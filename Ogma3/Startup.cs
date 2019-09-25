@@ -35,12 +35,14 @@ namespace Ogma3
                     Configuration.GetConnectionString("DefaultConnection"))
             );
 
-            services.AddDefaultIdentity<IdentityUser>(config =>
+            services.AddIdentity<User, IdentityRole>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
                     config.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<OgmaUserManager>()
+                .AddDefaultTokenProviders();
 
             // Email
             services.AddTransient<IEmailSender, EmailSender>();
