@@ -1,0 +1,14 @@
+{
+	"devDependencies": {
+		"autoprefixer": "^9.6.1",
+		"css-mqpacker": "^7.0.0",
+		"cssnano": "^4.1.10",
+		"mjml": "^4.4.0",
+		"postcss": "^7.0.17",
+		"postcss-discard-comments": "^4.0.2",
+		"postcss-zindex": "^4.0.1"
+	},
+	"dependencies": {
+		"vue": "^2.6.10"
+	}
+}
