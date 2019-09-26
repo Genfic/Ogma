@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ogma3.Services;
+using ScottBrady91.AspNetCore.Identity;
 using WebPWrecover.Services;
 
 namespace Ogma3
@@ -43,6 +44,9 @@ namespace Ogma3
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserManager<OgmaUserManager>()
                 .AddDefaultTokenProviders();
+            
+            // Argon2 hasher
+            services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
 
             // Email
             services.AddTransient<IEmailSender, EmailSender>();

@@ -149,7 +149,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("Ogma3"),
+                _urlEncoder.Encode("Ogma"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }

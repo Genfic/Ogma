@@ -35,5 +35,7 @@ namespace Ogma3.Data
             var oUser = await Store.FindByIdAsync(user.Id, CancellationToken);
             return oUser.Bio;
         }
+        
     }
+
 }
