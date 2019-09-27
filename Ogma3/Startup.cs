@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.RouteAnalyzer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +29,11 @@ namespace Ogma3
             Configuration = configuration;
         }
 
+
+
         public IConfiguration Configuration { get; }
+
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -59,12 +65,14 @@ namespace Ogma3
                     options.LoginPath = "/login";
                     options.AccessDeniedPath = "/login";
                 });
-
+            
             services.AddRazorPages();
         }
 
+
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -89,7 +97,34 @@ namespace Ogma3
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
+
+            // Seed data
+            SeedRoles(roleManager);
+            SeedUserRoles(userManager);
+
+        }
+
+
+        // Seeding
+
+        private static void SeedRoles (RoleManager<IdentityRole> roleManager)
+        {
+            if (!roleManager.RoleExistsAsync("Admin").Result)
+            {
+                var role = new IdentityRole { Name = "Admin" };
+                var roleResult = roleManager.CreateAsync(role).Result;
+            }
+        }
+
+        private static void SeedUserRoles(OgmaUserManager userManager)
+        {
+            var user = userManager.FindByNameAsync("Angius").Result;
+            if (user != null)
+            {
+                userManager.AddToRoleAsync(user, "Admin").Wait();
+            }
         }
     }
 }

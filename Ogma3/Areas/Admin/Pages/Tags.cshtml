@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model Ogma3.Areas.Admin.Pages.Tags
 
 @{
@@ -30,3 +30,23 @@
     </div>
         
 </form>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    let form = document.getElementById('tag');
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        axios.post('@Url.RouteUrl("TagsController")',
+            {
+                name: "Some Tag",
+                description: "Some description 😩👌"
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    });
+</script>

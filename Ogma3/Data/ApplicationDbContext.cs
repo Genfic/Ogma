@@ -13,5 +13,15 @@ namespace Ogma3.Data
             : base(options)
         {
         }
+
+        public DbSet<Tag> Tag { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Tag>()
+                .HasAlternateKey(c => c.Name);
+        }
     }
 }
