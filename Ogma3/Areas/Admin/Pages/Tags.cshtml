@@ -10,42 +10,124 @@
     <h1 class="display-4">Tags here!</h1>
 </div>
     
-<form id="tag" method="post">
+<form id="tag" method="post" v-on:submit.stop.prevent="createTag">
     <div asp-validation-summary="All" class="text-danger"></div>
         
     <div class="form-group">
         <label asp-for="Input.Name"></label>
-        <input asp-for="Input.Name" type="text" class="form-control">
+        <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
         <span class="text-danger"></span>
     </div>
         
     <div class="form-group">
         <label asp-for="Input.Description"></label>
-        <input asp-for="Input.Description" type="text" class="form-control">
+        <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
         <span class="text-danger"></span>
     </div>
+    
+    <input type="hidden" :value="form.id">
         
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
+        <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
     </div>
         
 </form>
 
-<script>
-    let form = document.getElementById('tag');
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
+<ul>
+    <li v-for="t in tags">{{ t.name }} – {{ t.description }} <button v-on:click="deleteTag(t)">X</button><button v-on:click="editTag(t)">E</button></li>
+</ul>
 
-        axios.post('@Url.RouteUrl("TagsController")',
-            {
-                name: "Some Tag",
-                description: "Some description 😩👌"
-            })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+@section Scripts
+{
+    <script>
+    let vue = new Vue({
+        el: "#app",
+        data: {
+            form: {
+                name: null,
+                desc: null,
+                id: null
+            },
+            tags: []
+        },
+        methods: {
+            
+            createTag: function(e) {
+                e.preventDefault();
+                
+                if (this.form.name && this.form.desc) {
+                    
+                    if (this.form.id === null) {
+                        axios.post('@Url.RouteUrl("TagsController")',
+                            {
+                              name: this.form.name,
+                              description: this.form.desc
+                            })
+                            .then(response => {
+                                this.getTags()
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    } else {
+                        axios.put('@Url.RouteUrl("TagsController")/' + this.form.id,
+                            {
+                                id: this.form.id,
+                                name: this.form.name,
+                                description: this.form.desc
+                            })
+                            .then(response => {
+                                this.getTags()
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            })
+                            .then(_ => {
+                                this.form.name = 
+                                this.form.desc = 
+                                this.form.id = null;
+                            });                    
+                    }
+                    
+                }
+            },
+            
+            getTags: function() {
+                axios.get('@Url.RouteUrl("TagsController")')
+                    .then(response => {
+                        this.tags = response.data
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            
+            deleteTag: function(t) {
+                axios.delete('@Url.RouteUrl("TagsController")/' + t.id)
+                    .then(response => {
+                        this.getTags()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            
+            editTag: function(t) {
+                this.form.name = t.name;
+                this.form.desc = t.description;
+                this.form.id = t.id;
+            },
+            
+            cancelEdit: function() {
+              this.form.name = 
+              this.form.desc = 
+              this.form.id = null;
+            }
+        },
+        mounted() {
+            this.getTags()
+        }
     });
-</script>
+    </script>
+}

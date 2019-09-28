@@ -34,7 +34,7 @@ namespace Ogma3.Api
 
         // GET: api/Tags/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tag>> GetTag(uint id)
+        public async Task<ActionResult<Tag>> GetTag(int id)
         {
             var tag = await _context.Tag.FindAsync(id);
 
@@ -52,7 +52,7 @@ namespace Ogma3.Api
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutTag(uint id, Tag tag)
+        public async Task<IActionResult> PutTag(int id, Tag tag)
         {
             if (id != tag.Id)
             {
@@ -108,7 +108,7 @@ namespace Ogma3.Api
         // DELETE: api/Tags/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Tag>> DeleteTag(uint id)
+        public async Task<ActionResult<Tag>> DeleteTag(int id)
         {
             var tag = await _context.Tag.FindAsync(id);
             if (tag == null)
@@ -122,7 +122,7 @@ namespace Ogma3.Api
             return tag;
         }
 
-        private bool TagExists(uint id)
+        private bool TagExists(int id)
         {
             return _context.Tag.Any(e => e.Id == id);
         }
