@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data
 {
-    public class Tag
+    public class Category
     {
         [Key]
         [Required]

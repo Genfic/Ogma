@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,54 +9,54 @@ using Ogma3.Data;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "TagsController")]
+    [Route("api/[controller]", Name = "CategoriesController")]
     [ApiController]
-    public class TagsController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public TagsController(ApplicationDbContext context)
+        public CategoriesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
 
-        // GET: api/Tags
+        // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetTag()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategory()
         {
-            return await _context.Tag.ToListAsync();
+            return await _context.Category.ToListAsync();
         }
 
 
-        // GET: api/Tags/5
+        // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tag>> GetTag(int id)
+        public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var tag = await _context.Tag.FindAsync(id);
+            var category = await _context.Category.FindAsync(id);
 
-            if (tag == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return tag;
+            return category;
         }
 
 
-        // PUT: api/Tags/5
+        // PUT: api/Categories/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutTag(int id, Tag tag)
+        public async Task<IActionResult> PutCategory(int id, Category category)
         {
-            if (id != tag.Id)
+            if (id != category.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tag).State = EntityState.Modified;
+            _context.Entry(category).State = EntityState.Modified;
 
             try
             {
@@ -64,7 +64,7 @@ namespace Ogma3.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TagExists(id))
+                if (!CategoryExists(id))
                 {
                     return NotFound();
                 }
@@ -73,21 +73,21 @@ namespace Ogma3.Api
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
             {
-                return Conflict(new { message = $"A tag with the name '{tag.Name}' already exists" });
+                return Conflict(new { message = $"A Category with the name '{category.Name}' already exists" });
             }
 
             return NoContent();
         }
 
 
-        // POST: api/Tags
+        // POST: api/Categories
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Tag>> PostTag(Tag tag)
+        public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            _context.Tag.Add(tag);
+            _context.Category.Add(category);
 
             try
             {
@@ -95,33 +95,33 @@ namespace Ogma3.Api
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
             {
-                return Conflict(new { message = $"A tag with the name '{tag.Name}' already exists" });
+                return Conflict(new { message = $"A Category with the name '{category.Name}' already exists" });
             }
 
-            return CreatedAtAction("GetTag", new { id = tag.Id }, tag);
+            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
         }
 
 
-        // DELETE: api/Tags/5
+        // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Tag>> DeleteTag(int id)
+        public async Task<ActionResult<Category>> DeleteCategory(int id)
         {
-            var tag = await _context.Tag.FindAsync(id);
-            if (tag == null)
+            var category = await _context.Category.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            _context.Tag.Remove(tag);
+            _context.Category.Remove(category);
             await _context.SaveChangesAsync();
 
-            return tag;
+            return category;
         }
 
-        private bool TagExists(int id)
+        private bool CategoryExists(int id)
         {
-            return _context.Tag.Any(e => e.Id == id);
+            return _context.Category.Any(e => e.Id == id);
         }
     }
 }

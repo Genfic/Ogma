@@ -5,10 +5,6 @@
     ViewData["Title"] = "Tags";
     ViewData["ActivePage"] = ManageNavPages.Tags;
 }
-
-<div class="text-center">
-    <h1 class="display-4">Tags here!</h1>
-</div>
     
 <form id="tag" method="post" v-on:submit.stop.prevent="createTag">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -38,96 +34,8 @@
     <li v-for="t in tags">{{ t.name }} – {{ t.description }} <button v-on:click="deleteTag(t)">X</button><button v-on:click="editTag(t)">E</button></li>
 </ul>
 
+<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("TagsController")" v-if="!route"></div>
 @section Scripts
 {
-    <script>
-    let vue = new Vue({
-        el: "#app",
-        data: {
-            form: {
-                name: null,
-                desc: null,
-                id: null
-            },
-            tags: []
-        },
-        methods: {
-            
-            createTag: function(e) {
-                e.preventDefault();
-                
-                if (this.form.name && this.form.desc) {
-                    
-                    if (this.form.id === null) {
-                        axios.post('@Url.RouteUrl("TagsController")',
-                            {
-                              name: this.form.name,
-                              description: this.form.desc
-                            })
-                            .then(response => {
-                                this.getTags()
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
-                    } else {
-                        axios.put('@Url.RouteUrl("TagsController")/' + this.form.id,
-                            {
-                                id: this.form.id,
-                                name: this.form.name,
-                                description: this.form.desc
-                            })
-                            .then(response => {
-                                this.getTags()
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            })
-                            .then(_ => {
-                                this.form.name = 
-                                this.form.desc = 
-                                this.form.id = null;
-                            });                    
-                    }
-                    
-                }
-            },
-            
-            getTags: function() {
-                axios.get('@Url.RouteUrl("TagsController")')
-                    .then(response => {
-                        this.tags = response.data
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
-            
-            deleteTag: function(t) {
-                axios.delete('@Url.RouteUrl("TagsController")/' + t.id)
-                    .then(response => {
-                        this.getTags()
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
-            
-            editTag: function(t) {
-                this.form.name = t.name;
-                this.form.desc = t.description;
-                this.form.id = t.id;
-            },
-            
-            cancelEdit: function() {
-              this.form.name = 
-              this.form.desc = 
-              this.form.id = null;
-            }
-        },
-        mounted() {
-            this.getTags()
-        }
-    });
-    </script>
+    <script src="~/js/admin/tags.min.js" asp-append-version="true"></script>
 }
