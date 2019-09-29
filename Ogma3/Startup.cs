@@ -66,6 +66,9 @@ namespace Ogma3
                     options.AccessDeniedPath = "/login";
                 });
             
+            // Runtime compilation
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            
             services.AddRazorPages();
         }
 

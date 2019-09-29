@@ -30,6 +30,11 @@
         
 </form>
 
+<button v-if="categories.length <= 0" class="btn btn-primary" type="button" disabled>
+  <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+  Loading...
+</button>
+
 <ul>
     <li v-for="c in categories">{{ c.name }} – {{ c.description }} <button v-on:click="deleteCategory(c)">X</button><button v-on:click="editCategory(c)">E</button></li>
 </ul>
