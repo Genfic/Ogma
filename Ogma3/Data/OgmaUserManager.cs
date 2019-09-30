@@ -36,7 +36,7 @@ namespace Ogma3.Data
             return oUser.Bio;
         }
 
-        public async Task<string> GetUserAvatarAsync(User user)
+        public async Task<string> GetAvatarAsync(User user)
         {
             ThrowIfDisposed();
             if (user == null)

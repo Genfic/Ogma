@@ -52,6 +52,9 @@ namespace Ogma3
                 .AddUserManager<OgmaUserManager>()
                 .AddDefaultTokenProviders();
             
+            // Claims
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, OgmaClaimsPrincipalFactory>();
+            
             // Argon2 hasher
             services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
 

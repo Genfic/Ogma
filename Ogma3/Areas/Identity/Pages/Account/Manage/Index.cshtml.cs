@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Services.Attributes;
 
@@ -19,15 +20,18 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         private readonly OgmaUserManager _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IB2Client _b2Client;
+        private readonly IConfiguration _config;
 
         public IndexModel(
             OgmaUserManager userManager,
             SignInManager<User> signInManager,
-            IB2Client b2Client)
+            IB2Client b2Client,
+            IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _b2Client = b2Client;
+            _config = config;
         }
 
         
@@ -99,7 +103,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             }
             
             // Handle avatar upload
-            if (Input.Avatar.Length > 0)
+            if (Input.Avatar != null && Input.Avatar.Length > 0)
             {
                 var ext = Input.Avatar.FileName.Split('.').Last();
                 var fileName = $"avatars/{user.Id}.{ext}";
@@ -107,7 +111,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 // Delete the old one if exists
                 if (user.Avatar != null && user.AvatarId != null)
                 {
-                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar);
+                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_config["cdn"], ""));
                 }
                 
                 // Upload new one
@@ -116,7 +120,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
 
                 user.AvatarId = file.FileId;
-                user.Avatar = fileName;
+                user.Avatar = _config["cdn"] + fileName;
             }
 
             if (Input.Title != user.Title)
