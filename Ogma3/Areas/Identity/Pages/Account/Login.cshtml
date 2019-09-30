@@ -11,19 +11,28 @@
         <section>
             <form id="account" method="post">
                 <h4>Use a local account to log in.</h4>
+
                 <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <img style="width:200px;height:200px" :src="avatar" class="rounded mx-auto d-block">
+                <h5 class="text-center">{{title}}</h5>
+                
                 <div class="form-group">
                     <label asp-for="Input.Name"></label>
-                    <input asp-for="Input.Name" class="form-control" />
+                    <input asp-for="Input.Name" class="form-control" v-model="name" :readonly="checked"/>
                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                
+                <div class="form-group" v-if="checked">
                     <label asp-for="Input.Password"></label>
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    <p>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    </p>
                 </div>
-                <div class="form-group">
+                
+                <div class="form-group" v-if="checked">
                     <div class="checkbox">
                         <label asp-for="Input.RememberMe">
                             <input asp-for="Input.RememberMe" />
@@ -31,19 +40,14 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
+                
+                <div class="form-group" v-if="!checked">
+                    <button class="btn btn-primary" v-on:click="checkDetails">Next</button>
                 </div>
-                <div class="form-group">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    @* <p> *@
-                    @*     <button type="submit" asp-page-handler="SendVerificationEmail" class="btn-link" style="padding:0px;margin:0px;border:0px">Resend email confirmation</button> *@
-                    @* </p> *@
+                
+                <div class="form-group" v-if="checked">
+                    <button class="btn btn-secondary" v-on:click="reset">Back</button>
+                    <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
             </form>
         </section>
@@ -80,6 +84,10 @@
     </div>
 </div>
 
+
+@* <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("UsersController")" v-if="!route"></div> *@
+<div id="route" style="background:indianred;padding:5rem" data-route="/api/Users/signin" v-if="!route"></div>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @* <partial name="_ValidationScriptsPartial" /> *@
+    <script src="~/js/login.min.js" asp-append-version="true"></script>
 }

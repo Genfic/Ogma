@@ -10,8 +10,8 @@ using Ogma3.Data;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190929011720_AddedCategories")]
-    partial class AddedCategories
+    [Migration("20190929223651_LetsNotChangeGenerationAfterAll")]
+    partial class LetsNotChangeGenerationAfterAll
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

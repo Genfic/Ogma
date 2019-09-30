@@ -36,6 +36,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
         [BindProperty]
         public InputModel Input { get; set; }
+        
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -44,6 +45,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
+        
         public class InputModel
         {
             [Required]
@@ -57,6 +59,8 @@ namespace Ogma3.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
+
+        
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -74,6 +78,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -107,34 +112,5 @@ namespace Ogma3.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
-//        public async Task<IActionResult> OnPostSendVerificationEmailAsync()
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                return Page();
-//            }
-//
-//            var user = await _userManager.FindByEmailAsync(Input.Email);
-//            if (user == null)
-//            {
-//                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
-//            }
-//
-//            var userId = await _userManager.GetUserIdAsync(user);
-//            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-//            var callbackUrl = Url.Page(
-//                "/Account/ConfirmEmail",
-//                pageHandler: null,
-//                values: new { userId = userId, code = code },
-//                protocol: Request.Scheme);
-//            await _emailSender.SendEmailAsync(
-//                Input.Email,
-//                "Confirm your email",
-//                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-//
-//            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
-//            return Page();
-//        }
     }
 }

@@ -3,11 +3,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Ogma3.Migrations
 {
-    public partial class ChangedTagLengthLimits : Migration
+    public partial class LetsNotChangeGenerationAfterAll : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            
+           
+            migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 20, nullable: false),
+                    Description = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.UniqueConstraint("AK_Category_Name", x => x.Name);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Tag",
                 columns: table => new
@@ -22,7 +37,6 @@ namespace Ogma3.Migrations
                     table.PrimaryKey("PK_Tag", x => x.Id);
                     table.UniqueConstraint("AK_Tag_Name", x => x.Name);
                 });
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -41,6 +55,9 @@ namespace Ogma3.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "Tag");
