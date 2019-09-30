@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using B2Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
+using Ogma3.Services.Attributes;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
@@ -14,15 +18,19 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
     {
         private readonly OgmaUserManager _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IB2Client _b2Client;
 
         public IndexModel(
             OgmaUserManager userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            IB2Client b2Client)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _b2Client = b2Client;
         }
 
+        
         public string Username { get; set; }
 
         [TempData]
@@ -31,8 +39,15 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
+        
         public class InputModel
         {
+            [Display(Name = "Avatar")]
+            [DataType(DataType.Upload)]
+            [MaxFileSize(1 * 1024 * 1024)]
+            [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png" })]
+            public IFormFile Avatar { get; set; }
+            
             [Display(Name = "Title")]
             [StringLength(20, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
             public string Title { get; set; }
@@ -81,6 +96,27 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+            
+            // Handle avatar upload
+            if (Input.Avatar.Length > 0)
+            {
+                var ext = Input.Avatar.FileName.Split('.').Last();
+                var fileName = $"avatars/{user.Id}.{ext}";
+                
+                // Delete the old one if exists
+                if (user.Avatar != null && user.AvatarId != null)
+                {
+                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar);
+                }
+                
+                // Upload new one
+                await using var ms = new MemoryStream();
+                Input.Avatar.CopyTo(ms);
+                var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
+
+                user.AvatarId = file.FileId;
+                user.Avatar = fileName;
             }
 
             if (Input.Title != user.Title)

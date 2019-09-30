@@ -35,7 +35,17 @@ namespace Ogma3.Data
             var oUser = await Store.FindByIdAsync(user.Id, CancellationToken);
             return oUser.Bio;
         }
-        
+
+        public async Task<string> GetUserAvatarAsync(User user)
+        {
+            ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            var oUser = await Store.FindByIdAsync(user.Id, CancellationToken);
+            return oUser.Avatar;
+        }
     }
 
 }

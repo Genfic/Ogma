@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
+using B2Net;
+using B2Net.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +20,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ogma3.Services;
 using ScottBrady91.AspNetCore.Identity;
-using WebPWrecover.Services;
 
 namespace Ogma3
 {
@@ -57,6 +58,11 @@ namespace Ogma3
             // Email
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+            
+            // Backblaze
+            var b2Options = Configuration.GetSection("B2").Get<B2Options>();
+            var client = new B2Client(B2Client.Authorize(b2Options));
+            services.AddSingleton<IB2Client>(client);
 
             // Auth
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
