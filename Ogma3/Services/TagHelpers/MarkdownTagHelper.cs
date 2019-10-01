@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Services.TagHelpers
 {
-//    [HtmlTargetElement("markdown", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class MarkdownTagHelper : TagHelper
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
