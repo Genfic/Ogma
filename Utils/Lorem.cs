@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Utils
 {
-    public class Lorem
+    public static class Lorem
     {
         public static string Picsum(int x, int? y = null)
         {
@@ -34,6 +37,16 @@ namespace Utils
 
             using var client = new WebClient();
             return client.DownloadString(api);
+        }
+
+        public static string Gravatar(string email)
+        {
+            using var md5 = MD5.Create();
+            var data = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()))
+                .ToList()
+                .Select(x => x.ToString("x2"));
+            var hash = string.Join("", data);
+            return $"https://www.gravatar.com/avatar/{hash}";
         }
     }
 

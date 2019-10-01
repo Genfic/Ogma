@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace Ogma3.Services
+namespace Ogma3.Services.Mailer
 {
     public class EmailSender : IEmailSender
     {

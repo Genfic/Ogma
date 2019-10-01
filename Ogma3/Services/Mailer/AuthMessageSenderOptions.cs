@@ -1,4 +1,4 @@
-﻿namespace Ogma3.Services
+﻿namespace Ogma3.Services.Mailer
 {
     public class AuthMessageSenderOptions
     {

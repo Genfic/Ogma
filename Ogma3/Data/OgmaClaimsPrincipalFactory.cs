@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Utils;
 
 namespace Ogma3.Data
 {
@@ -20,8 +21,8 @@ namespace Ogma3.Data
             
             ((ClaimsIdentity)principal.Identity).AddClaims(new []
             {
-                new Claim(OgmaClaimTypes.Avatar, user.Avatar),
-                new Claim(OgmaClaimTypes.Title, user.Title),
+                new Claim(OgmaClaimTypes.Avatar, user.Avatar ?? Lorem.Gravatar(user.Email)),
+                new Claim(OgmaClaimTypes.Title, user.Title ?? ""),
             });
 
             return principal;
