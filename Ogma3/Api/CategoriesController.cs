@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Models;
 
 namespace Ogma3.Api
 {
@@ -26,7 +27,7 @@ namespace Ogma3.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategory()
         {
-            return await _context.Category.ToListAsync();
+            return await _context.Categories.ToListAsync();
         }
 
 
@@ -34,7 +35,7 @@ namespace Ogma3.Api
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
 
             if (category == null)
             {
@@ -88,7 +89,7 @@ namespace Ogma3.Api
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            _context.Category.Add(category);
+            _context.Categories.Add(category);
 
             try
             {
@@ -108,13 +109,13 @@ namespace Ogma3.Api
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Category>> DeleteCategory(int id)
         {
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            _context.Category.Remove(category);
+            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
 
             return category;
@@ -122,7 +123,7 @@ namespace Ogma3.Api
 
         private bool CategoryExists(int id)
         {
-            return _context.Category.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

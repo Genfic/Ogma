@@ -10,54 +10,54 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "TagsController")]
+    [Route("api/[controller]", Name = "NamespacesController")]
     [ApiController]
-    public class TagsController : ControllerBase
+    public class NamespacesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public TagsController(ApplicationDbContext context)
+        public NamespacesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
 
-        // GET: api/Tags
+        // GET: api/Namespaces
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetTag()
+        public async Task<ActionResult<IEnumerable<Namespace>>> GetNamespace()
         {
-            return await _context.Tags.ToListAsync();
+            return await _context.Namespaces.ToListAsync();
         }
 
 
-        // GET: api/Tags/5
+        // GET: api/Namespaces/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tag>> GetTag(int id)
+        public async Task<ActionResult<Namespace>> GetNamespace(int id)
         {
-            var tag = await _context.Tags.FindAsync(id);
+            var ns = await _context.Namespaces.FindAsync(id);
 
-            if (tag == null)
+            if (ns == null)
             {
                 return NotFound();
             }
 
-            return tag;
+            return ns;
         }
 
 
-        // PUT: api/Tags/5
+        // PUT: api/Namespaces/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutTag(int id, Tag tag)
+        public async Task<IActionResult> PutNamespace(int id, Namespace ns)
         {
-            if (id != tag.Id)
+            if (id != ns.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tag).State = EntityState.Modified;
+            _context.Entry(ns).State = EntityState.Modified;
 
             try
             {
@@ -65,7 +65,7 @@ namespace Ogma3.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TagExists(id))
+                if (!NamespaceExists(id))
                 {
                     return NotFound();
                 }
@@ -74,21 +74,21 @@ namespace Ogma3.Api
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
             {
-                return Conflict(new { message = $"A tag with the name '{tag.Name}' already exists" });
+                return Conflict(new { message = $"A ns with the name '{ns.Name}' already exists" });
             }
 
             return NoContent();
         }
 
 
-        // POST: api/Tags
+        // POST: api/Namespaces
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Tag>> PostTag(Tag tag)
+        public async Task<ActionResult<Namespace>> PostNamespace(Namespace ns)
         {
-            _context.Tags.Add(tag);
+            _context.Namespaces.Add(ns);
 
             try
             {
@@ -96,33 +96,33 @@ namespace Ogma3.Api
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
             {
-                return Conflict(new { message = $"A tag with the name '{tag.Name}' already exists" });
+                return Conflict(new { message = $"A ns with the name '{ns.Name}' already exists" });
             }
 
-            return CreatedAtAction("GetTag", new { id = tag.Id }, tag);
+            return CreatedAtAction("GetNamespace", new { id = ns.Id }, ns);
         }
 
 
-        // DELETE: api/Tags/5
+        // DELETE: api/Namespaces/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Tag>> DeleteTag(int id)
+        public async Task<ActionResult<Namespace>> DeleteNamespace(int id)
         {
-            var tag = await _context.Tags.FindAsync(id);
-            if (tag == null)
+            var ns = await _context.Namespaces.FindAsync(id);
+            if (ns == null)
             {
                 return NotFound();
             }
 
-            _context.Tags.Remove(tag);
+            _context.Namespaces.Remove(ns);
             await _context.SaveChangesAsync();
 
-            return tag;
+            return ns;
         }
 
-        private bool TagExists(int id)
+        private bool NamespaceExists(int id)
         {
-            return _context.Tags.Any(e => e.Id == id);
+            return _context.Namespaces.Any(e => e.Id == id);
         }
     }
 }

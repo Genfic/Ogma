@@ -4,10 +4,15 @@ let vue = new Vue({
         form: {
             name: null,
             desc: null,
+            namespace: null,
             id: null
         },
+        routes: {
+            tags: null,
+            namespaces: null
+        },
         tags: [],
-        route: null
+        namespaces: [],
     },
     methods: {
 
@@ -21,9 +26,10 @@ let vue = new Vue({
                 // If no ID has been set, that means it's a new tag.
                 // Thus, we POST it.
                 if (this.form.id === null) {
-                    axios.post(this.route,
+                    axios.post(this.routes.tags,
                         {
                             name: this.form.name,
+                            namespaceId: this.form.namespace,
                             description: this.form.desc
                         })
                         .then(_ => {
@@ -36,10 +42,11 @@ let vue = new Vue({
                 // If the ID is set, that means it's an existing tag.
                 // Thus, we PUT it.
                 } else {
-                    axios.put(this.route + '/' + this.form.id,
+                    axios.put(this.routes.tags + '/' + this.form.id,
                         {
                             id: this.form.id,
                             name: this.form.name,
+                            namespaceId: this.form.namespace,
                             description: this.form.desc
                         })
                         .then(_ => {
@@ -52,7 +59,8 @@ let vue = new Vue({
                         .then(_ => {
                             this.form.name =
                                 this.form.desc =
-                                    this.form.id = null;
+                                    this.form.namespace = 
+                                        this.form.id = null;
                         });
                 }
 
@@ -61,9 +69,20 @@ let vue = new Vue({
 
         // Gets all existing tags
         getTags: function() {
-            axios.get(this.route)
+            axios.get(this.routes.tags)
                 .then(response => {
                     this.tags = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        
+        // Get all namespaces
+        getNamespaces: function() {
+            axios.get(this.routes.namespaces)
+                .then(response => {
+                    this.namespaces = response.data
                 })
                 .catch(error => {
                     console.log(error);
@@ -72,7 +91,7 @@ let vue = new Vue({
 
         // Deletes a selected tag
         deleteTag: function(t) {
-            axios.delete(this.route + '/' + t.id) 
+            axios.delete(this.routes.tags + '/' + t.id) 
                 .then(_ => {
                     this.getTags() 
                 })
@@ -85,6 +104,7 @@ let vue = new Vue({
         editTag: function(t) {
             this.form.name = t.name;
             this.form.desc = t.description;
+            this.form.namespace = t.namespaceId;
             this.form.id = t.id;
         },
 
@@ -92,14 +112,17 @@ let vue = new Vue({
         cancelEdit: function() {
             this.form.name =
                 this.form.desc =
-                    this.form.id = null;
+                    this.form.namespace =
+                        this.form.id = null;
         }
     },
     
     mounted() {
-        // Grab the route from route helper
-        this.route = document.getElementById('route').dataset.route;
+        // Grab the routes from route helpers
+        this.routes.tags = document.getElementById('tag-route').dataset.route;
+        this.routes.namespaces = document.getElementById('ns-route').dataset.route;
         // Grab the initial set of tags
         this.getTags();
+        this.getNamespaces();
     }
 });

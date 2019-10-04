@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
+using Ogma3.Data.Models;
 using Ogma3.Services.Attributes;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage

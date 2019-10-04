@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
+using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {

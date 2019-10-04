@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ogma3.Data
+namespace Ogma3.Data.Models
 {
-    public class Category
+    public class Namespace
     {
         [Key]
         [Required]
@@ -12,8 +13,6 @@ namespace Ogma3.Data
         [MaxLength(20)]
         public string Name { get; set; }
         
-        [Required]
-        [MaxLength(100)]
-        public string Description { get; set; }
+        public ICollection<Tag> Tags { get; set; }
     }
 }

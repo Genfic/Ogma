@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Admin.Pages
 {
-    public class Tags : PageModel
+    public class Namespaces : PageModel
     {
         [BindProperty]
         public InputModel Input { get; set; }
@@ -14,10 +13,6 @@ namespace Ogma3.Areas.Admin.Pages
         {
             [Required]
             public string Name { get; set; }
-            [Required]
-            public string Description { get; set; }
-            
-            public Namespace Namespace { get; set; }
         }
         
         public void OnGet()

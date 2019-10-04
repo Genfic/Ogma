@@ -9,11 +9,16 @@ namespace Ogma3.Areas.Admin.Pages
         
         public static string Tags => "Tags";
         
+        public static string Namespaces => "Namespaces";
+        
         public static string Categories => "Categories";
+
         
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         
         public static string TagsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Tags);
+        
+        public static string NamespacesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Namespaces);
         
         public static string CategoriesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Categories);
         

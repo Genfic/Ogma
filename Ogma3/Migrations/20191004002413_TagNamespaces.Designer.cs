@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ogma3.Data;
 
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191004002413_TagNamespaces")]
+    partial class TagNamespaces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +173,7 @@ namespace Ogma3.Migrations
 
                     b.HasAlternateKey("Name");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Namespace", b =>
@@ -190,7 +192,7 @@ namespace Ogma3.Migrations
 
                     b.HasAlternateKey("Name");
 
-                    b.ToTable("Namespaces");
+                    b.ToTable("Namespace");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Tag", b =>
@@ -219,7 +221,7 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("NamespaceId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.User", b =>

@@ -18,6 +18,7 @@ using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ogma3.Data.Models;
 using Ogma3.Services;
 using Ogma3.Services.Mailer;
 using ScottBrady91.AspNetCore.Identity;
