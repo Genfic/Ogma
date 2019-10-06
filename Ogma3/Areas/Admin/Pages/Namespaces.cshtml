@@ -30,7 +30,7 @@
 </button>
 
 <ul>
-    <li v-for="n in namespaces">{{ n.name }}<button v-on:click="deleteNamespace(t)">X</button><button v-on:click="editNamespace(t)">E</button></li>
+    <li v-for="n in namespaces">{{ n.name }}<button v-on:click="deleteNamespace(n)">X</button><button v-on:click="editNamespace(n)">E</button></li>
 </ul>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("NamespacesController")" v-if="!route"></div>

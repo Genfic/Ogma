@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ogma3.Data;
 
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191006020542_RatingsToEntities")]
+    partial class RatingsToEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,7 +248,7 @@ namespace Ogma3.Migrations
                     b.Property<DateTime>("ReleaseDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2019, 10, 6, 4, 7, 53, 398, DateTimeKind.Local).AddTicks(7861));
+                        .HasDefaultValue(new DateTime(2019, 10, 6, 4, 5, 42, 26, DateTimeKind.Local).AddTicks(4773));
 
                     b.Property<string>("Title")
                         .IsRequired()

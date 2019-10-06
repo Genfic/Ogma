@@ -86,7 +86,7 @@ namespace Ogma3
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext ctx)
         {
             if (env.IsDevelopment())
             {
@@ -117,6 +117,7 @@ namespace Ogma3
             // Seed data
             SeedRoles(roleManager);
             SeedUserRoles(userManager);
+            SeedRatings(ctx);
 
         }
 
@@ -138,6 +139,26 @@ namespace Ogma3
             if (user != null)
             {
                 userManager.AddToRoleAsync(user, "Admin").Wait();
+            }
+        }
+
+        private static void SeedRatings(ApplicationDbContext ctx)
+        {
+            Rating[] ratings =
+            {
+                new Rating {Name = "Everyone", Description = ""},
+                new Rating {Name = "Teen", Description = ""},
+                new Rating {Name = "Mature", Description = ""},
+                new Rating {Name = "Adult", Description = ""}
+            };
+
+            foreach (var rating in ratings)
+            {
+                if (ctx.Ratings.FirstOrDefault(r => r.Name == rating.Name) == null)
+                {
+                    ctx.Ratings.Add(rating);
+                }
+                ctx.SaveChanges();
             }
         }
     }

@@ -1,6 +1,7 @@
+#nullable enable
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace Ogma3.Data.Models
@@ -18,11 +19,10 @@ namespace Ogma3.Data.Models
         [Required]
         [MaxLength(100)]
         public string Description { get; set; }
-        
-        
-        public int? NamespaceId { get; set; }
+
         [ForeignKey("NamespaceId")]
         [JsonIgnore]
-        public Namespace Namespace { get; set; }
+        public Namespace? Namespace { get; set; }
+        public int? NamespaceId { get; set; }
     }
 }

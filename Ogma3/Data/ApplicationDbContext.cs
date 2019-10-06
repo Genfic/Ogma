@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,8 +19,10 @@ namespace Ogma3.Data
         
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Category> Categories { get; set; }
-        
         public DbSet<Namespace> Namespaces { get; set; }
+        public DbSet<Story> Stories { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        
         
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,7 +34,8 @@ namespace Ogma3.Data
                 .HasAlternateKey(c => c.Name);
             builder.Entity<Tag>()
                 .HasOne(t => t.Namespace)
-                .WithMany(n => n.Tags);
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Category
             builder.Entity<Category>()
@@ -40,10 +44,29 @@ namespace Ogma3.Data
             // Namespace
             builder.Entity<Namespace>()
                 .HasAlternateKey(n => n.Name);
-            builder.Entity<Namespace>()
-                .HasMany(n => n.Tags)
-                .WithOne(t => t.Namespace)
-                .OnDelete(DeleteBehavior.SetNull);
+            
+            // Rating
+            builder.Entity<Rating>()
+                .HasAlternateKey(r => r.Name);
+            
+            // Story
+            builder.Entity<Story>()
+                .Property(p => p.ReleaseDate)
+                .HasDefaultValue(DateTime.Now);
+            builder.Entity<Story>()
+                .HasOne(s => s.Rating)
+                .WithMany();
+            
+            // Story tags
+            builder.Entity<StoryTag>()
+                .HasKey(st => new {st.StoryId, st.TagId});
+            builder.Entity<StoryTag>()
+                .HasOne(st => st.Story)
+                .WithMany(s => s.StoryTags);
+            builder.Entity<StoryTag>()
+                .HasOne(st => st.Tag)
+                .WithMany();
+
         }
         
         
