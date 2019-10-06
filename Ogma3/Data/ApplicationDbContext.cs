@@ -22,6 +22,7 @@ namespace Ogma3.Data
         public DbSet<Namespace> Namespaces { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
         
         
         
@@ -56,7 +57,16 @@ namespace Ogma3.Data
             builder.Entity<Story>()
                 .HasOne(s => s.Rating)
                 .WithMany();
+            builder.Entity<Story>()
+                .HasMany(s => s.Chapters)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
             
+            // Chapter
+            builder.Entity<Chapter>()
+                .Property(c => c.PublishDate)
+                .HasDefaultValue(DateTime.Now);
+                
             // Story tags
             builder.Entity<StoryTag>()
                 .HasKey(st => new {st.StoryId, st.TagId});
