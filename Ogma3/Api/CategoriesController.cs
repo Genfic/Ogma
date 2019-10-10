@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,6 +9,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils;
 
 namespace Ogma3.Api
 {
@@ -28,6 +30,20 @@ namespace Ogma3.Api
         public async Task<ActionResult<IEnumerable<Category>>> GetCategory()
         {
             return await _context.Categories.ToListAsync();
+        }
+        
+        
+        // GET: api/Categories/validation
+        [HttpGet("validation")]
+        public ActionResult GetCategoryValidation()
+        {
+            return Ok(new
+            {
+                CTConfig.Category.MinNameLength,
+                CTConfig.Category.MaxNameLength,
+                CTConfig.Category.MinDescLength,
+                CTConfig.Category.MaxDescLength,
+            });
         }
 
 
@@ -53,6 +69,8 @@ namespace Ogma3.Api
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
+            System.Diagnostics.Debug.WriteLine(category.Name);
+            
             if (id != category.Id)
             {
                 return BadRequest();

@@ -49,16 +49,16 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         {
             [Display(Name = "Avatar")]
             [DataType(DataType.Upload)]
-            [MaxFileSize(1 * 1024 * 1024)]
+            [MaxFileSize(CTConfig.Files.AvatarMaxWeight)]
             [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png" })]
             public IFormFile Avatar { get; set; }
             
             [Display(Name = "Title")]
-            [StringLength(20, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
+            [StringLength(CTConfig.User.MaxTitleLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
             public string Title { get; set; }
             
             [Display(Name = "Bio")]
-            [StringLength(2000, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
+            [StringLength(CTConfig.User.MaxBioLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
             public string Bio { get; set; }
         }
 

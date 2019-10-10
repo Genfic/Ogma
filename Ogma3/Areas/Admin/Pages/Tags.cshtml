@@ -7,7 +7,10 @@
 }
     
 <form id="tag" method="post" v-on:submit.stop.prevent="createTag">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    
+    <ul v-if="err">
+        <li class="text-danger" v-for="e in err">{{ e }}</li>
+    </ul>
         
     <div class="form-group">
         <label asp-for="Input.Name"></label>

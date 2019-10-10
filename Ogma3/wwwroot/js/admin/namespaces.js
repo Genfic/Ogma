@@ -5,6 +5,11 @@ let vue = new Vue({
             name: null,
             id: null
         },
+        lens: {
+            minNameLength: 5,
+            maxNameLength: 10,
+        },
+        err: [],
         namespaces: [],
         route: null
     },
@@ -14,6 +19,12 @@ let vue = new Vue({
         // It was simply easier to slap both functionalities into a single function.
         createNamespace: function(e) {
             e.preventDefault();
+
+            // Validation
+            this.err = [];
+            if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
+                this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
+            if (this.err.length > 0) return;
 
             if (this.form.name) {
 
@@ -93,6 +104,12 @@ let vue = new Vue({
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route;
+        // Get validation data
+        axios.get(this.route + '/validation')
+            .then(r => {
+                this.lens = r.data;
+            })
+            .catch(e => console.error(e));
         // Grab the initial set of namespaces
         this.getNamespaces();
     }

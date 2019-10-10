@@ -32,7 +32,8 @@ namespace Ogma3.Data
 
             // Tag
             builder.Entity<Tag>()
-                .HasAlternateKey(c => c.Name);
+                .HasIndex(t => t.Name)
+                .IsUnique();
             builder.Entity<Tag>()
                 .HasOne(t => t.Namespace)
                 .WithMany()
@@ -40,20 +41,23 @@ namespace Ogma3.Data
 
             // Category
             builder.Entity<Category>()
-                .HasAlternateKey(c => c.Name);
+                .HasIndex(c => c.Name)
+                .IsUnique();
 
             // Namespace
             builder.Entity<Namespace>()
-                .HasAlternateKey(n => n.Name);
+                .HasIndex(n => n.Name)
+                .IsUnique();
             
             // Rating
             builder.Entity<Rating>()
-                .HasAlternateKey(r => r.Name);
+                .HasIndex(r => r.Name)
+                .IsUnique();
             
             // Story
             builder.Entity<Story>()
                 .Property(p => p.ReleaseDate)
-                .HasDefaultValue(DateTime.Now);
+                .HasDefaultValueSql("getdate()");
             builder.Entity<Story>()
                 .HasOne(s => s.Rating)
                 .WithMany();
@@ -65,7 +69,7 @@ namespace Ogma3.Data
             // Chapter
             builder.Entity<Chapter>()
                 .Property(c => c.PublishDate)
-                .HasDefaultValue(DateTime.Now);
+                .HasDefaultValueSql("getdate()");
                 
             // Story tags
             builder.Entity<StoryTag>()

@@ -6,6 +6,13 @@ let vue = new Vue({
             desc: null,
             id: null
         },
+        lens: {
+            minNameLength:5,
+            maxNameLength:20,
+            minDescLength:10,
+            maxDescLength:100
+        },
+        err: [],
         categories: [],
         route: null
     },
@@ -15,6 +22,16 @@ let vue = new Vue({
         // It was simply easier to slap both functionalities into a single function.
         createCategory: function(e) {
             e.preventDefault();
+            
+            
+            // Validation
+            this.err = [];
+            if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength) 
+                this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
+            if (this.form.desc.length > this.lens.maxDescLength || this.form.desc.length < this.lens.minDescLength) 
+                this.err.push(`Description has to be between ${this.lens.minDescLength} and ${this.lens.maxDescLength} characters long.`);
+            if (this.err.length > 0) return;
+            
 
             if (this.form.name && this.form.desc) {
 
@@ -99,6 +116,12 @@ let vue = new Vue({
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route;
+        // Get validation
+        axios.get(this.route + '/validation')
+            .then(r => {
+                this.lens = r.data;
+            })
+            .catch(e => console.error(e));
         // Grab the initial set of categories
         this.getCategories();
     }

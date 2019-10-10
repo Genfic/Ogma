@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
@@ -5,12 +7,13 @@ namespace Ogma3.Data.Models
 {
     public class User : IdentityUser
     {
-        [MaxLength(20)]
-        public string Title { get; set; }
-        [MaxLength(5000)]
-        public string Bio { get; set; }
+        [MaxLength(CTConfig.User.MaxTitleLength)]
+        public string? Title { get; set; } = null;
+        
+        [MaxLength(CTConfig.User.MaxBioLength)]
+        public string? Bio { get; set; } = null;
 
-        public string Avatar { get; set; }
-        public string AvatarId { get; set; }
+        public string? Avatar { get; set; } = null;
+        public string? AvatarId { get; set; } = null;
     }
 }    

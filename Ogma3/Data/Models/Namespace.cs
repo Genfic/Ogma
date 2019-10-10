@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
@@ -10,7 +9,8 @@ namespace Ogma3.Data.Models
         public int Id { get; set; }
         
         [Required]
-        [MaxLength(20)]
+        [MinLength(CTConfig.Namespace.MinNameLength)]
+        [MaxLength(CTConfig.Namespace.MaxNameLength)]
         public string Name { get; set; }
     }
 }

@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
@@ -9,11 +11,13 @@ namespace Ogma3.Data.Models
         public int Id { get; set; }
         
         [Required]
-        [MaxLength(20)]
+        [MaxLength(CTConfig.Category.MaxNameLength)]
+        [MinLength(CTConfig.Category.MinNameLength)]
         public string Name { get; set; }
         
         [Required]
-        [MaxLength(100)]
+        [MaxLength(CTConfig.Category.MaxDescLength)]
+        [MinLength(CTConfig.Category.MinDescLength)]
         public string Description { get; set; }
     }
 }

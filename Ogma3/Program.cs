@@ -20,7 +20,12 @@ namespace Ogma3
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        // Opts
+                    })
+                    .UseStartup<Startup>();
+//                    webBuilder.UseStartup<Startup>();
                 });
     }
 }

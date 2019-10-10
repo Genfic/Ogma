@@ -16,22 +16,22 @@ namespace Ogma3.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MinLength(3)]
-        [MaxLength(50)]
+        [MinLength(CTConfig.Story.MinTitleLength)]
+        [MaxLength(CTConfig.Story.MaxTitleLength)]
         public string Title { get; set; }
 
         [Required]
-        [MinLength(100)]
-        [MaxLength(1500)]
+        [MinLength(CTConfig.Story.MinDescriptionLength)]
+        [MaxLength(CTConfig.Story.MaxDescriptionLength)]
         public string Description { get; set; }
 
         [Required]
-        [MinLength(50)]
-        [MaxLength(500)]
+        [MinLength(CTConfig.Story.MinHookLength)]
+        [MaxLength(CTConfig.Story.MaxHookLength)]
         public string Hook { get; set; }
 
-        public string? Cover { get; set; }
-        public string? CoverId { get; set; }
+        public string? Cover { get; set; } = null;
+        public string? CoverId { get; set; } = null;
 
         [Required]
         public DateTime ReleaseDate { get; set; }

@@ -13,16 +13,16 @@ namespace Ogma3.Data.Models
         public int Id { get; set; }
         
         [Required]
-        [MaxLength(20)]
+        [MinLength(CTConfig.Tag.MinNameLength)]
+        [MaxLength(CTConfig.Tag.MaxNameLength)]
         public string Name { get; set; }
-        
-        [Required]
-        [MaxLength(100)]
-        public string Description { get; set; }
+
+        [MaxLength(CTConfig.Tag.MaxDescLength)]
+        public string? Description { get; set; } = null;
 
         [ForeignKey("NamespaceId")]
         [JsonIgnore]
-        public Namespace? Namespace { get; set; }
-        public int? NamespaceId { get; set; }
+        public Namespace? Namespace { get; set; } = null;
+        public int? NamespaceId { get; set; } = null;
     }
 }

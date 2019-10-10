@@ -43,6 +43,18 @@ namespace Ogma3.Api
 
             return ns;
         }
+        
+        
+        // GET: api/Namespaces/validation
+        [HttpGet("validation")]
+        public ActionResult GetNamespaceValidation()
+        {
+            return Ok(new
+            {
+                CTConfig.Namespace.MinNameLength,
+                CTConfig.Namespace.MaxNameLength,
+            });
+        }
 
 
         // PUT: api/Namespaces/5

@@ -17,19 +17,19 @@ namespace Ogma3.Data.Models
         public DateTime PublishDate { get; set; }
 
         [Required]
-        [MinLength(5)]
-        [MaxLength(50)]
+        [MinLength(CTConfig.Chapter.MinTitleLength)]
+        [MaxLength(CTConfig.Chapter.MaxTitleLength)]
         public string Title { get; set; }
 
         [Required]
-        [MinLength(1000)]
-        [MaxLength(500_000)]
+        [MinLength(CTConfig.Chapter.MinBodyLength)]
+        [MaxLength(CTConfig.Chapter.MaxBodyLength)]
         public string Body { get; set; }
 
-        [MaxLength(500)]
-        public string? StartNotes { get; set; }
+        [MaxLength(CTConfig.Chapter.MaxNotesLength)]
+        public string? StartNotes { get; set; } = null;
 
-        [MaxLength(500)]
-        public string? EndNotes { get; set; }
+        [MaxLength(CTConfig.Chapter.MaxNotesLength)]
+        public string? EndNotes { get; set; } = null;
     }
 }

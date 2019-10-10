@@ -7,6 +7,13 @@ let vue = new Vue({
             namespace: null,
             id: null
         },
+        lens: {
+            minNameLength:5,
+            maxNameLength:20,
+            minDescLength:10,
+            maxDescLength:100
+        },
+        err: [],
         routes: {
             tags: null,
             namespaces: null
@@ -21,7 +28,16 @@ let vue = new Vue({
         createTag: function(e) {
             e.preventDefault();
 
-            if (this.form.name && this.form.desc) {
+            // Validation
+            this.err = [];
+            if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
+                this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
+            if (this.form.desc !== null && this.form.desc.length > this.lens.maxDescLength)
+                this.err.push(`Description has to be at most ${this.lens.maxDescLength} characters long.`);
+            if (this.err.length > 0) return; 
+
+            console.info(this.form.name);
+            if (this.form.name) {
 
                 // If no ID has been set, that means it's a new tag.
                 // Thus, we POST it.
@@ -121,6 +137,12 @@ let vue = new Vue({
         // Grab the routes from route helpers
         this.routes.tags = document.getElementById('tag-route').dataset.route;
         this.routes.namespaces = document.getElementById('ns-route').dataset.route;
+        // Get validation data
+        axios.get(this.routes.tags + '/validation')
+            .then(r => {
+                this.lens = r.data;
+            })
+            .catch(e => console.error(e));
         // Grab the initial set of tags
         this.getTags();
         this.getNamespaces();

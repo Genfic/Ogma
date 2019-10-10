@@ -22,6 +22,7 @@ using Ogma3.Data.Models;
 using Ogma3.Services;
 using Ogma3.Services.Mailer;
 using ScottBrady91.AspNetCore.Identity;
+using Utils;
 
 namespace Ogma3
 {
@@ -77,6 +78,9 @@ namespace Ogma3
                     options.AccessDeniedPath = "/login";
                 });
             
+            // Compression
+            services.AddResponseCompression();
+            
             // Runtime compilation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             
@@ -113,6 +117,9 @@ namespace Ogma3
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+            
+            // Compression
+            app.UseResponseCompression();
 
             // Seed data
             SeedRoles(roleManager);
@@ -146,10 +153,10 @@ namespace Ogma3
         {
             Rating[] ratings =
             {
-                new Rating {Name = "Everyone", Description = ""},
-                new Rating {Name = "Teen", Description = ""},
-                new Rating {Name = "Mature", Description = ""},
-                new Rating {Name = "Adult", Description = ""}
+                new Rating {Name = "Everyone", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"},
+                new Rating {Name = "Teen", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"},
+                new Rating {Name = "Mature", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"},
+                new Rating {Name = "Adult", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"}
             };
 
             foreach (var rating in ratings)

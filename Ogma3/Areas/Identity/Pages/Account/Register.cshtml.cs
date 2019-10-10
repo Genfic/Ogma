@@ -48,7 +48,11 @@ namespace Ogma3.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+            [StringLength(
+                CTConfig.User.MaxNameLength, 
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.User.MinNameLength
+                )]
             public string Name { get; set; }
 
             [Required]
@@ -57,7 +61,11 @@ namespace Ogma3.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(
+                CTConfig.User.MaxPassLength, 
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.User.MinPassLength
+                )]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }

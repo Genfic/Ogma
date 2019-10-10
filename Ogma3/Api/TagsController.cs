@@ -43,6 +43,18 @@ namespace Ogma3.Api
 
             return tag;
         }
+        
+        // GET: api/Tags/validation
+        [HttpGet("validation")]
+        public ActionResult GetTagValidation()
+        {
+            return Ok(new
+            {
+                CTConfig.Tag.MinNameLength,
+                CTConfig.Tag.MaxNameLength,
+                CTConfig.Tag.MaxDescLength,
+            });
+        }
 
 
         // PUT: api/Tags/5

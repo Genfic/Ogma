@@ -33,7 +33,11 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(
+                CTConfig.User.MaxPassLength, 
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.User.MinPassLength
+                )]
             [DataType(DataType.Password)]
             [Display(Name = "New password")]
             public string NewPassword { get; set; }
