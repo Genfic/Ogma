@@ -17,6 +17,9 @@ namespace Ogma3.Data.Models
         public DateTime PublishDate { get; set; }
 
         [Required]
+        public bool IsPublished { get; set; } = false;
+
+        [Required]
         [MinLength(CTConfig.Chapter.MinTitleLength)]
         [MaxLength(CTConfig.Chapter.MaxTitleLength)]
         public string Title { get; set; }

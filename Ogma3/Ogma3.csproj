@@ -38,4 +38,9 @@
     <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Pages\Editors\" />
+  </ItemGroup>
+
 </Project>

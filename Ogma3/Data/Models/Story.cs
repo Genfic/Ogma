@@ -16,31 +16,37 @@ namespace Ogma3.Data.Models
         public int Id { get; set; }
 
         [Required]
+        public User Author { get; set; }
+
+        [Required]
         [MinLength(CTConfig.Story.MinTitleLength)]
         [MaxLength(CTConfig.Story.MaxTitleLength)]
-        public string Title { get; set; }
+        public string Title { get; set; } = "";
 
         [Required]
         [MinLength(CTConfig.Story.MinDescriptionLength)]
         [MaxLength(CTConfig.Story.MaxDescriptionLength)]
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
         [Required]
         [MinLength(CTConfig.Story.MinHookLength)]
         [MaxLength(CTConfig.Story.MaxHookLength)]
-        public string Hook { get; set; }
+        public string Hook { get; set; } = "";
 
         public string? Cover { get; set; } = null;
         public string? CoverId { get; set; } = null;
 
         [Required]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; } = new DateTime();
+
+        [Required]
+        public bool IsPublished { get; set; } = false;
         
         
         // Chapters
         public ICollection<Chapter> Chapters { get; set; }
-        
-        
+
+
         // Tags
         [JsonIgnore]
         public virtual ICollection<StoryTag> StoryTags { get; set; }

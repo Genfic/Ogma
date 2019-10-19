@@ -59,17 +59,26 @@ namespace Ogma3.Data
                 .Property(p => p.ReleaseDate)
                 .HasDefaultValueSql("getdate()");
             builder.Entity<Story>()
+                .Property(p => p.IsPublished)
+                .HasDefaultValue(false);
+            builder.Entity<Story>()
                 .HasOne(s => s.Rating)
                 .WithMany();
             builder.Entity<Story>()
                 .HasMany(s => s.Chapters)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Story>()
+                .HasOne(s => s.Author)
+                .WithMany();
             
             // Chapter
             builder.Entity<Chapter>()
                 .Property(c => c.PublishDate)
                 .HasDefaultValueSql("getdate()");
+            builder.Entity<Chapter>()
+                .Property(p => p.IsPublished)
+                .HasDefaultValue(false);
                 
             // Story tags
             builder.Entity<StoryTag>()
