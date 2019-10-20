@@ -18,6 +18,7 @@ namespace Ogma3.Data
 
         
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<StoryTag> StoryTags { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Namespace> Namespaces { get; set; }
         public DbSet<Story> Stories { get; set; }

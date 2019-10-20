@@ -13,6 +13,7 @@ namespace Ogma3.Services.TagHelpers
         public enum Presets
         {
             Basic, // Default
+            Comment,
             All,
         }
         
@@ -22,10 +23,13 @@ namespace Ogma3.Services.TagHelpers
 
             switch (Preset)
             {
+                case Presets.Basic:
+                    break;
+                case Presets.Comment:
+                    pipeline = new MarkdownPipelineBuilder().UseAutoLinks().Build();
+                    break;
                 case Presets.All:
                     pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                    break;
-                case Presets.Basic:
                     break;
             }
             

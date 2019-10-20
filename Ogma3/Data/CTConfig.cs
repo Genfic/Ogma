@@ -74,6 +74,7 @@ namespace Ogma3.Data
 
             public const int MinHookLength = 50;
             public const int MaxHookLength = 500;
+            public const int CoverMaxWeight = 2 * 1024 * 1024;
         }
     }
 }
