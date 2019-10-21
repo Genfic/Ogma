@@ -87,9 +87,11 @@ namespace Ogma3.Pages.Editors
             [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
             public IFormFile Cover { get; set; }
 
-            [Required] public Rating Rating { get; set; }
+            [Required] 
+            public Rating Rating { get; set; }
 
-            [Required] public List<Tag> Tags { get; set; }
+            [Required] 
+            public List<Tag> Tags { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -121,6 +123,7 @@ namespace Ogma3.Pages.Editors
                 {
                     Author = user,
                     Title = Input.Title,
+                    Slug = Input.Title.Friendlify(),
                     Description = Input.Description,
                     Hook = Input.Hook,
                     Rating = Input.Rating,

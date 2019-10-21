@@ -46,7 +46,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             }
 
             Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.json");
-            return new FileContentResult(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(personalData)), "text/json");
+            return new FileContentResult(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(personalData, Formatting.Indented)), "text/json");
         }
     }
 }

@@ -24,6 +24,9 @@ namespace Ogma3.Data.Models
         [MaxLength(CTConfig.Chapter.MaxTitleLength)]
         public string Title { get; set; }
 
+        [Required] 
+        public string Slug { get; set; } = "";
+
         [Required]
         [MinLength(CTConfig.Chapter.MinBodyLength)]
         [MaxLength(CTConfig.Chapter.MaxBodyLength)]

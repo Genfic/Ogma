@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
+using Utils;
 
 namespace Ogma3.Data.Models
 {
@@ -22,6 +24,9 @@ namespace Ogma3.Data.Models
         [MinLength(CTConfig.Story.MinTitleLength)]
         [MaxLength(CTConfig.Story.MaxTitleLength)]
         public string Title { get; set; } = "";
+
+        [Required] 
+        public string Slug { get; set; } = "";
 
         [Required]
         [MinLength(CTConfig.Story.MinDescriptionLength)]

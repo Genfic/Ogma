@@ -30,6 +30,11 @@ namespace Ogma3.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
+            // User
+            builder.Entity<User>()
+                .Ignore(u => u.PhoneNumber)
+                .Ignore(u => u.PhoneNumberConfirmed);
 
             // Tag
             builder.Entity<Tag>()
