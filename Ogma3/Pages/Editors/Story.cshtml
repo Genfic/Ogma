@@ -7,7 +7,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form id="story" method="post">
+<form id="story" method="post" enctype="multipart/form-data">
 
     <div class="form-group">
         <label asp-for="Input.Title"></label>
@@ -41,12 +41,21 @@
         <label>Rating</label>
         <p>The age rating</p>
         
+        @{ var first = true; }
         @foreach (var rating in Model.Ratings)
         {
             <div class="form-check">
-                <input asp-for="Input.Rating" class="form-check-input" type="radio" id="@rating.Name.ToLower()" value="@rating.Id" checked>
+                @if (first)
+                {
+                    <input asp-for="Input.Rating" class="form-check-input" type="radio" id="@rating.Name.ToLower()" value="@rating.Id" checked="checked">
+                }
+                else
+                {
+                    <input asp-for="Input.Rating" class="form-check-input" type="radio" id="@rating.Name.ToLower()" value="@rating.Id" >
+                }
                 <label class="form-check-label" for="@rating.Name.ToLower()">@rating.Name</label>
             </div>
+            first = false;
         }
         <span asp-validation-for="Input.Rating" class="text-warning"></span>
         
@@ -59,7 +68,7 @@
         <span asp-validation-for="Input.Tags" class="text-warning"></span>
     </div>
     
-    <button type="submit" class="btn btn-primary" >Register</button>
+    <button type="submit" class="btn btn-primary" >Create</button>
     
 </form>
 

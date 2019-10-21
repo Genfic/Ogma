@@ -15,6 +15,7 @@ namespace Ogma3.Data.Models
     {
         [Key]
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -38,8 +39,8 @@ namespace Ogma3.Data.Models
         [MaxLength(CTConfig.Story.MaxHookLength)]
         public string Hook { get; set; } = "";
 
-        public string? Cover { get; set; } = null;
-        public string? CoverId { get; set; } = null;
+        public string? Cover { get; set; }
+        public string? CoverId { get; set; }
 
         [Required]
         public DateTime ReleaseDate { get; set; } = new DateTime();

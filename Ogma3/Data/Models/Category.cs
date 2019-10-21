@@ -1,6 +1,7 @@
 #nullable enable
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
@@ -8,6 +9,7 @@ namespace Ogma3.Data.Models
     {
         [Key]
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         
         [Required]

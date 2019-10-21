@@ -88,10 +88,10 @@ namespace Ogma3.Pages.Editors
             public IFormFile Cover { get; set; }
 
             [Required] 
-            public Rating Rating { get; set; }
+            public int Rating { get; set; }
 
             [Required] 
-            public List<Tag> Tags { get; set; }
+            public List<int> Tags { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -99,26 +99,10 @@ namespace Ogma3.Pages.Editors
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
-//                string cover;
-//                string coverId;
-//                
-//                // Handle cover upload
-//                if (Input.Cover != null && Input.Cover.Length > 0)
-//                {
-//                    string safeTitle = Input.Title.Friendlify();
-//                    
-//                    var ext = Input.Cover.FileName.Split('.').Last();
-//                    var fileName = $"covers/{user.Id}.{ext}";
-//                
-//                    // Upload new one
-//                    await using var ms = new MemoryStream();
-//                    Input.Cover.CopyTo(ms);
-//                    var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-//
-//                    coverId = file.FileId;
-//                    cover = _config["cdn"] + fileName;
-//                }
+                var rating = await _context.Ratings.FindAsync(Input.Rating);
+                var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
 
+                // Add story
                 var story = new Story
                 {
                     Author = user,
@@ -126,20 +110,42 @@ namespace Ogma3.Pages.Editors
                     Slug = Input.Title.Friendlify(),
                     Description = Input.Description,
                     Hook = Input.Hook,
-                    Rating = Input.Rating,
+                    Rating = rating,
                 };
 
                 _context.Stories.Add(story);
                 await _context.SaveChangesAsync();
 
                 // Add tags and associations
-//                foreach (var tag in Input.Tags)
-//                {
-//                    await _context.StoryTags.AddAsync(new StoryTag
-//                    {
-//                        
-//                    });
-//                }
+                foreach (var tag in tags)
+                {
+                    await _context.StoryTags.AddAsync(new StoryTag
+                    {
+                        StoryId = story.Id,
+                        TagId = tag.Id
+                    });
+                }
+                
+                // Handle cover upload
+                if (Input.Cover != null && Input.Cover.Length > 0)
+                {
+                    var ext = Input.Cover.FileName.Split('.').Last();
+                    var fileName = $"covers/{story.Id}-{story.Slug}.{ext}";
+                
+                    // Upload new one
+                    await using var ms = new MemoryStream();
+                    Input.Cover.CopyTo(ms);
+                    var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
+                    
+                    Console.WriteLine(file.FileName);
+
+                    story.CoverId = file.FileId;
+                    story.Cover = _config["cdn"] + fileName;
+                }
+                
+                // Final save
+                await _context.SaveChangesAsync();
+                
                 return null;
             }
             else

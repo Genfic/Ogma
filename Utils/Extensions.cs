@@ -12,7 +12,7 @@ namespace Utils
 
         public static string Friendlify(this string input)
         {
-            var rgx = new Regex("[^a-zA-Z0-9 -]");
+            var rgx = new Regex("[^a-zA-Z0-9]");
             var str = rgx.Replace(input, "_");
             
             rgx = new Regex("_+");
