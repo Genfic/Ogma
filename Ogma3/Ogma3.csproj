@@ -40,6 +40,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Data\Enums" />
     <Folder Include="Pages\Editors\" />
   </ItemGroup>
 

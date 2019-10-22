@@ -1,5 +1,6 @@
 ﻿@page
 @using System.Security.AccessControl
+@using Ogma3.Data.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -34,8 +35,6 @@
     https://youtube.com
     
     [link](https://localhost:5001/)
-    
-    ![img](https://cdn.ogma.buzz/file/Ogma-net/avatars/268e8d5d-a76e-4abe-9d92-e655bb228d1c.png "title")
 
     ____
     
@@ -46,6 +45,32 @@
     
 
 </markdown>
+
+<div>
+    @foreach (Story s in Model.Stories)
+    {
+        <div style="display:flex; flex-direction:row">
+            <img src="@s.Cover" alt="@s.Title" />
+            <div style="display:flex; flex-direction: column">
+                <h3>@s.Title</h3>
+                <div>@s.Hook</div>
+                <div style="display:flex; flex-direction:row; flex-wrap:wrap">
+                    @foreach (Tag t in s.StoryTags.Select(st => st.Tag))
+                    {
+                        if (t.Namespace is null)
+                        {
+                            <p style="border:1px solid black;">@t.Name</p>
+                        }
+                        else
+                        {
+                            <p style="border:1px solid black;">@t.Namespace.Name : @t.Name</p>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 <div>
     @Html.Raw(Model.SampleText)
