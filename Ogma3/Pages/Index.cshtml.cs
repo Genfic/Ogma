@@ -35,6 +35,7 @@ namespace Ogma3.Pages
             Stories = await _context.Stories
                 .Include(s => s.StoryTags)
                 .ThenInclude(st => st.Tag)
+                .ThenInclude(t => t.Namespace)
                 .ToListAsync();
             
             SampleText = Lorem.Ipsum(5, new IpsumOptions
