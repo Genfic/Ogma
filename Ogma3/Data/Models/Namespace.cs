@@ -19,15 +19,13 @@ namespace Ogma3.Data.Models
         public string Name { get; set; }
 
         [JsonIgnore]
-        [Column(TypeName = "bigint")]
-        public int Argb { get; set; }
+        public uint Argb { get; set; }
 
         [NotMapped]
         public Color Color
         {
-            get => Color.FromArgb(Argb);
+            get => Color.FromArgb(unchecked((int)Argb));
             set => Color.ToArgb();
-
         }
     }
 }

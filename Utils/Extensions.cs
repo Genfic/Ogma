@@ -38,7 +38,8 @@ namespace Utils
 
         public static string ToCommaSeparatedCss(this Color input)
         {
-            return $"{input.R}, {input.G}, {input.B}, {((int)input.A).Normalize(0, 255)}";
+            var alpha = ((int) input.A).Normalize(0, 255).ToString("F").Replace(',', '.');
+            return $"{input.R}, {input.G}, {input.B}, {alpha}";
         }
     }
 }

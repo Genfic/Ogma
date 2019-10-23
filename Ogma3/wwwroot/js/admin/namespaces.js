@@ -1,8 +1,14 @@
-let vue = new Vue({ 
+let vue = new Vue({
     el: "#app",
     data: {
         form: {
             name: null,
+            color: {
+                a: null,
+                r: null,
+                g: null,
+                b: null,
+            },
             id: null
         },
         lens: {
@@ -11,13 +17,14 @@ let vue = new Vue({
         },
         err: [],
         namespaces: [],
-        route: null
+        route: null,
+        color: null
     },
     methods: {
 
         // Contrary to its name, it also modifies a namespace if needed.
         // It was simply easier to slap both functionalities into a single function.
-        createNamespace: function(e) {
+        createNamespace: function (e) {
             e.preventDefault();
 
             // Validation
@@ -34,6 +41,7 @@ let vue = new Vue({
                     axios.post(this.route,
                         {
                             name: this.form.name,
+                            argb: calculateColor(this.form.color)
                         })
                         .then(_ => {
                             this.getNamespaces()
@@ -41,14 +49,15 @@ let vue = new Vue({
                         .catch(error => {
                             console.log(error);
                         });
-                    
-                // If the ID is set, that means it's an existing namespace.
-                // Thus, we PUT it.
+
+                    // If the ID is set, that means it's an existing namespace.
+                    // Thus, we PUT it.
                 } else {
                     axios.put(this.route + '/' + this.form.id,
                         {
                             id: this.form.id,
                             name: this.form.name,
+                            argb: calculateColor(this.form.color)
                         })
                         .then(_ => {
                             this.getNamespaces()
@@ -67,7 +76,7 @@ let vue = new Vue({
         },
 
         // Gets all existing namespaces
-        getNamespaces: function() {
+        getNamespaces: function () {
             axios.get(this.route)
                 .then(response => {
                     this.namespaces = response.data
@@ -78,10 +87,10 @@ let vue = new Vue({
         },
 
         // Deletes a selected namespace
-        deleteNamespace: function(t) {
-            axios.delete(this.route + '/' + t.id) 
+        deleteNamespace: function (t) {
+            axios.delete(this.route + '/' + t.id)
                 .then(_ => {
-                    this.getNamespaces() 
+                    this.getNamespaces()
                 })
                 .catch(error => {
                     console.log(error);
@@ -89,18 +98,25 @@ let vue = new Vue({
         },
 
         // Throws a namespace from the list into the editor
-        editNamespace: function(t) {
+        editNamespace: function (t) {
             this.form.name = t.name;
-            this.form.id = t.id; 
+            this.form.color = t.color;
+            this.form.id = t.id;
         },
 
         // Clears the editor
-        cancelEdit: function() {
+        cancelEdit: function () {
             this.form.name =
-                this.form.id = null;    
+                this.form.color =
+                    this.form.id = null;
+        },
+        
+        // Update the color
+        updateColor: function () {
+            this.color = `rgba(${this.form.color.r}, ${this.form.color.g}, ${this.form.color.b}, ${this.form.color.a})`;
         }
     },
-    
+
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route;
@@ -114,3 +130,16 @@ let vue = new Vue({
         this.getNamespaces();
     }
 });
+
+function calculateColor (color) {
+    let a = Math.round(color.a * 255).toString(16);
+    let r = color.r.toString(16);
+    let g = color.g.toString(16);
+    let b = color.b.toString(16);
+    
+    let hexCol = `${a}${r}${g}${b}`;
+    
+    console.log(color, a, r, g, b, hexCol);
+    
+    return parseInt(hexCol, 16)
+}
