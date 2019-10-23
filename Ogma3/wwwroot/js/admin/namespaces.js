@@ -101,7 +101,9 @@ let vue = new Vue({
         editNamespace: function (t) {
             this.form.name = t.name;
             this.form.color = t.color;
+            this.form.color.a = t.color.a > 0 ? (t.color.a / 255).toFixed(2) : 0; // normalize alpha
             this.form.id = t.id;
+            this.updateColor();
         },
 
         // Clears the editor
@@ -138,8 +140,6 @@ function calculateColor (color) {
     let b = color.b.toString(16);
     
     let hexCol = `${a}${r}${g}${b}`;
-    
-    console.log(color, a, r, g, b, hexCol);
-    
+        
     return parseInt(hexCol, 16)
 }
