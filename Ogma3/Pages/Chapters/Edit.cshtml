@@ -1,0 +1,70 @@
+﻿@page
+@model Ogma3.Pages.Chapters.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Chapter</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Chapter.Id" />
+            <div class="form-group">
+                <label asp-for="Chapter.Order" class="control-label"></label>
+                <input asp-for="Chapter.Order" class="form-control" />
+                <span asp-validation-for="Chapter.Order" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chapter.PublishDate" class="control-label"></label>
+                <input asp-for="Chapter.PublishDate" class="form-control" />
+                <span asp-validation-for="Chapter.PublishDate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Chapter.IsPublished" /> @Html.DisplayNameFor(model => model.Chapter.IsPublished)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chapter.Title" class="control-label"></label>
+                <input asp-for="Chapter.Title" class="form-control" />
+                <span asp-validation-for="Chapter.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chapter.Slug" class="control-label"></label>
+                <input asp-for="Chapter.Slug" class="form-control" />
+                <span asp-validation-for="Chapter.Slug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chapter.Body" class="control-label"></label>
+                <input asp-for="Chapter.Body" class="form-control" />
+                <span asp-validation-for="Chapter.Body" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chapter.StartNotes" class="control-label"></label>
+                <input asp-for="Chapter.StartNotes" class="form-control" />
+                <span asp-validation-for="Chapter.StartNotes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chapter.EndNotes" class="control-label"></label>
+                <input asp-for="Chapter.EndNotes" class="form-control" />
+                <span asp-validation-for="Chapter.EndNotes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

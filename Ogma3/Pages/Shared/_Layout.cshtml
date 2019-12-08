@@ -15,6 +15,7 @@
     }
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/light.min.css" asp-append-version="true"/>
 
     @if (Env.IsDevelopment())
     {
@@ -46,7 +47,7 @@
                             <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">Admin</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Editors/Story">New Story</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/MyStories/Index">My Stories</a>
                         </li>
                     </ul>
                 </div>
@@ -54,7 +55,7 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container" id="site-content">
         <main role="main" class="pb-3" id="app">
             @RenderBody()
         </main>

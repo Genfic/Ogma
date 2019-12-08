@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Markdig;
@@ -14,7 +15,7 @@ namespace Ogma3.Services.TagHelpers
         {
             Basic, // Default
             Comment,
-            All,
+            All
         }
         
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -31,6 +32,8 @@ namespace Ogma3.Services.TagHelpers
                 case Presets.All:
                     pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
                     break;
+                default:
+                    throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...");
             }
             
             var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);

@@ -59,23 +59,5 @@ select {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important; } }
-body {
-  display: flex;
-  flex-direction: column; }
 
-#site-content {
-  flex: 1; }
-
-footer {
-  height: 60px; }
-
-p.tag {
-  line-height: 1;
-  border: 1px solid black;
-  margin: 4px;
-  padding: 4px; }
-
-img.avatar {
-  display: inline; }
-
-/*# sourceMappingURL=light.css.map */
+/*# sourceMappingURL=reset.css.map */

@@ -1,0 +1,24 @@
+@using Utils
+@model Ogma3.Data.Models.Story
+
+<div style="display:flex; flex-direction:row">
+    <img src="@Model.Cover" alt="@Model.Title" />
+    <div style="display:flex; flex-direction: column">
+        <h3>@Model.Title</h3>
+        <div>@Model.Hook</div>
+        <div style="display:flex; flex-direction:row; flex-wrap:wrap">
+            @foreach (var t in @Model.StoryTags.Select(st => st.Tag))
+            {
+                if (t.Namespace is null)
+                {
+                    <p style="border:1px solid black;">@t.Name</p>
+                }
+                else
+                {
+                    <p class="tag" style="background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
+                }
+            }
+        </div>
+    </div>
+</div>
+

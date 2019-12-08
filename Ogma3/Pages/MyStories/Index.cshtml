@@ -1,0 +1,17 @@
+﻿@page
+@model Ogma3.Pages.MyStories.IndexModel
+
+@{
+    ViewData["Title"] = "My Stories";
+}
+
+<h1>My Stories</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+    @foreach (var story in Model.Stories)
+    {
+        <partial name="Shared/_Story" model="story"/>
+    }

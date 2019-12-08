@@ -18,11 +18,8 @@ namespace Utils
 
         public static string Friendlify(this string input)
         {
-            var rgx = new Regex("[^a-zA-Z0-9]");
-            var str = rgx.Replace(input, "_");
-            
-            rgx = new Regex("_+");
-            str = rgx.Replace(str, "_");
+            var str = new Regex("[^a-zA-Z0-9]").Replace(input, "_");
+            str = new Regex("_+").Replace(str, "_");
 
             return str.ToLower().Trim('_');
         }

@@ -117,7 +117,7 @@ let vue = new Vue({
         updateColor: function () {
             this.color = `rgba(${this.form.color.r}, ${this.form.color.g}, ${this.form.color.b}, ${this.form.color.a})`;
         }
-    },
+    }, 
 
     mounted() {
         // Grab the route from route helper
@@ -138,8 +138,5 @@ function calculateColor (color) {
     let r = color.r.toString(16);
     let g = color.g.toString(16);
     let b = color.b.toString(16);
-    
-    let hexCol = `${a}${r}${g}${b}`;
-        
-    return parseInt(hexCol, 16)
+    return parseInt(`${a}${r}${g}${b}`, 16)
 }

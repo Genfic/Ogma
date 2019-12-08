@@ -1,7 +1,4 @@
 ﻿@page
-@using System.Security.AccessControl
-@using Ogma3.Data.Models
-@using Utils
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -48,28 +45,9 @@
 </markdown>
 
 <div>
-    @foreach (Story s in Model.Stories)
+    @foreach (var story in Model.Stories)
     {
-        <div style="display:flex; flex-direction:row">
-            <img src="@s.Cover" alt="@s.Title" />
-            <div style="display:flex; flex-direction: column">
-                <h3>@s.Title</h3>
-                <div>@s.Hook</div>
-                <div style="display:flex; flex-direction:row; flex-wrap:wrap">
-                    @foreach (Tag t in s.StoryTags.Select(st => st.Tag))
-                    {
-                        if (t.Namespace is null)
-                        {
-                            <p style="border:1px solid black;">@t.Name</p>
-                        }
-                        else
-                        {
-                            <p style="border:1px solid black; background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
+        <partial name="Shared/_Story" model="story"/>
     }
 </div>
 
