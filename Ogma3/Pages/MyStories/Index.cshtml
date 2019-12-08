@@ -14,4 +14,5 @@
     @foreach (var story in Model.Stories)
     {
         <partial name="Shared/_Story" model="story"/>
+        <a asp-page="./Delete" asp-route-id="@story.Id">Delet</a>
     }

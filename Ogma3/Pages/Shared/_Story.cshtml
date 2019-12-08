@@ -1,17 +1,17 @@
 @using Utils
 @model Ogma3.Data.Models.Story
 
-<div style="display:flex; flex-direction:row">
-    <img src="@Model.Cover" alt="@Model.Title" />
-    <div style="display:flex; flex-direction: column">
+<div class="story">
+    <img class="image" src="@Model.Cover" alt="@Model.Title" />
+    <div class="body">
         <h3>@Model.Title</h3>
         <div>@Model.Hook</div>
-        <div style="display:flex; flex-direction:row; flex-wrap:wrap">
+        <div class="tags">
             @foreach (var t in @Model.StoryTags.Select(st => st.Tag))
             {
                 if (t.Namespace is null)
                 {
-                    <p style="border:1px solid black;">@t.Name</p>
+                    <p class="tag">@t.Name</p>
                 }
                 else
                 {

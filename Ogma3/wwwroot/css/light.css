@@ -78,4 +78,21 @@ p.tag {
 img.avatar {
   display: inline; }
 
+div.story {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  margin: 4px 0 0; }
+  div.story:first-of-type {
+    margin: 0; }
+  div.story > img.image {
+    flex: 0 0 10rem; }
+  div.story > div.body {
+    display: flex;
+    flex-direction: column; }
+    div.story > div.body > div.tags {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap; }
+
 /*# sourceMappingURL=light.css.map */

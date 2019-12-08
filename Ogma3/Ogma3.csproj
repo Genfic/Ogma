@@ -43,4 +43,9 @@
     <Folder Include="Data\Enums" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Editors\Story.cshtml" />
+  </ItemGroup>
+
 </Project>

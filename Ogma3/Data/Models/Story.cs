@@ -57,7 +57,10 @@ namespace Ogma3.Data.Models
         [JsonIgnore]
         public virtual ICollection<StoryTag> StoryTags { get; set; }
         [NotMapped]
-        public IEnumerable<Tag> Tags => StoryTags.Select(st => st.Tag).ToList();
+        public IEnumerable<Tag> Tags => 
+            StoryTags == null 
+                ? new List<Tag>() 
+                : StoryTags.Select(st => st.Tag).ToList();
         
         // Rating
         [Required]

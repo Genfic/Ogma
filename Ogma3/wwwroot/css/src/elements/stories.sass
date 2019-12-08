@@ -1,0 +1,20 @@
+div
+  &.story
+    display: flex
+    flex-direction: row
+    border: 1px solid $foreground-25
+    margin: 4px 0 0
+    &:first-of-type
+      margin: 0
+
+    &>img.image
+      flex: 0 0 10rem
+      
+    &>div.body 
+      display: flex
+      flex-direction: column
+      
+      &>div.tags
+        display: flex
+        flex-direction: row
+        flex-wrap: wrap
