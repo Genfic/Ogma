@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,55 +25,25 @@ namespace Ogma3.Pages.MyStories
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
 
-        private Story Story;
+        public Story Story { get; set; }
 
         public EditModel(
             ApplicationDbContext context,
-            UserManager<User> userManager,
             IB2Client b2Client,
             IConfiguration config
         )
         {
             _context = context;
-            _userManager = userManager;
             _b2Client = b2Client;
             _config = config;
         }
 
         public List<Rating> Ratings { get; set; }
         
-        [BindProperty]
-        public int[] Tags { get; set; }
         public SelectList TagOptions { get; set; }
-
-        public async Task OnGetAsync(int? id)
-        {
-            // Get story to edit
-            Story = _context.Stories
-                .Where(s => s.Id == id)
-                .Include(s => s.StoryTags)
-                .Include(s => s.Rating)
-                .First();
-            Input = new InputModel
-            {
-                Title = Story.Title,
-                Description = Story.Description,
-                Hook = Story.Hook,
-                Rating = Story.Rating.Id,
-                Tags = Story.StoryTags.Select(st => st.TagId).ToList()
-            };
-            
-            Ratings = await _context.Ratings.ToListAsync();
-            TagOptions = new SelectList(
-                await _context.Tags.ToListAsync(),
-                nameof(Tag.Id), nameof(Tag.Name),
-                true
-            );
-        }
 
         [BindProperty] public InputModel Input { get; set; }
 
@@ -115,7 +85,44 @@ namespace Ogma3.Pages.MyStories
             public List<int> Tags { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnGetAsync(int? id)
+        {
+            // Get story to edit
+            Story = _context.Stories
+                .Where(s => s.Id == id)
+                .Include(s => s.StoryTags)
+                .Include(s => s.Rating)
+                .Include(s => s.Author)
+                .First();
+            
+            // Check ownership
+            if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
+                return RedirectToPage("./Index");
+            
+            // Fill InputModel
+            Input = new InputModel
+            {
+                Title = Story.Title,
+                Description = Story.Description,
+                Hook = Story.Hook,
+                Rating = Story.Rating.Id,
+                Tags = Story.StoryTags.Select(st => st.TagId).ToList()
+            };
+            
+            // Fill Ratings dropdown
+            Ratings = await _context.Ratings.ToListAsync();
+            
+            // Fill Tags dropdown
+            TagOptions = new SelectList(
+                await _context.Tags.ToListAsync(),
+                nameof(Tag.Id), nameof(Tag.Name),
+                true
+            );
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             Ratings = await _context.Ratings.ToListAsync();
             
@@ -123,16 +130,24 @@ namespace Ogma3.Pages.MyStories
             {
                 var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
 
-                // Add story
-                Story = new Story
-                {
-                    Author = await _userManager.GetUserAsync(User),
-                    Title = Input.Title,
-                    Slug = Input.Title.Friendlify(),
-                    Description = Input.Description,
-                    Hook = Input.Hook,
-                    Rating = await _context.Ratings.FindAsync(Input.Rating)
-                };
+                // Get story
+                Story = _context.Stories
+                    .Where(s => s.Id == id)
+                    .Include(s => s.StoryTags)
+                    .Include(s => s.Rating)
+                    .Include(s => s.Author)
+                    .First();
+                
+                // Check ownership
+                if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    return RedirectToPage("./Index");
+                
+                // Update story
+                Story.Title = Input.Title;
+                Story.Slug = Input.Title.Friendlify();
+                Story.Description = Input.Description;
+                Story.Hook = Input.Hook;
+                Story.Rating = await _context.Ratings.FindAsync(Input.Rating);
                 
                 _context.Update(Story);
                 await _context.SaveChangesAsync();
@@ -165,7 +180,6 @@ namespace Ogma3.Pages.MyStories
                         try
                         {
                             var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-                            Console.WriteLine(file.FileName);
                             Story.CoverId = file.FileId;
                             Story.Cover = _config["cdn"] + fileName;
                             keepUploading = false;

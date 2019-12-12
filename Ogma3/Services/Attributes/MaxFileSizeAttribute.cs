@@ -12,23 +12,15 @@ namespace Ogma3.Services.Attributes
             _maxFileSize = maxFileSize;
         }
 
-        protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            //var extension = Path.GetExtension(file.FileName);
-            //var allowedExtensions = new[] { ".jpg", ".png" };`enter code here`
-            if (value is IFormFile file)
-            {
-                if (file.Length > _maxFileSize)
-                {
-                    return new ValidationResult(GetErrorMessage());
-                }
-            }
-
-            return ValidationResult.Success;
+            if (!(value is IFormFile file)) 
+                return new ValidationResult("Object does not implement IFormFile interface.");
+            
+            return file.Length > _maxFileSize ? new ValidationResult(GetErrorMessage()) : ValidationResult.Success;
         }
 
-        public string GetErrorMessage()
+        private string GetErrorMessage()
         {
             var maxS = UnitConverters.FormatBytes(_maxFileSize);
             return $"Maximum allowed file size is {maxS}";
