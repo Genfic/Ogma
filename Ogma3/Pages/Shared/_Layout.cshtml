@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
+@using Ogma3.Data.Models
+@inject SignInManager<User> SignInManager
+@inject OgmaUserManager UserManager
 @inject IWebHostEnvironment Env
 
 <!DOCTYPE html>
@@ -46,9 +49,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">Admin</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/MyStories/Index">My Stories</a>
-                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/MyStories/Index">My Stories</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

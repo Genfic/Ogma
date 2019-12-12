@@ -25,7 +25,7 @@ namespace Ogma3.Api
             {
                 return new SignInData
                 {
-                    Avatar = Lorem.Picsum(200),
+                    Avatar = user.Avatar ?? Lorem.Picsum(200),
                     Title = user.Title,
                     HasMfa = user.TwoFactorEnabled
                 };

@@ -86,7 +86,7 @@ namespace Ogma3.Pages.MyStories
             [DataType(DataType.Upload)]
             [MaxFileSize(CTConfig.Story.CoverMaxWeight)]
             [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
-            public IFormFile? Cover { get; set; }
+            public IFormFile Cover { get; set; }
 
             [Required] 
             public int Rating { get; set; }
