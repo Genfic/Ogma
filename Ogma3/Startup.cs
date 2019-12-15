@@ -78,13 +78,22 @@ namespace Ogma3
                     options.AccessDeniedPath = "/login";
                 });
             
+            // Auth
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            });
+            
             // Compression
             services.AddResponseCompression();
             
             // Runtime compilation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
+                });
         }
 
 

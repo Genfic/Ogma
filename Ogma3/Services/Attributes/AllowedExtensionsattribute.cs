@@ -16,24 +16,25 @@ namespace Ogma3.Services.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value is IFormFile file)
+            switch (value)
             {
-                var extension = Path.GetExtension(file.FileName);
+                case null:
+                    return ValidationResult.Success;
                 
-                if (
-                    !Array.Exists(_extensions, e => e == extension.ToLower())
-                    || file.ContentType.Split('/')[0].ToLower() != "image"
-                )
+                case IFormFile file:
                 {
-                    return new ValidationResult("This file extension is not allowed.");
+                    var extension = Path.GetExtension(file.FileName).ToLower();
+                    var fileType = file.ContentType.Split('/')[0].ToLower();
+                
+                    if (!Array.Exists(_extensions, e => e == extension) || fileType != "image")
+                        return new ValidationResult("This file extension is not allowed.");
+                    
+                    return ValidationResult.Success;
                 }
-            }
-            else
-            {
-                return new ValidationResult("Object does not implement IFormFile interface.");
+                default:
+                    return new ValidationResult("Object does not implement IFormFile interface.");
             }
 
-            return ValidationResult.Success;
         }
     }
 }

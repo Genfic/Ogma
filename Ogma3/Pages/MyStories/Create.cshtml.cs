@@ -43,17 +43,7 @@ namespace Ogma3.Pages.MyStories
         }
 
         public List<Rating> Ratings { get; set; }
-        
-        [BindProperty]
-        public int[] Tags { get; set; }
         public SelectList TagOptions { get; set; }
-
-        public async Task OnGetAsync()
-        {
-            Ratings = await _context.Ratings.ToListAsync();
-//            Tags = await _context.Tags.ToListAsync();
-            TagOptions = new SelectList(await _context.Tags.ToListAsync(), nameof(Tag.Id), nameof(Tag.Name));
-        }
 
         [BindProperty] public InputModel Input { get; set; }
 
@@ -93,6 +83,12 @@ namespace Ogma3.Pages.MyStories
 
             [Required] 
             public List<int> Tags { get; set; }
+        }
+
+        public async Task OnGetAsync()
+        {
+            Ratings = await _context.Ratings.ToListAsync();
+            TagOptions = new SelectList(await _context.Tags.ToListAsync(), nameof(Tag.Id), nameof(Tag.Name));
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -162,7 +158,7 @@ namespace Ogma3.Pages.MyStories
                 // Final save
                 await _context.SaveChangesAsync();
                 
-                return  RedirectToPage();
+                return RedirectToPage("./Index");
             }
             else
             {

@@ -14,6 +14,9 @@ namespace Ogma3.Services.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+                return ValidationResult.Success;
+            
             if (!(value is IFormFile file)) 
                 return new ValidationResult("Object does not implement IFormFile interface.");
             
