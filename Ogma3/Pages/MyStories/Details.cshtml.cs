@@ -26,6 +26,9 @@ namespace Ogma3.Pages.MyStories
 
             Story = await _context.Stories
                 .Include(s => s.Author)
+                .Include(s => s.StoryTags)
+                    .ThenInclude(st => st.Tag)
+                        .ThenInclude(t => t.Namespace)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             // Check permissions

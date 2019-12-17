@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using B2Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.MyStories
@@ -13,12 +15,16 @@ namespace Ogma3.Pages.MyStories
     public class DeleteModel : PageModel
     {
         private readonly Data.ApplicationDbContext _context;
+        private IConfiguration _config;
+        private readonly IB2Client _b2Client;
 
-        public DeleteModel(Data.ApplicationDbContext context)
+        public DeleteModel(Data.ApplicationDbContext context, IB2Client b2Client, IConfiguration config)
         {
             _context = context;
+            _b2Client = b2Client;
+            _config = config;
         }
-
+        
         [BindProperty]
         public Story Story { get; set; }
 
@@ -28,6 +34,9 @@ namespace Ogma3.Pages.MyStories
 
             Story = await _context.Stories
                 .Include(s => s.Author)
+                .Include(s => s.StoryTags)
+                    .ThenInclude(st => st.Tag)
+                        .ThenInclude(t => t.Namespace)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             // Check permissions
@@ -43,6 +52,7 @@ namespace Ogma3.Pages.MyStories
         {
             if (id == null) return NotFound();
             
+            // Get story
             Story = await _context.Stories
                 .Include(s => s.Author)
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -52,13 +62,20 @@ namespace Ogma3.Pages.MyStories
             if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
                 return RedirectToPage("./Index");
 
+            // Remove tag associations
             await _context.StoryTags
                 .Where(st => st.StoryId == Story.Id)
                 .ForEachAsync(st => _context.StoryTags.Remove(st));
             
+            // Remove story
             _context.Stories.Remove(Story);
-            await _context.SaveChangesAsync();
+            
+            // Delete cover
+            await _b2Client.Files.Delete(Story.CoverId, Story.Cover.Replace(_config["cdn"], ""));
 
+            // Save
+            await _context.SaveChangesAsync();
+            
             return RedirectToPage("./Index");
         }
     }

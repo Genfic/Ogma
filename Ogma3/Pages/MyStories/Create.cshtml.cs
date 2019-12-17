@@ -149,7 +149,7 @@ namespace Ogma3.Pages.MyStories
                         }
                         catch (B2Exception e)
                         {
-                            Console.WriteLine(">>> Backblaze Error: " + e.Message);
+                            Console.WriteLine("⚠ Backblaze Error: " + e.Message);
                             counter--;
                         }
                     }
