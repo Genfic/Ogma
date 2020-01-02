@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Utils;
@@ -34,8 +30,10 @@ namespace Ogma3.Pages
         {
             Stories = await _context.Stories
                 .Include(s => s.StoryTags)
-                .ThenInclude(st => st.Tag)
-                .ThenInclude(t => t.Namespace)
+                    .ThenInclude(st => st.Tag)
+                        .ThenInclude(t => t.Namespace)
+                .Include(s => s.Rating)
+                .Include(s => s.Author)
                 .ToListAsync();
             
             SampleText = Lorem.Ipsum(5, new IpsumOptions

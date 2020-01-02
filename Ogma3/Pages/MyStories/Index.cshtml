@@ -13,7 +13,7 @@
 
     @foreach (var story in Model.Stories)
     {
-        <partial name="Shared/_Story" model="story"/>
+        <partial name="Shared/_StoryCard" model="story"/>
         <a asp-page="./Delete" asp-route-id="@story.Id">Delet</a>
         <a asp-page="./Edit" asp-route-id="@story.Id">Edit</a>
     }

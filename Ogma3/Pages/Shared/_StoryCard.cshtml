@@ -4,10 +4,11 @@
 <div class="story">
     <img class="image" src="@Model.Cover" alt="@Model.Title" />
     <div class="body">
-        <h3>@Model.Title</h3>
-        <div>@Model.Hook</div>
+        <h3 class="title">@Model.Title</h3>
+        <h4 class="author">By @Model.Author.UserName</h4>
+        <div class="hook">@Model.Hook</div>
         <div class="tags">
-            @foreach (var t in @Model.StoryTags.Select(st => st.Tag))
+            @foreach (var t in Model.Tags)
             {
                 if (t.Namespace is null)
                 {

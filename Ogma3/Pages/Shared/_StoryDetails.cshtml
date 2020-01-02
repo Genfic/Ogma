@@ -1,0 +1,70 @@
+@using Utils
+@model Ogma3.Data.Models.Story
+
+<div>
+    <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name">
+    <h4>Story</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Cover
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.Cover" alt="@Model.CoverId" class="rounded img-thumbnail">
+        </dd>
+        <dt class="col-sm-2">
+            Title
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Title
+        </dd>
+        <dt class="col-sm-2">
+            Slug
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Slug
+        </dd>
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Description
+        </dd>
+        <dt class="col-sm-2">
+            Hook
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Hook
+        </dd>
+        <dt class="col-sm-2">
+            Release date
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ReleaseDate
+        </dd>
+        <dt class="col-sm-2">
+            Published status
+        </dt>
+        <dd class="col-sm-10">
+            @Model.IsPublished
+        </dd>
+        <dt class="col-sm-2">
+            Tags
+        </dt>
+        <dd class="com-sm-10">
+        <div class="tags">
+            @foreach (var t in Model.Tags)
+            {
+                if (t.Namespace is null)
+                {
+                    <p class="tag">@t.Name</p>
+                }
+                else
+                {
+                    <p class="tag" style="background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
+                }
+            }
+        </div>
+        </dd>
+    </dl>
+</div>

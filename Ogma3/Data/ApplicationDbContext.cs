@@ -62,6 +62,9 @@ namespace Ogma3.Data
             
             // Story
             builder.Entity<Story>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd();
+            builder.Entity<Story>()
                 .Property(p => p.ReleaseDate)
                 .HasDefaultValueSql("getdate()");
             builder.Entity<Story>()

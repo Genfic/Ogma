@@ -29,8 +29,10 @@ namespace Ogma3.Pages.MyStories
             Stories = await _context.Stories
                 .Where(s => s.Author.Id == userId)
                 .Include(s => s.StoryTags)
-                .ThenInclude(st => st.Tag)
-                .ThenInclude(t => t.Namespace)
+                    .ThenInclude(st => st.Tag)
+                        .ThenInclude(t => t.Namespace)
+                .Include(s => s.Rating)
+                .Include(s => s.Author)
                 .ToListAsync();
         }
     }

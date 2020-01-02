@@ -73,7 +73,10 @@ p.tag {
   line-height: 1;
   border: 1px solid black;
   margin: 4px;
-  padding: 4px; }
+  padding: 4px;
+  cursor: pointer; }
+  p.tag:hover {
+    opacity: 0.9; }
 
 img.avatar {
   display: inline; }
@@ -85,12 +88,28 @@ div.story {
   margin: 4px 0 0; }
   div.story:first-of-type {
     margin: 0; }
+  @media only screen and (max-width: 570px) {
+    div.story {
+      flex-direction: column; } }
   div.story > img.image {
-    flex: 0 0 10rem; }
+    flex: 0 0 10rem;
+    object-fit: contain;
+    align-self: flex-start; }
+    @media only screen and (max-width: 570px) {
+      div.story > img.image {
+        align-self: center; } }
   div.story > div.body {
     display: flex;
-    flex-direction: column; }
-    div.story > div.body > div.tags {
+    flex-direction: column;
+    padding: 0 4px; }
+    div.story > div.body > .title {
+      margin: 0 4px; }
+    div.story > div.body > .author {
+      margin: 0 4px;
+      font-size: 1.1rem; }
+    div.story > div.body > .hook {
+      margin: 2px 4px; }
+    div.story > div.body > .tags {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap; }

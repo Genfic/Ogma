@@ -29,6 +29,8 @@ namespace Ogma3.Pages.MyStories
                 .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                         .ThenInclude(t => t.Namespace)
+                .Include(s => s.Rating)
+                .Include(s => s.Chapters)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             // Check permissions
