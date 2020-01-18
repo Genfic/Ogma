@@ -7,20 +7,20 @@ const rename = require("gulp-rename");
 const autoprefixer = require('autoprefixer');
 const discard = require('postcss-discard-comments');
 const mqpacker = require('css-mqpacker');
-const nano = require('gulp-cssnano');
+const nano = require('cssnano');
 
 gulp.task('css', () => {
     const processors = [
         autoprefixer,
         discard({ removeAll: true }),
-        mqpacker
+        mqpacker,
+        nano({ preset: 'default' })
     ];
 
     return gulp.src('./Ogma3/wwwroot/css/*.sass')
         .pipe(sass())                           // Compile SASS
-        .pipe(postcss(processors))              // Postprocess it
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output the raw CSS
-        .pipe(nano())                           // Minify CSS
+        .pipe(postcss(processors))              // Postprocess it
         .pipe(rename({ suffix: '.min' }))       // Add .min suffix
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output minified CSS
 });
