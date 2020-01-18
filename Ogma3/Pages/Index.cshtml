@@ -4,11 +4,6 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
 <markdown preset="Basic">
     # Hello World!
     
@@ -16,38 +11,13 @@
     
     *And More*
     
-    ~~strike~~
-    
-    ^sup^
-    
-    ~sub~
-    
-    ++ins++
-    
-    ==marked==
-    
-    a. extra
-    b. bullet
-    c. list
-    
-    https://youtube.com
-    
-    [link](https://localhost:5001/)
-
-    ____
-    
-    > [!IMPORTANT]
-    > Essential information required for user success.
-    
-    ____
-    
-
+    [link](https://localhost:5001/)    
 </markdown>
 
 <div>
     @foreach (var story in Model.Stories)
     {
-        <partial name="Shared/_StoryCard" model="story"/>
+        <partial name="Shared/_StoryCard" model="@story"/>
     }
 </div>
 

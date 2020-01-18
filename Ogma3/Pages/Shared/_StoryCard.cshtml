@@ -1,10 +1,12 @@
 @using Utils
 @model Ogma3.Data.Models.Story
 
-<div class="story">
+<div class="story-card">
     <img class="image" src="@Model.Cover" alt="@Model.Title" />
     <div class="body">
-        <h3 class="title">@Model.Title</h3>
+        <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
+            <h3>@Model.Title</h3>
+        </a>
         <h4 class="author">By @Model.Author.UserName</h4>
         <div class="hook">@Model.Hook</div>
         <div class="tags">

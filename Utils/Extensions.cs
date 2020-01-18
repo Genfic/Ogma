@@ -33,7 +33,7 @@ namespace Utils
         /// <exception cref="ArgumentException">`oldMin` has to be less than `oldMax`, and `newMin` has to be less than `newMax`.</exception>
         public static double Normalize(this double num, double oldMin, double oldMax, double newMin = 0, double newMax = 1)
         {
-            if (oldMin >= oldMax || newMin >= newMax) throw new ArgumentException();
+            if (oldMin >= oldMax || newMin >= newMax) throw new ArgumentException("oldMin has to be less than oldMax, and newMin has to be less than newMax");
             return newMin + (num - oldMin) * (newMax - newMin) / (oldMax - oldMin);
         }
 

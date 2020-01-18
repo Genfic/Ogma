@@ -1,70 +1,49 @@
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using Utils
 @model Ogma3.Data.Models.Story
 
-<div>
-    <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name">
-    <h4>Story</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Cover
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Model.Cover" alt="@Model.CoverId" class="rounded img-thumbnail">
-        </dd>
-        <dt class="col-sm-2">
-            Title
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Title
-        </dd>
-        <dt class="col-sm-2">
-            Slug
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Slug
-        </dd>
-        <dt class="col-sm-2">
-            Description
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Description
-        </dd>
-        <dt class="col-sm-2">
-            Hook
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Hook
-        </dd>
-        <dt class="col-sm-2">
-            Release date
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ReleaseDate
-        </dd>
-        <dt class="col-sm-2">
-            Published status
-        </dt>
-        <dd class="col-sm-10">
-            @Model.IsPublished
-        </dd>
-        <dt class="col-sm-2">
-            Tags
-        </dt>
-        <dd class="com-sm-10">
-        <div class="tags">
-            @foreach (var t in Model.Tags)
+<div class="story-details">
+
+    <div class="titlebar">
+        <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
+        <h1 class="title">@Model.Title</h1>
+    </div>
+    
+    <div class="tags">
+        @foreach (var t in Model.Tags)
+        {
+            if (t.Namespace is null)
             {
-                if (t.Namespace is null)
-                {
-                    <p class="tag">@t.Name</p>
-                }
-                else
-                {
-                    <p class="tag" style="background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
-                }
+                <p class="tag">@t.Name</p>
             }
+            else
+            {
+                <p class="tag" style="background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
+            }
+        }
+    </div>
+  
+    <div class="main">
+    
+        <img src="@Model.Cover" alt="@Model.CoverId" class="cover">
+        <h2 class="author">By @Model.Author.UserName</h2>
+        <span class="date">@Model.ReleaseDate</span>
+        <div class="description">@Model.Description</div>
+    
+    </div>
+    
+    <ol class="chapters">
+        @foreach (var c in Model.Chapters)
+        {
+            <div>@c.Title : @c.PublishDate</div>
+        }
+    </ol>
+    
+    @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+    {
+        <div>
+            <a asp-page="./MyStories/Edit" asp-route-id="@Model.Id">Edit</a>
         </div>
-        </dd>
-    </dl>
+    }
 </div>

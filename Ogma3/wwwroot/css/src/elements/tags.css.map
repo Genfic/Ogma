@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,KAAK;EACH,MAAM,EAAE,eAAe;EACvB,MAAM,EAAE,GAAG;EACX,OAAO,EAAE,GAAG",
-"sources": ["tags.sass"],
-"names": [],
-"file": "tags.css"
-}

@@ -1,0 +1,8 @@
+﻿@page "{id}/{slug?}"
+@model Ogma3.Pages.StoryModel
+
+@{
+    ViewData["Title"] = Model.Story.Title;
+}
+
+<partial name="Shared/_StoryDetails" model="@Model.Story"/>

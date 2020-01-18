@@ -1,0 +1,39 @@
+$title-height: 2rem
+
+.story-details
+  &>.titlebar
+    display: flex
+    flex-direction: row
+    padding-bottom: .5rem
+    
+    &>.rating
+      height: $title-height
+      width: $title-height
+      margin-right: .5rem
+    
+    &>h1.title
+      font-size: $title-height
+      line-height: $title-height
+  
+  &>.tags
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+
+  &>.main
+    padding-top: .5rem
+    
+    &>.cover
+      float: left
+      margin-right: 10px
+      margin-bottom: 10px
+      width: 10rem
+      object-fit: contain
+      border: 1px solid $foreground-25
+      
+    &>h2.author
+      font-size: 1.2rem
+      line-height: 1.2rem 
+      
+  &>.chapters
+    

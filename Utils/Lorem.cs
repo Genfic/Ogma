@@ -13,7 +13,7 @@ namespace Utils
             return y == null ? $"//picsum.photos/{x}" : $"//picsum.photos/{x}/{y}";
         }
 
-        public static string Ipsum(int paragraphs, IpsumOptions? options)
+        public static string Ipsum(int paragraphs, IpsumOptions options)
         {
             var api = $"https://loripsum.net/api/{paragraphs}/";
 
