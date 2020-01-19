@@ -26,7 +26,10 @@
   
     <div class="main">
     
-        <img src="@Model.Cover" alt="@Model.CoverId" class="cover">
+        @if (Model.Cover != null)
+        {
+            <img src="@Model.Cover" alt="@Model.CoverId" class="cover">
+        }
         <h2 class="author">By @Model.Author.UserName</h2>
         <span class="date">@Model.ReleaseDate</span>
         <div class="description">@Model.Description</div>
@@ -44,6 +47,9 @@
     {
         <div>
             <a asp-page="./MyStories/Edit" asp-route-id="@Model.Id">Edit</a>
+        </div>
+        <div>
+            <a asp-page="./Chapters/Create" asp-route-id="@Model.Id">New chapter</a>
         </div>
     }
 </div>
