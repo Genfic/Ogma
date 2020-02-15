@@ -3,14 +3,15 @@
 @using Utils
 @model Ogma3.Data.Models.Story
 
-<div class="story-details">
+<div class="story-details" itemscope itemtype="https://schema.org/Book">
 
     <div class="titlebar">
         <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
-        <h1 class="title">@Model.Title</h1>
+        <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
+        <h1 class="title" itemprop="name">@Model.Title</h1>
     </div>
     
-    <div class="tags">
+    <div class="tags" itemprop="keywords">
         @foreach (var t in Model.Tags)
         {
             if (t.Namespace is null)
@@ -28,11 +29,13 @@
     
         @if (Model.Cover != null)
         {
-            <img src="@Model.Cover" alt="@Model.CoverId" class="cover">
+            <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
         }
-        <h2 class="author">By @Model.Author.UserName</h2>
-        <span class="date">@Model.ReleaseDate</span>
-        <div class="description">@Model.Description</div>
+        <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
+        <span class="date" itemprop="datePublished">@Model.ReleaseDate</span>
+        <div class="description" itemprop="abstract">
+            <text>@Model.Description</text>
+        </div>
     
     </div>
     

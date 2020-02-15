@@ -2,13 +2,19 @@ const gulp = require('gulp');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const rename = require("gulp-rename");
+const sourcemaps = require("gulp-sourcemaps");
 
-// Processors
+// CSS processors
 const autoprefixer = require('autoprefixer');
 const discard = require('postcss-discard-comments');
 const mqpacker = require('css-mqpacker');
 const nano = require('cssnano');
 
+// JS processors
+const closureCompiler = require('google-closure-compiler').gulp();
+const uglify = require('gulp-uglify-es').default;
+
+// CSS tasks
 gulp.task('css', () => {
     const processors = [
         autoprefixer,
@@ -25,6 +31,20 @@ gulp.task('css', () => {
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output minified CSS
 });
 
-gulp.task('watch:css', () => {
-    gulp.watch('**/*.sass', gulp.series('css'));
+gulp.task('watch:css', () => gulp.watch('**/*.sass', gulp.series('css')));
+
+// JS tasks
+gulp.task('js', () => {
+    return gulp.src(['./Ogma3/wwwroot/js/**/*.js', '!./**/*.min.js'])
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(sourcemaps.init())
+        .pipe(uglify({mangle: true}))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('./Ogma3/wwwroot/js'));
 });
+
+gulp.task('watch:js', () => gulp.watch('**/*.js', gulp.series('js')));
+
+// All tasks
+gulp.task('all', gulp.parallel(['css', 'js']));
+gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js']));
