@@ -1,0 +1,13 @@
+﻿@page "{id}/{slug?}"
+@model Ogma3.Pages.ChapterModel
+
+@{
+    ViewData["Title"] = @Model.StoryChapter.Chapter.Title;
+}
+
+<partial name="Shared/_ChapterDetails" model="@Model.StoryChapter"></partial>
+
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.StoryChapter.Chapter.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

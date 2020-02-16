@@ -1,0 +1,41 @@
+$notes-padding-x: .5rem
+$notes-padding-y: .25rem
+
+.chapter-details
+  display: flex
+  flex-direction: column
+  align-content: center
+  
+  &>a.story
+    text-align: center
+    font-style: italic
+    color: $foreground-75
+    text-decoration: underline
+  
+  &>h1.title
+    text-align: center
+    margin: .5rem
+    
+  &>time.date
+    text-align: center
+    margin: 0
+    
+  &>.body-container
+    
+    &>.notes
+      text-align: justify
+      font-style: italic
+      padding: $notes-padding-y $notes-padding-x
+      margin: .5rem 0
+      color: $foreground-75
+      border: 1px solid $foreground-25
+    
+      &.start
+      
+      &.end
+
+      &>.an
+        font-weight: lighter
+      
+    &>.body
+      text-align: justify

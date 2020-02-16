@@ -4,23 +4,11 @@
     ViewData["Title"] = "Home page";
 }
 
-<markdown preset="Basic">
-    # Hello World!
-    
-    **Testing More**
-    
-    *And More*
-    
-    [link](https://localhost:5001/)    
-</markdown>
+<h2>Recent stories</h2>
 
 <div>
     @foreach (var story in Model.Stories)
     {
         <partial name="Shared/_StoryCard" model="@story"/>
     }
-</div>
-
-<div>
-    @Html.Raw(Model.SampleText)
 </div>

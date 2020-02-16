@@ -1,5 +1,5 @@
+@using System.Globalization
 @using System.Security.Claims
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using Utils
 @model Ogma3.Data.Models.Story
 
@@ -40,9 +40,13 @@
     </div>
     
     <ol class="chapters">
-        @foreach (var c in Model.Chapters)
+        <span>Chapters:</span>
+        @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
         {
-            <div>@c.Title : @c.PublishDate</div>
+            <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+                <div class="title">@c.Order. @c.Title</div>
+                <div class="date">@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</div>
+            </a>
         }
     </ol>
     

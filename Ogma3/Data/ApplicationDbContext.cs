@@ -88,7 +88,7 @@ namespace Ogma3.Data
             builder.Entity<Chapter>()
                 .Property(p => p.IsPublished)
                 .HasDefaultValue(false);
-                
+
             // Story tags
             builder.Entity<StoryTag>()
                 .HasKey(st => new {st.StoryId, st.TagId});

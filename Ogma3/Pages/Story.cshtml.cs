@@ -8,7 +8,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Pages
 {
-    [Authorize]
+    
     public class StoryModel : PageModel
     {
         private readonly Data.ApplicationDbContext _context;

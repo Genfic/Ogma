@@ -25,7 +25,7 @@ namespace Ogma3.Services.Attributes
 
         private string GetErrorMessage()
         {
-            var maxS = UnitConverters.FormatBytes(_maxFileSize);
+            var maxS = UnitConverters.SizeSuffix(_maxFileSize, 2);
             return $"Maximum allowed file size is {maxS}";
         }
     }

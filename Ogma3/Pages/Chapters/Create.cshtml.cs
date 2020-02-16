@@ -54,15 +54,24 @@ namespace Ogma3.Pages.Chapters
             {
                 return Page();
             }
-            
-            Console.WriteLine($"ID is {id}");
-            
-            _context.Chapters.Add(Chapter);
 
+            // Get the story to insert a chapter into
             Story = _context.Stories
                 .Where(s => s.Id == id)
                 .Include(s => s.Chapters)
                 .First();
+            
+            // Get the order number of the latest chapter
+            var latestChapter = Story.Chapters
+                .OrderBy(c => c.Order)
+                .LastOrDefault()
+                .Order;
+            
+            // Set this number
+            Chapter.Order = latestChapter + 1;
+            
+            // Create the chapter and add it to the story
+            _context.Chapters.Add(Chapter);
             Story.Chapters.Add(Chapter);
             
             await _context.SaveChangesAsync();

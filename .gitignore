@@ -39,3 +39,4 @@ msbuild.wrn
 # Dev env
 node_modules/
 package-lock.json
+yarn-error.log

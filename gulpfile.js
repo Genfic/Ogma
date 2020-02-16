@@ -11,7 +11,6 @@ const mqpacker = require('css-mqpacker');
 const nano = require('cssnano');
 
 // JS processors
-const closureCompiler = require('google-closure-compiler').gulp();
 const uglify = require('gulp-uglify-es').default;
 
 // CSS tasks

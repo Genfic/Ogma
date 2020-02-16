@@ -39,5 +39,8 @@ namespace Ogma3.Data.Models
 
         [MaxLength(CTConfig.Chapter.MaxNotesLength)]
         public string? EndNotes { get; set; } = null;
+        
+        [Required]
+        public int StoryId { get; set; }
     }
 }

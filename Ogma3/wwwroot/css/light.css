@@ -72,14 +72,16 @@ footer {
 
 p.tag {
   line-height: 1;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   margin: 4px;
   padding: 4px;
   cursor: pointer; }
   p.tag:first-child {
     margin-left: 0; }
   p.tag:hover {
-    opacity: 0.9; }
+    opacity: 0.9;
+    color: rgba(0, 0, 0, 0.8); }
 
 img.avatar {
   display: inline; }
@@ -91,6 +93,8 @@ div.story-card {
   margin: 4px 0 0; }
   div.story-card:first-of-type {
     margin: 0; }
+  div.story-card:hover {
+    border-color: rgba(0, 0, 0, 0.5); }
   @media only screen and (max-width: 570px) {
     div.story-card {
       flex-direction: column; } }
@@ -140,7 +144,8 @@ div.story-card {
   flex-wrap: wrap; }
 
 .story-details > .main {
-  padding-top: .5rem; }
+  padding-top: .5rem;
+  text-align: justify; }
   .story-details > .main > .cover {
     float: left;
     margin-right: 10px;
@@ -151,3 +156,51 @@ div.story-card {
   .story-details > .main > h2.author {
     font-size: 1.2rem;
     line-height: 1.2rem; }
+
+.story-details > .chapters {
+  margin-top: .5rem; }
+  .story-details > .chapters > span {
+    font-weight: bold; }
+  .story-details > .chapters > .chapter {
+    display: flex;
+    flex-direction: row;
+    padding: .5rem;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    border-top: 1px solid rgba(0, 0, 0, 0.25); }
+    .story-details > .chapters > .chapter:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
+    .story-details > .chapters > .chapter:hover {
+      background-color: rgba(0, 128, 255, 0.1); }
+    .story-details > .chapters > .chapter > .title {
+      flex-grow: 1; }
+    .story-details > .chapters > .chapter > .date {
+      flex-shrink: 1; }
+
+.chapter-details {
+  display: flex;
+  flex-direction: column;
+  align-content: center; }
+  .chapter-details > a.story {
+    text-align: center;
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.75);
+    text-decoration: underline; }
+  .chapter-details > h1.title {
+    text-align: center;
+    margin: .5rem; }
+  .chapter-details > time.date {
+    text-align: center;
+    margin: 0; }
+  .chapter-details > .body-container > .notes {
+    text-align: justify;
+    font-style: italic;
+    padding: 0.25rem 0.5rem;
+    margin: .5rem 0;
+    color: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(0, 0, 0, 0.25); }
+    .chapter-details > .body-container > .notes > .an {
+      font-weight: lighter; }
+  .chapter-details > .body-container > .body {
+    text-align: justify; }
