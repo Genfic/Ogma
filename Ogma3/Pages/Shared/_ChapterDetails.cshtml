@@ -8,8 +8,18 @@
     <time class="date" itemprop="datePublished">@Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
     
     <div class="body-container">
-        <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
+        
+        @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
+        {
+            <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
+        }
+        
         <div class="body">@Model.Chapter.Body</div>
-        <div class="end notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</div>
+        
+        @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
+        {
+            <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</div>
+        }
+        
     </div>
 </article>

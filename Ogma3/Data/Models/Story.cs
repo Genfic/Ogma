@@ -11,6 +11,11 @@ namespace Ogma3.Data.Models
 {
     public class Story
     {
+        // public Story()
+        // {
+        //     Chapters = new List<Chapter>();
+        // }
+
         [Key]
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

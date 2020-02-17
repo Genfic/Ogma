@@ -9,6 +9,8 @@
 
 <form id="story" method="post" enctype="multipart/form-data">
 
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="form-group">
         <label asp-for="Input.Title"></label>
         <p>What your story be named</p>

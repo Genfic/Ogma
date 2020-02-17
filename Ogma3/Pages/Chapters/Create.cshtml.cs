@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils;
 
 namespace Ogma3.Pages.Chapters
 {
@@ -43,8 +45,39 @@ namespace Ogma3.Pages.Chapters
         }
 
         [BindProperty]
-        public Chapter Chapter { get; set; }
+        public InputModel Chapter { get; set; }
         public Story Story { get; set; }
+
+        public class InputModel
+        {
+            [Required]
+            [StringLength(
+                CTConfig.Chapter.MaxTitleLength,
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.Chapter.MinTitleLength
+            )]
+            public string Title { get; set; }
+            
+            [Required]
+            [StringLength(
+                CTConfig.Chapter.MaxBodyLength,
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.Chapter.MinBodyLength
+            )]
+            public string Body { get; set; }
+            
+            [StringLength(
+                CTConfig.Chapter.MaxNotesLength,
+                ErrorMessage = "The {0} cannot exceed {1} characters."
+            )]
+            public string StartNotes { get; set; }
+            
+            [StringLength(
+                CTConfig.Chapter.MaxNotesLength,
+                ErrorMessage = "The {0} cannot exceed {1} characters."
+            )]
+            public string EndNotes { get; set; }
+        }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -61,22 +94,34 @@ namespace Ogma3.Pages.Chapters
                 .Include(s => s.Chapters)
                 .First();
             
-            // Get the order number of the latest chapter
-            var latestChapter = Story.Chapters
-                .OrderBy(c => c.Order)
-                .LastOrDefault()
-                .Order;
             
-            // Set this number
-            Chapter.Order = latestChapter + 1;
+            // Get the order number of the latest chapter
+            var latestChapter = Story.Chapters.Count <= 0 
+                ? 0 
+                : Story.Chapters
+                    .OrderBy(c => c.Order)
+                    .LastOrDefault()
+                    .Order;
+            
+            // Construct empty chapter
+            var chapter = new Chapter
+            {
+                Title = Chapter.Title.Trim(),
+                Body = Chapter.Body.Trim(),
+                StartNotes = Chapter.StartNotes?.Trim(),
+                EndNotes = Chapter.EndNotes?.Trim(),
+                Slug = Chapter.Title.Trim().Friendlify(),
+                Order = latestChapter + 1
+            };
+            
             
             // Create the chapter and add it to the story
-            _context.Chapters.Add(Chapter);
-            Story.Chapters.Add(Chapter);
+            _context.Chapters.Add(chapter);
+            Story.Chapters.Add(chapter);
             
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "{id}/{slug?}"
+@using System.Security.Claims
 @model Ogma3.Pages.StoryModel
 
 @{
@@ -6,3 +7,15 @@
 }
 
 <partial name="Shared/_StoryDetails" model="@Model.Story"/>
+
+@if (User.Identity.IsAuthenticated && Model.Story.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+{
+    <div>
+        <a asp-page="./MyStories/Edit" asp-route-id="@Model.Story.Id">
+            <icon icon="edit"></icon>
+        </a>
+        <a asp-page="./Chapters/Create" asp-route-id="@Model.Story.Id">
+            <icon icon="delete_forever"></icon>
+        </a>
+    </div>
+}

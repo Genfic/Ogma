@@ -6,7 +6,6 @@ namespace Ogma3.Services.TagHelpers
     {
         public string Src { get; set; }
         public int? Size { get; set; }
-        
         public string? Alt { get; set; }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)

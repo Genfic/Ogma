@@ -7,13 +7,30 @@
 
 <h1>My Stories</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<hr>
 
+<a class="btn btn-success btn-block" asp-page="Create">
+    <icon icon="add"></icon>
+    Create New
+</a>
+
+
+<ul class="my-list">
     @foreach (var story in Model.Stories)
     {
-        <partial name="Shared/_StoryCard" model="story"/>
-        <a asp-page="./Delete" asp-route-id="@story.Id">Delet</a>
-        <a asp-page="./Edit" asp-route-id="@story.Id">Edit</a>
+        <li class="item">
+        
+            <partial name="Shared/_StoryCard" model="story"/>
+            
+            <div class="buttons">
+                <a class="button" asp-page="./Edit" asp-route-id="@story.Id">
+                    <icon icon="edit"></icon>
+                </a>
+                <a class="button" asp-page="./Delete" asp-route-id="@story.Id">
+                    <icon icon="delete_forever"></icon>
+                </a>
+            </div>
+            
+        </li>
     }
+</ul>

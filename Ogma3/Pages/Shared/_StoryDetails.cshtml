@@ -49,14 +49,4 @@
             </a>
         }
     </ol>
-    
-    @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
-    {
-        <div>
-            <a asp-page="./MyStories/Edit" asp-route-id="@Model.Id">Edit</a>
-        </div>
-        <div>
-            <a asp-page="./Chapters/Create" asp-route-id="@Model.Id">New chapter</a>
-        </div>
-    }
 </div>

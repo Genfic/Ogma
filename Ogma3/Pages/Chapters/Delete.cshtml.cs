@@ -53,7 +53,7 @@ namespace Ogma3.Pages.Chapters
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Story", new { id = Chapter?.StoryId });
         }
     }
 }

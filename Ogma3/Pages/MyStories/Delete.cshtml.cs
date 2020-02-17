@@ -24,9 +24,8 @@ namespace Ogma3.Pages.MyStories
             _b2Client = b2Client;
             _config = config;
         }
-        
-        [BindProperty]
-        public Story Story { get; set; }
+
+        [BindProperty] public Story Story { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,6 +36,8 @@ namespace Ogma3.Pages.MyStories
                 .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                         .ThenInclude(t => t.Namespace)
+                .Include(s => s.Rating)
+                .Include(s => s.Chapters)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             // Check permissions
@@ -44,20 +45,20 @@ namespace Ogma3.Pages.MyStories
                 return RedirectToPage("./Index");
 
             if (Story == null) return NotFound();
-            
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null) return NotFound();
-            
+
             // Get story
             Story = await _context.Stories
                 .Include(s => s.Author)
                 .FirstOrDefaultAsync(s => s.Id == id);
             if (Story == null) return RedirectToPage("./Index");
-            
+
             // Check permissions
             if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
                 return RedirectToPage("./Index");
@@ -66,16 +67,17 @@ namespace Ogma3.Pages.MyStories
             await _context.StoryTags
                 .Where(st => st.StoryId == Story.Id)
                 .ForEachAsync(st => _context.StoryTags.Remove(st));
-            
+
             // Remove story
             _context.Stories.Remove(Story);
-            
+
             // Delete cover
-            await _b2Client.Files.Delete(Story.CoverId, Story.Cover.Replace(_config["cdn"], ""));
+            if (Story.CoverId != null)
+                await _b2Client.Files.Delete(Story.CoverId, Story.Cover.Replace(_config["cdn"], ""));
 
             // Save
             await _context.SaveChangesAsync();
-            
+
             return RedirectToPage("./Index");
         }
     }

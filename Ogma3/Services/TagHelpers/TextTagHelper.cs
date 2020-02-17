@@ -16,9 +16,6 @@ namespace Ogma3.Services.TagHelpers
                     .Split('\n', '\r')
                     .Where(s => !string.IsNullOrEmpty(s))
                 );
-
-            Console.WriteLine(content.GetContent()
-                .Split('\n', '\r'));
             
             output.TagName = "p";
             output.Content.SetHtmlContent(innerHtml + content.GetContent().Split('\n', '\r').Length);

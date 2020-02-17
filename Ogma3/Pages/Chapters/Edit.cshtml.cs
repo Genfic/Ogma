@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils;
 
 namespace Ogma3.Pages.Chapters
 {
@@ -21,7 +24,40 @@ namespace Ogma3.Pages.Chapters
         }
 
         [BindProperty]
-        public Chapter Chapter { get; set; }
+        public InputModel Chapter { get; set; }
+        
+        public class InputModel
+        {
+            public int Id { get; set; }
+            
+            [Required]
+            [StringLength(
+                CTConfig.Chapter.MaxTitleLength,
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.Chapter.MinTitleLength
+            )]
+            public string Title { get; set; }
+            
+            [Required]
+            [StringLength(
+                CTConfig.Chapter.MaxBodyLength,
+                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+                MinimumLength = CTConfig.Chapter.MinBodyLength
+            )]
+            public string Body { get; set; }
+            
+            [StringLength(
+                CTConfig.Chapter.MaxNotesLength,
+                ErrorMessage = "The {0} cannot exceed {1} characters."
+            )]
+            public string StartNotes { get; set; }
+            
+            [StringLength(
+                CTConfig.Chapter.MaxNotesLength,
+                ErrorMessage = "The {0} cannot exceed {1} characters."
+            )]
+            public string EndNotes { get; set; }
+        }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,12 +66,22 @@ namespace Ogma3.Pages.Chapters
                 return NotFound();
             }
 
-            Chapter = await _context.Chapters.FirstOrDefaultAsync(m => m.Id == id);
+            var chapter = await _context.Chapters.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (Chapter == null)
+            if (chapter == null)
             {
                 return NotFound();
             }
+            
+            Chapter = new InputModel
+            {
+                Id = chapter.Id,
+                Title = chapter.Title,
+                Body = chapter.Body,
+                StartNotes = chapter.StartNotes,
+                EndNotes = chapter.EndNotes
+            };
+            
             return Page();
         }
 
@@ -47,8 +93,13 @@ namespace Ogma3.Pages.Chapters
             {
                 return Page();
             }
-
-            _context.Attach(Chapter).State = EntityState.Modified;
+            
+            var chapter = await _context.Chapters.FirstAsync(c => c.Id == Chapter.Id);
+            chapter.Title = Chapter.Title.Trim();
+            chapter.Body = Chapter.Body.Trim();
+            chapter.StartNotes = Chapter.StartNotes?.Trim();
+            chapter.EndNotes = Chapter.EndNotes?.Trim();
+            chapter.Slug = Chapter.Title.Trim().Friendlify();
 
             try
             {
@@ -66,7 +117,7 @@ namespace Ogma3.Pages.Chapters
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
         }
 
         private bool ChapterExists(int id)

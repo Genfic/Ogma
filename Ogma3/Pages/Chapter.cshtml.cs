@@ -25,8 +25,12 @@ namespace Ogma3.Pages
                 return NotFound();
             }
 
-            var chapter = await _context.Chapters.FirstOrDefaultAsync(m => m.Id == id);
-            var story = await _context.Stories.FirstOrDefaultAsync(s => s.Id == chapter.StoryId);
+            var chapter = await _context.Chapters
+                .FirstOrDefaultAsync(m => m.Id == id);
+            var story = await _context.Stories
+                .Include(s => s.Author)
+                .FirstOrDefaultAsync(s => s.Id == chapter.StoryId);
+            
             StoryChapter = new StoryChapterDTO
             {
                 Chapter = chapter,

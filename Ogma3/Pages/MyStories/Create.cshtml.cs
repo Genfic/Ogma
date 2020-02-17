@@ -158,7 +158,7 @@ namespace Ogma3.Pages.MyStories
                 // Final save
                 await _context.SaveChangesAsync();
                 
-                return RedirectToPage("./Index");
+                return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
             }
             else
             {

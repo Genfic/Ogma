@@ -1,4 +1,5 @@
 ﻿@page "{id}/{slug?}"
+@using System.Security.Claims
 @model Ogma3.Pages.ChapterModel
 
 @{
@@ -7,7 +8,14 @@
 
 <partial name="Shared/_ChapterDetails" model="@Model.StoryChapter"></partial>
 
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.StoryChapter.Chapter.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+@if (User.Identity.IsAuthenticated && Model.StoryChapter.Story.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+{
+    <div>
+        <a asp-page="./Chapters/Edit" asp-route-id="@Model.StoryChapter.Chapter.Id">
+            <icon icon="edit"></icon>
+        </a>
+        <a asp-page="./Chapters/Delete" asp-route-id="@Model.StoryChapter.Chapter.Id">
+            <icon icon="delete_forever"></icon>
+        </a>
+    </div>
+}
