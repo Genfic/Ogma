@@ -88,7 +88,7 @@ namespace Ogma3.Data
             builder.Entity<Chapter>()
                 .HasOne(c => c.CommentsThread)
                 .WithOne()
-                .HasForeignKey<Chapter>(c => c.CommentsThreadId) /* TODO: Fix the relationship somehow */
+                .HasForeignKey<Chapter>(c => c.CommentsThreadId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Story tags

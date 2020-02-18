@@ -187,7 +187,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(500000);
 
-                    b.Property<int?>("CommentsThreadId")
+                    b.Property<int>("CommentsThreadId")
                         .HasColumnType("int");
 
                     b.Property<string>("EndNotes")
@@ -226,8 +226,7 @@ namespace Ogma3.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommentsThreadId")
-                        .IsUnique()
-                        .HasFilter("[CommentsThreadId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("StoryId");
 
@@ -562,7 +561,8 @@ namespace Ogma3.Migrations
                     b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
                         .WithOne()
                         .HasForeignKey("Ogma3.Data.Models.Chapter", "CommentsThreadId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ogma3.Data.Models.Story", null)
                         .WithMany("Chapters")

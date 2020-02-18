@@ -111,8 +111,7 @@ namespace Ogma3.Pages.Chapters
                 StartNotes = Chapter.StartNotes?.Trim(),
                 EndNotes = Chapter.EndNotes?.Trim(),
                 Slug = Chapter.Title.Trim().Friendlify(),
-                Order = latestChapter + 1,
-                CommentsThread = new CommentsThread()
+                Order = latestChapter + 1
             };
             
             
