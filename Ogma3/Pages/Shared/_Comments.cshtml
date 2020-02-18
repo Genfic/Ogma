@@ -1,11 +1,7 @@
 @using static Ogma3.Services.HtmlExtensions
 
-<div class="comments-container">
+<div class="comments-container" id="comments">
     Comments
 </div>
 
-@Html.Resource(
-    @<script>
-        alert("OwO")
-    </script>
-    )
+@Html.Resource(@<script src="~/js/comments.min.js" asp-append-version="true"></script>)
