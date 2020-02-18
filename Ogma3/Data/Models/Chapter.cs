@@ -39,6 +39,9 @@ namespace Ogma3.Data.Models
 
         [MaxLength(CTConfig.Chapter.MaxNotesLength)]
         public string? EndNotes { get; set; } = null;
+
+        public CommentsThread? CommentsThread { get; set; }
+        public int? CommentsThreadId { get; set; } /* TODO: Fix the relationship somehow */
         
         [Required]
         public int StoryId { get; set; }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.Models;
 
@@ -24,6 +19,8 @@ namespace Ogma3.Data
         public DbSet<Story> Stories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
+        public DbSet<CommentsThread> CommentThreads { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         
         
         
@@ -88,6 +85,11 @@ namespace Ogma3.Data
             builder.Entity<Chapter>()
                 .Property(p => p.IsPublished)
                 .HasDefaultValue(false);
+            builder.Entity<Chapter>()
+                .HasOne(c => c.CommentsThread)
+                .WithOne()
+                .HasForeignKey<Chapter>(c => c.CommentsThreadId) /* TODO: Fix the relationship somehow */
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Story tags
             builder.Entity<StoryTag>()
@@ -98,7 +100,18 @@ namespace Ogma3.Data
             builder.Entity<StoryTag>()
                 .HasOne(st => st.Tag)
                 .WithMany();
+            
+            // Comment threads
+            builder.Entity<CommentsThread>()
+                .HasMany(ct => ct.Comments)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Comments
+            builder.Entity<Comment>()
+                .HasOne(c => c.Author)
+                .WithMany();
+            
         }
         
         

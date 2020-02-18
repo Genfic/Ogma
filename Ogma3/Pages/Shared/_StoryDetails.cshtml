@@ -10,7 +10,7 @@
         <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
         <h1 class="title" itemprop="name">@Model.Title</h1>
     </div>
-    
+
     <div class="tags" itemprop="keywords">
         @foreach (var t in Model.Tags)
         {
@@ -24,9 +24,9 @@
             }
         }
     </div>
-  
+
     <div class="main">
-    
+
         @if (Model.Cover != null)
         {
             <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
@@ -36,9 +36,9 @@
         <div class="description" itemprop="abstract">
             <text>@Model.Description</text>
         </div>
-    
+
     </div>
-    
+
     <ol class="chapters">
         <span>Chapters:</span>
         @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
@@ -46,6 +46,13 @@
             <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
                 <div class="title">@c.Order. @c.Title</div>
                 <div class="date">@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</div>
+            </a>
+        }
+        @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+        {
+            <a class="btn btn-success btn-block btn-sm" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+                <icon icon="add"></icon>
+                Add new
             </a>
         }
     </ol>

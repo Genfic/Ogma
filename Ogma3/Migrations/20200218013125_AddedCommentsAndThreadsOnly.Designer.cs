@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ogma3.Data;
 
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200218013125_AddedCommentsAndThreadsOnly")]
+    partial class AddedCommentsAndThreadsOnly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,9 +189,6 @@ namespace Ogma3.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(500000);
 
-                    b.Property<int?>("CommentsThreadId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EndNotes")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
@@ -224,10 +223,6 @@ namespace Ogma3.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommentsThreadId")
-                        .IsUnique()
-                        .HasFilter("[CommentsThreadId] IS NOT NULL");
 
                     b.HasIndex("StoryId");
 
@@ -559,11 +554,6 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.Chapter", b =>
                 {
-                    b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
-                        .WithOne()
-                        .HasForeignKey("Ogma3.Data.Models.Chapter", "CommentsThreadId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Ogma3.Data.Models.Story", null)
                         .WithMany("Chapters")
                         .HasForeignKey("StoryId")

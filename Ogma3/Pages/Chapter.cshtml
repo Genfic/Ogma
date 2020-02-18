@@ -3,10 +3,8 @@
 @model Ogma3.Pages.ChapterModel
 
 @{
-    ViewData["Title"] = @Model.StoryChapter.Chapter.Title;
+    ViewData["Title"] = Model.StoryChapter.Chapter.Title;
 }
-
-<partial name="Shared/_ChapterDetails" model="@Model.StoryChapter"></partial>
 
 @if (User.Identity.IsAuthenticated && Model.StoryChapter.Story.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
 {
@@ -19,3 +17,6 @@
         </a>
     </div>
 }
+
+<partial name="Shared/_ChapterDetails" model="@Model.StoryChapter"></partial>
+

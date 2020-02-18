@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
 @using Ogma3.Data.Models
+@using Ogma3.Services
 @inject SignInManager<User> SignInManager
 @inject OgmaUserManager UserManager
 @inject IWebHostEnvironment Env
@@ -90,6 +91,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
+    @Html.RenderResources()
 
 </body>
 </html>

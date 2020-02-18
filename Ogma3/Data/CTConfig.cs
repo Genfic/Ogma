@@ -1,5 +1,7 @@
 // Compile-time config variables
 
+using System.IO.Pipelines;
+
 namespace Ogma3.Data
 {
     public static class CTConfig
@@ -18,7 +20,7 @@ namespace Ogma3.Data
             public const int MaxPassLength = 100;
 
             public const int MaxTitleLength = 20;
-            public const int MaxBioLength = 2000;
+            public const int MaxBioLength = 10_000;
         }
         
         public static class Category
@@ -75,6 +77,12 @@ namespace Ogma3.Data
             public const int MinHookLength = 50;
             public const int MaxHookLength = 500;
             public const int CoverMaxWeight = 2 * 1024 * 1024;
+        }
+        
+        public static class Comment
+        {
+            public const int MinBodyLength = 2;
+            public const int MaxBodyLength = 10_000;
         }
     }
 }
