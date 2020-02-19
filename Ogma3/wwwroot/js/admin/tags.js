@@ -1,4 +1,4 @@
-let vue = new Vue({ 
+let atags_vue = new Vue({ 
     el: "#app",
     data: {
         form: {

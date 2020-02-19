@@ -53,7 +53,7 @@ namespace Ogma3.Data.Models
         
         
         // Chapters
-        public ICollection<Chapter> Chapters { get; set; }
+        public ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
 
 
         // Tags

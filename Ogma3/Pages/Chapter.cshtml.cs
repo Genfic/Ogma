@@ -26,6 +26,7 @@ namespace Ogma3.Pages
             }
 
             var chapter = await _context.Chapters
+                .Include(c => c.CommentsThread)
                 .FirstOrDefaultAsync(m => m.Id == id);
             var story = await _context.Stories
                 .Include(s => s.Author)

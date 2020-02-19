@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,10 +19,12 @@ namespace Ogma3.Pages.Chapters
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public CreateModel(ApplicationDbContext context)
+        public CreateModel(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult OnGetAsync(int? id)
@@ -88,22 +92,26 @@ namespace Ogma3.Pages.Chapters
                 return Page();
             }
 
-            // Get the story to insert a chapter into
-            Story = _context.Stories
-                .Where(s => s.Id == id)
-                .Include(s => s.Chapters)
-                .First();
-            
-            
+            // Get logged in user
+            var user = await _userManager.GetUserAsync(User);
+
+            // Get the story to insert a chapter into. Include user in the search to check ownership.
+            Story = _context.Stories.First(s => s.Id == id && s.Author.Id == user.Id);
+
+            // Back to index if the story is null
+            if (Story == null)
+            {
+                return RedirectToPage("../Index");
+            }
+
             // Get the order number of the latest chapter
-            var latestChapter = Story.Chapters.Count <= 0 
-                ? 0 
-                : Story.Chapters
-                    .OrderBy(c => c.Order)
-                    .LastOrDefault()
-                    .Order;
-            
-            // Construct empty chapter
+            var latestChapter = await _context.Chapters
+                .Where(c => c.StoryId == Story.Id)
+                .OrderBy(c => c.Order)
+                .Select(c => c.Order)
+                .LastOrDefaultAsync();
+
+            // Construct new chapter
             var chapter = new Chapter
             {
                 Title = Chapter.Title.Trim(),

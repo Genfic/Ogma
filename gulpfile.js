@@ -12,6 +12,7 @@ const nano = require('cssnano');
 
 // JS processors
 const uglify = require('gulp-uglify-es').default;
+const closureCompiler = require('google-closure-compiler').gulp();
 
 // CSS tasks
 gulp.task('css', () => {
@@ -40,6 +41,17 @@ gulp.task('js', () => {
         .pipe(uglify({mangle: true}))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./Ogma3/wwwroot/js'));
+        // .pipe(closureCompiler({
+        //     compilation_level: 'SIMPLE',
+        //     warning_level: 'QUIET',
+        //     language_in: 'ECMASCRIPT6_STRICT',
+        //     language_out: 'ECMASCRIPT5_STRICT',
+        //     output_wrapper: '(function(){\n%output%\n}).call(this)',
+        // }, {
+        //     platform: ['native', 'java', 'javascript']
+        // }))
+        // .pipe(sourcemaps.write('./'))
+        // .pipe(gulp.dest('./Ogma3/wwwroot/js'));
 });
 
 gulp.task('watch:js', () => gulp.watch('**/*.js', gulp.series('js')));

@@ -1,4 +1,4 @@
-let vue = new Vue({ 
+let login_vue = new Vue({ 
     el: "#app",
     data: {
         name: null,

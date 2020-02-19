@@ -1,4 +1,4 @@
-let vue = new Vue({ 
+let acategories_vue = new Vue({ 
     el: "#app",
     data: {
         form: {

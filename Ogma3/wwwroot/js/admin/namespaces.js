@@ -1,4 +1,4 @@
-let vue = new Vue({
+let anamespaces_vue = new Vue({
     el: "#app",
     data: {
         form: {

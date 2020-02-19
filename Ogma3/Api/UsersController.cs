@@ -16,6 +16,7 @@ namespace Ogma3.Api
             _userManager = userManager;
         }
 
+        // GET: api/Users/signin/John
         [HttpGet("signin/{name}")]
         public async Task<ActionResult<SignInData>> GetSignInData(string name)
         {

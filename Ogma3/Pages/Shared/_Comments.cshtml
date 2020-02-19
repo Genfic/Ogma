@@ -1,7 +1,25 @@
 @using static Ogma3.Services.HtmlExtensions
+@model Ogma3.Data.Models.Chapter
 
-<div class="comments-container" id="comments">
-    Comments
+<div class="comments-container" id="comments-container">
+    <form>
+        <label for="body">Body</label>
+        <textarea v-model="body" name="body" id="body" cols="'30'" rows="10"></textarea>
+
+        <div id="thread" data-thread="@Model.CommentsThread.Id" v-if="!thread"></div>
+        <div id="route" data-route="@Url.RouteUrl("CommentsController")" v-if="!route"></div>
+
+        <button v-on:click="submit">Send</button>
+    </form>
+
+    <div id="comments">
+        <div class="comment" v-for="c in comments">
+            <h4>{{ c.author.userName }}</h4>
+            <time>{{ c.dateTime }}</time>
+            <span>{{ c.body }}</span>
+        </div>
+    </div>
+
 </div>
 
 @Html.Resource(@<script src="~/js/comments.min.js" asp-append-version="true"></script>)
