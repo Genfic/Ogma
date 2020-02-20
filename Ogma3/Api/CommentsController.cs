@@ -25,11 +25,12 @@ namespace Ogma3.Api
             _userManager = userManager;
         }
 
-        // GET: api/Comments
+        // GET: api/Comments?thread=6
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComment()
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery] int thread)
         {
             return await _context.Comments
+                .Where(c => c.CommentsThreadId == thread)
                 .Include(c => c.Author)
                 .Select(c => CommentDTO.FromComment(c))
                 .ToListAsync();
@@ -95,8 +96,7 @@ namespace Ogma3.Api
             var comment = new Comment
             {
                 Author = await _userManager.GetUserAsync(User),
-                Body = data.Body,
-                DateTime = new DateTime()
+                Body = data.Body
             };
 
             var thread = _context.CommentThreads.First(ct => ct.Id == data.Thread);

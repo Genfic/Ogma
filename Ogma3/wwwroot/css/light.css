@@ -179,6 +179,11 @@ div.story-card {
     .story-details > .chapters > .chapter > .date {
       flex-shrink: 1; }
 
+.chapter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
 .chapter-details {
   display: flex;
   flex-direction: column;
@@ -240,3 +245,81 @@ ul.my-list {
           border-top: 1px solid rgba(0, 0, 0, 0.25); }
         ul.my-list > li.item > div.buttons > .button:hover {
           background-color: rgba(0, 128, 255, 0.1); }
+
+.comments-container {
+  margin-top: 2rem;
+  width: 70%; }
+  @media screen and (max-width: 570px) {
+    .comments-container {
+      width: 100%; } }
+  .comments-container > form {
+    display: flex;
+    flex-direction: column; }
+    .comments-container > form .active-border {
+      border: 1px solid rgba(0, 0, 0, 0.5); }
+      .comments-container > form .active-border:hover {
+        border-color: rgba(0, 0, 0, 0.75); }
+      .comments-container > form .active-border:focus {
+        border-color: #0080ff; }
+    .comments-container > form > .comment-box {
+      padding: .5rem;
+      min-height: 5rem; }
+    .comments-container > form > .buttons {
+      display: flex; }
+    .comments-container > form .comment-btn {
+      flex: 1;
+      background-color: white;
+      margin: 1px 1px 0 0; }
+      .comments-container > form .comment-btn > i.material-icons-outlined {
+        font-size: inherit !important;
+        vertical-align: middle; }
+    .comments-container > form .help-btn {
+      flex: 0 0 2rem;
+      margin: 1px 0 0 0;
+      text-align: center;
+      color: black; }
+      .comments-container > form .help-btn > i.material-icons-outlined {
+        vertical-align: middle; }
+  .comments-container > .comments {
+    margin-top: 1rem; }
+    .comments-container > .comments > .comment {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      margin-bottom: 1rem; }
+      .comments-container > .comments > .comment:hover .author, .comments-container > .comments > .comment:hover .main {
+        border-color: rgba(0, 0, 0, 0.75); }
+      .comments-container > .comments > .comment > .author {
+        flex: 0 0 6rem;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        margin-right: .5rem; }
+        @media screen and (max-width: 570px) {
+          .comments-container > .comments > .comment > .author {
+            flex: 0 0 4rem; } }
+        .comments-container > .comments > .comment > .author > .name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-weight: 600;
+          padding: 0 .2rem; }
+        .comments-container > .comments > .comment > .author > .avatar {
+          border-top: 1px solid rgba(0, 0, 0, 0.5); }
+      .comments-container > .comments > .comment > .main {
+        flex: 1;
+        border: 1px solid rgba(0, 0, 0, 0.5); }
+        .comments-container > .comments > .comment > .main > .header {
+          display: flex;
+          align-items: center;
+          padding: 0 .5rem;
+          color: rgba(0, 0, 0, 0.5); }
+          .comments-container > .comments > .comment > .main > .header > *:hover {
+            color: rgba(0, 0, 0, 0.75); }
+        .comments-container > .comments > .comment > .main > .body {
+          white-space: pre-line;
+          margin: .5rem; }
+
+p.sm-line {
+  display: inline-block;
+  width: 1px;
+  height: .8rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0 .5rem; }

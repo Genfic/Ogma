@@ -1,0 +1,10 @@
+@page "{doc}"
+@model Ogma3.Pages.Docs
+
+@{
+    ViewData["Title"] = Model.Document.Title;
+}
+
+<div>
+@Model.Document.Body
+</div>

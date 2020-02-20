@@ -18,7 +18,7 @@ namespace Ogma3.Data.Models
         public User Author { get; set; }
 
         [Required] 
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
 
         [Required]
         [MinLength(CTConfig.Comment.MinBodyLength)]

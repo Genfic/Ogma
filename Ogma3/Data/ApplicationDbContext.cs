@@ -22,6 +22,9 @@ namespace Ogma3.Data
         public DbSet<CommentsThread> CommentThreads { get; set; }
         public DbSet<Comment> Comments { get; set; }
         
+        // Secondary
+        public DbSet<Document> Documents { get; set; }
+        
         
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -62,9 +65,6 @@ namespace Ogma3.Data
                 .Property(s => s.Id)
                 .ValueGeneratedOnAdd();
             builder.Entity<Story>()
-                .Property(p => p.ReleaseDate)
-                .HasDefaultValueSql("getdate()");
-            builder.Entity<Story>()
                 .Property(p => p.IsPublished)
                 .HasDefaultValue(false);
             builder.Entity<Story>()
@@ -79,9 +79,6 @@ namespace Ogma3.Data
                 .WithMany();
             
             // Chapter
-            builder.Entity<Chapter>()
-                .Property(c => c.PublishDate)
-                .HasDefaultValueSql("getdate()");
             builder.Entity<Chapter>()
                 .Property(p => p.IsPublished)
                 .HasDefaultValue(false);
@@ -111,7 +108,14 @@ namespace Ogma3.Data
             builder.Entity<Comment>()
                 .HasOne(c => c.Author)
                 .WithMany();
+
+
             
+            // Documents
+            builder.Entity<Document>()
+                .HasIndex(d => d.Slug)
+                .IsUnique();
+
         }
         
         

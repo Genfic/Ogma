@@ -11,7 +11,7 @@ namespace Ogma3.Services.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "i";
-            output.AddClass("material-icons", HtmlEncoder.Default);
+            output.AddClass("material-icons-outlined", HtmlEncoder.Default);
             output.Content.SetHtmlContent(Icon);
         }
     }

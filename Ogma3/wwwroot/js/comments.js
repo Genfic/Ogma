@@ -7,25 +7,43 @@ let comments_vue = new Vue({
         comments: []
     },
     methods: {
+        
+        // Submit the comment, load comments again, clean textarea
         submit: function (e) {
             e.preventDefault();
-            console.log(this.body, this.thread);
             axios.post(this.route, 
                 {
                     body: this.body,
                     thread: Number(this.thread)
                 })
-                .then(_ => this.load())
+                .then(_ => {
+                    this.load();
+                    this.body = null;
+                })
                 .catch(console.error) 
         },
         
+        // Load comments for the thread
         load: function () {
-            axios.get(this.route)
+            axios.get(this.route, {params:{thread:this.thread}})
                 .then(res => {
-                    this.comments = res.data;
-                })
+                    this.comments = res.data.map(
+                        (val, key) => ({val, key})
+                    ).reverse()
+;                }) 
                 .catch(console.error)
+        },
+        
+        // Handle Enter key input
+        enter: function(e) {
+            if (e.ctrlKey) this.submit(e)
+        },
+        
+        // Parse date
+        date: function (dt) {
+            return dayjs(dt).format('DD MMM YYYY, HH:mm');
         }
+        
     },
     
     mounted() {

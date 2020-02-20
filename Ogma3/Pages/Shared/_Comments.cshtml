@@ -3,20 +3,36 @@
 
 <div class="comments-container" id="comments-container">
     <form>
-        <label for="body">Body</label>
-        <textarea v-model="body" name="body" id="body" cols="'30'" rows="10"></textarea>
+        <textarea class="comment-box active-border" v-model="body" v-on:keydown.enter="enter" name="body" id="body" rows="3" aria-label="Comment"></textarea>
 
         <div id="thread" data-thread="@Model.CommentsThread.Id" v-if="!thread"></div>
         <div id="route" data-route="@Url.RouteUrl("CommentsController")" v-if="!route"></div>
 
-        <button v-on:click="submit">Send</button>
+        <div class="buttons">
+            <button class="comment-btn active-border" v-on:click="submit">
+                <icon icon="add_comment"></icon>
+                Comment
+            </button>
+            <a class="help-btn active-border" asp-page="/Docs" asp-route-doc="markdown">
+                <icon icon="help_outline"></icon>
+            </a>
+        </div>
     </form>
 
-    <div id="comments">
+    <div class="comments">
         <div class="comment" v-for="c in comments">
-            <h4>{{ c.author.userName }}</h4>
-            <time>{{ c.dateTime }}</time>
-            <span>{{ c.body }}</span>
+            <div class="author">
+                <span class="name">{{ c.val.author.userName }}</span>
+                <img :src="c.val.author.avatar" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
+            </div>
+            <div class="main">
+                <div class="header">
+                    <span>#{{ c.key+1 }}</span>
+                    <p class="sm-line"></p>
+                    <time :datetime="c.val.dateTime" class="time">{{ date(c.val.dateTime) }}</time>
+                </div>
+                <div class="body">{{ c.val.body }}</div>
+            </div>
         </div>
     </div>
 

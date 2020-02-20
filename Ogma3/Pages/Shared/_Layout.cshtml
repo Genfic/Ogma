@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/light.min.css" asp-append-version="true"/>
     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
     @if (Env.IsDevelopment())
     {
@@ -31,7 +31,6 @@
     {
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     }
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
 
@@ -81,6 +80,9 @@
             &copy; 2019-@DateTime.Now.Year - Angius - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.20/dayjs.min.js" integrity="sha256-ca0AUcGacUBWNoFjEyMEXFfWfdNHNiGC5uTEsMWj1oQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
 
     @if (ViewData["use_bootstrap"] == null)
     {

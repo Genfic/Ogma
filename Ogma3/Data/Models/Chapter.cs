@@ -16,7 +16,7 @@ namespace Ogma3.Data.Models
         [Required]
         public int Order { get; set; }
 
-        public DateTime PublishDate { get; set; }
+        public DateTime PublishDate { get; set; } = DateTime.Now;
 
         [Required]
         public bool IsPublished { get; set; } = false;

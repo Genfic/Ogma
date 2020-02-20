@@ -1,27 +1,30 @@
 @using System.Globalization
 @model Ogma3.Data.DTOs.StoryChapterDTO
 
-<article class="chapter-details" itemscope itemtype="https://bib.schema.org/Chapter">
-    
-    <a class="story" asp-page="/Story" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">@Model.Story.Title</a>
-    <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
-    <time class="date" itemprop="datePublished">@Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
-    
-    <div class="body-container">
-        
-        @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
-        {
-            <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
-        }
-        
-        <div class="body">@Model.Chapter.Body</div>
-        
-        @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
-        {
-            <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</div>
-        }
-        
-    </div>
-</article>
 
-<partial name="_Comments" model="@Model.Chapter"></partial>
+<div class="chapter-container">
+    <article class="chapter-details" itemscope itemtype="https://bib.schema.org/Chapter">
+        
+        <a class="story" asp-page="/Story" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">@Model.Story.Title</a>
+        <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
+        <time class="date" itemprop="datePublished">@Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
+        
+        <div class="body-container">
+            
+            @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
+            {
+                <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
+            }
+            
+            <div class="body">@Model.Chapter.Body</div>
+            
+            @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
+            {
+                <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</div>
+            }
+            
+        </div>
+    </article>
+    
+    <partial name="_Comments" model="@Model.Chapter"></partial>
+</div>

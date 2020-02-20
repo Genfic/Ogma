@@ -1,0 +1,84 @@
+.comments-container
+  margin-top: 2rem
+  width: 70%
+  @media screen and (max-width: $mq-mobile)
+    width: 100%
+  
+  &>form
+    display: flex
+    flex-direction: column
+    
+    & .active-border
+      border: 1px solid $foreground-50
+      &:hover
+        border-color: $foreground-75
+      &:focus
+        border-color: $accent
+    
+    &>.comment-box
+      padding: .5rem
+      min-height: 5rem
+      
+    &>.buttons
+      display: flex
+      
+    & .comment-btn
+      flex: 1
+      background-color: $background
+      margin: 1px 1px 0 0
+      
+      &>i.material-icons-outlined
+        font-size: inherit !important
+        vertical-align: middle
+        
+    & .help-btn
+      flex: 0 0 2rem
+      margin: 1px 0 0 0
+      text-align: center
+      color: $foreground
+
+      &>i.material-icons-outlined
+        vertical-align: middle
+    
+  &>.comments
+    margin-top: 1rem
+    
+    &>.comment
+      display: flex
+      flex-direction: row
+      align-items: baseline
+      margin-bottom: 1rem
+      &:hover .author, &:hover .main
+        border-color: $foreground-75
+      
+      &>.author
+        flex: 0 0 6rem
+        border: 1px solid $foreground-50
+        margin-right: .5rem
+        @media screen and (max-width: $mq-mobile)
+          flex: 0 0 4rem
+        
+        &>.name
+          overflow: hidden
+          text-overflow: ellipsis
+          font-weight: 600
+          padding: 0 .2rem
+
+        &>.avatar
+          border-top: 1px solid $foreground-50
+  
+      &>.main
+        flex: 1
+        border: 1px solid $foreground-50
+        
+        &>.header
+          display: flex
+          align-items: center
+          padding: 0 .5rem
+          color: $foreground-50
+          &>*:hover
+            color: $foreground-75
+                                              
+        &>.body
+          white-space: pre-line
+          margin: .5rem

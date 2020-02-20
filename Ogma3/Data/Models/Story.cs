@@ -46,7 +46,7 @@ namespace Ogma3.Data.Models
         public string? CoverId { get; set; }
 
         [Required]
-        public DateTime ReleaseDate { get; set; } = new DateTime();
+        public DateTime ReleaseDate { get; set; } = DateTime.Now;
 
         [Required]
         public bool IsPublished { get; set; } = false;
