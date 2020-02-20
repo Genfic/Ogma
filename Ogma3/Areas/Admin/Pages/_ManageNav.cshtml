@@ -11,4 +11,17 @@
     <li class="nav-item">
         <a class="nav-link @ManageNavPages.CategoriesNavClass(ViewContext)" id="categories" asp-page="./Categories">Categories</a>
     </li>
+    <li class="nav-item">
+        <span class="nav-link">Documents</span>
+        
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link @ManageNavPages.ManageDocumentsNavClass(ViewContext)" id="manage-documents" asp-page="./Manage">Manage</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @ManageNavPages.EditDocumentNavClass(ViewContext)" id="edit-documents" asp-page="./Edit">Edit</a>
+            </li>
+        </ul>
+
+    </li>
 </ul>

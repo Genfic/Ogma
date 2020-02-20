@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -5,24 +7,23 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Pages
+namespace Ogma3.Areas.Admin.Pages.Documents
 {
-    public class Docs : PageModel
+    public class Manage : PageModel
     {
         private readonly ApplicationDbContext _context;
 
-        public Docs(ApplicationDbContext context)
+        public Manage(ApplicationDbContext context)
         {
             _context = context;
         }
-
-        public Document Document { get; set; }
+        public List<Document> Documents { get; set; }
         
-        public async Task<IActionResult> OnGetAsync(string? doc)
+        public async Task<IActionResult> OnGetAsync()
         {
-            Document = await _context.Documents.FirstOrDefaultAsync(d => d.Slug == doc);
+            Documents = await _context.Documents.ToListAsync();
 
-            if (Document == null)
+            if (Documents.Count <= 0)
                 return NotFound();
             
             return Page();

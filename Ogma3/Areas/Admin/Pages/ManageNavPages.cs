@@ -13,6 +13,10 @@ namespace Ogma3.Areas.Admin.Pages
         
         public static string Categories => "Categories";
 
+        public static string ManageDocuments => "ManageDocuments";
+
+        public static string EditDocument => "EditDocument";
+
         
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         
@@ -21,6 +25,9 @@ namespace Ogma3.Areas.Admin.Pages
         public static string NamespacesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Namespaces);
         
         public static string CategoriesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Categories);
+
+        public static string ManageDocumentsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ManageDocuments);
+        public static string EditDocumentNavClass(ViewContext viewContext) => PageNavClass(viewContext, EditDocument);
         
         private static string PageNavClass(ViewContext viewContext, string page)
         {

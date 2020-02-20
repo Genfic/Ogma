@@ -1,0 +1,16 @@
+@page
+@model Ogma3.Areas.Admin.Pages.Documents.Manage
+
+@{
+    ViewData["Title"] = "Manage documents";
+    ViewData["ActivePage"] = ManageNavPages.ManageDocuments;
+}
+
+@foreach (var doc in Model.Documents)
+{
+    <div>
+        <h2>@doc.Title</h2>
+        <div>@doc.Slug</div>
+        <markdown>@doc.Body</markdown>
+    </div>
+}
