@@ -62,10 +62,10 @@ namespace Utils
         /// <returns>Friendlified string</returns>
         public static string Friendlify(this string input)
         {
-            var str = new Regex("[^a-zA-Z0-9]").Replace(input, "_");
-            str = new Regex("_+").Replace(str, "_");
+            var str = new Regex("[^a-zA-Z0-9]").Replace(input, "-");
+            str = new Regex("-+").Replace(str, "-");
 
-            return str.ToLower().Trim('_');
+            return str.ToLower().Trim('-');
         }
 
         /// <summary>

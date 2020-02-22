@@ -52,7 +52,7 @@ namespace Tests.Utils
         // Test string.Friendlify()
         [Fact]
         public void TestFriendlify()
-            => Assert.Equal("abcd_efgh_ijk_l_190_21", "aBcD.eFgH iJk++++++L 190.21".Friendlify());
+            => Assert.Equal("abcd-efgh-ijk-l-190-21", "aBcD.eFgH iJk++++++L 190.21".Friendlify());
         
         // Test Color.ToHexCss()
         [Fact]

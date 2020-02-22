@@ -24,7 +24,7 @@ namespace Ogma3.Data
         
         // Secondary
         public DbSet<Document> Documents { get; set; }
-        
+
         
         
         protected override void OnModelCreating(ModelBuilder builder)
