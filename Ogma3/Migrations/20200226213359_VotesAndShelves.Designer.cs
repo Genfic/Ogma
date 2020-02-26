@@ -10,14 +10,14 @@ using Ogma3.Data;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191023205452_ColorStoredAsIntNotUint")]
-    partial class ColorStoredAsIntNotUint
+    [Migration("20200226213359_VotesAndShelves")]
+    partial class VotesAndShelves
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -189,6 +189,9 @@ namespace Ogma3.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(500000);
 
+                    b.Property<int>("CommentsThreadId")
+                        .HasColumnType("int");
+
                     b.Property<string>("EndNotes")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
@@ -202,9 +205,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PublishDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -214,7 +215,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("StoryId")
+                    b.Property<int>("StoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -224,9 +225,88 @@ namespace Ogma3.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommentsThreadId")
+                        .IsUnique();
+
                     b.HasIndex("StoryId");
 
                     b.ToTable("Chapters");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(10000);
+
+                    b.Property<int>("CommentsThreadId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CommentsThreadId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.CommentsThread", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommentThreads");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Document", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastRevision")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Namespace", b =>
@@ -236,8 +316,8 @@ namespace Ogma3.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Argb")
-                        .HasColumnType("int");
+                    b.Property<long>("Argb")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -265,11 +345,9 @@ namespace Ogma3.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<string>("Icon")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IconId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -283,6 +361,49 @@ namespace Ogma3.Migrations
                         .IsUnique();
 
                     b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Shelf", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Shelves");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.ShelfStory", b =>
+                {
+                    b.Property<int>("ShelfId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShelfId", "StoryId");
+
+                    b.HasIndex("StoryId");
+
+                    b.ToTable("ShelfStories");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Story", b =>
@@ -321,9 +442,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -402,8 +521,8 @@ namespace Ogma3.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(10000);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -460,6 +579,29 @@ namespace Ogma3.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("StoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -513,10 +655,56 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.Chapter", b =>
                 {
+                    b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
+                        .WithOne()
+                        .HasForeignKey("Ogma3.Data.Models.Chapter", "CommentsThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ogma3.Data.Models.Story", null)
                         .WithMany("Chapters")
                         .HasForeignKey("StoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Comment", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.CommentsThread", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("CommentsThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Shelf", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.ShelfStory", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.Shelf", "Shelf")
+                        .WithMany("ShelfStories")
+                        .HasForeignKey("ShelfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.Story", "Story")
+                        .WithMany()
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Story", b =>
@@ -555,6 +743,19 @@ namespace Ogma3.Migrations
                         .WithMany()
                         .HasForeignKey("NamespaceId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Vote", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.Story", null)
+                        .WithMany("Votes")
+                        .HasForeignKey("StoryId");
+
+                    b.HasOne("Ogma3.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

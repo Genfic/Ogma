@@ -1,25 +1,25 @@
 <ul class="nav nav-pills flex-column">
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="admin" asp-page="./Index">Dashboard</a>
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="admin" asp-page="/Index" asp-area="Admin">Dashboard</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.TagsNavClass(ViewContext)" id="tags" asp-page="./Tags">Tags</a>
+        <a class="nav-link @ManageNavPages.TagsNavClass(ViewContext)" id="tags" asp-page="/Tags" asp-area="Admin">Tags</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.NamespacesNavClass(ViewContext)" id="namespaces" asp-page="./Namespaces">Namespaces</a>
+        <a class="nav-link @ManageNavPages.NamespacesNavClass(ViewContext)" id="namespaces" asp-page="/Namespaces" asp-area="Admin">Namespaces</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.CategoriesNavClass(ViewContext)" id="categories" asp-page="./Categories">Categories</a>
+        <a class="nav-link @ManageNavPages.CategoriesNavClass(ViewContext)" id="categories" asp-page="/Categories" asp-area="Admin">Categories</a>
     </li>
     <li class="nav-item">
         <span class="nav-link">Documents</span> 
         
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link @ManageNavPages.ManageDocumentsNavClass(ViewContext)" id="manage-documents" asp-page="./Documents/Manage">Manage</a>
+                <a class="nav-link @ManageNavPages.ManageDocumentsNavClass(ViewContext)" id="manage-documents" asp-page="/Documents/Manage" asp-area="Admin">Manage</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @ManageNavPages.EditDocumentNavClass(ViewContext)" id="edit-documents" asp-page="./Documents/Edit">Edit</a>
+                <a class="nav-link @ManageNavPages.EditDocumentNavClass(ViewContext)" id="edit-documents" asp-page="/Documents/Edit" asp-area="Admin">Edit</a>
             </li>
         </ul>
 

@@ -9,17 +9,12 @@ using System.Text.Json.Serialization;
 
 namespace Ogma3.Data.Models
 {
-    public class Story
+    public class Story : BaseModel
     {
         // public Story()
         // {
         //     Chapters = new List<Chapter>();
         // }
-
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
 
         [Required]
         public User Author { get; set; }
@@ -68,5 +63,11 @@ namespace Ogma3.Data.Models
         // Rating
         [Required]
         public Rating Rating { get; set; }
+        
+        // Votes
+        public ICollection<Vote> Votes { get; set; } = new List<Vote>();
+
+        [NotMapped] 
+        public int Score => Votes.Count;
     }
 }

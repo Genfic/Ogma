@@ -21,6 +21,9 @@ namespace Ogma3.Data
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<CommentsThread> CommentThreads { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Vote> Votes { get; set; }
+        public DbSet<Shelf> Shelves { get; set; }
+        public DbSet<ShelfStory> ShelfStories { get; set; }
         
         // Secondary
         public DbSet<Document> Documents { get; set; }
@@ -77,6 +80,9 @@ namespace Ogma3.Data
             builder.Entity<Story>()
                 .HasOne(s => s.Author)
                 .WithMany();
+            builder.Entity<Story>()
+                .HasMany(s => s.Votes)
+                .WithOne();
             
             // Chapter
             builder.Entity<Chapter>()
@@ -108,6 +114,23 @@ namespace Ogma3.Data
             builder.Entity<Comment>()
                 .HasOne(c => c.Author)
                 .WithMany();
+            
+            // Votes
+            builder.Entity<Vote>()
+                .HasOne(v => v.User)
+                .WithMany();
+            
+            // Shelf stories
+            builder.Entity<ShelfStory>()
+                .HasKey(ss => new {ss.ShelfId, ss.StoryId});
+            builder.Entity<ShelfStory>()
+                .HasOne(ss => ss.Shelf)
+                .WithMany(s => s.ShelfStories)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ShelfStory>()
+                .HasOne(ss => ss.Story)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             

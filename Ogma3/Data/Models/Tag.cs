@@ -6,13 +6,8 @@ using System.Text.Json.Serialization;
 
 namespace Ogma3.Data.Models
 {
-    public class Tag
+    public class Tag : BaseModel
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        
         [Required]
         [MinLength(CTConfig.Tag.MinNameLength)]
         [MaxLength(CTConfig.Tag.MaxNameLength)]

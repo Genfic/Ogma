@@ -15,7 +15,7 @@ namespace Ogma3.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -361,6 +361,49 @@ namespace Ogma3.Migrations
                     b.ToTable("Ratings");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Models.Shelf", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Shelves");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.ShelfStory", b =>
+                {
+                    b.Property<int>("ShelfId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShelfId", "StoryId");
+
+                    b.HasIndex("StoryId");
+
+                    b.ToTable("ShelfStories");
+                });
+
             modelBuilder.Entity("Ogma3.Data.Models.Story", b =>
                 {
                     b.Property<int>("Id")
@@ -534,6 +577,29 @@ namespace Ogma3.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("StoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -615,6 +681,30 @@ namespace Ogma3.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Models.Shelf", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.ShelfStory", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.Shelf", "Shelf")
+                        .WithMany("ShelfStories")
+                        .HasForeignKey("ShelfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.Story", "Story")
+                        .WithMany()
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Ogma3.Data.Models.Story", b =>
                 {
                     b.HasOne("Ogma3.Data.Models.User", "Author")
@@ -651,6 +741,19 @@ namespace Ogma3.Migrations
                         .WithMany()
                         .HasForeignKey("NamespaceId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Vote", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.Story", null)
+                        .WithMany("Votes")
+                        .HasForeignKey("StoryId");
+
+                    b.HasOne("Ogma3.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

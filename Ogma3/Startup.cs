@@ -45,6 +45,9 @@ namespace Ogma3
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"))
             );
+            // services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
+            //     Configuration.GetConnectionString("PostgresConnection"))
+            // );
 
             services.AddIdentity<User, IdentityRole>(config =>
                 {
