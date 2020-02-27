@@ -1,13 +1,20 @@
 @using System.Globalization
 @using System.Security.Claims
+@using Ogma3.Services
 @using Utils
 @model Ogma3.Data.Models.Story
 
-<div class="story-details" itemscope itemtype="https://schema.org/Book">
+<div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
 
     <div class="titlebar">
         <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
         <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
+        
+        <div class="votes">
+            <icon icon="grade" v-on:click="vote"></icon>
+            <span class="count">{{score}}</span>
+        </div>
+        
         <h1 class="title" itemprop="name">@Model.Title</h1>
     </div>
 
@@ -56,4 +63,9 @@
             </a>
         }
     </ol>
+    
+    <div id="route" v-if="!route" data-route="@Url.RouteUrl("VotesController")"></div>
+    <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPoolId">AAAAAAA</div>
 </div>
+
+@Html.Resource(@<script src="~/js/story.min.js" asp-append-version="true"></script>)

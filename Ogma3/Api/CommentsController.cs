@@ -99,7 +99,7 @@ namespace Ogma3.Api
                 Body = data.Body
             };
 
-            var thread = _context.CommentThreads.First(ct => ct.Id == data.Thread);
+            var thread = await _context.CommentThreads.FindAsync(data.Thread);
             thread.Comments.Add(comment);
 
             await _context.SaveChangesAsync();

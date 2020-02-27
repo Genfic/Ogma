@@ -10,7 +10,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "TagsController")]
+    [Route("api/[controller]", Name = nameof(TagsController))]
     [ApiController]
     public class TagsController : ControllerBase
     {

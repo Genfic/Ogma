@@ -6,5 +6,11 @@ namespace Ogma3.Data.Models
     {
         [Required] 
         public User User { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        public int VotePoolId { get; set; }
     }
 }

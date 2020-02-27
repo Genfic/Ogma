@@ -65,9 +65,10 @@ namespace Ogma3.Data.Models
         public Rating Rating { get; set; }
         
         // Votes
-        public ICollection<Vote> Votes { get; set; } = new List<Vote>();
+        public VotePool VotesPool { get; set; }// = new VotePool();
+        public int VotesPoolId { get; set; }
 
         [NotMapped] 
-        public int Score => Votes.Count;
+        public int Score => VotesPool.Votes.Count;
     }
 }
