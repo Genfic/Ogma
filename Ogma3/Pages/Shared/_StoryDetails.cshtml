@@ -10,8 +10,8 @@
         <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
         <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
         
-        <div class="votes">
-            <icon icon="grade" v-on:click="vote"></icon>
+        <div class="votes" v-on:click="vote">
+            <i class="material-icons-outlined">{{icon}}</i>
             <span class="count">{{score}}</span>
         </div>
         

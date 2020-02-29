@@ -11,13 +11,12 @@ namespace Tests.Utils
         public void TestBetween_Between() 
             => Assert.True(10.Between(1, 100));
         
-        [Fact]
-        public void TestBetween_OutLeft()
-            => Assert.False(1.Between(10, 100));
+        [Theory]
+        [InlineData(11, 100)]
+        [InlineData(1, 9)]
+        public void TestBetween_Outside(int a, int b)
+            => Assert.False(10.Between(a, b));
         
-        [Fact]
-        public void TestBetween_OutRight() 
-            => Assert.False(100.Between(1, 10));
         
         // Test double.Normalize()
         [Fact]

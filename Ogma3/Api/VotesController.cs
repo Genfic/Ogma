@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
@@ -14,7 +17,7 @@ namespace Ogma3.Api
     [ApiController]
     public class VotesController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         
 
@@ -28,8 +31,15 @@ namespace Ogma3.Api
         [HttpGet("{id}")]
         public async Task<int> GetVotes(int poolId)
         {
-            var pool = await _context.VotePools.FindAsync(poolId);
-            return pool.Votes.Count;
+            return await _context.VotePools.CountAsync(vp => vp.Id == poolId);
+        }
+
+        // GET api/votes/uservote/5
+        [HttpGet("uservote/{id}")]
+        public async Task<bool> GetUserVote(int poolId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return await _context.Votes.AnyAsync(v => v.User == user && v.VotePoolId == poolId);
         }
         
         // POST api/votes
@@ -37,12 +47,24 @@ namespace Ogma3.Api
         [Authorize]
         public async Task<ActionResult> PostVote(VoteFromApiDTO data)
         {
-            var vote = new Vote
-            {
-                User = await _userManager.GetUserAsync(User)
-            };
+            var user = await _userManager.GetUserAsync(User);
             var pool = await _context.VotePools.FindAsync(data.VotePool);
-            pool.Votes.Add(vote);
+            var vote = await _context.Votes
+                .Where(v => v.User == user && v.VotePoolId == data.VotePool)
+                .FirstOrDefaultAsync();
+
+            Console.WriteLine(vote == null);
+            
+            if (vote == null)
+            {
+                pool.Votes.Add(new Vote {
+                    User = await _userManager.GetUserAsync(User)
+                });
+            }
+            else
+            {
+                pool.Votes.Remove(vote);
+            }
 
             try
             {
@@ -53,25 +75,8 @@ namespace Ogma3.Api
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-
-            return Ok();
-        }
-        
-        // DELETE api/votes/5
-        [HttpDelete("{id}")]
-        [Authorize]
-        public async Task<ActionResult> DeleteVote(int id)
-        {
-            var vote = await _context.Votes.FindAsync(id);
-            if (vote == null)
-            {
-                return NotFound();
-            }
-
-            _context.Votes.Remove(vote);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            
+            return new OkObjectResult(await _context.Votes.CountAsync(v => v.VotePoolId == data.VotePool));
         }
     }
 }

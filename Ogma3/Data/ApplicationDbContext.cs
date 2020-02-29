@@ -129,7 +129,8 @@ namespace Ogma3.Data
                 .HasOne(v => v.User)
                 .WithMany();
             builder.Entity<Vote>()
-                .HasKey(v => new {v.UserId, v.VotePoolId});
+                .HasIndex(v => new {v.UserId, v.VotePoolId})
+                .IsUnique();
             
             // Shelf stories
             builder.Entity<ShelfStory>()
