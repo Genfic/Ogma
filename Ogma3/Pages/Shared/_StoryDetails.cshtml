@@ -10,10 +10,10 @@
         <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
         <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
         
-        <div class="votes" v-on:click="vote">
-            <i class="material-icons-outlined">{{icon}}</i>
+        <button class="votes" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
+            <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
             <span class="count">{{score}}</span>
-        </div>
+        </button>
         
         <h1 class="title" itemprop="name">@Model.Title</h1>
     </div>
@@ -39,7 +39,7 @@
             <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
         }
         <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
-        <span class="date" itemprop="datePublished">@Model.ReleaseDate</span>
+        <span class="date" itemprop="datePublished">@Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</span>
         <div class="description" itemprop="abstract">
             <text>@Model.Description</text>
         </div>
@@ -65,7 +65,7 @@
     </ol>
     
     <div id="route" v-if="!route" data-route="@Url.RouteUrl("VotesController")"></div>
-    <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPoolId">AAAAAAA</div>
+    <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPoolId"></div>
 </div>
 
 @Html.Resource(@<script src="~/js/story.min.js" asp-append-version="true"></script>)

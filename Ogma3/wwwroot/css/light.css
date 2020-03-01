@@ -323,3 +323,24 @@ p.sm-line {
   height: .8rem;
   background-color: rgba(0, 0, 0, 0.5);
   margin: 0 .5rem; }
+
+.votes {
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: transparent; }
+  .votes:focus {
+    border: 1px solid rgba(0, 128, 255, 0.5); }
+  .votes:hover {
+    background-color: rgba(0, 128, 255, 0.1); }
+  .votes.active > i {
+    color: #d5900e;
+    animation: spin .2s ease-in-out; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0); }
+  50% {
+    transform: rotate(180deg); }
+  100% {
+    transform: rotate(360deg); } }

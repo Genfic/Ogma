@@ -4,7 +4,7 @@ let story_vue = new Vue({
         score: 0,
         pool: null,
         route: null,
-        icon: 'star_border'
+        didVote: false
     },
     methods: {
         vote: function() {
@@ -12,24 +12,21 @@ let story_vue = new Vue({
                 votePool: Number(this.pool)
             })
             .then(res => {
-                this.score = res.data;
+                this.score = res.data.count;
+                this.didVote = res.data.didVote;
             })
             .catch(console.error)
-        }
+        },
     },
     mounted() {
         this.pool = document.getElementById('pool-id').dataset.pool;
         this.route = document.getElementById('route').dataset.route;
         axios.get(this.route + '/' + this.pool)
             .then(res => {
-                this.score = res.data;
+                console.log(res.data);
+                this.score = res.data.count;
+                this.didVote = res.data.didVote;
             })
             .catch(console.error);
-        
-        axios.get(this.route + '/uservote/' + this.pool)
-            .then(res => {
-                this.icon = res.data ? 'star' : 'star_border';
-            })
-            .catch(console.error)
     }
 });

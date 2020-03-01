@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
@@ -28,18 +26,18 @@ namespace Ogma3.Api
         }
 
         // GET api/votes/5
-        [HttpGet("{id}")]
-        public async Task<int> GetVotes(int poolId)
-        {
-            return await _context.VotePools.CountAsync(vp => vp.Id == poolId);
-        }
-
-        // GET api/votes/uservote/5
-        [HttpGet("uservote/{id}")]
-        public async Task<bool> GetUserVote(int poolId)
+        [HttpGet("{poolId}")]
+        public async Task<CountReturn> GetVotes(int poolId)
         {
             var user = await _userManager.GetUserAsync(User);
-            return await _context.Votes.AnyAsync(v => v.User == user && v.VotePoolId == poolId);
+            var count = await _context.Votes.CountAsync(v => v.VotePoolId == poolId);
+            var didUserVote = await _context.Votes.AnyAsync(v => v.User == user && v.VotePoolId == poolId);
+
+            return new CountReturn
+            {
+                Count = count,
+                DidVote = didUserVote
+            };
         }
         
         // POST api/votes
@@ -52,20 +50,22 @@ namespace Ogma3.Api
             var vote = await _context.Votes
                 .Where(v => v.User == user && v.VotePoolId == data.VotePool)
                 .FirstOrDefaultAsync();
+            var didVote = false;
 
-            Console.WriteLine(vote == null);
-            
+            // Check if the vote already exists
             if (vote == null)
             {
                 pool.Votes.Add(new Vote {
-                    User = await _userManager.GetUserAsync(User)
+                    User = user
                 });
+                didVote = true;
             }
             else
             {
                 pool.Votes.Remove(vote);
             }
 
+            // Save
             try
             {
                 await _context.SaveChangesAsync();
@@ -75,8 +75,19 @@ namespace Ogma3.Api
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-            
-            return new OkObjectResult(await _context.Votes.CountAsync(v => v.VotePoolId == data.VotePool));
+
+            var res = new CountReturn
+            {
+                Count = pool.Votes.Count,
+                DidVote = didVote
+            };
+            return new OkObjectResult(res);
+        }
+
+        public class CountReturn
+        {
+            public int Count { get; set; }
+            public bool DidVote { get; set; }
         }
     }
 }

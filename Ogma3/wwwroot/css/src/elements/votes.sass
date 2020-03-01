@@ -1,0 +1,22 @@
+.votes
+  display: flex
+  align-items: center
+  border: none
+  background-color: transparent
+  &:focus
+    border: 1px solid $accent-50
+  &:hover
+    background-color: $accent-10
+    
+  &.active
+    &>i
+      color: $gold
+      animation: spin .2s ease-in-out
+    
+@keyframes spin
+  0%
+    transform: rotate(0)
+  50%
+    transform: rotate(180deg)
+  100%
+    transform: rotate(360deg)
