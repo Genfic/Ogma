@@ -27,4 +27,13 @@ else
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
+                        
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">
+            <icon icon="settings"></icon>
+        </a>
+    </li>
+}
 </ul>
