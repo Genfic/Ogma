@@ -17,7 +17,7 @@ namespace Ogma3.Data.Models
         // }
 
         [Required]
-        public User Author { get; set; }
+        public  User Author { get; set; }
 
         [Required]
         [MinLength(CTConfig.Story.MinTitleLength)]
@@ -48,12 +48,12 @@ namespace Ogma3.Data.Models
         
         
         // Chapters
-        public ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
+        public  ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
 
 
         // Tags
         [JsonIgnore]
-        public virtual ICollection<StoryTag> StoryTags { get; set; }
+        public  ICollection<StoryTag> StoryTags { get; set; }
         [NotMapped]
         public IEnumerable<Tag> Tags => 
             StoryTags == null 
@@ -62,10 +62,10 @@ namespace Ogma3.Data.Models
         
         // Rating
         [Required]
-        public Rating Rating { get; set; }
+        public  Rating Rating { get; set; }
         
         // Votes
-        public VotePool VotesPool { get; set; }// = new VotePool();
+        public  VotePool VotesPool { get; set; }// = new VotePool();
         public int VotesPoolId { get; set; }
 
         [NotMapped] 

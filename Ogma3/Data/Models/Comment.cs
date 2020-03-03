@@ -15,7 +15,7 @@ namespace Ogma3.Data.Models
         public int CommentsThreadId { get; set; }
 
         [Required] 
-        public User Author { get; set; }
+        public  User Author { get; set; }
 
         [Required] 
         public DateTime DateTime { get; set; } = DateTime.Now;

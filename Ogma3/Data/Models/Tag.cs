@@ -18,7 +18,7 @@ namespace Ogma3.Data.Models
 
         [ForeignKey("NamespaceId")]
         [JsonIgnore]
-        public Namespace? Namespace { get; set; } = null;
+        public  Namespace? Namespace { get; set; } = null;
         public int? NamespaceId { get; set; } = null;
     }
 }

@@ -12,7 +12,7 @@ namespace Ogma3.Data.Models
         public string Name { get; set; }
         
         [Required]
-        public User Owner { get; set; }
+        public  User Owner { get; set; }
         
         [Required]
         public bool IsDefault { get; set; } = false;
@@ -22,7 +22,7 @@ namespace Ogma3.Data.Models
         
         // Stories
         [JsonIgnore]
-        public virtual ICollection<ShelfStory> ShelfStories { get; set; }
+        public  ICollection<ShelfStory> ShelfStories { get; set; } = new List<ShelfStory>();
         [NotMapped]
         public IEnumerable<Story> Stories =>
             ShelfStories == null

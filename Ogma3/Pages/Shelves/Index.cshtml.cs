@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
@@ -7,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Pages
+namespace Ogma3.Pages.Shelves
 {
-    public class Shelves : PageModel
+    public class Index : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public Shelves(ApplicationDbContext context, UserManager<User> userManager)
+        public Index(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;

@@ -18,6 +18,7 @@ using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Ogma3.Data.Models;
 using Ogma3.Services;
 using Ogma3.Services.Mailer;
@@ -44,6 +45,7 @@ namespace Ogma3
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
+                // options.UseLazyLoadingProxies();
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             // services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
