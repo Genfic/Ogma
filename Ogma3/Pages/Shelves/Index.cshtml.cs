@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -22,12 +24,15 @@ namespace Ogma3.Pages.Shelves
         public User Owner { get; set; }
         public List<Shelf> UserShelves { get; set; }
 
-        public async void OnGetAsync(string? name)
+        public async Task<IActionResult> OnGetAsync(string? name)
         {
             Owner = name == null 
                 ? await _userManager.GetUserAsync(User) 
                 : await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
+            
             UserShelves = await _context.Shelves.Where(s => s.Owner == Owner).ToListAsync();
+
+            return Page();
         }
     }
 }

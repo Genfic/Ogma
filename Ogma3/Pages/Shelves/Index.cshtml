@@ -1,12 +1,16 @@
 @page "{name?}"
-@using Ogma3.Services
 @model Ogma3.Pages.Shelves.Index
 
 @{
     ViewData["Title"] = $"{Model.Owner.UserName}'s bookshelves";
 }
 
-@Json.Serialize(Model.UserShelves)
+<ul>
+@foreach (var s in Model.UserShelves)
+{
+    <li>
+        <a asp-page="/Shelves/Bookshelf" asp-route-id="@s.Id">@s.Name – @s.ShelfStories.Count</a>
+    </li>
+}
+</ul>
 
-
-@Html.Resource(@<script>axios.get('/api/Shelves/1').then(console.log).catch(console.error)</script>)

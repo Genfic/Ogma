@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -20,25 +23,29 @@ namespace Ogma3.Pages.Shelves
         }
 
         public Shelf Shelf { get; set; }
-        public List<Story> Stories { get; set; }
         
-        public async void OnGetAsync(int id, string? slug)
+        public async Task<IActionResult> OnGetAsync(int? id, string? slug)
         {
+            if (id == null) return NotFound();
+            
             Shelf = await _context.Shelves
                 .Where(s => s.Id == id)
                 .Include(s => s.ShelfStories)
-                .FirstAsync();
+                    .ThenInclude(ss => ss.Story)
+                        .ThenInclude(s => s.StoryTags)
+                            .ThenInclude(st => st.Tag)
+                                .ThenInclude(t => t.Namespace)
+                .Include(s => s.ShelfStories)
+                    .ThenInclude(ss => ss.Story)
+                        .ThenInclude(s => s.Author)
+                .Include(s => s.ShelfStories)
+                    .ThenInclude(ss => ss.Story)
+                        .ThenInclude(s => s.Rating)
+                .FirstOrDefaultAsync();
+            
+            if (Shelf == null) return NotFound();
 
-            // Stories = await _context.Entry(Shelf)
-            //     .Collection(s => s.ShelfStories)
-            //     .Query()
-            //     .Select(s => s.Story)
-            //     .Include(s => s.Author)
-            //     .Include(s => s.Rating)
-            //     .Include(s => s.StoryTags)
-            //         .ThenInclude(st => st.Tag)
-            //             .ThenInclude(t => t.Namespace)
-            //     .ToListAsync();
+            return Page();
         }
     }
 }
