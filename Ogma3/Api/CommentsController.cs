@@ -54,6 +54,7 @@ namespace Ogma3.Api
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> PutComment(int id, Comment comment, string body)
         {
@@ -90,6 +91,7 @@ namespace Ogma3.Api
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<ActionResult<CommentDTO>> PostComment(CommentFromApiDTO data)
         {
@@ -112,11 +114,11 @@ namespace Ogma3.Api
         [Authorize]
         public async Task<ActionResult<CommentDTO>> DeleteComment(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
             var comment = await _context.Comments.FindAsync(id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
+            
+            if (comment == null) return NotFound();
+            if (comment.Author != user) return Forbid();
 
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();

@@ -15,7 +15,9 @@ namespace Ogma3.Areas.Admin.Pages
             [Required]
             public string Name { get; set; }
 
-            public Color Color { get; set; }
+            [MaxLength(7)]
+            [MinLength(7)]
+            public string Color { get; set; }
         }
         
         public void OnGet()

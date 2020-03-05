@@ -82,5 +82,13 @@ namespace Ogma3.Data
             public const int MinBodyLength = 2;
             public const int MaxBodyLength = 10_000;
         }
+
+        public static class Shelf
+        {
+            public const int MinNameLength = 3;
+            public const int MaxNameLength = 50;
+            
+            public const int MaxDescriptionLength = 255;
+        }
     }
 }

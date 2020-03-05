@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,21 @@ namespace Ogma3.Pages.Shelves
 
         public User Owner { get; set; }
         public List<Shelf> UserShelves { get; set; }
+        
+        public InputModel Input { get; set; }
+
+        public class InputModel
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+            
+            [DisplayName("Public")]
+            public bool IsPublic { get; set; }
+            
+            [DisplayName("Quick access")]
+            public bool QuickAccess { get; set; }
+            public string Color { get; set; }
+        }
 
         public async Task<IActionResult> OnGetAsync(string? name)
         {

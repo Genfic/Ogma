@@ -12,31 +12,23 @@
         <li class="text-danger" v-for="e in err">{{ e }}</li>
     </ul>
 
-    <div class="form-group">
-        <label asp-for="Input.Name"></label>
-        <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
-    </div>
-
-    <div class="form-group row" v-bind:style="{ background: color }">
-        <div class="col-3">
-            <label for="color-a" class="form-label">Alpha</label>
-            <input class="form-control" type="number" value="1" min="0" max="1" step="0.01" id="color-a" v-model.number="form.color.a" v-on:change="updateColor">
+    <div class="form-row">
+    
+        <div class="col-md-10">
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
+            </div>
         </div>
-
-        <div class="col-3">
-            <label for="color-r" class="form-label">Red</label>
-            <input class="form-control" type="number" value="255" min="0" max="255" id="color-r" v-model.number="form.color.r" v-on:change="updateColor">
+        
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="Input.Color"></label>
+                <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
+                <span class="text-danger"></span>
+            </div>
         </div>
-
-        <div class="col-3">
-            <label for="color-g" class="form-label">Green</label>
-            <input class="form-control" type="number" value="255" min="0" max="255" id="color-g" v-model.number="form.color.g" v-on:change="updateColor">
-        </div>
-
-        <div class="col-3">
-            <label for="color-b" class="form-label">Blue</label>
-            <input class="form-control" type="number" value="255" min="0" max="255" id="color-b" v-model.number="form.color.b" v-on:change="updateColor">
-        </div>
+        
     </div>
 
     <input type="hidden" :value="form.id">
@@ -53,8 +45,21 @@
     Loading...
 </button>
 
-<ul>
-    <li v-for="n in namespaces">{{ n.name }}<button v-on:click="deleteNamespace(n)">X</button><button v-on:click="editNamespace(n)">E</button></li>
+<ul class="items-list">    
+    <li v-for="n in namespaces">
+        <div class="deco" v-bind:style="{background: n.color}"></div>
+        <div class="main">
+            <h3 class="name">{{ n.name }}</h3>
+        </div>
+        <div class="actions">
+            <button v-on:click="deleteNamespace(n)">
+                <icon icon="delete_forever"></icon>
+            </button>
+            <button v-on:click="editNamespace(n)">
+                <icon icon="edit"></icon>
+            </button>
+        </div>
+    </li>
 </ul>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("NamespacesController")" v-if="!route"></div>

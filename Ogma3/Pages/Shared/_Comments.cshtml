@@ -2,7 +2,7 @@
 @model Ogma3.Data.Models.Chapter
 
 <div class="comments-container" id="comments-container">
-    <form>
+    <form asp-antiforgery="true">
         <textarea class="comment-box active-border" v-model="body" v-on:keydown.enter="enter" name="body" id="body" rows="3" aria-label="Comment"></textarea>
 
         <div id="thread" data-thread="@Model.CommentsThread.Id" v-if="!thread"></div>

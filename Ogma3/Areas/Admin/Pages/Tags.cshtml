@@ -46,8 +46,21 @@
   Loading...
 </button>
 
-<ul>
-    <li v-for="t in tags">{{ t.name }} – {{ t.description }} <button v-on:click="deleteTag(t)">X</button><button v-on:click="editTag(t)">E</button></li>
+<ul class="items-list">    
+    <li v-for="t in tags">
+        <div class="main">
+            <h3 class="name">{{ t.name }}</h3>
+            <span class="desc">{{ t.description }}</span>
+        </div>
+        <div class="actions">
+            <button v-on:click="deleteTag(t)">
+                <icon icon="delete_forever"></icon>
+            </button>
+            <button v-on:click="editTag(t)">
+                <icon icon="edit"></icon>
+            </button>
+        </div>
+    </li>
 </ul>
 
 <div id="tag-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("TagsController")" v-if="!routes.tags"></div>

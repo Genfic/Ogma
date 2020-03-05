@@ -18,14 +18,8 @@ namespace Ogma3.Data.Models
         [MaxLength(CTConfig.Namespace.MaxNameLength)]
         public string Name { get; set; }
 
-        [JsonIgnore]
-        public uint Argb { get; set; }
-
-        [NotMapped]
-        public Color Color
-        {
-            get => Color.FromArgb(unchecked((int)Argb));
-            set => Color.ToArgb();
-        }
+        [MinLength(7)]
+        [MaxLength(7)]
+        public string Color { get; set; }
     }
 }

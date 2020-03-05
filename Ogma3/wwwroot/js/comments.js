@@ -4,6 +4,7 @@ let comments_vue = new Vue({
         body: null,
         thread: null,
         route: null,
+        csrf: null,
         comments: []
     },
     methods: {
@@ -14,7 +15,9 @@ let comments_vue = new Vue({
             axios.post(this.route, 
                 {
                     body: this.body,
-                    thread: Number(this.thread)
+                    thread: Number(this.thread),
+                },{
+                    headers: { "RequestVerificationToken" : this.csrf }
                 })
                 .then(_ => {
                     this.load();
@@ -49,6 +52,7 @@ let comments_vue = new Vue({
     mounted() {
         this.thread = document.getElementById('thread').dataset.thread;
         this.route = document.getElementById('route').dataset.route;
+        this.csrf = document.querySelector('input[name=__RequestVerificationToken').value;
         this.load();
     }
 });

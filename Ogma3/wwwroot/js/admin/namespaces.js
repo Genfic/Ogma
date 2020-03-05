@@ -3,12 +3,7 @@ let anamespaces_vue = new Vue({
     data: {
         form: {
             name: null,
-            color: {
-                a: null,
-                r: null,
-                g: null,
-                b: null,
-            },
+            color: null,
             id: null
         },
         lens: {
@@ -41,7 +36,7 @@ let anamespaces_vue = new Vue({
                     axios.post(this.route,
                         {
                             name: this.form.name,
-                            argb: calculateColor(this.form.color)
+                            color: this.form.color
                         })
                         .then(_ => {
                             this.getNamespaces()
@@ -57,7 +52,7 @@ let anamespaces_vue = new Vue({
                         {
                             id: this.form.id,
                             name: this.form.name,
-                            argb: calculateColor(this.form.color)
+                            color: this.form.color
                         })
                         .then(_ => {
                             this.getNamespaces()
@@ -88,22 +83,22 @@ let anamespaces_vue = new Vue({
 
         // Deletes a selected namespace
         deleteNamespace: function (t) {
-            axios.delete(this.route + '/' + t.id)
-                .then(_ => {
-                    this.getNamespaces()
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            if(confirm("Delete permanently?")) {
+                axios.delete(this.route + '/' + t.id)
+                    .then(_ => {
+                        this.getNamespaces()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
         },
 
         // Throws a namespace from the list into the editor
         editNamespace: function (t) {
             this.form.name = t.name;
             this.form.color = t.color;
-            this.form.color.a = t.color.a > 0 ? (t.color.a / 255).toFixed(2) : 0; // normalize alpha
             this.form.id = t.id;
-            this.updateColor();
         },
 
         // Clears the editor
@@ -112,11 +107,6 @@ let anamespaces_vue = new Vue({
                 this.form.color =
                     this.form.id = null;
         },
-        
-        // Update the color
-        updateColor: function () {
-            this.color = `rgba(${this.form.color.r}, ${this.form.color.g}, ${this.form.color.b}, ${this.form.color.a})`;
-        }
     }, 
 
     mounted() {
@@ -132,11 +122,3 @@ let anamespaces_vue = new Vue({
         this.getNamespaces();
     }
 });
-
-function calculateColor (color) {
-    let a = Math.round(color.a * 255).toString(16);
-    let r = color.r.toString(16);
-    let g = color.g.toString(16);
-    let b = color.b.toString(16);
-    return parseInt(`${a}${r}${g}${b}`, 16)
-}

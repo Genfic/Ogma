@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace Utils
@@ -80,6 +81,30 @@ namespace Utils
                    b = input.B.ToString("X2");
 
             return "#" + r + g + b;
+        }
+
+        /// <summary>
+        /// Parse hex notation color string into a `System.Drawing.Color` object
+        /// </summary>
+        /// <param name="input">Input string to parse</param>
+        /// <returns>Resulting Color object</returns>
+        public static Color ParseHexColor(this string input)
+        {
+            var hex = input.Trim('#');
+            var values = hex.Length switch
+            {
+                3 => new[] {"FF", hex[0].ToString(), hex[1].ToString(), hex[2].ToString()},
+                4 => new[] {hex[0].ToString(), hex[1].ToString(), hex[2].ToString(), hex[3].ToString()},
+                6 => new[] {"FF", hex[..2], hex[2..4], hex[4..6]},
+                8 => new[] {hex[..2], hex[2..4], hex[4..6], hex[6..8]},
+                _ => throw new ArgumentException("Incorrect format")
+            };
+            return Color.FromArgb(
+                int.Parse(values[0], NumberStyles.HexNumber),
+                int.Parse(values[1], NumberStyles.HexNumber),
+                int.Parse(values[2], NumberStyles.HexNumber),
+                int.Parse(values[3], NumberStyles.HexNumber)
+            );
         }
 
         /// <summary>

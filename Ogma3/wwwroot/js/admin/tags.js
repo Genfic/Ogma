@@ -107,13 +107,15 @@ let atags_vue = new Vue({
 
         // Deletes a selected tag
         deleteTag: function(t) {
-            axios.delete(this.routes.tags + '/' + t.id) 
-                .then(_ => {
-                    this.getTags() 
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            if(confirm("Delete permanently?")) {
+                axios.delete(this.routes.tags + '/' + t.id)
+                    .then(_ => {
+                        this.getTags()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
         },
 
         // Throws a tag from the list into the editor

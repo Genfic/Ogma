@@ -38,9 +38,23 @@
   Loading...
 </button>
 
-<ul>
-    <li v-for="c in categories">{{ c.name }} – {{ c.description }} <button v-on:click="deleteCategory(c)">X</button><button v-on:click="editCategory(c)">E</button></li>
+<ul class="items-list">
+    <li v-for="c in categories">
+        <div class="main">
+            <h3 class="name">{{ c.name }}</h3>
+            <span class="desc">{{ c.description }}</span>
+        </div>
+        <div class="actions">
+            <button v-on:click="deleteCategory(c)">
+                <icon icon="delete_forever"></icon>
+            </button>
+            <button v-on:click="editCategory(c)">
+                <icon icon="edit"></icon>
+            </button>
+        </div>
+    </li>
 </ul>
+
 
 <div id="route" data-route="@Url.RouteUrl("CategoriesController")" v-if="!route"></div>
 @section Scripts

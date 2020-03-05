@@ -1,0 +1,55 @@
+ul.items-list
+  width: 100%
+  margin-top: 1rem
+  
+  &>li
+    display: flex
+    width: 100%
+    border: 1px solid $foreground-25
+    margin: .2rem
+    &:hover
+      border-color: $foreground
+      
+    & .count
+      align-self: center
+      font-size: 2rem
+      min-width: 5rem
+    
+    & .main
+      display: flex
+      flex-direction: column
+      flex: 1
+      color: $foreground
+      text-decoration: none
+      &:hover
+        color: $foreground-75
+    
+    & .deco
+      height: auto
+      width: 5px
+      margin-right: .5rem
+    
+    & .name
+      font-size: 1.2rem
+      text-decoration: none
+      
+    & .desc
+      color: $foreground-75
+      
+    & .actions
+      display: flex
+      height: auto
+      
+      &>button
+        height: auto
+        margin: .2rem
+        border: 1px solid $foreground-25
+        color: $foreground-50
+        background: transparent
+        &:hover
+          background: $accent-10
+          color: $foreground-75
+          border-color: $foreground
+        
+        &>i.material-icons-outlined
+          font-size: 1.2rem

@@ -5,12 +5,98 @@
     ViewData["Title"] = $"{Model.Owner.UserName}'s bookshelves";
 }
 
-<ul>
-@foreach (var s in Model.UserShelves)
-{
-    <li>
-        <a asp-page="/Shelves/Bookshelf" asp-route-id="@s.Id">@s.Name – @s.ShelfStories.Count</a>
-    </li>
-}
-</ul>
+<div id="app">
+    <form v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">
 
+        <ul v-if="err">
+            <li class="text-danger" v-for="e in err">{{ e }}</li>
+        </ul>
+                
+        <div class="form-row">
+
+            <div class="col-md-10">
+                <div class="form-group">
+                    <label asp-for="Input.Name"></label>
+                    <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label asp-for="Input.Color"></label>
+                    <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Input.Description"></label>
+            <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-2">
+                <div class="form-check">
+                    <label asp-for="Input.QuickAccess"></label>
+                    <input asp-for="Input.QuickAccess" type="checkbox" v-model="form.quick">
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-check">
+                    <label asp-for="Input.IsPublic"></label>
+                    <input asp-for="Input.IsPublic" type="checkbox" v-model="form.pub">
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+
+        <input type="hidden" :value="form.id">
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
+            <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
+        </div>
+
+    </form>
+    
+    <button class="btn btn-block btn-outline-primary" v-on:click="showForm = !showForm">
+        {{ showForm ? "Hide" : "Create new" }}
+    </button>
+
+    <button v-if="shelves.length <= 0" class="btn btn-primary" type="button" disabled>
+        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        Loading...
+    </button>
+
+    <ul class="items-list">
+        <li v-for="s in shelves">
+            <div class="deco" v-bind:style="{background: s.color}"></div>
+            <span class="count">{{ s.count }}</span>
+            <a class="main" :href="'/Shelf/' + s.id">
+                <h3 class="name">{{ s.name }}</h3>
+                <span class="desc">{{ s.description }}</span>
+            </a>
+            <div class="actions">
+                <button v-on:click="deleteShelf(s)">
+                    <icon icon="delete_forever"></icon>
+                </button>
+                <button v-on:click="editShelf(s)">
+                    <icon icon="edit"></icon>
+                </button>
+            </div>
+        </li>
+    </ul>
+
+    <div id="route" data-route="@Url.RouteUrl("ShelvesController")" v-if="!route"></div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/shelves.min.js" asp-append-version="true"></script>
+}

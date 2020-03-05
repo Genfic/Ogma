@@ -1,4 +1,3 @@
-@using Utils
 @model Ogma3.Data.Models.Story
 
 <div class="story-card">
@@ -14,11 +13,11 @@
             {
                 if (t.Namespace is null)
                 {
-                    <p class="tag">@t.Name</p>
+                    <tag href="/Tag/@t.Id/@t.Slug">@t.Name</tag>
                 }
                 else
                 {
-                    <p class="tag" style="background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
+                    <tag href="/Tag/@t.Id/@t.Slug" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
                 }
             }
         </div>

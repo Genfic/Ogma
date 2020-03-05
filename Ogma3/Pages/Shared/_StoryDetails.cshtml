@@ -6,32 +6,35 @@
 
 <div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
 
-    <div class="titlebar">
-        <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
-        <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
-        
+    <div class="actions">
+    
         <button class="votes" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
             <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
             <span class="count">{{score}}</span>
         </button>
-        
-        <h1 class="title" itemprop="name">@Model.Title</h1>
+    
     </div>
 
+    <div class="titlebar">
+        <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
+        <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>        
+        <h1 class="title" itemprop="name">@Model.Title</h1>
+    </div>
+    
     <div class="tags" itemprop="keywords">
         @foreach (var t in Model.Tags)
         {
             if (t.Namespace is null)
             {
-                <p class="tag">@t.Name</p>
+                <tag href="/Tag/@t.Id/@t.Slug">@t.Name</tag>
             }
             else
             {
-                <p class="tag" style="background-color:rgba(@t.Namespace.Color.ToCommaSeparatedCss())">@t.Namespace.Name:@t.Name</p>
+                <tag href="/Tag/@t.Id/@t.Slug" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
             }
         }
     </div>
-
+    
     <div class="main">
 
         @if (Model.Cover != null)
