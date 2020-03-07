@@ -1,74 +1,99 @@
 @using System.Globalization
 @using System.Security.Claims
 @using Ogma3.Services
-@using Utils
 @model Ogma3.Data.Models.Story
 
-<div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
+<div id="story-app">
+    <div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
 
-    <div class="actions">
-    
-        <button class="votes" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
-            <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
-            <span class="count">{{score}}</span>
-        </button>
-    
-    </div>
+        <div class="actions">
 
-    <div class="titlebar">
-        <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
-        <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>        
-        <h1 class="title" itemprop="name">@Model.Title</h1>
-    </div>
-    
-    <div class="tags" itemprop="keywords">
-        @foreach (var t in Model.Tags)
-        {
-            if (t.Namespace is null)
-            {
-                <tag href="/Tag/@t.Id/@t.Slug">@t.Name</tag>
-            }
-            else
-            {
-                <tag href="/Tag/@t.Id/@t.Slug" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
-            }
-        }
-    </div>
-    
-    <div class="main">
+            <button class="votes" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
+                <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
+                <span class="count">{{score}}</span>
+            </button>
 
-        @if (Model.Cover != null)
-        {
-            <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
-        }
-        <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
-        <span class="date" itemprop="datePublished">@Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</span>
-        <div class="description" itemprop="abstract">
-            <text>@Model.Description</text>
+            <button v-on:click="showShelves = true">
+                <icon icon="book"></icon>
+                <span>Add to bookshelf</span>
+            </button>
+
         </div>
 
+        <div class="titlebar">
+            <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
+            <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
+            <h1 class="title" itemprop="name">@Model.Title</h1>
+        </div>
+
+        <div class="tags" itemprop="keywords">
+            @foreach (var t in Model.Tags)
+            {
+                if (t.Namespace is null)
+                {
+                    <tag href="/Tag/@t.Id/@t.Slug">@t.Name</tag>
+                }
+                else
+                {
+                    <tag href="/Tag/@t.Id/@t.Slug" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
+                }
+            }
+        </div>
+
+        <div class="main">
+
+            @if (Model.Cover != null)
+            {
+                <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
+            }
+            <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
+            <span class="date" itemprop="datePublished">@Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</span>
+            <div class="description" itemprop="abstract">
+                <text>@Model.Description</text>
+            </div>
+
+        </div>
+
+        <ol class="chapters">
+            <span>Chapters:</span>
+            @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
+            {
+                <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+                    <div class="title">@c.Order. @c.Title</div>
+                    <div class="date">@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</div>
+                </a>
+            }
+            @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                <a class="btn btn-success btn-block btn-sm" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+                    <icon icon="add"></icon>
+                    Add new
+                </a>
+            }
+        </ol>
     </div>
 
-    <ol class="chapters">
-        <span>Chapters:</span>
-        @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
-        {
-            <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
-                <div class="title">@c.Order. @c.Title</div>
-                <div class="date">@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</div>
-            </a>
-        }
-        @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
-        {
-            <a class="btn btn-success btn-block btn-sm" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
-                <icon icon="add"></icon>
-                Add new
-            </a>
-        }
-    </ol>
+    <div class="my-modal" v-if="showShelves" v-on:click="showShelves = false">
+        <div class="content">
+            <h3>Add to bookshelf</h3>
+            <ul class="items-list">
+                <li v-for="s in shelves">
+                    <div class="deco" v-bind:style="{background: s.color}"></div>
+                    <button class="main" :href="'/Shelf/' + s.id" v-on:click="addToShelf(s.id)">
+                        <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
+                        <span class="desc">{{ s.description }}</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
     
-    <div id="route" v-if="!route" data-route="@Url.RouteUrl("VotesController")"></div>
+    
+    <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl("VotesController")"></div>
+    <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl("ShelvesController")"></div>
     <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPoolId"></div>
+    <div id="story-id" v-if="!storyId" data-id="@Model.Id"></div>
+    @Html.AntiForgeryToken()
 </div>
 
 @Html.Resource(@<script src="~/js/story.min.js" asp-append-version="true"></script>)

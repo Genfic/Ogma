@@ -32,12 +32,12 @@ let shelves_vue = new Vue({
             this.err = [];
             if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength) 
                 this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
-            if (this.form.desc.length > this.lens.maxDescLength) 
+            if (this.form.desc && this.form.desc.length > this.lens.maxDescLength) 
                 this.err.push(`Description has to be less than ${this.lens.maxDescLength} characters long.`);
             if (this.err.length > 0) return;
             
 
-            if (this.form.name && this.form.desc) {
+            if (this.form.name) {
 
                 // If no ID has been set, that means it's a new shelf.
                 // Thus, we POST it.
@@ -103,7 +103,11 @@ let shelves_vue = new Vue({
         // Deletes a selected shelf
         deleteShelf: function(t) {
             if (confirm("Delete permanently?")) {
-                axios.delete(this.route + '/' + t.id)
+                axios.delete(this.route + '/' + t.id,
+                    null,
+                    {
+                        headers: { "RequestVerificationToken" : this.csrf }
+                    })
                     .then(_ => {
                         this.getShelves()
                     })

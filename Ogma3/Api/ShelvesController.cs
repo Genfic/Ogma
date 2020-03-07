@@ -90,6 +90,28 @@ namespace Ogma3.Api
             return Ok(ShelfFromApiDTO.FromShelf(shelf));
         }
 
+        [HttpPost("add/{shelfId}/{storyId}")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<ActionResult> AddShelfAsync(int shelfId, int storyId)
+        {
+            var shelf = await _context.Shelves.FindAsync(shelfId);
+            var story = await _context.Stories.FindAsync(storyId);
+
+            if (shelf == null || story == null) return NotFound();
+
+            _context.ShelfStories.Add(new ShelfStory
+            {
+                Shelf = shelf,
+                ShelfId = shelf.Id,
+                Story = story,
+                StoryId = story.Id
+            });
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         // PUT: api/Shelves/5
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
@@ -150,6 +172,7 @@ namespace Ogma3.Api
 
             public bool IsPublic { get; set; } = false;
             public bool IsQuick { get; set; } = false;
+            
             [MinLength(7)]
             [MaxLength(7)]
             public string Color { get; set; }

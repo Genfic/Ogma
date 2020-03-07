@@ -77,9 +77,8 @@
     <ul class="items-list">
         <li v-for="s in shelves">
             <div class="deco" v-bind:style="{background: s.color}"></div>
-            <span class="count">{{ s.count }}</span>
             <a class="main" :href="'/Shelf/' + s.id">
-                <h3 class="name">{{ s.name }}</h3>
+                <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
                 <span class="desc">{{ s.description }}</span>
             </a>
             <div class="actions">

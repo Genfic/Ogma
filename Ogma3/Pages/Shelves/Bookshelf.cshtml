@@ -6,7 +6,8 @@
     ViewData["Title"] = $"{Model.Shelf.Name}";
 }
 
-@Json.Serialize(Model.Shelf)
+<h1>@Model.Shelf.Name</h1>
+<span>@Model.Shelf.Description</span>
 
 <ul>
 @foreach (var s in Model.Shelf.Stories)

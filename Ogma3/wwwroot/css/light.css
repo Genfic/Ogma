@@ -179,6 +179,16 @@ div.story-card {
     .story-details > .chapters > .chapter > .date {
       flex-shrink: 1; }
 
+.story-details > .actions {
+  display: flex;
+  margin-bottom: .5rem; }
+  .story-details > .actions button {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    margin-right: .2rem; }
+    .story-details > .actions button:hover {
+      border-color: rgba(0, 0, 0, 0.75); }
+
 .chapter-container {
   display: flex;
   flex-direction: column;
@@ -364,6 +374,8 @@ ul.items-list {
       flex-direction: column;
       flex: 1;
       color: black;
+      background: transparent;
+      border: none;
       text-decoration: none; }
       ul.items-list > li .main:hover {
         color: rgba(0, 0, 0, 0.75); }
@@ -391,3 +403,19 @@ ul.items-list {
           border-color: black; }
         ul.items-list > li .actions > button > i.material-icons-outlined {
           font-size: 1.2rem; }
+
+.my-modal {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25); }
+  .my-modal > .content {
+    max-width: 250rem;
+    max-height: 500rem;
+    background: white;
+    padding: 1rem; }
