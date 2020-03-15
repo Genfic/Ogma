@@ -43,12 +43,12 @@
 
 
   <ItemGroup>
-    <Folder Include="Data\Enums" />
+    <_ContentIncludedByDefault Remove="Pages\Editors\Story.cshtml" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Editors\Story.cshtml" />
+    <Folder Include="Data\Enums" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

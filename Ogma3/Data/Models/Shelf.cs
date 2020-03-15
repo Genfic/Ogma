@@ -1,3 +1,5 @@
+#nullable enable 
+
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -16,10 +18,10 @@ namespace Ogma3.Data.Models
         public string Name { get; set; }
 
         [MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
         
         [Required]
-        public  User Owner { get; set; }
+        public User Owner { get; set; }
         
         [Required]
         [DefaultValue(false)]
@@ -27,16 +29,19 @@ namespace Ogma3.Data.Models
         
         [Required]
         [DefaultValue(false)]
-        public bool IsPublic { get; set; } = false;
+        public bool IsPublic { get; set; }
 
         [Required]
         [DefaultValue(false)]
-        public bool IsQuickAdd { get; set; } = false;
+        public bool IsQuickAdd { get; set; }
         
         [DefaultValue(null)]
         [MinLength(7)]
         [MaxLength(7)]
         public string? Color { get; set; }
+
+        [DefaultValue(null)]
+        public Icon Icon { get; set; }
         
         // Stories
         [JsonIgnore]

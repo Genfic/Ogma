@@ -10,7 +10,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "NamespacesController")]
+    [Route("api/[controller]", Name = nameof(NamespacesController))]
     [ApiController]
     public class NamespacesController : ControllerBase
     {

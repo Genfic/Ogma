@@ -65,7 +65,7 @@ namespace Ogma3.Data.Models
         public  Rating Rating { get; set; }
         
         // Votes
-        public  VotePool VotesPool { get; set; }// = new VotePool();
+        public  VotePool VotesPool { get; set; } = new VotePool();
         public int VotesPoolId { get; set; }
 
         [NotMapped] 

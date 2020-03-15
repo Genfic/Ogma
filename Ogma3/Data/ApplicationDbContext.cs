@@ -28,6 +28,7 @@ namespace Ogma3.Data
         
         // Secondary
         public DbSet<Document> Documents { get; set; }
+        public DbSet<Icon> Icons { get; set; }
 
         
         

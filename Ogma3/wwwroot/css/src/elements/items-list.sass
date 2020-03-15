@@ -1,10 +1,10 @@
 ul.items-list
-  width: 100%
+  min-width: 100%
   margin-top: 1rem
   
   &>li
     display: flex
-    width: 100%
+    min-width: 100%
     border: 1px solid $foreground-25
     margin: .2rem
     &:hover
@@ -16,6 +16,7 @@ ul.items-list
       min-width: 5rem
     
     & .main
+      margin: .5rem
       display: flex
       flex-direction: column
       flex: 1
@@ -23,6 +24,7 @@ ul.items-list
       background: transparent
       border: none
       text-decoration: none
+      text-align: left
       &:hover
         color: $foreground-75
     
@@ -34,9 +36,11 @@ ul.items-list
     & .name
       font-size: 1.2rem
       text-decoration: none
+      text-overflow: ellipsis
       
     & .desc
       color: $foreground-75
+      text-overflow: ellipsis
       
     & .actions
       display: flex

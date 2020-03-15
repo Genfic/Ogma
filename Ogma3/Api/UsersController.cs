@@ -5,7 +5,7 @@ using Utils;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "UsersController")]
+    [Route("api/[controller]", Name = nameof(UsersController))]
     [ApiController]
     public class UsersController : ControllerBase
     {

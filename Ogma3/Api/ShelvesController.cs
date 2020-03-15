@@ -176,6 +176,9 @@ namespace Ogma3.Api
             [MinLength(7)]
             [MaxLength(7)]
             public string Color { get; set; }
+
+            [MaxLength(20)]
+            public string Icon { get; set; }
         }
 
     }

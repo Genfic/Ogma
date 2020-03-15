@@ -7,6 +7,7 @@ let shelves_vue = new Vue({
             pub: false,
             quick: false,
             color: null,
+            icon: null,
             id: null
         },
         lens: {

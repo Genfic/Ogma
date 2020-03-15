@@ -140,6 +140,7 @@ namespace Ogma3
             SeedRoles(roleManager);
             SeedUserRoles(userManager);
             SeedRatings(ctx);
+            SeedIcons(ctx);
 
         }
 
@@ -182,6 +183,43 @@ namespace Ogma3
                 }
                 ctx.SaveChanges();
             }
+        }
+
+        private static void SeedIcons(ApplicationDbContext ctx)
+        {
+            string[] icons =
+            {
+                "book",
+                "bookmark_border",
+                "check_circle",
+                "delete",
+                "eco",
+                "explore",
+                "extension",
+                "face",
+                "favorite_border",
+                "fingerprint",
+                "star_border",
+                "report_problem",
+                "thumb_up",
+                "thumb_down",
+                "visibility",
+                "new_releases",
+                "outlined_flag",
+                "toys",
+                "palette",
+                "casino",
+                "spa"
+            };
+            foreach (var i in icons)
+            {
+                if (ctx.Icons.FirstOrDefault(ico => ico.Name == i) == null)
+                {
+                    ctx.Icons.Add(new Icon {Name = i});
+                }
+            }
+
+            ctx.SaveChanges();
         }
     }
 }

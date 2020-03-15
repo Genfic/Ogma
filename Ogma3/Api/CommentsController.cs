@@ -12,7 +12,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "CommentsController")]
+    [Route("api/[controller]", Name = nameof(CommentsController))]
     [ApiController]
     public class CommentsController : ControllerBase
     {

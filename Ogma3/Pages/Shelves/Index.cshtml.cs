@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Services.Attributes;
 
 namespace Ogma3.Pages.Shelves
 {
@@ -29,7 +31,12 @@ namespace Ogma3.Pages.Shelves
 
         public class InputModel
         {
+            [Required]
+            [MinLength(CTConfig.Shelf.MinNameLength)]
+            [MaxLength(CTConfig.Shelf.MaxNameLength)]
             public string Name { get; set; }
+            
+            [MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
             public string Description { get; set; }
             
             [DisplayName("Public")]
@@ -37,7 +44,12 @@ namespace Ogma3.Pages.Shelves
             
             [DisplayName("Quick access")]
             public bool QuickAccess { get; set; }
+            
+            [MinLength(7)]
+            [MaxLength(7)]
             public string Color { get; set; }
+
+            public int Icon { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(string? name)

@@ -14,7 +14,7 @@
                 
         <div class="form-row">
 
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <div class="form-group">
                     <label asp-for="Input.Name"></label>
                     <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
@@ -26,6 +26,14 @@
                 <div class="form-group">
                     <label asp-for="Input.Color"></label>
                     <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label asp-for="Input.Icon"></label>
+                    <input asp-for="Input.Icon" type="text" class="form-control" v-model="form.icon">
                     <span class="text-danger"></span>
                 </div>
             </div>

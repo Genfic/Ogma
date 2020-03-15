@@ -13,7 +13,7 @@ using Utils;
 
 namespace Ogma3.Api
 {
-    [Route("api/[controller]", Name = "CategoriesController")]
+    [Route("api/[controller]", Name = nameof(CategoriesController))]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
