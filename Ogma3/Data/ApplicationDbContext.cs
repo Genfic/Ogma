@@ -145,6 +145,11 @@ namespace Ogma3.Data
                 .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Shelves
+            builder.Entity<Shelf>()
+                .HasOne(s => s.Icon)
+                .WithMany();
+            
 
             
             // Documents

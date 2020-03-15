@@ -1,4 +1,5 @@
 @page "{name?}"
+@using Ogma3.Data.Models
 @model Ogma3.Pages.Shelves.Index
 
 @{
@@ -14,7 +15,7 @@
                 
         <div class="form-row">
 
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="form-group">
                     <label asp-for="Input.Name"></label>
                     <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
@@ -26,14 +27,6 @@
                 <div class="form-group">
                     <label asp-for="Input.Color"></label>
                     <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
-                    <span class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="Input.Icon"></label>
-                    <input asp-for="Input.Icon" type="text" class="form-control" v-model="form.icon">
                     <span class="text-danger"></span>
                 </div>
             </div>
@@ -63,6 +56,17 @@
             </div>
         </div>
         
+        <div class="form-row">
+            @foreach(var ico in Model.Icons) {
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="icons" v-model="form.icon" id="icon-@ico.Id" value="@ico.Id">
+                    <label class="form-check-label" for="icon-@ico.Id">
+                        <icon icon="@ico.Name"></icon>
+                    </label>
+                </div>
+            }
+        </div>
+        
 
         <input type="hidden" :value="form.id">
 
@@ -84,7 +88,9 @@
 
     <ul class="items-list">
         <li v-for="s in shelves">
-            <div class="deco" v-bind:style="{background: s.color}"></div>
+            <div class="deco" v-bind:style="{background: s.color}">
+                <i class="material-icons-outlined">{{s.icon}}</i>
+            </div>
             <a class="main" :href="'/Shelf/' + s.id">
                 <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
                 <span class="desc">{{ s.description }}</span>

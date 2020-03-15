@@ -26,6 +26,8 @@ namespace Ogma3.Pages.Shelves
 
         public User Owner { get; set; }
         public List<Shelf> UserShelves { get; set; }
+
+        public List<Icon> Icons { get; set; }
         
         public InputModel Input { get; set; }
 
@@ -59,6 +61,8 @@ namespace Ogma3.Pages.Shelves
                 : await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
             
             UserShelves = await _context.Shelves.Where(s => s.Owner == Owner).ToListAsync();
+
+            Icons = await _context.Icons.ToListAsync();
 
             return Page();
         }

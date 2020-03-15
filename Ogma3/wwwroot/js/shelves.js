@@ -49,7 +49,8 @@ let shelves_vue = new Vue({
                             description: this.form.desc,
                             isPublic: this.form.pub,
                             isQuick: this.form.quick,
-                            color: this.form.color
+                            color: this.form.color,
+                            icon: Number(this.form.icon)
                         },{
                             headers: { "RequestVerificationToken" : this.csrf }
                         })
@@ -66,11 +67,13 @@ let shelves_vue = new Vue({
                     axios.put(this.route + '/' + this.form.id,
                         {
                             id: this.form.id,
-                            name: this.form.name,
+                            name: this.form.name, 
                             description: this.form.desc,
                             isPublic: this.form.pub,
                             isQuick: this.form.quick,
-                            color: this.form.color
+                            color: this.form.color,
+                            shelf: this.form.shelf,
+                            icon: Number(this.form.icon)
                         },{
                             headers: { "RequestVerificationToken" : this.csrf }
                         })
@@ -120,13 +123,13 @@ let shelves_vue = new Vue({
 
         // Throws a shelf from the list into the editor
         editShelf: function(t) {
-            this.form.name = t.name;
-            this.form.desc = t.description;
-            this.form.id = t.id;
+            this.form.name  = t.name;
+            this.form.desc  = t.description;
+            this.form.id    = t.id;
             this.form.color = t.color;
             this.form.quick = t.isQuick;
-            this.form.pub = t.isPublic;
-            this.showForm = true;
+            this.form.pub   = t.isPublic;
+            this.showForm   = true;
         },
 
         // Clears the editor

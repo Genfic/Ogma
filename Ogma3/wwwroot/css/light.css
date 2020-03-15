@@ -383,8 +383,13 @@ ul.items-list {
         color: rgba(0, 0, 0, 0.75); }
     ul.items-list > li .deco {
       height: auto;
-      width: 5px;
-      margin-right: .5rem; }
+      min-width: 5px;
+      margin-right: .5rem;
+      display: flex;
+      align-items: center; }
+      ul.items-list > li .deco > * {
+        margin: .2rem;
+        color: white; }
     ul.items-list > li .name {
       font-size: 1.2rem;
       text-decoration: none;
@@ -426,3 +431,6 @@ ul.items-list {
     height: 100%;
     overflow-y: scroll;
     border: 5px solid white; }
+
+.material-icons-outlined {
+  user-select: none; }

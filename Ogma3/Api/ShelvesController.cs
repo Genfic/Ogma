@@ -41,6 +41,7 @@ namespace Ogma3.Api
             var shelves = await _context.Shelves
                 .Where(s => s.Owner == user)
                 .Include(s => s.ShelfStories)
+                .Include(s => s.Icon)
                 .ToListAsync();
             return Ok(shelves.Select(ShelfFromApiDTO.FromShelf));
         }
@@ -62,6 +63,7 @@ namespace Ogma3.Api
                 .Include(s => s.ShelfStories)
                     .ThenInclude(ss => ss.Story)
                         .ThenInclude(s => s.Rating)
+                .Include(s => s.Icon)
                 .FirstOrDefaultAsync();
 
                 if (shelf == null) return NotFound();
@@ -83,7 +85,8 @@ namespace Ogma3.Api
                 Owner       = user,
                 IsPublic    = data.IsPublic,
                 IsQuickAdd  = data.IsQuick,
-                Color       = data.Color
+                Color       = data.Color,
+                IconId      = data.Icon
             };
             _context.Shelves.Add(shelf);
             await _context.SaveChangesAsync();
@@ -122,11 +125,12 @@ namespace Ogma3.Api
 
             if (shelf == null) return NotFound();
             
-            shelf.Name = data.Name;
+            shelf.Name        = data.Name;
             shelf.Description = data.Description;
-            shelf.Color = data.Color;
-            shelf.IsPublic = data.IsPublic;
-            shelf.IsQuickAdd = data.IsQuick;
+            shelf.Color       = data.Color;
+            shelf.IsPublic    = data.IsPublic;
+            shelf.IsQuickAdd  = data.IsQuick;
+            shelf.IconId      = data.Icon;
             
             await _context.SaveChangesAsync();
             return Ok(ShelfFromApiDTO.FromShelf(shelf));
@@ -177,8 +181,7 @@ namespace Ogma3.Api
             [MaxLength(7)]
             public string Color { get; set; }
 
-            [MaxLength(20)]
-            public string Icon { get; set; }
+            public int Icon { get; set; }
         }
 
     }

@@ -17,6 +17,8 @@ namespace Ogma3.Data.DTOs
         public IEnumerable<Story> Stories;
         public int Count { get; set; }
 
+        public string? Icon { get; set; }
+
         public static ShelfFromApiDTO FromShelf(Shelf shelf)
             => new ShelfFromApiDTO
             {
@@ -28,7 +30,8 @@ namespace Ogma3.Data.DTOs
                 IsQuick = shelf.IsQuickAdd,
                 Color = shelf.Color,
                 Stories = shelf.Stories,
-                Count = shelf.ShelfStories.Count
+                Count = shelf.ShelfStories.Count,
+                Icon = shelf.Icon?.Name
             };
     }
 }

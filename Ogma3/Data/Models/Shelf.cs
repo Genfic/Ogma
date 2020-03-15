@@ -40,8 +40,8 @@ namespace Ogma3.Data.Models
         [MaxLength(7)]
         public string? Color { get; set; }
 
-        [DefaultValue(null)]
-        public Icon Icon { get; set; }
+        public Icon? Icon { get; set; }
+        public int? IconId { get; set; }
         
         // Stories
         [JsonIgnore]
