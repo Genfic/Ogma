@@ -10,10 +10,12 @@
   background: $foreground-50
   
   &>.content
-    max-width: 20rem
+    max-width: 40rem
     max-height: 30rem
     background: $background
     padding: 1rem
     height: 100%
     overflow-y: scroll
     border: 5px solid $background
+    @media screen and (max-width: $mq-mobile)
+      width: 100vw

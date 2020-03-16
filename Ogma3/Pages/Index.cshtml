@@ -7,7 +7,7 @@
 <h2>Recent stories</h2>
 
 <div>
-    @foreach (var story in Model.Stories)
+    @foreach (var story in Model.RecentStories)
     {
         <partial name="Shared/_StoryCard" model="@story"/>
     }

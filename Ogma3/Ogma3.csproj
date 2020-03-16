@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Editors\Story.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Errors\e404.cshtml" />
   </ItemGroup>
 
 

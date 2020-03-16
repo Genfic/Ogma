@@ -9,12 +9,12 @@
 <h1>@Model.Shelf.Name</h1>
 <span>@Model.Shelf.Description</span>
 
-<ul>
-@foreach (var s in Model.Shelf.Stories)
+<div>
+@foreach (var story in Model.Shelf.Stories)
 {
-    <li>@s.Author.UserName – @s.Title – @s.Hook</li>
+    <partial name="Shared/_StoryCard" model="@story"/>
 }
-</ul>
+</div>
 
 
 @Html.Resource(@<script>axios.get('/api/Shelves/1').then(console.log).catch(console.error)</script>)

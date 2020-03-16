@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,7 +19,7 @@ namespace Ogma3.Pages
         [BindProperty]
         public string SampleText { get; set; }
 
-        public List<Story> Stories { get; set; }
+        public List<Story> RecentStories { get; set; }
 
         public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
         {
@@ -28,7 +29,8 @@ namespace Ogma3.Pages
 
         public async Task OnGetAsync()
         {
-            Stories = await _context.Stories
+            RecentStories = await _context.Stories
+                .Take(10)
                 .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                         .ThenInclude(t => t.Namespace)

@@ -1,12 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
@@ -28,9 +32,9 @@ namespace Ogma3.Api
         }
         
 
-        // GET: api/Shelves/user/JohnSmith
-        [HttpGet("user/{name?}")]
-        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync(string name)
+        // GET: api/Shelves/user?name=JohnSmith&story=5
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync([FromQuery]string? name, [FromQuery]int? story)
         {
             var user = name == null 
                 ? await _userManager.GetUserAsync(User) 
@@ -43,7 +47,8 @@ namespace Ogma3.Api
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
                 .ToListAsync();
-            return Ok(shelves.Select(ShelfFromApiDTO.FromShelf));
+            
+            return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, story)));
         }
 
         // GET: api/Shelves/5
@@ -96,23 +101,28 @@ namespace Ogma3.Api
         [HttpPost("add/{shelfId}/{storyId}")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult> AddShelfAsync(int shelfId, int storyId)
+        public async Task<ActionResult> AddToShelfAsync(int shelfId, int storyId)
         {
             var shelf = await _context.Shelves.FindAsync(shelfId);
             var story = await _context.Stories.FindAsync(storyId);
-
+            
             if (shelf == null || story == null) return NotFound();
+            
+            var exists = _context.ShelfStories.Any(ss => ss.Shelf == shelf && ss.Story == story);
 
-            _context.ShelfStories.Add(new ShelfStory
+            var shelfStory = new ShelfStory
             {
                 Shelf = shelf,
-                ShelfId = shelf.Id,
-                Story = story,
-                StoryId = story.Id
-            });
+                Story = story
+            };
+
+            if (exists)
+                _context.ShelfStories.Remove(shelfStory);
+            else
+                _context.ShelfStories.Add(shelfStory);
 
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(shelfStory);
         }
 
         // PUT: api/Shelves/5

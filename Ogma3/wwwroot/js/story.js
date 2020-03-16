@@ -27,7 +27,11 @@ let story_vue = new Vue({
         
         // Gets all existing shelves
         getShelves: function() {
-            axios.get(this.shelvesRoute + '/user')
+            axios.get(this.shelvesRoute + '/user/', {
+                params: {
+                    story: this.storyId
+                }
+            })
                 .then(response => {
                     this.shelves = response.data
                 })

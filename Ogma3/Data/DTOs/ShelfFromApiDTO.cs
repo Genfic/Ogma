@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Ogma3.Data.Models;
 using Utils;
 
@@ -16,10 +17,10 @@ namespace Ogma3.Data.DTOs
         public string Color { get; set; }
         public IEnumerable<Story> Stories;
         public int Count { get; set; }
-
         public string? Icon { get; set; }
+        public bool? DoesContainBook { get; set; }
 
-        public static ShelfFromApiDTO FromShelf(Shelf shelf)
+        public static ShelfFromApiDTO FromShelf(Shelf shelf, int? bookId = null)
             => new ShelfFromApiDTO
             {
                 Id = shelf.Id,
@@ -31,7 +32,10 @@ namespace Ogma3.Data.DTOs
                 Color = shelf.Color,
                 Stories = shelf.Stories,
                 Count = shelf.ShelfStories.Count,
-                Icon = shelf.Icon?.Name
+                Icon = shelf.Icon?.Name,
+                DoesContainBook = bookId == null 
+                    ? (bool?) null 
+                    : shelf.ShelfStories.Any(ss => ss.StoryId == bookId)
             };
     }
 }

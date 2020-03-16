@@ -183,11 +183,16 @@ div.story-card {
   display: flex;
   margin-bottom: .5rem; }
   .story-details > .actions button {
+    display: flex;
+    align-items: center;
     background: transparent;
     border: 1px solid rgba(0, 0, 0, 0.25);
-    margin-right: .2rem; }
+    min-height: 2rem;
+    margin-right: .1rem; }
     .story-details > .actions button:hover {
       border-color: rgba(0, 0, 0, 0.75); }
+  .story-details > .actions .spacer {
+    flex: 1; }
 
 .chapter-container {
   display: flex;
@@ -424,13 +429,16 @@ ul.items-list {
   height: 100%;
   background: rgba(0, 0, 0, 0.5); }
   .my-modal > .content {
-    max-width: 20rem;
+    max-width: 40rem;
     max-height: 30rem;
     background: white;
     padding: 1rem;
     height: 100%;
     overflow-y: scroll;
     border: 5px solid white; }
+    @media screen and (max-width: 570px) {
+      .my-modal > .content {
+        width: 100vw; } }
 
 .material-icons-outlined {
   user-select: none; }
