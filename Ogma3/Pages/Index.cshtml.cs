@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Models;
@@ -31,6 +32,7 @@ namespace Ogma3.Pages
         {
             RecentStories = await _context.Stories
                 .Take(10)
+                .OrderByDescending(s => s.ReleaseDate)
                 .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                         .ThenInclude(t => t.Namespace)

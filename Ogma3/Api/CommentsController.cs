@@ -32,7 +32,7 @@ namespace Ogma3.Api
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == thread)
                 .Include(c => c.Author)
-                .Select(c => CommentDTO.FromComment(c))
+                .Select(c => CommentDTO.FromComment(c, true))
                 .ToListAsync();
         }
 

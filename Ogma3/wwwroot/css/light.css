@@ -442,3 +442,11 @@ ul.items-list {
 
 .material-icons-outlined {
   user-select: none; }
+
+#version {
+  color: white;
+  border-radius: .2rem;
+  height: auto;
+  font-size: 15px;
+  line-height: 15px;
+  padding: 3px; }
