@@ -1,20 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
-using Utils;
 
 namespace Ogma3.Api
 {
@@ -32,18 +27,24 @@ namespace Ogma3.Api
         }
         
 
+        /// <summary>
+        /// Get all shelves that belong to user of `name`
+        /// </summary>
+        /// <param name="name">Name of the shelf owner, of null for currently logged-in user</param>
+        /// <param name="story">Optional story ID parameter to check whether the story is on the shelf</param>
+        /// <returns>List of `ShelfFromApiDTO` objects</returns>
         // GET: api/Shelves/user?name=JohnSmith&story=5
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync([FromQuery]string? name, [FromQuery]int? story)
         {
-            var user = name == null 
+            var user = name.IsNullOrEmpty()
                 ? await _userManager.GetUserAsync(User) 
                 : await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
 
             if (user == null) return NotFound();
             
             var shelves = await _context.Shelves
-                .Where(s => s.Owner == user)
+                .Where(s => s.Owner == user && (name == null || s.IsPublic))
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
                 .ToListAsync();
@@ -51,6 +52,11 @@ namespace Ogma3.Api
             return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, story)));
         }
 
+        /// <summary>
+        /// Get shelf by ID
+        /// </summary>
+        /// <param name="id">ID of the shelf</param>
+        /// <returns></returns>
         // GET: api/Shelves/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ShelfFromApiDTO>> GetShelfAsync(int id)
@@ -76,6 +82,11 @@ namespace Ogma3.Api
             return Ok(ShelfFromApiDTO.FromShelf(shelf));
         }
 
+        /// <summary>
+        /// Create a new shelf
+        /// </summary>
+        /// <param name="data">Shelf data</param>
+        /// <returns></returns>
         // POST: api/Shelves
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -98,6 +109,13 @@ namespace Ogma3.Api
             return Ok(ShelfFromApiDTO.FromShelf(shelf));
         }
 
+        /// <summary>
+        /// Add the story with `storyId` to shelf of `shelfId`
+        /// </summary>
+        /// <param name="shelfId">ID of the shelf to add to</param>
+        /// <param name="storyId">ID of the story to add</param>
+        /// <returns></returns>
+        // POST: api/Shelves/add/5/6
         [HttpPost("add/{shelfId}/{storyId}")]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -105,8 +123,12 @@ namespace Ogma3.Api
         {
             var shelf = await _context.Shelves.FindAsync(shelfId);
             var story = await _context.Stories.FindAsync(storyId);
+            var user  = await _userManager.GetUserAsync(User);
             
+            // Check existence
             if (shelf == null || story == null) return NotFound();
+            // Check ownership
+            if (shelf.Owner != user) return Forbid();
             
             var exists = _context.ShelfStories.Any(ss => ss.Shelf == shelf && ss.Story == story);
 
@@ -125,6 +147,12 @@ namespace Ogma3.Api
             return Ok(shelfStory);
         }
 
+        /// <summary>
+        /// Edit the shelf of `id` and replace its data with `data`
+        /// </summary>
+        /// <param name="id">ID of the shelf to edit</param>
+        /// <param name="data">New data of the shelf</param>
+        /// <returns></returns>
         // PUT: api/Shelves/5
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
@@ -132,8 +160,12 @@ namespace Ogma3.Api
         public async Task<ActionResult<ShelfFromApiDTO>> PutShelfAsync(int id, PostData data)
         {
             var shelf = await _context.Shelves.FindAsync(id);
+            var user  = await _userManager.GetUserAsync(User);
 
+            // Check existence
             if (shelf == null) return NotFound();
+            // Check ownership
+            if (shelf.Owner != user) return Forbid();
             
             shelf.Name        = data.Name;
             shelf.Description = data.Description;
@@ -146,6 +178,12 @@ namespace Ogma3.Api
             return Ok(ShelfFromApiDTO.FromShelf(shelf));
         }
 
+        /// <summary>
+        /// Delete the shelf of `id`
+        /// </summary>
+        /// <param name="id">ID of the shelf to delete</param>
+        /// <returns></returns>
+        // DELETE: api/Shelves/5
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteShelfAsync(int id)
@@ -153,7 +191,9 @@ namespace Ogma3.Api
             var user = await _userManager.GetUserAsync(User);
             var shelf = await _context.Shelves.FindAsync(id);
             
+            // Check existence
             if (shelf == null) return NotFound();
+            // Check ownership
             if (shelf.Owner != user) return Forbid();
             
             _context.Shelves.Remove(shelf);
@@ -162,6 +202,10 @@ namespace Ogma3.Api
             return Ok();
         }
 
+        /// <summary>
+        /// Get validation data
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Shelves/validation
         [HttpGet("validation")]
         public ActionResult GetShelfValidation()
@@ -170,7 +214,7 @@ namespace Ogma3.Api
             {
                 CTConfig.Shelf.MinNameLength,
                 CTConfig.Shelf.MaxNameLength,
-                CTConfig.Shelf.MaxDescriptionLength,
+                CTConfig.Shelf.MaxDescriptionLength
             });
         }
 

@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
-using Ogma3.Services.Attributes;
 
 namespace Ogma3.Pages.Shelves
 {
@@ -25,7 +24,7 @@ namespace Ogma3.Pages.Shelves
         }
 
         public User Owner { get; set; }
-        public List<Shelf> UserShelves { get; set; }
+        public bool DefaultUser { get; set; }
 
         public List<Icon> Icons { get; set; }
         
@@ -60,7 +59,7 @@ namespace Ogma3.Pages.Shelves
                 ? await _userManager.GetUserAsync(User) 
                 : await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
             
-            UserShelves = await _context.Shelves.Where(s => s.Owner == Owner).ToListAsync();
+            DefaultUser = name == null;
 
             Icons = await _context.Icons.ToListAsync();
 

@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +10,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Shelves
 {
+    [Authorize]
     public class Bookshelf : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -27,9 +27,11 @@ namespace Ogma3.Pages.Shelves
         public async Task<IActionResult> OnGetAsync(int? id, string? slug)
         {
             if (id == null) return NotFound();
+
+            var user = await _userManager.GetUserAsync(User);
             
             Shelf = await _context.Shelves
-                .Where(s => s.Id == id)
+                .Where(s => s.Id == id && s.Owner == user)
                 .Include(s => s.ShelfStories)
                     .ThenInclude(ss => ss.Story)
                         .ThenInclude(s => s.StoryTags)

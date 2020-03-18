@@ -19,7 +19,8 @@ let shelves_vue = new Vue({
         csrf: null,
         err: [],
         shelves: [],
-        route: null
+        route: null,
+        owner: null
     },
     methods: {
 
@@ -59,7 +60,7 @@ let shelves_vue = new Vue({
                         })
                         .catch(error => {
                             console.log(error);
-                        });
+                        }); 
                     
                 // If the ID is set, that means it's an existing shelf.
                 // Thus, we PUT it.
@@ -95,7 +96,11 @@ let shelves_vue = new Vue({
 
         // Gets all existing shelves
         getShelves: function() {
-            axios.get(this.route + '/user')
+            axios.get(this.route + '/user', {
+                params: {
+                    name: this.owner
+                }
+            })
                 .then(response => {
                     this.shelves = response.data
                 })
@@ -148,6 +153,8 @@ let shelves_vue = new Vue({
         this.route = document.getElementById('route').dataset.route;
         // Get CSRF token
         this.csrf = document.querySelector('input[name=__RequestVerificationToken').value;
+        // Get owner
+        this.owner = document.getElementById('owner').dataset.owner;
         // Get validation
         axios.get(this.route + '/validation')
             .then(r => {
