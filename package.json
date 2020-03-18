@@ -10,6 +10,7 @@
 		"gulp-sass": "^4.0.2",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-uglify-es": "^2.0.0",
+		"gulp-purgecss": "^2.1.0",
 		"mjml": "^4.4.0",
 		"postcss": "^7.0.26",
 		"postcss-discard-comments": "^4.0.2"

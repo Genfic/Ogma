@@ -3,6 +3,7 @@ let story_vue = new Vue({
     data: {
         votesRoute: null,
         shelvesRoute: null,
+        csrf: null,
         
         score: 0,
         pool: null,
@@ -47,7 +48,6 @@ let story_vue = new Vue({
                     headers: { "RequestVerificationToken" : this.csrf }
                 })
                 .then(res => {
-                    console.log(res.data);
                     this.getShelves();
                 })
                 .catch(console.error)

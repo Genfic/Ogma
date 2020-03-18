@@ -3,6 +3,7 @@ const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
+const purge = require("gulp-purgecss");
 
 // CSS processors
 const autoprefixer = require('autoprefixer');
@@ -26,8 +27,23 @@ gulp.task('css', () => {
         .pipe(sass())                           // Compile SASS
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output the raw CSS
         .pipe(postcss(processors))              // Postprocess it
+        .pipe(purge({                        // Purge it
+            content: ['./Ogma3/**/*.cshtml']
+        }))        
         .pipe(rename({ suffix: '.min' }))       // Add .min suffix
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output minified CSS
+});
+
+gulp.task('css:purged', () => {
+    return gulp.src(['./Ogma3/wwwroot/css/*.css', '!./**/*.min.css'])
+        .pipe(rename({
+            suffix: '.rejected'
+        }))
+        .pipe(purge({
+            content: ['./Ogma3/**/*.cshtml'],
+            rejected: true
+        }))
+        .pipe(gulp.dest('./Ogma3/wwwroot/css'))
 });
 
 gulp.task('watch:css', () => gulp.watch('**/*.sass', gulp.series('css')));

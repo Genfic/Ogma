@@ -4,36 +4,59 @@
 @inject OgmaUserManager UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-            <avatar src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" size="30" alt="@User.Identity.Name's avatar"></avatar>
-            Hello @User.Identity.Name!
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Profile" asp-page="/Index" title="Manage">
+                <avatar src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" size="30" alt="@User.Identity.Name's avatar"></avatar>
+                Hello @User.Identity.Name!
+            </a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+
+
+    <li class="nav-item dropdown">
+        <a class="nav-link text-dark" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <icon icon="menu"></icon>
         </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <a class="dropdown-item text-dark" asp-area="Admin" asp-page="/Index">
+                    <icon icon="settings" class="admin-cog"></icon>
+                    Admin
+                </a>
+            }
+            
+            <a href="" class="dropdown-item text-dark">
+                <icon icon="help"></icon>
+                About
+            </a>
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    <icon icon="person"></icon>
+                    Account
+                </a>
+                
+                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new {area = ""})" method="post">
+                    <icon icon="exit_to_app"></icon>
+                    Logout
+                </a>
+            }
+
+        </div>
     </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" >
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-                        
-@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">
-            <icon icon="settings" class="admin-cog"></icon>
-        </a>
-    </li>
-}
+
 </ul>
