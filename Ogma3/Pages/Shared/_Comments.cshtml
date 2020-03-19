@@ -1,11 +1,11 @@
 @using static Ogma3.Services.HtmlExtensions
-@model Ogma3.Data.Models.Chapter
+@model Ogma3.Data.Models.CommentsThread
 
 <div class="comments-container" id="comments-container">
     <form asp-antiforgery="true">
         <textarea class="comment-box active-border" v-model="body" v-on:keydown.enter="enter" name="body" id="body" rows="3" aria-label="Comment"></textarea>
 
-        <div id="thread" data-thread="@Model.CommentsThread.Id" v-if="!thread"></div>
+        <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
         <div id="route" data-route="@Url.RouteUrl("CommentsController")" v-if="!route"></div>
 
         <div class="buttons">
@@ -13,7 +13,7 @@
                 <icon icon="add_comment"></icon>
                 Comment
             </button>
-            <a class="help-btn active-border" asp-page="/Docs" asp-route-doc="markdown">
+            <a class="help-btn active-border" asp-page="/Markdown" asp-area="">
                 <icon icon="help_outline"></icon>
             </a>
         </div>

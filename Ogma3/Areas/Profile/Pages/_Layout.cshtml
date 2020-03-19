@@ -1,21 +1,35 @@
-﻿@{
+﻿@using System.Globalization
+@using Ogma3.Data.Models
+@{
     Layout = "/Pages/Shared/_Layout.cshtml";
+    var currentUser = ViewData["User"] as User;
 }
 
-<h1>Profile</h1>
-
-<div>
-    <h4>@ViewData["Title"]</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            Nav
-        </div>
-        <div class="col-md-9" id="app">
-            @RenderBody()
+@if (currentUser != null)
+{
+    <div>
+        <div class="row">
+            <div class="col-md-2">
+                <h1>@currentUser.UserName</h1>
+                <img src="@currentUser.Avatar" class="rounded img-fluid" alt="@currentUser.UserName's avatar">
+                <h2>@currentUser.Title</h2>
+                <time datetime="@currentUser.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                    @currentUser.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                </time>
+                <time datetime="@currentUser.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                    @currentUser.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                </time>
+            </div>
+            <div class="col-md-10" id="app">
+                @RenderBody()
+            </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <h1>User not found</h1>
+}
 
 @section Scripts {
     @RenderSection("Scripts", required: false)

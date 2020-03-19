@@ -1,8 +1,15 @@
-@page
+@page "{name?}"
 @model Ogma3.Areas.Profile.Pages.Index
 
 @{
-    ViewData["Title"] = "User's Page";
+    ViewData["Title"] = $"{User.Identity.Name}'s Profile";
+    ViewData["User"] = Model.CurrentUser;
 }
 
-<h1>Profile</h1>
+<markdown preset="All">
+    @Model.CurrentUser.Bio
+</markdown>
+
+<hr>
+
+<partial name="_Comments" model="@Model.CurrentUser.CommentsThread"></partial>

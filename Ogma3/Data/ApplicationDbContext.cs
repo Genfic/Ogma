@@ -40,6 +40,11 @@ namespace Ogma3.Data
             builder.Entity<User>()
                 .Ignore(u => u.PhoneNumber)
                 .Ignore(u => u.PhoneNumberConfirmed);
+            builder.Entity<User>()
+                .HasOne(u => u.CommentsThread)
+                .WithOne()
+                .HasForeignKey<User>(u => u.CommentsThreadId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Tag
             builder.Entity<Tag>()
