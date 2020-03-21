@@ -15,7 +15,7 @@ namespace Ogma3.Data
             public const int MaxNameLength = 20;
 
             public const int MinPassLength = 10;
-            public const int MaxPassLength = 100;
+            public const int MaxPassLength = 200;
 
             public const int MaxTitleLength = 20;
             public const int MaxBioLength = 10_000;

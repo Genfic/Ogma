@@ -1,28 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using AspNetCore.RouteAnalyzer;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data.Models;
-using Ogma3.Services;
 using Ogma3.Services.Mailer;
-using ScottBrady91.AspNetCore.Identity;
 using Utils;
 
 namespace Ogma3
@@ -43,14 +33,17 @@ namespace Ogma3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                // options.UseLazyLoadingProxies();
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-            // services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
-            //     Configuration.GetConnectionString("PostgresConnection"))
-            // );
+            var pg = true;
+            if (!pg)
+                services.AddDbContext<ApplicationDbContext>(options =>
+                {
+                    // options.UseLazyLoadingProxies();
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                });
+            else
+                services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
+                    Configuration.GetConnectionString("PostgresConnection"))
+                );
 
             services.AddIdentity<User, IdentityRole>(config =>
                 {
@@ -65,7 +58,8 @@ namespace Ogma3
             services.AddScoped<IUserClaimsPrincipalFactory<User>, OgmaClaimsPrincipalFactory>();
             
             // Argon2 hasher
-            services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
+            // services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
+            services.UpgradePasswordSecurity().UseArgon2<User>();
 
             // Email
             services.AddTransient<IEmailSender, EmailSender>();
