@@ -65,25 +65,25 @@
             </div>
 
         </div>
-
-        <ol class="chapters">
-            <span>Chapters:</span>
-            @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
-            {
-                <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
-                    <div class="title">@c.Order. @c.Title</div>
-                    <div class="date">@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</div>
-                </a>
-            }
-            @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
-            {
-                <a class="btn btn-success btn-block btn-sm" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
-                    <icon icon="add"></icon>
-                    Add new
-                </a>
-            }
-        </ol>
     </div>
+
+    <ol class="chapters">
+        <span>Chapters:</span>
+        @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
+        {
+            <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+                <div class="title">@c.Order. @c.Title</div>
+                <div class="date">@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</div>
+            </a>
+        }
+        @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+        {
+            <a class="btn btn-success btn-block btn-sm" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+                <icon icon="add"></icon>
+                Add new
+            </a>
+        }
+    </ol>
 
     <div class="my-modal" v-if="showShelves" v-on:click.self="showShelves = false">
         <div class="content">

@@ -127,72 +127,70 @@ div.story-card {
       flex-direction: row;
       flex-wrap: wrap; }
 
-.story-details > .titlebar {
-  display: flex;
-  flex-direction: row;
-  padding-bottom: .5rem; }
-  .story-details > .titlebar > .rating {
-    height: 2rem;
-    width: 2rem;
-    margin-right: .5rem; }
-  .story-details > .titlebar > h1.title {
-    font-size: 2rem;
-    line-height: 2rem; }
-
-.story-details > .tags {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap; }
-
-.story-details > .main {
-  padding-top: .5rem;
-  text-align: justify; }
-  .story-details > .main > .cover {
-    float: left;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    width: 10rem;
-    object-fit: contain;
-    border: 1px solid rgba(0, 0, 0, 0.25); }
-  .story-details > .main > h2.author {
-    font-size: 1.2rem;
-    line-height: 1.2rem; }
-
-.story-details > .chapters {
-  margin-top: .5rem; }
-  .story-details > .chapters > span {
-    font-weight: bold; }
-  .story-details > .chapters > .chapter {
+.story-details {
+  overflow-y: auto; }
+  .story-details > .titlebar {
     display: flex;
     flex-direction: row;
-    padding: .5rem;
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-    border-top: 1px solid rgba(0, 0, 0, 0.25); }
-    .story-details > .chapters > .chapter:last-child {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
-    .story-details > .chapters > .chapter:hover {
-      background-color: rgba(0, 128, 255, 0.1); }
-    .story-details > .chapters > .chapter > .title {
-      flex-grow: 1; }
-    .story-details > .chapters > .chapter > .date {
-      flex-shrink: 1; }
-
-.story-details > .actions {
-  display: flex;
-  margin-bottom: .5rem; }
-  .story-details > .actions button {
+    padding-bottom: .5rem; }
+    .story-details > .titlebar > .rating {
+      height: 2rem;
+      width: 2rem;
+      margin-right: .5rem; }
+    .story-details > .titlebar > h1.title {
+      font-size: 2rem;
+      line-height: 2rem; }
+  .story-details > .tags {
     display: flex;
-    align-items: center;
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    min-height: 2rem;
-    margin-right: .1rem; }
-    .story-details > .actions button:hover {
-      border-color: rgba(0, 0, 0, 0.75); }
-  .story-details > .actions .spacer {
-    flex: 1; }
+    flex-direction: row;
+    flex-wrap: wrap; }
+  .story-details > .main {
+    padding-top: .5rem;
+    text-align: justify; }
+    .story-details > .main > .cover {
+      float: left;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      width: 10rem;
+      object-fit: contain;
+      border: 1px solid rgba(0, 0, 0, 0.25); }
+    .story-details > .main > h2.author {
+      font-size: 1.2rem;
+      line-height: 1.2rem; }
+  .story-details > .chapters {
+    margin-top: .5rem; }
+    .story-details > .chapters > span {
+      font-weight: bold; }
+    .story-details > .chapters > .chapter {
+      display: flex;
+      flex-direction: row;
+      padding: .5rem;
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+      border-top: 1px solid rgba(0, 0, 0, 0.25); }
+      .story-details > .chapters > .chapter:last-child {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
+      .story-details > .chapters > .chapter:hover {
+        background-color: rgba(0, 128, 255, 0.1); }
+      .story-details > .chapters > .chapter > .title {
+        flex-grow: 1; }
+      .story-details > .chapters > .chapter > .date {
+        flex-shrink: 1; }
+  .story-details > .actions {
+    display: flex;
+    margin-bottom: .5rem; }
+    .story-details > .actions button {
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      min-height: 2rem;
+      margin-right: .1rem; }
+      .story-details > .actions button:hover {
+        border-color: rgba(0, 0, 0, 0.75); }
+    .story-details > .actions .spacer {
+      flex: 1; }
 
 .chapter-container {
   display: flex;
@@ -442,6 +440,19 @@ ul.items-list {
 
 .material-icons-outlined {
   user-select: none; }
+
+.profile-sidebar {
+  display: flex;
+  flex-direction: column; }
+  .profile-sidebar time {
+    display: block; }
+  .profile-sidebar .name {
+    font-size: 2rem;
+    margin-bottom: .5rem;
+    font-weight: 300; }
+  .profile-sidebar .title {
+    font-size: 1.1rem;
+    font-weight: 600; }
 
 #version {
   color: white;

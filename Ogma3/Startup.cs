@@ -33,18 +33,11 @@ namespace Ogma3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var pg = true;
-            if (!pg)
-                services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    // options.UseLazyLoadingProxies();
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                });
-            else
-                services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
-                    Configuration.GetConnectionString("PostgresConnection"))
-                );
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
+                Configuration.GetConnectionString("PostgresConnection"))
+            );
 
+            // Identity
             services.AddIdentity<User, IdentityRole>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
@@ -58,7 +51,6 @@ namespace Ogma3
             services.AddScoped<IUserClaimsPrincipalFactory<User>, OgmaClaimsPrincipalFactory>();
             
             // Argon2 hasher
-            // services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
             services.UpgradePasswordSecurity().UseArgon2<User>();
 
             // Email
@@ -67,8 +59,8 @@ namespace Ogma3
             
             // Backblaze
             var b2Options = Configuration.GetSection("B2").Get<B2Options>();
-            var client = new B2Client(B2Client.Authorize(b2Options));
-            services.AddSingleton<IB2Client>(client);
+            var b2Client = new B2Client(B2Client.Authorize(b2Options));
+            services.AddSingleton<IB2Client>(b2Client);
 
             // Auth
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -143,11 +135,10 @@ namespace Ogma3
 
         private static void SeedRoles (RoleManager<IdentityRole> roleManager)
         {
-            if (!roleManager.RoleExistsAsync("Admin").Result)
-            {
-                var role = new IdentityRole { Name = "Admin" };
-                var roleResult = roleManager.CreateAsync(role).Result;
-            }
+            if (roleManager.RoleExistsAsync("Admin").Result) return;
+            
+            var role = new IdentityRole { Name = "Admin" };
+            var roleResult = roleManager.CreateAsync(role).Result;
         }
 
         private static void SeedUserRoles(OgmaUserManager userManager)

@@ -18,7 +18,7 @@ namespace Ogma3.Data.Models
         public string Name { get; set; }
 
         [MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
-        public string Description { get; set; } = "";
+        public string? Description { get; set; } = "";
         
         [Required]
         public User Owner { get; set; }
@@ -26,14 +26,14 @@ namespace Ogma3.Data.Models
         [Required]
         [DefaultValue(false)]
         public bool IsDefault { get; set; } = false;
-        
-        [Required]
-        [DefaultValue(false)]
-        public bool IsPublic { get; set; }
+
+        [Required] 
+        [DefaultValue(false)] 
+        public bool IsPublic { get; set; } = false;
 
         [Required]
-        [DefaultValue(false)]
-        public bool IsQuickAdd { get; set; }
+        [DefaultValue(false)] 
+        public bool IsQuickAdd { get; set; } = false;
         
         [DefaultValue(null)]
         [MinLength(7)]

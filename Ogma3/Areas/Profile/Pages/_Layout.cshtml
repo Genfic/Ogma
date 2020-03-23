@@ -9,10 +9,11 @@
 {
     <div>
         <div class="row">
-            <div class="col-md-2">
-                <h1>@currentUser.UserName</h1>
-                <img src="@currentUser.Avatar" class="rounded img-fluid" alt="@currentUser.UserName's avatar">
-                <h2>@currentUser.Title</h2>
+        
+            <div class="col-md-2 profile-sidebar">
+                <h1 class="name">@currentUser.UserName</h1>
+                <img src="@currentUser.Avatar" class="rounded img-fluid avatar" alt="@currentUser.UserName's avatar">
+                <h2 class="title">@currentUser.Title</h2>
                 <time datetime="@currentUser.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
                     @currentUser.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
                 </time>
@@ -20,9 +21,11 @@
                     @currentUser.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
                 </time>
             </div>
+            
             <div class="col-md-10" id="app">
                 @RenderBody()
             </div>
+            
         </div>
     </div>
 }

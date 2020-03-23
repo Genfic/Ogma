@@ -29,6 +29,8 @@ let shelves_vue = new Vue({
         createShelf: function(e) {
             e.preventDefault();
             
+            // Set CSRF
+            this.csrf = document.querySelector('input[name=__RequestVerificationToken').value;
             
             // Validation
             this.err = [];
@@ -145,14 +147,12 @@ let shelves_vue = new Vue({
                         this.form.color = null;
             this.form.isQuick = 
                 this.form.isPublic = false;
-        }
+        },
     },
     
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route;
-        // Get CSRF token
-        this.csrf = document.querySelector('input[name=__RequestVerificationToken').value;
         // Get owner
         this.owner = document.getElementById('owner').dataset.owner;
         // Get validation
