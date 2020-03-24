@@ -1,0 +1,64 @@
+$avatarSize: 8rem
+$margin: .5rem
+
+.profile-bar
+  display: flex
+  height: $avatarSize + $margin
+  margin-bottom: $margin
+  border-bottom: 1px solid $foreground-25
+  
+  &>.nav
+    display: flex
+    flex-grow: 1
+    justify-content: flex-end
+    align-items: flex-end
+    
+    & .nav-item
+      color: $foreground-75
+      text-decoration: none
+      padding: $margin
+      border: 1px solid $foreground-25
+      border-right: none
+      border-bottom: none
+      &:hover
+        color: $foreground
+        background: $accent-10
+      &:first-child
+        border-top-left-radius: .25rem
+      &:last-child
+        border-right: 1px solid $foreground-25
+        border-top-right-radius: .25rem
+      
+    
+  &>#personal
+    display: flex
+    flex-grow: 1
+    margin-bottom: $margin
+  
+    & .data
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      margin-left: 1rem
+    
+    & .times
+      display: flex
+      flex-direction: column
+      justify-content: flex-end
+      flex-grow: 1
+        
+    & .name
+      font-size: 2rem
+      margin-bottom: $margin
+      font-weight: 300
+      color: $foreground
+      
+    & .title
+      font-size: 1.1rem
+      font-weight: 600
+      
+    & .avatar
+      width: $avatarSize
+      object-fit: contain
+      border-radius: .25rem
+      border: 1px solid $foreground-25

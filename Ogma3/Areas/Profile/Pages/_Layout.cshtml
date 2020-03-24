@@ -9,24 +9,53 @@
 {
     <div>
         <div class="row">
-        
-            <div class="col-md-2 profile-sidebar">
-                <h1 class="name">@currentUser.UserName</h1>
-                <img src="@currentUser.Avatar" class="rounded img-fluid avatar" alt="@currentUser.UserName's avatar">
-                <h2 class="title">@currentUser.Title</h2>
-                <time datetime="@currentUser.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                    @currentUser.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-                </time>
-                <time datetime="@currentUser.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                    @currentUser.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-                </time>
+            <div class="col-md-12 profile-bar">
+
+                <div id="personal">
+                    <img src="@currentUser.Avatar" class="avatar" alt="@currentUser.UserName's avatar">
+                    <div class="data">
+                        <a asp-page="Index" asp-route-name="@currentUser.UserName" asp-area="Profile">
+                            <h1 class="name">@currentUser.UserName</h1>
+                        </a>
+                        <h2 class="title">@currentUser.Title</h2>
+                        <div class="times">
+                            <div class="time">
+                                <span>Member since</span>
+                                <time datetime="@currentUser.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                                    @currentUser.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                                </time>
+                            </div>
+                            <div class="time">
+                                <span>Last seen</span>
+                                <time datetime="@currentUser.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                                    @currentUser.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                                </time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="nav">
+                    <a href="" class="nav-item">
+                        Stories
+                    </a>
+                    <a href="" class="nav-item">
+                        Blog
+                    </a>
+                    <a class="nav-item" asp-page="Shelves/Index" asp-route-name="@currentUser.UserName">
+                        Library
+                    </a>
+                </nav>
+
             </div>
-            
-            <div class="col-md-10" id="app">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="app">
                 @RenderBody()
             </div>
-            
         </div>
+
     </div>
 }
 else

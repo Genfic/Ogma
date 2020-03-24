@@ -37,14 +37,16 @@ namespace Ogma3.Api
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync([FromQuery]string? name, [FromQuery]int? story)
         {
+            // TODO: Redo it to always require user name and check auth by comparing it to logged-in user's.
             var user = name.IsNullOrEmpty()
                 ? await _userManager.GetUserAsync(User) 
                 : await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
+            var currentUser = await _userManager.GetUserAsync(User);
 
             if (user == null) return NotFound();
             
             var shelves = await _context.Shelves
-                .Where(s => s.Owner == user && (name == null || s.IsPublic))
+                .Where(s => (s.Owner == user && (name == null || s.IsPublic)) || user == currentUser)
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
                 .ToListAsync();
