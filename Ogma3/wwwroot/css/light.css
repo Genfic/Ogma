@@ -157,26 +157,6 @@ div.story-card {
     .story-details > .main > h2.author {
       font-size: 1.2rem;
       line-height: 1.2rem; }
-  .story-details > .chapters {
-    margin-top: .5rem; }
-    .story-details > .chapters > span {
-      font-weight: bold; }
-    .story-details > .chapters > .chapter {
-      display: flex;
-      flex-direction: row;
-      padding: .5rem;
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-      border-top: 1px solid rgba(0, 0, 0, 0.25); }
-      .story-details > .chapters > .chapter:last-child {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
-      .story-details > .chapters > .chapter:hover {
-        background-color: rgba(0, 128, 255, 0.1); }
-      .story-details > .chapters > .chapter > .title {
-        flex-grow: 1; }
-      .story-details > .chapters > .chapter > .date {
-        flex-shrink: 1; }
   .story-details > .actions {
     display: flex;
     margin-bottom: .5rem; }
@@ -191,6 +171,27 @@ div.story-card {
         border-color: rgba(0, 0, 0, 0.75); }
     .story-details > .actions .spacer {
       flex: 1; }
+
+.chapters {
+  margin-top: .5rem; }
+  .chapters > span {
+    font-weight: bold; }
+  .chapters > .chapter {
+    display: flex;
+    flex-direction: row;
+    padding: .5rem;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    border-top: 1px solid rgba(0, 0, 0, 0.25); }
+    .chapters > .chapter:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
+    .chapters > .chapter:hover {
+      background-color: rgba(0, 128, 255, 0.1); }
+    .chapters > .chapter > .title {
+      flex-grow: 1; }
+    .chapters > .chapter > .date {
+      flex-shrink: 1; }
 
 .chapter-container {
   display: flex;

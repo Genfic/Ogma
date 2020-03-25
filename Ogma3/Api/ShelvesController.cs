@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
@@ -30,23 +32,40 @@ namespace Ogma3.Api
         /// <summary>
         /// Get all shelves that belong to user of `name`
         /// </summary>
-        /// <param name="name">Name of the shelf owner, of null for currently logged-in user</param>
-        /// <param name="story">Optional story ID parameter to check whether the story is on the shelf</param>
+        /// <param name="name">Name of the shelf owner</param>
         /// <returns>List of `ShelfFromApiDTO` objects</returns>
         // GET: api/Shelves/user?name=JohnSmith&story=5
-        [HttpGet("user")]
-        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync([FromQuery]string? name, [FromQuery]int? story)
+        [HttpGet("user/{name:alpha}")]
+        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync(string name)
         {
-            // TODO: Redo it to always require user name and check auth by comparing it to logged-in user's.
-            var user = name.IsNullOrEmpty()
-                ? await _userManager.GetUserAsync(User) 
-                : await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
-            var currentUser = await _userManager.GetUserAsync(User);
-
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
             if (user == null) return NotFound();
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var shelvesQuery = user.Id == currentUser 
+                ? _context.Shelves.Where(s => s.Owner == user) 
+                : _context.Shelves.Where(s => s.Owner == user && s.IsPublic);
+            var shelves = await shelvesQuery
+                .Include(s => s.ShelfStories)
+                .Include(s => s.Icon)
+                .ToListAsync();
             
+            return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, null)));
+        }        
+        
+        /// <summary>
+        /// Get all shelves that belong to the current user and check if they contain a `story`
+        /// </summary>
+        /// <param name="story">Story to check for</param>
+        /// <returns></returns>
+        [HttpGet("user/{story:int}")]
+        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetCurrentUserShelvesAsync(int story)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
             var shelves = await _context.Shelves
-                .Where(s => (s.Owner == user && (name == null || s.IsPublic)) || user == currentUser)
+                .Where(s => s.Owner == user)
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
                 .ToListAsync();

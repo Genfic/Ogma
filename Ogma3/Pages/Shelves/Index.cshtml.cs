@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +25,8 @@ namespace Ogma3.Pages.Shelves
         }
 
         public User Owner { get; set; }
-        public bool DefaultUser { get; set; }
-
+        public bool IsCurrentUser { get; set; }
         public List<Icon> Icons { get; set; }
-        
         public InputModel Input { get; set; }
 
         public class InputModel
@@ -53,14 +52,10 @@ namespace Ogma3.Pages.Shelves
             public int Icon { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(string? name)
+        public async Task<IActionResult> OnGetAsync(string name)
         {
-            Owner = name == null 
-                ? await _userManager.GetUserAsync(User) 
-                : await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
-            
-            DefaultUser = name == null;
-
+            Owner = await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
+            IsCurrentUser = Owner.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
             Icons = await _context.Icons.ToListAsync();
 
             return Page();

@@ -95,14 +95,9 @@ let shelves_vue = new Vue({
 
             }
         },
-
         // Gets all existing shelves
         getShelves: function() {
-            axios.get(this.route + '/user', {
-                params: {
-                    name: this.owner
-                }
-            })
+            axios.get(this.route + '/user/' + this.owner)
                 .then(response => {
                     this.shelves = response.data
                 })

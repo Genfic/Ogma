@@ -28,11 +28,7 @@ let story_vue = new Vue({
         
         // Gets all existing shelves
         getShelves: function() {
-            axios.get(this.shelvesRoute + '/user/', {
-                params: {
-                    story: this.storyId
-                }
-            })
+            axios.get(this.shelvesRoute + '/user/' + this.storyId)
                 .then(response => {
                     this.shelves = response.data
                 })
@@ -55,8 +51,8 @@ let story_vue = new Vue({
     },
     mounted() {
         // Get pool and story IDs
-        this.pool = document.getElementById('pool-id').dataset.pool;
-        this.storyId = document.getElementById('story-id').dataset.id;
+        this.pool = Number(document.getElementById('pool-id').dataset.pool);
+        this.storyId = Number(document.getElementById('story-id').dataset.id);
         // Get routes
         this.votesRoute = document.getElementById('votes-route').dataset.route;
         this.shelvesRoute = document.getElementById('shelves-route').dataset.route;

@@ -1,0 +1,42 @@
+@using System.Globalization
+@model Ogma3.Data.Models.User
+
+<div class="col-md-12 profile-bar">
+
+    <div id="personal">
+        <img src="@Model.Avatar" class="avatar" alt="@Model.UserName's avatar">
+        <div class="data">
+            <a asp-page="Index" asp-route-name="@Model.UserName" asp-area="Profile">
+                <h1 class="name">@Model.UserName</h1>
+            </a>
+            <h2 class="title">@Model.Title</h2>
+            <div class="times">
+                <div class="time">
+                    <span>Member since</span>
+                    <time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                        @Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                    </time>
+                </div>
+                <div class="time">
+                    <span>Last seen</span>
+                    <time datetime="@Model.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                        @Model.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                    </time>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <a href="" class="nav-item">
+            Stories
+        </a>
+        <a href="" class="nav-item">
+            Blog
+        </a>
+        <a class="nav-item" asp-page="Shelves/Index" asp-route-name="@Model.UserName">
+            Library
+        </a>
+    </nav>
+
+</div>

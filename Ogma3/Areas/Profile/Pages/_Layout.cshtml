@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@using Ogma3.Data.Models
+﻿@using Ogma3.Data.Models
 @{
     Layout = "/Pages/Shared/_Layout.cshtml";
     var currentUser = ViewData["User"] as User;
@@ -9,45 +8,7 @@
 {
     <div>
         <div class="row">
-            <div class="col-md-12 profile-bar">
-
-                <div id="personal">
-                    <img src="@currentUser.Avatar" class="avatar" alt="@currentUser.UserName's avatar">
-                    <div class="data">
-                        <a asp-page="Index" asp-route-name="@currentUser.UserName" asp-area="Profile">
-                            <h1 class="name">@currentUser.UserName</h1>
-                        </a>
-                        <h2 class="title">@currentUser.Title</h2>
-                        <div class="times">
-                            <div class="time">
-                                <span>Member since</span>
-                                <time datetime="@currentUser.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                                    @currentUser.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-                                </time>
-                            </div>
-                            <div class="time">
-                                <span>Last seen</span>
-                                <time datetime="@currentUser.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                                    @currentUser.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-                                </time>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <nav class="nav">
-                    <a href="" class="nav-item">
-                        Stories
-                    </a>
-                    <a href="" class="nav-item">
-                        Blog
-                    </a>
-                    <a class="nav-item" asp-page="Shelves/Index" asp-route-name="@currentUser.UserName">
-                        Library
-                    </a>
-                </nav>
-
-            </div>
+            <partial name="_ProfileBar" model="currentUser"></partial>
         </div>
 
         <div class="row">

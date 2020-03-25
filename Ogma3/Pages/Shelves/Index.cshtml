@@ -6,79 +6,83 @@
 }
 
 <div id="app">
-    <form v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">
+    @if (Model.IsCurrentUser)
+    {
+        <form v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">
 
-        <ul v-if="err">
-            <li class="text-danger" v-for="e in err">{{ e }}</li>
-        </ul>
-                
-        <div class="form-row">
+            <ul v-if="err">
+                <li class="text-danger" v-for="e in err">{{ e }}</li>
+            </ul>
 
-            <div class="col-md-10">
-                <div class="form-group">
-                    <label asp-for="Input.Name"></label>
-                    <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
-                    <span class="text-danger"></span>
+            <div class="form-row">
+
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label asp-for="Input.Name"></label>
+                        <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label asp-for="Input.Color"></label>
+                        <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Description"></label>
+                <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
+                <span class="text-danger"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <label asp-for="Input.QuickAccess"></label>
+                        <input asp-for="Input.QuickAccess" type="checkbox" v-model="form.quick">
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <label asp-for="Input.IsPublic"></label>
+                        <input asp-for="Input.IsPublic" type="checkbox" v-model="form.pub">
+                        <span class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="Input.Color"></label>
-                    <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
-                    <span class="text-danger"></span>
-                </div>
+            <div class="form-row">
+                @foreach (var ico in Model.Icons)
+                {
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="icons" v-model="form.icon" id="icon-@ico.Id" value="@ico.Id">
+                        <label class="form-check-label" for="icon-@ico.Id">
+                            <icon icon="@ico.Name"></icon>
+                        </label>
+                    </div>
+                }
             </div>
-            
-        </div>
-        
-        <div class="form-group">
-            <label asp-for="Input.Description"></label>
-            <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
-            <span class="text-danger"></span>
-        </div>
 
-        <div class="form-row">
-            <div class="col-md-2">
-                <div class="form-check">
-                    <label asp-for="Input.QuickAccess"></label>
-                    <input asp-for="Input.QuickAccess" type="checkbox" v-model="form.quick">
-                    <span class="text-danger"></span>
-                </div>
+
+            <input type="hidden" :value="form.id">
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
+                <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
             </div>
-            <div class="col-md-2">
-                <div class="form-check">
-                    <label asp-for="Input.IsPublic"></label>
-                    <input asp-for="Input.IsPublic" type="checkbox" v-model="form.pub">
-                    <span class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-row">
-            @foreach(var ico in Model.Icons) {
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="icons" v-model="form.icon" id="icon-@ico.Id" value="@ico.Id">
-                    <label class="form-check-label" for="icon-@ico.Id">
-                        <icon icon="@ico.Name"></icon>
-                    </label>
-                </div>
-            }
-        </div>
-        
 
-        <input type="hidden" :value="form.id">
+        </form>
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-            <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
-        </div>
-
-    </form>
-    
-    <button class="btn btn-block btn-outline-primary" v-on:click="showForm = !showForm">
-        {{ showForm ? "Hide" : "Create new" }}
-    </button>
+        <button class="btn btn-block btn-outline-primary" v-on:click="showForm = !showForm">
+            {{ showForm ? "Hide" : "Create new" }}
+        </button>
+    }
 
     <button v-if="shelves.length <= 0" class="btn btn-primary" type="button" disabled>
         <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
@@ -94,20 +98,24 @@
                 <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
                 <span class="desc">{{ s.description }}</span>
             </a>
-            <div class="actions">
-                <button v-on:click="deleteShelf(s)">
-                    <icon icon="delete_forever"></icon>
-                </button>
-                <button v-on:click="editShelf(s)">
-                    <icon icon="edit"></icon>
-                </button>
-            </div>
+            @if (Model.IsCurrentUser)
+            {
+                <div class="actions">
+                    <button v-on:click="deleteShelf(s)">
+                        <icon icon="delete_forever"></icon>
+                    </button>
+                    <button v-on:click="editShelf(s)">
+                        <icon icon="edit"></icon>
+                    </button>
+                </div>
+            }
         </li>
     </ul>
 
     <div id="route" data-route="@Url.RouteUrl("ShelvesController")" v-if="!route"></div>
-    <div id="owner" data-owner="@(Model.DefaultUser ? null : Model.Owner?.NormalizedUserName)" v-if="!owner"></div>
+    <div id="owner" data-owner="@Model.Owner.NormalizedUserName" v-if="!owner"></div>
 </div>
+
 
 @section Scripts
 {
