@@ -24,19 +24,17 @@ namespace Ogma3.Pages.Stories
         public IList<Story> Stories { get;set; }
         public bool IsCurrentUser { get; set; }
 
-        public User RequestedUser { get; set; }
+        public User Owner { get; set; }
 
         public async Task<ActionResult> OnGetAsync(string name)
         {
-            RequestedUser = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
-            if (RequestedUser == null) return NotFound();
-            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            IsCurrentUser = currentUser == RequestedUser.Id;
+            Owner = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
+            if (Owner == null) return NotFound();
+            IsCurrentUser = Owner.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
             
-            var storiesQuery = RequestedUser.Id == currentUser
-                ? _context.Stories.Where(s => s.Author.Id == currentUser)
-                : _context.Stories.Where(s => s.Author == RequestedUser && s.IsPublished);
+            var storiesQuery = IsCurrentUser
+                ? _context.Stories.Where(s => s.Author == Owner)
+                : _context.Stories.Where(s => s.Author == Owner && s.IsPublished);
             
             Stories = await storiesQuery
                 .Include(s => s.StoryTags)

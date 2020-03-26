@@ -38,7 +38,7 @@
         <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/Stories/Index" asp-route-name="@Model.UserName">
             Stories
         </a>
-        <a class="nav-item @(tab == "Blog" ? "active" : null)">
+        <a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/Blog/Index" asp-route-name="@Model.UserName">
             Blog
         </a>
         <a class="nav-item @(tab == "Shelves" ? "active" : null)" asp-area="" asp-page="/Shelves/Index" asp-route-name="@Model.UserName">

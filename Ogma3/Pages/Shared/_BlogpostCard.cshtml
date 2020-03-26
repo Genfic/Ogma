@@ -1,0 +1,11 @@
+@model Ogma3.Data.Models.Blogpost
+
+<div class="blogpost-card">
+    <a asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+        <h3>@Model.Title</h3>
+    </a>
+    <h4 class="author">@Model.Author.UserName</h4>
+    <markdown class="excerpt">
+        @Model.Body
+    </markdown>
+</div>

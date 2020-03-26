@@ -19,14 +19,10 @@ namespace Ogma3.Pages
             _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(string? name)
+        public async Task<IActionResult> OnGetAsync(string name)
         {
-            var userName = string.IsNullOrEmpty(name)
-                ? User.FindFirstValue(ClaimTypes.Name)
-                : name;
-            
             CurrentUser = await _context.Users
-                .Where(u => u.NormalizedUserName == userName.ToUpper())
+                .Where(u => u.NormalizedUserName == name.ToUpper())
                 .Include(u => u.CommentsThread)
                 .FirstOrDefaultAsync();
 

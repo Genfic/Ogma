@@ -1,0 +1,36 @@
+@page
+@model Ogma3.Pages.Blog.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Blogpost</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Blogpost.Title" class="control-label"></label>
+                <input asp-for="Blogpost.Title" class="form-control" />
+                <span asp-validation-for="Blogpost.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Blogpost.Body" class="control-label"></label>
+                <input asp-for="Blogpost.Body" class="form-control" />
+                <span asp-validation-for="Blogpost.Body" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+

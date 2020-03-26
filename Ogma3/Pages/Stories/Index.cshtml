@@ -6,11 +6,11 @@
     ViewData["Tab"] = "Stories";
 }
 
-<partial name="_ProfileBar" model="Model.RequestedUser"></partial>
+<partial name="_ProfileBar" model="Model.Owner"></partial>
 
 @if (Model.IsCurrentUser)
 {
-    <a class="btn btn-success btn-block" asp-page="Create">
+    <a class="btn btn-block btn-outline-primary" asp-page="Create">
         <icon icon="add"></icon>
         Create New
     </a>
@@ -38,3 +38,8 @@
         </li>
     }
 </ul>
+
+@if (Model.Stories.Count <= 0)
+{
+    <h1>No stories found</h1>
+}

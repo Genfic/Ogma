@@ -1,0 +1,26 @@
+@page "{name}"
+@model Ogma3.Pages.Blog.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    ViewData["Tab"] = "Blog";
+}
+
+<partial name="_ProfileBar" model="Model.Owner"></partial>
+
+@if (Model.IsCurrentUser)
+{
+    <a asp-page="Create" class="btn btn-block btn-outline-primary">
+        <icon icon="add"></icon>
+        Create New
+    </a>
+}
+
+@foreach (var post in Model.Posts) {
+    <partial name="_BlogpostCard" model="post"></partial>
+}
+
+@if (Model.Posts.Count <= 0)
+{
+    <h1>No blog posts found</h1>
+}

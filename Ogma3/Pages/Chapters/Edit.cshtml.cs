@@ -95,11 +95,13 @@ namespace Ogma3.Pages.Chapters
             }
             
             var chapter = await _context.Chapters.FirstAsync(c => c.Id == Chapter.Id);
-            chapter.Title = Chapter.Title.Trim();
-            chapter.Body = Chapter.Body.Trim();
+            if (chapter == null) return NotFound();
+            
+            chapter.Title      = Chapter.Title.Trim();
+            chapter.Body       = Chapter.Body.Trim();
             chapter.StartNotes = Chapter.StartNotes?.Trim();
-            chapter.EndNotes = Chapter.EndNotes?.Trim();
-            chapter.Slug = Chapter.Title.Trim().Friendlify();
+            chapter.EndNotes   = Chapter.EndNotes?.Trim();
+            chapter.Slug       = Chapter.Title.Trim().Friendlify();
 
             try
             {
