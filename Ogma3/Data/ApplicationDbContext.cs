@@ -14,7 +14,6 @@ namespace Ogma3.Data
 
         public DbSet<Tag> Tags { get; set; }
         public DbSet<StoryTag> StoryTags { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Namespace> Namespaces { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -25,6 +24,7 @@ namespace Ogma3.Data
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfStory> ShelfStories { get; set; }
+        public DbSet<Blogpost> Blogposts { get; set; }
         
         // Secondary
         public DbSet<Document> Documents { get; set; }
@@ -54,11 +54,6 @@ namespace Ogma3.Data
                 .HasOne(t => t.Namespace)
                 .WithMany()
                 .OnDelete(DeleteBehavior.SetNull);
-
-            // Category
-            builder.Entity<Category>()
-                .HasIndex(c => c.Name)
-                .IsUnique();
 
             // Namespace
             builder.Entity<Namespace>()
@@ -155,6 +150,11 @@ namespace Ogma3.Data
                 .HasOne(s => s.Icon)
                 .WithMany();
             
+            // Blogposts
+            builder.Entity<Blogpost>()
+                .HasOne(b => b.Author)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
 
             
             // Documents

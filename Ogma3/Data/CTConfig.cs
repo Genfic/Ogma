@@ -21,15 +21,6 @@ namespace Ogma3.Data
             public const int MaxBioLength = 10_000;
         }
         
-        public static class Category
-        {
-            public const int MinNameLength = 5;
-            public const int MaxNameLength = 20;
-
-            public const int MinDescLength = 10;
-            public const int MaxDescLength = 100;
-        }
-        
         public static class Tag
         {
             public const int MinNameLength = 5;
@@ -89,6 +80,15 @@ namespace Ogma3.Data
             public const int MaxNameLength = 20;
             
             public const int MaxDescriptionLength = 100;
+        }
+
+        public static class Blogpost
+        {
+            public const int MinTitleLength = 3;
+            public const int MaxTitleLength = 50;
+
+            public const int MinBodyLength = 50;
+            public const int MaxBodyLength = 500_000;
         }
     }
 }
