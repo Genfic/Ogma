@@ -51,7 +51,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/MyStories/Index">My Stories</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Stories/Index" asp-route-name="@User.Identity.Name">My Stories</a>
                             </li>
                             
                             <li class="nav-item">

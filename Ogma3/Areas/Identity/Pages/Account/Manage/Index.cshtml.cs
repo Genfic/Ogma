@@ -19,13 +19,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
     public partial class IndexModel : PageModel
     {
         private readonly OgmaUserManager _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<Data.Models.User> _signInManager;
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
 
         public IndexModel(
             OgmaUserManager userManager,
-            SignInManager<User> signInManager,
+            SignInManager<Data.Models.User> signInManager,
             IB2Client b2Client,
             IConfiguration config)
         {
@@ -62,7 +62,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             public string Bio { get; set; }
         }
 
-        private async Task LoadAsync(User user)
+        private async Task LoadAsync(Data.Models.User user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var userTitle = await _userManager.GetTitleAsync(user);

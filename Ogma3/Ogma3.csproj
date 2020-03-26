@@ -45,6 +45,23 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Editors\Story.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Errors\e404.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\Documents\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\Documents\Manage.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\Documents\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Profile\Pages\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Profile\Pages\Stories.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Profile\Pages\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Profile\Pages\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Profile\Pages\_viewstart.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Profile\_ViewStart.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\Shelves.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\Stories.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\_ManageNav.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\Pages\_viewstart.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\User\_ViewStart.cshtml" />
   </ItemGroup>
 
 

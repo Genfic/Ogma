@@ -1,0 +1,40 @@
+﻿@page "{name}"
+@model Ogma3.Pages.Stories.IndexModel
+
+@{
+    ViewData["Title"] = "My Stories";
+    ViewData["Tab"] = "Stories";
+}
+
+<partial name="_ProfileBar" model="Model.RequestedUser"></partial>
+
+@if (Model.IsCurrentUser)
+{
+    <a class="btn btn-success btn-block" asp-page="Create">
+        <icon icon="add"></icon>
+        Create New
+    </a>
+}
+
+<ul class="my-list">
+    @foreach (var story in Model.Stories)
+    {
+        <li class="item">
+        
+            <partial name="Shared/_StoryCard" model="story"/>
+            
+            @if (Model.IsCurrentUser)
+            {
+                <div class="buttons">
+                    <a class="button" asp-page="./Edit" asp-route-id="@story.Id">
+                        <icon icon="edit"></icon>
+                    </a>
+                    <a class="button" asp-page="./Delete" asp-route-id="@story.Id">
+                        <icon icon="delete_forever"></icon>
+                    </a>
+                </div>
+            }
+            
+        </li>
+    }
+</ul>

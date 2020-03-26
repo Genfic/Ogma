@@ -14,13 +14,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly SignInManager<Data.Models.User> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            UserManager<Data.Models.User> userManager,
+            SignInManager<Data.Models.User> signInManager,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;

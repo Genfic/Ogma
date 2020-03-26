@@ -17,13 +17,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public partial class EmailModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly SignInManager<Data.Models.User> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            UserManager<Data.Models.User> userManager,
+            SignInManager<Data.Models.User> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -51,7 +51,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(User user)
+        private async Task LoadAsync(Data.Models.User user)
         {
             var email = await _userManager.GetEmailAsync(user);
             Email = email;

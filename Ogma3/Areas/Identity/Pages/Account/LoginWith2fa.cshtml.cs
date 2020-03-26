@@ -16,10 +16,10 @@ namespace Ogma3.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginWith2faModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<Data.Models.User> _signInManager;
         private readonly ILogger<LoginWith2faModel> _logger;
 
-        public LoginWith2faModel(SignInManager<User> signInManager, ILogger<LoginWith2faModel> logger)
+        public LoginWith2faModel(SignInManager<Data.Models.User> signInManager, ILogger<LoginWith2faModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

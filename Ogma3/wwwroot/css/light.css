@@ -467,6 +467,10 @@ ul.items-list {
       .profile-bar > .nav .nav-item:last-child {
         border-right: 1px solid rgba(0, 0, 0, 0.25);
         border-top-right-radius: .25rem; }
+      .profile-bar > .nav .nav-item.active {
+        border-top: 0.25rem solid #0080ff;
+        border-top-right-radius: .25rem;
+        border-top-left-radius: .25rem; }
   .profile-bar > #personal {
     display: flex;
     flex-grow: 1;

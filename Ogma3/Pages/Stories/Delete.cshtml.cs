@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Pages.MyStories
+namespace Ogma3.Pages.Stories
 {
     [Authorize]
     public class DeleteModel : PageModel

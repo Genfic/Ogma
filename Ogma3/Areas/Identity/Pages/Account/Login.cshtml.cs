@@ -19,14 +19,14 @@ namespace Ogma3.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly SignInManager<Data.Models.User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public LoginModel(SignInManager<User> signInManager, 
+        public LoginModel(SignInManager<Data.Models.User> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<User> userManager,
+            UserManager<Data.Models.User> userManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;

@@ -1,12 +1,16 @@
 @using System.Globalization
 @model Ogma3.Data.Models.User
 
+@{
+    var tab = (string) ViewData["Tab"];
+}
+
 <div class="col-md-12 profile-bar">
 
     <div id="personal">
         <img src="@Model.Avatar" class="avatar" alt="@Model.UserName's avatar">
         <div class="data">
-            <a asp-page="Index" asp-route-name="@Model.UserName" asp-area="Profile">
+            <a asp-page="/Profile" asp-area="" asp-route-name="@Model.UserName">
                 <h1 class="name">@Model.UserName</h1>
             </a>
             <h2 class="title">@Model.Title</h2>
@@ -28,13 +32,16 @@
     </div>
 
     <nav class="nav">
-        <a href="" class="nav-item">
+        <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/Profile" asp-route-name="@Model.UserName">
+            Home
+        </a>
+        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/Stories/Index" asp-route-name="@Model.UserName">
             Stories
         </a>
-        <a href="" class="nav-item">
+        <a class="nav-item @(tab == "Blog" ? "active" : null)">
             Blog
         </a>
-        <a class="nav-item" asp-page="Shelves/Index" asp-route-name="@Model.UserName">
+        <a class="nav-item @(tab == "Shelves" ? "active" : null)" asp-area="" asp-page="/Shelves/Index" asp-route-name="@Model.UserName">
             Library
         </a>
     </nav>

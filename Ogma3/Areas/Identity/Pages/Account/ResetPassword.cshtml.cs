@@ -17,9 +17,9 @@ namespace Ogma3.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<Data.Models.User> _userManager;
 
-        public ResetPasswordModel(UserManager<User> userManager)
+        public ResetPasswordModel(UserManager<Data.Models.User> userManager)
         {
             _userManager = userManager;
         }

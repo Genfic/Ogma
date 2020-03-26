@@ -3,7 +3,10 @@
 
 @{
     ViewData["Title"] = $"{Model.Owner.UserName}'s bookshelves";
+    ViewData["Tab"] = "Shelves";
 }
+
+<partial name="_ProfileBar" model="Model.Owner"></partial>
 
 <div id="app">
     @if (Model.IsCurrentUser)

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,30 +19,30 @@ using Ogma3.Data.Models;
 using Ogma3.Services.Attributes;
 using Utils;
 
-namespace Ogma3.Pages.MyStories
+namespace Ogma3.Pages.Stories
 {
     [Authorize]
-    public class EditModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
 
-        public Story Story { get; set; }
-
-        public EditModel(
+        public CreateModel(
             ApplicationDbContext context,
+            UserManager<User> userManager,
             IB2Client b2Client,
             IConfiguration config
         )
         {
             _context = context;
+            _userManager = userManager;
             _b2Client = b2Client;
             _config = config;
         }
 
         public List<Rating> Ratings { get; set; }
-        
         public SelectList TagOptions { get; set; }
 
         [BindProperty] public InputModel Input { get; set; }
@@ -85,80 +85,42 @@ namespace Ogma3.Pages.MyStories
             public List<int> Tags { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task OnGetAsync()
         {
-            // Get story to edit
-            Story = _context.Stories
-                .Where(s => s.Id == id)
-                .Include(s => s.StoryTags)
-                .Include(s => s.Rating)
-                .Include(s => s.Author)
-                .First();
-            
-            // Check ownership
-            if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
-                return RedirectToPage("./Index");
-            
-            // Fill InputModel
-            Input = new InputModel
-            {
-                Title = Story.Title,
-                Description = Story.Description,
-                Hook = Story.Hook,
-                Rating = Story.Rating.Id,
-                Tags = Story.StoryTags.Select(st => st.TagId).ToList()
-            };
-            
-            // Fill Ratings dropdown
             Ratings = await _context.Ratings.ToListAsync();
-            
-            // Fill Tags dropdown
-            TagOptions = new SelectList(
-                await _context.Tags.ToListAsync(),
-                nameof(Tag.Id), nameof(Tag.Name),
-                true
-            );
-
-            return Page();
+            TagOptions = new SelectList(await _context.Tags.ToListAsync(), nameof(Tag.Id), nameof(Tag.Name));
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
             Ratings = await _context.Ratings.ToListAsync();
             
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                var rating = await _context.Ratings.FindAsync(Input.Rating);
                 var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
 
-                // Get story
-                Story = _context.Stories
-                    .Where(s => s.Id == id)
-                    .Include(s => s.StoryTags)
-                    .Include(s => s.Rating)
-                    .Include(s => s.Author)
-                    .First();
-                
-                // Check ownership
-                if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
-                    return RedirectToPage("./Index");
-                
-                // Update story
-                Story.Title = Input.Title;
-                Story.Slug = Input.Title.Friendlify();
-                Story.Description = Input.Description;
-                Story.Hook = Input.Hook;
-                Story.Rating = await _context.Ratings.FindAsync(Input.Rating);
-                
-                _context.Update(Story);
+                // Add story
+                var story = new Story
+                {
+                    Author = user,
+                    Title = Input.Title,
+                    Slug = Input.Title.Friendlify(),
+                    Description = Input.Description,
+                    Hook = Input.Hook,
+                    Rating = rating,
+                };
+
+                _context.Stories.Add(story);
                 await _context.SaveChangesAsync();
-                
-                // Remove associations and add new ones.
-                _context.StoryTags.RemoveRange(Story.StoryTags);
+
+                // Add tags and associations
                 foreach (var tag in tags)
                 {
                     await _context.StoryTags.AddAsync(new StoryTag
                     {
-                        StoryId = Story.Id,
+                        StoryId = story.Id,
                         TagId = tag.Id
                     });
                 }
@@ -167,7 +129,7 @@ namespace Ogma3.Pages.MyStories
                 if (Input.Cover != null && Input.Cover.Length > 0)
                 {
                     var ext = Input.Cover.FileName.Split('.').Last();
-                    var fileName = $"covers/{Story.Id}-{Story.Slug}.{ext}";
+                    var fileName = $"covers/{story.Id}-{story.Slug}.{ext}";
                 
                     // Upload new one
                     await using var ms = new MemoryStream();
@@ -180,13 +142,14 @@ namespace Ogma3.Pages.MyStories
                         try
                         {
                             var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-                            Story.CoverId = file.FileId;
-                            Story.Cover = _config["cdn"] + fileName;
+                            Console.WriteLine(file.FileName);
+                            story.CoverId = file.FileId;
+                            story.Cover = _config["cdn"] + fileName;
                             keepUploading = false;
                         }
                         catch (B2Exception e)
                         {
-                            Console.WriteLine(">>> Backblaze Error: " + e.Message);
+                            Console.WriteLine("⚠ Backblaze Error: " + e.Message);
                             counter--;
                         }
                     }
@@ -195,7 +158,7 @@ namespace Ogma3.Pages.MyStories
                 // Final save
                 await _context.SaveChangesAsync();
                 
-                return RedirectToPage("../Story", new { id = Story.Id, slug = Story.Slug });
+                return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
             }
             else
             {
@@ -205,7 +168,7 @@ namespace Ogma3.Pages.MyStories
                     Console.WriteLine(error.ErrorMessage);
                 }
                 Console.WriteLine("===========================================");
-                return RedirectToPage("./Index");
+                return RedirectToPage();
             }
         }
     }

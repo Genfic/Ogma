@@ -1,10 +1,13 @@
-@page "{name?}"
-@model Ogma3.Areas.Profile.Pages.Index
+@page "{name}"
+@model Ogma3.Pages.Profile
 
 @{
     ViewData["Title"] = $"{User.Identity.Name}'s Profile";
     ViewData["User"] = Model.CurrentUser;
+    ViewData["Tab"] = "Profile";
 }
+
+<partial name="_ProfileBar" model="Model.CurrentUser"></partial>
 
 <markdown preset="All">
     @Model.CurrentUser.Bio

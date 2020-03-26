@@ -36,6 +36,9 @@ namespace Ogma3
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
                 Configuration.GetConnectionString("PostgresConnection"))
             );
+            
+            // Routing
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             // Identity
             services.AddIdentity<User, IdentityRole>(config =>
