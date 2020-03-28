@@ -1,0 +1,28 @@
+.blogpost-card
+  display: flex
+  flex: 1
+  flex-direction: column
+  border: 1px solid $foreground-25
+  margin: 4px 0 0
+  padding: 4px
+  &:first-of-type
+    margin: 0
+  &:hover
+    border-color: $foreground-50
+
+  &>.title
+    text-decoration: none 
+    color: $foreground
+    &:hover
+      color: $foreground-75
+      text-decoration: underline
+      text-decoration-skip-ink: auto
+    
+  & .author
+    font-size: 1.1rem
+    
+  & .excerpt
+    overflow: hidden
+    display: -webkit-box
+    -webkit-line-clamp: 5
+    -webkit-box-orient: vertical

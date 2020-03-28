@@ -1,0 +1,21 @@
+.story-status
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: 0 .1rem
+  margin-left: .2rem
+  border: 1px solid rgba(0, 0, 0, .7)
+  color: rgba(0, 0, 0, .7)
+  &.inprogress
+    background-color: rgba(0, 116, 255, .5)
+  &.completed
+    background-color: rgba(0, 241, 0, .5)
+  &.onhiatus
+    background-color: rgba(127, 127, 127, .5)
+  &.cancelled
+    background-color: rgba(255, 0, 0, .5)
+    
+  &>i.material-icons-outlined
+    margin-right: .1rem
+    font-size: 1rem
+    

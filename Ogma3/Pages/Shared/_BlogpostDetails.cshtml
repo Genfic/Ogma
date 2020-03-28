@@ -1,0 +1,14 @@
+@using System.Globalization
+@using System.Security.Claims
+@using Ogma3.Services
+@model Ogma3.Data.Models.Blogpost
+
+<div class="blogpost-details">
+    <h1 class="title">@Model.Title</h1>
+    <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+        @Model.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+    </time>
+    <markdown class="body">
+        @Model.Body
+    </markdown>
+</div>

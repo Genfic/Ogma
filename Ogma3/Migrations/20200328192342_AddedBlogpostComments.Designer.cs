@@ -2,21 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
-using Ogma3.Data.Enums;
 
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200328192342_AddedBlogpostComments")]
+    partial class AddedBlogpostComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:Enum:e_story_status", "in_progress,completed,on_hiatus,cancelled")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
@@ -189,8 +189,7 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("CommentsThreadId")
-                        .IsUnique();
+                    b.HasIndex("CommentsThreadId");
 
                     b.ToTable("Blogposts");
                 });
@@ -501,9 +500,6 @@ namespace Ogma3.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<EStoryStatus>("Status")
-                        .HasColumnType("e_story_status");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("character varying(50)")
@@ -753,8 +749,8 @@ namespace Ogma3.Migrations
                         .IsRequired();
 
                     b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
-                        .WithOne()
-                        .HasForeignKey("Ogma3.Data.Models.Blogpost", "CommentsThreadId")
+                        .WithMany()
+                        .HasForeignKey("CommentsThreadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

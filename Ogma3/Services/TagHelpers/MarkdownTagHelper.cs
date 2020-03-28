@@ -12,6 +12,8 @@ namespace Ogma3.Services.TagHelpers
     {
         public Presets Preset { get; set; }
 
+        public string Class { get; set; } = "";
+
         public enum Presets
         {
             Basic, // Default
@@ -41,7 +43,7 @@ namespace Ogma3.Services.TagHelpers
             var markdownHtmlContent = Markdown.ToHtml(RemoveLeadingWhiteSpace(childContent.GetContent(NullHtmlEncoder.Default)), pipeline);
             
             output.TagName = "div";
-            output.Attributes.SetAttribute("class", "md");
+            output.Attributes.SetAttribute("class", $"md {Class}");
             output.Content.SetHtmlContent(markdownHtmlContent);
         }
 

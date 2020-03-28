@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +21,11 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync(int id, string? slug)
         {
-            Blogpost = await _context.Blogposts.FirstOrDefaultAsync(m => m.Id == id);
+            Blogpost = await _context.Blogposts
+                .Where(b => b.Id == id)
+                .Include(b => b.Author)
+                .Include(b => b.CommentsThread)
+                .FirstOrDefaultAsync();
 
             if (Blogpost == null)
             {

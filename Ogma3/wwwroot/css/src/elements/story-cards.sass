@@ -26,12 +26,15 @@ div
       
       &>.title
         margin: 0 4px
-        color: $foreground 
+        color: $foreground
+        overflow: hidden
         &:hover
           color: $foreground-75
           text-decoration: underline
           text-decoration-skip-ink: auto
         &>h3
+          overflow: hidden
+          text-overflow: ellipsis
         
       &>.author
         margin: 0 4px

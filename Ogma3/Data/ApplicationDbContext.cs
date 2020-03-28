@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
+            NpgsqlConnection.GlobalTypeMapper.MapEnum<EStoryStatus>();
         }
+
+        // static ApplicationDbContext()
+        //     => NpgsqlConnection.GlobalTypeMapper.MapEnum<EStoryStatus>();
 
 
         public DbSet<Tag> Tags { get; set; }
@@ -155,7 +160,15 @@ namespace Ogma3.Data
                 .HasOne(b => b.Author)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Blogpost>()
+                .HasOne(b => b.CommentsThread)
+                .WithOne()
+                .HasForeignKey<Blogpost>(b => b.CommentsThreadId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            
+            // Enums
+            builder.HasPostgresEnum<EStoryStatus>();
             
             // Documents
             builder.Entity<Document>()

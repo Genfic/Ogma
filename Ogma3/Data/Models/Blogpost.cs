@@ -28,5 +28,8 @@ namespace Ogma3.Data.Models
         [MinLength(CTConfig.Blogpost.MinBodyLength)]
         [MaxLength(CTConfig.Blogpost.MaxBodyLength)]
         public string Body { get; set; }
+        
+        public  CommentsThread CommentsThread { get; set; } = new CommentsThread();
+        public int CommentsThreadId { get; set; }
     }
 }

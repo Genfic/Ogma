@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
+using Ogma3.Data.Enums;
 
 namespace Ogma3.Data.Models
 {
@@ -62,7 +64,12 @@ namespace Ogma3.Data.Models
         
         // Rating
         [Required]
-        public  Rating Rating { get; set; }
+        public Rating Rating { get; set; }
+        
+        // Status
+        [Required]
+        [DefaultValue(EStoryStatus.InProgress)]
+        public EStoryStatus Status { get; set; } = EStoryStatus.InProgress;
         
         // Votes
         public  VotePool VotesPool { get; set; } = new VotePool();

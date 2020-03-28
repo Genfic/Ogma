@@ -90,5 +90,11 @@ namespace Ogma3.Data
             public const int MinBodyLength = 50;
             public const int MaxBodyLength = 500_000;
         }
+
+        public static class StoryStatus
+        {
+            public const int MinNameLength = 3;
+            public const int MaxNameLength = 15;
+        }
     }
 }

@@ -64,11 +64,6 @@
     <_ContentIncludedByDefault Remove="Areas\User\_ViewStart.cshtml" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Data\Enums" />
-  </ItemGroup>
-
   <!--  Automatic migrations on production -->
   <Target Name="PrePublishTarget" AfterTargets="Publish">
     <Exec Command="dotnet ef database update" />

@@ -3,7 +3,7 @@ const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
-const purge = require("gulp-purgecss");
+// const purge = require("gulp-purgecss");
 
 // CSS processors
 const autoprefixer = require('autoprefixer');
@@ -27,9 +27,9 @@ gulp.task('css', () => {
         .pipe(sass())                           // Compile SASS
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output the raw CSS
         .pipe(postcss(processors))              // Postprocess it
-        .pipe(purge({                        // Purge it
-            content: ['./Ogma3/**/*.cshtml']
-        }))        
+        // .pipe(purge({                        // Purge it
+        //     content: ['./Ogma3/**/*.cshtml']
+        // }))        
         .pipe(rename({ suffix: '.min' }))       // Add .min suffix
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output minified CSS
 });

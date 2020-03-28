@@ -2,7 +2,7 @@
 @model Ogma3.Pages.Stories.IndexModel
 
 @{
-    ViewData["Title"] = "My Stories";
+    ViewData["Title"] = $"{Model.Owner.UserName}'s stories";
     ViewData["Tab"] = "Stories";
 }
 

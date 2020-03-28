@@ -112,11 +112,15 @@ div.story-card {
     padding: 0 4px; }
     div.story-card > div.body > .title {
       margin: 0 4px;
-      color: black; }
+      color: black;
+      overflow: hidden; }
       div.story-card > div.body > .title:hover {
         color: rgba(0, 0, 0, 0.75);
         text-decoration: underline;
         text-decoration-skip-ink: auto; }
+      div.story-card > div.body > .title > h3 {
+        overflow: hidden;
+        text-overflow: ellipsis; }
     div.story-card > div.body > .author {
       margin: 0 4px;
       font-size: 1.1rem; }
@@ -157,6 +161,9 @@ div.story-card {
     .story-details > .main > h2.author {
       font-size: 1.2rem;
       line-height: 1.2rem; }
+    .story-details > .main > .time {
+      display: flex;
+      align-items: center; }
   .story-details > .actions {
     display: flex;
     margin-bottom: .5rem; }
@@ -498,6 +505,68 @@ ul.items-list {
       object-fit: contain;
       border-radius: .25rem;
       border: 1px solid rgba(0, 0, 0, 0.25); }
+
+.blogpost-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  margin: 4px 0 0;
+  padding: 4px; }
+  .blogpost-card:first-of-type {
+    margin: 0; }
+  .blogpost-card:hover {
+    border-color: rgba(0, 0, 0, 0.5); }
+  .blogpost-card > .title {
+    text-decoration: none;
+    color: black; }
+    .blogpost-card > .title:hover {
+      color: rgba(0, 0, 0, 0.75);
+      text-decoration: underline;
+      text-decoration-skip-ink: auto; }
+  .blogpost-card .author {
+    font-size: 1.1rem; }
+  .blogpost-card .excerpt {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical; }
+
+.blogpost-details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 4px 0 0;
+  padding: 4px; }
+  .blogpost-details .title {
+    text-align: center;
+    margin: .5rem; }
+  .blogpost-details time.date {
+    text-align: center;
+    margin: 0; }
+  .blogpost-details .body {
+    text-align: justify;
+    margin-top: 1em; }
+
+.story-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 .1rem;
+  margin-left: .2rem;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.7); }
+  .story-status.inprogress {
+    background-color: rgba(0, 116, 255, 0.5); }
+  .story-status.completed {
+    background-color: rgba(0, 241, 0, 0.5); }
+  .story-status.onhiatus {
+    background-color: rgba(127, 127, 127, 0.5); }
+  .story-status.cancelled {
+    background-color: rgba(255, 0, 0, 0.5); }
+  .story-status > i.material-icons-outlined {
+    margin-right: .1rem;
+    font-size: 1rem; }
 
 #version {
   color: white;

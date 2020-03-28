@@ -2,7 +2,7 @@
 @model Ogma3.Pages.Blog.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = $"{Model.Owner.UserName}'s blog";
     ViewData["Tab"] = "Blog";
 }
 
@@ -17,7 +17,7 @@
 }
 
 @foreach (var post in Model.Posts) {
-    <partial name="_BlogpostCard" model="post"></partial>
+    <partial name="_BlogpostCard" model="@post"></partial>
 }
 
 @if (Model.Posts.Count <= 0)
