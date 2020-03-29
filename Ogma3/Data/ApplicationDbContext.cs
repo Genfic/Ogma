@@ -31,15 +31,21 @@ namespace Ogma3.Data
         public DbSet<ShelfStory> ShelfStories { get; set; }
         public DbSet<Blogpost> Blogposts { get; set; }
         
+        
         // Secondary
         public DbSet<Document> Documents { get; set; }
         public DbSet<Icon> Icons { get; set; }
+        public DbSet<Quote> Quotes { get; set; }
 
         
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
+            // Extensions
+            builder.HasPostgresExtension("uuid-ossp");
+            
             
             // User
             builder.Entity<User>()
@@ -170,11 +176,13 @@ namespace Ogma3.Data
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();
             
+            
+            
             // Documents
             builder.Entity<Document>()
                 .HasIndex(d => d.Slug)
                 .IsUnique();
-
+            
         }
         
         

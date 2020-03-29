@@ -1,0 +1,29 @@
+@page
+@using Ogma3.Services
+@model Ogma3.Areas.Admin.Pages.Quotes
+
+@{
+    ViewData["Title"] = "Quotes";
+    ViewData["ActivePage"] = ManageNavPages.Quotes;
+}
+
+<div id="quote">
+<textarea cols="30" rows="10" v-model="json"></textarea>
+<button v-on:click="send">Send</button>
+</div>
+
+@Html.Resource(@<script>
+    const quote_vue = new Vue({
+        el: '#quote',
+        data: {
+            json: null
+        },
+        methods: {
+            send: function() {
+                axios.post('/api/quotes/json', JSON.parse(this.json))
+                .then(console.log)
+                .catch(console.error)
+            } 
+        }
+    })
+</script>)

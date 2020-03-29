@@ -1,8 +1,14 @@
 ﻿@page
+@using Ogma3.Services
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
+
+<div id="quote" class="quote">
+    <em>{{quote}}</em>
+    <span>~ {{author}}</span>
+</div>
 
 <h2>Recent stories</h2>
 
@@ -12,3 +18,21 @@
         <partial name="Shared/_StoryCard" model="@story"/>
     }
 </div>
+
+@Html.Resource(@<script>
+    const quote_vue = new Vue({
+        el: '#quote',
+        data: {
+            quote: null,
+        author: null,
+    },
+    mounted() {
+        axios.get('/api/quotes/random')
+            .then(res => {
+                 this.quote = res.data.body;
+                 this.author = res.data.author;
+            })
+            .catch(console.error)
+    }
+    })
+</script>)

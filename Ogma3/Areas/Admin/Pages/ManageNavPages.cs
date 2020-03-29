@@ -11,6 +11,8 @@ namespace Ogma3.Areas.Admin.Pages
         
         public static string Namespaces => "Namespaces";
 
+        public static string Quotes => "Quotes";
+
         public static string ManageDocuments => "ManageDocuments";
 
         public static string EditDocument => "EditDocument";
@@ -21,6 +23,8 @@ namespace Ogma3.Areas.Admin.Pages
         public static string TagsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Tags);
         
         public static string NamespacesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Namespaces);
+
+        public static string QuotesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Quotes);
 
         public static string ManageDocumentsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ManageDocuments);
         public static string EditDocumentNavClass(ViewContext viewContext) => PageNavClass(viewContext, EditDocument);

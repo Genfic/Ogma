@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200329045447_AddedUuidPostgresExtension")]
+    partial class AddedUuidPostgresExtension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -378,11 +380,13 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
 
                     b.HasKey("Id");
 
