@@ -1,6 +1,5 @@
 @using System.Globalization
 @using System.Security.Claims
-@using System.Security.Cryptography
 @using Ogma3.Services
 @model Ogma3.Data.Models.Story
 
@@ -40,6 +39,7 @@
         </div>
 
         <div class="tags" itemprop="keywords">
+            <partial name="_StoryStatus" model="@Model.Status"></partial>
             @foreach (var t in Model.Tags)
             {
                 if (t.Namespace is null)
@@ -60,12 +60,9 @@
                 <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
             }
             <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
-            <div class="time">
-                <time class="date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
-                    @Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-                </time>
-                <partial name="_StoryStatus" model="@Model.Status"></partial>
-            </div>
+            <time class="date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
+                @Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+            </time>
             <div class="description" itemprop="abstract">
                 <text>@Model.Description</text>
             </div>
@@ -92,9 +89,9 @@
         }
         @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
         {
-            <a class="btn btn-success btn-block btn-sm" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+            <a class="btn btn-block btn-outline-primary" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
                 <icon icon="add"></icon>
-                Add new
+                Create New
             </a>
         }
     </ol>

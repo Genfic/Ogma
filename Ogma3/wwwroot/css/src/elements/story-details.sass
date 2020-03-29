@@ -5,12 +5,13 @@ $title-height: 2rem
   
   &>.titlebar
     display: flex
+    align-items: baseline
     flex-direction: row
     padding-bottom: .5rem
     
     &>.rating
-      height: $title-height
-      width: $title-height
+      height: $title-height * 0.7
+      width: $title-height * 0.7
       margin-right: .5rem
     
     &>h1.title
@@ -38,10 +39,6 @@ $title-height: 2rem
       font-size: 1.2rem
       line-height: 1.2rem
       
-    &> .time
-      display: flex
-      align-items: center
-
   &>.actions
     display: flex
     margin-bottom: .5rem

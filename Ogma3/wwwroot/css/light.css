@@ -86,60 +86,73 @@ footer {
 img.avatar {
   display: inline; }
 
-div.story-card {
+.story-card {
   display: flex;
   flex: 1;
   flex-direction: row;
   border: 1px solid rgba(0, 0, 0, 0.25);
   margin: 4px 0 0; }
-  div.story-card:first-of-type {
+  .story-card:first-of-type {
     margin: 0; }
-  div.story-card:hover {
+  .story-card:hover {
     border-color: rgba(0, 0, 0, 0.5); }
   @media only screen and (max-width: 570px) {
-    div.story-card {
+    .story-card {
       flex-direction: column; } }
-  div.story-card > img.image {
+  .story-card .image {
     flex: 0 0 10rem;
     object-fit: contain;
     align-self: flex-start; }
     @media only screen and (max-width: 570px) {
-      div.story-card > img.image {
+      .story-card .image {
         align-self: center; } }
-  div.story-card > div.body {
+  .story-card > div.body {
     display: flex;
     flex-direction: column;
     padding: 0 4px; }
-    div.story-card > div.body > .title {
-      margin: 0 4px;
-      color: black;
-      overflow: hidden; }
-      div.story-card > div.body > .title:hover {
-        color: rgba(0, 0, 0, 0.75);
-        text-decoration: underline;
-        text-decoration-skip-ink: auto; }
-      div.story-card > div.body > .title > h3 {
-        overflow: hidden;
-        text-overflow: ellipsis; }
-    div.story-card > div.body > .author {
-      margin: 0 4px;
-      font-size: 1.1rem; }
-    div.story-card > div.body > .hook {
-      margin: 2px 4px; }
-    div.story-card > div.body > .tags {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap; }
+  .story-card .title {
+    display: flex;
+    align-items: baseline;
+    margin: 0 4px;
+    font-size: 2rem;
+    line-height: 2rem;
+    color: black;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+    .story-card .title:hover {
+      color: rgba(0, 0, 0, 0.75);
+      text-decoration: underline;
+      text-decoration-skip-ink: auto; }
+    .story-card .title > h3 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline; }
+    .story-card .title > .rating {
+      display: inline;
+      height: 1.4rem;
+      width: 1.4rem;
+      margin-right: .5rem; }
+  .story-card .author {
+    margin: 0 4px;
+    font-size: 1.1rem; }
+  .story-card .hook {
+    margin: 2px 4px;
+    flex: 1; }
+  .story-card .tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; }
 
 .story-details {
   overflow-y: auto; }
   .story-details > .titlebar {
     display: flex;
+    align-items: baseline;
     flex-direction: row;
     padding-bottom: .5rem; }
     .story-details > .titlebar > .rating {
-      height: 2rem;
-      width: 2rem;
+      height: 1.4rem;
+      width: 1.4rem;
       margin-right: .5rem; }
     .story-details > .titlebar > h1.title {
       font-size: 2rem;
@@ -161,9 +174,6 @@ div.story-card {
     .story-details > .main > h2.author {
       font-size: 1.2rem;
       line-height: 1.2rem; }
-    .story-details > .main > .time {
-      display: flex;
-      align-items: center; }
   .story-details > .actions {
     display: flex;
     margin-bottom: .5rem; }
@@ -566,10 +576,15 @@ ul.items-list {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 .1rem;
-  margin-left: .2rem;
+  line-height: 1;
+  cursor: default;
+  padding: 4px;
+  margin: 4px;
   border: 1px solid rgba(0, 0, 0, 0.7);
   color: rgba(0, 0, 0, 0.7); }
+  .story-status:hover {
+    opacity: 0.9;
+    color: rgba(0, 0, 0, 0.8); }
   .story-status.inprogress {
     background-color: rgba(0, 116, 255, 0.5); }
   .story-status.completed {

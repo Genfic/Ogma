@@ -1,49 +1,68 @@
-div
-  &.story-card
-    display: flex
-    flex: 1
-    flex-direction: row
-    border: 1px solid $foreground-25
-    margin: 4px 0 0
-    &:first-of-type
-      margin: 0
-    &:hover
-      border-color: $foreground-50 
+$title-height: 2rem
+
+.story-card
+  display: flex
+  flex: 1
+  flex-direction: row
+  border: 1px solid $foreground-25
+  margin: 4px 0 0
+  &:first-of-type
+    margin: 0
+  &:hover
+    border-color: $foreground-50 
+  @media only screen and (max-width: $mq-mobile)
+    flex-direction: column
+
+  & .image
+    flex: 0 0 10rem
+    object-fit: contain
+    align-self: flex-start
     @media only screen and (max-width: $mq-mobile)
-      flex-direction: column
-
-    &>img.image
-      flex: 0 0 10rem
-      object-fit: contain
-      align-self: flex-start
-      @media only screen and (max-width: $mq-mobile)
-        align-self: center
+      align-self: center
+    
+  &>div.body 
+    display: flex
+    flex-direction: column
+    padding: 0 4px
+    
+  & .title
+    display: flex
+    align-items: baseline
+    
+    margin: 0 4px
+    
+    font-size: $title-height
+    line-height: $title-height
+    
+    color: $foreground
+    
+    overflow: hidden
+    text-overflow: ellipsis
+    &:hover
+      color: $foreground-75
+      text-decoration: underline
+      text-decoration-skip-ink: auto
       
-    &>div.body 
-      display: flex
-      flex-direction: column
-      padding: 0 4px
+    &>h3
+      overflow: hidden
+      text-overflow: ellipsis
+      display: inline
+    
+    &>.rating
+      display: inline
+      height: $title-height * 0.7
+      width: $title-height * 0.7
+      margin-right: .5rem
       
-      &>.title
-        margin: 0 4px
-        color: $foreground
-        overflow: hidden
-        &:hover
-          color: $foreground-75
-          text-decoration: underline
-          text-decoration-skip-ink: auto
-        &>h3
-          overflow: hidden
-          text-overflow: ellipsis
-        
-      &>.author
-        margin: 0 4px
-        font-size: 1.1rem
+  & .author
+    margin: 0 4px
+    font-size: 1.1rem
 
-      &>.hook
-        margin: 2px 4px
+  & .hook
+    margin: 2px 4px
+    flex: 1
 
-      &>.tags
-        display: flex
-        flex-direction: row
-        flex-wrap: wrap
+  & .tags
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
