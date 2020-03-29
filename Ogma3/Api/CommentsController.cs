@@ -66,8 +66,6 @@ namespace Ogma3.Api
             var comm = _context.Comments.FirstOrDefault(c => c.Id == id);
             if (comm != null) comm.Body = body;
 
-            // _context.Entry(comment).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -78,10 +76,7 @@ namespace Ogma3.Api
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();

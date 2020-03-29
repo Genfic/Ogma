@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +8,16 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Blog
 {
+    [Authorize]
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private OgmaUserManager _userManager;
 
-        public DeleteModel(ApplicationDbContext context)
+        public DeleteModel(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -44,14 +45,17 @@ namespace Ogma3.Pages.Blog
             {
                 return NotFound();
             }
+            
+            // Get logged in user
+            var user = await _userManager.GetUserAsync(User);
+            // Get post and make sure the user matches
+            Blogpost = await _context.Blogposts
+                .FirstOrDefaultAsync(b => b.Id == id && b.Author == user);
 
-            Blogpost = await _context.Blogposts.FindAsync(id);
-
-            if (Blogpost != null)
-            {
-                _context.Blogposts.Remove(Blogpost);
-                await _context.SaveChangesAsync();
-            }
+            if (Blogpost == null) return RedirectToPage("./Index", new {name = user.UserName});
+            
+            _context.Blogposts.Remove(Blogpost);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index", new { name = Blogpost.Author.UserName });
         }

@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Chapters
 {
+    [Authorize]
     public class DeleteModel : PageModel
     {
-        private readonly Ogma3.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public DeleteModel(Ogma3.Data.ApplicationDbContext context)
+        public DeleteModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -45,15 +49,18 @@ namespace Ogma3.Pages.Chapters
                 return NotFound();
             }
 
+            // Get chapter
             Chapter = await _context.Chapters.FindAsync(id);
+            // Make sure the story's author is the logged in user
+            var authorized = await _context.Stories
+                .AnyAsync(s => s.Id == Chapter.StoryId && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (Chapter != null)
-            {
-                _context.Chapters.Remove(Chapter);
-                await _context.SaveChangesAsync();
-            }
+            if (Chapter == null || !authorized) return NotFound();
+            
+            _context.Chapters.Remove(Chapter);
+            await _context.SaveChangesAsync();
 
-            return RedirectToPage("../Story", new { id = Chapter?.StoryId });
+            return RedirectToPage("../Story", new { id = Chapter.StoryId });
         }
     }
 }

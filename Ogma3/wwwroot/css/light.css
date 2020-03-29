@@ -454,18 +454,26 @@ ul.items-list {
   height: 8.5rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
+  @media only screen and (max-width: 570px) {
+    .profile-bar {
+      flex-direction: column;
+      height: auto; } }
   .profile-bar > .nav {
     display: flex;
     flex-grow: 1;
     justify-content: flex-end;
     align-items: flex-end; }
+    @media only screen and (max-width: 570px) {
+      .profile-bar > .nav {
+        justify-content: center; } }
     .profile-bar > .nav .nav-item {
       color: rgba(0, 0, 0, 0.75);
       text-decoration: none;
       padding: 0.5rem;
       border: 1px solid rgba(0, 0, 0, 0.25);
       border-right: none;
-      border-bottom: none; }
+      border-bottom: none;
+      text-align: center; }
       .profile-bar > .nav .nav-item:hover, .profile-bar > .nav .nav-item:focus {
         color: black;
         background: rgba(0, 128, 255, 0.1); }
@@ -474,6 +482,9 @@ ul.items-list {
       .profile-bar > .nav .nav-item:last-child {
         border-right: 1px solid rgba(0, 0, 0, 0.25);
         border-top-right-radius: .25rem; }
+      @media only screen and (max-width: 570px) {
+        .profile-bar > .nav .nav-item {
+          flex: 1; } }
       .profile-bar > .nav .nav-item.active {
         border-top: 0.25rem solid #0080ff;
         border-top-right-radius: .25rem;
@@ -482,6 +493,9 @@ ul.items-list {
     display: flex;
     flex-grow: 1;
     margin-bottom: 0.5rem; }
+    @media only screen and (max-width: 570px) {
+      .profile-bar > #personal {
+        flex-direction: column; } }
     .profile-bar > #personal .data {
       display: flex;
       flex-direction: column;

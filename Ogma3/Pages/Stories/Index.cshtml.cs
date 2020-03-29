@@ -11,7 +11,6 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Stories
 {
-    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;

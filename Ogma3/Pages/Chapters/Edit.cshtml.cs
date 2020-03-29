@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
 using Utils;
 
 namespace Ogma3.Pages.Chapters
 {
+    [Authorize]
     public class EditModel : PageModel
     {
-        private readonly Ogma3.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EditModel(Ogma3.Data.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -66,13 +64,14 @@ namespace Ogma3.Pages.Chapters
                 return NotFound();
             }
 
-            var chapter = await _context.Chapters.FirstOrDefaultAsync(m => m.Id == id);
+            // Get chapter
+            var chapter = await _context.Chapters.FindAsync(id);
+            // Make sure the story's author is the logged in user
+            var authorized = await _context.Stories
+                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (chapter == null)
-            {
-                return NotFound();
-            }
-            
+            if (chapter == null || !authorized) return NotFound();
+
             Chapter = new InputModel
             {
                 Id = chapter.Id,
@@ -94,8 +93,13 @@ namespace Ogma3.Pages.Chapters
                 return Page();
             }
             
-            var chapter = await _context.Chapters.FirstAsync(c => c.Id == Chapter.Id);
-            if (chapter == null) return NotFound();
+            // Get chapter
+            var chapter = await _context.Chapters.FindAsync(Chapter.Id);
+            // Make sure the story's author is the logged in user
+            var authorized = await _context.Stories
+                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            
+            if (chapter == null || !authorized) return NotFound();
             
             chapter.Title      = Chapter.Title.Trim();
             chapter.Body       = Chapter.Body.Trim();
@@ -113,10 +117,7 @@ namespace Ogma3.Pages.Chapters
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });

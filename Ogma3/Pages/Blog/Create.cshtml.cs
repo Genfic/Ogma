@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Utils;
 
 namespace Ogma3.Pages.Blog
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly OgmaUserManager _userManager;
 
-        public CreateModel(ApplicationDbContext context, UserManager<User> userManager)
+        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
             _userManager = userManager;

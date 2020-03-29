@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +10,16 @@ using Utils;
 
 namespace Ogma3.Pages.Blog
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly Ogma3.Data.ApplicationDbContext _context;
+        private OgmaUserManager _userManager;
 
-        public EditModel(Ogma3.Data.ApplicationDbContext context)
+        public EditModel(Ogma3.Data.ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -40,7 +44,11 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var post = await _context.Blogposts.FirstOrDefaultAsync(m => m.Id == id);
+            // Get logged in user
+            var user = await _userManager.GetUserAsync(User);
+            // Get post and make sure the user matches
+            var post = await _context.Blogposts
+                .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
 
             if (post == null) return NotFound();
             
@@ -62,8 +70,12 @@ namespace Ogma3.Pages.Blog
             {
                 return Page();
             }
-
-            var post = await _context.Blogposts.FirstOrDefaultAsync(m => m.Id == Blogpost.Id);
+            // Get logged in user
+            var user = await _userManager.GetUserAsync(User);
+            // Get post and make sure the user matches
+            var post = await _context.Blogposts
+                .FirstOrDefaultAsync(m => m.Id == Blogpost.Id && m.Author == user);
+            // 404 if no post found
             if (post == null) return NotFound();
 
             post.Title = Blogpost.Title.Trim();
@@ -80,10 +92,7 @@ namespace Ogma3.Pages.Blog
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return RedirectToPage("./Post", new { id = post.Id, slug = post.Slug });

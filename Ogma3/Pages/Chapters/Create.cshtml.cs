@@ -16,6 +16,7 @@ using Utils;
 
 namespace Ogma3.Pages.Chapters
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;

@@ -87,17 +87,14 @@ namespace Ogma3.Pages.Stories
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            // Get story to edit
-            Story = _context.Stories
-                .Where(s => s.Id == id)
+            // Get story to edit and make sure author matches logged in user
+            Story = await _context.Stories
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
-                .First();
-            
-            // Check ownership
-            if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
-                return RedirectToPage("./Index");
+                .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (Story == null) return NotFound();
             
             // Fill InputModel
             Input = new InputModel
@@ -128,19 +125,16 @@ namespace Ogma3.Pages.Stories
             
             if (ModelState.IsValid)
             {
-                var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
+                var tags = await _context.Tags.Where(t => Input.Tags.Contains(t.Id)).ToListAsync();
 
-                // Get story
-                Story = _context.Stories
-                    .Where(s => s.Id == id)
+                // Get the story and make sure the logged-in user matches author
+                Story = await _context.Stories
                     .Include(s => s.StoryTags)
                     .Include(s => s.Rating)
                     .Include(s => s.Author)
-                    .First();
-                
-                // Check ownership
-                if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
-                    return RedirectToPage("./Index");
+                    .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                if (Story == null) return NotFound();
                 
                 // Update story
                 Story.Title = Input.Title;
@@ -152,16 +146,16 @@ namespace Ogma3.Pages.Stories
                 _context.Update(Story);
                 await _context.SaveChangesAsync();
                 
+                // Parse tags
+                var storyTags = tags.Select(t => new StoryTag
+                {
+                    StoryId = Story.Id,
+                    TagId = t.Id
+                });
+                
                 // Remove associations and add new ones.
                 _context.StoryTags.RemoveRange(Story.StoryTags);
-                foreach (var tag in tags)
-                {
-                    await _context.StoryTags.AddAsync(new StoryTag
-                    {
-                        StoryId = Story.Id,
-                        TagId = tag.Id
-                    });
-                }
+                await _context.StoryTags.AddRangeAsync(storyTags);
                 
                 // Handle cover upload
                 if (Input.Cover != null && Input.Cover.Length > 0)

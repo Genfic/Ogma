@@ -31,6 +31,7 @@ namespace Ogma3.Pages.Stories
         {
             if (id == null) return NotFound();
 
+            // Get the story and make sure the logged-in user matches author
             Story = await _context.Stories
                 .Include(s => s.Author)
                 .Include(s => s.StoryTags)
@@ -38,11 +39,7 @@ namespace Ogma3.Pages.Stories
                         .ThenInclude(t => t.Namespace)
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            // Check permissions
-            if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
-                return RedirectToPage("./Index");
+                .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if (Story == null) return NotFound();
 
@@ -53,15 +50,11 @@ namespace Ogma3.Pages.Stories
         {
             if (id == null) return NotFound();
 
-            // Get story
+            // Get the story and make sure the logged-in user matches author
             Story = await _context.Stories
                 .Include(s => s.Author)
-                .FirstOrDefaultAsync(s => s.Id == id);
-            if (Story == null) return RedirectToPage("./Index");
-
-            // Check permissions
-            if (Story.Author.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
-                return RedirectToPage("./Index");
+                .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (Story == null) return NotFound();
 
             // Remove tag associations
             await _context.StoryTags

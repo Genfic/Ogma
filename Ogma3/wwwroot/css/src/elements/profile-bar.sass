@@ -6,12 +6,17 @@ $margin: .5rem
   height: $avatarSize + $margin
   margin-bottom: $margin
   border-bottom: 1px solid $foreground-25
+  @media only screen and (max-width: $mq-mobile)
+    flex-direction: column
+    height: auto
   
   &>.nav
     display: flex
     flex-grow: 1
     justify-content: flex-end
     align-items: flex-end
+    @media only screen and (max-width: $mq-mobile)
+      justify-content: center
     
     & .nav-item
       color: $foreground-75
@@ -20,6 +25,7 @@ $margin: .5rem
       border: 1px solid $foreground-25
       border-right: none
       border-bottom: none
+      text-align: center
       &:hover, 
       &:focus
         color: $foreground
@@ -29,6 +35,8 @@ $margin: .5rem
       &:last-child
         border-right: 1px solid $foreground-25
         border-top-right-radius: .25rem
+      @media only screen and (max-width: $mq-mobile)
+        flex: 1
         
       &.active
         border-top: .25rem solid $accent
@@ -40,6 +48,8 @@ $margin: .5rem
     display: flex
     flex-grow: 1
     margin-bottom: $margin
+    @media only screen and (max-width: $mq-mobile)
+      flex-direction: column
   
     & .data
       display: flex
