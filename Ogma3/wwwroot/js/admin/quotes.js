@@ -24,14 +24,13 @@ let quotes_vue = new Vue({
                 });
         },
         
-        // TODO: Fix this
         deleteQuote: function(q) {
             if(confirm("Delete permanently?")) {
                 axios.delete(this.route + '/' + q.id)
                     .then(res => {
-                        this.quotes = this.quotes.filter(i => i.id !== res.id);
+                        this.quotes = this.quotes.filter(i => i.id !== res.data.id);
                     })
-                    .catch(console.error);
+                    .catch(console.error); 
             }
         },
         
@@ -48,8 +47,8 @@ let quotes_vue = new Vue({
     computed: {
         filtered() {
             return this.quotes.filter(item => {
-                return item.body.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-                    || item.author.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+                return item.body.toLowerCase().includes(this.search.toLowerCase())
+                    || item.author.toLowerCase().includes(this.search.toLowerCase())
             })
         }
     },

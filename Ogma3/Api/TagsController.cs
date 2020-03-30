@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv.Internal;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Api
@@ -24,9 +27,12 @@ namespace Ogma3.Api
 
         // GET: api/Tags
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetTag()
+        public async Task<ActionResult<IEnumerable<TagDTO>>> GetTags()
         {
-            return await _context.Tags.ToListAsync();
+            var tags = await _context.Tags
+                .Include(t => t.Namespace)
+                .ToListAsync();
+            return tags.Select(TagDTO.FromTag).ToList();
         }
 
 

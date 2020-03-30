@@ -8,11 +8,11 @@
 }
 
 <div>
-    <textarea cols="30" rows="10" v-model="json"></textarea>
+    <textarea rows="1" v-model="json" placeholder="Json"></textarea>
     <button v-on:click="fromJson">Send</button>
 </div>
 
-<input type="text" class="search" v-model="search">
+<input type="text" class="search" v-model="search" placeholder="Search...">
 
 <ul class="items-list">    
     <li v-for="q in filtered">

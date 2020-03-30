@@ -1,3 +1,15 @@
+.active-border {
+  border: 1px solid rgba(0, 0, 0, 0.5); }
+  .active-border:hover,
+  .active-border:hover + .counter {
+    border-color: rgba(0, 0, 0, 0.75); }
+  .active-border:focus,
+  .active-border:focus + .counter {
+    border-color: #0080ff; }
+  .active-border + .counter {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-top: none; }
+
 *,
 *::before,
 *::after {
@@ -286,12 +298,6 @@ ul.my-list {
   .comments-container > form {
     display: flex;
     flex-direction: column; }
-    .comments-container > form .active-border {
-      border: 1px solid rgba(0, 0, 0, 0.5); }
-      .comments-container > form .active-border:hover {
-        border-color: rgba(0, 0, 0, 0.75); }
-      .comments-container > form .active-border:focus {
-        border-color: #0080ff; }
     .comments-container > form > .comment-box {
       padding: .5rem;
       min-height: 5rem; }
@@ -596,6 +602,51 @@ ul.items-list {
   .story-status > i.material-icons-outlined {
     margin-right: .1rem;
     font-size: 1rem; }
+
+form.form {
+  display: flex;
+  flex-direction: column; }
+  form.form .o-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem; }
+    form.form .o-form-group input,
+    form.form .o-form-group textarea {
+      padding: .5rem; }
+    form.form .o-form-group textarea {
+      min-height: 3rem; }
+    form.form .o-form-group label {
+      font-weight: 600;
+      font-size: .95rem;
+      margin: 0; }
+    form.form .o-form-group > .counter {
+      text-align: end;
+      padding: .05rem .2rem .05rem .05rem; }
+    form.form .o-form-group .ratings {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: .5rem; }
+      form.form .o-form-group .ratings .rating {
+        flex-basis: 50%; }
+        form.form .o-form-group .ratings .rating .radio {
+          display: none; }
+          form.form .o-form-group .ratings .rating .radio:checked + .radio-label {
+            background: rgba(0, 128, 255, 0.25);
+            border-color: #0080ff; }
+        form.form .o-form-group .ratings .rating .radio-label {
+          display: flex;
+          cursor: pointer; }
+          form.form .o-form-group .ratings .rating .radio-label > img {
+            flex-basis: 3rem; }
+          form.form .o-form-group .ratings .rating .radio-label > .main {
+            display: block;
+            margin-left: .5rem; }
+            form.form .o-form-group .ratings .rating .radio-label > .main > * {
+              display: block; }
+            form.form .o-form-group .ratings .rating .radio-label > .main > strong {
+              font-weight: 600; }
+            form.form .o-form-group .ratings .rating .radio-label > .main > span {
+              font-weight: 500; }
 
 #version {
   color: white;

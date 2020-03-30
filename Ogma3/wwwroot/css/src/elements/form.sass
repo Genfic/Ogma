@@ -1,0 +1,57 @@
+form.form
+  display: flex
+  flex-direction: column
+    
+  & .o-form-group
+    display: flex
+    flex-direction: column 
+    margin-top: 1rem
+    
+    & input, 
+    & textarea
+      padding: .5rem
+      
+    & textarea
+      min-height: 3rem
+      
+    & label
+      font-weight: 600
+      font-size: .95rem
+      margin: 0
+      
+    &>.counter
+      text-align: end
+      padding: .05rem .2rem .05rem .05rem
+      
+    & .ratings
+      display: grid
+      grid-template-columns: repeat(2, 1fr)
+      grid-gap: .5rem
+        
+      & .rating
+        flex-basis: 50%
+      
+        & .radio
+          display: none
+          
+          &:checked+.radio-label
+            background: $accent-25
+            border-color: $accent
+            
+        & .radio-label
+          display: flex
+          cursor: pointer
+          
+          &>img
+            flex-basis: 3rem
+            
+          &>.main
+            display: block
+            margin-left: .5rem
+            &>*
+              display: block
+            &>strong
+              font-weight: 600
+            &>span
+              font-weight: 500
+        
