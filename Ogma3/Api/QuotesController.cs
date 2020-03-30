@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
@@ -22,6 +21,11 @@ namespace Ogma3.Api
         public QuotesController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<Quote>> GetQuotes()
+        {
+            return await _context.Quotes.ToListAsync();
         }
 
         // GET: api/Quotes/5

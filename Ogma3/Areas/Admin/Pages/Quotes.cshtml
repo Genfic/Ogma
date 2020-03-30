@@ -1,5 +1,5 @@
 @page
-@using Ogma3.Services
+@using Ogma3.Api
 @model Ogma3.Areas.Admin.Pages.Quotes
 
 @{
@@ -7,23 +7,33 @@
     ViewData["ActivePage"] = ManageNavPages.Quotes;
 }
 
-<div id="quote">
-<textarea cols="30" rows="10" v-model="json"></textarea>
-<button v-on:click="send">Send</button>
+<div>
+    <textarea cols="30" rows="10" v-model="json"></textarea>
+    <button v-on:click="fromJson">Send</button>
 </div>
 
-@Html.Resource(@<script>
-    const quote_vue = new Vue({
-        el: '#quote',
-        data: {
-            json: null
-        },
-        methods: {
-            send: function() {
-                axios.post('/api/quotes/json', JSON.parse(this.json))
-                .then(console.log)
-                .catch(console.error)
-            } 
-        }
-    })
-</script>)
+<input type="text" class="search" v-model="search">
+
+<ul class="items-list">    
+    <li v-for="q in filtered">
+        <div class="main">
+            <span class="name">{{ q.body }}</span>
+            <em class="desc">{{ q.author }}</em>
+        </div>
+        <div class="actions">
+            <button v-on:click="deleteQuote(q)">
+                <icon icon="delete_forever"></icon>
+            </button>
+            <button v-on:click="editQuote(q)">
+                <icon icon="edit"></icon>
+            </button>
+        </div>
+    </li>
+</ul>
+
+<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(QuotesController))" v-if="!route"></div>
+
+@section Scripts
+{
+    <script src="~/js/admin/quotes.min.js" asp-append-version="true"></script>
+}
