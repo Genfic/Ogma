@@ -24,15 +24,17 @@ new Vue({
         search: '',
         
         // API routing
-        route: null
+        route: null,
     },  
     methods: {
         addUnique(x) {
-            if (!this.selected.includes(x))
-                this.selected.push(x);
+            if (this.selected.includes(x)) return;
+            this.selected.push(x);
+            this.options.find(e => e.id === x.id).hidden = true;
         },
         remove(x) {
             this.selected = this.selected.filter(e => e.id !== x.id);
+            this.options.find(e => e.id === x.id).hidden = false;
         }
     },
     computed: {

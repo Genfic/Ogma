@@ -20,3 +20,27 @@
   & .search
     
   & .search-results
+    max-height: 6rem
+    overflow-y: scroll
+    
+    &>li
+      display: flex
+      flex: 1
+      padding: .2rem
+      justify-content: space-between
+      border: 1px solid $foreground
+      border-top: none
+      cursor: pointer
+      @media only screen and (max-width: $mq-mobile)
+        flex-direction: column
+      &:hover
+        box-shadow: inset 0 0 2px 1px $accent-75
+      &.hidden
+        display: none
+      
+      &>.name
+        flex-grow: 1
+        
+      &>.desc
+        color: $foreground-50
+        text-overflow: ellipsis

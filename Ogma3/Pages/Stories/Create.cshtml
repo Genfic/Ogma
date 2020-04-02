@@ -106,14 +106,19 @@
             <span asp-validation-for="Input.Tags" class="text-warning"></span>
             
             <ol class="search-results">
-              <li v-for="o in filtered" v-on:click="addUnique(o)">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</li>
+              <li v-for="o in filtered" :style="{background: o.rgba}" :class="o.hidden ? 'hidden' : null" v-on:click="addUnique(o)">
+                <span class="name">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</span>
+                <span class="desc">{{o.description}}</span>
+              </li>
             </ol>
+
       </div>
         
     <button type="submit" class="btn btn-primary" >Create</button>
     
     <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(TagsController))" v-if="!route"></div>
 </form>
+
 
 
 @section Scripts {

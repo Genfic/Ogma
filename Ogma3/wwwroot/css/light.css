@@ -663,6 +663,30 @@ form.form {
     .tag-search .tags > .tag > .material-icons-outlined {
       font-size: 1.2rem; }
 
+.tag-search .search-results {
+  max-height: 6rem;
+  overflow-y: scroll; }
+  .tag-search .search-results > li {
+    display: flex;
+    flex: 1;
+    padding: .2rem;
+    justify-content: space-between;
+    border: 1px solid black;
+    border-top: none;
+    cursor: pointer; }
+    @media only screen and (max-width: 570px) {
+      .tag-search .search-results > li {
+        flex-direction: column; } }
+    .tag-search .search-results > li:hover {
+      box-shadow: inset 0 0 2px 1px rgba(0, 128, 255, 0.75); }
+    .tag-search .search-results > li.hidden {
+      display: none; }
+    .tag-search .search-results > li > .name {
+      flex-grow: 1; }
+    .tag-search .search-results > li > .desc {
+      color: rgba(0, 0, 0, 0.5);
+      text-overflow: ellipsis; }
+
 #version {
   color: white;
   border-radius: .2rem;
