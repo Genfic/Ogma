@@ -1,6 +1,7 @@
 new Vue({
     el: '#story',
     data: {
+        // Form counters
         title: {
             max: 0,
             min: 0,
@@ -16,7 +17,29 @@ new Vue({
             min: 0,
             current: '',
         },
+        
+        // Tag search
+        options: [],
+        selected: [],
+        search: '',
+        
+        // API routing
         route: null
+    },  
+    methods: {
+        addUnique(x) {
+            if (!this.selected.includes(x))
+                this.selected.push(x);
+        },
+        remove(x) {
+            this.selected = this.selected.filter(e => e.id !== x.id);
+        }
+    },
+    // TODO: Fix colors
+    filters: { 
+        color: function(col, alpha) {
+            return hexToArgb(col, alpha)
+        }  
     },
     computed: {
         titleCount() {
@@ -27,6 +50,14 @@ new Vue({
         },
         descCount() {
             return `${this.desc.current.length}/${this.desc.max}`;
+        },
+        filtered() {
+            return this.options.filter(x => { 
+                return (
+                    x.name.toLowerCase().includes(this.search.toLowerCase())
+                    || x.namespace.toLowerCase().includes(this.search.toLowerCase())
+                ) && this.search.length > 0
+            })
         }
     },
     beforeMount() {

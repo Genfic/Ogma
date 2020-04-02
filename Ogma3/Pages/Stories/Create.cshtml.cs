@@ -88,7 +88,8 @@ namespace Ogma3.Pages.Stories
         public async Task OnGetAsync()
         {
             Ratings = await _context.Ratings.ToListAsync();
-            TagOptions = new SelectList(await _context.Tags.ToListAsync(), nameof(Tag.Id), nameof(Tag.Name));
+            TagOptions = new SelectList(new List<Tag>());
+            // TagOptions = new SelectList(await _context.Tags.ToListAsync(), nameof(Tag.Id), nameof(Tag.Name));
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -109,7 +110,7 @@ namespace Ogma3.Pages.Stories
                     Slug = Input.Title.Friendlify(),
                     Description = Input.Description,
                     Hook = Input.Hook,
-                    Rating = rating,
+                    Rating = rating
                 };
 
                 _context.Stories.Add(story);

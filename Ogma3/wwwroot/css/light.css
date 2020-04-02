@@ -648,6 +648,21 @@ form.form {
             form.form .o-form-group .ratings .rating .radio-label > .main > span {
               font-weight: 500; }
 
+.tag-search .tags {
+  min-height: 2.5rem;
+  padding: .2rem;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: none;
+  display: flex;
+  flex-wrap: wrap; }
+  .tag-search .tags > .tag {
+    display: flex;
+    align-items: center; }
+    .tag-search .tags > .tag:first-child {
+      margin-left: 4px; }
+    .tag-search .tags > .tag > .material-icons-outlined {
+      font-size: 1.2rem; }
+
 #version {
   color: white;
   border-radius: .2rem;

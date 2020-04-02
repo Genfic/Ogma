@@ -53,6 +53,9 @@ namespace Ogma3.Pages.Stories
             // Get the story and make sure the logged-in user matches author
             Story = await _context.Stories
                 .Include(s => s.Author)
+                .Include(s => s.Chapters)
+                .Include(s => s.VotesPool)
+                    .ThenInclude(vp => vp.Votes)
                 .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (Story == null) return NotFound();
 

@@ -1,5 +1,7 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your Javascript code.
+﻿function hexToArgb(hex, alpha) {
+    let str = hex.trim('#');
+    let rgb = str.match(/.{1,3}/g);
+    rgb = rgb.map(c => parseInt(c, 16));
+    return 'rgba('+rgb[0]+', '+rgb[1]+', '+rgb[2]+', '+alpha+')';
+}
  

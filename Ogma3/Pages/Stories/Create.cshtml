@@ -84,15 +84,31 @@
         <span asp-validation-for="Input.Rating" class="text-warning"></span>
         
     </div>
+        
+
+        <select style="visibility: collapse" asp-for="Input.Tags" asp-items="Model.TagOptions" multiple="multiple" id="slim-select">
+            <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
+        </select>
     
-    @* TODO: Use https://jsfiddle.net/Angius/a86e13L2/31/ for multiselect *@
     
-    <div class="o-form-group">
-        <label asp-for="Input.Tags"></label>
-        <p>To make the story easier to find</p>
-        <select asp-for="Input.Tags" asp-items="Model.TagOptions" multiple="multiple" id="slim-select"></select>
-        <span asp-validation-for="Input.Tags" class="text-warning"></span>
-    </div>
+        <div class="o-form-group tag-search">
+            <label asp-for="Input.Tags"></label>
+            <p>To make the story easier to find</p>
+            
+            <div class="tags">
+              <div class="tag" v-bind:style="{background: s.color | color(0.5)}" v-for="s in selected">
+                {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
+                <icon icon="clear" v-on:click="remove(s)"></icon>
+              </div>
+            </div>
+            
+            <input class="search" type="text" placeholder="Search..." v-model="search">
+            <span asp-validation-for="Input.Tags" class="text-warning"></span>
+            
+            <ol class="search-results">
+              <li v-for="o in filtered" v-on:click="addUnique(o)">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</li>
+            </ol>
+      </div>
         
     <button type="submit" class="btn btn-primary" >Create</button>
     
