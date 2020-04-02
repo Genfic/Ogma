@@ -96,7 +96,7 @@
             <p>To make the story easier to find</p>
             
             <div class="tags">
-              <div class="tag" v-bind:style="{background: s.color | color(0.5)}" v-for="s in selected">
+              <div class="tag" v-bind:style="{background: s.rgba}" v-for="s in selected">
                 {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
                 <icon icon="clear" v-on:click="remove(s)"></icon>
               </div>

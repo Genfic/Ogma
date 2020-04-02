@@ -35,12 +35,6 @@ new Vue({
             this.selected = this.selected.filter(e => e.id !== x.id);
         }
     },
-    // TODO: Fix colors
-    filters: { 
-        color: function(col, alpha) {
-            return hexToArgb(col, alpha)
-        }  
-    },
     computed: {
         titleCount() {
             return `${this.title.current.length}/${this.title.max}`;
