@@ -62,7 +62,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             public string Bio { get; set; }
         }
 
-        private async Task LoadAsync(Data.Models.User user)
+        private async Task LoadAsync(User user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var userTitle = await _userManager.GetTitleAsync(user);
@@ -94,7 +94,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound("Unable to load user");
             }
 
             if (!ModelState.IsValid)
