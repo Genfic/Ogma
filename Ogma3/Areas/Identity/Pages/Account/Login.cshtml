@@ -13,8 +13,8 @@
                 <h4>Use a local account to log in.</h4>
 
                 <hr />
-                
-                <img style="width:200px;height:200px" :src="avatar" class="rounded mx-auto d-block">
+
+                <img style="width:200px;height:200px" :src="avatar" class="rounded mx-auto d-block" :alt="`${name}'s avatar`">
                 <h5 class="text-center">{{title}}</h5>
                 
                 <div class="form-group">
@@ -85,9 +85,9 @@
 </div>
 
 
-@* <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("UsersController")" v-if="!route"></div> *@
 <div id="route" style="background:indianred;padding:5rem" data-route="/api/Users/signin" v-if="!route"></div>
 @section Scripts {
+
     @* <partial name="_ValidationScriptsPartial" /> *@
     <script src="~/js/login.min.js" asp-append-version="true"></script>
 }

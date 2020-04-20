@@ -183,6 +183,13 @@ namespace Ogma3.Data
                 .HasIndex(d => d.Slug)
                 .IsUnique();
             
+            // Invite codes
+            builder.Entity<InviteCode>()
+                .HasOne(c => c.UsedBy)
+                .WithOne()
+                .HasForeignKey<InviteCode>(c => c.UsedById)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
         
         

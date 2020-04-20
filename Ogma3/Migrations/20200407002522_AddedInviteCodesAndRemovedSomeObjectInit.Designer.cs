@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200407002522_AddedInviteCodesAndRemovedSomeObjectInit")]
+    partial class AddedInviteCodesAndRemovedSomeObjectInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,6 +226,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("PublishDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Slug")
@@ -357,6 +360,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("IssueDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UsedById")
@@ -546,6 +550,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("ReleaseDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Slug")

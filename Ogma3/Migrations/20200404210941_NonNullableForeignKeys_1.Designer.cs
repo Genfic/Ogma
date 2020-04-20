@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200404210941_NonNullableForeignKeys_1")]
+    partial class NonNullableForeignKeys_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,36 +345,6 @@ namespace Ogma3.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Icons");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.InviteCode", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("IssueDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UsedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UsedDate")
-                        .IsRequired()
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsedById")
-                        .IsUnique();
-
-                    b.ToTable("InviteCode");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Namespace", b =>
@@ -836,15 +808,6 @@ namespace Ogma3.Migrations
                     b.HasOne("Ogma3.Data.Models.CommentsThread", null)
                         .WithMany("Comments")
                         .HasForeignKey("CommentsThreadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.InviteCode", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.User", "UsedBy")
-                        .WithOne()
-                        .HasForeignKey("Ogma3.Data.Models.InviteCode", "UsedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

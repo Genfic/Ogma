@@ -110,7 +110,8 @@ namespace Ogma3.Pages.Stories
                     Slug = Input.Title.Friendlify(),
                     Description = Input.Description,
                     Hook = Input.Hook,
-                    Rating = rating
+                    Rating = rating,
+                    VotesPool = new VotePool()
                 };
 
                 _context.Stories.Add(story);
