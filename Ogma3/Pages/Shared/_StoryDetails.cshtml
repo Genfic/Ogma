@@ -87,7 +87,7 @@
                 </a>
             } 
         }
-        @if (User.Identity.IsAuthenticated && Model.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+        @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))
         {
             <a class="btn btn-block btn-outline-primary" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
                 <icon icon="add"></icon>

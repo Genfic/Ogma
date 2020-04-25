@@ -30,6 +30,6 @@ namespace Ogma3.Data.Models
         public string Body { get; set; }
         
         public  CommentsThread CommentsThread { get; set; } = new CommentsThread();
-        public int CommentsThreadId { get; set; }
+        public long CommentsThreadId { get; set; }
     }
 }

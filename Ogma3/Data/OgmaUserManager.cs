@@ -24,25 +24,25 @@ namespace Ogma3.Data
         {
         }
 
-        public async Task<string> GetTitleAsync(IdentityUser user)
+        public async Task<string> GetTitleAsync(User user)
         {
             ThrowIfDisposed();
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            var oUser = await Store.FindByIdAsync(user.Id, CancellationToken);
+            var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
             return oUser.Title;
         }
 
-        public async Task<string> GetBioAsync(IdentityUser user)
+        public async Task<string> GetBioAsync(User user)
         {
             ThrowIfDisposed();
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            var oUser = await Store.FindByIdAsync(user.Id, CancellationToken);
+            var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
             return oUser.Bio;
         }
 
@@ -53,7 +53,7 @@ namespace Ogma3.Data
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            var oUser = await Store.FindByIdAsync(user.Id, CancellationToken);
+            var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
             return oUser.Avatar;
         }
     }

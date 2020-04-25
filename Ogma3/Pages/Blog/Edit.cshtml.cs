@@ -27,7 +27,7 @@ namespace Ogma3.Pages.Blog
         
         public class InputModel
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             
             [Required]
             [StringLength(CTConfig.Blogpost.MaxTitleLength,
@@ -98,7 +98,7 @@ namespace Ogma3.Pages.Blog
             return RedirectToPage("./Post", new { id = post.Id, slug = post.Slug });
         }
 
-        private bool BlogpostExists(int id)
+        private bool BlogpostExists(long id)
         {
             return _context.Blogposts.Any(e => e.Id == id);
         }

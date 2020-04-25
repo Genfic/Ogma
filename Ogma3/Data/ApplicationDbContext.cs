@@ -6,17 +6,14 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, long>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
             NpgsqlConnection.GlobalTypeMapper.MapEnum<EStoryStatus>();
         }
 
-        // static ApplicationDbContext()
-        //     => NpgsqlConnection.GlobalTypeMapper.MapEnum<EStoryStatus>();
-
-
+        
         public DbSet<Tag> Tags { get; set; }
         public DbSet<StoryTag> StoryTags { get; set; }
         public DbSet<Namespace> Namespaces { get; set; }

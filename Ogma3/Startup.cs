@@ -41,7 +41,7 @@ namespace Ogma3
             services.AddRouting(options => options.LowercaseUrls = true);
 
             // Identity
-            services.AddIdentity<User, IdentityRole>(config =>
+            services.AddIdentity<User, Role>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
                     config.User.RequireUniqueEmail = true;
@@ -94,7 +94,7 @@ namespace Ogma3
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext ctx)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<Role> roleManager, ApplicationDbContext ctx)
         {
             
             if (env.IsDevelopment())
@@ -137,20 +137,20 @@ namespace Ogma3
 
         // Seeding
 
-        private static void SeedRoles (RoleManager<IdentityRole> roleManager)
+        private static async void SeedRoles (RoleManager<Role> roleManager)
         {
             if (roleManager.RoleExistsAsync("Admin").Result) return;
             
-            var role = new IdentityRole { Name = "Admin" };
-            var roleResult = roleManager.CreateAsync(role).Result;
+            var role = new Role { Name = "Admin" };
+            await roleManager.CreateAsync(role);
         }
 
-        private static void SeedUserRoles(OgmaUserManager userManager)
+        private static async void SeedUserRoles(OgmaUserManager userManager)
         {
-            var user = userManager.FindByNameAsync("Angius").Result;
+            var user = await userManager.FindByNameAsync("Angius");
             if (user != null)
             {
-                userManager.AddToRoleAsync(user, "Admin").Wait();
+                await userManager.AddToRoleAsync(user, "Admin");
             }
         }
 

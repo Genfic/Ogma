@@ -29,7 +29,7 @@ namespace Ogma3.Pages.Stories
         {
             Owner = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
             if (Owner == null) return NotFound();
-            IsCurrentUser = Owner.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IsCurrentUser = Owner.IsLoggedIn(User);
             
             var storiesQuery = IsCurrentUser
                 ? _context.Stories.Where(s => s.Author == Owner)

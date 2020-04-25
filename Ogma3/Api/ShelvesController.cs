@@ -42,7 +42,7 @@ namespace Ogma3.Api
             if (user == null) return NotFound();
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var shelvesQuery = user.Id == currentUser 
+            var shelvesQuery = user.Id.ToString() == currentUser 
                 ? _context.Shelves.Where(s => s.Owner == user) 
                 : _context.Shelves.Where(s => s.Owner == user && s.IsPublic);
             var shelves = await shelvesQuery

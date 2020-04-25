@@ -82,7 +82,7 @@ namespace Ogma3.Pages.Stories
             public int Rating { get; set; }
 
             [Required] 
-            public List<int> Tags { get; set; }
+            public List<long> Tags { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -92,7 +92,7 @@ namespace Ogma3.Pages.Stories
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
-                .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
 
             if (Story == null) return NotFound();
             
@@ -132,7 +132,7 @@ namespace Ogma3.Pages.Stories
                     .Include(s => s.StoryTags)
                     .Include(s => s.Rating)
                     .Include(s => s.Author)
-                    .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
 
                 if (Story == null) return NotFound();
                 

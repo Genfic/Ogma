@@ -42,7 +42,7 @@ namespace Ogma3.Data.Models
         public string? EndNotes { get; set; }
 
         public  CommentsThread CommentsThread { get; set; } //= new CommentsThread();
-        public int CommentsThreadId { get; set; }
+        public long CommentsThreadId { get; set; }
         
         [Required]
         public int StoryId { get; set; }

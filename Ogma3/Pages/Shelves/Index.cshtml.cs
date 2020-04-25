@@ -55,7 +55,7 @@ namespace Ogma3.Pages.Shelves
         public async Task<IActionResult> OnGetAsync(string name)
         {
             Owner = await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
-            IsCurrentUser = Owner.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
             Icons = await _context.Icons.ToListAsync();
 
             return Page();

@@ -39,7 +39,7 @@ namespace Ogma3.Pages.Stories
                         .ThenInclude(t => t.Namespace)
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
-                .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
 
             if (Story == null) return NotFound();
 
@@ -56,7 +56,7 @@ namespace Ogma3.Pages.Stories
                 .Include(s => s.Chapters)
                 .Include(s => s.VotesPool)
                     .ThenInclude(vp => vp.Votes)
-                .FirstOrDefaultAsync(s => s.Id == id && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
             if (Story == null) return NotFound();
 
             // Remove tag associations

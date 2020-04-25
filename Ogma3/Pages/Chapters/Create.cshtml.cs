@@ -42,7 +42,7 @@ namespace Ogma3.Pages.Chapters
             if (Story == null) return RedirectToPage("../Index");
             
             // Check ownership, render page if it's ok
-            if (Story.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            if (Story.Author.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier))
                 return Page();
             
             // Redirect to the story itself if not an owner

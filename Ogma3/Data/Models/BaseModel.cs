@@ -8,6 +8,6 @@ namespace Ogma3.Data.Models
         [Key]
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }

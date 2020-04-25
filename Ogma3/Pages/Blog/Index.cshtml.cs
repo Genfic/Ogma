@@ -27,7 +27,7 @@ namespace Ogma3.Pages.Blog
         {
             Owner = await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
             if (Owner == null) return NotFound();
-            IsCurrentUser = Owner.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var postsQuery = IsCurrentUser
                 ? _context.Blogposts.Where(b => b.Author == Owner)

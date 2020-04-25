@@ -1,12 +1,11 @@
 ﻿@page "{id}/{slug?}"
-@using System.Security.Claims
 @model Ogma3.Pages.ChapterModel
 
 @{
     ViewData["Title"] = Model.StoryChapter.Chapter.Title;
 }
 
-@if (User.Identity.IsAuthenticated && Model.StoryChapter.Story.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+@if (User.Identity.IsAuthenticated && Model.StoryChapter.Story.Author.IsLoggedIn(User))
 {
     <div>
         <a asp-page="./Chapters/Edit" asp-route-id="@Model.StoryChapter.Chapter.Id">

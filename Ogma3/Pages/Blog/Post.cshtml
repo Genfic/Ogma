@@ -10,7 +10,7 @@
 
 <partial name="_BlogpostDetails" model="@Model.Blogpost"></partial>
 
-@if (User.Identity.IsAuthenticated && Model.Blogpost.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+@if (User.Identity.IsAuthenticated && Model.Blogpost.Author.IsLoggedIn(User))
 {
     <div>
         <a asp-page="./Edit" asp-route-id="@Model.Blogpost.Id">

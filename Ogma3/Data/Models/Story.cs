@@ -74,7 +74,7 @@ namespace Ogma3.Data.Models
         [Required]
         public  VotePool VotesPool { get; set; }
         [Required]
-        public int VotesPoolId { get; set; }
+        public long VotesPoolId { get; set; }
 
         [NotMapped] 
         public int Score => VotesPool.Votes.Count;

@@ -68,7 +68,7 @@ namespace Ogma3.Pages.Chapters
             var chapter = await _context.Chapters.FindAsync(id);
             // Make sure the story's author is the logged in user
             var authorized = await _context.Stories
-                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.IsLoggedIn(User));
 
             if (chapter == null || !authorized) return NotFound();
 
@@ -97,7 +97,7 @@ namespace Ogma3.Pages.Chapters
             var chapter = await _context.Chapters.FindAsync(Chapter.Id);
             // Make sure the story's author is the logged in user
             var authorized = await _context.Stories
-                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.IsLoggedIn(User));
             
             if (chapter == null || !authorized) return NotFound();
             

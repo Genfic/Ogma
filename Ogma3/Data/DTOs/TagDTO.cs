@@ -5,7 +5,7 @@ namespace Ogma3.Data.DTOs
 {
     public class TagDTO
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Slug { get; set; }
         public string Description { get; set; }

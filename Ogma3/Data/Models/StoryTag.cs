@@ -7,11 +7,11 @@ namespace Ogma3.Data.Models
         [Required]
         public  Story Story { get; set; }
         [Required]
-        public int StoryId { get; set; }
+        public long StoryId { get; set; }
 
         [Required]
         public  Tag Tag { get; set; }
         [Required]
-        public int TagId { get; set; }
+        public long TagId { get; set; }
     }
 }
