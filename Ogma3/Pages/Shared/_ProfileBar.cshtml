@@ -1,4 +1,5 @@
 @using System.Globalization
+@using Utils
 @model Ogma3.Data.Models.User
 
 @{
@@ -8,7 +9,7 @@
 <div class="col-md-12 profile-bar">
 
     <div id="personal">
-        <img src="@Model.Avatar" class="avatar" alt="@Model.UserName's avatar">
+        <avatar src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" size="130" alt="@Model.UserName's avatar"></avatar>
         <div class="data">
             <a asp-page="/Profile" asp-area="" asp-route-name="@Model.UserName">
                 <h1 class="name">@Model.UserName</h1>

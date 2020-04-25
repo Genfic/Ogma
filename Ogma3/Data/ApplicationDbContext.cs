@@ -186,7 +186,7 @@ namespace Ogma3.Data
                 .WithOne()
                 .HasForeignKey<InviteCode>(c => c.UsedById)
                 .OnDelete(DeleteBehavior.Cascade);
-
+            
         }
         
         

@@ -7,6 +7,7 @@ namespace Ogma3.Services.TagHelpers
         public string Src { get; set; }
         public int? Size { get; set; }
         public string? Alt { get; set; }
+        public string? Class { get; set; }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -18,7 +19,7 @@ namespace Ogma3.Services.TagHelpers
             }
 
             output.TagName = "img";
-            output.Attributes.SetAttribute("class", "avatar");
+            output.Attributes.SetAttribute("class", $"avatar {Class}");
             output.Attributes.SetAttribute("src", url);
             output.Attributes.SetAttribute("alt", Alt ?? "");
             output.Attributes.Remove(new TagHelperAttribute("title"));
