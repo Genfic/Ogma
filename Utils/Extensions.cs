@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Net;
@@ -116,6 +117,21 @@ namespace Utils
         {
             var alpha = ((double) input.A).Normalize(0, 255).ToString("F", CultureInfo.InvariantCulture);
             return $"{input.R}, {input.G}, {input.B}, {alpha}";
+        }
+
+        /// <summary>
+        /// Replaces elements of the `template` according to the supplied `pattern`
+        /// </summary>
+        /// <param name="template">Template to replace values in</param>
+        /// <param name="pattern">Dictionary in which keys are values to be replaced and values are values to replace them with</param>
+        /// <returns>Resulting string</returns>
+        public static string ReplaceWithPattern(this string template, Dictionary<string, string> pattern)
+        {
+            foreach (var (key, value) in pattern)
+            {
+                template = template.Replace(key, value);
+            }
+            return template;
         }
     }
 }

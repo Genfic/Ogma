@@ -79,8 +79,8 @@
         </div>
     </footer>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.20/dayjs.min.js" integrity="sha256-ca0AUcGacUBWNoFjEyMEXFfWfdNHNiGC5uTEsMWj1oQ=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.8.26/dayjs.min.js" integrity="sha256-vhr7lMQ7DPtWka5o4LbDYinKsFd2S9h1425NmzxeX0Q=" crossorigin="anonymous"></script>    
+<script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
 
     @if (ViewData["use_bootstrap"] == null)
     {
@@ -90,8 +90,8 @@
     
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
     @Html.RenderResources()
-
+    
 </body>
 </html>

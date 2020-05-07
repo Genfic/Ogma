@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Ogma3.Data.Models;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
+using reCAPTCHA.AspNetCore;
 using Utils;
 
 namespace Ogma3
@@ -65,6 +66,10 @@ namespace Ogma3
             var b2Options = Configuration.GetSection("B2").Get<B2Options>();
             var b2Client = new B2Client(B2Client.Authorize(b2Options));
             services.AddSingleton<IB2Client>(b2Client);
+            
+            // ReCaptcha
+            services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
+            services.AddTransient<IRecaptchaService, RecaptchaService>();
             
             // Seeding
             services.AddAsyncInitializer<DbSeedInitializer>();

@@ -34,6 +34,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="NMica" Version="1.1.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+    <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.0" />
     <PackageReference Include="SendGrid" Version="9.12.7" />
   </ItemGroup>
 

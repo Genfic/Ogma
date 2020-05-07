@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Utils;
 using Xunit;
 
@@ -62,5 +63,20 @@ namespace Tests.Utils
         [Fact]
         public void TestToCommaSeparatedCss()
             => Assert.Equal("255, 0, 0, 1.00", System.Drawing.Color.FromArgb(255,255, 0, 0).ToCommaSeparatedCss());
+        
+        // Test string.ReplaceWithPattern()
+        [Fact]
+        public void TestReplaceWithPattern()
+        {
+            const string inString = "Hello, {{name}}! Goodbye, {{name}}! Have a nice {{time}}.";
+            var pattern = new Dictionary<string, string>
+            {
+                {"{{name}}", "Bob"}, 
+                {"{{time}}", "night"}
+            };
+            const string outString = "Hello, Bob! Goodbye, Bob! Have a nice night.";
+
+            Assert.Equal(inString.ReplaceWithPattern(pattern), outString);
+        }
     }
 }

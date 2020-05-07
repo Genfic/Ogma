@@ -13,10 +13,10 @@ namespace Ogma3.Pages.Blog
     [Authorize]
     public class EditModel : PageModel
     {
-        private readonly Ogma3.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private OgmaUserManager _userManager;
 
-        public EditModel(Ogma3.Data.ApplicationDbContext context, OgmaUserManager userManager)
+        public EditModel(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
             _userManager = userManager;

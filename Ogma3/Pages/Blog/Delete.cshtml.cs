@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,12 +49,16 @@ namespace Ogma3.Pages.Blog
             
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
+            
             // Get post and make sure the user matches
             Blogpost = await _context.Blogposts
-                .FirstOrDefaultAsync(b => b.Id == id && b.Author == user);
+                .Where(b => b.Id == id && b.Author == user)
+                .Include(b => b.CommentsThread)
+                .FirstOrDefaultAsync();
 
             if (Blogpost == null) return RedirectToPage("./Index", new {name = user.UserName});
-            
+
+            _context.CommentThreads.Remove(Blogpost.CommentsThread);
             _context.Blogposts.Remove(Blogpost);
             await _context.SaveChangesAsync();
 

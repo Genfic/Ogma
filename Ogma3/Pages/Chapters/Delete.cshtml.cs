@@ -50,14 +50,20 @@ namespace Ogma3.Pages.Chapters
             }
 
             // Get chapter
-            Chapter = await _context.Chapters.FindAsync(id);
+            Chapter = await _context.Chapters
+                .Where(c => c.Id == id)
+                .Include(c => c.CommentsThread)
+                .FirstOrDefaultAsync();
+            
             // Make sure the story's author is the logged in user
             var authorized = await _context.Stories
-                .AnyAsync(s => s.Id == Chapter.StoryId && s.Author.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .AnyAsync(s => s.Id == Chapter.StoryId && s.Author.IsLoggedIn(User));
 
             if (Chapter == null || !authorized) return NotFound();
-            
+
+            _context.CommentThreads.Remove(Chapter.CommentsThread);
             _context.Chapters.Remove(Chapter);
+            
             await _context.SaveChangesAsync();
 
             return RedirectToPage("../Story", new { id = Chapter.StoryId });

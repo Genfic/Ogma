@@ -1,4 +1,8 @@
 ﻿@page "/register"
+@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@using reCAPTCHA.AspNetCore.Templates
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -36,6 +40,8 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password"/>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            
+            @(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
 
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
