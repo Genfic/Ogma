@@ -39,14 +39,14 @@ namespace Utils
             return client.DownloadString(api);
         }
 
-        public static string Gravatar(string email)
+        public static string Gravatar(string email, int size = 200)
         {
             using var md5 = MD5.Create();
             var data = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()))
                 .ToList()
                 .Select(x => x.ToString("x2"));
             var hash = string.Join("", data);
-            return $"https://www.gravatar.com/avatar/{hash}";
+            return $"https://www.gravatar.com/avatar/{hash}?s={size}";
         }
     }
 

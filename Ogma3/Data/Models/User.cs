@@ -28,7 +28,6 @@ namespace Ogma3.Data.Models
         public DateTime LastActive { get; set; } = DateTime.Now;
 
         public CommentsThread CommentsThread { get; set; } = new CommentsThread();
-        public long CommentsThreadId { get; set; }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {

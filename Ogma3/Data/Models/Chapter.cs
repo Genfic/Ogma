@@ -1,17 +1,11 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
-    public class Chapter
+    public class Chapter : BaseModel
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public int Order { get; set; }
 
@@ -41,8 +35,7 @@ namespace Ogma3.Data.Models
         [MaxLength(CTConfig.Chapter.MaxNotesLength)]
         public string? EndNotes { get; set; }
 
-        public  CommentsThread CommentsThread { get; set; } //= new CommentsThread();
-        public long CommentsThreadId { get; set; }
+        public  CommentsThread CommentsThread { get; set; }
         
         [Required]
         public int StoryId { get; set; }

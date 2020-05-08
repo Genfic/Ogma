@@ -79,7 +79,7 @@ namespace Ogma3.Pages.Stories
             public IFormFile Cover { get; set; }
 
             [Required] 
-            public int Rating { get; set; }
+            public long Rating { get; set; }
 
             [Required] 
             public List<long> Tags { get; set; }

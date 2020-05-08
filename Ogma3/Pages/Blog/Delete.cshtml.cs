@@ -58,7 +58,6 @@ namespace Ogma3.Pages.Blog
 
             if (Blogpost == null) return RedirectToPage("./Index", new {name = user.UserName});
 
-            _context.CommentThreads.Remove(Blogpost.CommentsThread);
             _context.Blogposts.Remove(Blogpost);
             await _context.SaveChangesAsync();
 

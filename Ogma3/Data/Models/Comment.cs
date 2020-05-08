@@ -1,18 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
-    public class Comment
+    public class Comment : BaseModel
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required] 
-        public int CommentsThreadId { get; set; }
+        public long CommentsThreadId { get; set; }
 
         [Required] 
         public  User Author { get; set; }

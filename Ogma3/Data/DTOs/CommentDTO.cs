@@ -6,9 +6,9 @@ namespace Ogma3.Data.DTOs
 {
     public class CommentDTO
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int CommentsThreadId { get; set; }
+        public long CommentsThreadId { get; set; }
 
         public UserSimpleDTO Author { get; set; }
 

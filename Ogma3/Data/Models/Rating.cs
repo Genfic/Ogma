@@ -3,13 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
-    public class Rating
+    public class Rating : BaseModel
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        
         [Required]
         [MinLength(CTConfig.Rating.MinNameLength)]
         [MaxLength(CTConfig.Rating.MaxNameLength)]

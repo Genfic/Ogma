@@ -1,11 +1,16 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
     public class CommentsThread : BaseModel
     {
-        public  ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        
+        public User? User { get; set; }
+        public long? UserId { get; set; }
+        public Chapter? Chapter { get; set; }
+        public long? ChapterId { get; set; }
+        public Blogpost? Blogpost { get; set; }
+        public long? BlogpostId { get; set; }
     }
 }

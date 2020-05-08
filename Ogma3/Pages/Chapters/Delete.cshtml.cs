@@ -61,7 +61,6 @@ namespace Ogma3.Pages.Chapters
 
             if (Chapter == null || !authorized) return NotFound();
 
-            _context.CommentThreads.Remove(Chapter.CommentsThread);
             _context.Chapters.Remove(Chapter);
             
             await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 using Ogma3.Data.Models;
+using Utils;
 
 namespace Ogma3.Data.DTOs
 {
@@ -13,7 +14,7 @@ namespace Ogma3.Data.DTOs
             return new UserSimpleDTO
             {
                 UserName = user.UserName,
-                Avatar = user.Avatar,
+                Avatar = user.Avatar ?? Lorem.Gravatar(user.Email),
                 Title = user.Title
             };
         }

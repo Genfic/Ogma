@@ -26,7 +26,7 @@ namespace Ogma3.Pages.Chapters
         
         public class InputModel
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             
             [Required]
             [StringLength(
@@ -123,7 +123,7 @@ namespace Ogma3.Pages.Chapters
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
         }
 
-        private bool ChapterExists(int id)
+        private bool ChapterExists(long id)
         {
             return _context.Chapters.Any(e => e.Id == id);
         }

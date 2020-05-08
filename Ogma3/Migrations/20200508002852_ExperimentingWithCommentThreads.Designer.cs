@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200508002852_ExperimentingWithCommentThreads")]
+    partial class ExperimentingWithCommentThreads
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,6 +140,9 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(500000)")
                         .HasMaxLength(500000);
 
+                    b.Property<long>("CommentsThreadId")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("IsPublished")
                         .HasColumnType("boolean");
 
@@ -157,20 +162,26 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("AuthorId");
 
+                    b.HasIndex("CommentsThreadId")
+                        .IsUnique();
+
                     b.ToTable("Blogposts");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Chapter", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("character varying(500000)")
                         .HasMaxLength(500000);
+
+                    b.Property<long>("CommentsThreadId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("EndNotes")
                         .HasColumnType("character varying(500)")
@@ -208,6 +219,9 @@ namespace Ogma3.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommentsThreadId")
+                        .IsUnique();
+
                     b.HasIndex("StoryId1");
 
                     b.ToTable("Chapters");
@@ -215,9 +229,9 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.Comment", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<long>("AuthorId")
@@ -228,7 +242,10 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(10000)")
                         .HasMaxLength(10000);
 
-                    b.Property<long>("CommentsThreadId")
+                    b.Property<int>("CommentsThreadId")
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("CommentsThreadId1")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("DateTime")
@@ -238,7 +255,7 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("CommentsThreadId");
+                    b.HasIndex("CommentsThreadId1");
 
                     b.ToTable("Comments");
                 });
@@ -250,34 +267,16 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<long?>("BlogpostId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ChapterId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BlogpostId")
-                        .IsUnique();
-
-                    b.HasIndex("ChapterId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("CommentThreads");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Document", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Body")
@@ -398,9 +397,9 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.Rating", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Description")
@@ -556,8 +555,8 @@ namespace Ogma3.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<long>("RatingId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("RatingId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp without time zone");
@@ -658,6 +657,9 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(10000)")
                         .HasMaxLength(10000);
 
+                    b.Property<long>("CommentsThreadId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -707,6 +709,9 @@ namespace Ogma3.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommentsThreadId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -820,10 +825,22 @@ namespace Ogma3.Migrations
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
+                        .WithOne("Blogpost")
+                        .HasForeignKey("Ogma3.Data.Models.Blogpost", "CommentsThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Chapter", b =>
                 {
+                    b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
+                        .WithOne("Chapter")
+                        .HasForeignKey("Ogma3.Data.Models.Chapter", "CommentsThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ogma3.Data.Models.Story", null)
                         .WithMany("Chapters")
                         .HasForeignKey("StoryId1")
@@ -840,27 +857,8 @@ namespace Ogma3.Migrations
 
                     b.HasOne("Ogma3.Data.Models.CommentsThread", null)
                         .WithMany("Comments")
-                        .HasForeignKey("CommentsThreadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.CommentsThread", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Blogpost", "Blogpost")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.Models.CommentsThread", "BlogpostId")
+                        .HasForeignKey("CommentsThreadId1")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Ogma3.Data.Models.Chapter", "Chapter")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.Models.CommentsThread", "ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Ogma3.Data.Models.User", "User")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.Models.CommentsThread", "UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.InviteCode", b =>
@@ -942,6 +940,15 @@ namespace Ogma3.Migrations
                         .WithMany()
                         .HasForeignKey("NamespaceId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.User", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
+                        .WithOne("User")
+                        .HasForeignKey("Ogma3.Data.Models.User", "CommentsThreadId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Vote", b =>

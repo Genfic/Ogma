@@ -50,8 +50,9 @@ namespace Ogma3.Data
                 .Ignore(u => u.PhoneNumberConfirmed);
             builder.Entity<User>()
                 .HasOne(u => u.CommentsThread)
-                .WithOne()
-                .HasForeignKey<User>(u => u.CommentsThreadId)
+                .WithOne(ct => ct.User)
+                // .HasForeignKey<User>(u => u.CommentsThreadId)
+                .HasForeignKey<CommentsThread>(ct => ct.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Tag
@@ -102,8 +103,9 @@ namespace Ogma3.Data
                 .HasDefaultValue(false);
             builder.Entity<Chapter>()
                 .HasOne(c => c.CommentsThread)
-                .WithOne()
-                .HasForeignKey<Chapter>(c => c.CommentsThreadId)
+                .WithOne(ct => ct.Chapter)
+                // .HasForeignKey<Chapter>(c => c.CommentsThreadId)
+                .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Story tags
@@ -120,6 +122,7 @@ namespace Ogma3.Data
             builder.Entity<CommentsThread>()
                 .HasMany(ct => ct.Comments)
                 .WithOne()
+                .HasForeignKey(c => c.CommentsThreadId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Comments
@@ -165,8 +168,9 @@ namespace Ogma3.Data
                 .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Blogpost>()
                 .HasOne(b => b.CommentsThread)
-                .WithOne()
-                .HasForeignKey<Blogpost>(b => b.CommentsThreadId)
+                .WithOne(ct => ct.Blogpost)
+                // .HasForeignKey<Blogpost>(b => b.CommentsThreadId)
+                .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             

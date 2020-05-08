@@ -27,8 +27,10 @@ namespace Ogma3.Api
 
         // GET: api/Comments?thread=6
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery] int thread)
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery] long thread)
         {
+            Console.WriteLine("=========================");
+            Console.WriteLine($"{thread}");
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == thread)
                 .Include(c => c.Author)
@@ -38,7 +40,7 @@ namespace Ogma3.Api
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CommentDTO>> GetComment(int id)
+        public async Task<ActionResult<CommentDTO>> GetComment(long id)
         {
             var comment = await _context.Comments.FindAsync(id);
 
@@ -56,7 +58,7 @@ namespace Ogma3.Api
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> PutComment(int id, Comment comment, string body)
+        public async Task<IActionResult> PutComment(long id, Comment comment, string body)
         {
             if (id != comment.Id)
             {
@@ -107,7 +109,7 @@ namespace Ogma3.Api
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult<CommentDTO>> DeleteComment(int id)
+        public async Task<ActionResult<CommentDTO>> DeleteComment(long id)
         {
             var user = await _userManager.GetUserAsync(User);
             var comment = await _context.Comments.FindAsync(id);
@@ -121,7 +123,7 @@ namespace Ogma3.Api
             return CommentDTO.FromComment(comment);
         }
 
-        private bool CommentExists(int id)
+        private bool CommentExists(long id)
         {
             return _context.Comments.Any(e => e.Id == id);
         }

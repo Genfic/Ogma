@@ -61,7 +61,8 @@ namespace Ogma3.Pages.Blog
                 Title = Blogpost.Title.Trim(),
                 Slug = Blogpost.Title.Trim().Friendlify(),
                 Body = Blogpost.Body.Trim(),
-                Author = user
+                Author = user,
+                CommentsThread = new CommentsThread()
             });
             await _context.SaveChangesAsync();
 

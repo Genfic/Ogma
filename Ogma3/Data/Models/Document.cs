@@ -4,13 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
-    public class Document
+    public class Document : BaseModel
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        
         [Required]
         public string Title { get; set; }
         
