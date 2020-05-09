@@ -1,4 +1,5 @@
 @page "{name}"
+@using Castle.Core.Internal
 @model Ogma3.Pages.Profile
 
 @{
@@ -9,10 +10,13 @@
 
 <partial name="_ProfileBar" model="Model.CurrentUser"></partial>
 
-<markdown preset="All">
-    @Model.CurrentUser.Bio
-</markdown>
+@if (!Model.CurrentUser.Bio.IsNullOrEmpty())
+{
+    <markdown preset="All">
+        @Model.CurrentUser.Bio
+    </markdown>
 
-<hr>
+    <hr>
+}
 
 <partial name="_Comments" model="@Model.CurrentUser.CommentsThread"></partial>

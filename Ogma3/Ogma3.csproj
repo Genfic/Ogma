@@ -66,6 +66,28 @@
     <_ContentIncludedByDefault Remove="Areas\User\_ViewStart.cshtml" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\style.sass">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\dark.sass">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\dark.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>darkCopy.sass</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\css\dark.min.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>darkCopy.css</DependentUpon>
+    </Content>
+  </ItemGroup>
+
   <!--  Automatic migrations on production -->
   <Target Name="PrePublishTarget" AfterTargets="Publish">
     <Exec Command="dotnet ef database update" />

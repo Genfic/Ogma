@@ -1,7 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using Extensions.Hosting.AsyncInitialization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Utils;
@@ -29,6 +34,7 @@ namespace Ogma3.Services.Initializers
             await SeedUserRoles(UserManager);
             SeedRatings(Ctx);
             SeedIcons(Ctx);
+            await SeedQuotes(Ctx);
         }
         
         
@@ -105,6 +111,29 @@ namespace Ogma3.Services.Initializers
             }
 
             ctx.SaveChanges();
+        }
+
+        
+        private class JsonQuote
+        {
+            public string Quote { get; set; }
+            public string Author { get; set; }
+        }
+        private static async Task SeedQuotes(ApplicationDbContext ctx)
+        {
+            if (await ctx.Quotes.CountAsync() > 0) return;
+            
+            using var wc = new WebClient();
+            var json = wc.DownloadString("https://gist.githubusercontent.com/Atulin/7b08ee72fa37609875b5a79fd4ed0e0f/raw/b30df8a231b740cd489d524d1981cd549c7a5be1/quotes.json");
+            
+            if (json.IsNullOrEmpty()) return;
+            
+            var quotes = JsonSerializer
+                .Deserialize<ICollection<JsonQuote>>(json)
+                .Select(q => new Quote{ Body = q.Quote, Author = q.Author});
+
+            await ctx.Quotes.AddRangeAsync(quotes);
+            await ctx.SaveChangesAsync();
         }
     }
 }

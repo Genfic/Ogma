@@ -6,6 +6,11 @@
 @inject OgmaUserManager UserManager
 @inject IWebHostEnvironment Env
 
+@{
+    Context.Request.Cookies.TryGetValue("theme", out var value);
+    var theme = value ?? "light";
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +24,15 @@
     }
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/light.min.css" asp-append-version="true"/>
+    
+    @if (theme == "system") {
+        <link rel="stylesheet" href="~/css/light.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/dark.min.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
+    } else {
+        <link rel="stylesheet" href="@( $"~/css/{theme}.min.css" )" asp-append-version="true"/>
+    }
+    
+    <link rel="stylesheet" href="~/css/style.min.css" asp-append-version="true">
     
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
@@ -67,13 +80,14 @@
         </nav>
     </header>
 
-    <div class="container" id="site-content">
-        <main role="main" class="pb-3" id="app">
-            @RenderBody()
-        </main>
-    </div>
+<div class="container" id="site-content">
+    <main role="main" class="pb-3" id="app">
+        @RenderBody()
+    </main>
+</div>
 
-    <footer class="border-top footer text-muted">
+
+<footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2019-@DateTime.Now.Year - Angius - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
