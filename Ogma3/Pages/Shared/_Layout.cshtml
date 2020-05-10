@@ -18,6 +18,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Ogma</title>
     
+    @* Theme Color for Chrome, Firefox OS and Opera *@
+    <meta name="theme-color" content="#995e31">
+    
+    @* Short description of the document (limit to 150 characters) *@
+    <meta name="description" content="@ViewData["Description"]">
+    
+    @* Control the behavior of search engine crawling and indexing *@
+    <meta name="robots" content="index,follow">@* All Search Engines *@
+    <meta name="googlebot" content="index,follow">@* Google Specific *@
+    
+    @* Gives a general age rating based on the document's content *@
+    <meta name="rating" content="@ViewData["Rating"]">
+    
     @if (ViewData["use_bootstrap"] == null)
     {
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>

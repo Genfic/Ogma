@@ -41,7 +41,7 @@ namespace Ogma3.Data.Models
         public string? Color { get; set; }
 
         public Icon? Icon { get; set; }
-        public int? IconId { get; set; }
+        public long? IconId { get; set; }
         
         // Stories
         [JsonIgnore]

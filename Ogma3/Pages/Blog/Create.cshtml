@@ -5,32 +5,37 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Blogpost</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Blogpost.Title" class="control-label"></label>
-                <input asp-for="Blogpost.Title" class="form-control" />
-                <span asp-validation-for="Blogpost.Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Blogpost.Body" class="control-label"></label>
-                <textarea rows="20" asp-for="Blogpost.Body" class="form-control" ></textarea>
-                <span asp-validation-for="Blogpost.Body" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form class="form" id="blogpost" method="post">
+    
+    <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+
+    <div class="o-form-group">
+        <label asp-for="Blogpost.Title"></label>
+        <input asp-for="Blogpost.Title" class="o-form-control" v-model="title.current"/>
+        <span class="counter">{{titleCount}}</span>
+        <span asp-validation-for="Blogpost.Title" class="text-warning"></span>
     </div>
-</div>
+    
+    <div class="o-form-group">
+        <label asp-for="Blogpost.Body"></label>
+        <textarea rows="20" asp-for="Blogpost.Body" class="o-form-control" v-model="body.current"></textarea>
+        <span class="counter">{{bodyCount}}</span>
+        <span asp-validation-for="Blogpost.Body" class="text-warning"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <input type="submit" value="Create" class="btn btn-primary"/>
+    </div>
+    
+</form>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+
+
+@section Scripts { 
+    <partial name="_ValidationScriptsPartial" />       
+    <script src="/js/new-blogpost.min.js" asp-append-version="true"></script>
+}
+
 

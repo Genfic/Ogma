@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,10 @@ namespace Ogma3.Api
     public class VotesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
-        
+        private readonly OgmaUserManager _userManager;
 
-        public VotesController(ApplicationDbContext context, UserManager<User> userManager)
+
+        public VotesController(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -27,7 +28,7 @@ namespace Ogma3.Api
 
         // GET api/votes/5
         [HttpGet("{poolId}")]
-        public async Task<CountReturn> GetVotes(int poolId)
+        public async Task<CountReturn> GetVotes(long poolId)
         {
             var user = await _userManager.GetUserAsync(User);
             var count = await _context.Votes.CountAsync(v => v.VotePoolId == poolId);

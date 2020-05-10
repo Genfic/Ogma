@@ -49,6 +49,8 @@ namespace Ogma3.Pages.Stories
 
         public class InputModel
         {
+            public long Id { get; set; }
+            
             [Required]
             [StringLength(
                 CTConfig.Story.MaxTitleLength,
@@ -92,13 +94,15 @@ namespace Ogma3.Pages.Stories
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
-                .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (Story == null) return NotFound();
+            if (!Story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
             
             // Fill InputModel
             Input = new InputModel
             {
+                Id = Story.Id,
                 Title = Story.Title,
                 Description = Story.Description,
                 Hook = Story.Hook,
@@ -132,9 +136,10 @@ namespace Ogma3.Pages.Stories
                     .Include(s => s.StoryTags)
                     .Include(s => s.Rating)
                     .Include(s => s.Author)
-                    .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
+                    .FirstOrDefaultAsync(s => s.Id == id);
 
                 if (Story == null) return NotFound();
+                if (!Story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
                 
                 // Update story
                 Story.Title = Input.Title;

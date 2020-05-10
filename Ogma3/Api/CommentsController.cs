@@ -29,8 +29,6 @@ namespace Ogma3.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery] long thread)
         {
-            Console.WriteLine("=========================");
-            Console.WriteLine($"{thread}");
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == thread)
                 .Include(c => c.Author)

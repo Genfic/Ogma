@@ -9,12 +9,12 @@ namespace Ogma3.Data.Models
         [Required]
         public  Shelf Shelf { get; set; }
         [Required]
-        public int ShelfId { get; set; }
+        public long ShelfId { get; set; }
 
         [JsonIgnore]
         [Required]
         public  Story Story { get; set; }
         [Required]
-        public int StoryId { get; set; }
+        public long StoryId { get; set; }
     }
 }

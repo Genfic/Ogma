@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -50,7 +51,9 @@ namespace Ogma3
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserManager<OgmaUserManager>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddUserStore<UserStore<User, Role, ApplicationDbContext, long>>()
+                .AddRoleStore<RoleStore<Role, ApplicationDbContext, long>>();
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<User>, OgmaClaimsPrincipalFactory>();

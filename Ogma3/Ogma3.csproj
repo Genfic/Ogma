@@ -86,6 +86,34 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <DependentUpon>darkCopy.css</DependentUpon>
     </Content>
+    <Content Update="wwwroot\js\edit-story.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\js\edit-story.min.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>edit-story.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\edit-story.min.js.map">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>edit-story.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\new-blogpost.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\js\new-blogpost.min.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>new-blogpost.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\new-blogpost.min.js.map">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>new-blogpost.js</DependentUpon>
+    </Content>
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

@@ -59,7 +59,7 @@ namespace Ogma3.Api
         /// <param name="story">Story to check for</param>
         /// <returns></returns>
         [HttpGet("user/{story:int}")]
-        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetCurrentUserShelvesAsync(int story)
+        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetCurrentUserShelvesAsync(long story)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return NotFound();
@@ -80,7 +80,7 @@ namespace Ogma3.Api
         /// <returns></returns>
         // GET: api/Shelves/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ShelfFromApiDTO>> GetShelfAsync(int id)
+        public async Task<ActionResult<ShelfFromApiDTO>> GetShelfAsync(long id)
         {
             var shelf = await _context.Shelves
                 .Where(s => s.Id == id)
@@ -140,7 +140,7 @@ namespace Ogma3.Api
         [HttpPost("add/{shelfId}/{storyId}")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult> AddToShelfAsync(int shelfId, int storyId)
+        public async Task<ActionResult> AddToShelfAsync(long shelfId, long storyId)
         {
             var shelf = await _context.Shelves.FindAsync(shelfId);
             var story = await _context.Stories.FindAsync(storyId);
@@ -178,7 +178,7 @@ namespace Ogma3.Api
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult<ShelfFromApiDTO>> PutShelfAsync(int id, PostData data)
+        public async Task<ActionResult<ShelfFromApiDTO>> PutShelfAsync(long id, PostData data)
         {
             var shelf = await _context.Shelves.FindAsync(id);
             var user  = await _userManager.GetUserAsync(User);
@@ -207,7 +207,7 @@ namespace Ogma3.Api
         // DELETE: api/Shelves/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult> DeleteShelfAsync(int id)
+        public async Task<ActionResult> DeleteShelfAsync(long id)
         {
             var user = await _userManager.GetUserAsync(User);
             var shelf = await _context.Shelves.FindAsync(id);
@@ -256,7 +256,7 @@ namespace Ogma3.Api
             [MaxLength(7)]
             public string Color { get; set; }
 
-            public int Icon { get; set; }
+            public long Icon { get; set; }
         }
 
     }

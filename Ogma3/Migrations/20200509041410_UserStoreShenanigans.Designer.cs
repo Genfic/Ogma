@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200509041410_UserStoreShenanigans")]
+    partial class UserStoreShenanigans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -470,7 +472,10 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
-                    b.Property<long?>("IconId")
+                    b.Property<int?>("IconId")
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("IconId1")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDefault")
@@ -492,7 +497,7 @@ namespace Ogma3.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IconId");
+                    b.HasIndex("IconId1");
 
                     b.HasIndex("OwnerId");
 
@@ -501,15 +506,23 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.ShelfStory", b =>
                 {
-                    b.Property<long>("ShelfId")
+                    b.Property<int>("ShelfId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("ShelfId1")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("StoryId")
+                    b.Property<long>("StoryId1")
                         .HasColumnType("bigint");
 
                     b.HasKey("ShelfId", "StoryId");
 
-                    b.HasIndex("StoryId");
+                    b.HasIndex("ShelfId1");
+
+                    b.HasIndex("StoryId1");
 
                     b.ToTable("ShelfStories");
                 });
@@ -714,13 +727,19 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<long>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UserId1")
                         .HasColumnType("bigint");
 
                     b.Property<long>("VotePoolId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
 
                     b.HasIndex("VotePoolId");
 
@@ -856,7 +875,7 @@ namespace Ogma3.Migrations
                 {
                     b.HasOne("Ogma3.Data.Models.Icon", "Icon")
                         .WithMany()
-                        .HasForeignKey("IconId");
+                        .HasForeignKey("IconId1");
 
                     b.HasOne("Ogma3.Data.Models.User", "Owner")
                         .WithMany()
@@ -869,13 +888,13 @@ namespace Ogma3.Migrations
                 {
                     b.HasOne("Ogma3.Data.Models.Shelf", "Shelf")
                         .WithMany("ShelfStories")
-                        .HasForeignKey("ShelfId")
+                        .HasForeignKey("ShelfId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ogma3.Data.Models.Story", "Story")
                         .WithMany()
-                        .HasForeignKey("StoryId")
+                        .HasForeignKey("StoryId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -928,7 +947,7 @@ namespace Ogma3.Migrations
                 {
                     b.HasOne("Ogma3.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

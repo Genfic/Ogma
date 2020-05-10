@@ -38,7 +38,7 @@ namespace Ogma3.Api
 
         // GET: api/Tags/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tag>> GetTag(int id)
+        public async Task<ActionResult<Tag>> GetTag(long id)
         {
             var tag = await _context.Tags.FindAsync(id);
 
@@ -48,6 +48,24 @@ namespace Ogma3.Api
             }
 
             return tag;
+        }
+
+        // GET: api/Tags/story/5
+        [HttpGet("story/{id}")]
+        public async Task<ActionResult<IEnumerable<TagDTO>>> GetStoryTags(long id)
+        {
+            var tags = await _context.StoryTags
+                .Include(st => st.Tag)
+                .ThenInclude(t => t.Namespace)
+                .Where(st => st.StoryId == id)
+                .Select(st => st.Tag)
+                .ToListAsync();
+
+            if (tags == null || tags.Count <= 0)
+            {
+                return NotFound();
+            }
+            return tags.Select(TagDTO.FromTag).ToList();
         }
         
         // GET: api/Tags/validation
