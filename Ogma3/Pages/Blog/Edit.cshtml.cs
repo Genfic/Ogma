@@ -23,7 +23,7 @@ namespace Ogma3.Pages.Blog
         }
 
         [BindProperty]
-        public InputModel Blogpost { get; set; }
+        public InputModel Input { get; set; }
         
         public class InputModel
         {
@@ -52,7 +52,7 @@ namespace Ogma3.Pages.Blog
 
             if (post == null) return NotFound();
             
-            Blogpost = new InputModel
+            Input = new InputModel
             {
                 Id = post.Id,
                 Title = post.Title,
@@ -64,7 +64,7 @@ namespace Ogma3.Pages.Blog
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
@@ -74,13 +74,13 @@ namespace Ogma3.Pages.Blog
             var user = await _userManager.GetUserAsync(User);
             // Get post and make sure the user matches
             var post = await _context.Blogposts
-                .FirstOrDefaultAsync(m => m.Id == Blogpost.Id && m.Author == user);
+                .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
             // 404 if no post found
             if (post == null) return NotFound();
 
-            post.Title = Blogpost.Title.Trim();
-            post.Slug = Blogpost.Title.Trim().Friendlify();
-            post.Body = Blogpost.Body.Trim();
+            post.Title = Input.Title.Trim();
+            post.Slug = Input.Title.Trim().Friendlify();
+            post.Body = Input.Body.Trim();
             
             try
             {
@@ -88,7 +88,7 @@ namespace Ogma3.Pages.Blog
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BlogpostExists(Blogpost.Id))
+                if (!BlogpostExists(Input.Id))
                 {
                     return NotFound();
                 }

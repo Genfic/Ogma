@@ -27,18 +27,19 @@ namespace Ogma3.Pages.Stories
         private readonly ApplicationDbContext _context;
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
+        private readonly OgmaUserManager _userManager;
 
         public Story Story { get; set; }
 
         public EditModel(
             ApplicationDbContext context,
             IB2Client b2Client,
-            IConfiguration config
-        )
+            IConfiguration config, OgmaUserManager userManager)
         {
             _context = context;
             _b2Client = b2Client;
             _config = config;
+            _userManager = userManager;
         }
 
         public List<Rating> Ratings { get; set; }
@@ -131,15 +132,16 @@ namespace Ogma3.Pages.Stories
             {
                 var tags = await _context.Tags.Where(t => Input.Tags.Contains(t.Id)).ToListAsync();
 
+                // Get logged in user
+                var user = await _userManager.GetUserAsync(User);
                 // Get the story and make sure the logged-in user matches author
                 Story = await _context.Stories
                     .Include(s => s.StoryTags)
                     .Include(s => s.Rating)
                     .Include(s => s.Author)
-                    .FirstOrDefaultAsync(s => s.Id == id);
-
+                    .FirstOrDefaultAsync(s => s.Id == id && s.Author == user);
+                // 404 if none found
                 if (Story == null) return NotFound();
-                if (!Story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
                 
                 // Update story
                 Story.Title = Input.Title;
@@ -198,12 +200,6 @@ namespace Ogma3.Pages.Stories
             }
             else
             {
-                Console.WriteLine("===========================================");
-                foreach (var error in ModelState.Values.SelectMany(msv => msv.Errors))
-                {
-                    Console.WriteLine(error.ErrorMessage);
-                }
-                Console.WriteLine("===========================================");
                 return RedirectToPage("./Index");
             }
         }

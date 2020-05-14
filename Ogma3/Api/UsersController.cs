@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Utils;
 
@@ -9,25 +10,25 @@ namespace Ogma3.Api
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly OgmaUserManager _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public UsersController(OgmaUserManager userManager)
+        public UsersController(ApplicationDbContext context)
         {
-            _userManager = userManager;
+            _context = context;
         }
 
         // GET: api/Users/signin/John
         [HttpGet("signin/{name}")]
         public async Task<ActionResult<SignInData>> GetSignInData(string name)
         {
-            var user = await _userManager.FindByNameAsync(name);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
 
             if (user != null)
             {
                 return new SignInData
                 {
                     Avatar = user.Avatar ?? Lorem.Picsum(200),
-                    Title = user.Title,
+                    Title  = user.Title,
                     HasMfa = user.TwoFactorEnabled
                 };
             }

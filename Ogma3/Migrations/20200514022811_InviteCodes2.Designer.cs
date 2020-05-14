@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200514022811_InviteCodes2")]
+    partial class InviteCodes2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,10 +340,9 @@ namespace Ogma3.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("NormalizedCode")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long?>("UsedById")
+                    b.Property<long>("UsedById")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("UsedDate")
@@ -851,7 +852,8 @@ namespace Ogma3.Migrations
                     b.HasOne("Ogma3.Data.Models.User", "UsedBy")
                         .WithOne()
                         .HasForeignKey("Ogma3.Data.Models.InviteCode", "UsedById")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Shelf", b =>

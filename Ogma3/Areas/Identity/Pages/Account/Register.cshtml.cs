@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Models;
@@ -28,19 +29,23 @@ namespace Ogma3.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IRecaptchaService _reCaptcha;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender, 
-            IRecaptchaService reCaptcha)
+            IRecaptchaService reCaptcha, 
+            ApplicationDbContext context
+        )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _reCaptcha = reCaptcha;
+            _context = context;
         }
 
         [BindProperty]
@@ -83,6 +88,11 @@ namespace Ogma3.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            [Display(Name = "Invite code")]
+            public string? InviteCode { get; set; }
             
         }
 
@@ -107,8 +117,25 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 return Page();
             }
             
+            // Check if invite code is correct
+            var inviteCode = await _context.InviteCodes
+                .FirstOrDefaultAsync(ic => ic.NormalizedCode == Input.InviteCode.ToUpper());
+            if (inviteCode == null)
+            {
+                ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
+                return Page();
+            }
+            
+            // Create user
             var user = new User { UserName = Input.Name, Email = Input.Email };
             var result = await _userManager.CreateAsync(user, Input.Password);
+            
+            // Modify invite code
+            inviteCode.UsedBy = user;
+            inviteCode.UsedDate = new DateTime();
+            await _context.SaveChangesAsync();
+            
+            // Send confirmation code
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");

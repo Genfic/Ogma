@@ -1,0 +1,38 @@
+@page
+@using Ogma3.Api
+@model Ogma3.Areas.Admin.Pages.InviteCodes
+
+@{
+    ViewData["Title"] = "Namespaces";
+    ViewData["ActivePage"] = ManageNavPages.InviteCodes;
+}
+
+<button class="btn btn-primary btn-block" v-on:click="createCode">
+    Create code
+</button>
+
+<button v-if="codes.length <= 0" class="btn btn-primary" type="button" disabled>
+    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+    Loading...
+</button>
+
+<ul class="items-list">    
+    <li v-for="n in codes">
+        <div class="deco" v-bind:style="{background: 'red'}"></div>
+        <div class="main">
+            <h3 class="name">{{ n.code }}</h3>
+        </div>
+        <div class="actions">
+            <button v-on:click="deleteCode(n)">
+                <icon icon="delete_forever"></icon>
+            </button>
+        </div>
+    </li>
+</ul>
+
+<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))" v-if="!route"></div>
+
+@section Scripts
+{
+    <script src="~/js/admin/invite-codes.min.js" asp-append-version="true"></script>
+}

@@ -647,6 +647,9 @@ form.form {
               font-weight: 600; }
             form.form .o-form-group .ratings .rating .radio-label > .main > span {
               font-weight: 500; }
+  form.form .o-form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-25); }
 
 .tag-search .tags {
   min-height: 2.5rem;
