@@ -10,6 +10,9 @@
     border: 1px solid var(--foreground-50);
     border-top: none; }
 
+.monospace {
+  font-family: "Courier New", Courier, monospace; }
+
 *,
 *::before,
 *::after {

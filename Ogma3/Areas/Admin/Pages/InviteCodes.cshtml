@@ -8,7 +8,7 @@
 }
 
 <button class="btn btn-primary btn-block" v-on:click="createCode">
-    Create code
+    Issue code
 </button>
 
 <button v-if="codes.length <= 0" class="btn btn-primary" type="button" disabled>
@@ -18,9 +18,10 @@
 
 <ul class="items-list">    
     <li v-for="n in codes">
-        <div class="deco" v-bind:style="{background: 'red'}"></div>
+        <div class="deco" v-bind:style="{background: n.userName ? 'green' : 'gray'}"></div>
         <div class="main">
-            <h3 class="name">{{ n.code }}</h3>
+            <h3 class="name"><span class="monospace">{{ n.code }}</span> : {{ date(n.issueDate) }}</h3>
+            <span class="desc">{{ n.userName ? `${n.userName} : ${date(n.usedDate)}` : '' }}</span>
         </div>
         <div class="actions">
             <button v-on:click="deleteCode(n)">

@@ -39,6 +39,11 @@ let anamespaces_vue = new Vue({
                     });
             }
         },
+
+        // Parse date
+        date: function (dt) {
+            return dayjs(dt).format('DD MMM YYYY, HH:mm');
+        }
     }, 
 
     mounted() {

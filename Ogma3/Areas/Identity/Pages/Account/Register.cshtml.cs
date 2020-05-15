@@ -125,6 +125,11 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
                 return Page();
             }
+            if (inviteCode.UsedBy != null)
+            {
+                ModelState.TryAddModelError("InviteCode", "This invite code has been used");
+                return Page();
+            }
             
             // Create user
             var user = new User { UserName = Input.Name, Email = Input.Email };
@@ -132,7 +137,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             
             // Modify invite code
             inviteCode.UsedBy = user;
-            inviteCode.UsedDate = new DateTime();
+            inviteCode.UsedDate = DateTime.Now;
             await _context.SaveChangesAsync();
             
             // Send confirmation code
@@ -157,7 +162,6 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    await _signInManager.SignInAsync(user, false);
                     return LocalRedirect(returnUrl);
                 }
             }

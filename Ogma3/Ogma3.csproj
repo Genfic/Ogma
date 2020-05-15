@@ -146,6 +146,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <DependentUpon>invite-codes.js</DependentUpon>
     </Content>
+    <Content Update="wwwroot\css\src\elements\typography.sass">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <!--  Automatic migrations on production -->
