@@ -29,6 +29,7 @@ namespace Ogma3.Pages
                         .ThenInclude(t => t.Namespace)
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
+                .Include(s => s.VotesPool)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (Story == null) return NotFound();

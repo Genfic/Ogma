@@ -54,7 +54,6 @@ namespace Ogma3.Data
             builder.Entity<User>()
                 .HasOne(u => u.CommentsThread)
                 .WithOne(ct => ct.User)
-                // .HasForeignKey<User>(u => u.CommentsThreadId)
                 .HasForeignKey<CommentsThread>(ct => ct.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -96,8 +95,8 @@ namespace Ogma3.Data
                 .WithMany();
             builder.Entity<Story>()
                 .HasOne(s => s.VotesPool)
-                .WithOne()
-                .HasForeignKey<Story>(s => s.VotesPoolId)
+                .WithOne(vp => vp.Story)
+                .HasForeignKey<VotePool>(vp => vp.StoryId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             // Chapter
@@ -107,7 +106,6 @@ namespace Ogma3.Data
             builder.Entity<Chapter>()
                 .HasOne(c => c.CommentsThread)
                 .WithOne(ct => ct.Chapter)
-                // .HasForeignKey<Chapter>(c => c.CommentsThreadId)
                 .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -172,8 +170,12 @@ namespace Ogma3.Data
             builder.Entity<Blogpost>()
                 .HasOne(b => b.CommentsThread)
                 .WithOne(ct => ct.Blogpost)
-                // .HasForeignKey<Blogpost>(b => b.CommentsThreadId)
                 .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Blogpost>()
+                .HasOne(b => b.VotesPool)
+                .WithOne(vp => vp.Blogpost)
+                .HasForeignKey<VotePool>(vp => vp.BlogpostId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             

@@ -68,14 +68,6 @@ namespace Ogma3.Pages.Stories
             // Remove story
             _context.Stories.Remove(Story);
             
-            // Remove votes
-            _context.Votes.RemoveRange(Story.VotesPool.Votes);
-            // Remove votes pool
-            _context.VotePools.Remove(Story.VotesPool);
-            
-            // Remove CommentThreads
-            _context.CommentThreads.RemoveRange(Story.Chapters.Select(c => c.CommentsThread).ToList());
-
             // Delete cover
             if (Story.CoverId != null && Story.Cover != null) 
                 await _b2Client.Files.Delete(Story.CoverId, Story.Cover.Replace(_config["cdn"], ""));
