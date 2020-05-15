@@ -43,7 +43,6 @@ namespace Ogma3.Pages.Stories
         }
 
         public List<Rating> Ratings { get; set; }
-        public SelectList TagOptions { get; set; }
 
         [BindProperty] public InputModel Input { get; set; }
 
@@ -88,8 +87,6 @@ namespace Ogma3.Pages.Stories
         public async Task OnGetAsync()
         {
             Ratings = await _context.Ratings.ToListAsync();
-            TagOptions = new SelectList(new List<Tag>());
-            // TagOptions = new SelectList(await _context.Tags.ToListAsync(), nameof(Tag.Id), nameof(Tag.Name));
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -111,21 +108,12 @@ namespace Ogma3.Pages.Stories
                     Description = Input.Description,
                     Hook = Input.Hook,
                     Rating = rating,
+                    Tags = tags,
                     VotesPool = new VotePool()
                 };
 
-                _context.Stories.Add(story);
+                await _context.Stories.AddAsync(story);
                 await _context.SaveChangesAsync();
-
-                // Add tags and associations
-                foreach (var tag in tags)
-                {
-                    await _context.StoryTags.AddAsync(new StoryTag
-                    {
-                        StoryId = story.Id,
-                        TagId = tag.Id
-                    });
-                }
                 
                 // Handle cover upload
                 if (Input.Cover != null && Input.Cover.Length > 0)
@@ -135,7 +123,7 @@ namespace Ogma3.Pages.Stories
                 
                     // Upload new one
                     await using var ms = new MemoryStream();
-                    Input.Cover.CopyTo(ms);
+                    await Input.Cover.CopyToAsync(ms);
 
                     var keepUploading = true;
                     var counter = 10;
@@ -164,12 +152,6 @@ namespace Ogma3.Pages.Stories
             }
             else
             {
-                Console.WriteLine("===========================================");
-                foreach (var error in ModelState.Values.SelectMany(msv => msv.Errors))
-                {
-                    Console.WriteLine(error.ErrorMessage);
-                }
-                Console.WriteLine("===========================================");
                 return RedirectToPage();
             }
         }

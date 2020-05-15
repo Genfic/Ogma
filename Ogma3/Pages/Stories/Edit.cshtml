@@ -84,7 +84,7 @@
     </div>
         
 
-        <select style="visibility: collapse" asp-for="Input.Tags" asp-items="Model.TagOptions" multiple="multiple" id="slim-select">
+        <select style="visibility: collapse" asp-for="Input.Tags" multiple="multiple" id="slim-select">
             <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
         </select>
     

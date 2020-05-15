@@ -55,12 +55,20 @@ namespace Ogma3.Data.Models
         // Tags
         [JsonIgnore]
         public  ICollection<StoryTag> StoryTags { get; set; } //= new List<StoryTag>();
+
         [NotMapped]
-        public IEnumerable<Tag> Tags => 
-            StoryTags == null || StoryTags.Count <= 0
-                ? new List<Tag>() 
-                : StoryTags.Select(st => st.Tag).ToList();
-        
+        public IEnumerable<Tag> Tags
+        {
+            get => StoryTags == null || StoryTags.Count <= 0
+                    ? new List<Tag>()
+                    : StoryTags.Select(st => st.Tag).ToList();
+            set => StoryTags = value.Select(t => new StoryTag
+            {
+                Tag = t,
+                TagId = t.Id
+            }).ToList();
+        }
+
         // Rating
         [Required]
         public Rating Rating { get; set; }
