@@ -56,6 +56,7 @@ namespace Ogma3.Data
             var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
             return oUser.Avatar;
         }
+
     }
 
 }

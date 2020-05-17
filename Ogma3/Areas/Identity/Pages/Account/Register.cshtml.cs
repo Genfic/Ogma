@@ -125,7 +125,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
                 return Page();
             }
-            if (inviteCode.UsedBy != null)
+            if (inviteCode.UsedDate != null)
             {
                 ModelState.TryAddModelError("InviteCode", "This invite code has been used");
                 return Page();

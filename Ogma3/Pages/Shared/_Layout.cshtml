@@ -120,5 +120,9 @@
     @await RenderSectionAsync("Scripts", required: false)
     @Html.RenderResources()
     
+    <script>
+    axios.post('api/useractivity').catch(console.error);
+    </script>
+    
 </body>
 </html>

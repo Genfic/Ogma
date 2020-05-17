@@ -101,6 +101,7 @@ namespace Ogma3
                 {
                     options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
                 });
+            
         }
 
 
