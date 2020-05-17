@@ -18,10 +18,8 @@ namespace Ogma3.Pages
 
         public Story Story { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, string? slug)
+        public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            if (id == null) return NotFound();
-
             Story = await _context.Stories
                 .Include(s => s.Author)
                 .Include(s => s.StoryTags)

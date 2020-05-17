@@ -150,6 +150,17 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="Pages\Tag.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Pages\Tag.cshtml.cs">
+      <DependentUpon>Tag.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

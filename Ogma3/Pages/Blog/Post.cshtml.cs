@@ -19,7 +19,7 @@ namespace Ogma3.Pages.Blog
 
         public Blogpost Blogpost { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int id, string? slug)
+        public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
             Blogpost = await _context.Blogposts
                 .Where(b => b.Id == id)

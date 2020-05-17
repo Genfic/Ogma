@@ -1,0 +1,18 @@
+﻿@page "{id}/{slug?}"
+@using Castle.Core.Internal
+@model TagModel
+@{
+    ViewData["Title"] = Model.Tag.Namespace.IsNullOrEmpty() 
+        ? Model.Tag.Name
+        : $"{Model.Tag.Namespace}:{Model.Tag.Name}";
+}
+
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    @foreach (var story in Model.Stories)
+    {
+        <partial name="Shared/_StoryCard" model="@story"/>
+    }
+</div>
