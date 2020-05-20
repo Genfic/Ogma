@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using B2Net;
-using B2Net.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Services;
 using Ogma3.Services.Attributes;
 using Utils;
 
@@ -26,20 +21,16 @@ namespace Ogma3.Pages.Stories
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly IB2Client _b2Client;
-        private readonly IConfiguration _config;
+        private readonly FileUploader _uploader;
 
         public CreateModel(
             ApplicationDbContext context,
             UserManager<User> userManager,
-            IB2Client b2Client,
-            IConfiguration config
-        )
+            FileUploader uploader)
         {
             _context = context;
             _userManager = userManager;
-            _b2Client = b2Client;
-            _config = config;
+            _uploader = uploader;
         }
 
         public List<Rating> Ratings { get; set; }
@@ -114,40 +105,17 @@ namespace Ogma3.Pages.Stories
 
                 await _context.Stories.AddAsync(story);
                 await _context.SaveChangesAsync();
-                
-                // Handle cover upload
+
+                // Upload cover
                 if (Input.Cover != null && Input.Cover.Length > 0)
                 {
-                    var ext = Input.Cover.FileName.Split('.').Last();
-                    var fileName = $"covers/{story.Id}-{story.Slug}.{ext}";
-                
-                    // Upload new one
-                    await using var ms = new MemoryStream();
-                    await Input.Cover.CopyToAsync(ms);
-
-                    var keepUploading = true;
-                    var counter = 10;
-                    while (keepUploading && counter >= 0)
-                    {
-                        try
-                        {
-                            var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-                            Console.WriteLine(file.FileName);
-                            story.CoverId = file.FileId;
-                            story.Cover = _config["cdn"] + fileName;
-                            keepUploading = false;
-                        }
-                        catch (B2Exception e)
-                        {
-                            Console.WriteLine("⚠ Backblaze Error: " + e.Message);
-                            counter--;
-                        }
-                    }
+                    var file = await _uploader.Upload(Input.Cover, "covers", $"{story.Id}-{story.Slug}");
+                    story.CoverId = file.FileId;
+                    story.Cover = file.Path;
+                    // Final save
+                    await _context.SaveChangesAsync();
                 }
-                
-                // Final save
-                await _context.SaveChangesAsync();
-                
+
                 return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
             }
             else

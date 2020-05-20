@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Services;
 using Ogma3.Services.Attributes;
 using Utils;
 
@@ -26,18 +27,20 @@ namespace Ogma3.Pages.Stories
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
         private readonly OgmaUserManager _userManager;
+        private readonly FileUploader _uploader;
 
         public Story Story { get; set; }
 
         public EditModel(
             ApplicationDbContext context,
             IB2Client b2Client,
-            IConfiguration config, OgmaUserManager userManager)
+            IConfiguration config, OgmaUserManager userManager, FileUploader uploader)
         {
             _context = context;
             _b2Client = b2Client;
             _config = config;
             _userManager = userManager;
+            _uploader = uploader;
         }
 
         public List<Rating> Ratings { get; set; }
@@ -146,34 +149,13 @@ namespace Ogma3.Pages.Stories
                 // Handle cover upload
                 if (Input.Cover != null && Input.Cover.Length > 0)
                 {
-                    var ext = Input.Cover.FileName.Split('.').Last();
-                    var fileName = $"covers/{Story.Id}-{Story.Slug}.{ext}";
-                
-                    // Upload new one
-                    await using var ms = new MemoryStream();
-                    await Input.Cover.CopyToAsync(ms);
-
-                    var keepUploading = true;
-                    var counter = 10;
-                    while (keepUploading && counter >= 0)
-                    {
-                        try
-                        {
-                            var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-                            Story.CoverId = file.FileId;
-                            Story.Cover = _config["cdn"] + fileName;
-                            keepUploading = false;
-                        }
-                        catch (B2Exception e)
-                        {
-                            Console.WriteLine("⚠ Backblaze Error: " + e.Message);
-                            counter--;
-                        }
-                    }
+                    // Upload cover
+                    var file = await _uploader.Upload(Input.Cover, "covers", $"{Story.Id}-{Story.Slug}");
+                    Story.CoverId = file.FileId;
+                    Story.Cover = file.Path;
+                    // Final save
+                    await _context.SaveChangesAsync();
                 }
-                
-                // Final save
-                await _context.SaveChangesAsync();
                 
                 return RedirectToPage("../Story", new { id = Story.Id, slug = Story.Slug });
             }

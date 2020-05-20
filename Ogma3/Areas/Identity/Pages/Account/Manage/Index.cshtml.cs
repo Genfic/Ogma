@@ -12,27 +12,30 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Services;
 using Ogma3.Services.Attributes;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
-    public partial class IndexModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly OgmaUserManager _userManager;
-        private readonly SignInManager<Data.Models.User> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
+        private readonly FileUploader _uploader;
 
         public IndexModel(
             OgmaUserManager userManager,
-            SignInManager<Data.Models.User> signInManager,
+            SignInManager<User> signInManager,
             IB2Client b2Client,
-            IConfiguration config)
+            IConfiguration config, FileUploader uploader)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _b2Client = b2Client;
             _config = config;
+            _uploader = uploader;
         }
 
         
@@ -102,26 +105,20 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-            
-            // Handle avatar upload
+
+            // If new avatar provided, replace the old one
             if (Input.Avatar != null && Input.Avatar.Length > 0)
             {
-                var ext = Input.Avatar.FileName.Split('.').Last();
-                var fileName = $"avatars/{user.Id}.{ext}";
-                
-                // Delete the old one if exists
+                // Delete the old avatar if exists
                 if (user.Avatar != null && user.AvatarId != null)
                 {
                     await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_config["cdn"], ""));
                 }
-                
-                // Upload new one
-                await using var ms = new MemoryStream();
-                Input.Avatar.CopyTo(ms);
-                var file = await _b2Client.Files.Upload(ms.ToArray(), fileName);
 
+                // Upload the new one
+                var file = await _uploader.Upload(Input.Avatar, "avatars", $"{user.Id}-{user.NormalizedUserName}");
                 user.AvatarId = file.FileId;
-                user.Avatar = _config["cdn"] + fileName;
+                user.Avatar = file.Path;
             }
 
             if (Input.Title != user.Title)
@@ -134,7 +131,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 user.Bio = Input.Bio;
             }
 
-            var update = await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

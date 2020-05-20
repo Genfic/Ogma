@@ -49,7 +49,8 @@
         <p>First thing people often notice</p>
         <input asp-for="Input.Cover" 
                 type="file" 
-                class="o-form-control active-border">
+                class="o-form-control active-border"
+                accept=".png,.jpg,.jpeg">
         <span asp-validation-for="Input.Cover" class="text-warning"></span>
     </div>
     
