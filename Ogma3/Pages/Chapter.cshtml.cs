@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ namespace Ogma3.Pages
                 Chapter = chapter,
                 Story = story
             };
+            
 
             if (chapter == null)
             {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
@@ -55,9 +51,14 @@ namespace Ogma3.Pages.Chapters
                 .Include(c => c.CommentsThread)
                 .FirstOrDefaultAsync();
             
+            // Get story for the chapter
+            var story = await _context.Stories
+                .Where(s => s.Id == Chapter.StoryId)
+                .Include(s => s.Author)
+                .FirstOrDefaultAsync();
+            
             // Make sure the story's author is the logged in user
-            var authorized = await _context.Stories
-                .AnyAsync(s => s.Id == Chapter.StoryId && s.Author.IsLoggedIn(User));
+            var authorized = story?.Author.IsLoggedIn(User) ?? false;
 
             if (Chapter == null || !authorized) return NotFound();
 

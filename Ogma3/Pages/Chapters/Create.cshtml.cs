@@ -97,10 +97,13 @@ namespace Ogma3.Pages.Chapters
             var user = await _userManager.GetUserAsync(User);
 
             // Get the story to insert a chapter into. Include user in the search to check ownership.
-            Story = _context.Stories.First(s => s.Id == id && s.Author.Id == user.Id);
+            Story = await _context.Stories
+                .Where(s => s.Id == id)
+                .Include(s => s.Chapters)
+                .FirstOrDefaultAsync();
 
-            // Back to index if the story is null
-            if (Story == null)
+            // Back to index if the story is null or author isn't the logged in user
+            if (Story == null || Story.Author.Id != user.Id)
             {
                 return RedirectToPage("../Index");
             }
@@ -120,12 +123,14 @@ namespace Ogma3.Pages.Chapters
                 StartNotes = Chapter.StartNotes?.Trim(),
                 EndNotes = Chapter.EndNotes?.Trim(),
                 Slug = Chapter.Title.Trim().Friendlify(),
-                Order = latestChapter + 1
+                Order = latestChapter + 1,
+                CommentsThread = new CommentsThread()
             };
             
             
             // Create the chapter and add it to the story
-            _context.Chapters.Add(chapter);
+            // await _context.Chapters.AddAsync(chapter);
+            Console.WriteLine((Story == null ? "story-null" : "story-full") + " " + (chapter == null ? "chapter-null" : "chapter-full"));
             Story.Chapters.Add(chapter);
             
             await _context.SaveChangesAsync();
