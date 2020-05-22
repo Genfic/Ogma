@@ -34,9 +34,9 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [StringLength(
-                CTConfig.User.MaxPassLength, 
+                CTConfig.CUser.MaxPassLength, 
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.User.MinPassLength
+                MinimumLength = CTConfig.CUser.MinPassLength
                 )]
             [DataType(DataType.Password)]
             [Display(Name = "New password")]

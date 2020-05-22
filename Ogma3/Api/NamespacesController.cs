@@ -51,8 +51,8 @@ namespace Ogma3.Api
         {
             return Ok(new
             {
-                CTConfig.Namespace.MinNameLength,
-                CTConfig.Namespace.MaxNameLength,
+                CTConfig.CNamespace.MinNameLength,
+                CTConfig.CNamespace.MaxNameLength,
             });
         }
 

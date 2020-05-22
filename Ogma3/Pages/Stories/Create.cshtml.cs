@@ -41,30 +41,30 @@ namespace Ogma3.Pages.Stories
         {
             [Required]
             [StringLength(
-                CTConfig.Story.MaxTitleLength,
+                CTConfig.CStory.MaxTitleLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.Story.MinTitleLength
+                MinimumLength = CTConfig.CStory.MinTitleLength
             )]
             public string Title { get; set; }
 
             [Required]
             [StringLength(
-                CTConfig.Story.MaxDescriptionLength,
+                CTConfig.CStory.MaxDescriptionLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.Story.MinDescriptionLength
+                MinimumLength = CTConfig.CStory.MinDescriptionLength
             )]
             public string Description { get; set; }
 
             [Required]
             [StringLength(
-                CTConfig.Story.MaxHookLength,
+                CTConfig.CStory.MaxHookLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.Story.MinHookLength
+                MinimumLength = CTConfig.CStory.MinHookLength
             )]
             public string Hook { get; set; }
 
             [DataType(DataType.Upload)]
-            [MaxFileSize(CTConfig.Story.CoverMaxWeight)]
+            [MaxFileSize(CTConfig.CStory.CoverMaxWeight)]
             [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
             public IFormFile Cover { get; set; }
 

@@ -10,11 +10,11 @@ namespace Ogma3.Data.Models
     public class User : IdentityUser<long>
     {
         [PersonalData]
-        [MaxLength(CTConfig.User.MaxTitleLength)]
+        [MaxLength(CTConfig.CUser.MaxTitleLength)]
         public string? Title { get; set; }
         
         [PersonalData]
-        [MaxLength(CTConfig.User.MaxBioLength)]
+        [MaxLength(CTConfig.CUser.MaxBioLength)]
         public string? Bio { get; set; }
 
         [PersonalData]

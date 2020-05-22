@@ -4,12 +4,12 @@ namespace Ogma3.Data
 {
     public static class CTConfig
     {
-        public static class Files
+        public static class CFiles
         {
             public const int AvatarMaxWeight = 1 * 1024 * 1024;
         }
         
-        public static class User
+        public static class CUser
         {
             public const int MinNameLength = 5;
             public const int MaxNameLength = 20;
@@ -21,7 +21,7 @@ namespace Ogma3.Data
             public const int MaxBioLength = 10_000;
         }
         
-        public static class Tag
+        public static class CTag
         {
             public const int MinNameLength = 5;
             public const int MaxNameLength = 20;
@@ -29,13 +29,13 @@ namespace Ogma3.Data
             public const int MaxDescLength = 100;
         }
         
-        public static class Namespace
+        public static class CNamespace
         {
             public const int MinNameLength = 5;
             public const int MaxNameLength = 10;
         }
         
-        public static class Rating
+        public static class CRating
         {
             public const int MinNameLength = 5;
             public const int MaxNameLength = 20;
@@ -44,7 +44,7 @@ namespace Ogma3.Data
             public const int MaxDescriptionLength = 1000;
         }
         
-        public static class Chapter
+        public static class CChapter
         {
             public const int MinTitleLength = 5;
             public const int MaxTitleLength = 50;
@@ -55,7 +55,7 @@ namespace Ogma3.Data
             public const int MaxNotesLength = 500;
         }
         
-        public static class Story
+        public static class CStory
         {
             public const int MinTitleLength = 3;
             public const int MaxTitleLength = 50;
@@ -68,13 +68,13 @@ namespace Ogma3.Data
             public const int CoverMaxWeight = 2 * 1024 * 1024;
         }
         
-        public static class Comment
+        public static class CComment
         {
             public const int MinBodyLength = 2;
             public const int MaxBodyLength = 10_000;
         }
 
-        public static class Shelf
+        public static class CShelf
         {
             public const int MinNameLength = 3;
             public const int MaxNameLength = 20;
@@ -82,7 +82,7 @@ namespace Ogma3.Data
             public const int MaxDescriptionLength = 100;
         }
 
-        public static class Blogpost
+        public static class CBlogpost
         {
             public const int MinTitleLength = 3;
             public const int MaxTitleLength = 50;
@@ -91,10 +91,23 @@ namespace Ogma3.Data
             public const int MaxBodyLength = 500_000;
         }
 
-        public static class StoryStatus
+        public static class CClub
         {
             public const int MinNameLength = 3;
-            public const int MaxNameLength = 15;
+            public const int MaxNameLength = 20;
+
+            public const int MaxHookLength = 50;
+            
+            public const int MaxDescriptionLength = 1_000;
+        }
+
+        public static class CClubThread
+        {
+            public const int MinTitleLength = 3;
+            public const int MaxTitleLength = 20;
+
+            public const int MinBodyLength = 20;
+            public const int MaxBodyLength = 10_000;
         }
     }
 }

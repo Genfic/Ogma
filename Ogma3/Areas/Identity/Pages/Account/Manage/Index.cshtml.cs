@@ -52,16 +52,16 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         {
             [Display(Name = "Avatar")]
             [DataType(DataType.Upload)]
-            [MaxFileSize(CTConfig.Files.AvatarMaxWeight)]
+            [MaxFileSize(CTConfig.CFiles.AvatarMaxWeight)]
             [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png" })]
             public IFormFile Avatar { get; set; }
             
             [Display(Name = "Title")]
-            [StringLength(CTConfig.User.MaxTitleLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
+            [StringLength(CTConfig.CUser.MaxTitleLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
             public string Title { get; set; }
             
             [Display(Name = "Bio")]
-            [StringLength(CTConfig.User.MaxBioLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
+            [StringLength(CTConfig.CUser.MaxBioLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
             public string Bio { get; set; }
         }
 

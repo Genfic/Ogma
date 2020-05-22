@@ -57,28 +57,28 @@ namespace Ogma3.Pages.Chapters
         {
             [Required]
             [StringLength(
-                CTConfig.Chapter.MaxTitleLength,
+                CTConfig.CChapter.MaxTitleLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.Chapter.MinTitleLength
+                MinimumLength = CTConfig.CChapter.MinTitleLength
             )]
             public string Title { get; set; }
             
             [Required]
             [StringLength(
-                CTConfig.Chapter.MaxBodyLength,
+                CTConfig.CChapter.MaxBodyLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.Chapter.MinBodyLength
+                MinimumLength = CTConfig.CChapter.MinBodyLength
             )]
             public string Body { get; set; }
             
             [StringLength(
-                CTConfig.Chapter.MaxNotesLength,
+                CTConfig.CChapter.MaxNotesLength,
                 ErrorMessage = "The {0} cannot exceed {1} characters."
             )]
             public string StartNotes { get; set; }
             
             [StringLength(
-                CTConfig.Chapter.MaxNotesLength,
+                CTConfig.CChapter.MaxNotesLength,
                 ErrorMessage = "The {0} cannot exceed {1} characters."
             )]
             public string EndNotes { get; set; }

@@ -17,22 +17,22 @@ namespace Ogma3.Data.Models
         public bool IsPublished { get; set; }
 
         [Required]
-        [MinLength(CTConfig.Chapter.MinTitleLength)]
-        [MaxLength(CTConfig.Chapter.MaxTitleLength)]
+        [MinLength(CTConfig.CChapter.MinTitleLength)]
+        [MaxLength(CTConfig.CChapter.MaxTitleLength)]
         public string Title { get; set; }
 
         [Required] 
         public string Slug { get; set; }
 
         [Required]
-        [MinLength(CTConfig.Chapter.MinBodyLength)]
-        [MaxLength(CTConfig.Chapter.MaxBodyLength)]
+        [MinLength(CTConfig.CChapter.MinBodyLength)]
+        [MaxLength(CTConfig.CChapter.MaxBodyLength)]
         public string Body { get; set; }
 
-        [MaxLength(CTConfig.Chapter.MaxNotesLength)]
+        [MaxLength(CTConfig.CChapter.MaxNotesLength)]
         public string? StartNotes { get; set; }
 
-        [MaxLength(CTConfig.Chapter.MaxNotesLength)]
+        [MaxLength(CTConfig.CChapter.MaxNotesLength)]
         public string? EndNotes { get; set; }
 
         public  CommentsThread CommentsThread { get; set; }

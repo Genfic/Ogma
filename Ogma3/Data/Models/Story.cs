@@ -20,21 +20,21 @@ namespace Ogma3.Data.Models
         public User Author { get; set; }
 
         [Required]
-        [MinLength(CTConfig.Story.MinTitleLength)]
-        [MaxLength(CTConfig.Story.MaxTitleLength)]
+        [MinLength(CTConfig.CStory.MinTitleLength)]
+        [MaxLength(CTConfig.CStory.MaxTitleLength)]
         public string Title { get; set; }
 
         [Required] 
         public string Slug { get; set; }
 
         [Required]
-        [MinLength(CTConfig.Story.MinDescriptionLength)]
-        [MaxLength(CTConfig.Story.MaxDescriptionLength)]
+        [MinLength(CTConfig.CStory.MinDescriptionLength)]
+        [MaxLength(CTConfig.CStory.MaxDescriptionLength)]
         public string Description { get; set; }
 
         [Required]
-        [MinLength(CTConfig.Story.MinHookLength)]
-        [MaxLength(CTConfig.Story.MaxHookLength)]
+        [MinLength(CTConfig.CStory.MinHookLength)]
+        [MaxLength(CTConfig.CStory.MaxHookLength)]
         public string Hook { get; set; }
 
         public string? Cover { get; set; }

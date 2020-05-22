@@ -7,8 +7,8 @@ namespace Ogma3.Data.Models
     public class Blogpost : BaseModel
     {
         [Required]
-        [MinLength(CTConfig.Blogpost.MinTitleLength)]
-        [MaxLength(CTConfig.Blogpost.MaxTitleLength)]
+        [MinLength(CTConfig.CBlogpost.MinTitleLength)]
+        [MaxLength(CTConfig.CBlogpost.MaxTitleLength)]
         public string Title { get; set; }
 
         [Required]
@@ -25,8 +25,8 @@ namespace Ogma3.Data.Models
         public User Author { get; set; }
         
         [Required]
-        [MinLength(CTConfig.Blogpost.MinBodyLength)]
-        [MaxLength(CTConfig.Blogpost.MaxBodyLength)]
+        [MinLength(CTConfig.CBlogpost.MinBodyLength)]
+        [MaxLength(CTConfig.CBlogpost.MaxBodyLength)]
         public string Body { get; set; }
         
         // Votes

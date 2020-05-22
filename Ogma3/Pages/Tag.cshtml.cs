@@ -33,6 +33,8 @@ namespace Ogma3.Pages
                 .FirstOrDefaultAsync();
             Tag = TagDTO.FromTag(tag);
             
+            _logger.Log(LogLevel.Information, "Test log %", id, slug);
+            
             if (Tag == null) return NotFound();
 
             Stories = await _context.Stories

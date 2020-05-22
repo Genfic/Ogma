@@ -28,6 +28,12 @@ namespace Ogma3.Data
         public DbSet<ShelfStory> ShelfStories { get; set; }
         public DbSet<Blogpost> Blogposts { get; set; }
         
+        // Clubs
+        public DbSet<Club> Clubs { get; set; }
+        public DbSet<ClubMember> ClubMembers { get; set; }
+        public DbSet<ClubThread> ClubThreads { get; set; }
+        public DbSet<ClubThreadComment> ClubThreadComments { get; set; }
+        
         
         // Secondary
         public DbSet<Document> Documents { get; set; }
@@ -177,6 +183,45 @@ namespace Ogma3.Data
                 .WithOne(vp => vp.Blogpost)
                 .HasForeignKey<VotePool>(vp => vp.BlogpostId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            // Clubs
+            builder.Entity<Club>(ent =>
+            {
+                ent.HasMany(c => c.Threads)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            
+            // Club members
+            builder.Entity<ClubMember>(ent =>
+            {
+                ent.HasKey(cm => new {cm.ClubId, cm.MemberId});
+                ent.HasOne(cm => cm.Club)
+                    .WithMany(c => c.ClubMembers)
+                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(cm => cm.Member)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            
+            // Club threads
+            builder.Entity<ClubThread>(ent =>
+            {
+                ent.HasOne(ct => ct.Author)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.SetNull);
+                ent.HasMany(ct => ct.Comments)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            
+            // Club thread comments
+            builder.Entity<ClubThreadComment>(ent =>
+            {
+                ent.HasOne(ctc => ctc.Author)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
 
             
             // Enums

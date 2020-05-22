@@ -12,8 +12,8 @@ namespace Ogma3.Data.Models
         private string _name;
         
         [Required]
-        [MinLength(CTConfig.Tag.MinNameLength)]
-        [MaxLength(CTConfig.Tag.MaxNameLength)]
+        [MinLength(CTConfig.CTag.MinNameLength)]
+        [MaxLength(CTConfig.CTag.MaxNameLength)]
         public string Name { 
             get => _name;
             set
@@ -24,11 +24,11 @@ namespace Ogma3.Data.Models
         }
 
         [Required]
-        [MinLength(CTConfig.Tag.MinNameLength)]
-        [MaxLength(CTConfig.Tag.MaxNameLength)]
+        [MinLength(CTConfig.CTag.MinNameLength)]
+        [MaxLength(CTConfig.CTag.MaxNameLength)]
         public string Slug { get; set; }
 
-        [MaxLength(CTConfig.Tag.MaxDescLength)]
+        [MaxLength(CTConfig.CTag.MaxDescLength)]
         public string? Description { get; set; } = null;
 
         [ForeignKey("NamespaceId")]

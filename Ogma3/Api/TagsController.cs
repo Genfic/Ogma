@@ -74,9 +74,9 @@ namespace Ogma3.Api
         {
             return Ok(new
             {
-                CTConfig.Tag.MinNameLength,
-                CTConfig.Tag.MaxNameLength,
-                CTConfig.Tag.MaxDescLength,
+                CTConfig.CTag.MinNameLength,
+                CTConfig.CTag.MaxNameLength,
+                CTConfig.CTag.MaxDescLength,
             });
         }
 

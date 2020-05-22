@@ -13,11 +13,11 @@ namespace Ogma3.Data.Models
     public class Shelf : BaseModel
     {
         [Required]
-        [MinLength(CTConfig.Shelf.MinNameLength)]
-        [MaxLength(CTConfig.Shelf.MaxNameLength)]
+        [MinLength(CTConfig.CShelf.MinNameLength)]
+        [MaxLength(CTConfig.CShelf.MaxNameLength)]
         public string Name { get; set; }
 
-        [MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
+        [MaxLength(CTConfig.CShelf.MaxDescriptionLength)]
         public string? Description { get; set; } = "";
         
         [Required]

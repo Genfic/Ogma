@@ -15,8 +15,8 @@ namespace Ogma3.Data.Models
         public DateTime DateTime { get; set; } = DateTime.Now;
 
         [Required]
-        [MinLength(CTConfig.Comment.MinBodyLength)]
-        [MaxLength(CTConfig.Comment.MaxBodyLength)]
+        [MinLength(CTConfig.CComment.MinBodyLength)]
+        [MaxLength(CTConfig.CComment.MaxBodyLength)]
         public string Body { get; set; }
     }
 }

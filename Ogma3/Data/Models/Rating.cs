@@ -6,13 +6,13 @@ namespace Ogma3.Data.Models
     public class Rating : BaseModel
     {
         [Required]
-        [MinLength(CTConfig.Rating.MinNameLength)]
-        [MaxLength(CTConfig.Rating.MaxNameLength)]
+        [MinLength(CTConfig.CRating.MinNameLength)]
+        [MaxLength(CTConfig.CRating.MaxNameLength)]
         public string Name { get; set; }
         
         [Required]
-        [MinLength(CTConfig.Rating.MinDescriptionLength)]
-        [MaxLength(CTConfig.Rating.MaxDescriptionLength)]
+        [MinLength(CTConfig.CRating.MinDescriptionLength)]
+        [MaxLength(CTConfig.CRating.MaxDescriptionLength)]
         public string Description { get; set; }
         
         public string Icon { get; set; }

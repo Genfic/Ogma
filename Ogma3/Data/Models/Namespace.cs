@@ -5,8 +5,8 @@ namespace Ogma3.Data.Models
     public class Namespace : BaseModel
     {
         [Required]
-        [MinLength(CTConfig.Namespace.MinNameLength)]
-        [MaxLength(CTConfig.Namespace.MaxNameLength)]
+        [MinLength(CTConfig.CNamespace.MinNameLength)]
+        [MaxLength(CTConfig.CNamespace.MaxNameLength)]
         public string Name { get; set; }
 
         [MinLength(7)]

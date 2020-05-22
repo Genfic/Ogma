@@ -30,15 +30,15 @@ namespace Ogma3.Pages.Blog
             public long Id { get; set; }
             
             [Required]
-            [StringLength(CTConfig.Blogpost.MaxTitleLength,
+            [StringLength(CTConfig.CBlogpost.MaxTitleLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.Blogpost.MinTitleLength)]
+                MinimumLength = CTConfig.CBlogpost.MinTitleLength)]
             public string Title { get; set; }
             
             [Required]
-            [StringLength(CTConfig.Blogpost.MaxBodyLength,
+            [StringLength(CTConfig.CBlogpost.MaxBodyLength,
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.Blogpost.MinBodyLength)]
+                MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
         }
 

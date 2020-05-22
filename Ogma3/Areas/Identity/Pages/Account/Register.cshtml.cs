@@ -63,9 +63,9 @@ namespace Ogma3.Areas.Identity.Pages.Account
         {
             [Required]
             [StringLength(
-                CTConfig.User.MaxNameLength, 
+                CTConfig.CUser.MaxNameLength, 
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.User.MinNameLength
+                MinimumLength = CTConfig.CUser.MinNameLength
                 )]
             public string Name { get; set; }
 
@@ -76,9 +76,9 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
             [Required]
             [StringLength(
-                CTConfig.User.MaxPassLength, 
+                CTConfig.CUser.MaxPassLength, 
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.User.MinPassLength
+                MinimumLength = CTConfig.CUser.MinPassLength
                 )]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]

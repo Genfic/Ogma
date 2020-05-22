@@ -233,20 +233,20 @@ namespace Ogma3.Api
         {
             return Ok(new
             {
-                CTConfig.Shelf.MinNameLength,
-                CTConfig.Shelf.MaxNameLength,
-                CTConfig.Shelf.MaxDescriptionLength
+                CTConfig.CShelf.MinNameLength,
+                CTConfig.CShelf.MaxNameLength,
+                CTConfig.CShelf.MaxDescriptionLength
             });
         }
 
         public class PostData
         {
             [Required]
-            [MinLength(CTConfig.Shelf.MinNameLength)]
-            [MaxLength(CTConfig.Shelf.MaxNameLength)]
+            [MinLength(CTConfig.CShelf.MinNameLength)]
+            [MaxLength(CTConfig.CShelf.MaxNameLength)]
             public string Name { get; set; }
             
-            [MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
+            [MaxLength(CTConfig.CShelf.MaxDescriptionLength)]
             public string Description { get; set; }
 
             public bool IsPublic { get; set; } = false;
