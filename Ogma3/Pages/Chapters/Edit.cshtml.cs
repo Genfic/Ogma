@@ -15,10 +15,12 @@ namespace Ogma3.Pages.Chapters
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private OgmaUserManager _userManager;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -57,7 +59,7 @@ namespace Ogma3.Pages.Chapters
             public string EndNotes { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(long? id)
         {
             if (id == null)
             {
@@ -66,9 +68,11 @@ namespace Ogma3.Pages.Chapters
 
             // Get chapter
             var chapter = await _context.Chapters.FindAsync(id);
+            // Get logged in user
+            var user = await _userManager.GetUserAsync(User);
             // Make sure the story's author is the logged in user
             var authorized = await _context.Stories
-                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.IsLoggedIn(User));
+                .AnyAsync(s => s.Id == chapter.StoryId && s.Author == user);
 
             if (chapter == null || !authorized) return NotFound();
 
@@ -95,17 +99,29 @@ namespace Ogma3.Pages.Chapters
             
             // Get chapter
             var chapter = await _context.Chapters.FindAsync(Chapter.Id);
-            // Make sure the story's author is the logged in user
-            var authorized = await _context.Stories
-                .AnyAsync(s => s.Id == chapter.StoryId && s.Author.IsLoggedIn(User));
+            if (chapter == null) return NotFound();
             
-            if (chapter == null || !authorized) return NotFound();
+            // Get story
+            var story = await _context.Stories
+                .Where(s => s.Id == chapter.StoryId)
+                .Include(s => s.Chapters)
+                .Include(s => s.Author)
+                .FirstOrDefaultAsync();
+            if (story == null) return NotFound();
+            
+            if (!story.Author.IsLoggedIn(User)) return NotFound();
             
             chapter.Title      = Chapter.Title.Trim();
             chapter.Body       = Chapter.Body.Trim();
             chapter.StartNotes = Chapter.StartNotes?.Trim();
             chapter.EndNotes   = Chapter.EndNotes?.Trim();
             chapter.Slug       = Chapter.Title.Trim().Friendlify();
+            chapter.WordCount  = Chapter.Body.Trim().Split(' ', '\t', '\n').Length;
+            
+            await _context.SaveChangesAsync();
+
+            // Recalculate words in the story
+            story.WordCount = story.Chapters.Sum(c => c.WordCount);
 
             try
             {

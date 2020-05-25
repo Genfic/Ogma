@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Api
+@using Ogma3.Data.Enums
 @model Ogma3.Pages.Stories.EditModel
 
 @{
@@ -27,6 +28,7 @@
         <textarea asp-for="Input.Description" 
                 placeholder="What your story is about" 
                 class="o-form-control active-border" 
+                rows="15"
                 v-model="desc.current">
         </textarea>
         <span class="counter">{{descCount}}</span>
@@ -52,6 +54,15 @@
                 class="o-form-control active-border"
                 accept=".png,.jpg,.jpeg">
         <span asp-validation-for="Input.Cover" class="text-warning"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Status"></label>
+        <p>Tell your readers what to expect when it comes to updates</p>
+        <select asp-for="Input.Status" 
+                asp-items="@Html.GetEnumSelectList<EStoryStatus>()" 
+                class="o-form-control active-border"></select>
+        <span asp-validation-for="Input.Status" class="text-warning"></span>
     </div>
     
     <div class="o-form-group">

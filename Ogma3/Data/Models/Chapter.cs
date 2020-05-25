@@ -35,6 +35,9 @@ namespace Ogma3.Data.Models
         [MaxLength(CTConfig.CChapter.MaxNotesLength)]
         public string? EndNotes { get; set; }
 
+        [Required]
+        public int WordCount { get; set; }
+
         public  CommentsThread CommentsThread { get; set; }
         
         [Required]

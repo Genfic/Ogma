@@ -1,83 +1,108 @@
 $title-height: 2rem
 
-.story-details
-  overflow-y: auto
-  
-  &>.titlebar
-    display: flex
-    align-items: baseline
-    flex-direction: row
-    padding-bottom: .5rem
-    
-    &>.rating
-      height: $title-height * 0.7
-      width: $title-height * 0.7
-      margin-right: .5rem
-    
-    &>h1.title
-      font-size: $title-height
-      line-height: $title-height
-  
-  &>.tags
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
+#story-app
 
-  &>.main
-    padding-top: .5rem
-    text-align: justify
+  &>.story-details
+    overflow-y: auto
     
-    &>.cover
-      float: left
-      margin-right: 10px
-      margin-bottom: 10px
-      width: 10rem
-      object-fit: contain
-      border: 1px solid $foreground-25
-      
-    &>h2.author
-      font-size: 1.2rem
-      line-height: 1.2rem
-      
-  &>.actions
-    display: flex
-    margin-bottom: .5rem
-
-    & button
+    &>.titlebar
       display: flex
-      align-items: center
-      background: transparent
-      border: 1px solid $foreground-25
-      min-height: 2rem
-      margin-right: .1rem
+      align-items: baseline
+      flex-direction: row
+      padding-bottom: .5rem
+      
+      &>.rating
+        height: $title-height * 0.7
+        width: $title-height * 0.7
+        margin-right: .5rem
+      
+      &>h1.title
+        font-size: $title-height
+        line-height: $title-height
+    
+    &>.tags
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+  
+    &>.main
+      padding-top: .5rem
+      text-align: justify
+      
+      &>.cover
+        float: left
+        margin-right: 10px
+        margin-bottom: 10px
+        width: 10rem
+        object-fit: contain
+        border: 1px solid $foreground-25
+        
+      &>h2.author
+        font-size: 1.2rem
+        line-height: 1.2rem
+        
+    &>.actions
+      display: flex
+      margin-bottom: .5rem
+  
+      & button
+        display: flex
+        align-items: center
+        background: transparent
+        border: 1px solid $foreground-25
+        min-height: 2rem
+        margin-right: .1rem
+        &:hover
+          border-color: $foreground-75
+  
+      & .spacer
+        flex: 1
+        
+  &>.chapters
+    margin-top: .5rem
+    &>span
+      font-weight: bold
+      
+    &>.chapter
+      display: flex
+      justify-content: space-between
+      padding: .5rem
+      color: $foreground
+      text-decoration: none
+      cursor: pointer
+      border-top: 1px solid $foreground-25
+      &:last-child
+        border-bottom: 1px solid $foreground-25
       &:hover
-        border-color: $foreground-75
-
-    & .spacer
-      flex: 1
+        background-color: $accent-10
       
-.chapters
-  margin-top: .5rem
-  &>span
-    font-weight: bold
-    
-  &>.chapter
-    display: flex
-    flex-direction: row
-    padding: .5rem
-    color: $foreground
-    text-decoration: none
-    cursor: pointer
+      &>.left
+        display: flex
+        align-items: center
+        &>*
+          padding: 0 .25rem
+  
+        &>.order
+          
+        &>.title
+          
+        &>.date
+          font-size: .8rem
+          color: $foreground-50
+          &:hover
+            color: $foreground-75
+        
+      &>.right
+        &>.word-count
+          
+  &>.info
     border-top: 1px solid $foreground-25
-    &:last-child
-      border-bottom: 1px solid $foreground-25
-    &:hover
-      background-color: $accent-10
-    
-    &>.title
-      flex-grow: 1
+  
+    &>*
+      padding: 0 .25rem
+      color: $foreground-75
+      &:hover
+        color: $foreground
       
-    &>.date
-      flex-shrink: 1
       
     

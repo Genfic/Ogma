@@ -50,17 +50,23 @@ namespace Ogma3.Pages.Chapters
                 .Where(c => c.Id == id)
                 .Include(c => c.CommentsThread)
                 .FirstOrDefaultAsync();
+
+            if (Chapter == null) return NotFound();
             
             // Get story for the chapter
             var story = await _context.Stories
                 .Where(s => s.Id == Chapter.StoryId)
                 .Include(s => s.Author)
+                .Include(s => s.Chapters)
                 .FirstOrDefaultAsync();
-            
-            // Make sure the story's author is the logged in user
-            var authorized = story?.Author.IsLoggedIn(User) ?? false;
 
-            if (Chapter == null || !authorized) return NotFound();
+            if (story == null) return NotFound();
+
+            if (!story.Author.IsLoggedIn(User)) return NotFound();
+
+            // Recalculate words and chapters in the story
+            story.WordCount = story.Chapters.Sum(c => c.WordCount) - Chapter.WordCount;
+            story.ChapterCount = story.Chapters.Count - 1;
 
             _context.Chapters.Remove(Chapter);
             

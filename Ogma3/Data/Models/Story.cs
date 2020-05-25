@@ -47,10 +47,8 @@ namespace Ogma3.Data.Models
         [DefaultValue(false)]
         public bool IsPublished { get; set; }
         
-        
         // Chapters
         public  ICollection<Chapter> Chapters { get; set; } //= new List<Chapter>();
-
 
         // Tags
         [JsonIgnore]
@@ -82,7 +80,15 @@ namespace Ogma3.Data.Models
         [Required]
         public  VotePool VotesPool { get; set; }
 
-        [NotMapped] 
+        [Required]
+        [DefaultValue(0)]
+        public int WordCount { get; set; }
+
+        [Required]
+        [DefaultValue(0)]
+        public int ChapterCount { get; set; }
+    
+        [NotMapped]
         public int Score => VotesPool.Votes.Count;
     }
 }

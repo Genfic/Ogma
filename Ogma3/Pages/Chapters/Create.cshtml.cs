@@ -124,13 +124,15 @@ namespace Ogma3.Pages.Chapters
                 EndNotes = Chapter.EndNotes?.Trim(),
                 Slug = Chapter.Title.Trim().Friendlify(),
                 Order = latestChapter + 1,
-                CommentsThread = new CommentsThread()
+                CommentsThread = new CommentsThread(),
+                WordCount = Chapter.Body.Trim().Split(' ', '\t', '\n').Length
             };
             
+            // Recalculate words and chapters in the story
+            Story.WordCount = Story.Chapters.Sum(c => c.WordCount) + chapter.WordCount;
+            Story.ChapterCount = Story.Chapters.Count + 1;
             
             // Create the chapter and add it to the story
-            // await _context.Chapters.AddAsync(chapter);
-            Console.WriteLine((Story == null ? "story-null" : "story-full") + " " + (chapter == null ? "chapter-null" : "chapter-full"));
             Story.Chapters.Add(chapter);
             
             await _context.SaveChangesAsync();

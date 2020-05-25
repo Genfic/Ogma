@@ -104,13 +104,15 @@ img.avatar {
 .story-card {
   display: flex;
   flex: 1;
-  flex-direction: row;
+  flex-direction: column;
   border: 1px solid var(--foreground-25);
-  margin: 4px 0 0; }
+  margin: .5rem 0 0; }
   .story-card:first-of-type {
     margin: 0; }
   .story-card:hover {
     border-color: var(--foreground-50); }
+    .story-card:hover .info {
+      border-color: var(--foreground-50); }
   @media only screen and (max-width: 570px) {
     .story-card {
       flex-direction: column; } }
@@ -121,109 +123,134 @@ img.avatar {
     @media only screen and (max-width: 570px) {
       .story-card .image {
         align-self: center; } }
-  .story-card > div.body {
+  .story-card div.main {
     display: flex;
-    flex-direction: column;
-    padding: 0 4px; }
-  .story-card .title {
-    display: flex;
-    align-items: baseline;
-    margin: 0 4px;
-    font-size: 2rem;
-    line-height: 2rem;
-    color: var(--foreground);
-    overflow: hidden;
-    text-overflow: ellipsis; }
-    .story-card .title:hover {
-      color: var(--foreground-75);
-      text-decoration: underline;
-      text-decoration-skip-ink: auto; }
-    .story-card .title > h3 {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: inline; }
-    .story-card .title > .rating {
-      display: inline;
-      height: 1.4rem;
-      width: 1.4rem;
-      margin-right: .5rem; }
-  .story-card .author {
-    margin: 0 4px;
-    font-size: 1.1rem; }
-  .story-card .hook {
-    margin: 2px 4px;
-    flex: 1; }
-  .story-card .tags {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap; }
+    flex: 1;
+    flex-direction: row; }
+    .story-card div.main div.body {
+      display: flex;
+      flex-direction: column;
+      padding: 0 4px; }
+      .story-card div.main div.body .title {
+        display: flex;
+        align-items: baseline;
+        margin: 0 4px;
+        font-size: 2rem;
+        line-height: 2rem;
+        color: var(--foreground);
+        overflow: hidden;
+        text-overflow: ellipsis; }
+        .story-card div.main div.body .title:hover {
+          color: var(--foreground-75);
+          text-decoration: underline;
+          text-decoration-skip-ink: auto; }
+        .story-card div.main div.body .title > h3 {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: inline; }
+        .story-card div.main div.body .title > .rating {
+          display: inline;
+          height: 1.4rem;
+          width: 1.4rem;
+          margin-right: .5rem; }
+      .story-card div.main div.body > .author {
+        margin: 0 4px;
+        font-size: 1.1rem; }
+    .story-card div.main .hook {
+      margin: 2px 4px;
+      flex: 1; }
+    .story-card div.main .tags {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap; }
+  .story-card .info {
+    border-top: 1px solid var(--foreground-25); }
+    .story-card .info > * {
+      padding: 0 .25rem;
+      color: var(--foreground-75); }
+      .story-card .info > *:hover {
+        color: var(--foreground); }
 
-.story-details {
+#story-app > .story-details {
   overflow-y: auto; }
-  .story-details > .titlebar {
+  #story-app > .story-details > .titlebar {
     display: flex;
     align-items: baseline;
     flex-direction: row;
     padding-bottom: .5rem; }
-    .story-details > .titlebar > .rating {
+    #story-app > .story-details > .titlebar > .rating {
       height: 1.4rem;
       width: 1.4rem;
       margin-right: .5rem; }
-    .story-details > .titlebar > h1.title {
+    #story-app > .story-details > .titlebar > h1.title {
       font-size: 2rem;
       line-height: 2rem; }
-  .story-details > .tags {
+  #story-app > .story-details > .tags {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap; }
-  .story-details > .main {
+  #story-app > .story-details > .main {
     padding-top: .5rem;
     text-align: justify; }
-    .story-details > .main > .cover {
+    #story-app > .story-details > .main > .cover {
       float: left;
       margin-right: 10px;
       margin-bottom: 10px;
       width: 10rem;
       object-fit: contain;
       border: 1px solid var(--foreground-25); }
-    .story-details > .main > h2.author {
+    #story-app > .story-details > .main > h2.author {
       font-size: 1.2rem;
       line-height: 1.2rem; }
-  .story-details > .actions {
+  #story-app > .story-details > .actions {
     display: flex;
     margin-bottom: .5rem; }
-    .story-details > .actions button {
+    #story-app > .story-details > .actions button {
       display: flex;
       align-items: center;
       background: transparent;
       border: 1px solid var(--foreground-25);
       min-height: 2rem;
       margin-right: .1rem; }
-      .story-details > .actions button:hover {
+      #story-app > .story-details > .actions button:hover {
         border-color: var(--foreground-75); }
-    .story-details > .actions .spacer {
+    #story-app > .story-details > .actions .spacer {
       flex: 1; }
 
-.chapters {
+#story-app > .chapters {
   margin-top: .5rem; }
-  .chapters > span {
+  #story-app > .chapters > span {
     font-weight: bold; }
-  .chapters > .chapter {
+  #story-app > .chapters > .chapter {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     padding: .5rem;
     color: var(--foreground);
     text-decoration: none;
     cursor: pointer;
     border-top: 1px solid var(--foreground-25); }
-    .chapters > .chapter:last-child {
+    #story-app > .chapters > .chapter:last-child {
       border-bottom: 1px solid var(--foreground-25); }
-    .chapters > .chapter:hover {
+    #story-app > .chapters > .chapter:hover {
       background-color: var(--accent-10); }
-    .chapters > .chapter > .title {
-      flex-grow: 1; }
-    .chapters > .chapter > .date {
-      flex-shrink: 1; }
+    #story-app > .chapters > .chapter > .left {
+      display: flex;
+      align-items: center; }
+      #story-app > .chapters > .chapter > .left > * {
+        padding: 0 .25rem; }
+      #story-app > .chapters > .chapter > .left > .date {
+        font-size: .8rem;
+        color: var(--foreground-50); }
+        #story-app > .chapters > .chapter > .left > .date:hover {
+          color: var(--foreground-75); }
+
+#story-app > .info {
+  border-top: 1px solid var(--foreground-25); }
+  #story-app > .info > * {
+    padding: 0 .25rem;
+    color: var(--foreground-75); }
+    #story-app > .info > *:hover {
+      color: var(--foreground); }
 
 .chapter-container {
   display: flex;

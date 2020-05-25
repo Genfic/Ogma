@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Services;
 using Ogma3.Services.Attributes;
@@ -83,6 +84,9 @@ namespace Ogma3.Pages.Stories
             [Required] 
             public long Rating { get; set; }
 
+            [Required]
+            public EStoryStatus Status { get; set; }
+
             [Required] 
             public List<long> Tags { get; set; }
         }
@@ -107,7 +111,8 @@ namespace Ogma3.Pages.Stories
                 Description = Story.Description,
                 Hook = Story.Hook,
                 Rating = Story.Rating.Id,
-                Tags = Story.StoryTags.Select(st => st.TagId).ToList()
+                Tags = Story.StoryTags.Select(st => st.TagId).ToList(),
+                Status = Story.Status
             };
             
             // Fill Ratings dropdown
@@ -143,6 +148,7 @@ namespace Ogma3.Pages.Stories
                 Story.Hook = Input.Hook;
                 Story.Rating = await _context.Ratings.FindAsync(Input.Rating);
                 Story.Tags = tags;
+                Story.Status = Input.Status;
                 _context.Update(Story);
                 await _context.SaveChangesAsync();
                 

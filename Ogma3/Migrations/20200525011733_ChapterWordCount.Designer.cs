@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -10,9 +11,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200525011733_ChapterWordCount")]
+    partial class ChapterWordCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -641,9 +643,6 @@ namespace Ogma3.Migrations
                     b.Property<long>("AuthorId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("ChapterCount")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Cover")
                         .HasColumnType("text");
 
@@ -657,8 +656,8 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Hook")
                         .IsRequired()
-                        .HasColumnType("character varying(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("character varying(500)")
+                        .HasMaxLength(500);
 
                     b.Property<bool>("IsPublished")
                         .ValueGeneratedOnAdd()
@@ -682,9 +681,6 @@ namespace Ogma3.Migrations
                         .IsRequired()
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
-
-                    b.Property<int>("WordCount")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
