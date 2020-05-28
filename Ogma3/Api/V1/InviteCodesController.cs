@@ -9,7 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Api
+namespace Ogma3.Api.V1
 {
     [ApiController]
     [Route("api/[controller]", Name = nameof(InviteCodesController))]

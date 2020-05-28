@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Api
+namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(QuotesController))]
     [ApiController]

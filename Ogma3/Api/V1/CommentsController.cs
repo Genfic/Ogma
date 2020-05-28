@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Api
+namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(CommentsController))]
     [ApiController]

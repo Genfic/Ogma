@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Api
+namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(UserActivityController))]
     public class UserActivityController : ControllerBase

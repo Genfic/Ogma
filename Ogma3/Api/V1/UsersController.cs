@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Utils;
 
-namespace Ogma3.Api
+namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(UsersController))]
     [ApiController]
