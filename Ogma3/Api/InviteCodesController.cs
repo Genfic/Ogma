@@ -24,6 +24,7 @@ namespace Ogma3.Api
         
         // GET: api/InviteCodes
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<InviteCodeApiDTO>>> GetInviteCodes()
         {
             return await _context.InviteCodes
@@ -35,6 +36,7 @@ namespace Ogma3.Api
         
         // GET: api/InviteCodes/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<InviteCodeApiDTO>> GetInviteCode(long id)
         {
             var code = await _context.InviteCodes

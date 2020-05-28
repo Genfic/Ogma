@@ -1,5 +1,5 @@
 @using System.Globalization
-@using System.Security.Claims
+@using Ogma3.Api
 @using Ogma3.Services
 @model Ogma3.Data.Models.Story
 
@@ -127,8 +127,8 @@
     </div>
     
     
-    <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl("VotesController")"></div>
-    <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl("ShelvesController")"></div>
+    <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl(nameof(VotesController))"></div>
+    <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
     <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPool.Id"></div>
     <div id="story-id" v-if="!storyId" data-id="@Model.Id"></div>
     @Html.AntiForgeryToken()

@@ -17,15 +17,15 @@ new Vue({
             min: 0,
             current: '',
         },
-        
+
         // Tag search
         options: [],
         selected: [],
         search: '',
-        
+
         // API routing
         route: null,
-    },  
+    },
     methods: {
         addUnique(x) {
             if (this.selected.includes(x)) return;
@@ -48,7 +48,7 @@ new Vue({
             return `${this.desc.current.length}/${this.desc.max}`;
         },
         filtered() {
-            return this.options.filter(x => { 
+            return this.options.filter(x => {
                 return (
                     x.name.toLowerCase().includes(this.search.toLowerCase())
                     || x.namespace.toLowerCase().includes(this.search.toLowerCase())

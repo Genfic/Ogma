@@ -1,4 +1,5 @@
 ﻿@page
+@using Ogma3.Api
 @model Ogma3.Areas.Admin.Pages.Tags
 
 @{
@@ -63,8 +64,8 @@
     </li>
 </ul>
 
-<div id="tag-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("TagsController")" v-if="!routes.tags"></div>
-<div id="ns-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("NamespacesController")" v-if="!routes.namespaces"></div>
+<div id="tag-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(TagsController))" v-if="!routes.tags"></div>
+<div id="ns-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(NamespacesController))" v-if="!routes.namespaces"></div>
 @section Scripts
 {
     <script src="~/js/admin/tags.min.js" asp-append-version="true"></script>

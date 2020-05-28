@@ -1,4 +1,5 @@
 ﻿@page
+@using Ogma3.Api
 @model Ogma3.Areas.Admin.Pages.Namespaces
 
 @{
@@ -62,7 +63,7 @@
     </li>
 </ul>
 
-<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl("NamespacesController")" v-if="!route"></div>
+<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(NamespacesController))" v-if="!route"></div>
 
 @section Scripts
 {

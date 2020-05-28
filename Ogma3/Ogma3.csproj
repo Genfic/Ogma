@@ -154,6 +154,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="wwwroot\js\new-story.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 
@@ -161,6 +165,11 @@
     <Compile Update="Pages\Tag.cshtml.cs">
       <DependentUpon>Tag.cshtml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Api\V1" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

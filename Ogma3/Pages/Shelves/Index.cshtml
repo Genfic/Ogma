@@ -1,4 +1,5 @@
 @page "{name?}"
+@using Ogma3.Api
 @model Ogma3.Pages.Shelves.Index
 
 @{
@@ -116,7 +117,7 @@
         </li>
     </ul>
 
-    <div id="route" data-route="@Url.RouteUrl("ShelvesController")" v-if="!route"></div>
+    <div id="route" data-route="@Url.RouteUrl(nameof(ShelvesController))" v-if="!route"></div>
     <div id="owner" data-owner="@Model.Owner.NormalizedUserName" v-if="!owner"></div>
 </div>
 

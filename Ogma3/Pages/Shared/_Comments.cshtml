@@ -1,4 +1,5 @@
 @using static Ogma3.Services.HtmlExtensions
+@using Ogma3.Api
 @model Ogma3.Data.Models.CommentsThread
 
 <div class="comments-container" id="comments-container">
@@ -9,7 +10,7 @@
             <textarea class="comment-box active-border" v-model="body" v-on:keydown.enter="enter" name="body" id="body" rows="3" aria-label="Comment"></textarea>
 
             <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
-            <div id="route" data-route="@Url.RouteUrl("CommentsController")" v-if="!route"></div>
+            <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
 
             <div class="buttons">
                 <button class="comment-btn active-border" v-on:click="submit">
