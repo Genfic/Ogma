@@ -157,6 +157,24 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="wwwroot\js\components\input-counter-component.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\js\components\textarea-counter-component.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\js\components\textarea-counter-component.min.js.map">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>textarea-counter-component.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\components\textarea-counter-component.min.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <DependentUpon>textarea-counter-component.js</DependentUpon>
+    </Content>
   </ItemGroup>
 
 
@@ -164,6 +182,12 @@
     <Compile Update="Pages\Tag.cshtml.cs">
       <DependentUpon>Tag.cshtml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\dist" />
+    <Folder Include="wwwroot\js\src" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

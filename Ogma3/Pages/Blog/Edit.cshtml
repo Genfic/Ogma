@@ -25,6 +25,14 @@
         <span asp-validation-for="Input.Body" class="text-warning"></span>
     </div>
     
+    <input-counter
+        :min="@CTConfig.CBlogpost.MinTitleLength"
+        :max="@CTConfig.CBlogpost.MaxTitleLength"
+        label="AAA"
+        value="@Model.Input.Title">
+    </input-counter>
+    <input-counter :max="50" label="BBB"></input-counter>
+    
     <div class="o-form-group">
         <input type="submit" value="Update" class="btn btn-primary"/>
     </div>
@@ -35,7 +43,8 @@
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />       
+    <partial name="_ValidationScriptsPartial" />      
+    <script src="/js/components/input-counter-component.min.js" asp-append-version="true"></script>
     <script src="/js/edit-blogpost.min.js" asp-append-version="true"></script>
 }
 
