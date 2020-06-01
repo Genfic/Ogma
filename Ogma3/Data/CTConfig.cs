@@ -89,6 +89,8 @@ namespace Ogma3.Data
 
             public const int MinBodyLength = 50;
             public const int MaxBodyLength = 500_000;
+
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
         }
 
         public static class CClub

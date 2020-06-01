@@ -31,13 +31,13 @@ namespace Ogma3.Pages.Blog
             
             [Required]
             [StringLength(CTConfig.CBlogpost.MaxTitleLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+                ErrorMessage = CTConfig.CBlogpost.ValidateLengthMsg,
                 MinimumLength = CTConfig.CBlogpost.MinTitleLength)]
             public string Title { get; set; }
             
             [Required]
             [StringLength(CTConfig.CBlogpost.MaxBodyLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+                ErrorMessage = CTConfig.CBlogpost.ValidateLengthMsg,
                 MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
         }

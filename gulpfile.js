@@ -50,15 +50,15 @@ gulp.task('watch:css', () => gulp.watch('**/*.sass', gulp.series('css')));
 
 // JS tasks
 gulp.task('js', () => {
-    return gulp.src(['./Ogma3/wwwroot/js/**/*.js', '!./**/*.min.js'])
+    return gulp.src(['./Ogma3/wwwroot/js/src/**/*.js'])
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.init())
         .pipe(uglify({mangle: true}))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./Ogma3/wwwroot/js'));
+        .pipe(gulp.dest('./Ogma3/wwwroot/js/dist'));
 });
 
-gulp.task('watch:js', () => gulp.watch(['./Ogma3/wwwroot/js/**/*.js', '!./**/*.min.js'], gulp.series('js')));
+gulp.task('watch:js', () => gulp.watch(['./Ogma3/wwwroot/js/src/**/*.js'], gulp.series('js')));
 
 // All tasks
 gulp.task('all', gulp.parallel(['css', 'js']));
