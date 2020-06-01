@@ -20,10 +20,6 @@ Vue.component('textarea-counter', {
             type: Number,
             default: 5
         },
-        name: {
-            type: String,
-            required: true
-        },
         validateMsg: {
             type: String,
             default: null
@@ -31,7 +27,8 @@ Vue.component('textarea-counter', {
     },
     data: function () {
         return {
-            text: this.value
+            text: this.value,
+            name: this.label.replace(/\s+/g, '')
         }
     },
     computed: {

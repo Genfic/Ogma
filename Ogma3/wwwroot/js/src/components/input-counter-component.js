@@ -16,10 +16,6 @@ Vue.component('input-counter', {
             type: String,
             default: ''
         },
-        name: {
-            type: String,
-            required: true
-        },
         validateMsg: {
             type: String,
             default: null
@@ -27,7 +23,8 @@ Vue.component('input-counter', {
     },
     data: function () {
         return {
-            text: this.value
+            text: this.value,
+            name: this.label.replace(/\s+/g, '')
         }
     },
     computed: {
