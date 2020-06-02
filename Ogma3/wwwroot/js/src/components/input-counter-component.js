@@ -29,7 +29,7 @@ Vue.component('input-counter', {
     },
     computed: {
         countChars: function () {
-            return this.text.length;
+            return this.text.length.toLocaleString();
         },
         validate: function () {
             return this.text.length >= this.min && this.text.length <= this.max
@@ -49,8 +49,11 @@ Vue.component('input-counter', {
                     type="text" 
                     class="o-form-control active-border" 
                     v-model="text">
-            <span class="counter" :class="validate ? '' : 'invalid'">{{countChars}}/{{max}}</span>
+            <div class="counter" :class="validate ? '' : 'invalid'">
+                <div class="o-progress-bar" :style="{ width: Math.min(100, 100 * (countChars / max)) + '%' }"></div>
+                <span>{{countChars}}/{{max.toLocaleString()}}</span>
+            </div>
             <span v-if="!validate && validateMsg">{{validationString}}</span>
         </div>
-    ` 
+    `
 });

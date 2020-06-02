@@ -1,12 +1,12 @@
 .active-border {
   border: 1px solid var(--foreground-50); }
   .active-border:hover,
-  .active-border:hover + .counter {
+  .active-border:hover ~ .counter {
     border-color: var(--foreground-75); }
   .active-border:focus,
-  .active-border:focus + .counter {
+  .active-border:focus ~ .counter {
     border-color: var(--accent); }
-  .active-border + .counter {
+  .active-border ~ .counter {
     border: 1px solid var(--foreground-50);
     border-top: none; }
 
@@ -651,7 +651,19 @@ form.form {
       margin: 0; }
     form.form .o-form-group > .counter {
       text-align: end;
-      padding: .05rem .2rem .05rem .05rem; }
+      padding: .05rem .2rem .05rem .05rem;
+      position: relative; }
+      form.form .o-form-group > .counter > .o-progress-bar {
+        position: absolute;
+        background-color: var(--accent-25);
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        transition: width .05s ease; }
+      form.form .o-form-group > .counter.invalid {
+        color: red; }
+        form.form .o-form-group > .counter.invalid > .o-progress-bar {
+          background-color: rgba(255, 0, 0, 0.25); }
     form.form .o-form-group .ratings {
       display: grid;
       grid-template-columns: repeat(2, 1fr);

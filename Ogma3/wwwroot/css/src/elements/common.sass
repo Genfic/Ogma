@@ -2,13 +2,13 @@
   border: 1px solid $foreground-50
   
   &:hover,
-  &:hover+.counter
+  &:hover~.counter
     border-color: $foreground-75
     
   &:focus,
-  &:focus+.counter
+  &:focus~.counter
     border-color: $accent 
     
-  &+.counter
+  &~.counter
     border: 1px solid $foreground-50
     border-top: none

@@ -22,6 +22,20 @@ form.form
     &>.counter
       text-align: end
       padding: .05rem .2rem .05rem .05rem
+      position: relative
+      
+      &>.o-progress-bar
+        position: absolute
+        background-color: $accent-25
+        top: 0
+        bottom: 0
+        height: 100%
+        transition: width .05s ease
+        
+      &.invalid
+        color: red
+        &>.o-progress-bar
+          background-color: rgba(255, 0, 0, 0.25)
       
     & .ratings
       display: grid
