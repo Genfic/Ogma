@@ -48,12 +48,11 @@ Vue.component('textarea-counter', {
     template: `
         <div class="o-form-group">
             <label :for="name">{{label}}</label>
-            <textarea 
-                    :name="name"
-                    :id="name" 
-                    class="o-form-control active-border" 
-                    v-model="text" 
-                    :rows="rows">
+            <textarea :name="name"
+                      :id="name" 
+                      class="o-form-control active-border" 
+                      v-model="text" 
+                      :rows="rows">
             </textarea>
             <div class="counter" :class="validate ? '' : 'invalid'">
                 <div class="o-progress-bar" :style="{ width: Math.min(100, 100 * (countChars / max)) + '%' }"></div>

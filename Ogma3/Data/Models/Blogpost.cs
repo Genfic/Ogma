@@ -34,5 +34,9 @@ namespace Ogma3.Data.Models
         public  VotePool VotesPool { get; set; }
         
         public  CommentsThread CommentsThread { get; set; }
+        
+        [Required]
+        [DefaultValue(0)]
+        public int WordCount { get; set; }
     }
 }

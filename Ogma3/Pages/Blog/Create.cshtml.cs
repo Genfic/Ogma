@@ -56,13 +56,14 @@ namespace Ogma3.Pages.Blog
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
 
-            _context.Blogposts.Add(new Blogpost
+            await _context.Blogposts.AddAsync(new Blogpost
             {
                 Title = Blogpost.Title.Trim(),
                 Slug = Blogpost.Title.Trim().Friendlify(),
                 Body = Blogpost.Body.Trim(),
                 Author = user,
-                CommentsThread = new CommentsThread()
+                CommentsThread = new CommentsThread(),
+                WordCount = Blogpost.Body.Trim().Split(' ', '\t', '\n').Length
             });
             await _context.SaveChangesAsync();
 

@@ -4,25 +4,35 @@
   flex-direction: column
   border: 1px solid $foreground-25
   margin: 4px 0 0
-  padding: 4px
   &:first-of-type
     margin: 0
   &:hover
     border-color: $foreground-50
+    & .info
+      border-color: $foreground-50
 
   &>.title
     text-decoration: none 
     color: $foreground
+    padding: .25rem
     &:hover
       color: $foreground-75
       text-decoration: underline
       text-decoration-skip-ink: auto
-    
-  & .author
-    font-size: 1.1rem
-    
+        
   & .excerpt
     overflow: hidden
     display: -webkit-box
+    padding: .25rem
     -webkit-line-clamp: 5
     -webkit-box-orient: vertical
+    
+  & .info
+    border-top: 1px solid $foreground-25
+
+    &>*
+      padding: 0 .25rem
+      color: $foreground-75
+      &:hover
+        color: $foreground
+    

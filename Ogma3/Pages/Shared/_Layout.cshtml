@@ -61,45 +61,44 @@
 </head>
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">
-                    Ogma
-                    <version color="#ff0000" text="α"></version>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex">
-                    <ul class="navbar-nav flex-grow-1">
-                                            
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Stories/Index" asp-route-name="@User.Identity.Name">My Stories</a>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Shelves/Index" asp-route-name="@User.Identity.Name">My Library</a>
-                            </li>
-                        }
-                    </ul>
-                    
-                    <partial name="_LoginPartial" />
-                    
-                </div>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">
+                Ogma
+                <version color="#ff0000" text="α"></version>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex">
+                <ul class="navbar-nav flex-grow-1">
+                                        
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Stories/Index" asp-route-name="@User.Identity.Name">My Stories</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Shelves/Index" asp-route-name="@User.Identity.Name">My Library</a>
+                        </li>
+                    }
+                </ul>
+                
+                <partial name="_LoginPartial" />
+                
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
 <div class="container" id="site-content">
     <main role="main" class="pb-3" id="app">
         @RenderBody()
     </main>
 </div>
-
 
 <footer class="border-top footer text-muted">
     <div class="container">

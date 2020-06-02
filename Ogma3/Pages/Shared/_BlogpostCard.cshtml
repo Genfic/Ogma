@@ -1,17 +1,19 @@
 @using System.Globalization
+@using Utils
 @model Ogma3.Data.Models.Blogpost
 
 <div class="blogpost-card">
     <a class="title" asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
         <h3>@Model.Title</h3>
     </a>
-    <h4 class="author">
-        <span>@Model.Author.UserName</span>,
-        <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-            @Model.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-        </time>
-    </h4>
     <markdown class="excerpt">
-        @Model.Body
+        @string.Join('\n', Model.Body.Split(' ').Take(80))...
     </markdown>
+    <div class="info">
+        <span class="word-count">@Model.WordCount.ToString("N0") words</span>
+        <time class="release-date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+            published @Model.PublishDate.FormatDateWithDaySuffix()
+        </time>
+        <span class="author">by @Model.Author.UserName</span>
+    </div>
 </div>

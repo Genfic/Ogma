@@ -81,6 +81,7 @@ namespace Ogma3.Pages.Blog
             post.Title = Input.Title.Trim();
             post.Slug = Input.Title.Trim().Friendlify();
             post.Body = Input.Body.Trim();
+            post.WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length;
             
             try
             {

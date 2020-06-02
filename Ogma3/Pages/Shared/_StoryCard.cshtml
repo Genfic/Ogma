@@ -10,19 +10,25 @@
                 <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
                 <h3>@Model.Title</h3>
             </a>
-            <h4 class="author">By @Model.Author.UserName</h4>
-            <div class="hook">@Model.Hook</div>
+            <h4 class="author">
+                <a href="@Url.Page("/Profile", new { Name = Model.Author.UserName })">By @Model.Author.UserName</a>
+            </h4>
+            <div class="hook">
+                <markdown>
+                    @Model.Hook
+                </markdown>
+            </div>
             <div class="tags">
                 <partial name="_StoryStatus" model="@Model.Status"></partial>
                 @foreach (var t in Model.Tags)
                 {
                     if (t.Namespace is null)
                     {
-                        <tag href="/Tag/@t.Id/@t.Slug">@t.Name</tag>
+                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug })">@t.Name</tag>
                     }
                     else
                     {
-                        <tag href="/Tag/@t.Id/@t.Slug" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
+                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug })" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
                     }
                 }
             </div>

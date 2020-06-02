@@ -23,19 +23,25 @@ form.form
       text-align: end
       padding: .05rem .2rem .05rem .05rem
       position: relative
+      &:hover
+        &>.o-progress-bar
+          background-color: $accent-25
+        &.invalid
+          &>.o-progress-bar
+            background-color: $red-25
       
       &>.o-progress-bar
         position: absolute
-        background-color: $accent-25
+        background-color: $accent-10
         top: 0
         bottom: 0
         height: 100%
-        transition: width .05s ease
+        transition: width .05s ease, background-color .1s ease-in-out
         
       &.invalid
         color: red
         &>.o-progress-bar
-          background-color: rgba(255, 0, 0, 0.25)
+          background-color: $red-10
       
     & .ratings
       display: grid
