@@ -9,6 +9,7 @@
     <Company>Ogma3</Company>
     <Product>Ogma3</Product>
     <Nullable>disable</Nullable>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
 
@@ -31,6 +32,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.0" />
@@ -253,8 +255,8 @@
   </ItemGroup>
 
   <!--  Automatic migrations on production -->
-  <Target Name="PrePublishTarget" AfterTargets="Publish">
-    <Exec Command="dotnet ef database update" />
-  </Target>
+<!--  <Target Name="PrePublishTarget" AfterTargets="Publish">-->
+<!--    <Exec Command="dotnet ef database update" />-->
+<!--  </Target>-->
 
 </Project>
