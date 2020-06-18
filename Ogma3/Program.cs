@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using Castle.Core.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,9 +28,10 @@ namespace Ogma3
                         await identityContext.Database.MigrateAsync();
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored
+                    var logger = provider.GetRequiredService<ILogger>();
+                    logger.Fatal($"Could not migrate database: {ex.Message}");
                 }
             }
             
@@ -38,15 +41,20 @@ namespace Ogma3
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return Host.CreateDefaultBuilder(args)
+            return Host
+                .CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables("ogma_");
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("http://+:5001", "http://+:8080", "http://+:80");
                     webBuilder.ConfigureKestrel(options =>
                         {
                             // Opts
                         })
                         .UseStartup<Startup>();
-//                    webBuilder.UseStartup<Startup>();
                 });
         }
 

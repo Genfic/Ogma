@@ -19,7 +19,6 @@ namespace Ogma3.Api.V1
 
         // POST
         [HttpPost]
-        [Authorize]
         public async Task UpdateLastActiveAsync()
         {
             var user = await _userManager.GetUserAsync(User);

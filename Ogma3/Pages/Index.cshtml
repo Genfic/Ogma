@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Services
+@using Ogma3.Api.V1
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -27,7 +28,7 @@
         author: null,
     },
     mounted() {
-        axios.get('/api/quotes/random')
+        axios.get('@Url.RouteUrl(nameof(QuotesController))/random')
             .then(res => {
                  this.quote = res.data.body;
                  this.author = res.data.author;

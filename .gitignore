@@ -40,3 +40,7 @@ msbuild.wrn
 node_modules/
 package-lock.json
 yarn-error.log
+
+# Env variables
+ogma.env
+postgres.env

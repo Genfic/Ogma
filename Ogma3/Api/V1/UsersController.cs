@@ -35,6 +35,8 @@ namespace Ogma3.Api.V1
 
             return NoContent();
         }
+        
+        [HttpGet] public IActionResult Ping() => Ok("Pong");
     }
 
     public class SignInData

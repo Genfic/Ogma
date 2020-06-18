@@ -14,14 +14,14 @@ new Vue({
             e.preventDefault();
             
             if (this.name) {
-                axios.get(this.route + '/signin' + this.name)
+                axios.get(this.route + '/signin/' + this.name)
                     .catch(e => console.error(e))
                     .then(r => {
                         if(r.status === 200) {
                             let d = r.data;
                             this.avatar = d.avatar;
                             this.title = d.title;
-                            // this.hasMfa = d.hasMfa;
+                            // this.hasMfa = d.hasMfa; 
                         }
                         this.checked = true;
                     });

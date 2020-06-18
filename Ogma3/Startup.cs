@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using B2Net;
 using B2Net.Models;
@@ -38,8 +39,8 @@ namespace Ogma3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
-                Configuration.GetConnectionString("PostgresConnection"))
-            );
+                Configuration.GetConnectionString("PostgresConnection") ?? Configuration.GetConnectionString("DbConnection")
+             ));
             
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);

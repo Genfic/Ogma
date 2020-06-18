@@ -1,16 +1,47 @@
-version: '2.0'
+version: '3.4'
+
 services:
 
-    web:
-        build:
-            context: .
-            dockerfile: ./Ogma3/Dockerfile
-        ports:
-        - "5000:5000"
-    
-    db:
-        image: postgres
-        restart: always
-        environment:
-            POSTGRES_PASSWORD: Dupa@Postgres666
+  web:
+    build:
+      context: .
+      dockerfile: ./Ogma3/Dockerfile
+    ports:
+      - "8080:80"
+      - "5001:80"
+    env_file:
+      - ogma.env
+    depends_on:
+      - db
+      # - nginx
+    networks:
+      - ogma
+
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432"
+    env_file:
+      - ./postgres/postgres.env
+    networks:
+      - ogma
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  # nginx:
+  #   build: 
+  #     context: .
+  #     dockerfile: ./nginx/Dockerfile
+  #   ports:
+  #     - "8080:80"
+  #   restart: always
+
+networks:
+  ogma:
+    driver: bridge
+        
+volumes:
+  db_data: 
+    driver: local
         
