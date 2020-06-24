@@ -21,13 +21,14 @@ namespace Ogma3.Pages.Blog
             _userManager = userManager;
         }
 
+        [BindProperty]
+        public InputModel Input { get; set; }
+
         public IActionResult OnGet()
         {
+            Input = new InputModel();
             return Page();
         }
-
-        [BindProperty]
-        public InputModel Blogpost { get; set; }
 
         public class InputModel
         {
@@ -58,12 +59,12 @@ namespace Ogma3.Pages.Blog
 
             await _context.Blogposts.AddAsync(new Blogpost
             {
-                Title = Blogpost.Title.Trim(),
-                Slug = Blogpost.Title.Trim().Friendlify(),
-                Body = Blogpost.Body.Trim(),
+                Title = Input.Title.Trim(),
+                Slug = Input.Title.Trim().Friendlify(),
+                Body = Input.Body.Trim(),
                 Author = user,
                 CommentsThread = new CommentsThread(),
-                WordCount = Blogpost.Body.Trim().Split(' ', '\t', '\n').Length
+                WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length
             });
             await _context.SaveChangesAsync();
 

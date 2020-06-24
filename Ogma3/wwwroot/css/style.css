@@ -124,7 +124,10 @@ img.avatar {
     .story-card {
       flex-direction: column; } }
   .story-card .image {
-    flex: 0 0 10rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 10rem;
+    width: 10rem;
     object-fit: contain;
     align-self: flex-start; }
     @media only screen and (max-width: 570px) {

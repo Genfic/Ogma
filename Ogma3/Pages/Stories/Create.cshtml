@@ -8,42 +8,32 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form class="form" id="story" method="post" enctype="multipart/form-data">
+<form class="form" id="story" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="All" class="text-warning">
+        <span>Please correct the following errors</span>
+    </div>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Title"></label>
-        <input asp-for="Input.Title" 
-                placeholder="What your story be named" 
-                class="o-form-control active-border" 
-                v-model="title.current">
-        <span class="counter">{{titleCount}}</span>
-        <span asp-validation-for="Input.Title" class="text-warning"></span>
-    </div>
+    <input-counter ref="title"
+        :min="@CTConfig.CStory.MinTitleLength"
+        :max="@CTConfig.CStory.MaxTitleLength"
+        validate-msg="@CTConfig.CStory.ValidateLengthMsg"
+        label="Input.@nameof(Model.Input.Title)">
+    </input-counter>
     
-    <div class="o-form-group">
-        <label asp-for="Input.Description"></label>
-        <textarea asp-for="Input.Description" 
-                placeholder="What your story is about" 
-                class="o-form-control active-border" 
-                rows="15"
-                v-model="desc.current">
-        </textarea>
-        <span class="counter">{{descCount}}</span>
-        <span asp-validation-for="Input.Description" class="text-warning"></span>
-    </div>
+    <textarea-counter ref="desc"
+        :min="@CTConfig.CStory.MinDescriptionLength"
+        :max="@CTConfig.CStory.MaxDescriptionLength"
+        validate-msg="@CTConfig.CStory.ValidateLengthMsg"
+        label="Input.@nameof(Model.Input.Description)">
+    </textarea-counter>
     
-    <div class="o-form-group">
-        <label asp-for="Input.Hook"></label>
-        <textarea asp-for="Input.Hook" 
-                placeholder="The first thing visible on every list of stories" 
-                class="o-form-control active-border"
-                 v-model="hook.current">
-        </textarea>
-        <span class="counter">{{hookCount}}</span>
-        <span asp-validation-for="Input.Hook" class="text-warning"></span>
-    </div>
+    <input-counter ref="hook"
+        :min="@CTConfig.CStory.MinHookLength"
+        :max="@CTConfig.CStory.MaxHookLength"
+        validate-msg="@CTConfig.CStory.ValidateLengthMsg"
+        label="Input.@nameof(Model.Input.Hook)">
+    </input-counter>
     
     <div class="o-form-group">
         <label asp-for="Input.Cover"></label>
@@ -88,7 +78,7 @@
     </div>
         
 
-        <select style="visibility: collapse" asp-for="Input.Tags" multiple="multiple" id="slim-select">
+        <select style="visibility: collapse; height: 0" asp-for="Input.Tags" multiple="multiple" id="slim-select">
             <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
         </select>
     
@@ -124,6 +114,7 @@
 
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />       
-    <script src="/js/dist/new-story.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>       
+    <script src="/js/dist/editors/story.min.js" asp-append-version="true"></script>
 }

@@ -1,8 +1,7 @@
 ﻿@page "{id}/{slug?}"
-@using Castle.Core.Internal
 @model TagModel
 @{
-    ViewData["Title"] = Model.Tag.Namespace.IsNullOrEmpty() 
+    ViewData["Title"] = string.IsNullOrEmpty(Model.Tag.Namespace) 
         ? Model.Tag.Name
         : $"{Model.Tag.Namespace}:{Model.Tag.Name}";
 }

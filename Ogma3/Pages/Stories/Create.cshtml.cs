@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,8 @@ namespace Ogma3.Pages.Stories
 
         public List<Rating> Ratings { get; set; }
 
-        [BindProperty] public InputModel Input { get; set; }
+        [BindProperty] 
+        public InputModel Input { get; set; }
 
         public class InputModel
         {
@@ -77,6 +79,7 @@ namespace Ogma3.Pages.Stories
 
         public async Task OnGetAsync()
         {
+            Input = new InputModel();
             Ratings = await _context.Ratings.ToListAsync();
         }
 
@@ -84,44 +87,54 @@ namespace Ogma3.Pages.Stories
         {
             Ratings = await _context.Ratings.ToListAsync();
             
-            if (ModelState.IsValid)
+            Console.WriteLine("— " + (ModelState.IsValid ? "State Valid" : "State Invalid"));
+
+            foreach (var (key, value) in ModelState)
             {
-                var user = await _userManager.GetUserAsync(User);
-                var rating = await _context.Ratings.FindAsync(Input.Rating);
-                var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
-
-                // Add story
-                var story = new Story
+                Console.WriteLine($"|— {key}");
+                foreach (var error in value.Errors)
                 {
-                    Author = user,
-                    Title = Input.Title,
-                    Slug = Input.Title.Friendlify(),
-                    Description = Input.Description,
-                    Hook = Input.Hook,
-                    Rating = rating,
-                    Tags = tags,
-                    VotesPool = new VotePool()
-                };
-
-                await _context.Stories.AddAsync(story);
-                await _context.SaveChangesAsync();
-
-                // Upload cover
-                if (Input.Cover != null && Input.Cover.Length > 0)
-                {
-                    var file = await _uploader.Upload(Input.Cover, "covers", $"{story.Id}-{story.Slug}");
-                    story.CoverId = file.FileId;
-                    story.Cover = file.Path;
-                    // Final save
-                    await _context.SaveChangesAsync();
+                    Console.WriteLine($"| |— {error.ErrorMessage}");
+                    Console.WriteLine($"| |  \\— {error.Exception?.Message}");
                 }
+            }
 
-                return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
-            }
-            else
+            if (!ModelState.IsValid)
             {
-                return RedirectToPage();
+                return Page();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            var rating = await _context.Ratings.FindAsync(Input.Rating);
+            var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
+
+            // Add story
+            var story = new Story
+            {
+                Author = user,
+                Title = Input.Title,
+                Slug = Input.Title.Friendlify(),
+                Description = Input.Description,
+                Hook = Input.Hook,
+                Rating = rating,
+                Tags = tags,
+                VotesPool = new VotePool()
+            };
+
+            await _context.Stories.AddAsync(story);
+            await _context.SaveChangesAsync();
+
+            // Upload cover
+            if (Input.Cover != null && Input.Cover.Length > 0)
+            {
+                var file = await _uploader.Upload(Input.Cover, "covers", $"{story.Id}-{story.Slug}");
+                story.CoverId = file.FileId;
+                story.Cover = file.Path;
+                // Final save
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage("../Story", new {id = story.Id, slug = story.Slug});
         }
     }
 }

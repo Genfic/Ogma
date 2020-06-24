@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
 using Extensions.Hosting.AsyncInitialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -126,7 +125,7 @@ namespace Ogma3.Services.Initializers
             using var wc = new WebClient();
             var json = wc.DownloadString("https://gist.githubusercontent.com/Atulin/7b08ee72fa37609875b5a79fd4ed0e0f/raw/b30df8a231b740cd489d524d1981cd549c7a5be1/quotes.json");
             
-            if (json.IsNullOrEmpty()) return;
+            if (string.IsNullOrEmpty(json)) return;
             
             var quotes = JsonSerializer
                 .Deserialize<ICollection<JsonQuote>>(json)

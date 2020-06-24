@@ -7,23 +7,27 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form class="form" id="blogpost" method="post">
+<form class="form" id="blogpost" method="post" v-on:submit="onSubmit">
     
-    <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+    <div asp-validation-summary="ModelOnly" class="text-warning">
+        <span>Please correct the following errors</span>
+    </div>
 
-    <div class="o-form-group">
-        <label asp-for="Blogpost.Title"></label>
-        <input asp-for="Blogpost.Title" class="o-form-control" v-model="title.current"/>
-        <span class="counter">{{titleCount}}</span>
-        <span asp-validation-for="Blogpost.Title" class="text-warning"></span>
-    </div>
+    <input-counter ref="title"
+        :min="@CTConfig.CBlogpost.MinTitleLength"
+        :max="@CTConfig.CBlogpost.MaxTitleLength"
+        validate-msg="@CTConfig.CBlogpost.ValidateLengthMsg"
+        label="@nameof(Model.Input.Title)"
+        value="@Model.Input.Title">
+    </input-counter>
     
-    <div class="o-form-group">
-        <label asp-for="Blogpost.Body"></label>
-        <textarea rows="20" asp-for="Blogpost.Body" class="o-form-control" v-model="body.current"></textarea>
-        <span class="counter">{{bodyCount}}</span>
-        <span asp-validation-for="Blogpost.Body" class="text-warning"></span>
-    </div>
+    <textarea-counter ref="body"
+        :min="@CTConfig.CBlogpost.MinBodyLength"
+        :max="@CTConfig.CBlogpost.MaxBodyLength"
+        validate-msg="@CTConfig.CBlogpost.ValidateLengthMsg"
+        label="@nameof(Model.Input.Body)"
+        value="@Model.Input.Body">
+    </textarea-counter>
     
     <div class="o-form-group">
         <input type="submit" value="Create" class="btn btn-primary"/>
@@ -34,8 +38,9 @@
 
 
 @section Scripts { 
-    <partial name="_ValidationScriptsPartial" />       
-    <script src="/js/dist/new-blogpost.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>   
+    <script src="/js/dist/editors/blogpost.min.js" asp-append-version="true"></script>
 }
 
 

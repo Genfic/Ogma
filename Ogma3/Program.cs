@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Castle.Core.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 
 namespace Ogma3
@@ -30,8 +30,9 @@ namespace Ogma3
                 }
                 catch (Exception ex)
                 {
-                    var logger = provider.GetRequiredService<ILogger>();
-                    logger.Fatal($"Could not migrate database: {ex.Message}");
+                    // var logger = provider.GetRequiredService<ILogger>();
+                    // logger.Log(LogLevel.Critical, $"Could not migrate database: {ex.Message}");
+                    Console.WriteLine($"Could not migrate database: {ex.Message}");
                 }
             }
             
@@ -43,6 +44,11 @@ namespace Ogma3
         {
             return Host
                 .CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddEnvironmentVariables("ogma_");
