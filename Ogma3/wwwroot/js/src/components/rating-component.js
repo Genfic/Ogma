@@ -12,6 +12,10 @@ Vue.component('input-rating', {
         ratingsApi: {
             type: String,
             required: true
+        },
+        value: {
+            type: Number,
+            default: null
         }
     },
     data: function () {
@@ -19,6 +23,15 @@ Vue.component('input-rating', {
             name: this.label.replace(/\s+/g, ''),
             loading: true,
             ratings: []
+        }
+    },
+    methods: {
+        checked(id, idx) {
+            if (this.value) {
+                return id === this.value;
+            } else {
+                return idx === 0;
+            }
         }
     },
     created() {
@@ -43,7 +56,7 @@ Vue.component('input-rating', {
                            :name="name"
                            :id="rating.name.toLowerCase()"
                            :value="rating.id" 
-                           :checked="idx === 0"
+                           :checked="checked(rating.id, idx)"
                            class="radio">
                     
                     <label class="radio-label active-border" :for="rating.name.toLowerCase()">
@@ -51,6 +64,7 @@ Vue.component('input-rating', {
                         <div class="main">
                             <strong>{{rating.name}}</strong>
                             <span>{{rating.description}}</span>
+                            <span>{{checked(rating.id, idx)}}</span> 
                         </div>
                     </label>
                 </div>

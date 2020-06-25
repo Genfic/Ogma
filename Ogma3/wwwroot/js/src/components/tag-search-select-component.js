@@ -8,10 +8,6 @@ Vue.component('tag-search-select', {
             type: String,
             required: true
         },
-        value: {
-            type: String,
-            default: ''
-        },
         desc: {
             type: String,
             required: false,
@@ -24,6 +20,10 @@ Vue.component('tag-search-select', {
         tagsApi: {
             type: String,
             required: true
+        },
+        storyId: {
+            type: Number,
+            default: null
         }
     },
     data: function () {
@@ -68,8 +68,18 @@ Vue.component('tag-search-select', {
     created() {
         axios.get(this.tagsApi)
             .then(res => {
-                this.options = res.data;
+                this.options = res.data; 
                 this.loading = false;
+                
+                if (this.storyId) {
+                    axios.get(`${this.tagsApi}/story/${this.storyId}`)
+                        .then(res => {
+                            this.selected = res.data;
+                            this.selected.forEach(x => this.options.find(e => e.id === x.id).hidden = true)
+                        })
+                        .catch(console.error);
+                }
+                
             })
             .catch(console.error);
     },
