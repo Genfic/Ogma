@@ -16,6 +16,7 @@
 		"postcss-discard-comments": "^4.0.2"
 	},
 	"dependencies": {
+		"gulp-terser-js": "^5.2.2",
 		"vue": "^2.6.10"
 	}
 }

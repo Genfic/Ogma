@@ -10,111 +10,66 @@
 
 <form class="form" id="story" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
 
-    <div asp-validation-summary="All" class="text-warning">
+    <div asp-validation-summary="ModelOnly" class="text-warning">
         <span>Please correct the following errors</span>
     </div>
 
     <input-counter ref="title"
-        :min="@CTConfig.CStory.MinTitleLength"
-        :max="@CTConfig.CStory.MaxTitleLength"
-        validate-msg="@CTConfig.CStory.ValidateLengthMsg"
-        label="Input.@nameof(Model.Input.Title)">
+                   :min="@CTConfig.CStory.MinTitleLength"
+                   :max="@CTConfig.CStory.MaxTitleLength"
+                   validate-msg="@CTConfig.CStory.ValidateLengthMsg"
+                   label="@nameof(Model.Input.Title)"
+                   desc="Try something catchy">
     </input-counter>
-    
+
     <textarea-counter ref="desc"
-        :min="@CTConfig.CStory.MinDescriptionLength"
-        :max="@CTConfig.CStory.MaxDescriptionLength"
-        validate-msg="@CTConfig.CStory.ValidateLengthMsg"
-        label="Input.@nameof(Model.Input.Description)">
+                      :min="@CTConfig.CStory.MinDescriptionLength"
+                      :max="@CTConfig.CStory.MaxDescriptionLength"
+                      validate-msg="@CTConfig.CStory.ValidateLengthMsg"
+                      label="@nameof(Model.Input.Description)"
+                      desc="The long description, shown when user opens your story's page">
     </textarea-counter>
-    
+
     <input-counter ref="hook"
-        :min="@CTConfig.CStory.MinHookLength"
-        :max="@CTConfig.CStory.MaxHookLength"
-        validate-msg="@CTConfig.CStory.ValidateLengthMsg"
-        label="Input.@nameof(Model.Input.Hook)">
+                   :min="@CTConfig.CStory.MinHookLength"
+                   :max="@CTConfig.CStory.MaxHookLength"
+                   validate-msg="@CTConfig.CStory.ValidateLengthMsg"
+                   label="@nameof(Model.Input.Hook)"
+                   desc="The short description that appears on story lists">
     </input-counter>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Cover"></label>
-        <p>First thing people often notice</p>
-        <input asp-for="Input.Cover" 
-                type="file" 
-                class="o-form-control active-border"
-                accept=".png,.jpg,.jpeg">
-        <span asp-validation-for="Input.Cover" class="text-warning"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label>Rating</label>
-        <p>What audience is the story suitable for</p>
-        
-        <div class="ratings">
-            @{ var first = true; }
-            @foreach (var rating in Model.Ratings)
-            {
-                <div class="rating">
-                    @if (first)
-                    {
-                        <input asp-for="Input.Rating" class="radio" type="radio" id="@rating.Name.ToLower()" value="@rating.Id" checked="checked">
-                    }
-                    else
-                    {
-                        <input asp-for="Input.Rating" class="radio" type="radio" id="@rating.Name.ToLower()" value="@rating.Id" >
-                    }
-                    <label class="radio-label active-border" for="@rating.Name.ToLower()">
-                        <img src="@rating.Icon" alt="">
-                        <div class="main">
-                            <strong>@rating.Name</strong>
-                            <span>@rating.Description</span>
-                        </div>
-                    </label>
-                </div>
-                first = false;
-            }
-        </div>
-        <span asp-validation-for="Input.Rating" class="text-warning"></span>
-        
-    </div>
-        
 
-        <select style="visibility: collapse; height: 0" asp-for="Input.Tags" multiple="multiple" id="slim-select">
-            <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
-        </select>
+    <input-file ref="cover"
+                :max="@CTConfig.CStory.CoverMaxWeight"
+                validate-msg="@CTConfig.CStory.ValidateFileWeight"
+                label="@nameof(Model.Input.Cover)"
+                desc="First thing people often notice">
+    </input-file>
     
+    <input-rating ref="rating"
+                  label="@nameof(Model.Input.Rating)"
+                  desc="What audience is the story suitable for"
+                  ratings-api="@Url.RouteUrl(nameof(RatingsController))">
+    </input-rating>
     
-        <div class="o-form-group tag-search">
-            <label asp-for="Input.Tags"></label>
-            <p>To make the story easier to find</p>
-            
-            <div class="tags">
-              <div class="tag" v-bind:style="{background: s.rgba}" v-for="s in selected">
-                {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
-                <icon icon="clear" v-on:click="remove(s)"></icon>
-              </div>
-            </div>
-            
-            <input class="search" type="text" placeholder="Search..." v-model="search">
-            <span asp-validation-for="Input.Tags" class="text-warning"></span>
-            
-            <ol class="search-results">
-              <li v-for="o in filtered" :style="{background: o.rgba}" :class="o.hidden ? 'hidden' : null" v-on:click="addUnique(o)">
-                <span class="name">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</span>
-                <span class="desc">{{o.description}}</span>
-              </li>
-            </ol>
+    <tag-search-select ref="tags"
+                       label="@nameof(Model.Input.Tags)"
+                       desc="To make the story easier to find"
+                       :min="@CTConfig.CStory.MinTagCount"
+                       tags-api="@Url.RouteUrl(nameof(TagsController))"
+                       validate-msg="@CTConfig.CStory.ValidateTagCount">
+    </tag-search-select>
 
-      </div>
-        
-    <button type="submit" class="btn btn-primary" >Create</button>
-    
-    <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(TagsController))" v-if="!route"></div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+
 </form>
-
 
 
 @section Scripts {
     <script src="/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>       
+    <script src="/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/input-file-component.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/rating-component.min.js" asp-append-version="true"></script>
+    <script src="/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
     <script src="/js/dist/editors/story.min.js" asp-append-version="true"></script>
 }

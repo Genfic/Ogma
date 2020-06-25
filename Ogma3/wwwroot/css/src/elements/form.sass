@@ -47,9 +47,13 @@ form.form
       display: grid
       grid-template-columns: repeat(2, 1fr)
       grid-gap: .5rem
+      @media only screen and (max-width: $mq-mobile)
+        display: flex
+        flex-direction: column
+        &>.rating
+          margin-bottom: .5rem
         
       & .rating
-        flex-basis: 50%
       
         & .radio
           display: none

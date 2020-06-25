@@ -13,6 +13,7 @@ const nano = require('cssnano');
 
 // JS processors
 const uglify = require('gulp-uglify-es').default;
+const terser = require('gulp-terser-js');
 
 // CSS tasks
 gulp.task('css', () => {
@@ -53,7 +54,12 @@ gulp.task('js', () => {
     return gulp.src(['./Ogma3/wwwroot/js/src/**/*.js'])
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.init())
-        .pipe(uglify({mangle: true}))
+        // .pipe(uglify({mangle: true}))
+        .pipe(terser({ mangle: { toplevel: true } }))
+        .on('error', err => {
+            console.error(err)
+            this.emit('end')
+        })
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./Ogma3/wwwroot/js/dist'));
 });

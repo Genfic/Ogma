@@ -692,27 +692,31 @@ form.form {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-gap: .5rem; }
-      form.form .o-form-group .ratings .rating {
-        flex-basis: 50%; }
-        form.form .o-form-group .ratings .rating .radio {
-          display: none; }
-          form.form .o-form-group .ratings .rating .radio:checked + .radio-label {
-            background: var(--accent-25);
-            border-color: var(--accent); }
-        form.form .o-form-group .ratings .rating .radio-label {
+      @media only screen and (max-width: 570px) {
+        form.form .o-form-group .ratings {
           display: flex;
-          cursor: pointer; }
-          form.form .o-form-group .ratings .rating .radio-label > img {
-            flex-basis: 3rem; }
-          form.form .o-form-group .ratings .rating .radio-label > .main {
-            display: block;
-            margin-left: .5rem; }
-            form.form .o-form-group .ratings .rating .radio-label > .main > * {
-              display: block; }
-            form.form .o-form-group .ratings .rating .radio-label > .main > strong {
-              font-weight: 600; }
-            form.form .o-form-group .ratings .rating .radio-label > .main > span {
-              font-weight: 500; }
+          flex-direction: column; }
+          form.form .o-form-group .ratings > .rating {
+            margin-bottom: .5rem; } }
+      form.form .o-form-group .ratings .rating .radio {
+        display: none; }
+        form.form .o-form-group .ratings .rating .radio:checked + .radio-label {
+          background: var(--accent-25);
+          border-color: var(--accent); }
+      form.form .o-form-group .ratings .rating .radio-label {
+        display: flex;
+        cursor: pointer; }
+        form.form .o-form-group .ratings .rating .radio-label > img {
+          flex-basis: 3rem; }
+        form.form .o-form-group .ratings .rating .radio-label > .main {
+          display: block;
+          margin-left: .5rem; }
+          form.form .o-form-group .ratings .rating .radio-label > .main > * {
+            display: block; }
+          form.form .o-form-group .ratings .rating .radio-label > .main > strong {
+            font-weight: 600; }
+          form.form .o-form-group .ratings .rating .radio-label > .main > span {
+            font-weight: 500; }
   form.form .o-form-control:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-25); }

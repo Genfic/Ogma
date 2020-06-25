@@ -20,6 +20,11 @@ Vue.component('textarea-counter', {
             type: Number,
             default: 5
         },
+        desc: {
+            type: String,
+            required: false,
+            default: null
+        },
         validateMsg: {
             type: String,
             default: null
@@ -41,13 +46,14 @@ Vue.component('textarea-counter', {
         validationString: function () {
             return this.validateMsg
                 .replace('{0}', this.label)
-                .replace('{1}', this.max)
-                .replace('{2}', this.min);
+                .replace('{1}', `${this.max}`)
+                .replace('{2}', `${this.min}`);
         }
     },
     template: `
         <div class="o-form-group">
             <label :for="name">{{label}}</label>
+            <p class="desc" v-if="desc">{{desc}}</p>
             <textarea :name="name"
                       :id="name" 
                       class="o-form-control active-border" 

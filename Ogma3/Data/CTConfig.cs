@@ -66,8 +66,12 @@ namespace Ogma3.Data
             public const int MinHookLength = 50;
             public const int MaxHookLength = 250;
             public const int CoverMaxWeight = 2 * 1024 * 1024;
+
+            public const int MinTagCount = 3;
             
             public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateFileWeight = "The {0} must be less than {1} bytes";
+            public const string ValidateTagCount = "You must select {0} tags or more";
         }
         
         public static class CComment
