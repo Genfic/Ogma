@@ -39,6 +39,16 @@ let anamespaces_vue = new Vue({
                     });
             }
         },
+        
+        copyCode: function(t) {
+            navigator.clipboard.writeText(t.code).then(
+                ( ) => alert("Copied"), 
+                (e) => {
+                    alert("Could not copy");
+                    console.error(e)
+                }
+            );
+        },
 
         // Parse date
         date: function (dt) {

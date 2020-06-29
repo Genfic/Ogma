@@ -4,14 +4,21 @@
 
 <div class="story-card">
     <div class="main">
-        <img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy"/>
+        @if (Model.Cover != null)
+        {
+            <img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy"/>
+        }
+        else
+        {
+            <div class="image">No image</div>
+        }
         <div class="body">
             <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
                 <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
                 <h3>@Model.Title</h3>
             </a>
             <h4 class="author">
-                <a href="@Url.Page("/Profile", new { Name = Model.Author.UserName })">By @Model.Author.UserName</a>
+                <a href="@Url.Page("/Profile", new {Name = Model.Author.UserName})">By @Model.Author.UserName</a>
             </h4>
             <div class="hook">
                 <markdown>
@@ -24,11 +31,11 @@
                 {
                     if (t.Namespace is null)
                     {
-                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug })">@t.Name</tag>
+                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})">@t.Name</tag>
                     }
                     else
                     {
-                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug })" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
+                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
                     }
                 }
             </div>

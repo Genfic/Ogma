@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api
 @using Ogma3.Api.V1
 @model Ogma3.Areas.Admin.Pages.InviteCodes
 
@@ -27,6 +26,9 @@
         <div class="actions">
             <button v-on:click="deleteCode(n)">
                 <icon icon="delete_forever"></icon>
+            </button>
+            <button v-on:click="copyCode(n)">
+                <icon icon="copy"></icon>
             </button>
         </div>
     </li>

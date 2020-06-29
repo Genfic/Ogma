@@ -133,6 +133,9 @@ img.avatar {
     @media only screen and (max-width: 570px) {
       .story-card .image {
         align-self: center; } }
+  .story-card div.image {
+    align-self: center;
+    text-align: center; }
   .story-card div.main {
     display: flex;
     flex: 1;
