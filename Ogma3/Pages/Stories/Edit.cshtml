@@ -1,7 +1,5 @@
 ﻿@page
-@using Ogma3.Api
 @using Ogma3.Api.V1
-@using Ogma3.Data.Enums
 @model Ogma3.Pages.Stories.EditModel
 
 @{
@@ -12,7 +10,7 @@
 
 <form class="form" id="story" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
 
-    <div asp-validation-summary="ModelOnly" class="text-warning">
+    <div asp-validation-summary="All">
         <span>Please correct the following errors</span>
     </div>
 
@@ -73,10 +71,10 @@
 
 
 @section Scripts {
-    <script src="/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/input-file-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/rating-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/editors/story.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/input-file-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/rating-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/editors/story.min.js" asp-append-version="true"></script>
 }

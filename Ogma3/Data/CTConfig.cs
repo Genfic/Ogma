@@ -53,6 +53,9 @@ namespace Ogma3.Data
             public const int MaxBodyLength = 500_000;
 
             public const int MaxNotesLength = 500;
+            
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateNoteLengthMsg = "The {0} cannot exceed {1} characters.";
         }
         
         public static class CStory

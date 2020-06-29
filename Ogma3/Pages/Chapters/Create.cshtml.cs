@@ -30,6 +30,8 @@ namespace Ogma3.Pages.Chapters
 
         public IActionResult OnGetAsync(int? id)
         {
+            Input = new InputModel();
+
             // Get story
             Story = _context.Stories
                 .Where(s => s.Id == id)
@@ -50,7 +52,7 @@ namespace Ogma3.Pages.Chapters
         }
 
         [BindProperty]
-        public InputModel Chapter { get; set; }
+        public InputModel Input { get; set; }
         public Story Story { get; set; }
 
         public class InputModel
@@ -118,14 +120,14 @@ namespace Ogma3.Pages.Chapters
             // Construct new chapter
             var chapter = new Chapter
             {
-                Title = Chapter.Title.Trim(),
-                Body = Chapter.Body.Trim(),
-                StartNotes = Chapter.StartNotes?.Trim(),
-                EndNotes = Chapter.EndNotes?.Trim(),
-                Slug = Chapter.Title.Trim().Friendlify(),
+                Title = Input.Title.Trim(),
+                Body = Input.Body.Trim(),
+                StartNotes = Input.StartNotes?.Trim(),
+                EndNotes = Input.EndNotes?.Trim(),
+                Slug = Input.Title.Trim().Friendlify(),
                 Order = latestChapter + 1,
                 CommentsThread = new CommentsThread(),
-                WordCount = Chapter.Body.Trim().Split(' ', '\t', '\n').Length
+                WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length
             };
             
             // Recalculate words and chapters in the story

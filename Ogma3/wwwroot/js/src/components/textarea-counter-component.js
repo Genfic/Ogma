@@ -52,7 +52,7 @@ Vue.component('textarea-counter', {
     },
     template: `
         <div class="o-form-group">
-            <label :for="name">{{label}}</label>
+            <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>
             <textarea :name="name"
                       :id="name" 
@@ -66,5 +66,5 @@ Vue.component('textarea-counter', {
             </div>
             <span v-if="!validate && validateMsg">{{validationString}}</span>
         </div>
-    `
+    ` 
 });

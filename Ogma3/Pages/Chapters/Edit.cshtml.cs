@@ -24,7 +24,7 @@ namespace Ogma3.Pages.Chapters
         }
 
         [BindProperty]
-        public InputModel Chapter { get; set; }
+        public InputModel Input { get; set; }
         
         public class InputModel
         {
@@ -76,7 +76,7 @@ namespace Ogma3.Pages.Chapters
 
             if (chapter == null || !authorized) return NotFound();
 
-            Chapter = new InputModel
+            Input = new InputModel
             {
                 Id = chapter.Id,
                 Title = chapter.Title,
@@ -98,7 +98,7 @@ namespace Ogma3.Pages.Chapters
             }
             
             // Get chapter
-            var chapter = await _context.Chapters.FindAsync(Chapter.Id);
+            var chapter = await _context.Chapters.FindAsync(Input.Id);
             if (chapter == null) return NotFound();
             
             // Get story
@@ -111,12 +111,12 @@ namespace Ogma3.Pages.Chapters
             
             if (!story.Author.IsLoggedIn(User)) return NotFound();
             
-            chapter.Title      = Chapter.Title.Trim();
-            chapter.Body       = Chapter.Body.Trim();
-            chapter.StartNotes = Chapter.StartNotes?.Trim();
-            chapter.EndNotes   = Chapter.EndNotes?.Trim();
-            chapter.Slug       = Chapter.Title.Trim().Friendlify();
-            chapter.WordCount  = Chapter.Body.Trim().Split(' ', '\t', '\n').Length;
+            chapter.Title      = Input.Title.Trim();
+            chapter.Body       = Input.Body.Trim();
+            chapter.StartNotes = Input.StartNotes?.Trim();
+            chapter.EndNotes   = Input.EndNotes?.Trim();
+            chapter.Slug       = Input.Title.Trim().Friendlify();
+            chapter.WordCount  = Input.Body.Trim().Split(' ', '\t', '\n').Length;
             
             await _context.SaveChangesAsync();
 
@@ -129,7 +129,7 @@ namespace Ogma3.Pages.Chapters
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ChapterExists(Chapter.Id))
+                if (!ChapterExists(Input.Id))
                 {
                     return NotFound();
                 }

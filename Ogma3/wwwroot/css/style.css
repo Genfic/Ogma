@@ -720,6 +720,15 @@ form.form {
   form.form .o-form-control:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-25); }
+  form.form .validation-summary-valid {
+    display: none; }
+  form.form .validation-summary-errors {
+    margin-top: 1rem;
+    border: 1px solid var(--red-50);
+    padding: .5rem;
+    background-color: var(--red-10); }
+    form.form .validation-summary-errors:hover {
+      border-color: var(--red-75); }
 
 .tag-search .tags {
   min-height: 2.5rem;
