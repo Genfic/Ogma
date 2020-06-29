@@ -28,6 +28,10 @@ Vue.component('textarea-counter', {
         validateMsg: {
             type: String,
             default: null
+        },
+        wordcount: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -40,6 +44,13 @@ Vue.component('textarea-counter', {
         countChars: function () {
             return this.text.length.toLocaleString();
         },
+        countWords: function () {
+            return this.text
+                .replace(/[\W_]+/, ' ')
+                .split(/\s+/)
+                .length
+                .toLocaleString();
+        },
         validate: function () {
             return this.text.length >= this.min && this.text.length <= this.max
         },
@@ -51,7 +62,7 @@ Vue.component('textarea-counter', {
         }
     },
     template: `
-        <div class="o-form-group">
+        <div class="o-form-group"> 
             <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>
             <textarea :name="name"
@@ -59,10 +70,11 @@ Vue.component('textarea-counter', {
                       class="o-form-control active-border" 
                       v-model="text" 
                       :rows="rows">
-            </textarea>
+            </textarea> 
             <div class="counter" :class="validate ? '' : 'invalid'">
                 <div class="o-progress-bar" :style="{ width: Math.min(100, 100 * (countChars / max)) + '%' }"></div>
-                <span>{{countChars}}/{{max.toLocaleString()}}</span>
+                <span v-if="wordcount">{{countWords}} words, </span>
+                <span>{{countChars}}/{{max.toLocaleString()}}<span v-if="wordcount"> chars</span></span>
             </div>
             <span v-if="!validate && validateMsg">{{validationString}}</span>
         </div>

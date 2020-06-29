@@ -21,7 +21,6 @@ form.form
       
     &>.counter
       text-align: end
-      padding: .05rem .2rem .05rem .05rem
       position: relative
       &:hover
         &>.o-progress-bar
@@ -38,6 +37,16 @@ form.form
         height: 100%
         transition: width .05s ease, background-color .1s ease-in-out
         
+      & span
+        margin-top: .05rem
+        margin-bottom: .05rem
+        &:first-child
+          margin-right: 0
+          margin-left: .2rem
+        &:last-child
+          margin-right: .2rem
+          margin-left: 0
+
       &.invalid
         color: red
         &>.o-progress-bar

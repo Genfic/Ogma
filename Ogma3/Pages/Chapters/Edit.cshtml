@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form class="form" id="chapter" method="post">
+        <form class="form" id="chapter" method="post" v-on:submit="onSubmit">
         
             <div asp-validation-summary="All">
                 <span>Please correct the following errors</span>
@@ -26,6 +26,8 @@
             <textarea-counter ref="body"
                               :min="@CTConfig.CChapter.MinBodyLength"
                               :max="@CTConfig.CChapter.MaxBodyLength"
+                              :wordcount="true"
+                              :rows="20"
                               validate-msg="@CTConfig.CChapter.ValidateLengthMsg"
                               label="@nameof(Model.Input.Body)"
                               value="@Model.Input.Body">

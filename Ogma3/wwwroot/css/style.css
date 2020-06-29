@@ -671,7 +671,6 @@ form.form {
       margin: 0; }
     form.form .o-form-group > .counter {
       text-align: end;
-      padding: .05rem .2rem .05rem .05rem;
       position: relative; }
       form.form .o-form-group > .counter:hover > .o-progress-bar {
         background-color: var(--accent-25); }
@@ -684,6 +683,15 @@ form.form {
         bottom: 0;
         height: 100%;
         transition: width .05s ease, background-color .1s ease-in-out; }
+      form.form .o-form-group > .counter span {
+        margin-top: .05rem;
+        margin-bottom: .05rem; }
+        form.form .o-form-group > .counter span:first-child {
+          margin-right: 0;
+          margin-left: .2rem; }
+        form.form .o-form-group > .counter span:last-child {
+          margin-right: .2rem;
+          margin-left: 0; }
       form.form .o-form-group > .counter.invalid {
         color: red; }
         form.form .o-form-group > .counter.invalid > .o-progress-bar {
