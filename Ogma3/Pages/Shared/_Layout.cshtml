@@ -48,7 +48,7 @@
     
     <link rel="stylesheet" href="~/css/style.min.css" asp-append-version="true">
     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&display=swap" rel="stylesheet">
 
     @if (Env.IsDevelopment())
     {
@@ -94,6 +94,11 @@
     </nav>
 </header>
 
+<noscript>
+    While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>
+    Consider enabling it — you can check the site's <a href="#">source code</a> if you're unsure.
+</noscript>
+
 <div class="container" id="site-content">
     <main role="main" class="pb-3" id="app">
         @RenderBody()
@@ -115,13 +120,11 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     }
     
-    @* <script src="~/js/dist/site.min.js" asp-append-version="true"></script> *@
-
     @await RenderSectionAsync("Scripts", required: false)
     @Html.RenderResources()
     
     <script>
-    axios.post('@Url.RouteUrl(nameof(UserActivityController))').catch(console.error);
+    (_=>{axios.post('@Url.RouteUrl(nameof(UserActivityController))').catch(console.error);})()
     </script>
     
 </body>

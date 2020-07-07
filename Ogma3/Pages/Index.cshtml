@@ -6,9 +6,9 @@
     ViewData["Title"] = "Home page";
 }
 
-<div id="quote" class="quote">
-    <em>{{quote}}</em>
-    <span>~ {{author}}</span>
+<div id="quote" class="quote active-border">
+    <em class="body">{{quote}}</em>
+    <span class="author">~ {{author}}</span>
 </div>
 
 <h2>Recent stories</h2>
@@ -25,15 +25,15 @@
         el: '#quote',
         data: {
             quote: null,
-        author: null,
-    },
-    mounted() {
-        axios.get('@Url.RouteUrl(nameof(QuotesController))/random')
-            .then(res => {
-                 this.quote = res.data.body;
-                 this.author = res.data.author;
-            })
-            .catch(console.error)
-    }
+            author: null,
+        },
+        mounted() {
+            axios.get('@Url.RouteUrl(nameof(QuotesController))/random')
+                .then(res => {
+                     this.quote = res.data.body;
+                     this.author = res.data.author;
+                })
+                .catch(console.error)
+        }
     })
 </script>)

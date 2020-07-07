@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
 body {
   display: flex;
@@ -16,15 +17,15 @@ body {
     display: flex; }
 
 .active-border {
-  border: 1px solid var(--foreground-50); }
+  border: 1px solid var(--foreground-25); }
   .active-border:hover,
   .active-border:hover ~ .counter {
-    border-color: var(--foreground-75); }
+    border-color: var(--foreground-50); }
   .active-border:focus,
   .active-border:focus ~ .counter {
     border-color: var(--accent); }
   .active-border ~ .counter {
-    border: 1px solid var(--foreground-50);
+    border: 1px solid var(--foreground-25);
     border-top: none; }
 
 .monospace {
@@ -780,6 +781,17 @@ form.form {
       color: var(--foreground-50);
       text-overflow: ellipsis; }
 
+.quote {
+  padding: .5rem;
+  display: flex;
+  flex-direction: column; }
+  .quote .body:before {
+    content: "“"; }
+  .quote .body:after {
+    content: "”"; }
+  .quote .author {
+    align-self: flex-end; }
+
 #version {
   color: var(--background);
   border-radius: .2rem;
@@ -787,3 +799,8 @@ form.form {
   font-size: 15px;
   line-height: 15px;
   padding: 3px; }
+
+noscript {
+  background-color: var(--red-25);
+  border: 1px solid var(--foreground-50);
+  padding: .2rem; }

@@ -12,7 +12,6 @@ const mqpacker = require('css-mqpacker');
 const nano = require('cssnano');
 
 // JS processors
-const uglify = require('gulp-uglify-es').default;
 const terser = require('gulp-terser-js');
 
 // CSS tasks
@@ -28,9 +27,6 @@ gulp.task('css', () => {
         .pipe(sass())                           // Compile SASS
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output the raw CSS
         .pipe(postcss(processors))              // Postprocess it
-        // .pipe(purge({                        // Purge it
-        //     content: ['./Ogma3/**/*.cshtml']
-        // }))        
         .pipe(rename({ suffix: '.min' }))       // Add .min suffix
         .pipe(gulp.dest('./Ogma3/wwwroot/css')) // Output minified CSS
 });
