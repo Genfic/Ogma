@@ -31,7 +31,10 @@ namespace Ogma3.Pages.Blog
                 return NotFound();
             }
 
-            Blogpost = await _context.Blogposts.FirstOrDefaultAsync(m => m.Id == id);
+            Blogpost = await _context.Blogposts
+                .Where(m => m.Id == id)
+                .Include(b => b.CommentsThread)
+                .FirstOrDefaultAsync();
 
             if (Blogpost == null)
             {

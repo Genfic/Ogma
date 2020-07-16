@@ -15,7 +15,7 @@ namespace Ogma3.Pages.Stories
     public class DeleteModel : PageModel
     {
         private readonly Data.ApplicationDbContext _context;
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
         private readonly IB2Client _b2Client;
 
         public DeleteModel(Data.ApplicationDbContext context, IB2Client b2Client, IConfiguration config)
@@ -34,14 +34,15 @@ namespace Ogma3.Pages.Stories
             // Get the story and make sure the logged-in user matches author
             Story = await _context.Stories
                 .Include(s => s.Author)
-                .Include(s => s.StoryTags)
-                    .ThenInclude(st => st.Tag)
-                        .ThenInclude(t => t.Namespace)
+                .Include(s => s.VotesPool)
+                    .ThenInclude(vp => vp.Votes)
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
-                .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
+                    .ThenInclude(c => c.CommentsThread)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (Story == null) return NotFound();
+            if (!Story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
 
             return Page();
         }
@@ -53,12 +54,9 @@ namespace Ogma3.Pages.Stories
             // Get the story and make sure the logged-in user matches author
             Story = await _context.Stories
                 .Include(s => s.Author)
-                .Include(s => s.Chapters)
-                    .ThenInclude(c => c.CommentsThread)
-                .Include(s => s.VotesPool)
-                    .ThenInclude(vp => vp.Votes)
-                .FirstOrDefaultAsync(s => s.Id == id && s.Author.IsLoggedIn(User));
+                .FirstOrDefaultAsync(s => s.Id == id);
             if (Story == null) return NotFound();
+            if (!Story.Author.IsLoggedIn(User)) return Forbid();
 
             // Remove tag associations
             await _context.StoryTags

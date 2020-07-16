@@ -106,3 +106,41 @@ form.form
       &:hover
         border-color: $red-75
         
+form.confirm
+  padding: 1rem 0 0
+    
+  &>.buttons
+    display: flex
+  
+    & .button
+      border: 1px solid $foreground-25
+      padding: .5rem
+      &:hover
+        border-color: $foreground-50
+        background-color: $accent-10
+          
+      &:first-child
+        border-radius: .5rem 0 0 .5rem
+  
+      &:last-child
+        border-radius: 0 .5rem .5rem 0
+      
+      &.accept
+        
+        &.red
+          border-color: $red
+          background-color: $red-50
+          &:hover
+            background-color: $red-75
+          
+        &.green
+          border-color: $green
+          background-color: $green-50
+          &:hover
+            background-color: $green-75
+        
+      &.cancel
+        text-decoration: none
+        color: $foreground
+    
+    

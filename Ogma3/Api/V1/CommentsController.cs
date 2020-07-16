@@ -95,8 +95,15 @@ namespace Ogma3.Api.V1
                 Body = data.Body
             };
 
-            var thread = await _context.CommentThreads.FindAsync(data.Thread);
+            var thread = await _context.CommentThreads
+                .Where(ct => ct.Id == data.Thread)
+                .Include(ct => ct.Comments)
+                .FirstOrDefaultAsync();
+
+            if (thread == null) return NotFound();
+            
             thread.Comments.Add(comment);
+            thread.CommentsCount = thread.Comments.Count;
 
             await _context.SaveChangesAsync();
 
@@ -114,7 +121,16 @@ namespace Ogma3.Api.V1
             if (comment == null) return NotFound();
             if (comment.Author != user) return Forbid();
 
+            var thread = await _context.CommentThreads
+                .Where(ct => ct.Id == comment.CommentsThreadId)
+                .Include(ct => ct.Comments)
+                .FirstOrDefaultAsync();
+            
+            if (thread == null) return NotFound();
+            
             _context.Comments.Remove(comment);
+            thread.CommentsCount = thread.Comments.Count;
+            
             await _context.SaveChangesAsync();
 
             return CommentDTO.FromComment(comment);

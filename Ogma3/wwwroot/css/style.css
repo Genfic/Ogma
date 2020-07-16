@@ -638,6 +638,7 @@ ul.items-list {
   justify-content: center;
   line-height: 1;
   cursor: default;
+  width: max-content;
   padding: 4px;
   margin: 4px;
   border: 1px solid rgba(0, 0, 0, 0.7);
@@ -742,6 +743,34 @@ form.form {
     form.form .validation-summary-errors:hover {
       border-color: var(--red-75); }
 
+form.confirm {
+  padding: 1rem 0 0; }
+  form.confirm > .buttons {
+    display: flex; }
+    form.confirm > .buttons .button {
+      border: 1px solid var(--foreground-25);
+      padding: .5rem; }
+      form.confirm > .buttons .button:hover {
+        border-color: var(--foreground-50);
+        background-color: var(--accent-10); }
+      form.confirm > .buttons .button:first-child {
+        border-radius: .5rem 0 0 .5rem; }
+      form.confirm > .buttons .button:last-child {
+        border-radius: 0 .5rem .5rem 0; }
+      form.confirm > .buttons .button.accept.red {
+        border-color: var(--red);
+        background-color: var(--red-50); }
+        form.confirm > .buttons .button.accept.red:hover {
+          background-color: var(--red-75); }
+      form.confirm > .buttons .button.accept.green {
+        border-color: var(--green);
+        background-color: var(--green-50); }
+        form.confirm > .buttons .button.accept.green:hover {
+          background-color: var(--green-75); }
+      form.confirm > .buttons .button.cancel {
+        text-decoration: none;
+        color: var(--foreground); }
+
 .tag-search .tags {
   min-height: 2.5rem;
   padding: .2rem;
@@ -791,6 +820,16 @@ form.form {
     content: "”"; }
   .quote .author {
     align-self: flex-end; }
+
+dl.rows {
+  display: grid;
+  grid-gap: .5rem;
+  grid-template-columns: max-content auto; }
+  dl.rows > dt {
+    grid-column-start: 1;
+    white-space: nowrap; }
+  dl.rows > dd {
+    grid-column-start: 2; }
 
 #version {
   color: var(--background);

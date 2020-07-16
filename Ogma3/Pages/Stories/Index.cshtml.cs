@@ -36,6 +36,7 @@ namespace Ogma3.Pages.Stories
                 : _context.Stories.Where(s => s.Author == Owner && s.IsPublished);
             
             Stories = await storiesQuery
+                .OrderByDescending(s => s.ReleaseDate)
                 .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                         .ThenInclude(t => t.Namespace)

@@ -64,4 +64,4 @@ gulp.task('watch:js', () => gulp.watch(['./Ogma3/wwwroot/js/src/**/*.js'], gulp.
 
 // All tasks
 gulp.task('all', gulp.parallel(['css', 'js']));
-gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js']));
+gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'all']));

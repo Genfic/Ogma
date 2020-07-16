@@ -5,6 +5,8 @@ namespace Ogma3.Data.Models
     public class CommentsThread : BaseModel
     {
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+        public int CommentsCount { get; set; }
         
         public User? User { get; set; }
         public long? UserId { get; set; }
