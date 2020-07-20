@@ -23,21 +23,15 @@ namespace Ogma3.Services.TagHelpers
         
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            MarkdownPipeline? pipeline = null;
-
-            switch (Preset)
+            var builder = Preset switch
             {
-                case Presets.Basic:
-                    break;
-                case Presets.Comment:
-                    pipeline = new MarkdownPipelineBuilder().UseAutoLinks().Build();
-                    break;
-                case Presets.All:
-                    pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                    break;
-                default:
-                    throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...");
-            }
+                Presets.Basic   => new MarkdownPipelineBuilder(),
+                Presets.Comment => new MarkdownPipelineBuilder().UseAutoLinks(),
+                Presets.All     => new MarkdownPipelineBuilder().UseAdvancedExtensions(),
+                _ => throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...")
+            };
+
+            var pipeline = builder.Build();
             
             var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);
             var markdownHtmlContent = Markdown.ToHtml(RemoveLeadingWhiteSpace(childContent.GetContent(NullHtmlEncoder.Default)), pipeline);
