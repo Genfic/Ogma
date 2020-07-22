@@ -31,7 +31,9 @@ namespace Ogma3.Api.V1
         [HttpGet("{id}")]
         public async Task<ActionResult<Quote>> GetQuote(int id)
         {
-            var q = await _context.Quotes.FindAsync(id);
+            var q = await _context.Quotes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(q => q.Id == id);
 
             if (q == null)
             {
@@ -48,6 +50,7 @@ namespace Ogma3.Api.V1
         {
             var q = await _context.Quotes
                 .OrderBy(r => Guid.NewGuid())
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
             if (q == null) return NotFound();
             return q;

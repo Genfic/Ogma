@@ -25,6 +25,7 @@ namespace Ogma3.Pages.Blog
                 .Where(b => b.Id == id)
                 .Include(b => b.Author)
                 .Include(b => b.CommentsThread)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (Blogpost == null)

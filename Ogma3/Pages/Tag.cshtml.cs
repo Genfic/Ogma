@@ -30,10 +30,9 @@ namespace Ogma3.Pages
             var tag = await _context.Tags
                 .Where(t => t.Id == id)
                 .Include(t => t.Namespace)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
             Tag = TagDTO.FromTag(tag);
-            
-            _logger.Log(LogLevel.Information, "Test log %", id, slug);
             
             if (Tag == null) return NotFound();
 
@@ -44,6 +43,7 @@ namespace Ogma3.Pages
                 .ThenInclude(st => st.Tag)
                 .ThenInclude(t => t.Namespace)
                 .Where(s => s.StoryTags.Any(st => st.TagId == id))
+                .AsNoTracking()
                 .ToListAsync();
 
             return Page();

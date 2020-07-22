@@ -48,6 +48,7 @@ namespace Ogma3.Pages.Blog
             var user = await _userManager.GetUserAsync(User);
             // Get post and make sure the user matches
             var post = await _context.Blogposts
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
 
             if (post == null) return NotFound();

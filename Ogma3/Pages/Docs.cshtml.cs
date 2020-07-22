@@ -20,7 +20,9 @@ namespace Ogma3.Pages
         
         public async Task<IActionResult> OnGetAsync(string? doc)
         {
-            Document = await _context.Documents.FirstOrDefaultAsync(d => d.Slug == doc);
+            Document = await _context.Documents
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Slug == doc);
 
             if (Document == null)
                 return NotFound();

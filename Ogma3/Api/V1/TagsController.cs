@@ -29,6 +29,7 @@ namespace Ogma3.Api.V1
         {
             var tags = await _context.Tags
                 .Include(t => t.Namespace)
+                .AsNoTracking()
                 .ToListAsync();
             return tags.Select(TagDTO.FromTag).ToList();
         }
@@ -38,7 +39,9 @@ namespace Ogma3.Api.V1
         [HttpGet("{id}")]
         public async Task<ActionResult<Tag>> GetTag(long id)
         {
-            var tag = await _context.Tags.FindAsync(id);
+            var tag = await _context.Tags
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (tag == null)
             {
@@ -57,6 +60,7 @@ namespace Ogma3.Api.V1
                 .ThenInclude(t => t.Namespace)
                 .Where(st => st.StoryId == id)
                 .Select(st => st.Tag)
+                .AsNoTracking()
                 .ToListAsync();
 
             if (tags == null || tags.Count <= 0)

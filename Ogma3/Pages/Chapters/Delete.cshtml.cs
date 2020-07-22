@@ -29,7 +29,9 @@ namespace Ogma3.Pages.Chapters
                 return NotFound();
             }
 
-            Chapter = await _context.Chapters.FirstOrDefaultAsync(m => m.Id == id);
+            Chapter = await _context.Chapters
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Chapter == null)
             {

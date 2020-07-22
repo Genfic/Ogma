@@ -38,6 +38,7 @@ namespace Ogma3.Pages.Chapters
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
+                .AsNoTracking()
                 .First();
             
             // Redirect if story doesn't exist
@@ -111,12 +112,11 @@ namespace Ogma3.Pages.Chapters
             }
 
             // Get the order number of the latest chapter
-            var latestChapter = await _context.Chapters
-                .Where(c => c.StoryId == Story.Id)
-                .OrderBy(c => c.Order)
+            var latestChapter = Story.Chapters
+                .OrderByDescending(c => c.Order)
                 .Select(c => c.Order)
-                .LastOrDefaultAsync();
-
+                .First();
+            
             // Construct new chapter
             var chapter = new Chapter
             {

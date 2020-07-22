@@ -32,6 +32,7 @@ namespace Ogma3.Api.V1
                 .Where(c => c.CommentsThreadId == thread)
                 .Include(c => c.Author)
                 .Select(c => CommentDTO.FromComment(c, true))
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -39,7 +40,9 @@ namespace Ogma3.Api.V1
         [HttpGet("{id}")]
         public async Task<ActionResult<CommentDTO>> GetComment(long id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (comment == null)
             {

@@ -34,6 +34,7 @@ namespace Ogma3.Pages.Blog
             Blogpost = await _context.Blogposts
                 .Where(m => m.Id == id)
                 .Include(b => b.CommentsThread)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (Blogpost == null)

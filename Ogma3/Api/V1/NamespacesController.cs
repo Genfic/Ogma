@@ -26,7 +26,9 @@ namespace Ogma3.Api.V1
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Namespace>>> GetNamespace()
         {
-            return await _context.Namespaces.ToListAsync();
+            return await _context.Namespaces
+                .AsNoTracking()
+                .ToListAsync();
         }
 
 
@@ -34,7 +36,9 @@ namespace Ogma3.Api.V1
         [HttpGet("{id}")]
         public async Task<ActionResult<Namespace>> GetNamespace(int id)
         {
-            var ns = await _context.Namespaces.FindAsync(id);
+            var ns = await _context.Namespaces
+                .AsNoTracking()
+                .FirstOrDefaultAsync(n => n.Id == id);
 
             if (ns == null)
             {

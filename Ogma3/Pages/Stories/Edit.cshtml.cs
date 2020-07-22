@@ -98,6 +98,7 @@ namespace Ogma3.Pages.Stories
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (Story == null) return NotFound();

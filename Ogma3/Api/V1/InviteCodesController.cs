@@ -30,6 +30,7 @@ namespace Ogma3.Api.V1
             return await _context.InviteCodes
                 .Include(ic => ic.UsedBy)
                 .Select(ic => InviteCodeApiDTO.FromInviteCode(ic))
+                .AsNoTracking()
                 .ToListAsync();
         }
         
@@ -42,6 +43,7 @@ namespace Ogma3.Api.V1
             var code = await _context.InviteCodes
                 .Where(ic => ic.Id == id)
                 .Include(ic => ic.UsedBy)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (code == null)

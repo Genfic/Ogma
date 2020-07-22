@@ -22,7 +22,9 @@ namespace Ogma3.Api.V1
         [HttpGet]
         public async Task<IEnumerable<RatingApiDTO>> GetRatings()
         {
-            var list = await _context.Ratings.ToListAsync();
+            var list = await _context.Ratings
+                .AsNoTracking()
+                .ToListAsync();
             return list.Select(RatingApiDTO.FronRating);
         }
     }

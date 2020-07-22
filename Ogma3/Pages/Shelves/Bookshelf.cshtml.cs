@@ -43,6 +43,7 @@ namespace Ogma3.Pages.Shelves
                 .Include(s => s.ShelfStories)
                     .ThenInclude(ss => ss.Story)
                         .ThenInclude(s => s.Rating)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
             
             if (Shelf == null) return NotFound();

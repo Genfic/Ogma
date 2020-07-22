@@ -39,6 +39,7 @@ namespace Ogma3.Pages.Stories
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
                     .ThenInclude(c => c.CommentsThread)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (Story == null) return NotFound();

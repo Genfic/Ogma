@@ -67,11 +67,15 @@ namespace Ogma3.Pages.Chapters
             }
 
             // Get chapter
-            var chapter = await _context.Chapters.FindAsync(id);
+            var chapter = await _context.Chapters
+                .Where(c => c.Id == id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
             // Make sure the story's author is the logged in user
             var authorized = await _context.Stories
+                .AsNoTracking()
                 .AnyAsync(s => s.Id == chapter.StoryId && s.Author == user);
 
             if (chapter == null || !authorized) return NotFound();

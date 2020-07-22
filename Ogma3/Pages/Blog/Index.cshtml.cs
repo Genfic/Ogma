@@ -25,7 +25,10 @@ namespace Ogma3.Pages.Blog
 
         public async Task<ActionResult> OnGetAsync(string name)
         {
-            Owner = await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
+            Owner = await _context.Users
+                .AsNoTracking()
+                .FirstAsync(u => u.NormalizedUserName == name.ToUpper());
+            
             if (Owner == null) return NotFound();
             IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -35,6 +38,7 @@ namespace Ogma3.Pages.Blog
 
             Posts = await postsQuery
                 .Include(b => b.Author)
+                .AsNoTracking()
                 .ToListAsync();
 
             return Page();

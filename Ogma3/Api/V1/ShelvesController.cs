@@ -36,8 +36,11 @@ namespace Ogma3.Api.V1
         [HttpGet("user/{name:alpha}")]
         public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync(string name)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
             if (user == null) return NotFound();
+            
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var shelvesQuery = user.Id.ToString() == currentUser 
@@ -46,6 +49,7 @@ namespace Ogma3.Api.V1
             var shelves = await shelvesQuery
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
+                .AsNoTracking()
                 .ToListAsync();
             
             return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, null)));
@@ -66,6 +70,7 @@ namespace Ogma3.Api.V1
                 .Where(s => s.Owner == user)
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
+                .AsNoTracking()
                 .ToListAsync();
             
             return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, story)));
@@ -94,6 +99,7 @@ namespace Ogma3.Api.V1
                     .ThenInclude(ss => ss.Story)
                         .ThenInclude(s => s.Rating)
                 .Include(s => s.Icon)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
                 if (shelf == null) return NotFound();

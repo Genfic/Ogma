@@ -28,6 +28,7 @@ namespace Ogma3.Pages
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
                 .Include(s => s.VotesPool)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (Story == null) return NotFound();

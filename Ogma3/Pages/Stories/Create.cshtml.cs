@@ -80,7 +80,9 @@ namespace Ogma3.Pages.Stories
         public async Task OnGetAsync()
         {
             Input = new InputModel();
-            Ratings = await _context.Ratings.ToListAsync();
+            Ratings = await _context.Ratings
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()

@@ -56,7 +56,9 @@ namespace Ogma3.Pages.Shelves
         {
             Owner = await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
             IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Icons = await _context.Icons.ToListAsync();
+            Icons = await _context.Icons
+                .AsNoTracking()
+                .ToListAsync();
 
             return Page();
         }

@@ -29,8 +29,12 @@ namespace Ogma3.Api.V1
         public async Task<CountReturn> GetVotes(long poolId)
         {
             var user = await _userManager.GetUserAsync(User);
-            var count = await _context.Votes.CountAsync(v => v.VotePoolId == poolId);
-            var didUserVote = await _context.Votes.AnyAsync(v => v.User == user && v.VotePoolId == poolId);
+            var count = await _context.Votes
+                .AsNoTracking()
+                .CountAsync(v => v.VotePoolId == poolId);
+            var didUserVote = await _context.Votes
+                .AsNoTracking()
+                .AnyAsync(v => v.User == user && v.VotePoolId == poolId);
 
             return new CountReturn
             {
@@ -45,10 +49,10 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult> PostVote(VoteFromApiDTO data)
         {
             var user = await _userManager.GetUserAsync(User);
-            var pool = await _context.VotePools.FindAsync(data.VotePool);
+            var pool = await _context.VotePools
+                .FindAsync(data.VotePool);
             var vote = await _context.Votes
-                .Where(v => v.User == user && v.VotePoolId == data.VotePool)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(v => v.User == user && v.VotePoolId == data.VotePool);
             var didVote = false;
 
             // Check if the vote already exists

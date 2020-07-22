@@ -42,6 +42,7 @@ namespace Ogma3.Pages.Stories
                         .ThenInclude(t => t.Namespace)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
+                .AsNoTracking()
                 .ToListAsync();
 
             return Page();

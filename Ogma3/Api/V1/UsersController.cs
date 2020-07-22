@@ -21,7 +21,9 @@ namespace Ogma3.Api.V1
         [HttpGet("signin/{name}")]
         public async Task<ActionResult<SignInData>> GetSignInData(string name)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
 
             if (user != null)
             {
@@ -36,6 +38,9 @@ namespace Ogma3.Api.V1
             return NoContent();
         }
         
+        /// <summary>
+        /// Plain, parameterless `GET` needs to be here or fuckery happens
+        /// </summary>
         [HttpGet] public IActionResult Ping() => Ok("Pong");
     }
 

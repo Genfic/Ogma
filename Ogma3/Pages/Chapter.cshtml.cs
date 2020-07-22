@@ -28,9 +28,11 @@ namespace Ogma3.Pages
 
             var chapter = await _context.Chapters
                 .Include(c => c.CommentsThread)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             var story = await _context.Stories
                 .Include(s => s.Author)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == chapter.StoryId);
             
             StoryChapter = new StoryChapterDTO

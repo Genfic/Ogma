@@ -24,6 +24,7 @@ namespace Ogma3.Pages
             CurrentUser = await _context.Users
                 .Where(u => u.NormalizedUserName == name.ToUpper())
                 .Include(u => u.CommentsThread)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (CurrentUser == null) return NotFound();

@@ -38,6 +38,7 @@ namespace Ogma3.Pages
                         .ThenInclude(t => t.Namespace)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
+                .AsNoTracking()
                 .ToListAsync();
             
             SampleText = Lorem.Ipsum(5, new IpsumOptions
