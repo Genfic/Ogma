@@ -13,7 +13,7 @@ using Ogma3.Data;
 using Ogma3.Data.Models;
 using Ogma3.Services;
 using Ogma3.Services.Attributes;
-using Utils;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Stories
 {

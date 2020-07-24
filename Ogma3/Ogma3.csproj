@@ -41,7 +41,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\MarkdigExtensions\MarkdigExtensions.csproj" />
     <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>
 

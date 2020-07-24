@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using B2Net;
-using B2Net.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +14,7 @@ using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Services;
 using Ogma3.Services.Attributes;
-using Utils;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Stories
 {

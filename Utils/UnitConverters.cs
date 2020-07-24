@@ -26,9 +26,11 @@ namespace Utils
                 adjustedSize /= 1024;
             }
 
-            return string.Format($"{{0:n{decimalPlaces}}} {{1}}",
+            return string.Format(
+                $"{{0:n{decimalPlaces}}} {{1}}",
                 adjustedSize, 
-                SizeSuffixes[mag]);
+                SizeSuffixes[mag]
+            );
         }
     }
 }

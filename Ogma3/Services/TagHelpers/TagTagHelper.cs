@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Utils;
+using Utils.Extensions;
 
 namespace Ogma3.Services.TagHelpers
 {

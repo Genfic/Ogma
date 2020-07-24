@@ -20,7 +20,7 @@ namespace Utils
             if (options != null)
             {
                 var parts = new List<string>();
-                if (options.Length != null) parts.Add(options.Length.ToString().ToLower());
+                if (options.Length != null) parts.Add(options.Length.ToString()?.ToLower());
                 if (options.Decorate) parts.Add("decorate");
                 if (options.Link) parts.Add("link");
                 if (options.Ulist) parts.Add("ul");

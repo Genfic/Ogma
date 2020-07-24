@@ -1,5 +1,5 @@
 using Ogma3.Data.Models;
-using Utils;
+using Utils.Extensions;
 
 namespace Ogma3.Data.DTOs
 {
