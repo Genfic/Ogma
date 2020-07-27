@@ -1,22 +1,24 @@
+@use '../vars' as v
+
 .blogpost-card
   display: flex
   flex: 1
   flex-direction: column
-  border: 1px solid $foreground-25
+  border: 1px solid v.$foreground-25
   margin: 4px 0 0
   &:first-of-type
     margin: 0
   &:hover
-    border-color: $foreground-50
+    border-color: v.$foreground-50
     & .info
-      border-color: $foreground-50
+      border-color: v.$foreground-50
 
   &>.title
     text-decoration: none 
-    color: $foreground
+    color: v.$foreground
     padding: .25rem
     &:hover
-      color: $foreground-75
+      color: v.$foreground-75
       text-decoration: underline
       text-decoration-skip-ink: auto
         
@@ -28,11 +30,11 @@
     -webkit-box-orient: vertical
     
   & .info
-    border-top: 1px solid $foreground-25
+    border-top: 1px solid v.$foreground-25
 
     &>*
       padding: 0 .25rem
-      color: $foreground-75
+      color: v.$foreground-75
       &:hover
-        color: $foreground
+        color: v.$foreground
     

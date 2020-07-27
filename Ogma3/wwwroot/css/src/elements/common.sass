@@ -1,14 +1,16 @@
+@use '../vars' as v
+
 .active-border
-  border: 1px solid $foreground-25
+  border: 1px solid v.$foreground-25
   
   &:hover,
   &:hover~.counter
-    border-color: $foreground-50
+    border-color: v.$foreground-50
     
   &:focus,
   &:focus~.counter
-    border-color: $accent 
+    border-color: v.$accent 
     
   &~.counter
-    border: 1px solid $foreground-25
+    border: 1px solid v.$foreground-25
     border-top: none

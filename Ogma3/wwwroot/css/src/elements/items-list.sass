@@ -1,3 +1,5 @@
+@use '../vars' as v
+
 ul.items-list
   min-width: 100%
   margin-top: 1rem
@@ -5,10 +7,10 @@ ul.items-list
   &>li
     display: flex
     min-width: 100%
-    border: 1px solid $foreground-25
+    border: 1px solid v.$foreground-25
     margin: .2rem
     &:hover
-      border-color: $foreground
+      border-color: v.$foreground
       
     & .count
       align-self: center
@@ -20,13 +22,13 @@ ul.items-list
       display: flex
       flex-direction: column
       flex: 1
-      color: $foreground
+      color: v.$foreground
       background: transparent
       border: none
       text-decoration: none
       text-align: left
       &:hover
-        color: $foreground-75
+        color: v.$foreground-75
     
     & .deco
       height: auto
@@ -36,7 +38,7 @@ ul.items-list
       align-items: center
       &>*
         margin: .2rem
-        color: $background
+        color: v.$background
     
     & .name
       font-size: 1.2rem
@@ -44,7 +46,7 @@ ul.items-list
       text-overflow: ellipsis
       
     & .desc
-      color: $foreground-75
+      color: v.$foreground-75
       text-overflow: ellipsis
       
     & .actions
@@ -54,13 +56,13 @@ ul.items-list
       &>button
         height: auto
         margin: .2rem
-        border: 1px solid $foreground-25
-        color: $foreground-50
+        border: 1px solid v.$foreground-25
+        color: v.$foreground-50
         background: transparent
         &:hover
-          background: $accent-10
-          color: $foreground-75
-          border-color: $foreground
+          background: v.$accent-10
+          color: v.$foreground-75
+          border-color: v.$foreground
         
         &>i.material-icons-outlined
           font-size: 1.2rem

@@ -1,3 +1,5 @@
+@use '../vars' as v
+
 ul.my-list
   margin: .5rem 0
 
@@ -13,12 +15,12 @@ ul.my-list
       &>.button
         display: block
         padding: .1rem
-        border: 1px solid $foreground-25
-        color: $foreground-75
+        border: 1px solid v.$foreground-25
+        color: v.$foreground-75
         text-decoration: none
         border-left: none
         border-top: none
         &:first-child
-          border-top: 1px solid $foreground-25
+          border-top: 1px solid v.$foreground-25
         &:hover
-          background-color: $accent-10
+          background-color: v.$accent-10

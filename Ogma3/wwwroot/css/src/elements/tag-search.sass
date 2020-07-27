@@ -1,9 +1,11 @@
+@use '../vars' as v
+
 .tag-search
   
   & .tags
     min-height: 2.5rem
     padding: .2rem
-    border: 1px solid $foreground-50
+    border: 1px solid v.$foreground-50
     border-bottom: none
     display: flex
     flex-wrap: wrap
@@ -17,7 +19,7 @@
       &>.material-icons-outlined
         font-size: 1.2rem
         
-  & .search
+  //& .search
     
   & .search-results
     max-height: 6rem
@@ -28,13 +30,13 @@
       flex: 1
       padding: .2rem
       justify-content: space-between
-      border: 1px solid $foreground
+      border: 1px solid v.$foreground
       border-top: none
       cursor: pointer
-      @media only screen and (max-width: $mq-mobile)
+      @media only screen and (max-width: v.$mq-mobile)
         flex-direction: column
       &:hover
-        box-shadow: inset 0 0 2px 1px $accent-75
+        box-shadow: inset 0 0 2px 1px v.$accent-75
       &.hidden
         display: none
       
@@ -42,5 +44,5 @@
         flex-grow: 1
         
       &>.desc
-        color: $foreground-50
+        color: v.$foreground-50
         text-overflow: ellipsis

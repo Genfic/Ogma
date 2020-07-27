@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
@@ -13,6 +15,8 @@ const nano = require('cssnano');
 
 // JS processors
 const terser = require('gulp-terser-js');
+
+sass.compiler = require('sass');
 
 // CSS tasks
 gulp.task('css', () => {

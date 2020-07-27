@@ -1,7 +1,9 @@
+@use '../vars' as v
+
 .comments-container
   margin-top: 2rem
   width: 70%
-  @media screen and (max-width: $mq-mobile)
+  @media screen and (max-width: v.$mq-mobile)
     width: 100%
   
   &>form
@@ -17,7 +19,7 @@
       
     & .comment-btn
       flex: 1
-      background-color: $background
+      background-color: v.$background
       margin: 1px 1px 0 0
       
       &>i.material-icons-outlined
@@ -28,7 +30,7 @@
       flex: 0 0 2rem
       margin: 1px 0 0 0
       text-align: center
-      color: $foreground
+      color: v.$foreground
 
       &>i.material-icons-outlined
         vertical-align: middle
@@ -42,13 +44,13 @@
       align-items: baseline
       margin-bottom: 1rem
       &:hover .author, &:hover .main
-        border-color: $foreground-75
+        border-color: v.$foreground-75
       
       &>.author
         flex: 0 0 6rem
-        border: 1px solid $foreground-50
+        border: 1px solid v.$foreground-50
         margin-right: .5rem
-        @media screen and (max-width: $mq-mobile)
+        @media screen and (max-width: v.$mq-mobile)
           flex: 0 0 4rem
         
         &>.name
@@ -58,19 +60,19 @@
           padding: 0 .2rem
 
         &>.avatar
-          border-top: 1px solid $foreground-50
+          border-top: 1px solid v.$foreground-50
   
       &>.main
         flex: 1
-        border: 1px solid $foreground-50
+        border: 1px solid v.$foreground-50
         
         &>.header
           display: flex
           align-items: center
           padding: 0 .5rem
-          color: $foreground-50
+          color: v.$foreground-50
           &>*:hover
-            color: $foreground-75
+            color: v.$foreground-75
                                               
         &>.body
           white-space: pre-line

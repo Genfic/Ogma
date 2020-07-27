@@ -1,3 +1,5 @@
+@use '../vars' as v
+
 $avatarSize: 8rem
 $margin: .5rem
 
@@ -5,8 +7,8 @@ $margin: .5rem
   display: flex
   height: $avatarSize + $margin
   margin-bottom: $margin
-  border-bottom: 1px solid $foreground-25
-  @media only screen and (max-width: $mq-mobile)
+  border-bottom: 1px solid v.$foreground-25
+  @media only screen and (max-width: v.$mq-mobile)
     flex-direction: column
     height: auto
   
@@ -15,31 +17,31 @@ $margin: .5rem
     flex-grow: 1
     justify-content: flex-end
     align-items: flex-end
-    @media only screen and (max-width: $mq-mobile)
+    @media only screen and (max-width: v.$mq-mobile)
       justify-content: center
     
     & .nav-item
-      color: $foreground-75
+      color: v.$foreground-75
       text-decoration: none
       padding: $margin
-      border: 1px solid $foreground-25
+      border: 1px solid v.$foreground-25
       border-right: none
       border-bottom: none
       text-align: center
       &:hover, 
       &:focus
-        color: $foreground
-        background: $accent-10
+        color: v.$foreground
+        background: v.$accent-10
       &:first-child
         border-top-left-radius: .25rem
       &:last-child
-        border-right: 1px solid $foreground-25
+        border-right: 1px solid v.$foreground-25
         border-top-right-radius: .25rem
-      @media only screen and (max-width: $mq-mobile)
+      @media only screen and (max-width: v.$mq-mobile)
         flex: 1
         
       &.active
-        border-top: .25rem solid $accent
+        border-top: .25rem solid v.$accent
         border-top-right-radius: .25rem
         border-top-left-radius: .25rem
       
@@ -48,7 +50,7 @@ $margin: .5rem
     display: flex
     flex-grow: 1
     margin-bottom: $margin
-    @media only screen and (max-width: $mq-mobile)
+    @media only screen and (max-width: v.$mq-mobile)
       flex-direction: column
   
     & .data
@@ -67,7 +69,7 @@ $margin: .5rem
       font-size: 2rem
       margin-bottom: $margin
       font-weight: 300
-      color: $foreground
+      color: v.$foreground
       
     & .title
       font-size: 1.1rem
@@ -77,4 +79,4 @@ $margin: .5rem
       width: $avatarSize
       object-fit: contain
       border-radius: .25rem
-      border: 1px solid $foreground-25
+      border: 1px solid v.$foreground-25
