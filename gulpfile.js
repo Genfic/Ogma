@@ -7,6 +7,7 @@ sass.compiler = require('sass');
 const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
 const Fiber = require('fibers');
+const browserSync = require('browser-sync').create();
 
 // CSS processors
 const autoprefixer = require('autoprefixer');
@@ -58,6 +59,14 @@ gulp.task('js', () => {
 });
 
 gulp.task('watch:js', () => gulp.watch([`${jsroot}/src/**/*.js`], gulp.series('js')));
+
+// Browser sync
+gulp.task('sync', function () {
+    browserSync.init({
+        proxy: 'http://localhost:5001',
+        files: [`${cssroot}/**/*.css`, `${jsroot}/**/*.js`]
+    })
+})
 
 // All tasks
 gulp.task('all', gulp.parallel(['css', 'js']));

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -24,13 +26,31 @@ namespace Ogma3.Api.V1
             _userManager = userManager;
         }
 
-        // GET: api/Comments?thread=6
+        public class GetCommentsInput
+        {
+            public long Thread { get; set; }
+            private int? _page;
+            private int? _perPage;
+            public int Page
+            {
+                get => Math.Max(1, _page ?? 1);
+                set => _page = value;
+            }
+            public int PerPage
+            {
+                get => _perPage?.Clamp(1, 100) ?? 20;
+                set => _perPage = value;
+            }
+        }
+
+        // GET: api/Comments?thread=6[&page=1&per-page=10]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery] long thread)
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery]GetCommentsInput input)
         {
             return await _context.Comments
-                .Where(c => c.CommentsThreadId == thread)
+                .Where(c => c.CommentsThreadId == input.Thread)
                 .Include(c => c.Author)
+                // .Skip((input.Page - 1) * input.PerPage).Take(input.PerPage) // Pagination
                 .Select(c => CommentDTO.FromComment(c, true))
                 .AsNoTracking()
                 .ToListAsync();

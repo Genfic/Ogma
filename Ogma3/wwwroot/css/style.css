@@ -1062,6 +1062,42 @@ dl.rows > dd {
   grid-column-start: 2;
 }
 
+.pagination {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 1px;
+}
+.pagination button {
+  border-radius: 0;
+  padding: 0.5rem;
+  width: 100%;
+  background-color: var(--background);
+  border: 1px solid var(--foreground-25);
+}
+.pagination button:hover {
+  border-color: var(--foreground-50);
+}
+.pagination button:focus {
+  border-color: var(--accent);
+}
+.pagination button.prev {
+  margin-right: 0.5px;
+}
+.pagination button.page {
+  margin: 0 0.5px;
+}
+.pagination button.next {
+  margin-left: 0.5px;
+}
+.pagination button.ph {
+  cursor: default;
+}
+.pagination button.active {
+  background-color: var(--accent-25);
+  font-weight: bold;
+}
+
 #version {
   color: var(--background);
   border-radius: 0.2rem;

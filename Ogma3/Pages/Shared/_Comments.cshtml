@@ -8,7 +8,13 @@
     @if (User.Identity.IsAuthenticated)
     {
         <form asp-antiforgery="true">
-            <textarea class="comment-box active-border" v-model="body" v-on:keydown.enter="enter" name="body" id="body" rows="3" aria-label="Comment"></textarea>
+            <textarea class="comment-box active-border" 
+                      v-model="body" 
+                      v-on:keydown.enter="enter" 
+                      name="body" id="body" 
+                      rows="3" 
+                      aria-label="Comment">
+            </textarea>
 
             <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
             <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
@@ -34,7 +40,7 @@
     }
 
     <div class="comments">
-        <div class="comment" v-for="c in comments">
+        <div class="comment" v-for="c in visibleComments">
             <div class="author">
                 <span class="name">{{ c.val.author.userName }}</span>
                 <img :src="c.val.author.avatar" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
@@ -48,6 +54,21 @@
                 <div class="body" v-html="c.val.body"></div>
             </div>
         </div>
+    </div>
+    
+    <div class="pagination" v-if="comments && comments.length > perPage">
+        <button class="prev" v-on:click="prevPage">Previous</button>
+        <button class="ph" v-if="page > 5">...</button>
+        <button v-for="idx in Math.ceil(comments.length / perPage)"
+                :key="idx"
+                v-on:click="changePage(idx)"
+                :class="idx === page ? 'active' : ''"
+                v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
+                class="page">
+            {{idx}}
+        </button>
+        <button class="ph" v-if="comments.length / perPage > 5 && page !== comments.length / perPage">...</button>
+        <button class="next" v-on:click="nextPage">Next</button>
     </div>
 
 </div>

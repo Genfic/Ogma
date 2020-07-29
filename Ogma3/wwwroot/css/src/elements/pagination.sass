@@ -1,0 +1,31 @@
+@use '../vars' as v
+@use '../mixins/active-border' as ab
+
+.pagination
+  display: flex
+  width: 100%
+  justify-content: space-between
+  padding: 1px
+  
+  & button
+    border-radius: 0
+    padding: .5rem
+    width: 100%
+    background-color: v.$background
+    @include ab.active-border
+  
+    &.prev
+      margin-right: .5px
+      
+    &.page
+      margin: 0 .5px
+
+    &.next
+      margin-left: .5px
+      
+    &.ph
+      cursor: default
+
+    &.active
+      background-color: v.$accent-25
+      font-weight: bold
