@@ -20,6 +20,7 @@ namespace Ogma3.Data
         public DbSet<Story> Stories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
+        public DbSet<ChaptersRead> ChaptersRead { get; set; }
         public DbSet<CommentsThread> CommentThreads { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<VotePool> VotePools { get; set; }
@@ -114,6 +115,15 @@ namespace Ogma3.Data
                 .WithOne(ct => ct.Chapter)
                 .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Chapter reads
+            builder.Entity<ChaptersRead>(ent =>
+            {
+                ent.HasOne(cr => cr.Story)
+                    .WithMany();
+                ent.HasOne(cr => cr.User)
+                    .WithMany();
+            });
 
             // Story tags
             builder.Entity<StoryTag>()

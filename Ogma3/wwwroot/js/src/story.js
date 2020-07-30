@@ -3,6 +3,7 @@ let story_vue = new Vue({
     data: {
         votesRoute: null,
         shelvesRoute: null,
+        readsRoute: null,
         csrf: null,
         
         score: 0,
@@ -12,7 +13,9 @@ let story_vue = new Vue({
         storyId: null,
         
         shelves: [],
-        showShelves: false
+        showShelves: false,
+        
+        read: []
     },
     methods: {
         vote: function() {
@@ -37,7 +40,6 @@ let story_vue = new Vue({
         
         // Add to bookshelf
         addToShelf: function (shelf) {
-            console.log(shelf, this.storyId);
             axios.post(this.shelvesRoute + "/add/" + shelf + "/" + this.storyId, 
                 null,
                 {
@@ -47,6 +49,14 @@ let story_vue = new Vue({
                     this.getShelves();
                 })
                 .catch(console.error)
+        },
+        
+        markRead: function (chapter) {
+            axios.post(this.readsRoute, { story: this.storyId, chapter: chapter })
+                .then(res => {
+                    this.read = res.data.read;
+                })
+                .catch(console.error);
         }
     },
     mounted() {
@@ -56,6 +66,7 @@ let story_vue = new Vue({
         // Get routes
         this.votesRoute = document.getElementById('votes-route').dataset.route;
         this.shelvesRoute = document.getElementById('shelves-route').dataset.route;
+        this.readsRoute = document.getElementById('reads-route').dataset.route;
         // Get CSRF token
         this.csrf = document.querySelector('input[name=__RequestVerificationToken').value;
         // Get initial score
@@ -63,6 +74,12 @@ let story_vue = new Vue({
             .then(res => {
                 this.score = res.data.count;
                 this.didVote = res.data.didVote;
+            })
+            .catch(console.error);
+        // get initial reads
+        axios.get(this.readsRoute + '/' + this.storyId)
+            .then(res => {
+                this.read = res.data.read
             })
             .catch(console.error);
         // Get shelves

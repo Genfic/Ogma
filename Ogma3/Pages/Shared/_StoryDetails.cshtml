@@ -87,10 +87,14 @@
         {
             @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
             {
-                <a class="chapter" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+                <div class="chapter">
                     <div class="left">
+                        <button class="read-status"
+                                :class="read.includes(@c.Id) ? 'active' : ''"
+                                v-on:click="markRead(@c.Id)">
+                        </button>
                         <span class="order">@c.Order</span>
-                        <span class="title">@c.Title</span>
+                        <a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">@c.Title</a>
                         <time class="date" datetime="@c.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
                             @c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
                         </time>
@@ -98,7 +102,7 @@
                     <div class="right">
                         <span class="word-count">@c.WordCount.ToString("N0") words</span>
                     </div>
-                </a>
+                </div>
             } 
         }
         @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))
@@ -130,10 +134,11 @@
     
     <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl(nameof(VotesController))"></div>
     <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
+    <div id="reads-route" v-if="!readsRoute" data-route="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
     <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPool.Id"></div>
     <div id="story-id" v-if="!storyId" data-id="@Model.Id"></div>
     @Html.AntiForgeryToken()
 </div>
 
 
-@Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>);

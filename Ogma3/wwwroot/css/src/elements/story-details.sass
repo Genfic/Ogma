@@ -1,4 +1,5 @@
 @use '../vars' as v
+@use '../mixins/active-border' as ab
 
 $title-height: 2rem
 
@@ -70,8 +71,6 @@ $title-height: 2rem
       justify-content: space-between
       padding: .5rem
       color: v.$foreground
-      text-decoration: none
-      cursor: pointer
       border-top: 1px solid v.$foreground-25
       &:last-child
         border-bottom: 1px solid v.$foreground-25
@@ -86,13 +85,35 @@ $title-height: 2rem
   
         //&>.order
           
-        //&>.title
+        &>.title
+          &:hover
+            color: v.$accent-75
           
         &>.date
           font-size: .8rem
           color: v.$foreground-50
           &:hover
             color: v.$foreground-75
+            
+        &>.read-status
+          padding: 0
+          width: 1.2rem
+          height: 1.2rem
+          background-color: transparent
+          @include ab.active-border
+          
+          &.active
+            background-color: v.$green-50
+            display: flex
+            align-items: center
+            justify-content: center
+            &:after
+              display: block
+              content: ''
+              width: 80%
+              height: 80%
+              background-color: v.$background-25
+              border: 1px solid v.$foreground-50
         
       //&>.right
         //&>.word-count
