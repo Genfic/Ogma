@@ -57,18 +57,18 @@
     </div>
     
     <div class="pagination" v-if="comments && comments.length > perPage">
-        <button class="prev" v-on:click="prevPage">Previous</button>
-        <button class="ph" v-if="page > 5">...</button>
+        <button class="prev button" v-on:click="prevPage">Previous</button>
+        <button class="ph button" v-if="page > 5">...</button>
         <button v-for="idx in Math.ceil(comments.length / perPage)"
                 :key="idx"
                 v-on:click="changePage(idx)"
                 :class="idx === page ? 'active' : ''"
                 v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
-                class="page">
+                class="page button">
             {{idx}}
         </button>
-        <button class="ph" v-if="comments.length / perPage > 5 && page !== comments.length / perPage">...</button>
-        <button class="next" v-on:click="nextPage">Next</button>
+        <button class="ph button" v-if="comments.length / perPage > 5 && page !== comments.length / perPage">...</button>
+        <button class="next button" v-on:click="nextPage">Next</button>
     </div>
 
 </div>

@@ -15,16 +15,23 @@ namespace Ogma3.Pages.Blog
     {
         private readonly ApplicationDbContext _context;
         public IList<Blogpost> Posts { get;set; }
+        public int PostsCount { get; set; }
+        
+        public readonly int PerPage = 25;
+        
+        public int Page { get; set; }
         public User Owner { get; set; }
         public bool IsCurrentUser { get; set; }
-        
+
         public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ActionResult> OnGetAsync(string name)
+        public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
+            Page = page;
+            
             Owner = await _context.Users
                 .AsNoTracking()
                 .FirstAsync(u => u.NormalizedUserName == name.ToUpper());
@@ -37,9 +44,13 @@ namespace Ogma3.Pages.Blog
                 : _context.Blogposts.Where(b => b.Author == Owner && b.IsPublished);
 
             Posts = await postsQuery
+                .Skip(Math.Max(0, page - 1) * PerPage)
+                .Take(PerPage)
                 .Include(b => b.Author)
                 .AsNoTracking()
                 .ToListAsync();
+
+            PostsCount = await _context.Blogposts.CountAsync();
 
             return Page();
         }

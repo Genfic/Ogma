@@ -7,8 +7,12 @@
 }
 
 <div id="quote" class="quote active-border">
+    <button class="refresh" v-on:click="fetch">
+        <icon icon="refresh" :class="loading ? 'spin' : ''"></icon>
+    </button>
     <em class="body">{{quote}}</em>
     <span class="author">~ {{author}}</span>
+    <div v-if="!route" id="quote-route" data-route="@Url.RouteUrl(nameof(QuotesController))/random"></div>
 </div>
 
 <h2>Recent stories</h2>
@@ -20,20 +24,4 @@
     }
 </div>
 
-@Html.Resource(@<script>
-    const quote_vue = new Vue({
-        el: '#quote',
-        data: {
-            quote: null,
-            author: null,
-        },
-        mounted() {
-            axios.get('@Url.RouteUrl(nameof(QuotesController))/random')
-                .then(res => {
-                     this.quote = res.data.body;
-                     this.author = res.data.author;
-                })
-                .catch(console.error)
-        }
-    })
-</script>)
+@Html.Resource(@<script src="~/js/dist/quote.min.js" asp-append-version="true"></script>)

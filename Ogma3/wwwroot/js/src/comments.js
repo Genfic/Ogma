@@ -57,7 +57,7 @@ let comments_vue = new Vue({
         },
         
         nextPage: function () {
-            this.page = Math.min(this.page + 1, this.comments.length / this.perPage);
+            this.page = Math.min(this.page + 1, Math.ceil(this.comments.length / this.perPage));
             this.paginate()
         },
         

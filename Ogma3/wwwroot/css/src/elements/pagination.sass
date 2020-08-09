@@ -7,11 +7,15 @@
   justify-content: space-between
   padding: 1px
   
-  & button
+  & .button
+    display: inline-block
+    text-align: center
     border-radius: 0
     padding: .5rem
     width: 100%
     background-color: v.$background
+    color: v.$foreground
+    text-decoration: none
     @include ab.active-border
   
     &.prev

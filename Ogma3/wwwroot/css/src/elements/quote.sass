@@ -1,7 +1,39 @@
+@use "../vars" as v
+
 .quote
+  position: relative
   padding: .5rem
   display: flex
   flex-direction: column
+  
+  & .refresh
+    position: absolute
+    display: flex
+    justify-content: center
+    align-items: center
+    top: 0
+    right: 0
+    padding: 0
+    margin: 0
+    border: none
+    height: 2rem
+    width: 2rem
+    background: transparent
+    opacity: .1
+    &:hover
+      opacity: .75
+      background: v.$accent-10
+    &:focus
+      outline: 0
+      
+    & .spin
+      animation: spin 1s infinite
+      
+    @keyframes spin
+      from
+        transform: rotate(0deg)
+      to
+        transform: rotate(360deg)
   
   & .body
     &:before
@@ -11,3 +43,4 @@
     
   & .author
     align-self: flex-end
+    

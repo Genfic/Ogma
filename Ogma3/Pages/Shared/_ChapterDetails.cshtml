@@ -1,4 +1,5 @@
 @using System.Globalization
+@using Ogma3.Services
 @model Ogma3.Data.DTOs.StoryChapterDTO
 
 
@@ -16,7 +17,7 @@
                 <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
             }
             
-            <div class="body">@Model.Chapter.Body</div>
+            <div class="body tts-body">@Model.Chapter.Body</div>
             
             @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
             {
@@ -26,5 +27,16 @@
         </div>
     </article>
     
+    <div id="tts">
+        <button id="tts-btn">
+            <span class="material-icons-outlined" id="tts-btn-ico">play_arrow</span>
+        </button>
+        <button id="tts-stop">
+            <span class="material-icons-outlined">stop</span>
+        </button>
+    </div>
+    
     <partial name="_Comments" model="@Model.Chapter.CommentsThread"></partial>
 </div>
+
+@Html.Resource(@<script src="~/js/dist/tts.min.js" asp-append-version="true"></script>);

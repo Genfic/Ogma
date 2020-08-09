@@ -1063,9 +1063,43 @@ form.confirm > .buttons .button.cancel {
 }
 
 .quote {
+  position: relative;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
+}
+.quote .refresh {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 2rem;
+  width: 2rem;
+  background: transparent;
+  opacity: 0.1;
+}
+.quote .refresh:hover {
+  opacity: 0.75;
+  background: var(--accent-10);
+}
+.quote .refresh:focus {
+  outline: 0;
+}
+.quote .refresh .spin {
+  animation: spin 1s infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 .quote .body:before {
   content: "“";
@@ -1096,32 +1130,36 @@ dl.rows > dd {
   justify-content: space-between;
   padding: 1px;
 }
-.pagination button {
+.pagination .button {
+  display: inline-block;
+  text-align: center;
   border-radius: 0;
   padding: 0.5rem;
   width: 100%;
   background-color: var(--background);
+  color: var(--foreground);
+  text-decoration: none;
   border: 1px solid var(--foreground-25);
 }
-.pagination button:hover {
+.pagination .button:hover {
   border-color: var(--foreground-50);
 }
-.pagination button:focus {
+.pagination .button:focus {
   border-color: var(--accent);
 }
-.pagination button.prev {
+.pagination .button.prev {
   margin-right: 0.5px;
 }
-.pagination button.page {
+.pagination .button.page {
   margin: 0 0.5px;
 }
-.pagination button.next {
+.pagination .button.next {
   margin-left: 0.5px;
 }
-.pagination button.ph {
+.pagination .button.ph {
   cursor: default;
 }
-.pagination button.active {
+.pagination .button.active {
   background-color: var(--accent-25);
   font-weight: bold;
 }

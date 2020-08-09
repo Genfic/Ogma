@@ -16,11 +16,40 @@
     </a>
 }
 
-@foreach (var post in Model.Posts) {
-    <partial name="_BlogpostCard" model="@post"></partial>
-}
-
 @if (Model.Posts.Count <= 0)
 {
     <h1>No blog posts found</h1>
 }
+else
+{
+    @foreach (var post in Model.Posts) {
+        <partial name="_BlogpostCard" model="@post"></partial>
+    }
+    
+    @if (Model.PostsCount > Model.PerPage)
+    {
+        <div class="pagination">
+            <a class="prev button" href="?page=@(Math.Max(1, Model.Page - 1))">Previous</a>
+            @if (Model.Page > 5)
+            {
+                <div class="ph button">...</div>
+            }
+            @for (var i = 1; i <= (int)Math.Ceiling((double)Model.PostsCount / Model.PerPage); i++)
+            {
+                @if (i >= Model.Page - 4 && i <= Math.Max(Model.Page, 5))
+                {
+                    <a href="?page=@i"
+                       class="page button @(i == Model.Page ? "active" : "")">
+                        @i
+                    </a>
+                }
+            }
+            @if (Model.PostsCount / Model.PerPage > 5 && Model.Page != Model.PostsCount / Model.PerPage)
+            {
+                <div class="ph button">...</div>
+            }
+            <a class="next button" href="?page=@(Math.Min(Model.Page + 1, (int)Math.Ceiling((double)Model.PostsCount / Model.PerPage)))">Next</a>
+        </div>
+    }
+}
+
