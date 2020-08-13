@@ -36,22 +36,32 @@
         vertical-align: middle
     
   &>.comments
-    margin-top: 1rem
+    padding-top: .5rem
     
     &>.comment
       display: flex
       flex-direction: row
       align-items: baseline
-      margin-bottom: 1rem
+      padding: .5rem 0
+
       &:hover .author, &:hover .main
         border-color: v.$foreground-75
-      
+        
+      &.marked
+        background: transparent linear-gradient(90deg, transparent 0%, v.$accent-25 40%, v.$accent-25 60%, transparent 100%)
+        transition: background-color 100ms ease-in-out
+        &:hover
+          background: v.$accent-10 linear-gradient(90deg, transparent 0%, v.$accent-25 40%, v.$accent-25 60%, transparent 100%)
+
       &>.author
         flex: 0 0 6rem
         border: 1px solid v.$foreground-50
         margin-right: .5rem
+        min-height: 100px
+        background-color: v.$background
         @media screen and (max-width: v.$mq-mobile)
           flex: 0 0 4rem
+          min-height: 75px
         
         &>.name
           overflow: hidden
@@ -65,6 +75,7 @@
       &>.main
         flex: 1
         border: 1px solid v.$foreground-50
+        background-color: v.$background
         
         &>.header
           display: flex
@@ -73,6 +84,9 @@
           color: v.$foreground-50
           &>*:hover
             color: v.$foreground-75
+            
+          &>.link
+            color: v.$foreground-50
                                               
         &>.body
           white-space: pre-line

@@ -484,25 +484,35 @@ ul.my-list > li.item > div.buttons > .button:hover {
   vertical-align: middle;
 }
 .comments-container > .comments {
-  margin-top: 1rem;
+  padding-top: 0.5rem;
 }
 .comments-container > .comments > .comment {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  margin-bottom: 1rem;
+  padding: 0.5rem 0;
 }
 .comments-container > .comments > .comment:hover .author, .comments-container > .comments > .comment:hover .main {
   border-color: var(--foreground-75);
+}
+.comments-container > .comments > .comment.marked {
+  background: transparent linear-gradient(90deg, transparent 0%, var(--accent-25) 40%, var(--accent-25) 60%, transparent 100%);
+  transition: background-color 100ms ease-in-out;
+}
+.comments-container > .comments > .comment.marked:hover {
+  background: var(--accent-10) linear-gradient(90deg, transparent 0%, var(--accent-25) 40%, var(--accent-25) 60%, transparent 100%);
 }
 .comments-container > .comments > .comment > .author {
   flex: 0 0 6rem;
   border: 1px solid var(--foreground-50);
   margin-right: 0.5rem;
+  min-height: 100px;
+  background-color: var(--background);
 }
 @media screen and (max-width: 570px) {
   .comments-container > .comments > .comment > .author {
     flex: 0 0 4rem;
+    min-height: 75px;
   }
 }
 .comments-container > .comments > .comment > .author > .name {
@@ -517,6 +527,7 @@ ul.my-list > li.item > div.buttons > .button:hover {
 .comments-container > .comments > .comment > .main {
   flex: 1;
   border: 1px solid var(--foreground-50);
+  background-color: var(--background);
 }
 .comments-container > .comments > .comment > .main > .header {
   display: flex;
@@ -526,6 +537,9 @@ ul.my-list > li.item > div.buttons > .button:hover {
 }
 .comments-container > .comments > .comment > .main > .header > *:hover {
   color: var(--foreground-75);
+}
+.comments-container > .comments > .comment > .main > .header > .link {
+  color: var(--foreground-50);
 }
 .comments-container > .comments > .comment > .main > .body {
   white-space: pre-line;

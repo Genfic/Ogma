@@ -16,12 +16,15 @@ const mqpacker = require('css-mqpacker');
 const nano = require('cssnano');
 
 // JS processors
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('./tsconfig.json');
 const terser = require('gulp-terser-js');
 
 // Dirs
 const root    = './Ogma3/wwwroot';
 const cssroot = `${root}/css`;
 const jsroot  = `${root}/js`;
+
 
 // CSS tasks
 gulp.task('css', () => {
@@ -60,14 +63,32 @@ gulp.task('js', () => {
 
 gulp.task('watch:js', () => gulp.watch([`${jsroot}/src/**/*.js`], gulp.series('js')));
 
+// TS tasks
+gulp.task('ts', () => {
+    return gulp.src([`${jsroot}/src/**/*.ts`])
+        .pipe(sourcemaps.init())
+        .pipe(tsProject())
+        .pipe(gulp.dest(`${jsroot}/dist`))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(terser({ mangle: { toplevel: true } }))
+        .on('error', err => {
+            console.error(err)
+            this.emit('end')
+        })
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(`${jsroot}/dist`));
+});
+
+gulp.task('watch:ts', () => gulp.watch([`${jsroot}/src/**/*.ts`], gulp.series('ts')))
+
 // Browser sync
 gulp.task('sync', function () {
     browserSync.init({
         proxy: 'http://localhost:5001',
-        files: [`${cssroot}/**/*.css`, `${jsroot}/**/*.js`]
+        files: [`${cssroot}/**/*.css`, `${jsroot}/**/*.js`, `${jsroot}/**/*.ts`]
     })
 })
 
 // All tasks
-gulp.task('all', gulp.parallel(['css', 'js']));
-gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'all']));
+gulp.task('all', gulp.parallel(['css', 'js', 'ts']));
+gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'watch:ts', 'all']));

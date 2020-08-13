@@ -12,10 +12,12 @@
 		"gulp-sass": "^4.0.2",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-terser-js": "^5.2.2",
+		"gulp-typescript": "^6.0.0-alpha.1",
 		"mjml": "^4.4.0",
 		"postcss": "^7.0.26",
 		"postcss-discard-comments": "^4.0.2",
 		"sass": "^1.26.10",
+		"typescript": "^3.9.7",
 		"vue": "^2.6.10"
 	}
 }
