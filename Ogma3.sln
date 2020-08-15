@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{45A4BB8B-BA00-401C-B888-6016A51E9DE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdigExtensions", "MarkdigExtensions\MarkdigExtensions.csproj", "{4D4B7C41-5550-45E4-A4A4-A77C2867D607}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{45A4BB8B-BA00-401C-B888-6016A51E9DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45A4BB8B-BA00-401C-B888-6016A51E9DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45A4BB8B-BA00-401C-B888-6016A51E9DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D4B7C41-5550-45E4-A4A4-A77C2867D607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D4B7C41-5550-45E4-A4A4-A77C2867D607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D4B7C41-5550-45E4-A4A4-A77C2867D607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D4B7C41-5550-45E4-A4A4-A77C2867D607}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

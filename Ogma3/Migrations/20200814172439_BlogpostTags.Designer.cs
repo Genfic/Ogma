@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200814172439_BlogpostTags")]
+    partial class BlogpostTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,8 +141,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(500000)")
                         .HasMaxLength(500000);
 
-                    b.Property<string[]>("Hashtags")
-                        .IsRequired()
+                    b.Property<List<string>>("Hashtags")
                         .HasColumnType("text[]")
                         .HasMaxLength(10);
 

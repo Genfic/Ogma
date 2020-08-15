@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -38,5 +39,10 @@ namespace Ogma3.Data.Models
         [Required]
         [DefaultValue(0)]
         public int WordCount { get; set; }
+        
+        [MaxLength(CTConfig.CBlogpost.MaxTagsAmount)]
+        [DefaultValue(new string[0])]
+        [Required]
+        public string[] Hashtags { get; set; } = new string[0];
     }
 }

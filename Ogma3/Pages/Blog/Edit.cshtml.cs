@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -78,11 +79,21 @@ namespace Ogma3.Pages.Blog
                 .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
             // 404 if no post found
             if (post == null) return NotFound();
+            
+            // Find hashtags
+            var rgx = new Regex(@"\#[\w\-]+");
+            var tags = rgx
+                .Matches(Input.Body)
+                .Select(m => m.Value)
+                .Distinct()
+                .Take(CTConfig.CBlogpost.MaxTagsAmount)
+                .ToList();
 
             post.Title = Input.Title.Trim();
             post.Slug = Input.Title.Trim().Friendlify();
             post.Body = Input.Body.Trim();
             post.WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length;
+            post.Hashtags = tags.ToArray();
             
             try
             {

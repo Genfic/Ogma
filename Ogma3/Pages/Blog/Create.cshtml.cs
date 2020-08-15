@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +58,15 @@ namespace Ogma3.Pages.Blog
             
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
+            
+            // Find hashtags
+            var rgx = new Regex(@"\#[\w\-]+");
+            var tags = rgx
+                .Matches(Input.Body)
+                .Select(m => m.Value)
+                .Distinct()
+                .Take(CTConfig.CBlogpost.MaxTagsAmount)
+                .ToList();
 
             await _context.Blogposts.AddAsync(new Blogpost
             {
@@ -64,7 +75,8 @@ namespace Ogma3.Pages.Blog
                 Body = Input.Body.Trim(),
                 Author = user,
                 CommentsThread = new CommentsThread(),
-                WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length
+                WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
+                Hashtags = tags.ToArray()
             });
             await _context.SaveChangesAsync();
 

@@ -266,7 +266,8 @@ img.avatar {
   object-fit: contain;
   border: 1px solid var(--foreground-25);
 }
-#story-app > .story-details > .main > h2.author {
+#story-app > .story-details > .main h2.author {
+  color: var(--foreground);
   font-size: 1.2rem;
   line-height: 1.2rem;
 }

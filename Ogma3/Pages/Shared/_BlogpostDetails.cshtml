@@ -6,7 +6,7 @@
     <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
         @Model.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
     </time>
-    <markdown class="body">
+    <markdown class="body" preset="Blogpost">
         @Model.Body
     </markdown>
 </div>

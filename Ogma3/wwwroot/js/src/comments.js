@@ -74,16 +74,18 @@ let comments_vue = new Vue({
             this.navigateToPage()
         },
         
-        changeHighlight: function(idx = null) {
+        changeHighlight: function(idx = null, e) {
+            e.preventDefault();
             this.highlight = idx ?? this.highlight;
             document
                 .getElementById(`comment-${this.highlight}`)
                 .scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+            history.replaceState(undefined, undefined, `#comment.${idx}`)
         },
 
         navigateToPage: function () {
             this.visibleComments = this.comments.slice((this.page - 1) * this.perPage, this.page * this.perPage);
-            window.location.hash = `page.${this.page}`;
+            history.replaceState(undefined, undefined, `#page.${this.page}`)
             if (this.highlight) this.highlight = null;
         },
         
@@ -109,7 +111,7 @@ let comments_vue = new Vue({
         } else if (hash[0] === '#comment' && hash[1]) {
             this.highlight = Number(hash[1]);
         } else {
-            window.location.hash = null; 
+            history.replaceState(undefined, undefined, "")
         }
         
         this.load(); 

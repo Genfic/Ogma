@@ -60,7 +60,9 @@
             {
                 <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
             }
-            <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
+            <a href="@Url.PageLink(nameof(Profile), null, new { name = Model.Author.UserName })">
+                <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
+            </a>
             <div class="description" itemprop="abstract">
                 <markdown>@Model.Description</markdown>
             </div>

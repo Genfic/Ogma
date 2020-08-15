@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +10,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Blog
 {
-    public class IndexModel : PageModel
+    public class SearchModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         public IList<Blogpost> Posts { get;set; }
@@ -20,38 +19,38 @@ namespace Ogma3.Pages.Blog
         public readonly int PerPage = 25;
         
         public int PageNumber { get; set; }
-        public User Owner { get; set; }
-        public bool IsCurrentUser { get; set; }
 
-        public IndexModel(ApplicationDbContext context)
+        public SearchModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
+        public async Task<ActionResult> OnGetAsync([FromQuery] string t = null, [FromQuery] string q = null, [FromQuery] int page = 1)
         {
             PageNumber = page;
-            
-            Owner = await _context.Users
-                .AsNoTracking()
-                .FirstAsync(u => u.NormalizedUserName == name.ToUpper());
-            
-            if (Owner == null) return NotFound();
-            IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var postsQuery = IsCurrentUser
-                ? _context.Blogposts.Where(b => b.Author == Owner)
-                : _context.Blogposts.Where(b => b.Author == Owner && b.IsPublished);
-
-            Posts = await postsQuery
+            var query = _context.Blogposts.AsQueryable();
+            
+            if (t != null) // Query by tags if they're in the search
+            {
+                var tags = t.Split(',').Select(tag => '#' + tag.TrimStart('#')).ToArray();
+                query = query.Where(b => tags.All(i => b.Hashtags.Contains(i)));
+            }
+            
+            if (q != null) // query by title if it's in the search
+            {
+                query = query.Where(b => EF.Functions.Like(b.Title.ToUpper(), $"%{q}%".ToUpper()));
+            }
+            
+            Posts = await query
+                .Include(b => b.Author)
                 .Skip(Math.Max(0, page - 1) * PerPage)
                 .Take(PerPage)
-                .Include(b => b.Author)
                 .AsNoTracking()
                 .ToListAsync();
-
+            
             PostsCount = await _context.Blogposts.CountAsync();
-
+            
             return Page();
         }
     }
