@@ -1,0 +1,38 @@
+@use "../vars" as v
+
+.search
+  height: 2rem
+  width: 100%
+  margin-bottom: 1rem
+  display: flex
+  align-items: center
+  
+  & label
+    margin: 0 .5rem
+
+  & input
+    height: 100%
+  
+    &[type="text"]
+      flex-grow: 1
+      padding: 0 .5rem
+      &:focus
+        border-color: v.$accent
+        box-shadow: 0 0 0 3px v.$accent-25
+      
+    &[type="submit"]
+      background-color: v.$background
+      margin: 0 0 0 .5rem
+      padding: 0 1rem
+      transition: background-color 100ms ease-in-out
+      &:hover
+        background-color: v.$accent-25
+      
+  & select
+    height: 100%
+    padding: 0 .5rem
+    &:focus
+      border-color: v.$accent
+      box-shadow: 0 0 0 3px v.$accent-25
+     
+   

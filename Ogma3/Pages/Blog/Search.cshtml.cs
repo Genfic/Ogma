@@ -21,7 +21,6 @@ namespace Ogma3.Pages.Blog
 
         public string SearchBy { get; set; }
         public string SortBy { get; set; }
-        
         public int PageNumber { get; set; }
 
         public SearchModel(ApplicationDbContext context)
@@ -58,13 +57,7 @@ namespace Ogma3.Pages.Blog
 
             }
             
-            // Include author and paginate
-            query = query
-                .Include(b => b.Author)
-                .Skip(Math.Max(0, page - 1) * PerPage)
-                .Take(PerPage);
-            
-            // Sorting
+            // Sort
             query = sort switch
             {
                 "title-up"   => query.OrderBy(b => b.Title),
@@ -77,6 +70,9 @@ namespace Ogma3.Pages.Blog
             
             // Finalize query
             Posts = await query
+                .Include(b => b.Author)
+                .Skip(Math.Max(0, page - 1) * PerPage)
+                .Take(PerPage)
                 .AsNoTracking()
                 .ToListAsync();
             

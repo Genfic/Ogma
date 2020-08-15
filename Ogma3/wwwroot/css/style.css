@@ -1179,6 +1179,45 @@ dl.rows > dd {
   font-weight: bold;
 }
 
+.search {
+  height: 2rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+.search label {
+  margin: 0 0.5rem;
+}
+.search input {
+  height: 100%;
+}
+.search input[type=text] {
+  flex-grow: 1;
+  padding: 0 0.5rem;
+}
+.search input[type=text]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+.search input[type=submit] {
+  background-color: var(--background);
+  margin: 0 0 0 0.5rem;
+  padding: 0 1rem;
+  transition: background-color 100ms ease-in-out;
+}
+.search input[type=submit]:hover {
+  background-color: var(--accent-25);
+}
+.search select {
+  height: 100%;
+  padding: 0 0.5rem;
+}
+.search select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+
 #version {
   color: var(--background);
   border-radius: 0.2rem;
