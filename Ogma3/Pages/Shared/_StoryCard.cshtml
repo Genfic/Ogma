@@ -3,47 +3,43 @@
 @model Ogma3.Data.Models.Story
 
 <div class="story-card">
-    <div class="main">
-        @if (Model.Cover != null)
+    @if (Model.Cover != null)
+    {
+        <img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"/>
+    }
+@*     else *@
+@*     { *@
+@*         <div class="image">No image</div> *@
+@*     } *@
+
+    <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
+        <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
+        <h3>@Model.Title</h3>
+    </a>
+    
+    <h4 class="author">
+        <a href="@Url.Page("/Profile", new {Name = Model.Author.UserName})">By @Model.Author.UserName</a>
+    </h4>
+    
+    <div class="hook">
+        <markdown>
+            @Model.Hook
+        </markdown>
+    </div>
+    
+    <div class="tags">
+        <partial name="_StoryStatus" model="@Model.Status"></partial>
+        @foreach (var t in Model.Tags)
         {
-            <img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"/>
+            if (t.Namespace is null)
+            {
+                <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})">@t.Name</tag>
+            }
+            else
+            {
+                <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
+            }
         }
-        else
-        {
-            <div class="image">No image</div>
-        }
-        <div class="body">
-            @* Rating and its icon *@
-            <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
-                <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
-                <h3>@Model.Title</h3>
-            </a>
-            
-            <h4 class="author">
-                <a href="@Url.Page("/Profile", new {Name = Model.Author.UserName})">By @Model.Author.UserName</a>
-            </h4>
-            
-            <div class="hook">
-                <markdown>
-                    @Model.Hook
-                </markdown>
-            </div>
-            
-            <div class="tags">
-                <partial name="_StoryStatus" model="@Model.Status"></partial>
-                @foreach (var t in Model.Tags)
-                {
-                    if (t.Namespace is null)
-                    {
-                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})">@t.Name</tag>
-                    }
-                    else
-                    {
-                        <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
-                    }
-                }
-            </div>
-        </div>
     </div>
     
     <div class="info">
