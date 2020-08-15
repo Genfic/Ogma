@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Models;
-using Utils;
 
 namespace Ogma3.Pages
 {
@@ -17,10 +14,8 @@ namespace Ogma3.Pages
         private readonly ILogger<IndexModel> _logger;
         private readonly ApplicationDbContext _context;
 
-        [BindProperty]
-        public string SampleText { get; set; }
-
         public List<Story> RecentStories { get; set; }
+        public List<Story> TopStories { get; set; }
 
         public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
         {
@@ -41,11 +36,19 @@ namespace Ogma3.Pages
                 .AsNoTracking()
                 .ToListAsync();
             
-            SampleText = Lorem.Ipsum(5, new IpsumOptions
-            {
-                Decorate = true,
-                Length = IpsumLength.Short
-            });
+            TopStories = await _context.Stories
+                // .Where(s => s.ReleaseDate > DateTime.Now - TimeSpan.FromDays(30))
+                .OrderByDescending(s => s.Votes.Count)
+                    .ThenByDescending(s => s.ReleaseDate)
+                .Take(10)
+                .Include(s => s.StoryTags)
+                    .ThenInclude(st => st.Tag)
+                        .ThenInclude(t => t.Namespace)
+                .Include(s => s.Rating)
+                .Include(s => s.Author)
+                .AsNoTracking()
+                .ToListAsync();
+
         }
     }
 }

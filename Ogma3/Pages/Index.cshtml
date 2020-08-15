@@ -15,13 +15,45 @@
     <div v-if="!route" id="quote-route" data-route="@Url.RouteUrl(nameof(QuotesController))/random"></div>
 </div>
 
-<h2>Recent stories</h2>
 
-<div>
-    @foreach (var story in Model.RecentStories)
-    {
-        <partial name="Shared/_StoryCard" model="@story"/>
-    }
+<div id="tabs" class="tab-view mt-3">
+    <div class="tabs">
+        <button class="tab"
+                :class="tabindex === 0 ? 'active' : ''"
+                v-on:click="tabindex = 0">
+            Top
+        </button>
+        <button class="tab"
+                :class="tabindex === 1 ? 'active' : ''"
+                v-on:click="tabindex = 1">
+            New
+        </button>    
+    </div>
+    
+    <div class="tab-body" v-if="tabindex === 0">
+        <h2>Top stories of all time</h2>
+
+        <div>
+            @foreach (var story in Model.TopStories)
+            {
+                <partial name="Shared/_StoryCard" model="@story"/>
+            }
+        </div>
+    </div>
+    
+    
+    <div class="tab-body" v-if="tabindex === 1">
+        <h2>Newest stories</h2>
+        
+        <div>
+            @foreach (var story in Model.RecentStories)
+            {
+                <partial name="Shared/_StoryCard" model="@story"/>
+            }
+        </div>
+    </div>
 </div>
 
+
 @Html.Resource(@<script src="~/js/dist/quote.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/tabs.min.js" asp-append-version="true"></script>)

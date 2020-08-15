@@ -23,7 +23,6 @@ namespace Ogma3.Data
         public DbSet<ChaptersRead> ChaptersRead { get; set; }
         public DbSet<CommentsThread> CommentThreads { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<VotePool> VotePools { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfStory> ShelfStories { get; set; }
@@ -101,9 +100,8 @@ namespace Ogma3.Data
                 .HasOne(s => s.Author)
                 .WithMany();
             builder.Entity<Story>()
-                .HasOne(s => s.VotesPool)
-                .WithOne(vp => vp.Story)
-                .HasForeignKey<VotePool>(vp => vp.StoryId)
+                .HasMany(s => s.Votes)
+                .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
             
             // Chapter
@@ -146,19 +144,14 @@ namespace Ogma3.Data
             builder.Entity<Comment>()
                 .HasOne(c => c.Author)
                 .WithMany();
-            
-            // Vote pools
-            builder.Entity<VotePool>()
-                .HasMany(vp => vp.Votes)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
+
             
             // Votes
             builder.Entity<Vote>()
                 .HasOne(v => v.User)
                 .WithMany();
             builder.Entity<Vote>()
-                .HasIndex(v => new {v.UserId, v.VotePoolId})
+                .HasIndex(v => new {v.UserId, v.StoryId})
                 .IsUnique();
             
             // Shelf stories
@@ -187,11 +180,6 @@ namespace Ogma3.Data
                 .HasOne(b => b.CommentsThread)
                 .WithOne(ct => ct.Blogpost)
                 .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<Blogpost>()
-                .HasOne(b => b.VotesPool)
-                .WithOne(vp => vp.Blogpost)
-                .HasForeignKey<VotePool>(vp => vp.BlogpostId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             // Clubs

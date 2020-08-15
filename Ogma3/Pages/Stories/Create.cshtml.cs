@@ -119,8 +119,7 @@ namespace Ogma3.Pages.Stories
                 Description = Input.Description,
                 Hook = Input.Hook,
                 Rating = rating,
-                Tags = tags,
-                VotesPool = new VotePool()
+                Tags = tags
             };
 
             await _context.Stories.AddAsync(story);

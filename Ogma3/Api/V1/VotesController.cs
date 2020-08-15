@@ -25,16 +25,17 @@ namespace Ogma3.Api.V1
         }
 
         // GET api/votes/5
-        [HttpGet("{poolId}")]
-        public async Task<CountReturn> GetVotes(long poolId)
+        [HttpGet("{storyId}")]
+        public async Task<CountReturn> GetVotes(long storyId)
         {
             var user = await _userManager.GetUserAsync(User);
+            
             var count = await _context.Votes
                 .AsNoTracking()
-                .CountAsync(v => v.VotePoolId == poolId);
+                .CountAsync(v => v.StoryId == storyId);
             var didUserVote = await _context.Votes
                 .AsNoTracking()
-                .AnyAsync(v => v.User == user && v.VotePoolId == poolId);
+                .AnyAsync(v => v.User == user && v.StoryId == storyId);
 
             return new CountReturn
             {
@@ -46,26 +47,33 @@ namespace Ogma3.Api.V1
         // POST api/votes
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> PostVote(VoteFromApiDTO data)
+        public async Task<ActionResult> PostVote([FromBody] VoteData data)
         {
+            Console.WriteLine($">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {data.StoryId== null}");
+            
             var user = await _userManager.GetUserAsync(User);
-            var pool = await _context.VotePools
-                .FindAsync(data.VotePool);
+            var story = await _context.Stories
+                .Where(s => s.Id == data.StoryId)
+                .Include(s => s.Votes)
+                .FirstOrDefaultAsync();
             var vote = await _context.Votes
-                .FirstOrDefaultAsync(v => v.User == user && v.VotePoolId == data.VotePool);
+                .FirstOrDefaultAsync(v => v.User == user && v.StoryId == data.StoryId);
             var didVote = false;
+
+            if (story == null) return NotFound();
 
             // Check if the vote already exists
             if (vote == null)
             {
-                pool.Votes.Add(new Vote {
+                story.Votes.Add(new Vote
+                {
                     User = user
                 });
                 didVote = true;
             }
             else
             {
-                pool.Votes.Remove(vote);
+                story.Votes.Remove(vote);
             }
 
             // Save
@@ -81,7 +89,7 @@ namespace Ogma3.Api.V1
 
             var res = new CountReturn
             {
-                Count = pool.Votes.Count,
+                Count = story.Votes.Count,
                 DidVote = didVote
             };
             return new OkObjectResult(res);
@@ -91,6 +99,11 @@ namespace Ogma3.Api.V1
         {
             public int Count { get; set; }
             public bool DidVote { get; set; }
+        }
+
+        public class VoteData
+        {
+            public long StoryId { get; set; }
         }
     }
 }

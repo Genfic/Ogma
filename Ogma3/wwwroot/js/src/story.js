@@ -7,7 +7,6 @@ let story_vue = new Vue({
         csrf: null,
         
         score: 0,
-        pool: null,
         didVote: false,
         
         storyId: null,
@@ -20,7 +19,7 @@ let story_vue = new Vue({
     methods: {
         vote: function() {
             axios.post(this.votesRoute, {
-                votePool: Number(this.pool)
+                storyId: Number(this.storyId)
             })
             .then(res => {
                 this.score = res.data.count;
@@ -60,17 +59,16 @@ let story_vue = new Vue({
         }
     },
     mounted() {
-        // Get pool and story IDs
-        this.pool = Number(document.getElementById('pool-id').dataset.pool);
+        // Get story ID
         this.storyId = Number(document.getElementById('story-id').dataset.id);
         // Get routes
         this.votesRoute = document.getElementById('votes-route').dataset.route;
         this.shelvesRoute = document.getElementById('shelves-route').dataset.route;
         this.readsRoute = document.getElementById('reads-route').dataset.route;
         // Get CSRF token
-        this.csrf = document.querySelector('input[name=__RequestVerificationToken').value;
+        this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
         // Get initial score
-        axios.get(this.votesRoute + '/' + this.pool)
+        axios.get(this.votesRoute + '/' + this.storyId)
             .then(res => {
                 this.score = res.data.count;
                 this.didVote = res.data.didVote;

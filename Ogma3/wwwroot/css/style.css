@@ -1218,6 +1218,36 @@ dl.rows > dd {
   box-shadow: 0 0 0 3px var(--accent-25);
 }
 
+.tab-view .tabs {
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--foreground-75);
+}
+.tab-view .tabs .tab {
+  padding: 0.5rem 1rem;
+  background-color: var(--background);
+  border: 1px solid var(--foreground-25);
+  border-right: none;
+  border-bottom: none;
+  text-align: center;
+}
+.tab-view .tabs .tab:hover, .tab-view .tabs .tab:focus {
+  color: var(--foreground);
+  background: var(--accent-10);
+}
+.tab-view .tabs .tab:first-child {
+  border-top-left-radius: 0.25rem;
+  margin-left: 1rem;
+}
+.tab-view .tabs .tab:last-child {
+  border-right: 1px solid var(--foreground-25);
+  border-top-right-radius: 0.25rem;
+}
+.tab-view .tabs .tab.active {
+  border-top: 0.25rem solid var(--accent);
+  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+}
 #version {
   color: var(--background);
   border-radius: 0.2rem;

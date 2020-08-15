@@ -34,8 +34,7 @@ namespace Ogma3.Pages.Stories
             // Get the story and make sure the logged-in user matches author
             Story = await _context.Stories
                 .Include(s => s.Author)
-                .Include(s => s.VotesPool)
-                    .ThenInclude(vp => vp.Votes)
+                .Include(s => s.Votes)
                 .Include(s => s.Rating)
                 .Include(s => s.Chapters)
                     .ThenInclude(c => c.CommentsThread)

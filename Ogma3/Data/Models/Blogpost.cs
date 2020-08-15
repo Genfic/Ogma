@@ -29,11 +29,7 @@ namespace Ogma3.Data.Models
         [MinLength(CTConfig.CBlogpost.MinBodyLength)]
         [MaxLength(CTConfig.CBlogpost.MaxBodyLength)]
         public string Body { get; set; }
-        
-        // Votes
-        [Required]
-        public  VotePool VotesPool { get; set; }
-        
+
         public  CommentsThread CommentsThread { get; set; }
         
         [Required]

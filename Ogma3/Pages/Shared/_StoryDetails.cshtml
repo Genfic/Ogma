@@ -137,7 +137,6 @@
     <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl(nameof(VotesController))"></div>
     <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
     <div id="reads-route" v-if="!readsRoute" data-route="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
-    <div id="pool-id" v-if="!pool" data-pool="@Model.VotesPool.Id"></div>
     <div id="story-id" v-if="!storyId" data-id="@Model.Id"></div>
     @Html.AntiForgeryToken()
 </div>

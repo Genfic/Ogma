@@ -77,8 +77,7 @@ namespace Ogma3.Data.Models
         public EStoryStatus Status { get; set; }
         
         // Votes
-        [Required]
-        public  VotePool VotesPool { get; set; }
+        public IList<Vote> Votes { get; set; }
 
         [Required]
         [DefaultValue(0)]
@@ -89,6 +88,6 @@ namespace Ogma3.Data.Models
         public int ChapterCount { get; set; }
     
         [NotMapped]
-        public int Score => VotesPool.Votes.Count;
+        public int Score => Votes.Count;
     }
 }
