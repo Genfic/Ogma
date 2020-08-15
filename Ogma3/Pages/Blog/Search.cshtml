@@ -6,10 +6,18 @@
 }
 
 <form id="search" method="GET">
-    <label for="title">Search in titles</label>
-    <input id="title" name="q" type="text">
-    <label for="tags">Search by hashtags</label>
-    <input id="tags" name="t" type="text">
+    <label for="title">Search</label>
+    <input id="title" name="q" type="text" value="@Model.SearchBy">
+    
+    <label for="sort">Sort</label>
+    <select name="sort" id="sort">
+        <option selected="@(Model.SortBy == "title-up")"   value="title-up">Title ↑</option>
+        <option selected="@(Model.SortBy == "title-down")" value="title-down">Title ↓</option>
+        <option selected="@(Model.SortBy == "words-up")"   value="words-up">Words ↑</option>
+        <option selected="@(Model.SortBy == "words-down")" value="words-down">Words ↓</option>
+        <option selected="@(Model.SortBy == "date-up")"    value="date-up">Date ↑</option>
+        <option selected="@(Model.SortBy == "date-down")"  value="date-down">Date ↓</option>
+    </select>
     
     <input type="submit" value="Search">
 </form>

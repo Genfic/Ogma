@@ -63,7 +63,7 @@ namespace Ogma3.Pages.Blog
             var rgx = new Regex(@"\#[\w\-]+");
             var tags = rgx
                 .Matches(Input.Body)
-                .Select(m => m.Value)
+                .Select(m => m.Value.ToLower())
                 .Distinct()
                 .Take(CTConfig.CBlogpost.MaxTagsAmount)
                 .ToList();
