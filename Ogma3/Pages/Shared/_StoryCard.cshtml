@@ -7,10 +7,6 @@
     {
         <img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"/>
     }
-@*     else *@
-@*     { *@
-@*         <div class="image">No image</div> *@
-@*     } *@
 
     <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
         <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">

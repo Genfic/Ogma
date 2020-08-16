@@ -6,6 +6,7 @@ using System.Security.Policy;
 using System.Threading.Tasks;
 using Markdig;
 using MarkdigExtensions.Hashtags;
+using MarkdigExtensions.Mentions;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Services.TagHelpers
@@ -27,20 +28,24 @@ namespace Ogma3.Services.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             // Options
-            var hashtagOptions = new HashtagOptions("/blog/search?t=", "_blank");
+            var hashtagOptions = new HashtagOptions("/blog/search?q=", "_blank");
+            var mentionOptions = new MentionOptions("/profile/", "_blank");
             
             var builder = Preset switch
             {
                 Presets.Basic   => new MarkdownPipelineBuilder(),
                 
                 Presets.Comment => new MarkdownPipelineBuilder()
+                    .UseMentions(mentionOptions)
                     .UseAutoLinks(),
                 
                 Presets.All     => new MarkdownPipelineBuilder()
+                    .UseMentions(mentionOptions)
                     .UseAdvancedExtensions(),
                 
                 Presets.Blogpost => new MarkdownPipelineBuilder()
                     .UseAdvancedExtensions()
+                    .UseMentions(mentionOptions)
                     .UseHashtags(hashtagOptions),
                 
                 _ => throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...")

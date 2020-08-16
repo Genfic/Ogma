@@ -874,41 +874,14 @@ namespace Ogma3.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("VotePoolId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StoryId");
-
-                    b.HasIndex("VotePoolId");
 
                     b.HasIndex("UserId", "StoryId")
                         .IsUnique();
 
                     b.ToTable("Votes");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.VotePool", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<long?>("BlogpostId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("StoryId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogpostId");
-
-                    b.HasIndex("StoryId");
-
-                    b.ToTable("VotePools");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -1158,22 +1131,6 @@ namespace Ogma3.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.VotePool", null)
-                        .WithMany("Votes")
-                        .HasForeignKey("VotePoolId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.VotePool", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Blogpost", "Blogpost")
-                        .WithMany()
-                        .HasForeignKey("BlogpostId");
-
-                    b.HasOne("Ogma3.Data.Models.Story", "Story")
-                        .WithMany()
-                        .HasForeignKey("StoryId");
                 });
 #pragma warning restore 612, 618
         }
