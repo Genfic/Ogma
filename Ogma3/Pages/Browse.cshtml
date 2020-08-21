@@ -1,0 +1,13 @@
+@page
+@model Ogma3.Pages.BrowseModel
+
+@{
+    ViewData["Title"] = "Browse stories";
+}
+
+<div>
+    @foreach (var story in Model.Stories)
+    {
+        <partial name="Shared/_StoryCard" model="@story"/>
+    }
+</div>

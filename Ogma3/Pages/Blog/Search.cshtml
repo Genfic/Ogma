@@ -1,4 +1,5 @@
 @page
+@using Ogma3.Data.Enums
 @model Ogma3.Pages.Blog.SearchModel
 
 @{
@@ -10,13 +11,11 @@
     <input class="active-border" id="title" name="q" type="text" value="@Model.SearchBy">
     
     <label for="sort">Sort</label>
-    <select class="active-border" name="sort" id="sort">
-        <option selected="@(Model.SortBy == "title-up")"   value="title-up">Title ↑</option>
-        <option selected="@(Model.SortBy == "title-down")" value="title-down">Title ↓</option>
-        <option selected="@(Model.SortBy == "words-up")"   value="words-up">Words ↑</option>
-        <option selected="@(Model.SortBy == "words-down")" value="words-down">Words ↓</option>
-        <option selected="@(Model.SortBy == "date-up")"    value="date-up">Date ↑</option>
-        <option selected="@(Model.SortBy == "date-down")"  value="date-down">Date ↓</option>
+    <select class="active-border"
+            name="sort"
+            id="sort"
+            asp-for="SortBy"
+            asp-items="Html.GetEnumSelectList<EBlogpostSortingOptions>()">
     </select>
     
     <input class="active-border" type="submit" value="Search">

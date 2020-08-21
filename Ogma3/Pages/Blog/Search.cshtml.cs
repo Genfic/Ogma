@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Castle.Core.Internal;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Blog
@@ -20,7 +21,7 @@ namespace Ogma3.Pages.Blog
         public readonly int PerPage = 25;
 
         public string SearchBy { get; set; }
-        public string SortBy { get; set; }
+        public EBlogpostSortingOptions SortBy { get; set; }
         public int PageNumber { get; set; }
 
         public SearchModel(ApplicationDbContext context)
@@ -28,7 +29,7 @@ namespace Ogma3.Pages.Blog
             _context = context;
         }
 
-        public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] string sort, [FromQuery] int page = 1)
+        public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
         {
             PageNumber = page;
             SearchBy = q;
@@ -60,12 +61,13 @@ namespace Ogma3.Pages.Blog
             // Sort
             query = sort switch
             {
-                "title-up"   => query.OrderBy(b => b.Title),
-                "title-down" => query.OrderByDescending(b => b.Title),
-                "words-up"   => query.OrderBy(b => b.WordCount),
-                "words-down" => query.OrderByDescending(b => b.WordCount),
-                "date-up"    => query.OrderBy(b => b.PublishDate),
-                _ => query.OrderByDescending(b => b.PublishDate)
+                EBlogpostSortingOptions.TitleAscending  => query.OrderBy(s => s.Title),
+                EBlogpostSortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
+                EBlogpostSortingOptions.DateAscending   => query.OrderBy(s => s.PublishDate),
+                EBlogpostSortingOptions.DateDescending  => query.OrderByDescending(s => s.PublishDate),
+                EBlogpostSortingOptions.WordsAscending  => query.OrderBy(s => s.WordCount),
+                EBlogpostSortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
+                _ => query.OrderByDescending(s => s.WordCount)
             };
             
             // Finalize query

@@ -1,5 +1,4 @@
 ﻿@page
-@using Ogma3.Api
 @using Ogma3.Api.V1
 @model Ogma3.Areas.Admin.Pages.Tags
 
@@ -27,7 +26,7 @@
     </div>
     
     <div class="form-group">
-        <label></label>
+        <label asp-for="Input.Namespace"></label>
         <select asp-for="Input.Namespace" v-model="form.namespace" class="form-control">
             <option v-for="n in namespaces" :value="n.id" :selected="n.id == form.namespace">{{ n.name }}</option>
         </select>

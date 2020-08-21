@@ -37,6 +37,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.0" />
     <PackageReference Include="SendGrid" Version="9.12.7" />
+    <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 
 
@@ -292,6 +293,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Pages\User" />
     <Folder Include="wwwroot\js\dist" />
   </ItemGroup>
 
