@@ -13,11 +13,11 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class GenerateRecoveryCodesModel : PageModel
     {
-        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly UserManager<Data.Models.OgmaUser> _userManager;
         private readonly ILogger<GenerateRecoveryCodesModel> _logger;
 
         public GenerateRecoveryCodesModel(
-            UserManager<Data.Models.User> userManager,
+            UserManager<Data.Models.OgmaUser> userManager,
             ILogger<GenerateRecoveryCodesModel> logger)
         {
             _userManager = userManager;

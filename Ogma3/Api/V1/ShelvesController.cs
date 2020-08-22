@@ -18,9 +18,9 @@ namespace Ogma3.Api.V1
     public class ShelvesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<OgmaUser> _userManager;
         
-        public ShelvesController(ApplicationDbContext context, UserManager<User> userManager)
+        public ShelvesController(ApplicationDbContext context, UserManager<OgmaUser> userManager)
         {
             _context = context;
             _userManager = userManager;

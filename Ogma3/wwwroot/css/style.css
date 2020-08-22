@@ -541,6 +541,7 @@ ul.my-list > li.item > div.buttons > .button:hover {
   text-overflow: ellipsis;
   font-weight: 600;
   padding: 0 0.2rem;
+  color: var(--foreground);
 }
 .comments-container > .comments > .comment > .author > .avatar {
   border-top: 1px solid var(--foreground-50);

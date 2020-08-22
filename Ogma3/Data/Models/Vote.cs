@@ -5,7 +5,7 @@ namespace Ogma3.Data.Models
     public class Vote : BaseModel
     {
         [Required] 
-        public User User { get; set; }
+        public OgmaUser User { get; set; }
 
         [Required]
         public long UserId { get; set; }

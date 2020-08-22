@@ -21,12 +21,12 @@ namespace Ogma3.Pages.Stories
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<OgmaUser> _userManager;
         private readonly FileUploader _uploader;
 
         public CreateModel(
             ApplicationDbContext context,
-            UserManager<User> userManager,
+            UserManager<OgmaUser> userManager,
             FileUploader uploader)
         {
             _context = context;

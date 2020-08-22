@@ -14,7 +14,7 @@
     </a>
     
     <h4 class="author">
-        <a href="@Url.Page("/Profile", new {Name = Model.Author.UserName})">By @Model.Author.UserName</a>
+        <a asp-page="/User/Index" asp-route-name="@Model.Author.UserName">By @Model.Author.UserName</a>
     </h4>
     
     <div class="hook">

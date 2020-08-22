@@ -1,6 +1,6 @@
 @using System.Globalization
 @using Utils
-@model Ogma3.Data.Models.User
+@model Ogma3.Data.Models.OgmaUser
 
 @{
     var tab = (string) ViewData["Tab"];
@@ -11,7 +11,7 @@
     <div id="personal">
         <avatar src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" size="130" alt="@Model.UserName's avatar"></avatar>
         <div class="data">
-            <a asp-page="/Profile" asp-area="" asp-route-name="@Model.UserName">
+            <a asp-page="/User/Index" asp-area="" asp-route-name="@Model.UserName">
                 <h1 class="name">@Model.UserName</h1>
             </a>
             <h2 class="title">@Model.Title</h2>
@@ -33,16 +33,16 @@
     </div>
 
     <nav class="nav">
-        <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/Profile" asp-route-name="@Model.UserName">
+        <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">
             Home
         </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/Stories/Index" asp-route-name="@Model.UserName">
+        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="@Model.UserName">
             Stories
         </a>
-        <a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/Blog/Index" asp-route-name="@Model.UserName">
+        <a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="@Model.UserName">
             Blog
         </a>
-        <a class="nav-item @(tab == "Shelves" ? "active" : null)" asp-area="" asp-page="/Shelves/Index" asp-route-name="@Model.UserName">
+        <a class="nav-item @(tab == "Library" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="@Model.UserName">
             Library
         </a>
     </nav>

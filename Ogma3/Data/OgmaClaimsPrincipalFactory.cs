@@ -7,16 +7,16 @@ using Utils;
 
 namespace Ogma3.Data
 {
-    public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, Role>
+    public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, Role>
     {
         public OgmaClaimsPrincipalFactory(
-            UserManager<User> userManager, 
+            UserManager<OgmaUser> userManager, 
             RoleManager<Role> roleManager, 
             IOptions<IdentityOptions> options) 
             : base(userManager, roleManager, options)
         { }
 
-        public override async Task<ClaimsPrincipal> CreateAsync(User user)
+        public override async Task<ClaimsPrincipal> CreateAsync(OgmaUser user)
         {
             var principal = await base.CreateAsync(user);
             

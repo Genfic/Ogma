@@ -1,30 +1,26 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Pages.Shelves
+namespace Ogma3.Pages.User
 {
-    public class Index : PageModel
+    public class LibraryModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
 
-        public Index(ApplicationDbContext context, UserManager<User> userManager)
+        public LibraryModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
-        public User Owner { get; set; }
+        public OgmaUser Owner { get; set; }
         public bool IsCurrentUser { get; set; }
         public List<Icon> Icons { get; set; }
         public InputModel Input { get; set; }

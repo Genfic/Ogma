@@ -13,11 +13,11 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class Disable2faModel : PageModel
     {
-        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly UserManager<Data.Models.OgmaUser> _userManager;
         private readonly ILogger<Disable2faModel> _logger;
 
         public Disable2faModel(
-            UserManager<Data.Models.User> userManager,
+            UserManager<Data.Models.OgmaUser> userManager,
             ILogger<Disable2faModel> logger)
         {
             _userManager = userManager;

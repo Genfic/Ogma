@@ -31,10 +31,10 @@ namespace Ogma3.Data.Models
         public ICollection<ClubMember> ClubMembers { get; set; }
         
         [NotMapped]
-        public IEnumerable<User> Members
+        public IEnumerable<OgmaUser> Members
         {
             get => ClubMembers == null || ClubMembers.Count <= 0
-                ? new List<User>()
+                ? new List<OgmaUser>()
                 : ClubMembers.Select(cm => cm.Member).ToList();
             set => ClubMembers = value.Select(u => new ClubMember
             {

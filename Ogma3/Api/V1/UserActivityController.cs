@@ -10,9 +10,9 @@ namespace Ogma3.Api.V1
     [Route("api/[controller]", Name = nameof(UserActivityController))]
     public class UserActivityController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<OgmaUser> _userManager;
 
-        public UserActivityController(UserManager<User> userManager)
+        public UserActivityController(UserManager<OgmaUser> userManager)
         {
             _userManager = userManager;
         }

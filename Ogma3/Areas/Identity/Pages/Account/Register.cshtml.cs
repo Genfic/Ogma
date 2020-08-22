@@ -24,16 +24,16 @@ namespace Ogma3.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
+        private readonly UserManager<OgmaUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IRecaptchaService _reCaptcha;
         private readonly ApplicationDbContext _context;
 
         public RegisterModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            UserManager<OgmaUser> userManager,
+            SignInManager<OgmaUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender, 
             IRecaptchaService reCaptcha, 
@@ -132,7 +132,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             }
             
             // Create user
-            var user = new User { UserName = Input.Name, Email = Input.Email };
+            var user = new OgmaUser { UserName = Input.Name, Email = Input.Email };
             var result = await _userManager.CreateAsync(user, Input.Password);
             
             // Modify invite code

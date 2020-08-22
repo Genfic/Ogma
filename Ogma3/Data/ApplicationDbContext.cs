@@ -6,7 +6,7 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, long>
+    public class ApplicationDbContext : IdentityDbContext<OgmaUser, Role, long>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -54,10 +54,10 @@ namespace Ogma3.Data
             
             
             // User
-            builder.Entity<User>()
+            builder.Entity<OgmaUser>()
                 .Ignore(u => u.PhoneNumber)
                 .Ignore(u => u.PhoneNumberConfirmed);
-            builder.Entity<User>()
+            builder.Entity<OgmaUser>()
                 .HasOne(u => u.CommentsThread)
                 .WithOne(ct => ct.User)
                 .HasForeignKey<CommentsThread>(ct => ct.UserId)

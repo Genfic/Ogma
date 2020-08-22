@@ -15,11 +15,11 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class DownloadPersonalDataModel : PageModel
     {
-        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly UserManager<Data.Models.OgmaUser> _userManager;
         private readonly ILogger<DownloadPersonalDataModel> _logger;
 
         public DownloadPersonalDataModel(
-            UserManager<Data.Models.User> userManager,
+            UserManager<Data.Models.OgmaUser> userManager,
             ILogger<DownloadPersonalDataModel> logger)
         {
             _userManager = userManager;
@@ -38,7 +38,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 
             // Only include personal data for download
             var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(Data.Models.User).GetProperties().Where(
+            var personalDataProps = typeof(Data.Models.OgmaUser).GetProperties().Where(
                             prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
             foreach (var p in personalDataProps)
             {

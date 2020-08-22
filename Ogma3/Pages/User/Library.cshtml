@@ -1,11 +1,10 @@
-@page "{name?}"
-@using Ogma3.Api
+@page "/user/{name}/library"
 @using Ogma3.Api.V1
-@model Ogma3.Pages.Shelves.Index
+@model Ogma3.Pages.User.LibraryModel
 
 @{
     ViewData["Title"] = $"{Model.Owner.UserName}'s library";
-    ViewData["Tab"] = "Shelves";
+    ViewData["Tab"] = "Library";
 }
 
 <partial name="_ProfileBar" model="Model.Owner"></partial>

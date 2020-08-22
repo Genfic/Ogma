@@ -47,7 +47,7 @@ namespace Ogma3
             services.AddRouting(options => options.LowercaseUrls = true);
 
             // Identity
-            services.AddIdentity<User, Role>(config =>
+            services.AddIdentity<OgmaUser, Role>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
                     config.User.RequireUniqueEmail = true;
@@ -55,14 +55,14 @@ namespace Ogma3
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserManager<OgmaUserManager>()
                 .AddDefaultTokenProviders()
-                .AddUserStore<UserStore<User, Role, ApplicationDbContext, long>>()
+                .AddUserStore<UserStore<OgmaUser, Role, ApplicationDbContext, long>>()
                 .AddRoleStore<RoleStore<Role, ApplicationDbContext, long>>();
             
             // Claims
-            services.AddScoped<IUserClaimsPrincipalFactory<User>, OgmaClaimsPrincipalFactory>();
+            services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
             
             // Argon2 hasher
-            services.UpgradePasswordSecurity().UseArgon2<User>();
+            services.UpgradePasswordSecurity().UseArgon2<OgmaUser>();
 
             // Email
             services.AddTransient<IEmailSender, EmailSender>();

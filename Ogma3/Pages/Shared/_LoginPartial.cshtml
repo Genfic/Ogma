@@ -1,13 +1,13 @@
 ﻿@using System.Security.Claims
 @using Ogma3.Data.Models
-@inject SignInManager<User> SignInManager
+@inject SignInManager<OgmaUser> SignInManager
 @inject OgmaUserManager UserManager
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-page="/Profile" asp-route-name="@User.Identity.Name" title="Manage">
+            <a class="nav-link text-dark" asp-area="" asp-page="/User/Index" asp-route-name="@User.Identity.Name" title="Manage">
                 <avatar src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" size="30" alt="@User.Identity.Name's avatar"></avatar>
                 Hello @User.Identity.Name!
             </a>

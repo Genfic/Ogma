@@ -18,7 +18,7 @@ namespace Ogma3.Data.Models
         public string Body { get; set; }
         
         [Required]
-        public User Author { get; set; }
+        public OgmaUser Author { get; set; }
         
         [Required] 
         public DateTime CreationDate { get; set; } = DateTime.Now;

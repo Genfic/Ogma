@@ -1,20 +1,25 @@
-@page "{name}"
+@page
+@using Ogma3.Data.Enums
 @model Ogma3.Pages.Blog.IndexModel
 
 @{
-    ViewData["Title"] = $"{Model.Owner.UserName}'s blog";
-    ViewData["Tab"] = "Blog";
+    ViewData["Title"] = "Blogpost search";
 }
 
-<partial name="_ProfileBar" model="Model.Owner"></partial>
-
-@if (Model.IsCurrentUser)
-{
-    <a asp-page="Create" class="btn btn-block btn-outline-primary">
-        <icon icon="add"></icon>
-        Create New
-    </a>
-}
+<form id="search" class="search" method="GET">
+    <label for="title">Query</label>
+    <input class="active-border" id="title" name="q" type="text" value="@Model.SearchBy">
+    
+    <label for="sort">Sort</label>
+    <select class="active-border"
+            name="sort"
+            id="sort"
+            asp-for="SortBy"
+            asp-items="Html.GetEnumSelectList<EBlogpostSortingOptions>()">
+    </select>
+    
+    <input class="active-border" type="submit" value="Search">
+</form>
 
 @if (Model.Posts.Count <= 0)
 {
@@ -52,4 +57,3 @@ else
         </div>
     }
 }
-

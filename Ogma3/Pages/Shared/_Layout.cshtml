@@ -3,7 +3,7 @@
 @using Ogma3.Api.V1
 @using Ogma3.Data.Models
 @using Ogma3.Services
-@inject SignInManager<User> SignInManager
+@inject SignInManager<OgmaUser> SignInManager
 @inject OgmaUserManager UserManager
 @inject IWebHostEnvironment Env
 
@@ -74,17 +74,14 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex">
                 <ul class="navbar-nav flex-grow-1">
-                                        
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Stories/Index" asp-route-name="@User.Identity.Name">My Stories</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Shelves/Index" asp-route-name="@User.Identity.Name">My Library</a>
-                        </li>
-                    }
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Stories/Index">Stories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Blog/Index">Blogs</a>
+                    </li>
+
                 </ul>
                 
                 <partial name="_LoginPartial" />

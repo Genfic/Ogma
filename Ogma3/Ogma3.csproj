@@ -293,7 +293,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Pages\User" />
     <Folder Include="wwwroot\js\dist" />
   </ItemGroup>
 

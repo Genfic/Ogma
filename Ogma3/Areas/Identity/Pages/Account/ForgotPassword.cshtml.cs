@@ -18,10 +18,10 @@ namespace Ogma3.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ForgotPasswordModel : PageModel
     {
-        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly UserManager<Data.Models.OgmaUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<Data.Models.User> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<Data.Models.OgmaUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

@@ -8,7 +8,7 @@ namespace Ogma3.Data.Models
 
         public int CommentsCount { get; set; }
         
-        public User? User { get; set; }
+        public OgmaUser? User { get; set; }
         public long? UserId { get; set; }
         public Chapter? Chapter { get; set; }
         public long? ChapterId { get; set; }

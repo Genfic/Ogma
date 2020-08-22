@@ -1,6 +1,7 @@
 @using System.Globalization
 @using Ogma3.Api
 @using Ogma3.Api.V1
+@using Ogma3.Pages.User
 @using Ogma3.Services
 @model Ogma3.Data.Models.Story
 
@@ -60,7 +61,7 @@
             {
                 <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
             }
-            <a href="@Url.PageLink(nameof(Profile), null, new { name = Model.Author.UserName })">
+            <a asp-page="/User/Index" asp-route-name="@Model.Author.UserName">
                 <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
             </a>
             <div class="description" itemprop="abstract">

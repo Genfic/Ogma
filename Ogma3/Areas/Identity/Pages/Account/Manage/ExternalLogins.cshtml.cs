@@ -13,12 +13,12 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<Data.Models.User> _userManager;
-        private readonly SignInManager<Data.Models.User> _signInManager;
+        private readonly UserManager<Data.Models.OgmaUser> _userManager;
+        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
 
         public ExternalLoginsModel(
-            UserManager<Data.Models.User> userManager,
-            SignInManager<Data.Models.User> signInManager)
+            UserManager<Data.Models.OgmaUser> userManager,
+            SignInManager<Data.Models.OgmaUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

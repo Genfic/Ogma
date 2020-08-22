@@ -21,7 +21,7 @@ namespace Ogma3.Data.Models
         public string? Description { get; set; } = "";
         
         [Required]
-        public User Owner { get; set; }
+        public OgmaUser Owner { get; set; }
         
         [Required]
         [DefaultValue(false)]

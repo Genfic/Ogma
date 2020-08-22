@@ -20,14 +20,14 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
     public class IndexModel : PageModel
     {
         private readonly OgmaUserManager _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
         private readonly IB2Client _b2Client;
         private readonly IConfiguration _config;
         private readonly FileUploader _uploader;
 
         public IndexModel(
             OgmaUserManager userManager,
-            SignInManager<User> signInManager,
+            SignInManager<OgmaUser> signInManager,
             IB2Client b2Client,
             IConfiguration config, FileUploader uploader)
         {
@@ -65,7 +65,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             public string Bio { get; set; }
         }
 
-        private async Task LoadAsync(User user)
+        private async Task LoadAsync(OgmaUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var userTitle = await _userManager.GetTitleAsync(user);

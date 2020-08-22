@@ -1,0 +1,31 @@
+﻿@page "/user/{name}/stories"
+@model Ogma3.Pages.User.StoriesModel
+
+@{
+    ViewData["Title"] = $"{Model.Owner.UserName}'s stories";
+    ViewData["Tab"] = "Stories";
+}
+
+<partial name="_ProfileBar" model="Model.Owner"></partial>
+
+@if (Model.IsCurrentUser)
+{
+    <a class="btn btn-block btn-outline-primary" asp-page="Create"> 
+        <icon icon="add"></icon>
+        Create New
+    </a>
+}
+
+<ul class="my-list">
+    @foreach (var story in Model.Stories)
+    {
+        <li class="item">
+            <partial name="Shared/_StoryCard" model="story"/>
+        </li>
+    }
+</ul>
+
+@if (Model.Stories.Count <= 0)
+{
+    <h1>No stories found</h1>
+}

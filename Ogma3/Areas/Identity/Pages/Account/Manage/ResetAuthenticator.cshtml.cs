@@ -13,13 +13,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        UserManager<Data.Models.User> _userManager;
-        private readonly SignInManager<Data.Models.User> _signInManager;
+        UserManager<Data.Models.OgmaUser> _userManager;
+        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
         ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<Data.Models.User> userManager,
-            SignInManager<Data.Models.User> signInManager,
+            UserManager<Data.Models.OgmaUser> userManager,
+            SignInManager<Data.Models.OgmaUser> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;

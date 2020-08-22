@@ -17,7 +17,7 @@ namespace Ogma3.Data.Models
         // }
 
         [Required]
-        public User Author { get; set; }
+        public OgmaUser Author { get; set; }
 
         [Required]
         [MinLength(CTConfig.CStory.MinTitleLength)]

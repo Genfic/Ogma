@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 
-namespace Ogma3.Pages
+namespace Ogma3.Pages.User
 {
-    public class Profile : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        public User CurrentUser { get; set; }
+        public OgmaUser CurrentUser { get; set; }
 
-        public Profile(ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }

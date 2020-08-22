@@ -9,7 +9,7 @@ namespace Ogma3.Data.Models
         public long CommentsThreadId { get; set; }
 
         [Required] 
-        public  User Author { get; set; }
+        public  OgmaUser Author { get; set; }
 
         [Required] 
         public DateTime DateTime { get; set; } = DateTime.Now;

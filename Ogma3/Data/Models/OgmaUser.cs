@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Ogma3.Data.Models
 {
-    public class User : IdentityUser<long>
+    public class OgmaUser : IdentityUser<long>
     {
         [PersonalData]
         [MaxLength(CTConfig.CUser.MaxTitleLength)]

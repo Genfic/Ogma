@@ -16,9 +16,9 @@ namespace Ogma3.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<Data.Models.User> _userManager;
+        private readonly UserManager<Data.Models.OgmaUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<Data.Models.User> userManager)
+        public ConfirmEmailModel(UserManager<Data.Models.OgmaUser> userManager)
         {
             _userManager = userManager;
         }

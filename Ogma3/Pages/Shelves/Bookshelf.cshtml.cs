@@ -14,9 +14,9 @@ namespace Ogma3.Pages.Shelves
     public class Bookshelf : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<OgmaUser> _userManager;
 
-        public Bookshelf(ApplicationDbContext context, UserManager<User> userManager)
+        public Bookshelf(ApplicationDbContext context, UserManager<OgmaUser> userManager)
         {
             _context = context;
             _userManager = userManager;

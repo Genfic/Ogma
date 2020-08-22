@@ -11,7 +11,7 @@ namespace Ogma3.Data.Models
         public long StoryId { get; set; }
         
         [Required]
-        public User User { get; set; }
+        public OgmaUser User { get; set; }
 
         public long UserId { get; set; }
         

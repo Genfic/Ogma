@@ -23,7 +23,7 @@ namespace Ogma3.Data.Models
         public bool IsPublished { get; set; } = false;
         
         [Required]
-        public User Author { get; set; }
+        public OgmaUser Author { get; set; }
         
         [Required]
         [MinLength(CTConfig.CBlogpost.MinBodyLength)]

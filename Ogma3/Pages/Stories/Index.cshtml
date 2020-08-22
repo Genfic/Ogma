@@ -1,31 +1,13 @@
-﻿@page "{name}"
+@page
 @model Ogma3.Pages.Stories.IndexModel
 
 @{
-    ViewData["Title"] = $"{Model.Owner.UserName}'s stories";
-    ViewData["Tab"] = "Stories";
+    ViewData["Title"] = "Browse stories";
 }
 
-<partial name="_ProfileBar" model="Model.Owner"></partial>
-
-@if (Model.IsCurrentUser)
-{
-    <a class="btn btn-block btn-outline-primary" asp-page="Create">
-        <icon icon="add"></icon>
-        Create New
-    </a>
-}
-
-<ul class="my-list">
+<div>
     @foreach (var story in Model.Stories)
     {
-        <li class="item">
-            <partial name="Shared/_StoryCard" model="story"/>
-        </li>
+        <partial name="Shared/_StoryCard" model="@story"/>
     }
-</ul>
-
-@if (Model.Stories.Count <= 0)
-{
-    <h1>No stories found</h1>
-}
+</div>

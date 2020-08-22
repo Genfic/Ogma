@@ -9,22 +9,22 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Data
 {
-    public class OgmaUserManager : UserManager<User>
+    public class OgmaUserManager : UserManager<OgmaUser>
     {
         public OgmaUserManager(
-            IUserStore<User> store, 
+            IUserStore<OgmaUser> store, 
             IOptions<IdentityOptions> optionsAccessor, 
-            IPasswordHasher<User> passwordHasher, 
-            IEnumerable<IUserValidator<User>> userValidators, 
-            IEnumerable<IPasswordValidator<User>> passwordValidators, 
+            IPasswordHasher<OgmaUser> passwordHasher, 
+            IEnumerable<IUserValidator<OgmaUser>> userValidators, 
+            IEnumerable<IPasswordValidator<OgmaUser>> passwordValidators, 
             ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, 
             IServiceProvider services, 
-            ILogger<UserManager<User>> logger) 
+            ILogger<UserManager<OgmaUser>> logger) 
                 : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
         }
 
-        public async Task<string> GetTitleAsync(User user)
+        public async Task<string> GetTitleAsync(OgmaUser user)
         {
             ThrowIfDisposed();
             if (user == null)
@@ -35,7 +35,7 @@ namespace Ogma3.Data
             return oUser.Title;
         }
 
-        public async Task<string> GetBioAsync(User user)
+        public async Task<string> GetBioAsync(OgmaUser user)
         {
             ThrowIfDisposed();
             if (user == null)
@@ -46,7 +46,7 @@ namespace Ogma3.Data
             return oUser.Bio;
         }
 
-        public async Task<string> GetAvatarAsync(User user)
+        public async Task<string> GetAvatarAsync(OgmaUser user)
         {
             ThrowIfDisposed();
             if (user == null)
