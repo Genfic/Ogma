@@ -1048,54 +1048,58 @@ form.confirm > .buttons .button.cancel {
   color: var(--foreground);
 }
 
-.tag-search .tags {
+.tag-search-select .output {
+  visibility: collapse;
+  height: 0;
+  width: 0;
+}
+.tag-search-select .tag-search .tags {
   min-height: 2.5rem;
-  padding: 0.2rem;
+  padding: 0.15rem;
   border: 1px solid var(--foreground-50);
-  border-bottom: none;
   display: flex;
   flex-wrap: wrap;
+  justify-content: stretch;
 }
-.tag-search .tags > .tag {
+.tag-search-select .tag-search .tags > .tag {
   display: flex;
   align-items: center;
-}
-.tag-search .tags > .tag:first-child {
-  margin-left: 4px;
-}
-.tag-search .tags > .tag > .material-icons-outlined {
-  font-size: 1.2rem;
-}
-.tag-search .search-results {
-  max-height: 6rem;
-  overflow-y: scroll;
-}
-.tag-search .search-results > li {
-  display: flex;
-  flex: 1;
-  padding: 0.2rem;
-  justify-content: space-between;
-  border: 1px solid var(--foreground);
-  border-top: none;
-  cursor: pointer;
-}
-@media only screen and (max-width: 570px) {
-  .tag-search .search-results > li {
-    flex-direction: column;
-  }
-}
-.tag-search .search-results > li:hover {
-  box-shadow: inset 0 0 2px 1px var(--accent-75);
-}
-.tag-search .search-results > li.hidden {
-  display: none;
-}
-.tag-search .search-results > li > .name {
   flex-grow: 1;
 }
-.tag-search .search-results > li > .desc {
-  color: var(--foreground-50);
-  text-overflow: ellipsis;
+.tag-search-select .tag-search .tags > .tag:first-child {
+  margin-left: 4px;
+}
+.tag-search-select .tag-search .tags > .tag > .material-icons-outlined {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.tag-search-select .tag-search .tags > .tag > .material-icons-outlined:hover {
+  background-color: var(--background-25);
+}
+.tag-search-select .tag-search .tags .search {
+  flex-grow: 100;
+  width: 1rem;
+  padding: 0.5rem;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+}
+.tag-search-select .tag-search .search-results {
+  max-height: 6rem;
+  overflow-y: scroll;
+  border: 1px solid var(--foreground-50);
+  border-top: none;
+}
+.tag-search-select .tag-search .search-results > li {
+  flex: 1;
+  padding: 0.2rem;
+  margin: 0.1rem;
+  cursor: pointer;
+  border: 1px solid var(--foreground-25);
+}
+.tag-search-select .tag-search .search-results > li:hover, .tag-search-select .tag-search .search-results > li.hl {
+  box-shadow: inset 0 0 2px 1px var(--accent-75);
+  border: 1px solid var(--foreground-75);
 }
 
 .quote {

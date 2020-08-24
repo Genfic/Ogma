@@ -35,6 +35,8 @@ Vue.component('tag-search-select', {
             options: [],
             selected: [],
             search: '',
+            highlighted: null,
+            focused: false
         }
     },
     computed: {
@@ -48,21 +50,49 @@ Vue.component('tag-search-select', {
         filtered() {
             return this.options.filter(x => {
                 return (
-                    x.name.toLowerCase().includes(this.search.toLowerCase())
-                    || x.namespace.toLowerCase().includes(this.search.toLowerCase())
-                ) && this.search.length > 0
+                        x.name.toLowerCase().includes(this.search.toLowerCase())
+                        || x.namespace.toLowerCase().includes(this.search.toLowerCase())
+                    )
+                    && !this.selected.some(i => i.id === x.id)
+                    && this.search.length > 0
             })
         }
     },
     methods: {
-        addUnique(x) {
-            if (this.selected.includes(x)) return;
-            this.selected.push(x);
-            this.options.find(e => e.id === x.id).hidden = true;
-        },
-        remove(x) {
-            this.selected = this.selected.filter(e => e.id !== x.id);
-            this.options.find(e => e.id === x.id).hidden = false;
+        handleInputKeys: function (e) {
+            switch (e.key) {
+                case 'Backspace':
+                    if (this.search.length <= 0) {
+                        this.selected.pop();
+                    }
+                    break;
+                case 'ArrowUp':
+                    if (this.highlighted !== null) e.preventDefault();
+                    if (this.highlighted > 0) {
+                        this.highlighted--;
+                    } else {
+                        this.highlighted = null;
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (this.highlighted !== null) e.preventDefault();
+                    if (this.highlighted === null) {
+                        this.highlighted = 0;
+                    } else if (this.highlighted < this.filtered.length - 1) {
+                        this.highlighted++;
+                    }
+                    break;
+                case ' ':
+                case 'Enter':
+                    if (this.highlighted !== null) {
+                        e.preventDefault();
+                        this.highlighted = 0;
+                        this.selected.pushUnique(JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     },
     created() {
@@ -84,8 +114,9 @@ Vue.component('tag-search-select', {
             .catch(console.error);
     },
     template: `
-        <div>
-            <select style="visibility: collapse; height: 0" :name="name" multiple="multiple" :id="name">
+        <div class="tag-search-select"
+             v-on:focusin="focused = true">
+            <select class="output" :name="name" multiple="multiple" :id="name">
                 <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
             </select>
     
@@ -96,16 +127,21 @@ Vue.component('tag-search-select', {
                 <div class="tags">
                     <div class="tag" v-bind:style="{background: s.rgba}" v-for="s in selected">
                         {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
-                        <i class="material-icons-outlined" v-on:click="remove(s)">clear</i>
+                        <i class="material-icons-outlined" v-on:click="selected.remove(s)">clear</i>
                     </div>
+                    <input type="text"
+                           class="search"
+                           v-model="search"
+                           v-on:keydown="handleInputKeys"
+                           placeholder="Search...">
                 </div>
     
-                <input class="search" type="text" placeholder="Search..." v-model="search">
-    
-                <ol v-if="!loading" class="search-results">
-                    <li v-for="o in filtered" :style="{background: o.rgba}" :class="o.hidden ? 'hidden' : null" v-on:click="addUnique(o)">
+                <ol v-if="!loading && focused" class="search-results">
+                    <li v-for="(o, idx) in filtered" 
+                        :style="{background: o.rgba}" 
+                        :class="highlighted === idx ? 'hl' : null"
+                        v-on:click="selected.pushUnique(o)">
                         <span class="name">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</span>
-                        <span class="desc">{{o.description}}</span>
                     </li>
                 </ol>
                 
