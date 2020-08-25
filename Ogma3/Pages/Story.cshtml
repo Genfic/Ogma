@@ -6,15 +6,3 @@
 }
 
 <partial name="Shared/_StoryDetails" model="@Model.Story"/>
-
-@if (User.Identity.IsAuthenticated && Model.Story.Author.IsLoggedIn(User))
- {
-     <div>
-         <a asp-page="./Stories/Edit" asp-route-id="@Model.Story.Id">
-             <icon icon="edit"></icon>
-         </a>
-         <a asp-page="./Stories/Delete" asp-route-id="@Model.Story.Id">
-             <icon icon="delete_forever"></icon>
-         </a>
-     </div>
- }

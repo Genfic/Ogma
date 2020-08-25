@@ -41,10 +41,10 @@ namespace Ogma3.Pages.Stories
             SortBy = sort;
             Rating = rating;
             PageNumber = page;
-            
+
             var query = _context.Stories
-                .Skip(Math.Max(0, page - 1) * PerPage)
-                .Take(PerPage);
+                .Include(s => s.StoryTags)
+                .AsQueryable();
             
             // Search by title
             if (!search.IsNullOrEmpty())
@@ -60,6 +60,16 @@ namespace Ogma3.Pages.Stories
                     .Where(s => s.Rating == rating);
             }
             
+            // Search by tags
+            if (Tags.Count > 0) // TODO: Figure this shit out
+            {
+                query = query
+                    .Where(s => s.StoryTags.Select(st => st.Tag).Any(x => Tags.Contains(x)));
+            }
+            
+            // Count stories at this stage
+            StoriesCount = await query.CountAsync();
+            
             // Sort
             query = sort switch
             {
@@ -73,6 +83,8 @@ namespace Ogma3.Pages.Stories
             };
 
             Stories = await query
+                .Skip(Math.Max(0, page - 1) * PerPage)
+                .Take(PerPage)
                 .AsNoTracking()
                 .ToListAsync();
         }

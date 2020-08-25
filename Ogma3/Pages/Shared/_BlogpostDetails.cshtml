@@ -3,10 +3,23 @@
 
 <div class="blogpost-details">
     <h1 class="title">@Model.Title</h1>
+    
     <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
         @Model.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
     </time>
+    
+    <div class="actions">
+        <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">
+            <icon icon="edit"></icon>
+        </a>
+        <a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.Id">
+            <icon icon="delete_forever"></icon>
+        </a>
+    </div>
+    
     <markdown class="body" preset="Blogpost">
         @Model.Body
     </markdown>
 </div>
+
+<partial name="_Comments" model="@Model.CommentsThread"></partial>

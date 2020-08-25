@@ -14,13 +14,23 @@
                 <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
                 <span class="count">{{score}}</span>
             </button>
+            
+            @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))
+             {
+                 <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
+                     <icon icon="edit"></icon>
+                 </a>
+                 <a title="Delete" class="action-btn" asp-page="./Stories/Delete" asp-route-id="@Model.Id">
+                     <icon icon="delete_forever"></icon>
+                 </a>
+             }
 
             <div class="spacer"></div>
 
             <button 
                 class="shelf" 
                 v-for="s in shelves.filter(s => s.isQuick || s.isDefault)" 
-                :title="s.name"
+                :title="'Add to ' + s.name"
                 v-on:click="addToShelf(s.id)" 
                 :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
                 <i class="material-icons-outlined" :style="{color: s.color}">
@@ -28,14 +38,14 @@
                 </i>
             </button>
 
-            <button class="shelf" v-on:click="showShelves = true">
+            <button title="All bookshelves" class="shelf" v-on:click="showShelves = true">
                 <icon icon="more_horiz"></icon>
             </button>
 
         </div>
 
         <div class="titlebar">
-            <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
+            <img src="@Model.Rating.Icon" alt="Rating: @Model.Rating.Name" title="Rating: @Model.Rating.Name" class="rating">
             <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
             <h1 class="title" itemprop="name">@Model.Title</h1>
         </div>
@@ -143,4 +153,4 @@
 </div>
 
 
-@Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>);
+@Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>)

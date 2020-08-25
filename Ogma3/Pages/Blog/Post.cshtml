@@ -9,17 +9,3 @@
 <partial name="_ProfileBar" model="@Model.Blogpost.Author"></partial>
 
 <partial name="_BlogpostDetails" model="@Model.Blogpost"></partial>
-
-@if (User.Identity.IsAuthenticated && Model.Blogpost.Author.IsLoggedIn(User))
-{
-    <div>
-        <a asp-page="./Edit" asp-route-id="@Model.Blogpost.Id">
-            <icon icon="edit"></icon>
-        </a>
-        <a asp-page="./Delete" asp-route-id="@Model.Blogpost.Id">
-            <icon icon="delete_forever"></icon>
-        </a>
-    </div>
-}
-
-<partial name="_Comments" model="@Model.Blogpost.CommentsThread"></partial>

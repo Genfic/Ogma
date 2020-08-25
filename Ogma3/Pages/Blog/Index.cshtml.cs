@@ -58,6 +58,9 @@ namespace Ogma3.Pages.Blog
 
             }
             
+            // Save post count at this stage
+            PostsCount = await query.CountAsync();
+            
             // Sort
             query = sort switch
             {
@@ -77,8 +80,6 @@ namespace Ogma3.Pages.Blog
                 .Take(PerPage)
                 .AsNoTracking()
                 .ToListAsync();
-            
-            PostsCount = await _context.Blogposts.CountAsync();
             
             return Page();
         }

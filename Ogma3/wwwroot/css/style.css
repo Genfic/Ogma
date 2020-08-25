@@ -857,6 +857,10 @@ ul.items-list > li .actions > button > i.material-icons-outlined {
   text-align: center;
   margin: 0;
 }
+.blogpost-details .actions {
+  display: flex;
+  justify-content: center;
+}
 .blogpost-details .body {
   text-align: justify;
   margin-top: 1em;
@@ -1272,6 +1276,34 @@ dl.rows > dd {
   border-top: 0.25rem solid var(--accent);
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  margin-right: 0.1rem;
+  color: var(--foreground-75);
+  border: 1px solid var(--foreground-25);
+}
+.action-btn:hover {
+  border-color: var(--foreground-50);
+}
+.action-btn:focus {
+  border-color: var(--accent);
+}
+.action-btn:hover {
+  color: var(--foreground);
+  text-decoration: none;
+  background-color: var(--accent-10);
+}
+
+.md p {
+  padding-bottom: 0.5rem;
+}
+.md p:last-child {
+  padding-bottom: 0;
 }
 
 #version {

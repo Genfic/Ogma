@@ -28,8 +28,8 @@ namespace Ogma3.Services.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             // Options
-            var hashtagOptions = new HashtagOptions("/blog/search?q=", "_blank");
-            var mentionOptions = new MentionOptions("/profile/", "_blank");
+            var hashtagOptions = new HashtagOptions("/blog?q=", "_blank");
+            var mentionOptions = new MentionOptions("/user/", "_blank");
             
             var builder = Preset switch
             {

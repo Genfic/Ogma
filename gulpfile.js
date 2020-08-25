@@ -52,7 +52,11 @@ gulp.task('js', () => {
     return gulp.src([`${jsroot}/src/**/*.js`])
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.init())
-        .pipe(terser({ mangle: { toplevel: true } }))
+        .pipe(terser({ 
+            mangle: { 
+                toplevel: false 
+            } 
+        }))
         .on('error', err => {
             console.error(err)
             this.emit('end')
