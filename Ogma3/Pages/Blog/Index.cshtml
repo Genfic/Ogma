@@ -1,5 +1,6 @@
 @page
 @using Ogma3.Data.Enums
+@using Ogma3.Services
 @model Ogma3.Pages.Blog.IndexModel
 
 @{
@@ -27,11 +28,11 @@
 }
 else
 {
-    @foreach (var post in Model.Posts) {
+    foreach (var post in Model.Posts) {
         <partial name="_BlogpostCard" model="@post"></partial>
     }
     
-    @if (Model.PostsCount > Model.PerPage)
+    if (Model.PostsCount > Model.PerPage)
     {
         <div class="pagination">
             <a class="prev button" href="?page=@(Math.Max(1, Model.PageNumber - 1))">Previous</a>
@@ -57,3 +58,6 @@ else
         </div>
     }
 }
+
+
+@Html.Resource(@<script src="~/js/dist/search/blog.min.js" asp-append-version="true"></script>)

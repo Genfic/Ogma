@@ -6,6 +6,7 @@
     "lib": [
       "dom",
       "es5",
+      "ES2017",
       "scripthost",
       "es2015.collection"
     ]

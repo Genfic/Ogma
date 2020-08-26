@@ -1,13 +1,79 @@
 @page
+@using Ogma3.Data.Enums
+@using Ogma3.Api.V1
+@using System.Text.Json
+@using Ogma3.Services
 @model Ogma3.Pages.Stories.IndexModel
 
 @{
     ViewData["Title"] = "Browse stories";
 }
 
+<form id="search" class="search" method="GET">
+    <label for="query">Title</label>
+    <input class="active-border" id="query" name="q" type="text" value="@Model.SearchBy">
+    
+    <label for="rating">Rating</label>
+    <select class="active-border"
+            name="rating"
+            id="rating">
+        <option value="">---</option>
+        @foreach (var r in Model.Ratings)
+        {
+            <option selected="@(r.Id == Model.Rating)" value="@r.Id">@r.Name</option>
+        }
+    </select>
+    
+    <label for="sort">Sort</label>
+    <select class="active-border"
+            name="sort"
+            id="sort"
+            asp-for="SortBy"
+            asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
+    </select>
+    
+    <input class="active-border" type="submit" value="Search">
+</form>
+
+
 <div>
-    @foreach (var story in Model.Stories)
+    @if (Model.Stories.Count <= 0)
     {
-        <partial name="Shared/_StoryCard" model="@story"/>
+        <h1>No stories found</h1>
+    }
+    else
+    {
+        foreach (var story in Model.Stories)
+        {
+            <partial name="Shared/_StoryCard" model="@story"/>
+        }
+        
+        if (Model.StoriesCount > Model.PerPage)
+        {
+            <div class="pagination">
+                <a class="prev button" href="?page=@(Math.Max(1, Model.PageNumber - 1))">Previous</a>
+                @if (Model.PageNumber > 5)
+                {
+                    <div class="ph button">...</div>
+                }
+                @for (var i = 1; i <= (int)Math.Ceiling((double)Model.StoriesCount / Model.PerPage); i++)
+                {
+                    if (i >= Model.PageNumber - 4 && i <= Math.Max(Model.PageNumber, 5))
+                    {
+                        <a href="?page=@i"
+                           class="page button @(i == Model.PageNumber ? "active" : "")">
+                            @i
+                        </a>
+                    }
+                }
+                @if (Model.StoriesCount / Model.PerPage > 5 && Model.PageNumber != Model.StoriesCount / Model.PerPage)
+                {
+                    <div class="ph button">...</div>
+                }
+                <a class="next button" href="?page=@(Math.Min(Model.PageNumber + 1, (int)Math.Ceiling((double)Model.StoriesCount / Model.PerPage)))">Next</a>
+            </div>
+        }
     }
 </div>
+
+@Html.Resource(@<script src="~/js/dist/search/story.min.js" asp-append-version="true"></script>)

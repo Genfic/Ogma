@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Castle.Core.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,8 +15,9 @@ namespace Ogma3.Pages.Stories
     public class IndexModel : PageModel
     {
         private ApplicationDbContext _context;
-        
-        public IList<Story> Stories { get; set; }
+
+        public List<Rating> Ratings { get; set; }
+        public List<Story> Stories { get; set; }
         public int StoriesCount { get; set; }
         
         public int PageNumber { get; set; }
@@ -23,27 +25,32 @@ namespace Ogma3.Pages.Stories
         public EStorySortingOptions SortBy { get; set; }
         public string SearchBy { get; set; }
         public List<Tag> Tags { get; set; }
-        public Rating Rating { get; set; }
+        public long? Rating { get; set; }
         
         public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }
         
-        public async void OnGetAsync(
-            [FromQuery] string search, 
-            [FromQuery] EStorySortingOptions sort,
-            [FromQuery] Rating rating,
-            [FromQuery] int page = 1
+        public async Task OnGetAsync(
+            [FromQuery] string search = null, 
+            [FromQuery] EStorySortingOptions sort = EStorySortingOptions.DateDescending,
+            [FromQuery] long? rating = null,
+            [FromQuery] int page = 1,
+            [FromQuery] List<Tag> tags = null
         )
         {
             SearchBy = search;
             SortBy = sort;
             Rating = rating;
             PageNumber = page;
+            Tags = tags ?? new List<Tag>();
 
+            // Load ratings
+            Ratings = await _context.Ratings.ToListAsync();
+            
+            // Prepare search query
             var query = _context.Stories
-                .Include(s => s.StoryTags)
                 .AsQueryable();
             
             // Search by title
@@ -57,7 +64,7 @@ namespace Ogma3.Pages.Stories
             if (rating != null)
             {
                 query = query
-                    .Where(s => s.Rating == rating);
+                    .Where(s => s.Rating.Id == rating);
             }
             
             // Search by tags
@@ -75,14 +82,19 @@ namespace Ogma3.Pages.Stories
             {
                 EStorySortingOptions.TitleAscending  => query.OrderBy(s => s.Title),
                 EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-                EStorySortingOptions.DateAscending   => query.OrderBy(s => s.ReleaseDate),
-                EStorySortingOptions.DateDescending  => query.OrderByDescending(s => s.ReleaseDate),
                 EStorySortingOptions.WordsAscending  => query.OrderBy(s => s.WordCount),
                 EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
-                _ => query.OrderByDescending(s => s.WordCount)
+                EStorySortingOptions.DateAscending   => query.OrderBy(s => s.ReleaseDate),
+                EStorySortingOptions.DateDescending  => query.OrderByDescending(s => s.ReleaseDate),
+                _ => query.OrderByDescending(s => s.ReleaseDate)
             };
 
             Stories = await query
+                .Include(s => s.StoryTags)
+                    .ThenInclude(st => st.Tag)
+                        .ThenInclude(t => t.Namespace)
+                .Include(s => s.Rating)
+                .Include(s => s.Author)
                 .Skip(Math.Max(0, page - 1) * PerPage)
                 .Take(PerPage)
                 .AsNoTracking()
