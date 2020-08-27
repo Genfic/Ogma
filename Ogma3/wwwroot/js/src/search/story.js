@@ -14,3 +14,7 @@ function sendForm() {
         .getElementById('search')
         .addEventListener('submit', sendForm);
 })()
+
+const search_vue = new Vue({
+   el: '#search' 
+});

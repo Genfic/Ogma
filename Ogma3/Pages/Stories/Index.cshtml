@@ -1,8 +1,7 @@
 @page
 @using Ogma3.Data.Enums
-@using Ogma3.Api.V1
-@using System.Text.Json
 @using Ogma3.Services
+@using Ogma3.Api.V1
 @model Ogma3.Pages.Stories.IndexModel
 
 @{
@@ -10,29 +9,45 @@
 }
 
 <form id="search" class="search" method="GET">
-    <label for="query">Title</label>
-    <input class="active-border" id="query" name="q" type="text" value="@Model.SearchBy">
     
-    <label for="rating">Rating</label>
-    <select class="active-border"
-            name="rating"
-            id="rating">
-        <option value="">---</option>
-        @foreach (var r in Model.Ratings)
-        {
-            <option selected="@(r.Id == Model.Rating)" value="@r.Id">@r.Name</option>
-        }
-    </select>
+    <div class="title field">
+        <label for="query">Title</label>
+        <input class="active-border" id="query" name="q" type="text" value="@Model.SearchBy">
+    </div>
     
-    <label for="sort">Sort</label>
-    <select class="active-border"
-            name="sort"
-            id="sort"
-            asp-for="SortBy"
-            asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
-    </select>
+    <div class="rating field">
+        <label for="rating">Rating</label>
+        <select class="active-border"
+                name="rating"
+                id="rating">
+            <option value="">---</option>
+            @foreach (var r in Model.Ratings)
+            {
+                <option selected="@(r.Id == Model.Rating)" value="@r.Id">@r.Name</option>
+            }
+        </select>
+    </div>
     
-    <input class="active-border" type="submit" value="Search">
+    <div class="sort field">
+        <label for="sort">Sort</label>
+        <select class="active-border"
+                name="sort"
+                id="sort"
+                asp-for="SortBy"
+                asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
+        </select>
+    </div>
+    
+    <div class="tags field">
+        <tag-search-select label="Tags"
+                           is-inline
+                           tags-api="@Url.RouteUrl(nameof(TagsController))">
+        </tag-search-select>
+    </div>
+    
+    <div class="field submit">
+        <input class="active-border" type="submit" value="Search">
+    </div>
 </form>
 
 
@@ -76,4 +91,5 @@
     }
 </div>
 
+@Html.Resource(@<script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/search/story.min.js" asp-append-version="true"></script>)

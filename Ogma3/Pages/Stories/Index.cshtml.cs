@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,6 @@ namespace Ogma3.Pages.Stories
         public readonly int PerPage = 25;
         public EStorySortingOptions SortBy { get; set; }
         public string SearchBy { get; set; }
-        public List<Tag> Tags { get; set; }
         public long? Rating { get; set; }
         
         public IndexModel(ApplicationDbContext context)
@@ -33,19 +33,18 @@ namespace Ogma3.Pages.Stories
         }
         
         public async Task OnGetAsync(
+            [FromQuery] IList<long> tags,
             [FromQuery] string search = null, 
             [FromQuery] EStorySortingOptions sort = EStorySortingOptions.DateDescending,
             [FromQuery] long? rating = null,
-            [FromQuery] int page = 1,
-            [FromQuery] List<Tag> tags = null
+            [FromQuery] int page = 1
         )
         {
             SearchBy = search;
             SortBy = sort;
             Rating = rating;
             PageNumber = page;
-            Tags = tags ?? new List<Tag>();
-
+            
             // Load ratings
             Ratings = await _context.Ratings.ToListAsync();
             
@@ -68,10 +67,10 @@ namespace Ogma3.Pages.Stories
             }
             
             // Search by tags
-            if (Tags.Count > 0) // TODO: Figure this shit out
+            if (tags.Count > 0)
             {
                 query = query
-                    .Where(s => s.StoryTags.Select(st => st.Tag).Any(x => Tags.Contains(x)));
+                    .Where(s => s.StoryTags.Any(st => tags.Contains(st.TagId)));
             }
             
             // Count stories at this stage

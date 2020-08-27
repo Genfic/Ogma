@@ -24,11 +24,15 @@ Vue.component('tag-search-select', {
         storyId: {
             type: Number,
             default: null
+        },
+        preselected: {
+            type: Array,
+            default: null
         }
     },
     data: function () {
         return {
-            name: this.label.replace(/\s+/g, ''),
+            name: this.label.replace(/\s+/g, '').toLowerCase(),
             loading: true,
             
             // Tag search
@@ -108,6 +112,10 @@ Vue.component('tag-search-select', {
                             this.selected.forEach(x => this.options.find(e => e.id === x.id).hidden = true)
                         })
                         .catch(console.error);
+                }
+                
+                if (this.preselected) {
+                    this.selected = this.options.find(e => e.id)
                 }
                 
             })

@@ -1,11 +1,18 @@
 @use '../vars' as v
 .tag-search-select
+  width: 100%
+  
   & .output
     visibility: collapse
     height: 0
     width: 0
   
   & .tag-search
+    &.inline
+      display: flex
+      align-items: center
+      & .tags
+        flex-grow: 1
     
     & .tags
       min-height: 2.5rem
