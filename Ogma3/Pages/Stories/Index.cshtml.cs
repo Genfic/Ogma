@@ -20,6 +20,8 @@ namespace Ogma3.Pages.Stories
         public List<Rating> Ratings { get; set; }
         public List<Story> Stories { get; set; }
         public int StoriesCount { get; set; }
+
+        public IEnumerable<long> Tags { get; set; }
         
         public int PageNumber { get; set; }
         public readonly int PerPage = 25;
@@ -44,6 +46,7 @@ namespace Ogma3.Pages.Stories
             SortBy = sort;
             Rating = rating;
             PageNumber = page;
+            Tags = tags;
             
             // Load ratings
             Ratings = await _context.Ratings.ToListAsync();

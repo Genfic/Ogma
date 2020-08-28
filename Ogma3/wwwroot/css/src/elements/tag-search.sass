@@ -7,12 +7,18 @@
     height: 0
     width: 0
   
-  & .tag-search
+  & .tag-search    
     &.inline
       display: flex
       align-items: center
       & .tags
         flex-grow: 1
+        
+    & .searchbar
+      display: flex
+      flex-direction: column
+      width: 100%
+      position: relative
     
     & .tags
       min-height: 2.5rem
@@ -47,7 +53,12 @@
       max-height: 6rem
       overflow-y: scroll
       border: 1px solid v.$foreground-50
+      background-color: v.$background
       border-top: none
+      position: absolute
+      top: 100%
+      left: 0
+      width: 100%
       
       &>li
         flex: 1

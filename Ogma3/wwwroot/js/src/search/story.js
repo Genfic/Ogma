@@ -1,4 +1,4 @@
-function sendForm() {
+function sendForm() { // TODO: Shit doesn't do what it's supposed to
     const inputs = [
         document.getElementById('query'),
         document.getElementById('rating'),

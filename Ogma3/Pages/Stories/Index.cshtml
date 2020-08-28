@@ -1,4 +1,5 @@
 @page
+@using System.Text.Json
 @using Ogma3.Data.Enums
 @using Ogma3.Services
 @using Ogma3.Api.V1
@@ -10,12 +11,12 @@
 
 <form id="search" class="search" method="GET">
     
-    <div class="title field">
+    <div class="inline title field">
         <label for="query">Title</label>
         <input class="active-border" id="query" name="q" type="text" value="@Model.SearchBy">
     </div>
     
-    <div class="rating field">
+    <div class="inline rating field">
         <label for="rating">Rating</label>
         <select class="active-border"
                 name="rating"
@@ -28,7 +29,7 @@
         </select>
     </div>
     
-    <div class="sort field">
+    <div class="inline sort field">
         <label for="sort">Sort</label>
         <select class="active-border"
                 name="sort"
@@ -38,14 +39,15 @@
         </select>
     </div>
     
-    <div class="tags field">
+    <div class="inline tags field">
         <tag-search-select label="Tags"
-                           is-inline
+                           inline
+                           :preselected="@JsonSerializer.Serialize(Model.Tags)"
                            tags-api="@Url.RouteUrl(nameof(TagsController))">
         </tag-search-select>
     </div>
     
-    <div class="field submit">
+    <div class="inline submit field">
         <input class="active-border" type="submit" value="Search">
     </div>
 </form>

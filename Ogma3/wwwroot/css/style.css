@@ -1067,6 +1067,12 @@ form.confirm > .buttons .button.cancel {
 .tag-search-select .tag-search.inline .tags {
   flex-grow: 1;
 }
+.tag-search-select .tag-search .searchbar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
 .tag-search-select .tag-search .tags {
   min-height: 2.5rem;
   padding: 0.15rem;
@@ -1102,7 +1108,12 @@ form.confirm > .buttons .button.cancel {
   max-height: 6rem;
   overflow-y: scroll;
   border: 1px solid var(--foreground-50);
+  background-color: var(--background);
   border-top: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
 }
 .tag-search-select .tag-search .search-results > li {
   flex: 1;
@@ -1230,6 +1241,9 @@ form.search .field {
   flex-direction: column;
   align-items: stretch;
   width: 100%;
+}
+form.search .field.inline {
+  flex-direction: row;
 }
 form.search .field.title {
   grid-row: 1;

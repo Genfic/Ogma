@@ -28,6 +28,10 @@ Vue.component('tag-search-select', {
         preselected: {
             type: Array,
             default: null
+        },
+        inline: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -115,7 +119,7 @@ Vue.component('tag-search-select', {
                 }
                 
                 if (this.preselected) {
-                    this.selected = this.options.find(e => e.id)
+                    this.selected = this.options.filter(o => this.preselected.indexOf(o.id) !== -1)
                 }
                 
             })
@@ -128,34 +132,38 @@ Vue.component('tag-search-select', {
                 <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
             </select>
     
-            <div class="o-form-group tag-search">
+            <div class="o-form-group tag-search" :class="inline ? 'inline' : null">
                 <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
-                <p class="desc" v-if="desc">{{desc}}</p>
+                <p class="desc" v-if="desc && !inline">{{desc}}</p>
     
-                <div class="tags">
+                <div class="searchbar">
+                  <div class="tags">
+                    
                     <div class="tag" v-bind:style="{background: s.rgba}" v-for="s in selected">
-                        {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
-                        <i class="material-icons-outlined" v-on:click="selected.remove(s)">clear</i>
+                      {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
+                      <i class="material-icons-outlined" v-on:click="selected.remove(s)">clear</i>
                     </div>
+                    
                     <input type="text"
                            class="search"
                            v-model="search"
                            v-on:keydown="handleInputKeys"
                            placeholder="Search...">
-                </div>
-    
-                <ol v-if="!loading && focused" class="search-results">
-                    <li v-for="(o, idx) in filtered" 
-                        :style="{background: o.rgba}" 
+                  </div>
+
+                  <ol v-if="!loading && focused" class="search-results">
+                    <li v-for="(o, idx) in filtered"
+                        :style="{background: o.rgba}"
                         :class="highlighted === idx ? 'hl' : null"
                         v-on:click="selected.pushUnique(o)">
-                        <span class="name">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</span>
+                      <span class="name">{{o.namespace ? o.namespace+':' : ''}}{{o.name}}</span>
                     </li>
-                </ol>
-                
-                <span v-if="!validate && validateMsg">{{validationString}}</span>
+                  </ol>
+                </div>
     
             </div>
+
+            <span v-if="!validate && validateMsg">{{validationString}}</span>
         </div>
     `
 });
