@@ -9,17 +9,25 @@
     ViewData["Title"] = "Browse stories";
 }
 
-<form id="search" class="search" method="GET">
+<form id="search" class="search" method="GET" v-on:submit.prevent="submit($event)">
     
     <div class="inline title field">
         <label for="query">Title</label>
-        <input class="active-border" id="query" name="q" type="text" value="@Model.SearchBy">
+        <input class="active-border" 
+               id="query" 
+               name="q" 
+               type="text" 
+               v-on:input="els.query = $event.target.value"
+               :disabled="dis.query"
+               value="@Model.SearchBy">
     </div>
     
     <div class="inline rating field">
         <label for="rating">Rating</label>
         <select class="active-border"
                 name="rating"
+                v-on:input="els.rating = $event.target.value"
+                :disabled="dis.rating"
                 id="rating">
             <option value="">---</option>
             @foreach (var r in Model.Ratings)
@@ -34,6 +42,8 @@
         <select class="active-border"
                 name="sort"
                 id="sort"
+                v-on:input="els.sort = $event.target.value"
+                :disabled="dis.sort"
                 asp-for="SortBy"
                 asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
         </select>
@@ -41,7 +51,9 @@
     
     <div class="inline tags field">
         <tag-search-select label="Tags"
+                           ref="tags"
                            inline
+                           disable-when-empty
                            :preselected="@JsonSerializer.Serialize(Model.Tags)"
                            tags-api="@Url.RouteUrl(nameof(TagsController))">
         </tag-search-select>

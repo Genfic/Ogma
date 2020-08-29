@@ -32,6 +32,10 @@ Vue.component('tag-search-select', {
         inline: {
             type: Boolean,
             default: false
+        },
+        disableWhenEmpty: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -44,7 +48,9 @@ Vue.component('tag-search-select', {
             selected: [],
             search: '',
             highlighted: null,
-            focused: false
+            focused: false,
+            
+            disable: false
         }
     },
     computed: {
@@ -101,6 +107,10 @@ Vue.component('tag-search-select', {
                 default:
                     break;
             }
+        },
+        checkDisabled: function () {
+            this.disable = this.selected.length <= 0;
+            return this.disable;
         }
     },
     created() {
@@ -128,7 +138,11 @@ Vue.component('tag-search-select', {
     template: `
         <div class="tag-search-select"
              v-on:focusin="focused = true">
-            <select class="output" :name="name" multiple="multiple" :id="name">
+            <select class="output" 
+                    :name="name" 
+                    multiple="multiple" 
+                    :id="name" 
+                    :disabled="disable">
                 <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
             </select>
     

@@ -36,13 +36,13 @@ namespace Ogma3.Pages.Stories
         
         public async Task OnGetAsync(
             [FromQuery] IList<long> tags,
-            [FromQuery] string search = null, 
+            [FromQuery] string q = null, 
             [FromQuery] EStorySortingOptions sort = EStorySortingOptions.DateDescending,
             [FromQuery] long? rating = null,
             [FromQuery] int page = 1
         )
         {
-            SearchBy = search;
+            SearchBy = q;
             SortBy = sort;
             Rating = rating;
             PageNumber = page;
@@ -56,10 +56,10 @@ namespace Ogma3.Pages.Stories
                 .AsQueryable();
             
             // Search by title
-            if (!search.IsNullOrEmpty())
+            if (!q.IsNullOrEmpty())
             {
                 query = query
-                    .Where(s => EF.Functions.Like(s.Title.ToUpper(), $"%{search.Trim().ToUpper()}%"));
+                    .Where(s => EF.Functions.Like(s.Title.ToUpper(), $"%{q.Trim().ToUpper()}%"));
             }
             
             // Search by rating
