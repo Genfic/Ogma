@@ -1,0 +1,49 @@
+@page
+@model Ogma3.Areas.Admin.Pages.Documents.IndexModel
+
+@{
+    ViewData["Title"] = "Documents";
+    ViewData["ActivePage"] = ManageNavPages.Documents;
+}
+    
+@if (Model.Docs.Any())
+{
+    <ul class="items-list">
+        @foreach (var doc in Model.Docs)
+        {
+            <li>
+                <div class="main">
+                    <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
+                </div>
+                <div class="actions">
+                    <a>
+                        <icon icon="delete_forever"></icon>
+                    </a>
+                    <a asp-page="./Edit" asp-route-id="@doc.Id">
+                        <icon icon="edit"></icon>
+                    </a>
+                </div>
+            </li> 
+        }
+    </ul>
+}
+else
+{
+    <h1>No documents found</h1>
+}
+
+
+<form method="post" id="editor">
+    <div class="o-form group">
+        <label asp-for="@Model.Input.Title"></label>
+        <input asp-for="@Model.Input.Title" type="text">
+    </div>
+    <div class="o-form group">
+        <label asp-for="@Model.Input.Body"></label>
+        <textarea asp-for="@Model.Input.Body" cols="30" rows="10"></textarea>
+    </div>
+    <input asp-for="@Model.Input.Id" type="hidden">
+    <div class="o-form-group">
+        <input type="submit">
+    </div>
+</form>

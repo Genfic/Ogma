@@ -1,7 +1,22 @@
-@page
-@model Ogma3.Areas.Admin.Pages.Documents.Edit
+@page "{id}"
+@model Ogma3.Areas.Admin.Pages.Documents.EditModel
 
 @{
-    ViewData["Title"] = "Edit document";
-    ViewData["ActivePage"] = ManageNavPages.EditDocument;
+    ViewData["Title"] = "Edit Document";
+    ViewData["ActivePage"] = ManageNavPages.Documents;
 }
+
+<form method="post" id="editor">
+    <div class="o-form group">
+        <label asp-for="@Model.Input.Title"></label>
+        <input asp-for="@Model.Input.Title" type="text">
+    </div>
+    <div class="o-form group">
+        <label asp-for="@Model.Input.Body"></label>
+        <textarea asp-for="@Model.Input.Body" cols="30" rows="10"></textarea>
+    </div>
+    <input asp-for="@Model.Input.Id" type="hidden">
+    <div class="o-form-group">
+        <input type="submit">
+    </div>
+</form>

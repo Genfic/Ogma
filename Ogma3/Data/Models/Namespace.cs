@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
@@ -12,5 +13,8 @@ namespace Ogma3.Data.Models
         [MinLength(7)]
         [MaxLength(7)]
         public string Color { get; set; }
+
+        [DefaultValue(null)]
+        public uint? Order { get; set; }
     }
 }

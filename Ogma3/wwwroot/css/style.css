@@ -644,8 +644,10 @@ ul.items-list > li .deco {
   align-items: center;
 }
 ul.items-list > li .deco > * {
-  margin: 0.2rem;
+  margin: 0 0.4rem;
+  font-weight: bold;
   color: var(--background);
+  text-shadow: 1px 1px 0 var(--foreground-75);
 }
 ul.items-list > li .name {
   font-size: 1.2rem;

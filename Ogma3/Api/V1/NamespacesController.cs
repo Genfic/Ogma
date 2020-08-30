@@ -27,6 +27,8 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<IEnumerable<Namespace>>> GetNamespace()
         {
             return await _context.Namespaces
+                .OrderByDescending(ns => ns.Order.HasValue)
+                    .ThenBy(ns => ns.Order)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -66,7 +68,7 @@ namespace Ogma3.Api.V1
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutNamespace(int id, Namespace ns)
+        public async Task<IActionResult> PutNamespace(long id, Namespace ns)
         {
             if (id != ns.Id)
             {
@@ -104,7 +106,7 @@ namespace Ogma3.Api.V1
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Namespace>> PostNamespace(Namespace ns)
         {
-            _context.Namespaces.Add(ns);
+            await _context.Namespaces.AddAsync(ns);
 
             try
             {
@@ -122,7 +124,7 @@ namespace Ogma3.Api.V1
         // DELETE: api/Namespaces/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Namespace>> DeleteNamespace(int id)
+        public async Task<ActionResult<Namespace>> DeleteNamespace(long id)
         {
             var ns = await _context.Namespaces.FindAsync(id);
             if (ns == null)
@@ -136,7 +138,7 @@ namespace Ogma3.Api.V1
             return ns;
         }
 
-        private bool NamespaceExists(int id)
+        private bool NamespaceExists(long id)
         {
             return _context.Namespaces.Any(e => e.Id == id);
         }

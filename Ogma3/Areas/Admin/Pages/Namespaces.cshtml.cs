@@ -2,23 +2,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Admin.Pages
 {
     public class Namespaces : PageModel
     {
         [BindProperty]
-        public InputModel Input { get; set; }
-
-        public class InputModel
-        {
-            [Required]
-            public string Name { get; set; }
-
-            [MaxLength(7)]
-            [MinLength(7)]
-            public string Color { get; set; }
-        }
+        public Namespace Input { get; set; }
         
         public void OnGet()
         {

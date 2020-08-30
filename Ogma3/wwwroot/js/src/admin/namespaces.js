@@ -4,6 +4,7 @@ let anamespaces_vue = new Vue({
         form: {
             name: null,
             color: null,
+            order: null,
             id: null
         },
         lens: {
@@ -36,7 +37,8 @@ let anamespaces_vue = new Vue({
                     axios.post(this.route,
                         {
                             name: this.form.name,
-                            color: this.form.color
+                            color: this.form.color,
+                            order: Number(this.form.order)
                         })
                         .then(_ => {
                             this.getNamespaces()
@@ -52,7 +54,8 @@ let anamespaces_vue = new Vue({
                         {
                             id: this.form.id,
                             name: this.form.name,
-                            color: this.form.color
+                            color: this.form.color,
+                            order: Number(this.form.order)
                         })
                         .then(_ => {
                             this.getNamespaces()
@@ -99,13 +102,15 @@ let anamespaces_vue = new Vue({
             this.form.name = t.name;
             this.form.color = t.color;
             this.form.id = t.id;
+            this.form.order = t.order;
         },
 
         // Clears the editor
         cancelEdit: function () {
             this.form.name =
                 this.form.color =
-                    this.form.id = null;
+                    this.form.id = 
+                        this.form.order = null;
         },
     }, 
 

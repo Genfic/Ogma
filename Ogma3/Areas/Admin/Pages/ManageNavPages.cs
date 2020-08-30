@@ -11,8 +11,7 @@ namespace Ogma3.Areas.Admin.Pages
         public static string Namespaces => "Namespaces";
         public static string Quotes => "Quotes";
         public static string InviteCodes => "InviteCodes";
-        public static string ManageDocuments => "ManageDocuments";
-        public static string EditDocument => "EditDocument";
+        public static string Documents => "ManageDocuments";
         public static string Roles => "Roles";
 
 
@@ -21,8 +20,7 @@ namespace Ogma3.Areas.Admin.Pages
         public static string NamespacesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Namespaces);
         public static string QuotesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Quotes);
         public static string InviteCodesNavClass(ViewContext viewContext) => PageNavClass(viewContext, InviteCodes);
-        public static string ManageDocumentsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ManageDocuments);
-        public static string EditDocumentNavClass(ViewContext viewContext) => PageNavClass(viewContext, EditDocument);
+        public static string DocumentsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Documents);
         public static string RolesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Roles);
         
         private static string PageNavClass(ViewContext viewContext, string page)

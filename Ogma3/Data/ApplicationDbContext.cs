@@ -228,9 +228,7 @@ namespace Ogma3.Data
             
             
             // Documents
-            builder.Entity<Document>()
-                .HasIndex(d => d.Slug)
-                .IsUnique();
+            builder.Entity<Document>();
             
             // Invite codes
             builder.Entity<InviteCode>()

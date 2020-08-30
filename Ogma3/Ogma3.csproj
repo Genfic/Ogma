@@ -70,6 +70,9 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\account\index.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\account\index.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\account\index.min.js.map" />
+    <_ContentIncludedByDefault Remove="Areas\Admin\Pages\Documents\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Admin\Pages\Documents\Manage.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Admin\Pages\Documents\_ViewImports.cshtml" />
   </ItemGroup>
 
 
