@@ -662,19 +662,19 @@ ul.items-list > li .actions {
   display: flex;
   height: auto;
 }
-ul.items-list > li .actions > button {
+ul.items-list > li .actions > .action {
   height: auto;
   margin: 0.2rem;
   border: 1px solid var(--foreground-25);
   color: var(--foreground-50);
-  background: transparent;
+  background-color: transparent;
 }
-ul.items-list > li .actions > button:hover {
-  background: var(--accent-10);
+ul.items-list > li .actions > .action:hover {
+  background-color: var(--accent-10);
   color: var(--foreground-75);
   border-color: var(--foreground);
 }
-ul.items-list > li .actions > button > i.material-icons-outlined {
+ul.items-list > li .actions > .action > i.material-icons-outlined {
   font-size: 1.2rem;
 }
 

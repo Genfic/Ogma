@@ -64,10 +64,10 @@
             <h3 class="name">{{ n.name }}</h3>
         </div>
         <div class="actions">
-            <button v-on:click="deleteNamespace(n)">
+            <button class="action" v-on:click="deleteNamespace(n)">
                 <icon icon="delete_forever"></icon>
             </button>
-            <button v-on:click="editNamespace(n)">
+            <button class="action" v-on:click="editNamespace(n)">
                 <icon icon="edit"></icon>
             </button>
         </div>

@@ -22,10 +22,10 @@
             <em class="desc">{{ q.author }}</em>
         </div>
         <div class="actions">
-            <button v-on:click="deleteQuote(q)">
+            <button class="action" v-on:click="deleteQuote(q)">
                 <icon icon="delete_forever"></icon>
             </button>
-            <button v-on:click="editQuote(q)">
+            <button class="action" v-on:click="editQuote(q)">
                 <icon icon="edit"></icon>
             </button>
         </div>

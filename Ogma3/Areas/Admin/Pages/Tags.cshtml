@@ -54,10 +54,10 @@
             <span class="desc">{{ t.description }}</span>
         </div>
         <div class="actions">
-            <button v-on:click="deleteTag(t)">
+            <button class="action" v-on:click="deleteTag(t)">
                 <icon icon="delete_forever"></icon>
             </button>
-            <button v-on:click="editTag(t)">
+            <button class="action" v-on:click="editTag(t)">
                 <icon icon="edit"></icon>
             </button>
         </div>

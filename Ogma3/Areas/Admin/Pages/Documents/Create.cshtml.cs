@@ -13,10 +13,10 @@ using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents
 {
-    public class EditModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        public EditModel(ApplicationDbContext context)
+        public CreateModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -34,41 +34,24 @@ namespace Ogma3.Areas.Admin.Pages.Documents
             public string Body { get; set; }
         }
 
-        public Document Doc { get; set; }
-        public async void OnGetAsync(long id)
+        public async void OnGetAsync()
         {
-            Doc = await _context.Documents
-                .FindAsync(id);
-
-            Input = new InputModel
-            {
-                Id = Doc.Id,
-                Title = Doc.Title,
-                Body = Doc.Body
-            };
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var oldVersion = await _context.Documents
-                .Where(d => d.RevisionDate == null)
-                .Where(d => d.Id == Input.Id)
-                .FirstOrDefaultAsync();
-
             var now = DateTime.Now;
             
             await _context.Documents.AddAsync(new Document
             {
-                GroupId = oldVersion.GroupId,
-                Title   = Input.Title.IsNullOrEmpty() ? oldVersion.Title : Input.Title,
-                Slug    = Input.Title.IsNullOrEmpty() ? oldVersion.Slug  : Input.Title.Friendlify(),
-                Body    = Input.Body.IsNullOrEmpty()  ? oldVersion.Body  : Input.Body,
-                Version = oldVersion.Version + 1,
+                GroupId = Guid.NewGuid(),
+                Title = Input.Title,
+                Slug = Input.Title.Friendlify(),
+                Body = Input.Body,
+                Version = 1,
                 CreationTime = now,
                 RevisionDate = null
             });
-            
-            oldVersion.RevisionDate = now;
             
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");

@@ -6,7 +6,21 @@
     ViewData["ActivePage"] = ManageNavPages.Documents;
 }
     
-@if (Model.Docs.Any())
+
+<a class="btn btn-block btn-outline-primary" asp-page="./Create"> 
+    <icon icon="add"></icon>
+    Create New
+</a>
+
+@if (Model == null)
+{
+    <h1>Model Null</h1>
+}
+else if (Model.Docs == null)
+{
+    <h1>Docs Null</h1>
+}
+else if (Model.Docs.Count > 0)
 {
     <ul class="items-list">
         @foreach (var doc in Model.Docs)
@@ -16,10 +30,10 @@
                     <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
                 </div>
                 <div class="actions">
-                    <a>
+                    <a class="action">
                         <icon icon="delete_forever"></icon>
                     </a>
-                    <a asp-page="./Edit" asp-route-id="@doc.Id">
+                    <a asp-page="./Edit" asp-route-id="@doc.Id" class="action">
                         <icon icon="edit"></icon>
                     </a>
                 </div>
@@ -31,19 +45,3 @@ else
 {
     <h1>No documents found</h1>
 }
-
-
-<form method="post" id="editor">
-    <div class="o-form group">
-        <label asp-for="@Model.Input.Title"></label>
-        <input asp-for="@Model.Input.Title" type="text">
-    </div>
-    <div class="o-form group">
-        <label asp-for="@Model.Input.Body"></label>
-        <textarea asp-for="@Model.Input.Body" cols="30" rows="10"></textarea>
-    </div>
-    <input asp-for="@Model.Input.Id" type="hidden">
-    <div class="o-form-group">
-        <input type="submit">
-    </div>
-</form>
