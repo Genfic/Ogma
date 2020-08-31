@@ -64,7 +64,6 @@ Vue.component('input-rating', {
                         <div class="main">
                             <strong>{{rating.name}}</strong>
                             <span>{{rating.description}}</span>
-                            <span>{{checked(rating.id, idx)}}</span> 
                         </div>
                     </label>
                 </div>

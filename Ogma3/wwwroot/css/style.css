@@ -422,6 +422,10 @@ img.avatar {
   text-align: center;
   margin: 0;
 }
+.chapter-details .actions {
+  display: flex;
+  justify-content: center;
+}
 .chapter-details > .body-container > .notes {
   text-align: justify;
   font-style: italic;
@@ -446,24 +450,6 @@ ul.my-list > li.item {
 }
 ul.my-list > li.item:first-of-type {
   margin: 0;
-}
-ul.my-list > li.item > div.buttons {
-  display: block;
-}
-ul.my-list > li.item > div.buttons > .button {
-  display: block;
-  padding: 0.1rem;
-  border: 1px solid var(--foreground-25);
-  color: var(--foreground-75);
-  text-decoration: none;
-  border-left: none;
-  border-top: none;
-}
-ul.my-list > li.item > div.buttons > .button:first-child {
-  border-top: 1px solid var(--foreground-25);
-}
-ul.my-list > li.item > div.buttons > .button:hover {
-  background-color: var(--accent-10);
 }
 
 .comments-container {
@@ -608,21 +594,21 @@ ul.items-list {
   min-width: 100%;
   margin-top: 1rem;
 }
-ul.items-list > li {
+ul.items-list li {
   display: flex;
   min-width: 100%;
   border: 1px solid var(--foreground-25);
   margin: 0.2rem;
 }
-ul.items-list > li:hover {
+ul.items-list li:hover {
   border-color: var(--foreground);
 }
-ul.items-list > li .count {
+ul.items-list li .count {
   align-self: center;
   font-size: 2rem;
   min-width: 5rem;
 }
-ul.items-list > li .main {
+ul.items-list li .main {
   margin: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -633,48 +619,48 @@ ul.items-list > li .main {
   text-decoration: none;
   text-align: left;
 }
-ul.items-list > li .main:hover {
+ul.items-list li .main:hover {
   color: var(--foreground-75);
 }
-ul.items-list > li .deco {
+ul.items-list li .deco {
   height: auto;
   min-width: 5px;
   margin-right: 0.5rem;
   display: flex;
   align-items: center;
 }
-ul.items-list > li .deco > * {
+ul.items-list li .deco > * {
   margin: 0 0.4rem;
   font-weight: bold;
   color: var(--background);
   text-shadow: 1px 1px 0 var(--foreground-75);
 }
-ul.items-list > li .name {
+ul.items-list li .name {
   font-size: 1.2rem;
   text-decoration: none;
   text-overflow: ellipsis;
 }
-ul.items-list > li .desc {
+ul.items-list li .desc {
   color: var(--foreground-75);
   text-overflow: ellipsis;
 }
-ul.items-list > li .actions {
+ul.items-list li .actions {
   display: flex;
   height: auto;
 }
-ul.items-list > li .actions > .action {
+ul.items-list li .actions > .action {
   height: auto;
   margin: 0.2rem;
   border: 1px solid var(--foreground-25);
   color: var(--foreground-50);
   background-color: transparent;
 }
-ul.items-list > li .actions > .action:hover {
+ul.items-list li .actions > .action:hover {
   background-color: var(--accent-10);
   color: var(--foreground-75);
   border-color: var(--foreground);
 }
-ul.items-list > li .actions > .action > i.material-icons-outlined {
+ul.items-list li .actions > .action > i.material-icons-outlined {
   font-size: 1.2rem;
 }
 

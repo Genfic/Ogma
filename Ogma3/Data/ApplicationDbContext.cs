@@ -228,7 +228,7 @@ namespace Ogma3.Data
             
             
             // Documents
-            builder.Entity<Document>();
+            // builder.Entity<Document>();
             
             // Invite codes
             builder.Entity<InviteCode>()

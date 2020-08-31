@@ -95,7 +95,7 @@ namespace Ogma3.Api.V1
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Quote>> PostQuote(Quote q)
         {
-            _context.Quotes.Add(q);
+            await _context.Quotes.AddAsync(q);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetQuote", new { id = q.Id }, q);
         }

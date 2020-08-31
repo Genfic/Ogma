@@ -5,20 +5,15 @@
     ViewData["Title"] = "Documents";
     ViewData["ActivePage"] = ManageNavPages.Documents;
 }
-    
 
-<a class="btn btn-block btn-outline-primary" asp-page="./Create"> 
+<a class="btn btn-block btn-outline-primary" asp-page="./Create">
     <icon icon="add"></icon>
     Create New
 </a>
 
-@if (Model == null)
+@if (Model.Docs == null)
 {
-    <h1>Model Null</h1>
-}
-else if (Model.Docs == null)
-{
-    <h1>Docs Null</h1>
+    <h1>The docs are null again, call the admin</h1>
 }
 else if (Model.Docs.Count > 0)
 {
@@ -27,13 +22,15 @@ else if (Model.Docs.Count > 0)
         {
             <li>
                 <div class="main">
-                    <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
+                    <a asp-area="" asp-page="/Docs" asp-route-id="@doc.Id" asp-route-slug="@doc.Slug" class="text-dark">
+                        <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
+                    </a>
                 </div>
                 <div class="actions">
                     <a class="action">
                         <icon icon="delete_forever"></icon>
                     </a>
-                    <a asp-page="./Edit" asp-route-id="@doc.Id" class="action">
+                    <a asp-page="./Edit" asp-route-id="@doc.GroupId" class="action">
                         <icon icon="edit"></icon>
                     </a>
                 </div>

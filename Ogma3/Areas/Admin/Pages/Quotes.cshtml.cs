@@ -9,6 +9,5 @@ namespace Ogma3.Areas.Admin.Pages
         public void OnGet()
         {
         }
-
     }
 }

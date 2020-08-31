@@ -1,10 +1,26 @@
-@page "{doc}"
+@page "{id}/{slug?}"
 @model Ogma3.Pages.Docs
 
 @{
     ViewData["Title"] = Model.Document.Title;
 }
 
-<markdown>
-    @Model.Document.Body
-</markdown>
+<article class="document">
+    <h1>@Model.Document.Title</h1>
+    
+    <markdown>
+        @Model.Document.Body
+    </markdown>
+</article>
+
+<ul class="my-list border-top">
+    @foreach (var ver in Model.Versions)
+    {
+        <li class="item">
+            <a asp-page="/Docs" asp-route-id="@ver.Id" asp-route-slug="@ver.Slug">
+                version @ver.Version — @ver.CreationTime
+                @(ver.Version == Model.Document.Version ? "«" : "")
+            </a>
+        </li>
+    }
+</ul>

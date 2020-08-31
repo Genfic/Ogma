@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api
 @using Ogma3.Api.V1
 @model Ogma3.Areas.Admin.Pages.Quotes
 
@@ -8,10 +7,12 @@
     ViewData["ActivePage"] = ManageNavPages.Quotes;
 }
 
-<div>
-    <textarea rows="1" v-model="json" placeholder="Json"></textarea>
-    <button v-on:click="fromJson">Send</button>
-</div>
+@if (User.IsInRole("Admin")){
+    <div>
+        <textarea rows="1" v-model="json" placeholder="Json"></textarea>
+        <button v-on:click="fromJson">Send</button>
+    </div>
+}
 
 <input type="text" class="search" v-model="search" placeholder="Search...">
 

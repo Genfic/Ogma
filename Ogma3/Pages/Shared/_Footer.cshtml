@@ -1,0 +1,37 @@
+<footer class="border-top text-muted">
+
+    <div class="container-fluid">
+        <div class="row justify-content-md-center">
+            <div class="col-2">
+                <nav class="nav flex-column">
+                    <a href="" class="nav-link">About</a>
+                    <a asp-area="" asp-page="/Privacy" class="nav-link">Privacy</a>
+                </nav>
+            </div>
+            
+            <div class="col-2">
+                <nav class="nav flex-column">
+                    <a asp-area="" asp-page="/Markdown" class="nav-link">Markdown reference</a>
+                </nav>
+            </div>
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <div class="col-2">
+                    <a class="text-dark" asp-area="Admin" asp-page="/Index">
+                        Admin
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="footer-copyright text-center py-3">
+                    &copy; 2019-@DateTime.Now.Year <a asp-area="" asp-page="/Index">Ogma</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</footer>

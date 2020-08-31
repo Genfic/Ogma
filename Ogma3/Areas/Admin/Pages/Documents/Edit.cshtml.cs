@@ -25,7 +25,7 @@ namespace Ogma3.Areas.Admin.Pages.Documents
         public InputModel Input { get; set; }
         public class InputModel
         {
-            public long Id { get; set; }
+            public Guid Id { get; set; }
             
             [Required]
             public string Title { get; set; }
@@ -35,24 +35,32 @@ namespace Ogma3.Areas.Admin.Pages.Documents
         }
 
         public Document Doc { get; set; }
-        public async void OnGetAsync(long id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             Doc = await _context.Documents
-                .FindAsync(id);
+                .Where(d => d.GroupId == id)
+                .Where(d => d.RevisionDate == null)
+                .FirstOrDefaultAsync();
 
+            if (Doc == null)
+            {
+                return NotFound();
+            }
+            
             Input = new InputModel
             {
-                Id = Doc.Id,
+                Id = Doc.GroupId,
                 Title = Doc.Title,
                 Body = Doc.Body
             };
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var oldVersion = await _context.Documents
                 .Where(d => d.RevisionDate == null)
-                .Where(d => d.Id == Input.Id)
+                .Where(d => d.GroupId == Input.Id)
                 .FirstOrDefaultAsync();
 
             var now = DateTime.Now;

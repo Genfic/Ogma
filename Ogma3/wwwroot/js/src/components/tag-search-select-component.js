@@ -111,6 +111,9 @@ Vue.component('tag-search-select', {
         checkDisabled: function () {
             this.disable = this.selected.length <= 0;
             return this.disable;
+        },
+        onClose: function () {
+            this.focused = false;
         }
     },
     created() {
@@ -146,11 +149,16 @@ Vue.component('tag-search-select', {
                 <option v-for="s in selected" :value="s.id" selected>{{s.name}}</option>
             </select>
     
-            <div class="o-form-group tag-search" :class="inline ? 'inline' : null">
+            <div class="o-form-group tag-search" 
+                 :class="inline ? 'inline' : null"
+                 v-closable="{
+                    exclude: ['search'],
+                    handler: 'onClose'
+                 }">
                 <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
                 <p class="desc" v-if="desc && !inline">{{desc}}</p>
     
-                <div class="searchbar">
+                <div class="searchbar" ref="search">
                   <div class="tags">
                     
                     <div class="tag" v-bind:style="{background: s.rgba}" v-for="s in selected">

@@ -12,6 +12,18 @@
                 Hello @User.Identity.Name!
             </a>
         </li>
+        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Account">
+                <icon icon="person"></icon>
+            </a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout" title="Log out">
+                <icon icon="exit_to_app"></icon>
+            </a>
+        </li>
     }
     else
     {
@@ -22,41 +34,5 @@
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     }
-
-
-    <li class="nav-item dropdown">
-        <a class="nav-link text-dark" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <icon icon="menu"></icon>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-
-            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-            {
-                <a class="dropdown-item text-dark" asp-area="Admin" asp-page="/Index">
-                    <icon icon="settings" class="admin-cog"></icon>
-                    Admin
-                </a>
-            }
-            
-            <a href="" class="dropdown-item text-dark">
-                <icon icon="help"></icon>
-                About
-            </a>
-
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
-                    <icon icon="person"></icon>
-                    Account
-                </a>
-                
-                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Logout" method="post">
-                    <icon icon="exit_to_app"></icon>
-                    Logout
-                </a>
-            }
-
-        </div>
-    </li>
 
 </ul>

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -19,13 +18,13 @@ namespace Ogma3.Areas.Admin.Pages.Documents
         }
 
         public List<Document> Docs { get; set; }
-        public async void OnGetAsync()
+        public async Task OnGetAsync()
         {
             Docs = await _context.Documents
-                .Where(d => d.RevisionDate == null)
+                .Where(d => !d.RevisionDate.HasValue)
                 .OrderBy(d => d.Slug)
                 .AsNoTracking()
-                .ToListAsync(); // TODO: Fix it being null
+                .ToListAsync();
         }
     }
 }

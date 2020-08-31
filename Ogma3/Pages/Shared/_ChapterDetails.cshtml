@@ -10,6 +10,18 @@
         <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
         <time class="date" itemprop="datePublished">@Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
         
+        @if (User.Identity.IsAuthenticated && Model.Story.Author.IsLoggedIn(User))
+        {
+            <div class="actions">
+                <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
+                    <icon icon="edit"></icon>
+                </a>
+                <a title="Delete" class="action-btn" asp-page="./Chapters/Delete" asp-route-id="@Model.Chapter.Id">
+                    <icon icon="delete_forever"></icon>
+                </a>
+            </div>
+        }
+        
         <div class="body-container">
             
             @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))

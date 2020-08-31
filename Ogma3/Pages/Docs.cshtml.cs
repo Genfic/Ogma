@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,15 +20,22 @@ namespace Ogma3.Pages
         }
 
         public Document Document { get; set; }
+        public List<Document> Versions { get; set; }
         
-        public async Task<IActionResult> OnGetAsync(string? doc)
+        public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
             Document = await _context.Documents
                 .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Slug == doc);
-
+                .Where(d => d.Id == id)
+                .FirstOrDefaultAsync();
+            
             if (Document == null)
                 return NotFound();
+            
+            Versions = await _context.Documents
+                .AsNoTracking()
+                .Where(d => d.GroupId == Document.GroupId)
+                .ToListAsync();
             
             return Page();
         }
