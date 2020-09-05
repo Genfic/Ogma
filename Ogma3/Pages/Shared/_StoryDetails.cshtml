@@ -69,7 +69,7 @@
 
             @if (Model.Cover != null)
             {
-                <img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl">
+                <cdn-img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl"></cdn-img>
             }
             <a asp-page="/User/Index" asp-route-name="@Model.Author.UserName">
                 <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>

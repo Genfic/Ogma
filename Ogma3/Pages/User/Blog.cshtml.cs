@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.User
@@ -18,6 +19,8 @@ namespace Ogma3.Pages.User
         public int PostsCount { get; set; }
         
         public readonly int PerPage = 25;
+        
+        public StoryAndBlogpostCountsDTO Counts { get; set; }
         
         public int PageNumber { get; set; }
         public OgmaUser Owner { get; set; }
@@ -51,8 +54,18 @@ namespace Ogma3.Pages.User
                 .ToListAsync();
 
             PostsCount = await _context.Blogposts.CountAsync();
+            
+            Counts = await _context.Users
+                .Where(u => u.Id == 7)
+                .Select(u => new StoryAndBlogpostCountsDTO
+                {
+                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
+                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
+                })
+                .FirstOrDefaultAsync();
 
             return Page();
         }
+
     }
 }

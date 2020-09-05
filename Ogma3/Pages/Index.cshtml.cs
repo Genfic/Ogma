@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages
@@ -16,6 +17,8 @@ namespace Ogma3.Pages
 
         public List<Story> RecentStories { get; set; }
         public List<Story> TopStories { get; set; }
+
+        public object Counts { get; set; }
 
         public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
         {
@@ -49,6 +52,14 @@ namespace Ogma3.Pages
                 .AsNoTracking()
                 .ToListAsync();
 
+            Counts = await _context.Users
+                .Where(u => u.Id == 7)
+                .Select(u => new StoryAndBlogpostCountsDTO
+                {
+                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
+                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

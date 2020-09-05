@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.User
@@ -24,6 +26,7 @@ namespace Ogma3.Pages.User
         public bool IsCurrentUser { get; set; }
         public List<Icon> Icons { get; set; }
         public InputModel Input { get; set; }
+        public StoryAndBlogpostCountsDTO Counts { get; set; }
 
         public class InputModel
         {
@@ -51,10 +54,22 @@ namespace Ogma3.Pages.User
         public async Task<IActionResult> OnGetAsync(string name)
         {
             Owner = await _context.Users.FirstAsync(u => u.NormalizedUserName == name.ToUpper());
+
+            if (Owner == null) return NotFound();
+            
             IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
             Icons = await _context.Icons
                 .AsNoTracking()
                 .ToListAsync();
+            
+            Counts = await _context.Users
+                .Where(u => u.Id == 7)
+                .Select(u => new StoryAndBlogpostCountsDTO
+                {
+                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
+                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
+                })
+                .FirstOrDefaultAsync();
 
             return Page();
         }

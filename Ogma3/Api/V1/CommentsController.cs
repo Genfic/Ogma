@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
@@ -17,13 +18,15 @@ namespace Ogma3.Api.V1
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        private readonly IConfiguration _config;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<OgmaUser> _userManager;
 
-        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager)
+        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
+            _config = config;
         }
 
         public class GetCommentsInput
@@ -51,7 +54,7 @@ namespace Ogma3.Api.V1
                 .Where(c => c.CommentsThreadId == input.Thread)
                 .Include(c => c.Author)
                 // .Skip((input.Page - 1) * input.PerPage).Take(input.PerPage) // Pagination
-                .Select(c => CommentDTO.FromComment(c, true))
+                .Select(c => new CommentDTO(_config, c, true))
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -69,7 +72,7 @@ namespace Ogma3.Api.V1
                 return NotFound();
             }
 
-            return CommentDTO.FromComment(comment);
+            return new CommentDTO(_config, comment);
         }
 
         // PUT: api/Comments/5
@@ -130,7 +133,7 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetComment", new { id = comment.Id }, CommentDTO.FromComment(comment));
+            return CreatedAtAction("GetComment", new { id = comment.Id }, new CommentDTO(_config, comment));
         }
 
         // DELETE: api/Comments/5
@@ -156,7 +159,7 @@ namespace Ogma3.Api.V1
             
             await _context.SaveChangesAsync();
 
-            return CommentDTO.FromComment(comment);
+            return new CommentDTO(_config, comment);
         }
 
         private bool CommentExists(long id)

@@ -5,7 +5,7 @@
 <div class="story-card">
     @if (Model.Cover != null)
     {
-        <img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"/>
+         <cdn-img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"></cdn-img>
     }
 
     <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">

@@ -1,35 +1,31 @@
-using System.Text.Encodings.Web;
+using System;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
 
 namespace Ogma3.Services.TagHelpers
 {
-    public class AvatarTagHelper : TagHelper
+    public class CdnImgTagHelper : TagHelper
     {
         private readonly IConfiguration _config;
-        public AvatarTagHelper(IConfiguration config)
+        public CdnImgTagHelper(IConfiguration config)
         {
             _config = config;
         }
 
         public string Src { get; set; }
-        public int? Size { get; set; }
-
+        public int? Width { get; set; }
+        public int? Height { get; set; }
+        
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var url = _config["cdn"] + Src;
-            if (Size != null)
-            {
-                url = $"{url}?s={Size}";
-                output.Attributes.SetAttribute("style", $"width:{Size}px;height:{Size}px");
-            }
 
+            if (Width.HasValue) output.Attributes.SetAttribute("width", Width);
+            if (Height.HasValue) output.Attributes.SetAttribute("height", Height);
+            
             output.TagName = "img";
-            output.AddClass("avatar", HtmlEncoder.Default);
             output.Attributes.SetAttribute("src", url);
-            output.Attributes.Remove(new TagHelperAttribute("title"));
         }
-        
     }
 }

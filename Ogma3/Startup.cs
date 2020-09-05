@@ -50,6 +50,7 @@ namespace Ogma3
             services.AddIdentity<OgmaUser, Role>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
+                    config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ";
                     config.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -40,7 +40,7 @@ namespace Ogma3.Services
                     return new FileUploaderResult
                     {
                         FileId = file.FileId,
-                        Path = _config["cdn"] + fileName
+                        Path = fileName
                     };
                 }
                 catch (B2Exception e)

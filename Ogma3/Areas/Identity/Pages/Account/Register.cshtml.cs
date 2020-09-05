@@ -135,16 +135,17 @@ namespace Ogma3.Areas.Identity.Pages.Account
             var user = new OgmaUser { UserName = Input.Name, Email = Input.Email };
             var result = await _userManager.CreateAsync(user, Input.Password);
             
-            // Modify invite code
-            inviteCode.UsedBy = user;
-            inviteCode.UsedDate = DateTime.Now;
-            await _context.SaveChangesAsync();
-            
-            // Send confirmation code
+            // If everything went fine...
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
-
+                
+                // Modify invite code
+                inviteCode.UsedBy = user;
+                inviteCode.UsedDate = DateTime.Now;
+                await _context.SaveChangesAsync();
+                
+                // Send confirmation code
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(

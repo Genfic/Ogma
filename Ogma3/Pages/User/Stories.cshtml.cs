@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.User
@@ -22,6 +23,7 @@ namespace Ogma3.Pages.User
         public bool IsCurrentUser { get; set; }
 
         public OgmaUser Owner { get; set; }
+        public StoryAndBlogpostCountsDTO Counts { get; set; }
 
         public async Task<ActionResult> OnGetAsync(string name)
         {
@@ -42,6 +44,15 @@ namespace Ogma3.Pages.User
                 .Include(s => s.Author)
                 .AsNoTracking()
                 .ToListAsync();
+            
+            Counts = await _context.Users
+                .Where(u => u.Id == 7)
+                .Select(u => new StoryAndBlogpostCountsDTO
+                {
+                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
+                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
+                })
+                .FirstOrDefaultAsync();
 
             return Page();
         }

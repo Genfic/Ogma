@@ -1,5 +1,6 @@
 using System;
 using Markdig;
+using Microsoft.Extensions.Configuration;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Data.DTOs
@@ -16,17 +17,13 @@ namespace Ogma3.Data.DTOs
 
         public string Body { get; set; }
 
-        public static CommentDTO FromComment(Comment comment, bool parseMd = false)
+        public CommentDTO(IConfiguration config, Comment comment, bool parseMd = false)
         {
-            var body = parseMd ? Markdown.ToHtml(comment.Body.Trim()) : comment.Body;
-            return new CommentDTO
-            {
-                Id = comment.Id,
-                CommentsThreadId = comment.CommentsThreadId,
-                DateTime = comment.DateTime,
-                Body = body.Trim(),
-                Author = UserSimpleDTO.FromUser(comment.Author)
-            };
+            Id = comment.Id;
+            CommentsThreadId = comment.CommentsThreadId;
+            DateTime = comment.DateTime;
+            Body = parseMd ? Markdown.ToHtml(comment.Body.Trim()) : comment.Body.Trim();
+            Author = new UserSimpleDTO(config, comment.Author);
         }
     }
 }

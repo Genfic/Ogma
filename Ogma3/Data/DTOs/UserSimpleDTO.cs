@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Ogma3.Data.Models;
 using Utils;
 
@@ -8,15 +9,14 @@ namespace Ogma3.Data.DTOs
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public string Title { get; set; }
-
-        public static UserSimpleDTO FromUser(OgmaUser user)
+        public UserSimpleDTO(IConfiguration config, OgmaUser user)
         {
-            return new UserSimpleDTO
-            {
-                UserName = user.UserName,
-                Avatar = user.Avatar ?? Lorem.Gravatar(user.Email),
-                Title = user.Title
-            };
+            UserName = user.UserName;
+            Avatar = user.Avatar == null 
+                ? Lorem.Gravatar(user.Email) 
+                : config["cdn"] + user.Avatar;
+            Title = user.Title;
         }
+
     }
 }
