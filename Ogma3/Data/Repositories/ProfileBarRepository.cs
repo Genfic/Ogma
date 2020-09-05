@@ -14,10 +14,10 @@ namespace Ogma3.Data.Repositories
             _context = context;
         }
         
-        public async Task<ProfileBarDTO> Get(string normalizedName)
+        public async Task<ProfileBarDTO> GetAsync(string normalizedName)
         {
             return await _context.Users
-                .Where(u => u.NormalizedUserName == normalizedName)
+                .Where(u => u.NormalizedUserName == normalizedName.Normalize())
                 .Select(u => new ProfileBarDTO
                 {
                     Id = u.Id,
@@ -30,6 +30,7 @@ namespace Ogma3.Data.Repositories
                     StoriesCount = _context.Stories.Count(s => s.Author.Id == u.Id),
                     BlogpostsCount = _context.Blogposts.Count(b => b.Author.Id == u.Id)
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
     }

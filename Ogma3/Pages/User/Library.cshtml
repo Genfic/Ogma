@@ -3,11 +3,11 @@
 @model Ogma3.Pages.User.LibraryModel
 
 @{
-    ViewData["Title"] = $"{Model.Owner.UserName}'s library";
+    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s library";
     ViewData["Tab"] = "Library";
 }
 
-<partial name="_ProfileBar" model="Model.Owner"></partial>
+<partial name="_ProfileBar" model="Model.ProfileBar"></partial>
 
 <div id="app">
     @if (Model.IsCurrentUser)
@@ -118,7 +118,7 @@
     </ul>
 
     <div id="route" data-route="@Url.RouteUrl(nameof(ShelvesController))" v-if="!route"></div>
-    <div id="owner" data-owner="@Model.Owner.NormalizedUserName" v-if="!owner"></div>
+    <div id="owner" data-owner="@Model.ProfileBar.UserName.ToUpper()" v-if="!owner"></div>
 </div>
 
 

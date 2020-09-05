@@ -6,40 +6,44 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 
 namespace Ogma3.Pages.User
 {
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        public OgmaUser CurrentUser { get; set; }
-        public StoryAndBlogpostCountsDTO Counts { get; set; }
+        private ProfileBarRepository _profileBarRepo;
 
-        public IndexModel(ApplicationDbContext context)
+        public string Bio { get; set; }
+        public CommentsThread CommentsThread { get; set; }
+        public ProfileBarDTO ProfileBar { get; set; }
+
+        public IndexModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
         {
             _context = context;
+            _profileBarRepo = profileBarRepo;
         }
 
         public async Task<IActionResult> OnGetAsync(string name)
         {
-            CurrentUser = await _context.Users
+            var userData = await _context.Users
                 .Where(u => u.NormalizedUserName == name.ToUpper())
-                .Include(u => u.CommentsThread)
+                .Select(u => new {u.Bio, u.CommentsThread })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (CurrentUser == null) return NotFound();
+            if (userData == null) return NotFound();
             
-            Counts = await _context.Users
-                .Where(u => u.Id == 7)
-                .Select(u => new StoryAndBlogpostCountsDTO
-                {
-                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
-                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
-                })
-                .FirstOrDefaultAsync();
+            Bio = userData.Bio;
+            CommentsThread = userData.CommentsThread;
+            
+            ProfileBar = await _profileBarRepo.GetAsync(name.ToUpper());
+
+            if (ProfileBar == null) return NotFound();
             
             return Page();
         }
+
     }
 }

@@ -2,11 +2,11 @@
 @model Ogma3.Pages.User.StoriesModel
 
 @{
-    ViewData["Title"] = $"{Model.Owner.UserName}'s stories";
+    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s stories";
     ViewData["Tab"] = "Stories";
 }
 
-<partial name="_ProfileBar" model="Model.Owner"></partial>
+<partial name="_ProfileBar" model="Model.ProfileBar"></partial>
 
 @if (Model.IsCurrentUser)
 {

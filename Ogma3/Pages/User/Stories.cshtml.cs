@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,33 +8,42 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 
 namespace Ogma3.Pages.User
 {
     public class StoriesModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly ProfileBarRepository _profileBarRepo;
 
-        public StoriesModel(ApplicationDbContext context)
+        public StoriesModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
         {
             _context = context;
+            _profileBarRepo = profileBarRepo;
         }
 
         public IList<Story> Stories { get;set; }
+        
+        public readonly int PerPage = 25;
+
+        public int PageNumber { get; set; }
+        
+        public ProfileBarDTO ProfileBar { get; set; }
         public bool IsCurrentUser { get; set; }
 
-        public OgmaUser Owner { get; set; }
-        public StoryAndBlogpostCountsDTO Counts { get; set; }
-
-        public async Task<ActionResult> OnGetAsync(string name)
+        public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
-            Owner = await _context.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
-            if (Owner == null) return NotFound();
-            IsCurrentUser = Owner.IsLoggedIn(User);
+            PageNumber = page;
+            
+            ProfileBar = await _profileBarRepo.GetAsync(name.ToUpper());
+            if (ProfileBar == null) return NotFound();
+
+            IsCurrentUser = ProfileBar.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
             
             var storiesQuery = IsCurrentUser
-                ? _context.Stories.Where(s => s.Author == Owner)
-                : _context.Stories.Where(s => s.Author == Owner && s.IsPublished);
+                ? _context.Stories.Where(s => s.Author.Id == ProfileBar.Id)
+                : _context.Stories.Where(s => s.Author.Id == ProfileBar.Id && s.IsPublished);
             
             Stories = await storiesQuery
                 .OrderByDescending(s => s.ReleaseDate)
@@ -44,15 +54,6 @@ namespace Ogma3.Pages.User
                 .Include(s => s.Author)
                 .AsNoTracking()
                 .ToListAsync();
-            
-            Counts = await _context.Users
-                .Where(u => u.Id == 7)
-                .Select(u => new StoryAndBlogpostCountsDTO
-                {
-                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
-                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
-                })
-                .FirstOrDefaultAsync();
 
             return Page();
         }

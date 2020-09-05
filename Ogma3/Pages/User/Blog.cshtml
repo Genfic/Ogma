@@ -2,11 +2,11 @@
 @model Ogma3.Pages.User.BlogModel
 
 @{
-    ViewData["Title"] = $"{Model.Owner.UserName}'s blog";
+    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s blog";
     ViewData["Tab"] = "Blog";
 }
 
-<partial name="_ProfileBar" model="Model.Owner"></partial>
+<partial name="_ProfileBar" model="Model.ProfileBar"></partial>
 
 @if (Model.IsCurrentUser)
 {
@@ -26,7 +26,7 @@ else
         <partial name="_BlogpostCard" model="@post"></partial>
     }
     
-    @if (Model.PostsCount > Model.PerPage)
+    @if (Model.ProfileBar.BlogpostsCount > Model.PerPage)
     {
         <div class="pagination">
             <a class="prev button" href="?page=@(Math.Max(1, Model.PageNumber - 1))">Previous</a>
@@ -34,7 +34,7 @@ else
             {
                 <div class="ph button">...</div>
             }
-            @for (var i = 1; i <= (int)Math.Ceiling((double)Model.PostsCount / Model.PerPage); i++)
+            @for (var i = 1; i <= (int)Math.Ceiling((double)Model.ProfileBar.BlogpostsCount / Model.PerPage); i++)
             {
                 @if (i >= Model.PageNumber - 4 && i <= Math.Max(Model.PageNumber, 5))
                 {
@@ -44,11 +44,11 @@ else
                     </a>
                 }
             }
-            @if (Model.PostsCount / Model.PerPage > 5 && Model.PageNumber != Model.PostsCount / Model.PerPage)
+            @if (Model.ProfileBar.BlogpostsCount / Model.PerPage > 5 && Model.PageNumber != Model.ProfileBar.BlogpostsCount / Model.PerPage)
             {
                 <div class="ph button">...</div>
             }
-            <a class="next button" href="?page=@(Math.Min(Model.PageNumber + 1, (int)Math.Ceiling((double)Model.PostsCount / Model.PerPage)))">Next</a>
+            <a class="next button" href="?page=@(Math.Min(Model.PageNumber + 1, (int)Math.Ceiling((double)Model.ProfileBar.BlogpostsCount / Model.PerPage)))">Next</a>
         </div>
     }
 }

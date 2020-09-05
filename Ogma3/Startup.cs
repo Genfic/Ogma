@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 using Ogma3.Services;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
@@ -40,6 +41,9 @@ namespace Ogma3
                 Configuration.GetConnectionString("DbConnection")
              ));
             
+            // Repositories
+            services.AddScoped<ProfileBarRepository>();
+
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
             

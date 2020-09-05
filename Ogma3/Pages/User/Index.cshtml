@@ -3,19 +3,18 @@
 
 @{
     ViewData["Title"] = $"{User.Identity.Name}'s profile";
-    ViewData["User"] = Model.CurrentUser;
     ViewData["Tab"] = "Profile";
 }
 
-<partial name="_ProfileBar" model="Model.CurrentUser"></partial>
+<partial name="_ProfileBar" model="Model.ProfileBar"></partial>
 
-@if (!string.IsNullOrEmpty(Model.CurrentUser.Bio))
+@if (!string.IsNullOrEmpty(Model.Bio))
 {
     <markdown preset="All">
-        @Model.CurrentUser.Bio
+        @Model.Bio
     </markdown>
 
     <hr>
 }
 
-<partial name="_Comments" model="@Model.CurrentUser.CommentsThread"></partial>
+<partial name="_Comments" model="@Model.CommentsThread"></partial>

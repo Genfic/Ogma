@@ -1,6 +1,6 @@
 @using System.Globalization
 @using Utils
-@model Ogma3.Data.Models.OgmaUser
+@model Ogma3.Data.DTOs.ProfileBarDTO
 
 @{
     var tab = (string) ViewData["Tab"];
@@ -37,10 +37,10 @@
             Home
         </a>
         <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="@Model.UserName">
-            Stories
+            Stories (@Model.StoriesCount)
         </a>
         <a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="@Model.UserName">
-            Blog
+            Blog (@Model.BlogpostsCount)
         </a>
         <a class="nav-item @(tab == "Library" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="@Model.UserName">
             Library

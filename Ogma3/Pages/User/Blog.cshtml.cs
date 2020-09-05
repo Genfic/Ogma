@@ -9,42 +9,42 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 
 namespace Ogma3.Pages.User
 {
     public class BlogModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly ProfileBarRepository _profileBarRepo;
+        
         public IList<Blogpost> Posts { get;set; }
-        public int PostsCount { get; set; }
         
         public readonly int PerPage = 25;
         
-        public StoryAndBlogpostCountsDTO Counts { get; set; }
         
         public int PageNumber { get; set; }
-        public OgmaUser Owner { get; set; }
+        public ProfileBarDTO ProfileBar { get; set; }
         public bool IsCurrentUser { get; set; }
 
-        public BlogModel(ApplicationDbContext context)
+        public BlogModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
         {
             _context = context;
+            _profileBarRepo = profileBarRepo;
         }
 
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
             PageNumber = page;
             
-            Owner = await _context.Users
-                .AsNoTracking()
-                .FirstAsync(u => u.NormalizedUserName == name.ToUpper());
-            
-            if (Owner == null) return NotFound();
-            IsCurrentUser = Owner.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ProfileBar = await _profileBarRepo.GetAsync(name.ToUpper());
+            if (ProfileBar == null) return NotFound();
+
+            IsCurrentUser = ProfileBar.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var postsQuery = IsCurrentUser
-                ? _context.Blogposts.Where(b => b.Author == Owner)
-                : _context.Blogposts.Where(b => b.Author == Owner && b.IsPublished);
+                ? _context.Blogposts.Where(b => b.Author.Id == ProfileBar.Id)
+                : _context.Blogposts.Where(b => b.Author.Id == ProfileBar.Id && b.IsPublished);
 
             Posts = await postsQuery
                 .Skip(Math.Max(0, page - 1) * PerPage)
@@ -52,18 +52,7 @@ namespace Ogma3.Pages.User
                 .Include(b => b.Author)
                 .AsNoTracking()
                 .ToListAsync();
-
-            PostsCount = await _context.Blogposts.CountAsync();
             
-            Counts = await _context.Users
-                .Where(u => u.Id == 7)
-                .Select(u => new StoryAndBlogpostCountsDTO
-                {
-                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
-                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
-                })
-                .FirstOrDefaultAsync();
-
             return Page();
         }
 
