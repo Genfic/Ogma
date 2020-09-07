@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +44,8 @@ namespace Ogma3.Pages.Blog
                 ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
                 MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
+            
+            public string Tags { get; set; }
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -59,14 +60,13 @@ namespace Ogma3.Pages.Blog
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
             
-            // Find hashtags
-            var rgx = new Regex(@"\#[\w\-]+");
-            var tags = rgx
-                .Matches(Input.Body)
-                .Select(m => m.Value.ToLower())
+            // Create array of hashtags
+            var tags = Input.Tags
+                .Split(',')
+                .ToList()
+                .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()
-                .Take(CTConfig.CBlogpost.MaxTagsAmount)
-                .ToList();
+                .ToArray();
 
             await _context.Blogposts.AddAsync(new Blogpost
             {
@@ -76,7 +76,7 @@ namespace Ogma3.Pages.Blog
                 Author = user,
                 CommentsThread = new CommentsThread(),
                 WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
-                Hashtags = tags.ToArray()
+                Hashtags = tags
             });
             await _context.SaveChangesAsync();
 

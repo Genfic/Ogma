@@ -23,6 +23,13 @@
     <markdown class="body" preset="Blogpost">
         @Model.Body
     </markdown>
+    
+    <div class="tags">
+        @foreach (var t in Model.Hashtags)
+        {
+            <a asp-page="/Blog/Index" asp-route-q="@t" class="tag active-border">@t</a>
+        }
+    </div>
 </div>
 
 <partial name="_Comments" model="@Model.CommentsThread"></partial>

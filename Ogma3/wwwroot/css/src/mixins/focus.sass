@@ -1,0 +1,6 @@
+@use '../vars' as v
+
+@mixin focus
+  &:focus
+    border-color: v.$accent
+    box-shadow: 0 0 0 3px v.$accent-25

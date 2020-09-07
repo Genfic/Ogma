@@ -29,6 +29,14 @@
                       value="@Model.Input.Body">
     </textarea-counter>
     
+    <input-blog-tags ref="tags"
+                     :max="@CTConfig.CBlogpost.MaxTagsAmount"
+                     validate-msg="@CTConfig.CBlogpost.ValidateTagsCountMsg"
+                     desc="Comma-separated tags"
+                     label="@nameof(Model.Input.Tags)"
+                     value="@Model.Input.Tags">
+    </input-blog-tags>
+    
     <div class="o-form-group">
         <input type="submit" value="Create" class="btn btn-primary"/>
     </div>
@@ -38,6 +46,7 @@
 
 
 @section Scripts { 
+    <script src="~/js/dist/components/input-blog-tags-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>   
     <script src="~/js/dist/editors/blogpost.min.js" asp-append-version="true"></script>

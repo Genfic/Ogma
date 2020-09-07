@@ -13,12 +13,12 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
-        private readonly UserManager<Data.Models.OgmaUser> _userManager;
-        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
+        private readonly UserManager<OgmaUser> _userManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
 
         public SetPasswordModel(
-            UserManager<Data.Models.OgmaUser> userManager,
-            SignInManager<Data.Models.OgmaUser> signInManager)
+            UserManager<OgmaUser> userManager,
+            SignInManager<OgmaUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

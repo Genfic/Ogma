@@ -1,4 +1,5 @@
-@use '../vars'
+@use '../vars' as v
+@use '../mixins/focus' as f
 
 .blogpost-details
   display: flex
@@ -22,3 +23,13 @@
   & .body
     text-align: justify
     margin-top: 1em
+    
+  & .tags
+    display: flex
+    
+    &>.tag
+      text-decoration: none
+      &:hover
+        background-color: v.$accent-10
+      +f.focus
+        

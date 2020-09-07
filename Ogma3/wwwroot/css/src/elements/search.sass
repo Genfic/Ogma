@@ -53,11 +53,13 @@ form.search
     &[type="submit"]
       width: 100%
       background-color: v.$background
-      margin: 0 0 0 .5rem
       padding: 0 1rem
+      margin: .5rem 0 0
       transition: background-color 100ms ease-in-out
       &:hover
         background-color: v.$accent-25
+      &.inline
+        margin: 0 0 0 .5rem
       
   & select
     height: 100%

@@ -791,7 +791,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   flex: 1;
   flex-direction: column;
   border: 1px solid var(--foreground-25);
-  margin: 4px 0 0;
+  margin: 0.5rem 0 0;
 }
 .blogpost-card:first-of-type {
   margin: 0;
@@ -800,6 +800,9 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   border-color: var(--foreground-50);
 }
 .blogpost-card:hover .info {
+  border-color: var(--foreground-50);
+}
+.blogpost-card:hover .tags {
   border-color: var(--foreground-50);
 }
 .blogpost-card > .title {
@@ -814,10 +817,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 }
 .blogpost-card .excerpt {
   overflow: hidden;
-  display: -webkit-box;
   padding: 0.25rem;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
 }
 .blogpost-card .info {
   border-top: 1px solid var(--foreground-25);
@@ -827,6 +827,21 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   color: var(--foreground-75);
 }
 .blogpost-card .info > *:hover {
+  color: var(--foreground);
+}
+.blogpost-card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--foreground-25);
+}
+.blogpost-card .tags > .tag {
+  border: none;
+  padding: 0 0.25rem;
+  margin: 4px;
+  cursor: default;
+  white-space: nowrap;
+}
+.blogpost-card .tags > .tag:hover {
   color: var(--foreground);
 }
 
@@ -852,6 +867,19 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 .blogpost-details .body {
   text-align: justify;
   margin-top: 1em;
+}
+.blogpost-details .tags {
+  display: flex;
+}
+.blogpost-details .tags > .tag {
+  text-decoration: none;
+}
+.blogpost-details .tags > .tag:hover {
+  background-color: var(--accent-10);
+}
+.blogpost-details .tags > .tag:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
 }
 
 .story-status {
@@ -1271,12 +1299,15 @@ form.search input[type=text]:focus {
 form.search input[type=submit] {
   width: 100%;
   background-color: var(--background);
-  margin: 0 0 0 0.5rem;
   padding: 0 1rem;
+  margin: 0.5rem 0 0;
   transition: background-color 100ms ease-in-out;
 }
 form.search input[type=submit]:hover {
   background-color: var(--accent-25);
+}
+form.search input[type=submit].inline {
+  margin: 0 0 0 0.5rem;
 }
 form.search select {
   height: 100%;

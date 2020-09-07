@@ -1,4 +1,5 @@
 @use '../vars' as v
+@use '../mixins/focus' as f
 
 form.form
   display: flex
@@ -91,9 +92,7 @@ form.form
               font-weight: 500
               
   & .o-form-control
-    &:focus
-      border-color: v.$accent
-      box-shadow: 0 0 0 3px v.$accent-25
+    +f.focus
       
   & .validation-summary
     

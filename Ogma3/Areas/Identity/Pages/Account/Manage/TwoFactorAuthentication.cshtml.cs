@@ -15,13 +15,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
     {
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
 
-        private readonly UserManager<Data.Models.OgmaUser> _userManager;
-        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
+        private readonly UserManager<OgmaUser> _userManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
         private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
         public TwoFactorAuthenticationModel(
-            UserManager<Data.Models.OgmaUser> userManager,
-            SignInManager<Data.Models.OgmaUser> signInManager,
+            UserManager<OgmaUser> userManager,
+            SignInManager<OgmaUser> signInManager,
             ILogger<TwoFactorAuthenticationModel> logger)
         {
             _userManager = userManager;

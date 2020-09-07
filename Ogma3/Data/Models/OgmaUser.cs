@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace Ogma3.Data.Models
 {
@@ -22,9 +23,11 @@ namespace Ogma3.Data.Models
         public string? AvatarId { get; set; }
 
         [Required]
+        [PersonalData]
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         
         [Required]
+        [PersonalData]
         public DateTime LastActive { get; set; } = DateTime.Now;
 
         public CommentsThread CommentsThread { get; set; } = new CommentsThread();

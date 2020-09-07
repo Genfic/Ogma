@@ -5,12 +5,14 @@
   flex: 1
   flex-direction: column
   border: 1px solid v.$foreground-25
-  margin: 4px 0 0
+  margin: .5rem 0 0
   &:first-of-type
     margin: 0
   &:hover
     border-color: v.$foreground-50
     & .info
+      border-color: v.$foreground-50
+    & .tags
       border-color: v.$foreground-50
 
   &>.title
@@ -24,10 +26,7 @@
         
   & .excerpt
     overflow: hidden
-    display: -webkit-box
     padding: .25rem
-    -webkit-line-clamp: 5
-    -webkit-box-orient: vertical
     
   & .info
     border-top: 1px solid v.$foreground-25
@@ -35,6 +34,20 @@
     &>*
       padding: 0 .25rem
       color: v.$foreground-75
+      &:hover
+        color: v.$foreground
+        
+  & .tags
+    display: flex
+    flex-wrap: wrap
+    border-top: 1px solid v.$foreground-25
+
+    &>.tag
+      border: none
+      padding: 0 .25rem
+      margin: 4px
+      cursor: default
+      white-space: nowrap
       &:hover
         color: v.$foreground
     

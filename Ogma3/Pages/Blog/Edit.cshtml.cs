@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -41,12 +42,15 @@ namespace Ogma3.Pages.Blog
                 ErrorMessage = CTConfig.CBlogpost.ValidateLengthMsg,
                 MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
+
+            public string Tags { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
+            
             // Get post and make sure the user matches
             var post = await _context.Blogposts
                 .AsNoTracking()
@@ -58,7 +62,11 @@ namespace Ogma3.Pages.Blog
             {
                 Id = post.Id,
                 Title = post.Title,
-                Body = post.Body
+                Body = post.Body,
+                Tags = post.Hashtags
+                    .Select(t => t.Trim('#'))
+                    .ToArray()
+                    .JoinToString(", ")
             };
             
             return Page();
@@ -72,22 +80,24 @@ namespace Ogma3.Pages.Blog
             {
                 return Page();
             }
+            
             // Get logged in user
             var user = await _userManager.GetUserAsync(User);
+            
             // Get post and make sure the user matches
             var post = await _context.Blogposts
                 .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
+            
             // 404 if no post found
             if (post == null) return NotFound();
             
-            // Find hashtags
-            var rgx = new Regex(@"\#[\w\-]+");
-            var tags = rgx
-                .Matches(Input.Body)
-                .Select(m => m.Value.ToLower())
+            // Create array of hashtags
+            var tags = Input.Tags
+                .Split(',')
+                .ToList()
+                .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()
-                .Take(CTConfig.CBlogpost.MaxTagsAmount)
-                .ToList();
+                .ToArray();
 
             post.Title = Input.Title.Trim();
             post.Slug = Input.Title.Trim().Friendlify();

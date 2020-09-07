@@ -104,6 +104,7 @@ namespace Ogma3.Data
             public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
             
             public const int MaxTagsAmount = 10;
+            public const string ValidateTagsCountMsg = "The {0} can have a maximum of {1} tags.";
         }
 
         public static class CClub
