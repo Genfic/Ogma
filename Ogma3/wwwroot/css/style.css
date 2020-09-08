@@ -510,6 +510,8 @@ ul.my-list > li.item:first-of-type {
   background: var(--accent-10) linear-gradient(90deg, transparent 0%, var(--accent-25) 40%, var(--accent-25) 60%, transparent 100%);
 }
 .comments-container > .comments > .comment > .author {
+  display: flex;
+  flex-direction: column;
   flex: 0 0 6rem;
   border: 1px solid var(--foreground-50);
   margin-right: 0.5rem;
@@ -530,6 +532,11 @@ ul.my-list > li.item:first-of-type {
   color: var(--foreground);
 }
 .comments-container > .comments > .comment > .author > .avatar {
+  border-top: 1px solid var(--foreground-50);
+}
+.comments-container > .comments > .comment > .author > .role-tag {
+  margin: 0;
+  border: none;
   border-top: 1px solid var(--foreground-50);
 }
 .comments-container > .comments > .comment > .main {
@@ -696,7 +703,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 
 .profile-bar {
   display: flex;
-  height: 8.5rem;
+  min-height: 9rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--foreground-25);
 }
@@ -757,33 +764,38 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
     flex-direction: column;
   }
 }
+.profile-bar > #personal .avatar {
+  width: 8.5rem;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  border: 1px solid var(--foreground-25);
+}
 .profile-bar > #personal .data {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-left: 1rem;
 }
-.profile-bar > #personal .times {
+.profile-bar > #personal .data > .name {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+  font-weight: 300;
+  color: var(--foreground);
+}
+.profile-bar > #personal .data .roles {
+  display: flex;
+  margin: 0.1rem 0;
+}
+.profile-bar > #personal .data .title {
+  font-size: 1.1rem;
+  font-weight: 100;
+}
+.profile-bar > #personal .data .times {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   flex-grow: 1;
-}
-.profile-bar > #personal .name {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  font-weight: 300;
-  color: var(--foreground);
-}
-.profile-bar > #personal .title {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-.profile-bar > #personal .avatar {
-  width: 8rem;
-  object-fit: contain;
-  border-radius: 0.25rem;
-  border: 1px solid var(--foreground-25);
+  font-size: 0.9rem;
 }
 
 .blogpost-card {
@@ -1369,6 +1381,42 @@ form.search select:focus {
   color: var(--foreground);
   text-decoration: none;
   background-color: var(--accent-10);
+}
+
+.role-tag {
+  display: grid;
+  grid-template-areas: "main";
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  margin: 0.1rem 0.2rem;
+  cursor: default;
+  border: 1px solid var(--foreground-25);
+}
+.role-tag:hover {
+  border-color: var(--foreground-50);
+}
+.role-tag:focus {
+  border-color: var(--accent);
+}
+.role-tag:first-child {
+  margin-left: 0;
+}
+.role-tag:last-child {
+  margin-right: 0;
+}
+.role-tag:hover > .bg {
+  opacity: 0.6;
+}
+.role-tag > .bg {
+  grid-area: main;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+}
+.role-tag > .name {
+  grid-area: main;
+  margin: 0.1rem 0.2rem;
+  z-index: 10;
 }
 
 .md p {

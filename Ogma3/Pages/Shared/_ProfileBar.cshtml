@@ -11,23 +11,37 @@
     <div id="personal">
         <avatar src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" size="130" alt="@Model.UserName's avatar"></avatar>
         <div class="data">
-            <a asp-page="/User/Index" asp-area="" asp-route-name="@Model.UserName">
-                <h1 class="name">@Model.UserName</h1>
-            </a>
+            
+            <h1 class="name">@Model.UserName</h1>
+            
+            <div class="roles">
+                @foreach (var r in Model.Roles)
+                {
+                    <div class="role-tag">
+                        <div class="bg" style="background-color: @r.Color"></div>
+                        <span class="name">@r.Name</span>
+                    </div>
+                }
+            </div>
+
             <h2 class="title">@Model.Title</h2>
+            
             <div class="times">
+                
                 <div class="time">
                     <span>Member since</span>
                     <time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
                         @Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
                     </time>
                 </div>
+                
                 <div class="time">
                     <span>Last seen</span>
                     <time datetime="@Model.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
                         @Model.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
                     </time>
                 </div>
+                
             </div>
         </div>
     </div>

@@ -45,6 +45,10 @@
              v-for="c in visibleComments">
             <div class="author">
                 <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
+                <div class="role-tag">
+                    <span class="name">{{c.val.author.topRole.name}}</span>
+                    <div class="bg" :style="{backgroundColor: c.val.author.topRole.color}"></div>
+                </div>
                 <img :src="c.val.author.avatar" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
             </div>
             <div class="main">

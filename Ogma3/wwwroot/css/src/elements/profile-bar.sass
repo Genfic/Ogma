@@ -1,15 +1,16 @@
 @use '../vars' as v
+@use '../mixins/active-border' as ab
 
-$avatarSize: 8rem
+$avatarSize: 8.5rem
 $margin: .5rem
 
 .profile-bar
   display: flex
-  height: $avatarSize + $margin
+  min-height: $avatarSize + $margin
   margin-bottom: $margin
   border-bottom: 1px solid v.$foreground-25
   @media only screen and (max-width: v.$mq-mobile)
-    flex-direction: column
+    flex-direction: column 
     height: auto
   
   &>.nav
@@ -52,31 +53,36 @@ $margin: .5rem
     margin-bottom: $margin
     @media only screen and (max-width: v.$mq-mobile)
       flex-direction: column
+
+    & .avatar
+      width: $avatarSize
+      object-fit: contain
+      border-radius: .25rem
+      border: 1px solid v.$foreground-25
   
     & .data
       display: flex
       flex-direction: column
       align-items: flex-start
       margin-left: 1rem
-    
-    & .times
-      display: flex
-      flex-direction: column
-      justify-content: flex-end
-      flex-grow: 1
+
+      &>.name
+        font-size: 2rem
+        margin-bottom: $margin / 2
+        font-weight: 300
+        color: v.$foreground
         
-    & .name
-      font-size: 2rem
-      margin-bottom: $margin
-      font-weight: 300
-      color: v.$foreground
-      
-    & .title
-      font-size: 1.1rem
-      font-weight: 600
-      
-    & .avatar
-      width: $avatarSize
-      object-fit: contain
-      border-radius: .25rem
-      border: 1px solid v.$foreground-25
+      & .roles
+        display: flex
+        margin: .1rem 0
+
+      & .title
+        font-size: 1.1rem
+        font-weight: 100
+    
+      & .times
+        display: flex
+        flex-direction: column
+        justify-content: flex-end
+        flex-grow: 1
+        font-size: .9rem

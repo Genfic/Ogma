@@ -27,10 +27,20 @@ namespace Ogma3.Data.Repositories
                     Email = u.Email,
                     RegistrationDate = u.RegistrationDate,
                     LastActive = u.LastActive,
+                    
+                    Roles = u.UserRoles.Select(ur => new RoleDTO
+                    {
+                        Id = ur.RoleId,
+                        Name = ur.Role.Name,
+                        IsStaff = ur.Role.IsStaff,
+                        Color = ur.Role.Color
+                    }),
+                    
                     StoriesCount = _context.Stories.Count(s => s.Author.Id == u.Id),
                     BlogpostsCount = _context.Blogposts.Count(b => b.Author.Id == u.Id)
                 })
                 .AsNoTracking()
+                .TagWith("Fetch profile bar data")
                 .FirstOrDefaultAsync();
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Ogma3.Data.Enums;
@@ -6,7 +7,17 @@ using Ogma3.Data.Models;
 
 namespace Ogma3.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<OgmaUser, Role, long>
+    public class ApplicationDbContext : IdentityDbContext
+    <
+        OgmaUser, 
+        OgmaRole, 
+        long,
+        IdentityUserClaim<long>,
+        UserRole,
+        IdentityUserLogin<long>,
+        IdentityRoleClaim<long>,
+        IdentityUserToken<long>
+    >
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -27,6 +38,9 @@ namespace Ogma3.Data
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfStory> ShelfStories { get; set; }
         public DbSet<Blogpost> Blogposts { get; set; }
+
+        public DbSet<UserRole> OgmaUserRoles { get; set; }
+        public DbSet<OgmaRole> OgmaRoles { get; set; }
         
         // Clubs
         public DbSet<Club> Clubs { get; set; }
@@ -62,6 +76,17 @@ namespace Ogma3.Data
                 .WithOne(ct => ct.User)
                 .HasForeignKey<CommentsThread>(ct => ct.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            // UserRole
+            builder.Entity<UserRole>(ent =>
+            {
+                ent.HasOne(ur => ur.Role)
+                    .WithMany()
+                    .HasForeignKey("RoleId");
+                ent.HasOne(ur => ur.User)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey("UserId");
+            });
 
             // Tag
             builder.Entity<Tag>()

@@ -17,9 +17,9 @@ namespace Ogma3.Services.Initializers
 
         public ApplicationDbContext Ctx { get; set; }
         public OgmaUserManager UserManager { get; set; }
-        public RoleManager<Role> RoleManager { get; set; }
+        public RoleManager<OgmaRole> RoleManager { get; set; }
         
-        public DbSeedInitializer(ApplicationDbContext ctx, OgmaUserManager userManager, RoleManager<Role> roleManager)
+        public DbSeedInitializer(ApplicationDbContext ctx, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager)
         {
             Ctx = ctx;
             UserManager = userManager;
@@ -38,11 +38,11 @@ namespace Ogma3.Services.Initializers
         
         
         
-        private static async Task SeedRoles (RoleManager<Role> roleManager)
+        private static async Task SeedRoles (RoleManager<OgmaRole> roleManager)
         {
             if (await roleManager.RoleExistsAsync("Admin")) return;
             
-            var role = new Role { Name = "Admin" };
+            var role = new OgmaRole { Name = "Admin" };
             await roleManager.CreateAsync(role);
         }
 

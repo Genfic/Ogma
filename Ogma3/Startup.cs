@@ -51,7 +51,7 @@ namespace Ogma3
             services.AddHttpContextAccessor();
 
             // Identity
-            services.AddIdentity<OgmaUser, Role>(config =>
+            services.AddIdentity<OgmaUser, OgmaRole>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
                     config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ";
@@ -60,8 +60,8 @@ namespace Ogma3
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserManager<OgmaUserManager>()
                 .AddDefaultTokenProviders()
-                .AddUserStore<UserStore<OgmaUser, Role, ApplicationDbContext, long>>()
-                .AddRoleStore<RoleStore<Role, ApplicationDbContext, long>>();
+                .AddUserStore<UserStore<OgmaUser, OgmaRole, ApplicationDbContext, long, IdentityUserClaim<long>, UserRole, IdentityUserLogin<long>, IdentityUserToken<long>, IdentityRoleClaim<long>>>()
+                .AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
@@ -118,7 +118,7 @@ namespace Ogma3
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<Role> roleManager, ApplicationDbContext ctx)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager, ApplicationDbContext ctx)
         {
             
             if (env.IsDevelopment())

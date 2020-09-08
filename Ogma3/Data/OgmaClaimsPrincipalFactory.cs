@@ -7,11 +7,11 @@ using Utils;
 
 namespace Ogma3.Data
 {
-    public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, Role>
+    public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, OgmaRole>
     {
         public OgmaClaimsPrincipalFactory(
             UserManager<OgmaUser> userManager, 
-            RoleManager<Role> roleManager, 
+            RoleManager<OgmaRole> roleManager, 
             IOptions<IdentityOptions> options) 
             : base(userManager, roleManager, options)
         { }

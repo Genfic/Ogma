@@ -53,6 +53,8 @@ namespace Ogma3.Api.V1
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == input.Thread)
                 .Include(c => c.Author)
+                    .ThenInclude(u => u.UserRoles)
+                        .ThenInclude(ur => ur.Role)
                 // .Skip((input.Page - 1) * input.PerPage).Take(input.PerPage) // Pagination
                 .Select(c => new CommentDTO(_config, c, true))
                 .AsNoTracking()

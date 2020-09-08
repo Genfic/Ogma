@@ -1,7 +1,11 @@
 #nullable enable
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
@@ -31,6 +35,22 @@ namespace Ogma3.Data.Models
         public DateTime LastActive { get; set; } = DateTime.Now;
 
         public CommentsThread CommentsThread { get; set; } = new CommentsThread();
+        
+        [JsonIgnore]
+        public ICollection<UserRole>? UserRoles { get; set; }
+
+        [NotMapped]
+        public ICollection<OgmaRole> Roles
+        {
+            get => UserRoles == null || UserRoles.Count <= 0 
+                ? new List<OgmaRole>() 
+                : UserRoles.Select(ur => ur.Role).ToList(); 
+            set => UserRoles = value.Select(r => new UserRole
+            {
+                Role = r,
+                RoleId = r.Id
+            }).ToList();
+        }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {

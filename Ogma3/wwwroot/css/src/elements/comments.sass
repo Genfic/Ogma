@@ -1,4 +1,5 @@
 @use '../vars' as v
+@use '../mixins/active-border' as ab
 
 .comments-container
   margin-top: 2rem
@@ -54,6 +55,8 @@
           background: v.$accent-10 linear-gradient(90deg, transparent 0%, v.$accent-25 40%, v.$accent-25 60%, transparent 100%)
 
       &>.author
+        display: flex
+        flex-direction: column
         flex: 0 0 6rem
         border: 1px solid v.$foreground-50
         margin-right: .5rem
@@ -71,6 +74,11 @@
           color: v.$foreground
 
         &>.avatar
+          border-top: 1px solid v.$foreground-50
+          
+        &>.role-tag
+          margin: 0
+          border: none
           border-top: 1px solid v.$foreground-50
   
       &>.main

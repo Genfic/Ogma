@@ -20,9 +20,13 @@ namespace Ogma3.Data.DTOs
         public CommentDTO(IConfiguration config, Comment comment, bool parseMd = false)
         {
             Id = comment.Id;
+            
             CommentsThreadId = comment.CommentsThreadId;
+            
             DateTime = comment.DateTime;
+            
             Body = parseMd ? Markdown.ToHtml(comment.Body.Trim()) : comment.Body.Trim();
+            
             Author = new UserSimpleDTO(config, comment.Author);
         }
     }
