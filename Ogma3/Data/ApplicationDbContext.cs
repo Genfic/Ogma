@@ -46,7 +46,6 @@ namespace Ogma3.Data
         public DbSet<Club> Clubs { get; set; }
         public DbSet<ClubMember> ClubMembers { get; set; }
         public DbSet<ClubThread> ClubThreads { get; set; }
-        public DbSet<ClubThreadComment> ClubThreadComments { get; set; }
         
         
         // Secondary
@@ -233,19 +232,13 @@ namespace Ogma3.Data
                 ent.HasOne(ct => ct.Author)
                     .WithMany()
                     .OnDelete(DeleteBehavior.SetNull);
-                ent.HasMany(ct => ct.Comments)
-                    .WithOne()
+                ent.HasOne(b => b.CommentsThread)
+                    .WithOne(ct => ct.ClubThread)
+                    .HasForeignKey<CommentsThread>(ct => ct.ClubThreadId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
             
-            // Club thread comments
-            builder.Entity<ClubThreadComment>(ent =>
-            {
-                ent.HasOne(ctc => ctc.Author)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.SetNull);
-            });
-
+            
             
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();

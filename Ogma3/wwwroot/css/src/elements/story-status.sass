@@ -1,3 +1,5 @@
+@use "../vars" as v
+
 .story-status
   display: flex
   align-items: center
@@ -10,11 +12,10 @@
   padding: 4px
   margin: 4px
   
-  border: 1px solid rgba(0, 0, 0, .7)
-  color: rgba(0, 0, 0, .7)
+  border: 1px solid v.$foreground-75
+  color: v.$foreground
   &:hover
     opacity: 0.9
-    color: rgba(0, 0, 0, .8)
   
   
   &.inprogress

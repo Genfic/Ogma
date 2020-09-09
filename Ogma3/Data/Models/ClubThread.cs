@@ -23,6 +23,6 @@ namespace Ogma3.Data.Models
         [Required] 
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
-        public ICollection<ClubThreadComment> Comments { get; set; }
+        public CommentsThread CommentsThread { get; set; }
     }
 }

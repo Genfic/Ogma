@@ -46,6 +46,8 @@
         <link rel="stylesheet" href="@( $"~/css/{theme}.min.css" )" asp-append-version="true"/>
     }
     
+    <link id="theme-ph">
+    
     <link rel="stylesheet" href="~/css/style.min.css" asp-append-version="true">
     
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&display=swap" rel="stylesheet">
@@ -63,32 +65,15 @@
 <body>
 
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
-                Ogma
-                <version color="#ff0000" text="α"></version>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex">
-                <ul class="navbar-nav flex-grow-1">
+    <nav id="top-nav">
+        
+        <a class="navbar-brand" asp-area="" asp-page="/Index">
+            Ogma
+            <version color="#ff0000" text="α"></version>
+        </a>
 
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Stories/Index">Stories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Blog/Index">Blogs</a>
-                    </li>
+        <partial name="_LoginPartial"/>
 
-                </ul>
-                
-                <partial name="_LoginPartial" />
-                
-            </div>
-        </div>
     </nav>
 </header>
 
@@ -98,6 +83,9 @@
 </noscript>
 
 <div class="container" id="site-content">
+    
+    <partial name="_SubNavigation"/>
+    
     <main role="main" class="pb-3" id="app">
         @RenderBody()
     </main>
@@ -108,18 +96,20 @@
 <script src="//cdn.jsdelivr.net/npm/dayjs@1.8.26/dayjs.min.js" integrity="sha256-vhr7lMQ7DPtWka5o4LbDYinKsFd2S9h1425NmzxeX0Q=" crossorigin="anonymous"></script>    
 <script src="//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
 
-    @if (ViewData["use_bootstrap"] == null)
-    {
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    }
+@if (ViewData["use_bootstrap"] == null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+}
+
+<script src="~/js/dist/themeswap.min.js" asp-append-version="true"></script>
     
-    @await RenderSectionAsync("Scripts", required: false)
-    @Html.RenderResources()
-    
-    <script>
-    (_=>{axios.post('@Url.RouteUrl(nameof(UserActivityController))').catch(console.error);})()
-    </script>
+@await RenderSectionAsync("Scripts", required: false)
+@Html.RenderResources()
+
+<script>
+(_=>{axios.post('@Url.RouteUrl(nameof(UserActivityController))').catch(console.error);})()
+</script>
     
 </body>
 </html>

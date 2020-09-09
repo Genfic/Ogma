@@ -6,7 +6,7 @@ namespace Ogma3.Services.TagHelpers
 {
     public class IconTagHelper : TagHelper
     {
-        public string Icon { get; set; }
+        public string Icon { get; set; } = "bug_report";
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {

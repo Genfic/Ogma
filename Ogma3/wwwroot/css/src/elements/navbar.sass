@@ -1,0 +1,56 @@
+@use "../vars" as v
+@use "../mixins/focus" as f
+
+nav#top-nav
+  display: flex
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: v.$nav-height
+  z-index: 99999
+  padding: .25rem 4rem
+  
+  background-color: v.$background
+  border-bottom: 1px solid v.$foreground-50
+  @media screen and (max-width: v.$mq-mobile)
+    padding: .25rem 2rem
+    
+  &.bottom
+    bottom: 0
+    
+  & .navbar-brand
+    display: flex
+    align-items: center
+    justify-content: center
+    color: v.$foreground-75
+    margin: 0 auto 0 0
+    padding: 0
+    +f.focus
+    
+  & .navbar-nav
+    display: flex
+    flex-direction: row
+    
+    &>.nav-item
+      padding: 0
+      display: flex
+      align-items: center
+      justify-content: center
+      color: v.$foreground-75
+      &:hover
+        color: v.$foreground
+        background-color: v.$accent-10
+      
+      &>.nav-link
+        padding: 0 .5rem
+        +f.focus
+          
+        &.light
+          color: v.$foreground-75
+          
+        &.user
+          &>.name
+            color: v.$foreground-75
+            @media screen and (max-width: v.$mq-mobile)
+              display: none

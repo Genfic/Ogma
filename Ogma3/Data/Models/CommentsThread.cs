@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 
 namespace Ogma3.Data.Models
@@ -14,5 +16,7 @@ namespace Ogma3.Data.Models
         public long? ChapterId { get; set; }
         public Blogpost? Blogpost { get; set; }
         public long? BlogpostId { get; set; }
+        public ClubThread? ClubThread { get; set; }
+        public long? ClubThreadId { get; set; }
     }
 }

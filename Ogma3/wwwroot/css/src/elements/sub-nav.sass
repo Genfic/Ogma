@@ -1,0 +1,29 @@
+@use "../vars" as v
+@use "../mixins/active-border" as ab
+@use "../mixins/focus" as f
+
+#sub-nav
+  display: flex
+  justify-content: center
+  width: 100%
+  padding: 1rem 0
+  margin-bottom: 2rem
+  border-bottom: 1px solid v.$foreground-50
+
+  &>.nav-link
+    display: flex
+    margin: 0 .5rem
+    flex-direction: column
+    align-items: center
+    +ab.active-border
+    +f.focus
+    &:hover
+      background-color: v.$accent-10
+    
+    &>.material-icons-outlined
+      font-size: 2rem
+      color: v.$foreground-75
+      
+    &>.name
+      font-size: 1.2rem
+      color: v.$foreground-75

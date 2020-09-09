@@ -45,3 +45,29 @@ Array.prototype.pushUnique = function (element) {
     if (this.includes(element)) return;
     this.push(element);
 }
+
+/**
+ * Reads cookie value by name
+ * @param {String} name Name of the cookie to get value from
+ * @returns {String} Returns the value of the cookie
+ */
+function getCookieValue(name) {
+    let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return b ? b.pop() : '';
+}
+
+/**
+ * Sets cookie of name to a value
+ * @param {String} name Name of the cookie
+ * @param {String} value Value of the cookie
+ * @param {Date} expires Expiration date
+ * @param {Boolean} secure Whether the cookie is secure
+ * @param {String} sameSite SameSite setting
+ */
+function setCookie(name, value, expires = null, secure = false, sameSite = null) {
+    let cookie = name + '=' + value;
+    if (expires) cookie += '; expires=' + expires.toUTCString();
+    if (secure) cookie += '; secure=' + String(secure);
+    if (sameSite) cookie += '; samesite=' + sameSite;
+    document.cookie = cookie;
+}

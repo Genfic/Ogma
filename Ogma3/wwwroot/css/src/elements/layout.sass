@@ -1,13 +1,18 @@
+@use "../vars" as v
+
 body
   display: flex
   flex-direction: column
   align-items: center
   font-family: 'Raleway', sans-serif
+  background-color: v.$background
+  color: v.$foreground
   
   &>header
     width: 100%
   
   &>#site-content
+    margin-top: v.$nav-height
     padding: 15px
     flex: 1
     max-width: 960px

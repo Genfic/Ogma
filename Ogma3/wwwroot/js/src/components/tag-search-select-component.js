@@ -63,10 +63,10 @@ Vue.component('tag-search-select', {
         },
         filtered() {
             return this.options.filter(x => {
-                return (
-                        x.name.toLowerCase().includes(this.search.toLowerCase())
-                        || x.namespace.toLowerCase().includes(this.search.toLowerCase())
-                    )
+                let inName = x.name.toLowerCase().includes(this.search.toLowerCase());
+                let inNamespace = x.namespace && x.namespace.toLowerCase().includes(this.search.toLowerCase());
+                
+                return (inName || inNamespace)
                     && !this.selected.some(i => i.id === x.id)
                     && this.search.length > 0
             })
