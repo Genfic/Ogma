@@ -188,6 +188,7 @@ nav#top-nav .navbar-nav > .nav-item > .nav-link.user > .name {
   border-bottom: 1px solid var(--foreground-50);
 }
 #sub-nav > .nav-link {
+  position: relative;
   display: flex;
   margin: 0 0.5rem;
   flex-direction: column;
@@ -206,6 +207,16 @@ nav#top-nav .navbar-nav > .nav-item > .nav-link.user > .name {
 }
 #sub-nav > .nav-link:hover {
   background-color: var(--accent-10);
+}
+#sub-nav > .nav-link.active:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  left: 0;
+  bottom: 100%;
+  background-color: var(--accent);
+  border-radius: 5px 5px 0 0;
 }
 #sub-nav > .nav-link > .material-icons-outlined {
   font-size: 2rem;

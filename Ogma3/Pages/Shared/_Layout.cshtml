@@ -6,12 +6,10 @@
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaUserManager UserManager
 @inject IWebHostEnvironment Env
-
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
     var theme = value ?? "light";
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,11 +52,15 @@
 
     @if (Env.IsDevelopment())
     {
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
+                asp-fallback-src="~/lib/vue/vue.js"
+                asp-fallback-test="window.Vue"></script>
     }
     else
     {
-        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"
+                asp-fallback-src="~/lib/vue/vue.min.js"
+                asp-fallback-test="window.Vue"></script>
     }
     <script src="~/js/dist/site.min.js" asp-append-version="true"></script>
 </head>
@@ -83,18 +85,21 @@
 </noscript>
 
 <div class="container" id="site-content">
-    
-    <partial name="_SubNavigation"/>
-    
     <main role="main" class="pb-3" id="app">
         @RenderBody()
     </main>
 </div>
 
-<partial name="_Footer"></partial>
+<partial name="_Footer" />
     
-<script src="//cdn.jsdelivr.net/npm/dayjs@1.8.26/dayjs.min.js" integrity="sha256-vhr7lMQ7DPtWka5o4LbDYinKsFd2S9h1425NmzxeX0Q=" crossorigin="anonymous"></script>    
-<script src="//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/dayjs@1.8.35/dayjs.min.js" 
+        crossorigin="anonymous"
+        asp-fallback-test="window.dayjs"
+        asp-fallback-src="~/lib/dayjs.min.js"></script>    
+<script src="//cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js" 
+        crossorigin="anonymous"
+        asp-fallback-test="window.axios"
+        asp-fallback-src="~/lib/axios.min.js"></script>
 
 @if (ViewData["use_bootstrap"] == null)
 {

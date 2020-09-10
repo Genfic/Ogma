@@ -11,6 +11,7 @@
   border-bottom: 1px solid v.$foreground-50
 
   &>.nav-link
+    position: relative
     display: flex
     margin: 0 .5rem
     flex-direction: column
@@ -19,7 +20,18 @@
     +f.focus
     &:hover
       background-color: v.$accent-10
-    
+      
+    &.active
+      &:before
+        content: ''
+        position: absolute
+        width: 100%
+        height: 5px
+        left: 0
+        bottom: 100%
+        background-color: v.$accent
+        border-radius: 5px 5px 0 0
+
     &>.material-icons-outlined
       font-size: 2rem
       color: v.$foreground-75

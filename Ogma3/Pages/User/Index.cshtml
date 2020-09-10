@@ -6,7 +6,7 @@
     ViewData["Tab"] = "Profile";
 }
 
-<partial name="_ProfileBar" model="Model.ProfileBar"></partial>
+<partial name="_ProfileBar" model="Model.ProfileBar" />
 
 @if (!string.IsNullOrEmpty(Model.Bio))
 {
@@ -17,4 +17,4 @@
     <hr>
 }
 
-<partial name="_Comments" model="@Model.CommentsThread"></partial>
+<partial name="_Comments" model="@Model.CommentsThread" />

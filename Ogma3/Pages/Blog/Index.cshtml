@@ -5,7 +5,10 @@
 
 @{
     ViewData["Title"] = "Blogpost search";
+    ViewData["ActivePage"] = "Blogs";
 }
+
+<partial name="_SubNavigation" />
 
 <form id="search" class="search" method="GET">
     <label for="title">Query</label>
@@ -29,7 +32,7 @@
 else
 {
     foreach (var post in Model.Posts) {
-        <partial name="_BlogpostCard" model="@post"></partial>
+        <partial name="_BlogpostCard" model="@post" />
     }
     
     if (Model.PostsCount > Model.PerPage)

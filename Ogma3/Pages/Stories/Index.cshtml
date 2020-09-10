@@ -1,13 +1,15 @@
 @page
 @using System.Text.Json
 @using Ogma3.Data.Enums
-@using Ogma3.Services
 @using Ogma3.Api.V1
 @model Ogma3.Pages.Stories.IndexModel
 
 @{
     ViewData["Title"] = "Browse stories";
+    ViewData["ActivePage"] = "Stories";
 }
+
+<partial name="_SubNavigation" />
 
 <form id="search" class="search" method="GET" v-on:submit.prevent="submit($event)">
     

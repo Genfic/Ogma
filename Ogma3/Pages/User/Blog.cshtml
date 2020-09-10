@@ -6,7 +6,7 @@
     ViewData["Tab"] = "Blog";
 }
 
-<partial name="_ProfileBar" model="Model.ProfileBar"></partial>
+<partial name="_ProfileBar" model="Model.ProfileBar" />
 
 @if (Model.IsCurrentUser)
 {
@@ -23,7 +23,7 @@
 else
 {
     @foreach (var post in Model.Posts) {
-        <partial name="_BlogpostCard" model="@post"></partial>
+        <partial name="_BlogpostCard" model="@post" />
     }
     
     @if (Model.ProfileBar.BlogpostsCount > Model.PerPage)

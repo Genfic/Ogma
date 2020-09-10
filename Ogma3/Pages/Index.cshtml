@@ -4,7 +4,10 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    ViewData["ActivePage"] = "Home";
 }
+
+<partial name="_SubNavigation" />
 
 <div id="quote" class="quote active-border">
     <button class="refresh" v-on:click="fetch">
@@ -36,7 +39,7 @@
         <div>
             @foreach (var story in Model.TopStories)
             {
-                <partial name="Shared/_StoryCard" model="@story"/>
+                <partial name="Shared/_StoryCard" model="@story" />
             }
         </div>
     </div>
@@ -48,7 +51,7 @@
         <div>
             @foreach (var story in Model.RecentStories)
             {
-                <partial name="Shared/_StoryCard" model="@story"/>
+                <partial name="Shared/_StoryCard" model="@story" />
             }
         </div>
     </div>

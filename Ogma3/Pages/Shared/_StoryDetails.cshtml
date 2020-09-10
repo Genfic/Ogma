@@ -51,7 +51,7 @@
         </div>
 
         <div class="tags" itemprop="keywords">
-            <partial name="_StoryStatus" model="@Model.Status"></partial>
+            <partial name="_StoryStatus" model="@Model.Status" />
             @foreach (var t in Model.Tags)
             {
                 if (t.Namespace is null)
