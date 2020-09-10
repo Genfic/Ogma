@@ -79,31 +79,7 @@
             <partial name="Shared/_StoryCard" model="@story"/>
         }
         
-        if (Model.StoriesCount > Model.PerPage)
-        {
-            <div class="pagination">
-                <a class="prev button" href="?page=@(Math.Max(1, Model.PageNumber - 1))">Previous</a>
-                @if (Model.PageNumber > 5)
-                {
-                    <div class="ph button">...</div>
-                }
-                @for (var i = 1; i <= (int)Math.Ceiling((double)Model.StoriesCount / Model.PerPage); i++)
-                {
-                    if (i >= Model.PageNumber - 4 && i <= Math.Max(Model.PageNumber, 5))
-                    {
-                        <a href="?page=@i"
-                           class="page button @(i == Model.PageNumber ? "active" : "")">
-                            @i
-                        </a>
-                    }
-                }
-                @if (Model.StoriesCount / Model.PerPage > 5 && Model.PageNumber != Model.StoriesCount / Model.PerPage)
-                {
-                    <div class="ph button">...</div>
-                }
-                <a class="next button" href="?page=@(Math.Min(Model.PageNumber + 1, (int)Math.Ceiling((double)Model.StoriesCount / Model.PerPage)))">Next</a>
-            </div>
-        }
+        <partial name="_Pagination" model="Model.PaginationModel"/>
     }
 </div>
 

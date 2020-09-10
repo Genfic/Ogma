@@ -16,16 +16,17 @@
     </a>
 }
 
-<ul class="my-list">
-    @foreach (var story in Model.Stories)
-    {
-        <li class="item">
-            <partial name="Shared/_StoryCard" model="story"/>
-        </li>
-    }
-</ul>
 
 @if (Model.Stories.Count <= 0)
 {
     <h1>No stories found</h1>
+}
+else
+{
+    @foreach (var story in Model.Stories)
+    {
+        <partial name="Shared/_StoryCard" model="story"/>
+    }
+    
+    <partial name="_Pagination" model="Model.PaginationModel"/>
 }

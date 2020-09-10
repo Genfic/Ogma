@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,29 +9,27 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.Stories
 {
     public class IndexModel : PageModel
     {
         private ApplicationDbContext _context;
-
-        public List<Rating> Ratings { get; set; }
-        public List<Story> Stories { get; set; }
-        public int StoriesCount { get; set; }
-
-        public IEnumerable<long> Tags { get; set; }
-        
-        public int PageNumber { get; set; }
-        public readonly int PerPage = 25;
-        public EStorySortingOptions SortBy { get; set; }
-        public string SearchBy { get; set; }
-        public long? Rating { get; set; }
-        
         public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        public List<Rating> Ratings { get; set; }
+        public List<Story> Stories { get; set; }
+        public IEnumerable<long> Tags { get; set; }
+        public EStorySortingOptions SortBy { get; set; }
+        public string SearchBy { get; set; }
+        public long? Rating { get; set; }
+
+        private const int PerPage = 25;
+        public PaginationModel PaginationModel { get; set; }
         
         public async Task OnGetAsync(
             [FromQuery] IList<long> tags,
@@ -45,7 +42,6 @@ namespace Ogma3.Pages.Stories
             SearchBy = q;
             SortBy = sort;
             Rating = rating;
-            PageNumber = page;
             Tags = tags;
             
             // Load ratings
@@ -77,7 +73,7 @@ namespace Ogma3.Pages.Stories
             }
             
             // Count stories at this stage
-            StoriesCount = await query.CountAsync();
+            var storiesCount = await query.CountAsync();
             
             // Sort
             query = sort switch
@@ -101,6 +97,14 @@ namespace Ogma3.Pages.Stories
                 .Take(PerPage)
                 .AsNoTracking()
                 .ToListAsync();
+            
+            // Prepare pagination
+            PaginationModel = new PaginationModel
+            {
+                PerPage = PerPage,
+                ItemCount = storiesCount,
+                CurrentPage = page
+            };
         }
 
     }

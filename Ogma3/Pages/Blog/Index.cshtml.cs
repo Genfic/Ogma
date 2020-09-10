@@ -9,29 +9,27 @@ using Castle.Core.Internal;
 using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.Blog
 {
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        public IList<Blogpost> Posts { get;set; }
-        public int PostsCount { get; set; }
-        
-        public readonly int PerPage = 25;
-
-        public string SearchBy { get; set; }
-        public EBlogpostSortingOptions SortBy { get; set; }
-        public int PageNumber { get; set; }
-
         public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }
+        
+        public IList<Blogpost> Posts { get;set; }
+        public string SearchBy { get; set; }
+        public EBlogpostSortingOptions SortBy { get; set; }
+
+        private const int PerPage = 25;
+        public PaginationModel PaginationModel { get; set; }
 
         public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
         {
-            PageNumber = page;
             SearchBy = q;
             SortBy = sort;
             
@@ -59,7 +57,7 @@ namespace Ogma3.Pages.Blog
             }
             
             // Save post count at this stage
-            PostsCount = await query.CountAsync();
+            var postsCount = await query.CountAsync();
             
             // Sort
             query = sort switch
@@ -80,6 +78,14 @@ namespace Ogma3.Pages.Blog
                 .Take(PerPage)
                 .AsNoTracking()
                 .ToListAsync();
+            
+            // Prepare pagination model
+            PaginationModel = new PaginationModel
+            {
+                PerPage = PerPage,
+                ItemCount = postsCount,
+                CurrentPage = page
+            };
             
             return Page();
         }
