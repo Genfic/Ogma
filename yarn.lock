@@ -28,6 +28,13 @@
     normalize-path "^2.0.1"
     through2 "^2.0.3"
 
+"@hail2u/css-mqpacker@https://github.com/hail2u/node-css-mqpacker":
+  version "8.0.1"
+  resolved "https://github.com/hail2u/node-css-mqpacker#ffa44669d19e5cb586a279e6cb651189d96a2d8b"
+  dependencies:
+    minimist "^1.2.5"
+    postcss "^7.0.32"
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"

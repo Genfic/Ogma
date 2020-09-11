@@ -3,11 +3,9 @@
 @model Ogma3.Data.Models.Story
 
 <div class="story-card">
-    @if (Model.Cover != null)
-    {
-         <cdn-img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"></cdn-img>
-    }
 
+    <cdn-img class="image" src="@Model.Cover" alt="@Model.Title" loading="lazy" width="160" height="160"></cdn-img>
+    
     <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
         <img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="@Model.Rating.Name" class="rating">
         <h3>@Model.Title</h3>

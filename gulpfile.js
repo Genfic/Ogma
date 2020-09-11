@@ -12,7 +12,7 @@ const browserSync = require('browser-sync').create();
 // CSS processors
 const autoprefixer = require('autoprefixer');
 const discard = require('postcss-discard-comments');
-const mqpacker = require('css-mqpacker');
+const mqpacker = require('@hail2u/css-mqpacker')
 const nano = require('cssnano');
 
 // JS processors
@@ -31,7 +31,7 @@ gulp.task('css', () => {
     const processors = [
         autoprefixer,
         discard({ removeAll: true }),
-        mqpacker,
+        mqpacker(),
         nano({ preset: 'default' })
     ];
 

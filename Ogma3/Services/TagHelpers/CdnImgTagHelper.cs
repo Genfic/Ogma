@@ -1,4 +1,5 @@
 using System;
+using Castle.Core.Internal;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,8 @@ namespace Ogma3.Services.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var url = _config["cdn"] + Src;
+            var src = Src.IsNullOrEmpty() ? "ph-250.png" : Src;
+            var url = _config["cdn"] + src.Trim('/');
 
             if (Width.HasValue) output.Attributes.SetAttribute("width", Width);
             if (Height.HasValue) output.Attributes.SetAttribute("height", Height);

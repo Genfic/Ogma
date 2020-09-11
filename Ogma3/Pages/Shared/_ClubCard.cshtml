@@ -1,0 +1,22 @@
+@using Utils.Extensions
+@using Microsoft.VisualStudio.Web.CodeGeneration
+@model Ogma3.Data.DTOs.ClubCardDTO
+
+<div class="club-card">
+    <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" width="160" height="160"></cdn-img>
+
+    <a asp-page="/Club" asp-route-id="@Model.Id" asp-route-slug="@Model.Name.Friendlify()" class="title">
+        <h3>@Model.Name</h3>
+    </a>
+
+    <markdown class="hook" preset="Basic">
+        @Model.Hook
+    </markdown>
+
+    <div class="info">
+        <div class="user-count">@Model.UserCount members</div>
+        <div class="thread-count">@Model.ThreadCount threads</div>
+        <div class="story-count">@Model.StoryCount stories</div>
+    </div>
+
+</div>

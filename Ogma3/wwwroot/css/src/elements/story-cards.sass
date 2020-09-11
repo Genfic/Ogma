@@ -1,4 +1,5 @@
 @use '../vars' as v
+@use "../mixins/active-border" as ab
 
 $title-height: 2rem
 
@@ -8,13 +9,13 @@ $title-height: 2rem
   grid-template-columns: 10rem 1fr
   grid-template-rows: auto auto 1fr auto auto
   grid-column-gap: .25rem
-  
-  border: 1px solid v.$foreground-25
   margin: .5rem 0 0
+  +ab.active-border
+  
   &:first-of-type
     margin: 0
+    
   &:hover
-    border-color: v.$foreground-50
     & .info
       border-color: v.$foreground-50
       
@@ -111,6 +112,7 @@ $title-height: 2rem
     &>*
       padding: 0 .25rem
       color: v.$foreground-75
+      cursor: default
       &:hover
         color: v.$foreground
     

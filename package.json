@@ -1,5 +1,6 @@
 {
 	"devDependencies": {
+		"@hail2u/css-mqpacker": "https://github.com/hail2u/node-css-mqpacker",
 		"autoprefixer": "^9.6.1",
 		"browser-sync": "^2.26.12",
 		"css-mqpacker": "^7.0.0",

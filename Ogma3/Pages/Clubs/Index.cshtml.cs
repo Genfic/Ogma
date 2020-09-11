@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.DTOs;
 using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.Clubs
@@ -20,13 +17,25 @@ namespace Ogma3.Pages.Clubs
             _context = context;
         }
 
-        public IList<Club> Club { get;set; }
+        public IList<ClubCardDTO> Clubs { get;set; }
 
         public const int PerPage = 2;
         public PaginationModel PaginationModel { get; set; }
         public async Task OnGetAsync()
         {
-            Club = await _context.Clubs.ToListAsync();
+            Clubs = await _context.Clubs
+                .Select(c => new ClubCardDTO
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Hook = c.Hook,
+                    Icon = c.Icon,
+                    StoryCount = 0,
+                    ThreadCount = c.Threads.Count,
+                    UserCount = c.ClubMembers.Count
+                })
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

@@ -1,0 +1,49 @@
+@using System.Globalization
+@using Ogma3.Api.V1
+@using Ogma3.Services
+@model Ogma3.Data.DTOs.ClubBarDTO
+
+@{
+    var tab = (string) ViewData["Tab"];
+}
+
+<div class="club-bar" id="club-bar">
+    <div id="data-route" v-if="!route" data-route="@Url.RouteUrl(nameof(ClubJoinController))"></div>
+    <div id="data-id" v-if="!id" data-id="@Model.Id"></div>
+
+    <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130"></cdn-img>
+
+    <h1 class="name">@Model.Name</h1>
+
+    <time class="date" datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+        @Model.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+    </time>
+
+    <div class="info">
+        <div class="user-count">@Model.UserCount members</div>
+        <div class="thread-count">@Model.ThreadCount threads</div>
+        <div class="story-count">@Model.StoryCount stories</div>
+    </div>
+
+    <button class="button" :class="getClass" v-on:click="join">
+        {{ getText }}
+    </button>
+
+    <nav class="nav">
+        <a class="nav-item @(tab == "Home" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="">
+            Home
+        </a>
+        <a class="nav-item @(tab == "Members" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="">
+            Members
+        </a>
+        <a class="nav-item @(tab == "Forums" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="">
+            Forums
+        </a>
+        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="">
+            Stories
+        </a>
+    </nav>
+
+</div>
+
+@Html.Resource(@<script src="~/js/dist/club-bar.min.js" asp-append-version="true"></script>)

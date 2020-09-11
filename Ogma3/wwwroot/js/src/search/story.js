@@ -25,7 +25,6 @@ const search_vue = new Vue({
         }
     },
     mounted() {
-        console.log(document.getElementById('query'));
         this.els = {
             query: document.getElementById('query').value,
             rating: document.getElementById('rating').value,
