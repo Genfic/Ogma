@@ -24,5 +24,7 @@ namespace Ogma3.Data.Models
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public CommentsThread CommentsThread { get; set; }
+
+        public long ClubId { get; set; }
     }
 }

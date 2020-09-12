@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Pages.Shared;
 
@@ -10,9 +11,9 @@ namespace Ogma3.Pages.Clubs
 {
     public class IndexModel : PageModel
     {
-        private readonly Ogma3.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public IndexModel(Ogma3.Data.ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }

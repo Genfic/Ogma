@@ -29,7 +29,7 @@ namespace Ogma3.Data.Models
         
         [JsonIgnore]
         public ICollection<ClubMember> ClubMembers { get; set; }
-        
+
         [NotMapped]
         public IEnumerable<OgmaUser> Members
         {
@@ -43,6 +43,22 @@ namespace Ogma3.Data.Models
             }).ToList();
         }
 
+        [JsonIgnore]
+        public ICollection<ClubStory> ClubStories { get; set; }
+
+        [NotMapped]
+        public IEnumerable<Story> Stories
+        {
+            get => ClubStories == null || ClubStories.Count <= 0
+                ? new List<Story>() 
+                : ClubStories.Select(cs => cs.Story).ToList(); 
+            set => ClubStories = value.Select(s => new ClubStory
+            {
+                Story = s,
+                StoryId = s.Id
+            }).ToList();
+        }
+        
         public ICollection<ClubThread> Threads { get; set; }
         
     }

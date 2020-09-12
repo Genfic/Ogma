@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,13 +12,13 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200911233842_MoreClubFunctionality")]
+    partial class MoreClubFunctionality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:Enum:e_club_member_roles", "founder,admin,moderator,user")
                 .HasAnnotation("Npgsql:Enum:e_story_status", "in_progress,completed,on_hiatus,cancelled")
                 .HasAnnotation("Npgsql:PostgresExtension:uuid-ossp", ",,")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
@@ -247,6 +248,9 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(10000)")
                         .HasMaxLength(10000);
 
+                    b.Property<long?>("FounderId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Hook")
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
@@ -264,6 +268,8 @@ namespace Ogma3.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FounderId");
+
                     b.ToTable("Clubs");
                 });
 
@@ -274,12 +280,6 @@ namespace Ogma3.Migrations
 
                     b.Property<long>("MemberId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime>("MemberSince")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
 
                     b.HasKey("ClubId", "MemberId");
 
@@ -964,6 +964,14 @@ namespace Ogma3.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Club", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.OgmaUser", "Founder")
+                        .WithMany()
+                        .HasForeignKey("FounderId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.ClubMember", b =>

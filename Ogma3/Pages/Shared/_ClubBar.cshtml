@@ -8,15 +8,15 @@
 }
 
 <div class="club-bar" id="club-bar">
-    <div id="data-route" v-if="!route" data-route="@Url.RouteUrl(nameof(ClubJoinController))"></div>
-    <div id="data-id" v-if="!id" data-id="@Model.Id"></div>
+    <div id="data-route" data-route="@Url.RouteUrl(nameof(ClubJoinController))"></div>
+    <div id="data-id" data-id="@Model.Id"></div>
 
     <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130"></cdn-img>
 
     <h1 class="name">@Model.Name</h1>
 
     <time class="date" datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-        @Model.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+        Founded @Model.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
     </time>
 
     <div class="info">
@@ -24,9 +24,9 @@
         <div class="thread-count">@Model.ThreadCount threads</div>
         <div class="story-count">@Model.StoryCount stories</div>
     </div>
-
-    <button class="button" :class="getClass" v-on:click="join">
-        {{ getText }}
+    
+    <button class="button @(Model.IsMember ? "leave" : "join")" id="join-btn">
+        @(Model.IsMember ? "Leave club" : "Join club")
     </button>
 
     <nav class="nav">

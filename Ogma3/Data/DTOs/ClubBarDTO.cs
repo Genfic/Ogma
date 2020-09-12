@@ -13,5 +13,6 @@ namespace Ogma3.Data.DTOs
         public int UserCount { get; set; }
         public int ThreadCount { get; set; }
         public int StoryCount { get; set; }
+        public bool IsMember { get; set; }
     }
 }

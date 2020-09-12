@@ -1,0 +1,28 @@
+@page "{id}/{slug?}"
+@model Ogma3.Pages.Club.IndexModel
+
+@{
+    ViewData["Title"] = Model.ClubBar.Name;
+    ViewData["Tab"] = "Home";
+}
+
+<partial name="_ClubBar" model="@Model.ClubBar"/>
+
+<div class="thread-list">
+    @if (Model.Threads.Any())
+    {
+        foreach (var t in Model.Threads)
+        {
+            <partial name="_ThreadCard" model="t"/>
+        }
+    }
+    else
+    {
+        <div class="thread-card">No threads yet!</div>
+    }
+
+</div>
+
+<markdown class="desc" preset="All">
+    @Model.ClubBar.Description
+</markdown>

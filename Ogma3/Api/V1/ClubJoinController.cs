@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Api.V1
@@ -16,11 +17,9 @@ namespace Ogma3.Api.V1
     public class ClubJoinController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly OgmaUserManager _userManager;
 
-        public ClubJoinController(OgmaUserManager userManager, ApplicationDbContext context)
+        public ClubJoinController(ApplicationDbContext context)
         {
-            _userManager = userManager;
             _context = context;
         }
         
@@ -52,7 +51,9 @@ namespace Ogma3.Api.V1
             var member = new ClubMember
             {
                 ClubId = data.ClubId,
-                MemberId = uid
+                MemberId = uid,
+                Role = EClubMemberRoles.User,
+                MemberSince = DateTime.Now
             };
             
             // If no such member exists, add one
@@ -64,8 +65,16 @@ namespace Ogma3.Api.V1
             }
             else // If the member does exist, remove them
             {
-                _context.ClubMembers.Remove(member);
-                isMember = false;
+                // But only if it's not the founder
+                if (clubMember.Role != EClubMemberRoles.Founder)
+                {
+                    _context.ClubMembers.Remove(clubMember);
+                    isMember = false;
+                }
+                else
+                {
+                    isMember = true;
+                }
             }
 
             // Save

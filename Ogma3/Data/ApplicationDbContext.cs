@@ -46,6 +46,7 @@ namespace Ogma3.Data
         public DbSet<Club> Clubs { get; set; }
         public DbSet<ClubMember> ClubMembers { get; set; }
         public DbSet<ClubThread> ClubThreads { get; set; }
+        public DbSet<ClubStory> ClubStories { get; set; }
         
         
         // Secondary
@@ -209,11 +210,12 @@ namespace Ogma3.Data
             // Clubs
             builder.Entity<Club>(ent =>
             {
+                
                 ent.HasMany(c => c.Threads)
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             // Club members
             builder.Entity<ClubMember>(ent =>
             {
@@ -238,11 +240,23 @@ namespace Ogma3.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
             
+            // Club stories
+            builder.Entity<ClubStory>(ent =>
+            {
+                ent.HasKey(cs => new {cs.ClubId, cs.StoryId});
+                ent.HasOne(cs => cs.Club)
+                    .WithMany(c => c.ClubStories)
+                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(cs => cs.Story)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            
             
             
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();
-            
+            builder.HasPostgresEnum<EClubMemberRoles>();
             
             
             // Documents

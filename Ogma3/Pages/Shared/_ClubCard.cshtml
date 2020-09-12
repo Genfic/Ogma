@@ -5,7 +5,7 @@
 <div class="club-card">
     <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" width="160" height="160"></cdn-img>
 
-    <a asp-page="/Club" asp-route-id="@Model.Id" asp-route-slug="@Model.Name.Friendlify()" class="title">
+    <a asp-page="/Club/Index" asp-route-id="@Model.Id" asp-route-slug="@Model.Name.Friendlify()" class="title">
         <h3>@Model.Name</h3>
     </a>
 
