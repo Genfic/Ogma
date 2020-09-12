@@ -23,6 +23,26 @@ body > footer {
   display: flex;
 }
 
+.o-grid {
+  display: grid;
+  width: 100%;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+}
+@media screen and (max-width: 570px) {
+  .o-grid {
+    display: flex;
+    flex-direction: column;
+  }
+}
+.o-grid.two-columns {
+  grid-template-columns: 1fr 1fr;
+}
+.o-grid.three-columns {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 .active-border {
   border: 1px solid var(--foreground-25);
 }
@@ -632,23 +652,24 @@ ul.my-list > li.item:first-of-type {
 .comments-container > .comments {
   padding-top: 0.5rem;
 }
-.comments-container > .comments > .comment {
+
+.comment {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   padding: 0.5rem 0;
 }
-.comments-container > .comments > .comment:hover .author, .comments-container > .comments > .comment:hover .main {
+.comment:hover .author, .comment:hover .main {
   border-color: var(--foreground-75);
 }
-.comments-container > .comments > .comment.marked {
+.comment.marked {
   background: transparent linear-gradient(90deg, transparent 0%, var(--accent-25) 40%, var(--accent-25) 60%, transparent 100%);
   transition: background-color 100ms ease-in-out;
 }
-.comments-container > .comments > .comment.marked:hover {
+.comment.marked:hover {
   background: var(--accent-10) linear-gradient(90deg, transparent 0%, var(--accent-25) 40%, var(--accent-25) 60%, transparent 100%);
 }
-.comments-container > .comments > .comment > .author {
+.comment > .author {
   display: flex;
   flex-direction: column;
   flex: 0 0 6rem;
@@ -658,44 +679,50 @@ ul.my-list > li.item:first-of-type {
   background-color: var(--background);
 }
 @media screen and (max-width: 570px) {
-  .comments-container > .comments > .comment > .author {
+  .comment > .author {
     flex: 0 0 4rem;
     min-height: 75px;
   }
 }
-.comments-container > .comments > .comment > .author > .name {
+.comment > .author > .name {
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
   padding: 0 0.2rem;
   color: var(--foreground);
 }
-.comments-container > .comments > .comment > .author > .avatar {
+.comment > .author > .avatar {
   border-top: 1px solid var(--foreground-50);
 }
-.comments-container > .comments > .comment > .author > .role-tag {
+.comment > .author > .role-tag {
   margin: 0;
   border: none;
   border-top: 1px solid var(--foreground-50);
 }
-.comments-container > .comments > .comment > .main {
+.comment > .main {
   flex: 1;
   border: 1px solid var(--foreground-50);
   background-color: var(--background);
 }
-.comments-container > .comments > .comment > .main > .header {
+.comment > .main > .header {
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
+  padding-left: 0.5rem;
   color: var(--foreground-50);
 }
-.comments-container > .comments > .comment > .main > .header > *:hover {
+.comment > .main > .header > *:hover {
   color: var(--foreground-75);
 }
-.comments-container > .comments > .comment > .main > .header > .link {
+.comment > .main > .header > .link {
   color: var(--foreground-50);
 }
-.comments-container > .comments > .comment > .main > .body {
+.comment > .main > .header > .actions {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  padding: 0.1rem;
+}
+.comment > .main > .body {
   white-space: pre-line;
   margin: 0.5rem;
 }
@@ -1573,7 +1600,7 @@ form.search select:focus {
   grid-template-rows: auto 1fr auto;
   grid-auto-columns: 10rem 1fr;
   grid-column-gap: 0.25rem;
-  margin: 0.5rem 0 0;
+  margin: 0;
   border: 1px solid var(--foreground-25);
 }
 .club-card:hover {
@@ -1581,9 +1608,6 @@ form.search select:focus {
 }
 .club-card:focus {
   border-color: var(--accent);
-}
-.club-card:first-of-type {
-  margin: 0;
 }
 .club-card:hover > .info {
   border-color: var(--foreground-50);
@@ -1619,6 +1643,8 @@ form.search select:focus {
   grid-row: 2;
   grid-column: 2;
   margin: 2px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .club-card > .info {
   display: flex;
@@ -1754,6 +1780,111 @@ form.search select:focus {
 }
 .club-bar > .button.leave:hover {
   background-color: var(--red-50);
+}
+
+.thread-card {
+  display: grid;
+  height: 4rem;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr auto;
+  column-gap: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--foreground-25);
+}
+.thread-card:hover {
+  border-color: var(--foreground-50);
+}
+.thread-card:focus {
+  border-color: var(--accent);
+}
+.thread-card:first-child {
+  margin-top: 0;
+}
+.thread-card > .img {
+  grid-column: 1;
+  grid-row: 1/3;
+  height: 4rem;
+  width: 4rem;
+  object-fit: contain;
+}
+.thread-card > .title {
+  align-self: center;
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 500;
+  color: var(--foreground);
+}
+.thread-card > .title:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+}
+.thread-card > .meta {
+  display: flex;
+  grid-column: 2;
+  grid-row: 2;
+}
+.thread-card > .meta > .author {
+  margin-right: 1rem;
+  color: var(--foreground-75);
+}
+.thread-card > .meta > .author:hover {
+  color: var(--foreground);
+}
+.thread-card > .meta > .date {
+  color: var(--foreground-50);
+}
+.thread-card > .meta > .date:hover {
+  color: var(--foreground-75);
+}
+.thread-card > .comment-count {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  grid-column: 3;
+  grid-row: 1/3;
+  place-self: center;
+  padding: 0.5rem;
+}
+.thread-card > .comment-count > .icon {
+  color: var(--foreground-75);
+  margin-right: 0.25rem;
+}
+
+.thread-details {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  grid-template-rows: auto auto auto 1fr;
+}
+.thread-details > .title {
+  grid-row: 1;
+  grid-column: 1/3;
+  background-color: limegreen;
+}
+.thread-details > .author {
+  grid-row: 2;
+  grid-column: 1;
+  background-color: red;
+}
+.thread-details > .role-tag {
+  grid-row: 3;
+  grid-column: 1;
+  background-color: yellow;
+}
+.thread-details > .avatar {
+  grid-row: 4;
+  grid-column: 1;
+  background-color: deepskyblue;
+}
+.thread-details > .header {
+  grid-row: 2;
+  grid-column: 2;
+  background-color: deeppink;
+}
+.thread-details > .body {
+  grid-row: 3/5;
+  grid-column: 2;
+  background-color: darkblue;
 }
 
 .md p {

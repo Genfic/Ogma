@@ -1,11 +1,12 @@
 @using System.Globalization
+@using Utils.Extensions
 @model Ogma3.Data.Models.Blogpost
 
 <div class="blogpost-details">
     <h1 class="title">@Model.Title</h1>
     
     <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-        @Model.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+        @Model.PublishDate.FormatDateWithDaySuffix()
     </time>
     
     @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))

@@ -40,29 +40,43 @@
     }
 
     <div class="comments">
-        <div :id="`comment-${c.key+1}`" 
+        
+        <div :id="`comment-${c.key+1}`"
              class="comment" :class="c.key+1 === highlight ? 'marked' : ''"
              v-for="c in visibleComments">
+            
             <div class="author">
+                
                 <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
+                
                 <div class="role-tag">
                     <span class="name">{{c.val.author.topRole.name}}</span>
                     <div class="bg" :style="{backgroundColor: c.val.author.topRole.color}"></div>
                 </div>
+                
                 <img :src="c.val.author.avatar" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
+                
             </div>
+            
             <div class="main">
+                
                 <div class="header">
+
                     <a class="link"
-                        :href="`#comment.${c.key+1}`"
-                        v-on:click="changeHighlight(c.key+1, $event)">
+                       :href="`#comment.${c.key+1}`"
+                       v-on:click="changeHighlight(c.key+1, $event)">
                         #{{ c.key+1 }}
                     </a>
+
                     <p class="sm-line"></p>
+
                     <time :datetime="c.val.dateTime" class="time">{{ date(c.val.dateTime) }}</time>
+                    
                 </div>
+
                 <div class="body" v-html="c.val.body"></div>
             </div>
+            
         </div>
     </div>
     

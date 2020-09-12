@@ -25,6 +25,7 @@ namespace Ogma3.Data.Models
 
         public CommentsThread CommentsThread { get; set; }
 
+        [Required]
         public long ClubId { get; set; }
     }
 }

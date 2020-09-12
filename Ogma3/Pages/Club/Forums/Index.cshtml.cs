@@ -12,7 +12,7 @@ using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 
-namespace Ogma3.Pages.Club
+namespace Ogma3.Pages.Club.Forums
 {
     public class IndexModel : PageModel
     {
@@ -26,9 +26,9 @@ namespace Ogma3.Pages.Club
         }
 
         public ClubBar ClubBar { get; set; }
-        public IList<ThreadCard> ThreadCards { get; set; }
-        
-        public async Task<IActionResult> OnGetAsync(long id, string? slug)
+        public IList<ThreadCard> ThreadCards { get;set; }
+
+        public async Task<IActionResult> OnGetAsync(long id)
         {
             var uid = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             ClubBar = await _clubRepo.GetClubBar(id, uid);
@@ -39,5 +39,6 @@ namespace Ogma3.Pages.Club
 
             return Page();
         }
+
     }
 }

@@ -1,0 +1,11 @@
+@page "/club/{clubId:long}/thread/{threadId:long}"
+@model Ogma3.Pages.Club.Forums.DetailsModel
+
+@{
+    ViewData["Title"] = $"{Model.ClubThread.Title}";
+    ViewData["Tab"] = "Forums";
+}
+
+<partial name="_ClubBar" model="@Model.ClubBar"/>
+
+<partial name="_ThreadDetails" model="@Model.ClubThread"/>

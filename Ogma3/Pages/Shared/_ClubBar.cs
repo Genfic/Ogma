@@ -1,8 +1,8 @@
 using System;
 
-namespace Ogma3.Data.DTOs
+namespace Ogma3.Pages.Shared
 {
-    public class ClubBarDTO
+    public class ClubBar
     {
         public long Id { get; set; }
         public string Name { get; set; }

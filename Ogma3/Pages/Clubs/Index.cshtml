@@ -2,19 +2,24 @@
 @model Ogma3.Pages.Clubs.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Clubs";
     ViewData["ActivePage"] = "Clubs";
 }
 
 <partial name="_SubNavigation" />
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<a class="btn btn-block btn-outline-primary" asp-page="Create"> 
+    <icon icon="add"></icon>
+    Create new club
+</a>
 
-@foreach (var club in Model.Clubs) {
-    <partial name="_ClubCard" model="@club"/>
-}
+<br>
+
+<div class="two-columns o-grid">
+    @foreach (var club in Model.Clubs) {
+        <partial name="_ClubCard" model="@club"/>
+    }
+</div>
 

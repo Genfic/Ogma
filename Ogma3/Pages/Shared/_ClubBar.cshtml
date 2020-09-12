@@ -1,7 +1,7 @@
 @using System.Globalization
 @using Ogma3.Api.V1
 @using Ogma3.Services
-@model Ogma3.Data.DTOs.ClubBarDTO
+@model ClubBar
 
 @{
     var tab = (string) ViewData["Tab"];
@@ -20,9 +20,9 @@
     </time>
 
     <div class="info">
-        <div class="user-count">@Model.UserCount members</div>
-        <div class="thread-count">@Model.ThreadCount threads</div>
-        <div class="story-count">@Model.StoryCount stories</div>
+        <div class="user-count">@Model.UserCount @(Model.UserCount == 1 ? "member" : "members")</div>
+        <div class="thread-count">@Model.ThreadCount @(Model.ThreadCount == 1 ? "thread" : "threads")</div>
+        <div class="story-count">@Model.StoryCount @(Model.StoryCount == 1 ?"story" : "stories")</div>
     </div>
     
     <button class="button @(Model.IsMember ? "leave" : "join")" id="join-btn">
@@ -30,16 +30,16 @@
     </button>
 
     <nav class="nav">
-        <a class="nav-item @(tab == "Home" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="">
+        <a class="nav-item @(tab == "Home" ? "active" : null)" asp-area="" asp-page="/Club/Index" asp-route-id="@Model.Id">
             Home
         </a>
-        <a class="nav-item @(tab == "Members" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="">
+        <a class="nav-item @(tab == "Members" ? "active" : null)" asp-area="" asp-page="/Club/Members" asp-route-id="@Model.Id">
             Members
         </a>
-        <a class="nav-item @(tab == "Forums" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="">
+        <a class="nav-item @(tab == "Forums" ? "active" : null)" asp-area="" asp-page="/Club/Forums/Index" asp-route-id="@Model.Id">
             Forums
         </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="">
+        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-id="@Model.Id">
             Stories
         </a>
     </nav>

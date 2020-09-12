@@ -1,22 +1,30 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Services;
+using Ogma3.Services.Attributes;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Clubs
 {
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private OgmaUserManager _userManager;
+        private readonly OgmaUserManager _userManager;
+        private readonly FileUploader _uploader;
 
-        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager)
+        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager, FileUploader uploader)
         {
             _context = context;
             _userManager = userManager;
+            _uploader = uploader;
         }
 
         public IActionResult OnGet()
@@ -25,7 +33,26 @@ namespace Ogma3.Pages.Clubs
         }
 
         [BindProperty]
-        public Data.Models.Club Club { get; set; }
+        public InputModel Input { get; set; }
+        
+        public class InputModel
+        {
+                [Required]
+                [MinLength(CTConfig.CClub.MinNameLength)]
+                [MaxLength(CTConfig.CClub.MaxNameLength)]
+                public string Name { get; set; }
+                
+                [MaxLength(CTConfig.CClub.MaxHookLength)]
+                public string Hook { get; set; }
+                
+                [MaxLength(CTConfig.CClub.MaxDescriptionLength)]
+                public string Description { get; set; }
+                
+                [DataType(DataType.Upload)]
+                [MaxFileSize(CTConfig.CStory.CoverMaxWeight)]
+                [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
+                public IFormFile Icon { get; set; }
+        }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -38,15 +65,33 @@ namespace Ogma3.Pages.Clubs
 
             var currentUser = await _userManager.GetUserAsync(User);
             
-            Club.ClubMembers.Add(new ClubMember
+            var clubMember = new ClubMember
             {
                 Member = currentUser,
                 Role = EClubMemberRoles.Founder,
                 MemberSince = DateTime.Now
-            });
+            };
 
-            await _context.Clubs.AddAsync(Club);
+            var club = new Data.Models.Club
+            {
+                Name = Input.Name,
+                Hook = Input.Hook,
+                Description = Input.Description,
+                CreationDate = DateTime.Now,
+                ClubMembers = new List<ClubMember> { clubMember }
+            };
+
+            await _context.Clubs.AddAsync(club);
             await _context.SaveChangesAsync();
+            
+            if (Input.Icon != null && Input.Icon.Length > 0)
+            {
+                var file = await _uploader.Upload(Input.Icon, "club-icons", $"{club.Id}-{club.Name.Friendlify()}");
+                club.IconId = file.FileId;
+                club.Icon = file.Path;
+                // Final save
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToPage("./Index");
         }

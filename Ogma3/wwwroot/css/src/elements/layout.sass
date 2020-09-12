@@ -21,3 +21,19 @@ body
     width: 100%
     height: 60px
     display: flex
+    
+.o-grid
+  display: grid
+  width: 100%
+  gap: .25rem
+  padding: 0
+  margin: 0
+  @media screen and (max-width: v.$mq-mobile)
+    display: flex
+    flex-direction: column
+  
+  &.two-columns
+    grid-template-columns: 1fr 1fr
+    
+  &.three-columns
+    grid-template-columns: 1fr 1fr 1fr

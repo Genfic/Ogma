@@ -9,9 +9,9 @@
 <partial name="_ClubBar" model="@Model.ClubBar"/>
 
 <div class="thread-list">
-    @if (Model.Threads.Any())
+    @if (Model.ThreadCards.Any())
     {
-        foreach (var t in Model.Threads)
+        foreach (var t in Model.ThreadCards)
         {
             <partial name="_ThreadCard" model="t"/>
         }
@@ -22,6 +22,8 @@
     }
 
 </div>
+
+<hr>
 
 <markdown class="desc" preset="All">
     @Model.ClubBar.Description

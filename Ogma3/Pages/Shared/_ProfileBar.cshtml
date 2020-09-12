@@ -1,4 +1,5 @@
 @using System.Globalization
+@using Humanizer
 @using Utils
 @model Ogma3.Data.DTOs.ProfileBarDTO
 
@@ -37,8 +38,9 @@
                 
                 <div class="time">
                     <span>Last seen</span>
-                    <time datetime="@Model.LastActive.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                        @Model.LastActive.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+                    <time datetime="@Model.LastActive.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
+                          title="@Model.LastActive.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture)">
+                        @Model.LastActive.Humanize(culture: CultureInfo.InvariantCulture)
                     </time>
                 </div>
                 

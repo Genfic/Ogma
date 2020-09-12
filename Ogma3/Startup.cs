@@ -43,6 +43,8 @@ namespace Ogma3
             
             // Repositories
             services.AddScoped<ProfileBarRepository>();
+            services.AddScoped<ClubRepository>();
+            services.AddScoped<ThreadRepository>();
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
