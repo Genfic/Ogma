@@ -19,6 +19,11 @@ namespace Ogma3.Data.Enums
         [Display(Name="Words ↑")]
         WordsAscending,
         [Display(Name="Words ↓")]
-        WordsDescending
+        WordsDescending,
+        
+        [Display(Name="Score ↑")]
+        ScoreAscending,
+        [Display(Name="Score ↓")]
+        ScoreDescending
     }
 }

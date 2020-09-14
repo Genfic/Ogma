@@ -2,36 +2,36 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages
 {
     
     public class StoryModel : PageModel
     {
-        private readonly Data.ApplicationDbContext _context;
+        private readonly UserRepository _userRepo;
+        private readonly StoriesRepository _storiesRepo;
 
-        public StoryModel(Data.ApplicationDbContext context)
+        public StoryModel(UserRepository userRepo, StoriesRepository storiesRepo)
         {
-            _context = context;
+            _userRepo = userRepo;
+            _storiesRepo = storiesRepo;
         }
 
-        public Story Story { get; set; }
+        public StoryDetails Story { get; set; }
+        public ProfileBar ProfileBar { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            Story = await _context.Stories
-                .Include(s => s.Author)
-                .Include(s => s.StoryTags)
-                    .ThenInclude(st => st.Tag)
-                        .ThenInclude(t => t.Namespace)
-                .Include(s => s.Rating)
-                .Include(s => s.Chapters)
-                .Include(s => s.Votes)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == id);
+            Story = await _storiesRepo.GetStoryDetails(id);
 
             if (Story == null) return NotFound();
+            
+            ProfileBar = await _userRepo.GetProfileBar(Story.AuthorId);
             
             return Page();
         }

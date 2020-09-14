@@ -10,7 +10,7 @@
 
 @if (Model.ClubBar.IsMember)
 {
-    <a class="btn btn-block btn-outline-primary" asp-page="Create"> 
+    <a class="btn btn-block btn-outline-primary" asp-page="Create" asp-route-id="@Model.ClubBar.Id"> 
         <icon icon="add"></icon>
         Create new thread
     </a>

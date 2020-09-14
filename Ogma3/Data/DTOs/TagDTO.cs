@@ -11,7 +11,7 @@ namespace Ogma3.Data.DTOs
         public string Description { get; set; }
         public string Namespace { get; set; }
         public string Color { get; set; }
-        public string Rgba { get; set; }
+        // public string Rgba { get; set; }
 
         public static TagDTO FromTag(Tag tag)
         {
@@ -24,13 +24,12 @@ namespace Ogma3.Data.DTOs
                 Namespace = tag.Namespace?.Name,
                 Color = tag.Namespace?.Color
             };
-            
-            if (tag.Namespace?.Color != null)
-            {
-                var color = tag.Namespace.Color.ParseHexColor();
-                var csColor = System.Drawing.Color.FromArgb(150, color.R, color.G, color.B).ToCommaSeparatedCss();
-                dto.Rgba = $"rgba({csColor})";
-            }
+
+            // if (tag.Namespace?.Color == null) return dto;
+            //
+            // var color = tag.Namespace.Color.ParseHexColor();
+            // var csColor = System.Drawing.Color.FromArgb(150, color.R, color.G, color.B).ToCommaSeparatedCss();
+            // dto.Rgba = $"rgba({csColor})";
 
             return dto;
         }

@@ -21,7 +21,7 @@ namespace Ogma3.Services.TagHelpers
             _generator = generator;
         }
 
-        public Tag Tag { get; set; }
+        public TagDTO Tag { get; set; }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -32,11 +32,11 @@ namespace Ogma3.Services.TagHelpers
             output.AddClass("tag", NullHtmlEncoder.Default);
             
             output.Attributes.Add("href", href);
-            output.Attributes.Add("title", Tag.Namespace?.Name);
+            output.Attributes.Add("title", Tag.Namespace);
 
-            output.Content.AppendHtml(Tag.Namespace?.Color == null
+            output.Content.AppendHtml(Tag.Color == null
                 ? "<div class='bg'></div>"
-                : $@"<div class='bg' style='background-color: #{Tag.Namespace.Color.Trim('#')}'></div>");
+                : $@"<div class='bg' style='background-color: #{Tag.Color.Trim('#')}'></div>");
 
             output.Content.AppendHtml($@"<span class='name'>{Tag.Name}</span>");
             

@@ -11,24 +11,25 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.User
 {
     public class LibraryModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private ProfileBarRepository _profileBarRepo;
+        private UserRepository _userRepo;
 
-        public LibraryModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
+        public LibraryModel(ApplicationDbContext context, UserRepository userRepo)
         {
             _context = context;
-            _profileBarRepo = profileBarRepo;
+            _userRepo = userRepo;
         }
 
         public bool IsCurrentUser { get; set; }
         public List<Icon> Icons { get; set; }
         public InputModel Input { get; set; }
-        public ProfileBarDTO ProfileBar { get; set; }
+        public ProfileBar ProfileBar { get; set; }
 
         public class InputModel
         {
@@ -55,7 +56,7 @@ namespace Ogma3.Pages.User
 
         public async Task<IActionResult> OnGetAsync(string name)
         {
-            ProfileBar = await _profileBarRepo.GetAsync(name.ToUpper());
+            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
             if (ProfileBar == null) return NotFound();
 
             IsCurrentUser = ProfileBar.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);

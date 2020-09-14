@@ -6,61 +6,28 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly ApplicationDbContext _context;
+        private readonly StoriesRepository _storiesRepo;
 
-        public List<Story> RecentStories { get; set; }
-        public List<Story> TopStories { get; set; }
-
-        public object Counts { get; set; }
-
-        public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
+        public IndexModel(StoriesRepository storiesRepo)
         {
-            _context = context;
-            _logger = logger;
+            _storiesRepo = storiesRepo;
         }
 
+        public List<StoryCard> RecentStories { get; set; }
+        public List<StoryCard> TopStories { get; set; }
         public async Task OnGetAsync()
         {
-            RecentStories = await _context.Stories
-                .Take(10)
-                .OrderByDescending(s => s.ReleaseDate)
-                .Include(s => s.StoryTags)
-                    .ThenInclude(st => st.Tag)
-                        .ThenInclude(t => t.Namespace)
-                .Include(s => s.Rating)
-                .Include(s => s.Author)
-                .AsNoTracking()
-                .ToListAsync();
-            
-            TopStories = await _context.Stories
-                // .Where(s => s.ReleaseDate > DateTime.Now - TimeSpan.FromDays(30))
-                .OrderByDescending(s => s.Votes.Count)
-                    .ThenByDescending(s => s.ReleaseDate)
-                .Take(10)
-                .Include(s => s.StoryTags)
-                    .ThenInclude(st => st.Tag)
-                        .ThenInclude(t => t.Namespace)
-                .Include(s => s.Rating)
-                .Include(s => s.Author)
-                .AsNoTracking()
-                .ToListAsync();
-
-            Counts = await _context.Users
-                .Where(u => u.Id == 7)
-                .Select(u => new StoryAndBlogpostCountsDTO
-                {
-                    Stories = _context.Stories.Count(s => s.Author.Id == u.Id),
-                    Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
-                })
-                .FirstOrDefaultAsync();
-            
+            RecentStories = await _storiesRepo.GetPaginatedStoryCards(order: EStorySortingOptions.DateDescending);
+            TopStories = await _storiesRepo.GetPaginatedStoryCards(order: EStorySortingOptions.ScoreDescending);
         }
     }
 }

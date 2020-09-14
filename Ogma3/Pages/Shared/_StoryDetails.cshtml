@@ -4,7 +4,7 @@
 @using Ogma3.Data.Models
 @using Ogma3.Pages.User
 @using Ogma3.Services
-@model Ogma3.Data.Models.Story
+@model StoryDetails
 
 <div id="story-app">
     <div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
@@ -16,13 +16,16 @@
                 <span class="count">{{score}}</span>
             </button>
             
-            @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))
+            @if (User.Identity.IsAuthenticated && Model.IsAuthor)
              {
                  <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
                      <icon icon="edit"></icon>
                  </a>
                  <a title="Delete" class="action-btn" asp-page="./Stories/Delete" asp-route-id="@Model.Id">
                      <icon icon="delete_forever"></icon>
+                 </a>
+                 <a title="New chapter" class="action-btn" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+                     <icon icon="add"></icon>
                  </a>
              }
 
@@ -45,6 +48,7 @@
 
         </div>
 
+        <cache expires-after="TimeSpan.FromMinutes(60)">
         <div class="titlebar">
             <img src="@Model.Rating.Icon" alt="Rating: @Model.Rating.Name" title="Rating: @Model.Rating.Name" class="rating">
             <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
@@ -63,16 +67,14 @@
 
             @if (Model.Cover != null)
             {
-                <cdn-img src="@Model.Cover" alt="@Model.CoverId" class="cover" itemprop="thumbnailUrl"></cdn-img>
+                <cdn-img src="@Model.Cover" alt="@Model.Title cover image" class="cover" itemprop="thumbnailUrl"></cdn-img>
             }
-            <a asp-page="/User/Index" asp-route-name="@Model.Author.UserName">
-                <h2 class="author" itemprop="author">By @Model.Author.UserName</h2>
-            </a>
             <div class="description" itemprop="abstract">
                 <markdown>@Model.Description</markdown>
             </div>
 
         </div>
+        </cache>
     </div>
     
     <div class="info">
@@ -111,13 +113,6 @@
                     </div>
                 </div>
             } 
-        }
-        @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))
-        {
-            <a class="btn btn-block btn-outline-primary" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
-                <icon icon="add"></icon>
-                Create New
-            </a>
         }
     </ol>
 

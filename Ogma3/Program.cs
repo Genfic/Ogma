@@ -55,7 +55,7 @@ namespace Ogma3
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://+:5001", "http://+:8080", "http://+:80");
+                    webBuilder.UseUrls("https://+:5001", "https://+:8080", "https://+:80");
                     webBuilder.ConfigureKestrel(options =>
                         {
                             // Opts

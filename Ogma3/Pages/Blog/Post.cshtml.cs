@@ -8,22 +8,23 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.Blog
 {
     public class DetailsModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private ProfileBarRepository _profileBarRepo;
+        private UserRepository _userRepo;
 
-        public DetailsModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
+        public DetailsModel(ApplicationDbContext context, UserRepository userRepo)
         {
             _context = context;
-            _profileBarRepo = profileBarRepo;
+            _userRepo = userRepo;
         }
 
         public Blogpost Blogpost { get; set; }
-        public ProfileBarDTO ProfileBar { get; set; }
+        public ProfileBar ProfileBar { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
@@ -39,7 +40,7 @@ namespace Ogma3.Pages.Blog
                 return NotFound();
             }
             
-            ProfileBar = await _profileBarRepo.GetAsync(Blogpost.Author.NormalizedUserName);
+            ProfileBar = await _userRepo.GetProfileBar(Blogpost.Author.NormalizedUserName);
             
             return Page();
         }

@@ -49,7 +49,7 @@
                 
                 <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
                 
-                <div class="role-tag">
+                <div v-if="c.valueOf.author.topRole" class="role-tag">
                     <span class="name">{{c.val.author.topRole.name}}</span>
                     <div class="bg" :style="{backgroundColor: c.val.author.topRole.color}"></div>
                 </div>

@@ -29,7 +29,7 @@ namespace Ogma3.Pages.Club.Forums
 
         public async Task<IActionResult> OnGetAsync(long clubId, long threadId)
         {
-            var uid = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var uid);
             ClubBar = await _clubRepo.GetClubBar(clubId, uid);
 
             if (ClubBar == null)

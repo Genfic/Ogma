@@ -19,6 +19,14 @@
             <span class="item">
                 Render time <span class="hl" title="@(renderTime.TotalMilliseconds) ms">@(renderTime.TotalSeconds.ToString("F3"))</span> seconds
             </span>
+            
+            <span class="item">
+                <users-online class="hl" tolerance="5" cache-time="10"></users-online> users online
+            </span>
+            
+            <span class="item">
+                Serving <story-count class="hl" cache-time="60"></story-count> stories
+            </span>
         </div>
 
         <div class="col">

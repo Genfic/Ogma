@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Ogma3.Data.Models;
+using Ogma3.Data.DTOs;
 
-namespace Ogma3.Data.DTOs
+namespace Ogma3.Pages.Shared
 {
-    public class ProfileBarDTO
+    public class ProfileBar
     {
         public long Id { get; set; }
         public string UserName { get; set; }

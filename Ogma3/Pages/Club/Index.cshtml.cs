@@ -30,7 +30,7 @@ namespace Ogma3.Pages.Club
         
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            var uid = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var uid);
             ClubBar = await _clubRepo.GetClubBar(id, uid);
             
             if (ClubBar == null) return NotFound();

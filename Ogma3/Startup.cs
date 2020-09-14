@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
+using System.Security.Claims;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -43,9 +45,10 @@ namespace Ogma3
              ));
             
             // Repositories
-            services.AddScoped<ProfileBarRepository>();
+            services.AddScoped<UserRepository>();
             services.AddScoped<ClubRepository>();
             services.AddScoped<ThreadRepository>();
+            services.AddScoped<StoriesRepository>();
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -68,6 +71,7 @@ namespace Ogma3
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
+            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
             
             // Argon2 hasher
             services.UpgradePasswordSecurity().UseArgon2<OgmaUser>();
@@ -107,6 +111,9 @@ namespace Ogma3
             
             // Compression
             services.AddResponseCompression();
+            
+            // Cache
+            services.AddMemoryCache();
             
             // Runtime compilation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

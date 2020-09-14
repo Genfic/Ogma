@@ -7,22 +7,23 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.User
 {
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private ProfileBarRepository _profileBarRepo;
+        private UserRepository _userRepo;
 
         public string Bio { get; set; }
         public CommentsThread CommentsThread { get; set; }
-        public ProfileBarDTO ProfileBar { get; set; }
+        public ProfileBar ProfileBar { get; set; }
 
-        public IndexModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
+        public IndexModel(ApplicationDbContext context, UserRepository userRepo)
         {
             _context = context;
-            _profileBarRepo = profileBarRepo;
+            _userRepo = userRepo;
         }
 
         public async Task<IActionResult> OnGetAsync(string name)
@@ -38,7 +39,7 @@ namespace Ogma3.Pages.User
             Bio = userData.Bio;
             CommentsThread = userData.CommentsThread;
             
-            ProfileBar = await _profileBarRepo.GetAsync(name.ToUpper());
+            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
 
             if (ProfileBar == null) return NotFound();
             

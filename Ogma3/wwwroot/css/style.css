@@ -526,8 +526,8 @@ img.avatar {
 }
 #story-app > .story-details > .main h2.author {
   color: var(--foreground);
-  font-size: 1.2rem;
-  line-height: 1.2rem;
+  font-weight: 500;
+  font-size: 1rem;
 }
 #story-app > .story-details > .actions {
   display: flex;
@@ -549,7 +549,7 @@ img.avatar {
   flex: 1;
 }
 #story-app > .chapters {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 #story-app > .chapters > span {
   font-weight: bold;
@@ -598,7 +598,6 @@ img.avatar {
   border-color: var(--accent);
 }
 #story-app > .chapters > .chapter > .left > .read-status.active {
-  background-color: var(--green-50);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,11 +607,12 @@ img.avatar {
   content: "";
   width: 80%;
   height: 80%;
-  background-color: var(--background-25);
-  border: 1px solid var(--foreground-50);
+  background-color: var(--green-25);
+  border: 1px solid var(--foreground-25);
 }
 #story-app > .info {
   border-top: 1px solid var(--foreground-25);
+  margin-top: 1rem;
 }
 #story-app > .info > * {
   padding: 0 0.25rem;

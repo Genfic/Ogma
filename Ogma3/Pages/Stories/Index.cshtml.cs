@@ -78,12 +78,14 @@ namespace Ogma3.Pages.Stories
             // Sort
             query = sort switch
             {
-                EStorySortingOptions.TitleAscending  => query.OrderBy(s => s.Title),
+                EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
                 EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-                EStorySortingOptions.WordsAscending  => query.OrderBy(s => s.WordCount),
+                EStorySortingOptions.DateAscending => query.OrderBy(s => s.ReleaseDate),
+                EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.ReleaseDate),
+                EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
                 EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
-                EStorySortingOptions.DateAscending   => query.OrderBy(s => s.ReleaseDate),
-                EStorySortingOptions.DateDescending  => query.OrderByDescending(s => s.ReleaseDate),
+                EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.Votes.Count),
+                EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.Votes.Count),
                 _ => query.OrderByDescending(s => s.ReleaseDate)
             };
 

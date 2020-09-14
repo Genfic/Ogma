@@ -42,8 +42,8 @@ $title-height: 2rem
         
       & h2.author
         color: v.$foreground
-        font-size: 1.2rem
-        line-height: 1.2rem
+        font-weight: 500
+        font-size: 1rem
         
     &>.actions
       display: flex
@@ -64,7 +64,7 @@ $title-height: 2rem
         flex: 1
         
   &>.chapters
-    margin-top: .5rem
+    margin-top: 1rem
     &>span
       font-weight: bold
       
@@ -105,7 +105,6 @@ $title-height: 2rem
           @include ab.active-border
           
           &.active
-            background-color: v.$green-50
             display: flex
             align-items: center
             justify-content: center
@@ -114,14 +113,15 @@ $title-height: 2rem
               content: ''
               width: 80%
               height: 80%
-              background-color: v.$background-25
-              border: 1px solid v.$foreground-50
+              background-color: v.$green-25
+              border: 1px solid v.$foreground-25
         
       //&>.right
         //&>.word-count
           
   &>.info
     border-top: 1px solid v.$foreground-25
+    margin-top: 1rem
   
     &>*
       padding: 0 .25rem

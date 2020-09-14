@@ -11,14 +11,17 @@
 <div class="comment">
     
     <div class="author">
-            <a asp-page="/User/Index" asp-route-name="@Model.AuthorName" class="name">
-                @Model.AuthorName
-            </a>
+        <a asp-page="/User/Index" asp-route-name="@Model.AuthorName" class="name">
+            @Model.AuthorName
+        </a>
         
-        <div class="role-tag">
-            <span class="name">@Model.AuthorRole.Name</span>
-            <div class="bg" style="background-color: @Model.AuthorRole.Color"></div>
-        </div>
+        @if (Model.AuthorRole != null)
+        {
+            <div class="role-tag">
+                <span class="name">@Model.AuthorRole.Name</span>
+                <div class="bg" style="background-color: @Model.AuthorRole.Color"></div>
+            </div>
+        }
         
         <cdn-img src="@Model.AuthorAvatar" alt="@Model.AuthorName's avatar" class="avatar" />
     </div>

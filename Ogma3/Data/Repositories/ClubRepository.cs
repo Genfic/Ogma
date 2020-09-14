@@ -15,7 +15,7 @@ namespace Ogma3.Data.Repositories
             _context = context;
         }
 
-        public async Task<ClubBar> GetClubBar(long clubId, long userId)
+        public async Task<ClubBar> GetClubBar(long clubId, long? userId)
         {
             return await _context.Clubs
                 .Where(c => c.Id == clubId)

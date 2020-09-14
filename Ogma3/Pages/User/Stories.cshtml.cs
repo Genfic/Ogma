@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 
@@ -16,46 +10,32 @@ namespace Ogma3.Pages.User
 {
     public class StoriesModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ProfileBarRepository _profileBarRepo;
+        private readonly UserRepository _userRepo;
+        private readonly StoriesRepository _storyRepo;
 
-        public StoriesModel(ApplicationDbContext context, ProfileBarRepository profileBarRepo)
+        public StoriesModel(UserRepository userRepo, StoriesRepository storyRepo)
         {
-            _context = context;
-            _profileBarRepo = profileBarRepo;
+            _userRepo = userRepo;
+            _storyRepo = storyRepo;
         }
 
-        public IList<Story> Stories { get;set; }
+        public IList<StoryCard> Stories { get;set; }
 
         private const int PerPage = 25;
-        public ProfileBarDTO ProfileBar { get; set; }
+        public ProfileBar ProfileBar { get; set; }
         public bool IsCurrentUser { get; set; }
         public PaginationModel PaginationModel { get; set; }
 
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
-            ProfileBar = await _profileBarRepo.GetAsync(name.ToUpper());
+            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
             if (ProfileBar == null) return NotFound();
 
             IsCurrentUser = ProfileBar.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
-            var query = IsCurrentUser
-                ? _context.Stories.Where(s => s.Author.Id == ProfileBar.Id)
-                : _context.Stories.Where(s => s.Author.Id == ProfileBar.Id && s.IsPublished);
 
-            var storiesCount = await query.CountAsync();
-            
-            Stories = await query
-                .OrderByDescending(s => s.ReleaseDate)
-                .Skip(Math.Max(0, page - 1) * PerPage)
-                .Take(PerPage)
-                .Include(s => s.StoryTags)
-                    .ThenInclude(st => st.Tag)
-                        .ThenInclude(t => t.Namespace)
-                .Include(s => s.Rating)
-                .Include(s => s.Author)
-                .AsNoTracking()
-                .ToListAsync();
+            var storiesCount = await _storyRepo.CountForUser(ProfileBar.Id);
+
+            Stories = await _storyRepo.GetPaginatedStoryCards(PerPage, page);
 
             // Prepare pagination
             PaginationModel = new PaginationModel

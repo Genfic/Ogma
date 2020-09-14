@@ -1,6 +1,6 @@
 @using System.Globalization
 @using Utils.Extensions
-@model Ogma3.Data.Models.Story
+@model StoryCard
 
 <div class="story-card">
 
@@ -12,7 +12,7 @@
     </a>
     
     <h4 class="author">
-        <a asp-page="/User/Index" asp-route-name="@Model.Author.UserName">By @Model.Author.UserName</a>
+        <a asp-page="/User/Index" asp-route-name="@Model.AuthorName">By @Model.AuthorName</a>
     </h4>
     
     <div class="hook">
@@ -25,7 +25,7 @@
         <partial name="_StoryStatus" model="@Model.Status" />
         @foreach (var t in Model.Tags)
         {
-            <tag tag="@t"></tag>
+            <tag tag="t"></tag>
         }
     </div>
     
