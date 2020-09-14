@@ -247,6 +247,88 @@ nav#top-nav .navbar-nav > .nav-item > .nav-link.user > .name {
   color: var(--foreground-75);
 }
 
+footer.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid var(--foreground-50);
+  width: 100%;
+  height: auto;
+}
+footer.footer > .cols {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+}
+@media screen and (max-width: 570px) {
+  footer.footer > .cols {
+    flex-direction: column;
+  }
+}
+footer.footer > .cols > .col {
+  display: flex;
+  flex-direction: column;
+  flex: 0 15%;
+  padding: 0 0.5rem;
+  border-right: 1px solid var(--foreground-25);
+}
+footer.footer > .cols > .col:last-child {
+  border-right: none;
+}
+footer.footer > .cols > .col > .header {
+  white-space: nowrap;
+  font-weight: 500;
+  padding: 0 0.25rem;
+  border-bottom: 1px solid var(--foreground-25);
+}
+footer.footer > .cols > .col > .item {
+  width: 100%;
+  white-space: nowrap;
+  padding: 0.25rem;
+  color: var(--foreground-75);
+}
+footer.footer > .cols > .col > .item.follow {
+  display: flex;
+}
+footer.footer > .cols > .col > .item.follow img {
+  object-fit: contain;
+  height: 1.5rem;
+  margin-right: 1ch;
+}
+footer.footer > .cols > .col > span .hl {
+  color: var(--foreground);
+}
+footer.footer > .cols > .col > a {
+  color: var(--foreground);
+  text-decoration: none;
+}
+footer.footer > .cols > .col > a:hover {
+  text-decoration: none;
+  background-color: var(--accent-10);
+}
+footer.footer > .cols > .col > button {
+  border: none;
+  background-color: transparent;
+  text-align: left;
+}
+footer.footer > .cols > .col > button:hover {
+  background-color: var(--accent-10);
+}
+footer.footer > .bottom {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+  padding: 0.5rem;
+  border-top: 1px solid var(--foreground-25);
+}
+footer.footer > .bottom > .copy-text {
+  margin-right: 1ch;
+}
+
 .tag {
   display: grid;
   grid-template-areas: "main";

@@ -25,14 +25,7 @@
         <partial name="_StoryStatus" model="@Model.Status" />
         @foreach (var t in Model.Tags)
         {
-            if (t.Namespace is null)
-            {
-                <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})">@t.Name</tag>
-            }
-            else
-            {
-                <tag href="@Url.Page("/Tag", new {t.Id, t.Slug})" color="@t.Namespace.Color">@t.Namespace.Name:@t.Name</tag>
-            }
+            <tag tag="@t"></tag>
         }
     </div>
     

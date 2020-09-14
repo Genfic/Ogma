@@ -9,6 +9,7 @@
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
     var theme = value ?? "light";
+    ViewData["render_start"] = DateTime.Now;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +30,9 @@
     
     @* Gives a general age rating based on the document's content *@
     <meta name="rating" content="@ViewData["Rating"]">
+    
+    @* Tells the browser what color schemes are supported *@
+    <meta name="color-scheme" content="dark light">
     
     @if (ViewData["use_bootstrap"] == null)
     {
@@ -70,7 +74,7 @@
     <nav id="top-nav">
         
         <a class="navbar-brand" asp-area="" asp-page="/Index">
-            Ogma
+            Genfic
             <version color="#ff0000" text="α"></version>
         </a>
 
@@ -96,6 +100,7 @@
         crossorigin="anonymous"
         asp-fallback-test="window.dayjs"
         asp-fallback-src="~/lib/dayjs.min.js"></script>    
+
 <script src="//cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js" 
         crossorigin="anonymous"
         asp-fallback-test="window.axios"

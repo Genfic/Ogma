@@ -8,6 +8,8 @@ const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
 const Fiber = require('fibers');
 const browserSync = require('browser-sync').create();
+const cached = require('gulp-cached');
+const dependents = require('gulp-dependents');
 
 // CSS processors
 const autoprefixer = require('autoprefixer');
@@ -21,10 +23,27 @@ const tsProject = ts.createProject('./tsconfig.json');
 const terser = require('gulp-terser-js');
 
 // Dirs
-const root    = './Ogma3/wwwroot';
-const cssroot = `${root}/css`;
-const jsroot  = `${root}/js`;
+const root = './Ogma3/wwwroot';
+const dir = {
+    cssroot : `${root}/css`,
+    jsroot  : `${root}/js`,
+}
 
+// Watch globs
+const watch = {
+    sass: [ // Avoid `**` because gulp-sass shits itself otherwise and compilation takes >5s on any change
+        `${dir.cssroot}/*.sass`, 
+        `${dir.cssroot}/src/*.sass`, 
+        `${dir.cssroot}/src/elements/*.sass`, 
+        `${dir.cssroot}/src/mixins/*.sass`
+    ],
+    js: [
+        `${dir.jsroot}/src/**/*.js`
+    ],
+    ts: [
+        `${dir.jsroot}/src/**/*.ts`
+    ]
+}
 
 // CSS tasks
 gulp.task('css', () => {
@@ -34,22 +53,22 @@ gulp.task('css', () => {
         mqpacker(),
         nano({ preset: 'default' })
     ];
-
-    return gulp.src(`${cssroot}/*.sass`)
-        .pipe(sourcemaps.init())                // Init maps
-        .pipe(sass({fiber: Fiber}))     // Compile SASS
-        .pipe(gulp.dest(cssroot))               // Output the raw CSS
-        .pipe(postcss(processors))              // Postprocess it
-        .pipe(sourcemaps.write(`./maps`))       // Write maps
-        .pipe(rename({ suffix: '.min' }))  // Add .min suffix
-        .pipe(gulp.dest(cssroot))               // Output minified CSS
+    
+    return gulp.src(`${dir.cssroot}/*.sass`)
+        .pipe(sourcemaps.init())                   // Init maps
+        .pipe(sass({fiber: Fiber}))        // Compile SASS
+        .pipe(gulp.dest(dir.cssroot))              // Output the raw CSS
+        .pipe(postcss(processors))                 // Postprocess it
+        .pipe(sourcemaps.write(`./maps`)) // Write maps
+        .pipe(rename({ suffix: '.min' }))     // Add .min suffix
+        .pipe(gulp.dest(dir.cssroot))              // Output minified CSS
 });
 
-gulp.task('watch:css', () => gulp.watch(`${cssroot}/**/*.sass`, gulp.series('css')));
+gulp.task('watch:css', () => gulp.watch(watch.sass, gulp.series('css')));
 
 // JS tasks
 gulp.task('js', () => {
-    return gulp.src([`${jsroot}/src/**/*.js`])
+    return gulp.src([`${dir.jsroot}/src/**/*.js`])
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.init())
         .pipe(terser({ 
@@ -62,17 +81,17 @@ gulp.task('js', () => {
             this.emit('end')
         })
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(`${jsroot}/dist`));
+        .pipe(gulp.dest(`${dir.jsroot}/dist`));
 });
 
-gulp.task('watch:js', () => gulp.watch([`${jsroot}/src/**/*.js`], gulp.series('js')));
+gulp.task('watch:js', () => gulp.watch(watch.js, gulp.series('js')));
 
 // TS tasks
 gulp.task('ts', () => {
-    return gulp.src([`${jsroot}/src/**/*.ts`])
+    return gulp.src([`${dir.jsroot}/src/**/*.ts`])
         .pipe(sourcemaps.init())
         .pipe(tsProject())
-        .pipe(gulp.dest(`${jsroot}/dist`))
+        .pipe(gulp.dest(`${dir.jsroot}/dist`))
         .pipe(rename({ suffix: '.min' }))
         .pipe(terser({ mangle: { toplevel: true } }))
         .on('error', err => {
@@ -80,19 +99,19 @@ gulp.task('ts', () => {
             this.emit('end')
         })
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(`${jsroot}/dist`));
+        .pipe(gulp.dest(`${dir.jsroot}/dist`));
 });
 
-gulp.task('watch:ts', () => gulp.watch([`${jsroot}/src/**/*.ts`], gulp.series('ts')))
+gulp.task('watch:ts', () => gulp.watch(watch.ts, gulp.series('ts')))
 
 // Browser sync
 gulp.task('sync', function () {
     browserSync.init({
         proxy: 'http://localhost:5001',
-        files: [`${cssroot}/**/*.css`, `${jsroot}/**/*.js`, `${jsroot}/**/*.ts`]
+        files: [`${dir.cssroot}/**/*.css`, `${dir.jsroot}/**/*.js`, `${dir.jsroot}/**/*.ts`]
     })
 })
 
 // All tasks
-gulp.task('all', gulp.parallel(['css', 'js', 'ts']));
-gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'watch:ts', 'all']));
+gulp.task('all', gulp.parallel(['css', 'js']));
+gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'all']));

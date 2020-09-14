@@ -19,6 +19,7 @@ using Ogma3.Data.Repositories;
 using Ogma3.Services;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
+using Ogma3.Services.Middleware;
 using reCAPTCHA.AspNetCore;
 using Utils;
 
@@ -122,6 +123,8 @@ namespace Ogma3
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager, ApplicationDbContext ctx)
         {
+            // Request timestamp
+            app.UseRequestTimestamp();
             
             if (env.IsDevelopment())
             {

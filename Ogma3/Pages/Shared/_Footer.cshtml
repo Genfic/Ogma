@@ -1,40 +1,93 @@
-<footer class="border-top text-muted">
+@using Ogma3.Services.Middleware
 
-    <div class="container-fluid">
-        
-        <div class="row justify-content-md-center">
-            
-            <div class="col-2">
-                <nav class="nav flex-column">
-                    <a href="" class="nav-link">About</a>
-                    <a asp-area="" asp-page="/Privacy" class="nav-link">Privacy</a>
-                </nav>
-            </div>
+@{
+    var genTime = DateTime.UtcNow - (DateTime) Context.Items[RequestTimestampMiddleware.Name];
+    var renderTime = DateTime.Now - (DateTime) ViewData["render_start"];
+}
 
-            <div class="col-2">
-                <nav class="nav flex-column">
-                    <a asp-area="" asp-page="/Markdown" class="nav-link">Markdown reference</a>
-                    <button id="theme-swap">T</button>
-                </nav>
-            </div>
+<footer class="footer">
+
+    <div class="cols">
+
+        <div class="col">
+            <span class="header">Stats</span>
+
+            <span class="item">
+                Request time <span class="hl" title="@(genTime.TotalMilliseconds) ms">@(genTime.TotalSeconds.ToString("F3"))</span> seconds
+            </span>
+
+            <span class="item">
+                Render time <span class="hl" title="@(renderTime.TotalMilliseconds) ms">@(renderTime.TotalSeconds.ToString("F3"))</span> seconds
+            </span>
+        </div>
+
+        <div class="col">
+            <span class="header">Links</span>
+
+            <a href="" class="item">About</a>
+
+            <a asp-area="" asp-page="/Privacy" class="item">Privacy</a>
+
+            <a asp-area="" asp-page="/Markdown" class="item">Markdown reference</a>
+
+            <button class="item" id="theme-swap">Switch theme</button>
 
             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
-                <div class="col-2">
-                    <a class="text-dark" asp-area="Admin" asp-page="/Index">
-                        Admin
-                    </a>
-                </div>
+                <a class="item" asp-area="Admin" asp-page="/Index">
+                    Admin
+                </a>
             }
         </div>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="footer-copyright text-center py-3">
-                    &copy; 2019-@DateTime.Now.Year <a asp-area="" asp-page="/Index">Ogma</a>
-                </div>
-            </div>
+        <div class="col">
+            <span class="header">Follow and support</span>
+
+            <a href="https://www.subscribestar.com/genfic" target="_blank" class="item follow substar">
+                <picture>
+                    <source type="image/webp" srcset="~/img/subscribestar.webp">
+                    <img src="~/img/subscribestar.img" alt="SubscribeStar logo">
+                </picture>
+                SubscribeStar
+            </a>
+
+            <a href="https://www.patreon.com/genfic" target="_blank" class="item follow patreon">
+                <picture>
+                    <source type="image/webp" srcset="~/img/patreon.webp">
+                    <img src="~/img/patreon.png" alt="Patreon logo">
+                </picture>
+                Patreon
+            </a>
+
+            <a href="https://ko-fi.com/genfic" target="_blank" class="item follow kofi">
+                <picture>
+                    <source type="image/webp" srcset="~/img/kofi.webp">
+                    <img src="~/img/kofi.png" alt="Ko-fi logo">
+                </picture>
+                Ko-fi
+            </a>
+
+            <a href="https://discord.gg/BNVZmJb" target="_blank" class="item follow discord">
+                <picture>
+                    <source type="image/webp" srcset="~/img/discord.webp">
+                    <img src="~/img/discord.png" alt="Discord logo">
+                </picture>
+                Discord
+            </a>
+
+            <a href="https://twitter.com/Genfic1" target="_blank" class="item follow twitter">
+                <picture>
+                    <source type="image/webp" srcset="~/img/twitter.webp">
+                    <img src="~/img/twitter.png" alt="Twitter logo">
+                </picture>
+                Twitter
+            </a>
         </div>
+
+    </div>
+
+    <div class="bottom">
+        <span class="copy-text">&copy;2019-@DateTime.Now.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
     </div>
 
 </footer>

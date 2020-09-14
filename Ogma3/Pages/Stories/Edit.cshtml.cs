@@ -22,28 +22,21 @@ namespace Ogma3.Pages.Stories
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly IB2Client _b2Client;
-        private readonly IConfiguration _config;
         private readonly OgmaUserManager _userManager;
         private readonly FileUploader _uploader;
 
-        public Story Story { get; set; }
 
-        public EditModel(
-            ApplicationDbContext context,
-            IB2Client b2Client,
-            IConfiguration config, OgmaUserManager userManager, FileUploader uploader)
+        public EditModel(ApplicationDbContext context, OgmaUserManager userManager, FileUploader uploader)
         {
             _context = context;
-            _b2Client = b2Client;
-            _config = config;
             _userManager = userManager;
             _uploader = uploader;
         }
 
         public List<Rating> Ratings { get; set; }
         
-        [BindProperty] public InputModel Input { get; set; }
+        [BindProperty] 
+        public InputModel Input { get; set; }
 
         public class InputModel
         {
@@ -91,26 +84,26 @@ namespace Ogma3.Pages.Stories
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             // Get story to edit and make sure author matches logged in user
-            Story = await _context.Stories
+            var story = await _context.Stories
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
                 .Include(s => s.Author)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if (Story == null) return NotFound();
-            if (!Story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
+            if (story == null) return NotFound();
+            if (!story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
             
             // Fill InputModel
             Input = new InputModel
             {
-                Id = Story.Id,
-                Title = Story.Title,
-                Description = Story.Description,
-                Hook = Story.Hook,
-                Rating = Story.Rating.Id,
-                Tags = Story.StoryTags.Select(st => st.TagId).ToList(),
-                Status = Story.Status
+                Id = story.Id,
+                Title = story.Title,
+                Description = story.Description,
+                Hook = story.Hook,
+                Rating = story.Rating.Id,
+                Tags = story.StoryTags.Select(st => st.TagId).ToList(),
+                Status = story.Status
             };
             
             // Fill Ratings dropdown
@@ -130,38 +123,38 @@ namespace Ogma3.Pages.Stories
                 // Get logged in user
                 var user = await _userManager.GetUserAsync(User);
                 // Get the story and make sure the logged-in user matches author
-                Story = await _context.Stories
+                var story = await _context.Stories
                     .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                     .Include(s => s.Rating)
                     .Include(s => s.Author)
                     .FirstOrDefaultAsync(s => s.Id == id && s.Author == user);
                 // 404 if none found
-                if (Story == null) return NotFound();
+                if (story == null) return NotFound();
                 
                 // Update story
-                Story.Title = Input.Title;
-                Story.Slug = Input.Title.Friendlify();
-                Story.Description = Input.Description;
-                Story.Hook = Input.Hook;
-                Story.Rating = await _context.Ratings.FindAsync(Input.Rating);
-                Story.Tags = tags;
-                Story.Status = Input.Status;
-                _context.Update(Story);
+                story.Title = Input.Title;
+                story.Slug = Input.Title.Friendlify();
+                story.Description = Input.Description;
+                story.Hook = Input.Hook;
+                story.Rating = await _context.Ratings.FindAsync(Input.Rating);
+                story.Tags = tags;
+                story.Status = Input.Status;
+                _context.Update(story);
                 await _context.SaveChangesAsync();
                 
                 // Handle cover upload
                 if (Input.Cover != null && Input.Cover.Length > 0)
                 {
                     // Upload cover
-                    var file = await _uploader.Upload(Input.Cover, "covers", $"{Story.Id}-{Story.Slug}");
-                    Story.CoverId = file.FileId;
-                    Story.Cover = file.Path;
+                    var file = await _uploader.Upload(Input.Cover, "covers", $"{story.Id}-{story.Slug}");
+                    story.CoverId = file.FileId;
+                    story.Cover = file.Path;
                     // Final save
                     await _context.SaveChangesAsync();
                 }
                 
-                return RedirectToPage("../Story", new { id = Story.Id, slug = Story.Slug });
+                return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
             }
             else
             {

@@ -60,6 +60,7 @@ namespace Ogma3.Pages
                     Blogposts = _context.Blogposts.Count(b => b.Author.Id == u.Id)
                 })
                 .FirstOrDefaultAsync();
+            
         }
     }
 }
