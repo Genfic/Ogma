@@ -1,48 +1,32 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages
 {
     public class ChapterModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ChaptersRepository _chaptersRepo;
 
-        public ChapterModel(ApplicationDbContext context)
+        public ChapterModel(ChaptersRepository chaptersRepo)
         {
-            _context = context;
+            _chaptersRepo = chaptersRepo;
         }
         
-        public StoryChapterDTO StoryChapter { get; set; }
+        public ChapterDetails Chapter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            Chapter = await _chaptersRepo.GetChapterDetails(id);
 
-            var chapter = await _context.Chapters
-                .Include(c => c.CommentsThread)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
-            var story = await _context.Stories
-                .Include(s => s.Author)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == chapter.StoryId);
-            
-            StoryChapter = new StoryChapterDTO
-            {
-                Chapter = chapter,
-                Story = story
-            };
-            
-
-            if (chapter == null)
+            if (Chapter == null)
             {
                 return NotFound();
             }

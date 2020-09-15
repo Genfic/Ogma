@@ -18,14 +18,14 @@ namespace Ogma3.Pages.Clubs
             _context = context;
         }
 
-        public IList<ClubCardDTO> Clubs { get;set; }
+        public IList<ClubCard> Clubs { get;set; }
 
         public const int PerPage = 2;
-        public PaginationModel PaginationModel { get; set; }
+        public Pagination Pagination { get; set; }
         public async Task OnGetAsync()
         {
             Clubs = await _context.Clubs
-                .Select(c => new ClubCardDTO
+                .Select(c => new ClubCard
                 {
                     Id = c.Id,
                     Name = c.Name,

@@ -28,7 +28,7 @@ namespace Ogma3.Pages.User
         private const int PerPage = 25;
         public ProfileBar ProfileBar { get; set; }
         public bool IsCurrentUser { get; set; }
-        public PaginationModel PaginationModel { get; set; }
+        public Pagination Pagination { get; set; }
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
             ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
@@ -50,7 +50,7 @@ namespace Ogma3.Pages.User
                 .ToListAsync();
             
             // Prepare pagination
-            PaginationModel = new PaginationModel
+            Pagination = new Pagination
             {
                 PerPage = PerPage,
                 ItemCount = postsCount,

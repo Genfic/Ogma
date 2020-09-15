@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
@@ -11,7 +10,6 @@ namespace Ogma3.Pages.Shared
     {
         public long Id { get; set; }
         public long AuthorId { get; set; }
-        public bool IsAuthor { get; set; }
         public string Title { get; set; }
         public string Slug { get; set; }
         public string Description { get; set; }
@@ -19,8 +17,8 @@ namespace Ogma3.Pages.Shared
         public string? Cover { get; set; }
         public DateTime ReleaseDate { get; set; }
         public bool IsPublished { get; set; }
-        public  ICollection<Chapter> Chapters { get; set; }
-        public ICollection<TagDTO> Tags { get; set; }
+        public  ICollection<ChapterBasicDto> Chapters { get; set; }
+        public ICollection<TagDto> Tags { get; set; }
         public Rating Rating { get; set; }
         public EStoryStatus Status { get; set; }
         public int WordCount { get; set; }

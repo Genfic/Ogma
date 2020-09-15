@@ -26,7 +26,7 @@ namespace Ogma3.Pages.Blog
         public EBlogpostSortingOptions SortBy { get; set; }
 
         private const int PerPage = 25;
-        public PaginationModel PaginationModel { get; set; }
+        public Pagination Pagination { get; set; }
 
         public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
         {
@@ -80,7 +80,7 @@ namespace Ogma3.Pages.Blog
                 .ToListAsync();
             
             // Prepare pagination model
-            PaginationModel = new PaginationModel
+            Pagination = new Pagination
             {
                 PerPage = PerPage,
                 ItemCount = postsCount,

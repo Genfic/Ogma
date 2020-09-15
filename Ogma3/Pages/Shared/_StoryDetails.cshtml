@@ -1,9 +1,7 @@
 @using System.Globalization
-@using Ogma3.Api
 @using Ogma3.Api.V1
-@using Ogma3.Data.Models
-@using Ogma3.Pages.User
 @using Ogma3.Services
+@using Utils.Extensions
 @model StoryDetails
 
 <div id="story-app">
@@ -16,7 +14,7 @@
                 <span class="count">{{score}}</span>
             </button>
             
-            @if (User.Identity.IsAuthenticated && Model.IsAuthor)
+            @if (User.IsUserSameAsLoggedIn(Model.AuthorId))
              {
                  <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
                      <icon icon="edit"></icon>

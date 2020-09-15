@@ -119,7 +119,7 @@ namespace Ogma3.Data
                 .WithMany();
             builder.Entity<Story>()
                 .HasMany(s => s.Chapters)
-                .WithOne()
+                .WithOne(c => c.Story)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Story>()
                 .HasOne(s => s.Author)

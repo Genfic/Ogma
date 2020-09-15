@@ -1,22 +1,23 @@
 @using System.Globalization
 @using Ogma3.Services
-@model Ogma3.Data.DTOs.StoryChapterDTO
+@using Utils.Extensions
+@model ChapterDetails
 
 
 <div class="chapter-container">
     <article class="chapter-details" itemscope itemtype="https://bib.schema.org/Chapter">
         
-        <a class="story" asp-page="/Story" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">@Model.Story.Title</a>
-        <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
-        <time class="date" itemprop="datePublished">@Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
+        <a class="story" asp-page="/Story" asp-route-id="@Model.StoryId" asp-route-slug="@Model.StorySlug">@Model.StoryTitle</a>
+        <h1 class="title" itemprop="name">@Model.Title</h1>
+        <time class="date" itemprop="datePublished">@Model.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
         
-        @if (User.Identity.IsAuthenticated && Model.Story.Author.IsLoggedIn(User))
+        @if (User.IsUserSameAsLoggedIn(Model.StoryAuthorId))
         {
             <div class="actions">
-                <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
+                <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Id">
                     <icon icon="edit"></icon>
                 </a>
-                <a title="Delete" class="action-btn" asp-page="./Chapters/Delete" asp-route-id="@Model.Chapter.Id">
+                <a title="Delete" class="action-btn" asp-page="./Chapters/Delete" asp-route-id="@Model.Id">
                     <icon icon="delete_forever"></icon>
                 </a>
             </div>
@@ -25,16 +26,16 @@
         <cache expires-after="TimeSpan.FromMinutes(60)">
         <div class="body-container">
             
-            @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
+            @if (!string.IsNullOrEmpty(Model.StartNotes))
             {
-                <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
+                <div class="start notes"><span class="an">Author's notes:</span> @Model.StartNotes</div>
             }
             
-            <div class="body tts-body">@Model.Chapter.Body</div>
+            <div class="body tts-body">@Model.Body</div>
             
-            @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
+            @if (!string.IsNullOrEmpty(Model.EndNotes))
             {
-                <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</div>
+                <div class="start notes"><span class="an">Author's notes:</span> @Model.EndNotes</div>
             }
             
         </div>
@@ -50,7 +51,7 @@
         </button>
     </div>
     
-    <partial name="_Comments" model="@Model.Chapter.CommentsThread" />
+    <partial name="_Comments" model="@Model.CommentsThreadId" />
 </div>
 
 @Html.Resource(@<script src="~/js/dist/tts.min.js" asp-append-version="true"></script>);

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -49,6 +50,8 @@ namespace Ogma3
             services.AddScoped<ClubRepository>();
             services.AddScoped<ThreadRepository>();
             services.AddScoped<StoriesRepository>();
+            services.AddScoped<TagsRepository>();
+            services.AddScoped<ChaptersRepository>();
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -114,6 +117,9 @@ namespace Ogma3
             
             // Cache
             services.AddMemoryCache();
+            
+            // Automapper
+            services.AddAutoMapper(typeof(AutoMapperProfile));
             
             // Runtime compilation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

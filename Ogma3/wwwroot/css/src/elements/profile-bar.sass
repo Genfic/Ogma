@@ -1,88 +1,11 @@
-@use '../vars' as v
-@use '../mixins/active-border' as ab
-
-$avatarSize: 8.5rem
-$margin: .5rem
-
 .profile-bar
-  display: flex
-  min-height: $avatarSize + $margin
-  margin-bottom: $margin
-  border-bottom: 1px solid v.$foreground-25
-  @media only screen and (max-width: v.$mq-mobile)
-    flex-direction: column 
-    height: auto
-  
-  &>.nav
+
+  & .roles
+    grid-row: 2
+    grid-column: 2 / 3
     display: flex
-    flex-grow: 1
-    justify-content: flex-end
-    align-items: flex-end
-    @media only screen and (max-width: v.$mq-mobile)
-      justify-content: center
-    
-    & .nav-item
-      color: v.$foreground-75
-      text-decoration: none
-      padding: $margin
-      border: 1px solid v.$foreground-25
-      border-right: none
-      border-bottom: none
-      text-align: center
-      &:hover, 
-      &:focus
-        color: v.$foreground
-        background: v.$accent-10
-      &:first-child
-        border-top-left-radius: .25rem
-      &:last-child
-        border-right: 1px solid v.$foreground-25
-        border-top-right-radius: .25rem
-      @media only screen and (max-width: v.$mq-mobile)
-        flex: 1
-        
-      &.active
-        border-top: .25rem solid v.$accent
-        border-top-right-radius: .25rem
-        border-top-left-radius: .25rem
-      
-    
-  &>#personal
-    display: flex
-    flex-grow: 1
-    margin-bottom: $margin
-    @media only screen and (max-width: v.$mq-mobile)
-      flex-direction: column
+    margin: .1rem 0
 
-    & .avatar
-      width: $avatarSize
-      object-fit: contain
-      border-radius: .25rem
-      border: 1px solid v.$foreground-25
-  
-    & .data
-      display: flex
-      flex-direction: column
-      align-items: flex-start
-      margin-left: 1rem
-
-      &>.name
-        font-size: 2rem
-        margin-bottom: $margin / 2
-        font-weight: 300
-        color: v.$foreground
-        
-      & .roles
-        display: flex
-        margin: .1rem 0
-
-      & .title
-        font-size: 1.1rem
-        font-weight: 100
-    
-      & .times
-        display: flex
-        flex-direction: column
-        justify-content: flex-end
-        flex-grow: 1
-        font-size: .9rem
+  & .title
+    font-size: 1.1rem
+    font-weight: 100

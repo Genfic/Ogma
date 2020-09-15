@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Ogma3.Data.Models
 {
@@ -42,5 +43,8 @@ namespace Ogma3.Data.Models
         
         [Required]
         public long StoryId { get; set; }
+        
+        [JsonIgnore] 
+        public Story Story { get; set; }
     }
 }
