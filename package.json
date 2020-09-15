@@ -1,26 +1,24 @@
 {
 	"devDependencies": {
-		"@hail2u/css-mqpacker": "https://github.com/hail2u/node-css-mqpacker",
-		"autoprefixer": "^9.6.1",
+		"@hail2u/css-mqpacker": "github:hail2u/node-css-mqpacker#v8.0.1",
+		"autoprefixer": "^9.8.6",
 		"browser-sync": "^2.26.12",
-		"css-mqpacker": "^7.0.0",
 		"cssnano": "^4.1.10",
 		"fibers": "^5.0.0",
 		"gulp": "^4.0.2",
-		"gulp-cached": "^1.1.1",
-		"gulp-dependents": "^1.2.5",
 		"gulp-postcss": "^8.0.0",
 		"gulp-purgecss": "2.3.0",
 		"gulp-rename": "^2.0.0",
-		"gulp-sass": "^4.0.2",
+		"gulp-sass": "^4.1.0",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-terser-js": "^5.2.2",
 		"gulp-typescript": "^6.0.0-alpha.1",
-		"mjml": "^4.4.0",
-		"postcss": "^7.0.26",
+		"mjml": "^4.6.3",
+		"postcss": "^7.0.32",
 		"postcss-discard-comments": "^4.0.2",
 		"sass": "^1.26.10",
-		"typescript": "^3.9.7",
-		"vue": "^2.6.10"
+		"typescript": "^4.0.2",
+		"vue": "^2.6.12",
+		"yarn-audit-fix": "^3.0.1"
 	}
 }

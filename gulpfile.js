@@ -8,8 +8,6 @@ const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
 const Fiber = require('fibers');
 const browserSync = require('browser-sync').create();
-const cached = require('gulp-cached');
-const dependents = require('gulp-dependents');
 
 // CSS processors
 const autoprefixer = require('autoprefixer');
