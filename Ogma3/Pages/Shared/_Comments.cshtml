@@ -1,7 +1,7 @@
 @using static Ogma3.Services.HtmlExtensions
 @using Ogma3.Api
 @using Ogma3.Api.V1
-@model Ogma3.Data.Models.CommentsThread
+@model long
 
 <div class="comments-container" id="comments-container">
 
@@ -16,7 +16,7 @@
                       aria-label="Comment">
             </textarea>
 
-            <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
+            <div id="thread" data-thread="@Model" v-if="!thread"></div>
             <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
 
             <div class="buttons">
@@ -49,7 +49,7 @@
                 
                 <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
                 
-                <div v-if="c.valueOf.author.topRole" class="role-tag">
+                <div v-if="c.val.author.topRole" class="role-tag">
                     <span class="name">{{c.val.author.topRole.name}}</span>
                     <div class="bg" :style="{backgroundColor: c.val.author.topRole.color}"></div>
                 </div>

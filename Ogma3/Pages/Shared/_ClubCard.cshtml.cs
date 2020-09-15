@@ -1,6 +1,6 @@
-namespace Ogma3.Data.DTOs
+namespace Ogma3.Pages.Shared
 {
-    public class ClubCardDTO
+    public class ClubCard
     {
         public long Id { get; set; }
         public string Name { get; set; }

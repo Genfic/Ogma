@@ -8,43 +8,32 @@ using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages
 {
     public class TagModel : PageModel
     {
-        private readonly ILogger<TagModel> _logger;
-        private readonly ApplicationDbContext _context;
+        private readonly TagsRepository _tagsRepo;
+        private readonly StoriesRepository _storiesRepo;
         
-        public TagModel(ApplicationDbContext context, ILogger<TagModel> logger)
+        public TagModel(TagsRepository tagsRepo, StoriesRepository storiesRepo)
         {
-            _context = context;
-            _logger = logger;
+            _tagsRepo = tagsRepo;
+            _storiesRepo = storiesRepo;
         }
 
-        public TagDTO Tag { get; set; }
-        public IEnumerable<Story> Stories { get; set; }
+        public TagDto Tag { get; set; }
+        public IList<StoryCard> Stories { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            var tag = await _context.Tags
-                .Where(t => t.Id == id)
-                .Include(t => t.Namespace)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-            Tag = TagDTO.FromTag(tag);
+            Tag = await _tagsRepo.GetTag(id);
             
             if (Tag == null) return NotFound();
 
-            Stories = await _context.Stories
-                .Include(s => s.Author)
-                .Include(s => s.Rating)
-                .Include(s => s.StoryTags)
-                .ThenInclude(st => st.Tag)
-                .ThenInclude(t => t.Namespace)
-                .Where(s => s.StoryTags.Any(st => st.TagId == id))
-                .AsNoTracking()
-                .ToListAsync();
+            Stories = await _storiesRepo.SearchAndSortStoryCards(tags: new List<long>{ Tag.Id });
 
             return Page();
         }

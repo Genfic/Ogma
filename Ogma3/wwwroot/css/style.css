@@ -949,101 +949,15 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   user-select: none;
 }
 
-.profile-bar {
-  display: flex;
-  min-height: 9rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid var(--foreground-25);
-}
-@media only screen and (max-width: 570px) {
-  .profile-bar {
-    flex-direction: column;
-    height: auto;
-  }
-}
-.profile-bar > .nav {
-  display: flex;
-  flex-grow: 1;
-  justify-content: flex-end;
-  align-items: flex-end;
-}
-@media only screen and (max-width: 570px) {
-  .profile-bar > .nav {
-    justify-content: center;
-  }
-}
-.profile-bar > .nav .nav-item {
-  color: var(--foreground-75);
-  text-decoration: none;
-  padding: 0.5rem;
-  border: 1px solid var(--foreground-25);
-  border-right: none;
-  border-bottom: none;
-  text-align: center;
-}
-.profile-bar > .nav .nav-item:hover, .profile-bar > .nav .nav-item:focus {
-  color: var(--foreground);
-  background: var(--accent-10);
-}
-.profile-bar > .nav .nav-item:first-child {
-  border-top-left-radius: 0.25rem;
-}
-.profile-bar > .nav .nav-item:last-child {
-  border-right: 1px solid var(--foreground-25);
-  border-top-right-radius: 0.25rem;
-}
-@media only screen and (max-width: 570px) {
-  .profile-bar > .nav .nav-item {
-    flex: 1;
-  }
-}
-.profile-bar > .nav .nav-item.active {
-  border-top: 0.25rem solid var(--accent);
-  border-top-right-radius: 0.25rem;
-  border-top-left-radius: 0.25rem;
-}
-.profile-bar > #personal {
-  display: flex;
-  flex-grow: 1;
-  margin-bottom: 0.5rem;
-}
-@media only screen and (max-width: 570px) {
-  .profile-bar > #personal {
-    flex-direction: column;
-  }
-}
-.profile-bar > #personal .avatar {
-  width: 8.5rem;
-  object-fit: contain;
-  border-radius: 0.25rem;
-  border: 1px solid var(--foreground-25);
-}
-.profile-bar > #personal .data {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 1rem;
-}
-.profile-bar > #personal .data > .name {
-  font-size: 2rem;
-  margin-bottom: 0.25rem;
-  font-weight: 300;
-  color: var(--foreground);
-}
-.profile-bar > #personal .data .roles {
+.profile-bar .roles {
+  grid-row: 2;
+  grid-column: 2/3;
   display: flex;
   margin: 0.1rem 0;
 }
-.profile-bar > #personal .data .title {
+.profile-bar .title {
   font-size: 1.1rem;
   font-weight: 100;
-}
-.profile-bar > #personal .data .times {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  flex-grow: 1;
-  font-size: 0.9rem;
 }
 
 .blogpost-card {
@@ -1359,19 +1273,16 @@ form.confirm > .buttons .button.cancel {
   justify-content: stretch;
 }
 .tag-search-select .tag-search .tags > .tag {
-  display: flex;
-  align-items: center;
   flex-grow: 1;
-  padding: 0.1rem;
 }
 .tag-search-select .tag-search .tags > .tag:first-child {
   margin-left: 4px;
 }
-.tag-search-select .tag-search .tags > .tag > .material-icons-outlined {
+.tag-search-select .tag-search .tags > .tag .material-icons-outlined {
   font-size: 1.2rem;
   cursor: pointer;
 }
-.tag-search-select .tag-search .tags > .tag > .material-icons-outlined:hover {
+.tag-search-select .tag-search .tags > .tag .material-icons-outlined:hover {
   background-color: var(--background-25);
 }
 .tag-search-select .tag-search .tags .search {
@@ -1743,7 +1654,7 @@ form.search select:focus {
   color: var(--foreground);
 }
 
-.club-bar {
+.info-bar {
   display: grid;
   grid-template-columns: 8.5rem 1fr auto;
   grid-template-rows: auto auto 1fr;
@@ -1754,13 +1665,13 @@ form.search select:focus {
   border-bottom: 1px solid var(--foreground-25);
 }
 @media only screen and (max-width: 570px) {
-  .club-bar {
+  .info-bar {
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto 1fr;
     height: auto;
   }
 }
-.club-bar > .nav {
+.info-bar > .nav {
   grid-row: 3;
   grid-column: 3;
   align-self: end;
@@ -1769,12 +1680,12 @@ form.search select:focus {
   align-items: flex-end;
 }
 @media only screen and (max-width: 570px) {
-  .club-bar > .nav {
+  .info-bar > .nav {
     grid-row: 4;
     grid-column: 1/4;
   }
 }
-.club-bar > .nav .nav-item {
+.info-bar > .nav .nav-item {
   color: var(--foreground-75);
   text-decoration: none;
   padding: 0.5rem;
@@ -1783,35 +1694,35 @@ form.search select:focus {
   border-bottom: none;
   text-align: center;
 }
-.club-bar > .nav .nav-item:hover, .club-bar > .nav .nav-item:focus {
+.info-bar > .nav .nav-item:hover, .info-bar > .nav .nav-item:focus {
   color: var(--foreground);
   background: var(--accent-10);
 }
-.club-bar > .nav .nav-item:first-child {
+.info-bar > .nav .nav-item:first-child {
   border-top-left-radius: 0.25rem;
 }
-.club-bar > .nav .nav-item:last-child {
+.info-bar > .nav .nav-item:last-child {
   border-right: 1px solid var(--foreground-25);
   border-top-right-radius: 0.25rem;
 }
 @media only screen and (max-width: 570px) {
-  .club-bar > .nav .nav-item {
+  .info-bar > .nav .nav-item {
     flex: 1;
   }
 }
-.club-bar > .nav .nav-item.active {
+.info-bar > .nav .nav-item.active {
   border-top: 0.25rem solid var(--accent);
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
 }
-.club-bar > .img {
+.info-bar > .img {
   grid-row: 1/4;
   grid-column: 1;
   object-fit: contain;
   align-self: baseline;
   height: 8.5rem;
 }
-.club-bar > .name {
+.info-bar > .name {
   grid-row: 1;
   grid-column: 2;
   font-size: 2rem;
@@ -1819,13 +1730,13 @@ form.search select:focus {
   font-weight: 300;
   color: var(--foreground);
 }
-.club-bar > .date {
+.info-bar > .date {
   grid-row: 2;
   grid-column: 2/3;
   font-size: 1.1rem;
   font-weight: 100;
 }
-.club-bar > .info {
+.info-bar > .info {
   grid-row: 3;
   grid-column: 2/3;
   display: flex;
@@ -1835,32 +1746,32 @@ form.search select:focus {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
-.club-bar > .button {
+.info-bar > .button {
   grid-row: 1;
   grid-column: 3;
   background-color: var(--accent-25);
   border: 1px solid var(--foreground-25);
 }
-.club-bar > .button:hover {
+.info-bar > .button:hover {
   border-color: var(--foreground-50);
 }
-.club-bar > .button:focus {
+.info-bar > .button:focus {
   border-color: var(--accent);
 }
-.club-bar > .button:focus {
+.info-bar > .button:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }
-.club-bar > .button.join {
+.info-bar > .button.join {
   background-color: var(--green-25);
 }
-.club-bar > .button.join:hover {
+.info-bar > .button.join:hover {
   background-color: var(--green-50);
 }
-.club-bar > .button.leave {
+.info-bar > .button.leave {
   background-color: var(--red-25);
 }
-.club-bar > .button.leave:hover {
+.info-bar > .button.leave:hover {
   background-color: var(--red-50);
 }
 

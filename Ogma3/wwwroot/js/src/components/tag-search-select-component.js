@@ -117,7 +117,7 @@ Vue.component('tag-search-select', {
         }
     },
     created() {
-        axios.get(this.tagsApi)
+        axios.get(this.tagsApi+'/all')
             .then(res => {
                 this.options = res.data; 
                 this.loading = false;
@@ -161,9 +161,12 @@ Vue.component('tag-search-select', {
                 <div class="searchbar" ref="search">
                   <div class="tags">
                     
-                    <div class="tag" v-bind:style="{background: s.rgba}" v-for="s in selected">
-                      {{s.namespace ? s.namespace+':' : ''}}{{s.name}}
-                      <i class="material-icons-outlined" v-on:click="selected.remove(s)">clear</i>
+                    <div class="tag" v-for="s in selected">
+                      <div class="bg" v-bind:style="{background: s.namespaceColor}"></div>
+                      <span class="name">
+                        {{s.namespaceName ? s.namespaceName+':' : ''}}{{s.name}}
+                        <i class="material-icons-outlined" v-on:click="selected.remove(s)">clear</i>
+                      </span>
                     </div>
                     
                     <input type="text"

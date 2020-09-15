@@ -2,8 +2,8 @@
 @model Ogma3.Pages.ChapterModel
 
 @{
-    ViewData["Title"] = Model.StoryChapter.Chapter.Title;
+    ViewData["Title"] = Model.Chapter.Title;
 }
 
-<partial name="Shared/_ChapterDetails" model="@Model.StoryChapter" />
+<partial name="Shared/_ChapterDetails" model="@Model.Chapter" />
 

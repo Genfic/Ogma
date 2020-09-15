@@ -24,7 +24,7 @@ namespace Ogma3.Pages.User
         private const int PerPage = 25;
         public ProfileBar ProfileBar { get; set; }
         public bool IsCurrentUser { get; set; }
-        public PaginationModel PaginationModel { get; set; }
+        public Pagination Pagination { get; set; }
 
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
@@ -35,10 +35,10 @@ namespace Ogma3.Pages.User
 
             var storiesCount = await _storyRepo.CountForUser(ProfileBar.Id);
 
-            Stories = await _storyRepo.GetPaginatedStoryCards(PerPage, page);
+            Stories = await _storyRepo.GetAndSortPaginatedStoryCards(PerPage, page);
 
             // Prepare pagination
-            PaginationModel = new PaginationModel
+            Pagination = new Pagination
             {
                 CurrentPage = page,
                 ItemCount = storiesCount,

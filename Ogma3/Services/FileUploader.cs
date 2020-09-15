@@ -12,12 +12,10 @@ namespace Ogma3.Services
     public class FileUploader : IFileUploader
     {
         private readonly IB2Client _b2Client;
-        private readonly IConfiguration _config;
 
-        public FileUploader(IB2Client b2Client, IConfiguration config)
+        public FileUploader(IB2Client b2Client)
         {
             _b2Client = b2Client;
-            _config = config;
         }
 
         public async Task<FileUploaderResult> Upload(IFormFile cover, string folder, string name, int tries = 10)

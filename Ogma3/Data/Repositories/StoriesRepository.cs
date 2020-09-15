@@ -1,114 +1,140 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Castle.Core.Internal;
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Pages.Shared;
+using Ogma3.Data.Models;
 
 namespace Ogma3.Data.Repositories
 {
     public class StoriesRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly ClaimsPrincipal _claims;
+        private readonly IMapper _mapper;
 
-        public StoriesRepository(ApplicationDbContext context, ClaimsPrincipal claims)
+        public StoriesRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
-            _claims = claims;
+            _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get `StoryDetails` viewmodel by story OD
+        /// </summary>
+        /// <param name="id">ID of the desired story</param>
+        /// <returns>Desired `StoryDetails` object</returns>
         public async Task<StoryDetails> GetStoryDetails(long id)
         {
             return await _context.Stories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetStoryDetails)} -> {id}")
                 .Where(s => s.Id == id)
-                .Select(s => new StoryDetails
-                {
-                    Id = s.Id,
-                    AuthorId = s.Author.Id,
-                    IsAuthor = s.Author.Id.ToString() == _claims.FindFirstValue(ClaimTypes.NameIdentifier),
-                    Title = s.Title,
-                    Slug = s.Slug,
-                    Description = s.Description,
-                    Hook = s.Hook,
-                    Cover = s.Cover,
-                    ReleaseDate = s.ReleaseDate,
-                    IsPublished = s.IsPublished,
-                    Chapters = s.Chapters,
-                    Tags = s.StoryTags.Select(st => new TagDTO
-                    {
-                        Id = st.Tag.Id,
-                        Name = st.Tag.Name,
-                        Slug = st.Tag.Slug,
-                        Description = st.Tag.Description,
-                        Namespace = st.Tag.Namespace.Name,
-                        Color = st.Tag.Namespace.Color
-                    }).ToList(),
-                    Rating = s.Rating,
-                    Status = s.Status,
-                    WordCount = s.WordCount,
-                    ChapterCount = s.ChapterCount,
-                    Score = s.Votes.Count
-                })
+                .ProjectTo<StoryDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<StoryCard>> GetPaginatedStoryCards(int perPage = 10, int page = 1, EStorySortingOptions order = EStorySortingOptions.DateDescending)
+        /// <summary>
+        /// Get `StoryCard` objects, sorted according to `EStorySortingOptions` and paginated
+        /// </summary>
+        /// <param name="perPage">Number of objects per page</param>
+        /// <param name="page">Number of the desired page</param>
+        /// <param name="sort">Sorting method</param>
+        /// <returns>Sorted and paginated list of `StoryCard` objects</returns>
+        public async Task<List<StoryCard>> GetAndSortPaginatedStoryCards(int perPage = 10, int page = 1, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
         {
-            var query = _context.Stories.AsQueryable();
-
-            query = order switch
-            {
-                EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
-                EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-                EStorySortingOptions.DateAscending => query.OrderBy(s => s.ReleaseDate),
-                EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.ReleaseDate),
-                EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
-                EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
-                EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.Votes.Count),
-                EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.Votes.Count),
-                _ => query.OrderByDescending(s => s.ReleaseDate)
-            };
-
-            return await query
-                .Take(perPage)
-                .Skip(Math.Max(0, page - 1) * perPage)
-                .Select(s => new StoryCard
-                {
-                    Id = s.Id,
-                    AuthorName = s.Author.UserName,
-                    Title = s.Title,
-                    Slug = s.Slug,
-                    Hook = s.Hook,
-                    Cover = s.Cover,
-                    ReleaseDate = s.ReleaseDate,
-                    Tags = s.StoryTags.Select(st => new TagDTO
-                    {
-                        Id = st.Tag.Id,
-                        Name = st.Tag.Name,
-                        Slug = st.Tag.Slug,
-                        Description = st.Tag.Description,
-                        Namespace = st.Tag.Namespace.Name,
-                        Color = st.Tag.Namespace.Color
-                    }).ToList(),
-                    Rating = s.Rating,
-                    Status = s.Status,
-                    WordCount = s.WordCount,
-                    ChapterCount = s.ChapterCount,
-                })
+            return await _context.Stories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
+                .SortByEnum(sort)
+                .Paginate(page, perPage)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Get `StoryCard` objects, sorted according to `EStorySortingOptions`, filtered, and paginated
+        /// </summary>
+        /// <param name="perPage">Number of objects per page</param>
+        /// <param name="page">Number of the desired page</param>
+        /// <param name="tags">Tags to search by</param>
+        /// <param name="searchQuery">Query to search the titles by</param>
+        /// <param name="ratingId">Rating to filter by</param>
+        /// <param name="sort">Sorting method</param>
+        /// <returns>Sorted, filtered, and paginated list of `StoryCard` objects</returns>
+        public async Task<List<StoryCard>> SearchAndSortStoryCards(
+            int perPage = 10,
+            int page = 1,
+            IList<long>? tags = null,
+            string? searchQuery = null, 
+            long? ratingId = null,
+            EStorySortingOptions sort = EStorySortingOptions.DateDescending
+        )
+        {
+            return await Search(tags, searchQuery, ratingId)
+                .SortByEnum(sort)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .Paginate(page, perPage)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Count `Story` search results
+        /// </summary>
+        /// <param name="tags">Tags to search by</param>
+        /// <param name="searchQuery">Query to search the titles by</param>
+        /// <param name="ratingId">Rating to filter by</param>
+        /// <returns>Number of stories that fit the requirements</returns>
+        public async Task<int> CountSearchResults(IList<long>? tags = null, string? searchQuery = null, long? ratingId = null)
+        {
+            return await Search(tags, searchQuery, ratingId)
+                .CountAsync();
+        }
+
+        /// <summary>
+        /// Count the number of stories written by a user
+        /// </summary>
+        /// <param name="id">ID of the user</param>
+        /// <returns>Number of stories written by the user</returns>
         public async Task<int> CountForUser(long id)
         {
             return await _context.Stories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(CountForUser)} -> {id}")
                 .Where(s => s.Author.Id == id)
                 .CountAsync();
+        }
+
+        
+        /// <summary>
+        /// Apply a filter on `IQueryable` 
+        /// </summary>
+        /// <param name="tags">Tags to search by</param>
+        /// <param name="searchQuery">Query to search the titles by</param>
+        /// <param name="ratingId">Rating to filter by</param>
+        /// <returns>`IQueryable` objects with applied filters</returns>
+        private IQueryable<Story> Search(IList<long>? tags = null, string? searchQuery = null, long? ratingId = null)
+        {
+            // Prepare search query
+            var query = _context.Stories
+                .AsQueryable();
+            
+            // Search by title
+            if (!searchQuery.IsNullOrEmpty())
+                query = query.Where(s => EF.Functions.Like(s.Title.ToUpper(), $"%{searchQuery.Trim().ToUpper()}%"));
+            
+            // Search by rating
+            if (ratingId != null)
+                query = query.Where(s => s.Rating.Id == ratingId);
+            
+            // Search by tags
+            if (tags != null && tags.Count > 0)
+                query = query.Where(s => s.StoryTags.Any(st => tags.Contains(st.TagId)));
+
+            return query;
         }
     }
 }

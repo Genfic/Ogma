@@ -7,45 +7,41 @@
     var tab = (string) ViewData["Tab"];
 }
 
-<div class="col-md-12 profile-bar">
+<div class="info-bar profile-bar">
 
-    <div id="personal">
-        <avatar src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" size="130" alt="@Model.UserName's avatar"></avatar>
-        <div class="data">
-            
-            <h1 class="name">@Model.UserName</h1>
-            
-            <div class="roles">
-                @foreach (var r in Model.Roles)
-                {
-                    <div class="role-tag">
-                        <div class="bg" style="background-color: @r.Color"></div>
-                        <span class="name">@r.Name</span>
-                    </div>
-                }
-            </div>
+    <cdn-img class="img" src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" alt="@Model.UserName's avatar" loading="lazy" height="130" width="130"></cdn-img>
 
-            <h2 class="title">@Model.Title</h2>
-            
-            <div class="times">
-                
-                <div class="time">
-                    <span>Member since</span>
-                    <time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                        @Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-                    </time>
-                </div>
-                
-                <div class="time">
-                    <span>Last seen</span>
-                    <time datetime="@Model.LastActive.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
-                          title="@Model.LastActive.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture)">
-                        @Model.LastActive.Humanize(culture: CultureInfo.InvariantCulture)
-                    </time>
-                </div>
-                
+    <h1 class="name">@Model.UserName</h1>
+    
+    <div class="roles">
+        @foreach (var r in Model.Roles)
+        {
+            <div class="role-tag">
+                <div class="bg" style="background-color: @r.Color"></div>
+                <span class="name">@r.Name</span>
             </div>
+        }
+    </div>
+    
+    
+    <div class="info">
+        <h2 class="title">@Model.Title</h2>
+        
+        <div class="time">
+            <span>Member since</span>
+            <time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+                @Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+            </time>
         </div>
+        
+        <div class="time">
+            <span>Last seen</span>
+            <time datetime="@Model.LastActive.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
+                  title="@Model.LastActive.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture)">
+                @Model.LastActive.Humanize(culture: CultureInfo.InvariantCulture)
+            </time>
+        </div>
+        
     </div>
 
     <nav class="nav">

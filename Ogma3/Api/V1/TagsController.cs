@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 
 namespace Ogma3.Api.V1
 {
@@ -16,22 +17,26 @@ namespace Ogma3.Api.V1
     public class TagsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public TagsController(ApplicationDbContext context)
+        private readonly TagsRepository _tagsRepo;
+        
+        public TagsController(ApplicationDbContext context, TagsRepository tagsRepo)
         {
             _context = context;
+            _tagsRepo = tagsRepo;
         }
 
-
-        // GET: api/Tags
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TagDTO>>> GetTags()
+        // GET: api/Tags/all
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<TagDto>>> GetAll()
         {
-            var tags = await _context.Tags
-                .Include(t => t.Namespace)
-                .AsNoTracking()
-                .ToListAsync();
-            return tags.Select(TagDTO.FromTag).ToList();
+            return await _tagsRepo.GetAll();
+        }
+
+        // GET: api/Tags?page=1&perPage=10
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TagDto>>> GetTags([FromQuery] int page, [FromQuery] int perPage)
+        {
+            return await _tagsRepo.GetPaginated(page, perPage);
         }
 
 
@@ -53,7 +58,7 @@ namespace Ogma3.Api.V1
 
         // GET: api/Tags/story/5
         [HttpGet("story/{id}")]
-        public async Task<ActionResult<IEnumerable<TagDTO>>> GetStoryTags(long id)
+        public async Task<ActionResult<IEnumerable<TagDto>>> GetStoryTags(long id)
         {
             var tags = await _context.StoryTags
                 .Include(st => st.Tag)
@@ -67,7 +72,7 @@ namespace Ogma3.Api.V1
             {
                 return NotFound();
             }
-            return tags.Select(TagDTO.FromTag).ToList();
+            return tags.Select(TagDto.FromTag).ToList();
         }
         
         // GET: api/Tags/validation
