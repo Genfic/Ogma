@@ -42,7 +42,7 @@ yarn-error.log
 
 # Env variables
 ogma.env
-postgres.env
+postgres/postgres.env
 
 # Separate projects
 MarkdigExtensions/
