@@ -1,4 +1,5 @@
 @page "/user/{name}/blog"
+@using Utils.Extensions
 @model Ogma3.Pages.User.BlogModel
 
 @{
@@ -8,7 +9,7 @@
 
 <partial name="_ProfileBar" model="Model.ProfileBar" />
 
-@if (Model.IsCurrentUser)
+@if (User.IsUserSameAsLoggedIn(Model.ProfileBar.Id))
 {
     <a asp-page="/Blog/Create" class="btn btn-block btn-outline-primary">
         <icon icon="add"></icon>

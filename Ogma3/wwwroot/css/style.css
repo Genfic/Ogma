@@ -370,7 +370,7 @@ img.avatar {
   grid-template-columns: 10rem 1fr;
   grid-template-rows: auto auto 1fr auto auto;
   grid-column-gap: 0.25rem;
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
   border: 1px solid var(--foreground-25);
 }
 .story-card:hover {
@@ -478,6 +478,7 @@ img.avatar {
 .story-card .info {
   grid-column: 1/3;
   grid-row: 5;
+  display: flex;
   border-top: 1px solid var(--foreground-25);
 }
 .story-card .info > * {
@@ -487,6 +488,13 @@ img.avatar {
 }
 .story-card .info > *:hover {
   color: var(--foreground);
+}
+.story-card .info .icon {
+  font-size: 1rem;
+}
+.story-card .info .not-published {
+  color: var(--red);
+  margin-left: auto;
 }
 
 #story-app > .story-details {
@@ -965,7 +973,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   flex: 1;
   flex-direction: column;
   border: 1px solid var(--foreground-25);
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
 }
 .blogpost-card:first-of-type {
   margin: 0;
@@ -980,6 +988,9 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   border-color: var(--foreground-50);
 }
 .blogpost-card > .title {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
   text-decoration: none;
   color: var(--foreground);
   padding: 0.25rem;
@@ -995,6 +1006,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 }
 .blogpost-card .info {
   border-top: 1px solid var(--foreground-25);
+  display: flex;
 }
 .blogpost-card .info > * {
   padding: 0 0.25rem;
@@ -1002,6 +1014,13 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 }
 .blogpost-card .info > *:hover {
   color: var(--foreground);
+}
+.blogpost-card .info .icon {
+  font-size: 1rem;
+}
+.blogpost-card .info .not-published {
+  color: var(--red);
+  margin-left: auto;
 }
 .blogpost-card .tags {
   display: flex;
@@ -1544,6 +1563,14 @@ form.search select:focus {
 }
 .action-btn:focus {
   border-color: var(--accent);
+}
+.action-btn > .icon {
+  margin-right: 0.5rem;
+}
+@media screen and (max-width: 570px) {
+  .action-btn > .name {
+    display: none;
+  }
 }
 .action-btn:hover {
   color: var(--foreground);

@@ -48,10 +48,7 @@ namespace Ogma3.Api.V1
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (tag == null)
-            {
-                return NotFound();
-            }
+            if (tag == null) return NotFound();
 
             return tag;
         }
@@ -60,19 +57,11 @@ namespace Ogma3.Api.V1
         [HttpGet("story/{id}")]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetStoryTags(long id)
         {
-            var tags = await _context.StoryTags
-                .Include(st => st.Tag)
-                .ThenInclude(t => t.Namespace)
-                .Where(st => st.StoryId == id)
-                .Select(st => st.Tag)
-                .AsNoTracking()
-                .ToListAsync();
+            var tags = await _tagsRepo.GetTagsOfStory(id);
 
-            if (tags == null || tags.Count <= 0)
-            {
-                return NotFound();
-            }
-            return tags.Select(TagDto.FromTag).ToList();
+            if (tags == null || tags.Count <= 0) return NotFound();
+            
+            return tags;
         }
         
         // GET: api/Tags/validation

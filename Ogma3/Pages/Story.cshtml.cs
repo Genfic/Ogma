@@ -7,6 +7,7 @@ using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
+using Utils.Extensions;
 
 namespace Ogma3.Pages
 {
@@ -30,6 +31,7 @@ namespace Ogma3.Pages
             Story = await _storiesRepo.GetStoryDetails(id);
 
             if (Story == null) return NotFound();
+            if (!Story.IsPublished && !User.IsUserSameAsLoggedIn(Story.AuthorId)) return NotFound();
             
             ProfileBar = await _userRepo.GetProfileBar(Story.AuthorId);
             

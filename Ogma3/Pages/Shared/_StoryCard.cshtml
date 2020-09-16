@@ -34,7 +34,14 @@
         <span class="chapter-count">@Model.ChapterCount chapters</span>
         <time class="release-date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
             published @Model.ReleaseDate.FormatDateWithDaySuffix()
-        </time>
+        </time>        
+        @if (!Model.IsPublished)
+       {
+           <span class="not-published">
+               <icon class="icon" icon="visibility_off"></icon>
+               Not published
+           </span>
+       }
     </div>
 </div>
 

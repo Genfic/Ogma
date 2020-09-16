@@ -9,8 +9,8 @@ namespace Ogma3.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     <
-        OgmaUser, 
-        OgmaRole, 
+        OgmaUser,
+        OgmaRole,
         long,
         IdentityUserClaim<long>,
         UserRole,
@@ -24,7 +24,7 @@ namespace Ogma3.Data
             NpgsqlConnection.GlobalTypeMapper.MapEnum<EStoryStatus>();
         }
 
-        
+
         public DbSet<Tag> Tags { get; set; }
         public DbSet<StoryTag> StoryTags { get; set; }
         public DbSet<Namespace> Namespaces { get; set; }
@@ -41,32 +41,31 @@ namespace Ogma3.Data
 
         public DbSet<UserRole> OgmaUserRoles { get; set; }
         public DbSet<OgmaRole> OgmaRoles { get; set; }
-        
+
         // Clubs
         public DbSet<Club> Clubs { get; set; }
         public DbSet<ClubMember> ClubMembers { get; set; }
         public DbSet<ClubThread> ClubThreads { get; set; }
         public DbSet<ClubStory> ClubStories { get; set; }
-        
-        
+
+
         // Secondary
         public DbSet<Document> Documents { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Quote> Quotes { get; set; }
-        
+
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
 
-        
-        
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             // Extensions
             builder.HasPostgresExtension("uuid-ossp");
-            
-            
+
+
             // User
             builder.Entity<OgmaUser>()
                 .Ignore(u => u.PhoneNumber)
@@ -76,7 +75,7 @@ namespace Ogma3.Data
                 .WithOne(ct => ct.User)
                 .HasForeignKey<CommentsThread>(ct => ct.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             // UserRole
             builder.Entity<UserRole>(ent =>
             {
@@ -101,34 +100,31 @@ namespace Ogma3.Data
             builder.Entity<Namespace>()
                 .HasIndex(n => n.Name)
                 .IsUnique();
-            
+
             // Rating
             builder.Entity<Rating>()
                 .HasIndex(r => r.Name)
                 .IsUnique();
-            
+
             // Story
-            builder.Entity<Story>()
-                .Property(s => s.Id)
-                .ValueGeneratedOnAdd();
-            builder.Entity<Story>()
-                .Property(p => p.IsPublished)
-                .HasDefaultValue(false);
-            builder.Entity<Story>()
-                .HasOne(s => s.Rating)
-                .WithMany();
-            builder.Entity<Story>()
-                .HasMany(s => s.Chapters)
-                .WithOne(c => c.Story)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<Story>()
-                .HasOne(s => s.Author)
-                .WithMany();
-            builder.Entity<Story>()
-                .HasMany(s => s.Votes)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
-            
+            builder.Entity<Story>(ent =>
+            {
+                ent.Property(s => s.Id)
+                    .ValueGeneratedOnAdd();
+                ent.Property(p => p.IsPublished)
+                    .HasDefaultValue(false);
+                ent.HasOne(s => s.Rating)
+                    .WithMany();
+                ent.HasMany(s => s.Chapters)
+                    .WithOne(c => c.Story)
+                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(s => s.Author)
+                    .WithMany(u => u.Stories);
+                ent.HasMany(s => s.Votes)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             // Chapter
             builder.Entity<Chapter>()
                 .Property(p => p.IsPublished)
@@ -157,7 +153,7 @@ namespace Ogma3.Data
             builder.Entity<StoryTag>()
                 .HasOne(st => st.Tag)
                 .WithMany();
-            
+
             // Comment threads
             builder.Entity<CommentsThread>()
                 .HasMany(ct => ct.Comments)
@@ -170,7 +166,7 @@ namespace Ogma3.Data
                 .HasOne(c => c.Author)
                 .WithMany();
 
-            
+
             // Votes
             builder.Entity<Vote>()
                 .HasOne(v => v.User)
@@ -178,7 +174,7 @@ namespace Ogma3.Data
             builder.Entity<Vote>()
                 .HasIndex(v => new {v.UserId, v.StoryId})
                 .IsUnique();
-            
+
             // Shelf stories
             builder.Entity<ShelfStory>()
                 .HasKey(ss => new {ss.ShelfId, ss.StoryId});
@@ -195,22 +191,23 @@ namespace Ogma3.Data
             builder.Entity<Shelf>()
                 .HasOne(s => s.Icon)
                 .WithMany();
-            
+
             // Blogposts
-            builder.Entity<Blogpost>()
-                .HasOne(b => b.Author)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<Blogpost>()
-                .HasOne(b => b.CommentsThread)
-                .WithOne(ct => ct.Blogpost)
-                .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
+            builder.Entity<Blogpost>(ent =>
+            {
+                ent.HasOne(b => b.Author)
+                    .WithMany(u => u.Blogposts)
+                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(b => b.CommentsThread)
+                    .WithOne(ct => ct.Blogpost)
+                    .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+                
+
             // Clubs
             builder.Entity<Club>(ent =>
             {
-                
                 ent.HasMany(c => c.Threads)
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
@@ -227,7 +224,7 @@ namespace Ogma3.Data
                     .WithMany()
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             // Club threads
             builder.Entity<ClubThread>(ent =>
             {
@@ -239,7 +236,7 @@ namespace Ogma3.Data
                     .HasForeignKey<CommentsThread>(ct => ct.ClubThreadId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             // Club stories
             builder.Entity<ClubStory>(ent =>
             {
@@ -251,26 +248,22 @@ namespace Ogma3.Data
                     .WithMany()
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
-            
-            
+
+
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();
-            
-            
+
+
             // Documents
             // builder.Entity<Document>();
-            
+
             // Invite codes
             builder.Entity<InviteCode>()
                 .HasOne(c => c.UsedBy)
                 .WithOne()
                 .HasForeignKey<InviteCode>(c => c.UsedById)
                 .OnDelete(DeleteBehavior.Cascade);
-            
         }
-        
-        
     }
 }

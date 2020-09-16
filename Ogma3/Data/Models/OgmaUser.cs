@@ -38,6 +38,12 @@ namespace Ogma3.Data.Models
         
         [JsonIgnore]
         public ICollection<UserRole>? UserRoles { get; set; }
+        
+        [JsonIgnore] 
+        public ICollection<Story> Stories { get; set; } = new List<Story>();
+
+        [JsonIgnore]
+        public ICollection<Blogpost> Blogposts { get; set; } = new List<Blogpost>();
 
         [NotMapped]
         public ICollection<OgmaRole> Roles

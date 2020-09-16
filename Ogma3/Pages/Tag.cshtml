@@ -9,9 +9,16 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div>
+@if (Model.Stories.Count <= 0)
+{
+    <h1>No stories found</h1>
+}
+else
+{
     @foreach (var story in Model.Stories)
     {
-        <partial name="Shared/_StoryCard" model="@story"/>
+        <partial name="Shared/_StoryCard" model="story"/>
     }
-</div>
+    
+    <partial name="_Pagination" model="Model.Pagination"/>
+}

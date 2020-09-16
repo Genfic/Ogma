@@ -1,6 +1,6 @@
 @using System.Globalization
 @using Utils.Extensions
-@model Ogma3.Data.Models.Blogpost
+@model BlogpostCard
 
 <div class="blogpost-card">
     <a class="title" asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
@@ -36,6 +36,14 @@
             published @Model.PublishDate.FormatDateWithDaySuffix()
         </time>
         
-        <span class="author">by @Model.Author.UserName</span>
+        <span class="author">by @Model.AuthorUserName</span>
+        
+        @if (!Model.IsPublished)
+        {
+            <span class="not-published">
+                <icon class="icon" icon="visibility_off"></icon>
+                Not published
+            </span>
+        }
     </div>
 </div>

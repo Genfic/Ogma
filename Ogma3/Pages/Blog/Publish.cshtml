@@ -1,0 +1,42 @@
+﻿@page
+@model Ogma3.Pages.Blog.PublishModel
+
+@{
+    ViewData["Title"] = Model.Blogpost.IsPublished ? "Unpublish story" : "Publish story";
+}
+
+<h2>@Model.Blogpost.Title</h2>
+<div>
+    <h3>Are you sure you want to @(Model.Blogpost.IsPublished ? "unpublish" : "publish") this story?</h3>
+    <hr />
+    <dl class="rows">
+        <dt>
+            Published on:
+        </dt>
+        <dd>
+            @Model.Blogpost.PublishDate
+        </dd>
+        <dt>
+            Published status:
+        </dt>
+        <dd>
+            @(Model.Blogpost.IsPublished ? "Published" : "Not published")
+        </dd>
+        <dt>
+            Comments:
+        </dt>
+        <dd>
+            @Model.Blogpost.CommentsCount
+        </dd>
+    </dl>
+    
+    <form method="post" class="confirm">
+        <input type="hidden" asp-for="Blogpost.Id" />
+        <div class="buttons">
+            <input type="submit" 
+                   value="@(Model.Blogpost.IsPublished ? "Unpublish" : "Publish")" 
+                   class="button accept @(Model.Blogpost.IsPublished ? "red" : "green")" />
+            <a asp-page="../Story" class="button cancel" asp-route-id="@Model.Blogpost.Id" asp-route-slug="@Model.Blogpost.Slug">Cancel</a>
+        </div>
+    </form>
+</div>

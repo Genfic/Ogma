@@ -6,15 +6,15 @@
     ViewData["Tab"] = "Profile";
 }
 
-<partial name="_ProfileBar" model="Model.ProfileBar" />
+<partial name="_ProfileBar" model="Model.UserData" />
 
-@if (!string.IsNullOrEmpty(Model.Bio))
+@if (!string.IsNullOrEmpty(Model.UserData.Bio))
 {
     <markdown preset="All">
-        @Model.Bio
+        @Model.UserData.Bio
     </markdown>
 
     <hr>
 }
 
-<partial name="_Comments" model="@Model.CommentsThread.Id" />
+<partial name="_Comments" model="@Model.UserData.CommentsThreadId" />

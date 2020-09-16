@@ -1,11 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
-using Ogma3.Data.DTOs;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 

@@ -10,6 +10,13 @@
   color: v.$foreground-75
   +ab.active-border
   
+  &>.icon
+    margin-right: .5rem
+      
+  &>.name
+    @media screen and (max-width: v.$mq-mobile)
+      display: none
+  
   &:hover
     color: v.$foreground
     text-decoration: none

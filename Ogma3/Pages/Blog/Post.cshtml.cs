@@ -1,46 +1,35 @@
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
-using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog
 {
     public class DetailsModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private UserRepository _userRepo;
-
-        public DetailsModel(ApplicationDbContext context, UserRepository userRepo)
+        private readonly UserRepository _userRepo;
+        private readonly BlogpostsRepository _blogpostsRepo;
+        
+        public DetailsModel(UserRepository userRepo, BlogpostsRepository blogpostsRepo)
         {
-            _context = context;
             _userRepo = userRepo;
+            _blogpostsRepo = blogpostsRepo;
         }
 
-        public Blogpost Blogpost { get; set; }
+        public BlogpostDetails Blogpost { get; set; }
         public ProfileBar ProfileBar { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            Blogpost = await _context.Blogposts
-                .Where(b => b.Id == id)
-                .Include(b => b.Author)
-                .Include(b => b.CommentsThread)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            Blogpost = await _blogpostsRepo.Get(id);
 
-            if (Blogpost == null)
-            {
-                return NotFound();
-            }
+            if (Blogpost == null) return NotFound();
+            if (!Blogpost.IsPublished && !User.IsUserSameAsLoggedIn(Blogpost.AuthorId)) return NotFound();
             
-            ProfileBar = await _userRepo.GetProfileBar(Blogpost.Author.NormalizedUserName);
+            ProfileBar = await _userRepo.GetProfileBar(Blogpost.AuthorId);
             
             return Page();
         }

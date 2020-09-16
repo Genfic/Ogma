@@ -23,6 +23,7 @@ namespace Ogma3.Pages.Shared
         public EStoryStatus Status { get; set; }
         public int WordCount { get; set; }
         public int ChapterCount { get; set; }
+        public int CommentsCount { get; set; }
         public int Score { get; set; }
     }
 }

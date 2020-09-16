@@ -17,6 +17,7 @@ namespace Ogma3.Pages.Shared
         public string Hook { get; set; }
         public string? Cover { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public bool IsPublished { get; set; }
         public ICollection<TagDto> Tags { get; set; }
         public Rating Rating { get; set; }
         public EStoryStatus Status { get; set; }

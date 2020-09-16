@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
 
@@ -33,6 +32,16 @@ namespace Ogma3.Data.Repositories
         {
             return await _context.Tags
                 .Paginate(page, perPage)
+                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<TagDto>> GetTagsOfStory(long id)
+        {
+            return await _context.StoryTags
+                .Where(st => st.StoryId == id)
+                .Select(st => st.Tag)
                 .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();

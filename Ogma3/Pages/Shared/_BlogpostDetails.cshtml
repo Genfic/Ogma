@@ -1,30 +1,46 @@
 @using System.Globalization
 @using Utils.Extensions
-@model Ogma3.Data.Models.Blogpost
+@model BlogpostDetails
 
 <div class="blogpost-details">
     <h1 class="title">@Model.Title</h1>
-    
+
     <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
         @Model.PublishDate.FormatDateWithDaySuffix()
     </time>
-    
-    @if (User.Identity.IsAuthenticated && Model.Author.IsLoggedIn(User))
-    {
-        <div class="actions">
-            <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">
-                <icon icon="edit"></icon>
-            </a>
-            <a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.Id">
-                <icon icon="delete_forever"></icon>
-            </a>
-        </div>
-    }
-    
+
+    <div class="actions">
+        @if (User.IsUserSameAsLoggedIn(Model.AuthorId))
+            {
+                <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="edit"></icon>
+                    <span class="name">Edit</span>
+                </a>
+                <a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="delete_forever"></icon>
+                    <span class="name">Delete</span>
+                </a>
+                @if (Model.IsPublished)
+                {
+                    <a title="Publish story" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
+                        <icon class="icon" icon="visibility_off"></icon>
+                        <span class="name">Unpublish</span>
+                    </a>
+                }
+                else
+                {
+                    <a title="Publish story" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
+                        <icon class="icon" icon="visibility"></icon>
+                        <span class="name">Publish</span>
+                    </a>
+                }
+            }
+    </div>
+
     <markdown class="body" preset="Blogpost">
         @Model.Body
     </markdown>
-    
+
     <div class="tags">
         @foreach (var t in Model.Hashtags)
         {
@@ -33,4 +49,4 @@
     </div>
 </div>
 
-<partial name="_Comments" model="@Model.CommentsThread" />
+<partial name="_Comments" model="@Model.CommentsThreadId"/>

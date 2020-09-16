@@ -20,8 +20,8 @@ namespace Ogma3.Pages
         public List<StoryCard> TopStories { get; set; }
         public async Task OnGetAsync()
         {
-            RecentStories = await _storiesRepo.GetAndSortPaginatedStoryCards(sort: EStorySortingOptions.DateDescending);
-            TopStories = await _storiesRepo.GetAndSortPaginatedStoryCards(sort: EStorySortingOptions.ScoreDescending);
+            RecentStories = await _storiesRepo.GetAndSortPaginatedStoryCards(10, 1);
+            TopStories = await _storiesRepo.GetAndSortPaginatedStoryCards(10, 1, EStorySortingOptions.ScoreDescending);
         }
     }
 }

@@ -52,6 +52,7 @@ namespace Ogma3
             services.AddScoped<StoriesRepository>();
             services.AddScoped<TagsRepository>();
             services.AddScoped<ChaptersRepository>();
+            services.AddScoped<BlogpostsRepository>();
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
