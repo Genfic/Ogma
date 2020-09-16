@@ -42,7 +42,7 @@ namespace Ogma3
         {
         
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
-                Configuration.GetConnectionString("DbConnection")
+                Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection")
              ));
             
             // Repositories
