@@ -37,6 +37,10 @@ namespace Ogma3.Data
             CreateMap<Story, StoryCard>()
                 .ForMember(sd => sd.Tags, opts => opts.MapFrom(s => s.StoryTags.Select(st => st.Tag)));
 
+            // Bookshelf mappings
+            CreateMap<Shelf, BookshelfDetails>()
+                .ForMember(s => s.Stories, opts => opts.MapFrom(s => s.ShelfStories.Select(ss => ss.Story)));
+            
             // Tag mappings
             CreateMap<Tag, TagDto>();
             

@@ -1,20 +1,8 @@
 @page "/Shelf/{id}/{slug?}"
-@using Ogma3.Services
 @model Ogma3.Pages.Shelves.Bookshelf
 
 @{
     ViewData["Title"] = $"{Model.Shelf.Name}";
 }
 
-<h1>@Model.Shelf.Name</h1>
-<span>@Model.Shelf.Description</span>
-
-<div>
-@foreach (var story in Model.Shelf.Stories)
-{
-    <partial name="Shared/_StoryCard" model="@story"/>
-}
-</div>
-
-
-@Html.Resource(@<script>axios.get('/api/Shelves/1').then(console.log).catch(console.error)</script>)
+<partial name="Shared/_BookshelfDetails" model="Model.Shelf"/>

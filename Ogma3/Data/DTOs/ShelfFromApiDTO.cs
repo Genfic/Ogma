@@ -19,6 +19,7 @@ namespace Ogma3.Data.DTOs
         public IEnumerable<Story> Stories;
         public int Count { get; set; }
         public string? Icon { get; set; }
+        public long? IconId { get; set; }
         public bool? DoesContainBook { get; set; }
 
         public static ShelfFromApiDTO FromShelf(Shelf shelf, long? bookId = null) =>
@@ -34,6 +35,7 @@ namespace Ogma3.Data.DTOs
                 Stories = shelf.Stories,
                 Count = shelf.ShelfStories.Count,
                 Icon = shelf.Icon?.Name,
+                IconId = shelf.Icon?.Id,
                 DoesContainBook = bookId == null
                     ? (bool?) null
                     : shelf.ShelfStories.Any(ss => ss.StoryId == bookId)

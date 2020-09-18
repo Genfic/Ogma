@@ -125,12 +125,14 @@ let shelves_vue = new Vue({
 
         // Throws a shelf from the list into the editor
         editShelf: function(t) {
+            console.log(t)
             this.form.name  = t.name;
             this.form.desc  = t.description;
             this.form.id    = t.id;
             this.form.color = t.color;
             this.form.quick = t.isQuick;
             this.form.pub   = t.isPublic;
+            this.form.icon  = t.iconId;
             this.showForm   = true;
         },
 

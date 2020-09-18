@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Ogma3.Pages.Shared;
 using Ogma3.Services;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
@@ -53,6 +54,7 @@ namespace Ogma3
             services.AddScoped<TagsRepository>();
             services.AddScoped<ChaptersRepository>();
             services.AddScoped<BlogpostsRepository>();
+            services.AddScoped<BookshelfRepository>();
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -103,14 +105,23 @@ namespace Ogma3
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/login";
-                    options.AccessDeniedPath = "/login";
+                    options.LoginPath = new PathString("/login");
+                    options.LogoutPath = new PathString("/logout");
+                    options.AccessDeniedPath = new PathString("/login");
                 });
             
             // Auth
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            });
+            
+            // Cookies
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/login");
+                options.LogoutPath = new PathString("/logout");
+                options.AccessDeniedPath = new PathString("/login");
             });
             
             // Compression
@@ -153,6 +164,7 @@ namespace Ogma3
             }
 
             app.UseHttpsRedirection();
+            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             app.UseStaticFiles();
 
             app.UseRouting();

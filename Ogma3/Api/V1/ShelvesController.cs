@@ -46,6 +46,7 @@ namespace Ogma3.Api.V1
             var shelvesQuery = user.Id.ToString() == currentUser 
                 ? _context.Shelves.Where(s => s.Owner == user) 
                 : _context.Shelves.Where(s => s.Owner == user && s.IsPublic);
+            
             var shelves = await shelvesQuery
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)

@@ -1,0 +1,15 @@
+@page "{code?}"
+@model Ogma3.Pages.StatusCodeModel
+
+@{
+    ViewData["Title"] = $"Error {Model.Code}";
+}
+
+<div id="http-status">
+    <h1 class="number">@Model.Code</h1>
+    <h2 class="message">@Model.Name</h2>
+    <a href="@Model.OriginalUrl" class="path">@Model.OriginalUrl</a>
+    <div class="text">
+        @Model.Text
+    </div>
+</div>

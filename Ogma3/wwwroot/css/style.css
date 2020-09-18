@@ -1907,6 +1907,22 @@ form.search select:focus {
   background-color: darkblue;
 }
 
+#bookshelf-details .name {
+  padding-bottom: 0.5rem;
+}
+#bookshelf-details .name .icon {
+  margin: 0 0.4rem;
+  padding: 0.25rem;
+  font-weight: bold;
+  color: var(--background);
+  text-shadow: 1px 1px 0 var(--foreground-75);
+  border: 1px solid var(--foreground-50);
+}
+#bookshelf-details .desc {
+  padding-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
 .md p {
   padding-bottom: 0.5rem;
 }
@@ -1927,4 +1943,37 @@ noscript {
   background-color: var(--red-25);
   border: 1px solid var(--foreground-50);
   padding: 0.2rem;
+}
+
+#http-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#http-status .number {
+  font-size: clamp(8rem, 10vw, 20rem);
+  margin: 2rem 0 1rem;
+  animation: swing infinite ease-in-out 1s alternate;
+}
+#http-status .message {
+  margin-bottom: 0.25rem;
+}
+#http-status .path {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+}
+#http-status .text {
+  width: min(100vw, 30rem);
+  padding: 0 1rem;
+  text-align: justify;
+}
+
+@keyframes swing {
+  from {
+    transform: rotate(-10deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
 }

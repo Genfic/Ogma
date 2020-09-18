@@ -106,10 +106,10 @@
             @if (Model.IsCurrentUser)
             {
                 <div class="actions">
-                    <button v-on:click="deleteShelf(s)">
+                    <button class="action" v-on:click="deleteShelf(s)">
                         <icon icon="delete_forever"></icon>
                     </button>
-                    <button v-on:click="editShelf(s)">
+                    <button class="action" v-on:click="editShelf(s)">
                         <icon icon="edit"></icon>
                     </button>
                 </div>
