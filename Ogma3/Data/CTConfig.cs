@@ -112,9 +112,15 @@ namespace Ogma3.Data
             public const int MinNameLength = 3;
             public const int MaxNameLength = 50;
 
+            public const int MinHookLength = 10;
             public const int MaxHookLength = 100;
             
-            public const int MaxDescriptionLength = 10_000;
+            public const int MaxDescriptionLength = 25_000;
+            
+            public const int CoverMaxWeight = 2 * 1024 * 1024;
+            
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateFileWeight = "The {0} must be less than {1} bytes";
         }
 
         public static class CClubThread

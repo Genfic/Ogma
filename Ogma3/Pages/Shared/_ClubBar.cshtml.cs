@@ -10,9 +10,10 @@ namespace Ogma3.Pages.Shared
         public string Description { get; set; }
         public string Icon { get; set; }
         public DateTime CreationDate { get; set; }
-        public int UserCount { get; set; }
-        public int ThreadCount { get; set; }
-        public int StoryCount { get; set; }
+        public int ClubMembersCount { get; set; }
+        public int ThreadsCount { get; set; }
+        public int ClubStoriesCount { get; set; }
         public bool IsMember { get; set; }
+        public long FounderId { get; set; }
     }
 }

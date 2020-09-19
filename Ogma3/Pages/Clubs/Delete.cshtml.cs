@@ -1,12 +1,16 @@
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Enums;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Clubs
 {
+    [Authorize]
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -26,12 +30,24 @@ namespace Ogma3.Pages.Clubs
                 return NotFound();
             }
 
-            Club = await _context.Clubs.FirstOrDefaultAsync(m => m.Id == id);
+            var club = await _context.Clubs
+                .Where(c => c.Id == id)
+                .Select(c => new
+                {
+                    Club = c,
+                    FounderId = c.ClubMembers.First(cm => cm.Role == EClubMemberRoles.Founder).MemberId
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
-            if (Club == null)
-            {
-                return NotFound();
-            }
+            if (club == null) return NotFound();
+            
+            Club = club.Club;
+
+            if (Club == null) return NotFound();
+
+            if (!User.IsUserSameAsLoggedIn(club.FounderId)) return Unauthorized();
+            
             return Page();
         }
 
@@ -42,13 +58,22 @@ namespace Ogma3.Pages.Clubs
                 return NotFound();
             }
 
-            Club = await _context.Clubs.FindAsync(id);
+            Club = await _context.Clubs
+                .Where(c => c.Id == id)
+                .Include(c => c.ClubMembers)
+                .FirstOrDefaultAsync();
+            
+            if (Club == null) return NotFound();
 
-            if (Club != null)
-            {
-                _context.Clubs.Remove(Club);
-                await _context.SaveChangesAsync();
-            }
+            var founderId = await _context.ClubMembers
+                .Where(cm => cm.ClubId == Club.Id && cm.Role == EClubMemberRoles.Founder)
+                .Select(cm => cm.MemberId)
+                .FirstOrDefaultAsync();
+
+            if (User.IsUserSameAsLoggedIn(founderId)) return Unauthorized();
+            
+            _context.Clubs.Remove(Club);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

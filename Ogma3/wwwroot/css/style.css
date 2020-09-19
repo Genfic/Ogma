@@ -1787,32 +1787,53 @@ form.search select:focus {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
-.info-bar > .button {
+.info-bar > .buttons {
   grid-row: 1;
   grid-column: 3;
-  background-color: var(--accent-25);
+  display: flex;
+}
+.info-bar > .buttons > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  color: var(--foreground-75);
+  text-decoration: none;
+}
+.info-bar > .buttons > .button {
+  background-color: var(--accent-10);
+  margin-left: 0.25rem;
   border: 1px solid var(--foreground-25);
 }
-.info-bar > .button:hover {
+.info-bar > .buttons > .button:hover {
   border-color: var(--foreground-50);
 }
-.info-bar > .button:focus {
+.info-bar > .buttons > .button:focus {
   border-color: var(--accent);
 }
-.info-bar > .button:focus {
+.info-bar > .buttons > .button:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }
-.info-bar > .button.join {
+.info-bar > .buttons > .button:first-child {
+  margin-left: 0;
+}
+.info-bar > .buttons > .button:hover {
+  background-color: var(--accent-25);
+}
+.info-bar > .buttons > .button.max {
+  flex: 1;
+}
+.info-bar > .buttons > .button.join {
   background-color: var(--green-25);
 }
-.info-bar > .button.join:hover {
+.info-bar > .buttons > .button.join:hover {
   background-color: var(--green-50);
 }
-.info-bar > .button.leave {
+.info-bar > .buttons > .button.leave {
   background-color: var(--red-25);
 }
-.info-bar > .button.leave:hover {
+.info-bar > .buttons > .button.leave:hover {
   background-color: var(--red-50);
 }
 

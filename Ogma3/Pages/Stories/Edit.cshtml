@@ -3,7 +3,7 @@
 @model Ogma3.Pages.Stories.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = $"Edit {Model.Input.Title}";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -64,7 +64,9 @@
                        validate-msg="@CTConfig.CStory.ValidateTagCount">
     </tag-search-select>
     
-    <button type="submit" class="btn btn-primary">Save changes</button>
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
 
 </form>
 

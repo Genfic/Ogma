@@ -1,6 +1,7 @@
 @using System.Globalization
 @using Ogma3.Api.V1
 @using Ogma3.Services
+@using Utils.Extensions
 @model ClubBar
 
 @{
@@ -20,14 +21,27 @@
     </time>
 
     <div class="info">
-        <div class="user-count">@Model.UserCount @(Model.UserCount == 1 ? "member" : "members")</div>
-        <div class="thread-count">@Model.ThreadCount @(Model.ThreadCount == 1 ? "thread" : "threads")</div>
-        <div class="story-count">@Model.StoryCount @(Model.StoryCount == 1 ?"story" : "stories")</div>
+        <div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
+        <div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
+        <div class="story-count">@Model.ClubStoriesCount @(Model.ClubStoriesCount == 1 ?"story" : "stories")</div>
     </div>
     
-    <button class="button @(Model.IsMember ? "leave" : "join")" id="join-btn">
-        @(Model.IsMember ? "Leave club" : "Join club")
-    </button>
+    <div class="buttons">
+        <button class="button max @(Model.IsMember ? "leave" : "join")" id="join-btn">
+            @(Model.IsMember ? "Leave club" : "Join club")
+        </button>
+        
+        @if (User.IsUserSameAsLoggedIn(Model.FounderId))
+        {
+            <a class="button" title="Edit club"  asp-page="/Clubs/Edit" asp-route-id="@Model.Id">
+                <icon class="icon" icon="edit"></icon>
+            </a>
+        
+            <a class="button" title="Delete club" asp-page="/Clubs/Delete" asp-route-id="@Model.Id">
+                <icon class="icon" icon="delete_forever"></icon>
+            </a>
+        }
+    </div>
 
     <nav class="nav">
         <a class="nav-item @(tab == "Home" ? "active" : null)" asp-area="" asp-page="/Club/Index" asp-route-id="@Model.Id">

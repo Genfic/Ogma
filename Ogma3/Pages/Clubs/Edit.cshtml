@@ -2,59 +2,59 @@
 @model Ogma3.Pages.Clubs.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = $"Edit {Model.Club.Name}";
 }
 
-<h1>Edit</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Club</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Club.Name" class="control-label"></label>
-                <input asp-for="Club.Name" class="form-control" />
-                <span asp-validation-for="Club.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Club.Hook" class="control-label"></label>
-                <input asp-for="Club.Hook" class="form-control" />
-                <span asp-validation-for="Club.Hook" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Club.Description" class="control-label"></label>
-                <input asp-for="Club.Description" class="form-control" />
-                <span asp-validation-for="Club.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Club.Icon" class="control-label"></label>
-                <input asp-for="Club.Icon" class="form-control" />
-                <span asp-validation-for="Club.Icon" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Club.IconId" class="control-label"></label>
-                <input asp-for="Club.IconId" class="form-control" />
-                <span asp-validation-for="Club.IconId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Club.CreationDate" class="control-label"></label>
-                <input asp-for="Club.CreationDate" class="form-control" />
-                <span asp-validation-for="Club.CreationDate" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Club.Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<form class="form" id="club" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
+
+    <div asp-validation-summary="All">
+        <span>Please correct the following errors</span>
     </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+    <input-counter ref="title"
+                   :min="@CTConfig.CClub.MinNameLength"
+                   :max="@CTConfig.CClub.MaxNameLength"
+                   validate-msg="@CTConfig.CClub.ValidateLengthMsg"
+                   label="@nameof(Model.Club.Name)"
+                   value="@Model.Club.Name"
+                   desc="Try something catchy">
+    </input-counter>
+
+    <textarea-counter ref="desc"
+                      :max="@CTConfig.CClub.MaxDescriptionLength"
+                      validate-msg="@CTConfig.CClub.ValidateLengthMsg"
+                      label="@nameof(Model.Club.Description)"
+                      value="@Model.Club.Description"
+                      desc="This will show on the club's home page">
+    </textarea-counter>
+
+    <input-counter ref="hook"
+                   :min="@CTConfig.CClub.MinHookLength"
+                   :max="@CTConfig.CClub.MaxHookLength"
+                   validate-msg="@CTConfig.CClub.ValidateLengthMsg"
+                   label="@nameof(Model.Club.Hook)"
+                   value="@Model.Club.Hook"
+                   desc="The short description that will appear on the clubs list">
+    </input-counter>
+
+    <input-file ref="cover"
+                :max="@CTConfig.CClub.CoverMaxWeight"
+                validate-msg="@CTConfig.CClub.ValidateFileWeight"
+                label="@nameof(Model.Club.Icon)"
+                desc="Something that will set your club apart">
+    </input-file>
+
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
+
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/input-file-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/editors/club.min.js" asp-append-version="true"></script>
 }

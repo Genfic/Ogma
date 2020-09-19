@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +18,14 @@ namespace Ogma3.Pages.Blog
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        public IndexModel(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public IndexModel(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         
-        public IList<Blogpost> Posts { get;set; }
+        public IList<BlogpostCard> Posts { get;set; }
         public string SearchBy { get; set; }
         public EBlogpostSortingOptions SortBy { get; set; }
 
@@ -76,6 +80,7 @@ namespace Ogma3.Pages.Blog
                 .Include(b => b.Author)
                 .Skip(Math.Max(0, page - 1) * PerPage)
                 .Take(PerPage)
+                .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
             
