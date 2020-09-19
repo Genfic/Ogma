@@ -2,7 +2,22 @@
 
 .md
 
-  & p
+  p
     padding-bottom: .5rem
     &:last-child
       padding-bottom: 0
+      
+  .spoiler
+    color: transparent
+    background-color: v.$foreground-50
+    border-bottom: 1px dotted v.$foreground
+    cursor: help
+    transition: color 50ms ease-in-out, background-color 50ms ease-in-out
+    &::selection
+      color: transparent
+      background-color: v.$foreground-50
+    &:hover
+      color: v.$foreground
+      background-color: transparent
+      &::selection
+        color: v.$background

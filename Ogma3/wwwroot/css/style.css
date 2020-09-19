@@ -1943,6 +1943,24 @@ form.search select:focus {
 .md p:last-child {
   padding-bottom: 0;
 }
+.md .spoiler {
+  color: transparent;
+  background-color: var(--foreground-50);
+  border-bottom: 1px dotted var(--foreground);
+  cursor: help;
+  transition: color 50ms ease-in-out, background-color 50ms ease-in-out;
+}
+.md .spoiler::selection {
+  color: transparent;
+  background-color: var(--foreground-50);
+}
+.md .spoiler:hover {
+  color: var(--foreground);
+  background-color: transparent;
+}
+.md .spoiler:hover::selection {
+  color: var(--background);
+}
 
 #version {
   color: var(--background);

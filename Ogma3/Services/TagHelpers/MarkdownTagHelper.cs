@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Markdig;
 using MarkdigExtensions.Hashtags;
 using MarkdigExtensions.Mentions;
+using MarkdigExtensions.Spoiler;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Services.TagHelpers
@@ -51,7 +52,10 @@ namespace Ogma3.Services.TagHelpers
                 _ => throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...")
             };
 
-            var pipeline = builder.Build();
+            // attach universal plugins and build the pipeline
+            var pipeline = builder
+                .UseSpoilers()
+                .Build();
             
             var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);
             var markdownHtmlContent = Markdown.ToHtml(RemoveLeadingWhiteSpace(childContent.GetContent(NullHtmlEncoder.Default)), pipeline);
