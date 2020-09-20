@@ -21,7 +21,9 @@ namespace Ogma3.Data
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            NpgsqlConnection.GlobalTypeMapper.MapEnum<EStoryStatus>();
+            NpgsqlConnection.GlobalTypeMapper
+                .MapEnum<EStoryStatus>()
+                .MapEnum<EClubMemberRoles>();
         }
 
 
