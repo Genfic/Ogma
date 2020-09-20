@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using AutoMapper;
 using B2Net;
 using B2Net.Models;
@@ -24,6 +27,7 @@ using Ogma3.Services;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;
+using Ogma3.Services.SiteConfig;
 using reCAPTCHA.AspNetCore;
 using Utils;
 
@@ -55,6 +59,11 @@ namespace Ogma3
             services.AddScoped<ChaptersRepository>();
             services.AddScoped<BlogpostsRepository>();
             services.AddScoped<BookshelfRepository>();
+            
+            // Custom config
+            using var sr = new StreamReader("config.json");
+            var configDict = JsonSerializer.Deserialize<Dictionary<string, string>>(sr.ReadToEnd());
+            services.AddSingleton<ISiteConfig>(new SiteConfig(configDict));
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);
