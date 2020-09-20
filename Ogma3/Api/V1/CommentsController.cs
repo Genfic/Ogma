@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
@@ -18,15 +17,15 @@ namespace Ogma3.Api.V1
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        private readonly IConfiguration _config;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<OgmaUser> _userManager;
+        private readonly OgmaConfig _ogmaConfig;
 
-        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager, IConfiguration config)
+        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager, OgmaConfig ogmaConfig)
         {
             _context = context;
             _userManager = userManager;
-            _config = config;
+            _ogmaConfig = ogmaConfig;
         }
 
         public class GetCommentsInput
@@ -50,15 +49,21 @@ namespace Ogma3.Api.V1
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery]GetCommentsInput input)
         {
-            return await _context.Comments
+            var comments =  await _context.Comments
                 .Where(c => c.CommentsThreadId == input.Thread)
                 .Include(c => c.Author)
                     .ThenInclude(u => u.UserRoles)
                         .ThenInclude(ur => ur.Role)
                 // .Skip((input.Page - 1) * input.PerPage).Take(input.PerPage) // Pagination
-                .Select(c => new CommentDTO(_config, c, true))
+                .Select(c => new CommentDTO(c, true))
                 .AsNoTracking()
                 .ToListAsync();
+            
+            return comments.Select(c =>
+            {
+                c.Author.Avatar = _ogmaConfig.Cdn + c.Author.Avatar;
+                return c;
+            }).ToList();
         }
 
         // GET: api/Comments/5
@@ -74,7 +79,9 @@ namespace Ogma3.Api.V1
                 return NotFound();
             }
 
-            return new CommentDTO(_config, comment);
+            var dto = new CommentDTO(comment);
+            dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
+            return dto;
         }
 
         // PUT: api/Comments/5
@@ -135,7 +142,9 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetComment", new { id = comment.Id }, new CommentDTO(_config, comment));
+            var dto = new CommentDTO(comment);
+            dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
+            return CreatedAtAction("GetComment", new { id = comment.Id }, dto);
         }
 
         // DELETE: api/Comments/5
@@ -161,7 +170,9 @@ namespace Ogma3.Api.V1
             
             await _context.SaveChangesAsync();
 
-            return new CommentDTO(_config, comment);
+            var dto = new CommentDTO(comment);
+            dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
+            return dto;
         }
 
         private bool CommentExists(long id)

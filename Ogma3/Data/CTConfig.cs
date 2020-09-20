@@ -1,7 +1,5 @@
 // Compile-time config variables
 
-using System.IO.Pipelines;
-
 namespace Ogma3.Data
 {
     public static class CTConfig

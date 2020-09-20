@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using reCAPTCHA.AspNetCore;
-using reCAPTCHA.AspNetCore.Attributes;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {

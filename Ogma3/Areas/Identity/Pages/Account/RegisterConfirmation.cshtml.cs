@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Ogma3.Data;
-using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {

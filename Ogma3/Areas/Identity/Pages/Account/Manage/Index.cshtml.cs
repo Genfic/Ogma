@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using B2Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Ogma3.Services;
@@ -22,20 +17,21 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         private readonly OgmaUserManager _userManager;
         private readonly SignInManager<OgmaUser> _signInManager;
         private readonly IB2Client _b2Client;
-        private readonly IConfiguration _config;
         private readonly FileUploader _uploader;
+        private readonly OgmaConfig _ogmaConfig;
 
         public IndexModel(
             OgmaUserManager userManager,
             SignInManager<OgmaUser> signInManager,
             IB2Client b2Client,
-            IConfiguration config, FileUploader uploader)
+            FileUploader uploader, 
+            OgmaConfig ogmaConfig)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _b2Client = b2Client;
-            _config = config;
             _uploader = uploader;
+            _ogmaConfig = ogmaConfig;
         }
 
         
@@ -112,7 +108,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 // Delete the old avatar if exists
                 if (user.Avatar != null && user.AvatarId != null)
                 {
-                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_config["cdn"], ""));
+                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_ogmaConfig.Cdn, ""));
                 }
 
                 // Upload the new one

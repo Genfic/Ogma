@@ -1,6 +1,5 @@
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models

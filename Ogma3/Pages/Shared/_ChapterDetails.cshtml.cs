@@ -1,5 +1,4 @@
 using System;
-using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Shared
 {

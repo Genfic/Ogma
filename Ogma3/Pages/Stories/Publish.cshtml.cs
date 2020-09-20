@@ -1,14 +1,10 @@
 ﻿using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using B2Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
-using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 using Utils.Extensions;

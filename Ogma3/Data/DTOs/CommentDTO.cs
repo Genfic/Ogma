@@ -1,6 +1,5 @@
 using System;
 using Markdig;
-using Microsoft.Extensions.Configuration;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Data.DTOs
@@ -17,7 +16,7 @@ namespace Ogma3.Data.DTOs
 
         public string Body { get; set; }
 
-        public CommentDTO(IConfiguration config, Comment comment, bool parseMd = false)
+        public CommentDTO(Comment comment, bool parseMd = false)
         {
             Id = comment.Id;
             
@@ -27,7 +26,7 @@ namespace Ogma3.Data.DTOs
             
             Body = parseMd ? Markdown.ToHtml(comment.Body.Trim()) : comment.Body.Trim();
             
-            Author = new UserSimpleDTO(config, comment.Author);
+            Author = new UserSimpleDTO(comment.Author);
         }
     }
 }

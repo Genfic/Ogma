@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using B2Net;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Ogma3.Data;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Pages.Stories
@@ -17,12 +17,14 @@ namespace Ogma3.Pages.Stories
         private readonly Data.ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly IB2Client _b2Client;
-
-        public DeleteModel(Data.ApplicationDbContext context, IB2Client b2Client, IConfiguration config)
+        private readonly OgmaConfig _ogmaConfig;
+        
+        public DeleteModel(Data.ApplicationDbContext context, IB2Client b2Client, IConfiguration config, OgmaConfig ogmaConfig)
         {
             _context = context;
             _b2Client = b2Client;
             _config = config;
+            _ogmaConfig = ogmaConfig;
         }
 
         [BindProperty] public Story Story { get; set; }
@@ -68,7 +70,7 @@ namespace Ogma3.Pages.Stories
             
             // Delete cover
             if (Story.CoverId != null && Story.Cover != null) 
-                await _b2Client.Files.Delete(Story.CoverId, Story.Cover.Replace(_config["cdn"], ""));
+                await _b2Client.Files.Delete(Story.CoverId, Story.Cover.Replace(_ogmaConfig.Cdn, ""));
 
             // Save
             await _context.SaveChangesAsync();

@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Ogma3.Data.Models;
-using Utils;
 
 namespace Ogma3.Data.DTOs
 {

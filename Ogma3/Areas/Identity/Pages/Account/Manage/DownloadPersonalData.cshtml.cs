@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Text.Json.Serialization;
-using Ogma3.Data;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage

@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Castle.Core.Internal;
 using Ogma3.Data;
 using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
 using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages.Blog

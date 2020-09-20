@@ -1,5 +1,4 @@
-﻿@using Ogma3.Data
-@using Ogma3.Data.Models
+﻿@using Ogma3.Data.Models
 @inject SignInManager<OgmaUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

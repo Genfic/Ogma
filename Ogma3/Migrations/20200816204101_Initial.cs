@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Ogma3.Data.Enums;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Ogma3.Migrations
 {

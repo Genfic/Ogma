@@ -8,7 +8,10 @@
     {
         <li class="nav-item">
             <a class="nav-link user text-dark" asp-area="" asp-page="/User/Index" asp-route-name="@User.Identity.Name" title="Manage">
-                <avatar src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" size="30" alt="@User.Identity.Name's avatar"></avatar>
+                <cdn-img src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" 
+                         width="30" height="30" 
+                         class="avatar"
+                         alt="@User.Identity.Name's avatar"></cdn-img>
                 <span class="name">Hello @User.Identity.Name!</span>
             </a>
         </li>
