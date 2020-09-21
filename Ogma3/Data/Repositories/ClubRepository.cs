@@ -29,12 +29,12 @@ namespace Ogma3.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<UserSimpleDto>> GetMembers(long clubId, int page, int perPage)
+        public async Task<List<UserCard>> GetMembers(long clubId, int page, int perPage)
         {
             return await _context.ClubMembers
                 .Where(cm => cm.ClubId == clubId)
                 .Select(cm => cm.Member)
-                .ProjectTo<UserSimpleDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
                 .Paginate(page, perPage)
                 .AsNoTracking()
                 .ToListAsync();

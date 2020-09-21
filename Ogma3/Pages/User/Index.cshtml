@@ -2,7 +2,7 @@
 @model Ogma3.Pages.User.IndexModel
 
 @{
-    ViewData["Title"] = $"{User.Identity.Name}'s profile";
+    ViewData["Title"] = $"{Model.UserData.UserName}'s profile";
     ViewData["Tab"] = "Profile";
 }
 

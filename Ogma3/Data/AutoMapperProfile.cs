@@ -52,6 +52,12 @@ namespace Ogma3.Data
                     opts 
                         => opts.MapFrom(u => u.UserRoles.Select(ur => ur.Role).Where(r => r.Order.HasValue).OrderBy(r => r.Order).FirstOrDefault())
                 );
+            CreateMap<OgmaUser, UserCard>()
+                .ForMember(
+                    pb => pb.Roles,
+                    opts 
+                        => opts.MapFrom(u => u.UserRoles.Select(ur => ur.Role))
+                );
 
             // Role mappings
             CreateMap<OgmaRole, RoleDTO>();

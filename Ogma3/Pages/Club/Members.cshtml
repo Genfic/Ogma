@@ -8,15 +8,9 @@
 
 <partial name="_ClubBar" model="@Model.ClubBar"/>
 
-<ul class="items-list">
+<ul class="two-columns o-grid">
     @foreach (var m in Model.ClubMembers)
     {
-        <li>
-            <div class="deco" style="background-color: @m.TopRole?.Color"></div>
-            <div class="main">
-                <div class="name">@m.UserName</div>
-                <div class="desc">@(m.TopRole?.Name)</div>
-            </div>
-        </li>
+        <partial name="Shared/_UserCard" model="m"/>
     }
 </ul>

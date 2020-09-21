@@ -1839,7 +1839,7 @@ form.search select:focus {
 
 .thread-card {
   display: grid;
-  height: 4rem;
+  height: calc(4rem + 2px);
   grid-template-columns: auto 1fr auto;
   grid-template-rows: 1fr auto;
   column-gap: 0.5rem;
@@ -1956,6 +1956,44 @@ form.search select:focus {
 #bookshelf-details .desc {
   padding-bottom: 1rem;
   font-size: 1.1rem;
+}
+
+.user-card {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem;
+  height: calc(5rem + 2px);
+  border: 1px solid var(--foreground-25);
+}
+.user-card:hover {
+  border-color: var(--foreground-50);
+}
+.user-card:focus {
+  border-color: var(--accent);
+}
+.user-card > .avatar {
+  grid-row: 1/4;
+  grid-column: 1;
+  height: 5rem;
+  object-fit: contain;
+}
+.user-card > .name {
+  grid-row: 1;
+  grid-column: 2;
+  color: var(--foreground);
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+.user-card > .roles {
+  grid-row: 2;
+  grid-column: 2;
+  display: flex;
+}
+.user-card > .title {
+  grid-row: 3;
+  grid-column: 2;
+  font-size: 0.9rem;
 }
 
 .md p {
