@@ -1,0 +1,22 @@
+@page "{id}"
+@model Ogma3.Pages.Club.Members
+
+@{
+    ViewData["Title"] = Model.ClubBar.Name;
+    ViewData["Tab"] = "Members";
+}
+
+<partial name="_ClubBar" model="@Model.ClubBar"/>
+
+<ul class="items-list">
+    @foreach (var m in Model.ClubMembers)
+    {
+        <li>
+            <div class="deco" style="background-color: @m.TopRole?.Color"></div>
+            <div class="main">
+                <div class="name">@m.UserName</div>
+                <div class="desc">@(m.TopRole?.Name)</div>
+            </div>
+        </li>
+    }
+</ul>

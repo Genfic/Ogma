@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data.DTOs;
 using Ogma3.Pages.Shared;
 
 namespace Ogma3.Data.Repositories
@@ -25,6 +27,17 @@ namespace Ogma3.Data.Repositories
                 .ProjectTo<ClubBar>(_mapper.ConfigurationProvider, new { currentUser = userId })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<UserSimpleDto>> GetMembers(long clubId, int page, int perPage)
+        {
+            return await _context.ClubMembers
+                .Where(cm => cm.ClubId == clubId)
+                .Select(cm => cm.Member)
+                .ProjectTo<UserSimpleDto>(_mapper.ConfigurationProvider)
+                .Paginate(page, perPage)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

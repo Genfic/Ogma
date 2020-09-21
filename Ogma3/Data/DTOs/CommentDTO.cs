@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Markdig;
 using Ogma3.Data.Models;
 
@@ -10,7 +11,7 @@ namespace Ogma3.Data.DTOs
 
         public long CommentsThreadId { get; set; }
 
-        public UserSimpleDTO Author { get; set; }
+        public UserSimpleDto Author { get; set; }
 
         public DateTime DateTime { get; set; }
 
@@ -26,7 +27,26 @@ namespace Ogma3.Data.DTOs
             
             Body = parseMd ? Markdown.ToHtml(comment.Body.Trim()) : comment.Body.Trim();
             
-            Author = new UserSimpleDTO(comment.Author);
+            var topRole = comment.Author.Roles
+                .Where(r => r.Order.HasValue)
+                .OrderBy(r => r.Order)
+                .First();
+            
+            var roleDto = new RoleDTO
+            {
+                Id = topRole.Id,
+                Name = topRole.Name,
+                Color = topRole.Color,
+                IsStaff = topRole.IsStaff
+            };
+            
+            Author = new UserSimpleDto
+            {
+                UserName = comment.Author.UserName,
+                Avatar = comment.Author.Avatar,
+                Title = comment.Author.Title,
+                TopRole = roleDto
+            };
         }
     }
 }
