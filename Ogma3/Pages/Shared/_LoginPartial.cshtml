@@ -7,12 +7,12 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link user text-dark" asp-area="" asp-page="/User/Index" asp-route-name="@User.Identity.Name" title="Manage">
+            <a class="nav-link user text-dark" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
                 <cdn-img src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" 
                          width="30" height="30" 
                          class="avatar"
-                         alt="@User.Identity.Name's avatar"></cdn-img>
-                <span class="name">Hello @User.Identity.Name!</span>
+                         alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar"></cdn-img>
+                <span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
             </a>
         </li>
         

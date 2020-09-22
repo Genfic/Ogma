@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Api.V1
+@inject OgmaConfig Cfg
 @model Ogma3.Pages.Stories.CreateModel
 
 @{
@@ -47,6 +48,7 @@
     
     <input-rating ref="rating"
                   label="@nameof(Model.Input.Rating)"
+                  cdn="@Cfg.Cdn"
                   desc="What audience is the story suitable for"
                   ratings-api="@Url.RouteUrl(nameof(RatingsController))">
     </input-rating>

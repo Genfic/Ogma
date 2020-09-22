@@ -48,7 +48,7 @@ namespace Ogma3.Data
         public static OgmaConfig Init(string persistentFileLocation)
         {
             using var sr = new StreamReader(persistentFileLocation);
-            var config = JsonSerializer.Deserialize<OgmaConfig>(sr.ReadToEnd());
+            var config = JsonSerializer.Deserialize<OgmaConfig>(sr.ReadToEnd()) ?? new OgmaConfig();
             config.PersistentFileLocation = persistentFileLocation;
             return config;
         }

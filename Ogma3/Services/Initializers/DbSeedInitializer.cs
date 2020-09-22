@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -14,125 +16,122 @@ namespace Ogma3.Services.Initializers
 {
     public class DbSeedInitializer : IAsyncInitializer
     {
+        private readonly ApplicationDbContext _context;
+        private readonly OgmaUserManager _userManager;
+        private readonly RoleManager<OgmaRole> _roleManager;
 
-        public ApplicationDbContext Ctx { get; set; }
-        public OgmaUserManager UserManager { get; set; }
-        public RoleManager<OgmaRole> RoleManager { get; set; }
+        private JsonData Data { get; set; }
         
-        public DbSeedInitializer(ApplicationDbContext ctx, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager)
+        public DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager)
         {
-            Ctx = ctx;
-            UserManager = userManager;
-            RoleManager = roleManager;
+            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            
+            using var sr = new StreamReader("seed.json");
+            var data = JsonSerializer.Deserialize<JsonData>(sr.ReadToEnd());
+            if (data != null)
+            {
+                Data = data;
+            }
+            else
+            {
+                Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COULD NOT READ `seed.json`");
+            }
         }
         
         
         public async Task InitializeAsync()
         {
-            await SeedRoles(RoleManager);
-            await SeedUserRoles(UserManager);
-            SeedRatings(Ctx);
-            SeedIcons(Ctx);
-            await SeedQuotes(Ctx);
+            await SeedRoles();
+            await SeedUserRoles();
+            SeedRatings();
+            SeedIcons();
+            await SeedQuotes();
         }
         
         
         
-        private static async Task SeedRoles (RoleManager<OgmaRole> roleManager)
+        private async Task SeedRoles()
         {
-            if (await roleManager.RoleExistsAsync("Admin")) return;
-            
-            var role = new OgmaRole { Name = "Admin" };
-            await roleManager.CreateAsync(role);
+            if (await _roleManager.RoleExistsAsync("Admin")) return;
+            var role = new OgmaRole
+            {
+                Name = "Admin",
+                IsStaff = true,
+                Color = "#ffaa00"
+            };
+            await _roleManager.CreateAsync(role);
         }
 
-        private static async Task SeedUserRoles(OgmaUserManager userManager)
+        private async Task SeedUserRoles()
         {
-            var user = await userManager.FindByNameAsync("Angius");
+            var user = await _userManager.FindByNameAsync("Angius");
             if (user != null)
             {
-                await userManager.AddToRoleAsync(user, "Admin");
+                await _userManager.AddToRoleAsync(user, "Admin");
             }
         }
 
-        private static void SeedRatings(ApplicationDbContext ctx)
+        private void SeedRatings()
         {
-            Rating[] ratings =
+            foreach (var rating in Data.Ratings)
             {
-                new Rating {Name = "Everyone", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"},
-                new Rating {Name = "Teen", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"},
-                new Rating {Name = "Mature", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"},
-                new Rating {Name = "Adult", Description = "12345", Icon = Lorem.Picsum(100), IconId = "12345"}
-            };
-
-            foreach (var rating in ratings)
-            {
-                if (ctx.Ratings.FirstOrDefault(r => r.Name == rating.Name) == null)
+                if (_context.Ratings.FirstOrDefault(r => r.Name == rating.Name) == null)
                 {
-                    ctx.Ratings.Add(rating);
+                    _context.Ratings.Add(rating);
                 }
-                ctx.SaveChanges();
+                _context.SaveChanges();
             }
         }
 
-        private static void SeedIcons(ApplicationDbContext ctx)
+        private void SeedIcons()
         {
-            string[] icons =
+            foreach (var i in Data.Icons)
             {
-                "book",
-                "bookmark_border",
-                "check_circle",
-                "delete",
-                "eco",
-                "explore",
-                "extension",
-                "face",
-                "favorite_border",
-                "fingerprint",
-                "star_border",
-                "report_problem",
-                "thumb_up",
-                "thumb_down",
-                "visibility",
-                "new_releases",
-                "outlined_flag",
-                "toys",
-                "palette",
-                "casino",
-                "spa"
-            };
-            foreach (var i in icons)
-            {
-                if (ctx.Icons.FirstOrDefault(ico => ico.Name == i) == null)
+                if (_context.Icons.FirstOrDefault(ico => ico.Name == i) == null)
                 {
-                    ctx.Icons.Add(new Icon {Name = i});
+                    _context.Icons.Add(new Icon {Name = i});
                 }
             }
 
-            ctx.SaveChanges();
+            _context.SaveChanges();
         }
+        
+        private async Task SeedQuotes()
+        {
+            if (await _context.Quotes.AnyAsync()) return;
+            
+            using var wc = new WebClient();
+            var json = wc.DownloadString(Data.QuotesUrl);
+            
+            if (string.IsNullOrEmpty(json)) return;
+            
+            var quotes = JsonSerializer
+                .Deserialize<ICollection<JsonQuote>>(json)
+                ?.Select(q => new Quote{ Body = q.Quote, Author = q.Author});
 
+            if (quotes == null) return;
+            
+            await _context.Quotes.AddRangeAsync(quotes);
+            
+            await _context.SaveChangesAsync();
+        }
+        
+        #region deserialization classes
         
         private class JsonQuote
         {
             public string Quote { get; set; }
             public string Author { get; set; }
         }
-        private static async Task SeedQuotes(ApplicationDbContext ctx)
+        private class JsonData
         {
-            if (await ctx.Quotes.CountAsync() > 0) return;
-            
-            using var wc = new WebClient();
-            var json = wc.DownloadString("https://gist.githubusercontent.com/Atulin/7b08ee72fa37609875b5a79fd4ed0e0f/raw/b30df8a231b740cd489d524d1981cd549c7a5be1/quotes.json");
-            
-            if (string.IsNullOrEmpty(json)) return;
-            
-            var quotes = JsonSerializer
-                .Deserialize<ICollection<JsonQuote>>(json)
-                .Select(q => new Quote{ Body = q.Quote, Author = q.Author});
-
-            await ctx.Quotes.AddRangeAsync(quotes);
-            await ctx.SaveChangesAsync();
+            public string[] Icons { get; set; }
+            public Rating[] Ratings { get; set; }
+            public string QuotesUrl { get; set; }
         }
+        
+        #endregion
     }
 }

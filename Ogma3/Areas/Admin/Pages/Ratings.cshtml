@@ -1,0 +1,83 @@
+﻿@page
+@using Ogma3.Api.V1
+@using Ogma3.Data
+@inject OgmaConfig Cfg;
+@model Ogma3.Areas.Admin.Pages.Ratings
+
+@{
+    ViewData["Title"] = "Ratings";
+    ViewData["ActivePage"] = ManageNavPages.Ratings;
+}
+
+<form id="namespace" method="post" v-on:submit.stop.prevent="createRating">
+
+    <ul v-if="err">
+        <li class="text-danger" v-for="e in err">{{ e }}</li>
+    </ul>
+
+    <div class="form-row">
+    
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
+            </div>
+        </div>
+    
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="Input.Description"></label>
+                <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
+            </div>
+        </div>
+    
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="Input.Icon"></label>
+                <input asp-for="Input.Icon" type="file" class="form-control" v-on:change="iconChanged" accept=".png,.jpg,.jpeg,.webp">
+            </div>
+        </div>
+        
+    </div>
+
+    <input type="hidden" :value="form.id">
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
+        <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
+    </div>
+
+</form>
+
+<button v-if="ratings.length <= 0" class="btn btn-primary" type="button" disabled>
+    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+    Loading...
+</button>
+
+<ul class="items-list">    
+    <li v-for="n in ratings">
+        <div class="deco">
+            <img :src="cdn + n.icon" alt="" height="30" width="30">
+        </div>
+        <div class="main">
+            <h3 class="name">{{ n.name }}</h3>
+            <div class="desc">{{ n.desc }}</div>
+        </div>
+        <div class="actions">
+            <button class="action" v-on:click="deleteRating(n)">
+                <icon icon="delete_forever"></icon>
+            </button>
+            <button class="action" v-on:click="editRating(n)">
+                <icon icon="edit"></icon>
+            </button>
+        </div>
+    </li>
+</ul>
+
+<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(RatingsController))" v-if="!route"></div>
+<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@Cfg.Cdn" v-if="!route"></div>
+
+@section Scripts
+{
+    <script src="~/js/dist/admin/ratings.min.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,52 @@
+{
+  "QuotesUrl": "https://gist.githubusercontent.com/Atulin/7b08ee72fa37609875b5a79fd4ed0e0f/raw/b30df8a231b740cd489d524d1981cd549c7a5be1/quotes.json",
+  "Icons": [
+    "book",
+    "bookmark_border",
+    "check_circle",
+    "delete",
+    "eco",
+    "explore",
+    "extension",
+    "face",
+    "favorite_border",
+    "fingerprint",
+    "star_border",
+    "report_problem",
+    "thumb_up",
+    "thumb_down",
+    "visibility",
+    "new_releases",
+    "outlined_flag",
+    "toys",
+    "palette",
+    "casino",
+    "spa"
+  ],
+  "Ratings": [
+    {
+      "Name": "Everyone",
+      "Description": "12345",
+      "Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
+      "IconId": "12345"
+    },
+    {
+      "Name": "Teen",
+      "Description": "12345",
+      "Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
+      "IconId": "12345"
+    },
+    {
+      "Name": "Mature",
+      "Description": "12345",
+      "Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
+      "IconId": "12345"
+    },
+    {
+      "Name": "Adult",
+      "Description": "12345",
+      "Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
+      "IconId": "12345"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -57,6 +58,16 @@ namespace Ogma3.Data.Repositories
                 .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<ICollection<UserCard>> GetStaff()
+        {
+            return await _context.Users
+                .TagWith($"{nameof(UserRepository)}.{nameof(GetStaff)}")
+                .Where(u => u.UserRoles.Any(ur => ur.Role.IsStaff))
+                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

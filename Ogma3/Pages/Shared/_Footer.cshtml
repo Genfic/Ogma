@@ -1,4 +1,6 @@
 @using Ogma3.Services.Middleware
+@using Ogma3.Data.Models
+@inject SignInManager<OgmaUser> SignInManager
 
 @{
     var genTime = DateTime.UtcNow - (DateTime) Context.Items[RequestTimestampMiddleware.Name];
@@ -36,11 +38,13 @@
 
             <a asp-area="" asp-page="/Privacy" class="item">Privacy</a>
 
+            <a asp-area="" asp-page="/Staff" class="item">Staff</a>
+
             <a asp-area="" asp-page="/Markdown" class="item">Markdown reference</a>
 
             <button class="item" id="theme-swap">Switch theme</button>
 
-            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
                 <a class="item" asp-area="Admin" asp-page="/Index">
                     Admin
