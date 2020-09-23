@@ -60,7 +60,7 @@ namespace Ogma3.Data
                 );
 
             // Role mappings
-            CreateMap<OgmaRole, RoleDTO>();
+            CreateMap<OgmaRole, RoleDto>();
 
             // Chapter mappings
             CreateMap<Chapter, ChapterDetails>();

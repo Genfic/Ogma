@@ -1,12 +1,37 @@
 @use '../vars' as v
+@use "../mixins/active-border" as ab
 
 .md
 
+  // Paragraphs
   p
     padding-bottom: .5rem
     &:last-child
       padding-bottom: 0
+    
+  // Headers
+  h1, h2, h3, h4, h5, h6
+    scroll-margin-top: v.$nav-height * 1.5
       
+  // Code
+  code
+    font-size: 87.5%
+    color: #e83e8c
+    word-break: break-word
+      
+  pre
+    position: relative
+    width: max-content
+    color: v.$foreground-75
+    padding: .1rem .2rem
+    border-radius: .2rem
+    +ab.active-border
+    &>code
+      font-size: inherit
+      color: inherit
+      word-break: normal
+      
+  // Spoilers
   .spoiler
     color: transparent
     background-color: v.$foreground-50

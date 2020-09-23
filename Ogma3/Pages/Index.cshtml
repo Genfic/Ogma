@@ -31,6 +31,11 @@
                 v-on:click="tabindex = 1">
             New
         </button>    
+        <button class="tab"
+                :class="tabindex === 2 ? 'active' : ''"
+                v-on:click="tabindex = 2">
+            Updated
+        </button>  
     </div>
     
     <div class="tab-body" v-if="tabindex === 0">
@@ -44,7 +49,6 @@
         </div>
     </div>
     
-    
     <div class="tab-body" v-if="tabindex === 1">
         <h2>Newest stories</h2>
         
@@ -55,6 +59,18 @@
             }
         </div>
     </div>
+    
+    <div class="tab-body" v-if="tabindex === 2">
+        <h2>Freshly updated</h2>
+        
+        <div>
+            @foreach (var story in Model.LastUpdatedStories)
+            {
+                <partial name="Shared/_StoryCard" model="@story" />
+            }
+        </div>
+    </div>
+    
 </div>
 
 

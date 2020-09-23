@@ -9,86 +9,91 @@
 
 <hr>
 
-<h2 id="basic-formatting">Basic formatting</h2>
-
-<div class="md-def" data-name="bold">
-    <h4>Bold</h4>
-    <span>This is some <strong>bold</strong> text.</span>
-    <pre>This is some **bold** text.</pre>
-</div>
-<div class="md-def" data-name="italics">
-    <h4>Italics</h4>
-    <span>This is some <em>italicized</em> text.</span>
-    <pre>This is some *italicized* text.</pre>
-</div>
-<div class="md-def" data-name="underline">
-    <h4>Underline</h4>
-    <span>This is some <ins>underlined</ins> text.</span>
-    <pre>This is some ++underlined++ text.</pre>
-</div>
-<div class="md-def" data-name="strikethrough">
-    <h4>Strike-through</h4>
-    <span>This is some <del>strikethrough</del> text.</span>
-    <pre>This is some ~~strikethrough~~ text.</pre>
-</div>
-
-<hr>
-
-<h2 id="embeds-and-inserts">Embeds and inserts</h2>
-
-<div class="md-def" data-name="links">
-    <h4>Links</h4>
-    <span>This is a <a href="https://google.com" rel="noopener" target="_blank">link</a>.</span>
-    <pre>This is a [link](https://google.com)</pre>
-</div>
-<div class="md-def" data-name="anchors">
-    <h4>Anchors</h4>
-    <span>This <a href="#basic-formatting">link</a> is really an achor.</span>
-    <pre>This [link](#basic-formatting) is really an achor.</pre>
-</div>
-<div class="md-def" data-name="images">
-    <h4>Images</h4>
-    <span><img src="https://picsum.photos/100" alt="yes, I am an image"></span>
-    <pre>![yes, I am an image](https://picsum.photos/100)</pre>
-</div>
-<div class="md-def" data-name="videos">
-    <h4>Videos</h4>
-    <span><iframe src="https://www.youtube.com/embed/mswPy5bt3TQ" allowfullscreen="" width="500" height="281" frameborder="0"></iframe></span>
-    <pre>![works with more than YT!](https://www.youtube.com/watch?v=mswPy5bt3TQ)</pre>
-</div>
-
-<hr>
-
-<h2 id="text-blocks">Text blocks</h2>
-
-<div class="md-def" data-name="code-blocks">
-    <h4>Code blocks</h4>
-    <span>
-    <pre><code>Here's some code
-In multiple lines</code></pre>
-    </span>
-    <pre>
-```
+<div class="md">
+    
+    <h2 id="basic-formatting">Basic formatting</h2>
+    
+    <div class="md-def" data-name="bold">
+        <h4>Bold</h4>
+        <span>This is some <strong>bold</strong> text.</span>
+        <pre>This is some **bold** text.</pre>
+    </div>
+    <div class="md-def" data-name="italics">
+        <h4>Italics</h4>
+        <span>This is some <em>italicized</em> text.</span>
+        <pre>This is some *italicized* text.</pre>
+    </div>
+    <div class="md-def" data-name="underline">
+        <h4>Underline</h4>
+        <span>This is some <ins>underlined</ins> text.</span>
+        <pre>This is some ++underlined++ text.</pre>
+    </div>
+    <div class="md-def" data-name="strikethrough">
+        <h4>Strike-through</h4>
+        <span>This is some <del>strikethrough</del> text.</span>
+        <pre>This is some ~~strikethrough~~ text.</pre>
+    </div>
+    <div class="md-def" data-name="spoiler">
+      <h4>Spoiler</h4>
+      <span>This is <span class="spoiler">some text</span> hidden with a spoiler.</span>
+      <pre>This is ||some text|| hidden with a spoiler.</pre>
+      </div>
+    
+    <hr>
+    
+    <h2 id="embeds-and-inserts">Embeds and inserts</h2>
+    
+    <div class="md-def" data-name="links">
+        <h4>Links</h4>
+        <span>This is a <a href="https://google.com" rel="noopener" target="_blank">link</a>.</span>
+        <pre>This is a [link](https://google.com)</pre>
+    </div>
+    <div class="md-def" data-name="anchors">
+        <h4>Anchors</h4>
+        <span>This <a href="#basic-formatting">link</a> is really an achor.</span>
+        <pre>This [link](#basic-formatting) is really an achor.</pre>
+    </div>
+    <div class="md-def" data-name="images">
+        <h4>Images</h4>
+        <span><img src="https://picsum.photos/100" alt="yes, I am an image"></span>
+        <pre>![yes, I am an image](https://picsum.photos/100)</pre>
+    </div>
+    <div class="md-def" data-name="videos">
+        <h4>Videos</h4>
+        <span><iframe src="https://www.youtube.com/embed/mswPy5bt3TQ" allowfullscreen="" width="500" height="281" frameborder="0"></iframe></span>
+        <pre>![works with more than YT!](https://www.youtube.com/watch?v=mswPy5bt3TQ)</pre>
+    </div>
+    
+    <hr>
+    
+    <h2 id="text-blocks">Text blocks</h2>
+    
+    <div class="md-def" data-name="code-blocks">
+        <h4>Code blocks</h4>
+        <span>
+        <pre><code>Here's some code<br>In multiple lines</code></pre>
+        </span>
+        <pre>```
 Here's some code
 In multiple lines
-```
-    </pre>
-</div>
-
-<div class="md-def" data-name="inline-code">
-    <h4>Inline code</h4>
-    <span>Here's some <code>inline code</code>.</span>
-    <pre>Here's some `inline code`.</pre>
-</div>
-
-<div class="md-def" data-name="quotes">
-    <h4>Quotes</h4>
-    <span><blockquote>This is a quote.</blockquote></span>
-    <pre>> This is a quote.</pre>
+```</pre>
+    </div>
+    
+    <div class="md-def" data-name="inline-code">
+        <h4>Inline code</h4>
+        <span>Here's some <code>inline code</code>.</span>
+        <pre>Here's some `inline code`.</pre>
+    </div>
+    
+    <div class="md-def" data-name="quotes">
+        <h4>Quotes</h4>
+        <span><blockquote>This is a quote.</blockquote></span>
+        <pre>> This is a quote.</pre>
+    </div>
+    
 </div>
 
 
 
 <markdown preset="All">
-
 </markdown>

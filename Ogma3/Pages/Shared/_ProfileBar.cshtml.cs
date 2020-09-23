@@ -14,7 +14,7 @@ namespace Ogma3.Pages.Shared
         public DateTime RegistrationDate { get; set; }
         public DateTime LastActive { get; set; }
 
-        public IEnumerable<RoleDTO> Roles { get; set; }
+        public IEnumerable<RoleDto> Roles { get; set; }
 
         public int StoriesCount { get; set; }
         public int BlogpostsCount { get; set; }

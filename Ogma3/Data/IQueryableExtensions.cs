@@ -39,6 +39,8 @@ namespace Ogma3.Data
                 EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
                 EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.Votes.Count),
                 EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.Votes.Count),
+                EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
+                EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
                 _ => query.OrderByDescending(s => s.ReleaseDate)
             };
             

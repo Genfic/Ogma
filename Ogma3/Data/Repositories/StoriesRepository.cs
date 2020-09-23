@@ -58,6 +58,24 @@ namespace Ogma3.Data.Repositories
         }
 
         /// <summary>
+        /// Get `StoryCard` objects, sorted according to `EStorySortingOptions` and paginated
+        /// </summary>
+        /// <param name="count">Number of objects</param>
+        /// <param name="sort">Sorting method</param>
+        /// <returns>Sorted and paginated list of `StoryCard` objects</returns>
+        public async Task<List<StoryCard>> GetTopStoryCards(int count, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
+        {
+            return await _context.Stories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetTopStoryCards)} -> {count}, {sort}")
+                .Where(b => b.IsPublished)
+                .SortByEnum(sort)
+                .Take(count)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Get `StoryCard` objects, sorted according to `EStorySortingOptions`, filtered, and paginated
         /// </summary>
         /// <param name="perPage">Number of objects per page</param>

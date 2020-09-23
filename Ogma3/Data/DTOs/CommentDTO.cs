@@ -32,7 +32,7 @@ namespace Ogma3.Data.DTOs
                 .OrderBy(r => r.Order)
                 .First();
             
-            var roleDto = new RoleDTO
+            var roleDto = new RoleDto
             {
                 Id = topRole.Id,
                 Name = topRole.Name,

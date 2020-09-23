@@ -24,6 +24,11 @@ namespace Ogma3.Data.Enums
         [Display(Name="Score ↑")]
         ScoreAscending,
         [Display(Name="Score ↓")]
-        ScoreDescending
+        ScoreDescending,
+        
+        [Display(Name="Updated ↑")]
+        UpdatedAscending,
+        [Display(Name="Updated ↓")]
+        UpdatedDescending,
     }
 }

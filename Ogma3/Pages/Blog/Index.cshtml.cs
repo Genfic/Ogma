@@ -77,7 +77,8 @@ namespace Ogma3.Pages.Blog
             // Finalize query
             Posts = await query
                 .Include(b => b.Author)
-                .Skip(Math.Max(0, page - 1) * PerPage)
+                .Where(b => b.IsPublished)
+                .Paginate(page, PerPage)
                 .Take(PerPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()

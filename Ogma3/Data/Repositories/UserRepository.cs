@@ -66,6 +66,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetStaff)}")
                 .Where(u => u.UserRoles.Any(ur => ur.Role.IsStaff))
                 .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+                .OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
                 .AsNoTracking()
                 .ToListAsync();
         }

@@ -8,6 +8,6 @@ namespace Ogma3.Pages.Shared
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public string Title { get; set; }
-        public IEnumerable<RoleDTO> Roles { get; set; }
+        public IEnumerable<RoleDto> Roles { get; set; }
     }
 }
