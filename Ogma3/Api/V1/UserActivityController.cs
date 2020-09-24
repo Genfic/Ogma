@@ -7,6 +7,7 @@ using Ogma3.Data.Models;
 namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(UserActivityController))]
+    [ApiController]
     public class UserActivityController : ControllerBase
     {
         private readonly UserManager<OgmaUser> _userManager;
@@ -17,13 +18,19 @@ namespace Ogma3.Api.V1
         }
 
         // POST
-        [HttpPost]
-        public async Task UpdateLastActiveAsync()
+        [HttpHead]
+        public async Task<IActionResult> UpdateLastActiveAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null) return;
+            if (user == null) return NotFound();
             user.LastActive = DateTime.Now;
             await _userManager.UpdateAsync(user);
+            return Ok();
         }
+        
+        /// <summary>
+        /// Plain, parameterless `GET` needs to be here or fuckery happens
+        /// </summary>
+        [HttpGet] public IActionResult Ping() => Ok("Pong");
     }
 }

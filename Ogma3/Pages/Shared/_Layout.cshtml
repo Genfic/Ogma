@@ -115,7 +115,7 @@
 @Html.RenderResources()
 
 <script>
-(_=>{axios.post('@Url.RouteUrl(nameof(UserActivityController))').catch(console.error);})()
+(_=>{axios.head('@Url.RouteUrl(nameof(UserActivityController))').catch(console.error);})()
 </script>
     
 </body>

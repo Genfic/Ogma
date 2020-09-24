@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,7 @@ namespace Ogma3
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
                 Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection")
              ));
+            services.AddDatabaseDeveloperPageExceptionFilter();
             
             // Repositories
             services.AddScoped<UserRepository>();
@@ -74,7 +76,7 @@ namespace Ogma3
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
-            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddScoped(s => s.GetService<IHttpContextAccessor>()?.HttpContext?.User);
             
             // Argon2 hasher
             services.UpgradePasswordSecurity().UseArgon2<OgmaUser>();
@@ -99,13 +101,13 @@ namespace Ogma3
             services.AddAsyncInitializer<DbSeedInitializer>();
 
             // Auth
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = new PathString("/login");
-                    options.LogoutPath = new PathString("/logout");
-                    options.AccessDeniedPath = new PathString("/login");
-                });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+                // .AddCookie(options =>
+                // {
+                //     options.LoginPath = new PathString("/login");
+                //     options.LogoutPath = new PathString("/logout");
+                //     options.AccessDeniedPath = new PathString("/login");
+                // });
             
             // Auth
             services.AddAuthorization(options =>
@@ -119,6 +121,8 @@ namespace Ogma3
                 options.LoginPath = new PathString("/login");
                 options.LogoutPath = new PathString("/logout");
                 options.AccessDeniedPath = new PathString("/login");
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
             
             // Compression
@@ -134,10 +138,14 @@ namespace Ogma3
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             
             services.AddRazorPages().AddRazorPagesOptions(options =>
-                {
-                    options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
-                });
-            
+            {
+                options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
+            });
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
         }
 
 
@@ -151,7 +159,7 @@ namespace Ogma3
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

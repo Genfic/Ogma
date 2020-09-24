@@ -96,11 +96,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <DependentUpon>darkCopy.sass</DependentUpon>
     </Content>
-    <Content Update="wwwroot\css\dark.min.css">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <DependentUpon>darkCopy.css</DependentUpon>
-    </Content>
     <Content Update="Areas\Admin\Pages\InviteCodes.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

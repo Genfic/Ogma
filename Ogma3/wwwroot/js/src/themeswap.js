@@ -10,12 +10,12 @@
     let date = new Date();
     date.setFullYear(date.getFullYear() + 100);
 
-    themeBtn.addEventListener('click', e => {
-        let theme = getCookieValue('theme') === 'light' ? 'dark' : 'light';
+    themeBtn.addEventListener('click', _ => {
+        let theme = getCookieValue('theme') === 'dark' ? 'light' : 'dark';
         
         themeLink.setAttribute('rel', 'stylesheet');
         themeLink.setAttribute('href', `/css/${theme}.min.css?v=${rnd}`);
         
-        setCookie('theme', theme, date, false, 'lax');
+        setCookie('theme', theme, date, true, 'lax');
     });
 })()
