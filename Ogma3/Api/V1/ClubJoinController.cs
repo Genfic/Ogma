@@ -27,11 +27,11 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<bool>> GetClubMember(long club)
         {
-            // var user = await _userManager.GetUserAsync(User);
-            var uid = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var uid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (uid == null) return NotFound();
             
             var isMember = await _context.ClubMembers
-                .AnyAsync(cm => cm.ClubId == club && cm.MemberId == uid);
+                .AnyAsync(cm => cm.ClubId == club && cm.MemberId == Convert.ToInt64(uid));
             
             return new OkObjectResult(isMember);
         }
@@ -41,16 +41,20 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<bool>> PostClubMember(PostModel data)
         {
-            var uid = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var uid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (uid == null) return NotFound();
+
+            var nUid = Convert.ToInt64(uid);
+            
             var clubMember = await _context.ClubMembers
-                .Where(cm => cm.ClubId == data.ClubId && cm.MemberId == uid)
+                .Where(cm => cm.ClubId == data.ClubId && cm.MemberId == nUid)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             var member = new ClubMember
             {
                 ClubId = data.ClubId,
-                MemberId = uid,
+                MemberId = nUid,
                 Role = EClubMemberRoles.User,
                 MemberSince = DateTime.Now
             };

@@ -261,11 +261,18 @@ namespace Ogma3.Data
             // builder.Entity<Document>();
 
             // Invite codes
-            builder.Entity<InviteCode>()
-                .HasOne(c => c.UsedBy)
-                .WithOne()
-                .HasForeignKey<InviteCode>(c => c.UsedById)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<InviteCode>(ent =>
+            {
+                ent.HasOne(c => c.UsedBy)
+                    .WithOne()
+                    .HasForeignKey<InviteCode>(c => c.UsedById)
+                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(c => c.IssuedBy)
+                    .WithOne()
+                    .HasForeignKey<InviteCode>(c => c.IssuedById)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
         }
     }
 }

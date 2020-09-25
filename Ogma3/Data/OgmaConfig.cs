@@ -17,8 +17,8 @@ namespace Ogma3.Data
             };
         }
 
-        [JsonIgnore]
-        public string PersistentFileLocation { get; set; }
+        [JsonIgnore] 
+        private string PersistentFileLocation { get; set; }
         
         #region Methods
         /// <summary>
@@ -56,7 +56,8 @@ namespace Ogma3.Data
         
         #region Data proper
         public string Cdn { get; set; }
-        
+        public int MaxInvitesPerUser { get; set; }
+
         #endregion
     }
 }

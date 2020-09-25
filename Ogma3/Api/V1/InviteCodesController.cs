@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,14 @@ namespace Ogma3.Api.V1
     public class InviteCodesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly OgmaUserManager _userManager;
+        private readonly OgmaConfig _config;
 
-        public InviteCodesController(ApplicationDbContext context)
+        public InviteCodesController(ApplicationDbContext context, OgmaUserManager userManager, OgmaConfig config)
         {
             _context = context;
+            _userManager = userManager;
+            _config = config;
         }
         
         // GET: api/InviteCodes
@@ -29,6 +34,19 @@ namespace Ogma3.Api.V1
         {
             return await _context.InviteCodes
                 .Include(ic => ic.UsedBy)
+                .Select(ic => InviteCodeApiDTO.FromInviteCode(ic))
+                .AsNoTracking()
+                .ToListAsync();
+        }
+        
+        // GET: api/InviteCodes/5
+        [HttpGet("{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<InviteCodeApiDTO>>> GetUserInviteCodes(long userId)
+        {
+            return await _context.InviteCodes
+                .Include(ic => ic.UsedBy)
+                .Where(ic => ic.IssuedById == userId)
                 .Select(ic => InviteCodeApiDTO.FromInviteCode(ic))
                 .AsNoTracking()
                 .ToListAsync();
@@ -56,10 +74,25 @@ namespace Ogma3.Api.V1
         
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<ActionResult<InviteCodeApiDTO>> PostInviteCode()
         {
-            var code = new InviteCode {Code = GenerateCode()};
+            Console.WriteLine(1);
+            var currentUser = await _userManager.GetUserAsync(ClaimsPrincipal.Current);
+
+            Console.WriteLine(2);
+            var issuedCount = await _context.InviteCodes
+                .CountAsync(ic => ic.IssuedById == currentUser.Id);
+
+            Console.WriteLine(3);
+            if (issuedCount > _config.MaxInvitesPerUser) 
+                return Unauthorized($"You cannot generate more than {_config.MaxInvitesPerUser} codes");
+            
+            var code = new InviteCode
+            {
+                Code = GenerateCode(),
+                IssuedBy = currentUser
+            };
             await _context.InviteCodes.AddAsync(code);
 
             await _context.SaveChangesAsync();

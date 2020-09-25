@@ -3,6 +3,7 @@ let anamespaces_vue = new Vue({
     data: {
         codes: [],
         route: null,
+        xcsrf: null,
     },
     methods: {
 
@@ -59,6 +60,8 @@ let anamespaces_vue = new Vue({
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route;
+        // Grab the XCSRF token
+        this.xcsrf = document.querySelector('[name=__RequestVerificationToken]').value; 
         // Grab the initial set of namespaces
         this.getCodes();
     }

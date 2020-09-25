@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Extensions.Hosting.AsyncInitialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
-using Utils;
 
 namespace Ogma3.Services.Initializers
 {
@@ -54,14 +55,24 @@ namespace Ogma3.Services.Initializers
         
         private async Task SeedRoles()
         {
-            if (await _roleManager.RoleExistsAsync("Admin")) return;
-            var role = new OgmaRole
-            {
-                Name = "Admin",
-                IsStaff = true,
-                Color = "#ffaa00"
-            };
-            await _roleManager.CreateAsync(role);
+            RoleBuilder rb;
+            
+            var adminRole = new OgmaRole { Name = "Admin", IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue};
+            rb = new RoleBuilder(adminRole, _roleManager);
+            await rb
+                .AddClaim(RoleClaimTypes.Permission, RoleClaimNames.GenerateUnlimitedInviteCodes)
+                .AddClaim(RoleClaimTypes.Permission, RoleClaimNames.DeleteInviteCodes)
+                .Build();
+            
+            var modRole = new OgmaRole { Name = "Moderator", IsStaff = true, Color = "#aaff00", Order = byte.MaxValue - 5};
+            rb = new RoleBuilder(modRole, _roleManager);
+            await rb
+                .AddClaim(RoleClaimTypes.Permission, RoleClaimNames.GenerateUnlimitedInviteCodes)
+                .Build();
+            
+            var supporterRole = new OgmaRole { Name = "Supporter", IsStaff = false, Color = "#ffdd11"};
+            rb = new RoleBuilder(supporterRole, _roleManager);
+            await rb.Build();
         }
 
         private async Task SeedUserRoles()
