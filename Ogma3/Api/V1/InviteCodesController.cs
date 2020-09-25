@@ -2,13 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -19,48 +24,64 @@ namespace Ogma3.Api.V1
         private readonly ApplicationDbContext _context;
         private readonly OgmaUserManager _userManager;
         private readonly OgmaConfig _config;
+        private readonly IMapper _mapper;
 
-        public InviteCodesController(ApplicationDbContext context, OgmaUserManager userManager, OgmaConfig config)
+        public InviteCodesController(ApplicationDbContext context, OgmaUserManager userManager, OgmaConfig config, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _config = config;
+            _mapper = mapper;
         }
         
         // GET: api/InviteCodes
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<InviteCodeApiDTO>>> GetInviteCodes()
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<InviteCodeApiDto>>> GetInviteCodes()
         {
-            return await _context.InviteCodes
+            var query = _context.InviteCodes
                 .Include(ic => ic.UsedBy)
-                .Select(ic => InviteCodeApiDTO.FromInviteCode(ic))
-                .AsNoTracking()
+                .AsNoTracking();
+
+            if (!User.HasClaim(RoleClaimTypes.Permission, RoleClaimNames.GetAllInviteCodes))
+            {
+                query = query.Where(ic => ic.IssuedById == User.GetNumericId());
+            }
+            
+            return await query
+                .ProjectTo<InviteCodeApiDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
         
-        // GET: api/InviteCodes/5
-        [HttpGet("{userId}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<InviteCodeApiDTO>>> GetUserInviteCodes(long userId)
+        // GET: api/InviteCodes/all
+        [HttpGet("all")]
+        [Authorize(Roles = RoleNames.Admin+", "+RoleNames.Moderator)]
+        public async Task<ActionResult<IEnumerable<InviteCodeApiDto>>> GetAllInviteCodes()
         {
-            return await _context.InviteCodes
+            var query = _context.InviteCodes
                 .Include(ic => ic.UsedBy)
-                .Where(ic => ic.IssuedById == userId)
-                .Select(ic => InviteCodeApiDTO.FromInviteCode(ic))
-                .AsNoTracking()
+                .AsNoTracking();
+
+            Console.WriteLine(JsonSerializer.Serialize(
+                User.Claims.Select(c => new { c.Type, c.Value }), 
+                new JsonSerializerOptions{WriteIndented = true})
+            );
+            
+            return await query
+                .ProjectTo<InviteCodeApiDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
         
         
         // GET: api/InviteCodes/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<InviteCodeApiDTO>> GetInviteCode(long id)
+        [Authorize]
+        public async Task<ActionResult<InviteCodeApiDto>> GetInviteCode(long id)
         {
             var code = await _context.InviteCodes
                 .Where(ic => ic.Id == id)
                 .Include(ic => ic.UsedBy)
+                .ProjectTo<InviteCodeApiDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
@@ -69,23 +90,20 @@ namespace Ogma3.Api.V1
                 return NotFound();
             }
 
-            return InviteCodeApiDTO.FromInviteCode(code);
+            return code;
         }
         
         
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<InviteCodeApiDTO>> PostInviteCode()
+        public async Task<ActionResult<InviteCodeApiDto>> PostInviteCode()
         {
-            Console.WriteLine(1);
-            var currentUser = await _userManager.GetUserAsync(ClaimsPrincipal.Current);
+            var currentUser = await _userManager.GetUserAsync(User);
 
-            Console.WriteLine(2);
             var issuedCount = await _context.InviteCodes
                 .CountAsync(ic => ic.IssuedById == currentUser.Id);
-
-            Console.WriteLine(3);
-            if (issuedCount > _config.MaxInvitesPerUser) 
+            
+            if (issuedCount >= _config.MaxInvitesPerUser) 
                 return Unauthorized($"You cannot generate more than {_config.MaxInvitesPerUser} codes");
             
             var code = new InviteCode
@@ -97,7 +115,26 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
             
-            return CreatedAtAction("GetInviteCode", new { id = code.Id }, code);
+            return _mapper.Map<InviteCode, InviteCodeApiDto>(code);
+        }
+        
+        
+        [HttpPost("no-limit")]
+        [Authorize(Roles = RoleNames.Admin+", "+RoleNames.Moderator)]
+        public async Task<ActionResult<InviteCodeApiDto>> PostInviteCodeNoLimit()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            
+            var code = new InviteCode
+            {
+                Code = GenerateCode(),
+                IssuedBy = currentUser
+            };
+            await _context.InviteCodes.AddAsync(code);
+
+            await _context.SaveChangesAsync();
+            
+            return _mapper.Map<InviteCode, InviteCodeApiDto>(code);
         }
 
 

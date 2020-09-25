@@ -123,6 +123,9 @@ namespace Ogma3.Data
                     opts 
                         => opts.MapFrom(c => c.ClubMembers.Any(cm => cm.MemberId == currentUser))
                 );
+            
+            // Invite code mappings
+            CreateMap<InviteCode, InviteCodeApiDto>();
         }
     }
 }

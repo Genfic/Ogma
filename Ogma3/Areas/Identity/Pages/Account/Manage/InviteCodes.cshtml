@@ -1,5 +1,7 @@
 @page
 @using Ogma3.Api.V1
+@using Ogma3.Data
+@inject OgmaConfig Cfg
 @model Ogma3.Areas.Identity.Pages.Account.Manage.InviteCodes
 
 @{
@@ -8,7 +10,7 @@
 }
 
 <button class="btn btn-primary btn-block" v-on:click="createCode">
-    Issue code
+    Issue code ({{codes.length}}/@Cfg.MaxInvitesPerUser)
 </button>
 
 <button v-if="codes.length <= 0" class="btn btn-primary" type="button" disabled>
@@ -24,9 +26,6 @@
             <span class="desc" v-if="n.userName">Redeemed by <strong>{{n.userName}}</strong> on <strong>{{date(n.usedDate)}}</strong></span>
         </div>
         <div class="actions">
-            <button class="action" v-on:click="deleteCode(n)">
-                <icon icon="delete_forever"></icon>
-            </button>
             <button class="action" v-on:click="copyCode(n)">
                 <icon icon="copy"></icon>
             </button>
@@ -39,5 +38,5 @@
 
 @section Scripts
 {
-    <script src="~/js/dist/admin/invite-codes.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/account/invite-codes.min.js" asp-append-version="true"></script>
 }

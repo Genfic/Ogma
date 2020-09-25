@@ -15,6 +15,7 @@ using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Services;
@@ -102,13 +103,7 @@ namespace Ogma3
 
             // Auth
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
-                // .AddCookie(options =>
-                // {
-                //     options.LoginPath = new PathString("/login");
-                //     options.LogoutPath = new PathString("/logout");
-                //     options.AccessDeniedPath = new PathString("/login");
-                // });
-            
+
             // Auth
             services.AddAuthorization(options =>
             {

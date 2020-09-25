@@ -1,4 +1,4 @@
-let anamespaces_vue = new Vue({
+let invites_vue = new Vue({
     el: "#app",
     data: {
         codes: [],
@@ -8,7 +8,7 @@ let anamespaces_vue = new Vue({
     methods: {
 
         createCode: function() {
-            axios.post(this.route+'/no-limit', null, { headers: { RequestVerificationToken: this.xcsrf } })
+            axios.post(this.route, null, { headers: { RequestVerificationToken: this.xcsrf } })
                 .then(response => {
                     this.codes.push(response.data)
                 })
@@ -19,26 +19,13 @@ let anamespaces_vue = new Vue({
 
         // Gets all existing namespaces
         getCodes: function () {
-            axios.get(this.route+'/all')
+            axios.get(this.route)
                 .then(response => {
                     this.codes = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 });
-        },
-
-        // Deletes a selected namespace
-        deleteCode: function (t) {
-            if(confirm("Delete permanently?")) {
-                axios.delete(this.route + '/' + t.id, { headers: { RequestVerificationToken: this.xcsrf } })
-                    .then(_ => {
-                        this.getCodes()
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            }
         },
         
         copyCode: function(t) {

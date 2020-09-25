@@ -57,20 +57,23 @@ namespace Ogma3.Services.Initializers
         {
             RoleBuilder rb;
             
-            var adminRole = new OgmaRole { Name = "Admin", IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue};
+            var adminRole = new OgmaRole { Name = RoleNames.Admin, IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue};
             rb = new RoleBuilder(adminRole, _roleManager);
-            await rb
-                .AddClaim(RoleClaimTypes.Permission, RoleClaimNames.GenerateUnlimitedInviteCodes)
-                .AddClaim(RoleClaimTypes.Permission, RoleClaimNames.DeleteInviteCodes)
-                .Build();
+            await rb.Build();
             
-            var modRole = new OgmaRole { Name = "Moderator", IsStaff = true, Color = "#aaff00", Order = byte.MaxValue - 5};
+            var modRole = new OgmaRole { Name = RoleNames.Moderator, IsStaff = true, Color = "#aaff00", Order = byte.MaxValue - 5};
             rb = new RoleBuilder(modRole, _roleManager);
-            await rb
-                .AddClaim(RoleClaimTypes.Permission, RoleClaimNames.GenerateUnlimitedInviteCodes)
-                .Build();
+            await rb.Build();
             
-            var supporterRole = new OgmaRole { Name = "Supporter", IsStaff = false, Color = "#ffdd11"};
+            var helperRole = new OgmaRole { Name = RoleNames.Helper, IsStaff = true, Color = "#ffdd11", Order = byte.MaxValue - 10};
+            rb = new RoleBuilder(helperRole, _roleManager);
+            await rb.Build();
+            
+            var reviewerRole = new OgmaRole { Name = RoleNames.Reviewer, IsStaff = true, Color = "#ffdd11", Order = byte.MaxValue - 15};
+            rb = new RoleBuilder(reviewerRole, _roleManager);
+            await rb.Build();
+            
+            var supporterRole = new OgmaRole { Name = RoleNames.Supporter, IsStaff = false, Color = "#ffdd11", Order = byte.MaxValue - 20};
             rb = new RoleBuilder(supporterRole, _roleManager);
             await rb.Build();
         }

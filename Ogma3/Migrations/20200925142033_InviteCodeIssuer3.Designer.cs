@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200925142033_InviteCodeIssuer3")]
+    partial class InviteCodeIssuer3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -489,7 +491,8 @@ namespace Ogma3.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IssuedById");
+                    b.HasIndex("IssuedById")
+                        .IsUnique();
 
                     b.HasIndex("UsedById")
                         .IsUnique();
@@ -1085,8 +1088,8 @@ namespace Ogma3.Migrations
             modelBuilder.Entity("Ogma3.Data.Models.InviteCode", b =>
                 {
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "IssuedBy")
-                        .WithMany()
-                        .HasForeignKey("IssuedById")
+                        .WithOne()
+                        .HasForeignKey("Ogma3.Data.Models.InviteCode", "IssuedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

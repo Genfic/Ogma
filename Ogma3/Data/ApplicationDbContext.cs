@@ -265,11 +265,9 @@ namespace Ogma3.Data
             {
                 ent.HasOne(c => c.UsedBy)
                     .WithOne()
-                    .HasForeignKey<InviteCode>(c => c.UsedById)
                     .OnDelete(DeleteBehavior.Cascade);
                 ent.HasOne(c => c.IssuedBy)
-                    .WithOne()
-                    .HasForeignKey<InviteCode>(c => c.IssuedById)
+                    .WithMany()
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

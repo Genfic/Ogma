@@ -3,7 +3,7 @@
 @model Ogma3.Areas.Admin.Pages.InviteCodes
 
 @{
-    ViewData["Title"] = "Namespaces";
+    ViewData["Title"] = "Invite Codes";
     ViewData["ActivePage"] = ManageNavPages.InviteCodes;
 }
 
@@ -18,11 +18,18 @@
 
 <ul class="items-list">    
     <li v-for="n in codes">
+        
         <div class="deco" v-bind:style="{background: n.userName ? 'green' : 'gray'}"></div>
+
         <div class="main">
-            <h3 class="name"><span class="monospace">{{ n.code }}</span> : {{ date(n.issueDate) }}</h3>
-            <span class="desc" v-if="n.userName">Redeemed by <strong>{{n.userName}}</strong> on <strong>{{date(n.usedDate)}}</strong></span>
+            <h3 class="name"><span class="monospace">{{ n.code }}</span></h3>
+            <span class="desc">
+                <span>Issued by <strong>{{n.issuedByUserName}}</strong> on <strong>{{date(n.issueDate)}}</strong></span>
+                <br>
+                <span v-if="n.usedDate">Redeemed by <strong>{{n.issuedByUserName}}</strong> on <strong>{{date(n.usedDate)}}</strong></span>
+            </span>
         </div>
+
         <div class="actions">
             <button class="action" v-on:click="deleteCode(n)">
                 <icon icon="delete_forever"></icon>
@@ -31,9 +38,11 @@
                 <icon icon="copy"></icon>
             </button>
         </div>
+
     </li>
 </ul>
 
+@Html.AntiForgeryToken()
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))" v-if="!route"></div>
 
 @section Scripts

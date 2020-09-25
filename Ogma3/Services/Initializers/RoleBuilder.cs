@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,9 @@ namespace Ogma3.Services.Initializers
             
             foreach (var claim in _claims)
             {
+                var claims = await _roleManager.GetClaimsAsync(role);
+                if (claims.Any(c => c.Type == claim.Type && c.Value == claim.Value)) continue;
+
                 await _roleManager.AddClaimAsync(role, claim);
             }
         }
