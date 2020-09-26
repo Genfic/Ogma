@@ -2,15 +2,15 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using Markdig;
 using MarkdigExtensions.Hashtags;
 using MarkdigExtensions.Mentions;
 using MarkdigExtensions.Spoiler;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Utils.Extensions;
 
-namespace Ogma3.Services.TagHelpers
+namespace Ogma3.Infrastructure.TagHelpers
 {
     public class MarkdownTagHelper : TagHelper
     {
@@ -32,6 +32,7 @@ namespace Ogma3.Services.TagHelpers
             var hashtagOptions = new HashtagOptions("/blog?q=", "_blank");
             var mentionOptions = new MentionOptions("/user/", "_blank");
             
+            // Attach plugins depending on the preset
             var builder = Preset switch
             {
                 Presets.Basic   => new MarkdownPipelineBuilder(),
@@ -58,17 +59,11 @@ namespace Ogma3.Services.TagHelpers
                 .Build();
             
             var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);
-            var markdownHtmlContent = Markdown.ToHtml(RemoveLeadingWhiteSpace(childContent.GetContent(NullHtmlEncoder.Default)), pipeline);
+            var markdownHtmlContent = Markdown.ToHtml(childContent.GetContent(NullHtmlEncoder.Default).RemoveLeadingWhiteSpace(), pipeline);
             
             output.TagName = "div";
             output.Attributes.SetAttribute("class", $"md {Class}");
             output.Content.SetHtmlContent(markdownHtmlContent);
-        }
-
-        private static string RemoveLeadingWhiteSpace(string content)
-        {
-            var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            return string.Join(Environment.NewLine, lines.Select(s => s.TrimStart(' ', '\t')));
         }
     }
 }

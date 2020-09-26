@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -67,9 +66,9 @@ namespace Ogma3.Areas.Admin.Pages.Documents
             await _context.Documents.AddAsync(new Document
             {
                 GroupId = oldVersion.GroupId,
-                Title   = Input.Title.IsNullOrEmpty() ? oldVersion.Title : Input.Title,
-                Slug    = Input.Title.IsNullOrEmpty() ? oldVersion.Slug  : Input.Title.Friendlify(),
-                Body    = Input.Body.IsNullOrEmpty()  ? oldVersion.Body  : Input.Body,
+                Title   = string.IsNullOrEmpty(Input.Title) ? oldVersion.Title : Input.Title,
+                Slug    = string.IsNullOrEmpty(Input.Title) ? oldVersion.Slug  : Input.Title.Friendlify(),
+                Body    = string.IsNullOrEmpty(Input.Body)  ? oldVersion.Body  : Input.Body,
                 Version = oldVersion.Version + 1,
                 CreationTime = now,
                 RevisionDate = null

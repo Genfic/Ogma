@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 
-namespace Ogma3.Services.TagHelpers
+namespace Ogma3.Infrastructure.TagHelpers
 {
     public class DocumentLinkTagHelper : TagHelper
     {
@@ -24,7 +24,7 @@ namespace Ogma3.Services.TagHelpers
         }
 
         public string GroupId { get; set; }
-        public int? Version { get; set; } = null;
+        public int? Version { get; set; }
         
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

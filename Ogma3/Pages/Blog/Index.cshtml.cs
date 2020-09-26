@@ -7,7 +7,6 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Castle.Core.Internal;
 using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Pages.Shared;
@@ -38,7 +37,7 @@ namespace Ogma3.Pages.Blog
             
             var query = _context.Blogposts.AsQueryable();
             
-            if (!q.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(q))
             {
                 // Search by tags
                 var tags = q
@@ -52,7 +51,7 @@ namespace Ogma3.Pages.Blog
                 // Search in title
                 var search = q
                     .Split(' ')
-                    .Where(x => !x.StartsWith('#') && !x.IsNullOrEmpty())
+                    .Where(x => !x.StartsWith('#') && !string.IsNullOrEmpty(x))
                     .ToList();
                 if (search.Count > 0)
                     query = query.Where(b => EF.Functions.Like(b.Title.ToUpper(), $"%{string.Join(' ', search)}%".ToUpper()));

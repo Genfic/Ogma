@@ -1,11 +1,7 @@
-using System;
-using Castle.Core.Internal;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
 
-namespace Ogma3.Services.TagHelpers
+namespace Ogma3.Infrastructure.TagHelpers
 {
     public class CdnImgTagHelper : TagHelper
     {
@@ -21,7 +17,7 @@ namespace Ogma3.Services.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var src = Src.IsNullOrEmpty() ? "ph-250.png" : Src;
+            var src = string.IsNullOrEmpty(Src) ? "ph-250.png" : Src;
             var url = _ogmaConfig.Cdn + src.Trim('/');
 
             if (Width.HasValue) output.Attributes.SetAttribute("width", Width);

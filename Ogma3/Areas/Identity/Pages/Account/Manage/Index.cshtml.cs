@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Infrastructure.Attributes;
 using Ogma3.Services;
-using Ogma3.Services.Attributes;
+using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {

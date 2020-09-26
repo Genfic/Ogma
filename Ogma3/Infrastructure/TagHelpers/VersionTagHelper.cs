@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Ogma3.Services.TagHelpers
+namespace Ogma3.Infrastructure.TagHelpers
 {
     public class VersionTagHelper : TagHelper
     {
-        public string Text { get; set; }
-        public string Color { get; set; }
+        private string Text { get; set; }
+        private string Color { get; set; }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {

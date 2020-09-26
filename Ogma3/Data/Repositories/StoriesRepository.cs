@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Castle.Core.Internal;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.Enums;
 using Ogma3.Pages.Shared;
@@ -163,7 +162,7 @@ namespace Ogma3.Data.Repositories
                 .AsQueryable();
             
             // Search by title
-            if (!searchQuery.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(searchQuery))
                 query = query.Where(s => EF.Functions.Like(s.Title.ToUpper(), $"%{searchQuery.Trim().ToUpper()}%"));
             
             // Search by rating

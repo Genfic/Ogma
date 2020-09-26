@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
-using Utils;
+using Humanizer;
 
-namespace Ogma3.Services.Attributes
+namespace Ogma3.Infrastructure.Attributes
 {
     public class MaxFileSizeAttribute : ValidationAttribute
     {
@@ -18,15 +18,11 @@ namespace Ogma3.Services.Attributes
                 return ValidationResult.Success;
             
             if (!(value is IFormFile file)) 
-                return new ValidationResult("Object does not implement IFormFile interface.");
+                return new ValidationResult("Object is not a valid file.");
             
-            return file.Length > _maxFileSize ? new ValidationResult(GetErrorMessage()) : ValidationResult.Success;
-        }
-
-        private string GetErrorMessage()
-        {
-            var maxS = UnitConverters.SizeSuffix(_maxFileSize, 2);
-            return $"Maximum allowed file size is {maxS}";
+            return file.Length > _maxFileSize 
+                ? new ValidationResult($"Maximum allowed file size is {_maxFileSize.Bytes().Humanize()}") 
+                : ValidationResult.Success;
         }
     }
 }

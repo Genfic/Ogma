@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Utils.Extensions
@@ -31,6 +33,17 @@ namespace Utils.Extensions
                 template = template.Replace(key, value);
             }
             return template;
+        }
+        
+        /// <summary>
+        /// Removes all leading whitespace
+        /// </summary>
+        /// <param name="input">String to modify</param>
+        /// <returns>String without leading whitespace</returns>
+        public static string RemoveLeadingWhiteSpace(this string input)
+        {
+            var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            return string.Join(Environment.NewLine, lines.Select(s => s.TrimStart(' ', '\t')));
         }
     }
 }

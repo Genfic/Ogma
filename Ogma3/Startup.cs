@@ -19,6 +19,7 @@ using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Services;
+using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;

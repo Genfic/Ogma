@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 
-namespace Ogma3.Services.Attributes
+namespace Ogma3.Infrastructure.Attributes
 {
     public class AllowedExtensionsAttribute : ValidationAttribute
     {
@@ -32,7 +32,7 @@ namespace Ogma3.Services.Attributes
                     return ValidationResult.Success;
                 }
                 default:
-                    return new ValidationResult("Object does not implement IFormFile interface.");
+                    return new ValidationResult("Object is not a valid file.");
             }
 
         }

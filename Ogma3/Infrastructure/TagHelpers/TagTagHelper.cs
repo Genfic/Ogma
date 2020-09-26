@@ -1,14 +1,10 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
 using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
-using Utils.Extensions;
 
-namespace Ogma3.Services.TagHelpers
+namespace Ogma3.Infrastructure.TagHelpers
 {
     public class TagTagHelper : TagHelper
     {
@@ -21,7 +17,7 @@ namespace Ogma3.Services.TagHelpers
             _generator = generator;
         }
 
-        public TagDto Tag { get; set; }
+        private TagDto Tag { get; set; }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {

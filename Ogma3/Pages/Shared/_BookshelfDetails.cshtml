@@ -1,4 +1,3 @@
-@using Castle.Core.Internal
 @model BookshelfDetails
 
 <div id="bookshelf-details">
@@ -7,7 +6,7 @@
         @Model.Name
     </h1>
 
-    @if (!Model.Description.IsNullOrEmpty())
+    @if (!string.IsNullOrEmpty(Model.Description))
     {
         <h2 class="desc">@Model.Description</h2>
     }

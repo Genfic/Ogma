@@ -1,4 +1,5 @@
 {
   "Cdn": "//cdn.genfic.net/file/Ogma-net/",
-  "MaxInvitesPerUser": 5
+  "MaxInvitesPerUser": 5,
+  "AdminEmail": "admin@genfic.net"
 }
