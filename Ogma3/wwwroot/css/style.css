@@ -194,7 +194,7 @@ nav#top-nav .navbar-nav > .nav-item.navbar-brand {
   justify-content: center;
   color: var(--foreground-75);
   margin: 0 1rem 0 0;
-  padding: 0 1rem 0 0;
+  padding: 0 1rem;
 }
 nav#top-nav .navbar-nav > .nav-item.navbar-brand:focus {
   border-color: var(--accent);
@@ -910,6 +910,9 @@ ul.items-list li .main {
 ul.items-list li .main:hover {
   color: var(--foreground-75);
 }
+ul.items-list li .main a {
+  color: var(--foreground);
+}
 ul.items-list li .deco {
   height: auto;
   min-width: 5px;
@@ -919,6 +922,7 @@ ul.items-list li .deco {
 }
 ul.items-list li .deco > * {
   margin: 0 0.4rem;
+  min-width: 3ch;
   font-weight: bold;
   color: var(--background);
   text-shadow: 1px 1px 0 var(--foreground-75);
@@ -927,6 +931,11 @@ ul.items-list li .name {
   font-size: 1.2rem;
   text-decoration: none;
   text-overflow: ellipsis;
+}
+ul.items-list li .name > .icon {
+  color: var(--foreground-50);
+  font-size: 90%;
+  padding-left: 0.5rem;
 }
 ul.items-list li .desc {
   color: var(--foreground-75);
@@ -939,6 +948,7 @@ ul.items-list li .actions {
 ul.items-list li .actions > .action {
   height: auto;
   margin: 0.2rem;
+  padding: 0 0.5rem;
   border: 1px solid var(--foreground-25);
   color: var(--foreground-50);
   background-color: transparent;
@@ -1235,6 +1245,9 @@ form.form .o-form-control:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }
+form.form .o-form-control.changed {
+  background-color: var(--red-25);
+}
 form.form .validation-summary-valid {
   display: none;
 }
@@ -1381,6 +1394,7 @@ form.confirm > .buttons .button.cancel {
   height: 2rem;
   width: 2rem;
   background: transparent;
+  color: var(--foreground);
   opacity: 0.1;
 }
 .quote .refresh:hover {
@@ -1836,12 +1850,14 @@ form.search select:focus {
   flex: 1;
 }
 .info-bar > .buttons > .button.join {
+  color: var(--foreground);
   background-color: var(--green-25);
 }
 .info-bar > .buttons > .button.join:hover {
   background-color: var(--green-50);
 }
 .info-bar > .buttons > .button.leave {
+  color: var(--foreground);
   background-color: var(--red-25);
 }
 .info-bar > .buttons > .button.leave:hover {

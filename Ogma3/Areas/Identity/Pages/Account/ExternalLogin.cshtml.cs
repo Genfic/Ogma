@@ -10,20 +10,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
-        private readonly UserManager<Data.Models.OgmaUser> _userManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
+        private readonly UserManager<OgmaUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<Data.Models.OgmaUser> signInManager,
-            UserManager<Data.Models.OgmaUser> userManager,
+            SignInManager<OgmaUser> signInManager,
+            UserManager<OgmaUser> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -82,7 +83,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
             if (result.Succeeded)
             {
-                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity?.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
             if (result.IsLockedOut)
@@ -118,7 +119,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new Data.Models.OgmaUser { UserName = Input.Email, Email = Input.Email };
+                var user = new OgmaUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

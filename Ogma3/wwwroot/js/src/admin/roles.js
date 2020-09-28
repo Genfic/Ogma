@@ -10,6 +10,7 @@ let roles_vue = new Vue({
         },
         roles: [],
         route: null,
+        xcsrf: null,
     },
     methods: {
 
@@ -28,7 +29,7 @@ let roles_vue = new Vue({
                             color: this.form.color,
                             isStaff: this.form.isStaff,
                             order: Number(this.form.order)
-                        })
+                        }, { headers: { RequestVerificationToken: this.xcsrf } })
                         .then(_ => this.getRoles())
                         .catch(console.error);
 
@@ -42,7 +43,7 @@ let roles_vue = new Vue({
                             color: this.form.color,
                             isStaff: this.form.isStaff,
                             order: Number(this.form.order)
-                        })
+                        }, { headers: { RequestVerificationToken: this.xcsrf } })
                         .then(_ => this.getRoles())
                         .catch(console.error)
                         // Clear the form too
@@ -64,7 +65,7 @@ let roles_vue = new Vue({
         // Deletes a selected role
         deleteRole: function (t) {
             if(confirm("Delete permanently?")) {
-                axios.delete(this.route + '/' + t.id)
+                axios.delete(this.route + '/' + t.id, { headers: { RequestVerificationToken: this.xcsrf } })
                     .then(_ => this.getRoles())
                     .catch(console.error);
             }
@@ -92,6 +93,8 @@ let roles_vue = new Vue({
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route;
+        // Grab the XCSRF token
+        this.xcsrf = document.querySelector('[name=__RequestVerificationToken]').value;
         // Grab the initial set of roles
         this.getRoles();
     }

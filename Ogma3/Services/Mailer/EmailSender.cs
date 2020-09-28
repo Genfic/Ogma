@@ -10,7 +10,7 @@ namespace Ogma3.Services.Mailer
     public class EmailSender : IEmailSender
     {
 
-        private readonly AuthMessageSenderOptions _options; //set only via Secret Manager
+        private readonly AuthMessageSenderOptions _options;
         private readonly OgmaConfig _config;
         
         public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor, OgmaConfig config)
@@ -21,12 +21,7 @@ namespace Ogma3.Services.Mailer
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(_options.SendGridKey, subject, message, email);
-        }
-
-        public Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(_options.SendGridKey);
             var msg = new SendGridMessage
             {
                 From = new EmailAddress(_config.AdminEmail, _options.SendGridUser),

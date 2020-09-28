@@ -64,7 +64,7 @@
             <span class="text">{{n.order}}</span>
         </div>
         <div class="main">
-            <h3 class="name">{{ n.name }}</h3>
+            <h3 class="name">{{ n.name }}<icon v-if="n.isStaff" class="icon" icon="security"></icon></h3>
         </div>
         <div class="actions">
             <button class="action" v-on:click="deleteRole(n)">

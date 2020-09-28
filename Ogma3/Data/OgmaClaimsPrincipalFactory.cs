@@ -20,10 +20,10 @@ namespace Ogma3.Data
         {
             var principal = await base.CreateAsync(user);
             
-            ((ClaimsIdentity)principal.Identity).AddClaims(new []
+            ((ClaimsIdentity)principal.Identity)?.AddClaims(new []
             {
                 new Claim(OgmaClaimTypes.Avatar, user.Avatar ?? Lorem.Gravatar(user.Email)),
-                new Claim(OgmaClaimTypes.Title, user.Title ?? ""),
+                new Claim(OgmaClaimTypes.Title, user.Title ?? "")
             });
 
             return principal;

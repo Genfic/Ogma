@@ -22,7 +22,7 @@ else if (Model.Docs.Count > 0)
         {
             <li>
                 <div class="main">
-                    <a asp-area="" asp-page="/Docs" asp-route-id="@doc.Id" asp-route-slug="@doc.Slug" class="text-dark">
+                    <a asp-area="" asp-page="/Docs" asp-route-id="@doc.Id" asp-route-slug="@doc.Slug">
                         <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
                     </a>
                 </div>

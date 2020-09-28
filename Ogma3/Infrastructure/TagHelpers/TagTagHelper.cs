@@ -1,3 +1,5 @@
+#nullable enable
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -15,15 +17,16 @@ namespace Ogma3.Infrastructure.TagHelpers
         {
             _accessor = accessor;
             _generator = generator;
+            Tag = new TagDto();
         }
 
-        private TagDto Tag { get; set; }
+        public TagDto Tag { get; set; }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var href = _generator
-                .GetUriByPage(_accessor.HttpContext, "/Tag", null, new {id = Tag.Id, slug = Tag.Slug});
-
+                           .GetUriByPage(_accessor.HttpContext, "/Tag", null, new {id = Tag.Id, slug = Tag.Slug});
+            
             output.TagName = "a";
             output.AddClass("tag", NullHtmlEncoder.Default);
             

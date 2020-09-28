@@ -22,7 +22,7 @@ namespace Ogma3.Infrastructure.TagHelpers
         /// <summary>
         /// How often should the cache refresh in minutes
         /// </summary>
-        private int CacheTime { get; set; } = 60;
+        public int CacheTime { get; set; } = 60;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

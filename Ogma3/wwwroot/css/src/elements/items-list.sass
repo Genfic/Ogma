@@ -29,6 +29,9 @@ ul.items-list
       text-align: left
       &:hover
         color: v.$foreground-75
+        
+      a
+        color: v.$foreground
     
     & .deco
       height: auto
@@ -36,8 +39,10 @@ ul.items-list
       margin-right: .5rem
       display: flex
       align-items: center
+      
       &>*
         margin: 0 .4rem
+        min-width: 3ch
         font-weight: bold
         color: v.$background
         text-shadow: 1px 1px 0 v.$foreground-75
@@ -46,6 +51,11 @@ ul.items-list
       font-size: 1.2rem
       text-decoration: none
       text-overflow: ellipsis
+      
+      &>.icon
+        color: v.$foreground-50
+        font-size: 90%
+        padding-left: .5rem        
       
     & .desc
       color: v.$foreground-75
@@ -58,6 +68,7 @@ ul.items-list
       &>.action
         height: auto
         margin: .2rem
+        padding: 0 .5rem
         border: 1px solid v.$foreground-25
         color: v.$foreground-50
         background-color: transparent

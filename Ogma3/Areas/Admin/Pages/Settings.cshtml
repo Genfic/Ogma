@@ -1,0 +1,38 @@
+@page
+@model Ogma3.Areas.Admin.Pages.Settings
+
+@{
+    ViewData["Title"] = "Settings";
+    ViewData["ActivePage"] = ManageNavPages.Settings;
+}
+
+<form id="config" class="form" method="post">
+
+    <div asp-validation-summary="All"></div>
+    
+    <div class="o-form-group">
+        <label asp-for="Config.Cdn"></label>
+        <input asp-for="Config.Cdn" type="text" class="o-form-control active-border">
+    </div>
+
+    <div class="o-form-group">
+        <label asp-for="Config.AdminEmail"></label>
+        <input asp-for="Config.AdminEmail" type="text" class="o-form-control active-border">
+    </div>
+
+    <div class="o-form-group">
+        <label asp-for="Config.MaxInvitesPerUser"></label>
+        <input asp-for="Config.MaxInvitesPerUser" type="number" class="o-form-control active-border">
+    </div>
+
+
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+
+</form>
+
+@section Scripts
+{
+   <script src="~/js/dist/admin/settings.min.js" asp-append-version="true"></script>
+}

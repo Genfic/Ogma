@@ -25,7 +25,7 @@ namespace Ogma3.Infrastructure.TagHelpers
         /// <summary>
         /// Tolerance in minutes
         /// </summary>
-        private int Tolerance { get; set; } = 10;
+        public int Tolerance { get; set; } = 10;
 
         /// <summary>
         /// How often should the cache refresh in minutes
