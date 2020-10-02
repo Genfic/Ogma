@@ -55,6 +55,7 @@ namespace Ogma3.Infrastructure.TagHelpers
 
             // attach universal plugins and build the pipeline
             var pipeline = builder
+                .UseAutoIdentifiers()
                 .UseSpoilers()
                 .Build();
             

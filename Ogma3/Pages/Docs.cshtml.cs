@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Pages
 {
@@ -20,6 +21,7 @@ namespace Ogma3.Pages
 
         public Document Document { get; set; }
         public List<Document> Versions { get; set; }
+        public IEnumerable<String.Header> Headers { get; set; }
         
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
@@ -35,6 +37,8 @@ namespace Ogma3.Pages
                 .AsNoTracking()
                 .Where(d => d.GroupId == Document.GroupId)
                 .ToListAsync();
+
+            Headers = Document.Body.GetMarkdownHeaders();
             
             return Page();
         }

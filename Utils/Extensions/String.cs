@@ -45,5 +45,51 @@ namespace Utils.Extensions
             var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             return string.Join(Environment.NewLine, lines.Select(s => s.TrimStart(' ', '\t')));
         }
+
+        public static IEnumerable<Header> GetMarkdownHeaders(this string input)
+        {
+            var headers = new List<Header>();
+            
+            var lines = input.Split(Environment.NewLine);
+            foreach (var line in lines)
+            {
+                if (!line.StartsWith('#')) continue;
+                
+                var head = new Header();
+                foreach (var c in line)
+                {
+                    if (c == '#')
+                    {
+                        head.Level++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                head.Body = line.TrimStart('#').Trim();
+
+                var latest = headers
+                    .Where(h => h.Body == head.Body)
+                    .OrderByDescending(h => h.Occurrence)
+                    .FirstOrDefault();
+
+                if (latest != null)
+                {
+                    head.Occurrence =  (byte) (latest.Occurrence + 1);
+                }
+
+                headers.Add(head);
+            }
+
+            return headers;
+        }
+        
+        public class Header
+        {
+            public byte Level { get; set; }
+            public byte Occurrence { get; set; }
+            public string Body { get; set; }
+        }
     }
 }
