@@ -50,6 +50,10 @@ ol[class]
 // <a> elements that don't have a class get default styles 
 a:not([class]) 
   text-decoration-skip-ink: auto
+  
+// and ones that do have a class, don't get decorations
+a[class]
+  text-decoration: none
 
 
 // Make images easier to work with 

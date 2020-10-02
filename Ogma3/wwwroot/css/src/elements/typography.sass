@@ -1,2 +1,11 @@
 .monospace
   font-family: "Courier New", Courier, monospace
+
+// Headers
+h1, h2, h3, h4, h5
+  line-height: 1.2
+  
+// Header sizes
+@for $level from 1 to 6
+  h#{$level}
+    font-size: #{1.2 + ((6 - $level) * .2)}rem

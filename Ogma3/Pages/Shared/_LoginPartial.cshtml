@@ -11,7 +11,7 @@
                 <cdn-img src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" 
                          width="30" height="30" 
                          class="avatar"
-                         alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar"></cdn-img>
+                         alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar" />
                 <span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
             </a>
         </li>

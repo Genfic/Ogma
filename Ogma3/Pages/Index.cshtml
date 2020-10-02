@@ -39,7 +39,7 @@
     </div>
     
     <div class="tab-body" v-if="tabindex === 0">
-        <h2>Top stories of all time</h2>
+        <h2 class="title">Top stories of all time</h2>
 
         <div>
             @foreach (var story in Model.TopStories)
@@ -50,7 +50,7 @@
     </div>
     
     <div class="tab-body" v-if="tabindex === 1">
-        <h2>Newest stories</h2>
+        <h2 class="title">Newest stories</h2>
         
         <div>
             @foreach (var story in Model.RecentStories)
@@ -61,7 +61,7 @@
     </div>
     
     <div class="tab-body" v-if="tabindex === 2">
-        <h2>Freshly updated</h2>
+        <h2 class="title">Freshly updated</h2>
         
         <div>
             @foreach (var story in Model.LastUpdatedStories)

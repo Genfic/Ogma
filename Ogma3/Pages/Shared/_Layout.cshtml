@@ -1,22 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
 @using Ogma3.Api.V1
-@using Ogma3.Data.Models
 @using Ogma3.Services
-@inject SignInManager<OgmaUser> SignInManager
-@inject OgmaUserManager UserManager
 @inject IWebHostEnvironment Env
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
     var theme = value ?? "light";
     ViewData["render_start"] = DateTime.Now;
+
+    ViewData["Description"] = "Genfic";
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Ogma</title>
+    <title>@ViewData["Title"] - Genfic</title>
     
     @* Theme Color for Chrome, Firefox OS and Opera *@
     <meta name="theme-color" content="#995e31">
@@ -36,7 +35,7 @@
     
     @if (ViewData["use_bootstrap"] == null)
     {
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+          <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     }
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -102,12 +101,6 @@
         crossorigin="anonymous"
         asp-fallback-test="window.axios"
         asp-fallback-src="~/lib/axios.min.js"></script>
-
-@if (ViewData["use_bootstrap"] == null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-}
 
 <script async src="~/js/dist/themeswap.min.js" asp-append-version="true"></script>
 <script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>

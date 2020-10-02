@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Ogma3.Data.Models;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -10,21 +11,21 @@ namespace Ogma3.Api.V1
     [ApiController]
     public class UserActivityController : ControllerBase
     {
-        private readonly UserManager<OgmaUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public UserActivityController(UserManager<OgmaUser> userManager)
+        public UserActivityController(ApplicationDbContext context)
         {
-            _userManager = userManager;
+            _context = context;
         }
 
         // POST
         [HttpHead]
         public async Task<IActionResult> UpdateLastActiveAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
-            user.LastActive = DateTime.Now;
-            await _userManager.UpdateAsync(user);
+            var uid = User.GetNumericId();
+            await _context.Database.ExecuteSqlInterpolatedAsync(
+                $"UPDATE \"AspNetUsers\" SET \"LastActive\" = {DateTime.Now} WHERE \"Id\" = {uid}"
+            );
             return Ok();
         }
         

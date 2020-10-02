@@ -126,6 +126,10 @@ namespace Ogma3.Data
             
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();
+            
+            // Document mappings
+            CreateMap<Document, DocumentDto>();
+            CreateMap<Document, DocumentVersionDto>();
         }
     }
 }

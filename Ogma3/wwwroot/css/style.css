@@ -57,8 +57,36 @@ body > footer {
   border-top: none;
 }
 
+.mt-3 {
+  margin-top: 1rem;
+}
+
 .monospace {
   font-family: "Courier New", Courier, monospace;
+}
+
+h1, h2, h3, h4, h5 {
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+}
+
+h4 {
+  font-size: 1.6rem;
+}
+
+h5 {
+  font-size: 1.4rem;
 }
 
 *,
@@ -107,6 +135,10 @@ ol[class] {
 
 a:not([class]) {
   text-decoration-skip-ink: auto;
+}
+
+a[class] {
+  text-decoration: none;
 }
 
 img {
@@ -198,12 +230,11 @@ nav#top-nav .navbar-nav > .nav-item.register:hover {
   border-color: var(--accent-75);
 }
 nav#top-nav .navbar-nav > .nav-item.navbar-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: var(--foreground-75);
-  margin: 0 1rem 0 0;
-  padding: 0 1rem;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  line-height: inherit;
+  white-space: nowrap;
 }
 nav#top-nav .navbar-nav > .nav-item.navbar-brand:focus {
   border-color: var(--accent);
@@ -245,6 +276,7 @@ nav#top-nav .navbar-nav > .nav-item > .nav-link.user > .name {
   position: relative;
   display: flex;
   margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
   flex-direction: column;
   align-items: center;
   border: 1px solid var(--foreground-25);
@@ -1596,6 +1628,9 @@ form.search select:focus {
   border-top: 0.25rem solid var(--accent);
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
+}
+.tab-view .tab-body > .title {
+  margin: 1rem 0 0.5rem;
 }
 
 .action-btn {

@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = Model.Story.Title;
+    ViewData["Description"] = Model.Story.Hook;
+    ViewData["Rating"] = Model.Story.Rating.Name;
 }
 
 <partial name="Shared/_ProfileBar" model="@Model.ProfileBar"/>

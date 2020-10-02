@@ -82,7 +82,7 @@
 
             @if (Model.Cover != null)
             {
-                <cdn-img src="@Model.Cover" alt="@Model.Title cover image" class="cover" itemprop="thumbnailUrl"></cdn-img>
+                <cdn-img src="@Model.Cover" alt="@Model.Title cover image" class="cover" itemprop="thumbnailUrl" />
             }
             <div class="description" itemprop="abstract">
                 <markdown>@Model.Description</markdown>
