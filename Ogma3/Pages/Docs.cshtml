@@ -6,18 +6,18 @@
     ViewData["Title"] = Model.Document.Title;
 }
 
-<div class="toc">
-    @foreach (var h in Model.Headers)
-    {
-        <a href="#@h.Body.Friendlify()@(h.Occurrence > 0 ? "-" + h.Occurrence : "")"
-           class="@("toc-h" + h.Level)">
-            @h.Body
-        </a>
-    }
-</div>
-
 <article class="document">
-    <h1>@Model.Document.Title</h1>
+    <h1 class="header">@Model.Document.Title</h1>
+    
+    <div class="toc">
+        @foreach (var h in Model.Headers)
+        {
+            <a href="#@h.Body.Friendlify()@(h.Occurrence > 0 ? "-" + h.Occurrence : "")"
+               class="toc-h @("h" + h.Level)">
+                @h.Body
+            </a>
+        }
+    </div>
     
     <markdown>
         @Model.Document.Body

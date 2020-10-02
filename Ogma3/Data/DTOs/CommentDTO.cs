@@ -30,9 +30,9 @@ namespace Ogma3.Data.DTOs
             var topRole = comment.Author.Roles
                 .Where(r => r.Order.HasValue)
                 .OrderBy(r => r.Order)
-                .First();
+                .FirstOrDefault();
             
-            var roleDto = new RoleDto
+            var roleDto = topRole == null ? null : new RoleDto
             {
                 Id = topRole.Id,
                 Name = topRole.Name,

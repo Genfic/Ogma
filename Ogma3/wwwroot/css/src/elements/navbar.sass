@@ -13,16 +13,23 @@ nav#top-nav
   
   background-color: v.$background
   border-bottom: 1px solid v.$foreground-50
+  
+  transition: height .2s ease-in-out
+  
   @media screen and (max-width: v.$mq-mobile)
-    padding: .25rem 2rem
+    padding: .1rem 1rem
   @media screen and (max-width: v.$mq-mobile-sm)
     flex-direction: column
-    padding: .1rem 1rem
+    padding: 0 .5rem
     height: auto
     
   &.bottom
     bottom: 0
 
+  &.compact
+    height: max(#{v.$nav-height * .65}, 30px)
+    @media (prefers-reduced-motion)
+      height: v.$nav-height
     
   .navbar-nav
     display: flex
@@ -69,10 +76,7 @@ nav#top-nav
           
         &.light
           color: v.$foreground-75
-          
-        //&>.name
-        //  margin-left: .5rem
-          
+                    
         &.user
           &>.name
             color: v.$foreground-75
