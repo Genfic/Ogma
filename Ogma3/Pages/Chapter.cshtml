@@ -2,8 +2,18 @@
 @model Ogma3.Pages.ChapterModel
 
 @{
+    var desc = $"{Model.Chapter.StoryTitle} – chapter {Model.Chapter.Order}";
+
     ViewData["Title"] = Model.Chapter.Title;
+    ViewData["Description"] = desc;
+    ViewData["Rating"] = Model.Chapter.StoryRatingName;
 }
+
+@section OgMeta {
+     <meta property="og:type" content="book.chapter">
+     <meta property="og:url" content="@Url.PageLink("/Chapter", values: new { Model.Chapter.Id, Model.Chapter.Slug })">
+     <meta property="og:description" content="@desc">
+ }
 
 <partial name="Shared/_ChapterDetails" model="@Model.Chapter" />
 

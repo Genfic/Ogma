@@ -2,8 +2,17 @@
 @model Ogma3.Pages.Blog.DetailsModel
 
 @{
+    var desc = Model.Blogpost.Body.Substring(0, 150);
+
     ViewData["Title"] = Model.Blogpost.Title;
+    ViewData["Description"] = desc;
     ViewData["Tab"] = "Blog";
+}
+
+@section OgMeta {
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="@Url.PageLink("/Blog/Post", values: new { Model.Blogpost.Id, Model.Blogpost.Slug })">
+    <meta property="og:description" content="@desc">
 }
 
 <partial name="_ProfileBar" model="@Model.ProfileBar" />

@@ -17,7 +17,7 @@ namespace Ogma3.Pages
         
         public ChapterDetails Chapter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long id)
+        public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
             Chapter = await _chaptersRepo.GetChapterDetails(id);
 

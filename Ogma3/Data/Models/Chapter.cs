@@ -8,7 +8,7 @@ namespace Ogma3.Data.Models
     public class Chapter : BaseModel
     {
         [Required]
-        public int Order { get; set; }
+        public uint Order { get; set; }
 
         [Required]
         public DateTime PublishDate { get; set; } = DateTime.Now;

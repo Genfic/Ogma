@@ -85,7 +85,12 @@ let comments_vue = new Vue({
 
         navigateToPage: function () {
             this.visibleComments = this.comments.slice((this.page - 1) * this.perPage, this.page * this.perPage);
-            history.replaceState(undefined, undefined, `#page.${this.page}`)
+            console.log(this.page)
+            if (this.page > 1) {
+                history.replaceState(null, null, `#page.${this.page}`)
+            } else {
+                history.replaceState(null, null, window.location.href.split('#')[0])
+            }
             if (this.highlight) this.highlight = null;
         },
         

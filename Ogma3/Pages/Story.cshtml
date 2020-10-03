@@ -7,6 +7,12 @@
     ViewData["Rating"] = Model.Story.Rating.Name;
 }
 
+@section OgMeta {
+    <meta property="og:type" content="book">
+    <meta property="og:url" content="@Url.PageLink("/Story", values: new { Model.Story.Id, Model.Story.Slug })">
+    <meta property="og:description" content="@Model.Story.Hook">
+}
+
 <partial name="Shared/_ProfileBar" model="@Model.ProfileBar"/>
 
 <partial name="Shared/_StoryDetails" model="@Model.Story"/>
