@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -64,11 +65,11 @@ namespace Ogma3.Api.V1
         [HttpGet("user/{story:int}")]
         public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetCurrentUserShelvesAsync(long story)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
+            var uid = User.GetNumericId();
+            if (uid == null) return Ok();
 
             var shelves = await _context.Shelves
-                .Where(s => s.Owner == user)
+                .Where(s => s.Owner.Id == uid)
                 .Include(s => s.ShelfStories)
                 .Include(s => s.Icon)
                 .AsNoTracking()

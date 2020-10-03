@@ -32,7 +32,7 @@ let story_vue = new Vue({
         getShelves: function() {
             axios.get(this.shelvesRoute + '/user/' + this.storyId)
                 .then(response => {
-                    this.shelves = response.data
+                    this.shelves = response.data || [];
                 })
                 .catch(console.error);
         },
@@ -53,7 +53,7 @@ let story_vue = new Vue({
         markRead: function (chapter) {
             axios.post(this.readsRoute, { story: this.storyId, chapter: chapter })
                 .then(res => {
-                    this.read = res.data.read;
+                    this.read = res.data.read || [];
                 })
                 .catch(console.error);
         }
@@ -77,7 +77,7 @@ let story_vue = new Vue({
         // get initial reads
         axios.get(this.readsRoute + '/' + this.storyId)
             .then(res => {
-                this.read = res.data.read
+                this.read = res.data.read || [];
             })
             .catch(console.error);
         // Get shelves

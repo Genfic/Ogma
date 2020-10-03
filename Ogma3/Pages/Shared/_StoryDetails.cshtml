@@ -47,6 +47,7 @@
             <div class="spacer"></div>
 
             <button 
+                v-if="shelves"
                 class="shelf" 
                 v-for="s in shelves.filter(s => s.isQuick || s.isDefault)" 
                 :title="'Add to ' + s.name"
@@ -103,17 +104,18 @@
     <ol class="chapters">
         @if (Model.Chapters.Count <= 0)
         {
-            <a class="chapter">
+            <li class="chapter">
                 <div class="title">No chapters found</div>
-            </a>
+            </li>
         }
         else
         {
             @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
             {
-                <div class="chapter">
+                <li class="chapter">
                     <div class="left">
                         <button class="read-status"
+                                aria-label="Chapter read status"
                                 :class="read.includes(@c.Id) ? 'active' : ''"
                                 v-on:click="markRead(@c.Id)">
                         </button>
@@ -126,7 +128,7 @@
                     <div class="right">
                         <span class="word-count">@c.WordCount.ToString("N0") words</span>
                     </div>
-                </div>
+                </li>
             } 
         }
     </ol>
