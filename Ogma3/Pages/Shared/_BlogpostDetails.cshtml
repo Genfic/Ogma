@@ -44,7 +44,9 @@
     <div class="tags">
         @foreach (var t in Model.Hashtags)
         {
-            <a asp-page="/Blog/Index" asp-route-q="@t" class="tag active-border">@t</a>
+            <a asp-page="/Blog/Index" asp-route-q="@t" class="tag active-border">
+                <span class="name">@t</span>
+            </a>
         }
     </div>
 </div>

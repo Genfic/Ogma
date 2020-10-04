@@ -64,33 +64,32 @@
 
         </div>
 
-        <cache expires-after="TimeSpan.FromMinutes(60)">
-        <div class="titlebar">
-            <img src="@Model.Rating.Icon" alt="Rating: @Model.Rating.Name" title="Rating: @Model.Rating.Name" class="rating">
-            <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
-            <h1 class="title" itemprop="name">@Model.Title</h1>
-        </div>
-
-        <div class="tags" itemprop="keywords">
-            <partial name="_StoryStatus" model="@Model.Status" />
-            @foreach (var t in Model.Tags)
-            {
-                <tag tag="@t"></tag>
-            }
-        </div>
-
-        <div class="main">
-
-            @if (Model.Cover != null)
-            {
-                <cdn-img src="@Model.Cover" alt="@Model.Title cover image" class="cover" itemprop="thumbnailUrl" />
-            }
-            <div class="description" itemprop="abstract">
-                <markdown>@Model.Description</markdown>
+        @* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
+            
+            <div class="titlebar">
+                <img src="@Model.Rating.Icon" alt="Rating: @Model.Rating.Name" title="Rating: @Model.Rating.Name" class="rating">
+                <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
+                <h1 class="title" itemprop="name">@Model.Title</h1>
             </div>
 
-        </div>
-        </cache>
+            <div class="tags" itemprop="keywords">
+                <partial name="_StoryStatus" model="@Model.Status"/>
+                @foreach (var t in Model.Tags)
+                {
+                    <tag tag="@t"></tag>
+                }
+            </div>
+
+            <div class="main">
+
+                <cdn-img src="@Model.Cover" alt="@Model.Title cover image" class="cover" itemprop="thumbnailUrl"/>
+
+                <div class="description" itemprop="abstract">
+                    <markdown>@Model.Description</markdown>
+                </div>
+
+            </div>
+        @* </cache> *@
     </div>
     
     <div class="info">
@@ -114,16 +113,21 @@
             {
                 <li class="chapter">
                     <div class="left">
+                        
                         <button class="read-status"
                                 aria-label="Chapter read status"
                                 :class="read.includes(@c.Id) ? 'active' : ''"
                                 v-on:click="markRead(@c.Id)">
                         </button>
+
                         <span class="order">@c.Order</span>
+                        
                         <a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">@c.Title</a>
+                        
                         <time class="date" datetime="@c.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
                             @c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
                         </time>
+                        
                     </div>
                     <div class="right">
                         <span class="word-count">@c.WordCount.ToString("N0") words</span>

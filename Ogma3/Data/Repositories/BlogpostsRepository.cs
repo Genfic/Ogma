@@ -51,19 +51,8 @@ namespace Ogma3.Data.Repositories
                 .Where(b => b.IsPublished || !publishedOnly)
                 .CountAsync();
         }
-        
-        public async Task<bool> TogglePublishedStatus(long id)
-        {
-            var story = await _context.Blogposts
-                .FindAsync(id);
-            story.IsPublished = !story.IsPublished;
 
-            await _context.SaveChangesAsync();
-
-            return story.IsPublished;
-        }
-
-        public async Task<BlogpostDetails> Get(long id)
+        public async Task<BlogpostDetails> GetDetails(long id)
         {
             return await _context.Blogposts
                 .Where(b => b.Id == id)

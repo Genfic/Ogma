@@ -14,12 +14,10 @@ namespace Ogma3.Pages.Blog
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly OgmaUserManager _userManager;
 
-        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager)
+        public CreateModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -58,11 +56,16 @@ namespace Ogma3.Pages.Blog
             }
             
             // Get logged in user
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
+            var uname = User.GetUsername();
+            
+            // Return if not logged in
+            if (uid == null || uname == null) return Unauthorized();
             
             // Create array of hashtags
-            var tags = Input.Tags
+            var tags = Input.Tags?
                 .Split(',')
+                .Where(t => !string.IsNullOrWhiteSpace(t))
                 .ToList()
                 .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()
@@ -73,14 +76,14 @@ namespace Ogma3.Pages.Blog
                 Title = Input.Title.Trim(),
                 Slug = Input.Title.Trim().Friendlify(),
                 Body = Input.Body.Trim(),
-                Author = user,
+                AuthorId = (long) uid,
                 CommentsThread = new CommentsThread(),
                 WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
-                Hashtags = tags
+                Hashtags = tags ?? System.Array.Empty<string>()
             });
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index", new { name = user.UserName });
+            return RedirectToPage("/User/Blog", new { name = uname });
         }
     }
 }

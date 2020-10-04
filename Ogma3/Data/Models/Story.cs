@@ -11,13 +11,11 @@ namespace Ogma3.Data.Models
 {
     public class Story : BaseModel
     {
-        // public Story()
-        // {
-        //     Chapters = new List<Chapter>();
-        // }
 
         [Required]
         public OgmaUser Author { get; set; }
+
+        public long AuthorId { get; set; }
 
         [Required]
         [MinLength(CTConfig.CStory.MinTitleLength)]
@@ -86,8 +84,5 @@ namespace Ogma3.Data.Models
         [Required]
         [DefaultValue(0)]
         public int ChapterCount { get; set; }
-    
-        [NotMapped]
-        public int Score => Votes.Count;
     }
 }

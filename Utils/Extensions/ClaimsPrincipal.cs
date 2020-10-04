@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Security.Claims;
 
 namespace Utils.Extensions
@@ -10,7 +12,8 @@ namespace Utils.Extensions
         /// <param name="principal">ClaimsPrincipal containing the logged-in user</param>
         /// <param name="userId">ID to check against</param>
         /// <returns>Whether the ID matches the logged in user ID</returns>
-        public static bool IsUserSameAsLoggedIn(this ClaimsPrincipal principal, long userId) => principal.GetNumericId() == userId;
+        public static bool IsUserSameAsLoggedIn(this ClaimsPrincipal principal, long userId) 
+            => principal.GetNumericId() == userId;
 
         /// <summary>
         /// Get current user's ID automatically cast to `long?`
@@ -22,6 +25,11 @@ namespace Utils.Extensions
             var user = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var castResult = long.TryParse(user, out var userId);
             return castResult ? userId : (long?) null;
+        }
+
+        public static string? GetUsername(this ClaimsPrincipal principal)
+        {
+            return principal.FindFirst(ClaimTypes.Name)?.Value;
         }
     }
 }

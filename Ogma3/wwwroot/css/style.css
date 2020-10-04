@@ -134,7 +134,11 @@ ol[class] {
 }
 
 a:not([class]) {
+  color: var(--accent);
   text-decoration-skip-ink: auto;
+}
+a:not([class]):hover {
+  text-decoration: underline;
 }
 
 a[class] {
@@ -433,10 +437,12 @@ img.avatar {
 .story-card {
   width: 100%;
   display: grid;
+  gap: 0.5rem;
   grid-template-columns: 10rem 1fr;
   grid-template-rows: auto auto 1fr auto auto;
   grid-column-gap: 0.25rem;
   margin: 0.75rem 0 0;
+  padding: 0.25rem;
   border: 1px solid var(--foreground-25);
 }
 .story-card:hover {
@@ -544,6 +550,7 @@ img.avatar {
 .story-card .info {
   grid-column: 1/3;
   grid-row: 5;
+  padding: 0.25rem;
   display: flex;
   border-top: 1px solid var(--foreground-25);
 }
@@ -579,7 +586,7 @@ img.avatar {
 }
 #story-app > .story-details > .titlebar > h1.title {
   font-size: 2rem;
-  line-height: 2rem;
+  line-height: 3rem;
 }
 #story-app > .story-details > .tags {
   display: flex;
@@ -639,7 +646,7 @@ img.avatar {
   border-bottom: 1px solid var(--foreground-25);
 }
 #story-app > .chapters > .chapter:hover {
-  background-color: var(--accent-10);
+  background-color: var(--accent-5);
 }
 #story-app > .chapters > .chapter > .left {
   display: flex;
@@ -648,8 +655,12 @@ img.avatar {
 #story-app > .chapters > .chapter > .left > * {
   padding: 0 0.25rem;
 }
+#story-app > .chapters > .chapter > .left > .title {
+  color: var(--foreground);
+}
 #story-app > .chapters > .chapter > .left > .title:hover {
-  color: var(--accent-75);
+  color: var(--accent);
+  text-decoration: underline;
 }
 #story-app > .chapters > .chapter > .left > .date {
   font-size: 0.8rem;
@@ -1052,6 +1063,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   flex-direction: column;
   border: 1px solid var(--foreground-25);
   margin: 0.75rem 0 0;
+  padding: 0.25rem;
 }
 .blogpost-card:first-of-type {
   margin: 0;
@@ -1085,6 +1097,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 .blogpost-card .info {
   border-top: 1px solid var(--foreground-25);
   display: flex;
+  padding: 0.25rem;
 }
 .blogpost-card .info > * {
   padding: 0 0.25rem;
@@ -1104,6 +1117,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   display: flex;
   flex-wrap: wrap;
   border-top: 1px solid var(--foreground-25);
+  padding: 0.25rem;
 }
 .blogpost-card .tags > .tag {
   border: none;
@@ -1716,6 +1730,13 @@ form.search select:focus {
 }
 .club-card:hover > .info {
   border-color: var(--foreground-50);
+}
+.club-card .title {
+  color: var(--accent);
+}
+.club-card .title:hover {
+  color: var(--accent-75);
+  text-decoration: underline;
 }
 .club-card > .img {
   grid-row: 1/3;

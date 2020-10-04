@@ -40,14 +40,13 @@ namespace Ogma3.Pages.Stories
         {
             var story = await _context.Stories
                 .Where(s => s.Id == id)
-                .Select(s => new {s.Id, s.Slug, AuthorId = s.Author.Id})
-                .AsNoTracking()
                 .FirstOrDefaultAsync();
             
             if (story == null) return NotFound();
             if (!User.IsUserSameAsLoggedIn(story.AuthorId)) return RedirectToPage("Index");
 
-            await _storiesRepo.TogglePublishedStatus(id);
+            story.IsPublished = !story.IsPublished;
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
         }

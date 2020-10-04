@@ -39,5 +39,19 @@ namespace Ogma3.Data.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public async Task<List<ClubCard>> GetPaginatedClubCards(int page, int perPage)
+        {
+            return await _context.Clubs
+                .Paginate(page, perPage)
+                .ProjectTo<ClubCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<int> CountClubs()
+        {
+            return await _context.Clubs.CountAsync();
+        }
     }
 }

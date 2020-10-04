@@ -121,7 +121,8 @@ namespace Ogma3.Data
                     .WithOne(c => c.Story)
                     .OnDelete(DeleteBehavior.Cascade);
                 ent.HasOne(s => s.Author)
-                    .WithMany(u => u.Stories);
+                    .WithMany(u => u.Stories)
+                    .HasForeignKey(s => s.AuthorId);
                 ent.HasMany(s => s.Votes)
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
@@ -199,6 +200,7 @@ namespace Ogma3.Data
             {
                 ent.HasOne(b => b.Author)
                     .WithMany(u => u.Blogposts)
+                    .HasForeignKey(b => b.AuthorId)
                     .OnDelete(DeleteBehavior.Cascade);
                 ent.HasOne(b => b.CommentsThread)
                     .WithOne(ct => ct.Blogpost)

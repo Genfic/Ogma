@@ -18,8 +18,20 @@
 <br>
 
 <div class="two-columns o-grid">
-    @foreach (var club in Model.Clubs) {
-        <partial name="_ClubCard" model="@club"/>
+    @if (Model.Clubs.Count <= 0)
+    {
+        <h1>No stories found</h1>
+    }
+    else
+    {
+        foreach (var club in Model.Clubs)
+        {
+            <partial name="_ClubCard" model="@club"/>
+        }
     }
 </div>
-
+        
+@if (Model.Clubs.Count > 0)
+{
+    <partial name="_Pagination" model="Model.Pagination"/>
+}

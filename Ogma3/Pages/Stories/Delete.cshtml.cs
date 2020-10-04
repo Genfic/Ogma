@@ -75,7 +75,7 @@ namespace Ogma3.Pages.Stories
             // Save
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/User/Stories", new { Name = Story.Author.UserName });
         }
     }
 }

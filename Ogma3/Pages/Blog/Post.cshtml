@@ -2,7 +2,9 @@
 @model Ogma3.Pages.Blog.DetailsModel
 
 @{
-    var desc = Model.Blogpost.Body.Substring(0, 150);
+    var desc = Model.Blogpost.Body.Length > 150 
+        ? Model.Blogpost.Body.Substring(0, 150)
+        : Model.Blogpost.Body;
 
     ViewData["Title"] = Model.Blogpost.Title;
     ViewData["Description"] = desc;

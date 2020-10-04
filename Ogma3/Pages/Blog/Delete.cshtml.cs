@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog
 {
@@ -13,12 +14,10 @@ namespace Ogma3.Pages.Blog
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private OgmaUserManager _userManager;
 
-        public DeleteModel(ApplicationDbContext context, OgmaUserManager userManager)
+        public DeleteModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -52,20 +51,23 @@ namespace Ogma3.Pages.Blog
             }
             
             // Get logged in user
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
+            var uname = User.GetUsername();
+
+            if (uid == null || uname == null) return Unauthorized();
             
             // Get post and make sure the user matches
             Blogpost = await _context.Blogposts
-                .Where(b => b.Id == id && b.Author == user)
+                .Where(b => b.Id == id && b.AuthorId == uid)
                 .Include(b => b.CommentsThread)
                 .FirstOrDefaultAsync();
 
-            if (Blogpost == null) return RedirectToPage("./Index", new {name = user.UserName});
+            if (Blogpost == null) return RedirectToPage("/User/Blog", new { name = uname });
 
             _context.Blogposts.Remove(Blogpost);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index", new { name = Blogpost.Author.UserName });
+            return RedirectToPage("/User/Blog", new { name = uname });
         }
     }
 }

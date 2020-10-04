@@ -1,3 +1,5 @@
+@use "../vars" as v
+
 // Box sizing rules 
 *,
 *::before,
@@ -48,8 +50,11 @@ ol[class]
 
 
 // <a> elements that don't have a class get default styles 
-a:not([class]) 
+a:not([class])
+  color: v.$accent
   text-decoration-skip-ink: auto
+  &:hover
+    text-decoration: underline
   
 // and ones that do have a class, don't get decorations
 a[class]

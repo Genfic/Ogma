@@ -12,17 +12,19 @@ namespace Ogma3.Data.Models
         public string Title { get; set; }
 
         [Required]
-        public string Slug { get; set; } = "";
+        public string Slug { get; set; }
         
         [Required]
         public DateTime PublishDate { get; set; } = DateTime.Now;
 
         [Required] 
         [DefaultValue(false)]
-        public bool IsPublished { get; set; } = false;
+        public bool IsPublished { get; set; }
         
         [Required]
         public OgmaUser Author { get; set; }
+
+        public long AuthorId { get; set; }
         
         [Required]
         [MinLength(CTConfig.CBlogpost.MinBodyLength)]
@@ -38,6 +40,6 @@ namespace Ogma3.Data.Models
         [MaxLength(CTConfig.CBlogpost.MaxTagsAmount)]
         [DefaultValue(new string[0])]
         [Required]
-        public string[] Hashtags { get; set; } = new string[0];
+        public string[] Hashtags { get; set; } = Array.Empty<string>();
     }
 }

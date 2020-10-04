@@ -10,7 +10,7 @@
         }
         @for (var i = 1; i <= (int)Math.Ceiling((double)Model.ItemCount / Model.PerPage); i++)
         {
-            @if (i >= Model.CurrentPage - 4 && i <= Math.Max(Model.CurrentPage, 5))
+            if (i >= Model.CurrentPage - 4 && i <= Math.Max(Model.CurrentPage, 5))
             {
                 <a href="?page=@i"
                    class="page button @(i == Model.CurrentPage ? "active" : "")">

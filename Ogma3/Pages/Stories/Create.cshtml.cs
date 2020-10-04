@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Attributes;
-using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 
@@ -22,16 +19,11 @@ namespace Ogma3.Pages.Stories
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<OgmaUser> _userManager;
         private readonly FileUploader _uploader;
 
-        public CreateModel(
-            ApplicationDbContext context,
-            UserManager<OgmaUser> userManager,
-            FileUploader uploader)
+        public CreateModel(ApplicationDbContext context, FileUploader uploader)
         {
             _context = context;
-            _userManager = userManager;
             _uploader = uploader;
         }
 
@@ -89,32 +81,25 @@ namespace Ogma3.Pages.Stories
         public async Task<IActionResult> OnPostAsync()
         {
             Ratings = await _context.Ratings.ToListAsync();
-            
-            Console.WriteLine("— " + (ModelState.IsValid ? "State Valid" : "State Invalid"));
-
-            foreach (var (key, value) in ModelState)
-            {
-                Console.WriteLine($"|— {key}");
-                foreach (var error in value.Errors)
-                {
-                    Console.WriteLine($"| |— {error.ErrorMessage}");
-                    Console.WriteLine($"| |  \\— {error.Exception?.Message}");
-                }
-            }
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            
+            // Get logged in user
+            var uid = User.GetNumericId();
 
-            var user = await _userManager.GetUserAsync(User);
+            // Return if not logged in
+            if (uid == null) return Unauthorized();
+            
             var rating = await _context.Ratings.FindAsync(Input.Rating);
             var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
 
             // Add story
             var story = new Story
             {
-                Author = user,
+                AuthorId = (long) uid,
                 Title = Input.Title,
                 Slug = Input.Title.Friendlify(),
                 Description = Input.Description,

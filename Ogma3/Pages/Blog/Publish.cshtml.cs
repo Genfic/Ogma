@@ -28,7 +28,7 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync(long id)
         {
-            Blogpost = await _blogpostsRepo.Get(id);
+            Blogpost = await _blogpostsRepo.GetDetails(id);
 
             if (Blogpost == null) return NotFound();
             if (!User.IsUserSameAsLoggedIn(Blogpost.AuthorId)) return RedirectToPage("Index");
@@ -38,18 +38,17 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnPostAsync(long id)
         {
-            var story = await _context.Blogposts
+            var blog = await _context.Blogposts
                 .Where(s => s.Id == id)
-                .Select(s => new {s.Id, s.Slug, AuthorId = s.Author.Id})
-                .AsNoTracking()
                 .FirstOrDefaultAsync();
             
-            if (story == null) return NotFound();
-            if (!User.IsUserSameAsLoggedIn(story.AuthorId)) return RedirectToPage("Index");
+            if (blog == null) return NotFound();
+            if (!User.IsUserSameAsLoggedIn(blog.AuthorId)) return RedirectToPage("Index");
 
-            await _blogpostsRepo.TogglePublishedStatus(id);
+            blog.IsPublished = !blog.IsPublished;
+            await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Post", new { id = story.Id, slug = story.Slug });
+            return RedirectToPage("./Post", new { id = blog.Id, slug = blog.Slug });
         }
     }
 }

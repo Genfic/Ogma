@@ -14,12 +14,10 @@ namespace Ogma3.Pages.Blog
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private OgmaUserManager _userManager;
 
-        public EditModel(ApplicationDbContext context, OgmaUserManager userManager)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -47,12 +45,13 @@ namespace Ogma3.Pages.Blog
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // Get logged in user
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
+            if (uid == null) return Unauthorized();
             
             // Get post and make sure the user matches
             var post = await _context.Blogposts
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
+                .FirstOrDefaultAsync(m => m.Id == id && m.AuthorId == uid);
 
             if (post == null) return NotFound();
             
@@ -72,7 +71,7 @@ namespace Ogma3.Pages.Blog
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(long id)
         {
             if (!ModelState.IsValid)
             {
@@ -80,11 +79,12 @@ namespace Ogma3.Pages.Blog
             }
             
             // Get logged in user
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
+            if (uid == null) return Unauthorized();
             
             // Get post and make sure the user matches
             var post = await _context.Blogposts
-                .FirstOrDefaultAsync(m => m.Id == id && m.Author == user);
+                .FirstOrDefaultAsync(m => m.Id == id && m.AuthorId == uid);
             
             // 404 if no post found
             if (post == null) return NotFound();
@@ -92,6 +92,7 @@ namespace Ogma3.Pages.Blog
             // Create array of hashtags
             var tags = Input.Tags
                 .Split(',')
+                .Where(t => !string.IsNullOrWhiteSpace(t))
                 .ToList()
                 .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()

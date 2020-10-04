@@ -23,7 +23,7 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            Blogpost = await _blogpostsRepo.Get(id);
+            Blogpost = await _blogpostsRepo.GetDetails(id);
 
             if (Blogpost == null) return NotFound();
             if (!Blogpost.IsPublished && !User.IsUserSameAsLoggedIn(Blogpost.AuthorId)) return NotFound();

@@ -21,14 +21,12 @@ namespace Ogma3.Pages.Stories
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly OgmaUserManager _userManager;
         private readonly FileUploader _uploader;
 
 
-        public EditModel(ApplicationDbContext context, OgmaUserManager userManager, FileUploader uploader)
+        public EditModel(ApplicationDbContext context, FileUploader uploader)
         {
             _context = context;
-            _userManager = userManager;
             _uploader = uploader;
         }
 
@@ -82,16 +80,18 @@ namespace Ogma3.Pages.Stories
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            // Get logged in user
+            var uid = User.GetNumericId();
+            if (uid == null) return Unauthorized();
+            
             // Get story to edit and make sure author matches logged in user
             var story = await _context.Stories
                 .Include(s => s.StoryTags)
                 .Include(s => s.Rating)
-                .Include(s => s.Author)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id && s.AuthorId == uid);
 
             if (story == null) return NotFound();
-            if (!story.Author.IsLoggedIn(User)) return RedirectToPage("Index");
             
             // Fill InputModel
             Input = new InputModel
@@ -120,14 +120,16 @@ namespace Ogma3.Pages.Stories
                 var tags = await _context.Tags.Where(t => Input.Tags.Contains(t.Id)).ToListAsync();
 
                 // Get logged in user
-                var user = await _userManager.GetUserAsync(User);
+                var uid = User.GetNumericId();
+                if (uid == null) return Unauthorized();
+                
                 // Get the story and make sure the logged-in user matches author
                 var story = await _context.Stories
                     .Include(s => s.StoryTags)
                     .ThenInclude(st => st.Tag)
                     .Include(s => s.Rating)
-                    .Include(s => s.Author)
-                    .FirstOrDefaultAsync(s => s.Id == id && s.Author == user);
+                    .FirstOrDefaultAsync(s => s.Id == id && s.AuthorId == uid);
+                
                 // 404 if none found
                 if (story == null) return NotFound();
                 
@@ -139,6 +141,7 @@ namespace Ogma3.Pages.Stories
                 story.Rating = await _context.Ratings.FindAsync(Input.Rating);
                 story.Tags = tags;
                 story.Status = Input.Status;
+                
                 _context.Update(story);
                 await _context.SaveChangesAsync();
                 

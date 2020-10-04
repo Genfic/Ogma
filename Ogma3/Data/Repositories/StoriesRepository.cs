@@ -136,17 +136,6 @@ namespace Ogma3.Data.Repositories
                 .CountAsync();
         }
 
-        public async Task<bool> TogglePublishedStatus(long id)
-        {
-            var story = await _context.Stories
-                .FindAsync(id);
-            story.IsPublished = !story.IsPublished;
-
-            await _context.SaveChangesAsync();
-
-            return story.IsPublished;
-        }
-
         
         /// <summary>
         /// Apply a filter on `IQueryable` 
