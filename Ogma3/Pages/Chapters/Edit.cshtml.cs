@@ -14,12 +14,10 @@ namespace Ogma3.Pages.Chapters
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private OgmaUserManager _userManager;
 
-        public EditModel(ApplicationDbContext context, OgmaUserManager userManager)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -58,26 +56,24 @@ namespace Ogma3.Pages.Chapters
             public string EndNotes { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(long? id)
+        public async Task<IActionResult> OnGetAsync(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             // Get chapter
             var chapter = await _context.Chapters
                 .Where(c => c.Id == id)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
-            // Get logged in user
-            var user = await _userManager.GetUserAsync(User);
+            
+            if (chapter == null) return NotFound();
+            
             // Make sure the story's author is the logged in user
             var authorized = await _context.Stories
+                .Where(s => s.Id == chapter.StoryId)
+                .Where(s => s.AuthorId == User.GetNumericId())
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == chapter.StoryId && s.Author == user);
+                .AnyAsync();
 
-            if (chapter == null || !authorized) return NotFound();
+            if (!authorized) return Unauthorized();
 
             Input = new InputModel
             {
@@ -107,12 +103,11 @@ namespace Ogma3.Pages.Chapters
             // Get story
             var story = await _context.Stories
                 .Where(s => s.Id == chapter.StoryId)
+                .Where(s => s.AuthorId == User.GetNumericId())
                 .Include(s => s.Chapters)
-                .Include(s => s.Author)
                 .FirstOrDefaultAsync();
-            if (story == null) return NotFound();
             
-            if (!story.Author.IsLoggedIn(User)) return NotFound();
+            if (story == null) return NotFound();
             
             chapter.Title      = Input.Title.Trim();
             chapter.Body       = Input.Body.Trim();
@@ -126,25 +121,9 @@ namespace Ogma3.Pages.Chapters
             // Recalculate words in the story
             story.WordCount = story.Chapters.Sum(c => c.WordCount);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ChapterExists(Input.Id))
-                {
-                    return NotFound();
-                }
-                throw;
-            }
-
+            await _context.SaveChangesAsync();
+            
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
-        }
-
-        private bool ChapterExists(long id)
-        {
-            return _context.Chapters.Any(e => e.Id == id);
         }
     }
 }

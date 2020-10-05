@@ -1,5 +1,6 @@
 using System.Linq;
 using AutoMapper;
+using Markdig;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
@@ -48,9 +49,9 @@ namespace Ogma3.Data
                 );
             CreateMap<OgmaUser, UserSimpleDto>()
                 .ForMember(
-                    usd => usd.TopRole,
+                    usd => usd.Roles,
                     opts 
-                        => opts.MapFrom(u => u.UserRoles.Select(ur => ur.Role).Where(r => r.Order.HasValue).OrderBy(r => r.Order).FirstOrDefault())
+                        => opts.MapFrom(u => u.UserRoles.OrderByDescending(ur => ur.Role.Order).Select(ur => ur.Role))
                 );
             CreateMap<OgmaUser, UserCard>()
                 .ForMember(
@@ -124,6 +125,14 @@ namespace Ogma3.Data
                         => opts.MapFrom(c => c.ClubMembers.Any(cm => cm.MemberId == currentUser))
                 );
             CreateMap<Club, ClubCard>();
+            
+            // Comment mappings
+            CreateMap<Comment, CommentDto>()
+                .ForMember(
+                    cd => cd.Body,
+                    opts
+                        => opts.MapFrom(c => Markdown.ToHtml(c.Body.Trim(), null))
+                );
             
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();

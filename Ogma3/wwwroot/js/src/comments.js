@@ -7,10 +7,10 @@ let comments_vue = new Vue({
         csrf: null,
         
         comments: [],
-        visibleComments: [],
+        total: 0,
         
         page: 1,
-        perPage: 10,
+        perPage: null,
         highlight: null,
     },
     methods: {
@@ -34,11 +34,17 @@ let comments_vue = new Vue({
 
         // Load comments for the thread
         load: function () {
-            axios.get(this.route, { params:{ thread:this.thread } })
+            const params = {
+                thread: this.thread,
+                page: this.page
+            }
+            
+            axios.get(this.route, { params: params })
                 .then(res => {
-                    this.comments = res.data.map(
+                    this.comments = res.data.comments.map(
                         (val, key) => ({val, key})
                     ).reverse();
+                    this.total = res.data.totalComments;
                     
                     if (this.highlight) {
                         this.navigateToComment()
@@ -61,17 +67,20 @@ let comments_vue = new Vue({
         
         prevPage: function () {
             this.page = Math.max(1, this.page - 1);
-            this.navigateToPage()
+            this.navigateToPage();
+            this.load();
         },
         
         nextPage: function () {
-            this.page = Math.min(this.page + 1, Math.ceil(this.comments.length / this.perPage));
-            this.navigateToPage()
+            this.page = Math.min(this.page + 1, Math.ceil(this.total / this.perPage));
+            this.navigateToPage();
+            this.load();
         },
         
         changePage: function (idx) {
             this.page = idx;
-            this.navigateToPage()
+            this.navigateToPage();
+            this.load();
         },
         
         changeHighlight: function(idx = null, e) {
@@ -80,14 +89,12 @@ let comments_vue = new Vue({
             document
                 .getElementById(`comment-${this.highlight}`)
                 .scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
-            history.replaceState(undefined, undefined, `#comment.${idx}`)
+            history.replaceState(undefined, undefined, `#comment-${idx}`)
         },
 
         navigateToPage: function () {
-            this.visibleComments = this.comments.slice((this.page - 1) * this.perPage, this.page * this.perPage);
-            console.log(this.page)
             if (this.page > 1) {
-                history.replaceState(null, null, `#page.${this.page}`)
+                history.replaceState(null, null, `#page-${this.page}`)
             } else {
                 history.replaceState(null, null, window.location.href.split('#')[0])
             }
@@ -107,9 +114,10 @@ let comments_vue = new Vue({
     mounted() {
         this.thread = document.getElementById('thread').dataset.thread;
         this.route = document.getElementById('route').dataset.route;
+        this.perPage = document.getElementById('per-page').dataset.count;
         this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
         
-        let hash = window.location.hash.split('.');
+        let hash = window.location.hash.split('-');
         
         if (hash[0] === '#page' && hash[1]) {
             this.page = Math.max(1, Number(hash[1] ?? 1));

@@ -17,33 +17,40 @@ namespace Ogma3.Pages.Chapters
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<OgmaUser> _userManager;
 
-        public CreateModel(ApplicationDbContext context, UserManager<OgmaUser> userManager)
+        public CreateModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
-        public IActionResult OnGetAsync(int? id)
+        public class GetModel
+        {
+            public long? AuthorId { get; set; }
+            public string Slug { get; set; }
+            public string Title { get; set; }
+        }
+
+        public async Task<IActionResult> OnGetAsync(long id)
         {
             Input = new InputModel();
 
             // Get story
-            Story = _context.Stories
+            Story = await _context.Stories
                 .Where(s => s.Id == id)
-                .Include(s => s.StoryTags)
-                .Include(s => s.Rating)
-                .Include(s => s.Author)
+                .Select(s => new GetModel
+                {
+                    AuthorId = s.AuthorId,
+                    Slug = s.Slug,
+                    Title = s.Title
+                })
                 .AsNoTracking()
-                .First();
+                .FirstOrDefaultAsync();
             
             // Redirect if story doesn't exist
             if (Story == null) return RedirectToPage("../Index");
             
             // Check ownership, render page if it's ok
-            if (Story.Author.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                return Page();
+            if (Story.AuthorId == User.GetNumericId()) return Page();
             
             // Redirect to the story itself if not an owner
             return RedirectToPage("../Story", new { id, slug = Story.Slug });
@@ -51,7 +58,7 @@ namespace Ogma3.Pages.Chapters
 
         [BindProperty]
         public InputModel Input { get; set; }
-        public Story Story { get; set; }
+        public GetModel Story { get; set; }
 
         public class InputModel
         {
@@ -86,30 +93,28 @@ namespace Ogma3.Pages.Chapters
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync(long id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            // Get logged in user
-            var user = await _userManager.GetUserAsync(User);
-
             // Get the story to insert a chapter into. Include user in the search to check ownership.
-            Story = await _context.Stories
+            var story = await _context.Stories
                 .Where(s => s.Id == id)
+                .Where(s => s.AuthorId == User.GetNumericId())
                 .Include(s => s.Chapters)
                 .FirstOrDefaultAsync();
 
             // Back to index if the story is null or author isn't the logged in user
-            if (Story == null || Story.Author.Id != user.Id)
+            if (story == null)
             {
                 return RedirectToPage("../Index");
             }
 
             // Get the order number of the latest chapter
-            var latestChapter = Story.Chapters
+            var latestChapter = story.Chapters
                 .OrderByDescending(c => c.Order)
                 .Select(c => c.Order)
                 .First();
@@ -128,11 +133,11 @@ namespace Ogma3.Pages.Chapters
             };
             
             // Recalculate words and chapters in the story
-            Story.WordCount = Story.Chapters.Sum(c => c.WordCount) + chapter.WordCount;
-            Story.ChapterCount = Story.Chapters.Count + 1;
+            story.WordCount = story.Chapters.Sum(c => c.WordCount) + chapter.WordCount;
+            story.ChapterCount = story.Chapters.Count + 1;
             
             // Create the chapter and add it to the story
-            Story.Chapters.Add(chapter);
+            story.Chapters.Add(chapter);
             
             await _context.SaveChangesAsync();
 

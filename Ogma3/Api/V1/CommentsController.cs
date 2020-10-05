@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 using Utils.Extensions;
 
 namespace Ogma3.Api.V1
@@ -20,55 +21,55 @@ namespace Ogma3.Api.V1
         private readonly ApplicationDbContext _context;
         private readonly UserManager<OgmaUser> _userManager;
         private readonly OgmaConfig _ogmaConfig;
+        private readonly CommentsRepository _commentsRepo;
 
-        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager, OgmaConfig ogmaConfig)
+        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager, OgmaConfig ogmaConfig, CommentsRepository commentsRepo)
         {
             _context = context;
             _userManager = userManager;
             _ogmaConfig = ogmaConfig;
+            _commentsRepo = commentsRepo;
         }
 
         public class GetCommentsInput
         {
             public long Thread { get; set; }
             private int? _page;
-            private int? _perPage;
             public int Page
             {
                 get => Math.Max(1, _page ?? 1);
                 set => _page = value;
             }
-            public int PerPage
-            {
-                get => _perPage?.Clamp(1, 100) ?? 20;
-                set => _perPage = value;
-            }
+        }
+        public class PaginationResults
+        {
+            public IEnumerable<CommentDto> Comments { get; set; }
+            public int TotalComments { get; set; }
         }
 
         // GET: api/Comments?thread=6[&page=1&per-page=10]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments([FromQuery]GetCommentsInput input)
+        public async Task<PaginationResults> GetComments([FromQuery]GetCommentsInput input)
         {
-            var comments =  await _context.Comments
-                .Where(c => c.CommentsThreadId == input.Thread)
-                .Include(c => c.Author)
-                    .ThenInclude(u => u.UserRoles)
-                        .ThenInclude(ur => ur.Role)
-                // .Skip((input.Page - 1) * input.PerPage).Take(input.PerPage) // Pagination
-                .Select(c => new CommentDTO(c, true))
-                .AsNoTracking()
-                .ToListAsync();
+            var output = new PaginationResults();
             
-            return comments.Select(c =>
+            var comments = await _commentsRepo.GetPaginated(input.Thread, input.Page, _ogmaConfig.CommentsPerPage);
+            
+            output.Comments = comments.Select(c =>
             {
                 c.Author.Avatar = _ogmaConfig.Cdn + c.Author.Avatar;
+                c.Author.UserName += _ogmaConfig.CommentsPerPage;
                 return c;
             }).ToList();
+
+            output.TotalComments = await _commentsRepo.CountComments(input.Thread);
+
+            return output;
         }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CommentDTO>> GetComment(long id)
+        public async Task<ActionResult<CommentDto>> GetComment(long id)
         {
             var comment = await _context.Comments
                 .AsNoTracking()
@@ -79,7 +80,7 @@ namespace Ogma3.Api.V1
                 return NotFound();
             }
 
-            var dto = new CommentDTO(comment);
+            var dto = CommentDto.FromComment(comment);
             dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
             return dto;
         }
@@ -122,7 +123,7 @@ namespace Ogma3.Api.V1
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult<CommentDTO>> PostComment(CommentFromApiDTO data)
+        public async Task<ActionResult<CommentDto>> PostComment(CommentFromApiDTO data)
         {
             var comment = new Comment
             {
@@ -142,7 +143,7 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            var dto = new CommentDTO(comment);
+            var dto = CommentDto.FromComment(comment);
             dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
             return CreatedAtAction("GetComment", new { id = comment.Id }, dto);
         }
@@ -150,7 +151,7 @@ namespace Ogma3.Api.V1
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult<CommentDTO>> DeleteComment(long id)
+        public async Task<ActionResult<CommentDto>> DeleteComment(long id)
         {
             var user = await _userManager.GetUserAsync(User);
             var comment = await _context.Comments.FindAsync(id);
@@ -170,7 +171,7 @@ namespace Ogma3.Api.V1
             
             await _context.SaveChangesAsync();
 
-            var dto = new CommentDTO(comment);
+            var dto = CommentDto.FromComment(comment);
             dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
             return dto;
         }

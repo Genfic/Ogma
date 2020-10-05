@@ -1,10 +1,11 @@
 @using static Ogma3.Services.HtmlExtensions
 @using Ogma3.Api.V1
+@inject OgmaConfig Config
 @model long
 
 <div class="comments-container" id="comments-container">
 
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
     {
         <form asp-antiforgery="true">
             <textarea class="comment-box active-border" 
@@ -17,6 +18,7 @@
 
             <div id="thread" data-thread="@Model" v-if="!thread"></div>
             <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
+            <div id="per-page" data-count="@Config.CommentsPerPage" v-if="!perPage"></div>
 
             <div class="buttons">
                 <button class="comment-btn active-border" v-on:click="submit">
@@ -42,15 +44,15 @@
         
         <div :id="`comment-${c.key+1}`"
              class="comment" :class="c.key+1 === highlight ? 'marked' : ''"
-             v-for="c in visibleComments">
+             v-for="c in comments">
             
             <div class="author">
                 
                 <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
                 
-                <div v-if="c.val.author.topRole" class="role-tag">
-                    <span class="name">{{c.val.author.topRole.name}}</span>
-                    <div class="bg" :style="{backgroundColor: c.val.author.topRole.color}"></div>
+                <div v-if="c.val.author.roles[0]" class="role-tag">
+                    <span class="name">{{c.val.author.roles[0].name}}</span>
+                    <div class="bg" :style="{backgroundColor: c.val.author.roles[0].color}"></div>
                 </div>
                 
                 <img :src="c.val.author.avatar" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
@@ -79,10 +81,10 @@
         </div>
     </div>
     
-    <div class="pagination" v-if="comments && comments.length > perPage">
+    <div class="pagination" v-if="comments && total > perPage">
         <button class="prev button" v-on:click="prevPage">Previous</button>
         <button class="ph button" v-if="page > 5">...</button>
-        <button v-for="idx in Math.ceil(comments.length / perPage)"
+        <button v-for="idx in Math.ceil(total / perPage)"
                 :key="idx"
                 v-on:click="changePage(idx)"
                 :class="idx === page ? 'active' : ''"
@@ -90,7 +92,7 @@
                 class="page button">
             {{idx}}
         </button>
-        <button class="ph button" v-if="comments.length / perPage > 5 && page !== comments.length / perPage">...</button>
+        <button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
         <button class="next button" v-on:click="nextPage">Next</button>
     </div>
 

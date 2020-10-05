@@ -1,5 +1,6 @@
 {
   "Cdn": "//cdn.genfic.net/file/Ogma-net/",
   "MaxInvitesPerUser": 5,
-  "AdminEmail": "admin@genfic.net"
+  "AdminEmail": "admin@genfic.net",
+  "CommentsPerPage": 20
 }

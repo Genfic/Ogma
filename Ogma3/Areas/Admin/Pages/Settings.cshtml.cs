@@ -30,6 +30,7 @@ namespace Ogma3.Areas.Admin.Pages
             _config.Cdn = Config.Cdn;
             _config.AdminEmail = Config.AdminEmail;
             _config.MaxInvitesPerUser = Config.MaxInvitesPerUser;
+            _config.CommentsPerPage = Config.CommentsPerPage;
             
             await _config.PersistAsync();
         }

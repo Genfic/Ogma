@@ -58,6 +58,8 @@ namespace Ogma3.Data
         public string Cdn { get; set; }
         public int MaxInvitesPerUser { get; set; }
         public string AdminEmail { get; set; }
+        
+        public int CommentsPerPage { get; set; }
 
         #endregion
     }
