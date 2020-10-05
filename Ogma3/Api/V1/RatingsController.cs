@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
-using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Api.V1

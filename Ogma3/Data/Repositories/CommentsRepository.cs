@@ -5,8 +5,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
-using Ogma3.Pages.Shared;
 
 namespace Ogma3.Data.Repositories
 {
