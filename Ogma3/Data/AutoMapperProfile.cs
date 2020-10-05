@@ -17,11 +17,6 @@ namespace Ogma3.Data
             // User mappings
             CreateMap<OgmaUser, ProfileBar>()
                 .ForMember(
-                    pb => pb.Roles,
-                    opts 
-                        => opts.MapFrom(u => u.UserRoles.Select(ur => ur.Role))
-                )
-                .ForMember(
                     pb => pb.StoriesCount,
                     opts 
                         => opts.MapFrom(u => u.Stories.Count(s => s.IsPublished))
@@ -32,11 +27,6 @@ namespace Ogma3.Data
                         => opts.MapFrom(u => u.Blogposts.Count(b => b.IsPublished))
                 );
             CreateMap<OgmaUser, UserProfileDto>()
-                .ForMember(
-                    pb => pb.Roles,
-                    opts 
-                        => opts.MapFrom(u => u.UserRoles.Select(ur => ur.Role))
-                )
                 .ForMember(
                     pb => pb.StoriesCount,
                     opts 
@@ -51,13 +41,13 @@ namespace Ogma3.Data
                 .ForMember(
                     usd => usd.Roles,
                     opts 
-                        => opts.MapFrom(u => u.UserRoles.OrderByDescending(ur => ur.Role.Order).Select(ur => ur.Role))
+                        => opts.MapFrom(u => u.Roles.OrderByDescending(r => r.Order))
                 );
             CreateMap<OgmaUser, UserCard>()
                 .ForMember(
                     pb => pb.Roles,
                     opts 
-                        => opts.MapFrom(u => u.UserRoles.Select(ur => ur.Role))
+                        => opts.MapFrom(u => u.Roles.OrderByDescending(r => r.Order))
                 );
 
             // Role mappings
@@ -131,7 +121,7 @@ namespace Ogma3.Data
                 .ForMember(
                     cd => cd.Body,
                     opts
-                        => opts.MapFrom(c => Markdown.ToHtml(c.Body.Trim(), null))
+                        => opts.MapFrom(c => Markdown.ToHtml(c.Body, null))
                 );
             
             // Invite code mappings

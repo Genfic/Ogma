@@ -20,15 +20,24 @@ namespace Ogma3.Data.Repositories
             _context = context;
             _mapper = mapper;
         }
-        
+
+
+        public async Task<CommentDto> GetSingle(long id)
+        {
+            return await _context.Comments
+                .Where(c => c.Id == id)
+                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
 
         public async Task<IEnumerable<CommentDto>> GetPaginated(long threadId, int page, int perPage)
         {
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == threadId)
-                .OrderBy(c => c.DateTime)
-                .Paginate(page, perPage)
+                .OrderByDescending(c => c.DateTime)
                 .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
+                .Paginate(page, perPage)
                 .AsNoTracking()
                 .ToListAsync();
             
@@ -42,32 +51,6 @@ namespace Ogma3.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ICollection<BlogpostCard>> GetPaginatedCardsForUser(string userName, int page, int perPage, bool publishedOnly = true)
-        {
-            return await _context.Blogposts
-                .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
-                .Where(b => b.IsPublished || !publishedOnly)
-                .Paginate(page, perPage)
-                .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
-        }
 
-        public async Task<int> CountForUser(string userName, bool publishedOnly = true)
-        {
-            return await _context.Blogposts
-                .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
-                .Where(b => b.IsPublished || !publishedOnly)
-                .CountAsync();
-        }
-
-        public async Task<BlogpostDetails> GetDetails(long id)
-        {
-            return await _context.Blogposts
-                .Where(b => b.Id == id)
-                .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
     }
 }

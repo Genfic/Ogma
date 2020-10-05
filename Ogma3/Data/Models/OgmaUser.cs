@@ -44,18 +44,8 @@ namespace Ogma3.Data.Models
         [JsonIgnore]
         public ICollection<Blogpost> Blogposts { get; set; } = new List<Blogpost>();
 
-        [NotMapped]
-        public ICollection<OgmaRole> Roles
-        {
-            get => UserRoles == null || UserRoles.Count <= 0 
-                ? new List<OgmaRole>() 
-                : UserRoles.Select(ur => ur.Role).ToList(); 
-            set => UserRoles = value.Select(r => new UserRole
-            {
-                Role = r,
-                RoleId = r.Id
-            }).ToList();
-        }
+        [JsonIgnore]
+        public ICollection<OgmaRole> Roles { get; set; }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {

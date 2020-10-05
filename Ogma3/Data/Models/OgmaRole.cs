@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Identity;
 
@@ -13,5 +14,7 @@ namespace Ogma3.Data.Models
 
         [DefaultValue(null)]
         public byte? Order { get; set; }
+
+        public IEnumerable<OgmaUser> Users { get; set; }
     }
 }

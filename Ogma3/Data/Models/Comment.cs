@@ -10,6 +10,7 @@ namespace Ogma3.Data.Models
 
         [Required] 
         public  OgmaUser Author { get; set; }
+        public long AuthorId { get; set; }
 
         [Required] 
         public DateTime DateTime { get; set; } = DateTime.Now;
@@ -18,5 +19,6 @@ namespace Ogma3.Data.Models
         [MinLength(CTConfig.CComment.MinBodyLength)]
         [MaxLength(CTConfig.CComment.MaxBodyLength)]
         public string Body { get; set; }
+
     }
 }

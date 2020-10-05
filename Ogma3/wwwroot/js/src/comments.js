@@ -39,11 +39,13 @@ let comments_vue = new Vue({
                 page: this.page
             }
             
+            // TODO: Has to load a different page if `this.highlight` is not null
+            
             axios.get(this.route, { params: params })
                 .then(res => {
                     this.comments = res.data.comments.map(
                         (val, key) => ({val, key})
-                    ).reverse();
+                    );
                     this.total = res.data.totalComments;
                     
                     if (this.highlight) {

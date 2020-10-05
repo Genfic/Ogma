@@ -97,10 +97,10 @@ namespace Ogma3.Data.Repositories
                     CreationDate = ct.CreationDate,
                     AuthorName = ct.Author.UserName,
                     AuthorAvatar = ct.Author.Avatar,
-                    AuthorRole = ct.Author.UserRoles
-                        .Where(ur => ur.Role.Order.HasValue)
-                        .OrderBy(ur => ur.Role.Order)
-                        .First().Role,
+                    AuthorRole = ct.Author.Roles
+                        .Where(ur => ur.Order.HasValue)
+                        .OrderBy(ur => ur.Order)
+                        .First(),
                     Body = ct.Body,
                     CommentsThread = ct.CommentsThread
                 })

@@ -55,7 +55,7 @@
                     <div class="bg" :style="{backgroundColor: c.val.author.roles[0].color}"></div>
                 </div>
                 
-                <img :src="c.val.author.avatar" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
+                <img :src="`@Config.Cdn${c.val.author.avatar}`" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
                 
             </div>
             

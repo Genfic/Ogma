@@ -69,24 +69,24 @@ namespace Ogma3.Data
 
 
             // User
-            builder.Entity<OgmaUser>()
-                .Ignore(u => u.PhoneNumber)
-                .Ignore(u => u.PhoneNumberConfirmed);
-            builder.Entity<OgmaUser>()
-                .HasOne(u => u.CommentsThread)
-                .WithOne(ct => ct.User)
-                .HasForeignKey<CommentsThread>(ct => ct.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            // UserRole
-            builder.Entity<UserRole>(ent =>
+            builder.Entity<OgmaUser>(ent =>
             {
-                ent.HasOne(ur => ur.Role)
-                    .WithMany()
-                    .HasForeignKey("RoleId");
-                ent.HasOne(ur => ur.User)
-                    .WithMany(u => u.UserRoles)
-                    .HasForeignKey("UserId");
+                ent.Ignore(u => u.PhoneNumber)
+                    .Ignore(u => u.PhoneNumberConfirmed);
+                ent.HasOne(u => u.CommentsThread)
+                    .WithOne(ct => ct.User)
+                    .HasForeignKey<CommentsThread>(ct => ct.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+                ent.HasMany(u => u.Roles)
+                    .WithMany(or => or.Users)
+                    .UsingEntity<UserRole>(
+                        ur => ur.HasOne(e => e.Role)
+                            .WithMany()
+                            .HasForeignKey(k => k.RoleId),
+                        ur => ur.HasOne(e => e.User)
+                            .WithMany(u => u.UserRoles)
+                            .HasForeignKey(k => k.UserId)
+                    );
             });
 
             // Tag

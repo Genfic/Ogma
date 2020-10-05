@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,16 +20,16 @@ namespace Ogma3.Api.V1
     public class CommentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<OgmaUser> _userManager;
         private readonly OgmaConfig _ogmaConfig;
         private readonly CommentsRepository _commentsRepo;
+        private readonly IMapper _mapper;
 
-        public CommentsController(ApplicationDbContext context, UserManager<OgmaUser> userManager, OgmaConfig ogmaConfig, CommentsRepository commentsRepo)
+        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo, IMapper mapper)
         {
             _context = context;
-            _userManager = userManager;
             _ogmaConfig = ogmaConfig;
             _commentsRepo = commentsRepo;
+            _mapper = mapper;
         }
 
         public class GetCommentsInput
@@ -51,38 +52,18 @@ namespace Ogma3.Api.V1
         [HttpGet]
         public async Task<PaginationResults> GetComments([FromQuery]GetCommentsInput input)
         {
-            var output = new PaginationResults();
-            
-            var comments = await _commentsRepo.GetPaginated(input.Thread, input.Page, _ogmaConfig.CommentsPerPage);
-            
-            output.Comments = comments.Select(c =>
+            return new PaginationResults
             {
-                c.Author.Avatar = _ogmaConfig.Cdn + c.Author.Avatar;
-                c.Author.UserName += _ogmaConfig.CommentsPerPage;
-                return c;
-            }).ToList();
-
-            output.TotalComments = await _commentsRepo.CountComments(input.Thread);
-
-            return output;
+                Comments = await _commentsRepo.GetPaginated(input.Thread, input.Page, _ogmaConfig.CommentsPerPage),
+                TotalComments = await _commentsRepo.CountComments(input.Thread)
+            };
         }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CommentDto>> GetComment(long id)
+        public async Task<CommentDto> GetComment(long id)
         {
-            var comment = await _context.Comments
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            var dto = CommentDto.FromComment(comment);
-            dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
-            return dto;
+            return await _commentsRepo.GetSingle(id);
         }
 
         // PUT: api/Comments/5
@@ -101,19 +82,8 @@ namespace Ogma3.Api.V1
             var comm = _context.Comments.FirstOrDefault(c => c.Id == id);
             if (comm != null) comm.Body = body;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CommentExists(id))
-                {
-                    return NotFound();
-                }
-                throw;
-            }
-
+            await _context.SaveChangesAsync();
+            
             return NoContent();
         }
 
@@ -125,9 +95,13 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<CommentDto>> PostComment(CommentFromApiDTO data)
         {
+            var uid = User.GetNumericId();
+
+            if (uid == null) return Unauthorized();
+            
             var comment = new Comment
             {
-                Author = await _userManager.GetUserAsync(User),
+                AuthorId = (long) uid,
                 Body = data.Body
             };
 
@@ -143,8 +117,7 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            var dto = CommentDto.FromComment(comment);
-            dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
+            var dto = _mapper.Map<Comment, CommentDto>(comment);
             return CreatedAtAction("GetComment", new { id = comment.Id }, dto);
         }
 
@@ -153,11 +126,12 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<CommentDto>> DeleteComment(long id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
+            
             var comment = await _context.Comments.FindAsync(id);
             
             if (comment == null) return NotFound();
-            if (comment.Author != user) return Forbid();
+            if (comment.AuthorId != uid) return Unauthorized();
 
             var thread = await _context.CommentThreads
                 .Where(ct => ct.Id == comment.CommentsThreadId)
@@ -171,14 +145,7 @@ namespace Ogma3.Api.V1
             
             await _context.SaveChangesAsync();
 
-            var dto = CommentDto.FromComment(comment);
-            dto.Author.Avatar = _ogmaConfig.Cdn + dto.Author.Avatar;
-            return dto;
-        }
-
-        private bool CommentExists(long id)
-        {
-            return _context.Comments.Any(e => e.Id == id);
+            return _mapper.Map<Comment, CommentDto>(comment);
         }
     }
 }
