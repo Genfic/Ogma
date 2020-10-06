@@ -26,6 +26,7 @@ let comments_vue = new Vue({
                     headers: { "RequestVerificationToken" : this.csrf }
                 })
                 .then(_ => {
+                    this.highlight = 1;
                     this.load();
                     this.body = null;
                 })
@@ -39,16 +40,14 @@ let comments_vue = new Vue({
                 page: this.page,
                 highlight: this.highlight
             }
-            
-            // TODO: Has to load a different page if `this.highlight` is not null
-            
+                        
             axios.get(this.route, { params: params })
                 .then(res => {
                     this.total = res.data.total;
                     this.page = res.data.page ?? this.page;
                     
                     this.comments = res.data.elements.map(
-                        (val, key) => ({val, key: key + ((this.page - 1) * this.perPage)})
+                        (val, key) => ({val, key: res.data.total - (key + ((this.page - 1) * this.perPage))})
                     );
                     
                     if (this.highlight) {
@@ -70,33 +69,36 @@ let comments_vue = new Vue({
             return dayjs(dt).format('DD MMM YYYY, HH:mm');
         },
         
+        // Navigate to the previous page
         prevPage: function () {
-            this.page = Math.max(1, this.page - 1);
-            this.navigateToPage();
-            this.load();
+            let page = Math.max(1, this.page - 1);
+            this.changePage(page);
         },
         
+        // Navigate to the next page
         nextPage: function () {
-            this.page = Math.min(this.page + 1, Math.ceil(this.total / this.perPage));
-            this.navigateToPage();
-            this.load();
+            let page = Math.min(this.page + 1, Math.ceil(this.total / this.perPage));
+            this.changePage(page);
         },
         
+        // Navigate to the selected page
         changePage: function (idx) {
             this.page = idx;
             this.navigateToPage();
             this.load();
         },
         
-        changeHighlight: function(idx = null, e) {
-            e.preventDefault();
+        // Highlights the selected comment and scrolls it into view
+        changeHighlight: function(idx = null, e = null) {
+            if (e) e.preventDefault();
             this.highlight = idx ?? this.highlight;
             document
                 .getElementById(`comment-${this.highlight}`)
                 .scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
-            history.replaceState(undefined, undefined, `#comment-${idx}`)
+            history.replaceState(undefined, undefined, `#comment-${this.highlight}`)
         },
 
+        // Navigates to `this.page` page
         navigateToPage: function () {
             if (this.page > 1) {
                 history.replaceState(null, null, `#page-${this.page}`)

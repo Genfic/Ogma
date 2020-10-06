@@ -56,7 +56,7 @@ namespace Ogma3.Api.V1
             int p;
             if (highlight.HasValue)
             {
-                p = (int)Math.Ceiling((double)highlight / _ogmaConfig.CommentsPerPage);
+                p = (int)Math.Ceiling((double)(total - highlight) / _ogmaConfig.CommentsPerPage);
             }
             else
             {
