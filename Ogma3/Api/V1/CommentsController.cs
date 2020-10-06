@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
@@ -41,20 +42,34 @@ namespace Ogma3.Api.V1
                 set => _page = value;
             }
         }
-        public class PaginationResults
-        {
-            public IEnumerable<CommentDto> Comments { get; set; }
-            public int TotalComments { get; set; }
-        }
 
         // GET: api/Comments?thread=6[&page=1&per-page=10]
         [HttpGet]
-        public async Task<PaginationResults> GetComments([FromQuery]GetCommentsInput input)
+        public async Task<ActionResult<PaginationResult<CommentDto>>> GetComments(
+            [FromQuery]long thread, 
+            [FromQuery]int? page, 
+            [FromQuery]long? highlight
+        )
         {
-            return new PaginationResults
+            var total = await _commentsRepo.CountComments(thread);
+            
+            int p;
+            if (highlight.HasValue)
             {
-                Comments = await _commentsRepo.GetPaginated(input.Thread, input.Page, _ogmaConfig.CommentsPerPage),
-                TotalComments = await _commentsRepo.CountComments(input.Thread)
+                p = (int)Math.Ceiling((double)highlight / _ogmaConfig.CommentsPerPage);
+            }
+            else
+            {
+                p = Math.Max(1, page ?? 1);
+            }
+            
+            return new PaginationResult<CommentDto>
+            {
+                Elements = await _commentsRepo.GetPaginated(thread, p, _ogmaConfig.CommentsPerPage),
+                Total = total,
+                Page = p,
+                Pages = (int)Math.Ceiling((double)total / _ogmaConfig.CommentsPerPage),
+                PerPage = _ogmaConfig.CommentsPerPage
             };
         }
 

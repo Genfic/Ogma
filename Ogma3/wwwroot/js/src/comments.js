@@ -9,7 +9,7 @@ let comments_vue = new Vue({
         comments: [],
         total: 0,
         
-        page: 1,
+        page: null,
         perPage: null,
         highlight: null,
     },
@@ -36,20 +36,23 @@ let comments_vue = new Vue({
         load: function () {
             const params = {
                 thread: this.thread,
-                page: this.page
+                page: this.page,
+                highlight: this.highlight
             }
             
             // TODO: Has to load a different page if `this.highlight` is not null
             
             axios.get(this.route, { params: params })
                 .then(res => {
-                    this.comments = res.data.comments.map(
-                        (val, key) => ({val, key})
+                    this.total = res.data.total;
+                    this.page = res.data.page ?? this.page;
+                    
+                    this.comments = res.data.elements.map(
+                        (val, key) => ({val, key: key + ((this.page - 1) * this.perPage)})
                     );
-                    this.total = res.data.totalComments;
                     
                     if (this.highlight) {
-                        this.navigateToComment()
+                        Vue.nextTick(_ => comments_vue.changeHighlight())
                     } else {
                         this.navigateToPage();
                     }
@@ -102,15 +105,6 @@ let comments_vue = new Vue({
             }
             if (this.highlight) this.highlight = null;
         },
-        
-        navigateToComment: function () {
-            let idx = this.comments.findIndex(e => e.key+1 === this.highlight);
-            this.page = Math.floor(idx / this.perPage) + 1;
-            this.visibleComments = this.comments.slice((this.page - 1) * this.perPage, this.page * this.perPage);
-            Vue.nextTick(function () {
-                comments_vue.changeHighlight();
-            })
-        }
     },
 
     mounted() {
@@ -124,8 +118,10 @@ let comments_vue = new Vue({
         if (hash[0] === '#page' && hash[1]) {
             this.page = Math.max(1, Number(hash[1] ?? 1));
         } else if (hash[0] === '#comment' && hash[1]) {
+            this.page = 1;
             this.highlight = Number(hash[1]);
         } else {
+            this.page = 1;
             history.replaceState(undefined, undefined, "")
         }
         
