@@ -24,6 +24,7 @@ namespace Ogma3.Infrastructure.TagHelpers
             if (Height.HasValue) output.Attributes.SetAttribute("height", Height);
             
             output.TagName = "img";
+            output.Attributes.SetAttribute("loading", "lazy");
             output.Attributes.SetAttribute("src", url);
         }
     }

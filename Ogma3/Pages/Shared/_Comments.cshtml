@@ -39,6 +39,23 @@
             to be able to leave comments
         </span>
     }
+    
+    <br>
+    
+    <div class="pagination" v-if="comments && total > perPage">
+        <button class="prev button" v-on:click="prevPage">Previous</button>
+        <button class="ph button" v-if="page > 5">...</button>
+        <button v-for="idx in Math.ceil(total / perPage)"
+                :key="idx"
+                v-on:click="changePage(idx)"
+                :class="idx === page ? 'active' : ''"
+                v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
+                class="page button">
+            {{idx}}
+        </button>
+        <button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
+        <button class="next button" v-on:click="nextPage">Next</button>
+    </div>
 
     <div class="comments">
         
@@ -72,6 +89,15 @@
                     <p class="sm-line"></p>
 
                     <time :datetime="c.val.dateTime" class="time">{{ date(c.val.dateTime) }}</time>
+                    
+                    <div v-if="c.val.owned" class="actions">
+                        <button class="action-btn small" v-on:click="del(c.val.id)">
+                            <icon class="icon" icon="delete_forever"></icon>
+                        </button>
+                        <button class="action-btn small" v-on:click="edit(c.val.id)">
+                            <icon class="icon" icon="edit"></icon>
+                        </button>
+                    </div>
                     
                 </div>
 

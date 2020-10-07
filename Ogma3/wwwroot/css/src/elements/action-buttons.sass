@@ -7,11 +7,17 @@
   justify-content: center
   padding: 0 .5rem
   margin-right: .1rem
+  background-color: transparent
   color: v.$foreground-75
   +ab.active-border
   
+  &.small
+    font-size: 1.2rem
+  
   &>.icon
-    margin-right: .5rem
+    font-size: inherit
+    & + *
+      margin-left: .5rem
       
   &>.name
     @media screen and (max-width: v.$mq-mobile)

@@ -24,7 +24,7 @@ namespace Ogma3.Pages.Club
         
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            ClubBar = await _clubRepo.GetClubBar(id, User.GetNumericId());
+            ClubBar = await _clubRepo.GetClubBar(id);
             
             if (ClubBar == null) return NotFound();
 

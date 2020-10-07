@@ -889,6 +889,10 @@ ul.my-list > li.item:first-of-type {
   flex-direction: row;
   margin-left: auto;
   padding: 0.1rem;
+  opacity: 0.5;
+}
+.comment > .main > .header > .actions:hover {
+  opacity: 1;
 }
 .comment > .main > .body {
   white-space: pre-line;
@@ -1654,6 +1658,7 @@ form.search select:focus {
   justify-content: center;
   padding: 0 0.5rem;
   margin-right: 0.1rem;
+  background-color: transparent;
   color: var(--foreground-75);
   border: 1px solid var(--foreground-25);
 }
@@ -1663,8 +1668,14 @@ form.search select:focus {
 .action-btn:focus {
   border-color: var(--accent);
 }
+.action-btn.small {
+  font-size: 1.2rem;
+}
 .action-btn > .icon {
-  margin-right: 0.5rem;
+  font-size: inherit;
+}
+.action-btn > .icon + * {
+  margin-left: 0.5rem;
 }
 @media screen and (max-width: 570px) {
   .action-btn > .name {

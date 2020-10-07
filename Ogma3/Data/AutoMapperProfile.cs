@@ -122,6 +122,11 @@ namespace Ogma3.Data
                     cd => cd.Body,
                     opts
                         => opts.MapFrom(c => Markdown.ToHtml(c.Body, null))
+                )
+                .ForMember(
+                    cd => cd.Owned,
+                    opts
+                        => opts.MapFrom(c => c.AuthorId == currentUser)
                 );
             
             // Invite code mappings

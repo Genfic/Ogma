@@ -21,6 +21,7 @@ using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;
+using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 
 namespace Ogma3
@@ -74,6 +75,9 @@ namespace Ogma3
                 .AddDefaultTokenProviders()
                 .AddUserStore<UserStore<OgmaUser, OgmaRole, ApplicationDbContext, long, IdentityUserClaim<long>, UserRole, IdentityUserLogin<long>, IdentityUserToken<long>, IdentityRoleClaim<long>>>()
                 .AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
+            
+            // Logged in user service
+            services.AddTransient<IUserService, UserService>();
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();

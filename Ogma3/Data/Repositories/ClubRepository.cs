@@ -5,6 +5,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Pages.Shared;
+using Ogma3.Services.UserService;
+using Utils.Extensions;
 
 namespace Ogma3.Data.Repositories
 {
@@ -12,18 +14,20 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public ClubRepository(ApplicationDbContext context, IMapper mapper)
+        public ClubRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
+            _userService = userService;
         }
 
-        public async Task<ClubBar> GetClubBar(long clubId, long? userId)
+        public async Task<ClubBar> GetClubBar(long clubId)
         {
             return await _context.Clubs
                 .Where(c => c.Id == clubId)
-                .ProjectTo<ClubBar>(_mapper.ConfigurationProvider, new { currentUser = userId })
+                .ProjectTo<ClubBar>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

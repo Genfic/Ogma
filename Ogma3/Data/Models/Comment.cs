@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
@@ -14,6 +15,9 @@ namespace Ogma3.Data.Models
 
         [Required] 
         public DateTime DateTime { get; set; } = DateTime.Now;
+
+        [DefaultValue(null)]
+        public DateTime? LastEdit { get; set; }
 
         [Required]
         [MinLength(CTConfig.CComment.MinBodyLength)]

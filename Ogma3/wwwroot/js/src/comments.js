@@ -59,6 +59,23 @@ let comments_vue = new Vue({
                 .catch(console.error)
         },
 
+        del: function(id) {
+            if (confirm("Are you sure you want to delete?")) {
+                axios.delete(`${this.route}/${id}`, { headers: { "RequestVerificationToken" : this.csrf }})
+                    .then(_ => {
+                        this.load()
+                    })
+                    .catch(console.error);
+            }
+        },
+        
+        edit: function(id) {
+            console.info("Not implemented", id)
+            axios.get(`${this.route}/md`, { params: { id } })
+                .then(res => console.log(res.data))
+                .catch(console.error);
+        },
+        
         // Handle Enter key input
         enter: function(e) {
             if (e.ctrlKey) this.submit(e)

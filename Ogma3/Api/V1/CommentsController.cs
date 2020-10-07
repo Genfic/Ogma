@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
@@ -32,18 +30,8 @@ namespace Ogma3.Api.V1
             _mapper = mapper;
         }
 
-        public class GetCommentsInput
-        {
-            public long Thread { get; set; }
-            private int? _page;
-            public int Page
-            {
-                get => Math.Max(1, _page ?? 1);
-                set => _page = value;
-            }
-        }
-
-        // GET: api/Comments?thread=6[&page=1&per-page=10]
+        
+        // GET: api/Comments?thread=6[&page=1&highlight=10]
         [HttpGet]
         public async Task<ActionResult<PaginationResult<CommentDto>>> GetComments(
             [FromQuery]long thread, 
@@ -52,17 +40,13 @@ namespace Ogma3.Api.V1
         )
         {
             var total = await _commentsRepo.CountComments(thread);
-            
-            int p;
-            if (highlight.HasValue)
-            {
-                p = (int)Math.Ceiling((double)(total - highlight) / _ogmaConfig.CommentsPerPage);
-            }
-            else
-            {
-                p = Math.Max(1, page ?? 1);
-            }
-            
+
+            // If a highlight has been requested, get the page on which the highlighted comment would be.
+            // If not, simply return the requested page or the first page if requested page is null
+            var p = highlight.HasValue
+                ? (int) Math.Ceiling((double) (total - highlight) / _ogmaConfig.CommentsPerPage)
+                : Math.Max(1, page ?? 1);
+
             return new PaginationResult<CommentDto>
             {
                 Elements = await _commentsRepo.GetPaginated(thread, p, _ogmaConfig.CommentsPerPage),
@@ -80,34 +64,39 @@ namespace Ogma3.Api.V1
             return await _commentsRepo.GetSingle(id);
         }
 
-        // PUT: api/Comments/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        // GET: api/Comments/md?id=5
+        [HttpGet("md")]
+        public async Task<string> GetMarkdown([FromQuery]long id)
+        {
+            return await _commentsRepo.GetMarkdown(id);
+        }
+
+        // PATCH: api/Comments
+        [HttpPatch]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> PutComment(long id, Comment comment, string body)
+        public async Task<IActionResult> PutComment(PatchData data)
         {
-            if (id != comment.Id)
-            {
-                return BadRequest();
-            }
+            var uid = User.GetNumericId();
+            var comm = _context.Comments.FirstOrDefault(c => c.Id == data.Id);
+            
+            if (comm == null) return NotFound();
+            if (uid != comm.AuthorId) return Unauthorized();
 
-            var comm = _context.Comments.FirstOrDefault(c => c.Id == id);
-            if (comm != null) comm.Body = body;
-
+            comm.Id = data.Id;
+            comm.Body = data.Body;
+            comm.LastEdit = DateTime.Now;
+            
             await _context.SaveChangesAsync();
             
             return NoContent();
         }
-
+        
         // POST: api/Comments
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult<CommentDto>> PostComment(CommentFromApiDTO data)
+        public async Task<ActionResult<CommentDto>> PostComment(PostData data)
         {
             var uid = User.GetNumericId();
 
@@ -137,6 +126,7 @@ namespace Ogma3.Api.V1
 
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<ActionResult<CommentDto>> DeleteComment(long id)
         {
@@ -160,6 +150,20 @@ namespace Ogma3.Api.V1
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Comment, CommentDto>(comment);
+        }
+
+        
+        // Data classes
+        public class PostData
+        {
+            public string Body { get; set; }
+            public long Thread { get; set; }
+        }
+
+        public class PatchData
+        {
+            public long Id { get; set; }
+            public string Body { get; set; }
         }
     }
 }

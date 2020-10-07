@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
+using static System.Int64;
 
 namespace Ogma3.Pages.Club.Forums
 {
@@ -24,8 +25,7 @@ namespace Ogma3.Pages.Club.Forums
 
         public async Task<IActionResult> OnGetAsync(long id)
         {
-            long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var uid);
-            ClubBar = await _clubRepo.GetClubBar(id, uid);
+            ClubBar = await _clubRepo.GetClubBar(id);
             
             if (ClubBar == null) return NotFound();
 
