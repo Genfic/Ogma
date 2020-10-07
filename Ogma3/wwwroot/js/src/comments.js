@@ -123,7 +123,7 @@ let comments_vue = new Vue({
                 history.replaceState(null, null, window.location.href.split('#')[0])
             }
             if (this.highlight) this.highlight = null;
-        },
+        }
     },
 
     mounted() {

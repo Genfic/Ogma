@@ -80,7 +80,11 @@ namespace Ogma3.Api.V1
             
             if (rating.Icon != null && rating.Icon.Length > 0)
             {
-                await _b2Client.Files.Delete(r.IconId, r.Icon);
+                if (r.IconId != null && r.Icon != null)
+                {
+                    await _b2Client.Files.Delete(r.IconId, r.Icon);
+                }
+
                 var fileData = await _uploader.Upload(rating.Icon, "ratings", rating.Name+"_rating");
                 r.Icon = fileData.Path;
                 r.IconId = fileData.FileId;

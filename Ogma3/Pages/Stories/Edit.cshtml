@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Api.V1
+@inject OgmaConfig Config
 @model Ogma3.Pages.Stories.EditModel
 
 @{
@@ -52,6 +53,7 @@
                   label="@nameof(Model.Input.Rating)"
                   desc="What audience is the story suitable for"
                   :value="@Model.Input.Rating"
+                  cdn="@Config.Cdn"
                   ratings-api="@Url.RouteUrl(nameof(RatingsController))">
     </input-rating>
     

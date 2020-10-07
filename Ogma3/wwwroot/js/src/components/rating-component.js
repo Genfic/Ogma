@@ -64,7 +64,7 @@ Vue.component('input-rating', {
                            class="radio">
                     
                     <label class="radio-label active-border" :for="rating.name.toLowerCase()">
-                        <img :src="cdn+rating.icon" alt="">
+                        <img :src="cdn+rating.icon" :alt="'Rating: '+rating.name" height="50" width="50">
                         <div class="main">
                             <strong>{{rating.name}}</strong>
                             <span>{{rating.description}}</span>

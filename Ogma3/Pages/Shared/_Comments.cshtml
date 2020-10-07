@@ -63,7 +63,7 @@
              class="comment" :class="c.key+1 === highlight ? 'marked' : ''"
              v-for="c in comments">
             
-            <div class="author">
+            <div v-if="c.val.author" class="author">
                 
                 <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
                 
@@ -81,14 +81,19 @@
                 <div class="header">
 
                     <a class="link"
+                       v-if="c.val.author"
                        :href="`#comment.${c.key+1}`"
                        v-on:click="changeHighlight(c.key+1, $event)">
                         #{{ c.key+1 }}
                     </a>
 
-                    <p class="sm-line"></p>
+                    <p v-if="c.val.author" class="sm-line"></p>
 
                     <time :datetime="c.val.dateTime" class="time">{{ date(c.val.dateTime) }}</time>
+                    
+                    <p v-if="!c.val.author" class="sm-line"></p>
+                    
+                    <span v-if="c.val.deletedBy">Comment deleted by {{ c.val.deletedBy.toLowerCase() }}.</span>
                     
                     <div v-if="c.val.owned" class="actions">
                         <button class="action-btn small" v-on:click="del(c.val.id)">
@@ -101,7 +106,7 @@
                     
                 </div>
 
-                <div class="body" v-html="c.val.body"></div>
+                <div v-if="c.val.body" class="body" v-html="c.val.body"></div>
             </div>
             
         </div>

@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using B2Net;
 using B2Net.Models;
@@ -140,10 +141,16 @@ namespace Ogma3
             {
                 options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
             });
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
+            services
+                .AddMvc(options =>
+                {
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                });
 
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Utils.Extensions;
@@ -137,16 +138,12 @@ namespace Ogma3.Api.V1
             if (comment == null) return NotFound();
             if (comment.AuthorId != uid) return Unauthorized();
 
-            var thread = await _context.CommentThreads
-                .Where(ct => ct.Id == comment.CommentsThreadId)
-                .Include(ct => ct.Comments)
-                .FirstOrDefaultAsync();
-            
-            if (thread == null) return NotFound();
-            
-            _context.Comments.Remove(comment);
-            thread.CommentsCount = thread.Comments.Count;
-            
+            comment.Author = null;
+            comment.AuthorId = null;
+            comment.DeletedBy = EDeletedBy.User;
+            comment.DeletedByUserId = uid;
+            comment.Body = string.Empty;
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Comment, CommentDto>(comment);

@@ -165,9 +165,13 @@ namespace Ogma3.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Comments
-            builder.Entity<Comment>()
-                .HasOne(c => c.Author)
-                .WithMany();
+            builder.Entity<Comment>(ent =>
+            {
+                ent.HasOne(c => c.Author)
+                    .WithMany();
+                ent.HasOne(c => c.DeletedByUser)
+                    .WithMany();
+            });
 
 
             // Votes
@@ -257,6 +261,7 @@ namespace Ogma3.Data
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();
+            builder.HasPostgresEnum<EDeletedBy>();
 
 
             // Documents

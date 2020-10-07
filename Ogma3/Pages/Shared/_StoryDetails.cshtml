@@ -67,7 +67,7 @@
         @* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
             
             <div class="titlebar">
-                <img src="@Model.Rating.Icon" alt="Rating: @Model.Rating.Name" title="Rating: @Model.Rating.Name" class="rating">
+                <cdn-img src="@Model.Rating.Icon" alt="Rated: @Model.Rating.Name" title="Rating: @Model.Rating.Name" class="rating"/>
                 <span style="display:none" itemprop="contentRating">@Model.Rating.Name</span>
                 <h1 class="title" itemprop="name">@Model.Title</h1>
             </div>
