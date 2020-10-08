@@ -108,8 +108,8 @@
 
                 <div v-if="c.val.body && (!editData || editData.id !== c.val.id)" class="body" v-html="c.val.body"></div>
                 
-                <form v-if="editData && editData.id === c.val.id" asp-antiforgery="true">
-                    <textarea class="comment-box active-border" 
+                <form class="form" v-if="editData && editData.id === c.val.id" asp-antiforgery="true">
+                    <textarea class="comment-box" 
                               v-model="editData.body" 
                               v-on:keydown.enter="enter" 
                               name="body" id="edit-body" 

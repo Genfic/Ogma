@@ -898,6 +898,48 @@ ul.my-list > li.item:first-of-type {
   white-space: pre-line;
   margin: 0.5rem;
 }
+.comment > .main > .form {
+  width: 100%;
+}
+.comment > .main > .form .comment-box {
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: calc(.1rem + 2px);
+  padding: 0.25rem;
+  border: 1px solid var(--foreground-25);
+}
+.comment > .main > .form .comment-box:focus {
+  box-shadow: 0 0 0 2px var(--accent-50);
+}
+.comment > .main > .form .buttons {
+  padding: 0 calc(.1rem + 2px) calc(.1rem + 2px);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.comment > .main > .form .buttons button {
+  display: flex;
+  align-content: center;
+  justify-items: center;
+  color: var(--foreground);
+}
+.comment > .main > .form .buttons button.confirm {
+  background-color: var(--green-50);
+  padding: 0 2rem;
+}
+.comment > .main > .form .buttons button.confirm:hover {
+  background-color: var(--green-75);
+}
+.comment > .main > .form .buttons button.cancel {
+  background-color: var(--red-50);
+  margin-left: auto;
+}
+.comment > .main > .form .buttons button.cancel:hover {
+  background-color: var(--red-75);
+}
+.comment > .main > .form .buttons button i {
+  margin-right: 0.5rem;
+}
 .comment > .main > .edit-data {
   font-size: 0.75rem;
   color: var(--foreground-50);

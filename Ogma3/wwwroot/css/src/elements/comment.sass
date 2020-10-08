@@ -69,6 +69,43 @@
       white-space: pre-line
       margin: .5rem
       
+    &>.form
+      width: 100%
+      
+      .comment-box
+        background-color: v.$background
+        color: v.$foreground
+        margin: calc(.1rem + 2px)
+        padding: .25rem
+        border: 1px solid v.$foreground-25
+        &:focus
+          box-shadow: 0 0 0 2px v.$accent-50
+      
+      .buttons
+        padding: 0 calc(.1rem + 2px) calc(.1rem + 2px)
+        width: 100%
+        display: flex
+        flex-direction: row
+        
+        button
+          display: flex
+          align-content: center
+          justify-items: center
+          color: v.$foreground          
+          &.confirm
+            background-color: v.$green-50
+            padding: 0 2rem
+            &:hover
+              background-color: v.$green-75
+          &.cancel
+            background-color: v.$red-50
+            margin-left: auto
+            &:hover
+              background-color: v.$red-75
+              
+          i
+            margin-right: .5rem
+      
     &>.edit-data
       font-size: .75rem
       color: v.$foreground-50
