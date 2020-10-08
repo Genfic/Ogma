@@ -106,7 +106,29 @@
                     
                 </div>
 
-                <div v-if="c.val.body" class="body" v-html="c.val.body"></div>
+                <div v-if="c.val.body && !editData" class="body" v-html="c.val.body"></div>
+                
+                <form v-if="editData && editData.id === c.val.id" asp-antiforgery="true">
+                    <textarea class="comment-box active-border" 
+                              v-model="editData.body" 
+                              v-on:keydown.enter="enter" 
+                              name="body" id="edit-body" 
+                              rows="3" 
+                              aria-label="Comment">
+                    </textarea>
+        
+                    <div class="buttons">
+                        <button class="comment-btn active-border" v-on:click="update">
+                            <icon icon="edit"></icon>
+                            Update
+                        </button>
+                    </div>
+                </form>
+                
+                <time v-if="c.val.lastEdit" :datetime="c.val.lastEdit" class="edit-time">
+                    Edited {{c.val.editCount}} times, last edit: {{ date(c.val.lastEdit) }}
+                </time>
+                
             </div>
             
         </div>

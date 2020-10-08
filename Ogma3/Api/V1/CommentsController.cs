@@ -83,10 +83,20 @@ namespace Ogma3.Api.V1
             
             if (comm == null) return NotFound();
             if (uid != comm.AuthorId) return Unauthorized();
+            
+            // Create revision
+            await _context.CommentRevisions.AddAsync(new CommentRevision
+            {
+                Body = comm.Body,
+                ParentId = comm.Id,
+                EditTime = DateTime.Now
+            });
 
+            // Edit the comment
             comm.Id = data.Id;
             comm.Body = data.Body;
             comm.LastEdit = DateTime.Now;
+            comm.EditCount = (ushort?)(comm.EditCount + 1) ?? 1;
             
             await _context.SaveChangesAsync();
             
@@ -133,16 +143,25 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments
+                .Where(c => c.Id == id)
+                .Include(c => c.Revisions)
+                .FirstOrDefaultAsync();
             
             if (comment == null) return NotFound();
             if (comment.AuthorId != uid) return Unauthorized();
 
+            // Wipe comment
             comment.Author = null;
             comment.AuthorId = null;
             comment.DeletedBy = EDeletedBy.User;
             comment.DeletedByUserId = uid;
             comment.Body = string.Empty;
+            comment.LastEdit = null;
+            comment.EditCount = null;
+            
+            // Wipe revisions
+            comment.Revisions.Clear();
 
             await _context.SaveChangesAsync();
 

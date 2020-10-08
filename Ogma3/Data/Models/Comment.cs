@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Ogma3.Data.Enums;
@@ -33,5 +34,11 @@ namespace Ogma3.Data.Models
         
         [DefaultValue(null)]
         public long? DeletedByUserId { get; set; }
+        
+        // Metadata about edits
+        public IList<CommentRevision> Revisions { get; set; }
+        
+        [DefaultValue(null)]
+        public ushort? EditCount { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace Ogma3.Data.DTOs
         public UserSimpleDto? Author { get; set; }
         public DateTime DateTime { get; set; }
         public DateTime? LastEdit { get; set; }
+        public ushort EditCount { get; set; }
         public bool Owned { get; set; }
         public string Body { get; set; }
         public EDeletedBy? DeletedBy { get; set; }

@@ -11,24 +11,46 @@ let comments_vue = new Vue({
         
         page: null,
         perPage: null,
+        
         highlight: null,
+        editData: null,
     },
     methods: {
 
         // Submit the comment, load comments again, clean textarea
         submit: function (e) {
             e.preventDefault();
-            axios.post(this.route,
-                {
-                    body: this.body,
-                    thread: Number(this.thread)
-                },{
+            
+            let data = {
+                body: this.body,
+                thread: Number(this.thread)
+            };
+            
+            axios.post(this.route, data,{
                     headers: { "RequestVerificationToken" : this.csrf }
                 })
                 .then(_ => {
                     this.highlight = 1;
                     this.load();
                     this.body = null;
+                })
+                .catch(console.error)
+        },
+        
+        update: function (e) {
+            e.preventDefault();
+
+            let data = {
+                body: this.editData.body,
+                id: Number(this.editData.id)
+            };
+
+            axios.patch(this.route, data,{
+                headers: { "RequestVerificationToken" : this.csrf }
+            })
+                .then(_ => {
+                    this.load();
+                    this.editData = null;
                 })
                 .catch(console.error)
         },
@@ -70,9 +92,13 @@ let comments_vue = new Vue({
         },
         
         edit: function(id) {
-            console.info("Not implemented", id)
             axios.get(`${this.route}/md`, { params: { id } })
-                .then(res => console.log(res.data))
+                .then(res => {
+                    this.editData = {
+                        id: id,
+                        body: res.data
+                    }
+                })
                 .catch(console.error);
         },
         

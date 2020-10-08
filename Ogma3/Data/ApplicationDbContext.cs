@@ -36,6 +36,7 @@ namespace Ogma3.Data
         public DbSet<ChaptersRead> ChaptersRead { get; set; }
         public DbSet<CommentsThread> CommentThreads { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<CommentRevision> CommentRevisions { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfStory> ShelfStories { get; set; }
@@ -171,6 +172,15 @@ namespace Ogma3.Data
                     .WithMany();
                 ent.HasOne(c => c.DeletedByUser)
                     .WithMany();
+            });
+            
+            // Comment revisions
+            builder.Entity<CommentRevision>(ent =>
+            {
+                ent.HasOne(cr => cr.Parent)
+                    .WithMany(c => c.Revisions)
+                    .HasForeignKey(cr => cr.ParentId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
 
