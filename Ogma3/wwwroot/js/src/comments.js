@@ -92,6 +92,9 @@ let comments_vue = new Vue({
         },
         
         edit: function(id) {
+            if (this.editData && this.editData.id === id) return;
+            
+            this.editData = null;
             axios.get(`${this.route}/md`, { params: { id } })
                 .then(res => {
                     this.editData = {
@@ -99,6 +102,12 @@ let comments_vue = new Vue({
                         body: res.data
                     }
                 })
+                .catch(console.error);
+        },
+        
+        history: function(id) {
+            axios.get(`${this.route}/revisions/${id}`)
+                .then(console.log)
                 .catch(console.error);
         },
         

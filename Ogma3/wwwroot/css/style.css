@@ -898,13 +898,21 @@ ul.my-list > li.item:first-of-type {
   white-space: pre-line;
   margin: 0.5rem;
 }
-.comment > .main > .edit-time {
+.comment > .main > .edit-data {
   font-size: 0.75rem;
   color: var(--foreground-50);
   margin: 0.5rem;
 }
-.comment > .main > .edit-time:hover {
+.comment > .main > .edit-data:hover {
   color: var(--foreground-75);
+}
+.comment > .main > .edit-data .count {
+  cursor: pointer;
+  color: var(--accent-50);
+}
+.comment > .main > .edit-data .count:hover {
+  color: var(--accent-75);
+  text-decoration: underline;
 }
 
 p.sm-line {

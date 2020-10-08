@@ -5,6 +5,7 @@ using Markdig;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 
 namespace Ogma3.Data
@@ -129,6 +130,9 @@ namespace Ogma3.Data
                     opts
                         => opts.MapFrom(c => c.AuthorId == currentUser)
                 );
+            
+            // Comment revision mappings
+            CreateMap<CommentRevision, CommentRevisionDto>();
             
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();

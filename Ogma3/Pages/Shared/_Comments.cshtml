@@ -106,7 +106,7 @@
                     
                 </div>
 
-                <div v-if="c.val.body && !editData" class="body" v-html="c.val.body"></div>
+                <div v-if="c.val.body && (!editData || editData.id !== c.val.id)" class="body" v-html="c.val.body"></div>
                 
                 <form v-if="editData && editData.id === c.val.id" asp-antiforgery="true">
                     <textarea class="comment-box active-border" 
@@ -118,16 +118,20 @@
                     </textarea>
         
                     <div class="buttons">
-                        <button class="comment-btn active-border" v-on:click="update">
+                        <button class="confirm active-border" v-on:click="update">
                             <icon icon="edit"></icon>
                             Update
+                        </button>
+                        <button class="cancel active-border" v-on:click="editData = null">
+                            <icon icon="cancel"></icon>
+                            Cancel
                         </button>
                     </div>
                 </form>
                 
-                <time v-if="c.val.lastEdit" :datetime="c.val.lastEdit" class="edit-time">
-                    Edited {{c.val.editCount}} times, last edit: {{ date(c.val.lastEdit) }}
-                </time>
+                <span v-if="c.val.lastEdit" class="edit-data">
+                    Edited <span class="count" v-on:click="history(c.val.id)">{{c.val.editCount}} times</span>, last edit: <time :datetime="c.val.lastEdit" >{{ date(c.val.lastEdit) }}</time>
+                </span>
                 
             </div>
             

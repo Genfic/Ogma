@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +58,15 @@ namespace Ogma3.Api.V1
                 Pages = (int)Math.Ceiling((double)total / _ogmaConfig.CommentsPerPage),
                 PerPage = _ogmaConfig.CommentsPerPage
             };
+        }
+
+        [HttpGet("revisions/{id}")]
+        public async Task<IEnumerable<CommentRevisionDto>> GetRevisions(long id)
+        {
+            return await _context.CommentRevisions
+                .Where(r => r.ParentId == id)
+                .ProjectTo<CommentRevisionDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         // GET: api/Comments/5
