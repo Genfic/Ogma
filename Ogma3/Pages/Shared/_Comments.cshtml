@@ -58,84 +58,17 @@
     </div>
 
     <div class="comments">
-        
-        <div :id="`comment-${c.key+1}`"
-             class="comment" :class="c.key+1 === highlight ? 'marked' : ''"
-             v-for="c in comments">
-            
-            <div v-if="c.val.author" class="author">
-                
-                <a :href="`/user/${c.val.author.userName}`" class="name">{{ c.val.author.userName }}</a>
-                
-                <div v-if="c.val.author.roles[0]" class="role-tag">
-                    <span class="name">{{c.val.author.roles[0].name}}</span>
-                    <div class="bg" :style="{backgroundColor: c.val.author.roles[0].color}"></div>
-                </div>
-                
-                <img :src="`@Config.Cdn${c.val.author.avatar}`" :alt="c.val.author.userName + '\'s avatar'" class="avatar">
-                
-            </div>
-            
-            <div class="main">
-                
-                <div class="header">
+    
+            <comment v-for="(c, k) in comments"
+                     :key="c.key"
+                     cdn="@Config.Cdn"
+                     :comment="c.val" 
+                     :idx="c.key"
+                     :csrf="csrf"
+                     :route="route"
+                     :highlight="highlight === (c.key + 1)"
+                     v-on:change-hl="changeHighlight"/>
 
-                    <a class="link"
-                       v-if="c.val.author"
-                       :href="`#comment.${c.key+1}`"
-                       v-on:click="changeHighlight(c.key+1, $event)">
-                        #{{ c.key+1 }}
-                    </a>
-
-                    <p v-if="c.val.author" class="sm-line"></p>
-
-                    <time :datetime="c.val.dateTime" class="time">{{ date(c.val.dateTime) }}</time>
-                    
-                    <p v-if="!c.val.author" class="sm-line"></p>
-                    
-                    <span v-if="c.val.deletedBy">Comment deleted by {{ c.val.deletedBy.toLowerCase() }}.</span>
-                    
-                    <div v-if="c.val.owned" class="actions">
-                        <button class="action-btn small" v-on:click="del(c.val.id)">
-                            <icon class="icon" icon="delete_forever"></icon>
-                        </button>
-                        <button class="action-btn small" v-on:click="edit(c.val.id)">
-                            <icon class="icon" icon="edit"></icon>
-                        </button>
-                    </div>
-                    
-                </div>
-
-                <div v-if="c.val.body && (!editData || editData.id !== c.val.id)" class="body" v-html="c.val.body"></div>
-                
-                <form class="form" v-if="editData && editData.id === c.val.id" asp-antiforgery="true">
-                    <textarea class="comment-box" 
-                              v-model="editData.body" 
-                              v-on:keydown.enter="enter" 
-                              name="body" id="edit-body" 
-                              rows="3" 
-                              aria-label="Comment">
-                    </textarea>
-        
-                    <div class="buttons">
-                        <button class="confirm active-border" v-on:click="update">
-                            <icon icon="edit"></icon>
-                            Update
-                        </button>
-                        <button class="cancel active-border" v-on:click="editData = null">
-                            <icon icon="cancel"></icon>
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-                
-                <span v-if="c.val.lastEdit" class="edit-data">
-                    Edited <span class="count" v-on:click="history(c.val.id)">{{c.val.editCount}} times</span>, last edit: <time :datetime="c.val.lastEdit" >{{ date(c.val.lastEdit) }}</time>
-                </span>
-                
-            </div>
-            
-        </div>
     </div>
     
     <div class="pagination" v-if="comments && total > perPage">
@@ -155,4 +88,5 @@
 
 </div>
 
+@Html.Resource(@<script src="~/js/dist/components/comment-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/comments.min.js" asp-append-version="true"></script>)

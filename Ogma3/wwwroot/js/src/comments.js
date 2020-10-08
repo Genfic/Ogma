@@ -13,7 +13,6 @@ let comments_vue = new Vue({
         perPage: null,
         
         highlight: null,
-        editData: null,
     },
     methods: {
 
@@ -30,27 +29,10 @@ let comments_vue = new Vue({
                     headers: { "RequestVerificationToken" : this.csrf }
                 })
                 .then(_ => {
-                    this.highlight = 1;
+                    this.highlight = this.total + 1;
+                    this.page = 1;
                     this.load();
                     this.body = null;
-                })
-                .catch(console.error)
-        },
-        
-        update: function (e) {
-            e.preventDefault();
-
-            let data = {
-                body: this.editData.body,
-                id: Number(this.editData.id)
-            };
-
-            axios.patch(this.route, data,{
-                headers: { "RequestVerificationToken" : this.csrf }
-            })
-                .then(_ => {
-                    this.load();
-                    this.editData = null;
                 })
                 .catch(console.error)
         },
@@ -69,7 +51,7 @@ let comments_vue = new Vue({
                     this.page = res.data.page ?? this.page;
                     
                     this.comments = res.data.elements.map(
-                        (val, key) => ({val, key: res.data.total - (key + ((this.page - 1) * this.perPage))})
+                        (val, key) => ({val, key: (res.data.total - (this.page * this.perPage)) + (this.perPage - (key + 1))})
                     );
                     
                     if (this.highlight) {
@@ -80,45 +62,10 @@ let comments_vue = new Vue({
                 })
                 .catch(console.error)
         },
-
-        del: function(id) {
-            if (confirm("Are you sure you want to delete?")) {
-                axios.delete(`${this.route}/${id}`, { headers: { "RequestVerificationToken" : this.csrf }})
-                    .then(_ => {
-                        this.load()
-                    })
-                    .catch(console.error);
-            }
-        },
-        
-        edit: function(id) {
-            if (this.editData && this.editData.id === id) return;
-            
-            this.editData = null;
-            axios.get(`${this.route}/md`, { params: { id } })
-                .then(res => {
-                    this.editData = {
-                        id: id,
-                        body: res.data
-                    }
-                })
-                .catch(console.error);
-        },
-        
-        history: function(id) {
-            axios.get(`${this.route}/revisions/${id}`)
-                .then(console.log)
-                .catch(console.error);
-        },
         
         // Handle Enter key input
         enter: function(e) {
             if (e.ctrlKey) this.submit(e)
-        },
-
-        // Parse date
-        date: function (dt) {
-            return dayjs(dt).format('DD MMM YYYY, HH:mm');
         },
         
         // Navigate to the previous page

@@ -45,9 +45,10 @@ namespace Ogma3.Api.V1
             var total = await _commentsRepo.CountComments(thread);
 
             // If a highlight has been requested, get the page on which the highlighted comment would be.
-            // If not, simply return the requested page or the first page if requested page is null
+            // If not, simply return the requested page or the first page if requested page is null.
+            // `highlight - 1` offsets the fact, that the requested IDs start from 1, not 0
             var p = highlight.HasValue
-                ? (int) Math.Ceiling((double) (total - highlight) / _ogmaConfig.CommentsPerPage)
+                ? (int) Math.Ceiling((double) (total - (highlight - 1)) / _ogmaConfig.CommentsPerPage)
                 : Math.Max(1, page ?? 1);
 
             return new PaginationResult<CommentDto>
@@ -87,7 +88,7 @@ namespace Ogma3.Api.V1
         [HttpPatch]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> PutComment(PatchData data)
+        public async Task<ActionResult<CommentDto>> PutComment(PatchData data)
         {
             var uid = User.GetNumericId();
             var comm = _context.Comments.FirstOrDefault(c => c.Id == data.Id);
@@ -111,7 +112,7 @@ namespace Ogma3.Api.V1
             
             await _context.SaveChangesAsync();
             
-            return NoContent();
+            return _mapper.Map<Comment, CommentDto>(comm);
         }
         
         // POST: api/Comments

@@ -948,13 +948,31 @@ ul.my-list > li.item:first-of-type {
 .comment > .main > .edit-data:hover {
   color: var(--foreground-75);
 }
-.comment > .main > .edit-data .count {
+.comment > .main > .edit-data .link {
   cursor: pointer;
   color: var(--accent-50);
 }
-.comment > .main > .edit-data .count:hover {
+.comment > .main > .edit-data .link:hover {
   color: var(--accent-75);
   text-decoration: underline;
+}
+.comment > .main > .history {
+  padding: 0.5rem;
+}
+.comment > .main > .history li {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--foreground-50);
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.comment > .main > .history li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.comment > .main > .history li time {
+  font-size: 0.75rem;
+  color: var(--foreground-50);
 }
 
 p.sm-line {

@@ -113,9 +113,25 @@
       &:hover
         color: v.$foreground-75
         
-      .count
+      .link
         cursor: pointer
         color: v.$accent-50
         &:hover
           color: v.$accent-75
           text-decoration: underline
+          
+    &>.history
+      padding: .5rem
+      li
+        display: flex
+        flex-direction: column
+        border-bottom: 1px solid v.$foreground-50
+        margin-bottom: .25rem
+        padding-bottom: .25rem
+        &:last-child
+          border-bottom: none
+          margin-bottom: 0
+        time
+          font-size: .75rem
+          color: v.$foreground-50
+          

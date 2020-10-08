@@ -1,11 +1,11 @@
-using System;
 using System.Linq;
 using AutoMapper;
 using Markdig;
+using MarkdigExtensions.Mentions;
+using MarkdigExtensions.Spoiler;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
-using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 
 namespace Ogma3.Data
@@ -15,6 +15,13 @@ namespace Ogma3.Data
         public AutoMapperProfile()
         {
             long? currentUser = null;
+            
+            var md = new MarkdownPipelineBuilder()
+                .UseMentions(new MentionOptions("/user/", "_blank"))
+                .UseAutoLinks()
+                .UseAutoIdentifiers()
+                .UseSpoilers()
+                .Build();
 
             // User mappings
             CreateMap<OgmaUser, ProfileBar>()
@@ -123,7 +130,7 @@ namespace Ogma3.Data
                 .ForMember(
                     cd => cd.Body,
                     opts
-                        => opts.MapFrom(c => Markdown.ToHtml(c.Body, null))
+                        => opts.MapFrom(c => Markdown.ToHtml(c.Body, md))
                 )
                 .ForMember(
                     cd => cd.Owned,
@@ -132,7 +139,12 @@ namespace Ogma3.Data
                 );
             
             // Comment revision mappings
-            CreateMap<CommentRevision, CommentRevisionDto>();
+            CreateMap<CommentRevision, CommentRevisionDto>()
+                .ForMember(
+                    crd => crd.Body,
+                    opts
+                        => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md))
+                );
             
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();
