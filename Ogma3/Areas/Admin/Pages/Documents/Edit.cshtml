@@ -1,4 +1,4 @@
-@page "{id}"
+@page "{slug}"
 @model Ogma3.Areas.Admin.Pages.Documents.EditModel
 
 @{
@@ -6,12 +6,9 @@
     ViewData["ActivePage"] = ManageNavPages.Documents;
 }
 
+<h1>@Model.Input.Title</h1>
+
 <form method="post" id="editor" class="form">
-    
-    <div class="o-form-group">
-        <label asp-for="@Model.Input.Title"></label>
-        <input asp-for="@Model.Input.Title" type="text" class="o-form-control active-border">
-    </div>
 
     <div class="o-form-group">
         <label asp-for="@Model.Input.Body"></label>
@@ -21,7 +18,7 @@
         </textarea>
     </div>
 
-    <input asp-for="@Model.Input.Id" type="hidden">
+    <input asp-for="@Model.Input.Slug" type="hidden">
 
     <div class="o-form-group">
         <button type="submit" class="btn btn-primary">Create version @(Model.Doc.Version + 1)</button>

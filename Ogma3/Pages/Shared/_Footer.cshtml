@@ -1,5 +1,6 @@
 @using Ogma3.Services.Middleware
 @using Ogma3.Data.Models
+@using Ogma3.Data.AuthorizationData
 @inject SignInManager<OgmaUser> SignInManager
 
 @{
@@ -46,7 +47,7 @@
 
             @* <button class="item" id="theme-swap">Switch theme</button> *@
 
-            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
             {
                 <a class="item" asp-area="Admin" asp-page="/Index">
                     Admin

@@ -7,9 +7,6 @@ namespace Ogma3.Data.Models
     public class Document : BaseModel
     {
         [Required]
-        public Guid GroupId { get; set; }
-        
-        [Required]
         public string Title { get; set; }
         
         [Required]

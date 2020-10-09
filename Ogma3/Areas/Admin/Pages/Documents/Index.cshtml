@@ -22,7 +22,7 @@ else if (Model.Docs.Count > 0)
         {
             <li>
                 <div class="main">
-                    <a asp-area="" asp-page="/Docs" asp-route-id="@doc.Id" asp-route-slug="@doc.Slug">
+                    <a asp-area="" asp-page="/Docs" asp-route-slug="@doc.Slug">
                         <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
                     </a>
                 </div>
@@ -30,7 +30,7 @@ else if (Model.Docs.Count > 0)
                     <a class="action">
                         <icon icon="delete_forever"></icon>
                     </a>
-                    <a asp-page="./Edit" asp-route-id="@doc.GroupId" class="action">
+                    <a asp-page="./Edit" asp-route-slug="@doc.Slug" class="action">
                         <icon icon="edit"></icon>
                     </a>
                 </div>

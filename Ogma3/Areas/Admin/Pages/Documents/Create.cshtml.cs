@@ -40,7 +40,6 @@ namespace Ogma3.Areas.Admin.Pages.Documents
             
             await _context.Documents.AddAsync(new Document
             {
-                GroupId = Guid.NewGuid(),
                 Title = Input.Title,
                 Slug = Input.Title.Friendlify(),
                 Body = Input.Body,

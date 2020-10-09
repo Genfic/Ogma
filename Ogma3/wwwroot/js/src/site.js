@@ -1,16 +1,26 @@
 ﻿/**
  * Replaces all instances of `oldCh` character with `newCh`
  * @param {String} oldCh Old character
- * @param {string} newCh New character
+ * @param {String} newCh New character
  * @returns {string} Resulting string
  */
 String.prototype.replaceAll = function(oldCh, newCh) {
     let out = '';
     for (let c of this) {
-        if (c === oldCh) out += newCh;
-        else             out += c;
+        out += c === oldCh ? newCh : c;
     }
     return out;
+}
+
+/**
+ * If the string is null or empty, return the alternative string. If not, return the string itself.
+ * @param {String} alternative Alternative string.
+ * @returns {String} Source string, or alternative if source is null or empty.
+ */
+String.prototype.ifNullOrEmpty = function (alternative) {
+    return this === null || this.length <= 0
+        ? alternative
+        : this;
 }
 
 /**

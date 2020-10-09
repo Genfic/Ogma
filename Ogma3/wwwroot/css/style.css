@@ -65,6 +65,10 @@ body > footer {
   font-family: "Courier New", Courier, monospace;
 }
 
+.nb {
+  white-space: nowrap;
+}
+
 h1, h2, h3, h4, h5 {
   line-height: 1.2;
 }
@@ -2309,6 +2313,7 @@ form.search select:focus {
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
   scroll-margin-top: 5.25rem;
   margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
 }
 .md h1 {
   font-size: 2rem;
@@ -2348,6 +2353,18 @@ form.search select:focus {
   font-size: inherit;
   color: inherit;
   word-break: normal;
+}
+.md table {
+  margin: 0.5rem 0;
+}
+.md table tr {
+  border-bottom: 1px solid var(--foreground-50);
+}
+.md table tr:first-child {
+  border-top: 1px solid var(--foreground-50);
+}
+.md table td {
+  padding: 0.5rem;
 }
 .md .spoiler {
   color: transparent;
