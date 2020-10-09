@@ -1,6 +1,8 @@
 @use '../vars' as v
 @use '../mixins/active-border' as ab
 
+$btn-height: 2.5rem
+
 .comments-container
   margin-top: 2rem
   width: 70%
@@ -22,6 +24,7 @@
       
     & .comment-btn
       flex: 1
+      height: $btn-height
       background-color: v.$background
       color: v.$foreground
       margin: 1px 1px 0 0
@@ -31,13 +34,32 @@
         vertical-align: middle
         
     & .help-btn
-      flex: 0 0 2rem
+      display: flex
+      align-items: center
+      justify-content: center
+      flex: 0 0 $btn-height
       margin: 1px 0 0 0
-      text-align: center
+      height: $btn-height
       color: v.$foreground
-
-      &>i.material-icons-outlined
-        vertical-align: middle
     
   &>.comments
     padding-top: .5rem
+    
+    .snip
+      width: 100%
+      display: flex
+      flex-direction: row
+      margin: .5rem 0
+      color: v.$foreground-50
+      &:hover
+        color: v.$foreground
+
+      &:before, &:after
+        content: ""
+        flex: 1 1
+        border-bottom: 2px solid v.$foreground-50
+        margin: auto
+      &:before
+        margin-right: .5rem
+      &:after
+        margin-left: .5rem

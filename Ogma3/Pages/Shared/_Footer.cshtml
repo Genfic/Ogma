@@ -42,7 +42,9 @@
 
             <a asp-area="" asp-page="/Markdown" class="item">Markdown reference</a>
 
-            <button class="item" id="theme-swap">Switch theme</button>
+            <a asp-area="" asp-page="/Settings" class="item">Local settings</a>
+
+            @* <button class="item" id="theme-swap">Switch theme</button> *@
 
             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
@@ -87,7 +89,7 @@
                 Discord
             </a>
 
-            <a href="https://twitter.com/Genfic1" target="_blank" rel="noopener" class="item follow twitter">
+            <a href="https://twitter.com/GenficNet" target="_blank" rel="noopener" class="item follow twitter">
                 <picture>
                     <source type="image/webp" srcset="~/img/twitter.webp">
                     <img src="~/img/twitter.png" alt="Twitter logo">

@@ -13,6 +13,7 @@ let comments_vue = new Vue({
         perPage: null,
         
         highlight: null,
+        collapse: JSON.parse(window.localStorage.getItem('collapse-deleted'))
     },
     methods: {
 
@@ -105,6 +106,29 @@ let comments_vue = new Vue({
                 history.replaceState(null, null, window.location.href.split('#')[0])
             }
             if (this.highlight) this.highlight = null;
+        }
+    },
+    
+    computed: {
+        comms: function () {
+            // Check collapse preference
+            if(this.collapse !== true) return this.comments;
+            
+            // If `collapse-deleted` is true, collapse the deleted comments
+            let o = [];
+            let concat = 0;
+            
+            for(const c of this.comments) {
+                if (!c.val.deletedBy) {
+                    if (concat !== 0) o.push({ snip: `Removed ${concat} comments.` });
+                    concat = 0;
+                    o.push(c);
+                } else {
+                    concat += 1;
+                }
+            }
+            
+            return o;
         }
     },
 

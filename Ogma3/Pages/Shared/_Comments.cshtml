@@ -59,15 +59,21 @@
 
     <div class="comments">
     
-            <comment v-for="(c, k) in comments"
-                     :key="c.key"
-                     cdn="@Config.Cdn"
-                     :comment="c.val" 
-                     :idx="c.key"
-                     :csrf="csrf"
-                     :route="route"
-                     :highlight="highlight === (c.key + 1)"
-                     v-on:change-hl="changeHighlight"/>
+        <template v-for="c in comms">
+            <template v-if="!c.snip">
+                <comment :key="c.key"
+                         cdn="@Config.Cdn"
+                         :comment="c.val"
+                         :idx="c.key"
+                         :csrf="csrf"
+                         :route="route"
+                         :highlight="highlight === (c.key + 1)"
+                         v-on:change-hl="changeHighlight"/>
+            </template>
+            <template v-else>
+                <div class="snip">{{c.snip}}</div>
+            </template>
+        </template>
 
     </div>
     

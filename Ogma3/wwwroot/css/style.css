@@ -800,6 +800,7 @@ ul.my-list > li.item:first-of-type {
 }
 .comments-container > form .comment-btn {
   flex: 1;
+  height: 2.5rem;
   background-color: var(--background);
   color: var(--foreground);
   margin: 1px 1px 0 0;
@@ -809,16 +810,38 @@ ul.my-list > li.item:first-of-type {
   vertical-align: middle;
 }
 .comments-container > form .help-btn {
-  flex: 0 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 2.5rem;
   margin: 1px 0 0 0;
-  text-align: center;
+  height: 2.5rem;
   color: var(--foreground);
-}
-.comments-container > form .help-btn > i.material-icons-outlined {
-  vertical-align: middle;
 }
 .comments-container > .comments {
   padding-top: 0.5rem;
+}
+.comments-container > .comments .snip {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem 0;
+  color: var(--foreground-50);
+}
+.comments-container > .comments .snip:hover {
+  color: var(--foreground);
+}
+.comments-container > .comments .snip:before, .comments-container > .comments .snip:after {
+  content: "";
+  flex: 1 1;
+  border-bottom: 2px solid var(--foreground-50);
+  margin: auto;
+}
+.comments-container > .comments .snip:before {
+  margin-right: 0.5rem;
+}
+.comments-container > .comments .snip:after {
+  margin-left: 0.5rem;
 }
 
 .comment {
@@ -2239,6 +2262,42 @@ form.search select:focus {
 }
 .document .toc .toc-h.h5 {
   margin-left: 5rem;
+}
+
+#local-settings {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1rem;
+  width: max-content;
+}
+#local-settings dt, #local-settings dd {
+  min-height: 32px;
+}
+#local-settings dt {
+  grid-column: 1;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+}
+#local-settings dd {
+  grid-column: 2;
+}
+#local-settings dd button {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  color: var(--foreground);
+  padding: 0 1rem;
+  border: 1px solid var(--foreground-25);
+}
+#local-settings dd button:hover {
+  border-color: var(--foreground-50);
+}
+#local-settings dd button:focus {
+  border-color: var(--accent);
+}
+#local-settings dd button.on {
+  background-color: var(--accent-50);
 }
 
 .md p {
