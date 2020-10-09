@@ -2,15 +2,17 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
-using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents
 {
+    [Authorize(Roles = RoleNames.Admin)]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -23,7 +25,8 @@ namespace Ogma3.Areas.Admin.Pages.Documents
         public InputModel Input { get; set; }
         public class InputModel
         {
-            public Guid Id { get; set; }
+            [Required]
+            public string Slug { get; set; }
             
             [Required]
             public string Title { get; set; }
@@ -33,21 +36,19 @@ namespace Ogma3.Areas.Admin.Pages.Documents
         }
 
         public Document Doc { get; set; }
-        public async Task<IActionResult> OnGetAsync(Guid id)
+        public async Task<IActionResult> OnGetAsync(string slug)
         {
             Doc = await _context.Documents
-                .Where(d => d.GroupId == id)
+                .Where(d => d.Slug == slug)
                 .Where(d => d.RevisionDate == null)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (Doc == null)
-            {
-                return NotFound();
-            }
+            if (Doc == null) return NotFound();
             
             Input = new InputModel
             {
-                Id = Doc.GroupId,
+                Slug = Doc.Slug,
                 Title = Doc.Title,
                 Body = Doc.Body
             };
@@ -58,16 +59,15 @@ namespace Ogma3.Areas.Admin.Pages.Documents
         {
             var oldVersion = await _context.Documents
                 .Where(d => d.RevisionDate == null)
-                .Where(d => d.GroupId == Input.Id)
+                .Where(d => d.Slug == Input.Slug)
                 .FirstOrDefaultAsync();
 
             var now = DateTime.Now;
             
             await _context.Documents.AddAsync(new Document
             {
-                GroupId = oldVersion.GroupId,
-                Title   = string.IsNullOrEmpty(Input.Title) ? oldVersion.Title : Input.Title,
-                Slug    = string.IsNullOrEmpty(Input.Title) ? oldVersion.Slug  : Input.Title.Friendlify(),
+                Title   = oldVersion.Title,
+                Slug    = oldVersion.Slug,
                 Body    = string.IsNullOrEmpty(Input.Body)  ? oldVersion.Body  : Input.Body,
                 Version = oldVersion.Version + 1,
                 CreationTime = now,

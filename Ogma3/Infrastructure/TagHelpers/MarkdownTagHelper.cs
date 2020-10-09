@@ -42,6 +42,7 @@ namespace Ogma3.Infrastructure.TagHelpers
                     .UseAutoLinks(),
                 
                 Presets.All     => new MarkdownPipelineBuilder()
+                    .UsePipeTables()
                     .UseMentions(mentionOptions)
                     .UseAdvancedExtensions(),
                 

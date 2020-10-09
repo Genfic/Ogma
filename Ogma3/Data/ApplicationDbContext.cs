@@ -275,7 +275,13 @@ namespace Ogma3.Data
 
 
             // Documents
-            // builder.Entity<Document>();
+            builder.Entity<Document>(ent =>
+            {
+                ent.HasIndex(d => new { d.Slug, d.Version })
+                    .IsUnique();
+                ent.HasIndex(d => new { d.Title, d.Version })
+                    .IsUnique();
+            });
 
             // Invite codes
             builder.Entity<InviteCode>(ent =>

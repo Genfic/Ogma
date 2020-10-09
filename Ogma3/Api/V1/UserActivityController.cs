@@ -24,7 +24,7 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             await _context.Database.ExecuteSqlInterpolatedAsync(
-                $"UPDATE \"AspNetUsers\" SET \"LastActive\" = {DateTime.Now} WHERE \"Id\" = {uid}"
+                $"UPDATE \"AspNetUsers\" SET \"LastActive\" = {DateTime.Now.ToUniversalTime()} WHERE \"Id\" = {uid}"
             );
             return Ok();
         }

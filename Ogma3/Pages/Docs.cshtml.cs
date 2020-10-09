@@ -27,10 +27,16 @@ namespace Ogma3.Pages
         public List<DocumentVersionDto> Versions { get; set; }
         public IEnumerable<String.Header> Headers { get; set; }
         
-        public async Task<IActionResult> OnGetAsync(long id, string? slug)
+        public async Task<IActionResult> OnGetAsync(string slug, [FromQuery] uint? v)
         {
-            Document = await _context.Documents
-                .Where(d => d.Id == id)
+            var query = _context.Documents
+                .Where(d => d.Slug == slug);
+
+            query = v.HasValue 
+                ? query.Where(d => d.Version == v) 
+                : query.OrderByDescending(d => d.Version);
+            
+            Document = await query
                 .ProjectTo<DocumentDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -39,7 +45,8 @@ namespace Ogma3.Pages
                 return NotFound();
             
             Versions = await _context.Documents
-                .Where(d => d.GroupId == Document.GroupId)
+                .Where(d => d.Slug == Document.Slug)
+                .OrderByDescending(d => d.Version)
                 .ProjectTo<DocumentVersionDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
