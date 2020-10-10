@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Pages.Shared;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog
@@ -14,10 +17,12 @@ namespace Ogma3.Pages.Blog
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [BindProperty]
@@ -38,8 +43,10 @@ namespace Ogma3.Pages.Blog
                 ErrorMessage = CTConfig.CBlogpost.ValidateLengthMsg,
                 MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
-
             public string Tags { get; set; }
+            
+            public ChapterMinimal? ChapterMinimal { get; set; }
+            public StoryMinimal? StoryMinimal { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -65,6 +72,23 @@ namespace Ogma3.Pages.Blog
                     .ToArray()
                     .JoinToString(", ")
             };
+
+            if (post.AttachedStoryId.HasValue)
+            {
+                Input.StoryMinimal = await _context.Stories
+                    .Where(s => s.Id == post.AttachedStoryId)
+                    .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
+            } 
+            else if (post.AttachedChapterId.HasValue)
+            {
+                Input.ChapterMinimal = await _context.Chapters
+                    .Where(c => c.Id == post.AttachedChapterId)
+                    .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
+            }
             
             return Page();
         }
