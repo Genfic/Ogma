@@ -65,6 +65,7 @@ namespace Ogma3.Data
             // Chapter mappings
             CreateMap<Chapter, ChapterDetails>();
             CreateMap<Chapter, ChapterBasicDto>();
+            CreateMap<Chapter, ChapterMinimal>();
 
             // Story mappings
             CreateMap<Story, StoryDetails>()
@@ -83,13 +84,13 @@ namespace Ogma3.Data
                     opts 
                         => opts.MapFrom(s => s.Votes.Count)
                 );
-
             CreateMap<Story, StoryCard>()
                 .ForMember(
                     sd => sd.Tags,
                     opts 
                         => opts.MapFrom(s => s.StoryTags.Select(st => st.Tag))
                 );
+            CreateMap<Story, StoryMinimal>();
 
             // Bookshelf mappings
             CreateMap<Shelf, BookshelfDetails>()
@@ -104,6 +105,7 @@ namespace Ogma3.Data
 
             // Blogpost mappings
             CreateMap<Blogpost, BlogpostCard>();
+            CreateMap<Blogpost, BlogpostMinimal>();
             CreateMap<Blogpost, BlogpostDetails>()
                 .ForMember(
                     bd => bd.CommentsCount,

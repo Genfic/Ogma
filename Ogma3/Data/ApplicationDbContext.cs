@@ -130,14 +130,15 @@ namespace Ogma3.Data
             });
 
             // Chapter
-            builder.Entity<Chapter>()
-                .Property(p => p.IsPublished)
-                .HasDefaultValue(false);
-            builder.Entity<Chapter>()
-                .HasOne(c => c.CommentsThread)
-                .WithOne(ct => ct.Chapter)
-                .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Chapter>(ent =>
+            {
+                ent.Property(p => p.IsPublished)
+                    .HasDefaultValue(false);
+                ent.HasOne(c => c.CommentsThread)
+                    .WithOne(ct => ct.Chapter)
+                    .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             // Chapter reads
             builder.Entity<ChaptersRead>(ent =>
@@ -220,6 +221,14 @@ namespace Ogma3.Data
                     .WithOne(ct => ct.Blogpost)
                     .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
                     .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(b => b.AttachedStory)
+                    .WithMany()
+                    .HasForeignKey(b => b.AttachedStoryId)
+                    .OnDelete(DeleteBehavior.SetNull);
+                ent.HasOne(b => b.AttachedChapter)
+                    .WithMany()
+                    .HasForeignKey(b => b.AttachedChapterId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
                 
 

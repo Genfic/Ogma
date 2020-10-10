@@ -1,4 +1,5 @@
 @page
+@using System.Runtime.CompilerServices
 @model Ogma3.Pages.Blog.CreateModel
 
 @{
@@ -36,6 +37,25 @@
                      label="@nameof(Model.Input.Tags)"
                      value="@Model.Input.Tags">
     </input-blog-tags>
+    
+    @if (Model.Input.StoryMinimal != null)
+    {
+        <div class="o-form-group">
+            <label>Attached story</label>
+            <partial name="Shared/_StoryMinimal" model="@Model.Input.StoryMinimal"/>
+            <input type="hidden" name="StoryMinimalId" value="@Model.Input.StoryMinimal.Id">
+        </div>
+    }
+    @if (Model.Input.ChapterMinimal != null)
+    {
+        <div class="o-form-group">
+            <label>Attached chapter</label>
+            <partial name="Shared/_ChapterMinimal" model="@Model.Input.ChapterMinimal"/>
+            <input type="hidden" name="ChapterMinimalId" value="@Model.Input.ChapterMinimal.Id">
+        </div>
+    }
+    
+    <br>
     
     <div class="o-form-group">
         <input type="submit" value="Create" class="btn btn-primary"/>

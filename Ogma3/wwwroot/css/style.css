@@ -1244,7 +1244,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   margin: 4px 0 0;
   padding: 4px;
 }
-.blogpost-details .title {
+.blogpost-details > .title {
   text-align: center;
   margin: 0.5rem;
 }
@@ -2302,6 +2302,37 @@ form.search select:focus {
 }
 #local-settings dd button.on {
   background-color: var(--accent-50);
+}
+
+.minimal {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  color: var(--foreground);
+}
+.minimal:hover {
+  color: var(--foreground-75);
+}
+.minimal:hover .dot {
+  background-color: var(--foreground-50);
+}
+.minimal:hover .title {
+  text-decoration: underline;
+}
+.minimal .title {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+.minimal .info {
+  display: flex;
+  align-items: center;
+}
+.minimal .info i.dot {
+  margin: 0.5rem;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 50%;
+  background-color: var(--foreground-75);
 }
 
 .md p {

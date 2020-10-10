@@ -1,0 +1,21 @@
+@using System.Globalization
+@using Utils.Extensions
+@model ChapterMinimal
+
+<a asp-page="/Chapter" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
+    <span class="title">@Model.Title</span>
+
+    <div class="info">
+        <span class="author">By @Model.StoryAuthorUserName</span>
+        
+        <i class="dot"></i>
+        
+        <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+            @Model.PublishDate.FormatDateWithDaySuffix()
+        </time>
+
+        <i class="dot"></i>
+        
+        <span class="story">Story: @Model.StoryTitle</span>
+    </div>
+</a>

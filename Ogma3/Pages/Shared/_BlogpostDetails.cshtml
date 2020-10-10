@@ -37,6 +37,17 @@
             }
     </div>
 
+        @if (Model.AttachedStory != null)
+        {
+            <strong>Attached story</strong>
+            <partial name="Shared/_StoryMinimal" model="@Model.AttachedStory"/>
+        }
+        @if (Model.AttachedChapter != null)
+        {
+            <strong>Attached chapter</strong>
+            <partial name="Shared/_ChapterMinimal" model="@Model.AttachedChapter"/>
+        }
+    
     <markdown class="body" preset="Blogpost">
         @Model.Body
     </markdown>

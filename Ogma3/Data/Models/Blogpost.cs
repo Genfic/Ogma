@@ -41,5 +41,12 @@ namespace Ogma3.Data.Models
         [DefaultValue(new string[0])]
         [Required]
         public string[] Hashtags { get; set; } = Array.Empty<string>();
+
+        // Attachments
+        public Story? AttachedStory { get; set; }
+        public long? AttachedStoryId { get; set; }
+        
+        public Chapter? AttachedChapter { get; set; }
+        public long? AttachedChapterId { get; set; }
     }
 }

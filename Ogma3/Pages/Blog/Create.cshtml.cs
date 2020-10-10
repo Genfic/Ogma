@@ -1,11 +1,17 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Pages.Shared;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog
@@ -14,18 +20,36 @@ namespace Ogma3.Pages.Blog
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateModel(ApplicationDbContext context)
+        public CreateModel(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet([FromQuery] long? story, [FromQuery] long? chapter)
         {
             Input = new InputModel();
+
+            if (story.HasValue)
+            {
+                Input.StoryMinimal = await _context.Stories
+                    .Where(s => s.Id == story)
+                    .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
+            }
+            else if (chapter.HasValue)
+            {
+                Input.ChapterMinimal = await _context.Chapters
+                    .Where(c => c.Id == chapter)
+                    .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
+            }
+            
             return Page();
         }
 
@@ -44,6 +68,11 @@ namespace Ogma3.Pages.Blog
             public string Body { get; set; }
             
             public string Tags { get; set; }
+
+            public ChapterMinimal? ChapterMinimal { get; set; }
+            public long? ChapterMinimalId { get; set; }
+            public StoryMinimal? StoryMinimal { get; set; }
+            public long? StoryMinimalId { get; set; }
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -71,7 +100,7 @@ namespace Ogma3.Pages.Blog
                 .Distinct()
                 .ToArray();
 
-            await _context.Blogposts.AddAsync(new Blogpost
+            var post = new Blogpost
             {
                 Title = Input.Title.Trim(),
                 Slug = Input.Title.Trim().Friendlify(),
@@ -79,8 +108,19 @@ namespace Ogma3.Pages.Blog
                 AuthorId = (long) uid,
                 CommentsThread = new CommentsThread(),
                 WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
-                Hashtags = tags ?? System.Array.Empty<string>()
-            });
+                Hashtags = tags ?? Array.Empty<string>()
+            };
+
+            if (Input.StoryMinimalId.HasValue)
+            {
+                post.AttachedStoryId = Input.StoryMinimalId;
+            } 
+            else if (Input.ChapterMinimalId.HasValue)
+            {
+                post.AttachedChapterId = Input.ChapterMinimalId;
+            }
+
+            await _context.Blogposts.AddAsync(post);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("/User/Blog", new { name = uname });

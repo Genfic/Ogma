@@ -15,5 +15,9 @@ namespace Ogma3.Pages.Shared
         public long CommentsThreadId { get; set; }
         public bool IsPublished { get; set; }
         public int CommentsCount { get; set; }
+
+        // Attachments
+        public ChapterMinimal? AttachedChapter { get; set; }
+        public StoryMinimal? AttachedStory { get; set; }
     }
 }
