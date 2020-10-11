@@ -54,6 +54,12 @@
             <input type="hidden" name="ChapterMinimalId" value="@Model.Input.ChapterMinimal.Id">
         </div>
     }
+    @if (Model.Input.IsUnavailable)
+    {
+        <div class="o-form-group">
+            <label>Selected attachment is unavailable.</label>
+        </div>
+    }
     
     <br>
     

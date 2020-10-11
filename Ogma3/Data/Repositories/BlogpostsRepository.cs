@@ -52,10 +52,11 @@ namespace Ogma3.Data.Repositories
                 .CountAsync();
         }
 
-        public async Task<BlogpostDetails> GetDetails(long id)
+        public async Task<BlogpostDetails> GetDetails(long id, bool publishedOnly = true)
         {
             return await _context.Blogposts
                 .Where(b => b.Id == id)
+                .Where(b => b.IsPublished || !publishedOnly)
                 .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

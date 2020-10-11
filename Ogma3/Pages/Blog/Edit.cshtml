@@ -42,7 +42,6 @@
         <div class="o-form-group">
             <label>Attached story</label>
             <partial name="Shared/_StoryMinimal" model="@Model.Input.StoryMinimal"/>
-            <input type="hidden" name="StoryMinimalId" value="@Model.Input.StoryMinimal.Id">
         </div>
     }
     @if (Model.Input.ChapterMinimal != null)
@@ -50,7 +49,12 @@
         <div class="o-form-group">
             <label>Attached chapter</label>
             <partial name="Shared/_ChapterMinimal" model="@Model.Input.ChapterMinimal"/>
-            <input type="hidden" name="ChapterMinimalId" value="@Model.Input.ChapterMinimal.Id">
+        </div>
+    }
+    @if (Model.Input.IsUnavailable)
+    {
+        <div class="o-form-group">
+            <label>Attached content is unavailable.</label>
         </div>
     }
     

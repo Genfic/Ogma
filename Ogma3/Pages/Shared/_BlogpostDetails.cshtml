@@ -20,16 +20,16 @@
                     <icon class="icon" icon="delete_forever"></icon>
                     <span class="name">Delete</span>
                 </a>
-                @if (Model.IsPublished)
+                if (Model.IsPublished)
                 {
-                    <a title="Publish story" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
+                    <a title="Unpublish post" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
                         <icon class="icon" icon="visibility_off"></icon>
                         <span class="name">Unpublish</span>
                     </a>
                 }
                 else
                 {
-                    <a title="Publish story" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
+                    <a title="Publish post" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
                         <icon class="icon" icon="visibility"></icon>
                         <span class="name">Publish</span>
                     </a>
@@ -37,15 +37,24 @@
             }
     </div>
 
-        @if (Model.AttachedStory != null)
+        @if (Model.IsUnavailable)
         {
-            <strong>Attached story</strong>
-            <partial name="Shared/_StoryMinimal" model="@Model.AttachedStory"/>
+            <div class="active-border">
+                <strong>Attached content is unavailable.</strong>
+            </div>
         }
-        @if (Model.AttachedChapter != null)
+        else
         {
-            <strong>Attached chapter</strong>
-            <partial name="Shared/_ChapterMinimal" model="@Model.AttachedChapter"/>
+            if (Model.AttachedStory != null)
+            {
+                <strong>Attached story</strong>
+                <partial name="Shared/_StoryMinimal" model="@Model.AttachedStory"/>
+            }
+            if (Model.AttachedChapter != null)
+            {
+                <strong>Attached chapter</strong>
+                <partial name="Shared/_ChapterMinimal" model="@Model.AttachedChapter"/>
+            }
         }
     
     <markdown class="body" preset="Blogpost">

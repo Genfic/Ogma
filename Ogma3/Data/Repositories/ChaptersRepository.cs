@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -24,6 +25,16 @@ namespace Ogma3.Data.Repositories
                 .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<ChapterMinimal> GetMinimal(long id, bool publishedOnly = true)
+        {
+            return await _context.Chapters
+                .Where(c => c.Id == id)
+                .Where(c => c.IsPublished || !publishedOnly)
+                .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
     }
 }

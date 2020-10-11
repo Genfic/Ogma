@@ -19,5 +19,6 @@ namespace Ogma3.Pages.Shared
         // Attachments
         public ChapterMinimal? AttachedChapter { get; set; }
         public StoryMinimal? AttachedStory { get; set; }
+        public bool IsUnavailable { get; set; }
     }
 }

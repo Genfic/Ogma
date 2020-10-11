@@ -10,5 +10,6 @@ namespace Ogma3.Pages.Shared
         public string AuthorUserName { get; set; }
         public string Slug { get; set; }
         public DateTime PublishDate { get; set; }
+        public bool IsPublished { get; set; }
     }
 }

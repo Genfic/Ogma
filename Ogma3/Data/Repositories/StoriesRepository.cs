@@ -36,6 +36,16 @@ namespace Ogma3.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<StoryMinimal> GetMinimal(long id, bool publishedOnly = true)
+        {
+            return await _context.Stories
+                .Where(c => c.Id == id)
+                .Where(c => c.IsPublished || !publishedOnly)
+                .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
+
         /// <summary>
         /// Get `StoryCard` objects, sorted according to `EStorySortingOptions` and paginated
         /// </summary>

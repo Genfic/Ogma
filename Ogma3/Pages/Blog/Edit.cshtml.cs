@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 using Utils.Extensions;
 
@@ -17,12 +18,14 @@ namespace Ogma3.Pages.Blog
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly StoriesRepository _storiesRepo;
+        private readonly ChaptersRepository _chaptersRepo;
 
-        public EditModel(ApplicationDbContext context, IMapper mapper)
+        public EditModel(ApplicationDbContext context, StoriesRepository storiesRepo, ChaptersRepository chaptersRepo)
         {
             _context = context;
-            _mapper = mapper;
+            _storiesRepo = storiesRepo;
+            _chaptersRepo = chaptersRepo;
         }
 
         [BindProperty]
@@ -47,6 +50,7 @@ namespace Ogma3.Pages.Blog
             
             public ChapterMinimal? ChapterMinimal { get; set; }
             public StoryMinimal? StoryMinimal { get; set; }
+            public bool IsUnavailable { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -75,19 +79,13 @@ namespace Ogma3.Pages.Blog
 
             if (post.AttachedStoryId.HasValue)
             {
-                Input.StoryMinimal = await _context.Stories
-                    .Where(s => s.Id == post.AttachedStoryId)
-                    .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync();
+                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) post.AttachedStoryId);
+                Input.IsUnavailable = Input.StoryMinimal is null;
             } 
             else if (post.AttachedChapterId.HasValue)
             {
-                Input.ChapterMinimal = await _context.Chapters
-                    .Where(c => c.Id == post.AttachedChapterId)
-                    .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync();
+                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) post.AttachedChapterId);
+                Input.IsUnavailable = Input.ChapterMinimal is null;
             }
             
             return Page();

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 using Utils.Extensions;
 
@@ -20,12 +21,14 @@ namespace Ogma3.Pages.Blog
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly StoriesRepository _storiesRepo;
+        private readonly ChaptersRepository _chaptersRepo;
 
-        public CreateModel(ApplicationDbContext context, IMapper mapper)
+        public CreateModel(ApplicationDbContext context, StoriesRepository storiesRepo, ChaptersRepository chaptersRepo)
         {
             _context = context;
-            _mapper = mapper;
+            _storiesRepo = storiesRepo;
+            _chaptersRepo = chaptersRepo;
         }
 
         [BindProperty]
@@ -37,17 +40,13 @@ namespace Ogma3.Pages.Blog
 
             if (story.HasValue)
             {
-                Input.StoryMinimal = await _context.Stories
-                    .Where(s => s.Id == story)
-                    .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync();
+                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) story);
+                Input.IsUnavailable = Input.StoryMinimal is null;
             }
             else if (chapter.HasValue)
             {
-                Input.ChapterMinimal = await _context.Chapters
-                    .Where(c => c.Id == chapter)
-                    .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync();
+                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) chapter);
+                Input.IsUnavailable = Input.ChapterMinimal is null;
             }
             
             return Page();
@@ -73,6 +72,7 @@ namespace Ogma3.Pages.Blog
             public long? ChapterMinimalId { get; set; }
             public StoryMinimal? StoryMinimal { get; set; }
             public long? StoryMinimalId { get; set; }
+            public bool IsUnavailable { get; set; }
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
