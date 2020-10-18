@@ -15,9 +15,10 @@
     margin-bottom: .25rem
     margin-top: .5rem
       
-  @for $level from 1 to 6
+  @for $level from 1 to 7
     h#{$level}
       font-size: #{1 + ((6 - $level) * .2)}rem
+      margin-top: #{((((7 - $level) - 1) / (6 - 1)) * (2 - 1)) + 1}rem // Normalize to [1rem, 2rem] range
       
   // Code
   code

@@ -1,10 +1,12 @@
 let comments_vue = new Vue({
     el: '#comments-container',
     data: {
-        body: null,
+        body: '',
         thread: null,
         route: null,
         csrf: null,
+        
+        maxLength: null,
         
         comments: [],
         total: 0,
@@ -20,6 +22,8 @@ let comments_vue = new Vue({
         // Submit the comment, load comments again, clean textarea
         submit: function (e) {
             e.preventDefault();
+            
+            if (this.body.length >= this.maxLength) return;
             
             let data = {
                 body: this.body,
@@ -136,6 +140,7 @@ let comments_vue = new Vue({
         this.thread = document.getElementById('thread').dataset.thread;
         this.route = document.getElementById('route').dataset.route;
         this.perPage = document.getElementById('per-page').dataset.count;
+        this.maxLength = document.getElementById('max-length').dataset.length;
         this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
         
         let hash = window.location.hash.split('-');

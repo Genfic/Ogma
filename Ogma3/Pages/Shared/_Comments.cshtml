@@ -5,6 +5,11 @@
 
 <div class="comments-container" id="comments-container">
 
+    <div id="thread" data-thread="@Model" v-if="!thread"></div>
+    <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
+    <div id="per-page" data-count="@Config.CommentsPerPage" v-if="!perPage"></div>
+    <div id="max-length" data-length="@CTConfig.CComment.MaxBodyLength" v-if="!maxLength"></div>
+
     @if (User.Identity != null && User.Identity.IsAuthenticated)
     {
         <form asp-antiforgery="true">
@@ -15,10 +20,13 @@
                       rows="3" 
                       aria-label="Comment">
             </textarea>
-
-            <div id="thread" data-thread="@Model" v-if="!thread"></div>
-            <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
-            <div id="per-page" data-count="@Config.CommentsPerPage" v-if="!perPage"></div>
+            
+            <div class="counter" :class="body.length < maxLength ? '' : 'invalid'">
+                <div class="o-progress-bar"
+                     :style="{ width: Math.min(100, 100 * (body.length / maxLength)) + '%' }">
+                </div>
+                <span>{{ body.length.toLocaleString() }}/{{ maxLength?.toLocaleString() }}</span>
+            </div>
 
             <div class="buttons">
                 <button class="comment-btn active-border" v-on:click="submit">

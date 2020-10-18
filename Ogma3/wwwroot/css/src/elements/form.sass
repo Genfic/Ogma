@@ -24,39 +24,6 @@ form.form
       font-size: .95rem
       margin: 0
       
-    &>.counter
-      text-align: end
-      position: relative
-      &:hover
-        &>.o-progress-bar
-          background-color: v.$accent-25
-        &.invalid
-          &>.o-progress-bar
-            background-color: v.$red-25
-      
-      &>.o-progress-bar
-        position: absolute
-        background-color: v.$accent-10
-        top: 0
-        bottom: 0
-        height: 100%
-        transition: width .05s ease, background-color .1s ease-in-out
-        
-      & span
-        margin-top: .05rem
-        margin-bottom: .05rem
-        &:first-child
-          margin-right: 0
-          margin-left: .2rem
-        &:last-child
-          margin-right: .2rem
-          margin-left: 0
-
-      &.invalid
-        color: red
-        &>.o-progress-bar
-          background-color: v.$red-10
-      
     & .ratings
       display: grid
       grid-template-columns: repeat(2, 1fr)
