@@ -57,6 +57,8 @@ namespace Ogma3.Data.Repositories
             return await _context.Blogposts
                 .Where(b => b.Id == id)
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Include(b => b.AttachedChapter)
+                .Include(b => b.AttachedStory)
                 .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

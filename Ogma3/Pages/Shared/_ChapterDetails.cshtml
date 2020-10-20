@@ -42,7 +42,7 @@
                 <div class="start notes"><span class="an">Author's notes:</span> @Model.StartNotes</div>
             }
             
-            <div class="body tts-body">@Model.Body</div>
+            <markdown preset="Basic" class="body @* tts-body *@">@Model.Body</markdown>
             
             @if (!string.IsNullOrEmpty(Model.EndNotes))
             {
@@ -53,16 +53,16 @@
         </cache>
     </article>
     
-    <div id="tts">
-        <button id="tts-btn">
-            <span class="material-icons-outlined" id="tts-btn-ico">play_arrow</span>
-        </button>
-        <button id="tts-stop">
-            <span class="material-icons-outlined">stop</span>
-        </button>
-    </div>
+    @* <div id="tts"> *@
+    @*     <button id="tts-btn"> *@
+    @*         <span class="material-icons-outlined" id="tts-btn-ico">play_arrow</span> *@
+    @*     </button> *@
+    @*     <button id="tts-stop"> *@
+    @*         <span class="material-icons-outlined">stop</span> *@
+    @*     </button> *@
+    @* </div> *@
     
     <partial name="_Comments" model="@Model.CommentsThreadId" />
 </div>
 
-@Html.Resource(@<script src="~/js/dist/tts.min.js" asp-append-version="true"></script>)
+@* @Html.Resource(@<script src="~/js/dist/tts.min.js" asp-append-version="true"></script>) *@

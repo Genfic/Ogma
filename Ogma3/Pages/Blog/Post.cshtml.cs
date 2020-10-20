@@ -1,3 +1,5 @@
+using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -28,7 +30,11 @@ namespace Ogma3.Pages.Blog
             if (Blogpost == null) return NotFound();
             if (!Blogpost.IsPublished && !User.IsUserSameAsLoggedIn(Blogpost.AuthorId)) return NotFound();
 
-            if (!(Blogpost.AttachedChapter?.IsPublished ?? false) || !(Blogpost.AttachedStory?.IsPublished ?? false))
+            if (Blogpost.AttachedChapter is not null && !Blogpost.AttachedChapter.IsPublished)
+            {
+                Blogpost.IsUnavailable = true;
+            }
+            else if (Blogpost.AttachedStory is not null && !Blogpost.AttachedStory.IsPublished)
             {
                 Blogpost.IsUnavailable = true;
             }

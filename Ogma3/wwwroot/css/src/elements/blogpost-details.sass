@@ -12,24 +12,30 @@
     text-align: center
     margin: .5rem
     
-  & time.date
+  time.date
     text-align: center
     margin: 0
     
-  & .actions
+  .actions
+    margin: .5rem 0
     display: flex
     justify-content: center
     
-  & .body
+  .body
     text-align: justify
     margin-top: 1em
     
-  & .tags
+  .tags
     display: flex
     
     &>.tag
+      padding: .15rem
       text-decoration: none
       &:hover
         background-color: v.$accent-10
       +f.focus
         
+  .unavailable
+    padding: .5rem
+    margin: .5rem 0
+    background-color: v.$red-10

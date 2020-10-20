@@ -5,7 +5,6 @@ let quotes_vue = new Vue({
             body: null,
             author: null
         },
-        err: [],
         quotes: [],
         route: null,
         json: null,
@@ -43,13 +42,14 @@ let quotes_vue = new Vue({
                 .catch(console.error)
         }
     },
-
-    computed: {
-        filtered() {
-            return this.quotes.filter(item => {
-                return item.body.toLowerCase().includes(this.search.toLowerCase())
-                    || item.author.toLowerCase().includes(this.search.toLowerCase())
-            })
+    
+    watch: {
+        search() {
+            for (const q of this.quotes) {
+                q.show = this.search 
+                    ? q.body.toLowerCase().includes(this.search.toLowerCase()) || q.author.toLowerCase().includes(this.search.toLowerCase())
+                    : true;
+            }
         }
     },
 

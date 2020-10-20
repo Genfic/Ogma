@@ -7,17 +7,24 @@
     ViewData["ActivePage"] = ManageNavPages.Quotes;
 }
 
-@if (User.IsInRole("Admin")){
-    <div>
-        <textarea rows="1" v-model="json" placeholder="Json"></textarea>
-        <button v-on:click="fromJson">Send</button>
+<form class="form" v-on:submit.prevent="this.$event.preventDefault()">
+    @if (User.IsInRole("Admin")){
+        <details>
+            <summary>Load from Json</summary>
+            <div class="o-form-group">
+                <textarea class="o-form-control active-border" rows="1" v-model="json" placeholder="Json"></textarea>
+                <button class="action-btn" v-on:click="fromJson">Send</button>
+            </div>
+        </details>
+    }
+    
+    <div class="o-form-group">
+        <input type="text" class="o-form-control active-border" v-model="search" placeholder="Search...">
     </div>
-}
-
-<input type="text" class="search" v-model="search" placeholder="Search...">
+</form>
 
 <ul class="items-list">    
-    <li v-for="q in filtered">
+    <li v-for="q in quotes" v-show="!search || q.show">
         <div class="main">
             <span class="name">{{ q.body }}</span>
             <em class="desc">{{ q.author }}</em>
