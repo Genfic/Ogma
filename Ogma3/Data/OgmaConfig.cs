@@ -56,10 +56,10 @@ namespace Ogma3.Data
         
         #region Data proper
         public string Cdn { get; set; }
-        public int MaxInvitesPerUser { get; set; }
         public string AdminEmail { get; set; }
-        
+        public int MaxInvitesPerUser { get; set; }
         public int CommentsPerPage { get; set; }
+        public string PrivacyPolicyDoc { get; set; }
 
         #endregion
     }

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +28,10 @@ namespace Ogma3.Areas.Admin.Pages
 
         public async Task OnPostAsync()
         {
-            _config.Cdn = Config.Cdn;
-            _config.AdminEmail = Config.AdminEmail;
-            _config.MaxInvitesPerUser = Config.MaxInvitesPerUser;
-            _config.CommentsPerPage = Config.CommentsPerPage;
+            foreach (var prop in typeof(OgmaConfig).GetProperties().Where(p => p.CanWrite))
+            {
+                prop.SetValue(_config, prop.GetValue(Config, null), null);
+            }
             
             await _config.PersistAsync();
         }

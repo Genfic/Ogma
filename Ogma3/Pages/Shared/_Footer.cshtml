@@ -2,6 +2,7 @@
 @using Ogma3.Data.Models
 @using Ogma3.Data.AuthorizationData
 @inject SignInManager<OgmaUser> SignInManager
+@inject OgmaConfig _Config
 
 @{
     var genTime = DateTime.UtcNow - (DateTime) Context.Items[RequestTimestampMiddleware.Name];
@@ -37,7 +38,7 @@
 
             <a asp-area="" asp-page="/About" class="item">About</a>
 
-            <a asp-area="" asp-page="/Privacy" class="item">Privacy</a>
+            <a asp-area="" asp-page="/Docs" asp-route-slug="@_Config.PrivacyPolicyDoc" class="item">Privacy</a>
 
             <a asp-area="" asp-page="/Staff" class="item">Staff</a>
 
