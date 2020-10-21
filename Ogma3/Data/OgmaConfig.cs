@@ -60,6 +60,7 @@ namespace Ogma3.Data
         public int MaxInvitesPerUser { get; set; }
         public int CommentsPerPage { get; set; }
         public string PrivacyPolicyDoc { get; set; }
+        public string AboutDoc { get; set; }
 
         #endregion
     }
