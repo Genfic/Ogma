@@ -137,10 +137,13 @@ namespace Ogma3
             // Runtime compilation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             
+            // Razor
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
             });
+            
+            // MVC
             services
                 .AddMvc(options =>
                 {
@@ -151,7 +154,6 @@ namespace Ogma3
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
-
         }
 
 

@@ -43,7 +43,19 @@ namespace Ogma3.Data
                 EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
                 _ => query.OrderByDescending(s => s.ReleaseDate)
             };
-            
+        }
+
+        public static IQueryable<Story> Blacklist(this IQueryable<Story> query, ApplicationDbContext ctx, long? userId)
+        {
+            return userId.HasValue
+                ? query
+                    .Where(s => !ctx.BlacklistedRatings
+                        .Where(br => br.UserId == userId)
+                        .Select(br => br.RatingId)
+                        .Contains(s.Rating.Id)
+                    )
+                : query
+                    .Where(s => !s.Rating.BlacklistedByDefault);
         }
     }
 }

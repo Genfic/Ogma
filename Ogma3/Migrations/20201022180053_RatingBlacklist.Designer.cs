@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201022180053_RatingBlacklist")]
+    partial class RatingBlacklist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,15 +115,15 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.BlacklistedRating", b =>
                 {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("RatingId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("UserId", "RatingId");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.HasIndex("RatingId");
+                    b.HasKey("RatingId", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("BlacklistedRatings");
                 });
@@ -1018,7 +1020,7 @@ namespace Ogma3.Migrations
                         .IsRequired();
 
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "User")
-                        .WithMany("BlacklistedRatings")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1373,8 +1375,6 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.OgmaUser", b =>
                 {
-                    b.Navigation("BlacklistedRatings");
-
                     b.Navigation("Blogposts");
 
                     b.Navigation("CommentsThread")

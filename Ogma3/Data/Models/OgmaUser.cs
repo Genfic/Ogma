@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
 
 namespace Ogma3.Data.Models
 {
@@ -44,6 +44,9 @@ namespace Ogma3.Data.Models
 
         [JsonIgnore]
         public ICollection<OgmaRole> Roles { get; set; }
+
+        [JsonIgnore]
+        public ICollection<BlacklistedRating> BlacklistedRatings { get; set; }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {

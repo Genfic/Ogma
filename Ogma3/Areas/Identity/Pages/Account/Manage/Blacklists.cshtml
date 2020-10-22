@@ -1,0 +1,58 @@
+@page
+@using Ogma3.Data
+@inject OgmaConfig Config
+
+@model Ogma3.Areas.Identity.Pages.Account.Manage.Blacklists
+
+@{
+    ViewData["Title"] = "Blacklists";
+    ViewData["ActivePage"] = ManageNavPages.Blacklists;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<form class="form" id="blacklists-form" method="post">
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="o-form-group">
+        <h5>Ratings</h5>
+        <p class="desc">Select ratings to blacklist</p>
+
+        <div class="ratings">
+            @if (Model != null)
+            {
+                foreach (var r in Model.Ratings)
+                {
+                    <div class="rating">
+   
+                        <input type="checkbox" 
+                               name="BlacklistedRatings"
+                               id="@r.Name"
+                               value="@r.Id" 
+                               checked="@(Model.BlacklistedRatings?.Contains(r.Id) ?? false)"
+                               class="radio">
+                
+                        <label class="radio-label active-border" for="@r.Name">
+                            <cdn-img src="@r.Icon" alt="'Rating: @r.Name" height="50" width="50" />
+                            <div class="main">
+                                <strong>@r.Name</strong>
+                                <span>@r.Description</span>
+                            </div>
+                        </label>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <br>
+    
+    <div class="o-form-group">
+        <button id="update-blacklists-button" type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

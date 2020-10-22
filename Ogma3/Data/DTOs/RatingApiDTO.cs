@@ -8,6 +8,7 @@ namespace Ogma3.Data.DTOs
         public string Name { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; }
+        public bool BlacklistedByDefault { get; set; }
 
         public static RatingApiDto FromRating(Rating rating)
         {
@@ -16,7 +17,8 @@ namespace Ogma3.Data.DTOs
                 Id = rating.Id,
                 Name = rating.Name,
                 Description = rating.Description,
-                Icon = rating.Icon
+                Icon = rating.Icon,
+                BlacklistedByDefault = rating.BlacklistedByDefault
             };
         }
     }

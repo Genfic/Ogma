@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
@@ -27,6 +28,7 @@ namespace Ogma3.Api.V1
 
         // GET: api/Tags/all
         [HttpGet("all")]
+        [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetAll()
         {
             return await _tagsRepo.GetAll();

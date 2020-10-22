@@ -47,6 +47,7 @@ namespace Ogma3.Api.V1
             {
                 Name = rating.Name,
                 Description = rating.Description,
+                BlacklistedByDefault = rating.BlacklistedByDefault
             };
 
             if (rating.Icon != null && rating.Icon.Length > 0)
@@ -77,6 +78,7 @@ namespace Ogma3.Api.V1
 
             r.Name = rating.Name;
             r.Description = rating.Description;
+            r.BlacklistedByDefault = rating.BlacklistedByDefault;
             
             if (rating.Icon != null && rating.Icon.Length > 0)
             {
@@ -129,6 +131,7 @@ namespace Ogma3.Api.V1
         {
             public string Name { get; set; }
             public string Description { get; set; }
+            public bool BlacklistedByDefault { get; set; }
             public IFormFile Icon { get; set; }
         }
     }

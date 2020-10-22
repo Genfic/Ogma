@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Ogma3.Data.Models
 {
@@ -16,6 +18,8 @@ namespace Ogma3.Data.Models
         
         public string Icon { get; set; }
         public string IconId { get; set; }
+
+        public bool BlacklistedByDefault { get; set; }
     }
     
 }

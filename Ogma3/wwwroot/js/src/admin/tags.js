@@ -85,7 +85,7 @@ let atags_vue = new Vue({
 
         // Gets all existing tags
         getTags: function() {
-            axios.get(this.routes.tags)
+            axios.get(this.routes.tags + '/all')
                 .then(response => {
                     this.tags = response.data
                 })

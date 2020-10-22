@@ -5,6 +5,7 @@ let ratings_vue = new Vue({
             name: null,
             desc: null,
             icon: null,
+            blacklist: null,
             id: null
         },
         err: [],
@@ -22,6 +23,7 @@ let ratings_vue = new Vue({
         // It was simply easier to slap both functionalities into a single function.
         createRating: function (e) {
             e.preventDefault();
+            console.log('asdasd')
             
             if (this.form.name) {
 
@@ -29,6 +31,7 @@ let ratings_vue = new Vue({
 
                 data.append('name', this.form.name);
                 data.append('description', this.form.desc);
+                data.append('blacklistedByDefault', this.form.blacklist ?? false)
                 if (this.form.icon)
                     data.append('icon', this.form.icon, this.form.icon.name)
                 
@@ -93,6 +96,7 @@ let ratings_vue = new Vue({
             this.form.color = t.color;
             this.form.id = t.id;
             this.form.order = t.order;
+            this.form.blacklist = t.blacklistedByDefault;
         },
 
         // Clears the editor

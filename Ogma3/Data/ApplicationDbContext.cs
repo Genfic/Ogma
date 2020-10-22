@@ -56,6 +56,9 @@ namespace Ogma3.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        
+        // Blacklists
+        public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
 
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
@@ -276,6 +279,15 @@ namespace Ogma3.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            // Blacklisted ratings
+            builder.Entity<BlacklistedRating>(ent =>
+            {
+                ent.HasKey(br => new { br.UserId, br.RatingId });
+                ent.HasOne(e => e.Rating)
+                    .WithMany();
+                ent.HasOne(e => e.User)
+                    .WithMany(u => u.BlacklistedRatings);
+            });
 
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();

@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.Enums;
 using Ogma3.Pages.Shared;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Data.Repositories
 {
@@ -14,11 +16,13 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-
-        public StoriesRepository(ApplicationDbContext context, IMapper mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+        
+        public StoriesRepository(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
 
         /// <summary>
@@ -59,6 +63,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
                 .Paginate(page, perPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -77,6 +82,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetTopStoryCards)} -> {count}, {sort}")
                 .Where(b => b.IsPublished)
+                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
                 .Take(count)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -108,6 +114,7 @@ namespace Ogma3.Data.Repositories
             return await Search(tags, searchQuery, ratingId)
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(SearchAndSortStoryCards)} -> {perPage}, {page}, {searchQuery}. {ratingId}, {sort}")
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .Paginate(page, perPage)
@@ -123,11 +130,17 @@ namespace Ogma3.Data.Repositories
         /// <param name="ratingId">Rating to filter by</param>
         /// <param name="publishedOnly">Should only published stories be fetched</param>
         /// <returns>Number of stories that fit the requirements</returns>
-        public async Task<int> CountSearchResults(IList<long>? tags = null, string? searchQuery = null, long? ratingId = null, bool publishedOnly = true)
+        public async Task<int> CountSearchResults(
+            IList<long>? tags = null, 
+            string? searchQuery = null, 
+            long? ratingId = null, 
+            bool publishedOnly = true
+        )
         {
             return await Search(tags, searchQuery, ratingId)
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(CountSearchResults)} -> {searchQuery}. {ratingId}")
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .CountAsync();
         }
 
