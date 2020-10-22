@@ -31,14 +31,23 @@ namespace Ogma3.Pages.User
             if (ProfileBar == null) return NotFound();
 
             var isCurrentUser = User.IsUserSameAsLoggedIn(ProfileBar.Id);
-            
-            Stories = await _storyRepo.GetAndSortPaginatedStoryCards(PerPage, page, publishedOnly: !isCurrentUser);
-            
+
+            int count;
+            if (isCurrentUser)
+            {
+                Stories = await _storyRepo.GetAndSortOwnedPaginatedStoryCards(PerPage, page);
+                count = await _storyRepo.CountOwnedForUser(ProfileBar.Id);
+            } else
+            {
+                Stories = await _storyRepo.GetAndSortPaginatedStoryCards(PerPage, page);
+                count = await _storyRepo.CountForUser(ProfileBar.Id);
+            }
+
             // Prepare pagination
             Pagination = new Pagination
             {
                 CurrentPage = page,
-                ItemCount = await _storyRepo.CountForUser(ProfileBar.Id, !isCurrentUser),
+                ItemCount = count,
                 PerPage = PerPage
             };
             

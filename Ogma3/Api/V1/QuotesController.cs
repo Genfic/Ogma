@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Api.V1
 {
@@ -29,6 +30,7 @@ namespace Ogma3.Api.V1
 
         // GET: api/Quotes/5
         [HttpGet("{id}")]
+        [Throttle(Count = 10, TimeUnit = TimeUnit.Minute)]
         public async Task<ActionResult<Quote>> GetQuote(int id)
         {
             var q = await _context.Quotes
@@ -46,6 +48,7 @@ namespace Ogma3.Api.V1
         
         // GET: api/Quotes/random
         [HttpGet("random")]
+        [Throttle(Count = 1, TimeUnit = TimeUnit.Second)]
         public async Task<ActionResult<Quote>> GetRandomQuote()
         {
             var q = await _context.Quotes
