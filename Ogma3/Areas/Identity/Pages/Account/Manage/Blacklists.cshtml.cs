@@ -25,7 +25,6 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             _mapper = mapper;
         }
         public IEnumerable<Rating> Ratings { get; set; }
-        public IEnumerable<TagDto> Tags { get; set; }
         
         public async Task<IActionResult> OnGetAsync()
         {
@@ -42,11 +41,6 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 .ToListAsync();
 
             Ratings = await _context.Ratings.ToListAsync();
-            Tags = await _context.Tags
-                .Where(t => BlacklistedTags.Any(bt => bt == t.Id))
-                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
             
             return Page();
         }
