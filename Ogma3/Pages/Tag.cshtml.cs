@@ -25,21 +25,18 @@ namespace Ogma3.Pages
         public IList<StoryCard> Stories { get; set; }
         public Pagination Pagination { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long id, string? slug, [FromQuery] int page)
+        public async Task<IActionResult> OnGetAsync(long id, string? slug, [FromQuery] int page = 1)
         {
             Tag = await _tagsRepo.GetTag(id);
-            
             if (Tag == null) return NotFound();
 
-            var tagList = new List<long> { Tag.Id };
-
-            Stories = await _storiesRepo.SearchAndSortStoryCards(page, PerPage, tagList);
+            Stories = await _storiesRepo.GetCardsWithTag(id, page, PerPage);
 
             // Prepare pagination
             Pagination = new Pagination
             {
                 CurrentPage = page,
-                ItemCount = await _storiesRepo.CountSearchResults(tagList),
+                ItemCount = await _storiesRepo.CountWithTag(id),
                 PerPage = PerPage
             };
             

@@ -25,7 +25,7 @@ namespace Ogma3.Infrastructure.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var href = _generator
-                           .GetUriByPage(_accessor.HttpContext, "/Tag", null, new {id = Tag.Id, slug = Tag.Slug});
+                           .GetUriByPage(_accessor.HttpContext, "/Tag", null, new { id = Tag.Id, slug = Tag.Slug });
             
             output.TagName = "a";
             output.AddClass("tag", NullHtmlEncoder.Default);
@@ -36,7 +36,7 @@ namespace Ogma3.Infrastructure.TagHelpers
             output.Content.AppendHtml(Tag.NamespaceColor == null
                 ? "<div class='bg'></div>"
                 : $@"<div class='bg' style='background-color: #{Tag.NamespaceColor.Trim('#')}'></div>");
-
+            
             output.Content.AppendHtml($@"<span class='name'>{Tag.Name}</span>");
             
         }

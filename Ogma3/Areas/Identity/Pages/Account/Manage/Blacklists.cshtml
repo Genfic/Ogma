@@ -1,5 +1,7 @@
 @page
 @using Ogma3.Data
+@using Ogma3.Api.V1
+@using System.Text.Json
 @inject OgmaConfig Config
 
 @model Ogma3.Areas.Identity.Pages.Account.Manage.Blacklists
@@ -20,30 +22,44 @@
         <p class="desc">Select ratings to blacklist</p>
 
         <div class="ratings">
-            @if (Model != null)
+
+            @foreach (var r in Model.Ratings)
             {
-                foreach (var r in Model.Ratings)
-                {
-                    <div class="rating">
-   
-                        <input type="checkbox" 
-                               name="BlacklistedRatings"
-                               id="@r.Name"
-                               value="@r.Id" 
-                               checked="@(Model.BlacklistedRatings?.Contains(r.Id) ?? false)"
-                               class="radio">
-                
-                        <label class="radio-label active-border" for="@r.Name">
-                            <cdn-img src="@r.Icon" alt="'Rating: @r.Name" height="50" width="50" />
-                            <div class="main">
-                                <strong>@r.Name</strong>
-                                <span>@r.Description</span>
-                            </div>
-                        </label>
-                    </div>
-                }
+                <div class="rating">
+
+                    <input type="checkbox" 
+                           name="BlacklistedRatings"
+                           id="@r.Name"
+                           value="@r.Id" 
+                           checked="@(Model.BlacklistedRatings?.Contains(r.Id) ?? false)"
+                           class="radio">
+            
+                    <label class="radio-label active-border" for="@r.Name">
+                        <cdn-img src="@r.Icon" alt="'Rating: @r.Name" height="50" width="50" />
+                        <div class="main">
+                            <strong>@r.Name</strong>
+                            <span>@r.Description</span>
+                        </div>
+                    </label>
+                </div>
             }
+            
         </div>
+    </div>
+    
+    
+    <div class="o-form-group">
+        <h5>Tags</h5>
+        <p class="desc">Select tags to blacklist</p>
+        
+        <tag-search-select label="BlacklistedTags"
+                           ref="tags"
+                           hide-labels
+                           :preselected="@JsonSerializer.Serialize(Model.BlacklistedTags)"
+                           tags-api="@Url.RouteUrl(nameof(TagsController))">
+        </tag-search-select>
+        
+        
     </div>
 
     <br>
@@ -54,5 +70,7 @@
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <script src="~/js/dist/vue-directives/closeable.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/account/blacklists.min.js" asp-append-version="true"></script>
 }

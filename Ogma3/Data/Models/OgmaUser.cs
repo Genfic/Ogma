@@ -45,8 +45,11 @@ namespace Ogma3.Data.Models
         [JsonIgnore]
         public ICollection<OgmaRole> Roles { get; set; }
 
+        // Blacklist
         [JsonIgnore]
         public ICollection<BlacklistedRating> BlacklistedRatings { get; set; }
+        [JsonIgnore]
+        public ICollection<BlacklistedTag> BlacklistedTags { get; set; }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {

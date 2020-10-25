@@ -403,6 +403,10 @@ footer.footer > .bottom > .copy-text {
   margin-right: 1ch;
 }
 
+.tags {
+  display: flex;
+}
+
 .tag {
   display: grid;
   grid-template-areas: "main";
@@ -432,6 +436,13 @@ footer.footer > .bottom > .copy-text {
   align-self: center;
   margin: 0.1rem 0.2rem;
   z-index: 1;
+}
+.tag .material-icons-outlined {
+  font-size: inherit;
+  cursor: pointer;
+}
+.tag .material-icons-outlined:hover {
+  background-color: var(--background-25);
 }
 
 img.avatar {
@@ -1485,6 +1496,7 @@ form.confirm > .buttons .button.cancel {
 }
 .tag-search-select .output {
   visibility: collapse;
+  display: contents;
   height: 0;
   width: 0;
 }

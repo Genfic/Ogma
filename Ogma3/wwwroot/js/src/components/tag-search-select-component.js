@@ -36,6 +36,10 @@ Vue.component('tag-search-select', {
         disableWhenEmpty: {
             type: Boolean,
             default: false
+        },
+        hideLabels: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -151,12 +155,15 @@ Vue.component('tag-search-select', {
     
             <div class="o-form-group tag-search" 
                  :class="inline ? 'inline' : null"
+                 :style="{ marginTop: hideLabels ? 0 : null }"
                  v-closable="{
                     exclude: ['search'],
                     handler: 'onClose'
                  }">
-                <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
-                <p class="desc" v-if="desc && !inline">{{desc}}</p>
+                <template v-if="!hideLabels">
+                  <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
+                  <p class="desc" v-if="desc && !inline">{{desc}}</p>
+                </template>
     
                 <div class="searchbar" ref="search">
                   <div class="tags">

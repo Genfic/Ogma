@@ -1,5 +1,8 @@
 @use "../vars" as v
 
+.tags
+  display: flex
+
 .tag 
   display: grid
   grid-template-areas: "main"
@@ -28,3 +31,9 @@
     align-self: center
     margin: .1rem .2rem
     z-index: 1
+    
+  & .material-icons-outlined
+    font-size: inherit
+    cursor: pointer
+    &:hover
+      background-color: v.$background-25

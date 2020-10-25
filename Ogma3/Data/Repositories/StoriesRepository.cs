@@ -109,6 +109,26 @@ namespace Ogma3.Data.Repositories
         }
 
         /// <summary>
+        /// Gets `StoryCard` objects with a given Tag, paginates them, and sorts by release date descending
+        /// </summary>
+        /// <param name="tagId">Tag to search for</param>
+        /// <param name="perPage">Number of objects per page</param>
+        /// <param name="page">Number of the desired page</param>
+        /// <returns>Sorted, filtered, and paginated list of `StoryCard` objects</returns>
+        public async Task<List<StoryCard>> GetCardsWithTag(long tagId, int page, int perPage)
+        {
+            return await _context.Stories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetCardsWithTag)} -> {tagId}")
+                .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
+                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .OrderByDescending(s => s.ReleaseDate)
+                .Paginate(page, perPage)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Get `StoryCard` objects, sorted according to `EStorySortingOptions`, filtered, and paginated
         /// </summary>
         /// <param name="perPage">Number of objects per page</param>
@@ -185,6 +205,19 @@ namespace Ogma3.Data.Repositories
                 .CountAsync();
         }
 
+
+        /// <summary>
+        /// Counts stories with the given tag
+        /// </summary>
+        /// <param name="tagId">Tag to search for</param>
+        /// <returns>Number of stories</returns>
+        public async Task<int> CountWithTag(long tagId)
+        {
+            return await _context.Stories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetCardsWithTag)} -> {tagId}")
+                .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
+                .CountAsync();
+        }
         
         /// <summary>
         /// Apply a filter on `IQueryable` 

@@ -59,6 +59,7 @@ namespace Ogma3.Data
         
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
+        public DbSet<BlacklistedTag> BlacklistedTags { get; set; }
 
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
@@ -287,6 +288,16 @@ namespace Ogma3.Data
                     .WithMany();
                 ent.HasOne(e => e.User)
                     .WithMany(u => u.BlacklistedRatings);
+            });
+            
+            // Blacklisted tags
+            builder.Entity<BlacklistedTag>(ent =>
+            {
+                ent.HasKey(bt => new {bt.UserId, bt.TagId});
+                ent.HasOne(e => e.Tag)
+                    .WithMany();
+                ent.HasOne(e => e.User)
+                    .WithMany(u => u.BlacklistedTags);
             });
 
             // Enums

@@ -54,6 +54,12 @@ namespace Ogma3.Data
                         .Select(br => br.RatingId)
                         .Contains(s.Rating.Id)
                     )
+                    .Where(s => !ctx.BlacklistedTags
+                        .Where(bt => bt.UserId == userId)
+                        .Select(bt => bt.TagId)
+                        .Intersect(s.StoryTags.Select(st => st.TagId))
+                        .Any()
+                    )
                 : query
                     .Where(s => !s.Rating.BlacklistedByDefault);
         }
