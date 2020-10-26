@@ -60,6 +60,11 @@ namespace Ogma3.Data
                         .Intersect(s.StoryTags.Select(st => st.TagId))
                         .Any()
                     )
+                    .Where(s => !ctx.BlacklistedUsers
+                        .Where(bu => bu.UserId == userId)
+                        .Select(bu => bu.BlockedUserId)
+                        .Contains(s.AuthorId)
+                    )
                 : query
                     .Where(s => !s.Rating.BlacklistedByDefault);
         }

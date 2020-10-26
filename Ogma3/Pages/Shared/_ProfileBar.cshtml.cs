@@ -18,5 +18,8 @@ namespace Ogma3.Pages.Shared
 
         public int StoriesCount { get; set; }
         public int BlogpostsCount { get; set; }
+
+        public bool IsBlockedBy { get; set; }
+        public bool IsFollowedBy { get; set; }
     }
 }

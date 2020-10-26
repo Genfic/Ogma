@@ -36,7 +36,7 @@ namespace Ogma3.Api.V1
             return new OkObjectResult(isMember);
         }
         
-        // POST api/chaptersread
+        // POST api/clubjoin
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<bool>> PostClubMember(PostModel data)

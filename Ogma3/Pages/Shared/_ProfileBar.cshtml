@@ -1,13 +1,16 @@
 @using System.Globalization
 @using Humanizer
+@using Ogma3.Api.V1
+@using Ogma3.Services
 @using Utils
+@using Utils.Extensions
 @model ProfileBar
 
 @{
     var tab = (string) ViewData["Tab"];
 }
 
-<div class="info-bar profile-bar">
+<div class="info-bar profile-bar" id="profile-bar">
 
     <cdn-img class="img" src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" alt="@Model.UserName's avatar" loading="lazy" height="130" width="130" />
 
@@ -43,6 +46,22 @@
         </div>
         
     </div>
+    
+    <div class="buttons">
+        @if (!User.IsUserSameAsLoggedIn(Model.Id))
+        {
+            <button class="button max join" v-on:click="follow">
+                Follow
+            </button>
+
+            @* TODO: Improve the UIUX *@
+             <button class="button @(Model.IsBlockedBy ? "join" : "leave")"
+                     title="@(Model.IsBlockedBy ? "unblock" : "block")"
+                     v-on:click="block">
+                 <icon class="icon" icon="@(Model.IsBlockedBy ? "lens" : "block")"></icon>
+             </button>
+        }
+    </div>
 
     <nav class="nav">
         <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">
@@ -59,4 +78,10 @@
         </a>
     </nav>
 
+    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
+    <div v-if="!name" id="data-name" data-name="@Model.UserName.Friendlify()"></div>
+    @Html.AntiForgeryToken()
 </div>
+
+
+@Html.Resource(@<script src="~/js/dist/profile-bar.min.js" asp-append-version="true"></script>)

@@ -60,6 +60,7 @@ namespace Ogma3.Data
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
         public DbSet<BlacklistedTag> BlacklistedTags { get; set; }
+        public DbSet<BlacklistedUser> BlacklistedUsers { get; set; }
 
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
@@ -280,6 +281,8 @@ namespace Ogma3.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            
+            
             // Blacklisted ratings
             builder.Entity<BlacklistedRating>(ent =>
             {
@@ -293,13 +296,25 @@ namespace Ogma3.Data
             // Blacklisted tags
             builder.Entity<BlacklistedTag>(ent =>
             {
-                ent.HasKey(bt => new {bt.UserId, bt.TagId});
+                ent.HasKey(bt => new { bt.UserId, bt.TagId });
                 ent.HasOne(e => e.Tag)
                     .WithMany();
                 ent.HasOne(e => e.User)
                     .WithMany(u => u.BlacklistedTags);
             });
+            
+            // Blacklisted users
+            builder.Entity<BlacklistedUser>(ent =>
+            {
+                ent.HasKey(bu => new {bu.UserId, bu.BlockedUserId});
+                ent.HasOne(e => e.BlockedUser)
+                    .WithMany(u => u.BlacklistedBy);
+                ent.HasOne(e => e.User)
+                    .WithMany(u => u.BlacklistedUsers);
+            });
 
+            
+            
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();

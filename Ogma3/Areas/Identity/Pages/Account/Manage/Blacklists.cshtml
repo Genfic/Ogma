@@ -61,6 +61,20 @@
         
         
     </div>
+    
+    
+    <div class="o-form-group">
+        <h5>Users</h5>
+        <p class="desc">Users you blocked</p>
+        
+        @foreach (var u in Model.BlockedUsers)
+        {
+            <partial name="_UserCard" model="u"/>
+        }
+        
+        @* <input type="text" name="BlacklistedUsers"> *@
+        
+    </div>
 
     <br>
     

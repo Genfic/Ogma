@@ -34,7 +34,13 @@ namespace Ogma3.Data
                     pb => pb.BlogpostsCount,
                     opts 
                         => opts.MapFrom(u => u.Blogposts.Count(b => b.IsPublished))
+                )
+                .ForMember(
+                    pb => pb.IsBlockedBy,
+                    opts
+                    => opts.MapFrom(u => u.BlacklistedBy.Any(bu => bu.UserId == currentUser))
                 );
+            
             CreateMap<OgmaUser, UserProfileDto>()
                 .ForMember(
                     pb => pb.StoriesCount,
@@ -45,13 +51,20 @@ namespace Ogma3.Data
                     pb => pb.BlogpostsCount,
                     opts 
                         => opts.MapFrom(u => u.Blogposts.Count(b => b.IsPublished))
+                )
+                .ForMember(
+                    pb => pb.IsBlockedBy,
+                    opts
+                        => opts.MapFrom(u => u.BlacklistedBy.Any(bu => bu.UserId == currentUser))
                 );
+            
             CreateMap<OgmaUser, UserSimpleDto>()
                 .ForMember(
                     usd => usd.Roles,
                     opts 
                         => opts.MapFrom(u => u.Roles.OrderByDescending(r => r.Order))
                 );
+            
             CreateMap<OgmaUser, UserCard>()
                 .ForMember(
                     pb => pb.Roles,

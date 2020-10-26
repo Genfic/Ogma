@@ -50,6 +50,11 @@ namespace Ogma3.Data.Models
         public ICollection<BlacklistedRating> BlacklistedRatings { get; set; }
         [JsonIgnore]
         public ICollection<BlacklistedTag> BlacklistedTags { get; set; }
+        [JsonIgnore]
+        public ICollection<BlacklistedUser> BlacklistedUsers { get; set; }
+        
+        // Blacklist and follow meta
+        public ICollection<BlacklistedUser> BlacklistedBy { get; set; }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {

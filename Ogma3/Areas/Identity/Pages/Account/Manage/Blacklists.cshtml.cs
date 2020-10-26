@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Pages.Shared;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
@@ -25,6 +26,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             _mapper = mapper;
         }
         public IEnumerable<Rating> Ratings { get; set; }
+        public IEnumerable<UserCard> BlockedUsers { get; set; }
         
         public async Task<IActionResult> OnGetAsync()
         {
@@ -39,6 +41,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 .Where(bt => bt.UserId == uid)
                 .Select(bt => bt.TagId)
                 .ToListAsync();
+            BlockedUsers = await _context.BlacklistedUsers
+                .Where(bu => bu.UserId == uid)
+                .Select(bu => bu.BlockedUser)
+                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            
+            // TODO: add some proper UI to block/unblock users
 
             Ratings = await _context.Ratings.ToListAsync();
             

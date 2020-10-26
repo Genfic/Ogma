@@ -37,7 +37,7 @@ let comments_vue = new Vue({
                     this.highlight = this.total + 1;
                     this.page = 1;
                     this.load();
-                    this.body = null;
+                    this.body = '';
                 })
                 .catch(console.error)
         },

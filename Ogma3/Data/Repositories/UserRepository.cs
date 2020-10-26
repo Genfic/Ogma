@@ -6,6 +6,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
 using Ogma3.Pages.Shared;
+using Ogma3.Services.UserService;
+using Utils.Extensions;
 
 namespace Ogma3.Data.Repositories
 {
@@ -13,11 +15,13 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
         
-        public UserRepository(ApplicationDbContext context, IMapper mapper)
+        public UserRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
+            _userService = userService;
         }
         
         public async Task<ProfileBar> GetProfileBar(string name)
@@ -25,7 +29,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
                 .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
+                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
@@ -35,7 +39,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {id}")
                 .Where(u => u.Id == id)
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
+                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
@@ -45,7 +49,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetUserData)} -> {name}")
                 .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
@@ -55,7 +59,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetUserData)} -> {id}")
                 .Where(u => u.Id == id)
-                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
