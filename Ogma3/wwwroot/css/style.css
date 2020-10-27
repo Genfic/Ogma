@@ -916,6 +916,9 @@ ul.my-list > li.item:first-of-type {
   border: 1px solid var(--foreground-50);
   background-color: var(--background);
 }
+.comment > .main.blocked {
+  border-color: var(--red-75);
+}
 .comment > .main > .header {
   display: flex;
   align-items: center;

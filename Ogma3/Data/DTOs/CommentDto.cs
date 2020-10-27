@@ -13,5 +13,6 @@ namespace Ogma3.Data.DTOs
         public bool Owned { get; set; }
         public string Body { get; set; }
         public EDeletedBy? DeletedBy { get; set; }
+        public bool IsBlocked { get; set; }
     }
 }

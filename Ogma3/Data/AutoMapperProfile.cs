@@ -151,6 +151,11 @@ namespace Ogma3.Data
                     cd => cd.Owned,
                     opts
                         => opts.MapFrom(c => c.AuthorId == currentUser)
+                )
+                .ForMember(
+                    cd => cd.IsBlocked,
+                    opts
+                    => opts.MapFrom(c => c.Author.BlacklistedBy.Any(bu => bu.UserId == currentUser))
                 );
             
             // Comment revision mappings
