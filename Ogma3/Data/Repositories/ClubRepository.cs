@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data.Enums;
+using Ogma3.Data.Models;
 using Ogma3.Pages.Shared;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
@@ -52,9 +54,36 @@ namespace Ogma3.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<ClubCard>> SearchAndSortPaginatedClubCards(
+            int page, 
+            int perPage, 
+            string query = null, 
+            EClubSortingOptions sort = EClubSortingOptions.CreationDateDescending
+        )
+        {
+            var q = _context.Clubs.AsQueryable();
+            
+            if (!string.IsNullOrEmpty(query))
+                q = q.Where(c => EF.Functions.Like(c.Name.ToUpper(), $"%{query.Trim().ToUpper()}%"));
+
+            return await q
+                .SortByEnum(sort)
+                .Paginate(page, perPage)
+                .ProjectTo<ClubCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<int> CountClubs()
         {
             return await _context.Clubs.CountAsync();
+        }
+
+        public async Task<int> CountSearchedClubs(string query)
+        {
+            return await _context.Clubs
+                .Where(c => EF.Functions.Like(c.Name.ToUpper(), $"%{query.Trim().ToUpper()}%"))
+                .CountAsync();
         }
     }
 }

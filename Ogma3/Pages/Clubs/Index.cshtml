@@ -1,4 +1,5 @@
 @page
+@using Ogma3.Data.Enums
 @model Ogma3.Pages.Clubs.IndexModel
 
 @{
@@ -8,7 +9,20 @@
 
 <partial name="_SubNavigation" />
 
-<h1>@ViewData["Title"]</h1>
+<form id="search" class="search" method="GET">
+    <label for="title">Query</label>
+    <input class="active-border" id="title" name="q" type="text" value="@Model.Query">
+ 
+    <label for="sort">Sort</label>
+    <select class="active-border"
+            name="sort"
+            id="sort"
+            asp-for="SortBy"
+            asp-items="Html.GetEnumSelectList<EClubSortingOptions>()">
+    </select>
+    
+    <input class="active-border" type="submit" value="Search">
+</form>
 
 <a class="btn btn-block btn-outline-primary" asp-page="Create"> 
     <icon icon="add"></icon>

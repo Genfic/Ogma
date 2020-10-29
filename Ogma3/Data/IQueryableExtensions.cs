@@ -27,6 +27,7 @@ namespace Ogma3.Data
                 .Skip(Math.Max(0, page - 1) * perPage)
                 .Take(perPage);
         }
+        
         public static IQueryable<Story> SortByEnum(this IQueryable<Story> query, EStorySortingOptions order)
         {
             return order switch
@@ -42,6 +43,25 @@ namespace Ogma3.Data
                 EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
                 EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
                 _ => query.OrderByDescending(s => s.ReleaseDate)
+            };
+        }
+
+
+        public static IQueryable<Club> SortByEnum(this IQueryable<Club> query, EClubSortingOptions order)
+        {
+            return order switch
+            {
+                EClubSortingOptions.NameAscending => query.OrderBy(c => c.Name),
+                EClubSortingOptions.NameDescending => query.OrderByDescending(c => c.Name),
+                EClubSortingOptions.MembersAscending => query.OrderBy(c => c.ClubMembers.Count),
+                EClubSortingOptions.MembersDescending => query.OrderByDescending(c => c.ClubMembers.Count),
+                EClubSortingOptions.StoriesAscending => query.OrderBy(c => c.ClubStories.Count),
+                EClubSortingOptions.StoriesDescending => query.OrderByDescending(c => c.ClubStories.Count),
+                EClubSortingOptions.ThreadsAscending => query.OrderBy(c => c.Threads.Count),
+                EClubSortingOptions.ThreadsDescending => query.OrderByDescending(c => c.Threads.Count),
+                EClubSortingOptions.CreationDateAscending => query.OrderBy(c => c.CreationDate),
+                EClubSortingOptions.CreationDateDescending => query.OrderByDescending(c => c.CreationDate),
+                _ => query.OrderByDescending(c => c.CreationDate)
             };
         }
 

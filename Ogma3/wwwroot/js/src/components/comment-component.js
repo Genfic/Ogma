@@ -40,11 +40,12 @@ Vue.component('comment', {
     methods: {
         del: function () {
             if (confirm("Are you sure you want to delete?")) {
-                axios.delete(`${this.route}/${this.comment.id}`, {headers: {"RequestVerificationToken": this.csrf}})
-                    .then(res => {
-                        console.log(res.data)
-                        this.mutComment = res.data;
+                axios.delete(`${this.route}/${this.comment.id}`, {
+                        headers: {
+                            "RequestVerificationToken": this.csrf
+                        }
                     })
+                    .then(res => this.mutComment = res.data)
                     .catch(console.error);
             }
         },
@@ -53,7 +54,11 @@ Vue.component('comment', {
             if (this.editData && this.editData.id === this.comment.id) return;
 
             this.editData = null;
-            axios.get(`${this.route}/md`, {params: {id: this.comment.id}})
+            axios.get(`${this.route}/md`, {
+                    params: {
+                        id: this.comment.id
+                    }
+                })
                 .then(res => {
                     this.editData = {
                         id: this.comment.id,
@@ -72,12 +77,12 @@ Vue.component('comment', {
             };
 
             axios.patch(this.route, data, {
-                headers: {"RequestVerificationToken": this.csrf}
-            })
+                    headers: {
+                        "RequestVerificationToken": this.csrf
+                    }
+                })
                 .then(res => {
-                    this.mutComment.body = res.data.body;
-                    this.mutComment.editCount = res.data.editCount;
-                    this.mutComment.lastEdit = res.data.lastEdit;
+                    Object.assign(this.mutComment, res.data);
                     this.editData = null;
                 })
                 .catch(console.error)
@@ -86,14 +91,12 @@ Vue.component('comment', {
         history: function () {
             if (this.revisions.length > 0) {
                 this.revisions = [];
+            } else if (this.revisionsCache !== null) {
+                this.revisions = this.revisionsCache
             } else {
-                if (this.revisionsCache !== null) {
-                    this.revisions = this.revisionsCache
-                } else {
-                    axios.get(`${this.route}/revisions/${this.comment.id}`)
-                        .then(res => this.revisionsCache = this.revisions = res.data)
-                        .catch(console.error);
-                }
+                axios.get(`${this.route}/revisions/${this.comment.id}`)
+                    .then(res => this.revisionsCache = this.revisions = res.data)
+                    .catch(console.error);
             }
         },
 
@@ -102,8 +105,8 @@ Vue.component('comment', {
             e.preventDefault();
             this.$emit('change-hl', (this.idx + 1));
         },
-        
-        toggleShow: function() {
+
+        toggleShow: function () {
             if (this.comment.isBlocked) {
                 this.hide = !this.hide;
             }
@@ -206,7 +209,8 @@ Vue.component('comment', {
           </form>
 
           <span v-if="mutComment.lastEdit" class="edit-data">
-            Edited <span class="link" v-on:click="history">{{ mutComment.editCount }} times</span>, last edit: <time :datetime="mutComment.lastEdit">{{ date(mutComment.lastEdit) }}</time>
+            Edited <span class="link" v-on:click="history">{{ mutComment.editCount }} times</span>, last edit: <time
+              :datetime="mutComment.lastEdit">{{ date(mutComment.lastEdit) }}</time>
           </span>
 
           <ol v-if="revisions.length > 0" class="history">
