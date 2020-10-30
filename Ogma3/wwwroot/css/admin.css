@@ -1,0 +1,15 @@
+.autoform details {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: var(--foreground-10);
+  border: 1px solid var(--foreground-25);
+}
+.autoform details:hover {
+  border-color: var(--foreground-50);
+}
+.autoform details:focus {
+  border-color: var(--accent);
+}
+.autoform details summary {
+  font-size: 1.1rem;
+}

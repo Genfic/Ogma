@@ -16,17 +16,17 @@ namespace Ogma3.Pages.Blog
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public IndexModel(ApplicationDbContext context, IMapper mapper)
+        private readonly OgmaConfig _config;
+        public IndexModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config)
         {
             _context = context;
             _mapper = mapper;
+            _config = config;
         }
         
         public IList<BlogpostCard> Posts { get;set; }
         public string SearchBy { get; set; }
         public EBlogpostSortingOptions SortBy { get; set; }
-
-        private const int PerPage = 25;
         public Pagination Pagination { get; set; }
 
         public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
@@ -76,8 +76,8 @@ namespace Ogma3.Pages.Blog
             Posts = await query
                 .Include(b => b.Author)
                 .Where(b => b.IsPublished)
-                .Paginate(page, PerPage)
-                .Take(PerPage)
+                .Paginate(page, _config.BlogpostsPerPage)
+                .Take(_config.BlogpostsPerPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
@@ -85,7 +85,7 @@ namespace Ogma3.Pages.Blog
             // Prepare pagination model
             Pagination = new Pagination
             {
-                PerPage = PerPage,
+                PerPage = _config.BlogpostsPerPage,
                 ItemCount = postsCount,
                 CurrentPage = page
             };

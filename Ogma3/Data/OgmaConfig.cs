@@ -1,7 +1,9 @@
+using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Data
 {
@@ -55,12 +57,30 @@ namespace Ogma3.Data
         #endregion
         
         #region Data proper
+        
         public string Cdn { get; set; }
         public string AdminEmail { get; set; }
         public int MaxInvitesPerUser { get; set; }
-        public int CommentsPerPage { get; set; }
+        
+        // Docs
+        
+        [AutoformCategory("Docs")]
         public string PrivacyPolicyDoc { get; set; }
+        [AutoformCategory("Docs")]
         public string AboutDoc { get; set; }
+        
+        // Pagination settings
+        [AutoformCategory("Pagination")]
+        public int CommentsPerPage { get; set; } = 25;
+        
+        [AutoformCategory("Pagination")]
+        public int ClubsPerPage { get; set; } = 25;
+        
+        [AutoformCategory("Pagination")]
+        public int BlogpostsPerPage { get; set; } = 25;
+        
+        [AutoformCategory("Pagination")]
+        public int StoriesPerPage { get; set; } = 25;
 
         #endregion
     }

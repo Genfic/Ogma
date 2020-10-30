@@ -18,5 +18,8 @@
 </div>
 
 @section Scripts {
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
+}
+@section CSS {
+    <link rel="stylesheet" href="~/css/admin.min.css" asp-append-version="true">
 }

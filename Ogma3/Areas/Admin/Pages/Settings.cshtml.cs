@@ -26,7 +26,7 @@ namespace Ogma3.Areas.Admin.Pages
             Config = _config;
         }
 
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             foreach (var prop in typeof(OgmaConfig).GetProperties().Where(p => p.CanWrite))
             {
@@ -34,6 +34,7 @@ namespace Ogma3.Areas.Admin.Pages
             }
             
             await _config.PersistAsync();
+            return RedirectToPage("./Settings");
         }
 
     }

@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Infrastructure.TagHelpers
 {
@@ -26,36 +31,50 @@ namespace Ogma3.Infrastructure.TagHelpers
         {
             output.TagName = "form";
             output.AddClass("form", NullHtmlEncoder.Default);
+            output.AddClass("autoform", NullHtmlEncoder.Default);
             output.Attributes.Add("id", "config");
             output.Attributes.Add("method", "post");
 
             var obj = For.Model;
-            var props = obj.GetType().GetProperties();
             var objName = For.Name;
 
-            foreach (var prop in props)
-            {
-                var type = Type.GetTypeCode(prop.PropertyType) switch
-                {
-                    TypeCode.Int16    => "number",
-                    TypeCode.Int32    => "number",
-                    TypeCode.Int64    => "number",
-                    TypeCode.UInt16   => "number",
-                    TypeCode.UInt32   => "number",
-                    TypeCode.UInt64   => "number",
-                    TypeCode.Double   => "number",
-                    TypeCode.Decimal  => "number",
-                    TypeCode.Boolean  => "checkbox",
-                    TypeCode.DateTime => "date",
-                    _                 => "text"
-                };
-                var label = prop.Name;
-                var value = prop.GetValue(obj);
+            var groupedProps = obj
+                .GetType()
+                .GetProperties()
+                .GroupBy(p => p.GetCustomAttribute<AutoformCategoryAttribute>()?.Name ?? "General")
+                .ToDictionary(p => p.Key, p => p.ToList());
 
-                output.Content.AppendHtml("<div class='o-form-group'>");
-                output.Content.AppendHtml($"<label for='{objName}_{label}'>{label}</label>");
-                output.Content.AppendHtml($"<input type='{type}' id='{objName}_{label}' name='{objName}.{label}' value='{value}' class='o-form-control active-border'>");
-                output.Content.AppendHtml("</div>");
+            foreach (var (key, propertyInfos) in groupedProps)
+            {
+                output.Content.AppendHtml("<details>");
+                output.Content.AppendHtml($"<summary>{key}</summary>");
+                
+                foreach (var prop in propertyInfos)
+                {
+                    var type = Type.GetTypeCode(prop.PropertyType) switch
+                    {
+                        TypeCode.Int16    => "number",
+                        TypeCode.Int32    => "number",
+                        TypeCode.Int64    => "number",
+                        TypeCode.UInt16   => "number",
+                        TypeCode.UInt32   => "number",
+                        TypeCode.UInt64   => "number",
+                        TypeCode.Double   => "number",
+                        TypeCode.Decimal  => "number",
+                        TypeCode.Boolean  => "checkbox",
+                        TypeCode.DateTime => "date",
+                        _                 => "text"
+                    };
+                    var label = prop.Name;
+                    var value = prop.GetValue(obj);
+
+                    output.Content.AppendHtml("<div class='o-form-group'>");
+                    output.Content.AppendHtml($"<label for='{objName}_{label}'>{label}</label>");
+                    output.Content.AppendHtml($"<input type='{type}' id='{objName}_{label}' name='{objName}.{label}' value='{value}' class='o-form-control active-border'>");
+                    output.Content.AppendHtml("</div>");
+                }
+                
+                output.Content.AppendHtml("</details>");
             }
             
             output.Content.AppendHtml("<div class='o-form-group'>");

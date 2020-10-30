@@ -15,10 +15,12 @@ namespace Ogma3.Pages.Stories
     {
         private readonly ApplicationDbContext _context;
         private readonly StoriesRepository _storiesRepo;
-        public IndexModel(ApplicationDbContext context, StoriesRepository storiesRepo)
+        private readonly OgmaConfig _config;
+        public IndexModel(ApplicationDbContext context, StoriesRepository storiesRepo, OgmaConfig config)
         {
             _context = context;
             _storiesRepo = storiesRepo;
+            _config = config;
         }
 
         public List<Rating> Ratings { get; set; }
@@ -27,8 +29,6 @@ namespace Ogma3.Pages.Stories
         public EStorySortingOptions SortBy { get; set; }
         public string SearchBy { get; set; }
         public long? Rating { get; set; }
-
-        private const int PerPage = 25;
         public Pagination Pagination { get; set; }
         
         public async Task OnGetAsync(
@@ -48,12 +48,12 @@ namespace Ogma3.Pages.Stories
             Ratings = await _context.Ratings.ToListAsync();
 
             // Load stories
-            Stories = await _storiesRepo.SearchAndSortStoryCards(PerPage, page, tags, q, rating, sort);
+            Stories = await _storiesRepo.SearchAndSortStoryCards(_config.StoriesPerPage, page, tags, q, rating, sort);
             
             // Prepare pagination
             Pagination = new Pagination
             {
-                PerPage = PerPage,
+                PerPage = _config.StoriesPerPage,
                 ItemCount = await _storiesRepo.CountSearchResults(tags, q, rating),
                 CurrentPage = page
             };

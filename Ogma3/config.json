@@ -2,6 +2,10 @@
   "Cdn": "//cdn.genfic.net/file/Ogma-net/",
   "AdminEmail": "admin@genfic.net",
   "MaxInvitesPerUser": 5,
+  "PrivacyPolicyDoc": "privacy-policy",
+  "AboutDoc": null,
   "CommentsPerPage": 20,
-  "PrivacyPolicyDoc": "privacy-policy"
+  "ClubsPerPage": 25,
+  "BlogpostsPerPage": 25,
+  "StoriesPerPage": 25
 }
