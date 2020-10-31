@@ -21,12 +21,14 @@ namespace Ogma3.Pages.Stories
     {
         private readonly ApplicationDbContext _context;
         private readonly FileUploader _uploader;
+        private readonly OgmaConfig _config;
 
 
-        public EditModel(ApplicationDbContext context, FileUploader uploader)
+        public EditModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config)
         {
             _context = context;
             _uploader = uploader;
+            _config = config;
         }
 
         public List<Rating> Ratings { get; set; }
@@ -110,7 +112,7 @@ namespace Ogma3.Pages.Stories
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(long? id)
         {
             Ratings = await _context.Ratings.ToListAsync();
             
@@ -148,7 +150,13 @@ namespace Ogma3.Pages.Stories
                 if (Input.Cover != null && Input.Cover.Length > 0)
                 {
                     // Upload cover
-                    var file = await _uploader.Upload(Input.Cover, "covers", $"{story.Id}-{story.Slug}");
+                    var file = await _uploader.Upload(
+                        Input.Cover, 
+                        "covers", 
+                        $"{story.Id}-{story.Slug}",
+                        _config.StoryCoverWidth,
+                        _config.StoryCoverHeight
+                    );
                     story.CoverId = file.FileId;
                     story.Cover = file.Path;
                     // Final save

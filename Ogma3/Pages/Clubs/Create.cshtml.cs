@@ -19,12 +19,14 @@ namespace Ogma3.Pages.Clubs
         private readonly ApplicationDbContext _context;
         private readonly OgmaUserManager _userManager;
         private readonly FileUploader _uploader;
+        private readonly OgmaConfig _config;
 
-        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager, FileUploader uploader)
+        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager, FileUploader uploader, OgmaConfig config)
         {
             _context = context;
             _userManager = userManager;
             _uploader = uploader;
+            _config = config;
         }
 
         public IActionResult OnGet()
@@ -86,7 +88,13 @@ namespace Ogma3.Pages.Clubs
             
             if (Input.Icon != null && Input.Icon.Length > 0)
             {
-                var file = await _uploader.Upload(Input.Icon, "club-icons", $"{club.Id}-{club.Name.Friendlify()}");
+                var file = await _uploader.Upload(
+                    Input.Icon, 
+                    "club-icons", 
+                    $"{club.Id}-{club.Name.Friendlify()}",
+                    _config.ClubIconWidth,
+                    _config.ClubIconHeight
+                );
                 club.IconId = file.FileId;
                 club.Icon = file.Path;
                 // Final save

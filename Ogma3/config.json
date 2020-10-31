@@ -7,5 +7,7 @@
   "CommentsPerPage": 20,
   "ClubsPerPage": 25,
   "BlogpostsPerPage": 25,
-  "StoriesPerPage": 25
+  "StoriesPerPage": 25,
+  "StoryCoverWidth": 200,
+  "StoryCoverHeight": 200
 }

@@ -112,7 +112,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 }
 
                 // Upload the new one
-                var file = await _uploader.Upload(Input.Avatar, "avatars", $"{user.Id}-{user.NormalizedUserName}");
+                var file = await _uploader.Upload(
+                    Input.Avatar, 
+                    "avatars", 
+                    $"U-{user.NormalizedUserName}",
+                    _ogmaConfig.AvatarWidth,
+                    _ogmaConfig.AvatarHeight
+                );
                 user.AvatarId = file.FileId;
                 user.Avatar = file.Path;
             }

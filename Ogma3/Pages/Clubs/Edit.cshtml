@@ -2,7 +2,7 @@
 @model Ogma3.Pages.Clubs.EditModel
 
 @{
-    ViewData["Title"] = $"Edit {Model.Club.Name}";
+    ViewData["Title"] = $"Edit {Model.Input.Name}";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -17,16 +17,16 @@
                    :min="@CTConfig.CClub.MinNameLength"
                    :max="@CTConfig.CClub.MaxNameLength"
                    validate-msg="@CTConfig.CClub.ValidateLengthMsg"
-                   label="@nameof(Model.Club.Name)"
-                   value="@Model.Club.Name"
+                   label="@nameof(Model.Input.Name)"
+                   value="@Model.Input.Name"
                    desc="Try something catchy">
     </input-counter>
 
     <textarea-counter ref="desc"
                       :max="@CTConfig.CClub.MaxDescriptionLength"
                       validate-msg="@CTConfig.CClub.ValidateLengthMsg"
-                      label="@nameof(Model.Club.Description)"
-                      value="@Model.Club.Description"
+                      label="@nameof(Model.Input.Description)"
+                      value="@Model.Input.Description"
                       desc="This will show on the club's home page">
     </textarea-counter>
 
@@ -34,15 +34,15 @@
                    :min="@CTConfig.CClub.MinHookLength"
                    :max="@CTConfig.CClub.MaxHookLength"
                    validate-msg="@CTConfig.CClub.ValidateLengthMsg"
-                   label="@nameof(Model.Club.Hook)"
-                   value="@Model.Club.Hook"
+                   label="@nameof(Model.Input.Hook)"
+                   value="@Model.Input.Hook"
                    desc="The short description that will appear on the clubs list">
     </input-counter>
 
     <input-file ref="cover"
                 :max="@CTConfig.CClub.CoverMaxWeight"
                 validate-msg="@CTConfig.CClub.ValidateFileWeight"
-                label="@nameof(Model.Club.Icon)"
+                label="@nameof(Model.Input.Icon)"
                 desc="Something that will set your club apart">
     </input-file>
 
