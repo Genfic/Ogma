@@ -84,5 +84,9 @@ namespace Ogma3.Data.Models
         [Required]
         [DefaultValue(0)]
         public int ChapterCount { get; set; }
+
+        // Just for relationship purposes
+        [JsonIgnore]
+        public ICollection<Folder> Folders { get; set; }
     }
 }

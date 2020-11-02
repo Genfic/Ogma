@@ -23,7 +23,7 @@
     <div class="info">
         <div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
         <div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
-        <div class="story-count">@Model.ClubStoriesCount @(Model.ClubStoriesCount == 1 ?"story" : "stories")</div>
+        <div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ?"story" : "stories")</div>
     </div>
     
     <div class="buttons">
@@ -53,7 +53,7 @@
         <a class="nav-item @(tab == "Forums" ? "active" : null)" asp-area="" asp-page="/Club/Forums/Index" asp-route-id="@Model.Id">
             Forums
         </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-id="@Model.Id">
+        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/Club/Folders/Index" asp-route-clubId="@Model.Id">
             Stories
         </a>
     </nav>

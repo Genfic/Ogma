@@ -137,6 +137,11 @@ namespace Ogma3.Data
                     cb => cb.IsMember,
                     opts 
                         => opts.MapFrom(c => c.ClubMembers.Any(cm => cm.MemberId == currentUser))
+                )
+                .ForMember(
+                    cb => cb.StoriesCount,
+                    opts
+                    => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
                 );
             CreateMap<Club, ClubCard>();
             

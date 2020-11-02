@@ -12,7 +12,7 @@ namespace Ogma3.Pages.Shared
         public DateTime CreationDate { get; set; }
         public int ClubMembersCount { get; set; }
         public int ThreadsCount { get; set; }
-        public int ClubStoriesCount { get; set; }
+        public int StoriesCount { get; set; }
         public bool IsMember { get; set; }
         public long FounderId { get; set; }
     }

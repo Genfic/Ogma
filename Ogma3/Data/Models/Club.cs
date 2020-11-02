@@ -29,37 +29,8 @@ namespace Ogma3.Data.Models
         
         [JsonIgnore]
         public ICollection<ClubMember> ClubMembers { get; set; }
-
-        [NotMapped]
-        public IEnumerable<OgmaUser> Members
-        {
-            get => ClubMembers == null || ClubMembers.Count <= 0
-                ? new List<OgmaUser>()
-                : ClubMembers.Select(cm => cm.Member).ToList();
-            set => ClubMembers = value.Select(u => new ClubMember
-            {
-                Member = u,
-                MemberId = u.Id
-            }).ToList();
-        }
-
-        [JsonIgnore]
-        public ICollection<ClubStory> ClubStories { get; set; }
-
-        [NotMapped]
-        public IEnumerable<Story> Stories
-        {
-            get => ClubStories == null || ClubStories.Count <= 0
-                ? new List<Story>() 
-                : ClubStories.Select(cs => cs.Story).ToList(); 
-            set => ClubStories = value.Select(s => new ClubStory
-            {
-                Story = s,
-                StoryId = s.Id
-            }).ToList();
-        }
         
         public ICollection<ClubThread> Threads { get; set; }
-        
+        public ICollection<Folder> Folders { get; set; }
     }
 }

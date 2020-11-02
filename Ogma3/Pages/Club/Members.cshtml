@@ -1,8 +1,8 @@
-@page "{id}"
+@page "/club/{id}/members"
 @model Ogma3.Pages.Club.Members
 
 @{
-    ViewData["Title"] = Model.ClubBar.Name;
+    ViewData["Title"] = $"{Model.ClubBar.Name} — Members";
     ViewData["Tab"] = "Members";
 }
 

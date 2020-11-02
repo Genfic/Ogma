@@ -1,0 +1,24 @@
+@page "/club/{clubid}/folder/{id?}"
+@model Ogma3.Pages.Club.Folders.FolderModel
+
+
+@{
+    ViewData["Title"] = $"{Model.ClubBar.Name} — {Model.Folder.Name}";
+    ViewData["Tab"] = "Stories";
+}
+
+<partial name="_ClubBar" model="@Model.ClubBar"/>
+
+<h1>@Model.Folder.Name</h1>
+
+<span>@Model.Folder.Description</span>
+
+<ol>
+    @foreach (var folder in Model.Folder.ChildFolders)
+    {
+        <li>
+            <strong>@folder.Name</strong><br>
+            <em>@folder.Description</em>
+        </li>
+    }
+</ol>

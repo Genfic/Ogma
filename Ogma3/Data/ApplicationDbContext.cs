@@ -49,7 +49,7 @@ namespace Ogma3.Data
         public DbSet<Club> Clubs { get; set; }
         public DbSet<ClubMember> ClubMembers { get; set; }
         public DbSet<ClubThread> ClubThreads { get; set; }
-        public DbSet<ClubStory> ClubStories { get; set; }
+        public DbSet<Folder> Folders { get; set; }
 
 
         // Secondary
@@ -243,6 +243,10 @@ namespace Ogma3.Data
                 ent.HasMany(c => c.Threads)
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
+                ent.HasMany(c => c.Folders)
+                    .WithOne(f => f.Club)
+                    .HasForeignKey(f => f.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Club members
@@ -269,18 +273,16 @@ namespace Ogma3.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // Club stories
-            builder.Entity<ClubStory>(ent =>
+            // Folders
+            builder.Entity<Folder>(ent =>
             {
-                ent.HasKey(cs => new {cs.ClubId, cs.StoryId});
-                ent.HasOne(cs => cs.Club)
-                    .WithMany(c => c.ClubStories)
+                ent.HasMany(f => f.ChildFolders)
+                    .WithOne(f => f.ParentFolder)
+                    .HasForeignKey(f => f.ParentFolderId)
                     .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(cs => cs.Story)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasMany(f => f.Stories)
+                    .WithMany(s => s.Folders);
             });
-
             
             
             // Blacklisted ratings

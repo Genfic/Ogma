@@ -54,6 +54,7 @@ namespace Ogma3
             services.AddScoped<ChaptersRepository>();
             services.AddScoped<BlogpostsRepository>();
             services.AddScoped<CommentsRepository>();
+            services.AddScoped<FoldersRepository>();
 
             // Custom persistent config
             services.AddSingleton(OgmaConfig.Init("config.json"));
