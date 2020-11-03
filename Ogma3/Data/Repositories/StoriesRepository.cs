@@ -128,6 +128,20 @@ namespace Ogma3.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<StoryCard>> GetPaginatedCardsOfFolder(long folderId, int page, int perPage)
+        {
+            return await _context.FolderStories
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetPaginatedCardsOfFolder)} -> {folderId}")
+                .Where(s => s.FolderId == folderId)
+                .Select(s => s.Story)
+                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .OrderByDescending(s => s.ReleaseDate)
+                .Paginate(page, perPage)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         /// <summary>
         /// Get `StoryCard` objects, sorted according to `EStorySortingOptions`, filtered, and paginated
         /// </summary>
@@ -218,6 +232,7 @@ namespace Ogma3.Data.Repositories
                 .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
                 .CountAsync();
         }
+        
         
         /// <summary>
         /// Apply a filter on `IQueryable` 

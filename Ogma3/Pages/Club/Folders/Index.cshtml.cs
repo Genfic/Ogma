@@ -21,14 +21,14 @@ namespace Ogma3.Pages.Club.Folders
         
         public ClubBar ClubBar { get; set; }
 
-        public ICollection<Folder> Folders { get; set; }
+        public ICollection<FolderCard> Folders { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long clubId, long id)
         {
             ClubBar = await _clubRepo.GetClubBar(clubId);
             if (ClubBar == null) return NotFound();
 
-            Folders = await _foldersRepo.GetTopLevelOfClub(clubId);
+            Folders = await _foldersRepo.GetClubFolderCards(clubId);
             
             return Page();
 

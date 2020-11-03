@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using Markdig;
@@ -170,6 +171,12 @@ namespace Ogma3.Data
                     opts
                         => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md))
                 );
+            
+            // Folder mappings
+            CreateMap<Folder, FolderCard>();
+            CreateMap<Folder, FolderMinimal>();
+            CreateMap<Folder, FolderMinimalDto>();
+            CreateMap<Folder, FolderDto>();
             
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();

@@ -11,11 +11,14 @@ body {
 body > header {
   width: 100%;
 }
-body > #site-content {
+body > #site-content, body > #site-content-wide {
   margin-top: 3.5rem;
   padding: 15px;
   flex: 1;
   max-width: 960px;
+}
+body > #site-content-wide {
+  max-width: 1200px;
 }
 body > footer {
   width: 100%;
@@ -1107,6 +1110,9 @@ ul.items-list li .deco > * {
   font-weight: bold;
   color: var(--background);
   text-shadow: 1px 1px 0 var(--foreground-75);
+}
+ul.items-list li .deco > i {
+  min-width: unset;
 }
 ul.items-list li .name {
   font-size: 1.2rem;
@@ -2368,6 +2374,80 @@ form.search select:focus {
   height: 0.25rem;
   border-radius: 50%;
   background-color: var(--foreground-75);
+}
+
+.folder-card {
+  display: grid;
+  grid-template-columns: 1fr 4rem;
+  grid-template-rows: auto auto 1fr;
+  padding: 0.5rem;
+}
+.folder-card .name {
+  grid-row: 1;
+  grid-column: 1;
+  font-weight: bold;
+  font-size: 110%;
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+  color: var(--foreground);
+}
+.folder-card .name:hover {
+  color: var(--accent);
+}
+.folder-card .desc {
+  grid-row: 2;
+  grid-column: 1;
+}
+.folder-card .children {
+  grid-row: 3;
+  grid-column: 1;
+  display: flex;
+  margin: 0.2rem -0.25rem 0;
+}
+.folder-card .children .child {
+  padding: 0.25rem;
+  margin: 0 0.25rem;
+  color: var(--foreground);
+}
+.folder-card .children .child:hover {
+  color: var(--accent);
+}
+.folder-card .count {
+  grid-row: 1/4;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.folder-card .count strong {
+  font-size: 120%;
+}
+
+.folder-minimal {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+}
+.folder-minimal .name {
+  flex: 1;
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+  color: var(--foreground);
+}
+.folder-minimal .name:hover {
+  color: var(--accent);
+}
+.folder-minimal .count {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.folder-minimal .count strong {
+  font-size: 110%;
+  margin-right: 0.5ch;
 }
 
 .md p {

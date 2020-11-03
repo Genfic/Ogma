@@ -9,18 +9,9 @@
 
 <partial name="_ClubBar" model="@Model.ClubBar"/>
 
-<ol>
+<ul class="folders-list">
     @foreach (var folder in Model.Folders)
     {
-        <li>
-            <h3>@folder.Name</h3><br>
-            <em>@folder.Description</em>
-            <ol>
-                @foreach (var inner in folder.ChildFolders)
-                {
-                    <strong>@inner.Name</strong>
-                }
-            </ol>
-        </li>
+        <partial name="Shared/_FolderCard" model="folder"/>
     }
-</ol>
+</ul>

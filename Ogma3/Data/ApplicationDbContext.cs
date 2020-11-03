@@ -50,6 +50,7 @@ namespace Ogma3.Data
         public DbSet<ClubMember> ClubMembers { get; set; }
         public DbSet<ClubThread> ClubThreads { get; set; }
         public DbSet<Folder> Folders { get; set; }
+        public DbSet<FolderStory> FolderStories { get; set; }
 
 
         // Secondary
@@ -281,7 +282,15 @@ namespace Ogma3.Data
                     .HasForeignKey(f => f.ParentFolderId)
                     .OnDelete(DeleteBehavior.Cascade);
                 ent.HasMany(f => f.Stories)
-                    .WithMany(s => s.Folders);
+                    .WithMany(s => s.Folders)
+                    .UsingEntity<FolderStory>(
+                        fs => fs.HasOne(f => f.Story)
+                            .WithMany()
+                            .HasForeignKey(f => f.StoryId),
+                        fs => fs.HasOne(f => f.Folder)
+                            .WithMany()
+                            .HasForeignKey(f => f.FolderId)
+                        );
             });
             
             

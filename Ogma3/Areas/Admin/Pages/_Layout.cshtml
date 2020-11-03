@@ -1,12 +1,11 @@
 ﻿@{
-    Layout = "/Pages/Shared/_Layout.cshtml";
+    Layout = "/Pages/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Admin panel</h1>
+<h1>Admin panel - @ViewData["Title"]</h1>
+<br>
 
 <div>
-    <h4>@ViewData["Title"]</h4>
-    <hr />
     <div class="row">
         <div class="col-md-3">
             <partial name="_ManageNav"></partial>

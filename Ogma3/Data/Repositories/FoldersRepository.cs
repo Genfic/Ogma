@@ -2,8 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Data.Repositories
 {
@@ -18,23 +21,24 @@ namespace Ogma3.Data.Repositories
             _mapper = mapper;
         }
 
-        public async Task<ICollection<Folder>> GetTopLevelOfClub(long clubId)
+        public async Task<ICollection<FolderCard>> GetClubFolderCards(long clubId)
         {
             return await _context.Folders
                 .Where(f => f.ClubId == clubId)
                 .Where(f => f.ParentFolderId == null)
-                .Include(f => f.ChildFolders)
+                .ProjectTo<FolderCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<Folder> GetFolder(long id)
+        public async Task<FolderDto> GetFolder(long id, int page, int perPage)
         {
             return await _context.Folders
                 .Where(f => f.Id == id)
-                .Include(f => f.ChildFolders)
+                .ProjectTo<FolderDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
+
     }
 }

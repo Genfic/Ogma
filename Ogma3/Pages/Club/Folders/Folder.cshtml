@@ -13,12 +13,29 @@
 
 <span>@Model.Folder.Description</span>
 
-<ol>
+<hr>
+
+<div class="folder-list">
     @foreach (var folder in Model.Folder.ChildFolders)
     {
-        <li>
-            <strong>@folder.Name</strong><br>
-            <em>@folder.Description</em>
-        </li>
+        <partial name="Shared/_FolderMinimal" model="folder"/>
     }
-</ol>
+</div>
+
+<hr>
+
+<div>
+    @if (Model.Stories.Count <= 0)
+    {
+        <h3>No stories found</h3>
+    }
+    else
+    {
+        foreach (var story in Model.Stories)
+        {
+            <partial name="Shared/_StoryCard" model="@story"/>
+        }
+        
+         <partial name="_Pagination" model="Model.Pagination"/>
+    }
+</div>
