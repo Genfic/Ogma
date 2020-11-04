@@ -54,7 +54,7 @@ namespace Ogma3.Data
 
             public const int MaxNotesLength = 500;
             
-            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
             public const string ValidateNoteLengthMsg = "The {0} cannot exceed {1} characters.";
         }
         
@@ -72,7 +72,7 @@ namespace Ogma3.Data
 
             public const int MinTagCount = 3;
             
-            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
             public const string ValidateFileWeight = "The {0} must be less than {1} bytes";
             public const string ValidateTagCount = "You must select {0} tags or more";
         }
@@ -99,7 +99,7 @@ namespace Ogma3.Data
             public const int MinBodyLength = 50;
             public const int MaxBodyLength = 500_000;
 
-            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
             
             public const int MaxTagsAmount = 10;
             public const string ValidateTagsCountMsg = "The {0} can have a maximum of {1} tags.";
@@ -117,7 +117,7 @@ namespace Ogma3.Data
             
             public const int CoverMaxWeight = 2 * 1024 * 1024;
             
-            public const string ValidateLengthMsg = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
             public const string ValidateFileWeight = "The {0} must be less than {1} bytes";
         }
 
@@ -128,6 +128,16 @@ namespace Ogma3.Data
 
             public const int MinBodyLength = 20;
             public const int MaxBodyLength = 25_000;
+        }
+
+        public static class CFolder
+        {
+            public const int MinNameLength = 3;
+            public const int MaxNameLength = 20;
+            
+            public const int MaxDescriptionLength = 100;
+            
+            public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
         }
 
         public static class CClubThreadComment

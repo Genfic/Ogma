@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 
@@ -35,7 +34,7 @@ namespace Ogma3.Pages.Club.Folders
             ClubBar = await _clubRepo.GetClubBar(clubId);
             if (ClubBar == null) return NotFound();
 
-            Folder = await _foldersRepo.GetFolder(id, page, _config.StoriesPerPage);
+            Folder = await _foldersRepo.GetFolder(id);
             Stories = await _storiesRepo.GetPaginatedCardsOfFolder(id, page, _config.StoriesPerPage);
 
             // Prepare pagination

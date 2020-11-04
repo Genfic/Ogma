@@ -5,7 +5,7 @@
         @Model.Name
     </a>
     
-    <span class="desc">@Model.Description</span>
+    <markdown preset="Basic" class="desc">@Model.Description</markdown>
     
     <div class="children">
         @foreach (var inner in Model.ChildFolders)

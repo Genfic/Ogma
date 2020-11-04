@@ -11,7 +11,7 @@ namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(VotesController))]
     [ApiController]
-    public class VotesController : Controller
+    public class VotesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly OgmaUserManager _userManager;

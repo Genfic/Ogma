@@ -16,7 +16,7 @@ namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(ShelvesController))]
     [ApiController]
-    public class ShelvesController : Controller
+    public class ShelvesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<OgmaUser> _userManager;

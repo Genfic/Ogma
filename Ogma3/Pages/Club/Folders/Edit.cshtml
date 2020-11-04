@@ -1,0 +1,47 @@
+@page "/club/{clubid}/folder/{id}/edit"
+@using Ogma3.Api.V1
+@model Ogma3.Pages.Club.Folders.EditModel
+
+@{
+    ViewData["Title"] = "Create a new folder";
+}
+
+<form method="post" class="form" id="folder" v-on:submit="onSubmit">
+    
+    <div asp-validation-summary="All">
+        <span>Please correct the following errors</span>
+    </div>
+    
+    <folder-tree :club-id="@Model.ClubId"
+                 route="@Url.RouteUrl(nameof(FoldersController))">
+    </folder-tree>
+
+    <input-counter ref="name"
+                   :min="@CTConfig.CFolder.MinNameLength"
+                   :max="@CTConfig.CFolder.MaxNameLength"
+                   validate-msg="@CTConfig.CFolder.ValidateLengthMsg"
+                   value="@Model.Input.Name"
+                   label="@nameof(Model.Input.Name)">
+    </input-counter>
+
+    <textarea-counter ref="desc"
+                      :max="@CTConfig.CFolder.MaxDescriptionLength"
+                      validate-msg="@CTConfig.CFolder.ValidateLengthMsg"
+                      value="@Model.Input.Description"
+                      label="@nameof(Model.Input.Description)">
+    </textarea-counter>
+    
+    <input type="hidden" name="id" value="@Model.Input.Id">
+    
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+    
+</form>
+
+@section Scripts {
+    <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/editors/folder.min.js" asp-append-version="true"></script>
+}

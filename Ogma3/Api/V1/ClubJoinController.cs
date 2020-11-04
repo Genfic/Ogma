@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(ClubJoinController))]
     [ApiController]
-    public class ClubJoinController : Controller
+    public class ClubJoinController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 

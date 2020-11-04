@@ -54,6 +54,17 @@ namespace Ogma3.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<bool> CheckRoles(long clubId, long userId, IEnumerable<EClubMemberRoles> roles)
+        {
+            return await _context.Clubs
+                .TagWith($"{nameof(ClubRepository)} : {nameof(CheckRoles)} — {clubId}, {userId}")
+                .Where(c => c.Id == clubId)
+                .Where(c => c.ClubMembers
+                    .Any(cm => cm.MemberId == userId && roles.Contains(cm.Role))
+                )
+                .AnyAsync();
+        }
+
         public async Task<List<ClubCard>> SearchAndSortPaginatedClubCards(
             int page, 
             int perPage, 

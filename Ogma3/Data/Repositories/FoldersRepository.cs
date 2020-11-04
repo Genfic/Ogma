@@ -31,13 +31,22 @@ namespace Ogma3.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<FolderDto> GetFolder(long id, int page, int perPage)
+        public async Task<FolderDto> GetFolder(long id)
         {
             return await _context.Folders
                 .Where(f => f.Id == id)
                 .ProjectTo<FolderDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<ICollection<FolderMinimalWithParentDto>> GetClubFolders(long clubId)
+        {
+            return await _context.Folders
+                .Where(f => f.ClubId == clubId)
+                .ProjectTo<FolderMinimalWithParentDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
     }

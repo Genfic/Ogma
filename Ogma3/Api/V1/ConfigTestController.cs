@@ -7,7 +7,7 @@ namespace Ogma3.Api.V1
 {
     [Route("api/[controller]", Name = nameof(ConfigTestController))]
     [ApiController]
-    public class ConfigTestController : Controller
+    public class ConfigTestController : ControllerBase
     {
         private readonly OgmaConfig _ogmaConfig;
 

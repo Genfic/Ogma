@@ -2381,6 +2381,7 @@ form.search select:focus {
   grid-template-columns: 1fr 4rem;
   grid-template-rows: auto auto 1fr;
   padding: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 .folder-card .name {
   grid-row: 1;
