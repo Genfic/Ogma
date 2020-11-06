@@ -13,6 +13,9 @@
     </div>
     
     <folder-tree :club-id="@Model.ClubId"
+                 label="Parent folder"
+                 :value="@Model.Input.ParentId"
+                 :current="@Model.Input.Id"
                  route="@Url.RouteUrl(nameof(FoldersController))">
     </folder-tree>
 

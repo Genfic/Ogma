@@ -13,6 +13,9 @@
 
 <span>@Model.Folder.Description</span>
 
+<a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
+<a asp-page="./Delete" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Delete</a>
+
 <hr>
 
 <div class="folder-list">

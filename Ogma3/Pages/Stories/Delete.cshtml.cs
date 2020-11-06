@@ -14,12 +14,12 @@ namespace Ogma3.Pages.Stories
     [Authorize]
     public class DeleteModel : PageModel
     {
-        private readonly Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly IB2Client _b2Client;
         private readonly OgmaConfig _ogmaConfig;
         
-        public DeleteModel(Data.ApplicationDbContext context, IB2Client b2Client, IConfiguration config, OgmaConfig ogmaConfig)
+        public DeleteModel(ApplicationDbContext context, IB2Client b2Client, IConfiguration config, OgmaConfig ogmaConfig)
         {
             _context = context;
             _b2Client = b2Client;

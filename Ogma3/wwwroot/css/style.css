@@ -1411,18 +1411,6 @@ form.form .o-form-control:focus {
 form.form .o-form-control.changed {
   background-color: var(--red-25);
 }
-form.form .validation-summary-valid {
-  display: none;
-}
-form.form .validation-summary-errors {
-  margin-top: 1rem;
-  border: 1px solid var(--red-50);
-  padding: 0.5rem;
-  background-color: var(--red-10);
-}
-form.form .validation-summary-errors:hover {
-  border-color: var(--red-75);
-}
 
 form.confirm {
   padding: 1rem 0 0;
@@ -2451,6 +2439,51 @@ form.search select:focus {
   margin-right: 0.5ch;
 }
 
+.folder-tree {
+  padding: 0.25rem;
+}
+.folder-tree .folder {
+  position: relative;
+  margin-left: 1rem;
+  padding: 0.1rem 0.1rem 0.1rem 0.8rem;
+  border-left: 1px solid var(--foreground-75);
+  min-height: 1rem;
+  min-width: 1rem;
+}
+.folder-tree .folder.disabled {
+  color: var(--foreground-25);
+  pointer-events: none;
+}
+.folder-tree .folder:last-child {
+  border: none;
+}
+.folder-tree .folder:last-child:before {
+  border-left: 1px solid var(--foreground-75);
+}
+.folder-tree .folder:before {
+  content: "";
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 0.8rem;
+  position: absolute;
+  border-bottom: 1px solid var(--foreground-75);
+}
+.folder-tree span {
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+.folder-tree span:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+.folder-tree span:hover {
+  background-color: var(--accent-10);
+}
+.folder-tree span.active {
+  background-color: var(--accent-25);
+}
+
 .md p {
   padding-bottom: 0.5rem;
 }
@@ -2587,4 +2620,16 @@ noscript {
   to {
     transform: rotate(10deg);
   }
+}
+.validation-summary-valid {
+  display: none;
+}
+.validation-summary-errors {
+  margin-top: 1rem;
+  border: 1px solid var(--red-50);
+  padding: 0.5rem;
+  background-color: var(--red-10);
+}
+.validation-summary-errors:hover {
+  border-color: var(--red-75);
 }

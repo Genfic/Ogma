@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -100,11 +101,19 @@ namespace Ogma3.Pages.Club.Folders
             folder.Slug = Input.Name.Friendlify();
             folder.Description = Input.Description;
             
-            // Prevent nesting the parent folder inside of one of its children
-            if (folder.ChildFolders.All(cf => cf.Id != Input.ParentId))
+            // Prevent nesting the parent folder inside of one of its children or inside of itself
+            if (folder.ChildFolders.Any(cf => cf.Id == Input.ParentId))
             {
-                folder.ParentFolderId = Input.ParentId;
+                ModelState.AddModelError("", "The folder cannot be nested inside of its child");
+                return Page();
             }
+            if (folder.Id == Input.ParentId)
+            {
+                ModelState.AddModelError("", "The folder cannot be nested inside of itself");
+                return Page();
+            }
+
+            folder.ParentFolderId = Input.ParentId;
 
             await _context.SaveChangesAsync();
             
