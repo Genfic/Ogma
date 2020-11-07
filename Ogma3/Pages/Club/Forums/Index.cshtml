@@ -6,7 +6,7 @@
     ViewData["Tab"] = "Forums";
 }
 
-<partial name="_ClubBar" model="@Model.ClubBar"/>
+<partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
 @if (Model.ClubBar.IsMember)
 {
@@ -17,6 +17,6 @@
 }
 
 @foreach (var thread in Model.ThreadCards) {
-    <partial name="_ThreadCard" model="thread"/>
+    <partial name="Shared/Cards/_ThreadCard" model="thread"/>
 }
 

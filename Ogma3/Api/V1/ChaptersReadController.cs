@@ -51,6 +51,7 @@ namespace Ogma3.Api.V1
                 .FirstOrDefaultAsync(cr => cr.StoryId == post.Story && cr.UserId == user.Id);
             
             // If no read list exists yet, create one with the chapter read
+            List<long> res;
             if (chaptersReadObj == null)
             {
                 var newCr = new ChaptersRead
@@ -60,16 +61,19 @@ namespace Ogma3.Api.V1
                     Chapters = new List<long>{ post.Chapter }
                 };
                 await _context.ChaptersRead.AddAsync(newCr);
+                res = newCr.Chapters;
             }
             else // just update the existing one
             {
                 if (chaptersReadObj.Chapters.Contains(post.Chapter))
                 {
                     chaptersReadObj.Chapters.Remove(post.Chapter);
+                    res = chaptersReadObj.Chapters;
                 }
                 else
                 {
                     chaptersReadObj.Chapters.Add(post.Chapter);
+                    res = chaptersReadObj.Chapters;
                 }
             }
 
@@ -77,14 +81,13 @@ namespace Ogma3.Api.V1
             try
             {
                 await _context.SaveChangesAsync();
+                return new OkObjectResult(new { Read = res });
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-
-            return new OkObjectResult(new { Read = chaptersReadObj?.Chapters });
         }
 
         public class ChaptersReadPost

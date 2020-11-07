@@ -11,6 +11,7 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Pages.Shared;
+using Ogma3.Pages.Shared.Cards;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage

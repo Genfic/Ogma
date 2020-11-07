@@ -8,7 +8,7 @@ services:
       dockerfile: ./Ogma3/Dockerfile
     ports:
       - "8080:80"
-      - "5001:80"
+      - "6001:80"
     env_file:
       - ogma.env
     depends_on:

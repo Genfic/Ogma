@@ -44,7 +44,7 @@
         <div>
             @foreach (var story in Model.TopStories)
             {
-                <partial name="Shared/_StoryCard" model="@story" />
+                <partial name="Shared/Cards/_StoryCard" model="@story" />
             }
         </div>
     </div>
@@ -55,7 +55,7 @@
         <div>
             @foreach (var story in Model.RecentStories)
             {
-                <partial name="Shared/_StoryCard" model="@story" />
+                <partial name="Shared/Cards/_StoryCard" model="@story" />
             }
         </div>
     </div>
@@ -66,7 +66,7 @@
         <div>
             @foreach (var story in Model.LastUpdatedStories)
             {
-                <partial name="Shared/_StoryCard" model="@story" />
+                <partial name="Shared/Cards/_StoryCard" model="@story" />
             }
         </div>
     </div>

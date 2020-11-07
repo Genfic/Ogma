@@ -313,8 +313,8 @@
   </ItemGroup>
 
   <!--  Automatic migrations on production -->
-  <Target Name="PrePublishTarget" AfterTargets="Publish">
-    <Exec Command="dotnet ef database update" />
-  </Target>
+<!--  <Target Name="PrePublishTarget" AfterTargets="Publish">-->
+<!--    <Exec Command="dotnet-ef database update" />-->
+<!--  </Target>-->
 
 </Project>

@@ -1,4 +1,5 @@
 using Ogma3.Pages.Shared;
+using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Data.DTOs
 {

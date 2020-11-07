@@ -6,7 +6,7 @@
     ViewData["Tab"] = "Profile";
 }
 
-<partial name="_ProfileBar" model="Model.UserData" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.UserData" />
 
 @if (!string.IsNullOrEmpty(Model.UserData.Bio))
 {

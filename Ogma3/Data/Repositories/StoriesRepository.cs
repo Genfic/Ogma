@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.Enums;
 using Ogma3.Pages.Shared;
 using Ogma3.Data.Models;
+using Ogma3.Pages.Shared.Cards;
+using Ogma3.Pages.Shared.Details;
+using Ogma3.Pages.Shared.Minimals;
 using Utils.Extensions;
 
 namespace Ogma3.Data.Repositories

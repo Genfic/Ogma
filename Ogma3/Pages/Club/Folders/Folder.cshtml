@@ -7,7 +7,7 @@
     ViewData["Tab"] = "Stories";
 }
 
-<partial name="_ClubBar" model="@Model.ClubBar"/>
+<partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
 <h1>@Model.Folder.Name</h1>
 
@@ -21,7 +21,7 @@
 <div class="folder-list">
     @foreach (var folder in Model.Folder.ChildFolders)
     {
-        <partial name="Shared/_FolderMinimal" model="folder"/>
+        <partial name="Shared/Minimals/_FolderMinimal" model="folder"/>
     }
 </div>
 
@@ -36,7 +36,7 @@
     {
         foreach (var story in Model.Stories)
         {
-            <partial name="Shared/_StoryCard" model="@story"/>
+            <partial name="Shared/Cards/_StoryCard" model="@story"/>
         }
         
          <partial name="_Pagination" model="Model.Pagination"/>

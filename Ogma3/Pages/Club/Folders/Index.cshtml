@@ -7,11 +7,11 @@
     ViewData["Tab"] = "Stories";
 }
 
-<partial name="_ClubBar" model="@Model.ClubBar"/>
+<partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
 <ul class="folders-list">
     @foreach (var folder in Model.Folders)
     {
-        <partial name="Shared/_FolderCard" model="folder"/>
+        <partial name="Shared/Cards/_FolderCard" model="folder"/>
     }
 </ul>

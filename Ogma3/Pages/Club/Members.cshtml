@@ -6,11 +6,11 @@
     ViewData["Tab"] = "Members";
 }
 
-<partial name="_ClubBar" model="@Model.ClubBar"/>
+<partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
 <ul class="two-columns o-grid">
     @foreach (var m in Model.ClubMembers)
     {
-        <partial name="Shared/_UserCard" model="m"/>
+        <partial name="Shared/Cards/_UserCard" model="m"/>
     }
 </ul>

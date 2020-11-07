@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Pages.Shared;
+using Ogma3.Pages.Shared.Cards;
+using Ogma3.Pages.Shared.Details;
 
 namespace Ogma3.Data.Repositories
 {

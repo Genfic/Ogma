@@ -1,0 +1,75 @@
+@using System.Globalization
+@using Utils.Extensions
+@model BlogpostDetails
+
+<div class="blogpost-details">
+    <h1 class="title">@Model.Title</h1>
+
+    <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+        @Model.PublishDate.FormatDateWithDaySuffix()
+    </time>
+
+    <div class="actions">
+        @if (User.IsUserSameAsLoggedIn(Model.AuthorId))
+            {
+                <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="edit"></icon>
+                    <span class="name">Edit</span>
+                </a>
+                <a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="delete_forever"></icon>
+                    <span class="name">Delete</span>
+                </a>
+                if (Model.IsPublished)
+                {
+                    <a title="Unpublish post" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
+                        <icon class="icon" icon="visibility_off"></icon>
+                        <span class="name">Unpublish</span>
+                    </a>
+                }
+                else
+                {
+                    <a title="Publish post" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
+                        <icon class="icon" icon="visibility"></icon>
+                        <span class="name">Publish</span>
+                    </a>
+                }
+            }
+    </div>
+
+        @if (Model.IsUnavailable)
+        {
+            <div class="unavailable active-border">
+                <strong>Attached content is unavailable.</strong>
+                <p>This story or chapter has been deleted or unpublished.</p>
+            </div>
+        }
+        else
+        {
+            if (Model.AttachedStory != null)
+            {
+                <strong>Attached story</strong>
+                <partial name="Shared/Minimals/_StoryMinimal" model="@Model.AttachedStory"/>
+            }
+            if (Model.AttachedChapter != null)
+            {
+                <strong>Attached chapter</strong>
+                <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.AttachedChapter"/>
+            }
+        }
+    
+    <markdown class="body" preset="Blogpost">
+        @Model.Body
+    </markdown>
+
+    <div class="tags">
+        @foreach (var t in Model.Hashtags)
+        {
+            <a asp-page="/Blog/Index" asp-route-q="@t" class="tag active-border">
+                <span class="name">@t</span>
+            </a>
+        }
+    </div>
+</div>
+
+<partial name="_Comments" model="@Model.CommentsThreadId"/>

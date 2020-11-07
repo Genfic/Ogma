@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Pages.Shared;
+using Ogma3.Pages.Shared.Bars;
+using Ogma3.Pages.Shared.Cards;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 

@@ -51,7 +51,14 @@ let story_vue = new Vue({
         },
         
         markRead: function (chapter) {
-            axios.post(this.readsRoute, { story: this.storyId, chapter: chapter })
+            axios.post(this.readsRoute, 
+                { 
+                    story: this.storyId, 
+                    chapter: chapter 
+                },
+                {
+                    headers: { "RequestVerificationToken" : this.csrf }
+                })
                 .then(res => {
                     this.read = res.data.read || [];
                 })

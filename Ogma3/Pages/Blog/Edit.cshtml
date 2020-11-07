@@ -41,14 +41,14 @@
     {
         <div class="o-form-group">
             <label>Attached story</label>
-            <partial name="Shared/_StoryMinimal" model="@Model.Input.StoryMinimal"/>
+            <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Input.StoryMinimal"/>
         </div>
     }
     @if (Model.Input.ChapterMinimal != null)
     {
         <div class="o-form-group">
             <label>Attached chapter</label>
-            <partial name="Shared/_ChapterMinimal" model="@Model.Input.ChapterMinimal"/>
+            <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Input.ChapterMinimal"/>
         </div>
     }
     @if (Model.Input.IsUnavailable)

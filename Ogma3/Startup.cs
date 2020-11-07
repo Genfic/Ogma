@@ -194,6 +194,14 @@ namespace Ogma3
             
             // Compression
             app.UseResponseCompression();
+            
+            // Apply migrations
+            if (!env.IsDevelopment())
+            {
+                ctx.Database.Migrate();
+            }
         }
+        
+        
     }
 }

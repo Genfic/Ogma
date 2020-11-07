@@ -34,7 +34,7 @@
 else
 {
     foreach (var post in Model.Posts) {
-        <partial name="_BlogpostCard" model="@post" />
+        <partial name="Shared/Cards/_BlogpostCard" model="@post" />
     }
     
     <partial name="_Pagination" model="Model.Pagination" />
