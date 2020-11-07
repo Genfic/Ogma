@@ -77,6 +77,7 @@ namespace Ogma3.Pages.Clubs
             var club = new Data.Models.Club
             {
                 Name = Input.Name,
+                Slug = Input.Name.Friendlify(),
                 Hook = Input.Hook,
                 Description = Input.Description,
                 CreationDate = DateTime.Now,

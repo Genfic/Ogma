@@ -106,6 +106,7 @@ namespace Ogma3.Pages.Clubs
             if (club == null) return NotFound();
 
             club.Name = Input.Name;
+            club.Slug = Input.Name.Friendlify();
             club.Hook = Input.Hook;
             club.Description = Input.Description;
 

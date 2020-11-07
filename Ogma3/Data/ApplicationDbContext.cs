@@ -267,6 +267,7 @@ namespace Ogma3.Data
             {
                 ent.HasOne(ct => ct.Author)
                     .WithMany()
+                    .HasForeignKey(ct => ct.AuthorId)
                     .OnDelete(DeleteBehavior.SetNull);
                 ent.HasOne(b => b.CommentsThread)
                     .WithOne(ct => ct.ClubThread)

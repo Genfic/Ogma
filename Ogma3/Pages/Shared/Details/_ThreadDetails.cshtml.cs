@@ -11,6 +11,7 @@ namespace Ogma3.Pages.Shared.Details
         public string Body { get; set; }
         public DateTime CreationDate { get; set; }
         public string AuthorName { get; set; }
+        public long AuthorId { get; set; }
         public string AuthorAvatar { get; set; }
         public OgmaRole AuthorRole { get; set; }
         public CommentsThread CommentsThread { get; set; }

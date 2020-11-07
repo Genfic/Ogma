@@ -1,0 +1,45 @@
+@page "/club/{id}/add-story/{storyId}"
+@using Ogma3.Api.V1
+@model Ogma3.Pages.Club.AddStoryModel
+
+@{
+    ViewData["Title"] = $"{Model.ClubBar.Name} — Add Story";
+    ViewData["Tab"] = "Stories";
+}
+
+<partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"></partial>
+
+<hr>
+
+<h3>You're trying to add the following story</h3>
+
+<partial name="Shared/Cards/_StoryCard" model="@Model.StoryCard"></partial>
+
+<hr>
+
+<h3>Select the folder</h3>
+
+<form method="post" class="form" id="folder">
+    
+    <div asp-validation-summary="All">
+        <span>Please correct the following errors</span>
+    </div>
+    
+    <folder-tree :club-id="@Model.ClubBar.Id"
+                 label="Folder"
+                 route="@Url.RouteUrl(nameof(FoldersController))">
+    </folder-tree>
+    
+    <input type="hidden" name="ClubId" value="@Model.ClubBar.Id">
+    <input type="hidden" name="StoryId" value="@Model.StoryCard.Id">
+    
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+    
+</form>
+
+@section Scripts {
+    <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/club/add-story.min.js" asp-append-version="true"></script>
+}

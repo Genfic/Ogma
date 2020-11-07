@@ -1,4 +1,4 @@
-@page "/club/{id}/forums/edit"
+@page "/club/thread/{id}/edit"
 @model Ogma3.Pages.Club.Forums.EditModel
 
 @{
@@ -12,30 +12,25 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="ClubThread.Title" class="control-label"></label>
-                <input asp-for="ClubThread.Title" class="form-control" />
-                <span asp-validation-for="ClubThread.Title" class="text-danger"></span>
+                <label asp-for="Input.Title" class="control-label"></label>
+                <input asp-for="Input.Title" class="form-control"/>
+                <span asp-validation-for="Input.Title" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
-                <label asp-for="ClubThread.Body" class="control-label"></label>
-                <input asp-for="ClubThread.Body" class="form-control" />
-                <span asp-validation-for="ClubThread.Body" class="text-danger"></span>
+                <label asp-for="Input.Body" class="control-label"></label>
+                <input asp-for="Input.Body" class="form-control"/>
+                <span asp-validation-for="Input.Body" class="text-danger"></span>
             </div>
+            
+            <input type="hidden" asp-for="Input.Id"/>
+            
             <div class="form-group">
-                <label asp-for="ClubThread.CreationDate" class="control-label"></label>
-                <input asp-for="ClubThread.CreationDate" class="form-control" />
-                <span asp-validation-for="ClubThread.CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClubThread.ClubId" class="control-label"></label>
-                <select asp-for="ClubThread.ClubId" class="form-control" asp-items="ViewBag.ClubId"></select>
-                <span asp-validation-for="ClubThread.ClubId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="ClubThread.Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </form>
     </div>

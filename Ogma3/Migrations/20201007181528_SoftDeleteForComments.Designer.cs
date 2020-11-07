@@ -12,8 +12,8 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201107001107_Initial")]
-    partial class Initial
+    [Migration("20201007181528_SoftDeleteForComments")]
+    partial class SoftDeleteForComments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -113,63 +113,12 @@ namespace Ogma3.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedRating", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RatingId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("UserId", "RatingId");
-
-                    b.HasIndex("RatingId");
-
-                    b.ToTable("BlacklistedRatings");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedTag", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TagId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("UserId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("BlacklistedTags");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedUser", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BlockedUserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("UserId", "BlockedUserId");
-
-                    b.HasIndex("BlockedUserId");
-
-                    b.ToTable("BlacklistedUsers");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.Blogpost", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
-
-                    b.Property<long?>("AttachedChapterId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("AttachedStoryId")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("AuthorId")
                         .HasColumnType("bigint");
@@ -203,10 +152,6 @@ namespace Ogma3.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttachedChapterId");
-
-                    b.HasIndex("AttachedStoryId");
 
                     b.HasIndex("AuthorId");
 
@@ -346,6 +291,21 @@ namespace Ogma3.Migrations
                     b.ToTable("ClubMembers");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Models.ClubStory", b =>
+                {
+                    b.Property<long>("ClubId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StoryId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ClubId", "StoryId");
+
+                    b.HasIndex("StoryId");
+
+                    b.ToTable("ClubStories");
+                });
+
             modelBuilder.Entity("Ogma3.Data.Models.ClubThread", b =>
                 {
                     b.Property<long>("Id")
@@ -388,7 +348,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<long?>("AuthorId")
+                    b.Property<long>("AuthorId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Body")
@@ -408,9 +368,6 @@ namespace Ogma3.Migrations
                     b.Property<long?>("DeletedByUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("EditCount")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime?>("LastEdit")
                         .HasColumnType("timestamp without time zone");
 
@@ -423,31 +380,6 @@ namespace Ogma3.Migrations
                     b.HasIndex("DeletedByUserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.CommentRevision", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
-
-                    b.Property<DateTime>("EditTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("CommentRevisions");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.CommentsThread", b =>
@@ -503,6 +435,9 @@ namespace Ogma3.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("RevisionDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -519,62 +454,7 @@ namespace Ogma3.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Slug", "Version")
-                        .IsUnique();
-
-                    b.HasIndex("Title", "Version")
-                        .IsUnique();
-
                     b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.Folder", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<long>("ClubId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<long?>("ParentFolderId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Slug")
-                        .HasColumnType("text");
-
-                    b.Property<int>("StoriesCount")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClubId");
-
-                    b.HasIndex("ParentFolderId");
-
-                    b.ToTable("Folders");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.FolderStory", b =>
-                {
-                    b.Property<long>("FolderId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("StoryId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("FolderId", "StoryId");
-
-                    b.HasIndex("StoryId");
-
-                    b.ToTable("FolderStories");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Icon", b =>
@@ -801,9 +681,6 @@ namespace Ogma3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
-
-                    b.Property<bool>("BlacklistedByDefault")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1075,84 +952,13 @@ namespace Ogma3.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedRating", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Rating", "Rating")
-                        .WithMany()
-                        .HasForeignKey("RatingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "User")
-                        .WithMany("BlacklistedRatings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Rating");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedTag", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "User")
-                        .WithMany("BlacklistedTags")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tag");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedUser", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "BlockedUser")
-                        .WithMany("BlacklistedBy")
-                        .HasForeignKey("BlockedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "User")
-                        .WithMany("BlacklistedUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BlockedUser");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.Blogpost", b =>
                 {
-                    b.HasOne("Ogma3.Data.Models.Chapter", "AttachedChapter")
-                        .WithMany()
-                        .HasForeignKey("AttachedChapterId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Ogma3.Data.Models.Story", "AttachedStory")
-                        .WithMany()
-                        .HasForeignKey("AttachedStoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "Author")
                         .WithMany("Blogposts")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AttachedChapter");
-
-                    b.Navigation("AttachedStory");
 
                     b.Navigation("Author");
                 });
@@ -1206,6 +1012,25 @@ namespace Ogma3.Migrations
                     b.Navigation("Member");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Models.ClubStory", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.Club", "Club")
+                        .WithMany("ClubStories")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.Story", "Story")
+                        .WithMany()
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
+
+                    b.Navigation("Story");
+                });
+
             modelBuilder.Entity("Ogma3.Data.Models.ClubThread", b =>
                 {
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "Author")
@@ -1227,7 +1052,9 @@ namespace Ogma3.Migrations
                 {
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ogma3.Data.Models.CommentsThread", null)
                         .WithMany("Comments")
@@ -1242,17 +1069,6 @@ namespace Ogma3.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("DeletedByUser");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.CommentRevision", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Comment", "Parent")
-                        .WithMany("Revisions")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.CommentsThread", b =>
@@ -1284,43 +1100,6 @@ namespace Ogma3.Migrations
                     b.Navigation("ClubThread");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.Folder", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Club", "Club")
-                        .WithMany("Folders")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.Folder", "ParentFolder")
-                        .WithMany("ChildFolders")
-                        .HasForeignKey("ParentFolderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Club");
-
-                    b.Navigation("ParentFolder");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.FolderStory", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.Folder", "Folder")
-                        .WithMany()
-                        .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.Story", "Story")
-                        .WithMany()
-                        .HasForeignKey("StoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Folder");
-
-                    b.Navigation("Story");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.InviteCode", b =>
@@ -1473,7 +1252,7 @@ namespace Ogma3.Migrations
                 {
                     b.Navigation("ClubMembers");
 
-                    b.Navigation("Folders");
+                    b.Navigation("ClubStories");
 
                     b.Navigation("Threads");
                 });
@@ -1483,31 +1262,13 @@ namespace Ogma3.Migrations
                     b.Navigation("CommentsThread");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.Comment", b =>
-                {
-                    b.Navigation("Revisions");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.CommentsThread", b =>
                 {
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.Folder", b =>
-                {
-                    b.Navigation("ChildFolders");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.OgmaUser", b =>
                 {
-                    b.Navigation("BlacklistedBy");
-
-                    b.Navigation("BlacklistedRatings");
-
-                    b.Navigation("BlacklistedTags");
-
-                    b.Navigation("BlacklistedUsers");
-
                     b.Navigation("Blogposts");
 
                     b.Navigation("CommentsThread")

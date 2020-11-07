@@ -36,7 +36,7 @@
                 @Model.CreationDate.FormatDateWithDaySuffix()
             </time>
             
-            @if (User.Identity.IsAuthenticated && string.Equals(User.FindFirst(ClaimTypes.Name).Value, Model.AuthorName, StringComparison.CurrentCultureIgnoreCase))
+            @if (User.GetNumericId() == Model.AuthorId)
             {
                 <div class="actions">
                     <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">

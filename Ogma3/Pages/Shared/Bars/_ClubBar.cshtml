@@ -44,16 +44,25 @@
     </div>
 
     <nav class="nav">
-        <a class="nav-item @(tab == "Home" ? "active" : null)" asp-area="" asp-page="/Club/Index" asp-route-id="@Model.Id">
+        <a class="nav-item @(tab == "Home" ? "active" : null)" 
+           asp-page="/Club/Index" 
+           asp-route-id="@Model.Id"
+           asp-route-slug="@Model.Slug">
             Home
         </a>
-        <a class="nav-item @(tab == "Members" ? "active" : null)" asp-area="" asp-page="/Club/Members" asp-route-id="@Model.Id">
+        <a class="nav-item @(tab == "Members" ? "active" : null)" 
+           asp-page="/Club/Members" 
+           asp-route-id="@Model.Id">
             Members
         </a>
-        <a class="nav-item @(tab == "Forums" ? "active" : null)" asp-area="" asp-page="/Club/Forums/Index" asp-route-id="@Model.Id">
+        <a class="nav-item @(tab == "Forums" ? "active" : null)" 
+           asp-page="/Club/Forums/Index" 
+           asp-route-id="@Model.Id">
             Forums
         </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/Club/Folders/Index" asp-route-clubId="@Model.Id">
+        <a class="nav-item @(tab == "Stories" ? "active" : null)" 
+           asp-page="/Club/Folders/Index" 
+           asp-route-id="@Model.Id">
             Stories
         </a>
     </nav>

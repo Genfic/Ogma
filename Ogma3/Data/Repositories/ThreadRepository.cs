@@ -98,6 +98,7 @@ namespace Ogma3.Data.Repositories
                     Title = ct.Title,
                     CreationDate = ct.CreationDate,
                     AuthorName = ct.Author.UserName,
+                    AuthorId = ct.Author.Id,
                     AuthorAvatar = ct.Author.Avatar,
                     AuthorRole = ct.Author.Roles
                         .Where(ur => ur.Order.HasValue)

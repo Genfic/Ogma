@@ -43,6 +43,14 @@ namespace Ogma3.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<StoryCard> GetCard(long storyId)
+        {
+            return await _context.Stories
+                .Where(s => s.Id == storyId)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<StoryMinimal> GetMinimal(long id, bool publishedOnly = true)
         {
             return await _context.Stories

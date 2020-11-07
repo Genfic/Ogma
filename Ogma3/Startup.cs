@@ -142,6 +142,7 @@ namespace Ogma3
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
+                options.Conventions.AddPageRoute("/Club/Index", "/club/{slug}-{id}");
             });
             
             // MVC

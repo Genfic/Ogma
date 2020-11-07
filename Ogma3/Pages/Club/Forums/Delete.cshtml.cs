@@ -1,9 +1,11 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Pages.Club.Forums
 {
@@ -19,38 +21,32 @@ namespace Ogma3.Pages.Club.Forums
         [BindProperty]
         public ClubThread ClubThread { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long? id)
+        public async Task<IActionResult> OnGetAsync(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            ClubThread = await _context.ClubThreads
+                .Where(ct => ct.Id == id)
+                .Where(ct => ct.AuthorId == User.GetNumericId())
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
-            ClubThread = await _context.ClubThreads.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (ClubThread == null)
-            {
-                return NotFound();
-            }
+            if (ClubThread == null) return NotFound();
+            
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(long? id)
+        public async Task<IActionResult> OnPostAsync(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            ClubThread = await _context.ClubThreads
+                .Where(ct => ct.Id == id)
+                .Where(ct => ct.AuthorId == User.GetNumericId())
+                .FirstOrDefaultAsync();
 
-            ClubThread = await _context.ClubThreads.FindAsync(id);
+            if (ClubThread == null) return NotFound();
 
-            if (ClubThread != null)
-            {
-                _context.ClubThreads.Remove(ClubThread);
-                await _context.SaveChangesAsync();
-            }
+            _context.ClubThreads.Remove(ClubThread);
+            await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { id = ClubThread.ClubId });
         }
     }
 }

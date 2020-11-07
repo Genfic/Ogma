@@ -13,6 +13,9 @@ namespace Ogma3.Data.Models
         [MinLength(CTConfig.CClub.MinNameLength)]
         [MaxLength(CTConfig.CClub.MaxNameLength)]
         public string Name { get; set; }
+
+        [Required]
+        public string Slug { get; set; }
         
         [MaxLength(CTConfig.CClub.MaxHookLength)]
         public string Hook { get; set; }
