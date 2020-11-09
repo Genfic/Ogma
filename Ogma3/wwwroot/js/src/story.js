@@ -63,6 +63,10 @@ let story_vue = new Vue({
                     this.read = res.data.read || [];
                 })
                 .catch(console.error);
+        },
+        
+        addToFolder: function () {
+            this.$refs.folderSelect.visible = true;
         }
     },
     mounted() {

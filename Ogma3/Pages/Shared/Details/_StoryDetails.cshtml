@@ -2,6 +2,7 @@
 @using Ogma3.Api.V1
 @using Ogma3.Services
 @using Utils.Extensions
+@inject OgmaConfig _Config
 @model StoryDetails
 
 <div id="story-app">
@@ -60,7 +61,7 @@
             <button 
                 v-if="shelves"
                 class="shelf" 
-                v-for="s in shelves.filter(s => s.isQuick || s.isDefault)" 
+                v-for="s in shelves.filter(e => e.isQuick || e.isDefault)" 
                 :title="'Add to ' + s.name"
                 v-on:click="addToShelf(s.id)" 
                 :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
@@ -109,6 +110,7 @@
         <time class="release-date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
             published @Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
         </time>
+        <a v-on:click="addToFolder">Add to folder</a>
     </div>
 
     <ol class="chapters">
@@ -165,47 +167,22 @@
         </div>
     </div>
     
+    <club-folder-selector 
+        ref="folderSelect"
+        cdn="@_Config.Cdn"
+        :story-id="@Model.Id"
+        clubs-route="@Url.RouteUrl(nameof(ClubsController))"
+        folders-route="@Url.RouteUrl(nameof(FoldersController))">
+    </club-folder-selector>
+    
     <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl(nameof(VotesController))"></div>
     <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
     <div id="reads-route" v-if="!readsRoute" data-route="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
     <div id="story-id" v-if="!storyId" data-id="@Model.Id"></div>
     @Html.AntiForgeryToken()
 </div>
-    
-<div>
-    <ul id="clubs"></ul>
-    <button id="get">Get Clubs</button>
-    
-    <input type="number" id="folder">
-    <button id="add">Add</button>
-    @Html.AntiForgeryToken()
-    <script>
-    const cont = document.getElementById('clubs');
-    const fold = document.getElementById('folder');
-    const csrf = document.querySelector('[name=__RequestVerificationToken]').value;
-    
-    document.getElementById('get').addEventListener('click', _ => {
-        cont.innerHTML = null;
-        axios.get('https://localhost:6001/api/clubs/user')
-        .then(res => {
-            res.data.forEach(d => cont.innerHTML += `<li>${d.id}: ${d.name}</li>`)
-        })
-        .catch(console.error);
-    })
-    
-    document.getElementById('add').addEventListener('click', _ => {
-        cont.innerHTML = null;
-        axios.post('https://localhost:6001/api/folders/add-story', {
-            folderId: Number(fold.value),
-            storyId: Number(@Model.Id)
-        }, {
-            headers: { "RequestVerificationToken" : csrf }
-        })
-        .then(console.log)
-        .catch(console.error);
-    })
-    </script>
-</div>
 
 
+@Html.Resource(@<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>)

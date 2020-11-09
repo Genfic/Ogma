@@ -8,7 +8,6 @@ using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
-    
     [Route("api/[controller]", Name = nameof(ClubsController))]
     [ApiController]
     public class ClubsController : ControllerBase
@@ -30,6 +29,9 @@ namespace Ogma3.Api.V1
             return await _clubRepo.GetUserClubsMinimal((long) uid);
         }
         
+        
+        [HttpGet]
+        public string Ping() => "Pong";
         
     }
 }

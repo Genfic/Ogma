@@ -11,7 +11,7 @@
 
 <h1>@Model.Folder.Name</h1>
 
-<span>@Model.Folder.Description</span>
+<markdown preset="Basic">@Model.Folder.Description</markdown>
 
 <a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
 <a asp-page="./Delete" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Delete</a>

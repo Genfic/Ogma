@@ -92,7 +92,6 @@ Vue.component('folder-tree', {
             });
         },
         bus: function (data) {
-            console.log(data);
             this.sel = data;
         }
     },
