@@ -29,11 +29,11 @@ namespace Ogma3.Data.Models
         
         [Required] 
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        
-        [JsonIgnore]
-        public ICollection<ClubMember> ClubMembers { get; set; }
-        
-        public ICollection<ClubThread> Threads { get; set; }
-        public ICollection<Folder> Folders { get; set; }
+
+        [JsonIgnore] 
+        public ICollection<ClubMember> ClubMembers { get; set; } = new List<ClubMember>();
+
+        public ICollection<ClubThread> Threads { get; set; } = new List<ClubThread>();
+        public ICollection<Folder> Folders { get; set; } = new List<Folder>();
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Pages.Shared;
@@ -52,6 +53,21 @@ namespace Ogma3.Data.Repositories
             return await _context.Clubs
                 .Paginate(page, perPage)
                 .ProjectTo<ClubCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<UserClubMinimalDto>> GetUserClubsMinimal(long userId)
+        {
+            return await _context.Clubs
+                .Where(c => c.ClubMembers.Any(cm => cm.MemberId == userId))
+                .OrderBy(c => c.Name)
+                .Select(c => new UserClubMinimalDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Icon = c.Icon
+                })
                 .AsNoTracking()
                 .ToListAsync();
         }

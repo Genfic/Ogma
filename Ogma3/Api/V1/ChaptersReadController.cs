@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -29,9 +30,10 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<List<long>>> GetChaptersRead(long story)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
             var chaptersRead = await _context.ChaptersRead
-                .Where(cr => cr.StoryId == story && cr.User == user)
+                .Where(cr => cr.StoryId == story)
+                .Where(cr => cr.UserId == uid)
                 .Select(cr => cr.Chapters)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

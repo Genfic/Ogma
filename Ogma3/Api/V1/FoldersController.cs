@@ -1,8 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -11,10 +17,12 @@ namespace Ogma3.Api.V1
     public class FoldersController : ControllerBase
     {
         private readonly FoldersRepository _foldersRepo;
+        private readonly ApplicationDbContext _context;
 
-        public FoldersController(FoldersRepository foldersRepo)
+        public FoldersController(FoldersRepository foldersRepo, ApplicationDbContext context)
         {
             _foldersRepo = foldersRepo;
+            _context = context;
         }
 
         // GET api/folders/5
@@ -23,8 +31,42 @@ namespace Ogma3.Api.V1
         {
             return await _foldersRepo.GetClubFolders(id);
         }
+        
+        [HttpPost("add-story")]
+        [Authorize]
+        public async Task<ActionResult> AddStory(PostData data)
+        {
+            var uid = User.GetNumericId();
+            var (folderId, storyId) = data;
+            
+            var folderExists = await _context.Folders
+                .Where(f => f.Id == folderId)
+                .Where(f => f.Club.ClubMembers.Any(cm => cm.MemberId == uid))
+                .AnyAsync();
+            if (!folderExists) return NotFound($"Folder {folderId} not found");
+
+            var storyExists = await _context.Stories
+                .AnyAsync(s => s.Id == storyId);
+            if (!storyExists) return NotFound($"Story {storyId} not found");
+            
+            var exists = await _context.FolderStories
+                .AnyAsync(fs => fs.FolderId == folderId && fs.StoryId == storyId);
+            if (exists) return Conflict("Already exists");
+
+            var folderStory = new FolderStory
+            {
+                FolderId = folderId,
+                StoryId = storyId
+            };
+            
+            _context.Entry(folderStory).State = EntityState.Added;
+            await _context.SaveChangesAsync();
+            return Ok(folderStory);
+        }
 
         [HttpGet]
         public string Ping() => "Pong";
+
+        public sealed record PostData(long FolderId, long StoryId);
     }
 }

@@ -1,13 +1,13 @@
 namespace Ogma3.Pages.Shared.Cards
 {
-    public class ClubCard
+    public record ClubCard
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Hook { get; set; }
-        public string Icon { get; set; }
-        public int ThreadsCount { get; set; }
-        public int ClubMembersCount { get; set; }
-        public int StoriesCount { get; set; }
+        public long Id { get; init; }
+        public string Name { get; init; }
+        public string Hook { get; init; }
+        public string Icon { get; init; }
+        public int ThreadsCount { get; init; }
+        public int ClubMembersCount { get; init; }
+        public int StoriesCount { get; init; }
     }
 }
