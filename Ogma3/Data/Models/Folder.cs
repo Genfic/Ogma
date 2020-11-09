@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using Ogma3.Data.Enums;
 
 namespace Ogma3.Data.Models
 {
@@ -18,5 +20,6 @@ namespace Ogma3.Data.Models
         public ICollection<Story> Stories { get; set; }
 
         public int StoriesCount { get; set; }
+        public EClubMemberRoles AccessLevel { get; set; }
     }
 }

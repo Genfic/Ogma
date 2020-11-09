@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
@@ -41,11 +42,19 @@ namespace Ogma3.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ICollection<FolderMinimalWithParentDto>> GetClubFolders(long clubId)
+        public async Task<ICollection<FolderMinimalWithParentDto>> GetClubFolders(long clubId, long userId)
         {
             return await _context.Folders
+                .TagWith($"{nameof(GetClubFolders)} — {clubId}, {userId}")
                 .Where(f => f.ClubId == clubId)
-                .ProjectTo<FolderMinimalWithParentDto>(_mapper.ConfigurationProvider)
+                .Select(f => new FolderMinimalWithParentDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Slug = f.Slug,
+                    ParentFolderId = f.ParentFolderId,
+                    CanAdd = f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == userId).Role <= f.AccessLevel
+                })
                 .AsNoTracking()
                 .ToListAsync();
         }

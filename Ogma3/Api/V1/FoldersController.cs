@@ -27,9 +27,12 @@ namespace Ogma3.Api.V1
 
         // GET api/folders/5
         [HttpGet("{id}")]
-        public async Task<ICollection<FolderMinimalWithParentDto>> GetChaptersRead(long id)
+        [Authorize]
+        public async Task<ActionResult<ICollection<FolderMinimalWithParentDto>>> GetChaptersRead(long id)
         {
-            return await _foldersRepo.GetClubFolders(id);
+            var uid = User.GetNumericId();
+            if (uid == null) return Unauthorized();
+            return Ok(await _foldersRepo.GetClubFolders(id, (long) uid));
         }
         
         [HttpPost("add-story")]
@@ -41,18 +44,18 @@ namespace Ogma3.Api.V1
             
             var folderExists = await _context.Folders
                 .Where(f => f.Id == folderId)
-                .Where(f => f.Club.ClubMembers.Any(cm => cm.MemberId == uid))
+                .Where(f => f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == uid).Role <= f.AccessLevel)
                 .AnyAsync();
-            if (!folderExists) return NotFound($"Folder {folderId} not found");
+            if (!folderExists) return NotFound("Folder not found or insufficient permissions");
 
             var storyExists = await _context.Stories
                 .AnyAsync(s => s.Id == storyId);
-            if (!storyExists) return NotFound($"Story {storyId} not found");
+            if (!storyExists) return NotFound("Story not found");
             
             var exists = await _context.FolderStories
                 .AnyAsync(fs => fs.FolderId == folderId && fs.StoryId == storyId);
             if (exists) return Conflict("Already exists");
-
+            
             var folderStory = new FolderStory
             {
                 FolderId = folderId,

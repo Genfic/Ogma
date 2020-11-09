@@ -2449,9 +2449,15 @@ form.search select:focus {
   border-left: 1px solid var(--foreground-75);
   min-height: 1rem;
   min-width: 1rem;
+  color: var(--foreground);
+  pointer-events: all;
 }
-.folder-tree .folder.disabled {
+.folder-tree .folder.locked, .folder-tree .folder .disabled {
   color: var(--foreground-25);
+  pointer-events: none;
+}
+.folder-tree .folder.disabled .folder {
+  color: var(--foreground);
   pointer-events: none;
 }
 .folder-tree .folder:last-child {
@@ -2482,6 +2488,72 @@ form.search select:focus {
 }
 .folder-tree span.active {
   background-color: var(--accent-25);
+}
+
+.club-folder-selector .header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.club-folder-selector .msg.success {
+  color: var(--green-75);
+}
+.club-folder-selector .msg.error {
+  color: var(--red-75);
+}
+.club-folder-selector .buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  padding-top: 0.5rem;
+}
+.club-folder-selector .buttons:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+.club-folder-selector .buttons > button {
+  background: transparent;
+  color: var(--foreground);
+}
+.club-folder-selector .buttons > .add {
+  flex: 2;
+  margin-right: 0.5rem;
+  background-color: var(--green-10);
+}
+.club-folder-selector .buttons > .add:hover {
+  background-color: var(--green-50);
+}
+.club-folder-selector .buttons > .cancel {
+  flex: 1;
+  background-color: var(--red-10);
+}
+.club-folder-selector .buttons > .cancel:hover {
+  background-color: var(--red-50);
+}
+.club-folder-selector .clubs {
+  display: flex;
+  flex-direction: column;
+}
+.club-folder-selector .clubs .club {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.club-folder-selector .clubs .club:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+.club-folder-selector .clubs .club:hover {
+  background-color: var(--accent-10);
+}
+.club-folder-selector .clubs .club > img {
+  margin-right: 0.5rem;
 }
 
 .md p {

@@ -47,21 +47,21 @@
         
     </div>
     
-    <div class="buttons">
-        @if (!User.IsUserSameAsLoggedIn(Model.Id))
+        @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
         {
-            <button class="button max join" v-on:click="follow">
-                Follow
-            </button>
+            <div class="buttons">
+                <button class="button max join" v-on:click="follow">
+                    Follow
+                </button>
 
-            @* TODO: Improve the UIUX *@
-             <button class="button @(Model.IsBlockedBy ? "join" : "leave")"
-                     title="@(Model.IsBlockedBy ? "unblock" : "block")"
-                     v-on:click="block">
-                 <icon class="icon" icon="@(Model.IsBlockedBy ? "lens" : "block")"></icon>
-             </button>
+                @* TODO: Improve the UIUX *@
+                 <button class="button @(Model.IsBlockedBy ? "join" : "leave")"
+                         title="@(Model.IsBlockedBy ? "unblock" : "block")"
+                         v-on:click="block">
+                     <icon class="icon" icon="@(Model.IsBlockedBy ? "lens" : "block")"></icon>
+                 </button>
+            </div>
         }
-    </div>
 
     <nav class="nav">
         <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">

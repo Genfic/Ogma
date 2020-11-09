@@ -11,10 +11,17 @@
     border-left: 1px solid v.$foreground-75
     min-height: 1rem
     min-width: 1rem
+    color: v.$foreground
+    pointer-events: all
     
-    &.disabled
+    &.locked, .disabled
       color: v.$foreground-25
       pointer-events: none
+    
+    &.disabled
+      .folder
+        color: v.$foreground
+        pointer-events: none
     
     &:last-child
       border: none

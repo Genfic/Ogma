@@ -24,6 +24,7 @@ using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
+using static Ogma3.Services.RoutingHelpers;
 
 namespace Ogma3
 {
@@ -115,6 +116,7 @@ namespace Ogma3
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             });
+
             
             // Cookies
             services.ConfigureApplicationCookie(options =>
@@ -124,6 +126,11 @@ namespace Ogma3
                 options.AccessDeniedPath = new PathString("/login");
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                options.Events.OnRedirectToLogin = 
+                    HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.RedirectToLogin);
+                options.Events.OnRedirectToAccessDenied =
+                    HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.RedirectToLogin);
             });
             
             // Compression
@@ -177,9 +184,18 @@ namespace Ogma3
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            // Handle errors
+            app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+            {
+                appBuilder.UseStatusCodePagesWithRedirects("/api/error?code={0}");
+            });
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+            {
+                appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
+            });
 
             app.UseHttpsRedirection();
-            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             app.UseStaticFiles();
 
             app.UseRouting();

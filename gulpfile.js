@@ -18,7 +18,7 @@ const nano = require('cssnano');
 // JS processors
 const ts = require('gulp-typescript');
 const tsProject = ts.createProject('./tsconfig.json');
-const terser = require('gulp-terser-js');
+const terser = require('gulp-terser');
 
 // Dirs
 const root = './Ogma3/wwwroot';

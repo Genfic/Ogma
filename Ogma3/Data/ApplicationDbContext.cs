@@ -282,6 +282,8 @@ namespace Ogma3.Data
                     .WithOne(f => f.ParentFolder)
                     .HasForeignKey(f => f.ParentFolderId)
                     .OnDelete(DeleteBehavior.Cascade);
+                ent.Property(f => f.AccessLevel)
+                    .HasDefaultValue(EClubMemberRoles.User);
                 ent.HasMany(f => f.Stories)
                     .WithMany(s => s.Folders)
                     .UsingEntity<FolderStory>(

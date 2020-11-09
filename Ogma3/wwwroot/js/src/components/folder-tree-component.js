@@ -17,17 +17,22 @@ Vue.component('folder-item', {
     },
     methods: {
         bus: function (data) {
+            console.log(this.folder);
             if (data !== this.current)
             {
                 this.$emit('bus', data);
             }
-        }
+        },
     },
     template: `
-      <div class="folder" :class="folder.id === current || disabled ? 'disabled' : null">
-        <span v-on:click.self="$emit('bus', folder.id)" 
+      <div class="folder" 
+           :class="[
+               folder.id === current || disabled ? 'disabled' : null,
+               folder.canAdd ? null : 'locked'
+           ]">
+        <span v-on:click.self="bus(folder.id)" 
               :class="sel === folder.id ? 'active' : null"
-              :tabindex="folder.id === current || disabled ? -1 : 0">
+              :tabindex="folder.id === current || disabled || !folder.canAdd ? -1 : 0">
           {{folder.name}}
         </span> 
         <template v-if="folder.children.length > 0">
@@ -55,7 +60,6 @@ Vue.component('folder-tree', {
         },
         label: {
             type: String,
-            required: true
         },
         value: {
             type: Number,
@@ -69,13 +73,17 @@ Vue.component('folder-tree', {
             type: String,
             default: null
         },
+        showNone: {
+            type: Boolean,
+            default: true
+        }
     },
     data: function () { 
         return {
             folders: [],
             tree: [],
             sel: this.value,
-            name: this.label.replace(/\s+/g, '')
+            name: this.label?.replace(/\s+/g, '')
         }
     },
     methods: {
@@ -99,19 +107,19 @@ Vue.component('folder-tree', {
         axios.get(`${this.route}/${this.clubId}`)
             .then(res => {
                 this.folders = res.data;
-                this.unflatten()
+                this.unflatten();
             })
             .catch(console.error);
     },
     template: `
         <div class="o-form-group">
-            <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
+            <label v-if="label" :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>
             <input type="hidden" :value="sel" name="parentId">
             
             <div class="folder-tree active-border">
               
-                <span v-on:click.self="sel = null"
+                <span v-if="showNone" v-on:click.self="sel = null"
                     :class="sel === null ? 'active' : null"
                     tabindex="0">
                   None

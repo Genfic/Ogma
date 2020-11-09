@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201109053249_FolderPermissions")]
+    partial class FolderPermissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -537,10 +539,8 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<EClubMemberRoles>("AccessLevel")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("e_club_member_roles")
-                        .HasDefaultValue(EClubMemberRoles.User);
+                    b.Property<EClubMemberRoles[]>("AllowedRoles")
+                        .HasColumnType("e_club_member_roles[]");
 
                     b.Property<long>("ClubId")
                         .HasColumnType("bigint");

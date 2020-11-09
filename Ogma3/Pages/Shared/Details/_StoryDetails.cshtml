@@ -2,7 +2,7 @@
 @using Ogma3.Api.V1
 @using Ogma3.Services
 @using Utils.Extensions
-@inject OgmaConfig _Config
+@inject OgmaConfig Config
 @model StoryDetails
 
 <div id="story-app">
@@ -35,7 +35,7 @@
                      <span class="name">Delete</span>
                  </a>
                  
-                 @if (Model.IsPublished)
+                 if (Model.IsPublished)
                  {
                      <a title="Publish story" class="action-btn" asp-page="./Stories/Publish" asp-route-id="@Model.Id">
                          <icon class="icon" icon="visibility_off"></icon>
@@ -56,24 +56,26 @@
                  </a>
              }
 
-            <div class="spacer"></div>
+            @if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                <div class="spacer"></div>
+                
+                <button
+                    v-if="shelves"
+                    class="shelf"
+                    v-for="s in shelves.filter(e => e.isQuick || e.isDefault)"
+                    :title="'Add to ' + s.name"
+                    v-on:click="addToShelf(s.id)"
+                    :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
+                    <i class="material-icons-outlined" :style="{color: s.color}">
+                        {{s.icon ?? "bookmark_border"}}
+                    </i>
+                </button>
 
-            <button 
-                v-if="shelves"
-                class="shelf" 
-                v-for="s in shelves.filter(e => e.isQuick || e.isDefault)" 
-                :title="'Add to ' + s.name"
-                v-on:click="addToShelf(s.id)" 
-                :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
-                <i class="material-icons-outlined" :style="{color: s.color}">
-                    {{s.icon ?? "bookmark_border"}}
-                </i>
-            </button>
-
-            <button title="All bookshelves" class="shelf" v-on:click="showShelves = true">
-                <icon icon="more_horiz"></icon>
-            </button>
-
+                <button title="All bookshelves" class="shelf" v-on:click="showShelves = true">
+                    <icon icon="more_horiz"></icon>
+                </button>
+            }
         </div>
 
         @* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
@@ -110,7 +112,10 @@
         <time class="release-date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
             published @Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
         </time>
-        <a v-on:click="addToFolder">Add to folder</a>
+        @if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            <a v-on:click="addToFolder">Add to folder</a>
+        }
     </div>
 
     <ol class="chapters">
@@ -169,7 +174,7 @@
     
     <club-folder-selector 
         ref="folderSelect"
-        cdn="@_Config.Cdn"
+        cdn="@Config.Cdn"
         :story-id="@Model.Id"
         clubs-route="@Url.RouteUrl(nameof(ClubsController))"
         folders-route="@Url.RouteUrl(nameof(FoldersController))">
