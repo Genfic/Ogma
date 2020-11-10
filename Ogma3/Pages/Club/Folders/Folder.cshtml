@@ -13,8 +13,13 @@
 
 <markdown preset="Basic">@Model.Folder.Description</markdown>
 
-<a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
-<a asp-page="./Delete" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Delete</a>
+<span>Stories can be added by @Model.Folder.AccessLevel</span>
+
+@if (Model.EditPermitted)
+{
+    <a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
+    <a asp-page="./Delete" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Delete</a>
+}
 
 <hr>
 

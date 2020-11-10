@@ -72,8 +72,10 @@ namespace Ogma3.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> CheckRoles(long clubId, long userId, IEnumerable<EClubMemberRoles> roles)
+        public async Task<bool> CheckRoles(long clubId, long? userId, IEnumerable<EClubMemberRoles> roles)
         {
+            if (!userId.HasValue) return false;
+            
             return await _context.Clubs
                 .TagWith($"{nameof(ClubRepository)} : {nameof(CheckRoles)} — {clubId}, {userId}")
                 .Where(c => c.Id == clubId)

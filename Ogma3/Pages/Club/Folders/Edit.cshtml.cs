@@ -33,7 +33,7 @@ namespace Ogma3.Pages.Club.Folders
             var uid = User.GetNumericId();
             if (uid == null) return Unauthorized();
             
-            // Check if founder
+            // Check if founder or admin
             var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
             if (!isFounder) return Unauthorized();
 

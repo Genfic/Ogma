@@ -1,26 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
+using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Data.Repositories
 {
     public class FoldersRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
-        public FoldersRepository(ApplicationDbContext context, IMapper mapper)
+        public FoldersRepository(ApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<ICollection<FolderCard>> GetClubFolderCards(long clubId)
@@ -28,7 +22,21 @@ namespace Ogma3.Data.Repositories
             return await _context.Folders
                 .Where(f => f.ClubId == clubId)
                 .Where(f => f.ParentFolderId == null)
-                .ProjectTo<FolderCard>(_mapper.ConfigurationProvider)
+                .Select(f => new FolderCard
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Slug = f.Slug,
+                    Description = f.Description,
+                    ClubId = f.ClubId,
+                    StoriesCount = f.StoriesCount,
+                    ChildFolders = f.ChildFolders.Select(cf => new FolderMinimalDto
+                    {
+                        Id = cf.Id,
+                        Name = cf.Name,
+                        Slug = cf.Slug
+                    })
+                })
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -37,11 +45,27 @@ namespace Ogma3.Data.Repositories
         {
             return await _context.Folders
                 .Where(f => f.Id == id)
-                .ProjectTo<FolderDto>(_mapper.ConfigurationProvider)
+                .Select(f => new FolderDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Slug = f.Slug,
+                    Description = f.Description,
+                    StoriesCount = f.StoriesCount,
+                    AccessLevel = f.AccessLevel,
+                    ChildFolders = f.ChildFolders.Select(cf => new FolderMinimal
+                    {
+                        Id = f.Id,
+                        ClubId = f.ClubId,
+                        Name = f.Name,
+                        Slug = f.Slug,
+                        StoriesCount = f.StoriesCount
+                    })
+                })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
-
+        
         public async Task<ICollection<FolderMinimalWithParentDto>> GetClubFolders(long clubId, long userId)
         {
             return await _context.Folders
