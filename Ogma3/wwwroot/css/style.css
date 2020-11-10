@@ -2556,6 +2556,33 @@ form.search select:focus {
   margin-right: 0.5rem;
 }
 
+.club-role-slider .selector {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  height: 2rem;
+}
+.club-role-slider .selector input[type=radio] {
+  display: none;
+}
+.club-role-slider .selector input[type=radio]:checked ~ label {
+  background-color: var(--accent-25);
+}
+.club-role-slider .selector input[type=radio]:hover ~ label {
+  background-color: var(--accent-50);
+}
+.club-role-slider .selector label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.club-role-slider .selector label:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+
 .md p {
   padding-bottom: 0.5rem;
 }

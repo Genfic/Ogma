@@ -128,9 +128,9 @@ namespace Ogma3
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
                 options.Events.OnRedirectToLogin = 
-                    HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.RedirectToLogin);
+                    HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.OnRedirectToLogin);
                 options.Events.OnRedirectToAccessDenied =
-                    HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.RedirectToLogin);
+                    HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.OnRedirectToLogin);
             });
             
             // Compression

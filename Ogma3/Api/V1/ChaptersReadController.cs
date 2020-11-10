@@ -35,10 +35,9 @@ namespace Ogma3.Api.V1
                 .Where(cr => cr.StoryId == story)
                 .Where(cr => cr.UserId == uid)
                 .Select(cr => cr.Chapters)
-                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (chaptersRead == null) return NotFound();
+            if (chaptersRead == null) return NoContent();
             
             return new OkObjectResult(new { Read = chaptersRead });
         }
@@ -49,8 +48,10 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult> PostChaptersRead(ChaptersReadPost post)
         {
             var user = await _userManager.GetUserAsync(User);
+            var (chapter, story) = post;
+            
             var chaptersReadObj = await _context.ChaptersRead
-                .FirstOrDefaultAsync(cr => cr.StoryId == post.Story && cr.UserId == user.Id);
+                .FirstOrDefaultAsync(cr => cr.StoryId == story && cr.UserId == user.Id);
             
             // If no read list exists yet, create one with the chapter read
             List<long> res;
@@ -58,23 +59,23 @@ namespace Ogma3.Api.V1
             {
                 var newCr = new ChaptersRead
                 {
-                    StoryId = post.Story,
+                    StoryId = story,
                     User = user,
-                    Chapters = new List<long>{ post.Chapter }
+                    Chapters = new List<long> {chapter}
                 };
                 await _context.ChaptersRead.AddAsync(newCr);
                 res = newCr.Chapters;
             }
             else // just update the existing one
             {
-                if (chaptersReadObj.Chapters.Contains(post.Chapter))
+                if (chaptersReadObj.Chapters.Contains(chapter))
                 {
-                    chaptersReadObj.Chapters.Remove(post.Chapter);
+                    chaptersReadObj.Chapters.Remove(chapter);
                     res = chaptersReadObj.Chapters;
                 }
                 else
                 {
-                    chaptersReadObj.Chapters.Add(post.Chapter);
+                    chaptersReadObj.Chapters.Add(chapter);
                     res = chaptersReadObj.Chapters;
                 }
             }
@@ -92,10 +93,6 @@ namespace Ogma3.Api.V1
             }
         }
 
-        public class ChaptersReadPost
-        {
-            public long Chapter { get; set; }
-            public long Story { get; set; }
-        }
+        public sealed record ChaptersReadPost(long Chapter, long Story);
     }
 }

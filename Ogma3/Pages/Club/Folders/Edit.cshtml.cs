@@ -50,7 +50,8 @@ namespace Ogma3.Pages.Club.Folders
                 Id = folder.Id,
                 Name = folder.Name,
                 Description = folder.Description,
-                ParentId = folder.ParentFolderId
+                ParentId = folder.ParentFolderId,
+                Role = folder.AccessLevel
             };
 
             return Page();
@@ -73,6 +74,7 @@ namespace Ogma3.Pages.Club.Folders
             public string Description { get; set; }
 
             public long? ParentId { get; set; }
+            public EClubMemberRoles Role { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync(long clubId)
@@ -99,6 +101,7 @@ namespace Ogma3.Pages.Club.Folders
 
             folder.Name = Input.Name;
             folder.Slug = Input.Name.Friendlify();
+            folder.AccessLevel = Input.Role;
             folder.Description = Input.Description;
             
             // Prevent nesting the parent folder inside of one of its children or inside of itself
@@ -117,7 +120,7 @@ namespace Ogma3.Pages.Club.Folders
 
             await _context.SaveChangesAsync();
             
-            return RedirectToPage("./Index", new { clubId });
+            return RedirectToPage("./Folder", new { clubId, folder.Id, folder.Slug });
         }
     }
 }

@@ -1,5 +1,7 @@
 @page "/club/{clubid}/folder/{id}/edit"
 @using Ogma3.Api.V1
+@using Ogma3.Data.Enums
+@using System.Text.Json
 @model Ogma3.Pages.Club.Folders.EditModel
 
 @{
@@ -34,10 +36,16 @@
                       label="@nameof(Model.Input.Description)">
     </textarea-counter>
     
+    <club-role-slider label="Role"
+                      desc="Choose who can add stories to this folder"
+                      :value="@((int)Model.Input.Role)"
+                      roles-str="@JsonSerializer.Serialize(Enum.GetNames(typeof(EClubMemberRoles)))">
+    </club-role-slider>
+    
     <input type="hidden" name="id" value="@Model.Input.Id">
     
     <div class="o-form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
     </div>
     
 </form>
@@ -46,5 +54,6 @@
     <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/club-role-slider-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/editors/folder.min.js" asp-append-version="true"></script>
 }
