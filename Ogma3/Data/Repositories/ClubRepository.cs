@@ -105,6 +105,23 @@ namespace Ogma3.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<ClubMinimalDto>> GetClubsWithStory(long storyId)
+        {
+            return await _context.Clubs
+                .Where(c => c.Folders
+                    .Any(f => f.Stories
+                        .Any(s => s.Id == storyId)
+                    )
+                )
+                .Select(c => new ClubMinimalDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Icon = c.Icon
+                })
+                .ToListAsync();
+        }
+
         public async Task<int> CountClubs()
         {
             return await _context.Clubs.CountAsync();

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,10 +58,15 @@ namespace Ogma3
                 {
                     webBuilder.UseUrls("https://+:6001", "https://+:8080", "https://+:80");
                     webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
+                        options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
+                        options.ConfigureEndpointDefaults(lo =>
                         {
-                            // Opts
-                        })
-                        .UseStartup<Startup>();
+                            lo.Protocols = HttpProtocols.Http1AndHttp2;
+                        });
+                    })
+                    .UseStartup<Startup>();
                 });
         }
 

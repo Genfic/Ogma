@@ -44,8 +44,9 @@ Vue.component('folder-item', {
                          :current="current"
                          :disabled="folder.id === current">
             </folder-item>  
-        </template>  
-    </div>`
+        </template> 
+    </div>
+    `
 });
 
 Vue.component('folder-tree', {
@@ -124,14 +125,20 @@ Vue.component('folder-tree', {
                     tabindex="0">
                   None
                 </span>
+              
+                  <template v-if="tree.length > 0">
+                    <folder-item v-for="f in tree"
+                                 :folder="f"
+                                 :key="f.id"
+                                 @bus="bus"
+                                 :sel="sel"
+                                 :current="current">
+                    </folder-item>
+                  </template>
 
-                <folder-item v-for="f in tree" 
-                           :folder="f" 
-                           :key="f.id"
-                           @bus="bus"
-                           :sel="sel"
-                           :current="current">
-                </folder-item>
+                <template v-else>
+                  No folders found
+                </template>
             </div>
         </div>
     `

@@ -67,6 +67,9 @@ let story_vue = new Vue({
         
         addToFolder: function () {
             this.$refs.folderSelect.visible = true;
+        },
+        showClubs: function () {
+            this.$refs.featuredIn.visible = true;
         }
     },
     mounted() {

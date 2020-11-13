@@ -29,6 +29,13 @@ namespace Ogma3.Api.V1
             return await _clubRepo.GetUserClubsMinimal((long) uid);
         }
         
+        // GET: /api/clubs/story/3
+        [HttpGet("story/{id}")]
+        public async Task<ActionResult<List<ClubMinimalDto>>> GetClubsWithStory(long id)
+        {
+            return await _clubRepo.GetClubsWithStory(id);
+        }
+        
         
         [HttpGet]
         public string Ping() => "Pong";

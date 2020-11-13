@@ -124,12 +124,19 @@ $title-height: 2rem
   &>.info
     border-top: 1px solid v.$foreground-25
     margin-top: 1rem
+    display: flex
+    
+    .spacer
+      flex: 1
   
     &>*
       padding: 0 .25rem
       color: v.$foreground-75
       &:hover
         color: v.$foreground
+        
+    &>a
+      cursor: pointer
       
       
     

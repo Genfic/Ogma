@@ -112,10 +112,14 @@
         <time class="release-date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
             published @Model.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
         </time>
+        
+        <div class="spacer"></div>
+        
         @if (User?.Identity?.IsAuthenticated ?? false)
         {
             <a v-on:click="addToFolder">Add to folder</a>
         }
+            <a v-on:click="showClubs">Featured in clubs</a>
     </div>
 
     <ol class="chapters">
@@ -180,6 +184,13 @@
         folders-route="@Url.RouteUrl(nameof(FoldersController))">
     </club-folder-selector>
     
+    <clubs-with-story
+        ref="featuredIn"
+        cdn="@Config.Cdn"
+        :story-id="@Model.Id"
+        clubs-route="@Url.RouteUrl(nameof(ClubsController))">
+    </clubs-with-story>
+    
     <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl(nameof(VotesController))"></div>
     <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
     <div id="reads-route" v-if="!readsRoute" data-route="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
@@ -190,4 +201,5 @@
 
 @Html.Resource(@<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/clubs-with-story-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>)

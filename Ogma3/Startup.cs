@@ -188,7 +188,7 @@ namespace Ogma3
             // Handle errors
             app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
             {
-                appBuilder.UseStatusCodePagesWithRedirects("/api/error?code={0}");
+                appBuilder.UseStatusCodePagesWithReExecute("/api/error?code={0}");
             });
             app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
             {

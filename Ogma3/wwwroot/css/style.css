@@ -717,6 +717,10 @@ img.avatar {
 #story-app > .info {
   border-top: 1px solid var(--foreground-25);
   margin-top: 1rem;
+  display: flex;
+}
+#story-app > .info .spacer {
+  flex: 1;
 }
 #story-app > .info > * {
   padding: 0 0.25rem;
@@ -724,6 +728,9 @@ img.avatar {
 }
 #story-app > .info > *:hover {
   color: var(--foreground);
+}
+#story-app > .info > a {
+  cursor: pointer;
 }
 
 .chapter-container {
@@ -1162,12 +1169,13 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   background: var(--foreground-50);
 }
 .my-modal > .content {
+  min-width: 20rem;
   max-width: 40rem;
   max-height: 30rem;
   background: var(--background);
   padding: 1rem;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   border: 5px solid var(--background);
 }
 @media screen and (max-width: 570px) {
@@ -2544,6 +2552,7 @@ form.search select:focus {
   align-items: center;
   padding: 0.5rem;
   cursor: pointer;
+  color: var(--foreground);
 }
 .club-folder-selector .clubs .club:focus {
   border-color: var(--accent);
@@ -2641,6 +2650,15 @@ form.search select:focus {
   font-size: inherit;
   color: inherit;
   word-break: normal;
+}
+.md blockquote {
+  font-style: italic;
+  padding-left: 0.5rem;
+  margin: 0.5rem 0.5rem 0.5rem 1ch;
+  border-left: 2px solid var(--foreground-10);
+}
+.md blockquote:hover {
+  border-left-color: var(--foreground-25);
 }
 .md table {
   margin: 0.5rem 0;
