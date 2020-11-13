@@ -18,6 +18,7 @@ namespace Ogma3.Pages.Shared.Bars
 
         public int StoriesCount { get; set; }
         public int BlogpostsCount { get; set; }
+        public int FollowersCount { get; set; }
 
         public bool IsBlockedBy { get; set; }
         public bool IsFollowedBy { get; set; }

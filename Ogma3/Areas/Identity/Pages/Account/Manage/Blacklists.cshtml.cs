@@ -43,7 +43,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 .Select(bt => bt.TagId)
                 .ToListAsync();
             BlockedUsers = await _context.BlacklistedUsers
-                .Where(bu => bu.UserId == uid)
+                .Where(bu => bu.BlockingUserId == uid)
                 .Select(bu => bu.BlockedUser)
                 .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
                 .ToListAsync();

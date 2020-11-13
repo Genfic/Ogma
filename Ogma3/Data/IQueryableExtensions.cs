@@ -81,7 +81,7 @@ namespace Ogma3.Data
                         .Any()
                     )
                     .Where(s => !ctx.BlacklistedUsers
-                        .Where(bu => bu.UserId == userId)
+                        .Where(bu => bu.BlockingUserId == userId)
                         .Select(bu => bu.BlockedUserId)
                         .Contains(s.AuthorId)
                     )

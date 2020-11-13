@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using AutoMapper;
 using Markdig;
@@ -7,7 +6,6 @@ using MarkdigExtensions.Spoiler;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Pages.Shared.Details;
@@ -29,23 +27,6 @@ namespace Ogma3.Data
                 .Build();
 
             // User mappings
-            CreateMap<OgmaUser, ProfileBar>()
-                .ForMember(
-                    pb => pb.StoriesCount,
-                    opts 
-                        => opts.MapFrom(u => u.Stories.Count(s => s.IsPublished))
-                )
-                .ForMember(
-                    pb => pb.BlogpostsCount,
-                    opts 
-                        => opts.MapFrom(u => u.Blogposts.Count(b => b.IsPublished))
-                )
-                .ForMember(
-                    pb => pb.IsBlockedBy,
-                    opts
-                    => opts.MapFrom(u => u.BlacklistedBy.Any(bu => bu.UserId == currentUser))
-                );
-            
             CreateMap<OgmaUser, UserProfileDto>()
                 .ForMember(
                     pb => pb.StoriesCount,
@@ -60,7 +41,7 @@ namespace Ogma3.Data
                 .ForMember(
                     pb => pb.IsBlockedBy,
                     opts
-                        => opts.MapFrom(u => u.BlacklistedBy.Any(bu => bu.UserId == currentUser))
+                        => opts.MapFrom(u => u.BlockedByUsers.Any(bu => bu.Id == currentUser))
                 );
             
             CreateMap<OgmaUser, UserSimpleDto>()
@@ -149,24 +130,6 @@ namespace Ogma3.Data
                     => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
                 );
             CreateMap<Club, ClubCard>();
-            
-            // Comment mappings
-            CreateMap<Comment, CommentDto>()
-                .ForMember(
-                    cd => cd.Body,
-                    opts
-                        => opts.MapFrom(c => Markdown.ToHtml(c.Body, md))
-                )
-                .ForMember(
-                    cd => cd.Owned,
-                    opts
-                        => opts.MapFrom(c => c.AuthorId == currentUser)
-                )
-                .ForMember(
-                    cd => cd.IsBlocked,
-                    opts
-                    => opts.MapFrom(c => c.Author.BlacklistedBy.Any(bu => bu.UserId == currentUser))
-                );
             
             // Comment revision mappings
             CreateMap<CommentRevision, CommentRevisionDto>()

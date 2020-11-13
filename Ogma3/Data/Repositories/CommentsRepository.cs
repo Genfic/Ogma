@@ -3,8 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Markdig;
+using MarkdigExtensions.Mentions;
+using MarkdigExtensions.Spoiler;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Models;
+using Ogma3.Data.Projections;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 
@@ -13,24 +18,30 @@ namespace Ogma3.Data.Repositories
     public class CommentsRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly long? _uid;
+        private readonly MarkdownPipeline _md;
 
-        public CommentsRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
+        public CommentsRepository(ApplicationDbContext context,IUserService userService)
         {
             _context = context;
-            _mapper = mapper;
-            _userService = userService;
+            _uid = userService.GetUser()?.GetNumericId();
+            _md = new MarkdownPipelineBuilder()
+                .UseMentions(new MentionOptions("/user/", "_blank"))
+                .UseAutoLinks()
+                .UseAutoIdentifiers()
+                .UseSpoilers()
+                .Build();
         }
 
 
         public async Task<CommentDto> GetSingle(long id)
         {
-            return await _context.Comments
-                .Where(c => c.Id == id)
-                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
+            var comment =  await _context.Comments
+                .Where(c => c.Id == id)                
+                .ToDto(_uid, _md)
                 .FirstOrDefaultAsync();
+            
+            return comment;
         }
         public async Task<string> GetMarkdown(long id)
         {
@@ -45,9 +56,8 @@ namespace Ogma3.Data.Repositories
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == threadId)
                 .OrderByDescending(c => c.DateTime)
-                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
+                .ToDto(_uid, _md)
                 .Paginate(page, perPage)
-                .AsNoTracking()
                 .ToListAsync();
             
         }

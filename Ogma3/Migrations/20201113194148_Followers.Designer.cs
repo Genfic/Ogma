@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201113194148_Followers")]
+    partial class Followers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,6 +141,21 @@ namespace Ogma3.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("BlacklistedTags");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedUser", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BlockedUserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UserId", "BlockedUserId");
+
+                    b.HasIndex("BlockedUserId");
+
+                    b.ToTable("BlacklistedUsers");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Blogpost", b =>
@@ -993,21 +1010,6 @@ namespace Ogma3.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.UserBlock", b =>
-                {
-                    b.Property<long>("BlockingUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BlockedUserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("BlockingUserId", "BlockedUserId");
-
-                    b.HasIndex("BlockedUserId");
-
-                    b.ToTable("BlacklistedUsers");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.UserFollow", b =>
                 {
                     b.Property<long>("FollowingUserId")
@@ -1131,6 +1133,25 @@ namespace Ogma3.Migrations
                         .IsRequired();
 
                     b.Navigation("Tag");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.BlacklistedUser", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.OgmaUser", "BlockedUser")
+                        .WithMany("BlacklistedBy")
+                        .HasForeignKey("BlockedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.OgmaUser", "User")
+                        .WithMany("BlacklistedUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlockedUser");
 
                     b.Navigation("User");
                 });
@@ -1426,25 +1447,6 @@ namespace Ogma3.Migrations
                     b.Navigation("Namespace");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.UserBlock", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "BlockedUser")
-                        .WithMany()
-                        .HasForeignKey("BlockedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "BlockingUser")
-                        .WithMany()
-                        .HasForeignKey("BlockingUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BlockedUser");
-
-                    b.Navigation("BlockingUser");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.UserFollow", b =>
                 {
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "FollowedUser")
@@ -1541,9 +1543,13 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Models.OgmaUser", b =>
                 {
+                    b.Navigation("BlacklistedBy");
+
                     b.Navigation("BlacklistedRatings");
 
                     b.Navigation("BlacklistedTags");
+
+                    b.Navigation("BlacklistedUsers");
 
                     b.Navigation("Blogposts");
 

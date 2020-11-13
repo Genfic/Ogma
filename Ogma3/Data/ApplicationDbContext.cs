@@ -61,7 +61,7 @@ namespace Ogma3.Data
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
         public DbSet<BlacklistedTag> BlacklistedTags { get; set; }
-        public DbSet<BlacklistedUser> BlacklistedUsers { get; set; }
+        public DbSet<UserBlock> BlacklistedUsers { get; set; }
 
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
@@ -93,6 +93,28 @@ namespace Ogma3.Data
                         ur => ur.HasOne(e => e.User)
                             .WithMany(u => u.UserRoles)
                             .HasForeignKey(k => k.UserId)
+                    );
+                ent.HasMany(u => u.Followers)
+                    .WithMany(u => u.Following)
+                    .UsingEntity<UserFollow>(
+                        uf => uf.HasOne(e => e.FollowedUser)
+                            .WithMany()
+                            .HasForeignKey(k => k.FollowedUserId),
+                        uf => uf.HasOne(e => e.FollowingUser)
+                            .WithMany()
+                            .HasForeignKey(k => k.FollowedUserId),
+                        uf => uf.HasKey(i => new { i.FollowingUserId, i.FollowedUserId })
+                    );
+                ent.HasMany(u => u.BlockedUsers)
+                    .WithMany(u => u.BlockedByUsers)
+                    .UsingEntity<UserBlock>(
+                        ub => ub.HasOne(e => e.BlockingUser)
+                            .WithMany()
+                            .HasForeignKey(k => k.BlockingUserId),
+                        ub => ub.HasOne(e => e.BlockedUser)
+                            .WithMany()
+                            .HasForeignKey(k => k.BlockedUserId),
+                        ub => ub.HasKey(i => new { i.BlockingUserId, i.BlockedUserId })
                     );
             });
 
@@ -318,14 +340,14 @@ namespace Ogma3.Data
             });
             
             // Blacklisted users
-            builder.Entity<BlacklistedUser>(ent =>
-            {
-                ent.HasKey(bu => new {bu.UserId, bu.BlockedUserId});
-                ent.HasOne(e => e.BlockedUser)
-                    .WithMany(u => u.BlacklistedBy);
-                ent.HasOne(e => e.User)
-                    .WithMany(u => u.BlacklistedUsers);
-            });
+            // builder.Entity<UserBlock>(ent =>
+            // {
+            //     ent.HasKey(bu => new {UserId = bu.BlockingUserId, bu.BlockedUserId});
+            //     ent.HasOne(e => e.BlockedUser)
+            //         .WithMany(u => u.BlockedByUsers);
+            //     ent.HasOne(e => e.BlockingUser)
+            //         .WithMany(u => u.BlockedUsers);
+            // });
 
             
             

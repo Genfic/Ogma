@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Projections;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
@@ -18,12 +19,14 @@ namespace Ogma3.Data.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly long? _uid;
         
         public UserRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
             _userService = userService;
+            _uid = _userService.GetUser()?.GetNumericId();
         }
         
         public async Task<ProfileBar> GetProfileBar(string name)
@@ -31,8 +34,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
                 .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
-                .AsNoTracking()
+                .ToProfileBar(_uid)
                 .FirstOrDefaultAsync();
         }
         
@@ -41,8 +43,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {id}")
                 .Where(u => u.Id == id)
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
-                .AsNoTracking()
+                .ToProfileBar(_uid)
                 .FirstOrDefaultAsync();
         }
 

@@ -54,16 +54,16 @@ namespace Ogma3.Api.V1
                 .FirstOrDefaultAsync();
 
             var existing = await _context.BlacklistedUsers
-                .Where(bu => bu.UserId == uid)
-                .Where(bu => bu.BlockedUserId == targetUserId)
+                .Where(bu => bu.BlockingUserId == targetUserId)
+                .Where(bu => bu.BlockedUserId == uid)
                 .FirstOrDefaultAsync();
             
             if (existing == null)
             {
-                await _context.BlacklistedUsers.AddAsync(new BlacklistedUser
+                await _context.BlacklistedUsers.AddAsync(new UserBlock
                 {
-                    UserId = (long) uid,
-                    BlockedUserId = targetUserId
+                    BlockingUserId = targetUserId,
+                    BlockedUserId = (long) uid 
                 });
                 await _context.SaveChangesAsync();
                 return true;

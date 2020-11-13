@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Markdig;
+using MarkdigExtensions.Mentions;
+using MarkdigExtensions.Spoiler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +14,7 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Data.Projections;
 using Ogma3.Data.Repositories;
 using Utils.Extensions;
 
@@ -24,6 +28,7 @@ namespace Ogma3.Api.V1
         private readonly OgmaConfig _ogmaConfig;
         private readonly CommentsRepository _commentsRepo;
         private readonly IMapper _mapper;
+        private readonly MarkdownPipeline _md;
 
         public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo, IMapper mapper)
         {
@@ -31,6 +36,12 @@ namespace Ogma3.Api.V1
             _ogmaConfig = ogmaConfig;
             _commentsRepo = commentsRepo;
             _mapper = mapper;
+            _md = new MarkdownPipelineBuilder()
+                .UseMentions(new MentionOptions("/user/", "_blank"))
+                .UseAutoLinks()
+                .UseAutoIdentifiers()
+                .UseSpoilers()
+                .Build();
         }
 
         
@@ -111,8 +122,10 @@ namespace Ogma3.Api.V1
             comm.EditCount = (ushort?)(comm.EditCount + 1) ?? 1;
             
             await _context.SaveChangesAsync();
-            
-            return _mapper.Map<Comment, CommentDto>(comm);
+
+            return new List<Comment> {comm}.AsQueryable()
+                .ToDto(uid, _md)
+                .FirstOrDefault();
         }
         
         // POST: api/Comments

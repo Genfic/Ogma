@@ -51,10 +51,15 @@ namespace Ogma3.Data.Models
         [JsonIgnore]
         public ICollection<BlacklistedTag> BlacklistedTags { get; set; }
         [JsonIgnore]
-        public ICollection<BlacklistedUser> BlacklistedUsers { get; set; }
+        public ICollection<OgmaUser> BlockedUsers { get; set; }
+        [JsonIgnore]
+        public ICollection<OgmaUser> BlockedByUsers { get; set; }
         
-        // Blacklist and follow meta
-        public ICollection<BlacklistedUser> BlacklistedBy { get; set; }
+        // Follows
+        [JsonIgnore]
+        public ICollection<OgmaUser> Followers { get; set; }
+        [JsonIgnore]
+        public ICollection<OgmaUser> Following { get; set; }
 
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {
