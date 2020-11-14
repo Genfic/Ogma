@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +72,41 @@ namespace Ogma3.Api.V1
             else
             {
                 _context.BlacklistedUsers.Remove(existing);
+                await _context.SaveChangesAsync();
+                return false;
+            }
+        }
+
+        // api/Users/follow
+        [HttpPost("follow")]
+        public async Task<ActionResult<bool>> FollowUser(BlockPostData data)
+        {
+            var uid = User.GetNumericId();
+            if (!uid.HasValue) return Unauthorized();
+
+            var targetUserId = await _context.Users
+                .Where(u => u.NormalizedUserName == data.Name.Normalize().ToUpper())
+                .Select(u => u.Id)
+                .FirstOrDefaultAsync();
+
+            var existing = await _context.FollowedUsers
+                .Where(bu => bu.FollowingUserId == uid)
+                .Where(bu => bu.FollowedUserId == targetUserId)
+                .FirstOrDefaultAsync();
+            
+            if (existing == null)
+            {
+                await _context.FollowedUsers.AddAsync(new UserFollow
+                {
+                    FollowingUserId = (long) uid ,
+                    FollowedUserId = targetUserId
+                });
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                _context.FollowedUsers.Remove(existing);
                 await _context.SaveChangesAsync();
                 return false;
             }

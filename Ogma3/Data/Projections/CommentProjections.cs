@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Markdig;
 using Ogma3.Data.DTOs;
@@ -7,9 +8,8 @@ namespace Ogma3.Data.Projections
 {
     public static class CommentProjections
     {
-        public static IQueryable<CommentDto> ToDto(this IQueryable<Comment> source, long? userId, MarkdownPipeline md)
-        {
-            return source.Select(c => new CommentDto
+        public static IQueryable<CommentDto> ToDto(this IQueryable<Comment> source, long? userId, MarkdownPipeline md) 
+            => source.Select(c => new CommentDto
             {
                 Id = c.Id,
                 DateTime = c.DateTime,
@@ -31,11 +31,46 @@ namespace Ogma3.Data.Projections
                             Id = r.Id,
                             Name = r.Name,
                             IsStaff = r.IsStaff,
-                            Order = (int) r.Order,
+                            Order = r.Order ?? 0,
                             Color = r.Color
                         })
                     }
             });
-        }
+
+        public static CommentDto ToDto(this Comment source, long? userId, MarkdownPipeline md) 
+            => new CommentDto
+            {
+                Id = source.Id,
+                DateTime = source.DateTime,
+                LastEdit = source.LastEdit,
+                DeletedBy = source.DeletedBy,
+                EditCount = source.EditCount ?? 0,
+                Body = Markdown.ToHtml(source.Body, md),
+                Owned = source.AuthorId == userId,
+                IsBlocked = source.Author != null && source.Author.BlockedByUsers.Any(bu => bu.Id == userId),
+                Author = source.Author == null
+                    ? null
+                    : new UserSimpleDto
+                    {
+                        UserName = source.Author.UserName,
+                        Avatar = source.Author.Avatar,
+                        Title = source.Author.Title,
+                        Roles = source.Author.Roles.Select(r => new RoleDto
+                        {
+                            Id = r.Id,
+                            Name = r.Name,
+                            IsStaff = r.IsStaff,
+                            Order = r.Order ?? 0,
+                            Color = r.Color
+                        })
+                    }
+            };
+
+        public static IQueryable<CommentRevisionDto> ToCommentRevisionDto(this IQueryable<CommentRevision> source, MarkdownPipeline md)
+            => source.Select(c => new CommentRevisionDto
+            {
+                Body = Markdown.ToHtml(c.Body, md),
+                EditTime = c.EditTime
+            });
     }
 }

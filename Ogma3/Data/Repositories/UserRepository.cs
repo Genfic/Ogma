@@ -18,15 +18,13 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
         private readonly long? _uid;
         
         public UserRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
-            _userService = userService;
-            _uid = _userService.GetUser()?.GetNumericId();
+            _uid = userService.GetUser()?.GetNumericId();
         }
         
         public async Task<ProfileBar> GetProfileBar(string name)
@@ -52,7 +50,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetUserData)} -> {name}")
                 .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
+                .ToUserProfileDto(_uid)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
@@ -62,7 +60,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetUserData)} -> {id}")
                 .Where(u => u.Id == id)
-                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
+                .ToUserProfileDto(_uid)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

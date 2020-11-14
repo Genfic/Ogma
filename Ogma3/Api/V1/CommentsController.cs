@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Markdig;
 using MarkdigExtensions.Mentions;
 using MarkdigExtensions.Spoiler;
@@ -27,15 +25,13 @@ namespace Ogma3.Api.V1
         private readonly ApplicationDbContext _context;
         private readonly OgmaConfig _ogmaConfig;
         private readonly CommentsRepository _commentsRepo;
-        private readonly IMapper _mapper;
         private readonly MarkdownPipeline _md;
 
-        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo, IMapper mapper)
+        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo)
         {
             _context = context;
             _ogmaConfig = ogmaConfig;
             _commentsRepo = commentsRepo;
-            _mapper = mapper;
             _md = new MarkdownPipelineBuilder()
                 .UseMentions(new MentionOptions("/user/", "_blank"))
                 .UseAutoLinks()
@@ -77,7 +73,7 @@ namespace Ogma3.Api.V1
         {
             return await _context.CommentRevisions
                 .Where(r => r.ParentId == id)
-                .ProjectTo<CommentRevisionDto>(_mapper.ConfigurationProvider)
+                .ToCommentRevisionDto(_md)
                 .ToListAsync();
         }
 
@@ -102,7 +98,11 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<CommentDto>> PutComment(PatchData data)
         {
             var uid = User.GetNumericId();
-            var comm = _context.Comments.FirstOrDefault(c => c.Id == data.Id);
+            if (uid == null) return Unauthorized();
+            
+            var (body, commentId) = data;
+            
+            var comm = _context.Comments.FirstOrDefault(c => c.Id == commentId);
             
             if (comm == null) return NotFound();
             if (uid != comm.AuthorId) return Unauthorized();
@@ -116,16 +116,14 @@ namespace Ogma3.Api.V1
             });
 
             // Edit the comment
-            comm.Id = data.Id;
-            comm.Body = data.Body;
+            comm.Id = commentId;
+            comm.Body = body;
             comm.LastEdit = DateTime.Now;
             comm.EditCount = (ushort?)(comm.EditCount + 1) ?? 1;
             
             await _context.SaveChangesAsync();
-
-            return new List<Comment> {comm}.AsQueryable()
-                .ToDto(uid, _md)
-                .FirstOrDefault();
+            
+            return comm.ToDto(uid, _md);
         }
         
         // POST: api/Comments
@@ -135,17 +133,18 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<CommentDto>> PostComment(PostData data)
         {
             var uid = User.GetNumericId();
-
             if (uid == null) return Unauthorized();
+
+            var (body, threadId) = data;
             
             var comment = new Comment
             {
                 AuthorId = (long) uid,
-                Body = data.Body
+                Body = body
             };
 
             var thread = await _context.CommentThreads
-                .Where(ct => ct.Id == data.Thread)
+                .Where(ct => ct.Id == threadId)
                 .Include(ct => ct.Comments)
                 .FirstOrDefaultAsync();
 
@@ -156,7 +155,7 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            var dto = _mapper.Map<Comment, CommentDto>(comment);
+            var dto = comment.ToDto(uid, _md);
             return CreatedAtAction("GetComment", new { id = comment.Id }, dto);
         }
 
@@ -190,21 +189,12 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<Comment, CommentDto>(comment);
+            return comment.ToDto(uid, _md);
         }
 
         
         // Data classes
-        public class PostData
-        {
-            public string Body { get; set; }
-            public long Thread { get; set; }
-        }
-
-        public class PatchData
-        {
-            public long Id { get; set; }
-            public string Body { get; set; }
-        }
+        public sealed record PostData (string Body, long Thread);
+        public sealed record PatchData (string Body, long Id);
     }
 }

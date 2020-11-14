@@ -131,14 +131,6 @@ namespace Ogma3.Data
                 );
             CreateMap<Club, ClubCard>();
             
-            // Comment revision mappings
-            CreateMap<CommentRevision, CommentRevisionDto>()
-                .ForMember(
-                    crd => crd.Body,
-                    opts
-                        => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md))
-                );
-            
             // Folder mappings
             CreateMap<Folder, FolderCard>();
             CreateMap<Folder, FolderMinimal>();

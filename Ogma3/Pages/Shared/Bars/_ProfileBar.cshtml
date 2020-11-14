@@ -50,15 +50,18 @@
         @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
         {
             <div class="buttons">
-                <button class="button max join" v-on:click="follow">
-                    Follow
+                <button class="button max join" 
+                        :title="isFollowed ? 'Unfollow' : 'Follow'"
+                        v-on:click="follow">
+                    {{ isFollowed ? 'Following' : 'Follow' }}
                 </button>
 
-                @* TODO: Improve the UIUX *@
-                 <button class="button @(Model.IsBlockedBy ? "join" : "leave")"
-                         title="@(Model.IsBlockedBy ? "unblock" : "block")"
+                 <button class="button" :class="isBlocked ? 'join' : 'leave'"
+                         :title="isBlocked ? 'Unblock' : 'Block'"
                          v-on:click="block">
-                     <icon class="icon" icon="@(Model.IsBlockedBy ? "lens" : "block")"></icon>
+                     <i class="icon material-icons-outlined">
+                         {{ isBlocked ? 'lens' : 'block' }}
+                     </i>
                  </button>
             </div>
         }
@@ -80,8 +83,9 @@
 
     <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
     <div v-if="!name" id="data-name" data-name="@Model.UserName.Friendlify()"></div>
+    <div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy"></div>
+    <div v-if="!done" id="data-followed" data-followed="@Model.IsFollowedBy"></div>
     @Html.AntiForgeryToken()
 </div>
-
 
 @Html.Resource(@<script src="~/js/dist/profile-bar.min.js" asp-append-version="true"></script>)

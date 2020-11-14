@@ -62,6 +62,9 @@ namespace Ogma3.Data
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
         public DbSet<BlacklistedTag> BlacklistedTags { get; set; }
         public DbSet<UserBlock> BlacklistedUsers { get; set; }
+        
+        // Follows
+        public DbSet<UserFollow> FollowedUsers { get; set; }
 
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
@@ -97,10 +100,10 @@ namespace Ogma3.Data
                 ent.HasMany(u => u.Followers)
                     .WithMany(u => u.Following)
                     .UsingEntity<UserFollow>(
-                        uf => uf.HasOne(e => e.FollowedUser)
-                            .WithMany()
-                            .HasForeignKey(k => k.FollowedUserId),
                         uf => uf.HasOne(e => e.FollowingUser)
+                            .WithMany()
+                            .HasForeignKey(k => k.FollowingUserId),
+                        uf => uf.HasOne(e => e.FollowedUser)
                             .WithMany()
                             .HasForeignKey(k => k.FollowedUserId),
                         uf => uf.HasKey(i => new { i.FollowingUserId, i.FollowedUserId })
