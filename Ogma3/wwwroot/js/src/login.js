@@ -2,11 +2,12 @@ new Vue({
     el: "#app",
     data: {
         name: null,
-        avatar: "//cdn.ogma.buzz/file/Ogma-net/key.webp",
+        avatar: "key.webp",
         title: null,
         // hasMfa: false,
         checked: false,        
         
+        cdn: null,
         route: null
     },
     methods: {
@@ -35,8 +36,16 @@ new Vue({
         }
     },
     
+    computed: {
+        getAvatar: function() {
+            return this.cdn + (this.avatar ?? 'key.webp');
+        }
+    },
+    
     mounted() {
         // Grab the route from route helper
         this.route = document.getElementById('route').dataset.route; 
+        this.cdn = document.getElementById('cdn').dataset.cdn;
     }
 });
+

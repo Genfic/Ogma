@@ -176,6 +176,24 @@ select {
     scroll-behavior: auto !important;
   }
 }
+table.o-table {
+  border-collapse: collapse;
+}
+table.o-table tr:hover {
+  background-color: var(--accent-5);
+}
+table.o-table tr td {
+  border: 1px solid var(--foreground-25);
+  padding: 0.5rem;
+}
+table.o-table tr td .flex {
+  display: flex;
+}
+table.o-table tr td .flex time {
+  flex: 1;
+  padding-right: 0.5rem;
+}
+
 nav#top-nav {
   display: flex;
   position: fixed;

@@ -56,6 +56,20 @@ namespace Ogma3.Data
             return oUser.Avatar;
         }
 
+        public async Task<DateTime?> GetBanDate(string name)
+        {
+            ThrowIfDisposed();
+            var oUser = await Store.FindByNameAsync(name.ToUpper(), CancellationToken);
+            return oUser.BannedUntil;
+        }
+
+        public async Task Unban(string name)
+        {
+            ThrowIfDisposed();
+            var oUser = await Store.FindByNameAsync(name.ToUpper(), CancellationToken);
+            oUser.BannedUntil = null;
+            await Store.UpdateAsync(oUser, CancellationToken);
+        }
     }
 
 }

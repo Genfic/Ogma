@@ -1,0 +1,93 @@
+@page
+@inject Ogma3.Data.OgmaConfig Config
+@using System.Globalization
+@model Ogma3.Areas.Admin.Pages.Users
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+@if (Model.OgmaUser is not null)
+{
+    var u = Model.OgmaUser;
+
+    <a asp-page="/User/Index" asp-route-name="@u.Name.ToLower()">Visit profile</a>
+    
+    <table class="o-table">
+        <tr>
+            <td>Id</td><td>@u.Id</td>
+        </tr>
+        <tr>
+            <td>Name</td><td>@u.Name</td>
+        </tr>
+        <tr>
+            <td>Email</td><td>@u.Email</td>
+        </tr>
+        <tr>
+            <td>Title</td><td>@u.Title</td>
+        </tr>
+        <tr>
+            <td>Avatar</td><td><a href="@(Config.Cdn + @u.Avatar)">@u.Avatar</a></td>
+        </tr>
+        <tr>
+            <td>Registration date</td><td>@u.RegistrationDate</td>
+        </tr>
+        <tr>
+            <td>Last active</td><td>@u.LastActive</td>
+        </tr>
+        <tr>
+            <td>Stories count</td><td>@u.StoriesCount</td>
+        </tr>
+        <tr>
+            <td>Blogposts count</td><td>@u.BlogpostsCount</td>
+        </tr>
+        <tr>
+            <td>Roles</td>
+            <td>
+                @foreach (var r in u.RoleNames)
+                {
+                    <div>@r</div>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>Banned until</td>
+            <td>
+                <div class="flex">
+                    <time datetime="@u.BannedUntil?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+                        @u.BannedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)
+                    </time>
+                    <button v-on:click="manageBan">Manage</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Muted until</td>
+            <td>
+                <div class="flex">
+                    <time datetime="@u.MutedUntil?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+                        @u.MutedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)
+                    </time>
+                    <button v-on:click="manageMute">Manage</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+    <manage-ban ref="manageBan"
+                action-name="Ban"
+                ban-date="@u.BannedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
+                duration="@Math.Round(((u.BannedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
+    </manage-ban>
+    
+    <manage-ban ref="manageMute"
+                action-name="Mute"
+                ban-date="@u.MutedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
+                duration="@Math.Round(((u.MutedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
+    </manage-ban>
+}
+
+@section Scripts {
+    <script src="~/js/dist/admin/components/manage-ban-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/admin/users.min.js" asp-append-version="true"></script>
+}

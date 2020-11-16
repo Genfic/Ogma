@@ -1,0 +1,52 @@
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
+using Ogma3.Data.DTOs;
+using Ogma3.Data.Models;
+
+namespace Ogma3.Areas.Admin.Pages
+{
+    public class Users : PageModel
+    {
+        private readonly ApplicationDbContext _context;
+
+        public Users(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public UserDetailsDto? OgmaUser { get; set; }
+        
+        public async Task<ActionResult> OnGet([FromQuery] string? name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                OgmaUser = await _context.Users
+                    .Where(u => u.NormalizedUserName == name.ToUpper())
+                    .Select(u => new UserDetailsDto
+                    {
+                        Id = u.Id,
+                        Name = u.UserName,
+                        Email = u.Email,
+                        Title = u.Title,
+                        Avatar = u.Avatar,
+                        Bio = u.Bio,
+                        RoleNames = u.Roles.Select(r => r.Name),
+                        RegistrationDate = u.RegistrationDate,
+                        LastActive = u.LastActive,
+                        StoriesCount = u.Stories.Count,
+                        BlogpostsCount = u.Blogposts.Count,
+                        BannedUntil = u.BannedUntil,
+                        MutedUntil = u.MutedUntil
+                    })
+                    .FirstOrDefaultAsync();
+                if (OgmaUser is null) return NotFound();
+            }
+            
+            return Page();
+        }
+    }
+}

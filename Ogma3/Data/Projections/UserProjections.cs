@@ -1,8 +1,9 @@
 using System.Linq;
-using Markdig;
+using EllipticCurve;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Pages.Shared.Bars;
+using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Data.Projections
 {
@@ -52,6 +53,25 @@ namespace Ogma3.Data.Projections
                 IsFollowedBy = u.Followers.Any(fu => fu.Id == userId),
                 Bio = u.Bio,
                 CommentsThreadId = u.CommentsThread.Id,
+                Roles = u.Roles.Select(r => new RoleDto
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    IsStaff = r.IsStaff,
+                    Order = (int) r.Order,
+                    Color = r.Color
+                })
+            });
+            
+        }
+
+        public static IQueryable<UserCard> ToUserCard(this IQueryable<OgmaUser> source)
+        {
+            return source.Select(u => new UserCard
+            {
+                UserName = u.UserName,
+                Avatar = u.Avatar,
+                Title = u.Title,
                 Roles = u.Roles.Select(r => new RoleDto
                 {
                     Id = r.Id,

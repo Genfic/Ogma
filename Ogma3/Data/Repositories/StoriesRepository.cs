@@ -67,13 +67,19 @@ namespace Ogma3.Data.Repositories
         /// </summary>
         /// <param name="perPage">Number of objects per page</param>
         /// <param name="page">Number of the desired page</param>
+        /// <param name="authorId">ID of the author whose stories are to be fetched</param>
         /// <param name="sort">Sorting method</param>
         /// <returns>Sorted and paginated list of `StoryCard` objects</returns>
-        public async Task<List<StoryCard>> GetAndSortPaginatedStoryCards(int perPage, int page, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
-        {
+        public async Task<List<StoryCard>> GetAndSortPaginatedStoryCards(
+            int perPage, 
+            int page, 
+            long authorId,
+            EStorySortingOptions sort = EStorySortingOptions.DateDescending
+        ) {
             return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {authorId}, {sort}")
                 .Where(b => b.IsPublished)
+                .Where(b => b.AuthorId == authorId)
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
                 .Paginate(page, perPage)
@@ -92,7 +98,7 @@ namespace Ogma3.Data.Repositories
         public async Task<List<StoryCard>> GetAndSortOwnedPaginatedStoryCards(int perPage, int page, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
         {
             return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortOwnedPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
                 .SortByEnum(sort)
                 .Paginate(page, perPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -213,7 +219,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(CountForUser)} -> {id}")
                 .Where(b => b.IsPublished)
-                .Where(s => s.Author.Id == id)
+                .Where(s => s.AuthorId == id)
                 .CountAsync();
         }
 

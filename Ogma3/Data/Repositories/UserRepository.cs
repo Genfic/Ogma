@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Projections;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Services.UserService;
@@ -17,13 +14,11 @@ namespace Ogma3.Data.Repositories
     public class UserRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
         private readonly long? _uid;
         
-        public UserRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
+        public UserRepository(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
-            _mapper = mapper;
             _uid = userService.GetUser()?.GetNumericId();
         }
         
@@ -70,7 +65,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetStaff)}")
                 .Where(u => u.Roles.Any(ur => ur.IsStaff))
-                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+                .ToUserCard()
                 .OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
                 .AsNoTracking()
                 .ToListAsync();

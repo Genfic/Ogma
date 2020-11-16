@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -31,7 +32,7 @@ namespace Ogma3.Data.Models
         [PersonalData]
         public DateTime LastActive { get; set; } = DateTime.Now;
 
-        public CommentsThread CommentsThread { get; set; } = new CommentsThread();
+        public CommentsThread CommentsThread { get; set; } = new();
         
         [JsonIgnore]
         public ICollection<UserRole>? UserRoles { get; set; }
@@ -50,17 +51,23 @@ namespace Ogma3.Data.Models
         public ICollection<BlacklistedRating> BlacklistedRatings { get; set; }
         [JsonIgnore]
         public ICollection<BlacklistedTag> BlacklistedTags { get; set; }
-        // [JsonIgnore]
+        [JsonIgnore]
         public ICollection<OgmaUser> BlockedUsers { get; set; }
-        // [JsonIgnore]
+        [JsonIgnore]
         public ICollection<OgmaUser> BlockedByUsers { get; set; }
         
         // Follows
-        // [JsonIgnore]
+        [JsonIgnore]
         public ICollection<OgmaUser> Followers { get; set; }
-        // [JsonIgnore]
+        [JsonIgnore]
         public ICollection<OgmaUser> Following { get; set; }
-
+        
+        // Bans and mutes
+        [DefaultValue(null)]
+        public DateTime? BannedUntil { get; set; }
+        [DefaultValue(null)]
+        public DateTime? MutedUntil { get; set; }
+        
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {
             return Id.ToString() == claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
