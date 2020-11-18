@@ -37,7 +37,15 @@
     </li>
     
     <li class="nav-item">
+        <a class="nav-link @ManageNavPages.UsersNavClass(ViewContext)" id="users" asp-page="/Users" asp-area="Admin">Users</a>
+    </li>
+    
+    <li class="nav-item">
         <a class="nav-link @ManageNavPages.DocumentsNavClass(ViewContext)" id="documents" asp-page="/Documents/Index" asp-area="Admin">Documents</a>
+    </li>
+    
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ModLogNavClass(ViewContext)" id="modlog" asp-page="/ModLog" asp-area="Admin">Modlog</a>
     </li>
     
 </ul>

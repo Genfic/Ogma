@@ -57,6 +57,7 @@ namespace Ogma3.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        public DbSet<ModeratorAction> ModeratorActions { get; set; }
         
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
@@ -341,16 +342,6 @@ namespace Ogma3.Data
                 ent.HasOne(e => e.User)
                     .WithMany(u => u.BlacklistedTags);
             });
-            
-            // Blacklisted users
-            // builder.Entity<UserBlock>(ent =>
-            // {
-            //     ent.HasKey(bu => new {UserId = bu.BlockingUserId, bu.BlockedUserId});
-            //     ent.HasOne(e => e.BlockedUser)
-            //         .WithMany(u => u.BlockedByUsers);
-            //     ent.HasOne(e => e.BlockingUser)
-            //         .WithMany(u => u.BlockedUsers);
-            // });
 
             
             
@@ -378,6 +369,15 @@ namespace Ogma3.Data
                 ent.HasOne(c => c.IssuedBy)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+            
+            // Moderator actions
+            builder.Entity<ModeratorAction>(ent =>
+            {
+                ent.HasOne(ma => ma.StaffMember)
+                    .WithMany()
+                    .HasForeignKey(ma => ma.StaffMemberId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
         }

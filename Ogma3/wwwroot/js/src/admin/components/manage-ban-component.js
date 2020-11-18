@@ -6,9 +6,17 @@ Vue.component('manage-ban', {
         },
         banDate: {
             type: String,
-            required: true
+            required: false
         },
         duration: {
+            type: Number,
+            required: true
+        },
+        route: {
+            type: String,
+            required: true
+        },
+        userId: {
             type: Number,
             required: true
         }
@@ -16,6 +24,8 @@ Vue.component('manage-ban', {
     data: function () {
         return {            
             newDuration: 0,
+            days: 1,
+            csrf: null,
             visible: false
         }
     },
@@ -23,11 +33,25 @@ Vue.component('manage-ban', {
         hide: function () {
             this.visible = false;
         },
-        execute: function () {
-            
+        ban: function () {
+            axios.post(`${this.route}/${this.actionName.toLowerCase()}`, {
+                    UserId: this.userId,
+                    Days: this.days
+                },{
+                    headers: { "RequestVerificationToken" : this.csrf }
+                })
+                .then(_ => location.reload())
+                .catch(console.error);
         },
         unban: function () {
-            
+            axios.post(`${this.route}/${this.actionName.toLowerCase()}`, {
+                    UserId: this.userId,
+                    Days: null
+                },{
+                    headers: { "RequestVerificationToken" : this.csrf }
+                })
+                .then(_ => location.reload())
+                .catch(console.error);
         }
     },
     template: `
@@ -45,12 +69,15 @@ Vue.component('manage-ban', {
             </template>
             
             <template v-else>
-              {{actionName}} user for <input type="number" min="1"> days
+              {{actionName}} user for <input type="number" min="1" v-model="days"> days
               <br>
-              <button @click="execute">Save</button>
+              <button @click="ban">Save</button>
             </template>
             
           </div>
         </div>
-    `
+    `,
+    mounted() {
+        this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
+    }
 });

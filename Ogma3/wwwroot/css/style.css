@@ -292,6 +292,11 @@ nav#top-nav .navbar-nav > .nav-item > .nav-link.user > .name {
     display: none;
   }
 }
+nav#top-nav time.timer {
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: -2px;
+  margin: auto 0;
+}
 
 #sub-nav {
   display: flex;

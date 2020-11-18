@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
-@using Ogma3.Api.V1
 @using Ogma3.Services
+@using System.Globalization
 @inject IWebHostEnvironment Env
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
@@ -68,6 +68,11 @@
 
         <partial name="_MainNav"/>
 
+        <time class="timer" datetime="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
+              title="Server time">
+            @DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+        </time>
+        
         <partial name="_LoginPartial"/>
 
     </nav>
@@ -93,6 +98,7 @@
         asp-fallback-src="~/lib/axios.min.js"></script>
 
 <script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
+<script async src="~/js/dist/clock.min.js" asp-append-version="true"></script>
     
 @await RenderSectionAsync("Scripts", required: false)
 @Html.RenderResources()

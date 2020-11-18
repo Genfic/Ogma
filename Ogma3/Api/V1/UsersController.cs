@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
 using Utils;
 using Utils.Extensions;
@@ -112,21 +114,99 @@ namespace Ogma3.Api.V1
             }
         }
         
+        [HttpPost("ban")]
+        [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+        public async Task<ActionResult> BanUser(BanData data)
+        {
+            var (userId, days) = data;
+
+            // Get user to be banned
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .FirstOrDefaultAsync();
+            if (user == null) return NotFound();
+
+            // Ban/unban user
+            if (days.HasValue)
+            {
+                user.BannedUntil = DateTime.Now.AddDays((double) days);
+                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                {
+                    StaffMemberId = User.GetNumericId(),
+                    Description = ModeratorActionTemplates.UserBan(user, User?.Identity?.Name, (DateTime) user.BannedUntil)
+                });
+            }
+            else if(user.BannedUntil.HasValue)
+            {
+                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                {
+                    StaffMemberId = User.GetNumericId(),
+                    Description = ModeratorActionTemplates.UserUnban(user, User?.Identity?.Name, (DateTime) user.BannedUntil)
+                });
+                user.BannedUntil = null;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        
+        [HttpPost("mute")]
+        [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+        public async Task<ActionResult> MuteUser(BanData data)
+        {
+            var (userId, days) = data;
+            
+            // Get user to be muted
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .FirstOrDefaultAsync();
+            if (user == null) return NotFound();
+
+            // Mute/unmute user
+            if (days.HasValue && !user.MutedUntil.HasValue)
+            {
+                user.MutedUntil = DateTime.Now.AddDays((double) days);
+                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                {
+                    StaffMemberId = User.GetNumericId(),
+                    Description = ModeratorActionTemplates.UserMute(user, User?.Identity?.Name, (DateTime) user.MutedUntil)
+                });
+            }
+            else if (user.MutedUntil.HasValue)
+            {
+                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                {
+                    StaffMemberId = User.GetNumericId(),
+                    Description = ModeratorActionTemplates.UserUnmute(user, User?.Identity?.Name, (DateTime) user.MutedUntil)
+                });
+                user.MutedUntil = null;
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        
         /// <summary>
         /// Plain, parameterless `GET` needs to be here or fuckery happens
         /// </summary>
         [HttpGet] public IActionResult Ping() => Ok("Pong");
     }
 
-    public class SignInData
+    public sealed record BanData(long UserId, double? Days);
+    public sealed record SignInData
     {
-        public string Avatar { get; set; }
-        public string Title { get; set; }
-        public bool HasMfa { get; set; }
+        public string Avatar { get; init; }
+        public string Title { get; init; }
+        public bool HasMfa { get; init; }
     }
 
-    public class BlockPostData
-    {
-        public string Name { get; set; }
-    }
+    public sealed record BlockPostData(string Name);
 }

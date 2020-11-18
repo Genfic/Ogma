@@ -1,10 +1,12 @@
 @page
 @inject Ogma3.Data.OgmaConfig Config
 @using System.Globalization
+@using Ogma3.Api.V1
 @model Ogma3.Areas.Admin.Pages.Users
 
 @{
     ViewData["Title"] = "Users";
+    ViewData["ActivePage"] = ManageNavPages.Users;
 }
 
 @if (Model.OgmaUser is not null)
@@ -76,15 +78,33 @@
     
     <manage-ban ref="manageBan"
                 action-name="Ban"
+                :user-id="@u.Id"
+                route="@Url.RouteUrl(nameof(UsersController))"
                 ban-date="@u.BannedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
-                duration="@Math.Round(((u.BannedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
+                :duration="@Math.Round(((u.BannedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
     </manage-ban>
     
     <manage-ban ref="manageMute"
                 action-name="Mute"
+                :user-id="@u.Id"
+                route="@Url.RouteUrl(nameof(UsersController))"
                 ban-date="@u.MutedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
-                duration="@Math.Round(((u.MutedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
+                :duration="@Math.Round(((u.MutedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
     </manage-ban>
+    
+    @Html.AntiForgeryToken()
+}
+else
+{
+    <form class="form" method="get">
+        <div class="o-form-control">
+            <label for="name">Go to user</label>
+            <input type="text" name="name" id="name">
+        </div>
+        <div class="o-form-control">
+            <input type="submit" value="Go">
+        </div>
+    </form>
 }
 
 @section Scripts {
