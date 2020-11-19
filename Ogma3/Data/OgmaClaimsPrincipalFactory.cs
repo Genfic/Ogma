@@ -23,7 +23,7 @@ namespace Ogma3.Data
             ((ClaimsIdentity)principal.Identity)?.AddClaims(new []
             {
                 new Claim(OgmaClaimTypes.Avatar, user.Avatar ?? Lorem.Gravatar(user.Email)),
-                new Claim(OgmaClaimTypes.Title, user.Title ?? "")
+                new Claim(OgmaClaimTypes.Title, user.Title ?? ""),
             });
 
             return principal;

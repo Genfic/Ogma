@@ -1482,6 +1482,41 @@ form.confirm > .buttons .button.cancel {
   color: var(--foreground);
 }
 
+.select-group {
+  display: flex;
+  background-color: var(--background);
+}
+.select-group label {
+  cursor: pointer;
+  padding: 0.25rem;
+  margin: 0;
+  border: 1px solid var(--foreground-25);
+}
+.select-group label:hover {
+  border-color: var(--foreground-50);
+}
+.select-group label:focus {
+  border-color: var(--accent);
+}
+.select-group label:hover {
+  background-color: var(--accent-5);
+}
+.select-group input[type=checkbox] {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+}
+.select-group input[type=checkbox]:checked + label {
+  background-color: var(--accent-25);
+}
+.select-group input[type=checkbox]:focus + label {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+
 .counter {
   text-align: end;
   position: relative;

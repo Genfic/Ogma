@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using B2Net;
 using B2Net.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -111,7 +112,7 @@ namespace Ogma3
 
             // Auth
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
-
+            
             // Auth
             services.AddAuthorization(options =>
             {

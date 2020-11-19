@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,33 +20,35 @@ namespace Ogma3.Areas.Admin.Pages
         }
 
         public UserDetailsDto? OgmaUser { get; set; }
+        public List<OgmaRole> Roles { get; set; }
         
         public async Task<ActionResult> OnGet([FromQuery] string? name)
         {
-            if (!string.IsNullOrEmpty(name))
-            {
-                OgmaUser = await _context.Users
-                    .Where(u => u.NormalizedUserName == name.ToUpper())
-                    .Select(u => new UserDetailsDto
-                    {
-                        Id = u.Id,
-                        Name = u.UserName,
-                        Email = u.Email,
-                        Title = u.Title,
-                        Avatar = u.Avatar,
-                        Bio = u.Bio,
-                        RoleNames = u.Roles.Select(r => r.Name),
-                        RegistrationDate = u.RegistrationDate,
-                        LastActive = u.LastActive,
-                        StoriesCount = u.Stories.Count,
-                        BlogpostsCount = u.Blogposts.Count,
-                        BannedUntil = u.BannedUntil,
-                        MutedUntil = u.MutedUntil
-                    })
-                    .FirstOrDefaultAsync();
-                if (OgmaUser is null) return NotFound();
-            }
+            if (string.IsNullOrEmpty(name)) return Page();
             
+            OgmaUser = await _context.Users
+                .Where(u => u.NormalizedUserName == name.ToUpper())
+                .Select(u => new UserDetailsDto
+                {
+                    Id = u.Id,
+                    Name = u.UserName,
+                    Email = u.Email,
+                    Title = u.Title,
+                    Avatar = u.Avatar,
+                    Bio = u.Bio,
+                    RoleNames = u.Roles.Select(r => r.Name),
+                    RegistrationDate = u.RegistrationDate,
+                    LastActive = u.LastActive,
+                    StoriesCount = u.Stories.Count,
+                    BlogpostsCount = u.Blogposts.Count,
+                    BannedUntil = u.BannedUntil,
+                    MutedUntil = u.MutedUntil
+                })
+                .FirstOrDefaultAsync();
+            if (OgmaUser is null) return NotFound();
+
+            Roles = await _context.Roles.ToListAsync();
+
             return Page();
         }
     }

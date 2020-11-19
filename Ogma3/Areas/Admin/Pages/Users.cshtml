@@ -17,7 +17,7 @@
     
     <table class="o-table">
         <tr>
-            <td>Id</td><td>@u.Id</td>
+            <td>Id</td><td id="id">@u.Id</td>
         </tr>
         <tr>
             <td>Name</td><td>@u.Name</td>
@@ -46,10 +46,14 @@
         <tr>
             <td>Roles</td>
             <td>
-                @foreach (var r in u.RoleNames)
-                {
-                    <div>@r</div>
-                }
+                <div class="select-group">
+                    @foreach (var r in Model.Roles)
+                    {
+                        <input id="@r.Name" type="checkbox" name="roles" value="@r.Id" checked="@u.RoleNames.Contains(r.Name)">
+                        <label for="@r.Name">@r.Name</label>
+                    }
+                </div>
+                <button v-on:click="saveRoles">Save</button>
             </td>
         </tr>
         <tr>
@@ -93,16 +97,17 @@
     </manage-ban>
     
     @Html.AntiForgeryToken()
+    <div id="rolesRoute" v-if="!rolesRoute" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
 }
 else
 {
     <form class="form" method="get">
-        <div class="o-form-control">
+        <div class="o-form-group">
             <label for="name">Go to user</label>
-            <input type="text" name="name" id="name">
+            <input class="o-form-control active-border" type="text" name="name" id="name">
         </div>
-        <div class="o-form-control">
-            <input type="submit" value="Go">
+        <div class="o-form-group">
+            <input class="o-form-control active-border" type="submit" value="Go">
         </div>
     </form>
 }

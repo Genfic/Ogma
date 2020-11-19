@@ -1,5 +1,6 @@
 @use '../vars' as v
 @use '../mixins/focus' as f
+@use '../mixins/active-border' as ab
 
 form.form
   display: flex
@@ -59,7 +60,8 @@ form.form
               font-weight: 600
             &>span
               font-weight: 500
-              
+
+      
   & .o-form-control
     +f.focus
     
@@ -103,4 +105,34 @@ form.confirm
         text-decoration: none
         color: v.$foreground
     
-    
+
+
+.select-group
+  display: flex
+  background-color: v.$background
+
+  label
+    cursor: pointer
+    padding: .25rem
+    margin: 0
+    +ab.active-border
+
+    &:hover
+      background-color: v.$accent-5
+
+  input[type=checkbox]
+    position: absolute !important
+    height: 1px
+    width: 1px
+    overflow: hidden
+    clip: rect(1px 1px 1px 1px) /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px)
+
+    &:checked
+      & + label
+        background-color: v.$accent-25
+        
+    &:focus
+      & + label
+        border-color: v.$accent
+        box-shadow: 0 0 0 3px v.$accent-25

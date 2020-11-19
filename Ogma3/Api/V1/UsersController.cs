@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
+using Ogma3.Infrastructure.Comparers;
 using Utils;
 using Utils.Extensions;
 
@@ -17,10 +19,12 @@ namespace Ogma3.Api.V1
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly OgmaUserManager _userManager;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Users/signin/John
@@ -130,13 +134,14 @@ namespace Ogma3.Api.V1
             if (days.HasValue)
             {
                 user.BannedUntil = DateTime.Now.AddDays((double) days);
+                await _userManager.UpdateSecurityStampAsync(user);
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
                     StaffMemberId = User.GetNumericId(),
                     Description = ModeratorActionTemplates.UserBan(user, User?.Identity?.Name, (DateTime) user.BannedUntil)
                 });
             }
-            else if(user.BannedUntil.HasValue)
+            else if (user.BannedUntil.HasValue)
             {
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
@@ -193,6 +198,57 @@ namespace Ogma3.Api.V1
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPost("roles")]
+        [Authorize(Roles = RoleNames.Admin)]
+        public async Task<ActionResult> ManageRoles(RoleData data)
+        {
+            var (userId, roles) = data;
+            
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync();
+            
+            var newRoles = await _context.OgmaRoles
+                .Where(ur => roles.Contains(ur.Id))
+                .ToListAsync();
+
+            // Handle role removal
+            var removedRoles = user.Roles.Except(newRoles, new OgmaRoleComparer()).ToList();
+            foreach (var role in removedRoles)
+            {
+                user.Roles.Remove(role);
+            }
+            await _context.ModeratorActions.AddRangeAsync(removedRoles.Select(r => new ModeratorAction
+            {
+                StaffMemberId = User.GetNumericId(),
+                Description = ModeratorActionTemplates.UserRoleRemoved(user, User?.Identity?.Name, r.Name)
+            }));
+            
+            // Handle role adding
+            var addedRoles = newRoles.Except(user.Roles, new OgmaRoleComparer()).ToList();
+            foreach (var role in addedRoles)
+            {
+                user.Roles.Add(role);
+            }
+            await _context.ModeratorActions.AddRangeAsync(addedRoles.Select(r => new ModeratorAction
+            {
+                StaffMemberId = User.GetNumericId(),
+                Description = ModeratorActionTemplates.UserRoleAdded(user, User?.Identity?.Name, r.Name)
+            }));
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e.Message);
+            }
+            return Ok();
+        }
         
         /// <summary>
         /// Plain, parameterless `GET` needs to be here or fuckery happens
@@ -201,6 +257,7 @@ namespace Ogma3.Api.V1
     }
 
     public sealed record BanData(long UserId, double? Days);
+    public sealed record RoleData(long UserId, IEnumerable<long> Roles);
     public sealed record SignInData
     {
         public string Avatar { get; init; }
