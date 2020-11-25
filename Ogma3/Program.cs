@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Ogma3.Data;
+using Serilog;
 
 namespace Ogma3
 {
@@ -15,30 +15,40 @@ namespace Ogma3
     {
         public static async Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            
-            using (var scope = host.Services.CreateScope())
+            (string token, string chat) cfg;
+            try
             {
-                var provider = scope.ServiceProvider;
-                try
-                {
-                    var configuration = provider.GetRequiredService<IConfiguration>();
-                    if (configuration.GetValue<bool>("migrateDatabases"))
-                    {
-                        var identityContext = provider.GetRequiredService<ApplicationDbContext>();
-                        await identityContext.Database.MigrateAsync();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // var logger = provider.GetRequiredService<ILogger>();
-                    // logger.Log(LogLevel.Critical, $"Could not migrate database: {ex.Message}");
-                    Console.WriteLine($"Could not migrate database: {ex.Message}");
-                }
+                using var sr = new StreamReader("logger-tokens.txt");
+                var split = (await sr.ReadToEndAsync()).Split('|');
+                cfg.token = split[0];
+                cfg.chat = split[1];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
             }
             
-            await host.InitAsync();
-            await host.RunAsync();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Warning()
+                .WriteTo.Telegram(cfg.token, cfg.chat)
+                .CreateLogger();
+
+            try
+            {
+                var host = CreateHostBuilder(args).Build();
+                await host.InitAsync();
+                Log.Warning("Genfic has started!");
+                await host.RunAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Unexpected shutdown on startup");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
@@ -54,6 +64,7 @@ namespace Ogma3
                 {
                     config.AddEnvironmentVariables("ogma_");
                 })
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseUrls("https://+:6001", "https://+:8080", "https://+:80");

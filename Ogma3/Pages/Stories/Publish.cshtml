@@ -9,6 +9,13 @@
 <div>
     <h3>Are you sure you want to @(Model.Story.IsPublished ? "unpublish" : "publish") this story?</h3>
     <hr />
+    
+    @if (!string.IsNullOrEmpty(ViewData["Error"] as string))
+    {
+        <div class="validation-summary-errors">@ViewData["Error"]</div>
+        <br>
+    }
+    
     <dl class="rows">
         <dt>
             Published on:
@@ -46,7 +53,7 @@
             Chapters:
         </dt>
         <dd>
-            @Model.Story.Chapters.Count
+            @Model.Story.ChapterCount
         </dd>
         <dt>
             Comments:

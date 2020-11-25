@@ -46,7 +46,20 @@ namespace Ogma3.Pages.Stories
             if (story == null) return NotFound();
             if (!User.IsUserSameAsLoggedIn(story.AuthorId)) return RedirectToPage("Index");
 
-            story.IsPublished = !story.IsPublished;
+            if (story.IsPublished)
+            {
+                story.IsPublished = false;
+            }
+            else if (story.ChapterCount > 0)
+            {
+                story.IsPublished = true;
+            }
+            else
+            {
+                ViewData["Error"] = "You cannot publish a story with no chapters";
+                return Page();
+            }
+            
             await _context.SaveChangesAsync();
 
             return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });

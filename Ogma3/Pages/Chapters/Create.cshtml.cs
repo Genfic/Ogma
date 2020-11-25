@@ -115,7 +115,7 @@ namespace Ogma3.Pages.Chapters
             var latestChapter = story.Chapters
                 .OrderByDescending(c => c.Order)
                 .Select(c => c.Order)
-                .First();
+                .FirstOrDefault();
             
             // Construct new chapter
             var chapter = new Chapter

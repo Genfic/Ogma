@@ -39,6 +39,7 @@ msbuild.wrn
 # Dev env
 node_modules/
 yarn-error.log
+Ogma3/logger-tokens.txt
 
 # Env variables
 ogma.env
