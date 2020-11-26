@@ -1,11 +1,10 @@
 using System.Linq;
 using AutoMapper;
 using Markdig;
-using MarkdigExtensions.Mentions;
-using MarkdigExtensions.Spoiler;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Infrastructure;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Pages.Shared.Details;
@@ -19,15 +18,10 @@ namespace Ogma3.Data
         {
             long? currentUser = null;
             
-            var md = new MarkdownPipelineBuilder()
-                .UseMentions(new MentionOptions("/user/", "_blank"))
-                .UseAutoLinks()
-                .UseAutoIdentifiers()
-                .UseSpoilers()
-                .Build();
+            var md = MarkdownPipelines.Comment;
 
             // User mappings
-            CreateMap<OgmaUser, UserProfileDto>()
+            CreateMap<OgmaUser, ProfileBar>()
                 .ForMember(
                     pb => pb.StoriesCount,
                     opts 
@@ -42,7 +36,15 @@ namespace Ogma3.Data
                     pb => pb.IsBlockedBy,
                     opts
                         => opts.MapFrom(u => u.BlockedByUsers.Any(bu => bu.Id == currentUser))
+                )
+                .ForMember(
+                    pb => pb.IsFollowedBy,
+                    opts
+                        => opts.MapFrom(u => u.Followers.Any(fu => fu.Id == currentUser))
                 );
+            
+            CreateMap<OgmaUser, UserProfileDto>()
+                .IncludeBase<OgmaUser, ProfileBar>();
             
             CreateMap<OgmaUser, UserSimpleDto>()
                 .ForMember(
@@ -99,6 +101,32 @@ namespace Ogma3.Data
                         => opts.MapFrom(s => s.ShelfStories.Select(ss => ss.Story).Where(st => st.IsPublished || st.Author.Id == currentUser))
                 );
 
+            // Comment mappings
+            CreateMap<Comment, CommentDto>()
+                .ForMember(
+                    cd => cd.Body,
+                    opts
+                        => opts.MapFrom(c => Markdown.ToHtml(c.Body, md))
+                )
+                .ForMember(
+                    cd => cd.Owned,
+                    opts
+                        => opts.MapFrom(c => c.AuthorId == currentUser)
+                )
+                .ForMember(
+                    cd => cd.IsBlocked,
+                    opts
+                        => opts.MapFrom(c => c.Author.BlockedByUsers.Any(bu => bu.Id == currentUser))
+                );
+            
+            // Comment revision mappings
+            CreateMap<CommentRevision, CommentRevisionDto>()
+                .ForMember(
+                    crd => crd.Body,
+                    opts
+                        => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md))
+                );
+            
             // Tag mappings
             CreateMap<Tag, TagDto>();
 

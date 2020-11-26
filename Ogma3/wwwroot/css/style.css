@@ -977,6 +977,10 @@ ul.my-list > li.item:first-of-type {
 .comment > .main > .body {
   white-space: pre-line;
   margin: 0.5rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 .comment > .main > .form {
   width: 100%;
@@ -1053,6 +1057,12 @@ ul.my-list > li.item:first-of-type {
 .comment > .main > .history li time {
   font-size: 0.75rem;
   color: var(--foreground-50);
+}
+.comment > .main > .history li .body {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 p.sm-line {

@@ -88,6 +88,11 @@ Vue.component('comment', {
                 .catch(console.error)
         },
 
+        // Handle Enter key input
+        enter: function(e) {
+            if (e.ctrlKey) this.update(e)
+        },
+
         history: function () {
             if (this.revisions.length > 0) {
                 this.revisions = [];

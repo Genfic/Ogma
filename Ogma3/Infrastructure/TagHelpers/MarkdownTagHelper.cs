@@ -28,40 +28,18 @@ namespace Ogma3.Infrastructure.TagHelpers
         
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            // Options
-            var hashtagOptions = new HashtagOptions("/blog?q=", "_blank");
-            var mentionOptions = new MentionOptions("/user/", "_blank");
-            
-            // Attach plugins depending on the preset
+            // Select preset
             var builder = Preset switch
             {
-                Presets.Basic   => new MarkdownPipelineBuilder(),
-                
-                Presets.Comment => new MarkdownPipelineBuilder()
-                    .UseMentions(mentionOptions)
-                    .UseAutoLinks(),
-                
-                Presets.All     => new MarkdownPipelineBuilder()
-                    .UsePipeTables()
-                    .UseMentions(mentionOptions)
-                    .UseAdvancedExtensions(),
-                
-                Presets.Blogpost => new MarkdownPipelineBuilder()
-                    .UseAdvancedExtensions()
-                    .UseMentions(mentionOptions)
-                    .UseHashtags(hashtagOptions),
-                
+                Presets.Basic    => MarkdownPipelines.Basic,
+                Presets.Comment  => MarkdownPipelines.Comment,
+                Presets.All      => MarkdownPipelines.All,
+                Presets.Blogpost => MarkdownPipelines.Blogpost,
                 _ => throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...")
             };
-
-            // attach universal plugins and build the pipeline
-            var pipeline = builder
-                .UseAutoIdentifiers()
-                .UseSpoilers()
-                .Build();
             
             var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);
-            var markdownHtmlContent = Markdown.ToHtml(childContent.GetContent(NullHtmlEncoder.Default).RemoveLeadingWhiteSpace(), pipeline);
+            var markdownHtmlContent = Markdown.ToHtml(childContent.GetContent(NullHtmlEncoder.Default).RemoveLeadingWhiteSpace(), builder);
             
             output.TagName = "div";
             output.Attributes.SetAttribute("class", $"md {Class}");

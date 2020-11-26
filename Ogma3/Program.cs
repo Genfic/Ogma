@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 
 namespace Ogma3
 {
@@ -30,8 +30,9 @@ namespace Ogma3
             }
             
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Warning()
-                .WriteTo.Telegram(cfg.token, cfg.chat)
+                .WriteTo.Telegram(cfg.token, cfg.chat, restrictedToMinimumLevel: LogEventLevel.Error)
+                .WriteTo.Console(LogEventLevel.Information)
+                .MinimumLevel.Debug()
                 .CreateLogger();
 
             try

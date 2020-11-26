@@ -11,8 +11,12 @@ let comments_vue = new Vue({
         comments: [],
         total: 0,
         
+        // Pagination
         page: null,
         perPage: null,
+        
+        // Name of the OP
+        opName: null,
         
         highlight: null,
         collapse: JSON.parse(window.localStorage.getItem('collapse-deleted'))

@@ -3,13 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Markdig;
-using MarkdigExtensions.Mentions;
-using MarkdigExtensions.Spoiler;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
-using Ogma3.Data.Projections;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 
@@ -19,26 +14,21 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
-        private readonly MarkdownPipeline _md;
+        private readonly IMapper _mapper;
 
-        public CommentsRepository(ApplicationDbContext context,IUserService userService)
+        public CommentsRepository(ApplicationDbContext context,IUserService userService, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             _uid = userService.GetUser()?.GetNumericId();
-            _md = new MarkdownPipelineBuilder()
-                .UseMentions(new MentionOptions("/user/", "_blank"))
-                .UseAutoLinks()
-                .UseAutoIdentifiers()
-                .UseSpoilers()
-                .Build();
         }
 
 
         public async Task<CommentDto> GetSingle(long id)
         {
             var comment =  await _context.Comments
-                .Where(c => c.Id == id)                
-                .ToDto(_uid, _md)
+                .Where(c => c.Id == id)       
+                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider, new { currentUser = _uid })
                 .FirstOrDefaultAsync();
             
             return comment;
@@ -56,7 +46,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Comments
                 .Where(c => c.CommentsThreadId == threadId)
                 .OrderByDescending(c => c.DateTime)
-                .ToDto(_uid, _md)
+                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider, new { currentUser = _uid })
                 .Paginate(page, perPage)
                 .ToListAsync();
             

@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Markdig;
-using MarkdigExtensions.Mentions;
-using MarkdigExtensions.Spoiler;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,6 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
-using Ogma3.Data.Projections;
 using Ogma3.Data.Repositories;
 using Utils.Extensions;
 
@@ -25,19 +23,14 @@ namespace Ogma3.Api.V1
         private readonly ApplicationDbContext _context;
         private readonly OgmaConfig _ogmaConfig;
         private readonly CommentsRepository _commentsRepo;
-        private readonly MarkdownPipeline _md;
+        private readonly IMapper _mapper;
 
-        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo)
+        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo, IMapper mapper)
         {
             _context = context;
             _ogmaConfig = ogmaConfig;
             _commentsRepo = commentsRepo;
-            _md = new MarkdownPipelineBuilder()
-                .UseMentions(new MentionOptions("/user/", "_blank"))
-                .UseAutoLinks()
-                .UseAutoIdentifiers()
-                .UseSpoilers()
-                .Build();
+            _mapper = mapper;
         }
 
         
@@ -73,7 +66,7 @@ namespace Ogma3.Api.V1
         {
             return await _context.CommentRevisions
                 .Where(r => r.ParentId == id)
-                .ToCommentRevisionDto(_md)
+                .ProjectTo<CommentRevisionDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -122,8 +115,11 @@ namespace Ogma3.Api.V1
             comm.EditCount = (ushort?)(comm.EditCount + 1) ?? 1;
             
             await _context.SaveChangesAsync();
-            
-            return comm.ToDto(uid, _md);
+
+            var dto = _mapper.Map<Comment, CommentDto>(comm);
+            dto.Owned = uid == comm.AuthorId;
+
+            return dto;
         }
         
         // POST: api/Comments
@@ -132,8 +128,8 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<CommentDto>> PostComment(PostData data)
         {
-            var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            var uid = User?.GetNumericId();
+            if (uid is null) return Unauthorized();
 
             var (body, threadId) = data;
             
@@ -155,7 +151,7 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            var dto = comment.ToDto(uid, _md);
+            var dto = _mapper.Map<Comment, CommentDto>(comment);
             return CreatedAtAction("GetComment", new { id = comment.Id }, dto);
         }
 
@@ -165,7 +161,8 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<CommentDto>> DeleteComment(long id)
         {
-            var uid = User.GetNumericId();
+            var uid = User?.GetNumericId();
+            if (uid is null) return Unauthorized();
             
             var comment = await _context.Comments
                 .Where(c => c.Id == id)
@@ -189,7 +186,7 @@ namespace Ogma3.Api.V1
 
             await _context.SaveChangesAsync();
 
-            return comment.ToDto(uid, _md);
+            return _mapper.Map<Comment, CommentDto>(comment);
         }
 
         
