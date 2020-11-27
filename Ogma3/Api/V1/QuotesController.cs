@@ -51,10 +51,20 @@ namespace Ogma3.Api.V1
         [Throttle(Count = 1, TimeUnit = TimeUnit.Second)]
         public async Task<ActionResult<Quote>> GetRandomQuote()
         {
-            var q = await _context.Quotes
-                .OrderBy(r => Guid.NewGuid())
+            var q = (await _context.Quotes
+                .FromSqlRaw(@"
+                    SELECT *
+                    FROM ""Quotes""
+                    OFFSET floor(random() * (
+                        SELECT count(*)
+                        FROM ""Quotes""
+                    ))
+                    LIMIT 1
+                ")
                 .AsNoTracking()
-                .FirstOrDefaultAsync();
+                .ToListAsync())
+                .First();
+            
             if (q == null) return NotFound();
             return q;
         }
@@ -109,8 +119,11 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult> PostJson()
         {
             var data = await JsonSerializer.DeserializeAsync<IEnumerable<Quote>>(Request.Body);
+            if (data == null) return BadRequest();
+            
             await _context.Quotes.AddRangeAsync(data);
             await _context.SaveChangesAsync();
+            
             return Ok();
         }
 

@@ -379,7 +379,6 @@ namespace Ogma3.Data
                     .HasForeignKey(ma => ma.StaffMemberId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
-
         }
     }
 }

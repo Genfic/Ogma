@@ -8,6 +8,7 @@ const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
 const Fiber = require('fibers');
 const browserSync = require('browser-sync').create();
+const cond = require('gulp-if');
 
 // CSS processors
 const autoprefixer = require('autoprefixer');
@@ -57,9 +58,11 @@ gulp.task('css', () => {
         .pipe(sass({fiber: Fiber}))        // Compile SASS
         .pipe(gulp.dest(dir.cssroot))              // Output the raw CSS
         .pipe(postcss(processors))                 // Postprocess it
-        .pipe(sourcemaps.write(`./maps`)) // Write maps
-        .pipe(rename({ suffix: '.min' }))     // Add .min suffix
-        .pipe(gulp.dest(dir.cssroot))              // Output minified CSS
+        .pipe(sourcemaps.write(`./`))     // Write maps
+        .pipe(cond('**/*.css',           // If it's a css file and not a map file
+            rename({ suffix: '.min' })        // Add .min suffix
+        ))     
+        .pipe(gulp.dest(`${dir.cssroot}/dist`))    // Output minified CSS
 });
 
 gulp.task('watch:css', () => gulp.watch(watch.sass, gulp.series('css')));

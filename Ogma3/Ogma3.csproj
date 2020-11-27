@@ -82,6 +82,10 @@
     <_ContentIncludedByDefault Remove="Areas\Admin\Pages\Documents\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Admin\Pages\Documents\Manage.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Admin\Pages\Documents\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\maps\admin.css.min.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\maps\dark.css.min.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\maps\light.css.min.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\maps\style.css.min.map" />
   </ItemGroup>
 
 
@@ -93,11 +97,6 @@
     <Content Update="wwwroot\css\dark.sass">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\dark.css">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <DependentUpon>darkCopy.sass</DependentUpon>
     </Content>
     <Content Update="Areas\Admin\Pages\InviteCodes.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

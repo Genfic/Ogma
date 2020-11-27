@@ -73,6 +73,8 @@
     
 </div>
 
-
-@Html.Resource(@<script src="~/js/dist/quote.min.js" asp-append-version="true"></script>)
-@Html.Resource(@<script src="~/js/dist/tabs.min.js" asp-append-version="true"></script>)
+@section Scripts
+{
+    <script src="~/js/dist/quote.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/tabs.min.js" asp-append-version="true"></script>
+}

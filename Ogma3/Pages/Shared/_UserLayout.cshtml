@@ -11,6 +11,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @* Preconnects and prefetches *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap">
+    <link rel="preconnect" href="https://cdn.genfic.net">
+    
+    @* Base meta *@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
@@ -40,18 +46,16 @@
           <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     }
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
     @if (theme == "system") {
-        <link rel="stylesheet" href="~/css/light.min.css" asp-append-version="true"/>
-        <link rel="stylesheet" href="~/css/dark.min.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/dist/light.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/dist/dark.min.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
     } else {
-        <link rel="stylesheet" href="@( $"~/css/{theme}.min.css" )" asp-append-version="true"/>
+        <link rel="stylesheet" href="@( $"~/css/dist/{theme}.min.css" )" asp-append-version="true"/>
     }
     
     <link id="theme-ph">
     
-    <link rel="stylesheet" href="~/css/style.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/dist/style.min.css" asp-append-version="true">
     
     @await RenderSectionAsync("CSS", false)
     

@@ -1,3 +1,5 @@
+@use "../vars" as v
+
 .monospace
   font-family: "Courier New", Courier, monospace
 
@@ -12,3 +14,9 @@ h1, h2, h3, h4, h5
 @for $level from 1 to 6
   h#{$level}
     font-size: #{1.2 + ((6 - $level) * .2)}rem
+    
+// Links
+a
+  color: v.$accent
+  &:hover
+    color: v.$accent-75
