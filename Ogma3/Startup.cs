@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Services;
@@ -27,6 +29,7 @@ using Ogma3.Services.Middleware;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace Ogma3
 {
@@ -200,7 +203,20 @@ namespace Ogma3
             });
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            
+            // Serve static files with cache headers and compression
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                HttpsCompression = HttpsCompressionMode.Compress,
+                OnPrepareResponse = context =>
+                {
+                    context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromDays(30)
+                    };
+                }
+            });
 
             app.UseRouting();
 

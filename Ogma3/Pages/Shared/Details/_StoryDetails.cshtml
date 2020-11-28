@@ -131,7 +131,7 @@
         }
         else
         {
-            @foreach (var c in Model.Chapters.OrderBy(c => c.Order))
+            foreach (var c in Model.Chapters.OrderBy(c => c.Order))
             {
                 <li class="chapter">
                     <div class="left">
@@ -159,30 +159,33 @@
         }
     </ol>
 
-    <div class="my-modal" v-if="showShelves" v-on:click.self="showShelves = false">
-        <div class="content">
-            <h3>Add to bookshelf</h3>
-            <ul class="items-list">
-                <li v-for="s in shelves" :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
-                    <div class="deco" v-bind:style="{background: s.color}">
-                        <i class="material-icons-outlined">{{s.icon ?? "bookmark_border"}}</i>
-                    </div>
-                    <button class="main" :href="'/Shelf/' + s.id" v-on:click="addToShelf(s.id)">
-                        <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
-                        <span class="desc">{{ s.description }}</span>
-                    </button>
-                </li>
-            </ul>
+    @if (User?.Identity?.IsAuthenticated ?? false)
+    {
+        <div class="my-modal" v-if="showShelves" v-on:click.self="showShelves = false">
+            <div class="content">
+                <h3>Add to bookshelf</h3>
+                <ul class="items-list">
+                    <li v-for="s in shelves" :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
+                        <div class="deco" v-bind:style="{background: s.color}">
+                            <i class="material-icons-outlined">{{s.icon ?? "bookmark_border"}}</i>
+                        </div>
+                        <button class="main" :href="'/Shelf/' + s.id" v-on:click="addToShelf(s.id)">
+                            <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
+                            <span class="desc">{{ s.description }}</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    
-    <club-folder-selector 
-        ref="folderSelect"
-        cdn="@Config.Cdn"
-        :story-id="@Model.Id"
-        clubs-route="@Url.RouteUrl(nameof(ClubsController))"
-        folders-route="@Url.RouteUrl(nameof(FoldersController))">
-    </club-folder-selector>
+            
+        <club-folder-selector 
+            ref="folderSelect"
+            cdn="@Config.Cdn"
+            :story-id="@Model.Id"
+            clubs-route="@Url.RouteUrl(nameof(ClubsController))"
+            folders-route="@Url.RouteUrl(nameof(FoldersController))">
+        </club-folder-selector>
+    }
     
     <clubs-with-story
         ref="featuredIn"

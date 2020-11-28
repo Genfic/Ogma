@@ -14,6 +14,8 @@ namespace Ogma3.Pages.Shared.Cards
         public string Slug { get; set; }
         public string Hook { get; set; }
         public string? Cover { get; set; }
+        
+        public string? CoverId { get; set; }
         public DateTime ReleaseDate { get; set; }
         public bool IsPublished { get; set; }
         public ICollection<TagDto> Tags { get; set; }

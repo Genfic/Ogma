@@ -14,7 +14,10 @@ namespace Ogma3.Infrastructure.TagHelpers
         public string Src { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
-        
+        public bool Eager { get; set; } = false;
+
+        public string? Buster { get; set; } = null;
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var src = string.IsNullOrEmpty(Src) ? "ph-250.png" : Src;
@@ -22,10 +25,16 @@ namespace Ogma3.Infrastructure.TagHelpers
 
             if (Width.HasValue) output.Attributes.SetAttribute("width", Width);
             if (Height.HasValue) output.Attributes.SetAttribute("height", Height);
+
+            if (!string.IsNullOrEmpty(Buster)) url += $"?v={Buster}";
             
             output.TagName = "img";
-            output.Attributes.SetAttribute("loading", "lazy");
             output.Attributes.SetAttribute("src", url);
+
+            if (!Eager)
+            {
+                output.Attributes.SetAttribute("loading", "lazy");
+            }
         }
     }
 }

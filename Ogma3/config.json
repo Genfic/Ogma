@@ -3,11 +3,15 @@
   "AdminEmail": "admin@genfic.net",
   "MaxInvitesPerUser": 5,
   "PrivacyPolicyDoc": "privacy-policy",
-  "AboutDoc": null,
+  "AboutDoc": "about",
   "CommentsPerPage": 20,
   "ClubsPerPage": 25,
   "BlogpostsPerPage": 25,
   "StoriesPerPage": 25,
   "StoryCoverWidth": 200,
-  "StoryCoverHeight": 200
+  "StoryCoverHeight": 200,
+  "ClubIconWidth": 250,
+  "ClubIconHeight": 250,
+  "AvatarWidth": 250,
+  "AvatarHeight": 250
 }

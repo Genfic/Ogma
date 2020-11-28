@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Http;
+using Serilog;
+using Serilog.Core;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Gif;
@@ -46,6 +48,8 @@ namespace Ogma3.Services.FileUploader
 
             if (width.HasValue || height.HasValue)
             {
+                Log.Information($">>> Resizing image {name}");
+                
                 // Create the appropriate decoder
                 IImageDecoder decoder = ext.ToUpper() switch
                 {
@@ -84,6 +88,7 @@ namespace Ogma3.Services.FileUploader
                 try
                 {
                     var result = await _b2Client.Files.Upload(ms.ToArray(), fileName);
+                    Log.Information($">>> Uploaded image {name} to {fileName}");
                     return new FileUploaderResult
                     {
                         FileId = result.FileId,
