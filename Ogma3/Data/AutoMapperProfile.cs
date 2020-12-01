@@ -84,13 +84,20 @@ namespace Ogma3.Data
                     sd => sd.Score,
                     opts 
                         => opts.MapFrom(s => s.Votes.Count)
+                )
+                .ForMember(
+                    sd => sd.Chapters,
+                    opts
+                    => opts.MapFrom(s => s.Chapters.Where(c => c.IsPublished || c.Story.AuthorId == currentUser))
                 );
+            
             CreateMap<Story, StoryCard>()
                 .ForMember(
                     sd => sd.Tags,
                     opts 
                         => opts.MapFrom(s => s.StoryTags.Select(st => st.Tag))
                 );
+            
             CreateMap<Story, StoryMinimal>();
 
             // Bookshelf mappings

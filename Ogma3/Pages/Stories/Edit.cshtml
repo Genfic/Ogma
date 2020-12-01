@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Api.V1
+@using Utils.Extensions
 @inject OgmaConfig Config
 @model Ogma3.Pages.Stories.EditModel
 
@@ -8,6 +9,17 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<div class="button-group">
+    <a title="Cancel" class="action-btn large" asp-page="../Story" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
+         <icon class="icon" icon="arrow_back"></icon>
+         <span class="name">Cancel</span>
+     </a>
+     <a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
+         <icon class="icon" icon="delete_forever"></icon>
+         <span class="name">Delete</span>
+     </a>
+</div>
 
 <form class="form" id="story" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
 
@@ -66,6 +78,12 @@
                        validate-msg="@CTConfig.CStory.ValidateTagCount">
     </tag-search-select>
     
+    <input-toggle ref="published"
+                  label="@nameof(Model.Input.Published)"
+                  value="@Model.Input.Published"
+                  desc="Control whether your story is visible or not">
+    </input-toggle>
+    
     <div class="o-form-group">
         <button type="submit" class="btn btn-primary">Save changes</button>
     </div>
@@ -81,5 +99,6 @@
     <script src="~/js/dist/components/input-file-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/rating-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/toggle-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/editors/story.min.js" asp-append-version="true"></script>
 }

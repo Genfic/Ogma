@@ -1,4 +1,5 @@
 ﻿@page
+@using Utils.Extensions
 @model Ogma3.Pages.Chapters.EditModel
 
 @{
@@ -6,6 +7,17 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<div class="button-group">
+    <a title="Cancel" class="action-btn large" asp-page="../Chapter" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
+         <icon class="icon" icon="arrow_back"></icon>
+         <span class="name">Cancel</span>
+     </a>
+     <a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
+         <icon class="icon" icon="delete_forever"></icon>
+         <span class="name">Delete</span>
+     </a>
+</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -46,6 +58,12 @@
                               label="@nameof(Model.Input.EndNotes)"
                               value="@Model.Input.EndNotes">
             </textarea-counter>
+    
+            <input-toggle ref="published"
+                          label="@nameof(Model.Input.Published)"
+                          value="@Model.Input.Published"
+                          desc="Control whether this chapter is visible or not">
+            </input-toggle>
             
             <div class="o-form-group">
                 <input type="submit" value="Save changes" class="btn btn-primary"/>
@@ -58,5 +76,6 @@
 @section Scripts {
     <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script> 
+    <script src="~/js/dist/components/toggle-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/editors/chapter.min.js" asp-append-version="true"></script>
 }

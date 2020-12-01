@@ -18,43 +18,29 @@
             @if (User?.Identity?.IsAuthenticated ?? false)
             {
                 <a title="Write about it" class="action-btn" asp-page="./Blog/Create" asp-route-story="@Model.Id">
-                    <icon class="icon" icon="edit"></icon>
+                    <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
             }
             
             @if (User?.IsUserSameAsLoggedIn(Model.AuthorId) ?? false)
-             {
-                 <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
-                     <icon class="icon" icon="edit"></icon>
-                     <span class="name">Edit</span>
-                 </a>
-                 
-                 <a title="Delete" class="action-btn" asp-page="./Stories/Delete" asp-route-id="@Model.Id">
-                     <icon class="icon" icon="delete_forever"></icon>
-                     <span class="name">Delete</span>
-                 </a>
-                 
-                 if (Model.IsPublished)
-                 {
-                     <a title="Publish story" class="action-btn" asp-page="./Stories/Publish" asp-route-id="@Model.Id">
-                         <icon class="icon" icon="visibility_off"></icon>
-                         <span class="name">Unpublish</span>
-                     </a>
-                 }
-                 else
-                 {
-                     <a title="Publish story" class="action-btn" asp-page="./Stories/Publish" asp-route-id="@Model.Id">
-                         <icon class="icon" icon="visibility"></icon>
-                         <span class="name">Publish</span>
-                     </a>
-                 }
-                 
-                 <a title="New chapter" class="action-btn" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
-                     <icon class="icon" icon="post_add"></icon>
-                     <span class="name">New chapter</span>
-                 </a>
-             }
+            {
+                <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="edit"></icon>
+                    <span class="name">Edit</span>
+                </a>
+                
+                <a title="New chapter" class="action-btn" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="post_add"></icon>
+                    <span class="name">New chapter</span>
+                </a>                 
+                if (!Model.IsPublished)
+                {
+                    <span class="not-published">
+                        <icon class="icon" icon="visibility_off"></icon>
+                    </span>
+                }
+            }
 
             @if (User?.Identity?.IsAuthenticated ?? false)
             {

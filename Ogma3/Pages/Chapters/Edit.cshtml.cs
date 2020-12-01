@@ -54,6 +54,9 @@ namespace Ogma3.Pages.Chapters
                 ErrorMessage = "The {0} cannot exceed {1} characters."
             )]
             public string EndNotes { get; set; }
+
+            [Required]
+            public bool Published { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(long id)
@@ -81,7 +84,8 @@ namespace Ogma3.Pages.Chapters
                 Title = chapter.Title,
                 Body = chapter.Body,
                 StartNotes = chapter.StartNotes,
-                EndNotes = chapter.EndNotes
+                EndNotes = chapter.EndNotes,
+                Published = chapter.IsPublished
             };
             
             return Page();
@@ -91,10 +95,7 @@ namespace Ogma3.Pages.Chapters
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
             
             // Get chapter
             var chapter = await _context.Chapters.FindAsync(Input.Id);
@@ -106,22 +107,30 @@ namespace Ogma3.Pages.Chapters
                 .Where(s => s.AuthorId == User.GetNumericId())
                 .Include(s => s.Chapters)
                 .FirstOrDefaultAsync();
-            
             if (story == null) return NotFound();
             
-            chapter.Title      = Input.Title.Trim();
-            chapter.Body       = Input.Body.Trim();
-            chapter.StartNotes = Input.StartNotes?.Trim();
-            chapter.EndNotes   = Input.EndNotes?.Trim();
-            chapter.Slug       = Input.Title.Trim().Friendlify();
-            chapter.WordCount  = Input.Body.Trim().Split(' ', '\t', '\n').Length;
-            
+            // Update the chapter
+            chapter.Title       = Input.Title.Trim();
+            chapter.Body        = Input.Body.Trim();
+            chapter.StartNotes  = Input.StartNotes?.Trim();
+            chapter.EndNotes    = Input.EndNotes?.Trim();
+            chapter.Slug        = Input.Title.Trim().Friendlify();
+            chapter.WordCount   = Input.Body.Trim().Split(' ', '\t', '\n').Length;
+            chapter.IsPublished = Input.Published;
             await _context.SaveChangesAsync();
 
             // Recalculate words in the story
             story.WordCount = story.Chapters.Sum(c => c.WordCount);
-
+            // Recalculate chapters in the story
+            story.ChapterCount = story.Chapters.Count(c => c.IsPublished);
             await _context.SaveChangesAsync();
+            
+            // Check if story has any published chapter, and if not, unpublish it
+            if (!story.Chapters.Any(c => c.IsPublished))
+            {
+                story.IsPublished = false;
+                await _context.SaveChangesAsync();
+            }
             
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
         }

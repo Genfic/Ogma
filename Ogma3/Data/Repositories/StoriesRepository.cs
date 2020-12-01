@@ -38,7 +38,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetStoryDetails)} -> {id}")
                 .Where(s => s.Id == id)
-                .ProjectTo<StoryDetails>(_mapper.ConfigurationProvider)
+                .ProjectTo<StoryDetails>(_mapper.ConfigurationProvider, new{ currentUser = _contextAccessor?.HttpContext?.User.GetNumericId() })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

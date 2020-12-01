@@ -36,13 +36,19 @@ form.form
           margin-bottom: .5rem
         
       & .rating
+        position: relative
       
         & .radio
-          display: none
+          opacity: 0
+          position: absolute
           
           &:checked+.radio-label
             background: v.$accent-25
             border-color: v.$accent
+            
+          &:focus+.radio-label
+            border-color: v.$accent
+            box-shadow: 0 0 0 3px v.$accent-25
             
         & .radio-label
           display: flex

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -77,6 +78,9 @@ namespace Ogma3.Pages.Stories
 
             [Required] 
             public List<long> Tags { get; set; }
+
+            [Required]
+            public bool Published { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -103,7 +107,8 @@ namespace Ogma3.Pages.Stories
                 Hook = story.Hook,
                 Rating = story.Rating.Id,
                 Tags = story.StoryTags.Select(st => st.TagId).ToList(),
-                Status = story.Status
+                Status = story.Status,
+                Published = story.IsPublished
             };
             
             // Fill Ratings dropdown
@@ -134,6 +139,13 @@ namespace Ogma3.Pages.Stories
                 // 404 if none found
                 if (story == null) return NotFound();
                 
+                // Check if it can be published
+                if(!story.IsPublished && Input.Published && story.ChapterCount <= 0)
+                {
+                    ModelState.AddModelError("", "You cannot publish a story with no chapters");
+                    return Page();
+                }
+
                 // Update story
                 story.Title = Input.Title;
                 story.Slug = Input.Title.Friendlify();
@@ -142,6 +154,7 @@ namespace Ogma3.Pages.Stories
                 story.Rating = await _context.Ratings.FindAsync(Input.Rating);
                 story.Tags = tags;
                 story.Status = Input.Status;
+                story.IsPublished = Input.Published;
                 
                 _context.Update(story);
                 await _context.SaveChangesAsync();
@@ -167,7 +180,7 @@ namespace Ogma3.Pages.Stories
             }
             else
             {
-                return RedirectToPage("./Index");
+                return Page();
             }
         }
     }

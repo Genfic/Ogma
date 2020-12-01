@@ -16,7 +16,7 @@
             <div class="actions">
                 
                 <a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-story="@Model.Id">
-                    <icon class="icon" icon="edit"></icon>
+                    <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
                 
@@ -24,10 +24,8 @@
                 {
                     <div class="actions">
                         <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Id">
-                            <icon icon="edit"></icon>
-                        </a>
-                        <a title="Delete" class="action-btn" asp-page="./Chapters/Delete" asp-route-id="@Model.Id">
-                            <icon icon="delete_forever"></icon>
+                            <icon class="icon" icon="edit"></icon>
+                            <span class="name">Edit</span>
                         </a>
                     </div>
                 }
