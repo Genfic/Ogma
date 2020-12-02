@@ -20,5 +20,6 @@ namespace Ogma3.Pages.Shared.Details
         public string EndNotes { get; set; }
         
         public long CommentsThreadId { get; set; }
+        public bool IsPublished { get; set; }
     }
 }

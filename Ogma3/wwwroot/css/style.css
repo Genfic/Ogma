@@ -87,6 +87,10 @@ body > footer {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
 }
 
+[v-cloak] {
+  display: none;
+}
+
 .monospace {
   font-family: "Courier New", Courier, monospace;
 }
@@ -856,6 +860,13 @@ img.avatar {
   display: flex;
   justify-content: center;
 }
+.chapter-details .actions .not-published {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red-75);
+  font-size: 1rem;
+}
 .chapter-details > .body-container > .notes {
   text-align: justify;
   font-style: italic;
@@ -1382,6 +1393,13 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   margin: 0.5rem 0;
   display: flex;
   justify-content: center;
+}
+.blogpost-details .actions .not-published {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red-75);
+  font-size: 1rem;
 }
 .blogpost-details .body {
   text-align: justify;
@@ -2181,6 +2199,7 @@ form.search select:focus {
   grid-row: 1;
   grid-column: 3;
   display: flex;
+  justify-content: flex-end;
 }
 .info-bar > .buttons > a {
   display: flex;
@@ -2787,6 +2806,56 @@ form.search select:focus {
   width: 1rem;
   border-radius: 50%;
   background-color: var(--foreground-50);
+}
+
+.o-dropdown {
+  position: relative;
+  border: 1px solid var(--foreground-25);
+}
+.o-dropdown:hover {
+  border-color: var(--foreground-50);
+}
+.o-dropdown:focus {
+  border-color: var(--accent);
+}
+.o-dropdown input[type=checkbox] {
+  opacity: 0;
+  position: absolute;
+}
+.o-dropdown input[type=checkbox]:checked + label {
+  background-color: var(--accent-25);
+}
+.o-dropdown input[type=checkbox]:checked ~ .menu {
+  display: flex;
+  flex-direction: column;
+}
+.o-dropdown label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 48px;
+  height: 100%;
+  user-select: none;
+}
+.o-dropdown .menu {
+  position: absolute;
+  display: none;
+  background-color: var(--background);
+  border: 1px solid var(--foreground-50);
+  padding: 0.5rem;
+}
+.o-dropdown .menu a.item {
+  color: var(--foreground);
+}
+.o-dropdown .menu .item.active {
+  cursor: pointer;
+}
+.o-dropdown .menu .item.active:hover {
+  color: var(--accent-75);
+}
+.o-dropdown.left .menu {
+  right: 0;
 }
 
 .md p {

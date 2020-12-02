@@ -6,7 +6,6 @@ namespace Ogma3.Pages
     {
         public void OnGet()
         {
-            
         }
     }
 }

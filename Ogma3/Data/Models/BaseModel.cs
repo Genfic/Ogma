@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ogma3.Data.Models
 {
-    public class BaseModel
+    public abstract class BaseModel
     {
         [Key]
         [Required]

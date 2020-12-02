@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -52,6 +53,7 @@ namespace Ogma3.Pages.Blog
             public ChapterMinimal? ChapterMinimal { get; set; }
             public StoryMinimal? StoryMinimal { get; set; }
             public bool IsUnavailable { get; set; }
+            public bool Published { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -75,7 +77,8 @@ namespace Ogma3.Pages.Blog
                 Tags = post.Hashtags
                     .Select(t => t.Trim('#'))
                     .ToArray()
-                    .JoinToString(", ")
+                    .JoinToString(", "),
+                Published = post.IsPublished
             };
 
             if (post.AttachedStoryId.HasValue)
@@ -126,6 +129,7 @@ namespace Ogma3.Pages.Blog
             post.Body = Input.Body.Trim();
             post.WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length;
             post.Hashtags = tags.ToArray();
+            post.IsPublished = Input.Published;
             
             try
             {

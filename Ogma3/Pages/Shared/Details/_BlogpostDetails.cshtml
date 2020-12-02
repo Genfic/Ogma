@@ -11,30 +11,18 @@
 
     <div class="actions">
         @if (User.IsUserSameAsLoggedIn(Model.AuthorId))
-            {
-                <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">
-                    <icon class="icon" icon="edit"></icon>
-                    <span class="name">Edit</span>
-                </a>
-                <a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.Id">
-                    <icon class="icon" icon="delete_forever"></icon>
-                    <span class="name">Delete</span>
-                </a>
-                if (Model.IsPublished)
-                {
-                    <a title="Unpublish post" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
-                        <icon class="icon" icon="visibility_off"></icon>
-                        <span class="name">Unpublish</span>
-                    </a>
-                }
-                else
-                {
-                    <a title="Publish post" class="action-btn" asp-page="./Publish" asp-route-id="@Model.Id">
-                        <icon class="icon" icon="visibility"></icon>
-                        <span class="name">Publish</span>
-                    </a>
-                }
-            }
+        {
+            <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Id">
+                <icon class="icon" icon="edit"></icon>
+                <span class="name">Edit</span>
+            </a>
+        }                 
+        @if (!Model.IsPublished)
+        {
+            <span class="not-published">
+                <icon class="icon" icon="visibility_off"></icon>
+            </span>
+        }
     </div>
 
         @if (Model.IsUnavailable)

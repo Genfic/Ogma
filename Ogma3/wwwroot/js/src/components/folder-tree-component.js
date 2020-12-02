@@ -29,7 +29,8 @@ Vue.component('folder-item', {
            :class="[
                folder.id === current || disabled ? 'disabled' : null,
                folder.canAdd ? null : 'locked'
-           ]">
+           ]"
+           v-cloak>
         <span v-on:click.self="bus(folder.id)" 
               :class="sel === folder.id ? 'active' : null"
               :tabindex="folder.id === current || disabled || !folder.canAdd ? -1 : 0">

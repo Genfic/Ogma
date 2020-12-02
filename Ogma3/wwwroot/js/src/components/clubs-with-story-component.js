@@ -31,7 +31,7 @@ Vue.component('clubs-with-story', {
             .catch(console.error);
     },
     template: `
-      <div class="club-folder-selector my-modal" v-if="visible" @click.self="hide">
+      <div class="club-folder-selector my-modal" v-if="visible" @click.self="hide" v-cloak>
           <div class="content">
             
             <div class="header">

@@ -15,7 +15,7 @@
         {
             <div class="actions">
                 
-                <a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-story="@Model.Id">
+                <a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-chapter="@Model.Id">
                     <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
@@ -28,6 +28,12 @@
                             <span class="name">Edit</span>
                         </a>
                     </div>
+                }
+                @if (!Model.IsPublished)
+                {
+                    <span class="not-published">
+                        <icon class="icon" icon="visibility_off"></icon>
+                    </span>
                 }
             </div>
         }

@@ -1,6 +1,7 @@
 @using System.Globalization
 @using Humanizer
 @using Ogma3.Api.V1
+@using Ogma3.Data.AuthorizationData
 @using Ogma3.Services
 @using Utils
 @using Utils.Extensions
@@ -47,24 +48,37 @@
         
     </div>
     
-        @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
-        {
-            <div class="buttons">
+        <div class="buttons">
+            @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
+            {
                 <button class="button max join" 
                         :title="isFollowed ? 'Unfollow' : 'Follow'"
                         v-on:click="follow">
                     {{ isFollowed ? 'Following' : 'Follow' }}
                 </button>
-
-                 <button class="button" :class="isBlocked ? 'join' : 'leave'"
-                         :title="isBlocked ? 'Unblock' : 'Block'"
-                         v-on:click="block">
-                     <i class="icon material-icons-outlined">
-                         {{ isBlocked ? 'lens' : 'block' }}
-                     </i>
-                 </button>
-            </div>
-        }
+                
+                <div class="o-dropdown left">
+                    <input type="checkbox" id="o-dropdown-toggler">
+                    <label for="o-dropdown-toggler">
+                        <icon icon="more_vert"></icon>
+                    </label>
+                    <ul class="menu">
+                        <li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
+                            {{ isBlocked ? 'Unblock' : 'Block' }}
+                        </li>
+                        @if (User.IsInRole(RoleNames.Admin))
+                        {
+                            <a asp-area="Admin"
+                               asp-page="/Users"
+                               asp-route-name="@Model.UserName"
+                               class="item active">
+                                Manage
+                            </a>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
 
     <nav class="nav">
         <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">

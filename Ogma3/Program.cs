@@ -68,7 +68,7 @@ namespace Ogma3
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("https://+:6001", "https://+:8080", "https://+:80");
+                    webBuilder.UseUrls("https://+:5001", "https://+:8080", "https://+:80");
                     webBuilder.ConfigureKestrel(options =>
                     {
                         options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
