@@ -57,7 +57,10 @@ namespace Ogma3.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        
+        // Moderation
         public DbSet<ModeratorAction> ModeratorActions { get; set; }
+        public DbSet<ContentBlock> ContentBlocks { get; set; }
         
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
@@ -159,6 +162,10 @@ namespace Ogma3.Data
                 ent.HasMany(s => s.Votes)
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(s => s.ContentBlock)
+                    .WithOne()
+                    .HasForeignKey<Story>(s => s.ContentBlockId)
+                    .IsRequired(false);
             });
 
             // Chapter
@@ -170,6 +177,10 @@ namespace Ogma3.Data
                     .WithOne(ct => ct.Chapter)
                     .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
                     .OnDelete(DeleteBehavior.Cascade);
+                ent.HasOne(p => p.ContentBlock)
+                    .WithOne()
+                    .HasForeignKey<Chapter>(c => c.ContentBlockId)
+                    .IsRequired(false);
             });
 
             // Chapter reads
@@ -261,6 +272,10 @@ namespace Ogma3.Data
                     .WithMany()
                     .HasForeignKey(b => b.AttachedChapterId)
                     .OnDelete(DeleteBehavior.SetNull);
+                ent.HasOne(b => b.ContentBlock)
+                    .WithOne()
+                    .HasForeignKey<Blogpost>(b => b.ContentBlockId)
+                    .IsRequired(false);
             });
                 
 

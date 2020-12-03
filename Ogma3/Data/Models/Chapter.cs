@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ogma3.Data.Models
 {
-    public class Chapter : BaseModel
+    public class Chapter : BaseModel, IBlockableContent
     {
         [Required]
         public uint Order { get; set; }
@@ -46,5 +46,8 @@ namespace Ogma3.Data.Models
         
         [JsonIgnore] 
         public Story Story { get; set; }
+        
+        public ContentBlock? ContentBlock { get; set; }
+        public long? ContentBlockId { get; set; }
     }
 }

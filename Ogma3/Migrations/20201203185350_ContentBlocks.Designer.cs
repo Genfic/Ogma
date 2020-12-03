@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201203185350_ContentBlocks")]
+    partial class ContentBlocks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -498,18 +500,17 @@ namespace Ogma3.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<long>("IssuerId")
+                    b.Property<long?>("IssuerId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Reason")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IssuerId");
 
-                    b.ToTable("ContentBlocks");
+                    b.ToTable("ContentBlock");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Document", b =>
@@ -1377,9 +1378,7 @@ namespace Ogma3.Migrations
                 {
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "Issuer")
                         .WithMany()
-                        .HasForeignKey("IssuerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IssuerId");
 
                     b.Navigation("Issuer");
                 });

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
 {
-    public class Blogpost : BaseModel
+    public class Blogpost : BaseModel, IBlockableContent
     {
         [Required]
         [MinLength(CTConfig.CBlogpost.MinTitleLength)]
@@ -48,5 +48,8 @@ namespace Ogma3.Data.Models
         
         public Chapter? AttachedChapter { get; set; }
         public long? AttachedChapterId { get; set; }
+
+        public ContentBlock? ContentBlock { get; set; }
+        public long? ContentBlockId { get; set; }
     }
 }

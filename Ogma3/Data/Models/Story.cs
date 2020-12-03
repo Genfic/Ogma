@@ -9,7 +9,7 @@ using Ogma3.Data.Enums;
 
 namespace Ogma3.Data.Models
 {
-    public class Story : BaseModel
+    public class Story : BaseModel, IBlockableContent
     {
 
         [Required]
@@ -88,5 +88,8 @@ namespace Ogma3.Data.Models
         // Just for relationship purposes
         [JsonIgnore]
         public ICollection<Folder> Folders { get; set; }
+        
+        public ContentBlock? ContentBlock { get; set; }
+        public long? ContentBlockId { get; set; }
     }
 }
