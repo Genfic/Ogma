@@ -8,12 +8,12 @@
   --background-75: rgba(255, 255, 255, 0.75);
   --background-50: rgba(255, 255, 255, 0.5);
   --background-25: rgba(255, 255, 255, 0.25);
-  --accent: #0080ff;
-  --accent-75: rgba(0, 128, 255, 0.75);
-  --accent-50: rgba(0, 128, 255, 0.5);
-  --accent-25: rgba(0, 128, 255, 0.25);
-  --accent-10: rgba(0, 128, 255, 0.1);
-  --accent-5: rgba(0, 128, 255, 0.05);
+  --accent: #0058ff;
+  --accent-75: rgba(0, 88, 255, 0.75);
+  --accent-50: rgba(0, 88, 255, 0.5);
+  --accent-25: rgba(0, 88, 255, 0.25);
+  --accent-10: rgba(0, 88, 255, 0.1);
+  --accent-5: rgba(0, 88, 255, 0.05);
   --gold: #d5900e;
   --red: red;
   --red-75: rgba(255, 0, 0, 0.75);

@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using B2Net;
 using B2Net.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +20,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
-using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
@@ -213,7 +211,7 @@ namespace Ogma3
                     context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
                     {
                         Public = true,
-                        MaxAge = TimeSpan.FromDays(30)
+                        MaxAge = TimeSpan.FromDays(365)
                     };
                 }
             });

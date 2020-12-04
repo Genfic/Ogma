@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Repositories;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Details;
+using Utils.Extensions;
 
 namespace Ogma3.Pages
 {
@@ -20,7 +21,7 @@ namespace Ogma3.Pages
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            Chapter = await _chaptersRepo.GetChapterDetails(id);
+            Chapter = await _chaptersRepo.GetChapterDetails(id, User.GetNumericId());
 
             if (Chapter == null)
             {

@@ -11,10 +11,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @* Preconnects and prefetches *@
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap">
+    @* Preconnects, preloads and prefetches *@
     <link rel="preconnect" href="https://cdn.genfic.net">
+    
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/MaterialIconsOutlined-Regular.otf"> *@
+    <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/MaterialIconsOutlined-Regular.woff2">
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-300.woff"> *@
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-300.woff2"> *@
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-300italic.woff"> *@
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-300italic.woff2"> *@
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-500.woff"> *@
+    <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-500.woff2">
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-500italic.woff"> *@
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-500italic.woff2"> *@
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-italic.woff"> *@
+    <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-italic.woff2">
+    @* <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-regular.woff"> *@
+    <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-v18-latin-regular.woff2">
+
     
     @* Base meta *@
     <meta charset="utf-8" />
@@ -41,10 +55,10 @@
     <meta property="og:title" content="@ViewData["Title"]">
     @await RenderSectionAsync("OgMeta", false)
     
-    @if (ViewData["use_bootstrap"] == null)
-    {
-          <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    }
+    @* @if (ViewData["use_bootstrap"] == null) *@
+    @* { *@
+    @*       <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/> *@
+    @* } *@
 
     @if (theme == "system") {
         <link rel="stylesheet" href="~/css/dist/light.min.css" asp-append-version="true"/>
@@ -59,18 +73,16 @@
     
     @await RenderSectionAsync("CSS", false)
     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&display=swap" rel="stylesheet">
-
     @if (Env.IsDevelopment())
     {
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
-                asp-fallback-src="~/lib/vue/vue.js"
+        <script src="~/lib/vue/vue.js"
+                asp-fallback-src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
                 asp-fallback-test="window.Vue"></script>
     }
     else
     {
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"
-                asp-fallback-src="~/lib/vue/vue.min.js"
+        <script src="~/lib/vue/vue.min.js"
+                asp-fallback-src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"
                 asp-fallback-test="window.Vue"></script>
     }
     <script src="~/js/dist/site.min.js" asp-append-version="true"></script>
@@ -100,17 +112,16 @@
 
 <partial name="_Footer" />
     
-<script src="//cdn.jsdelivr.net/npm/dayjs@1.8.35/dayjs.min.js" 
+<script src="~/lib/dayjs.min.js" 
         crossorigin="anonymous"
         asp-fallback-test="window.dayjs"
-        asp-fallback-src="~/lib/dayjs.min.js"></script>    
+        asp-fallback-src="https://cdn.jsdelivr.net/npm/dayjs@1.8.35/dayjs.min.js"></script>    
 
-<script src="//cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js" 
+<script src="~/lib/axios.min.js" 
         crossorigin="anonymous"
         asp-fallback-test="window.axios"
-        asp-fallback-src="~/lib/axios.min.js"></script>
+        asp-fallback-src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js"></script>
 
-@* <script async src="~/js/dist/themeswap.min.js" asp-append-version="true"></script> *@
 <script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
     
 @await RenderSectionAsync("Scripts", required: false)

@@ -20,10 +20,11 @@ namespace Ogma3.Data.Repositories
             _mapper = mapper;
         }
 
-        public async Task<ChapterDetails> GetChapterDetails(long id)
+        public async Task<ChapterDetails> GetChapterDetails(long id, long? currentUser)
         {
             return await _context.Chapters
                 .TagWith($"{nameof(ChaptersRepository)}.{nameof(GetChapterDetails)} -> {id}")
+                .Where(c => c.IsPublished || c.Story.AuthorId == currentUser)
                 .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
