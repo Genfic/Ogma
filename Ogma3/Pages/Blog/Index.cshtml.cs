@@ -77,6 +77,7 @@ namespace Ogma3.Pages.Blog
             Posts = await query
                 .Include(b => b.Author)
                 .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Paginate(page, _config.BlogpostsPerPage)
                 .Take(_config.BlogpostsPerPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)

@@ -1,0 +1,32 @@
+@page "{type}/{id}"
+@model Ogma3.Areas.Admin.Pages.ContentBlock
+
+@{
+    bool blocked = false;
+    string reason = "";
+}
+
+@if (Model.Story is not null)
+{
+    blocked = Model.Story.ContentBlockId != null;
+    reason = Model.Story.ContentBlock?.Reason;
+    <h1>Story: @Model.Story.Title</h1>
+}
+else if (Model.Chapter is not null)
+{
+    blocked = Model.Chapter.ContentBlockId != null;
+    reason = Model.Chapter.ContentBlock?.Reason;
+    <h1>Chapter: @Model.Chapter.Title</h1>
+}
+else if (Model.Blogpost is not null)
+{
+    blocked = Model.Blogpost.ContentBlockId != null;
+    reason = Model.Blogpost.ContentBlock?.Reason;
+    <h1>Blogpost: @Model.Blogpost.Title</h1>
+}
+
+<form method="POST">
+    <label for="reason">Reason</label>
+    <input type="text" name="reason" id="reason" value="@reason">
+    <input type="submit" value="@(blocked ? "Unblock" : "Block")">
+</form>

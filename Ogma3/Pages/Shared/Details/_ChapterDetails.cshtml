@@ -1,4 +1,5 @@
 @using System.Globalization
+@using Ogma3.Data.AuthorizationData
 @using Ogma3.Services
 @using Utils.Extensions
 @model ChapterDetails
@@ -20,22 +21,36 @@
                     <span class="name">Write about it</span>
                 </a>
                 
-                @if (User.IsUserSameAsLoggedIn(Model.StoryAuthorId))
-                {
-                    <div class="actions">
+                <div class="actions">
+                    @if (User.IsUserSameAsLoggedIn(Model.StoryAuthorId))
+                    {
                         <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Id">
                             <icon class="icon" icon="edit"></icon>
                             <span class="name">Edit</span>
                         </a>
-                    </div>
-                }
+                    }
+                    @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+                    {
+                        <a title="Manage" class="action-btn red" target="_blank"
+                           asp-area="Admin" asp-page="/ContentBlock" 
+                           asp-route-type="chapter" asp-route-id="@Model.Id">
+                            <icon class="icon" icon="shield"></icon>
+                        </a>
+                    }
+                </div>
                 @if (!Model.IsPublished)
                 {
                     <span class="not-published">
                         <icon class="icon" icon="visibility_off"></icon>
                     </span>
                 }
-            </div>
+                @if (Model.ContentBlockId != null)
+                {
+                    <span class="not-published">
+                        <icon class="icon" icon="shield"></icon>
+                    </span>
+                }
+                </div>
         }
 
         <cache expires-after="TimeSpan.FromMinutes(60)">

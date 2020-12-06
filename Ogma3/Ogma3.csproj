@@ -293,6 +293,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Remove="wwwroot\js\dist\moderation\content-block.min.js" />
   </ItemGroup>
 
 
@@ -305,7 +306,6 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Extensions" />
-    <Folder Include="wwwroot\js\dist" />
   </ItemGroup>
 
 

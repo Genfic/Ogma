@@ -13,5 +13,7 @@ namespace Ogma3.Data.Models
         public string Reason { get; set; }
         [Required]
         public DateTime DateTime { get; set; } = DateTime.Now;
+
+        public string Type { get; set; }
     }
 }

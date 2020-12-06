@@ -25,5 +25,6 @@ namespace Ogma3.Pages.Shared.Details
         public int ChapterCount { get; set; }
         public int CommentsCount { get; set; }
         public int Score { get; set; }
+        public long? ContentBlockId { get; set; }
     }
 }

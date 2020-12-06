@@ -24,6 +24,7 @@ using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;
+using Ogma3.Services.SignalR;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
@@ -168,6 +169,9 @@ namespace Ogma3
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
+            
+            // SignalR
+            services.AddSignalR();
         }
 
 
@@ -225,6 +229,7 @@ namespace Ogma3
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/notifications-hub");
             });
             
             // Compression

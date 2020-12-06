@@ -25,6 +25,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Chapters
                 .TagWith($"{nameof(ChaptersRepository)}.{nameof(GetChapterDetails)} -> {id}")
                 .Where(c => c.IsPublished || c.Story.AuthorId == currentUser)
+                .Where(c => c.ContentBlockId == null || c.Story.AuthorId == currentUser)
                 .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
@@ -35,6 +36,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Chapters
                 .Where(c => c.Id == id)
                 .Where(c => c.IsPublished || !publishedOnly)
+                .Where(b => b.ContentBlockId == null || !publishedOnly)
                 .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

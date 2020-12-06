@@ -40,6 +40,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Blogposts
                 .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Where(b => b.ContentBlockId == null || !publishedOnly)
                 .Paginate(page, perPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
@@ -51,6 +52,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Blogposts
                 .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Where(b => b.ContentBlockId == null || !publishedOnly)
                 .CountAsync();
         }
 
@@ -59,6 +61,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Blogposts
                 .Where(b => b.Id == id)
                 .Where(b => b.IsPublished || !publishedOnly)
+                .Where(b => b.ContentBlockId == null || !publishedOnly)
                 .Include(b => b.AttachedChapter)
                 .Include(b => b.AttachedStory)
                 .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)

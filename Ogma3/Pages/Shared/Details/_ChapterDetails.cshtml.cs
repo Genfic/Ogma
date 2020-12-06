@@ -21,5 +21,6 @@ namespace Ogma3.Pages.Shared.Details
         
         public long CommentsThreadId { get; set; }
         public bool IsPublished { get; set; }
+        public long? ContentBlockId { get; set; }
     }
 }

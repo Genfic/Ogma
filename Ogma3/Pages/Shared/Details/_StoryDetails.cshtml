@@ -1,5 +1,6 @@
 @using System.Globalization
 @using Ogma3.Api.V1
+@using Ogma3.Data.AuthorizationData
 @using Ogma3.Services
 @using Utils.Extensions
 @inject OgmaConfig Config
@@ -15,7 +16,7 @@
                 <span class="count">{{score}}</span>
             </button>
             
-            @if (User?.Identity?.IsAuthenticated ?? false)
+            @if (User.Identity?.IsAuthenticated ?? false)
             {
                 <a title="Write about it" class="action-btn" asp-page="./Blog/Create" asp-route-story="@Model.Id">
                     <icon class="icon" icon="note_add"></icon>
@@ -23,7 +24,7 @@
                 </a>
             }
             
-            @if (User?.IsUserSameAsLoggedIn(Model.AuthorId) ?? false)
+            @if (User.IsUserSameAsLoggedIn(Model.AuthorId))
             {
                 <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
                     <icon class="icon" icon="edit"></icon>
@@ -34,15 +35,29 @@
                     <icon class="icon" icon="post_add"></icon>
                     <span class="name">New chapter</span>
                 </a>
-                if (!Model.IsPublished)
-                {
-                    <span class="not-published">
-                        <icon class="icon" icon="visibility_off"></icon>
-                    </span>
-                }
+            }                    
+            @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+            {
+                <a title="Manage" class="action-btn red" target="_blank"
+                   asp-area="Admin" asp-page="/ContentBlock" 
+                   asp-route-type="story" asp-route-id="@Model.Id">
+                    <icon class="icon" icon="shield"></icon>
+                </a>
+            }
+            @if (!Model.IsPublished)
+            {
+                <span class="not-published">
+                    <icon class="icon" icon="visibility_off"></icon>
+                </span>
+            }
+            @if (Model.ContentBlockId != null)
+            {
+                <span class="not-published">
+                    <icon class="icon" icon="shield"></icon>
+                </span>
             }
 
-            @if (User?.Identity?.IsAuthenticated ?? false)
+            @if (User.Identity?.IsAuthenticated ?? false)
             {
                 <div class="spacer"></div>
                 
@@ -101,7 +116,7 @@
         
         <div class="spacer"></div>
         
-        @if (User?.Identity?.IsAuthenticated ?? false)
+        @if (User.Identity?.IsAuthenticated ?? false)
         {
             <a v-on:click="addToFolder">Add to folder</a>
         }
@@ -145,7 +160,7 @@
         }
     </ol>
 
-    @if (User?.Identity?.IsAuthenticated ?? false)
+    @if (User.Identity?.IsAuthenticated ?? false)
     {
         <div class="my-modal" v-if="showShelves" v-on:click.self="showShelves = false">
             <div class="content">

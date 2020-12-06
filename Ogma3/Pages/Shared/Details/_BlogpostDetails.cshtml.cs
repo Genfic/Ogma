@@ -21,5 +21,6 @@ namespace Ogma3.Pages.Shared.Details
         public ChapterMinimal? AttachedChapter { get; set; }
         public StoryMinimal? AttachedStory { get; set; }
         public bool IsUnavailable { get; set; }
+        public long? ContentBlockId { get; set; }
     }
 }

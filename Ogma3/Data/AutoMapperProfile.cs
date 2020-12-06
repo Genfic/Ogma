@@ -88,7 +88,10 @@ namespace Ogma3.Data
                 .ForMember(
                     sd => sd.Chapters,
                     opts
-                    => opts.MapFrom(s => s.Chapters.Where(c => c.IsPublished || c.Story.AuthorId == currentUser))
+                    => opts.MapFrom(s => s.Chapters
+                        .Where(c => c.IsPublished || c.Story.AuthorId == currentUser)
+                        .Where(c => c.ContentBlockId == null || c.Story.AuthorId == currentUser)
+                    )
                 );
             
             CreateMap<Story, StoryCard>()

@@ -51,11 +51,12 @@ namespace Ogma3.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<StoryMinimal> GetMinimal(long id, bool publishedOnly = true)
+        public async Task<StoryMinimal> GetMinimal(long id)
         {
             return await _context.Stories
                 .Where(c => c.Id == id)
-                .Where(c => c.IsPublished || !publishedOnly)
+                .Where(c => c.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -79,6 +80,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {authorId}, {sort}")
                 .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Where(b => b.AuthorId == authorId)
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
@@ -117,6 +119,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetTopStoryCards)} -> {count}, {sort}")
                 .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
                 .Take(count)
@@ -136,6 +139,8 @@ namespace Ogma3.Data.Repositories
         {
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetCardsWithTag)} -> {tagId}")
+                .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .OrderByDescending(s => s.ReleaseDate)
@@ -151,6 +156,8 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetPaginatedCardsOfFolder)} -> {folderId}")
                 .Where(s => s.FolderId == folderId)
                 .Select(s => s.Story)
+                .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .OrderByDescending(s => s.ReleaseDate)
                 .Paginate(page, perPage)
@@ -181,6 +188,7 @@ namespace Ogma3.Data.Repositories
             return await Search(tags, searchQuery, ratingId)
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(SearchAndSortStoryCards)} -> {perPage}, {page}, {searchQuery}. {ratingId}, {sort}")
                 .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .SortByEnum(sort)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -205,6 +213,7 @@ namespace Ogma3.Data.Repositories
             return await Search(tags, searchQuery, ratingId)
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(CountSearchResults)} -> {searchQuery}. {ratingId}")
                 .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
                 .CountAsync();
         }
@@ -219,6 +228,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(CountForUser)} -> {id}")
                 .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Where(s => s.AuthorId == id)
                 .CountAsync();
         }
@@ -245,7 +255,9 @@ namespace Ogma3.Data.Repositories
         public async Task<int> CountWithTag(long tagId)
         {
             return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetCardsWithTag)} -> {tagId}")
+                .TagWith($"{nameof(StoriesRepository)}.{nameof(CountWithTag)} -> {tagId}")
+                .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
                 .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
                 .CountAsync();
         }
