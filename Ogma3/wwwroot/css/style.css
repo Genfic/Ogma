@@ -29,6 +29,7 @@ body {
   flex-direction: column;
   align-items: center;
   font-family: "Raleway Var", "Arial", sans-serif;
+  padding-left: calc(100vw - 100%);
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -247,6 +248,27 @@ button {
   cursor: pointer;
 }
 
+.btn {
+  width: 100%;
+  background-color: transparent;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: 1px solid var(--foreground-25);
+}
+.btn:hover {
+  border-color: var(--foreground-50);
+}
+.btn:focus {
+  border-color: var(--accent);
+}
+.btn:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+
 .btn-primary {
   color: var(--background);
   background-color: var(--accent-75);
@@ -433,7 +455,7 @@ footer.footer > .cols {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
+  width: min(100vw, 800px);
   padding: 0.5rem;
 }
 @media screen and (max-width: 570px) {

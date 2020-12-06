@@ -14,6 +14,53 @@
   font-size: 1.1rem;
 }
 
+form.auto {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-auto-rows: 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+form label {
+  grid-column: 1;
+  margin: 0;
+}
+form input, form textarea, form select {
+  grid-column: 2;
+  background-color: transparent;
+  color: var(--foreground);
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--foreground-25);
+}
+form input:hover, form textarea:hover, form select:hover {
+  border-color: var(--foreground-50);
+}
+form input:focus, form textarea:focus, form select:focus {
+  border-color: var(--accent);
+}
+form select > option {
+  background-color: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+}
+form .input-field {
+  grid-column: 2;
+}
+form input[type=submit] {
+  grid-column: 1/3;
+  background-color: var(--foreground-10);
+  color: var(--foreground);
+  padding: 0.5rem;
+  border: 1px solid var(--foreground-25);
+}
+form input[type=submit]:hover {
+  border-color: var(--foreground-50);
+}
+form input[type=submit]:focus {
+  border-color: var(--accent);
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: var(--background) !important;
   background-color: var(--accent-75) !important;

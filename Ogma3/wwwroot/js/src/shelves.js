@@ -1,5 +1,5 @@
 let shelves_vue = new Vue({ 
-    el: "#app",
+    el: "#shelves",
     data: {
         form: {
             name: null,

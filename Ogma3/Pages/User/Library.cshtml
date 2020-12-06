@@ -9,7 +9,7 @@
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
-<div id="app">
+<div id="shelves">
     @if (Model.IsCurrentUser)
     {
         <form v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">

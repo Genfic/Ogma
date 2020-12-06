@@ -33,7 +33,8 @@ const watch = {
     sass: [ // Avoid `**` because gulp-sass shits itself otherwise and compilation takes >5s on any change
         `${dir.cssroot}/*.sass`, 
         `${dir.cssroot}/src/*.sass`, 
-        `${dir.cssroot}/src/elements/*.sass`, 
+        `${dir.cssroot}/src/elements/*.sass`,
+        `${dir.cssroot}/src/admin-elements/*.sass`,
         `${dir.cssroot}/src/mixins/*.sass`
     ],
     js: [

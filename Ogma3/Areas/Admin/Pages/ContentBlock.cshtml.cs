@@ -51,6 +51,7 @@ namespace Ogma3.Areas.Admin.Pages
                     Chapter = await _context.Chapters
                         .Where(i => i.Id == id)
                         .Include(i => i.ContentBlock)
+                        .Include(i => i.Story)
                         .FirstOrDefaultAsync();
                     break;
                 case "blogpost":
