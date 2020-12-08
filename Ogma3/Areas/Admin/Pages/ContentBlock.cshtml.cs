@@ -34,10 +34,15 @@ namespace Ogma3.Areas.Admin.Pages
         public Chapter? Chapter { get; set; }
         public Blogpost? Blogpost { get; set; }
 
-        public async Task<ActionResult> OnGet(string type, long id)
+        public async Task<ActionResult> OnGet(string? type, long? id)
         {
+            if (type is null || id is null)
+            {
+                return Page();
+            }
+            
             Type = type;
-            Id = id;
+            Id = (long) id;
 
             switch (type)
             {
@@ -94,6 +99,14 @@ namespace Ogma3.Areas.Admin.Pages
                 .FirstOrDefaultAsync();
             if (item is null) return false;
 
+            var title = item switch
+            {
+                Story s => s.Title,
+                Chapter c => c.Title,
+                Blogpost b => b.Title,
+                _ => ""
+            };
+
             if (item.ContentBlock is null)
             {
                 item.ContentBlock = new Data.Models.ContentBlock
@@ -102,10 +115,23 @@ namespace Ogma3.Areas.Admin.Pages
                     IssuerId = uid,
                     Type = typeof(T).Name
                 };
+                
+                // Log the action
+                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                {
+                    StaffMemberId = User.GetNumericId(),
+                    Description = ModeratorActionTemplates.ContentBlocked(Type, title, itemId, User.GetUsername())
+                });
             }
             else
             {
                 _context.ContentBlocks.Remove(item.ContentBlock);
+            
+                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                {
+                    StaffMemberId = User.GetNumericId(),
+                    Description = ModeratorActionTemplates.ContentUnblocked(Type, title, itemId, User.GetUsername())
+                });
             }
             
             await _context.SaveChangesAsync();

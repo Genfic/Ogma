@@ -138,7 +138,7 @@ namespace Ogma3.Api.V1
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
                     StaffMemberId = User.GetNumericId(),
-                    Description = ModeratorActionTemplates.UserBan(user, User?.Identity?.Name, (DateTime) user.BannedUntil)
+                    Description = ModeratorActionTemplates.UserBan(user, User.GetUsername(), (DateTime) user.BannedUntil)
                 });
             }
             else if (user.BannedUntil.HasValue)
@@ -146,7 +146,7 @@ namespace Ogma3.Api.V1
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
                     StaffMemberId = User.GetNumericId(),
-                    Description = ModeratorActionTemplates.UserUnban(user, User?.Identity?.Name, (DateTime) user.BannedUntil)
+                    Description = ModeratorActionTemplates.UserUnban(user, User.GetUsername(), (DateTime) user.BannedUntil)
                 });
                 user.BannedUntil = null;
             }
@@ -178,7 +178,7 @@ namespace Ogma3.Api.V1
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
                     StaffMemberId = User.GetNumericId(),
-                    Description = ModeratorActionTemplates.UserMute(user, User?.Identity?.Name, (DateTime) user.MutedUntil)
+                    Description = ModeratorActionTemplates.UserMute(user, User.GetUsername(), (DateTime) user.MutedUntil)
                 });
             }
             else if (user.MutedUntil.HasValue)
@@ -186,7 +186,7 @@ namespace Ogma3.Api.V1
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
                     StaffMemberId = User.GetNumericId(),
-                    Description = ModeratorActionTemplates.UserUnmute(user, User?.Identity?.Name, (DateTime) user.MutedUntil)
+                    Description = ModeratorActionTemplates.UserUnmute(user, User.GetUsername(), (DateTime) user.MutedUntil)
                 });
                 user.MutedUntil = null;
             }
@@ -223,7 +223,7 @@ namespace Ogma3.Api.V1
             await _context.ModeratorActions.AddRangeAsync(removedRoles.Select(r => new ModeratorAction
             {
                 StaffMemberId = User.GetNumericId(),
-                Description = ModeratorActionTemplates.UserRoleRemoved(user, User?.Identity?.Name, r.Name)
+                Description = ModeratorActionTemplates.UserRoleRemoved(user, User.GetUsername(), r.Name)
             }));
             
             // Handle role adding
@@ -235,7 +235,7 @@ namespace Ogma3.Api.V1
             await _context.ModeratorActions.AddRangeAsync(addedRoles.Select(r => new ModeratorAction
             {
                 StaffMemberId = User.GetNumericId(),
-                Description = ModeratorActionTemplates.UserRoleAdded(user, User?.Identity?.Name, r.Name)
+                Description = ModeratorActionTemplates.UserRoleAdded(user, User.GetUsername(), r.Name)
             }));
 
             try

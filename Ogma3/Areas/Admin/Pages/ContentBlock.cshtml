@@ -1,37 +1,57 @@
-@page "{type}/{id}"
+@page
 @model Ogma3.Areas.Admin.Pages.ContentBlock
 
 @{
-    ViewData["Title"] = $"Block {Model.Type}";
+    ViewData["Title"] = Model.Type is null 
+        ? "Block content" 
+        : $"Block {Model.Type}";
+    ViewData["ActivePage"] = ManageNavPages.ContentBlock;
 }
 
-@{
+@if (Model.Type is null)
+{
+    <form method="GET" class="auto">
+        <label for="type">Type</label>
+        <select name="type" id="type">
+            <option value="story">Story</option>
+            <option value="chapter">Chapter</option>
+            <option value="blogpost">Blogpost</option>
+        </select>
+        
+        <label for="id">Id</label>
+        <input type="number" name="id" id="id">
+
+        <input type="submit" value="Search">
+    </form>
+}
+else
+{
     var blocked = false;
     var reason = "";
-}
+    
+    if (Model.Story is not null)
+    {
+        blocked = Model.Story.ContentBlockId != null;
+        reason = Model.Story.ContentBlock?.Reason;
+        <h2>Story: @Model.Story.Title</h2>
+    }
+    else if (Model.Chapter is not null)
+    {
+        blocked = Model.Chapter.ContentBlockId != null;
+        reason = Model.Chapter.ContentBlock?.Reason;
+        <h2>Chapter: @Model.Chapter.Title</h2>
+        <h3>Story: @Model.Chapter.Story.Title</h3>
+    }
+    else if (Model.Blogpost is not null)
+    {
+        blocked = Model.Blogpost.ContentBlockId != null;
+        reason = Model.Blogpost.ContentBlock?.Reason;
+        <h2>Blogpost: @Model.Blogpost.Title</h2>
+    }
 
-@if (Model.Story is not null)
-{
-    blocked = Model.Story.ContentBlockId != null;
-    reason = Model.Story.ContentBlock?.Reason;
-    <h2>Story: @Model.Story.Title</h2>
+    <form method="POST" class="auto">
+        <label for="reason">Reason</label>
+        <input type="text" name="reason" id="reason" value="@reason">
+        <input type="submit" value="@(blocked ? "Unblock" : "Block")">
+    </form>
 }
-else if (Model.Chapter is not null)
-{
-    blocked = Model.Chapter.ContentBlockId != null;
-    reason = Model.Chapter.ContentBlock?.Reason;
-    <h2>Chapter: @Model.Chapter.Title</h2>
-    <h3>Story: @Model.Chapter.Story.Title</h3>
-}
-else if (Model.Blogpost is not null)
-{
-    blocked = Model.Blogpost.ContentBlockId != null;
-    reason = Model.Blogpost.ContentBlock?.Reason;
-    <h2>Blogpost: @Model.Blogpost.Title</h2>
-}
-
-<form method="POST" class="auto">
-    <label for="reason">Reason</label>
-    <input type="text" name="reason" id="reason" value="@reason">
-    <input type="submit" value="@(blocked ? "Unblock" : "Block")">
-</form>

@@ -29,5 +29,11 @@ namespace Ogma3.Data
             => $"User **{user.UserName}** (id: {user.Id}) had their role **{roleName}** removed by **{modName}**.";
         public static string UserRoleAdded(OgmaUser user, string modName, string roleName)
             => $"User **{user.UserName}** (id: {user.Id}) has been granted a **{roleName}** role by **{modName}**.";
+        
+        // Content templates
+        public static string ContentBlocked(string type, string title, long id, string modName)
+            => $"{type.Humanize()} ***\"{title}\"*** (id: {id}) has been blocked by **{modName}**";
+        public static string ContentUnblocked(string type, string title, long id, string modName)
+            => $"{type.Humanize()} ***\"{title}\"*** (id: {id}) has been unblocked by **{modName}**";
     }
 }

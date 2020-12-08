@@ -1,51 +1,79 @@
 @using Ogma3.Data.AuthorizationData
 <ul class="nav nav-pills flex-column">
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="admin" asp-page="/Index" asp-area="Admin">Dashboard</a>
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="admin" asp-page="/Index" asp-area="Admin">
+            Dashboard
+        </a>
     </li>
 
     @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(RoleNames.Admin))
     {
         <li class="nav-item">
-            <a class="nav-link @ManageNavPages.SettingsNavClass(ViewContext)" id="settings" asp-page="/Settings" asp-area="Admin">Settings</a>
+            <a class="nav-link @ManageNavPages.SettingsNavClass(ViewContext)" id="settings" asp-page="/Settings" asp-area="Admin">
+                Settings
+            </a>
         </li>
     }
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.TagsNavClass(ViewContext)" id="tags" asp-page="/Tags" asp-area="Admin">Tags</a>
+        <a class="nav-link @ManageNavPages.TagsNavClass(ViewContext)" id="tags" asp-page="/Tags" asp-area="Admin">
+            Tags
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.NamespacesNavClass(ViewContext)" id="namespaces" asp-page="/Namespaces" asp-area="Admin">Namespaces</a>
+        <a class="nav-link @ManageNavPages.NamespacesNavClass(ViewContext)" id="namespaces" asp-page="/Namespaces" asp-area="Admin">
+            Namespaces
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.RatingsNavClass(ViewContext)" id="ratings" asp-page="/Ratings" asp-area="Admin">Ratings</a>
+        <a class="nav-link @ManageNavPages.RatingsNavClass(ViewContext)" id="ratings" asp-page="/Ratings" asp-area="Admin">
+            Ratings
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.QuotesNavClass(ViewContext)" id="quotes" asp-page="/Quotes" asp-area="Admin">Quotes</a>
+        <a class="nav-link @ManageNavPages.QuotesNavClass(ViewContext)" id="quotes" asp-page="/Quotes" asp-area="Admin">
+            Quotes
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.InviteCodesNavClass(ViewContext)" id="codes" asp-page="/InviteCodes" asp-area="Admin">Invite codes</a>
+        <a class="nav-link @ManageNavPages.InviteCodesNavClass(ViewContext)" id="codes" asp-page="/InviteCodes" asp-area="Admin">
+            Invite codes
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.RolesNavClass(ViewContext)" id="roles" asp-page="/Roles" asp-area="Admin">User roles</a>
+        <a class="nav-link @ManageNavPages.RolesNavClass(ViewContext)" id="roles" asp-page="/Roles" asp-area="Admin">
+            User roles
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.UsersNavClass(ViewContext)" id="users" asp-page="/Users" asp-area="Admin">Users</a>
+        <a class="nav-link @ManageNavPages.UsersNavClass(ViewContext)" id="users" asp-page="/Users" asp-area="Admin">
+            Users
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.DocumentsNavClass(ViewContext)" id="documents" asp-page="/Documents/Index" asp-area="Admin">Documents</a>
+        <a class="nav-link @ManageNavPages.ContentBlockNavClass(ViewContext)" id="contentBlock" asp-page="/ContentBlock" asp-area="Admin">
+            Content Block
+        </a>
     </li>
-    
+
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.ModLogNavClass(ViewContext)" id="modlog" asp-page="/ModLog" asp-area="Admin">Modlog</a>
+        <a class="nav-link @ManageNavPages.DocumentsNavClass(ViewContext)" id="documents" asp-page="/Documents/Index" asp-area="Admin">
+            Documents
+        </a>
     </li>
-    
+
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ModLogNavClass(ViewContext)" id="modlog" asp-page="/ModLog" asp-area="Admin">
+            Modlog
+        </a>
+    </li>
+
 </ul>

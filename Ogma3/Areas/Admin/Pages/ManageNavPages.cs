@@ -14,6 +14,7 @@ namespace Ogma3.Areas.Admin.Pages
         public static string Documents => "ManageDocuments";
         public static string Roles => "Roles";
         public static string Users => "Users";
+        public static string ContentBlock => "ContentBlock";
         public static string Ratings => "Ratings";
         public static string ModLog => "ModLog";
 
@@ -27,6 +28,7 @@ namespace Ogma3.Areas.Admin.Pages
         public static string DocumentsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Documents);
         public static string RolesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Roles);
         public static string UsersNavClass(ViewContext viewContext) => PageNavClass(viewContext, Users);
+        public static string ContentBlockNavClass(ViewContext viewContext) => PageNavClass(viewContext, ContentBlock);
         public static string RatingsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Ratings);
         public static string ModLogNavClass(ViewContext viewContext) => PageNavClass(viewContext, ModLog);
         
