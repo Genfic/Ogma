@@ -113,11 +113,11 @@ namespace Ogma3.Data
 
             // Comment mappings
             CreateMap<Comment, CommentDto>()
-                .ForMember(
-                    cd => cd.Body,
-                    opts
-                        => opts.MapFrom(c => Markdown.ToHtml(c.Body, md))
-                )
+                // .ForMember(
+                //     cd => cd.Body,
+                //     opts
+                //         => opts.MapFrom(c => Markdown.ToHtml(c.Body, md))
+                // )
                 .ForMember(
                     cd => cd.Owned,
                     opts
@@ -127,6 +127,16 @@ namespace Ogma3.Data
                     cd => cd.IsBlocked,
                     opts
                         => opts.MapFrom(c => c.Author.BlockedByUsers.Any(bu => bu.Id == currentUser))
+                )
+                .ForMember(
+                    cd => cd.Author,
+                    opts
+                    => opts.MapFrom(c => c.DeletedBy == null ? c.Author : null)
+                )
+                .ForMember(
+                    cd => cd.Body,
+                    opts
+                        => opts.MapFrom(c => c.DeletedBy == null ? Markdown.ToHtml(c.Body, md) : null)
                 );
             
             // Comment revision mappings

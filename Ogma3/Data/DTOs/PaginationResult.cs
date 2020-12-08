@@ -2,7 +2,6 @@ using System.Collections.Generic;
 
 namespace Ogma3.Data.DTOs
 {
-    // TODO: Consider using records?
     /// <summary>
     /// Object to hold the results of a paginated fetch
     /// </summary>

@@ -47,8 +47,6 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 .Select(bu => bu.BlockedUser)
                 .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-            
-            // TODO: add some proper UI to block/unblock users
 
             Ratings = await _context.Ratings.ToListAsync();
             

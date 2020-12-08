@@ -1,4 +1,5 @@
 @using Ogma3.Data.AuthorizationData
+
 <ul class="nav nav-pills flex-column">
 
     <li class="nav-item">
@@ -15,6 +16,10 @@
             </a>
         </li>
     }
+    
+    <li class="nav-item">
+        Categorization
+    </li>
 
     <li class="nav-item">
         <a class="nav-link @ManageNavPages.TagsNavClass(ViewContext)" id="tags" asp-page="/Tags" asp-area="Admin">
@@ -33,11 +38,31 @@
             Ratings
         </a>
     </li>
+    
+    <li class="nav-item">
+        Content
+    </li>
 
     <li class="nav-item">
         <a class="nav-link @ManageNavPages.QuotesNavClass(ViewContext)" id="quotes" asp-page="/Quotes" asp-area="Admin">
             Quotes
         </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ContentBlockNavClass(ViewContext)" id="contentBlock" asp-page="/ContentBlock" asp-area="Admin">
+            Content Block
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.DocumentsNavClass(ViewContext)" id="documents" asp-page="/Documents/Index" asp-area="Admin">
+            Documents
+        </a>
+    </li>
+    
+    <li class="nav-item">
+        Users
     </li>
 
     <li class="nav-item">
@@ -54,20 +79,12 @@
 
     <li class="nav-item">
         <a class="nav-link @ManageNavPages.UsersNavClass(ViewContext)" id="users" asp-page="/Users" asp-area="Admin">
-            Users
+            User management
         </a>
     </li>
-
+    
     <li class="nav-item">
-        <a class="nav-link @ManageNavPages.ContentBlockNavClass(ViewContext)" id="contentBlock" asp-page="/ContentBlock" asp-area="Admin">
-            Content Block
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link @ManageNavPages.DocumentsNavClass(ViewContext)" id="documents" asp-page="/Documents/Index" asp-area="Admin">
-            Documents
-        </a>
+        Other
     </li>
 
     <li class="nav-item">
