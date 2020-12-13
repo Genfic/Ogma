@@ -31,14 +31,24 @@ namespace Ogma3.Pages.User
             if (ProfileBar == null) return NotFound();
 
             var isCurrentUser = User.IsUserSameAsLoggedIn(ProfileBar.Id);
-            
-            Posts = await _blogpostsRepo.GetPaginatedCardsForUser(name, page, PerPage, !isCurrentUser);
-            
+
+            int count;
+            if (isCurrentUser)
+            {
+                Posts = await _blogpostsRepo.GetAllPaginatedCardsForUser(name, page, PerPage);
+                count = await _blogpostsRepo.CountAllForUser(name);
+            }
+            else
+            {
+                Posts = await _blogpostsRepo.GetPublicPaginatedCardsForUser(name, page, PerPage);
+                count = await _blogpostsRepo.CountPublicForUser(name);
+            }
+
             // Prepare pagination
             Pagination = new Pagination
             {
                 PerPage = PerPage,
-                ItemCount = await _blogpostsRepo.CountForUser(name, !isCurrentUser),
+                ItemCount = count,
                 CurrentPage = page
             };
             

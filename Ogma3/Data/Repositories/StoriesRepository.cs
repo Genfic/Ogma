@@ -19,13 +19,13 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly long? _uid;
         
         public StoriesRepository(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _mapper = mapper;
-            _contextAccessor = contextAccessor;
+            _uid = contextAccessor?.HttpContext?.User.GetNumericId();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetStoryDetails)} -> {id}")
                 .Where(s => s.Id == id)
-                .ProjectTo<StoryDetails>(_mapper.ConfigurationProvider, new{ currentUser = _contextAccessor?.HttpContext?.User.GetNumericId() })
+                .ProjectTo<StoryDetails>(_mapper.ConfigurationProvider, new{ currentUser = _uid })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
@@ -48,6 +48,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Stories
                 .Where(s => s.Id == storyId)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
@@ -82,7 +83,7 @@ namespace Ogma3.Data.Repositories
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
                 .Where(b => b.AuthorId == authorId)
-                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .Blacklist(_context, _uid)
                 .SortByEnum(sort)
                 .Paginate(page, perPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -120,7 +121,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetTopStoryCards)} -> {count}, {sort}")
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .Blacklist(_context, _uid)
                 .SortByEnum(sort)
                 .Take(count)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -142,7 +143,7 @@ namespace Ogma3.Data.Repositories
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
                 .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
-                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .Blacklist(_context, _uid)
                 .OrderByDescending(s => s.ReleaseDate)
                 .Paginate(page, perPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -158,7 +159,7 @@ namespace Ogma3.Data.Repositories
                 .Select(s => s.Story)
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .Blacklist(_context, _uid)
                 .OrderByDescending(s => s.ReleaseDate)
                 .Paginate(page, perPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
@@ -189,10 +190,10 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(SearchAndSortStoryCards)} -> {perPage}, {page}, {searchQuery}. {ratingId}, {sort}")
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .Blacklist(_context, _uid)
                 .SortByEnum(sort)
-                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .Paginate(page, perPage)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -214,7 +215,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(CountSearchResults)} -> {searchQuery}. {ratingId}")
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _contextAccessor?.HttpContext?.User.GetNumericId())
+                .Blacklist(_context, _uid)
                 .CountAsync();
         }
 
@@ -270,7 +271,7 @@ namespace Ogma3.Data.Repositories
         /// <param name="searchQuery">Query to search the titles by</param>
         /// <param name="ratingId">Rating to filter by</param>
         /// <returns>`IQueryable` objects with applied filters</returns>
-        private IQueryable<Story> Search(IList<long>? tags = null, string? searchQuery = null, long? ratingId = null)
+        private IQueryable<Story> Search(ICollection<long> tags = null, string? searchQuery = null, long? ratingId = null)
         {
             // Prepare search query
             var query = _context.Stories

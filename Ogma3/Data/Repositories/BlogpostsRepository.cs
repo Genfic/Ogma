@@ -22,46 +22,82 @@ namespace Ogma3.Data.Repositories
             _mapper = mapper;
         }
 
-        public async Task<ICollection<Blogpost>> GetPaginated(int page, int perPage)
+        /// <summary>
+        /// Get all blogposts written by the given user as blogpost cards
+        /// </summary>
+        /// <param name="userName">Name of the desired author</param>
+        /// <param name="page">Page number</param>
+        /// <param name="perPage">Amount of blogposts per page</param>
+        /// <returns>Collection of blogpost cards</returns>
+        public async Task<ICollection<BlogpostCard>> GetAllPaginatedCardsForUser(string userName, int page, int perPage)
         {
             return await _context.Blogposts
-                .Paginate(page, perPage)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<int> CountBlogposts()
-        {
-            return await _context.Blogposts.CountAsync();
-        }
-
-        public async Task<ICollection<BlogpostCard>> GetPaginatedCardsForUser(string userName, int page, int perPage, bool publishedOnly = true)
-        {
-            return await _context.Blogposts
+                .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetAllPaginatedCardsForUser)} -> {userName} {page} {perPage}")
                 .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
-                .Where(b => b.IsPublished || !publishedOnly)
-                .Where(b => b.ContentBlockId == null || !publishedOnly)
                 .Paginate(page, perPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<int> CountForUser(string userName, bool publishedOnly = true)
+        /// <summary>
+        /// Get all blogposts written by the given user that are published and aren't blocked, as blogpost cards
+        /// </summary>
+        /// <param name="userName">Name of the desired author</param>
+        /// <param name="page">Page number</param>
+        /// <param name="perPage">Amount of blogposts per page</param>
+        /// <returns>Collection of blogpost cards</returns>
+        public async Task<ICollection<BlogpostCard>> GetPublicPaginatedCardsForUser(string userName, int page, int perPage)
+        {
+            return await _context.Blogposts
+                .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetPublicPaginatedCardsForUser)} -> {userName} {page} {perPage}")
+                .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
+                .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
+                .Paginate(page, perPage)
+                .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Count all of user's blogposts
+        /// </summary>
+        /// <param name="userName">Name of the desired author</param>
+        /// <returns>The amount of blogposts</returns>
+        public async Task<int> CountAllForUser(string userName)
         {
             return await _context.Blogposts
                 .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
-                .Where(b => b.IsPublished || !publishedOnly)
-                .Where(b => b.ContentBlockId == null || !publishedOnly)
                 .CountAsync();
         }
 
-        public async Task<BlogpostDetails> GetDetails(long id, bool publishedOnly = true)
+        /// <summary>
+        /// Count all of user's blogposts that are published and aren't blocked
+        /// </summary>
+        /// <param name="userName">Name of the desired author</param>
+        /// <returns>The amount of blogposts</returns>
+        public async Task<int> CountPublicForUser(string userName)
         {
             return await _context.Blogposts
+                .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
+                .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
+                .CountAsync();
+        }
+
+        /// <summary>
+        /// Get all details of the desired blogpost
+        /// </summary>
+        /// <param name="id">ID of the blogpost</param>
+        /// <returns>The blogpost as BlogpostDetails object</returns>
+        public async Task<BlogpostDetails> GetDetails(long id) // , bool publishedOnly = true)
+        {
+            return await _context.Blogposts
+                .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetDetails)} -> {id}")
                 .Where(b => b.Id == id)
-                .Where(b => b.IsPublished || !publishedOnly)
-                .Where(b => b.ContentBlockId == null || !publishedOnly)
+                .Where(b => b.IsPublished) // || !publishedOnly)
+                .Where(b => b.ContentBlockId == null) // || !publishedOnly)
                 .Include(b => b.AttachedChapter)
                 .Include(b => b.AttachedStory)
                 .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)

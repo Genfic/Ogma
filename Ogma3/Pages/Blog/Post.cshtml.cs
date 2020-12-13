@@ -1,10 +1,7 @@
-using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Repositories;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Details;
 using Utils.Extensions;
@@ -27,10 +24,10 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
-            Blogpost = await _blogpostsRepo.GetDetails(id, false);
+            Blogpost = await _blogpostsRepo.GetDetails(id);
 
             if (Blogpost == null) return NotFound();
-            if (!Blogpost.IsPublished && !User.IsUserSameAsLoggedIn(Blogpost.AuthorId)) return NotFound();
+            if (!Blogpost.IsPublished && User.GetNumericId() != Blogpost.AuthorId) return NotFound();
 
             if (Blogpost.AttachedChapter is not null && !Blogpost.AttachedChapter.IsPublished)
             {

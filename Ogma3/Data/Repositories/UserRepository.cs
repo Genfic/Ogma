@@ -31,6 +31,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
                 .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
                 .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
         
@@ -40,6 +41,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {id}")
                 .Where(u => u.Id == id)
                 .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 

@@ -33,6 +33,7 @@ namespace Ogma3.Data.Repositories
             var comment =  await _context.Comments
                 .Where(c => c.Id == id)       
                 .ProjectTo<CommentDto>(_mapper.ConfigurationProvider, new { currentUser = _uid })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
             
             return comment;
@@ -78,6 +79,7 @@ namespace Ogma3.Data.Repositories
                         })
                     }
                 })
+                .AsNoTracking()
                 .Paginate(page, perPage)
                 .ToListAsync();
             
