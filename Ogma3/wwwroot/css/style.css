@@ -2030,10 +2030,16 @@ form.search select:focus {
 .action-btn.red:hover {
   background-color: var(--red-25);
 }
+.action-btn.red-hl:hover {
+  background-color: var(--red-25);
+}
 .action-btn.green {
   background-color: var(--green-10);
 }
 .action-btn.green:hover {
+  background-color: var(--green-25);
+}
+.action-btn.green-hl:hover {
   background-color: var(--green-25);
 }
 .action-btn > .icon {

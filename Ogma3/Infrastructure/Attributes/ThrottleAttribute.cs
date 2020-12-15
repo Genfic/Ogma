@@ -55,6 +55,7 @@ namespace Ogma3.Infrastructure.Attributes
                 Content = "You are allowed to make only " + Count + " requests per " + TimeUnit.ToString().ToLower()
             };
             filterContext.HttpContext.Response.StatusCode = 429;
+            filterContext.HttpContext.Response.Headers.Add("Retry-After", (seconds / Count).ToString());
         }
     }
 }

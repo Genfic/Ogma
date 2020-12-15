@@ -1,0 +1,20 @@
+@page "/user/{name}/follows"
+@model Ogma3.Pages.User.Follows
+
+@{
+    ViewData["Title"] = $"Users followed by {Model.ProfileBar.UserName}";
+    ViewData["Tab"] = "Follows";
+}
+
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+
+<h1>Users followed by @Model.ProfileBar.UserName</h1>
+
+<hr>
+
+<div class="two-columns o-grid">
+    @foreach (var u in Model.Users)
+    {
+        <partial name="Shared/Cards/_UserCard" model="u"/>
+    }
+</div>

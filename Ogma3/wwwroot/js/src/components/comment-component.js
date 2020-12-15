@@ -41,9 +41,7 @@ Vue.component('comment', {
         del: function () {
             if (confirm("Are you sure you want to delete?")) {
                 axios.delete(`${this.route}/${this.comment.id}`, {
-                        headers: {
-                            "RequestVerificationToken": this.csrf
-                        }
+                        headers: { "RequestVerificationToken": this.csrf }
                     })
                     .then(res => this.mutComment = res.data)
                     .catch(console.error);
@@ -77,15 +75,17 @@ Vue.component('comment', {
             };
 
             axios.patch(this.route, data, {
-                    headers: {
-                        "RequestVerificationToken": this.csrf
-                    }
+                    headers: { "RequestVerificationToken": this.csrf }
                 })
                 .then(res => {
                     Object.assign(this.mutComment, res.data);
                     this.editData = null;
                 })
                 .catch(console.error)
+        },
+        
+        report: function(_) {
+            alert("Not implemented yet :(");
         },
 
         // Handle Enter key input
@@ -178,13 +178,23 @@ Vue.component('comment', {
               {{ date(mutComment.dateTime) }}
             </time>
 
-            <div v-if="mutComment.owned" class="actions">
-              <button class="action-btn small" v-on:click="del">
-                <i class="icon material-icons-outlined">delete_forever</i>
+            <div class="actions">
+              
+              <button class="action-btn small red-hl" title="Report" v-on:click="report">
+                <i class="icon material-icons-outlined">flag</i>
               </button>
-              <button class="action-btn small" v-on:click="edit">
-                <i class="icon material-icons-outlined">edit</i>
-              </button>
+              
+              <template v-if="mutComment.owned">
+                
+                <button class="action-btn small" title="Delete" v-on:click="del">
+                  <i class="icon material-icons-outlined">delete_forever</i>
+                </button>
+                
+                <button class="action-btn small" title="Edit" v-on:click="edit">
+                  <i class="icon material-icons-outlined">edit</i>
+                </button>
+                
+              </template>
             </div>
 
           </div>

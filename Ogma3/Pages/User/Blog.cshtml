@@ -23,7 +23,7 @@
 }
 else
 {
-    @foreach (var post in Model.Posts) {
+    foreach (var post in Model.Posts) {
         <partial name="Shared/Cards/_BlogpostCard" model="@post" />
     }
     
