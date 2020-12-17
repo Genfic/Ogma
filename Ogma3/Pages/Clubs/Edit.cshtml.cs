@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Infrastructure.Attributes;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 

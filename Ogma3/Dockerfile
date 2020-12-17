@@ -8,17 +8,21 @@ EXPOSE 5001
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
+
 COPY ["Ogma3/Ogma3.csproj", "Ogma3/"]
 COPY ["Utils/Utils.csproj", "Utils/"]
 COPY ["MarkdigExtensions/MarkdigExtensions.csproj", "MarkdigExtensions/"]
+
 RUN dotnet restore "Ogma3/Ogma3.csproj"
 COPY . .
+
 WORKDIR "/src/Ogma3"
+
 RUN rm -rf Migrations
 RUN dotnet build "Ogma3.csproj" -c Release -o /app/build
-#RUN dotnet tool install --global dotnet-ef --version 5.0.0-rc.1.20451.13
-#ENV PATH="${PATH}:/root/.dotnet/tools"
-#RUN dotnet-ef database update
+RUN dotnet tool install --global dotnet-ef
+RUN chmod +x ./entrypoint.sh
+CMD /bin/bash ./entrypoint.sh
 
 FROM build AS publish
 RUN dotnet publish "Ogma3.csproj" -c Release -o /app/publish
@@ -27,3 +31,14 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Ogma3.dll"]
+
+#FROM mcr.microsoft.com/dotnet/sdk:5.0
+#COPY . /app
+#WORKDIR /app
+#
+#RUN dotnet tool install --global dotnet-ef
+#RUN dotnet restore
+#RUN dotnet build
+#RUN chmod +x ./entrypoint.sh
+#
+#CMD /bin/bash ./entrypoint.sh

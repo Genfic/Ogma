@@ -1,47 +1,70 @@
+#version: '3.4'
+#
+#services:
+#
+#  web:
+#    build:
+#      context: .
+#      dockerfile: ./Ogma3/Dockerfile
+#    ports:
+#      - "8080:80"
+#      - "6001:80"
+#    env_file:
+#      - ogma.env
+#    depends_on:
+#      - db
+#      # - nginx
+#    networks:
+#      - ogma
+#
+#  db:
+#    image: postgres:latest
+#    restart: always
+#    ports:
+#      - "5432"
+#    env_file:
+#      - ./postgres/postgres.env
+#    networks:
+#      - ogma
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#
+#  # nginx:
+#  #   build: 
+#  #     context: .
+#  #     dockerfile: ./nginx/Dockerfile
+#  #   ports:
+#  #     - "8080:80"
+#  #   restart: always
+#
+#networks:
+#  ogma:
+#    driver: bridge
+#        
+#volumes:
+#  db_data: 
+#    driver: local
+#        
+
 version: '3.4'
 
 services:
-
   web:
+    container_name: dotnet5
     build:
       context: .
       dockerfile: ./Ogma3/Dockerfile
     ports:
-      - "8080:80"
-      - "6001:80"
-    env_file:
-      - ogma.env
+      - "5005:5000"
     depends_on:
-      - db
-      # - nginx
-    networks:
-      - ogma
-
-  db:
+      - database
+  
+  database:
+    container_name: database
     image: postgres:latest
-    restart: always
     ports:
-      - "5432"
-    env_file:
-      - ./postgres/postgres.env
-    networks:
-      - ogma
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
     volumes:
-      - db_data:/var/lib/postgresql/data
-
-  # nginx:
-  #   build: 
-  #     context: .
-  #     dockerfile: ./nginx/Dockerfile
-  #   ports:
-  #     - "8080:80"
-  #   restart: always
-
-networks:
-  ogma:
-    driver: bridge
-        
-volumes:
-  db_data: 
-    driver: local
-        
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -5,10 +5,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Services.UserService;
-using Utils.Extensions;
 
 namespace Ogma3.Data.Repositories
 {

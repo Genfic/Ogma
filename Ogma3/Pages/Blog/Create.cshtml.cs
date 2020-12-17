@@ -1,18 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
-using Ogma3.Pages.Shared;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Minimals;
 using Utils.Extensions;
 

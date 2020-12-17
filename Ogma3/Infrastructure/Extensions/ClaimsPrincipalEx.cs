@@ -2,7 +2,7 @@
 
 using System.Security.Claims;
 
-namespace Utils.Extensions
+namespace Ogma3.Infrastructure.Extensions
 {
     public static class ClaimsPrincipalEx
     {

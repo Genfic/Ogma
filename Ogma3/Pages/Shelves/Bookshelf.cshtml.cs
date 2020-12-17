@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Pages.Shared;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Details;
-using Utils.Extensions;
 
 namespace Ogma3.Pages.Shelves
 {

@@ -15,22 +15,29 @@ namespace Ogma3
     {
         public static async Task Main(string[] args)
         {
-            (string token, string chat) cfg;
-            try
+            var telegramToken = Environment.GetEnvironmentVariable("TELEGRAM_TOKEN");
+            var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
+            
+            if (telegramToken is null)
             {
-                using var sr = new StreamReader("logger-tokens.txt");
-                var split = (await sr.ReadToEndAsync()).Split('|');
-                cfg.token = split[0];
-                cfg.chat = split[1];
+                try
+                {
+                    using var sr = new StreamReader("./logger-tokens.txt");
+                    telegramToken = await sr.ReadToEndAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return;
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return;
-            }
+
+            var split = telegramToken.Split('|');
             
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Telegram(cfg.token, cfg.chat, restrictedToMinimumLevel: LogEventLevel.Error)
+                .Enrich.FromLogContext()
+                .WriteTo.Telegram(split[0], split[1], restrictedToMinimumLevel: LogEventLevel.Error)
+                .WriteTo.Seq(seqUrl)
                 .WriteTo.Console(LogEventLevel.Information)
                 .MinimumLevel.Debug()
                 .CreateLogger();

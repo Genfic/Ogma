@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Ogma3.Data.Enums;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Data.DTOs

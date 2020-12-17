@@ -6,10 +6,10 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Repositories;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
-using Utils.Extensions;
 
 namespace Ogma3.Pages.Club.Folders
 {

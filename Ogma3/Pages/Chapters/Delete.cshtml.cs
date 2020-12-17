@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
-using Utils.Extensions;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Chapters
 {

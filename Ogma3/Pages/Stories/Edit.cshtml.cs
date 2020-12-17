@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,7 @@ using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Attributes;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 

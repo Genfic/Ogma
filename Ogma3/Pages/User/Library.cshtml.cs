@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User

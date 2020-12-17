@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Mappings;
 using Ogma3.Infrastructure;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
-using Utils.Extensions;
 
 namespace Ogma3.Data.Repositories
 {

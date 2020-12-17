@@ -6,7 +6,6 @@ using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Http;
 using Serilog;
-using Serilog.Core;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Gif;

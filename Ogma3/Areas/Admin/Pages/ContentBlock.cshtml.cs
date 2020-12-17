@@ -2,17 +2,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor.Extensions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Api.V1;
 using Ogma3.Data;
 using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
-using Serilog;
-using Serilog.Core;
-using Utils.Extensions;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages
 {

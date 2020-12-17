@@ -9,8 +9,8 @@ using Ogma3.Data;
 using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Comparers;
+using Ogma3.Infrastructure.Extensions;
 using Utils;
-using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {

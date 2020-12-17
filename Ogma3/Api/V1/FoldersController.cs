@@ -8,7 +8,7 @@ using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
-using Utils.Extensions;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Api.V1
 {

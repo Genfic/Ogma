@@ -1,15 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Infrastructure.TagHelpers
 {
