@@ -23,6 +23,7 @@
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="JpProject.AspNetCore.PasswordHasher.Argon2" Version="3.0.3" />
     <PackageReference Include="Markdig" Version="0.22.0" />
+    <PackageReference Include="MarkdigExtensions" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
@@ -52,7 +53,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\MarkdigExtensions\MarkdigExtensions.csproj" />
     <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>
 
