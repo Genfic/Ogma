@@ -95,6 +95,10 @@ namespace Ogma3.Data
         [AutoformCategory("Image sizes")] 
         public int AvatarHeight { get; set; } = 250;
 
+        [AutoformCategory("Moderation")] 
+        public int MinReportLength { get; set; } = 30;
+        
+
         #endregion
     }
 }

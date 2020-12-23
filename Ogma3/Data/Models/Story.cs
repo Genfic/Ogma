@@ -9,12 +9,11 @@ using Ogma3.Data.Enums;
 
 namespace Ogma3.Data.Models
 {
-    public class Story : BaseModel, IBlockableContent
+    public class Story : BaseModel, IBlockableContent, IReportableContent
     {
 
         [Required]
         public OgmaUser Author { get; set; }
-
         public long AuthorId { get; set; }
 
         [Required]
@@ -91,5 +90,7 @@ namespace Ogma3.Data.Models
         
         public ContentBlock? ContentBlock { get; set; }
         public long? ContentBlockId { get; set; }
+        
+        public ICollection<Report> Reports { get; set; }
     }
 }

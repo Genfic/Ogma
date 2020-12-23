@@ -26,7 +26,7 @@ namespace Ogma3.Data.Models
         public OgmaUser? UsedBy { get; set; }
         public long? UsedById { get; set; }
 
-        [DefaultValue(null)]
+        [Required]
         public OgmaUser IssuedBy { get; set; }
         public long IssuedById { get; set; }
         

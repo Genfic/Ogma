@@ -114,6 +114,12 @@ let comments_vue = new Vue({
                 history.replaceState(null, null, window.location.href.split('#')[0])
             }
             if (this.highlight) this.highlight = null;
+        },
+        
+        // Open the report modal
+        report: function (id) {
+            this.$refs.reportModal.mutId = id;
+            this.$refs.reportModal.visible = true;
         }
     },
     

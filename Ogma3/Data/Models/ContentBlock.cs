@@ -7,13 +7,15 @@ namespace Ogma3.Data.Models
     {
         [Required]
         public OgmaUser Issuer { get; set; }
-        [Required]
         public long IssuerId { get; set; }
+        
         [Required]
         public string Reason { get; set; }
+        
         [Required]
         public DateTime DateTime { get; set; } = DateTime.Now;
 
+        [Required]
         public string Type { get; set; }
     }
 }

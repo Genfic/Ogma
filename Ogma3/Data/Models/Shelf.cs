@@ -47,7 +47,7 @@ namespace Ogma3.Data.Models
         public  ICollection<ShelfStory> ShelfStories { get; set; } = new List<ShelfStory>();
         [NotMapped]
         public IEnumerable<Story> Stories =>
-            ShelfStories == null || ShelfStories.Count <= 0
+            ShelfStories.Count <= 0
                 ? new List<Story>()
                 : ShelfStories.Select(ss => ss.Story).ToList();
     }

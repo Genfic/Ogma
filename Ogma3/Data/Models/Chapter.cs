@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 namespace Ogma3.Data.Models
 {
-    public class Chapter : BaseModel, IBlockableContent
+    public class Chapter : BaseModel, IBlockableContent, IReportableContent
     {
         [Required]
         public uint Order { get; set; }
@@ -41,13 +42,15 @@ namespace Ogma3.Data.Models
 
         public  CommentsThread CommentsThread { get; set; }
         
-        [Required]
-        public long StoryId { get; set; }
         
-        [JsonIgnore] 
+        [JsonIgnore]
+        [Required]
         public Story Story { get; set; }
+        public long StoryId { get; set; }
         
         public ContentBlock? ContentBlock { get; set; }
         public long? ContentBlockId { get; set; }
+        
+        public ICollection<Report> Reports { get; set; }
     }
 }

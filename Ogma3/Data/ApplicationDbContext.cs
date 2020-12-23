@@ -61,6 +61,7 @@ namespace Ogma3.Data
         // Moderation
         public DbSet<ModeratorAction> ModeratorActions { get; set; }
         public DbSet<ContentBlock> ContentBlocks { get; set; }
+        public DbSet<Report> Reports { get; set; }
         
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
@@ -123,6 +124,10 @@ namespace Ogma3.Data
                             .HasForeignKey(k => k.BlockedUserId),
                         ub => ub.HasKey(i => new { i.BlockingUserId, i.BlockedUserId })
                     );
+                ent.HasMany(u => u.Reports)
+                    .WithOne(r => r.User)
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Tag
@@ -166,6 +171,10 @@ namespace Ogma3.Data
                     .WithOne()
                     .HasForeignKey<Story>(s => s.ContentBlockId)
                     .IsRequired(false);
+                ent.HasMany(s => s.Reports)
+                    .WithOne(r => r.Story)
+                    .HasForeignKey(r => r.StoryId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Chapter
@@ -181,6 +190,10 @@ namespace Ogma3.Data
                     .WithOne()
                     .HasForeignKey<Chapter>(c => c.ContentBlockId)
                     .IsRequired(false);
+                ent.HasMany(c => c.Reports)
+                    .WithOne(r => r.Chapter)
+                    .HasForeignKey(r => r.ChapterId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Chapter reads
@@ -216,6 +229,10 @@ namespace Ogma3.Data
                     .WithMany();
                 ent.HasOne(c => c.DeletedByUser)
                     .WithMany();
+                ent.HasMany(c => c.Reports)
+                    .WithOne(r => r.Comment)
+                    .HasForeignKey(r => r.CommentId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             
             // Comment revisions
@@ -276,6 +293,10 @@ namespace Ogma3.Data
                     .WithOne()
                     .HasForeignKey<Blogpost>(b => b.ContentBlockId)
                     .IsRequired(false);
+                ent.HasMany(b => b.Reports)
+                    .WithOne(r => r.Blogpost)
+                    .HasForeignKey(r => r.BlogpostId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
                 
 
@@ -288,6 +309,10 @@ namespace Ogma3.Data
                 ent.HasMany(c => c.Folders)
                     .WithOne(f => f.Club)
                     .HasForeignKey(f => f.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                ent.HasMany(c => c.Reports)
+                    .WithOne(r => r.Club)
+                    .HasForeignKey(r => r.ClubId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

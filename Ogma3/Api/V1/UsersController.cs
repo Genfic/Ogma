@@ -20,11 +20,13 @@ namespace Ogma3.Api.V1
     {
         private readonly ApplicationDbContext _context;
         private readonly OgmaUserManager _userManager;
+        private readonly long? _uid;
 
         public UsersController(ApplicationDbContext context, OgmaUserManager userManager)
         {
             _context = context;
             _userManager = userManager;
+            _uid = User.GetNumericId();
         }
 
         // GET: api/Users/signin/John
@@ -123,6 +125,10 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult> BanUser(BanData data)
         {
             var (userId, days) = data;
+            
+            // Check if user is logged in
+            if (_uid is null) return Unauthorized();
+            var uid = (long)_uid;
 
             // Get user to be banned
             var user = await _context.Users
@@ -137,7 +143,7 @@ namespace Ogma3.Api.V1
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = User.GetNumericId(),
+                    StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserBan(user, User.GetUsername(), (DateTime) user.BannedUntil)
                 });
             }
@@ -145,7 +151,7 @@ namespace Ogma3.Api.V1
             {
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = User.GetNumericId(),
+                    StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserUnban(user, User.GetUsername(), (DateTime) user.BannedUntil)
                 });
                 user.BannedUntil = null;
@@ -165,6 +171,10 @@ namespace Ogma3.Api.V1
         {
             var (userId, days) = data;
             
+            // Check if user is logged in
+            if (_uid is null) return Unauthorized();
+            var uid = (long)_uid;
+            
             // Get user to be muted
             var user = await _context.Users
                 .Where(u => u.Id == userId)
@@ -177,7 +187,7 @@ namespace Ogma3.Api.V1
                 user.MutedUntil = DateTime.Now.AddDays((double) days);
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = User.GetNumericId(),
+                    StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserMute(user, User.GetUsername(), (DateTime) user.MutedUntil)
                 });
             }
@@ -185,7 +195,7 @@ namespace Ogma3.Api.V1
             {
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = User.GetNumericId(),
+                    StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserUnmute(user, User.GetUsername(), (DateTime) user.MutedUntil)
                 });
                 user.MutedUntil = null;
@@ -205,6 +215,10 @@ namespace Ogma3.Api.V1
         {
             var (userId, roles) = data;
             
+            // Check if user is logged in
+            if (_uid is null) return Unauthorized();
+            var uid = (long)_uid;
+            
             var user = await _context.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Roles)
@@ -222,7 +236,7 @@ namespace Ogma3.Api.V1
             }
             await _context.ModeratorActions.AddRangeAsync(removedRoles.Select(r => new ModeratorAction
             {
-                StaffMemberId = User.GetNumericId(),
+                StaffMemberId = uid,
                 Description = ModeratorActionTemplates.UserRoleRemoved(user, User.GetUsername(), r.Name)
             }));
             
@@ -234,7 +248,7 @@ namespace Ogma3.Api.V1
             }
             await _context.ModeratorActions.AddRangeAsync(addedRoles.Select(r => new ModeratorAction
             {
-                StaffMemberId = User.GetNumericId(),
+                StaffMemberId = uid,
                 Description = ModeratorActionTemplates.UserRoleAdded(user, User.GetUsername(), r.Name)
             }));
 

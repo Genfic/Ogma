@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ogma3.Data.Models
 {
-    public class Club : BaseModel
+    public class Club : BaseModel, IReportableContent
     {
         [Required]
         [MinLength(CTConfig.CClub.MinNameLength)]
@@ -15,6 +15,7 @@ namespace Ogma3.Data.Models
         [Required]
         public string Slug { get; set; }
         
+        [Required]
         [MaxLength(CTConfig.CClub.MaxHookLength)]
         public string Hook { get; set; }
         
@@ -22,7 +23,6 @@ namespace Ogma3.Data.Models
         public string Description { get; set; }
         
         public string Icon { get; set; }
-        
         public string IconId { get; set; }
         
         [Required] 
@@ -33,5 +33,7 @@ namespace Ogma3.Data.Models
 
         public ICollection<ClubThread> Threads { get; set; } = new List<ClubThread>();
         public ICollection<Folder> Folders { get; set; } = new List<Folder>();
+        
+        public ICollection<Report> Reports { get; set; }
     }
 }

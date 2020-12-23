@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
@@ -17,6 +18,8 @@ namespace Ogma3.Data.Models
         public string Icon { get; set; }
         public string IconId { get; set; }
 
+        [Required]
+        [DefaultValue(false)]
         public bool BlacklistedByDefault { get; set; }
     }
     

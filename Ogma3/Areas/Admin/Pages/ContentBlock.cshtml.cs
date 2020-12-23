@@ -88,6 +88,10 @@ namespace Ogma3.Areas.Admin.Pages
         
         private async Task<bool> TryBlockUnblockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
         {
+            var modId = User.GetNumericId();
+            if (modId is null) return false;
+            var luid = (long) modId;
+            
             var item = await _context.Set<T>()
                 .Where(i => i.Id == itemId)
                 .Include(i => i.ContentBlock)
@@ -114,7 +118,7 @@ namespace Ogma3.Areas.Admin.Pages
                 // Log the action
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = User.GetNumericId(),
+                    StaffMemberId = luid,
                     Description = ModeratorActionTemplates.ContentBlocked(Type, title, itemId, User.GetUsername())
                 });
             }
@@ -124,7 +128,7 @@ namespace Ogma3.Areas.Admin.Pages
             
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = User.GetNumericId(),
+                    StaffMemberId = luid,
                     Description = ModeratorActionTemplates.ContentUnblocked(Type, title, itemId, User.GetUsername())
                 });
             }

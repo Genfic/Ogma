@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
 {
-    public class Blogpost : BaseModel, IBlockableContent
+    public class Blogpost : BaseModel, IBlockableContent, IReportableContent
     {
         [Required]
         [MinLength(CTConfig.CBlogpost.MinTitleLength)]
@@ -23,7 +24,6 @@ namespace Ogma3.Data.Models
         
         [Required]
         public OgmaUser Author { get; set; }
-
         public long AuthorId { get; set; }
         
         [Required]
@@ -51,5 +51,7 @@ namespace Ogma3.Data.Models
 
         public ContentBlock? ContentBlock { get; set; }
         public long? ContentBlockId { get; set; }
+        
+        public ICollection<Report> Reports { get; set; }
     }
 }

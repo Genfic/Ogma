@@ -70,6 +70,9 @@ let story_vue = new Vue({
         },
         showClubs: function () {
             this.$refs.featuredIn.visible = true;
+        },
+        report: function () {
+            this.$refs.reportModal.visible = true;
         }
     },
     mounted() {

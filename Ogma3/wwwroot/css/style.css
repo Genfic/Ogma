@@ -268,6 +268,26 @@ button {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }
+.btn.red {
+  background-color: var(--red-10);
+  color: var(--foreground);
+}
+.btn.red:hover {
+  background-color: var(--red-25);
+}
+.btn.red-hl:hover {
+  background-color: var(--red-25);
+}
+.btn.green {
+  background-color: var(--green-10);
+  color: var(--foreground);
+}
+.btn.green:hover {
+  background-color: var(--green-25);
+}
+.btn.green-hl:hover {
+  background-color: var(--green-25);
+}
 
 .btn-primary {
   color: var(--background);
@@ -751,27 +771,8 @@ img.avatar {
   display: flex;
   margin-bottom: 0.5rem;
 }
-#story-app > .story-details > .actions button {
-  display: flex;
-  align-items: center;
-  background: transparent;
-  border: 1px solid var(--foreground-25);
-  color: var(--foreground);
-  min-height: 2rem;
-  margin-right: 0.1rem;
-}
-#story-app > .story-details > .actions button:hover {
-  border-color: var(--foreground-75);
-}
 #story-app > .story-details > .actions .spacer {
   flex: 1;
-}
-#story-app > .story-details > .actions .not-published {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--red-75);
-  font-size: 1rem;
 }
 #story-app > .chapters {
   margin-top: 1rem;

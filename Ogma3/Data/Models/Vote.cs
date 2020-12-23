@@ -6,8 +6,6 @@ namespace Ogma3.Data.Models
     {
         [Required] 
         public OgmaUser User { get; set; }
-
-        [Required]
         public long UserId { get; set; }
 
         [Required]

@@ -315,6 +315,11 @@
     <TypeScriptCompile Include="wwwroot\js\src\hashparser.ts" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\dist\native-components" />
+  </ItemGroup>
+
   <!--  Automatic migrations on production -->
 <!--  <Target Name="PrePublishTarget" AfterTargets="Publish">-->
 <!--    <Exec Command="dotnet-ef database update" />-->

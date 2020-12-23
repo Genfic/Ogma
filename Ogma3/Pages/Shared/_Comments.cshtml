@@ -76,6 +76,7 @@
                          :csrf="csrf"
                          :route="route"
                          :highlight="highlight === (c.key + 1)"
+                         v-on:report="report"
                          v-on:change-hl="changeHighlight"/>
             </template>
             <template v-else>
@@ -99,8 +100,18 @@
         <button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
         <button class="next button" v-on:click="nextPage">Next</button>
     </div>
+    
+    <report-modal
+        ref="reportModal"
+        :item-id="0"
+        item-type="Comment"
+        reports-route="@Url.RouteUrl(nameof(ReportsController))">
+    </report-modal>
 
 </div>
 
 @Html.Resource(@<script src="~/js/dist/components/comment-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
+
 @Html.Resource(@<script src="~/js/dist/comments.min.js" asp-append-version="true"></script>)

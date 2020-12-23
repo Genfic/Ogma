@@ -6,7 +6,7 @@ using Ogma3.Data.Enums;
 
 namespace Ogma3.Data.Models
 {
-    public class Comment : BaseModel
+    public class Comment : BaseModel, IReportableContent
     {
         [Required] 
         public long CommentsThreadId { get; set; }
@@ -40,5 +40,7 @@ namespace Ogma3.Data.Models
         
         [DefaultValue(null)]
         public ushort? EditCount { get; set; }
+
+        public ICollection<Report> Reports { get; set; }
     }
 }

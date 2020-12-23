@@ -84,8 +84,8 @@ Vue.component('comment', {
                 .catch(console.error)
         },
         
-        report: function(_) {
-            alert("Not implemented yet :(");
+        report: function() {
+            this.$emit('report', this.comment.id)
         },
 
         // Handle Enter key input
@@ -158,7 +158,9 @@ Vue.component('comment', {
             <div class="bg" :style="{backgroundColor: mutComment.author.roles[0].color}"></div>
           </div>
 
-          <img :src="cdn + mutComment.author.avatar" :alt="mutComment.author.userName + '\\'s avatar'" class="avatar">
+          <img :src="cdn + mutComment.author.avatar" :alt="mutComment.author.userName + '\\'s avatar'" 
+               class="avatar"
+               loading="lazy">
 
         </div>
 

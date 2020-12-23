@@ -22,7 +22,6 @@ Vue.component('textarea-counter', {
         },
         desc: {
             type: String,
-            required: false,
             default: null
         },
         validateMsg: {
@@ -61,21 +60,34 @@ Vue.component('textarea-counter', {
                 .replace('{2}', `${this.min}`);
         }
     },
+    methods: {
+        updateValue: function () {
+            this.$emit('input', this.text);
+        },
+        clear: function () {
+            this.text = ''
+        }  
+    },
     template: `
         <div class="o-form-group"> 
             <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
-            <p class="desc" v-if="desc">{{desc}}</p>
+            
+            <p class="desc" v-if="desc">{{desc}}</p> 
+            
             <textarea :name="name"
                       :id="name" 
                       class="o-form-control active-border" 
                       v-model="text" 
+                      v-on:input="updateValue"
                       :rows="rows">
             </textarea> 
+            
             <div class="counter" :class="validate ? '' : 'invalid'">
                 <div class="o-progress-bar" :style="{ width: Math.min(100, 100 * (countChars / max)) + '%' }"></div>
                 <span v-if="wordcount">{{countWords}} words, </span>
                 <span>{{countChars}}/{{max.toLocaleString()}}<span v-if="wordcount"> chars</span></span>
             </div>
+            
             <span v-if="!validate && validateMsg">{{validationString}}</span>
         </div>
     ` 

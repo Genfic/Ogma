@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Ogma3.Data.Models
 {
-    public class OgmaUser : IdentityUser<long>
+    public class OgmaUser : IdentityUser<long>, IReportableContent
     {
         [PersonalData]
         [MaxLength(CTConfig.CUser.MaxTitleLength)]
@@ -72,5 +72,7 @@ namespace Ogma3.Data.Models
         {
             return Id.ToString() == claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
+        public ICollection<Report> Reports { get; set; }
     }
 }    

@@ -11,7 +11,7 @@
 
         <div class="actions">
 
-            <button class="votes" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
+            <button class="votes action-btn large" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
                 <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
                 <span class="count">{{score}}</span>
             </button>
@@ -46,15 +46,21 @@
             }
             @if (!Model.IsPublished)
             {
-                <span class="not-published">
+                <span class="action-btn red">
                     <icon class="icon" icon="visibility_off"></icon>
                 </span>
             }
             @if (Model.ContentBlockId != null)
             {
-                <span class="not-published">
+                <span class="action-btn red">
                     <icon class="icon" icon="shield"></icon>
                 </span>
+            }            
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <button title="Report" class="action-btn red" v-on:click="report">
+                    <icon class="icon" icon="flag"></icon>
+                </button>
             }
 
             @if (User.Identity?.IsAuthenticated ?? false)
@@ -63,7 +69,7 @@
                 
                 <button
                     v-if="shelves"
-                    class="shelf"
+                    class="shelf action-btn"
                     v-for="s in shelves.filter(e => e.isQuick || e.isDefault)"
                     :title="'Add to ' + s.name"
                     v-on:click="addToShelf(s.id)"
@@ -73,7 +79,7 @@
                     </i>
                 </button>
 
-                <button title="All bookshelves" class="shelf" v-on:click="showShelves = true">
+                <button title="All bookshelves" class="shelf action-btn" v-on:click="showShelves = true">
                     <icon icon="more_horiz"></icon>
                 </button>
             }
@@ -195,6 +201,13 @@
         clubs-route="@Url.RouteUrl(nameof(ClubsController))">
     </clubs-with-story>
     
+    <report-modal
+        ref="reportModal"
+        :item-id="@Model.Id"
+        item-type="Story"
+        reports-route="@Url.RouteUrl(nameof(ReportsController))">
+    </report-modal>
+    
     <div id="votes-route" v-if="!votesRoute" data-route="@Url.RouteUrl(nameof(VotesController))"></div>
     <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
     <div id="reads-route" v-if="!readsRoute" data-route="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
@@ -206,4 +219,7 @@
 @Html.Resource(@<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/clubs-with-story-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
+
 @Html.Resource(@<script src="~/js/dist/story.min.js" asp-append-version="true"></script>)

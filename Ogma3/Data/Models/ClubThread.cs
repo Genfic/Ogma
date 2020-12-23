@@ -18,12 +18,11 @@ namespace Ogma3.Data.Models
         
         [Required]
         public OgmaUser Author { get; set; }
-
         public long AuthorId { get; set; }
         
         [Required] 
         public DateTime CreationDate { get; set; } = DateTime.Now;
-
+        
         public CommentsThread CommentsThread { get; set; }
 
         [Required]
