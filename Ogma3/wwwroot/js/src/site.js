@@ -81,3 +81,19 @@ function setCookie(name, value, expires = null, secure = false, sameSite = null)
     if (sameSite) cookie += '; samesite=' + sameSite;
     document.cookie = cookie;
 }
+
+/**
+ * Normalizes a number within a given [min, max] range to a [0, 1] range
+ * @param min The minimum value the given number can take
+ * @param max The maximum value the given number can take
+ * @returns {number} The given number normalized into [0, 1] range
+ */
+Number.prototype.normalize = function (min, max) {
+    return (this - min) / (max - min);
+}
+
+Number.prototype.clamp = function (min = 0, max = 1) {
+    if (this < min) return min;
+    if (this > max) return max;
+    return this;
+}

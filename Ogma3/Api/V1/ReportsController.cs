@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Models;
@@ -27,6 +28,7 @@ namespace Ogma3.Api.V1
 
         // POST
         [HttpPost]
+        [Authorize]
         [Throttle(Count = 3, TimeUnit = TimeUnit.Hour)]
         public async Task<ActionResult> PostReportsAsync([FromBody] PostData data)
         {
@@ -68,7 +70,7 @@ namespace Ogma3.Api.V1
             await _context.Reports.AddAsync(report);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return new OkObjectResult(report);
         }
 
         public sealed record PostData(long ItemId, string Reason, string ItemType);
