@@ -65,7 +65,9 @@
                     <div class="start notes"><span class="an">Author's notes:</span> @Model.StartNotes</div>
                 }
 
-                <markdown preset="Basic" class="body @* tts-body *@">@Model.Body</markdown>
+                <markdown preset="Basic" class="body @* tts-body *@" itemprop="text">
+                    @Model.Body
+                </markdown>
 
                 @if (!string.IsNullOrEmpty(Model.EndNotes))
                 {

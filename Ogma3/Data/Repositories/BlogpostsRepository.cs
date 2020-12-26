@@ -94,8 +94,8 @@ namespace Ogma3.Data.Repositories
             return await _context.Blogposts
                 .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetDetails)} -> {id}")
                 .Where(b => b.Id == id)
-                .Where(b => b.IsPublished) // || !publishedOnly)
-                .Where(b => b.ContentBlockId == null) // || !publishedOnly)
+                // .Where(b => b.IsPublished) // || !publishedOnly)
+                // .Where(b => b.ContentBlockId == null) // || !publishedOnly)
                 .Include(b => b.AttachedChapter)
                 .Include(b => b.AttachedStory)
                 .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)

@@ -1,13 +1,15 @@
 @using System.Globalization
+@using Ogma3.Api.V1
 @using Ogma3.Data.AuthorizationData
 @using Ogma3.Infrastructure.Extensions
+@using Ogma3.Services
 @using Utils.Extensions
 @model BlogpostDetails
 
-<div class="blogpost-details">
-    <h1 class="title">@Model.Title</h1>
+<article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
+    <h1 class="title" itemprop="name">@Model.Title</h1>
 
-    <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+    <time class="date" itemprop="datePublished" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
         @Model.PublishDate.FormatDateWithDaySuffix()
     </time>
 
@@ -26,6 +28,12 @@
                asp-route-type="blogpost" asp-route-id="@Model.Id">
                 <icon class="icon" icon="shield"></icon>
             </a>
+        }
+        @if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            <button title="Report" class="action-btn red" v-on:click="report">
+                <icon class="icon" icon="flag"></icon>
+            </button>
         }
         @if (!Model.IsPublished)
         {
@@ -62,11 +70,11 @@
             }
         }
     
-    <markdown class="body" preset="Blogpost">
+    <markdown class="body" preset="Blogpost" itemprop="articleBody">
         @Model.Body
     </markdown>
 
-    <div class="tags">
+    <div class="tags" itemprop="keywords">
         @foreach (var t in Model.Hashtags)
         {
             <a asp-page="/Blog/Index" asp-route-q="@t" class="tag active-border">
@@ -74,6 +82,24 @@
             </a>
         }
     </div>
-</div>
+
+    <div class="read-progress">
+        <div class="bar" :style="{width: (progress * 100) + '%'}"></div>
+    </div>
+
+    <report-modal
+        ref="reportModal"
+        :item-id="@Model.Id"
+        item-type="Blogpost"
+        reports-route="@Url.RouteUrl(nameof(ReportsController))">
+    </report-modal>
+
+    @Html.AntiForgeryToken()
+</article>
 
 <partial name="_Comments" model="@Model.CommentsThreadId"/>
+
+@Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
+
+@Html.Resource(@<script src="~/js/dist/blogpost.min.js" asp-append-version="true"></script>)

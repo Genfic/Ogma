@@ -89,10 +89,18 @@ function setCookie(name, value, expires = null, secure = false, sameSite = null)
  * @returns {number} The given number normalized into [0, 1] range
  */
 Number.prototype.normalize = function (min, max) {
+    if (max < min) throw 'Max cannot be less than min';
     return (this - min) / (max - min);
 }
 
+/**
+ * Clamps a given number to a given [min, max] range
+ * @param min The lower edge to clamp to, by default 0
+ * @param max The upper edge to clamp to, by default 1
+ * @returns {number} 
+ */
 Number.prototype.clamp = function (min = 0, max = 1) {
+    if (max < min) throw 'Max cannot be less than min';
     if (this < min) return min;
     if (this > max) return max;
     return this;
