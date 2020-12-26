@@ -1,9 +1,5 @@
-#nullable enable
-
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
@@ -13,24 +9,20 @@ namespace Ogma3.Data.Models
     public class OgmaUser : IdentityUser<long>, IReportableContent
     {
         [PersonalData]
-        [MaxLength(CTConfig.CUser.MaxTitleLength)]
         public string? Title { get; set; }
         
         [PersonalData]
-        [MaxLength(CTConfig.CUser.MaxBioLength)]
         public string? Bio { get; set; }
 
         [PersonalData]
         public string? Avatar { get; set; }
         public string? AvatarId { get; set; }
 
-        [Required]
         [PersonalData]
-        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+        public DateTime RegistrationDate { get; set; }
         
-        [Required]
         [PersonalData]
-        public DateTime LastActive { get; set; } = DateTime.Now;
+        public DateTime LastActive { get; set; }
 
         public CommentsThread CommentsThread { get; set; } = new();
         
@@ -38,10 +30,10 @@ namespace Ogma3.Data.Models
         public ICollection<UserRole>? UserRoles { get; set; }
         
         [JsonIgnore] 
-        public ICollection<Story> Stories { get; set; } = new List<Story>();
+        public ICollection<Story> Stories { get; set; }
 
         [JsonIgnore]
-        public ICollection<Blogpost> Blogposts { get; set; } = new List<Blogpost>();
+        public ICollection<Blogpost> Blogposts { get; set; }
 
         [JsonIgnore]
         public ICollection<OgmaRole> Roles { get; set; }
@@ -63,9 +55,7 @@ namespace Ogma3.Data.Models
         public ICollection<OgmaUser> Following { get; set; }
         
         // Bans and mutes
-        [DefaultValue(null)]
         public DateTime? BannedUntil { get; set; }
-        [DefaultValue(null)]
         public DateTime? MutedUntil { get; set; }
         
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)

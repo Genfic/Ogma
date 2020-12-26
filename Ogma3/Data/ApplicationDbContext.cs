@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Ogma3.Data.Enums;
+using Ogma3.Data.ModelConfigs;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Data
@@ -84,98 +85,16 @@ namespace Ogma3.Data
 
 
             // User
-            builder.Entity<OgmaUser>(ent =>
-            {
-                ent.Ignore(u => u.PhoneNumber)
-                    .Ignore(u => u.PhoneNumberConfirmed);
-                ent.HasOne(u => u.CommentsThread)
-                    .WithOne(ct => ct.User)
-                    .HasForeignKey<CommentsThread>(ct => ct.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
-                ent.HasMany(u => u.Roles)
-                    .WithMany(or => or.Users)
-                    .UsingEntity<UserRole>(
-                        ur => ur.HasOne(e => e.Role)
-                            .WithMany()
-                            .HasForeignKey(k => k.RoleId),
-                        ur => ur.HasOne(e => e.User)
-                            .WithMany(u => u.UserRoles)
-                            .HasForeignKey(k => k.UserId)
-                    );
-                ent.HasMany(u => u.Followers)
-                    .WithMany(u => u.Following)
-                    .UsingEntity<UserFollow>(
-                        uf => uf.HasOne(e => e.FollowingUser)
-                            .WithMany()
-                            .HasForeignKey(k => k.FollowingUserId),
-                        uf => uf.HasOne(e => e.FollowedUser)
-                            .WithMany()
-                            .HasForeignKey(k => k.FollowedUserId),
-                        uf => uf.HasKey(i => new { i.FollowingUserId, i.FollowedUserId })
-                    );
-                ent.HasMany(u => u.BlockedUsers)
-                    .WithMany(u => u.BlockedByUsers)
-                    .UsingEntity<UserBlock>(
-                        ub => ub.HasOne(e => e.BlockingUser)
-                            .WithMany()
-                            .HasForeignKey(k => k.BlockingUserId),
-                        ub => ub.HasOne(e => e.BlockedUser)
-                            .WithMany()
-                            .HasForeignKey(k => k.BlockedUserId),
-                        ub => ub.HasKey(i => new { i.BlockingUserId, i.BlockedUserId })
-                    );
-                ent.HasMany(u => u.Reports)
-                    .WithOne(r => r.User)
-                    .HasForeignKey(r => r.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
+            builder.ApplyConfiguration(new OgmaUserConfiguration());
             // Tag
-            builder.Entity<Tag>()
-                .HasIndex(t => t.Name)
-                .IsUnique();
-            builder.Entity<Tag>()
-                .HasOne(t => t.Namespace)
-                .WithMany()
-                .OnDelete(DeleteBehavior.SetNull);
-
+            builder.ApplyConfiguration(new TagConfiguration());
             // Namespace
-            builder.Entity<Namespace>()
-                .HasIndex(n => n.Name)
-                .IsUnique();
-
+            builder.ApplyConfiguration(new NamespaceConfiguration());
             // Rating
-            builder.Entity<Rating>()
-                .HasIndex(r => r.Name)
-                .IsUnique();
-
+            builder.ApplyConfiguration(new RatingConfiguration());
             // Story
-            builder.Entity<Story>(ent =>
-            {
-                ent.Property(s => s.Id)
-                    .ValueGeneratedOnAdd();
-                ent.Property(p => p.IsPublished)
-                    .HasDefaultValue(false);
-                ent.HasOne(s => s.Rating)
-                    .WithMany();
-                ent.HasMany(s => s.Chapters)
-                    .WithOne(c => c.Story)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(s => s.Author)
-                    .WithMany(u => u.Stories)
-                    .HasForeignKey(s => s.AuthorId);
-                ent.HasMany(s => s.Votes)
-                    .WithOne()
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(s => s.ContentBlock)
-                    .WithOne()
-                    .HasForeignKey<Story>(s => s.ContentBlockId)
-                    .IsRequired(false);
-                ent.HasMany(s => s.Reports)
-                    .WithOne(r => r.Story)
-                    .HasForeignKey(r => r.StoryId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+            builder.ApplyConfiguration(new StoryConfiguration());
+
 
             // Chapter
             builder.Entity<Chapter>(ent =>

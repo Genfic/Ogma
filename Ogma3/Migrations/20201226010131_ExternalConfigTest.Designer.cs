@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201226010131_ExternalConfigTest")]
+    partial class ExternalConfigTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -872,9 +874,7 @@ namespace Ogma3.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<bool>("BlacklistedByDefault")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1028,9 +1028,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("ChapterCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
                     b.Property<long?>("ContentBlockId")
                         .HasColumnType("bigint");
@@ -1060,19 +1058,14 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("ReleaseDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<EStoryStatus>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("e_story_status")
-                        .HasDefaultValue(EStoryStatus.InProgress);
+                        .HasColumnType("e_story_status");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1080,9 +1073,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<int>("WordCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
