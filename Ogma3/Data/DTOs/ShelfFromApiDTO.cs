@@ -30,12 +30,12 @@ namespace Ogma3.Data.DTOs
                 IsQuick = shelf.IsQuickAdd,
                 Color = shelf.Color,
                 Stories = shelf.Stories,
-                Count = shelf.ShelfStories.Count,
+                Count = shelf.Stories.Count,
                 Icon = shelf.Icon?.Name,
                 IconId = shelf.Icon?.Id,
                 DoesContainBook = bookId == null
                     ? (bool?) null
-                    : shelf.ShelfStories.Any(ss => ss.StoryId == bookId)
+                    : shelf.Stories.Any(ss => ss.Id == bookId)
             };
     }
 }

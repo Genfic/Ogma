@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201227071950_ChaptersReadConfig")]
+    partial class ChaptersReadConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,33 +164,23 @@ namespace Ogma3.Migrations
                         .HasMaxLength(500000)
                         .HasColumnType("character varying(500000)");
 
-                    b.Property<long>("CommentsThreadId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ContentBlockId")
                         .HasColumnType("bigint");
 
                     b.Property<string[]>("Hashtags")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(10)
-                        .HasColumnType("text[]")
-                        .HasDefaultValue(new string[0]);
+                        .HasColumnType("text[]");
 
                     b.Property<bool>("IsPublished")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("PublishDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -196,9 +188,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<int>("WordCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -415,9 +405,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("DateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("DeletedBy")
                         .HasColumnType("integer");
@@ -425,10 +413,8 @@ namespace Ogma3.Migrations
                     b.Property<long?>("DeletedByUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("EditCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                    b.Property<int?>("EditCount")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastEdit")
                         .HasColumnType("timestamp without time zone");
@@ -457,9 +443,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(5000)");
 
                     b.Property<DateTime>("EditTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
@@ -991,35 +975,27 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(7)");
 
                     b.Property<string>("Description")
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<long?>("IconId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDefault")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsPublic")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsQuickAdd")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<long>("OwnerId")
+                    b.Property<long?>("OwnerId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -1616,14 +1592,11 @@ namespace Ogma3.Migrations
                 {
                     b.HasOne("Ogma3.Data.Models.Icon", "Icon")
                         .WithMany()
-                        .HasForeignKey("IconId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("IconId");
 
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Icon");
 
@@ -1633,7 +1606,7 @@ namespace Ogma3.Migrations
             modelBuilder.Entity("Ogma3.Data.Models.ShelfStory", b =>
                 {
                     b.HasOne("Ogma3.Data.Models.Shelf", "Shelf")
-                        .WithMany()
+                        .WithMany("ShelfStories")
                         .HasForeignKey("ShelfId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1839,6 +1812,11 @@ namespace Ogma3.Migrations
                     b.Navigation("Stories");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Models.Shelf", b =>
+                {
+                    b.Navigation("ShelfStories");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Story", b =>

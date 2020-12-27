@@ -94,46 +94,9 @@ namespace Ogma3.Data
             builder.ApplyConfiguration(new RatingConfiguration());
             // Story
             builder.ApplyConfiguration(new StoryConfiguration());
-
-
             // Chapter
-            builder.Entity<Chapter>(ent =>
-            {
-                ent.Property(p => p.IsPublished)
-                    .HasDefaultValue(false);
-                ent.HasOne(c => c.CommentsThread)
-                    .WithOne(ct => ct.Chapter)
-                    .HasForeignKey<CommentsThread>(ct => ct.ChapterId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(p => p.ContentBlock)
-                    .WithOne()
-                    .HasForeignKey<Chapter>(c => c.ContentBlockId)
-                    .IsRequired(false);
-                ent.HasMany(c => c.Reports)
-                    .WithOne(r => r.Chapter)
-                    .HasForeignKey(r => r.ChapterId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // Chapter reads
-            builder.Entity<ChaptersRead>(ent =>
-            {
-                ent.HasOne(cr => cr.Story)
-                    .WithMany();
-                ent.HasOne(cr => cr.User)
-                    .WithMany();
-            });
-
-            // Story tags
-            builder.Entity<StoryTag>()
-                .HasKey(st => new {st.StoryId, st.TagId});
-            builder.Entity<StoryTag>()
-                .HasOne(st => st.Story)
-                .WithMany(s => s.StoryTags);
-            builder.Entity<StoryTag>()
-                .HasOne(st => st.Tag)
-                .WithMany();
-
+            builder.ApplyConfiguration(new ChapterConfiguration());
+            
             // Comment threads
             builder.Entity<CommentsThread>()
                 .HasMany(ct => ct.Comments)
@@ -142,82 +105,19 @@ namespace Ogma3.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Comments
-            builder.Entity<Comment>(ent =>
-            {
-                ent.HasOne(c => c.Author)
-                    .WithMany();
-                ent.HasOne(c => c.DeletedByUser)
-                    .WithMany();
-                ent.HasMany(c => c.Reports)
-                    .WithOne(r => r.Comment)
-                    .HasForeignKey(r => r.CommentId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-            
+            builder.ApplyConfiguration(new CommentConfiguration());
             // Comment revisions
-            builder.Entity<CommentRevision>(ent =>
-            {
-                ent.HasOne(cr => cr.Parent)
-                    .WithMany(c => c.Revisions)
-                    .HasForeignKey(cr => cr.ParentId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-
+            builder.ApplyConfiguration(new CommentRevisionConfiguration());
+            
             // Votes
-            builder.Entity<Vote>()
-                .HasOne(v => v.User)
-                .WithMany();
-            builder.Entity<Vote>()
-                .HasIndex(v => new {v.UserId, v.StoryId})
-                .IsUnique();
-
-            // Shelf stories
-            builder.Entity<ShelfStory>()
-                .HasKey(ss => new {ss.ShelfId, ss.StoryId});
-            builder.Entity<ShelfStory>()
-                .HasOne(ss => ss.Shelf)
-                .WithMany(s => s.ShelfStories)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ShelfStory>()
-                .HasOne(ss => ss.Story)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.ApplyConfiguration(new VoteConfiguration());
 
             // Shelves
-            builder.Entity<Shelf>()
-                .HasOne(s => s.Icon)
-                .WithMany();
+            builder.ApplyConfiguration(new ShelfConfiguration());
 
             // Blogposts
-            builder.Entity<Blogpost>(ent =>
-            {
-                ent.HasOne(b => b.Author)
-                    .WithMany(u => u.Blogposts)
-                    .HasForeignKey(b => b.AuthorId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(b => b.CommentsThread)
-                    .WithOne(ct => ct.Blogpost)
-                    .HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(b => b.AttachedStory)
-                    .WithMany()
-                    .HasForeignKey(b => b.AttachedStoryId)
-                    .OnDelete(DeleteBehavior.SetNull);
-                ent.HasOne(b => b.AttachedChapter)
-                    .WithMany()
-                    .HasForeignKey(b => b.AttachedChapterId)
-                    .OnDelete(DeleteBehavior.SetNull);
-                ent.HasOne(b => b.ContentBlock)
-                    .WithOne()
-                    .HasForeignKey<Blogpost>(b => b.ContentBlockId)
-                    .IsRequired(false);
-                ent.HasMany(b => b.Reports)
-                    .WithOne(r => r.Blogpost)
-                    .HasForeignKey(r => r.BlogpostId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-                
+            builder.ApplyConfiguration(new BlogpostConfiguration());
+
 
             // Clubs
             builder.Entity<Club>(ent =>

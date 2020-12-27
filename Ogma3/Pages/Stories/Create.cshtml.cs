@@ -97,7 +97,9 @@ namespace Ogma3.Pages.Stories
             if (uid == null) return Unauthorized();
             
             var rating = await _context.Ratings.FindAsync(Input.Rating);
-            var tags = _context.Tags.Where(t => Input.Tags.Contains(t.Id));
+            var tags = await _context.Tags
+                .Where(t => Input.Tags.Contains(t.Id))
+                .ToListAsync();
 
             // Add story
             var story = new Story

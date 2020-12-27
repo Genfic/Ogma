@@ -17,7 +17,7 @@ namespace Ogma3.Data.Mappings
             Owned = c.AuthorId == uid && c.DeletedBy == null,
             DateTime = c.DateTime,
             DeletedBy = c.DeletedBy,
-            EditCount = c.EditCount ?? 0,
+            EditCount = c.EditCount,
             LastEdit = c.LastEdit,
             IsBlocked = c.Author.BlockedByUsers.Any(bu => bu.Id == uid),
             Author = c.DeletedBy != null

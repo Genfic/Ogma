@@ -317,6 +317,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Data\Validators" />
     <Folder Include="wwwroot\js\dist\native-components" />
   </ItemGroup>
 

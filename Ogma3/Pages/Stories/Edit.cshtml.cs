@@ -91,7 +91,7 @@ namespace Ogma3.Pages.Stories
             
             // Get story to edit and make sure author matches logged in user
             var story = await _context.Stories
-                .Include(s => s.StoryTags)
+                .Include(s => s.Tags)
                 .Include(s => s.Rating)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id && s.AuthorId == uid);
@@ -106,7 +106,7 @@ namespace Ogma3.Pages.Stories
                 Description = story.Description,
                 Hook = story.Hook,
                 Rating = story.Rating.Id,
-                Tags = story.StoryTags.Select(st => st.TagId).ToList(),
+                Tags = story.Tags.Select(st => st.Id).ToList(),
                 Status = story.Status,
                 Published = story.IsPublished
             };
@@ -123,7 +123,9 @@ namespace Ogma3.Pages.Stories
             
             if (ModelState.IsValid)
             {
-                var tags = await _context.Tags.Where(t => Input.Tags.Contains(t.Id)).ToListAsync();
+                var tags = await _context.Tags
+                    .Where(t => Input.Tags.Contains(t.Id))
+                    .ToListAsync();
 
                 // Get logged in user
                 var uid = User.GetNumericId();
@@ -131,8 +133,7 @@ namespace Ogma3.Pages.Stories
                 
                 // Get the story and make sure the logged-in user matches author
                 var story = await _context.Stories
-                    .Include(s => s.StoryTags)
-                    .ThenInclude(st => st.Tag)
+                    .Include(s => s.Tags)
                     .Include(s => s.Rating)
                     .FirstOrDefaultAsync(s => s.Id == id && s.AuthorId == uid);
                 

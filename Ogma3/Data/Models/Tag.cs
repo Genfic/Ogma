@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Utils.Extensions;
@@ -25,5 +26,6 @@ namespace Ogma3.Data.Models
         [JsonIgnore]
         public Namespace? Namespace { get; set; } = null;
         public long? NamespaceId { get; set; } = null;
+        public IEnumerable<Story> Stories { get; set; }
     }
 }

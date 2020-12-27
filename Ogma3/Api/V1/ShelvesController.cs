@@ -49,7 +49,7 @@ namespace Ogma3.Api.V1
                 : _context.Shelves.Where(s => s.Owner == user && s.IsPublic);
             
             var shelves = await shelvesQuery
-                .Include(s => s.ShelfStories)
+                .Include(s => s.Stories)
                 .Include(s => s.Icon)
                 .AsNoTracking()
                 .ToListAsync();
@@ -70,7 +70,7 @@ namespace Ogma3.Api.V1
 
             var shelves = await _context.Shelves
                 .Where(s => s.Owner.Id == uid)
-                .Include(s => s.ShelfStories)
+                .Include(s => s.Stories)
                 .Include(s => s.Icon)
                 .AsNoTracking()
                 .ToListAsync();
@@ -89,17 +89,13 @@ namespace Ogma3.Api.V1
         {
             var shelf = await _context.Shelves
                 .Where(s => s.Id == id)
-                .Include(s => s.ShelfStories)
-                    .ThenInclude(ss => ss.Story)
-                        .ThenInclude(s => s.StoryTags)
-                            .ThenInclude(st => st.Tag)
-                                .ThenInclude(t => t.Namespace)
-                .Include(s => s.ShelfStories)
-                    .ThenInclude(ss => ss.Story)
-                        .ThenInclude(s => s.Author)
-                .Include(s => s.ShelfStories)
-                    .ThenInclude(ss => ss.Story)
-                        .ThenInclude(s => s.Rating)
+                .Include(s => s.Stories)
+                    .ThenInclude(st => st.Tags)
+                        .ThenInclude(t => t.Namespace)
+                .Include(s => s.Stories)
+                    .ThenInclude(s => s.Author)
+                .Include(s => s.Stories)
+                    .ThenInclude(s => s.Rating)
                 .Include(s => s.Icon)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

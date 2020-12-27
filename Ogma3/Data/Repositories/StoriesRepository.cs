@@ -141,7 +141,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetCardsWithTag)} -> {tagId}")
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
+                .Where(s => s.Tags.Any(st => st.Id == tagId))
                 .Blacklist(_context, _uid)
                 .OrderByDescending(s => s.ReleaseDate)
                 .Paginate(page, perPage)
@@ -258,7 +258,7 @@ namespace Ogma3.Data.Repositories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(CountWithTag)} -> {tagId}")
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Where(s => s.StoryTags.Any(st => st.TagId == tagId))
+                .Where(s => s.Tags.Any(st => st.Id == tagId))
                 .CountAsync();
         }
         
@@ -286,7 +286,7 @@ namespace Ogma3.Data.Repositories
             
             // Search by tags
             if (tags != null && tags.Count > 0)
-                query = query.Where(s => s.StoryTags.Any(st => tags.Contains(st.TagId)));
+                query = query.Where(s => s.Tags.Any(st => tags.Contains(st.Id)));
 
             return query;
         }

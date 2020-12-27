@@ -77,7 +77,7 @@ namespace Ogma3.Data
                     .Where(s => !ctx.BlacklistedTags
                         .Where(bt => bt.UserId == userId)
                         .Select(bt => bt.TagId)
-                        .Intersect(s.StoryTags.Select(st => st.TagId))
+                        .Intersect(s.Tags.Select(st => st.Id))
                         .Any()
                     )
                     .Where(s => !ctx.BlacklistedUsers

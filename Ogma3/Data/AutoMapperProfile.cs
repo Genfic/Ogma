@@ -76,11 +76,6 @@ namespace Ogma3.Data
                         => opts.MapFrom(s => s.Chapters.Sum(c => c.CommentsThread.CommentsCount))
                 )
                 .ForMember(
-                    sd => sd.Tags,
-                    opts 
-                        => opts.MapFrom(s => s.StoryTags.Select(st => st.Tag))
-                )
-                .ForMember(
                     sd => sd.Score,
                     opts 
                         => opts.MapFrom(s => s.Votes.Count)
@@ -94,12 +89,7 @@ namespace Ogma3.Data
                     )
                 );
             
-            CreateMap<Story, StoryCard>()
-                .ForMember(
-                    sd => sd.Tags,
-                    opts 
-                        => opts.MapFrom(s => s.StoryTags.Select(st => st.Tag))
-                );
+            CreateMap<Story, StoryCard>();
             
             CreateMap<Story, StoryMinimal>();
 
@@ -108,7 +98,7 @@ namespace Ogma3.Data
                 .ForMember(
                     s => s.Stories,
                     opts 
-                        => opts.MapFrom(s => s.ShelfStories.Select(ss => ss.Story).Where(st => st.IsPublished || st.Author.Id == currentUser))
+                        => opts.MapFrom(s => s.Stories.Where(st => st.IsPublished || st.Author.Id == currentUser))
                 );
 
             // Comment mappings

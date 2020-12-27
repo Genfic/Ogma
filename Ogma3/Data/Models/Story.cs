@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.Json.Serialization;
 using Ogma3.Data.Enums;
 
@@ -35,21 +33,7 @@ namespace Ogma3.Data.Models
         public  ICollection<Chapter> Chapters { get; set; }
 
         // Tags
-        [JsonIgnore]
-        public  ICollection<StoryTag> StoryTags { get; set; }
-
-        [NotMapped]
-        public IEnumerable<Tag> Tags
-        {
-            get => StoryTags == null || StoryTags.Count <= 0
-                    ? new List<Tag>()
-                    : StoryTags.Select(st => st.Tag).ToList();
-            set => StoryTags = value.Select(t => new StoryTag
-            {
-                Tag = t,
-                TagId = t.Id
-            }).ToList();
-        }
+        public IEnumerable<Tag> Tags { get; set; }
 
         // Rating
         public Rating Rating { get; set; }
@@ -73,5 +57,6 @@ namespace Ogma3.Data.Models
         public long? ContentBlockId { get; set; }
         
         public ICollection<Report> Reports { get; set; }
+        public ICollection<Shelf> Shelves { get; set; }
     }
 }

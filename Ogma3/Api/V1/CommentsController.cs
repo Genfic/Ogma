@@ -179,7 +179,7 @@ namespace Ogma3.Api.V1
             comment.DeletedByUserId = uid;
             comment.Body = string.Empty;
             comment.LastEdit = null;
-            comment.EditCount = null;
+            comment.EditCount = 0;
             
             // Wipe revisions
             comment.Revisions.Clear();

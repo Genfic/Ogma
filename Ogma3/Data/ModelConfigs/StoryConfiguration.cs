@@ -72,6 +72,20 @@ namespace Ogma3.Data.ModelConfigs
                 .HasMany(s => s.Chapters)
                 .WithOne(c => c.Story)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .HasMany(s => s.Tags)
+                .WithMany(t => t.Stories)
+                .UsingEntity<StoryTag>(
+                    st => st.HasOne(e => e.Tag)
+                        .WithMany()
+                        .HasForeignKey(e => e.TagId)
+                        .OnDelete(DeleteBehavior.Cascade),
+                    st => st.HasOne(e => e.Story)
+                        .WithMany()
+                        .HasForeignKey(e => e.StoryId)
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
             
             builder
                 .HasOne(s => s.Author)
