@@ -2,6 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Models;
+using Ogma3.Infrastructure;
 
 namespace Ogma3.Data.ModelConfigs
 {
@@ -21,13 +22,13 @@ namespace Ogma3.Data.ModelConfigs
             builder
                 .Property(u => u.RegistrationDate)
                 .IsRequired()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql(PgConstants.CurrentTimestamp)
                 .ValueGeneratedOnAdd();
             
             builder
                 .Property(u => u.LastActive)
                 .IsRequired()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql(PgConstants.CurrentTimestamp)
                 .ValueGeneratedOnAdd();
             
             builder

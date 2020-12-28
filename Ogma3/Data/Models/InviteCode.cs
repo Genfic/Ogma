@@ -1,39 +1,28 @@
 using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
 {
     public class InviteCode : BaseModel
     {
-        private string _code;
-        [Required]
+        private readonly string _code;
         public string Code
         {
             get => _code;
-            set
+            init
             {
                 NormalizedCode = value.ToUpper();
                 _code = value;
             }
         }
 
-        [Required]
-        public string NormalizedCode { get; set; }
+        public string NormalizedCode { get; private set; }
         
-
-        [DefaultValue(null)]
         public OgmaUser? UsedBy { get; set; }
         public long? UsedById { get; set; }
 
-        [Required]
         public OgmaUser IssuedBy { get; set; }
         public long IssuedById { get; set; }
-        
-        [DefaultValue(null)]
         public DateTime? UsedDate { get; set; }
-
-        [Required]
-        public DateTime IssueDate { get; set; } = DateTime.Now;
+        public DateTime IssueDate { get; set; }
     }
 }

@@ -18,7 +18,6 @@ Vue.component('input-counter', {
         },
         desc: {
             type: String,
-            required: false,
             default: null
         },
         validateMsg: {

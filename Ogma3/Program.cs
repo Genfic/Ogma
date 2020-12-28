@@ -37,7 +37,7 @@ namespace Ogma3
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Telegram(split[0], split[1], restrictedToMinimumLevel: LogEventLevel.Error)
-                .WriteTo.Seq(seqUrl)
+                .WriteTo.Seq(seqUrl, LogEventLevel.Debug)
                 .WriteTo.Console(LogEventLevel.Information)
                 .MinimumLevel.Debug()
                 .CreateLogger();

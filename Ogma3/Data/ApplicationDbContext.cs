@@ -82,8 +82,14 @@ namespace Ogma3.Data
 
             // Extensions
             builder.HasPostgresExtension("uuid-ossp");
-
-
+            
+            
+            // Enums
+            builder.HasPostgresEnum<EStoryStatus>();
+            builder.HasPostgresEnum<EClubMemberRoles>();
+            builder.HasPostgresEnum<EDeletedBy>();
+            
+            
             // User
             builder.ApplyConfiguration(new OgmaUserConfiguration());
             // Tag
@@ -108,136 +114,33 @@ namespace Ogma3.Data
             builder.ApplyConfiguration(new CommentConfiguration());
             // Comment revisions
             builder.ApplyConfiguration(new CommentRevisionConfiguration());
-            
             // Votes
             builder.ApplyConfiguration(new VoteConfiguration());
-
             // Shelves
             builder.ApplyConfiguration(new ShelfConfiguration());
-
             // Blogposts
             builder.ApplyConfiguration(new BlogpostConfiguration());
-
-
             // Clubs
-            builder.Entity<Club>(ent =>
-            {
-                ent.HasMany(c => c.Threads)
-                    .WithOne()
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasMany(c => c.Folders)
-                    .WithOne(f => f.Club)
-                    .HasForeignKey(f => f.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasMany(c => c.Reports)
-                    .WithOne(r => r.Club)
-                    .HasForeignKey(r => r.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
+            builder.ApplyConfiguration(new ClubConfiguration());
             // Club members
-            builder.Entity<ClubMember>(ent =>
-            {
-                ent.HasKey(cm => new {cm.ClubId, cm.MemberId});
-                ent.HasOne(cm => cm.Club)
-                    .WithMany(c => c.ClubMembers)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(cm => cm.Member)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
+            builder.ApplyConfiguration(new ClubMemberConfiguration());
             // Club threads
-            builder.Entity<ClubThread>(ent =>
-            {
-                ent.HasOne(ct => ct.Author)
-                    .WithMany()
-                    .HasForeignKey(ct => ct.AuthorId)
-                    .OnDelete(DeleteBehavior.SetNull);
-                ent.HasOne(b => b.CommentsThread)
-                    .WithOne(ct => ct.ClubThread)
-                    .HasForeignKey<CommentsThread>(ct => ct.ClubThreadId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
+            builder.ApplyConfiguration(new ClubThreadConfiguration());
             // Folders
-            builder.Entity<Folder>(ent =>
-            {
-                ent.HasMany(f => f.ChildFolders)
-                    .WithOne(f => f.ParentFolder)
-                    .HasForeignKey(f => f.ParentFolderId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.Property(f => f.AccessLevel)
-                    .HasDefaultValue(EClubMemberRoles.User);
-                ent.HasMany(f => f.Stories)
-                    .WithMany(s => s.Folders)
-                    .UsingEntity<FolderStory>(
-                        fs => fs.HasOne(f => f.Story)
-                            .WithMany()
-                            .HasForeignKey(f => f.StoryId),
-                        fs => fs.HasOne(f => f.Folder)
-                            .WithMany()
-                            .HasForeignKey(f => f.FolderId)
-                        );
-            });
-            
-            
+            builder.ApplyConfiguration(new FolderConfiguration());
             // Blacklisted ratings
-            builder.Entity<BlacklistedRating>(ent =>
-            {
-                ent.HasKey(br => new { br.UserId, br.RatingId });
-                ent.HasOne(e => e.Rating)
-                    .WithMany();
-                ent.HasOne(e => e.User)
-                    .WithMany(u => u.BlacklistedRatings);
-            });
-            
+            builder.ApplyConfiguration(new BlacklistedRatingConfiguration());
             // Blacklisted tags
-            builder.Entity<BlacklistedTag>(ent =>
-            {
-                ent.HasKey(bt => new { bt.UserId, bt.TagId });
-                ent.HasOne(e => e.Tag)
-                    .WithMany();
-                ent.HasOne(e => e.User)
-                    .WithMany(u => u.BlacklistedTags);
-            });
-
+            builder.ApplyConfiguration(new BlacklistedTagConfiguration());
             
             
-            // Enums
-            builder.HasPostgresEnum<EStoryStatus>();
-            builder.HasPostgresEnum<EClubMemberRoles>();
-            builder.HasPostgresEnum<EDeletedBy>();
-
-
             // Documents
-            builder.Entity<Document>(ent =>
-            {
-                ent.HasIndex(d => new { d.Slug, d.Version })
-                    .IsUnique();
-                ent.HasIndex(d => new { d.Title, d.Version })
-                    .IsUnique();
-            });
-
+            builder.ApplyConfiguration(new DocumentConfiguration());
             // Invite codes
-            builder.Entity<InviteCode>(ent =>
-            {
-                ent.HasOne(c => c.UsedBy)
-                    .WithOne()
-                    .OnDelete(DeleteBehavior.Cascade);
-                ent.HasOne(c => c.IssuedBy)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-            
+            builder.ApplyConfiguration(new InviteCodeConfiguration());
             // Moderator actions
-            builder.Entity<ModeratorAction>(ent =>
-            {
-                ent.HasOne(ma => ma.StaffMember)
-                    .WithMany()
-                    .HasForeignKey(ma => ma.StaffMemberId)
-                    .OnDelete(DeleteBehavior.SetNull);
-            });
+            builder.ApplyConfiguration(new ModeratorActionConfiguration());
+
         }
     }
 }

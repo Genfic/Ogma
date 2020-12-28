@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Infrastructure;
 
 namespace Ogma3.Data.ModelConfigs
 {
@@ -39,7 +40,7 @@ namespace Ogma3.Data.ModelConfigs
             builder
                 .Property(s => s.ReleaseDate)
                 .IsRequired()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
             builder
                 .Property(s => s.IsPublished)

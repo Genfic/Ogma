@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="~/css/dist/style.min.css" asp-append-version="true">
     
     @await RenderSectionAsync("CSS", false)
+    @Html.RenderResources("css")
     
     @if (Env.IsDevelopment())
     {

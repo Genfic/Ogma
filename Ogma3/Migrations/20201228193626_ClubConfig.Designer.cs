@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201228193626_ClubConfig")]
+    partial class ClubConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,7 +377,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<long?>("AuthorId")
+                    b.Property<long>("AuthorId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Body")
@@ -387,9 +389,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -559,9 +559,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("RevisionDate")
                         .HasColumnType("timestamp without time zone");
@@ -575,9 +573,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("text");
 
                     b.Property<long>("Version")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(1L);
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -606,26 +602,21 @@ namespace Ogma3.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("text");
 
                     b.Property<long?>("ParentFolderId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("text");
 
                     b.Property<int>("StoriesCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -680,9 +671,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("IssueDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("IssuedById")
                         .HasColumnType("bigint");
@@ -715,9 +704,7 @@ namespace Ogma3.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<DateTime>("DateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1429,17 +1416,16 @@ namespace Ogma3.Migrations
                     b.HasOne("Ogma3.Data.Models.OgmaUser", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
-                    b.HasOne("Ogma3.Data.Models.Club", "Club")
+                    b.HasOne("Ogma3.Data.Models.Club", null)
                         .WithMany("Threads")
                         .HasForeignKey("ClubId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Author");
-
-                    b.Navigation("Club");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.Comment", b =>
