@@ -19,7 +19,6 @@ namespace Utils.Extensions
         
         /// <summary>
         /// Remaps the given `num` in range `oldMin` to `oldMax` to new range of `newMin` to `newMax`.
-        /// By default, remaps the given `num` to 0...1 range.
         /// </summary>
         /// <param name="num">Number to remap</param>
         /// <param name="oldMin">Original lowest value `num` can take</param>
@@ -28,7 +27,7 @@ namespace Utils.Extensions
         /// <param name="newMax">New highest value `num` can take</param>
         /// <returns>Remapped `num`</returns>
         /// <exception cref="ArgumentException">`oldMin` has to be less than `oldMax`, and `newMin` has to be less than `newMax`.</exception>
-        public static double Normalize(this double num, double oldMin, double oldMax, double newMin = 0, double newMax = 1)
+        public static double Normalize(this double num, double oldMin, double oldMax, double newMin, double newMax)
         {
             if (oldMin >= oldMax || newMin >= newMax)
             {
@@ -36,6 +35,24 @@ namespace Utils.Extensions
             }
 
             return newMin + (num - oldMin) * (newMax - newMin) / (oldMax - oldMin);
+        }
+        
+        /// <summary>
+        /// Remaps the given `num` in range `oldMin` to `oldMax` to range of 0..1.
+        /// </summary>
+        /// <param name="num">Number to remap</param>
+        /// <param name="oldMin">Original lowest value `num` can take</param>
+        /// <param name="oldMax">Original highest value `num` can take</param>
+        /// <returns>Remapped `num`</returns>
+        /// <exception cref="ArgumentException">`oldMin` has to be less than `oldMax`, and `newMin` has to be less than `newMax`.</exception>
+        public static double Normalize(this double num, double oldMin, double oldMax)
+        {
+            if (oldMin >= oldMax)
+            {
+                throw new ArgumentException("oldMin has to be less than oldMax");
+            }
+
+            return (num - oldMin) / (oldMax - oldMin);
         }
         
         /// <summary>

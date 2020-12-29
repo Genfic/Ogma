@@ -1,17 +1,11 @@
-#nullable enable
-
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Models
 {
     public class CommentsThread : BaseModel
     {
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; }
 
-        [Required]
-        [DefaultValue(0)]
         public int CommentsCount { get; set; }
         
         public OgmaUser? User { get; set; }

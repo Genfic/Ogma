@@ -7,6 +7,7 @@ namespace Ogma3.Data.Models
 {
     public class Comment : BaseModel, IReportableContent
     {
+        public CommentsThread CommentsThread { get; set; }
         public long CommentsThreadId { get; set; }
 
         public  OgmaUser? Author { get; set; }

@@ -6,7 +6,7 @@ namespace Utils.Extensions
 {
     public static class Colour
     {
-                /// <summary>
+        /// <summary>
         /// Convert `System.Drawing.Color` to `#RRGGBB` notation string.
         /// </summary>
         /// <param name="input">Color object to convert</param>
@@ -14,8 +14,8 @@ namespace Utils.Extensions
         public static string ToHexCss(this Color input)
         {
             string r = input.R.ToString("X2"),
-                   g = input.G.ToString("X2"),
-                   b = input.B.ToString("X2");
+                g = input.G.ToString("X2"),
+                b = input.B.ToString("X2");
 
             return "#" + r + g + b;
         }
@@ -30,10 +30,34 @@ namespace Utils.Extensions
             var hex = input.Trim('#');
             var values = hex.Length switch
             {
-                3 => new[] {"FF", hex[0].ToString(), hex[1].ToString(), hex[2].ToString()},
-                4 => new[] {hex[0].ToString(), hex[1].ToString(), hex[2].ToString(), hex[3].ToString()},
-                6 => new[] {"FF", hex[..2], hex[2..4], hex[4..6]},
-                8 => new[] {hex[..2], hex[2..4], hex[4..6], hex[6..8]},
+                3 => new[]
+                {
+                    "FF", 
+                    hex[0].ToString(), 
+                    hex[1].ToString(), 
+                    hex[2].ToString()
+                },
+                4 => new[]
+                {
+                    hex[0].ToString(), 
+                    hex[1].ToString(), 
+                    hex[2].ToString(), 
+                    hex[3].ToString()
+                },
+                6 => new[]
+                {
+                    "FF", 
+                    hex[..2], 
+                    hex[2..4], 
+                    hex[4..6]
+                },
+                8 => new[]
+                {
+                    hex[..2], 
+                    hex[2..4], 
+                    hex[4..6], 
+                    hex[6..8]
+                },
                 _ => throw new ArgumentException("Incorrect format")
             };
             return Color.FromArgb(

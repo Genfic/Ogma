@@ -88,59 +88,9 @@ namespace Ogma3.Data
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();
             builder.HasPostgresEnum<EDeletedBy>();
-            
-            
-            // User
-            builder.ApplyConfiguration(new OgmaUserConfiguration());
-            // Tag
-            builder.ApplyConfiguration(new TagConfiguration());
-            // Namespace
-            builder.ApplyConfiguration(new NamespaceConfiguration());
-            // Rating
-            builder.ApplyConfiguration(new RatingConfiguration());
-            // Story
-            builder.ApplyConfiguration(new StoryConfiguration());
-            // Chapter
-            builder.ApplyConfiguration(new ChapterConfiguration());
-            
-            // Comment threads
-            builder.Entity<CommentsThread>()
-                .HasMany(ct => ct.Comments)
-                .WithOne()
-                .HasForeignKey(c => c.CommentsThreadId)
-                .OnDelete(DeleteBehavior.Cascade);
 
-            // Comments
-            builder.ApplyConfiguration(new CommentConfiguration());
-            // Comment revisions
-            builder.ApplyConfiguration(new CommentRevisionConfiguration());
-            // Votes
-            builder.ApplyConfiguration(new VoteConfiguration());
-            // Shelves
-            builder.ApplyConfiguration(new ShelfConfiguration());
-            // Blogposts
-            builder.ApplyConfiguration(new BlogpostConfiguration());
-            // Clubs
-            builder.ApplyConfiguration(new ClubConfiguration());
-            // Club members
-            builder.ApplyConfiguration(new ClubMemberConfiguration());
-            // Club threads
-            builder.ApplyConfiguration(new ClubThreadConfiguration());
-            // Folders
-            builder.ApplyConfiguration(new FolderConfiguration());
-            // Blacklisted ratings
-            builder.ApplyConfiguration(new BlacklistedRatingConfiguration());
-            // Blacklisted tags
-            builder.ApplyConfiguration(new BlacklistedTagConfiguration());
-            
-            
-            // Documents
-            builder.ApplyConfiguration(new DocumentConfiguration());
-            // Invite codes
-            builder.ApplyConfiguration(new InviteCodeConfiguration());
-            // Moderator actions
-            builder.ApplyConfiguration(new ModeratorActionConfiguration());
-
+            // Load model configurations
+            builder.ApplyConfigurationsFromAssembly(typeof(OgmaUserConfiguration).Assembly);
         }
     }
 }
