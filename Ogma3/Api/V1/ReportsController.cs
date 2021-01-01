@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
@@ -40,27 +41,27 @@ namespace Ogma3.Api.V1
             {
                 Reason = reason,
                 ReporterId = (long)uid,
-                ContentType = itemType
+                ContentType = itemType.ToString()
             };
 
             switch (itemType)
             {
-                case nameof(Comment):
+                case EReportableContentTypes.Comment:
                     report.CommentId = itemId;
                     break;
-                case nameof(OgmaUser):
+                case EReportableContentTypes.User:
                     report.UserId = itemId;
                     break;
-                case nameof(Story):
+                case EReportableContentTypes.Story:
                     report.StoryId = itemId;
                     break;
-                case nameof(Chapter):
+                case EReportableContentTypes.Chapter:
                     report.ChapterId = itemId;
                     break;
-                case nameof(Blogpost):
+                case EReportableContentTypes.Blogpost:
                     report.BlogpostId = itemId;
                     break;
-                case nameof(Club):
+                case EReportableContentTypes.Club:
                     report.ClubId = itemId;
                     break;
                 default:
@@ -73,6 +74,6 @@ namespace Ogma3.Api.V1
             return new OkObjectResult(report);
         }
 
-        public sealed record PostData(long ItemId, string Reason, string ItemType);
+        public sealed record PostData(long ItemId, string Reason, EReportableContentTypes ItemType);
     }
 }

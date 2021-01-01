@@ -1,24 +1,33 @@
-(function () {
-    const route = document.getElementById('data-route');
-    const id = document.getElementById('data-id');
-    const btn = document.getElementById('join-btn');
-    const xcsrf = document.querySelector('[name=__RequestVerificationToken]');
-
-    route.remove();
-    id.remove();
-
-    btn.addEventListener('click', _ => {
-        axios.post(route.dataset.route,
-            {
-                ClubId: Number(id.dataset.id)
-            }, {
-                headers: {"RequestVerificationToken": xcsrf.value}
-            }
-        )
+new Vue({
+    el: '#club-bar',
+    data: {
+        route: null,
+        id: null,
+        xcsrf: null,
+        joined: null,
+    },
+    methods: {
+        join: function () {
+            axios.post(this.route,
+                { ClubId: this.id }, 
+                { headers: {"RequestVerificationToken": this.xcsrf} }
+            )
             .then(res => {
-                btn.className = res.data ? 'button max leave' : 'button max join';
-                btn.innerText = res.data ? 'Leave club' : 'Join club';
+                this.joined = res.data;
             })
             .catch(console.error)
-    });
-})() 
+        },
+        report: function () {
+            this.$refs.reportModal.visible = true;
+        }
+    },
+    mounted() {        
+        this.route = document.getElementById('data-route').dataset.route;
+        this.id = Number(document.getElementById('data-id').dataset.id);
+        this.joined = document.getElementById('data-joined').dataset.joined.toLowerCase() === 'true';
+        this.xcsrf = document.querySelector('[name=__RequestVerificationToken]').value;
+    },
+    beforeCreate() {
+        document.getElementById('join-btn').classList.remove('join', 'leave');
+    }
+})

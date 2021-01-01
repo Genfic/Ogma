@@ -1,6 +1,7 @@
 @using System.Globalization
 @using Ogma3.Api.V1
 @using Ogma3.Data.AuthorizationData
+@using Ogma3.Data.Enums
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
 @model ChapterDetails
@@ -84,7 +85,7 @@
         <report-modal
             ref="reportModal"
             :item-id="@Model.Id"
-            item-type="Chapter"
+            item-type="@EReportableContentTypes.Chapter"
             reports-route="@Url.RouteUrl(nameof(ReportsController))">
         </report-modal>
 

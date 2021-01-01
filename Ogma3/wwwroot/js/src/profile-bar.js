@@ -25,12 +25,13 @@ new Vue({
         block: function () {
             axios.post(this.route + '/block',
                 { name: this.name }, 
-                {
-                    headers: { 'RequestVerificationToken': this.xcsrf }
-                }
+                { headers: { 'RequestVerificationToken': this.xcsrf } }
             )
             .then(res => this.isBlocked = res.data)
             .catch(console.error)
+        },
+        report: function () {
+            this.$refs.reportModal.visible = true;
         }
     },
     mounted() {

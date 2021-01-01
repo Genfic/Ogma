@@ -1,6 +1,7 @@
 @using System.Globalization
 @using Ogma3.Api.V1
 @using Ogma3.Data.AuthorizationData
+@using Ogma3.Data.Enums
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
 @inject OgmaConfig Config
@@ -204,7 +205,7 @@
     <report-modal
         ref="reportModal"
         :item-id="@Model.Id"
-        item-type="Story"
+        item-type="@EReportableContentTypes.Story"
         reports-route="@Url.RouteUrl(nameof(ReportsController))">
     </report-modal>
     

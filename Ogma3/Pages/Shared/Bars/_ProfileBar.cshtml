@@ -2,6 +2,7 @@
 @using Humanizer
 @using Ogma3.Api.V1
 @using Ogma3.Data.AuthorizationData
+@using Ogma3.Data.Enums
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
 @using Utils
@@ -49,37 +50,48 @@
         
     </div>
     
-        <div class="buttons">
-            @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
-            {
-                <button class="button max join" 
-                        :title="isFollowed ? 'Unfollow' : 'Follow'"
-                        v-on:click="follow">
-                    {{ isFollowed ? 'Following' : 'Follow' }}
-                </button>
+    <div class="buttons">
+        @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
+        {
+            <button class="button max join" 
+                    :title="isFollowed ? 'Unfollow' : 'Follow'"
+                    v-on:click="follow">
+                {{ isFollowed ? 'Following' : 'Follow' }}
+            </button>
                 
-                <div class="o-dropdown left">
-                    <input type="checkbox" id="o-dropdown-toggler">
-                    <label for="o-dropdown-toggler">
-                        <icon icon="more_vert"></icon>
-                    </label>
-                    <ul class="menu">
-                        <li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
-                            {{ isBlocked ? 'Unblock' : 'Block' }}
+            <div class="o-dropdown left">
+                <input type="checkbox" id="o-dropdown-toggler">
+                
+                <label for="o-dropdown-toggler">
+                    <icon icon="more_vert"></icon>
+                </label>
+                
+                <ul class="menu">
+                        
+                    <li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
+                        {{ isBlocked ? 'Unblock' : 'Block' }}
+                    </li>
+                        
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <li title="Report" class="item active red" v-on:click="report">
+                            Report
                         </li>
-                        @if (User.IsInRole(RoleNames.Admin))
-                        {
-                            <a asp-area="Admin"
-                               asp-page="/Users"
-                               asp-route-name="@Model.UserName"
-                               class="item active">
-                                Manage
-                            </a>
-                        }
-                    </ul>
-                </div>
-            }
-        </div>
+                    }
+
+                    @if (User.IsInRole(RoleNames.Admin))
+                    {
+                        <a asp-area="Admin"
+                           asp-page="/Users"
+                           asp-route-name="@Model.UserName"
+                           class="item active">
+                            Manage
+                        </a>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
 
     <nav class="nav">
         <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">
@@ -101,6 +113,16 @@
     <div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy"></div>
     <div v-if="!done" id="data-followed" data-followed="@Model.IsFollowedBy"></div>
     @Html.AntiForgeryToken()
+    
+    <report-modal
+        ref="reportModal"
+        :item-id="@Model.Id"
+        item-type="@EReportableContentTypes.User"
+        reports-route="@Url.RouteUrl(nameof(ReportsController))">
+    </report-modal>
 </div>
+
+@Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
 
 @Html.Resource(@<script src="~/js/dist/profile-bar.min.js" asp-append-version="true"></script>)

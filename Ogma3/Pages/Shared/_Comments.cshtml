@@ -1,5 +1,6 @@
 @using static Ogma3.Services.HtmlExtensions
 @using Ogma3.Api.V1
+@using Ogma3.Data.Enums
 @inject OgmaConfig Config
 @model long
 
@@ -104,7 +105,7 @@
     <report-modal
         ref="reportModal"
         :item-id="0"
-        item-type="Comment"
+        item-type="@EReportableContentTypes.Comment"
         reports-route="@Url.RouteUrl(nameof(ReportsController))">
     </report-modal>
 
