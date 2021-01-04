@@ -28,7 +28,8 @@ namespace Ogma3.Api.V1
 
         // GET: api/Tags/all
         [HttpGet("all")]
-        [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+        // TODO: Make access to all tags better for the users
+        // [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetAll()
         {
             return await _tagsRepo.GetAll();

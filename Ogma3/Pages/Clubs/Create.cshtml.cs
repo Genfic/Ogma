@@ -9,6 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Attributes;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 
@@ -17,14 +18,12 @@ namespace Ogma3.Pages.Clubs
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly OgmaUserManager _userManager;
         private readonly FileUploader _uploader;
         private readonly OgmaConfig _config;
 
-        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager, FileUploader uploader, OgmaConfig config)
+        public CreateModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config)
         {
             _context = context;
-            _userManager = userManager;
             _uploader = uploader;
             _config = config;
         }
@@ -60,19 +59,9 @@ namespace Ogma3.Pages.Clubs
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var currentUser = await _userManager.GetUserAsync(User);
-            
-            var clubMember = new ClubMember
-            {
-                Member = currentUser,
-                Role = EClubMemberRoles.Founder,
-                MemberSince = DateTime.Now
-            };
+            if (!ModelState.IsValid) return Page();
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
 
             var club = new Data.Models.Club
             {
@@ -81,10 +70,19 @@ namespace Ogma3.Pages.Clubs
                 Hook = Input.Hook,
                 Description = Input.Description,
                 CreationDate = DateTime.Now,
-                ClubMembers = new List<ClubMember> { clubMember }
+                ClubMembers = new List<ClubMember>()
+            };
+            await _context.Clubs.AddAsync(club);
+
+            var member = new ClubMember
+            {
+                MemberId = (long) uid,
             };
 
-            await _context.Clubs.AddAsync(club);
+            club.ClubMembers.Add(member);
+            await _context.SaveChangesAsync();
+
+            member.Role = EClubMemberRoles.Founder;
             await _context.SaveChangesAsync();
             
             if (Input.Icon != null && Input.Icon.Length > 0)

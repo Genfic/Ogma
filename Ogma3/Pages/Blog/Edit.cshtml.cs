@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,7 +72,7 @@ namespace Ogma3.Pages.Blog
                 Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
-                Tags = post.Hashtags
+                Tags = post.Hashtags?
                     .Select(t => t.Trim('#'))
                     .ToArray()
                     .JoinToString(", "),
@@ -113,13 +114,13 @@ namespace Ogma3.Pages.Blog
             if (post == null) return NotFound();
             
             // Create array of hashtags
-            var tags = Input.Tags
+            var tags = Input.Tags?
                 .Split(',')
                 .Where(t => !string.IsNullOrWhiteSpace(t))
                 .ToList()
                 .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()
-                .ToArray();
+                .ToArray() ?? Array.Empty<string>();
 
             post.Title = Input.Title.Trim();
             post.Slug = Input.Title.Trim().Friendlify();

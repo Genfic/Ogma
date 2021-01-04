@@ -37,7 +37,7 @@ namespace Ogma3.Pages.User
             int count;
             if (isCurrentUser)
             {
-                Stories = await _storyRepo.GetAndSortOwnedPaginatedStoryCards(PerPage, page);
+                Stories = await _storyRepo.GetAndSortOwnedPaginatedStoryCards(PerPage, page, ProfileBar.Id);
                 count = await _storyRepo.CountOwnedForUser(ProfileBar.Id);
             } else
             {

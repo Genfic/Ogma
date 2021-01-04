@@ -12,7 +12,7 @@
 
         <div class="actions">
 
-            <button class="votes action-btn large" v-bind:class="didVote ? 'active' : ''" v-on:click="vote">
+            <button class="votes action-btn large" v-bind:class="didVote ? 'active' : ''" v-on:click="vote" title="Give it a star!">
                 <i class="material-icons-outlined">{{didVote ? 'star' : 'star_border'}}</i>
                 <span class="count">{{score}}</span>
             </button>

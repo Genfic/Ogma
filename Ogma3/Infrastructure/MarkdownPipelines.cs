@@ -11,11 +11,13 @@ namespace Ogma3.Infrastructure
         private static HashtagOptions HashtagOptions => new("/blog?q=", "_blank");
     
         public static MarkdownPipeline Basic => new MarkdownPipelineBuilder()
+            .DisableHtml()
             .UseAutoIdentifiers()
             .UseSpoilers()
             .Build();
 
         public static MarkdownPipeline Comment => new MarkdownPipelineBuilder()
+            .DisableHtml()
             .UseMentions(MentionOptions)
             .UseAutoLinks()
             .UseAutoIdentifiers()
@@ -23,6 +25,7 @@ namespace Ogma3.Infrastructure
             .Build();
 
         public static MarkdownPipeline All => new MarkdownPipelineBuilder()
+            .DisableHtml()
             .UsePipeTables()
             .UseMentions(MentionOptions)
             .UseAdvancedExtensions()
@@ -31,6 +34,7 @@ namespace Ogma3.Infrastructure
             .Build();
 
         public static MarkdownPipeline Blogpost => new MarkdownPipelineBuilder()
+            .DisableHtml()
             .UseAdvancedExtensions()
             .UseMentions(MentionOptions)
             .UseHashtags(HashtagOptions)

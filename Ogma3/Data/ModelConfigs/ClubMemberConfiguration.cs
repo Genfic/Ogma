@@ -28,11 +28,13 @@ namespace Ogma3.Data.ModelConfigs
             builder
                 .HasOne(cm => cm.Club)
                 .WithMany(c => c.ClubMembers)
+                .HasForeignKey(cm => cm.ClubId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(cm => cm.Member)
                 .WithMany()
+                .HasForeignKey(cm => cm.MemberId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

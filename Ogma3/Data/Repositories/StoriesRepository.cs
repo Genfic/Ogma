@@ -97,10 +97,11 @@ namespace Ogma3.Data.Repositories
         /// <param name="page">Number of the desired page</param>
         /// <param name="sort">Sorting method</param>
         /// <returns>Sorted and paginated list of `StoryCard` objects</returns>
-        public async Task<List<StoryCard>> GetAndSortOwnedPaginatedStoryCards(int perPage, int page, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
+        public async Task<List<StoryCard>> GetAndSortOwnedPaginatedStoryCards(int perPage, int page, long authorId, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
         {
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortOwnedPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
+                .Where(b => b.AuthorId == authorId)
                 .SortByEnum(sort)
                 .Paginate(page, perPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,20 +18,20 @@ namespace Ogma3.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly long? _uid;
 
         public ClubRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
-            _userService = userService;
+            _uid = userService.GetUser()?.GetNumericId();
         }
 
         public async Task<ClubBar> GetClubBar(long clubId)
         {
             return await _context.Clubs
                 .Where(c => c.Id == clubId)
-                .ProjectTo<ClubBar>(_mapper.ConfigurationProvider, new { currentUser = _userService.GetUser()?.GetNumericId() })
+                .ProjectTo<ClubBar>(_mapper.ConfigurationProvider, new { currentUser = _uid })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
