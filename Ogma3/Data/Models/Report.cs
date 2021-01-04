@@ -5,9 +5,7 @@ namespace Ogma3.Data.Models
 {
     public class Report : BaseModel
     {
-        [Required]
         public OgmaUser Reporter { get; set; }
-        [Required]
         public long ReporterId { get; set; }
 
         [Required]

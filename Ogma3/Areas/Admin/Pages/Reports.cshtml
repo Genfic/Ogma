@@ -1,0 +1,54 @@
+@page
+@using Ogma3.Data.Enums
+@using Ogma3.Data.DTOs
+@model Ogma3.Areas.Admin.Pages.Reports
+
+@{
+    ViewData["Title"] = "Reports";
+    ViewData["ActivePage"] = ManageNavPages.Reports;
+}
+
+<table class="o-table">
+    <tr>
+        <th>ID</th>
+        <th>Item</th>
+        <th>Reporter</th>
+        <th>Date</th>
+        <th>Description</th>
+    </tr>
+    @foreach (var report in Model.ReportsList)
+    {
+        Func<ReportDto, object>? link;
+        if (Enum.TryParse<EReportableContentTypes>(report.ContentType, out var t))
+        {
+            link = t switch {
+                EReportableContentTypes.Comment 
+                    => @<a asp-page="/Reports" asp-page-handler="Comment" asp-area="Admin" asp-route-id="@report.CommentId" target="_blank">@report.ContentType</a>,
+                EReportableContentTypes.User 
+                    => @<a asp-page="/User/Index" asp-area="" asp-route-name="@report.UserUserName" target="_blank">@report.ContentType</a>,
+                EReportableContentTypes.Story 
+                    => @<a asp-page="/Story" asp-area="" asp-route-id="@report.StoryId" target="_blank">@report.ContentType</a>,
+                EReportableContentTypes.Chapter 
+                    => @<a asp-page="/Chapter" asp-area="" asp-route-id="@report.ChapterId" target="_blank">@report.ContentType</a>,
+                EReportableContentTypes.Blogpost 
+                    => @<a asp-page="/Blog/Post" asp-area="" asp-route-id="@report.BlogpostId" target="_blank">@report.ContentType</a>,
+                EReportableContentTypes.Club 
+                    => @<a asp-page="/Club/Index" asp-area="" asp-route-id="@report.ClubId" asp-route-slug="@report.ClubName" target="_blank">@report.ContentType</a>,
+                _ => throw new ArgumentOutOfRangeException()};
+        }
+        else
+        {
+            link = null;
+        }
+
+        <tr>
+            <td>@report.Id</td>
+            <td>@link?.Invoke(report)</td>
+            <td>@report.ReporterUserName</td>
+            <td>@report.ReportDate</td>
+            <td><markdown preset="Basic">@report.Reason</markdown></td>
+        </tr>
+    }
+</table>
+
+<partial name="_Pagination" model="Model.Pagination"/>

@@ -182,6 +182,9 @@ namespace Ogma3.Data
             // Document mappings
             CreateMap<Document, DocumentDto>();
             CreateMap<Document, DocumentVersionDto>();
+            
+            // Report mappings
+            CreateMap<Report, ReportDto>();
         }
     }
 }

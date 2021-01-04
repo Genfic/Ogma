@@ -4,7 +4,7 @@ namespace Ogma3.Data.Models
 {
     public class CommentsThread : BaseModel
     {
-        public ICollection<Comment> Comments { get; set; }
+        public IList<Comment> Comments { get; set; }
 
         public int CommentsCount { get; set; }
         
