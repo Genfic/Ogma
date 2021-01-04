@@ -26,7 +26,7 @@ namespace Ogma3.Api.V1
         {
             _context = context;
             _userManager = userManager;
-            _uid = User.GetNumericId();
+            _uid = User?.GetNumericId();
         }
 
         // GET: api/Users/signin/John

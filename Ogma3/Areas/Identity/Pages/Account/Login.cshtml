@@ -12,53 +12,55 @@
 
 <hr>
 
-<div class="row align-items-center">
-    <div class="col-md-4 mx-auto">
-        <section>
-            <form class="form" id="account" method="post">
+<div class="login-form">
+    <section class="left">
+        <form class="form" id="account" method="post">
 
-                <div asp-validation-summary="All" class="text-danger"></div>
-                
-                <img style="width:200px;height:200px" :src="getAvatar" class="rounded mx-auto d-block" :alt="`${name}'s avatar`">
-                <h5 class="text-center">{{title}}</h5>
-                
-                <div class="o-form-group">
-                    <label asp-for="Input.Name"></label>
-                    <input asp-for="Input.Name" class="o-form-control active-border" v-model="name" :readonly="checked" autocomplete="username"/>
-                    <span asp-validation-for="Input.Name" class="text-danger"></span>
-                </div>
-                
-                <div class="o-form-group" v-if="checked">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="o-form-control active-border" autocomplete="current-password" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                </div>
-                
-                <div class="o-form-group" v-if="checked">
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="o-form-group" v-if="!checked">
-                    <button class="btn btn-primary" v-on:click="checkDetails">Next</button>
-                </div>
-                
-                <div class="o-form-group" v-if="checked">
-                    <button class="btn btn-secondary" v-on:click="reset">Back</button>
-                    <button type="submit" class="btn btn-primary">Log in</button>
-                </div>
-            </form>
+            <div asp-validation-summary="All" class="text-danger"></div>
             
+            <img width="240" height="240"
+                 :src="getAvatar" 
+                 class="avatar" 
+                 :class="checked ? 'checked' : null" 
+                 :alt="`${name}'s avatar`">
+            <h5 v-if="title" class="title">{{title}}</h5>
             
-        </section>
-    </div>
+            <div class="o-form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="o-form-control active-border" v-model="name" :readonly="checked" autocomplete="username"/>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            
+            <div class="o-form-group" v-if="checked">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="o-form-control active-border" autocomplete="current-password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <p>
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                </p>
+            </div>
+            
+            <div class="o-form-group" v-if="checked">
+                <div class="checkbox">
+                    <label asp-for="Input.RememberMe">
+                        <input asp-for="Input.RememberMe" />
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
+            </div>
+            
+            <div class="o-form-group" v-if="!checked">
+                <button class="btn btn-primary" v-on:click="checkDetails">Next</button>
+            </div>
+            
+            <div class="o-form-group" v-if="checked">
+                <button class="btn btn-secondary" v-on:click="reset">Back</button>
+                <button type="submit" class="btn btn-primary">Log in</button>
+            </div>
+        </form>
+        
+        
+    </section>
     @* <div class="col-md-6 col-md-offset-2"> *@
     @*     <section> *@
     @*         <h4>Use another service to log in.</h4> *@
@@ -94,7 +96,8 @@
 <div id="cdn" style="background:indianred;padding:5rem" data-cdn="@Config.Cdn" v-if="!cdn"></div>
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(UsersController))" v-if="!route"></div>
 @section Scripts {
-
-    @* <partial name="_ValidationScriptsPartial" /> *@
     <script src="~/js/dist/login.min.js" asp-append-version="true"></script>
+}
+@section CSS {
+    <link rel="stylesheet" href="~/css/dist/login.min.css" asp-append-version="true">
 }

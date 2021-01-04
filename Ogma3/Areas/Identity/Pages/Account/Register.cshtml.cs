@@ -89,6 +89,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
+            [StringLength(13, ErrorMessage = "The invite code is exactly 13 characters long", MinimumLength = 13)]
             [DataType(DataType.Password)]
             [Display(Name = "Invite code")]
             public string? InviteCode { get; set; }

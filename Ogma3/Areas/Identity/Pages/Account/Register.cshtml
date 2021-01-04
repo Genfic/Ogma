@@ -10,11 +10,11 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
+<div class="login-form">
+    <div class="left wide">
         <form class="form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
-            <hr />
+            
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="o-form-group">
@@ -77,4 +77,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+@section CSS {
+    <link rel="stylesheet" href="~/css/dist/login.min.css" asp-append-version="true">
 }

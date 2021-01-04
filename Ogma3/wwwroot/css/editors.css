@@ -69,6 +69,12 @@ form.form .o-form-group .ratings .rating .radio-label > .main > strong {
 form.form .o-form-group .ratings .rating .radio-label > .main > span {
   font-weight: 500;
 }
+form.form .o-form-group .field-validation-error {
+  color: var(--red);
+  background-color: var(--red-10);
+  padding: 0.25rem;
+  font-size: 0.9rem;
+}
 form.form .o-form-control:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
