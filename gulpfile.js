@@ -7,7 +7,6 @@ sass.compiler = require('sass');
 const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps");
 const Fiber = require('fibers');
-const browserSync = require('browser-sync').create();
 const cond = require('gulp-if');
 
 // CSS processors
@@ -76,7 +75,8 @@ gulp.task('js', () => {
         .pipe(terser({ 
             mangle: { 
                 toplevel: false 
-            } 
+            },
+            ecma: '5'
         }))
         .on('error', err => {
             console.error(err)
@@ -105,14 +105,6 @@ gulp.task('ts', () => {
 });
 
 gulp.task('watch:ts', () => gulp.watch(watch.ts, gulp.series('ts')))
-
-// Browser sync
-gulp.task('sync', function () {
-    browserSync.init({
-        proxy: 'http://localhost:5001',
-        files: [`${dir.cssroot}/**/*.css`, `${dir.jsroot}/**/*.js`, `${dir.jsroot}/**/*.ts`]
-    })
-})
 
 // All tasks
 gulp.task('all', gulp.parallel(['css', 'js']));
