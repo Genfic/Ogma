@@ -1,6 +1,8 @@
 ﻿@page
 @using Ogma3.Api.V1
 @using Utils.Extensions
+@using System.Text.Json
+@using Ogma3.Data.Enums
 @inject OgmaConfig Config
 @model Ogma3.Pages.Stories.EditModel
 
@@ -78,6 +80,13 @@
                        validate-msg="@CTConfig.CStory.ValidateTagCount">
     </tag-search-select>
     
+    <status-select ref="status"
+                   label="@nameof(Model.Input.Status)"
+                   :value="@((int)Model.Input.Status)"
+                   statuses-str="@JsonSerializer.Serialize(Enum.GetNames(typeof(EStoryStatus)))"
+                   desc="Choose the status of your story">
+    </status-select>
+    
     <input-toggle ref="published"
                   label="@nameof(Model.Input.Published)"
                   value="@Model.Input.Published"
@@ -100,5 +109,6 @@
     <script src="~/js/dist/components/rating-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/toggle-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/status-select-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/editors/story.min.js" asp-append-version="true"></script>
 }

@@ -1,28 +1,28 @@
 @use "../vars" as v
 @use "../mixins/focus" as f
 
-.club-role-slider
+.status-select
   
   .selector
     display: flex
-    flex-direction: row-reverse
-    flex-wrap: wrap
     width: 100%
     min-height: 48px
-    
+    flex-wrap: wrap
+
     input[type=radio]
       display: none
-  
-      &:checked~label
+
+      &:checked+label
         background-color: v.$accent-25
 
-      &:hover~label
+      &:hover+label
         background-color: v.$accent-50
-      
+
     label
       flex: 1
       display: flex
       align-items: center
       justify-content: center
       cursor: pointer
+      padding: .5rem
       +f.focus
