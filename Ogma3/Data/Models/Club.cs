@@ -17,7 +17,7 @@ namespace Ogma3.Data.Models
         
         public DateTime CreationDate { get; set; }
 
-        public ICollection<ClubMember> ClubMembers { get; set; }
+        public ICollection<ClubMember> ClubMembers { get; set; } = new List<ClubMember>();
         public ICollection<ClubThread> Threads { get; set; }
         public ICollection<Folder> Folders { get; set; }
         public ICollection<Report> Reports { get; set; }

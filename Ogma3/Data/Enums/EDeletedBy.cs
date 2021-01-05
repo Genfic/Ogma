@@ -5,8 +5,8 @@ namespace Ogma3.Data.Enums
     public enum EDeletedBy
     {
         [Description("Comment deleted by its author.")]
-        User,
+        User = 1,
         [Description("Comment deleted by a member of the staff.")]
-        Staff
+        Staff = 2
     }
 }

@@ -69,20 +69,18 @@ namespace Ogma3.Pages.Clubs
                 Slug = Input.Name.Friendlify(),
                 Hook = Input.Hook,
                 Description = Input.Description,
-                CreationDate = DateTime.Now,
-                ClubMembers = new List<ClubMember>()
+                CreationDate = DateTime.Now
             };
             await _context.Clubs.AddAsync(club);
 
             var member = new ClubMember
             {
                 MemberId = (long) uid,
+                Role = EClubMemberRoles.Founder,
+                MemberSince = DateTime.Now
             };
-
             club.ClubMembers.Add(member);
-            await _context.SaveChangesAsync();
-
-            member.Role = EClubMemberRoles.Founder;
+            
             await _context.SaveChangesAsync();
             
             if (Input.Icon != null && Input.Icon.Length > 0)

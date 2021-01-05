@@ -83,7 +83,6 @@ namespace Ogma3.Data
             // Extensions
             builder.HasPostgresExtension("uuid-ossp");
             
-            
             // Enums
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();

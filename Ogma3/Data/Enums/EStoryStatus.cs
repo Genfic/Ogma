@@ -2,9 +2,9 @@ namespace Ogma3.Data.Enums
 {
     public enum EStoryStatus
     {
-        InProgress,
-        Completed,
-        OnHiatus,
-        Cancelled
+        InProgress = 1,
+        Completed = 2,
+        OnHiatus = 3,
+        Cancelled = 4
     }
 }
