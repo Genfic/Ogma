@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
@@ -69,6 +71,12 @@ namespace Ogma3
             
             // HttpContextAccessor
             services.AddHttpContextAccessor();
+            
+            // ActionContextAccessor
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            
+            // UrlHelperFactory
+            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
             // Identity
             services.AddIdentity<OgmaUser, OgmaRole>(config =>

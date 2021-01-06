@@ -7,15 +7,14 @@ namespace Utils.Extensions
     {
         public static string FormatDateWithDaySuffix(this DateTime dateTime)
         {
-            var suffix = dateTime.Day switch
+            var suffix = (dateTime.Day % 10) switch
             {
-                1 or 21 or 31 => "st",
-                2 or 22 => "nd",
-                3 or 23 => "rd",
+                1 => "st",
+                2 => "nd",
+                3 => "rd",
                 _ => "th"
             };
-            var date = dateTime.ToString("d~ MMMM yyyy", CultureInfo.InvariantCulture);
-            return date.Replace("~", suffix);
+            return string.Format(dateTime.ToString("d{0} MMMM yyyy", CultureInfo.InvariantCulture), suffix);
         }
     }
 }

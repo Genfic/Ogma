@@ -31,7 +31,9 @@ namespace Ogma3.Pages.Shelves
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             
-            if (Shelf == null || !Shelf.IsPublic) return NotFound();
+            if (Shelf == null) return NotFound();
+            if (Shelf.OwnerId == User?.GetNumericId()) return Page();
+            if (!Shelf.IsPublic) return NotFound();
 
             return Page();
         }

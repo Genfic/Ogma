@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Ogma3.Data.Models;
 
@@ -13,14 +12,12 @@ namespace Ogma3.Data.DTOs
         public bool IsPublic { get; set; }
         public bool IsQuick { get; set; }
         public string Color { get; set; }
-        public IEnumerable<Story> Stories;
         public int Count { get; set; }
         public string? Icon { get; set; }
         public long? IconId { get; set; }
         public bool? DoesContainBook { get; set; }
 
-        public static ShelfFromApiDTO FromShelf(Shelf shelf, long? bookId = null) =>
-            new ShelfFromApiDTO
+        public static ShelfFromApiDTO FromShelf(Shelf shelf, long? bookId = null) => new ShelfFromApiDTO
             {
                 Id = shelf.Id,
                 Name = shelf.Name,
@@ -29,13 +26,12 @@ namespace Ogma3.Data.DTOs
                 IsPublic = shelf.IsPublic,
                 IsQuick = shelf.IsQuickAdd,
                 Color = shelf.Color,
-                Stories = shelf.Stories,
-                Count = shelf.Stories.Count,
+                Count = shelf.Stories?.Count ?? 0,
                 Icon = shelf.Icon?.Name,
                 IconId = shelf.Icon?.Id,
                 DoesContainBook = bookId == null
-                    ? (bool?) null
-                    : shelf.Stories.Any(ss => ss.Id == bookId)
+                    ? null
+                    : shelf.Stories?.Any(ss => ss.Id == bookId)
             };
     }
 }

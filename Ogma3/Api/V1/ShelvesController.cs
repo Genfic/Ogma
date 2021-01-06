@@ -19,12 +19,10 @@ namespace Ogma3.Api.V1
     public class ShelvesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<OgmaUser> _userManager;
         
-        public ShelvesController(ApplicationDbContext context, UserManager<OgmaUser> userManager)
+        public ShelvesController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
         
 
@@ -37,24 +35,27 @@ namespace Ogma3.Api.V1
         [HttpGet("user/{name:alpha}")]
         public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync(string name)
         {
-            var user = await _context.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
-            if (user == null) return NotFound();
+            var uid = User?.GetNumericId();
             
-            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var shelvesQuery = user.Id.ToString() == currentUser 
-                ? _context.Shelves.Where(s => s.Owner == user) 
-                : _context.Shelves.Where(s => s.Owner == user && s.IsPublic);
-            
-            var shelves = await shelvesQuery
-                .Include(s => s.Stories)
-                .Include(s => s.Icon)
-                .AsNoTracking()
+            var shelves = await _context.Shelves
+                .Where(s => s.Owner.NormalizedUserName == name.ToUpper())
+                .Where(s => s.OwnerId == uid || s.IsPublic)
+                .Select(s => new ShelfFromApiDTO
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Description = s.Description,
+                    IsDefault = s.IsDefault,
+                    IsPublic = s.IsPublic,
+                    IsQuick = s.IsQuickAdd,
+                    Color = s.Color,
+                    Count = s.Stories.Count,
+                    Icon = s.Icon.Name,
+                    IconId = s.IconId
+                })
                 .ToListAsync();
             
-            return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, null)));
+            return Ok(shelves);
         }        
         
         /// <summary>
@@ -65,7 +66,7 @@ namespace Ogma3.Api.V1
         [HttpGet("user/{story:int}")]
         public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetCurrentUserShelvesAsync(long story)
         {
-            var uid = User.GetNumericId();
+            var uid = User?.GetNumericId();
             if (uid == null) return Ok();
 
             var shelves = await _context.Shelves
@@ -79,33 +80,6 @@ namespace Ogma3.Api.V1
         }
 
         /// <summary>
-        /// Get shelf by ID
-        /// </summary>
-        /// <param name="id">ID of the shelf</param>
-        /// <returns></returns>
-        // GET: api/Shelves/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ShelfFromApiDTO>> GetShelfAsync(long id)
-        {
-            var shelf = await _context.Shelves
-                .Where(s => s.Id == id)
-                .Include(s => s.Stories)
-                    .ThenInclude(st => st.Tags)
-                        .ThenInclude(t => t.Namespace)
-                .Include(s => s.Stories)
-                    .ThenInclude(s => s.Author)
-                .Include(s => s.Stories)
-                    .ThenInclude(s => s.Rating)
-                .Include(s => s.Icon)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-
-                if (shelf == null) return NotFound();
-            
-            return Ok(ShelfFromApiDTO.FromShelf(shelf));
-        }
-
-        /// <summary>
         /// Create a new shelf
         /// </summary>
         /// <param name="data">Shelf data</param>
@@ -116,20 +90,22 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<ShelfFromApiDTO>> PostShelfAsync(PostData data)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User?.GetNumericId();
+            if (uid is null) return Unauthorized("Not logged in");
+            
             var shelf = new Shelf
             {
                 Name        = data.Name,
                 Description = data.Description,
-                Owner       = user,
+                OwnerId     = (long) uid,
                 IsPublic    = data.IsPublic,
                 IsQuickAdd  = data.IsQuick,
                 Color       = data.Color,
                 IconId      = data.Icon
             };
-            _context.Shelves.Add(shelf);
+            await _context.Shelves.AddAsync(shelf);
             await _context.SaveChangesAsync();
-            return Ok(ShelfFromApiDTO.FromShelf(shelf));
+            return Ok();
         }
 
         /// <summary>
@@ -144,27 +120,29 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult> AddToShelfAsync(long shelfId, long storyId)
         {
+            var uid = User?.GetNumericId();
+            if (uid is null) return Unauthorized("Not logged in");
+            
             var shelf = await _context.Shelves.FindAsync(shelfId);
-            var story = await _context.Stories.FindAsync(storyId);
-            var user  = await _userManager.GetUserAsync(User);
+
+            var storyExists = await _context.Stories.AnyAsync(s => s.Id == storyId);
             
             // Check existence
-            if (shelf == null || story == null) return NotFound();
+            if (shelf is null || !storyExists) return NotFound();
             // Check ownership
-            if (shelf.Owner != user) return Forbid();
+            if (shelf.OwnerId != uid) return Unauthorized("Not owner");
             
-            var exists = _context.ShelfStories.Any(ss => ss.Shelf == shelf && ss.Story == story);
-
+            var exists = _context.ShelfStories.Any(ss => ss.ShelfId == shelfId && ss.StoryId == storyId);
             var shelfStory = new ShelfStory
             {
-                Shelf = shelf,
-                Story = story
+                ShelfId = shelfId,
+                StoryId = storyId
             };
 
             if (exists)
                 _context.ShelfStories.Remove(shelfStory);
             else
-                _context.ShelfStories.Add(shelfStory);
+                await _context.ShelfStories.AddAsync(shelfStory);
 
             await _context.SaveChangesAsync();
             return Ok(shelfStory);
@@ -182,13 +160,15 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult<ShelfFromApiDTO>> PutShelfAsync(long id, PostData data)
         {
+            var uid = User?.GetNumericId();
+            if (uid is null) return Unauthorized("Not logged in");
+            
             var shelf = await _context.Shelves.FindAsync(id);
-            var user  = await _userManager.GetUserAsync(User);
 
             // Check existence
             if (shelf == null) return NotFound();
             // Check ownership
-            if (shelf.Owner != user) return Forbid();
+            if (shelf.OwnerId != uid) return Unauthorized("Not owner");
             
             shelf.Name        = data.Name;
             shelf.Description = data.Description;
@@ -211,13 +191,15 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult> DeleteShelfAsync(long id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User?.GetNumericId();
+            if (uid is null) return Unauthorized("Not logged in");
+            
             var shelf = await _context.Shelves.FindAsync(id);
             
             // Check existence
             if (shelf == null) return NotFound();
             // Check ownership
-            if (shelf.Owner != user) return Forbid();
+            if (shelf.OwnerId != uid) return Unauthorized("Not owner");
             
             _context.Shelves.Remove(shelf);
             await _context.SaveChangesAsync();

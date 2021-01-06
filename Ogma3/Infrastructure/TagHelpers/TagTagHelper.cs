@@ -1,6 +1,9 @@
 #nullable enable
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
@@ -10,13 +13,11 @@ namespace Ogma3.Infrastructure.TagHelpers
 {
     public class TagTagHelper : TagHelper
     {
-        private readonly IHttpContextAccessor _accessor;
-        private readonly LinkGenerator _generator;
+        private readonly IUrlHelper _urlHelper;
 
-        public TagTagHelper(IHttpContextAccessor accessor, LinkGenerator generator)
+        public TagTagHelper(IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
         {
-            _accessor = accessor;
-            _generator = generator;
+            _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
             Tag = new TagDto();
         }
 
@@ -24,8 +25,7 @@ namespace Ogma3.Infrastructure.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var href = _generator
-                           .GetUriByPage(_accessor.HttpContext, "/Tag", null, new { id = Tag.Id, slug = Tag.Slug });
+            var href = _urlHelper.Page("/Tag", new { id = Tag.Id, slug = Tag.Slug });
             
             output.TagName = "a";
             output.AddClass("tag", NullHtmlEncoder.Default);
