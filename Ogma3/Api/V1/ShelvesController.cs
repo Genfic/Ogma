@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Mappings;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Extensions;
 
@@ -33,26 +32,14 @@ namespace Ogma3.Api.V1
         /// <returns>List of `ShelfFromApiDTO` objects</returns>
         // GET: api/Shelves/user?name=JohnSmith&story=5
         [HttpGet("user/{name:alpha}")]
-        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetUserShelvesAsync(string name)
+        public async Task<ActionResult<IEnumerable<ShelfDto>>> GetUserShelvesAsync(string name)
         {
             var uid = User?.GetNumericId();
             
             var shelves = await _context.Shelves
                 .Where(s => s.Owner.NormalizedUserName == name.ToUpper())
                 .Where(s => s.OwnerId == uid || s.IsPublic)
-                .Select(s => new ShelfFromApiDTO
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Description = s.Description,
-                    IsDefault = s.IsDefault,
-                    IsPublic = s.IsPublic,
-                    IsQuick = s.IsQuickAdd,
-                    Color = s.Color,
-                    Count = s.Stories.Count,
-                    Icon = s.Icon.Name,
-                    IconId = s.IconId
-                })
+                .Select(ShelfMappings.ToShelfDto())
                 .ToListAsync();
             
             return Ok(shelves);
@@ -64,19 +51,17 @@ namespace Ogma3.Api.V1
         /// <param name="story">Story to check for</param>
         /// <returns></returns>
         [HttpGet("user/{story:int}")]
-        public async Task<ActionResult<IEnumerable<ShelfFromApiDTO>>> GetCurrentUserShelvesAsync(long story)
+        public async Task<ActionResult<IEnumerable<ShelfDto>>> GetCurrentUserShelvesAsync(long story)
         {
             var uid = User?.GetNumericId();
             if (uid == null) return Ok();
 
             var shelves = await _context.Shelves
                 .Where(s => s.Owner.Id == uid)
-                .Include(s => s.Stories)
-                .Include(s => s.Icon)
+                .Select(ShelfMappings.ToShelfDto(story))
                 .AsNoTracking()
                 .ToListAsync();
-            
-            return Ok(shelves.Select(s => ShelfFromApiDTO.FromShelf(s, story)));
+            return Ok(shelves);
         }
 
         /// <summary>
@@ -88,7 +73,7 @@ namespace Ogma3.Api.V1
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult<ShelfFromApiDTO>> PostShelfAsync(PostData data)
+        public async Task<ActionResult<ShelfDto>> PostShelfAsync(PostData data)
         {
             var uid = User?.GetNumericId();
             if (uid is null) return Unauthorized("Not logged in");
@@ -158,7 +143,7 @@ namespace Ogma3.Api.V1
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult<ShelfFromApiDTO>> PutShelfAsync(long id, PostData data)
+        public async Task<ActionResult<ShelfDto>> PutShelfAsync(long id, PostData data)
         {
             var uid = User?.GetNumericId();
             if (uid is null) return Unauthorized("Not logged in");
@@ -178,7 +163,9 @@ namespace Ogma3.Api.V1
             shelf.IconId      = data.Icon;
             
             await _context.SaveChangesAsync();
-            return Ok(ShelfFromApiDTO.FromShelf(shelf));
+
+            var s = ShelfMappings.ToShelfDto().Compile().Invoke(shelf);
+            return Ok(s);
         }
 
         /// <summary>

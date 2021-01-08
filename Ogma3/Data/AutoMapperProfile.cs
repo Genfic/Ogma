@@ -103,11 +103,6 @@ namespace Ogma3.Data
 
             // Comment mappings
             CreateMap<Comment, CommentDto>()
-                // .ForMember(
-                //     cd => cd.Body,
-                //     opts
-                //         => opts.MapFrom(c => Markdown.ToHtml(c.Body, md))
-                // )
                 .ForMember(
                     cd => cd.Owned,
                     opts
@@ -168,7 +163,7 @@ namespace Ogma3.Data
                     => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
                 );
             CreateMap<Club, ClubCard>();
-            
+
             // Folder mappings
             CreateMap<Folder, FolderCard>();
             CreateMap<Folder, FolderMinimal>();

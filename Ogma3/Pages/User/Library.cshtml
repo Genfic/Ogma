@@ -97,10 +97,10 @@
     <ul class="items-list">
         <li v-for="s in shelves">
             <div class="deco" v-bind:style="{background: s.color}">
-                <i class="material-icons-outlined">{{s.icon ?? "bookmark_outline"}}</i>
+                <i class="material-icons-outlined">{{s.iconName ?? "bookmark_outline"}}</i>
             </div>
             <a class="main" :href="'/Shelf/' + s.id">
-                <h3 class="name">{{ s.name }} – {{ s.count }}</h3>
+                <h3 class="name">{{ s.name }} – {{ s.storiesCount }}</h3>
                 <span class="desc">{{ s.description }}</span>
             </a>
             @if (Model.IsCurrentUser)

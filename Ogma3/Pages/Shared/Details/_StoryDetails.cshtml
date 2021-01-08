@@ -169,7 +169,7 @@
 
     @if (User.Identity?.IsAuthenticated ?? false)
     {
-        <div class="my-modal" v-if="showShelves" v-on:click.self="showShelves = false">
+        <div class="my-modal" v-cloak v-if="showShelves" v-on:click.self="showShelves = false">
             <div class="content">
                 <h3>Add to bookshelf</h3>
                 <ul class="items-list">
