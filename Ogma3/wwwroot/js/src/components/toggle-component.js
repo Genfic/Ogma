@@ -19,8 +19,18 @@ Vue.component('input-toggle', {
             checked: this.value,
         }
     },
+    methods: {
+        update: function (value) {
+            this.$emit('input', value);
+        }
+    },
+    watch: {
+        value() {
+            this.checked = this.value;
+        }
+    },
     template: `
-        <div class="o-form-group">
+        <div class="o-form-group keep-size">
             <label>{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>
 
@@ -28,6 +38,7 @@ Vue.component('input-toggle', {
                 <input type="checkbox"
                      :name="name"
                      :id="name"
+                     @change="update($event.target.checked)"
                      v-model="checked"
                      value="true">
               

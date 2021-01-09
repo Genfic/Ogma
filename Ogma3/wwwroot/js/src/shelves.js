@@ -17,7 +17,7 @@ let shelves_vue = new Vue({
         },
         showForm: false,
         csrf: null,
-        err: [],
+        err: null,
         shelves: [],
         route: null,
         owner: null
@@ -57,6 +57,7 @@ let shelves_vue = new Vue({
                             headers: { "RequestVerificationToken" : this.csrf } 
                         })
                         .then(_ => {
+                            this.cancelEdit();
                             this.getShelves()
                         })
                         .catch(console.error); 
@@ -86,7 +87,11 @@ let shelves_vue = new Vue({
         getShelves: function() {
             axios.get(`${this.route}/user/${this.owner}`)
                 .then(response => {
-                    this.shelves = response.data
+                    if (response.status === 200) {
+                        this.shelves = response.data
+                    } else {
+                        this.shelves = null;
+                    }
                 })
                 .catch(console.error);
         },

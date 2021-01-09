@@ -32,16 +32,16 @@ namespace Ogma3.Api.V1
         [Throttle(Count = 10, TimeUnit = TimeUnit.Minute)]
         public async Task<ActionResult<Quote>> GetQuote(int id)
         {
-            var q = await _context.Quotes
+            var quote = await _context.Quotes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(q => q.Id == id);
 
-            if (q == null)
+            if (quote == null)
             {
                 return NotFound();
             }
 
-            return q;
+            return quote;
         }
 
         

@@ -44,7 +44,7 @@ let story_vue = new Vue({
                 {
                     headers: { "RequestVerificationToken" : this.csrf }
                 })
-                .then(res => {
+                .then(_ => {
                     this.getShelves();
                 })
                 .catch(console.error)

@@ -5,27 +5,52 @@
 form.form
   display: flex
   flex-direction: column
+  
+  .form-row
+    display: flex
+    flex-direction: row
+    padding: .5rem 0
     
-  & .o-form-group
+    .o-form-group
+      flex: 1
+      padding: 0 .5rem
+      margin: 0
+      &:first-child
+        padding-left: 0
+      &:last-child
+        padding-right: 0
+        
+      &.keep-size
+        flex: 0
+    
+  .o-form-group
     display: flex
     flex-direction: column 
     margin-top: 1rem
     
-    & input, 
-    & textarea
+    input, 
+    textarea
       padding: .5rem
       background-color: v.$background
       color: v.$foreground
       
-    & textarea
+    textarea
       min-height: 3rem
       
-    & label
+    input[type=color]
+      cursor: pointer
+      padding: .25rem
+      min-height: 48px
+      min-width: 48px
+      +ab.active-border
+      
+    label
       font-weight: 600
       font-size: .95rem
       margin: 0
+      white-space: nowrap
       
-    & .ratings
+    .ratings
       display: grid
       grid-template-columns: repeat(2, 1fr)
       grid-gap: .5rem
@@ -35,10 +60,10 @@ form.form
         &>.rating
           margin-bottom: .5rem
         
-      & .rating
+      .rating
         position: relative
       
-        & .radio
+        .radio
           opacity: 0
           position: absolute
           
@@ -50,7 +75,7 @@ form.form
             border-color: v.$accent
             box-shadow: 0 0 0 3px v.$accent-25
             
-        & .radio-label
+        .radio-label
           display: flex
           cursor: pointer
           
@@ -73,7 +98,7 @@ form.form
       padding: .25rem
       font-size: .9rem
       
-  & .o-form-control
+  .o-form-control
     +f.focus
     
     &.changed
@@ -85,7 +110,7 @@ form.confirm
   &>.buttons
     display: flex
   
-    & .button
+    .button
       border: 1px solid v.$foreground-25
       padding: .5rem
       &:hover
@@ -120,18 +145,24 @@ form.confirm
 
 .select-group
   display: flex
+  flex-direction: row
   background-color: v.$background
 
   label
+    display: inline-flex
+    align-items: center
+    justify-content: center
     cursor: pointer
     padding: .25rem
     margin: 0
+    flex: 1
     +ab.active-border
 
     &:hover
       background-color: v.$accent-5
 
-  input[type=checkbox]
+  input[type=checkbox],
+  input[type=radio]
     position: absolute !important
     height: 1px
     width: 1px

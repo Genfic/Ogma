@@ -40,10 +40,10 @@ body > #site-content, body > #site-content-wide {
   margin-top: 3.5rem;
   padding: 15px max(min(5vw, 5rem), 2rem);
   flex: 1;
-  width: min(100vw, calc(1000px + 5rem));
+  width: min(100%, calc(1000px + 5rem));
 }
 body > #site-content-wide {
-  max-width: min(100vw, 1200px);
+  max-width: min(100%, 1200px);
 }
 body > footer {
   width: 100%;
@@ -744,6 +744,7 @@ img.avatar {
 #story-app > .story-details > .titlebar > h1.title {
   font-size: 2rem;
   line-height: 3rem;
+  word-wrap: break-word;
 }
 #story-app > .story-details > .tags {
   display: flex;
@@ -2824,12 +2825,32 @@ form.form {
   display: flex;
   flex-direction: column;
 }
+form.form .form-row {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem 0;
+}
+form.form .form-row .o-form-group {
+  flex: 1;
+  padding: 0 0.5rem;
+  margin: 0;
+}
+form.form .form-row .o-form-group:first-child {
+  padding-left: 0;
+}
+form.form .form-row .o-form-group:last-child {
+  padding-right: 0;
+}
+form.form .form-row .o-form-group.keep-size {
+  flex: 0;
+}
 form.form .o-form-group {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
 }
-form.form .o-form-group input, form.form .o-form-group textarea {
+form.form .o-form-group input,
+form.form .o-form-group textarea {
   padding: 0.5rem;
   background-color: var(--background);
   color: var(--foreground);
@@ -2837,10 +2858,24 @@ form.form .o-form-group input, form.form .o-form-group textarea {
 form.form .o-form-group textarea {
   min-height: 3rem;
 }
+form.form .o-form-group input[type=color] {
+  cursor: pointer;
+  padding: 0.25rem;
+  min-height: 48px;
+  min-width: 48px;
+  border: 1px solid var(--foreground-25);
+}
+form.form .o-form-group input[type=color]:hover {
+  border-color: var(--foreground-50);
+}
+form.form .o-form-group input[type=color]:focus {
+  border-color: var(--accent);
+}
 form.form .o-form-group label {
   font-weight: 600;
   font-size: 0.95rem;
   margin: 0;
+  white-space: nowrap;
 }
 form.form .o-form-group .ratings {
   display: grid;
@@ -2946,12 +2981,17 @@ form.confirm > .buttons .button.cancel {
 
 .select-group {
   display: flex;
+  flex-direction: row;
   background-color: var(--background);
 }
 .select-group label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding: 0.25rem;
   margin: 0;
+  flex: 1;
   border: 1px solid var(--foreground-25);
 }
 .select-group label:hover {
@@ -2963,7 +3003,8 @@ form.confirm > .buttons .button.cancel {
 .select-group label:hover {
   background-color: var(--accent-5);
 }
-.select-group input[type=checkbox] {
+.select-group input[type=checkbox],
+.select-group input[type=radio] {
   position: absolute !important;
   height: 1px;
   width: 1px;
@@ -2971,10 +3012,12 @@ form.confirm > .buttons .button.cancel {
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
 }
-.select-group input[type=checkbox]:checked + label {
+.select-group input[type=checkbox]:checked + label,
+.select-group input[type=radio]:checked + label {
   background-color: var(--accent-25);
 }
-.select-group input[type=checkbox]:focus + label {
+.select-group input[type=checkbox]:focus + label,
+.select-group input[type=radio]:focus + label {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }

@@ -27,8 +27,13 @@ Vue.component('input-counter', {
     },
     data: function () {
         return {
-            text: this.value,
+            text: this.value ?? '',
             name: this.label.replace(/\s+/g, '')
+        }
+    },
+    watch: {
+        value() {
+            this.text = this.value;
         }
     },
     computed: {
@@ -45,6 +50,11 @@ Vue.component('input-counter', {
                 .replace('{2}', `${this.min}`);
         }
     },
+    methods: {
+        update: function (value) {
+            this.$emit('input', value);
+        }
+    },
     template: `
         <div class="o-form-group">
             <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
@@ -53,6 +63,7 @@ Vue.component('input-counter', {
                    :id="name" 
                    type="text" 
                    class="o-form-control active-border" 
+                   @input="update($event.target.value)"
                    v-model="text">
             <div class="counter" :class="validate ? '' : 'invalid'">
                 <div class="o-progress-bar" :style="{ width: Math.min(100, 100 * (countChars / max)) + '%' }"></div>

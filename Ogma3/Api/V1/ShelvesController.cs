@@ -10,6 +10,7 @@ using Ogma3.Data.DTOs;
 using Ogma3.Data.Mappings;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Extensions;
+using Serilog;
 
 namespace Ogma3.Api.V1
 {
@@ -29,11 +30,12 @@ namespace Ogma3.Api.V1
         /// Get all shelves that belong to user of `name`
         /// </summary>
         /// <param name="name">Name of the shelf owner</param>
-        /// <returns>List of `ShelfFromApiDTO` objects</returns>
-        // GET: api/Shelves/user?name=JohnSmith&story=5
-        [HttpGet("user/{name:alpha}")]
+        /// <returns>List of `ShelfDto` objects</returns>
+        // GET: api/Shelves/JohnSmith
+        [HttpGet("user/{name}")]
         public async Task<ActionResult<IEnumerable<ShelfDto>>> GetUserShelvesAsync(string name)
         {
+            Log.Debug($">>>>>>>>>>> Fetching shelves for user {name}");
             var uid = User?.GetNumericId();
             
             var shelves = await _context.Shelves
@@ -42,7 +44,7 @@ namespace Ogma3.Api.V1
                 .Select(ShelfMappings.ToShelfDto())
                 .ToListAsync();
             
-            return Ok(shelves);
+            return shelves.Count > 0 ? Ok(shelves) : NoContent();
         }        
         
         /// <summary>
@@ -61,7 +63,8 @@ namespace Ogma3.Api.V1
                 .Select(ShelfMappings.ToShelfDto(story))
                 .AsNoTracking()
                 .ToListAsync();
-            return Ok(shelves);
+            
+            return shelves.Count > 0 ? Ok(shelves) : NoContent();
         }
 
         /// <summary>
@@ -163,9 +166,7 @@ namespace Ogma3.Api.V1
             shelf.IconId      = data.Icon;
             
             await _context.SaveChangesAsync();
-
-            var s = ShelfMappings.ToShelfDto().Compile().Invoke(shelf);
-            return Ok(s);
+            return Ok(ShelfMappings.ToShelfDto().Compile().Invoke(shelf));
         }
 
         /// <summary>
