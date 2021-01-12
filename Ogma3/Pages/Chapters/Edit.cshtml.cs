@@ -48,12 +48,14 @@ namespace Ogma3.Pages.Chapters
                 CTConfig.CChapter.MaxNotesLength,
                 ErrorMessage = "The {0} cannot exceed {1} characters."
             )]
+            [Display(Name = "Start notes")]
             public string StartNotes { get; set; }
             
             [StringLength(
                 CTConfig.CChapter.MaxNotesLength,
                 ErrorMessage = "The {0} cannot exceed {1} characters."
             )]
+            [Display(Name = "End notes")]
             public string EndNotes { get; set; }
 
             [Required]

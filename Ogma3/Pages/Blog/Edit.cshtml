@@ -25,35 +25,40 @@
         <span>Please correct the following errors</span>
     </div>
     
-    <input-counter ref="title"
-        :min="@CTConfig.CBlogpost.MinTitleLength"
-        :max="@CTConfig.CBlogpost.MaxTitleLength"
-        validate-msg="@CTConfig.CBlogpost.ValidateLengthMsg"
-        label="@nameof(Model.Input.Title)"
-        value="@Model.Input.Title">
-    </input-counter>
+    <div class="o-form-group">
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" class="o-form-control active-border">
+        <span asp-validation-for="Input.Title"></span>
+    </div>
+
+    <div class="o-form-group">
+        <label asp-for="Input.Body"></label>
+        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true"></textarea>
+        <span asp-validation-for="Input.Body"></span>
+    </div>
     
-    <textarea-counter ref="body"
-                      :min="@CTConfig.CBlogpost.MinBodyLength"
-                      :max="@CTConfig.CBlogpost.MaxBodyLength"
-                      validate-msg="@CTConfig.CBlogpost.ValidateLengthMsg"
-                      label="@nameof(Model.Input.Body)"
-                      value="@Model.Input.Body">
-    </textarea-counter>
+    <div class="o-form-group">
+        <label asp-for="Input.Tags"></label>
+        <p class="desc">Comma-separated tags</p>
+        <input asp-for="Input.Tags" data-max-count="10" class="o-form-control active-border">
+        <span asp-validation-for="Input.Tags"></span>
+    </div>
     
-    <input-blog-tags ref="tags"
-                     :max="@CTConfig.CBlogpost.MaxTagsAmount"
-                     validate-msg="@CTConfig.CBlogpost.ValidateTagsCountMsg"
-                     desc="Comma-separated tags"
-                     label="@nameof(Model.Input.Tags)"
-                     value="@Model.Input.Tags">
-    </input-blog-tags>
-    
-    <input-toggle ref="published"
-                  label="@nameof(Model.Input.Published)"
-                  value="@Model.Input.Published"
-                  desc="Control whether this blogpost is visible or not">
-    </input-toggle>
+    <div class="o-form-group keep-size">
+        <label asp-for="Input.Published"></label>
+        <p class="desc">Control whether the post is published or not</p>
+
+        <div class="toggle-input">
+            <input asp-for="Input.Published">
+          
+            <label asp-for="Input.Published">
+                <span class="toggle"></span>
+                <span class="label-on">On!!!</span>
+                <span class="label-off">Off!</span>
+            </label>
+          
+        </div>
+    </div>
     
     @if (Model.Input.StoryMinimal != null)
     {
@@ -85,11 +90,9 @@
     
 </form>
 
-@section Scripts {
-    <script src="~/js/dist/components/input-blog-tags-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/toggle-component.min.js" asp-append-version="true"></script>
-    <script src="/js/dist/editors/blogpost.min.js" asp-append-version="true"></script>
+<partial name="Shared/_ValidationScriptsPartial"/>
+
+@section Scripts { 
+    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
 }
 

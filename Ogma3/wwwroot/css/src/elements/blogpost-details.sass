@@ -36,11 +36,17 @@
     display: flex
     
     &>.tag
-      padding: .15rem
+      padding: .25rem
       text-decoration: none
+      +f.focus
+      
       &:hover
         background-color: v.$accent-10
-      +f.focus
+      
+      &>.name
+        &:before
+          content: '#'
+          color: v.$foreground-50
         
   .unavailable
     padding: .5rem

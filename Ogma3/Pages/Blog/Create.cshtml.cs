@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Minimals;
 using Utils.Extensions;
@@ -53,16 +54,18 @@ namespace Ogma3.Pages.Blog
         {
             [Required]
             [StringLength(CTConfig.CBlogpost.MaxTitleLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+                ErrorMessage = "The {0} must be between {1} and {2} characters long.",
                 MinimumLength = CTConfig.CBlogpost.MinTitleLength)]
             public string Title { get; set; }
             
             [Required]
             [StringLength(CTConfig.CBlogpost.MaxBodyLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+                ErrorMessage = "The {0} must be between {1} and {2} characters long.",
                 MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
             
+            [RegularExpression("^([^,]*,){0,9}[^,]*$", ErrorMessage = "You can use no more than 10 tags")]
+            [BlogpostTagsValidation(10)]
             public string Tags { get; set; }
 
             public ChapterMinimal? ChapterMinimal { get; set; }
@@ -93,7 +96,7 @@ namespace Ogma3.Pages.Blog
                 .Split(',')
                 .Where(t => !string.IsNullOrWhiteSpace(t))
                 .ToList()
-                .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
+                .Select(t => t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()
                 .ToArray();
 

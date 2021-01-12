@@ -84,8 +84,8 @@ function setCookie(name, value, expires = null, secure = false, sameSite = null)
 
 /**
  * Normalizes a number within a given [min, max] range to a [0, 1] range
- * @param min The minimum value the given number can take
- * @param max The maximum value the given number can take
+ * @param {number} min The minimum value the given number can take
+ * @param {number} max The maximum value the given number can take
  * @returns {number} The given number normalized into [0, 1] range
  */
 Number.prototype.normalize = function (min, max) {
@@ -95,8 +95,8 @@ Number.prototype.normalize = function (min, max) {
 
 /**
  * Clamps a given number to a given [min, max] range
- * @param min The lower edge to clamp to, by default 0
- * @param max The upper edge to clamp to, by default 1
+ * @param {number} min The lower edge to clamp to, by default 0
+ * @param {number} max The upper edge to clamp to, by default 1
  * @returns {number} 
  */
 Number.prototype.clamp = function (min = 0, max = 1) {
@@ -104,4 +104,15 @@ Number.prototype.clamp = function (min = 0, max = 1) {
     if (this < min) return min;
     if (this > max) return max;
     return this;
+}
+
+/**
+ * Properly splits a string, that is returns an empty array of the string is empty, null, or undefined
+ * @param {number} split What to split the string on
+ * @returns {Array}
+ */
+String.prototype.properSplit = function (split) {
+    return this.length === 0 || this === null || this === undefined
+        ? []
+        : this.split(split);
 }

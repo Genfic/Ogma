@@ -313,6 +313,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\js\src\hashparser.ts" />
+    <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
   </ItemGroup>
 
 

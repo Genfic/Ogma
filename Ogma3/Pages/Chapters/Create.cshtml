@@ -9,56 +9,46 @@
 
 <h4>New chapter for <em>@Model.Story.Title</em></h4>
 
-<div class="row">
-    <div class="col-md-12">
-        <form class="form" id="chapter" method="post" v-on:submit="onSubmit">
-        
-            <div asp-validation-summary="All">
-                <span>Please correct the following errors</span>
-            </div>
-            
-            <input-counter ref="title"
-                :min="@(CTConfig.CChapter.MinTitleLength)"
-                :max="@CTConfig.CChapter.MaxTitleLength"
-                validate-msg="@CTConfig.CChapter.ValidateLengthMsg"
-                label="@nameof(Model.Input.Title)"
-                value="@Model.Input.Title">
-            </input-counter>
-            
-            <textarea-counter ref="body"
-                              :min="@CTConfig.CChapter.MinBodyLength"
-                              :max="@CTConfig.CChapter.MaxBodyLength"
-                              :wordcount="true"
-                              :rows="20"
-                              validate-msg="@CTConfig.CChapter.ValidateLengthMsg"
-                              label="@nameof(Model.Input.Body)"
-                              value="@Model.Input.Body">
-            </textarea-counter>
-            
-            <textarea-counter ref="start-notes"
-                              :max="@CTConfig.CChapter.MaxNotesLength"
-                              validate-msg="@CTConfig.CChapter.ValidateNoteLengthMsg"
-                              label="@nameof(Model.Input.StartNotes)"
-                              value="@Model.Input.StartNotes">
-            </textarea-counter>
-            
-            <textarea-counter ref="end-notes"
-                              :max="@CTConfig.CChapter.MaxNotesLength"
-                              validate-msg="@CTConfig.CChapter.ValidateNoteLengthMsg"
-                              label="@nameof(Model.Input.EndNotes)"
-                              value="@Model.Input.EndNotes">
-            </textarea-counter>
-            
-            <div class="o-form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-            </div>
-            
-        </form>
-    </div>
-</div>
+<form class="form" id="chapter" method="post" v-on:submit="onSubmit">
 
-@section Scripts {
-    <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script> 
-    <script src="~/js/dist/editors/chapter.min.js" asp-append-version="true"></script>
+    <div asp-validation-summary="All">
+        <span>Please correct the following errors</span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" class="o-form-control active-border">
+        <span asp-validation-for="Input.Title"></span>
+    </div>
+
+    <div class="o-form-group">
+        <label asp-for="Input.Body"></label>
+        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true"></textarea>
+        <span asp-validation-for="Input.Body"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.StartNotes"></label>
+        <textarea asp-for="Input.StartNotes" class="o-form-control active-border" rows="5"></textarea>
+        <span asp-validation-for="Input.StartNotes"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.EndNotes"></label>
+        <textarea asp-for="Input.EndNotes" class="o-form-control active-border" rows="5"></textarea>
+        <span asp-validation-for="Input.EndNotes"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <input type="submit" value="Create" class="btn btn-primary"/>
+    </div>
+    
+</form>
+
+
+<partial name="Shared/_ValidationScriptsPartial"/>
+
+@section Scripts { 
+    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
 }
+

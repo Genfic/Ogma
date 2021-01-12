@@ -58,6 +58,7 @@
     padding: .25rem
 
     &>.tag
+      display: flex
       border: none
       padding: 0 .25rem
       margin: 4px
@@ -65,4 +66,7 @@
       white-space: nowrap
       &:hover
         color: v.$foreground
+      &:before
+        content: '#'
+        color: v.$foreground-50
     

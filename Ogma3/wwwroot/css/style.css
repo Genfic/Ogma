@@ -249,6 +249,7 @@ button {
 }
 
 .btn {
+  cursor: pointer;
   width: 100%;
   background-color: transparent;
   color: var(--accent);
@@ -1427,6 +1428,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   padding: 0.25rem;
 }
 .blogpost-card .tags > .tag {
+  display: flex;
   border: none;
   padding: 0 0.25rem;
   margin: 4px;
@@ -1435,6 +1437,10 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 }
 .blogpost-card .tags > .tag:hover {
   color: var(--foreground);
+}
+.blogpost-card .tags > .tag:before {
+  content: "#";
+  color: var(--foreground-50);
 }
 
 .blogpost-details {
@@ -1472,15 +1478,19 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   display: flex;
 }
 .blogpost-details .tags > .tag {
-  padding: 0.15rem;
+  padding: 0.25rem;
   text-decoration: none;
-}
-.blogpost-details .tags > .tag:hover {
-  background-color: var(--accent-10);
 }
 .blogpost-details .tags > .tag:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
+}
+.blogpost-details .tags > .tag:hover {
+  background-color: var(--accent-10);
+}
+.blogpost-details .tags > .tag > .name:before {
+  content: "#";
+  color: var(--foreground-50);
 }
 .blogpost-details .unavailable {
   padding: 0.5rem;
@@ -2553,6 +2563,12 @@ form.search select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }
+.toggle-input > label > .label-off {
+  display: inline;
+}
+.toggle-input > label > .label-on {
+  display: none;
+}
 .toggle-input > input {
   opacity: 0;
   position: absolute;
@@ -2561,10 +2577,16 @@ form.search select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-25);
 }
+.toggle-input > input:checked + label > .label-off {
+  display: none;
+}
+.toggle-input > input:checked + label > .label-on {
+  display: inline;
+}
 .toggle-input > input:checked + label .toggle {
   flex-direction: row-reverse;
 }
-.toggle-input > input:checked + label .toggle > .dot {
+.toggle-input > input:checked + label .toggle:before {
   background-color: var(--accent-75);
 }
 .toggle-input .toggle {
@@ -2576,7 +2598,8 @@ form.search select:focus {
   padding: 2px;
   margin-right: 0.5rem;
 }
-.toggle-input .toggle > .dot {
+.toggle-input .toggle:before {
+  content: "";
   height: 1rem;
   width: 1rem;
   border-radius: 50%;
@@ -3025,6 +3048,7 @@ form.confirm > .buttons .button.cancel {
 .counter {
   text-align: end;
   position: relative;
+  display: flex;
 }
 .counter:hover > .o-progress-bar {
   background-color: var(--accent-25);
@@ -3041,16 +3065,14 @@ form.confirm > .buttons .button.cancel {
   transition: width 0.05s ease, background-color 0.1s ease-in-out;
 }
 .counter span {
-  margin-top: 0.05rem;
-  margin-bottom: 0.05rem;
+  margin: 0.05rem 0.2rem;
 }
 .counter span:first-child {
   margin-right: 0;
-  margin-left: 0.2rem;
 }
 .counter span:last-child {
-  margin-right: 0.2rem;
   margin-left: 0;
+  flex: 1;
 }
 .counter.invalid {
   color: red;

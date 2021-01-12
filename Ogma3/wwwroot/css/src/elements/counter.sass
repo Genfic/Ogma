@@ -3,6 +3,8 @@
 .counter
   text-align: end
   position: relative
+  display: flex
+  
   &:hover
     &>.o-progress-bar
       background-color: v.$accent-25
@@ -19,14 +21,13 @@
     transition: width .05s ease, background-color .1s ease-in-out
 
   & span
-    margin-top: .05rem
-    margin-bottom: .05rem
+    margin: .05rem .2rem
     &:first-child
       margin-right: 0
-      margin-left: .2rem
     &:last-child
-      margin-right: .2rem
       margin-left: 0
+      flex: 1
+      
   &.invalid
     color: red
     &>.o-progress-bar

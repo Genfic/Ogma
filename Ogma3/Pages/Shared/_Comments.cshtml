@@ -4,7 +4,7 @@
 @inject OgmaConfig Config
 @model long
 
-<div class="comments-container" id="comments-container">
+<div class="comments-container" id="comments-container" v-cloak>
 
     <div id="thread" data-thread="@Model" v-if="!thread"></div>
     <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>

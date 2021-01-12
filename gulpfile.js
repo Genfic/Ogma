@@ -17,7 +17,7 @@ const nano = require('cssnano');
 
 // JS processors
 const ts = require('gulp-typescript');
-const tsProject = ts.createProject('./tsconfig.json');
+const tsProject = ts.createProject('tsconfig.json');
 const terser = require('gulp-terser');
 
 // Dirs
@@ -75,8 +75,7 @@ gulp.task('js', () => {
         .pipe(terser({ 
             mangle: { 
                 toplevel: false 
-            },
-            ecma: '5'
+            }
         }))
         .on('error', err => {
             console.error(err)
@@ -95,7 +94,11 @@ gulp.task('ts', () => {
         .pipe(tsProject())
         .pipe(gulp.dest(`${dir.jsroot}/dist`))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(terser({ mangle: { toplevel: true } }))
+        .pipe(terser({ 
+            mangle: { 
+                toplevel: true 
+            } 
+        }))
         .on('error', err => {
             console.error(err)
             this.emit('end')
@@ -107,5 +110,5 @@ gulp.task('ts', () => {
 gulp.task('watch:ts', () => gulp.watch(watch.ts, gulp.series('ts')))
 
 // All tasks
-gulp.task('all', gulp.parallel(['css', 'js']));
-gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'all']));
+gulp.task('all', gulp.parallel(['css', 'js', 'ts']));
+gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'watch:ts', 'all']));

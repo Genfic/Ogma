@@ -32,6 +32,7 @@ namespace Ogma3.Data.Repositories
             return await _context.Blogposts
                 .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetAllPaginatedCardsForUser)} -> {userName} {page} {perPage}")
                 .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
+                .OrderByDescending(b => b.PublishDate)
                 .Paginate(page, perPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
@@ -52,6 +53,7 @@ namespace Ogma3.Data.Repositories
                 .Where(b => b.Author.NormalizedUserName == userName.Normalize().ToUpper())
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
+                .OrderByDescending(b => b.PublishDate)
                 .Paginate(page, perPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()

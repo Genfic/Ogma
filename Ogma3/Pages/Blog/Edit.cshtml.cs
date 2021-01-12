@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Repositories;
+using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Minimals;
 using Utils.Extensions;
@@ -46,6 +47,9 @@ namespace Ogma3.Pages.Blog
                 ErrorMessage = CTConfig.CBlogpost.ValidateLengthMsg,
                 MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
             public string Body { get; set; }
+            
+            [RegularExpression("^([^,]*,){0,9}[^,]*$", ErrorMessage = "You can use no more than 10 tags")]
+            [BlogpostTagsValidation(10)]
             public string Tags { get; set; }
             
             public ChapterMinimal? ChapterMinimal { get; set; }
@@ -118,7 +122,7 @@ namespace Ogma3.Pages.Blog
                 .Split(',')
                 .Where(t => !string.IsNullOrWhiteSpace(t))
                 .ToList()
-                .Select(t => '#' + t.Trim(' ', '#', ',').Friendlify())
+                .Select(t => t.Trim(' ', '#', ',').Friendlify())
                 .Distinct()
                 .ToArray() ?? Array.Empty<string>();
 
