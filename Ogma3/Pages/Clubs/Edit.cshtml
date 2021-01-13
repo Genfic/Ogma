@@ -13,38 +13,33 @@
         <span>Please correct the following errors</span>
     </div>
 
-    <input-counter ref="title"
-                   :min="@CTConfig.CClub.MinNameLength"
-                   :max="@CTConfig.CClub.MaxNameLength"
-                   validate-msg="@CTConfig.CClub.ValidateLengthMsg"
-                   label="@nameof(Model.Input.Name)"
-                   value="@Model.Input.Name"
-                   desc="Try something catchy">
-    </input-counter>
-
-    <textarea-counter ref="desc"
-                      :max="@CTConfig.CClub.MaxDescriptionLength"
-                      validate-msg="@CTConfig.CClub.ValidateLengthMsg"
-                      label="@nameof(Model.Input.Description)"
-                      value="@Model.Input.Description"
-                      desc="This will show on the club's home page">
-    </textarea-counter>
-
-    <input-counter ref="hook"
-                   :min="@CTConfig.CClub.MinHookLength"
-                   :max="@CTConfig.CClub.MaxHookLength"
-                   validate-msg="@CTConfig.CClub.ValidateLengthMsg"
-                   label="@nameof(Model.Input.Hook)"
-                   value="@Model.Input.Hook"
-                   desc="The short description that will appear on the clubs list">
-    </input-counter>
-
-    <input-file ref="cover"
-                :max="@CTConfig.CClub.CoverMaxWeight"
-                validate-msg="@CTConfig.CClub.ValidateFileWeight"
-                label="@nameof(Model.Input.Icon)"
-                desc="Something that will set your club apart">
-    </input-file>
+    <div class="o-form-group">
+        <label asp-for="Input.Name"></label>
+        <span class="desc">Try something catchy</span>
+        <input asp-for="Input.Name" class="o-form-control active-border">
+        <span asp-validation-for="Input.Name"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Hook"></label>
+        <span class="desc">The short description that will appear on the clubs list</span>
+        <input asp-for="Input.Hook" class="o-form-control active-border">
+        <span asp-validation-for="Input.Hook"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Description"></label>
+        <span class="desc">This will show on the club's home page</span>
+        <textarea asp-for="Input.Description" class="o-form-control active-border" rows="5"></textarea>
+        <span asp-validation-for="Input.Description"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Icon"></label>
+        <span class="desc">Something that will set your club apart</span>
+        <input asp-for="Input.Icon" class="o-form-control active-border">
+        <span asp-validation-for="Input.Icon"></span>
+    </div>
 
     <div class="o-form-group">
         <button type="submit" class="btn btn-primary">Save changes</button>
@@ -52,9 +47,8 @@
 
 </form>
 
+<partial name="Shared/_ValidationScriptsPartial"/>
+
 @section Scripts {
-    <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/input-file-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/club.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
 }

@@ -15,9 +15,31 @@ interface String {
     for (const i of inputs) {
         
         // If there's no count specified, get max length. If that's not there, just use 0.
-        let max: number = i.dataset.maxCount 
-            ? Number(i.dataset.maxCount) 
-            : i.maxLength ?? 0;
+        let max: number;
+        if (i.dataset.maxCount) {
+            // `data-max-count` is set, so that's what we use
+            max = Number(i.dataset.maxCount);
+        } else if(i.dataset.valFilesizeMax && i.type === 'file') {
+            // It's a file input with maximum file size defined, so we get that
+            max = Number(i.dataset.valFilesizeMax);
+        } else {
+            // Just a regular input, so grab `maxLength`
+            max = i.maxLength ?? 0;
+        }
+        
+        // Function to get the current size
+        let currentSize: () => number = function (): number {
+            if (i.dataset.maxCount) {
+                // `data-max-count` is set, so we're counting comma-separated values
+                return i.value.split(',').length;
+            } else if(i.dataset.valFilesizeMax && i.type === 'file') {
+                // It's a file input with maximum file size defined, so we get the file size
+                return (i as HTMLInputElement).files[0]?.size ?? 0;
+            } else {
+                // Just a regular ol' input, get the value length
+                return i.value.length;
+            }
+        }
         
         let min: number = Number(i.dataset.valLengthMin) ?? 0;
         
@@ -31,11 +53,7 @@ interface String {
         
         // Create the character counter
         let count: HTMLElement = document.createElement('span');
-        // If `data-max-count` has been specified, that means we're counting elements of a comma-separated list
-        // If not, we're just counting chars
-        let length = i.dataset.maxCount
-            ? i.value.split(',').length
-            : i.value.length;
+        let length = currentSize()
         count.innerText = `${length}/${max}`;
         
         // Append the progress bar to the container
@@ -57,12 +75,7 @@ interface String {
         
         // Listen to input
         i.addEventListener('input', _ => {
-
-            // If `data-max-count` has been specified, that means we're counting elements of a comma-separated list
-            // If not, we're just counting chars
-            let length = i.dataset.maxCount
-                ? i.value.split(',').length
-                : i.value.length;
+            let length = currentSize();
             
             // Update character counter
             count.innerText = `${length}/${max}`;

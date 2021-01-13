@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -39,19 +37,30 @@ namespace Ogma3.Pages.Clubs
         public class InputModel
         {
                 [Required]
-                [MinLength(CTConfig.CClub.MinNameLength)]
-                [MaxLength(CTConfig.CClub.MaxNameLength)]
+                [StringLength(
+                    CTConfig.CClub.MaxNameLength, 
+                    ErrorMessage = CTConfig.CClub.ValidateLengthMsg,
+                    MinimumLength = CTConfig.CClub.MinNameLength
+                )]
                 public string Name { get; set; }
                 
-                [MaxLength(CTConfig.CClub.MaxHookLength)]
+                [Required]
+                [StringLength(
+                    CTConfig.CClub.MaxHookLength, 
+                    ErrorMessage = CTConfig.CClub.ValidateLengthMsg,
+                    MinimumLength = CTConfig.CClub.MinHookLength
+                )]
                 public string Hook { get; set; }
                 
-                [MaxLength(CTConfig.CClub.MaxDescriptionLength)]
+                [StringLength(
+                    CTConfig.CClub.MaxDescriptionLength, 
+                    ErrorMessage = CTConfig.CClub.ValidateLengthMsg
+                )]
                 public string Description { get; set; }
                 
                 [DataType(DataType.Upload)]
-                [MaxFileSize(CTConfig.CStory.CoverMaxWeight)]
-                [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
+                [MaxFileSize(CTConfig.CClub.CoverMaxWeight)]
+                [AllowedExtensions(new []{".jpg", ".jpeg", ".png", ".webp"})]
                 public IFormFile Icon { get; set; }
         }
 
@@ -69,15 +78,13 @@ namespace Ogma3.Pages.Clubs
                 Slug = Input.Name.Friendlify(),
                 Hook = Input.Hook,
                 Description = Input.Description,
-                CreationDate = DateTime.Now
             };
             await _context.Clubs.AddAsync(club);
 
             var member = new ClubMember
             {
                 MemberId = (long) uid,
-                Role = EClubMemberRoles.Founder,
-                MemberSince = DateTime.Now
+                Role = EClubMemberRoles.Founder
             };
             club.ClubMembers.Add(member);
             

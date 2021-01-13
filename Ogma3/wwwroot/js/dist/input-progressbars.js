@@ -9,9 +9,35 @@
     ];
     for (const i of inputs) {
         // If there's no count specified, get max length. If that's not there, just use 0.
-        let max = i.dataset.maxCount
-            ? Number(i.dataset.maxCount)
-            : (_a = i.maxLength) !== null && _a !== void 0 ? _a : 0;
+        let max;
+        if (i.dataset.maxCount) {
+            // `data-max-count` is set, so that's what we use
+            max = Number(i.dataset.maxCount);
+        }
+        else if (i.dataset.valFilesizeMax && i.type === 'file') {
+            // It's a file input with maximum file size defined, so we get that
+            max = Number(i.dataset.valFilesizeMax);
+        }
+        else {
+            // Just a regular input, so grab `maxLength`
+            max = (_a = i.maxLength) !== null && _a !== void 0 ? _a : 0;
+        }
+        // Function to get the current size
+        let currentSize = function () {
+            var _a, _b;
+            if (i.dataset.maxCount) {
+                // `data-max-count` is set, so we're counting comma-separated values
+                return i.value.split(',').length;
+            }
+            else if (i.dataset.valFilesizeMax && i.type === 'file') {
+                // It's a file input with maximum file size defined, so we get the file size
+                return (_b = (_a = i.files[0]) === null || _a === void 0 ? void 0 : _a.size) !== null && _b !== void 0 ? _b : 0;
+            }
+            else {
+                // Just a regular ol' input, get the value length
+                return i.value.length;
+            }
+        };
         let min = (_b = Number(i.dataset.valLengthMin)) !== null && _b !== void 0 ? _b : 0;
         // Create the main container
         let counter = document.createElement('div');
@@ -21,11 +47,7 @@
         progress.classList.add('o-progress-bar');
         // Create the character counter
         let count = document.createElement('span');
-        // If `data-max-count` has been specified, that means we're counting elements of a comma-separated list
-        // If not, we're just counting chars
-        let length = i.dataset.maxCount
-            ? i.value.split(',').length
-            : i.value.length;
+        let length = currentSize();
         count.innerText = `${length}/${max}`;
         // Append the progress bar to the container
         counter.appendChild(progress);
@@ -43,11 +65,7 @@
         // Listen to input
         i.addEventListener('input', _ => {
             var _a;
-            // If `data-max-count` has been specified, that means we're counting elements of a comma-separated list
-            // If not, we're just counting chars
-            let length = i.dataset.maxCount
-                ? i.value.split(',').length
-                : i.value.length;
+            let length = currentSize();
             // Update character counter
             count.innerText = `${length}/${max}`;
             // Update progress bar progress

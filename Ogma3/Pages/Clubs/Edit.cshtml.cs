@@ -37,19 +37,30 @@ namespace Ogma3.Pages.Clubs
             public long Id { get; set; }
             
             [Required]
-            [MinLength(CTConfig.CClub.MinNameLength)]
-            [MaxLength(CTConfig.CClub.MaxNameLength)]
+            [StringLength(
+                CTConfig.CClub.MaxNameLength, 
+                ErrorMessage = CTConfig.CClub.ValidateLengthMsg,
+                MinimumLength = CTConfig.CClub.MinNameLength
+            )]
             public string Name { get; set; }
                 
-            [MaxLength(CTConfig.CClub.MaxHookLength)]
+            [Required]
+            [StringLength(
+                CTConfig.CClub.MaxHookLength, 
+                ErrorMessage = CTConfig.CClub.ValidateLengthMsg,
+                MinimumLength = CTConfig.CClub.MinHookLength
+            )]
             public string Hook { get; set; }
                 
-            [MaxLength(CTConfig.CClub.MaxDescriptionLength)]
+            [StringLength(
+                CTConfig.CClub.MaxDescriptionLength, 
+                ErrorMessage = CTConfig.CClub.ValidateLengthMsg
+            )]
             public string Description { get; set; }
                 
             [DataType(DataType.Upload)]
-            [MaxFileSize(CTConfig.CStory.CoverMaxWeight)]
-            [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
+            [MaxFileSize(CTConfig.CClub.CoverMaxWeight)]
+            [AllowedExtensions(new []{".jpg", ".jpeg", ".png", ".webp"})]
             public IFormFile Icon { get; set; }
         }
         public async Task<IActionResult> OnGetAsync(long? id)
