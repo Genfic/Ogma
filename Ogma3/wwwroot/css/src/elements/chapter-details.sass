@@ -1,4 +1,5 @@
 @use '../vars' as v
+@use "../mixins/focus" as f
 
 $notes-padding-x: .5rem
 $notes-padding-y: .25rem
@@ -7,6 +8,44 @@ $notes-padding-y: .25rem
   display: flex
   flex-direction: column
   align-items: center
+  
+  .navigation
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: auto
+    gap: .5rem
+    width: 100%
+    margin-top: 1rem
+    
+    a
+      display: flex
+      flex-direction: column
+      padding: .5rem
+      +f.focus
+      
+      .action
+        font-weight: bold
+        
+      .title
+        font-style: italic
+        color: v.$foreground
+        &:before, &:after
+          color: v.$foreground-50
+        &:before
+          content: '❝'
+          margin-right: .2rem
+        &:after
+          content: '❞'
+        
+        @media screen and (max-width: v.$mq-mobile-sm)
+          display: none
+    
+      &.previous
+        grid-column: 1
+        
+      &.next
+        grid-column: 2
+        text-align: right
 
 .chapter-details
   display: flex
@@ -52,6 +91,7 @@ $notes-padding-y: .25rem
       font-size: 1rem
     
   &>.body-container
+    margin-bottom: .5rem
     
     &>.notes
       text-align: justify

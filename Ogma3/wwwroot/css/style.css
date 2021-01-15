@@ -866,6 +866,52 @@ img.avatar {
   flex-direction: column;
   align-items: center;
 }
+.chapter-container .navigation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+.chapter-container .navigation a {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+.chapter-container .navigation a:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-25);
+}
+.chapter-container .navigation a .action {
+  font-weight: bold;
+}
+.chapter-container .navigation a .title {
+  font-style: italic;
+  color: var(--foreground);
+}
+.chapter-container .navigation a .title:before, .chapter-container .navigation a .title:after {
+  color: var(--foreground-50);
+}
+.chapter-container .navigation a .title:before {
+  content: "❝";
+  margin-right: 0.2rem;
+}
+.chapter-container .navigation a .title:after {
+  content: "❞";
+}
+@media screen and (max-width: 445px) {
+  .chapter-container .navigation a .title {
+    display: none;
+  }
+}
+.chapter-container .navigation a.previous {
+  grid-column: 1;
+}
+.chapter-container .navigation a.next {
+  grid-column: 2;
+  text-align: right;
+}
 
 .chapter-details {
   display: flex;
@@ -910,6 +956,9 @@ img.avatar {
   justify-content: center;
   color: var(--red-75);
   font-size: 1rem;
+}
+.chapter-details > .body-container {
+  margin-bottom: 0.5rem;
 }
 .chapter-details > .body-container > .notes {
   text-align: justify;

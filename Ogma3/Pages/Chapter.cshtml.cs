@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Repositories;
@@ -26,6 +27,12 @@ namespace Ogma3.Pages
             {
                 return NotFound();
             }
+            
+            var siblings = await _chaptersRepo.GetMicroSiblings(Chapter.StoryId, Chapter.Order);
+            
+            Chapter.Previous = siblings.FirstOrDefault(c => c.Order < Chapter.Order);
+            Chapter.Next = siblings.FirstOrDefault(c => c.Order > Chapter.Order);
+            
             return Page();
         }
     }

@@ -58,25 +58,23 @@
             </div>
         }
 
-        @* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
-            <div class="body-container">
+        <div class="body-container">
 
-                @if (!string.IsNullOrEmpty(Model.StartNotes))
-                {
-                    <div class="start notes"><span class="an">Author's notes:</span> @Model.StartNotes</div>
-                }
+            @if (!string.IsNullOrEmpty(Model.StartNotes))
+            {
+                <div class="start notes"><span class="an">Author's notes:</span> @Model.StartNotes</div>
+            }
 
-                <markdown preset="Basic" class="body @* tts-body *@" itemprop="text">
-                    @Model.Body
-                </markdown>
+            <markdown preset="Basic" class="body @* tts-body *@" itemprop="text">
+                @Model.Body
+            </markdown>
 
-                @if (!string.IsNullOrEmpty(Model.EndNotes))
-                {
-                    <div class="start notes"><span class="an">Author's notes:</span> @Model.EndNotes</div>
-                }
+            @if (!string.IsNullOrEmpty(Model.EndNotes))
+            {
+                <div class="start notes"><span class="an">Author's notes:</span> @Model.EndNotes</div>
+            }
 
-            </div>
-        @* </cache> *@
+        </div>
         
         <div class="read-progress">
             <div class="bar" :style="{width: (progress * 100) + '%'}"></div>
@@ -91,6 +89,29 @@
 
         @Html.AntiForgeryToken()
     </article>
+    
+    <div class="navigation">
+        @if (Model.Previous is not null)
+        {
+            <a asp-page="/Chapter"
+               asp-route-id="@Model.Previous.Id"
+               asp-route-slug="@Model.Previous.Slug"
+               class="previous active-border">
+                <span class="action">Previous</span>
+                <span class="title">@Model.Previous.Title</span>
+            </a>
+        }
+        @if (Model.Next is not null)
+        {
+            <a asp-page="/Chapter"
+               asp-route-id="@Model.Next.Id"
+               asp-route-slug="@Model.Next.Slug"
+               class="next active-border">
+                <span class="action">Next</span>
+                <span class="title">@Model.Next.Title</span>
+            </a>
+        }
+    </div>
     
     @* <div id="tts"> *@
     @*     <button id="tts-btn"> *@

@@ -1,4 +1,5 @@
 using System;
+using Ogma3.Data.DTOs;
 
 namespace Ogma3.Pages.Shared.Details
 {
@@ -22,5 +23,8 @@ namespace Ogma3.Pages.Shared.Details
         public long CommentsThreadId { get; set; }
         public bool IsPublished { get; set; }
         public long? ContentBlockId { get; set; }
+
+        public ChapterMicroDto? Previous { get; set; }
+        public ChapterMicroDto? Next { get; set; }
     }
 }

@@ -1,9 +1,10 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data.DTOs;
 using Ogma3.Pages.Shared.Details;
 using Ogma3.Pages.Shared.Minimals;
 
@@ -30,6 +31,23 @@ namespace Ogma3.Data.Repositories
                 .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<ChapterMicroDto>> GetMicroSiblings(long storyId, uint ordinal)
+        {
+            return await _context.Chapters
+                .TagWith($"{nameof(ChaptersRepository)}.{nameof(GetMicroSiblings)} -> {storyId} {ordinal}")
+                .Where(c => c.StoryId == storyId)
+                .Where(c => c.Order == ordinal - 1 || c.Order == ordinal + 1)
+                .Select(c => new ChapterMicroDto
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Slug = c.Slug,
+                    Order = c.Order
+                })
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<ChapterMinimal> GetMinimal(long id) //, bool publishedOnly = true)
