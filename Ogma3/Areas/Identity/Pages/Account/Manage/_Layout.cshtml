@@ -4,19 +4,23 @@
 
 <h1>Manage your account</h1>
 
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
+<div id="account">
+    <h4 class="account__header">Change your account settings</h4>
+
+    <nav class="account__nav">
+        <partial name="_ManageNav" />
+    </nav>
+    <div class="account__body">
+        @RenderBody()
     </div>
+
 </div>
 
 @section Scripts {
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/dist/alerts.min.js" asp-append-version="true"></script>
+}
+@section CSS
+{
+    <link rel="stylesheet" type="text/css" href="~/css/dist/account.min.css" asp-append-version="true"/>
 }

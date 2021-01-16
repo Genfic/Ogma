@@ -146,6 +146,22 @@ a:hover {
   color: var(--accent-75);
 }
 
+.text-accent {
+  color: var(--accent);
+}
+.text-green {
+  color: var(--green);
+}
+.text-red {
+  color: var(--red);
+}
+
+kbd {
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+  background-color: var(--foreground-10);
+}
+
 *,
 *::before,
 *::after {
@@ -2705,6 +2721,49 @@ form.search select:focus {
   right: 0;
 }
 
+.alert {
+  position: relative;
+  padding: 1rem;
+  border: 1px solid var(--foreground-25);
+}
+.alert:hover {
+  border-color: var(--foreground-50);
+}
+.alert:focus {
+  border-color: var(--accent);
+}
+.alert-success {
+  background-color: var(--green-10);
+  border-color: var(--green-25);
+}
+.alert-success:hover {
+  border-color: var(--green-50);
+}
+.alert-danger {
+  background-color: var(--red-10);
+  border-color: var(--red-25);
+}
+.alert-danger:hover {
+  border-color: var(--red-50);
+}
+.alert > button.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem;
+  border: none;
+  color: var(--foreground-75);
+  background: transparent;
+  font-size: 2rem;
+  line-height: 1rem;
+}
+.alert > button.close:hover {
+  color: var(--foreground);
+}
+.alert > button.close span {
+  display: block;
+}
+
 .md p {
   padding-bottom: 0.5rem;
 }
@@ -2916,6 +2975,36 @@ form.form .form-row .o-form-group:last-child {
 form.form .form-row .o-form-group.keep-size {
   flex: 0;
 }
+form.form .input-group {
+  display: grid;
+  grid-template: 1/1;
+}
+form.form .input-group > * {
+  grid-column: 1;
+  grid-row: 1;
+}
+form.form .input-group .input-group-append {
+  align-self: center;
+  justify-self: end;
+  padding: 0.5rem;
+}
+form.form .input-group.push {
+  display: flex;
+}
+form.form .input-group.push .o-form-control {
+  flex: 1;
+}
+form.form .input-group.push .input-group-append {
+  display: flex;
+  padding: 0;
+  align-self: stretch;
+}
+form.form .input-group.push .input-group-append button {
+  margin-left: 2px;
+}
+form.form .input-group.push .input-group-append button i {
+  font-size: 1rem;
+}
 form.form .o-form-group {
   display: flex;
   flex-direction: column;
@@ -2926,6 +3015,10 @@ form.form .o-form-group textarea {
   padding: 0.5rem;
   background-color: var(--background);
   color: var(--foreground);
+}
+form.form .o-form-group input[disabled],
+form.form .o-form-group textarea[disabled] {
+  color: var(--foreground-50);
 }
 form.form .o-form-group textarea {
   min-height: 3rem;

@@ -7,8 +7,8 @@ interface String {
     // so that it's easier to use/ Because of course `querySelectorAll()` returns some weird shit instead
     // of a proper array. Thank fuck for the spread operator.
     const inputs: (HTMLInputElement|HTMLTextAreaElement)[] = [
-        ...[...document.querySelectorAll('input.o-form-control')], 
-        ...[...document.querySelectorAll('textarea.o-form-control')]
+        ...[...document.querySelectorAll('input.o-form-control:not([disabled])')], 
+        ...[...document.querySelectorAll('textarea.o-form-control:not([disabled])')]
     ] as (HTMLInputElement|HTMLTextAreaElement)[];
     
     

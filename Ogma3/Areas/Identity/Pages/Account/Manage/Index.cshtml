@@ -7,41 +7,41 @@
 
 <h4>@ViewData["Title"]</h4>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post" enctype="multipart/form-data">
-            
-            <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled/>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Input.Avatar"></label>
-                <input asp-for="Input.Avatar" accept=".png,.jpg,.jpeg">
-                <span asp-validation-for="Input.Avatar" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Input.Title"></label>
-                <input asp-for="Input.Title" class="form-control"/>
-                <span asp-validation-for="Input.Title" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Input.Bio"></label>
-                <textarea asp-for="Input.Bio" class="form-control" rows="10"></textarea>
-                <span asp-validation-for="Input.Bio" class="text-danger"></span>
-            </div>
+<form id="profile-form" class="form" method="post" enctype="multipart/form-data">
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
-        </form>
+    <div class="o-form-group">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="o-form-control active-border" disabled/>
     </div>
-</div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Avatar"></label>
+        <input asp-for="Input.Avatar" accept=".png,.jpg,.jpeg" class="o-form-control active-border">
+        <span asp-validation-for="Input.Avatar" class="text-danger"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" class="o-form-control active-border"/>
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Input.Bio"></label>
+        <textarea asp-for="Input.Bio" class="o-form-control active-border" rows="10"></textarea>
+        <span asp-validation-for="Input.Bio" class="text-danger"></span>
+    </div>
+
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
 
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/dist/input-progressbars.js" asp-append-version="true"></script>
 }

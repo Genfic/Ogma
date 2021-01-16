@@ -24,6 +24,10 @@ Vue.component('comment', {
             type: Boolean,
             required: false,
             default: false
+        },
+        isAuthenticated: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -180,7 +184,7 @@ Vue.component('comment', {
               {{ date(mutComment.dateTime) }}
             </time>
 
-            <div class="actions">
+            <div v-if="isAuthenticated" class="actions">
               
               <button class="action-btn small red-hl" title="Report" v-on:click="report">
                 <i class="icon material-icons-outlined">flag</i>

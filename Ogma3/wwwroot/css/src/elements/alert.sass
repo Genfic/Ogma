@@ -1,0 +1,37 @@
+@use "../vars" as v
+@use "../mixins/active-border" as ab
+
+.alert
+  position: relative
+  padding: 1rem
+  +ab.active-border
+  
+  &-success
+    background-color: v.$green-10
+    border-color: v.$green-25
+    &:hover
+      border-color: v.$green-50
+    
+  &-danger
+    background-color: v.$red-10
+    border-color: v.$red-25
+    &:hover
+      border-color: v.$red-50
+    
+  &>button.close
+    position: absolute
+    top: 0
+    right: 0
+    padding: .25rem
+    border: none
+    color: v.$foreground-75
+    background: transparent
+    font-size: 2rem
+    line-height: 1rem
+    &:hover
+      color: v.$foreground
+      
+    span
+      display: block
+    
+    

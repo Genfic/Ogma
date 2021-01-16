@@ -50,6 +50,9 @@ namespace Ogma3.Api.V1
             var p = highlight.HasValue
                 ? (int) Math.Ceiling((double) (total - (highlight - 1)) / _ogmaConfig.CommentsPerPage)
                 : Math.Max(1, page ?? 1);
+            
+            // Send auth data
+            Response.Headers.Add("X-Authenticated", (User?.Identity?.IsAuthenticated ?? false).ToString());
 
             return new PaginationResult<CommentDto>
             {

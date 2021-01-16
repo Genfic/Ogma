@@ -18,6 +18,9 @@ let comments_vue = new Vue({
         // Name of the OP
         opName: null,
         
+        // Auth status
+        isAuthenticated: false,
+        
         highlight: null,
         collapse: JSON.parse(window.localStorage.getItem('collapse-deleted'))
     },
@@ -58,6 +61,7 @@ let comments_vue = new Vue({
                 .then(res => {
                     this.total = res.data.total;
                     this.page = res.data.page ?? this.page;
+                    this.isAuthenticated = res.headers['x-authenticated'].toLowerCase() === 'true';
                     
                     this.comments = res.data.elements.map(
                         (val, key) => ({val, key: (res.data.total - (this.page * this.perPage)) + (this.perPage - (key + 1))})

@@ -4,8 +4,8 @@
     // so that it's easier to use/ Because of course `querySelectorAll()` returns some weird shit instead
     // of a proper array. Thank fuck for the spread operator.
     const inputs = [
-        ...[...document.querySelectorAll('input.o-form-control')],
-        ...[...document.querySelectorAll('textarea.o-form-control')]
+        ...[...document.querySelectorAll('input.o-form-control:not([disabled])')],
+        ...[...document.querySelectorAll('textarea.o-form-control:not([disabled])')]
     ];
     for (const i of inputs) {
         // If there's no count specified, get max length. If that's not there, just use 0.

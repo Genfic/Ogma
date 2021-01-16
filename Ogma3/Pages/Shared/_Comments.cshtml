@@ -76,6 +76,7 @@
                          :idx="c.key"
                          :csrf="csrf"
                          :route="route"
+                         :is-authenticated="isAuthenticated"
                          :highlight="highlight === (c.key + 1)"
                          v-on:report="report"
                          v-on:change-hl="changeHighlight"/>

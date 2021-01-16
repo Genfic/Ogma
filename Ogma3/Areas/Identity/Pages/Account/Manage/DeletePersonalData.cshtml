@@ -7,24 +7,29 @@
 
 <h4>@ViewData["Title"]</h4>
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-danger" role="alert">
     <p>
         <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
     </p>
 </div>
 
 <div>
-    <form id="delete-user" method="post" class="form-group">
+    <form id="delete-user" method="post" class="form">
         <div asp-validation-summary="All" class="text-danger"></div>
+        
         @if (Model.RequirePassword)
         {
-            <div class="form-group">
+            <div class="o-form-group">
                 <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
+                <input asp-for="Input.Password" class="o-form-control active-border" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
         }
-        <button class="btn btn-danger" type="submit">Delete data and close my account</button>
+        
+        <div class="o-form-group">
+            <button class="btn btn-danger" type="submit">Delete data and close my account</button>
+        </div>
+        
     </form>
 </div>
 

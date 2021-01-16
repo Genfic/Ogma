@@ -61,8 +61,14 @@ form input[type=submit]:focus {
   border-color: var(--accent);
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
   color: var(--background) !important;
   background-color: var(--accent-75) !important;
   border-color: var(--accent) !important;
+}
+.nav-pills .nav-link {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
 }

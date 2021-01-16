@@ -312,8 +312,10 @@
 
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\js\src\alerts.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\hashparser.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
+    <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
   </ItemGroup>
 
 
