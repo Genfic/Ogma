@@ -32,6 +32,9 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+Ogma3/wwwroot/css/dist/
+Ogma3/wwwroot/js/dist/
+
 
 # Visual Studio 2015
 .vs/
@@ -44,6 +47,3 @@ Ogma3/logger-tokens.txt
 # Env variables
 ogma.env
 postgres/postgres.env
-
-# Separate projects
-MarkdigExtensions/

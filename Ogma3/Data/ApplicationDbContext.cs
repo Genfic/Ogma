@@ -20,14 +20,6 @@ namespace Ogma3.Data
         IdentityUserToken<long>
     >
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        {
-            NpgsqlConnection.GlobalTypeMapper
-                .MapEnum<EStoryStatus>()
-                .MapEnum<EClubMemberRoles>();
-        }
-
-
         public DbSet<Tag> Tags { get; set; }
         public DbSet<StoryTag> StoryTags { get; set; }
         public DbSet<Namespace> Namespaces { get; set; }
@@ -76,6 +68,15 @@ namespace Ogma3.Data
         public DbSet<InviteCode> InviteCodes { get; set; }
 
 
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+            // NOTE: When mapping an enum here, remember to also add it in `OnModelCreating()`
+            NpgsqlConnection.GlobalTypeMapper
+                .MapEnum<EStoryStatus>()
+                .MapEnum<EClubMemberRoles>()
+                .MapEnum<EDeletedBy>();
+        }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -84,6 +85,7 @@ namespace Ogma3.Data
             builder.HasPostgresExtension("uuid-ossp");
             
             // Enums
+            // NOTE: When adding an enum here, remember to also map it in `ApplicationDbContext()`
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();
             builder.HasPostgresEnum<EDeletedBy>();
