@@ -13,17 +13,22 @@ footer.footer
     flex-direction: row
     flex-wrap: wrap
     justify-content: center
-    width: min(100vw, 800px)
-    padding: .5rem
+    width: v.$body-width
+    padding: .5rem v.$body-padding-horizontal
+    
     @media screen and (max-width: v.$mq-mobile)
       flex-direction: column
     
     &>.col
       display: flex
       flex-direction: column
-      flex: 0 15%
+      flex: 1
       padding: 0 .5rem
       border-right: 1px solid v.$foreground-25
+      @media screen and (max-width: v.$mq-mobile)
+        border-right: none
+        padding-top: 1rem
+        
       &:last-child
         border-right: none
       

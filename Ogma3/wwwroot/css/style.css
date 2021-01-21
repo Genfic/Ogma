@@ -496,8 +496,8 @@ footer.footer > .cols {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  width: min(100vw, 800px);
-  padding: 0.5rem;
+  width: min(100%, calc(1000px + 5rem));
+  padding: 0.5rem max(min(5vw, 5rem), 2rem);
 }
 @media screen and (max-width: 570px) {
   footer.footer > .cols {
@@ -507,9 +507,15 @@ footer.footer > .cols {
 footer.footer > .cols > .col {
   display: flex;
   flex-direction: column;
-  flex: 0 15%;
+  flex: 1;
   padding: 0 0.5rem;
   border-right: 1px solid var(--foreground-25);
+}
+@media screen and (max-width: 570px) {
+  footer.footer > .cols > .col {
+    border-right: none;
+    padding-top: 1rem;
+  }
 }
 footer.footer > .cols > .col:last-child {
   border-right: none;

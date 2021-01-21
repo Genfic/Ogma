@@ -14,10 +14,10 @@ namespace Utils.Extensions
         /// <returns>Friendlified string</returns>
         public static string Friendlify(this string input)
         {
-            var str = new Regex("[^a-zA-Z0-9]").Replace(input, "-");
-            str = new Regex("-+").Replace(str, "-");
-
-            return str.ToLower().Trim('-');
+            return new Regex("[^a-zA-Z0-9]+")
+                .Replace(input, "-")
+                .ToLower()
+                .Trim('-');
         }
         
         /// <summary>
@@ -67,6 +67,7 @@ namespace Utils.Extensions
                         break;
                     }
                 }
+
                 head.Body = line.TrimStart('#').Trim();
 
                 var latest = headers

@@ -49,7 +49,7 @@ gulp.task('css', () => {
     const processors = [
         autoprefixer,
         discard({ removeAll: true }),
-        mqpacker(),
+        mqpacker,
         nano({ preset: 'default' })
     ];
     

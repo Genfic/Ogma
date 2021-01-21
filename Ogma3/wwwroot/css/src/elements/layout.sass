@@ -21,9 +21,9 @@ body
   
   &>#site-content
     margin-top: v.$nav-height
-    padding: 15px max(min(5vw, 5rem), 2rem)
+    padding: 15px v.$body-padding-horizontal
     flex: 1
-    width: min(100%, calc(1000px + 5rem))
+    width: v.$body-width
     &-wide
       @extend #site-content
       max-width: min(100%, 1200px)
