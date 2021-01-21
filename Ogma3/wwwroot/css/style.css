@@ -242,6 +242,10 @@ select {
     scroll-behavior: auto !important;
   }
 }
+summary {
+  cursor: pointer;
+}
+
 table.o-table {
   border-collapse: collapse;
 }
@@ -2288,7 +2292,7 @@ form.search select:focus {
 
 .document {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr fit-content(25%);
   gap: 1rem;
 }
@@ -2348,6 +2352,10 @@ form.search select:focus {
 }
 .document .toc .toc-h.h5 {
   margin-left: 5rem;
+}
+.document details {
+  grid-row: 3;
+  grid-column: 1;
 }
 
 #local-settings {
@@ -2846,12 +2854,16 @@ form.search select:focus {
 }
 .md table {
   margin: 0.5rem 0;
+  border-collapse: collapse;
 }
-.md table tr {
-  border-bottom: 1px solid var(--foreground-50);
+.md table tbody tr {
+  border-bottom: 1px solid var(--foreground-25);
 }
-.md table tr:first-child {
-  border-top: 1px solid var(--foreground-50);
+.md table tbody tr:first-child {
+  border-top: 1px solid var(--foreground-25);
+}
+.md table tbody tr:hover {
+  background-color: var(--foreground-10);
 }
 .md table td {
   padding: 0.5rem;

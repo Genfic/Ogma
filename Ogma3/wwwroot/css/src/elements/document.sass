@@ -3,7 +3,7 @@
 
 .document
   display: grid
-  grid-template-rows: auto 1fr
+  grid-template-rows: auto 1fr auto
   grid-template-columns: 1fr fit-content(25%)
   gap: 1rem
   @media screen and (max-width: v.$mq-mobile)
@@ -41,4 +41,8 @@
       @for $level from 1 to 6
         &.h#{$level}
           margin-left: #{$level}rem
+          
+  details
+    grid-row: 3
+    grid-column: 1
       

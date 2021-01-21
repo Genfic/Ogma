@@ -285,10 +285,6 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="wwwroot\js\src\quote.js">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Update="seed.json">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -315,6 +311,7 @@
     <TypeScriptCompile Include="wwwroot\js\src\alerts.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\hashparser.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
+    <TypeScriptCompile Include="wwwroot\js\src\native-components\quote-box.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
   </ItemGroup>
 

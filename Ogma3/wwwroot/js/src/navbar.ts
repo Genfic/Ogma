@@ -1,15 +1,11 @@
-(() => {
-    let last_known_scroll_position = 0;
-    let ticking = false;
-    const nav = document.getElementById('top-nav');
+(_ => {
+    let last_known_scroll_position: number = 0;
+    let ticking: boolean = false;
+    const nav: HTMLElement = document.getElementById('top-nav');
 
-    let lastPos = 0;
+    let lastPos: number = 0;
     function changeNav(pos) {
-        if (pos - lastPos > 0) {
-            nav.classList.add('compact');
-        } else {
-            nav.classList.remove('compact');
-        }
+        nav.classList.toggle('compact', pos - lastPos > 0)
         lastPos = pos;
     }
 

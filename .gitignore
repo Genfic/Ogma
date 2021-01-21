@@ -47,3 +47,6 @@ Ogma3/logger-tokens.txt
 # Env variables
 ogma.env
 postgres/postgres.env
+
+# Lighthouse reports
+*.report.html
