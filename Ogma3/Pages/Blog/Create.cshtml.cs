@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Infrastructure.Attributes;
@@ -21,12 +23,14 @@ namespace Ogma3.Pages.Blog
         private readonly ApplicationDbContext _context;
         private readonly StoriesRepository _storiesRepo;
         private readonly ChaptersRepository _chaptersRepo;
+        private readonly NotificationsRepository _notificationsRepo;
 
-        public CreateModel(ApplicationDbContext context, StoriesRepository storiesRepo, ChaptersRepository chaptersRepo)
+        public CreateModel(ApplicationDbContext context, StoriesRepository storiesRepo, ChaptersRepository chaptersRepo, NotificationsRepository notificationsRepo)
         {
             _context = context;
             _storiesRepo = storiesRepo;
             _chaptersRepo = chaptersRepo;
+            _notificationsRepo = notificationsRepo;
         }
 
         [BindProperty]
@@ -119,9 +123,22 @@ namespace Ogma3.Pages.Blog
             {
                 post.AttachedChapterId = Input.ChapterMinimalId;
             }
-
+            
             await _context.Blogposts.AddAsync(post);
             await _context.SaveChangesAsync();
+
+            var notificationRecipients = await _context.Users
+                .Where(u => u.Following.Any(a => a.Id == uid))
+                .Select(u => u.Id)
+                .ToListAsync();
+            
+            await _notificationsRepo.Create(
+                "The author you follow wrote a new blogpost",
+                ENotificationEvent.FollowedAuthorNewBlogpost,
+                notificationRecipients,
+                "/Blog/Post",
+                new { post.Id, post.Slug }
+            );
 
             return RedirectToPage("/User/Blog", new { name = uname });
         }

@@ -27,7 +27,8 @@ nav#top-nav
     bottom: 0
 
   &.compact
-    height: max(#{(v.$nav-height) * .65}, 30px)
+    $h: v.$nav-height * .65
+    height: max(#{$h}, 30px)
     @media (prefers-reduced-motion)
       height: v.$nav-height
     
@@ -65,7 +66,8 @@ nav#top-nav
         white-space: nowrap
         +f.focus
       
-      &>.nav-link
+      .nav-link
+        position: relative
         padding: 0 .5rem
         height: 100%
         display: flex
@@ -82,6 +84,22 @@ nav#top-nav
             padding-left: .5ch
             @media screen and (max-width: v.$mq-mobile)
               display: none
+              
+        &>.badge
+          position: absolute
+          bottom: 0
+          right: 0
+          display: block
+          background-color: v.$accent
+          color: v.$background
+          font-weight: bold
+          font-size: .8rem
+          text-align: center
+          line-height: 1
+          height: 1rem
+          min-width: 1rem
+          border: 1px solid v.$background
+          border-radius: .5rem
               
   time.timer
     font-family: "Courier New", Courier, monospace

@@ -1,5 +1,7 @@
 ﻿@using System.Security.Claims
+@using Ogma3.Api.V1
 @using Ogma3.Data.Models
+@using Ogma3.Services
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaUserManager UserManager
 
@@ -15,6 +17,10 @@
                          alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar" />
                 <span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
             </a>
+        </li>
+        
+        <li class="nav-item">
+            <o-notifications href="/notifications" endpoint="@Url.RouteUrl(nameof(NotificationsController))/count"></o-notifications>
         </li>
         
         <li class="nav-item">
@@ -41,3 +47,5 @@
     }
 
 </ul>
+
+@Html.Resource(@<script src="~/js/dist/native-components/notifications-button.min.js" asp-append-version="true"></script>)

@@ -311,6 +311,7 @@
     <TypeScriptCompile Include="wwwroot\js\src\alerts.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\hashparser.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
+    <TypeScriptCompile Include="wwwroot\js\src\native-components\notifications-button.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\native-components\quote-box.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
   </ItemGroup>

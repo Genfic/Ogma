@@ -64,5 +64,6 @@ namespace Ogma3.Data.Models
         }
 
         public ICollection<Report> Reports { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 }    

@@ -63,6 +63,10 @@ namespace Ogma3.Data
         
         // Follows
         public DbSet<UserFollow> FollowedUsers { get; set; }
+        
+        // Notifications
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<NotificationRecipients> NotificationRecipients { get; set; }
 
         // Invite codes
         public DbSet<InviteCode> InviteCodes { get; set; }
@@ -74,7 +78,8 @@ namespace Ogma3.Data
             NpgsqlConnection.GlobalTypeMapper
                 .MapEnum<EStoryStatus>()
                 .MapEnum<EClubMemberRoles>()
-                .MapEnum<EDeletedBy>();
+                .MapEnum<EDeletedBy>()
+                .MapEnum<ENotificationEvent>();
         }
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -89,6 +94,7 @@ namespace Ogma3.Data
             builder.HasPostgresEnum<EStoryStatus>();
             builder.HasPostgresEnum<EClubMemberRoles>();
             builder.HasPostgresEnum<EDeletedBy>();
+            builder.HasPostgresEnum<ENotificationEvent>();
 
             // Load model configurations
             builder.ApplyConfigurationsFromAssembly(typeof(OgmaUserConfiguration).Assembly);

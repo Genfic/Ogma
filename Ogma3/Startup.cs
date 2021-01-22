@@ -62,6 +62,7 @@ namespace Ogma3
             services.AddScoped<BlogpostsRepository>();
             services.AddScoped<CommentsRepository>();
             services.AddScoped<FoldersRepository>();
+            services.AddScoped<NotificationsRepository>();
 
             // Custom persistent config
             services.AddSingleton(OgmaConfig.Init("config.json"));
