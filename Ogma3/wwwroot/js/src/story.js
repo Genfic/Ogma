@@ -6,9 +6,6 @@ let story_vue = new Vue({
         readsRoute: null,
         csrf: null,
         
-        score: 0,
-        didVote: false,
-        
         storyId: null,
         
         shelves: [],
@@ -17,18 +14,6 @@ let story_vue = new Vue({
         read: []
     },
     methods: {
-        vote: function() {
-            axios.post(this.votesRoute, {
-                storyId: Number(this.storyId)
-            }, {
-                headers: { "RequestVerificationToken" : this.csrf }
-            })
-            .then(res => {
-                this.score = res.data.count;
-                this.didVote = res.data.didVote;
-            })
-            .catch(console.error)
-        },
         
         // Gets all existing shelves
         getShelves: function() {
@@ -81,18 +66,10 @@ let story_vue = new Vue({
         // Get story ID
         this.storyId = Number(document.getElementById('story-id').dataset.id);
         // Get routes
-        this.votesRoute = document.getElementById('votes-route').dataset.route;
         this.shelvesRoute = document.getElementById('shelves-route').dataset.route;
         this.readsRoute = document.getElementById('reads-route').dataset.route;
         // Get CSRF token
         this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
-        // Get initial score
-        axios.get(this.votesRoute + '/' + this.storyId)
-            .then(res => {
-                this.score = res.data.count;
-                this.didVote = res.data.didVote;
-            })
-            .catch(console.error);
         // get initial reads
         axios.get(this.readsRoute + '/' + this.storyId)
             .then(res => {

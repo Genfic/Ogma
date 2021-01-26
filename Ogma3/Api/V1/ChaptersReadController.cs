@@ -47,21 +47,23 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult> PostChaptersRead(ChaptersReadPost post)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+            
             var (chapter, story) = post;
             
             var chaptersReadObj = await _context.ChaptersRead
-                .FirstOrDefaultAsync(cr => cr.StoryId == story && cr.UserId == user.Id);
+                .FirstOrDefaultAsync(cr => cr.StoryId == story && cr.UserId == uid);
             
             // If no read list exists yet, create one with the chapter read
             List<long> res;
-            if (chaptersReadObj == null)
+            if (chaptersReadObj is null)
             {
                 var newCr = new ChaptersRead
                 {
                     StoryId = story,
-                    User = user,
-                    Chapters = new List<long> {chapter}
+                    UserId = (long) uid,
+                    Chapters = new List<long> { chapter }
                 };
                 await _context.ChaptersRead.AddAsync(newCr);
                 res = newCr.Chapters;
@@ -70,8 +72,16 @@ namespace Ogma3.Api.V1
             {
                 if (chaptersReadObj.Chapters.Contains(chapter))
                 {
-                    chaptersReadObj.Chapters.Remove(chapter);
-                    res = chaptersReadObj.Chapters;
+                    if (chaptersReadObj.Chapters.Count <= 1)
+                    {
+                        _context.ChaptersRead.Remove(chaptersReadObj);
+                        res = new List<long>();
+                    }
+                    else
+                    {
+                        chaptersReadObj.Chapters.Remove(chapter);
+                        res = chaptersReadObj.Chapters;
+                    }
                 }
                 else
                 {

@@ -789,6 +789,7 @@ img.avatar {
   font-size: 2rem;
   line-height: 3rem;
   word-wrap: break-word;
+  word-break: break-all;
 }
 #story-app > .story-details > .tags {
   display: flex;
@@ -845,6 +846,13 @@ img.avatar {
 #story-app > .chapters > .chapter > .left > * {
   padding: 0 0.25rem;
 }
+#story-app > .chapters > .chapter > .left > .order {
+  color: var(--foreground-75);
+  border-right: 1px solid var(--foreground-10);
+  border-left: 1px solid var(--foreground-10);
+  padding: 0 0.5rem;
+  margin: 0 0.2rem;
+}
 #story-app > .chapters > .chapter > .left > .title {
   color: var(--foreground);
 }
@@ -864,26 +872,19 @@ img.avatar {
   width: 1.2rem;
   height: 1.2rem;
   background-color: transparent;
-  border: 1px solid var(--foreground-25);
-}
-#story-app > .chapters > .chapter > .left > .read-status:hover {
-  border-color: var(--foreground-50);
-}
-#story-app > .chapters > .chapter > .left > .read-status:focus {
-  border-color: var(--accent);
+  color: var(--foreground-25);
+  border: none;
 }
 #story-app > .chapters > .chapter > .left > .read-status.active {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--foreground-75);
 }
-#story-app > .chapters > .chapter > .left > .read-status.active:after {
-  display: block;
-  content: "";
-  width: 80%;
-  height: 80%;
-  background-color: var(--green-25);
-  border: 1px solid var(--foreground-25);
+#story-app > .chapters > .chapter > .left > .read-status i {
+  color: inherit;
+  font-size: inherit;
+  line-height: 1.2rem;
 }
 #story-app > .info {
   border-top: 1px solid var(--foreground-25);
