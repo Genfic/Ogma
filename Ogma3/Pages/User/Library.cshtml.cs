@@ -16,7 +16,7 @@ namespace Ogma3.Pages.User
     public class LibraryModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private UserRepository _userRepo;
+        private readonly UserRepository _userRepo;
 
         public LibraryModel(ApplicationDbContext context, UserRepository userRepo)
         {

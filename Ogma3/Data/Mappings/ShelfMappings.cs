@@ -16,6 +16,7 @@ namespace Ogma3.Data.Mappings
             IsDefault = shelf.IsDefault,
             IsPublic = shelf.IsPublic,
             IsQuick = shelf.IsQuickAdd,
+            TrackUpdates = shelf.TrackUpdates,
             Color = shelf.Color,
             StoriesCount = shelf.Stories != null ? shelf.Stories.Count : 0,
             IconName = shelf.Icon != null ? shelf.Icon.Name : null,

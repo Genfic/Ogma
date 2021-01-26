@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,11 +22,22 @@ namespace Ogma3.Data.Repositories
             _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
         }
 
-        public async Task Create(string body, ENotificationEvent @event, IEnumerable<long> recipientIds, string page, object routeData)
+        private static string Message(ENotificationEvent @event) => @event switch
+        {
+            ENotificationEvent.System => "[SYSTEM]",
+            ENotificationEvent.WatchedStoryUpdated => "The story you're watching just updated.",
+            ENotificationEvent.WatchedThreadNewComment => "The comments thread you're following has a new comment.",
+            ENotificationEvent.FollowedAuthorNewBlogpost => "The author you're following just wrote a new blogpost.",
+            ENotificationEvent.FollowedAuthorNewStory => "The author you're following just created a new story.",
+            ENotificationEvent.CommentReply => "One of your comments just got a reply.",
+            _ => throw new ArgumentOutOfRangeException(nameof(@event), @event, null)
+        };
+
+        public async Task Create(ENotificationEvent @event, IEnumerable<long> recipientIds, string page, object routeData, string? body = null)
         {
             var notification = new Notification
             {
-                Body = body,
+                Body = body ?? Message(@event),
                 Event = @event,
                 Url = _urlHelper.Page(page, routeData)
             };

@@ -16,6 +16,7 @@ namespace Ogma3.Data.Models
         public bool IsDefault { get; set; }
         public bool IsPublic { get; set; }
         public bool IsQuickAdd { get; set; }
+        public bool TrackUpdates { get; set; }
         
         [MinLength(7)]
         public string? Color { get; set; }
@@ -25,6 +26,5 @@ namespace Ogma3.Data.Models
         
         // Stories
         public ICollection<Story> Stories { get; set; }
-    
     }
 }

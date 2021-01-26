@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 using Ogma3.Infrastructure.Extensions;
 using Utils.Extensions;
 
@@ -16,10 +18,12 @@ namespace Ogma3.Pages.Chapters
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly NotificationsRepository _notificationsRepo;
 
-        public CreateModel(ApplicationDbContext context)
+        public CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
         {
             _context = context;
+            _notificationsRepo = notificationsRepo;
         }
 
         public class GetModel
@@ -141,6 +145,19 @@ namespace Ogma3.Pages.Chapters
             story.Chapters.Add(chapter);
             
             await _context.SaveChangesAsync();
+            
+            // Get a list of users that should receive a notifications
+            var notificationRecipients = await _context.Shelves
+                .Where(s => s.TrackUpdates)
+                .Where(s => s.Stories.Any(st => st.Id == story.Id))
+                .Select(s => s.OwnerId)
+                .ToListAsync();
+            
+            // Notify
+            await _notificationsRepo.Create(ENotificationEvent.WatchedStoryUpdated,
+                notificationRecipients,
+                "/Chapter",
+                new { chapter.Id, chapter.Slug });
 
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
         }

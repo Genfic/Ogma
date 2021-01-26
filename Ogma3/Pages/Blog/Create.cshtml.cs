@@ -132,13 +132,10 @@ namespace Ogma3.Pages.Blog
                 .Select(u => u.Id)
                 .ToListAsync();
             
-            await _notificationsRepo.Create(
-                "The author you follow wrote a new blogpost",
-                ENotificationEvent.FollowedAuthorNewBlogpost,
+            await _notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewBlogpost,
                 notificationRecipients,
                 "/Blog/Post",
-                new { post.Id, post.Slug }
-            );
+                new { post.Id, post.Slug });
 
             return RedirectToPage("/User/Blog", new { name = uname });
         }

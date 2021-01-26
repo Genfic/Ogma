@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
+using Ogma3.Data.Repositories;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
@@ -22,12 +24,14 @@ namespace Ogma3.Pages.Stories
         private readonly ApplicationDbContext _context;
         private readonly FileUploader _uploader;
         private readonly OgmaConfig _config;
+        private readonly NotificationsRepository _notificationsRepo;
 
-        public CreateModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config)
+        public CreateModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config, NotificationsRepository notificationsRepo)
         {
             _context = context;
             _uploader = uploader;
             _config = config;
+            _notificationsRepo = notificationsRepo;
         }
 
         public List<Rating> Ratings { get; set; }
@@ -131,6 +135,18 @@ namespace Ogma3.Pages.Stories
                 // Final save
                 await _context.SaveChangesAsync();
             }
+            
+            // Get a list of users that should receive notifications
+            var notificationRecipients = await _context.Users
+                .Where(u => u.Following.Any(a => a.Id == uid))
+                .Select(u => u.Id)
+                .ToListAsync();
+            
+            // Notify
+            await _notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewStory,
+                notificationRecipients,
+                "/Story",
+                new { story.Id, story.Slug });
 
             return RedirectToPage("../Story", new {id = story.Id, slug = story.Slug});
         }

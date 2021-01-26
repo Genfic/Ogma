@@ -48,8 +48,6 @@ namespace Ogma3.Api.V1
         [Authorize]
         public async Task<ActionResult> PostVote([FromBody] VoteData data)
         {
-            Console.WriteLine($">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {data.StoryId== null}");
-            
             var user = await _userManager.GetUserAsync(User);
             var story = await _context.Stories
                 .Where(s => s.Id == data.StoryId)

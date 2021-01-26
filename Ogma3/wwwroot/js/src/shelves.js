@@ -1,11 +1,14 @@
-let shelves_vue = new Vue({ 
+new Vue({ 
     el: "#shelves",
     data: {
         form: {
             name: null,
             desc: null,
+            
             pub: false,
             quick: false,
+            track: false,
+            
             color: null,
             icon: null,
             id: null
@@ -45,6 +48,7 @@ let shelves_vue = new Vue({
                     description: this.form.desc,
                     isPublic: this.form.pub,
                     isQuick: this.form.quick,
+                    trackUpdates: this.form.track,
                     color: this.form.color,
                     icon: Number(this.form.icon)
                 }
@@ -116,6 +120,7 @@ let shelves_vue = new Vue({
             this.form.color = t.color;
             this.form.quick = t.isQuick;
             this.form.pub   = t.isPublic;
+            this.form.track = t.trackUpdates;
             this.form.icon  = t.iconId;
             this.showForm   = true;
         },

@@ -35,7 +35,7 @@ namespace Ogma3.Api.V1
         [HttpGet("user/{name}")]
         public async Task<ActionResult<IEnumerable<ShelfDto>>> GetUserShelvesAsync(string name)
         {
-            Log.Debug($">>>>>>>>>>> Fetching shelves for user {name}");
+            Log.Debug(">>>>>>>>>>> Fetching shelves for user {Name}", name);
             var uid = User?.GetNumericId();
             
             var shelves = await _context.Shelves
@@ -83,13 +83,14 @@ namespace Ogma3.Api.V1
             
             var shelf = new Shelf
             {
-                Name        = data.Name,
-                Description = data.Description,
-                OwnerId     = (long) uid,
-                IsPublic    = data.IsPublic,
-                IsQuickAdd  = data.IsQuick,
-                Color       = data.Color,
-                IconId      = data.Icon
+                Name         = data.Name,
+                Description  = data.Description,
+                OwnerId      = (long) uid,
+                IsPublic     = data.IsPublic,
+                IsQuickAdd   = data.IsQuick,
+                TrackUpdates = data.TrackUpdates,
+                Color        = data.Color,
+                IconId       = data.Icon
             };
             await _context.Shelves.AddAsync(shelf);
             await _context.SaveChangesAsync();
@@ -158,12 +159,13 @@ namespace Ogma3.Api.V1
             // Check ownership
             if (shelf.OwnerId != uid) return Unauthorized("Not owner");
             
-            shelf.Name        = data.Name;
-            shelf.Description = data.Description;
-            shelf.Color       = data.Color;
-            shelf.IsPublic    = data.IsPublic;
-            shelf.IsQuickAdd  = data.IsQuick;
-            shelf.IconId      = data.Icon;
+            shelf.Name         = data.Name;
+            shelf.Description  = data.Description;
+            shelf.Color        = data.Color;
+            shelf.IsPublic     = data.IsPublic;
+            shelf.TrackUpdates = data.TrackUpdates;
+            shelf.IsQuickAdd   = data.IsQuick;
+            shelf.IconId       = data.Icon;
             
             await _context.SaveChangesAsync();
             return Ok(ShelfMappings.ToShelfDto().Compile().Invoke(shelf));
@@ -223,11 +225,11 @@ namespace Ogma3.Api.V1
 
             public bool IsPublic { get; set; } = false;
             public bool IsQuick { get; set; } = false;
+            public bool TrackUpdates { get; set; } = false;
             
             [MinLength(7)]
             [MaxLength(7)]
             public string Color { get; set; }
-
             public long Icon { get; set; }
         }
 

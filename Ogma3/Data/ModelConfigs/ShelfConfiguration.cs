@@ -34,6 +34,10 @@ namespace Ogma3.Data.ModelConfigs
                 .HasDefaultValue(false);
 
             builder
+                .Property(s => s.TrackUpdates)
+                .HasDefaultValue(false);
+
+            builder
                 .Property(s => s.Color)
                 .HasMaxLength(7)
                 .HasDefaultValue(null);

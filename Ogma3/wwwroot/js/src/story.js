@@ -20,6 +20,8 @@ let story_vue = new Vue({
         vote: function() {
             axios.post(this.votesRoute, {
                 storyId: Number(this.storyId)
+            }, {
+                headers: { "RequestVerificationToken" : this.csrf }
             })
             .then(res => {
                 this.score = res.data.count;
