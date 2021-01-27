@@ -22,11 +22,11 @@ namespace Ogma3.Pages.Stories
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly FileUploader _uploader;
+        private readonly ImageUploader _uploader;
         private readonly OgmaConfig _config;
         private readonly NotificationsRepository _notificationsRepo;
 
-        public CreateModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config, NotificationsRepository notificationsRepo)
+        public CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config, NotificationsRepository notificationsRepo)
         {
             _context = context;
             _uploader = uploader;

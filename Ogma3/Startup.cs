@@ -112,7 +112,7 @@ namespace Ogma3
             services.AddSingleton<IB2Client>(b2Client);
             
             // File uploader
-            services.AddSingleton<FileUploader>();
+            services.AddSingleton<ImageUploader>();
             
             // ReCaptcha
             services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));

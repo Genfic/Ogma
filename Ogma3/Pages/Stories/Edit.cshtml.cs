@@ -21,11 +21,11 @@ namespace Ogma3.Pages.Stories
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly FileUploader _uploader;
+        private readonly ImageUploader _uploader;
         private readonly OgmaConfig _config;
 
 
-        public EditModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config)
+        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config)
         {
             _context = context;
             _uploader = uploader;

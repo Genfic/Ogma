@@ -54,49 +54,51 @@
 
         <div class="col">
             <span class="header">Follow and support</span>
+            
+            @{ var formats = new[] {"avif", "webp"};}
 
             <a href="https://www.subscribestar.com/genfic" target="_blank" rel="noopener" class="item follow substar">
-                <picture>
-                    <source type="image/avif" srcset="~/img/subscribestar.avif">
-                    <source type="image/webp" srcset="~/img/subscribestar.webp">
-                    <img src="~/img/subscribestar.png" alt="SubscribeStar logo" width="24" height="24">
-                </picture>
+                <cdn-picture src="/social/subscribestar.png"
+                             height="24" width="24"
+                             source-formats="@formats"
+                             alt="SubscribeStar logo" >
+                </cdn-picture>
                 SubscribeStar
             </a>
 
             <a href="https://www.patreon.com/genfic" target="_blank" rel="noopener" class="item follow patreon">
-                <picture>
-                    <source type="image/avif" srcset="~/img/patreon.avif">
-                    <source type="image/webp" srcset="~/img/patreon.webp">
-                    <img src="~/img/patreon.png" alt="Patreon logo" width="24" height="24">
-                </picture>
+                <cdn-picture src="/social/patreon.png"
+                             height="24" width="24"
+                             source-formats="@formats"
+                             alt="Patreon logo" >
+                </cdn-picture>
                 Patreon
             </a>
 
             <a href="https://ko-fi.com/genfic" target="_blank" rel="noopener" class="item follow kofi">
-                <picture>
-                    <source type="image/avif" srcset="~/img/kofi.avif">
-                    <source type="image/webp" srcset="~/img/kofi.webp">
-                    <img src="~/img/kofi.png" alt="Ko-fi logo" width="24" height="24">
-                </picture>
+                <cdn-picture src="/social/kofi.png"
+                             height="24" width="24"
+                             source-formats="@formats"
+                             alt="Ko-Fi logo" >
+                </cdn-picture>
                 Ko-fi
             </a>
 
             <a href="https://discord.gg/BNVZmJb" target="_blank" rel="noopener" class="item follow discord">
-                <picture>
-                    <source type="image/avif" srcset="~/img/discord.avif">
-                    <source type="image/webp" srcset="~/img/discord.webp">
-                    <img src="~/img/discord.png" alt="Discord logo" width="24" height="24">
-                </picture>
+                <cdn-picture src="/social/discord.png"
+                             height="24" width="24"
+                             source-formats="@formats"
+                             alt="Discord logo" >
+                </cdn-picture>
                 Discord
             </a>
 
             <a href="https://twitter.com/GenficNet" target="_blank" rel="noopener" class="item follow twitter">
-                <picture>
-                    <source type="image/avif" srcset="~/img/twitter.avif">
-                    <source type="image/webp" srcset="~/img/twitter.webp">
-                    <img src="~/img/twitter.png" alt="Twitter logo" width="24" height="24">
-                </picture>
+                <cdn-picture src="/social/twitter.png"
+                             height="24" width="24"
+                             source-formats="@formats"
+                             alt="Twitter logo" >
+                </cdn-picture>
                 Twitter
             </a>
         </div>

@@ -19,10 +19,10 @@ namespace Ogma3.Api.V1
     public class RatingsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly FileUploader _uploader;
+        private readonly ImageUploader _uploader;
         private readonly IB2Client _b2Client;
 
-        public RatingsController(ApplicationDbContext context, FileUploader uploader, IB2Client b2Client)
+        public RatingsController(ApplicationDbContext context, ImageUploader uploader, IB2Client b2Client)
         {
             _context = context;
             _uploader = uploader;

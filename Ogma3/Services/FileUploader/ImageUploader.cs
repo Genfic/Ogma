@@ -15,11 +15,11 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader
 {
-    public class FileUploader : IFileUploader
+    public class ImageUploader : IFileUploader
     {
         private readonly IB2Client _b2Client;
 
-        public FileUploader(IB2Client b2Client)
+        public ImageUploader(IB2Client b2Client)
         {
             _b2Client = b2Client;
         }

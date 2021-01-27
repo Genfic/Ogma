@@ -16,7 +16,7 @@
     
     <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/MaterialIconsOutlined-Regular.woff2">
     <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-variablefont_wght.ttf">
-    <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/Raleway-Italic-VariableFont_wght.ttf">
+    <link rel="preload" as="font" crossorigin="anonymous" href="~/fonts/raleway-italic-variablefont_wght.ttf">
     
     
     @* Base meta *@
@@ -25,7 +25,7 @@
     <title>@ViewData["Title"]</title>
     
     @* Theme Color for Chrome, Firefox OS and Opera *@
-    <meta name="theme-color" content="#995e31">
+    <meta name="theme-color" content="#995E31">
     
     @* Short description of the document (limit to 150 characters) *@
     <meta name="description" content="@(ViewData["Description"] ?? "The one-stop-shop for everything fiction")">
@@ -57,20 +57,6 @@
     
     @await RenderSectionAsync("CSS", false)
     @Html.RenderResources("css")
-    
-    @if (Env.IsDevelopment())
-    {
-        <script src="~/lib/vue/vue.js"
-                asp-fallback-src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
-                asp-fallback-test="window.Vue"></script>
-    }
-    else
-    {
-        <script src="~/lib/vue/vue.min.js"
-                asp-fallback-src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"
-                asp-fallback-test="window.Vue"></script>
-    }
-    <script src="~/js/dist/site.min.js" asp-append-version="true"></script>
 </head>
 <body>
 
@@ -97,16 +83,30 @@
 
 <partial name="_Footer" />
     
-<script src="~/lib/dayjs.min.js" 
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.8.35/dayjs.min.js" 
         crossorigin="anonymous"
         asp-fallback-test="window.dayjs"
-        asp-fallback-src="https://cdn.jsdelivr.net/npm/dayjs@1.8.35/dayjs.min.js"></script>    
+        asp-fallback-src="~/lib/dayjs.min.js"></script>    
 
-<script src="~/lib/axios.min.js" 
+<script src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js" 
         crossorigin="anonymous"
         asp-fallback-test="window.axios"
-        asp-fallback-src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js"></script>
+        asp-fallback-src="~/lib/axios.min.js"></script>
+    
+@if (Env.IsDevelopment())
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
+            asp-fallback-src="~/lib/vue/vue.js"
+            asp-fallback-test="window.Vue"></script>
+}
+else
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"
+            asp-fallback-src="~/lib/vue/vue.min.js"
+            asp-fallback-test="window.Vue"></script>
+}
 
+<script src="~/js/dist/site.min.js" asp-append-version="true"></script>
 <script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
     
 @await RenderSectionAsync("Scripts", required: false)

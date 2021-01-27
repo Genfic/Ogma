@@ -16,10 +16,10 @@ namespace Ogma3.Pages.Clubs
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly FileUploader _uploader;
+        private readonly ImageUploader _uploader;
         private readonly OgmaConfig _config;
 
-        public CreateModel(ApplicationDbContext context, FileUploader uploader, OgmaConfig config)
+        public CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config)
         {
             _context = context;
             _uploader = uploader;

@@ -17,14 +17,14 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         private readonly OgmaUserManager _userManager;
         private readonly SignInManager<OgmaUser> _signInManager;
         private readonly IB2Client _b2Client;
-        private readonly FileUploader _uploader;
+        private readonly ImageUploader _uploader;
         private readonly OgmaConfig _ogmaConfig;
 
         public IndexModel(
             OgmaUserManager userManager,
             SignInManager<OgmaUser> signInManager,
             IB2Client b2Client,
-            FileUploader uploader, 
+            ImageUploader uploader, 
             OgmaConfig ogmaConfig)
         {
             _userManager = userManager;
