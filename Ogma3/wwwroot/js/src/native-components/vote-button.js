@@ -18,7 +18,6 @@ export class VoteButton extends LitElement {
     
     connectedCallback() {
         super.connectedCallback();
-        console.log(this.endpoint + '/' + this.storyId)
 
         axios.get(this.endpoint + '/' + this.storyId)
             .then(res => {

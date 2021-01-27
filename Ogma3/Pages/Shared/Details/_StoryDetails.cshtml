@@ -16,7 +16,7 @@
             
             @if (User.Identity?.IsAuthenticated ?? false)
             {
-                <a title="Write about it" class="action-btn" asp-page="./Blog/Create" asp-route-story="@Model.Id">
+                <a title="Write about it" class="action-btn large" asp-page="./Blog/Create" asp-route-story="@Model.Id">
                     <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
@@ -24,19 +24,19 @@
             
             @if (User.IsUserSameAsLoggedIn(Model.AuthorId))
             {
-                <a title="Edit" class="action-btn" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
+                <a title="Edit" class="action-btn large" asp-page="./Stories/Edit" asp-route-id="@Model.Id">
                     <icon class="icon" icon="edit"></icon>
                     <span class="name">Edit</span>
                 </a>
                 
-                <a title="New chapter" class="action-btn" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
+                <a title="New chapter" class="action-btn large" asp-page="./Chapters/Create" asp-route-id="@Model.Id">
                     <icon class="icon" icon="post_add"></icon>
                     <span class="name">New chapter</span>
                 </a>
             }                    
             @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
             {
-                <a title="Manage" class="action-btn red" target="_blank"
+                <a title="Manage" class="action-btn large red" target="_blank"
                    asp-area="Admin" asp-page="/ContentBlock" 
                    asp-route-type="story" asp-route-id="@Model.Id">
                     <icon class="icon" icon="shield"></icon>
@@ -44,19 +44,19 @@
             }
             @if (!Model.IsPublished)
             {
-                <span class="action-btn red">
+                <span class="action-btn large red">
                     <icon class="icon" icon="visibility_off"></icon>
                 </span>
             }
             @if (Model.ContentBlockId != null)
             {
-                <span class="action-btn red">
+                <span class="action-btn large red">
                     <icon class="icon" icon="shield"></icon>
                 </span>
             }            
             @if (User.Identity?.IsAuthenticated ?? false)
             {
-                <button title="Report" class="action-btn red" v-on:click="report">
+                <button title="Report" class="action-btn large red" v-on:click="report">
                     <icon class="icon" icon="flag"></icon>
                 </button>
             }
@@ -64,23 +64,9 @@
             @if (User.Identity?.IsAuthenticated ?? false)
             {
                 <div class="spacer"></div>
-                
-                <button
-                    v-if="shelves"
-                    class="shelf action-btn"
-                    v-for="s in shelves.filter(e => e.isQuick || e.isDefault)"
-                    :title="'Add to ' + s.name"
-                    v-on:click="addToShelf(s.id)"
-                    :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
-                    <i class="material-icons-outlined" :style="{color: s.color}">
-                        {{s.iconName ?? "bookmark_border"}}
-                    </i>
-                </button>
-
-                <button title="All bookshelves" class="shelf action-btn" v-on:click="showShelves = true">
-                    <icon icon="more_horiz"></icon>
-                </button>
+                <o-shelves v-pre endpoint="@Url.RouteUrl(nameof(ShelvesController))" storyId="@Model.Id"></o-shelves>
             }
+            
         </div>
 
         @* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
@@ -143,9 +129,8 @@
                         
                         <button class="read-status"
                                 aria-label="Chapter read status"
-                                :class="read.includes(@c.Id) ? 'active' : ''"
-                                v-on:click="markRead(@c.Id)">
-                            <i class="material-icons-outlined">{{read.includes(@c.Id) ? 'visibility' : 'visibility_off'}}</i>
+                                data-id="@c.Id">
+                            <i class="material-icons-outlined">'visibility_off'</i>
                         </button>
 
                         <span class="order">@c.Order</span>
@@ -167,23 +152,6 @@
 
     @if (User.Identity?.IsAuthenticated ?? false)
     {
-        <div class="my-modal" v-cloak v-if="showShelves" v-on:click.self="showShelves = false">
-            <div class="content">
-                <h3>Add to bookshelf</h3>
-                <ul class="items-list">
-                    <li v-for="s in shelves" :style="{boxShadow: s.doesContainBook ? `${s.color} inset 0 0 0 3px` : null}">
-                        <div class="deco" v-bind:style="{background: s.color}">
-                            <i class="material-icons-outlined">{{s.iconName ?? "bookmark_border"}}</i>
-                        </div>
-                        <button class="main" :href="'/Shelf/' + s.id" v-on:click="addToShelf(s.id)">
-                            <h3 class="name">{{ s.name }} – {{ s.storiesCount }}</h3>
-                            <span class="desc">{{ s.description }}</span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-            
         <club-folder-selector 
             ref="folderSelect"
             cdn="@Config.Cdn"
@@ -207,9 +175,8 @@
         reports-route="@Url.RouteUrl(nameof(ReportsController))">
     </report-modal>
     
-    <div id="shelves-route" v-if="!shelvesRoute" data-route="@Url.RouteUrl(nameof(ShelvesController))"></div>
-    <div id="reads-route" v-if="!readsRoute" data-route="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
-    <div id="story-id" v-if="!storyId" data-id="@Model.Id"></div>
+    <div id="reads-route" data-reads="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
+    <div id="story-id" data-story-id="@Model.Id"></div>
     @Html.AntiForgeryToken()
 </div>
 
@@ -226,3 +193,8 @@
                         src="~/js/dist/native-components/vote-button.min.js" 
                         asp-append-version="true" 
                         type="module"></script>)
+@Html.Resource(@<script async
+                        src="~/js/dist/native-components/shelves-button.min.js"
+                        asp-append-version="true"
+                        type="module"></script>)
+@Html.Resource(@<script src="~/js/dist/chapter-reads.min.js" asp-append-version="true"></script>)
