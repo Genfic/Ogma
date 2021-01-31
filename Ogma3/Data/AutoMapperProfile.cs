@@ -87,9 +87,17 @@ namespace Ogma3.Data
                         .Where(c => c.IsPublished || c.Story.AuthorId == currentUser)
                         .Where(c => c.ContentBlockId == null || c.Story.AuthorId == currentUser)
                     )
+                )
+                .ForMember(sd => sd.Tags,
+                opts
+                    => opts.MapFrom(s => s.Tags.OrderBy(t => t.Namespace.Order))
                 );
             
-            CreateMap<Story, StoryCard>();
+            CreateMap<Story, StoryCard>()
+                .ForMember(sd => sd.Tags,
+                    opts
+                        => opts.MapFrom(s => s.Tags.OrderBy(t => t.Namespace.Order))
+                );;
             
             CreateMap<Story, StoryMinimal>();
 

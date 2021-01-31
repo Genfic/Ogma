@@ -78,11 +78,6 @@ export class ShelvesButton extends LitElement {
             .catch(console.error)
     }
     
-    _showMore() {
-        this.more = !this.more;
-        console.log('asd')
-    }
-
     createRenderRoot() {
         return this;
     }
