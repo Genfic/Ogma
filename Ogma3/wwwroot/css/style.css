@@ -2948,7 +2948,8 @@ form.search select:focus {
   padding: 3px;
 }
 
-noscript {
+noscript.noscript {
+  display: block;
   background-color: var(--red-25);
   border: 1px solid var(--foreground-50);
   padding: 0.2rem;
