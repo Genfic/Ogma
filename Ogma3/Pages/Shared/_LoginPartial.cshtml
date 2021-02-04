@@ -21,6 +21,11 @@
         
         <li class="nav-item">
             <o-notifications href="/notifications" endpoint="@Url.RouteUrl(nameof(NotificationsController))/count"></o-notifications>
+            <noscript>
+                <a asp-page="/Notifications" title="Notifications">
+                    <i class="material-icons-outlined">notifications</i>
+                </a>
+            </noscript>
         </li>
         
         <li class="nav-item">
@@ -48,4 +53,4 @@
 
 </ul>
 
-@Html.Resource(@<script src="~/js/dist/native-components/notifications-button.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" async src="~/js/dist/native-components/notifications-button.min.js" asp-append-version="true"></script>)

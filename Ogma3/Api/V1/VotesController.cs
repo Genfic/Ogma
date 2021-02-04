@@ -92,15 +92,15 @@ namespace Ogma3.Api.V1
             return new OkObjectResult(res);
         }
 
-        public class CountReturn
+        public sealed record CountReturn
         {
-            public int Count { get; set; }
-            public bool DidVote { get; set; }
+            public int Count { get; init; }
+            public bool DidVote { get; init; }
         }
 
-        public class VoteData
+        public sealed record VoteData
         {
-            public long StoryId { get; set; }
+            public long StoryId { get; init; }
         }
     }
 }

@@ -372,14 +372,12 @@
     <TypeScriptCompile Include="wwwroot\js\src\chapter-reads.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\hashparser.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
-    <TypeScriptCompile Include="wwwroot\js\src\native-components\notifications-button.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="Data\Validators" />
-    <Folder Include="wwwroot\js\dist\native-components" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->
