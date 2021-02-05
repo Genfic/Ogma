@@ -117,7 +117,11 @@
         {
             <a v-on:click="addToFolder">Add to folder</a>
         }
-            <a v-on:click="showClubs">Featured in clubs</a>
+        <o-featured-in-clubs v-pre
+                             endpoint="@Url.RouteUrl(nameof(ClubsController))"
+                             storyId="@Model.Id"
+                             cdn="@Config.Cdn">
+        </o-featured-in-clubs>
     </div>
 
     <ol class="chapters">
@@ -168,13 +172,6 @@
         </club-folder-selector>
     }
     
-    <clubs-with-story
-        ref="featuredIn"
-        cdn="@Config.Cdn"
-        :story-id="@Model.Id"
-        clubs-route="@Url.RouteUrl(nameof(ClubsController))">
-    </clubs-with-story>
-    
     <report-modal
         ref="reportModal"
         :item-id="@Model.Id"
@@ -190,7 +187,6 @@
 
 @Html.Resource(@<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>)
-@Html.Resource(@<script src="~/js/dist/components/clubs-with-story-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
 
@@ -202,6 +198,10 @@
                         type="module"></script>)
 @Html.Resource(@<script async
                         src="~/js/dist/native-components/shelves-button.min.js"
+                        asp-append-version="true"
+                        type="module"></script>)
+@Html.Resource(@<script async
+                        src="~/js/dist/native-components/featured-in-clubs.min.js"
                         asp-append-version="true"
                         type="module"></script>)
 @Html.Resource(@<script src="~/js/dist/chapter-reads.min.js" asp-append-version="true"></script>)

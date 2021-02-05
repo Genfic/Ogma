@@ -50,24 +50,27 @@ $title-height: 1.8rem
     h3
       font-size: $title-height
       line-height: $title-height
-      overflow: hidden
-      text-overflow: ellipsis
       display: inline
+      white-space: nowrap
       padding: 0 .25rem
         
       &>a
         color: v.$foreground
         text-decoration: none
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: normal
   
         &:hover
           color: v.$foreground-75
           text-decoration: underline
           text-decoration-skip-ink: auto
     
-    &>.rating
-      display: inline
-      height: $title-height * 0.7
-      width: $title-height * 0.7
+      &>.rating
+        display: inline
+        vertical-align: middle
+        height: $title-height * 0.7
+        width: $title-height * 0.7
       
     &>.author
       color: v.$foreground-75

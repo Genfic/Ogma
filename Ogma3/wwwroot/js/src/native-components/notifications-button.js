@@ -15,6 +15,10 @@ export class NotificationsButton extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+        this.load();
+    }
+    
+    load() {
         axios.get(this.endpoint)
             .then(data => {
                 this.count = data.data;

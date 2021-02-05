@@ -6,7 +6,7 @@
 .tag 
   display: grid
   grid-template-areas: "main"
-  line-height: 1
+  line-height: .9
   border: 1px solid v.$foreground-75
   background-color: v.$background
   color: v.$foreground
@@ -29,10 +29,12 @@
     grid-area: main
     justify-self: center
     align-self: center
+    line-height: .9
+    font-size: .9rem
     margin: .1rem .2rem
     z-index: 1
     
-  & .material-icons-outlined
+  .material-icons-outlined
     font-size: inherit
     cursor: pointer
     &:hover

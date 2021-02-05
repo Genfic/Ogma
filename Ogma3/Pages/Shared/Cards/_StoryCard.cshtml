@@ -11,12 +11,14 @@
              width="160" height="160"/>
 
     <header class="title">
-        <cdn-img src="@Model.Rating.Icon"
-                 alt="Rated: @Model.Rating.Name"
-                 title="Rating: @Model.Rating.Name"
-                 class="rating"/>
         
-        <h3><a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">@Model.Title</a></h3>
+        <h3>
+            <cdn-img src="@Model.Rating.Icon"
+                     alt="Rated: @Model.Rating.Name"
+                     title="Rating: @Model.Rating.Name"
+                     class="rating"/>
+            <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">@Model.Title</a>
+        </h3>
           
         <a class="author" asp-page="/User/Index" asp-route-name="@Model.AuthorUserName">By&nbsp;@Model.AuthorUserName</a>
     </header>

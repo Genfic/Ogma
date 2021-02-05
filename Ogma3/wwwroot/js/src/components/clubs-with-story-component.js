@@ -22,7 +22,6 @@ Vue.component('clubs-with-story', {
     methods: {
         hide: function () {
             this.visible = false;
-            this.selectedClub = null;
         }
     },
     mounted() {
@@ -43,8 +42,7 @@ Vue.component('clubs-with-story', {
                  target="_blank"
                  class="club" 
                  tabindex="0" 
-                 v-for="c in clubs" 
-                 @click="selectedClub = c">
+                 v-for="c in clubs">
                 <img :src="cdn + (c.icon ?? 'ph-250.png')" :alt="c.name" width="24" height="24">
                 <span>{{c.name}}</span>
               </a>

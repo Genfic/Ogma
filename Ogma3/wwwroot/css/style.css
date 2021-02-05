@@ -37,8 +37,8 @@ body > header {
   width: 100%;
 }
 body > #site-content, body > #site-content-wide {
-  margin-top: 3.5rem;
-  padding: 15px max(min(5vw, 5rem), 2rem);
+  margin-top: 3.1rem;
+  padding: 15px clamp(1px, -2.0000rem + 8.0000vw, 3rem);
   flex: 1;
   width: min(100%, calc(1000px + 5rem));
 }
@@ -336,22 +336,22 @@ nav#top-nav {
   top: 0;
   left: 0;
   width: 100%;
-  height: 3.5rem;
+  min-height: 1.5rem;
   z-index: 99999;
-  padding: 0.25rem 4rem;
+  padding: 0.8rem 4rem;
   background-color: var(--background);
   border-bottom: 1px solid var(--foreground-50);
-  transition: height 0.2s ease-in-out;
+  transition: padding-top 0.2s ease-in-out, padding-bottom 0.2s ease-in-out;
 }
 @media screen and (max-width: 570px) {
   nav#top-nav {
-    padding: 0.1rem 1rem;
+    padding: 0.2rem 1rem;
   }
 }
 @media screen and (max-width: 445px) {
   nav#top-nav {
     flex-direction: column;
-    padding: 0 0.5rem;
+    padding: 0.1rem 0.5rem;
     height: auto;
   }
 }
@@ -359,11 +359,12 @@ nav#top-nav.bottom {
   bottom: 0;
 }
 nav#top-nav.compact {
-  height: max(2.275rem, 30px);
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 @media (prefers-reduced-motion) {
   nav#top-nav.compact {
-    height: 3.5rem;
+    height: 1.5rem;
   }
 }
 nav#top-nav .navbar-nav {
@@ -514,7 +515,7 @@ footer.footer > .cols {
   flex-wrap: wrap;
   justify-content: center;
   width: min(100%, calc(1000px + 5rem));
-  padding: 0.5rem max(min(5vw, 5rem), 2rem);
+  padding: 0.5rem clamp(1px, -2.0000rem + 8.0000vw, 3rem);
 }
 @media screen and (max-width: 570px) {
   footer.footer > .cols {
@@ -595,7 +596,7 @@ footer.footer > .bottom > .copy-text {
 .tag {
   display: grid;
   grid-template-areas: "main";
-  line-height: 1;
+  line-height: 0.9;
   border: 1px solid var(--foreground-75);
   background-color: var(--background);
   color: var(--foreground);
@@ -619,6 +620,8 @@ footer.footer > .bottom > .copy-text {
   grid-area: main;
   justify-self: center;
   align-self: center;
+  line-height: 0.9;
+  font-size: 0.9rem;
   margin: 0.1rem 0.2rem;
   z-index: 1;
 }
@@ -687,22 +690,25 @@ img.avatar {
 .story-card > .title h3 {
   font-size: 1.8rem;
   line-height: 1.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: inline;
+  white-space: nowrap;
   padding: 0 0.25rem;
 }
 .story-card > .title h3 > a {
   color: var(--foreground);
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 .story-card > .title h3 > a:hover {
   color: var(--foreground-75);
   text-decoration: underline;
   text-decoration-skip-ink: auto;
 }
-.story-card > .title > .rating {
+.story-card > .title h3 > .rating {
   display: inline;
+  vertical-align: middle;
   height: 1.26rem;
   width: 1.26rem;
 }
@@ -899,14 +905,16 @@ img.avatar {
 #story-app > .info .spacer {
   flex: 1;
 }
-#story-app > .info > * {
-  padding: 0 0.25rem;
+#story-app > .info * {
   color: var(--foreground-75);
 }
-#story-app > .info > *:hover {
+#story-app > .info *:hover {
   color: var(--foreground);
 }
-#story-app > .info > a {
+#story-app > .info > * {
+  padding: 0 0.25rem;
+}
+#story-app > .info a {
   cursor: pointer;
 }
 
@@ -1600,7 +1608,8 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+  line-height: 0.9;
+  font-size: 0.9rem;
   cursor: default;
   width: max-content;
   padding: 4px;
@@ -1625,7 +1634,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 }
 .story-status > i.material-icons-outlined {
   margin-right: 0.1rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .quote {
@@ -2345,7 +2354,7 @@ form.search select:focus {
   grid-column: 2;
   align-self: start;
   position: sticky;
-  top: 3.85rem;
+  top: 3.26rem;
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
@@ -2843,7 +2852,7 @@ form.search select:focus {
   text-decoration: underline;
 }
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
-  scroll-margin-top: 5.25rem;
+  scroll-margin-top: 3.9rem;
   margin-bottom: 0.25rem;
   margin-top: 0.5rem;
 }
