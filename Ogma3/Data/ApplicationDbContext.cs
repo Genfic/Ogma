@@ -50,6 +50,7 @@ namespace Ogma3.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        public DbSet<Faq> Faqs { get; set; }
         
         // Moderation
         public DbSet<ModeratorAction> ModeratorActions { get; set; }

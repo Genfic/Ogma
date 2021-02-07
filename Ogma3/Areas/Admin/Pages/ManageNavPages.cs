@@ -18,6 +18,7 @@ namespace Ogma3.Areas.Admin.Pages
         public static string Ratings => "Ratings";
         public static string ModLog => "ModLog";
         public static string Reports => "Reports";
+        public static string Faq => "FAQ";
 
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
@@ -33,6 +34,7 @@ namespace Ogma3.Areas.Admin.Pages
         public static string RatingsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Ratings);
         public static string ModLogNavClass(ViewContext viewContext) => PageNavClass(viewContext, ModLog);
         public static string ReportsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Reports);
+        public static string FaqNavClass(ViewContext viewContext) => PageNavClass(viewContext, Faq);
         
         private static string PageNavClass(ViewContext viewContext, string page)
         {

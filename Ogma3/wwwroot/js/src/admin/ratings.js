@@ -23,7 +23,6 @@ let ratings_vue = new Vue({
         // It was simply easier to slap both functionalities into a single function.
         createRating: function (e) {
             e.preventDefault();
-            console.log('asdasd')
             
             if (this.form.name) {
 
