@@ -1,4 +1,4 @@
-let comments_vue = new Vue({
+new Vue({
     el: '#comments-container',
     data: {
         body: '',

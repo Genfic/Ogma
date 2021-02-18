@@ -1,4 +1,6 @@
-let anamespaces_vue = new Vue({
+import dayjs from 'https://cdn.skypack.dev/-/dayjs@v1.10.4-MoS2QVkxh1TZYPgJA5zq/dist=es2020,mode=imports/optimized/dayjs.js';
+
+new Vue({
     el: "#app",
     data: {
         codes: [],

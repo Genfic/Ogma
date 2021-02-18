@@ -95,7 +95,7 @@
         asp-fallback-src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js"></script>
 
 <script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
-<script async src="~/js/dist/clock.min.js" asp-append-version="true"></script>
+<script type="module" src="~/js/dist/clock.min.js" asp-append-version="true"></script>
     
 @await RenderSectionAsync("Scripts", required: false)
 @Html.RenderResources()

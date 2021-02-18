@@ -112,8 +112,8 @@
 
 </div>
 
-@Html.Resource(@<script src="~/js/dist/components/comment-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" src="~/js/dist/components/comment-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
 
-@Html.Resource(@<script src="~/js/dist/comments.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script defer src="~/js/dist/comments.min.js" asp-append-version="true"></script>)
