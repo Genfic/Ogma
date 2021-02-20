@@ -83,6 +83,4 @@ export class ShelvesButton extends LitElement {
     }
 }
 
-(_ => {
-    window.customElements.define('o-shelves', ShelvesButton);
-})();
+window.customElements.define('o-shelves', ShelvesButton);

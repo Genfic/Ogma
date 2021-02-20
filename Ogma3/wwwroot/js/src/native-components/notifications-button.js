@@ -43,6 +43,4 @@ export class NotificationsButton extends LitElement {
     }
 }
 
-(_ => {
-    window.customElements.define('o-notifications', NotificationsButton);
-})();
+window.customElements.define('o-notifications', NotificationsButton);

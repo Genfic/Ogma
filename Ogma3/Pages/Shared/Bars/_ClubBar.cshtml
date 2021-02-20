@@ -94,9 +94,9 @@
         </a>
     </nav>
 
-    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(ClubJoinController))"></div>
-    <div v-if="!id" id="data-id" data-id="@Model.Id"></div>
-    <div v-if="joined === null" id="data-joined" data-joined="@Model.IsMember"></div>
+    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(ClubJoinController))" style="display: none"></div>
+    <div v-if="!id" id="data-id" data-id="@Model.Id" style="display: none"></div>
+    <div v-if="joined === null" id="data-joined" data-joined="@Model.IsMember" style="display: none"></div>
     @Html.AntiForgeryToken()
     
     <report-modal

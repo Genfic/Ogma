@@ -31,7 +31,7 @@ export class VoteButton extends LitElement {
         return html`
             <button class="votes action-btn large ${this.voted ? 'active' : ''}" @click="${this._vote}" title="Give it a star!">
                 <i class="material-icons-outlined">${this.voted ? 'star' : 'star_border'}</i>
-                <span class="count">${this.score}</span>
+                <span class="count">${this.score ?? 0}</span>
             </button>
         `;
     }
@@ -54,6 +54,4 @@ export class VoteButton extends LitElement {
     }
 }
 
-(_ => {
-    window.customElements.define('o-vote', VoteButton);
-})();
+window.customElements.define('o-vote', VoteButton);

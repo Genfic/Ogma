@@ -62,6 +62,4 @@ export class FeaturedInClubs extends LitElement {
     }
 }
 
-(_ => {
-    window.customElements.define('o-featured-in-clubs', FeaturedInClubs);
-})();
+window.customElements.define('o-featured-in-clubs', FeaturedInClubs);

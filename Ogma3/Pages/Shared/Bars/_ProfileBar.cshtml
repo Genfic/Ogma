@@ -58,7 +58,12 @@
                     v-on:click="follow">
                 {{ isFollowed ? 'Following' : 'Follow' }}
             </button>
-                
+            
+            @*<o-follow v-pre
+                      endpoint="@Url.RouteUrl(nameof(UsersController))"
+                      username="@Model.UserName.ToLower()"
+                      isfollowed="@Model.IsFollowedBy.ToString().ToLower()"></o-follow>*@
+
             <div class="o-dropdown left">
                 <input type="checkbox" id="o-dropdown-toggler">
                 
@@ -108,10 +113,10 @@
         </a>
     </nav>
 
-    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
-    <div v-if="!name" id="data-name" data-name="@Model.UserName.Friendlify()"></div>
-    <div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy"></div>
-    <div v-if="!done" id="data-followed" data-followed="@Model.IsFollowedBy"></div>
+    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))" style="display: none"></div>
+    <div v-if="!name"  id="data-name" data-name="@Model.UserName.Friendlify()" style="display: none"></div>
+    <div v-if="!done"  id="data-blocked" data-blocked="@Model.IsBlockedBy" style="display: none"></div>
+    <div v-if="!done"  id="data-followed" data-followed="@Model.IsFollowedBy" style="display: none"></div>
     @Html.AntiForgeryToken()
     
     <report-modal

@@ -22,6 +22,7 @@ new Vue({
                 .then(res => this.isFollowed = res.data)
                 .catch(console.error)
         },
+        
         block: function () {
             axios.post(this.route + '/block',
                 { name: this.name }, 
@@ -30,6 +31,7 @@ new Vue({
             .then(res => this.isBlocked = res.data)
             .catch(console.error)
         },
+        
         report: function () {
             this.$refs.reportModal.visible = true;
         }

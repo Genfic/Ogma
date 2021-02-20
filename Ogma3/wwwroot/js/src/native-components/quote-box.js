@@ -45,6 +45,4 @@ export class QuoteBox extends LitElement {
     }
 }
 
-(_ => {
-    window.customElements.define('o-quotebox', QuoteBox);
-})();
+window.customElements.define('o-quotebox', QuoteBox);
