@@ -7,7 +7,7 @@ export class FeaturedInClubs extends LitElement {
             storyId: { type: Number },
             cdn: { type: String },
             visible: { type: Boolean, attribute: false, },
-            clubs: { type: Array, attribute: false}
+            clubs: { type: Array, attribute: false} 
         }
     }
 
