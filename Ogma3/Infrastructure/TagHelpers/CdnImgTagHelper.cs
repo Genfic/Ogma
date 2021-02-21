@@ -23,8 +23,8 @@ namespace Ogma3.Infrastructure.TagHelpers
             var src = string.IsNullOrEmpty(Src) ? "ph-250.png" : Src;
             var url = _ogmaConfig.Cdn + src.Trim('/');
 
-            if (Width.HasValue) output.Attributes.SetAttribute("width", Width);
-            if (Height.HasValue) output.Attributes.SetAttribute("height", Height);
+            if (Width.HasValue) output.Attributes.SetAttribute("width", Width ?? Height);
+            if (Height.HasValue) output.Attributes.SetAttribute("height", Height ?? Width);
 
             if (!string.IsNullOrEmpty(Buster)) url += $"?v={Buster}";
             
