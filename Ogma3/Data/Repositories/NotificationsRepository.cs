@@ -22,24 +22,13 @@ namespace Ogma3.Data.Repositories
             _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
         }
 
-        private static string Message(ENotificationEvent @event) => @event switch
-        {
-            ENotificationEvent.System => "[SYSTEM]",
-            ENotificationEvent.WatchedStoryUpdated => "The story you're watching just updated.",
-            ENotificationEvent.WatchedThreadNewComment => "The comments thread you're following has a new comment.",
-            ENotificationEvent.FollowedAuthorNewBlogpost => "The author you're following just wrote a new blogpost.",
-            ENotificationEvent.FollowedAuthorNewStory => "The author you're following just created a new story.",
-            ENotificationEvent.CommentReply => "One of your comments just got a reply.",
-            _ => throw new ArgumentOutOfRangeException(nameof(@event), @event, null)
-        };
-
-        public async Task Create(ENotificationEvent @event, IEnumerable<long> recipientIds, string page, object routeData, string? body = null)
+        public async Task Create(ENotificationEvent @event, IEnumerable<long> recipientIds, string page, object routeData, string? fragment = null, string? body = null)
         {
             var notification = new Notification
             {
-                Body = body ?? Message(@event),
+                Body = body,
                 Event = @event,
-                Url = _urlHelper.Page(page, routeData)
+                Url = _urlHelper.Page(page, routeData) + (fragment is null ? null : "#" + fragment)
             };
             await _context.Notifications.AddAsync(notification);
 

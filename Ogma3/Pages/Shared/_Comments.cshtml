@@ -51,6 +51,8 @@
     
     <br>
     
+    <o-subscribe v-pre endpoint="@Url.RouteUrl(nameof(SubscriptionController))" threadId="@Model"></o-subscribe>
+    
     <div class="pagination" v-if="comments && total > perPage">
         <button class="prev button" v-on:click="prevPage">Previous</button>
         <button class="ph button" v-if="page > 5">...</button>
@@ -86,6 +88,10 @@
             </template>
         </template>
 
+        <template v-if="comms.length <= 0">
+            <h4>No comments found :(</h4>
+        </template>
+
     </div>
     
     <div class="pagination" v-if="comments && total > perPage">
@@ -115,5 +121,6 @@
 @Html.Resource(@<script type="module" src="~/js/dist/components/comment-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" src="~/js/dist/native-components/subscribe-thread-button.min.js" asp-append-version="true"></script>)
 
 @Html.Resource(@<script defer src="~/js/dist/comments.min.js" asp-append-version="true"></script>)

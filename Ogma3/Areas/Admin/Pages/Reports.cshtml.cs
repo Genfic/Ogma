@@ -10,18 +10,21 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.DTOs;
 using Ogma3.Pages.Shared;
+using Ogma3.Services;
 
 namespace Ogma3.Areas.Admin.Pages
 {
     public class Reports : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly CommentRedirector _redirector;
         private readonly IMapper _mapper;
         private const int PerPage = 50;
 
-        public Reports(ApplicationDbContext context, IMapper mapper)
+        public Reports(ApplicationDbContext context, CommentRedirector redirector, IMapper mapper)
         {
             _context = context;
+            _redirector = redirector;
             _mapper = mapper;
         }
         
@@ -53,37 +56,11 @@ namespace Ogma3.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<ActionResult> OnGetComment(long id)
         {
-            var comment = await _context.Comments
-                .Where(c => c.Id == id)
-                .Select(c => new
-                {
-                    CommentIds = c.CommentsThread.Comments.Select(e => e.Id),
-                    c.CommentsThread.User.UserName,
-                    c.CommentsThread.BlogpostId,
-                    c.CommentsThread.ChapterId,
-                    c.CommentsThread.ClubThreadId,
-                    c.CommentsThread.ClubThread
-                })
-                .FirstOrDefaultAsync();
+            var redirect = await _redirector.RedirectToComment(id);
 
-            if (comment is null) return NotFound();
+            if (redirect is null) return NotFound();
 
-            // Get the ordinal number of the comment within the thread.
-            // +1 because they're 1-indexed.
-            var order = comment.CommentIds.ToList().IndexOf(id) + 1;
-            
-            // Figure out the redirect
-            if (comment.UserName is not null)
-                return RedirectToPage("/User/Index", null, new { Name = comment.UserName }, $"comment-{order}");
-            if (comment.BlogpostId is not null)
-                return RedirectToPage("/Blog/Post", null, new { Id = comment.BlogpostId }, $"comment-{order}");
-            if (comment.ChapterId is not null)
-                return RedirectToPage("/Chapter",  null,new {Id = comment.ChapterId}, $"comment-{order}");
-            if (comment.ClubThreadId is not null)
-                return RedirectToPage("/Club/Forums/Details", null, new { comment.ClubThread.ClubId, ThreadId = comment.ClubThreadId}, $"comment-{order}");
-
-            return NotFound();
-
+            return RedirectToPage(redirect.Url, null, redirect.Params, redirect.Fragment);
         }
     }
 }

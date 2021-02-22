@@ -22,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
+using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
@@ -66,6 +67,9 @@ namespace Ogma3
 
             // Custom persistent config
             services.AddSingleton(OgmaConfig.Init("config.json"));
+            
+            // Comment redirector
+            services.AddScoped<CommentRedirector>();
 
             // Routing
             services.AddRouting(options => options.LowercaseUrls = true);

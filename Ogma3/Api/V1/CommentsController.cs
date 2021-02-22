@@ -13,6 +13,8 @@ using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1
 {
@@ -23,13 +25,17 @@ namespace Ogma3.Api.V1
         private readonly ApplicationDbContext _context;
         private readonly OgmaConfig _ogmaConfig;
         private readonly CommentsRepository _commentsRepo;
+        private readonly NotificationsRepository _notificationsRepo;
+        private readonly CommentRedirector _redirector;
         private readonly IMapper _mapper;
 
-        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo, IMapper mapper)
+        public CommentsController(ApplicationDbContext context, OgmaConfig ogmaConfig, CommentsRepository commentsRepo, NotificationsRepository notificationsRepo, CommentRedirector redirector, IMapper mapper)
         {
             _context = context;
             _ogmaConfig = ogmaConfig;
             _commentsRepo = commentsRepo;
+            _notificationsRepo = notificationsRepo;
+            _redirector = redirector;
             _mapper = mapper;
         }
 
@@ -151,6 +157,35 @@ namespace Ogma3.Api.V1
             
             thread.Comments.Add(comment);
             thread.CommentsCount = thread.Comments.Count;
+            
+            // Add subscriber
+            var subscribers = await _context.CommentsThreadSubscribers
+                .Where(cts => cts.CommentsThreadId == thread.Id)
+                .Select(cts => cts.OgmaUserId)
+                .ToListAsync();
+            if (!subscribers.Contains((long) uid))
+            {
+                await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+                {
+                    OgmaUserId = (long) uid,
+                    CommentsThread = thread
+                });
+            }
+            
+            await _context.SaveChangesAsync();
+            
+            // Create notification
+            var redirection = await _redirector.RedirectToComment(comment.Id);
+            if (redirection is not null)
+            {
+                await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
+                    subscribers,
+                    redirection.Url,
+                    redirection.Params,
+                    redirection.Fragment,
+                    comment.Body.Truncate(50)
+                );
+            }
 
             await _context.SaveChangesAsync();
 

@@ -13,10 +13,6 @@ namespace Ogma3.Data.ModelConfigs
 
             // CONSTRAINTS
             builder
-                .Property(n => n.Body)
-                .IsRequired();
-            
-            builder
                 .Property(n => n.DateTime)
                 .IsRequired()
                 .HasDefaultValueSql(PgConstants.CurrentTimestamp);

@@ -34,9 +34,9 @@ namespace Ogma3.Data
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfStory> ShelfStories { get; set; }
         public DbSet<Blogpost> Blogposts { get; set; }
-
         public DbSet<UserRole> OgmaUserRoles { get; set; }
         public DbSet<OgmaRole> OgmaRoles { get; set; }
+        public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; }
 
         // Clubs
         public DbSet<Club> Clubs { get; set; }

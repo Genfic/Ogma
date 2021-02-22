@@ -4,7 +4,7 @@ namespace Ogma3.Data.Enums
     {
         System, // x
         WatchedStoryUpdated, // v
-        WatchedThreadNewComment, // x
+        WatchedThreadNewComment, // v
         FollowedAuthorNewBlogpost, // v
         FollowedAuthorNewStory, // v
         CommentReply, // x

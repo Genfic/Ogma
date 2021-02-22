@@ -22,6 +22,20 @@ namespace Ogma3.Data.ModelConfigs
                 .WithOne(c => c.CommentsThread)
                 .HasForeignKey(ct => ct.CommentsThreadId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .HasMany(ct => ct.Subscribers)
+                .WithMany(u => u.SubscribedThreads)
+                .UsingEntity<CommentsThreadSubscriber>(
+                    cts => cts
+                        .HasOne(c => c.OgmaUser)
+                        .WithMany()
+                        .HasForeignKey(c => c.OgmaUserId),
+                    cts => cts
+                        .HasOne(c => c.CommentsThread)
+                        .WithMany()
+                        .HasForeignKey(c => c.CommentsThreadId)
+                );
         }
     }
 }

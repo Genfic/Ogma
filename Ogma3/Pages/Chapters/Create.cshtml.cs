@@ -105,6 +105,9 @@ namespace Ogma3.Pages.Chapters
                 return Page();
             }
 
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+
             // Get the story to insert a chapter into. Include user in the search to check ownership.
             var story = await _context.Stories
                 .Where(s => s.Id == id)
@@ -143,6 +146,15 @@ namespace Ogma3.Pages.Chapters
             
             // Create the chapter and add it to the story
             story.Chapters.Add(chapter);
+            
+            await _context.SaveChangesAsync();            
+            
+            // Subscribe author to the comment thread
+            await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+            {
+                CommentsThread = chapter.CommentsThread,
+                OgmaUserId = (long) uid
+            });
             
             await _context.SaveChangesAsync();
             

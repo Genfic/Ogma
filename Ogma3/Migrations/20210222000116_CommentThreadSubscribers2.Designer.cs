@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210222000116_CommentThreadSubscribers2")]
+    partial class CommentThreadSubscribers2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -534,7 +536,7 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("OgmaUserId");
 
-                    b.ToTable("CommentsThreadSubscribers");
+                    b.ToTable("CommentsThreadSubscriber");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.ContentBlock", b =>
@@ -810,6 +812,7 @@ namespace Ogma3.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Body")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateTime")

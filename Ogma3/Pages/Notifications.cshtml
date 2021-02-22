@@ -10,7 +10,9 @@
 <div id="notifications">
     
     <div v-for="notif in notifications" class="notification active-border">
-        <a class="link" :href="notif.url">{{notif.body}}</a>
+        <a class="link" :href="notif.url">{{notif.message}}</a>
+        <span class="body">{{notif.body}}</span>
+        
         <time class="time" :datetime="notif.dateTime">
             {{parseTime(notif.dateTime)}}
         </time>

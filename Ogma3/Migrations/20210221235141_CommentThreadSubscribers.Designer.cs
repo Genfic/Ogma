@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -11,9 +12,10 @@ using Ogma3.Data.Enums;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210221235141_CommentThreadSubscribers")]
+    partial class CommentThreadSubscribers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +27,21 @@ namespace Ogma3.Migrations
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.1");
+
+            modelBuilder.Entity("CommentsThreadOgmaUser", b =>
+                {
+                    b.Property<long>("SubcribersId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SubscribedThreadsId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SubcribersId", "SubscribedThreadsId");
+
+                    b.HasIndex("SubscribedThreadsId");
+
+                    b.ToTable("CommentsThreadOgmaUser");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
@@ -522,21 +539,6 @@ namespace Ogma3.Migrations
                     b.ToTable("CommentThreads");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Models.CommentsThreadSubscriber", b =>
-                {
-                    b.Property<long>("CommentsThreadId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("OgmaUserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CommentsThreadId", "OgmaUserId");
-
-                    b.HasIndex("OgmaUserId");
-
-                    b.ToTable("CommentsThreadSubscribers");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Models.ContentBlock", b =>
                 {
                     b.Property<long>("Id")
@@ -810,6 +812,7 @@ namespace Ogma3.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Body")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateTime")
@@ -1352,6 +1355,21 @@ namespace Ogma3.Migrations
                     b.ToTable("Votes");
                 });
 
+            modelBuilder.Entity("CommentsThreadOgmaUser", b =>
+                {
+                    b.HasOne("Ogma3.Data.Models.OgmaUser", null)
+                        .WithMany()
+                        .HasForeignKey("SubcribersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Models.CommentsThread", null)
+                        .WithMany()
+                        .HasForeignKey("SubscribedThreadsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("Ogma3.Data.Models.OgmaRole", null)
@@ -1593,25 +1611,6 @@ namespace Ogma3.Migrations
                     b.Navigation("ClubThread");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Models.CommentsThreadSubscriber", b =>
-                {
-                    b.HasOne("Ogma3.Data.Models.CommentsThread", "CommentsThread")
-                        .WithMany()
-                        .HasForeignKey("CommentsThreadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ogma3.Data.Models.OgmaUser", "OgmaUser")
-                        .WithMany()
-                        .HasForeignKey("OgmaUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommentsThread");
-
-                    b.Navigation("OgmaUser");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Models.ContentBlock", b =>

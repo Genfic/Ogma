@@ -54,16 +54,19 @@ namespace Ogma3.Data.Models
         [JsonIgnore]
         public ICollection<OgmaUser> Following { get; set; }
         
+        // Subscriptions
+        public ICollection<CommentsThread> SubscribedThreads { get; set; }
+        
         // Bans and mutes
         public DateTime? BannedUntil { get; set; }
         public DateTime? MutedUntil { get; set; }
+
+        public ICollection<Report> Reports { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
         
         public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
         {
             return Id.ToString() == claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
-
-        public ICollection<Report> Reports { get; set; }
-        public ICollection<Notification> Notifications { get; set; }
     }
 }    

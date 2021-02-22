@@ -20,7 +20,6 @@ namespace Ogma3.Data.Models
         public string Body { get; set; }
 
         public CommentsThread CommentsThread { get; set; }
-        public long CommentsThreadId { get; set; }
         
         public int WordCount { get; set; }
         

@@ -145,18 +145,6 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 inviteCode.UsedDate = DateTime.Now;
                 await _context.SaveChangesAsync();
                 
-                // Setup default blacklists
-                var defaultBlockedRatings = await _context.Ratings
-                    .Where(r => r.BlacklistedByDefault)
-                    .AsNoTracking()
-                    .ToListAsync();
-                var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
-                {
-                    User = user,
-                    Rating = dbr
-                });
-                await _context.BlacklistedRatings.AddRangeAsync(blockedRatings);
-                
                 // Send confirmation code
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -173,10 +161,8 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 {
                     return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
                 }
-                else
-                {
-                    return LocalRedirect(returnUrl);
-                }
+
+                return LocalRedirect(returnUrl);
             }
             foreach (var error in result.Errors)
             {

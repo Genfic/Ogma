@@ -110,7 +110,6 @@ namespace Ogma3.Pages.Blog
                 Slug = Input.Title.Trim().Friendlify(),
                 Body = Input.Body.Trim(),
                 AuthorId = (long) uid,
-                CommentsThread = new CommentsThread(),
                 WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
                 Hashtags = tags ?? Array.Empty<string>()
             };
@@ -126,12 +125,21 @@ namespace Ogma3.Pages.Blog
             
             await _context.Blogposts.AddAsync(post);
             await _context.SaveChangesAsync();
+            
+            // Subscribe author to the comment thread
+            await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+            {
+                CommentsThread = post.CommentsThread,
+                OgmaUserId = (long) uid
+            });
+            
+            await _context.SaveChangesAsync();
 
+            // Notify followers
             var notificationRecipients = await _context.Users
                 .Where(u => u.Following.Any(a => a.Id == uid))
                 .Select(u => u.Id)
                 .ToListAsync();
-            
             await _notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewBlogpost,
                 notificationRecipients,
                 "/Blog/Post",

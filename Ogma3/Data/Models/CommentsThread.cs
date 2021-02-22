@@ -19,5 +19,7 @@ namespace Ogma3.Data.Models
         
         public ClubThread? ClubThread { get; set; }
         public long? ClubThreadId { get; set; }
+
+        public ICollection<OgmaUser> Subscribers { get; set; }
     }
 }

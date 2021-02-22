@@ -46,6 +46,20 @@ namespace Utils.Extensions
             return string.Join(Environment.NewLine, lines.Select(s => s.TrimStart(' ', '\t')));
         }
 
+        /// <summary>
+        /// Truncates a string to the given length and caps it of
+        /// </summary>
+        /// <param name="input">String to be truncated</param>
+        /// <param name="length">Truncation length</param>
+        /// <param name="cap">String cap, "..." by default</param>
+        /// <returns>Truncated and capped string</returns>
+        public static string Truncate(this string input, int length, string cap = "...")
+        {
+            return input.Length > length 
+                ? input.Substring(0, length) + cap 
+                : input;
+        }
+
         public static IEnumerable<Header> GetMarkdownHeaders(this string input)
         {
             var headers = new List<Header>();

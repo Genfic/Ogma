@@ -1,21 +1,27 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
+using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<Data.Models.OgmaUser> _userManager;
+        private readonly UserManager<OgmaUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public ConfirmEmailModel(UserManager<Data.Models.OgmaUser> userManager)
+        public ConfirmEmailModel(UserManager<OgmaUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         [TempData]
@@ -37,6 +43,36 @@ namespace Ogma3.Areas.Identity.Pages.Account
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+
+            if (result.Succeeded)
+            {
+                // Setup default blacklists
+                var defaultBlockedRatings = await _context.Ratings
+                    .Where(r => r.BlacklistedByDefault)
+                    .AsNoTracking()
+                    .ToListAsync();
+                var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
+                {
+                    User = user,
+                    Rating = dbr
+                });
+                await _context.BlacklistedRatings.AddRangeAsync(blockedRatings);
+                
+                // Setup profile comment thread subscription
+                var thread = await _context.CommentThreads
+                    .FirstOrDefaultAsync(ct => ct.UserId == user.Id);
+                await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+                {
+                    CommentsThread = thread,
+                    OgmaUser = user
+                });
+                
+                // TODO: set up default bookshelves
+
+
+                await _context.SaveChangesAsync();
+            }
+            
             return Page();
         }
     }
