@@ -642,9 +642,10 @@ img.avatar {
   width: 100%;
   display: grid;
   gap: 0.25rem 0.5rem;
+  grid-column-gap: 0.25rem;
   grid-template-columns: 10rem 1fr;
   grid-template-rows: auto 1fr auto auto;
-  grid-column-gap: 0.25rem;
+  grid-template-areas: " img  title " " img  hook  " " img  tags  " " info info  ";
   margin: 0.75rem 0 0;
   padding: 0.25rem 0.25rem 0;
   border: 1px solid var(--foreground-25);
@@ -655,33 +656,26 @@ img.avatar {
 .story-card:focus {
   border-color: var(--accent);
 }
+@media only screen and (max-width: 570px) {
+  .story-card {
+    grid-template-columns: 6rem 1fr;
+    grid-template-areas: " title  title " " img    hook  " " tags   tags  " " info   info  ";
+  }
+}
 .story-card:first-of-type {
   margin: 0;
 }
 .story-card:hover .info {
   border-color: var(--foreground-50);
 }
-@media only screen and (max-width: 570px) {
-  .story-card {
-    grid-template-columns: 6rem 1fr;
-    flex-direction: column;
-  }
-}
 .story-card > .image {
   object-fit: contain;
-  grid-row: 1/4;
-  grid-column: 1;
+  grid-area: img;
   align-self: baseline;
   height: auto;
 }
-@media only screen and (max-width: 570px) {
-  .story-card > .image {
-    grid-row: 2/3;
-  }
-}
 .story-card > .title {
-  grid-column: 1/3;
-  grid-row: 1;
+  grid-area: title;
   display: inline;
   margin: 0 4px;
   overflow: hidden;
@@ -720,43 +714,18 @@ img.avatar {
   color: var(--foreground);
 }
 .story-card .hook {
-  grid-column: 1/3;
-  grid-row: 2;
+  grid-area: hook;
   margin: 2px 4px;
   flex: 1;
 }
 .story-card .tags {
-  grid-column: 1/3;
-  grid-row: 3;
+  grid-area: tags;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
-.story-card .image ~ .title {
-  grid-column: 2;
-}
-@media only screen and (max-width: 570px) {
-  .story-card .image ~ .title {
-    grid-column: 1/3;
-  }
-}
-.story-card .image ~ .author {
-  grid-column: 2;
-}
-.story-card .image ~ .hook {
-  grid-column: 2;
-}
-.story-card .image ~ .tags {
-  grid-column: 2;
-}
-@media only screen and (max-width: 570px) {
-  .story-card .image ~ .tags {
-    grid-column: 1/3;
-  }
-}
 .story-card .info {
-  grid-column: 1/3;
-  grid-row: 4;
+  grid-area: info;
   padding: 0.25rem;
   display: flex;
   flex-wrap: wrap;

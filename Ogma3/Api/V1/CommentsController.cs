@@ -121,7 +121,7 @@ namespace Ogma3.Api.V1
             comm.Id = commentId;
             comm.Body = body;
             comm.LastEdit = DateTime.Now;
-            comm.EditCount = (ushort?)(comm.EditCount + 1) ?? 1;
+            comm.EditCount += 1;
             
             await _context.SaveChangesAsync();
 
@@ -157,24 +157,15 @@ namespace Ogma3.Api.V1
             
             thread.Comments.Add(comment);
             thread.CommentsCount = thread.Comments.Count;
+
+            await _context.SaveChangesAsync();
             
-            // Add subscriber
+            // Create notification
             var subscribers = await _context.CommentsThreadSubscribers
                 .Where(cts => cts.CommentsThreadId == thread.Id)
                 .Select(cts => cts.OgmaUserId)
                 .ToListAsync();
-            if (!subscribers.Contains((long) uid))
-            {
-                await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
-                {
-                    OgmaUserId = (long) uid,
-                    CommentsThread = thread
-                });
-            }
             
-            await _context.SaveChangesAsync();
-            
-            // Create notification
             var redirection = await _redirector.RedirectToComment(comment.Id);
             if (redirection is not null)
             {

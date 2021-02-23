@@ -34,7 +34,13 @@ const watch = {
         `${dir.cssroot}/src/*.sass`, 
         `${dir.cssroot}/src/elements/*.sass`,
         `${dir.cssroot}/src/admin-elements/*.sass`,
-        `${dir.cssroot}/src/mixins/*.sass`
+        `${dir.cssroot}/src/mixins/*.sass`,
+
+        `${dir.cssroot}/*.scss`,
+        `${dir.cssroot}/src/*.scss`,
+        `${dir.cssroot}/src/elements/*.scss`,
+        `${dir.cssroot}/src/admin-elements/*.scss`,
+        `${dir.cssroot}/src/mixins/*.scss`
     ],
     js: [
         `${dir.jsroot}/src/**/*.js`
