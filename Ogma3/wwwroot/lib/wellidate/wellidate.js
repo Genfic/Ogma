@@ -1,6 +1,5 @@
 /*!
- * Wellidate 2.2.0
- * https://github.com/NonFactors/Wellidate
+ * Wellidate 2.2.1
  *
  * Copyright © NonFactors
  *
@@ -255,30 +254,30 @@
                 });
             }
 
-            if (element.getAttribute("minlength") && defaultRules.minlength) {
-                rules.minlength = Object.assign({}, defaultRule, defaultRules.minlength, {
+            if (element.getAttribute("minlength") && defaultRules.length) {
+                rules.length = Object.assign({}, defaultRule, defaultRules.length, rules.length, {
                     min: element.getAttribute("minlength"),
                     element: element
                 });
             }
 
-            if (element.getAttribute("maxlength") && defaultRules.maxlength) {
-                rules.maxlength = Object.assign({}, defaultRule, defaultRules.maxlength, {
+            if (element.getAttribute("maxlength") && defaultRules.length) {
+                rules.length = Object.assign({}, defaultRule, defaultRules.length, rules.length, {
                     max: element.getAttribute("maxlength"),
                     element: element
                 });
             }
 
-            if (element.min && defaultRules.min) {
-                rules.min = Object.assign({}, defaultRule, defaultRules.min, {
-                    value: element.min,
+            if (element.min && defaultRules.range) {
+                rules.range = Object.assign({}, defaultRule, defaultRules.range, rules.range, {
+                    min: element.min,
                     element: element
                 });
             }
 
-            if (element.max && defaultRules.max) {
-                rules.max = Object.assign({}, defaultRule, defaultRules.max, {
-                    value: element.max,
+            if (element.max && defaultRules.range) {
+                rules.range = Object.assign({}, defaultRule, defaultRules.range, rules.range, {
+                    max: element.max,
                     element: element
                 });
             }

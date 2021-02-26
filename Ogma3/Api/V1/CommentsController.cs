@@ -159,26 +159,29 @@ namespace Ogma3.Api.V1
             thread.CommentsCount = thread.Comments.Count;
 
             await _context.SaveChangesAsync();
-            
-            // Create notification
-            var subscribers = await _context.CommentsThreadSubscribers
-                .Where(cts => cts.CommentsThreadId == thread.Id)
-                .Select(cts => cts.OgmaUserId)
-                .ToListAsync();
-            
-            var redirection = await _redirector.RedirectToComment(comment.Id);
-            if (redirection is not null)
-            {
-                await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
-                    subscribers,
-                    redirection.Url,
-                    redirection.Params,
-                    redirection.Fragment,
-                    comment.Body.Truncate(50)
-                );
-            }
 
-            await _context.SaveChangesAsync();
+            if (thread.UserId != uid)
+            {
+                // Create notification
+                var subscribers = await _context.CommentsThreadSubscribers
+                    .Where(cts => cts.CommentsThreadId == thread.Id)
+                    .Select(cts => cts.OgmaUserId)
+                    .ToListAsync();
+            
+                var redirection = await _redirector.RedirectToComment(comment.Id);
+                if (redirection is not null)
+                {
+                    await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
+                        subscribers,
+                        redirection.Url,
+                        redirection.Params,
+                        redirection.Fragment,
+                        comment.Body.Truncate(50)
+                    );
+                }
+
+                await _context.SaveChangesAsync();
+            }
 
             var dto = _mapper.Map<Comment, CommentDto>(comment);
             return CreatedAtAction("GetComment", new { id = comment.Id }, dto);

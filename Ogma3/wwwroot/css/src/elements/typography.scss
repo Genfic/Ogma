@@ -1,0 +1,54 @@
+@use "../vars" as v;
+@use "sass:math";
+
+.monospace {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.nb {
+  white-space: nowrap;
+}
+  
+// Headers
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 500;
+}
+  
+// Header sizes
+@for $level from 1 to 7 {
+  h#{$level} {
+    font-size: #{math.pow(1.15, 7 - $level)}rem;
+  }
+}
+    
+// Links
+a {
+  color: v.$accent;
+
+  &:hover {
+    color: v.$accent-75;
+  }
+}
+    
+// Colors
+.text {
+  &-accent {
+    color: v.$accent;
+  }
+  &-green {
+    color: v.$green;
+  }
+  &-red {
+    color: v.$red;
+  }
+}
+    
+// Code and stuff
+kbd {
+  padding: .1rem .25rem;
+  border-radius: 3px;
+  background-color: v.$foreground-10;
+}

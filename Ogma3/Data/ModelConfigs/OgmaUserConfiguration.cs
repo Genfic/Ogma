@@ -48,7 +48,7 @@ namespace Ogma3.Data.ModelConfigs
                 .HasOne(u => u.CommentsThread)
                 .WithOne(ct => ct.User)
                 .HasForeignKey<CommentsThread>(ct => ct.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasMany(u => u.Roles)

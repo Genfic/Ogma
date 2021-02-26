@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Ogma3.Data.DTOs;
 using Ogma3.Data.Models;
+using Utils;
 
 namespace Ogma3.Data.Mappings
 {
@@ -24,7 +25,7 @@ namespace Ogma3.Data.Mappings
                 ? null
                 : new UserSimpleDto
                 {
-                    Avatar = c.Author.Avatar,
+                    Avatar = c.Author.Avatar ?? Lorem.Gravatar(c.Author.Email, 200),
                     Title = c.Author.Title,
                     UserName = c.Author.UserName,
                     Roles = c.Author.Roles.AsQueryable().Select(RoleMappings.ToRoleDto)

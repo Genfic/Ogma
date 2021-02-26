@@ -1,4 +1,4 @@
-let tabs_vue = new Vue({
+new Vue({
     el: '#tabs',
     data: {
         tabindex: 0

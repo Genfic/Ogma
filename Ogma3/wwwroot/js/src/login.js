@@ -4,7 +4,6 @@ new Vue({
         name: null,
         avatar: "key.webp",
         title: null,
-        // hasMfa: false,
         checked: false,        
         
         cdn: null,
@@ -22,7 +21,6 @@ new Vue({
                             let d = r.data;
                             this.avatar = d.avatar;
                             this.title = d.title;
-                            // this.hasMfa = d.hasMfa; 
                         }
                         this.checked = true;
                     });
@@ -31,14 +29,15 @@ new Vue({
         reset: function (e) {
             this.avatar = null;
             this.title = null;
-            // this.hasMfa = false;
             this.checked = false;
         }
     },
     
     computed: {
         getAvatar: function() {
-            return this.cdn + (this.avatar ?? 'key.webp');
+            return this.avatar?.includes('picsum') || this.avatar?.includes('gravatar')
+                ? this.avatar 
+                : this.cdn + (this.avatar ?? 'key.webp');
         }
     },
     

@@ -35,19 +35,23 @@ namespace Ogma3.Api.V1
         {
             var user = await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.NormalizedUserName == name.ToUpper());
+                .Where(u => u.NormalizedUserName == name.ToUpper())
+                .Select(u => new { u.Avatar, u.Title, u.Email })
+                .FirstOrDefaultAsync();
 
-            if (user != null)
-            {
-                return new SignInData
+            return user is null
+                ? new SignInData
                 {
-                    Avatar = user.Avatar ?? Lorem.Picsum(200),
-                    Title  = user.Title,
-                    HasMfa = user.TwoFactorEnabled
+                    Avatar = Lorem.Picsum(200),
+                    Title = string.Empty,
+                    // HasMfa = false
+                }
+                : new SignInData
+                {
+                    Avatar = user.Avatar ?? Lorem.Gravatar(user.Email),
+                    Title = user.Title,
+                    // HasMfa = user.TwoFactorEnabled
                 };
-            }
-
-            return NoContent();
         }
 
         // api/Users/block
@@ -276,7 +280,7 @@ namespace Ogma3.Api.V1
     {
         public string Avatar { get; init; }
         public string Title { get; init; }
-        public bool HasMfa { get; init; }
+        // public bool HasMfa { get; init; }
     }
 
     public sealed record BlockPostData(string Name);

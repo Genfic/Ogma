@@ -117,10 +117,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <DependentUpon>invite-codes.js</DependentUpon>
     </Content>
-    <Content Update="wwwroot\css\src\elements\typography.sass">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Update="Pages\Tag.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

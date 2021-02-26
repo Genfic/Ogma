@@ -85,11 +85,11 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare(nameof(Password), ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [StringLength(13, ErrorMessage = "The invite code is exactly 13 characters long", MinimumLength = 13)]
+            [StringLength(13, ErrorMessage = "The invite code should be exactly 13 characters long", MinimumLength = 13)]
             [DataType(DataType.Password)]
             [Display(Name = "Invite code")]
             public string? InviteCode { get; set; }
@@ -151,11 +151,11 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     null,
-                    new { area = "Identity", userId = user.Id, code },
+                    new { area = "Identity", userName = user.UserName, code },
                     Request.Scheme);
 
                 await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.\n\nAlternatively, go to <pre>/confirm-email</pre> and enter the code <pre>{code}</pre>.");
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {

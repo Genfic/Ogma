@@ -54,7 +54,7 @@
             </div>
             
             <div class="o-form-group" v-if="checked">
-                <button class="btn btn-secondary" v-on:click="reset">Back</button>
+                <button class="btn btn-secondary" v-on:click.prevent="reset">Back</button>
                 <button type="submit" class="btn btn-primary">Log in</button>
             </div>
         </form>

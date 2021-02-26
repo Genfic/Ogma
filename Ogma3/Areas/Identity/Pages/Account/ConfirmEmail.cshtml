@@ -5,4 +5,31 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<form method="post" class="form">
+    <div asp-validation-summary="All">
+        <span>Please correct the following errors</span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="UserName"></label>
+        <input class="o-form-control active-border" asp-for="UserName" required>
+        <span asp-validation-for="UserName"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="Code"></label>
+        <input class="o-form-control active-border" asp-for="Code" autocomplete="one-time-code" required>
+        <span asp-validation-for="Code"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <input type="submit" value="Create" class="btn btn-primary"/>
+    </div>
+</form>
+
+@section Scripts {
+    @* <partial name="_ValidationScriptsPartial" /> *@
+}

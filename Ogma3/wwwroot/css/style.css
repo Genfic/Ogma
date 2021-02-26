@@ -115,28 +115,33 @@ body > footer {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
+  margin: 0;
   line-height: 1.2;
   font-weight: 500;
 }
 
 h1 {
-  font-size: 2.2rem;
+  font-size: 2.3130607656rem;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 2.0113571875rem;
 }
 
 h3 {
-  font-size: 1.8rem;
+  font-size: 1.74900625rem;
 }
 
 h4 {
-  font-size: 1.6rem;
+  font-size: 1.520875rem;
 }
 
 h5 {
-  font-size: 1.4rem;
+  font-size: 1.3225rem;
+}
+
+h6 {
+  font-size: 1.15rem;
 }
 
 a {
@@ -999,6 +1004,7 @@ img.avatar {
 }
 .chapter-details > .body-container > .body {
   text-align: justify;
+  line-height: 1.75;
 }
 
 ul.my-list {
@@ -1554,6 +1560,7 @@ ul.items-list li .actions > .action > i.material-icons-outlined {
 .blogpost-details .body {
   text-align: justify;
   margin-top: 1em;
+  line-height: 1.75;
 }
 .blogpost-details .tags {
   display: flex;

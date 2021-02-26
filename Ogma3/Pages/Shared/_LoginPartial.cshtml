@@ -2,15 +2,22 @@
 @using Ogma3.Api.V1
 @using Ogma3.Data.Models
 @using Ogma3.Services
+@using Utils
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaUserManager UserManager
 
 <ul class="navbar-nav right">
     @if (SignInManager.IsSignedIn(User))
     {
+        var avatarExists = !string.IsNullOrEmpty(User.FindFirstValue(OgmaClaimTypes.Avatar));
+        var avatar = avatarExists
+            ? User.FindFirstValue(OgmaClaimTypes.Avatar)
+            : Lorem.Gravatar(User.FindFirstValue(ClaimTypes.Email));
+            
         <li class="nav-item">
             <a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
-                <cdn-img src="@(User.FindFirstValue(OgmaClaimTypes.Avatar))" 
+                <cdn-img src="@avatar"
+                         no-cdn="@(!avatarExists)"
                          width="30" height="30" 
                          eager="true"
                          class="avatar"
