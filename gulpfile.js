@@ -1,4 +1,6 @@
 'use strict';
+const req = require('stream');
+const pipeline = req.pipeline;
 
 const gulp = require('gulp');
 const postcss = require('gulp-postcss');
@@ -23,15 +25,15 @@ const terser = require('gulp-terser');
 // Dirs
 const root = './Ogma3/wwwroot';
 const dir = {
-    cssroot : `${root}/css`,
-    jsroot  : `${root}/js`,
+    cssroot: `${root}/css`,
+    jsroot: `${root}/js`,
 }
 
 // Watch globs
 const watch = {
     sass: [ // Avoid `**` because gulp-sass shits itself otherwise and compilation takes >5s on any change
-        `${dir.cssroot}/*.sass`, 
-        `${dir.cssroot}/src/*.sass`, 
+        `${dir.cssroot}/*.sass`,
+        `${dir.cssroot}/src/*.sass`,
         `${dir.cssroot}/src/elements/*.sass`,
         `${dir.cssroot}/src/admin-elements/*.sass`,
         `${dir.cssroot}/src/mixins/*.sass`,
@@ -51,66 +53,64 @@ const watch = {
 }
 
 // CSS tasks
-gulp.task('css', () => {
+gulp.task('css', (cb) => {
     const processors = [
         autoprefixer,
-        discard({ removeAll: true }),
+        discard({removeAll: true}),
         mqpacker,
-        nano({ preset: 'default' })
+        nano({preset: 'default'})
     ];
-    
-    return gulp.src(`${dir.cssroot}/*.sass`)
-        .pipe(sourcemaps.init())                   // Init maps
-        .pipe(sass({fiber: Fiber}))        // Compile SASS
-        .pipe(gulp.dest(dir.cssroot))              // Output the raw CSS
-        .pipe(postcss(processors))                 // Postprocess it
-        .pipe(sourcemaps.write(`./`))     // Write maps
-        .pipe(cond('**/*.css',           // If it's a css file and not a map file
-            rename({ suffix: '.min' })        // Add .min suffix
-        ))     
-        .pipe(gulp.dest(`${dir.cssroot}/dist`))    // Output minified CSS
+
+    pipeline(gulp.src(`${dir.cssroot}/*.sass`),
+        sourcemaps.init(),                   // Init maps
+        sass({fiber: Fiber}),        // Compile SASS
+        gulp.dest(dir.cssroot),              // Output the raw CSS
+        postcss(processors),                 // Postprocess it
+        sourcemaps.write(`./`),     // Write maps
+        cond('**/*.css',           // If it's a css file and not a map file
+            rename({suffix: '.min'}), // Add .min suffix
+        ),
+        gulp.dest(`${dir.cssroot}/dist`),    // Output minified CSS
+        errorHandler);
+    cb();
 });
 
 gulp.task('watch:css', () => gulp.watch(watch.sass, gulp.series('css')));
 
 // JS tasks
-gulp.task('js', () => {
-    return gulp.src([`${dir.jsroot}/src/**/*.js`])
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(sourcemaps.init())
-        .pipe(terser({ 
-            mangle: { 
-                toplevel: false 
+gulp.task('js', (cb) => {
+    pipeline(gulp.src([`${dir.jsroot}/src/**/*.js`]),
+        rename({suffix: '.min'}),
+        sourcemaps.init(),
+        terser({
+            mangle: {
+                toplevel: false
             }
-        }))
-        .on('error', err => {
-            console.error(err)
-            this.emit('end')
-        })
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(`${dir.jsroot}/dist`));
+        }),
+        sourcemaps.write('./'),
+        gulp.dest(`${dir.jsroot}/dist`),
+        errorHandler);
+    cb();
 });
 
 gulp.task('watch:js', () => gulp.watch(watch.js, gulp.series('js')));
 
 // TS tasks
-gulp.task('ts', () => {
-    return gulp.src([`${dir.jsroot}/src/**/*.ts`])
-        .pipe(sourcemaps.init())
-        .pipe(tsProject())
-        .pipe(gulp.dest(`${dir.jsroot}/dist`))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(terser({ 
-            mangle: { 
-                toplevel: true 
-            } 
-        }))
-        .on('error', err => {
-            console.error(err)
-            this.emit('end')
-        })
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(`${dir.jsroot}/dist`));
+gulp.task('ts', (cb) => {
+    pipeline(gulp.src([`${dir.jsroot}/src/**/*.ts`]),
+        sourcemaps.init(),
+        tsProject(),
+        gulp.dest(`${dir.jsroot}/dist`),
+        rename({suffix: '.min'}),
+        terser({
+            mangle: {
+                toplevel: true
+            }
+        }),
+        sourcemaps.write('./'),
+        gulp.dest(`${dir.jsroot}/dist`),
+        errorHandler);
+    cb();
 });
 
 gulp.task('watch:ts', () => gulp.watch(watch.ts, gulp.series('ts')))
@@ -118,3 +118,10 @@ gulp.task('watch:ts', () => gulp.watch(watch.ts, gulp.series('ts')))
 // All tasks
 gulp.task('all', gulp.parallel(['css', 'js', 'ts']));
 gulp.task('watch:all', gulp.parallel(['watch:css', 'watch:js', 'watch:ts', 'all']));
+
+
+function errorHandler(err) {
+    if (err) {
+        console.error(err);
+    }
+}

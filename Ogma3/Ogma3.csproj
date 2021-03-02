@@ -374,6 +374,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Validators" />
+    <Folder Include="wwwroot\css\dist" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

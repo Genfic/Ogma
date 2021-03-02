@@ -16,13 +16,10 @@ namespace Ogma3.Api.V1
     public class ChaptersReadController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly OgmaUserManager _userManager;
-
-
-        public ChaptersReadController(ApplicationDbContext context, OgmaUserManager userManager)
+        
+        public ChaptersReadController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         // GET api/chaptersread/5

@@ -1,7 +1,6 @@
 new Vue({
    el: '#blogpost-app',
    data: {
-      // lastScroll: 0,
       ticking: false,
       
       windowHeight: 0,
@@ -13,7 +12,6 @@ new Vue({
          this.$refs.reportModal.visible = true;
       },
       handleScroll: function () {
-         // console.log(this.lastScroll)
          let elBottom = this.$el.getBoundingClientRect().bottom;
          let perc = elBottom - this.windowHeight;
          
@@ -25,7 +23,6 @@ new Vue({
       this.containerHeight = this.$el.offsetTop + this.$el.offsetHeight;
       
       document.addEventListener('scroll', e => {
-         // this.lastScroll = window.scrollY;
          if (!this.ticking) {
             window.requestAnimationFrame(() => {
                this.handleScroll();
