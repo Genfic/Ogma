@@ -38,14 +38,14 @@ $title-height: 1.8rem;
     }
   }
 
-  &>.image {
+  >.image {
     object-fit: contain;
     grid-area: img;
     align-self: baseline;
     height: auto;
   }
     
-  &>.title {
+  >.title {
     grid-area: title;
 
     display: inline;
@@ -113,7 +113,7 @@ $title-height: 1.8rem;
     display: flex;
     flex-wrap: wrap;
     border-top: 1px solid v.$foreground-25;
-    &> * {
+    > * {
       padding: 0 .25rem;
       color: v.$foreground-75;
       cursor: default;

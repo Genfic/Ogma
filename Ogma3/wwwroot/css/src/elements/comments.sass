@@ -9,20 +9,20 @@ $btn-height: 2.5rem
   @media screen and (max-width: v.$mq-mobile)
     width: 100%
   
-  &>form
+  >form
     display: flex
     flex-direction: column
     
-    &>.comment-box
+    >.comment-box
       padding: .5rem
       min-height: 5rem
       background-color: v.$background
       color: v.$foreground
 
-    &>.counter
+    >.counter
       font-size: .8rem
     
-    &>.buttons
+    >.buttons
       margin-top: .1rem
       display: flex
       
@@ -33,7 +33,7 @@ $btn-height: 2.5rem
       color: v.$foreground
       margin: 1px 1px 0 0
       
-      &>i.material-icons-outlined
+      >i.material-icons-outlined
         font-size: inherit !important
         vertical-align: middle
         
@@ -46,15 +46,15 @@ $btn-height: 2.5rem
       height: $btn-height
       color: v.$foreground
       
-  &>o-subscribe
-    &>button
+  >o-subscribe
+    >button
       margin-bottom: .1rem
       
       &.active
-        &>.material-icons-outlined
+        >.material-icons-outlined
           color: v.$accent
 
-  &>.comments
+  >.comments
     padding-top: .5rem
     
     .snip

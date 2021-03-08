@@ -5,36 +5,36 @@ $title-height: 2rem
 
 #story-app
 
-  &>.story-details
+  >.story-details
     overflow-y: auto
     
-    &>.titlebar
+    >.titlebar
       display: flex
       align-items: baseline
       flex-direction: row
       padding-bottom: .5rem
       
-      &>.rating
+      >.rating
         height: $title-height * 0.7
         width: $title-height * 0.7
         margin-right: .5rem
       
-      &>h1.title
+      >h1.title
         font-size: $title-height
         line-height: $title-height * 1.5
         word-wrap: break-word
         word-break: break-all
     
-    &>.tags
+    >.tags
       display: flex
       flex-direction: row
       flex-wrap: wrap
   
-    &>.main
+    >.main
       padding-top: .5rem
       text-align: justify
       
-      &>.cover
+      >.cover
         float: left
         margin-right: 10px
         margin-bottom: 10px
@@ -47,7 +47,7 @@ $title-height: 2rem
         font-weight: 500
         font-size: 1rem
         
-    &>.actions
+    >.actions
       display: flex
       flex-wrap: wrap-reverse
       margin-bottom: .5rem
@@ -55,12 +55,12 @@ $title-height: 2rem
       .spacer
         flex: 1
         
-  &>.chapters
+  >.chapters
     margin-top: 1rem
-    &>span
+    >span
       font-weight: bold
       
-    &>.chapter
+    >.chapter
       display: flex
       justify-content: space-between
       padding: .5rem
@@ -71,32 +71,32 @@ $title-height: 2rem
       &:hover
         background-color: v.$accent-5
       
-      &>.left
+      >.left
         display: flex
         align-items: center
-        &>*
+        >*
           padding: 0 .25rem
   
-        &>.order
+        >.order
           color: v.$foreground-75
           border-right: 1px solid v.$foreground-10
           border-left: 1px solid v.$foreground-10
           padding: 0 .5rem
           margin: 0 .2rem
           
-        &>.title
+        >.title
           color: v.$foreground
           &:hover
             color: v.$accent
             text-decoration: underline
           
-        &>.date
+        >.date
           font-size: .8rem
           color: v.$foreground-75
           &:hover
             color: v.$foreground
             
-        &>.read-status
+        >.read-status
           padding: 0
           width: 1.2rem
           height: 1.2rem
@@ -115,10 +115,10 @@ $title-height: 2rem
             font-size: inherit
             line-height: 1.2rem
         
-      //&>.right
-        //&>.word-count
+      //>.right
+        //>.word-count
           
-  &>.info
+  >.info
     border-top: 1px solid v.$foreground-25
     margin-top: 1rem
     display: flex
@@ -131,7 +131,7 @@ $title-height: 2rem
       &:hover
         color: v.$foreground
       
-    &>*
+    >*
       padding: 0 .25rem
         
     a

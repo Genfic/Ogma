@@ -41,14 +41,14 @@ ul.items-list
       display: flex
       align-items: center
       
-      &>*
+      >*
         margin: 0 .4rem
         min-width: 3ch
         font-weight: bold
         color: v.$background
         text-shadow: 1px 1px 0 v.$foreground-75
       
-      &>i
+      >i
         min-width: unset
     
     & .name
@@ -56,7 +56,7 @@ ul.items-list
       text-decoration: none
       text-overflow: ellipsis
       
-      &>.icon
+      >.icon
         color: v.$foreground-50
         font-size: 90%
         padding-left: .5rem        
@@ -69,7 +69,7 @@ ul.items-list
       display: flex
       height: auto
       
-      &>.action
+      >.action
         height: auto
         margin: .2rem
         padding: 0 .5rem
@@ -81,5 +81,5 @@ ul.items-list
           color: v.$foreground-75
           border-color: v.$foreground
         
-        &>i.material-icons-outlined
+        >i.material-icons-outlined
           font-size: 1.2rem

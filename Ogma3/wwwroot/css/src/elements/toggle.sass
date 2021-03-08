@@ -8,7 +8,7 @@
     .toggle
       border-color: v.$foreground-75
         
-  &>label
+  >label
     display: flex
     align-items: center
     min-height: 48px
@@ -17,12 +17,12 @@
     cursor: pointer
     +f.focus
     
-    &>.label-off
+    >.label-off
       display: inline
-    &>.label-on
+    >.label-on
       display: none
   
-  &>input
+  >input
     opacity: 0
     position: absolute
     
@@ -34,9 +34,9 @@
     &:checked
       &+label
 
-        &>.label-off
+        >.label-off
           display: none
-        &>.label-on
+        >.label-on
           display: inline
           
         .toggle

@@ -22,7 +22,7 @@ $margin: .5rem
     height: auto
     padding: 0
 
-  &>.nav
+  >.nav
     grid-row: 3
     grid-column: 3
     align-self: end
@@ -59,14 +59,14 @@ $margin: .5rem
         border-top-right-radius: .25rem
         border-top-left-radius: .25rem
 
-  &>.img
+  >.img
     grid-row: 1 / 4
     grid-column: 1
     object-fit: contain
     align-self: baseline
     height: $avatarSize
 
-  &>.name
+  >.name
     grid-row: 1
     grid-column: 2
     font-size: 2rem
@@ -74,13 +74,13 @@ $margin: .5rem
     font-weight: 300
     color: v.$foreground
 
-  &>.date
+  >.date
     grid-row: 2
     grid-column: 2 / 3
     font-size: 1.1rem
     font-weight: 100
     
-  &>.info
+  >.info
     grid-row: 3
     grid-column: 2 / 3
     display: flex
@@ -90,13 +90,13 @@ $margin: .5rem
     font-size: .9rem
     margin-bottom: $margin
     
-  &>.buttons
+  >.buttons
     grid-row: 1
     grid-column: 3
     display: flex
     justify-content: flex-end
     
-    &>a
+    >a
       display: flex
       align-items: center
       justify-content: center
@@ -104,7 +104,7 @@ $margin: .5rem
       color: v.$foreground-75
       text-decoration: none
       
-    &>.button
+    >.button
       background-color: v.$accent-10
       margin-left: .25rem
       +ab.active-border

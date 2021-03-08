@@ -27,7 +27,7 @@ form.form
     display: grid
     grid-template: 1 / 1
       
-    &>*
+    >*
       grid-column: 1
       grid-row: 1
       
@@ -91,7 +91,7 @@ form.form
       @media only screen and (max-width: v.$mq-mobile)
         display: flex
         flex-direction: column
-        &>.rating
+        >.rating
           margin-bottom: .5rem
         
       .rating
@@ -113,17 +113,17 @@ form.form
           display: flex
           cursor: pointer
           
-          &>img
+          >img
             flex-basis: 3rem
             
-          &>.main
+          >.main
             display: block
             margin-left: .5rem
-            &>*
+            >*
               display: block
-            &>strong
+            >strong
               font-weight: 600
-            &>span
+            >span
               font-weight: 500
 
     .field-validation-error
@@ -141,7 +141,7 @@ form.form
 form.confirm
   padding: 1rem 0 0
     
-  &>.buttons
+  >.buttons
     display: flex
   
     .button

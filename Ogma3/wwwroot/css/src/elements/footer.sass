@@ -8,7 +8,7 @@ footer.footer
   width: 100%
   height: auto
   
-  &>.cols
+  >.cols
     display: flex
     flex-direction: row
     flex-wrap: wrap
@@ -19,7 +19,7 @@ footer.footer
     @media screen and (max-width: v.$mq-mobile)
       flex-direction: column
     
-    &>.col
+    >.col
       display: flex
       flex-direction: column
       flex: 1
@@ -32,13 +32,13 @@ footer.footer
       &:last-child
         border-right: none
       
-      &>.header
+      >.header
         white-space: nowrap
         font-weight: 500
         padding: 0 .25rem 
         border-bottom: 1px solid v.$foreground-25
 
-      &>.item
+      >.item
         width: 100%
         white-space: nowrap
         padding: .25rem
@@ -52,18 +52,18 @@ footer.footer
             height: 1.5rem
             margin-right: 1ch
           
-      &>span
+      >span
         .hl
           color: v.$foreground
         
-      &>a
+      >a
         color: v.$foreground
         text-decoration: none
         &:hover
           text-decoration: none
           background-color: v.$accent-10
       
-      &>button
+      >button
         border: none
         background-color: transparent
         text-align: left
@@ -71,7 +71,7 @@ footer.footer
           background-color: v.$accent-10
       
     
-  &>.bottom
+  >.bottom
     display: flex
     width: 100%
     justify-content: center
@@ -79,5 +79,5 @@ footer.footer
     padding: .5rem
     border-top: 1px solid v.$foreground-25
     
-    &>.copy-text
+    >.copy-text
       margin-right: 1ch
