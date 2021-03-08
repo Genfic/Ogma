@@ -16,6 +16,7 @@ export class QuoteBox extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+        this.classList.add('wc-loaded');
         this._load();
     }
 
@@ -36,8 +37,18 @@ export class QuoteBox extends LitElement {
             .then(res => {
                 this.body = res.data.body;
                 this.author = res.data.author;
+                window.localStorage.setItem('quote', JSON.stringify(res.data))
             })
-            .catch(console.error);
+            .catch(e => {
+                if (e.response.status === 429) {
+                    console.log('Too many requests, loading from cache');
+                } else {
+                    console.error(e);
+                }
+                let { body, author } = JSON.parse(window.localStorage.getItem('quote'))
+                this.body = body;
+                this.author = author;
+            });
     }
 
     createRenderRoot() {

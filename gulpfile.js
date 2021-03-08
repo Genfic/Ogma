@@ -34,12 +34,17 @@ const watchGlobs = {
         `${roots.css}/src/elements/*.sass`,
         `${roots.css}/src/admin-elements/*.sass`,
         `${roots.css}/src/mixins/*.sass`,
+        `${roots.css}/src/base/*.sass`,
 
         `${roots.css}/*.scss`,
         `${roots.css}/src/*.scss`,
         `${roots.css}/src/elements/*.scss`,
         `${roots.css}/src/admin-elements/*.scss`,
         `${roots.css}/src/mixins/*.scss`,
+        `${roots.css}/src/base/*.scss`,
+
+        // `${roots.css}/**/*.sass`,
+        // `${roots.css}/**/*.scss`,
     ],
     js: [
         `${roots.js}/src/**/*.js`

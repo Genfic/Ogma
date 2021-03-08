@@ -19,6 +19,7 @@ export class ShelvesButton extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this._getShelves();
+        this.classList.add('wc-loaded');
     }
 
     render() {

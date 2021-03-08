@@ -1,4 +1,4 @@
-@page "/club/{clubId}/folder/{slug}-{id}"
+@page "/club/{clubId}/folder/{id}/{slug}"
 @model Ogma3.Pages.Club.Folders.FolderModel
 
 
@@ -23,7 +23,7 @@
 
 <hr>
 
-<div class="folder-list">
+<div class="folder-list tile-list">
     @foreach (var folder in Model.Folder.ChildFolders)
     {
         <partial name="Shared/Minimals/_FolderMinimal" model="folder"/>
@@ -44,6 +44,6 @@
             <partial name="Shared/Cards/_StoryCard" model="@story"/>
         }
         
-         <partial name="_Pagination" model="Model.Pagination"/>
+        <partial name="_Pagination" model="Model.Pagination"/>
     }
 </div>

@@ -2502,6 +2502,9 @@ form.search select:focus {
   flex-direction: row;
   padding: 0.5rem;
 }
+.folder-minimal .icon {
+  margin-right: 0.5rem;
+}
 .folder-minimal .name {
   flex: 1;
   font-weight: bold;
@@ -2856,6 +2859,15 @@ details .actions {
   right: 0;
 }
 
+.tile-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.tile-list > * {
+  margin: 0.5rem;
+  flex: 1;
+}
+
 .md p {
   padding-bottom: 0.5rem;
 }
@@ -3070,6 +3082,31 @@ o-shelves .more-shelves button {
 }
 o-shelves .more-shelves button i {
   margin-right: 0.5rem;
+}
+
+.wc-loaded {
+  animation-name: wc-loaded;
+  animation-duration: 200ms;
+}
+
+@keyframes wc-loaded {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+o-vote:empty {
+  min-width: 53.4px;
+}
+
+o-notifications {
+  min-width: 40px;
+}
+
+o-featured-in-clubs {
+  min-width: 135px;
 }
 
 form.form {

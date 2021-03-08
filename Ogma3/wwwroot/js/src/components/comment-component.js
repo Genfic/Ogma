@@ -130,7 +130,7 @@ Vue.component('comment', {
         avatar: function (url) {
             return url.includes('gravatar')
                 ? url
-                : cdn + url;
+                : this.cdn + url;
         }
     },
     template: `

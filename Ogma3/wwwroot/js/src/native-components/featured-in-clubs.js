@@ -17,6 +17,7 @@ export class FeaturedInClubs extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+        this.classList.add('wc-loaded');
         axios.get(`${this.endpoint}/story/${this.storyId}`)
             .then(res => this.clubs = res.data)
             .catch(console.error);

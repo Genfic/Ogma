@@ -16,6 +16,7 @@ export class NotificationsButton extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this.load();
+        this.classList.add('wc-loaded');
     }
     
     load() {
@@ -29,7 +30,7 @@ export class NotificationsButton extends LitElement {
     render() {
         return html`
             <a class="nav-link light" href="${this.href}" title="${this.count ?? 0} notifications">
-                <i class="material-icons-outlined">notifications</i>
+                <i class="material-icons-outlined wc-loaded">notifications</i>
                 ${(this.count ?? 0) > 0 
                     ? html`<span class="badge">${this.count}</span>` 
                     : null 

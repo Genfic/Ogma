@@ -1,10 +1,12 @@
 @model FolderMinimal
 
 <div class="folder-minimal active-border">
+    <icon icon="folder" class="icon"></icon>
+    
     <a class="name" asp-page="/Club/Folders/Folder" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" asp-route-clubid="@Model.ClubId">
         @Model.Name
     </a>
-    
+
     <div class="count">
         <strong>@Model.StoriesCount</strong> stories
     </div>

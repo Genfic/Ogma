@@ -17,6 +17,7 @@ export class FollowButton extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+        this.classList.add('wc-loaded');
     }
 
     render() {

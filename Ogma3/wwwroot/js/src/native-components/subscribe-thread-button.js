@@ -17,6 +17,7 @@ export class SubscribeThreadButton extends LitElement {
     
     connectedCallback() {
         super.connectedCallback();
+        this.classList.add('wc-loaded');
 
         axios.get(`${this.endpoint}/thread?threadId=${this.threadId}`)
             .then(res => {

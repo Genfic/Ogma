@@ -55,11 +55,11 @@ namespace Ogma3.Data.Repositories
                     AccessLevel = f.AccessLevel,
                     ChildFolders = f.ChildFolders.Select(cf => new FolderMinimal
                     {
-                        Id = f.Id,
-                        ClubId = f.ClubId,
-                        Name = f.Name,
-                        Slug = f.Slug,
-                        StoriesCount = f.StoriesCount
+                        Id = cf.Id,
+                        ClubId = cf.ClubId,
+                        Name = cf.Name,
+                        Slug = cf.Slug,
+                        StoriesCount = cf.StoriesCount
                     })
                 })
                 .AsNoTracking()
