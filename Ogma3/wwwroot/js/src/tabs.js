@@ -1,6 +1,6 @@
 new Vue({
-    el: '#tabs',
-    data: {
-        tabindex: 0
-    }
+	el: '#tabs',
+	data: {
+		tabindex: 0
+	}
 });

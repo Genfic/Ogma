@@ -1,47 +1,47 @@
 Vue.component('input-file', {
-    props: {
-        max: {
-            type: Number,
-            required: true
-        },
-        label: {
-            type: String,
-            required: true 
-        },
-        desc: {
-            type: String,
-            required: false,
-            default: null
-        },
-        validateMsg: {
-            type: String,
-            default: null
-        }
-    },
-    data: function () {
-        return {
-            name: this.label.replace(/\s+/g, ''),
-            file: null
-        }
-    },
-    methods: {
-        fileSelected(e) {
-            this.file = e.target.files[0]
-        }
-    },
-    computed: {
-        validate: function () {
-            if (this.file)
-                return this.file.size <= this.max;
-            else return true;
-        },
-        validationString: function () {
-            return this.validateMsg
-                .replace('{0}', this.label)
-                .replace('{1}', `${this.max}`);
-        },
-    },
-    template: `
+	props: {
+		max: {
+			type: Number,
+			required: true
+		},
+		label: {
+			type: String,
+			required: true 
+		},
+		desc: {
+			type: String,
+			required: false,
+			default: null
+		},
+		validateMsg: {
+			type: String,
+			default: null
+		}
+	},
+	data: function () {
+		return {
+			name: this.label.replace(/\s+/g, ''),
+			file: null
+		};
+	},
+	methods: {
+		fileSelected(e) {
+			this.file = e.target.files[0];
+		}
+	},
+	computed: {
+		validate: function () {
+			if (this.file)
+				return this.file.size <= this.max;
+			else return true;
+		},
+		validationString: function () {
+			return this.validateMsg
+				.replace('{0}', this.label)
+				.replace('{1}', `${this.max}`);
+		},
+	},
+	template: `
         <div class="o-form-group">
             <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>

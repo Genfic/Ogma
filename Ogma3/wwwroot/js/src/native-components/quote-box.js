@@ -1,27 +1,27 @@
 import {LitElement, html} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
 
 export class QuoteBox extends LitElement {
-    static get properties() {
-        return {
-            endpoint: { type: String },
-            loading: { type: Boolean, attribute: false },
-            body: { type: String, attribute: false },
-            author: { type: String, attribute: false }
-        }
-    }
+	static get properties() {
+		return {
+			endpoint: { type: String },
+			loading: { type: Boolean, attribute: false },
+			body: { type: String, attribute: false },
+			author: { type: String, attribute: false }
+		};
+	}
 
-    constructor() {
-        super();
-    }
+	constructor() {
+		super();
+	}
 
-    connectedCallback() {
-        super.connectedCallback();
-        this.classList.add('wc-loaded');
-        this._load();
-    }
+	connectedCallback() {
+		super.connectedCallback();
+		this.classList.add('wc-loaded');
+		this._load();
+	}
 
-    render() {
-        return html`
+	render() {
+		return html`
             <div id="quote" class="quote active-border">
                 <div class="refresh" @click="${this._load}">
                     <i class="material-icons-outlined ${this.loading ? 'spin' : ''}">refresh</i>
@@ -30,30 +30,30 @@ export class QuoteBox extends LitElement {
                 <span class="author">${this.author}</span>
             </div>
         `;
-    }
+	}
 
-    _load() {
-        axios.get(this.endpoint)
-            .then(res => {
-                this.body = res.data.body;
-                this.author = res.data.author;
-                window.localStorage.setItem('quote', JSON.stringify(res.data))
-            })
-            .catch(e => {
-                if (e.response.status === 429) {
-                    console.log('Too many requests, loading from cache');
-                } else {
-                    console.error(e);
-                }
-                let { body, author } = JSON.parse(window.localStorage.getItem('quote'))
-                this.body = body;
-                this.author = author;
-            });
-    }
+	_load() {
+		axios.get(this.endpoint)
+			.then(res => {
+				this.body = res.data.body;
+				this.author = res.data.author;
+				window.localStorage.setItem('quote', JSON.stringify(res.data));
+			})
+			.catch(e => {
+				if (e.response.status === 429) {
+					console.log('Too many requests, loading from cache');
+				} else {
+					console.error(e);
+				}
+				let { body, author } = JSON.parse(window.localStorage.getItem('quote'));
+				this.body = body;
+				this.author = author;
+			});
+	}
 
-    createRenderRoot() {
-        return this;
-    }
+	createRenderRoot() {
+		return this;
+	}
 }
 
 window.customElements.define('o-quotebox', QuoteBox);

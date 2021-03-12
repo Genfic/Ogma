@@ -1,76 +1,76 @@
 Vue.component('club-folder-selector', {
-    props: {
-        clubsRoute: {
-            type: String,
-            required: true
-        },
-        foldersRoute: {
-            type: String,
-            required: true
-        },
-        cdn: {
-            type: String,
-            required: true
-        },
-        storyId: {
-            type: Number,
-            required: true
-        }
-    },
-    data: function () {
-        return {
-            clubs: [],
-            folders: null,
-            selectedClub: null,
-            csrf: null,
-            status: {
-                message: '',
-                success: null
-            },
-            visible: false
-        }
-    },
-    methods: {
-        add: function () {
-            if (!this.$refs.folder.sel) {
-                this.status = {
-                    message: "You must select a folder!",
-                    success: false
-                }
-                return;
-            }
+	props: {
+		clubsRoute: {
+			type: String,
+			required: true
+		},
+		foldersRoute: {
+			type: String,
+			required: true
+		},
+		cdn: {
+			type: String,
+			required: true
+		},
+		storyId: {
+			type: Number,
+			required: true
+		}
+	},
+	data: function () {
+		return {
+			clubs: [],
+			folders: null,
+			selectedClub: null,
+			csrf: null,
+			status: {
+				message: '',
+				success: null
+			},
+			visible: false
+		};
+	},
+	methods: {
+		add: function () {
+			if (!this.$refs.folder.sel) {
+				this.status = {
+					message: "You must select a folder!",
+					success: false
+				};
+				return;
+			}
             
-            axios.post(`${this.foldersRoute}/add-story`, {
-                folderId: this.$refs.folder.sel,
-                storyId: this.storyId
-            }, {
-                headers: { "RequestVerificationToken" : this.csrf }
-            })
-            .then(_ => {
-                this.status = {
-                    message: 'Successfully added',
-                    success: true
-                }
-            })
-            .catch(err => {
-                this.status = {
-                    message: err.response.data,
-                    success: false
-                }
-            });
-        },
-        hide: function () {
-            this.visible = false;
-            this.selectedClub = null;
-        }
-    },
-    mounted() {
-        axios.get(`${this.clubsRoute}/user`)
-            .then(res => this.clubs = res.data)
-            .catch(console.error);
-        this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
-    },
-    template: `
+			axios.post(`${this.foldersRoute}/add-story`, {
+				folderId: this.$refs.folder.sel,
+				storyId: this.storyId
+			}, {
+				headers: { "RequestVerificationToken" : this.csrf }
+			})
+				.then(() => {
+					this.status = {
+						message: 'Successfully added',
+						success: true
+					};
+				})
+				.catch(err => {
+					this.status = {
+						message: err.response.data,
+						success: false
+					};
+				});
+		},
+		hide: function () {
+			this.visible = false;
+			this.selectedClub = null;
+		}
+	},
+	mounted() {
+		axios.get(`${this.clubsRoute}/user`)
+			.then(res => this.clubs = res.data)
+			.catch(console.error);
+		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
+	},
+	template: `
         <div class="club-folder-selector my-modal" v-if="visible" @click.self="hide" v-cloak>
           <div class="content">
             <template v-if="selectedClub">

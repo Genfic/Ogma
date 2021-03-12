@@ -1,35 +1,35 @@
 Vue.component('clubs-with-story', {
-    props: {
-        clubsRoute: {
-            type: String,
-            required: true
-        },
-        cdn: {
-            type: String,
-            required: true
-        },
-        storyId: {
-            type: Number,
-            required: true
-        }
-    },
-    data: function () {
-        return {
-            clubs: [],
-            visible: false
-        }
-    },
-    methods: {
-        hide: function () {
-            this.visible = false;
-        }
-    },
-    mounted() {
-        axios.get(`${this.clubsRoute}/story/${this.storyId}`)
-            .then(res => this.clubs = res.data)
-            .catch(console.error);
-    },
-    template: `
+	props: {
+		clubsRoute: {
+			type: String,
+			required: true
+		},
+		cdn: {
+			type: String,
+			required: true
+		},
+		storyId: {
+			type: Number,
+			required: true
+		}
+	},
+	data: function () {
+		return {
+			clubs: [],
+			visible: false
+		};
+	},
+	methods: {
+		hide: function () {
+			this.visible = false;
+		}
+	},
+	mounted() {
+		axios.get(`${this.clubsRoute}/story/${this.storyId}`)
+			.then(res => this.clubs = res.data)
+			.catch(console.error);
+	},
+	template: `
       <div class="club-folder-selector my-modal" v-if="visible" @click.self="hide" v-cloak>
           <div class="content">
             

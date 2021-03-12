@@ -1,52 +1,52 @@
 Vue.component('input-rating', {
-    props: {
-        label: {
-            type: String,
-            required: true
-        },
-        cdn: {
-            type: String,
-            required: true
-        },
-        desc: {
-            type: String,
-            required: false,
-            default: null
-        },
-        ratingsApi: {
-            type: String,
-            required: true
-        },
-        value: {
-            type: Number,
-            default: null
-        }
-    },
-    data: function () {
-        return {
-            name: this.label.replace(/\s+/g, ''),
-            loading: true,
-            ratings: []
-        }
-    },
-    methods: {
-        checked(id, idx) {
-            if (this.value) {
-                return id === this.value;
-            } else {
-                return idx === 0;
-            }
-        }
-    },
-    created() {
-        axios.get(this.ratingsApi)
-            .then(res => {
-                this.ratings = res.data;
-                this.loading = false;
-            })
-            .catch(console.error);
-    },
-    template: `
+	props: {
+		label: {
+			type: String,
+			required: true
+		},
+		cdn: {
+			type: String,
+			required: true
+		},
+		desc: {
+			type: String,
+			required: false,
+			default: null
+		},
+		ratingsApi: {
+			type: String,
+			required: true
+		},
+		value: {
+			type: Number,
+			default: null
+		}
+	},
+	data: function () {
+		return {
+			name: this.label.replace(/\s+/g, ''),
+			loading: true,
+			ratings: []
+		};
+	},
+	methods: {
+		checked(id, idx) {
+			if (this.value) {
+				return id === this.value;
+			} else {
+				return idx === 0;
+			}
+		}
+	},
+	created() {
+		axios.get(this.ratingsApi)
+			.then(res => {
+				this.ratings = res.data;
+				this.loading = false;
+			})
+			.catch(console.error);
+	},
+	template: `
         <div class="o-form-group">
             <label :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>

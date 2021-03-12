@@ -1,30 +1,30 @@
 import {LitElement, html} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
 
 export class FeaturedInClubs extends LitElement {
-    static get properties() {
-        return {
-            endpoint: { type: String },
-            storyId: { type: Number },
-            cdn: { type: String },
-            visible: { type: Boolean, attribute: false, },
-            clubs: { type: Array, attribute: false}
-        }
-    }
+	static get properties() {
+		return {
+			endpoint: { type: String },
+			storyId: { type: Number },
+			cdn: { type: String },
+			visible: { type: Boolean, attribute: false, },
+			clubs: { type: Array, attribute: false}
+		};
+	}
 
-    constructor() {
-        super();
-    }
+	constructor() {
+		super();
+	}
 
-    connectedCallback() {
-        super.connectedCallback();
-        this.classList.add('wc-loaded');
-        axios.get(`${this.endpoint}/story/${this.storyId}`)
-            .then(res => this.clubs = res.data)
-            .catch(console.error);
-    }
+	connectedCallback() {
+		super.connectedCallback();
+		this.classList.add('wc-loaded');
+		axios.get(`${this.endpoint}/story/${this.storyId}`)
+			.then(res => this.clubs = res.data)
+			.catch(console.error);
+	}
 
-    render() {
-        return html`
+	render() {
+		return html`
             <a @click="${() => this.visible = !this.visible}">Featured in clubs</a>
             
             ${this.visible ? html`
@@ -56,11 +56,11 @@ export class FeaturedInClubs extends LitElement {
                 </div>
             ` : null}
         `;
-    }
+	}
 
-    createRenderRoot() {
-        return this;
-    }
+	createRenderRoot() {
+		return this;
+	}
 }
 
 window.customElements.define('o-featured-in-clubs', FeaturedInClubs);

@@ -4,13 +4,13 @@
  * @param {String} newCh New character
  * @returns {string} Resulting string
  */
-String.prototype.replaceAll = function(oldCh, newCh) {
-    let out = '';
-    for (let c of this) {
-        out += c === oldCh ? newCh : c;
-    }
-    return out;
-}
+String.prototype.replaceAll = function (oldCh, newCh) {
+	let out = '';
+	for (let c of this) {
+		out += c === oldCh ? newCh : c;
+	}
+	return out;
+};
 
 /**
  * If the string is null or empty, return the alternative string. If not, return the string itself.
@@ -18,10 +18,8 @@ String.prototype.replaceAll = function(oldCh, newCh) {
  * @returns {String} Source string, or alternative if source is null or empty.
  */
 String.prototype.ifNullOrEmpty = function (alternative) {
-    return this === null || this.length <= 0
-        ? alternative
-        : this;
-}
+	return this === null || this.length <= 0 ? alternative : this;
+};
 
 /**
  * Converts hexadecimal color, and an alpha into an argb color
@@ -30,31 +28,31 @@ String.prototype.ifNullOrEmpty = function (alternative) {
  * @returns {string} Resulting RGBA value formatted as `rgba(255, 255, 255, 1)`
  */
 function hexToArgb(hex, alpha = 1) {
-    let str = hex.replace('#', '');
-    let rgb = str.match(/.{1,2}/g);
-    rgb = rgb.map(c => parseInt(c, 16));
-    return 'rgba('+rgb[0]+', '+rgb[1]+', '+rgb[2]+', '+alpha+')';
+	let str = hex.replace('#', '');
+	let rgb = str.match(/.{1,2}/g);
+	rgb = rgb.map((c) => parseInt(c, 16));
+	return 'rgba(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ', ' + alpha + ')';
 }
-
+ 
 /**
  * Removes the given element from an array
  * @param {object} element Element to remove
  */
 Array.prototype.remove = function (element) {
-    let idx = this.indexOf(element);
-    if (idx > -1) {
-        this.splice(idx, 1)
-    }
-}
+	let idx = this.indexOf(element);
+	if (idx > -1) {
+		this.splice(idx, 1);
+	}
+};
 
 /**
  * Pushes the given element to an array, provided the array doesn't already include it
  * @param {object} element Element to push
  */
 Array.prototype.pushUnique = function (element) {
-    if (this.includes(element)) return;
-    this.push(element);
-}
+	if (this.includes(element)) return;
+	this.push(element);
+};
 
 /**
  * Reads cookie value by name
@@ -62,8 +60,8 @@ Array.prototype.pushUnique = function (element) {
  * @returns {String} Returns the value of the cookie
  */
 function getCookieValue(name) {
-    let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return b ? b.pop() : '';
+	let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : '';
 }
 
 /**
@@ -75,11 +73,11 @@ function getCookieValue(name) {
  * @param {String} sameSite SameSite setting
  */
 function setCookie(name, value, expires = null, secure = false, sameSite = null) {
-    let cookie = name + '=' + value;
-    if (expires) cookie += '; expires=' + expires.toUTCString();
-    if (secure) cookie += '; secure=' + String(secure);
-    if (sameSite) cookie += '; samesite=' + sameSite;
-    document.cookie = cookie;
+	let cookie = name + '=' + value;
+	if (expires) cookie += '; expires=' + expires.toUTCString();
+	if (secure) cookie += '; secure=' + String(secure);
+	if (sameSite) cookie += '; samesite=' + sameSite;
+	document.cookie = cookie;
 }
 
 /**
@@ -89,22 +87,22 @@ function setCookie(name, value, expires = null, secure = false, sameSite = null)
  * @returns {number} The given number normalized into [0, 1] range
  */
 Number.prototype.normalize = function (min, max) {
-    if (max < min) throw 'Max cannot be less than min';
-    return (this - min) / (max - min);
-}
+	if (max < min) throw 'Max cannot be less than min';
+	return (this - min) / (max - min);
+};
 
 /**
  * Clamps a given number to a given [min, max] range
  * @param {number} min The lower edge to clamp to, by default 0
  * @param {number} max The upper edge to clamp to, by default 1
- * @returns {number} 
+ * @returns {number}
  */
 Number.prototype.clamp = function (min = 0, max = 1) {
-    if (max < min) throw 'Max cannot be less than min';
-    if (this < min) return min;
-    if (this > max) return max;
-    return this;
-}
+	if (max < min) throw 'Max cannot be less than min';
+	if (this < min) return min;
+	if (this > max) return max;
+	return this;
+};
 
 /**
  * Properly splits a string, that is returns an empty array of the string is empty, null, or undefined
@@ -112,7 +110,5 @@ Number.prototype.clamp = function (min = 0, max = 1) {
  * @returns {Array}
  */
 String.prototype.properSplit = function (split) {
-    return this.length === 0 || this === null || this === undefined
-        ? []
-        : this.split(split);
-}
+	return this.length === 0 || this === null || this === undefined ? [] : this.split(split);
+};

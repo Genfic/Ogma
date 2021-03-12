@@ -1,30 +1,30 @@
 Vue.component('folder-item', {
-    props: {
-        folder: {
-           type: Object,
-           required: true
-        },
-        sel: {
-           type: Number
-        },
-        current: {
-            type: Number
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        }
-    },
-    methods: {
-        bus: function (data) {
-            console.log(this.folder);
-            if (data !== this.current)
-            {
-                this.$emit('bus', data);
-            }
-        },
-    },
-    template: `
+	props: {
+		folder: {
+			type: Object,
+			required: true
+		},
+		sel: {
+			type: Number
+		},
+		current: {
+			type: Number
+		},
+		disabled: {
+			type: Boolean,
+			default: false
+		}
+	},
+	methods: {
+		bus: function (data) {
+			console.log(this.folder);
+			if (data !== this.current)
+			{
+				this.$emit('bus', data);
+			}
+		},
+	},
+	template: `
       <div class="folder" 
            :class="[
                folder.id === current || disabled ? 'disabled' : null,
@@ -51,69 +51,69 @@ Vue.component('folder-item', {
 });
 
 Vue.component('folder-tree', {
-    props: {
-        clubId: {
-            type: Number,
-            required: true
-        },
-        route: {
-            type: String,
-            required: true
-        },
-        label: {
-            type: String,
-        },
-        value: {
-            type: Number,
-            default: null
-        },
-        current: {
-            type: Number,
-            default: null,
-        },
-        desc: {
-            type: String,
-            default: null
-        },
-        showNone: {
-            type: Boolean,
-            default: true
-        }
-    },
-    data: function () { 
-        return {
-            folders: [],
-            tree: [],
-            sel: this.value,
-            name: this.label?.replace(/\s+/g, '')
-        }
-    },
-    methods: {
-        unflatten: function () {
-            let hashTable = Object.create(null);
-            this.folders.forEach( aData => hashTable[aData.id] = { ...aData, children : [] } );
-            this.folders.forEach( aData => {
-                if( aData.parentFolderId ) {
-                    hashTable[aData.parentFolderId].children.push(hashTable[aData.id]);
-                }
-                else {
-                    this.tree.push(hashTable[aData.id]);
-                }
-            });
-        },
-        bus: function (data) {
-            this.sel = data;
-        }
-    },
-    mounted() {
-        axios.get(`${this.route}/${this.clubId}`)
-            .then(res => {
-                this.folders = res.data;
-                this.unflatten();
-            })
-            .catch(console.error);
-    },
-    template: `
+	props: {
+		clubId: {
+			type: Number,
+			required: true
+		},
+		route: {
+			type: String,
+			required: true
+		},
+		label: {
+			type: String,
+		},
+		value: {
+			type: Number,
+			default: null
+		},
+		current: {
+			type: Number,
+			default: null,
+		},
+		desc: {
+			type: String,
+			default: null
+		},
+		showNone: {
+			type: Boolean,
+			default: true
+		}
+	},
+	data: function () { 
+		return {
+			folders: [],
+			tree: [],
+			sel: this.value,
+			name: this.label?.replace(/\s+/g, '')
+		};
+	},
+	methods: {
+		unflatten: function () {
+			let hashTable = Object.create(null);
+			this.folders.forEach( aData => hashTable[aData.id] = { ...aData, children : [] } );
+			this.folders.forEach( aData => {
+				if( aData.parentFolderId ) {
+					hashTable[aData.parentFolderId].children.push(hashTable[aData.id]);
+				}
+				else {
+					this.tree.push(hashTable[aData.id]);
+				}
+			});
+		},
+		bus: function (data) {
+			this.sel = data;
+		}
+	},
+	mounted() {
+		axios.get(`${this.route}/${this.clubId}`)
+			.then(res => {
+				this.folders = res.data;
+				this.unflatten();
+			})
+			.catch(console.error);
+	},
+	template: `
         <div class="o-form-group">
             <label v-if="label" :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>

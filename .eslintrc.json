@@ -1,0 +1,60 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2016
+    },
+    "plugins": [],
+    "rules": {
+        "indent": [
+            "warn",
+            "tab",
+            {
+                "MemberExpression": 1
+            }
+        ],
+        "semi-style": [
+            "warn",
+            "last"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "semi-spacing": [
+            "error",
+            {
+                "before": false,
+                "after": true
+            }
+        ],
+        "no-unused-vars": "off"
+    },
+    "globals": {
+        "axios": "readonly",
+        "Vue": "readonly",
+        "require": "readonly",
+        "exports": "readonly",
+        "getCookieValue": "readonly",
+        "setCookie": "readonly"
+    },
+    "overrides": [
+        {
+            "files": [
+                "Ogma3/wwroot/js/src/**/*.{ts,tsx}"
+            ],
+            "extends": [
+                "plugin:@typescript-eslint/recommended"
+            ],
+            "plugins": [
+                "@typescript-eslint"
+            ]
+        }
+    ]
+}

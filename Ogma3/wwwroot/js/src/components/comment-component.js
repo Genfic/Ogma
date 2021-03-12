@@ -1,139 +1,139 @@
 import dayjs from 'https://cdn.skypack.dev/-/dayjs@v1.10.4-MoS2QVkxh1TZYPgJA5zq/dist=es2020,mode=imports/optimized/dayjs.js';
 
 Vue.component('comment', {
-    props: {
-        cdn: {
-            type: String,
-            required: true
-        },
-        comment: {
-            type: Object,
-            required: true
-        },
-        idx: {
-            type: Number,
-            required: true
-        },
-        route: {
-            type: String,
-            required: true
-        },
-        csrf: {
-            type: String,
-            required: true
-        },
-        highlight: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        isAuthenticated: {
-            type: Boolean,
-            default: false
-        }
-    },
+	props: {
+		cdn: {
+			type: String,
+			required: true
+		},
+		comment: {
+			type: Object,
+			required: true
+		},
+		idx: {
+			type: Number,
+			required: true
+		},
+		route: {
+			type: String,
+			required: true
+		},
+		csrf: {
+			type: String,
+			required: true
+		},
+		highlight: {
+			type: Boolean,
+			required: false,
+			default: false
+		},
+		isAuthenticated: {
+			type: Boolean,
+			default: false
+		}
+	},
 
-    data: function () {
-        return {
-            editData: null,
-            mutComment: this.comment,
-            revisions: [],
-            revisionsCache: null,
-            hide: this.comment.isBlocked
-        }
-    },
+	data: function () {
+		return {
+			editData: null,
+			mutComment: this.comment,
+			revisions: [],
+			revisionsCache: null,
+			hide: this.comment.isBlocked
+		};
+	},
 
-    methods: {
-        del: function () {
-            if (confirm("Are you sure you want to delete?")) {
-                axios.delete(`${this.route}/${this.comment.id}`, {
-                        headers: { "RequestVerificationToken": this.csrf }
-                    })
-                    .then(res => this.mutComment = res.data)
-                    .catch(console.error);
-            }
-        },
+	methods: {
+		del: function () {
+			if (confirm("Are you sure you want to delete?")) {
+				axios.delete(`${this.route}/${this.comment.id}`, {
+					headers: { "RequestVerificationToken": this.csrf }
+				})
+					.then(res => this.mutComment = res.data)
+					.catch(console.error);
+			}
+		},
 
-        edit: function () {
-            if (this.editData && this.editData.id === this.comment.id) return;
+		edit: function () {
+			if (this.editData && this.editData.id === this.comment.id) return;
 
-            this.editData = null;
-            axios.get(`${this.route}/md`, {
-                    params: {
-                        id: this.comment.id
-                    }
-                })
-                .then(res => {
-                    this.editData = {
-                        id: this.comment.id,
-                        body: res.data
-                    }
-                })
-                .catch(console.error);
-        },
+			this.editData = null;
+			axios.get(`${this.route}/md`, {
+				params: {
+					id: this.comment.id
+				}
+			})
+				.then(res => {
+					this.editData = {
+						id: this.comment.id,
+						body: res.data
+					};
+				})
+				.catch(console.error);
+		},
 
-        update: function (e) {
-            e.preventDefault();
+		update: function (e) {
+			e.preventDefault();
 
-            let data = {
-                body: this.editData.body,
-                id: Number(this.editData.id)
-            };
+			let data = {
+				body: this.editData.body,
+				id: Number(this.editData.id)
+			};
 
-            axios.patch(this.route, data, {
-                    headers: { "RequestVerificationToken": this.csrf }
-                })
-                .then(res => {
-                    Object.assign(this.mutComment, res.data);
-                    this.editData = null;
-                })
-                .catch(console.error)
-        },
+			axios.patch(this.route, data, {
+				headers: { "RequestVerificationToken": this.csrf }
+			})
+				.then(res => {
+					Object.assign(this.mutComment, res.data);
+					this.editData = null;
+				})
+				.catch(console.error);
+		},
         
-        report: function() {
-            this.$emit('report', this.comment.id)
-        },
+		report: function() {
+			this.$emit('report', this.comment.id);
+		},
 
-        // Handle Enter key input
-        enter: function(e) {
-            if (e.ctrlKey) this.update(e)
-        },
+		// Handle Enter key input
+		enter: function(e) {
+			if (e.ctrlKey) this.update(e);
+		},
 
-        history: function () {
-            if (this.revisions.length > 0) {
-                this.revisions = [];
-            } else if (this.revisionsCache !== null) {
-                this.revisions = this.revisionsCache
-            } else {
-                axios.get(`${this.route}/revisions/${this.comment.id}`)
-                    .then(res => this.revisionsCache = this.revisions = res.data)
-                    .catch(console.error);
-            }
-        },
+		history: function () {
+			if (this.revisions.length > 0) {
+				this.revisions = [];
+			} else if (this.revisionsCache !== null) {
+				this.revisions = this.revisionsCache;
+			} else {
+				axios.get(`${this.route}/revisions/${this.comment.id}`)
+					.then(res => this.revisionsCache = this.revisions = res.data)
+					.catch(console.error);
+			}
+		},
 
-        // Highlights the selected comment and scrolls it into view
-        changeHighlight: function (e) {
-            e.preventDefault();
-            this.$emit('change-hl', (this.idx + 1));
-        },
+		// Highlights the selected comment and scrolls it into view
+		changeHighlight: function (e) {
+			e.preventDefault();
+			this.$emit('change-hl', (this.idx + 1));
+		},
 
-        toggleShow: function () {
-            if (this.comment.isBlocked) {
-                this.hide = !this.hide;
-            }
-        },
+		toggleShow: function () {
+			if (this.comment.isBlocked) {
+				this.hide = !this.hide;
+			}
+		},
 
-        date: function (dt) {
-            return dayjs(dt).format('DD MMM YYYY, HH:mm');
-        },
+		date: function (dt) {
+			return dayjs(dt).format('DD MMM YYYY, HH:mm');
+		},
         
-        avatar: function (url) {
-            return url.includes('gravatar')
-                ? url
-                : this.cdn + url;
-        }
-    },
-    template: `
+		avatar: function (url) {
+			return url.includes('gravatar')
+				? url
+				: this.cdn + url;
+		}
+	},
+	template: `
       <div :id="'comment-' + (idx + 1)"
            class="comment" :class="highlight ? 'marked' : ''">
 

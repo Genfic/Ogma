@@ -1,29 +1,29 @@
 import {LitElement, html} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
 
 export class ShelvesButton extends LitElement {
-    static get properties() {
-        return {
-            endpoint: { type: String },
-            storyId: { type: Number },
-            csrf: { type: String, attribute: false },
-            shelves: { type: Array, attribute: false },
-            more: { type: Array, attribute: false }
-        }
-    }
+	static get properties() {
+		return {
+			endpoint: { type: String },
+			storyId: { type: Number },
+			csrf: { type: String, attribute: false },
+			shelves: { type: Array, attribute: false },
+			more: { type: Array, attribute: false }
+		};
+	}
     
-    constructor() {
-        super();
-        this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
-    }
+	constructor() {
+		super();
+		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
+	}
     
-    connectedCallback() {
-        super.connectedCallback();
-        this._getShelves();
-        this.classList.add('wc-loaded');
-    }
+	connectedCallback() {
+		super.connectedCallback();
+		this._getShelves();
+		this.classList.add('wc-loaded');
+	}
 
-    render() {
-        return html`
+	render() {
+		return html`
             ${this.shelves?.filter(e => e.isQuick).slice(0, 5).map(shelf => html`
                 <button
                     class="shelf action-btn"
@@ -57,31 +57,31 @@ export class ShelvesButton extends LitElement {
                 </div>
             ` : null}
         `;
-    }
+	}
     
-    _getShelves() {
-        axios.get(`${this.endpoint}/user/${this.storyId}`)
-            .then(res => {
-                this.shelves = res.data || [];
-            })
-            .catch(console.error);
-    }
+	_getShelves() {
+		axios.get(`${this.endpoint}/user/${this.storyId}`)
+			.then(res => {
+				this.shelves = res.data || [];
+			})
+			.catch(console.error);
+	}
 
-    _add(id) {
-        axios.post(`${this.endpoint}/add/${id}/${this.storyId}`,
-            null,
-            {
-                headers: { "RequestVerificationToken" : this.csrf }
-            })
-            .then(_ => {
-                this._getShelves();
-            })
-            .catch(console.error)
-    }
+	_add(id) {
+		axios.post(`${this.endpoint}/add/${id}/${this.storyId}`,
+			null,
+			{
+				headers: { "RequestVerificationToken" : this.csrf }
+			})
+			.then(() => {
+				this._getShelves();
+			})
+			.catch(console.error);
+	}
     
-    createRenderRoot() {
-        return this;
-    }
+	createRenderRoot() {
+		return this;
+	}
 }
 
 window.customElements.define('o-shelves', ShelvesButton);
