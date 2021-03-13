@@ -24,5 +24,8 @@
 		"typescript": "^4.1.3",
 		"vue": "^2.6.12"
 	},
-	"name": "Ogma3"
+	"name": "Ogma3",
+	"dependencies": {
+		"deglob": "^4.0.1"
+	}
 }

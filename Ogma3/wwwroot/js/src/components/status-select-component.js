@@ -33,7 +33,7 @@ Vue.component('status-select', {
                 <input type="radio" 
                        :id="'sel-' + r" 
                        :name="name" 
-                       :value='statuses.length - k'
+                       :value='k + 1'
                        v-model="selected">
                 <label :for="'sel-' + r" tabindex="0">{{ r }}</label>
             </template>

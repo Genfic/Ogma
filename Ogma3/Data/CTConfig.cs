@@ -23,7 +23,7 @@ namespace Ogma3.Data
         
         public static class CTag
         {
-            public const int MinNameLength = 5;
+            public const int MinNameLength = 3;
             public const int MaxNameLength = 20;
 
             public const int MaxDescLength = 100;

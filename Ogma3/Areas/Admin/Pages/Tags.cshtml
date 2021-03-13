@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Api.V1
+@using Ogma3.Data.Enums
 @model Ogma3.Areas.Admin.Pages.Tags
 
 @{
@@ -7,35 +8,38 @@
     ViewData["ActivePage"] = ManageNavPages.Tags;
 }
     
-<form id="tag" method="post" v-on:submit.stop.prevent="createTag">
+<form id="tag" class="form" method="post" v-on:submit.stop.prevent="createTag">
     
-    <ul v-if="err">
+    <ul v-if="err" style="margin: 0">
         <li class="text-danger" v-for="e in err">{{ e }}</li>
     </ul>
         
-    <div class="form-group">
+    <div class="o-form-group">
         <label asp-for="Input.Name"></label>
-        <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
+        <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
         <span class="text-danger"></span>
     </div>
         
-    <div class="form-group">
+    <div class="o-form-group">
         <label asp-for="Input.Description"></label>
-        <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
+        <input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
         <span class="text-danger"></span>
     </div>
-    
-    <div class="form-group">
+
+    <div class="o-form-group">
         <label asp-for="Input.Namespace"></label>
-        <select asp-for="Input.Namespace" v-model="form.namespace" class="form-control">
-            <option v-for="n in namespaces" :value="n.id" :selected="n.id == form.namespace">{{ n.name }}</option>
+        <select asp-for="Input.Namespace"
+                asp-items="Html.GetEnumSelectList<ETagNamespace>()"
+                v-model="form.namespace"
+                class="o-form-control">
+            <option value="null" selected>None</option>
         </select>
         <span class="text-danger"></span>
     </div>
     
     <input type="hidden" :value="form.id">
         
-    <div class="form-group">
+    <div class="o-form-group">
         <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
         <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
     </div>
@@ -49,6 +53,7 @@
 
 <ul class="items-list">    
     <li v-for="t in tags">
+        <div class="deco" :style="{backgroundColor: t.namespaceColor}"></div>
         <div class="main">
             <h3 class="name">{{ t.name }}</h3>
             <span class="desc">{{ t.description }}</span>
@@ -65,7 +70,6 @@
 </ul>
 
 <div id="tag-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(TagsController))" v-if="!routes.tags"></div>
-<div id="ns-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(NamespacesController))" v-if="!routes.namespaces"></div>
 @section Scripts
 {
     <script src="~/js/dist/admin/tags.min.js" asp-append-version="true"></script>

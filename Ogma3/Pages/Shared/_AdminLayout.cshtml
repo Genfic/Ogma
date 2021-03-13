@@ -24,11 +24,6 @@
     
     @* Tells the browser what color schemes are supported *@
     <meta name="color-scheme" content="dark light">
-    
-    @if (ViewData["use_bootstrap"] == null)
-    {
-          <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    }
 
     @if (theme == "system") {
         <link rel="stylesheet" href="~/css/dist/light.min.css" asp-append-version="true"/>

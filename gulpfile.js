@@ -1,4 +1,5 @@
 'use strict';
+const { readdirSync } = require('fs');
 const {pipeline} = require('stream');
 
 const gulp = require('gulp');
@@ -29,19 +30,13 @@ const roots = {
 // Watch globs
 const watchGlobs = {
 	sass: [ // Avoid `**` because gulp-sass shits itself otherwise and compilation takes >5s on any change
-		`${roots.css}/*.sass`,
-		`${roots.css}/src/*.sass`,
-		`${roots.css}/src/elements/*.sass`,
-		`${roots.css}/src/admin-elements/*.sass`,
-		`${roots.css}/src/mixins/*.sass`,
-		`${roots.css}/src/base/*.sass`,
-
-		`${roots.css}/*.scss`,
-		`${roots.css}/src/*.scss`,
-		`${roots.css}/src/elements/*.scss`,
-		`${roots.css}/src/admin-elements/*.scss`,
-		`${roots.css}/src/mixins/*.scss`,
-		`${roots.css}/src/base/*.scss`,
+		`${roots.css}/*.{sass,scss}`,
+		`${roots.css}/src/*.{sass,scss}`,
+		`${roots.css}/src/elements/*.{sass,scss}`,
+		`${roots.css}/src/admin-elements/*.{sass,scss}`,
+		`${roots.css}/src/mixins/*.{sass,scss}`,
+		`${roots.css}/src/base/*.{sass,scss}`,
+		`${roots.css}/src/pages/*.{sass,scss}`,
 
 		// `${roots.css}/**/*.sass`,
 		// `${roots.css}/**/*.scss`,
@@ -124,4 +119,15 @@ function errorHandler(err) {
 	if (err) {
 		console.error(err);
 	}
+}
+
+// Deglobber
+function generateGlobs(dir, pattern) {
+	let dirs = 	readdirSync(dir, { withFileTypes: true })
+		.filter(dirent => dirent.isDirectory())
+		.map(dirent => `${dir}/${dirent.name}`);
+
+	dirs = [dir, ...dirs];
+
+	return dirs.map(d => `${d}/${pattern}`);
 }

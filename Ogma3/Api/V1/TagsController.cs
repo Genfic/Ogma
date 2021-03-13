@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.DTOs;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
 
@@ -81,16 +81,21 @@ namespace Ogma3.Api.V1
 
 
         // PUT: api/Tags/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutTag(int id, Tag tag)
+        public async Task<IActionResult> PutTag(long id, PostData data)
         {
-            if (id != tag.Id)
+            var (tagId, name, description, eTagNamespace) = data;
+            
+            if (id != tagId) return BadRequest();
+
+            var tag = new Tag
             {
-                return BadRequest();
-            }
+                Id = id,
+                Name = name,
+                Description = description,
+                Namespace = eTagNamespace
+            };
 
             _context.Entry(tag).State = EntityState.Modified;
 
@@ -117,13 +122,19 @@ namespace Ogma3.Api.V1
 
 
         // POST: api/Tags
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Tag>> PostTag(Tag tag)
+        public async Task<ActionResult<Tag>> PostTag(PostData data)
         {
-            _context.Tags.Add(tag);
+            var (_, name, description, eTagNamespace) = data;
+            var tag = new Tag
+            {
+                Name = name,
+                Description = description,
+                Namespace = eTagNamespace
+            };
+            
+            await _context.Tags.AddAsync(tag);
 
             try
             {
@@ -155,9 +166,11 @@ namespace Ogma3.Api.V1
             return tag;
         }
 
-        private bool TagExists(int id)
+        private bool TagExists(long id)
         {
             return _context.Tags.Any(e => e.Id == id);
         }
+
+        public sealed record PostData(long? Id, string Name, string? Description, ETagNamespace? Namespace);
     }
 }

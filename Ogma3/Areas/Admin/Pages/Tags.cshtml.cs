@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 
 namespace Ogma3.Areas.Admin.Pages
@@ -17,7 +18,7 @@ namespace Ogma3.Areas.Admin.Pages
             [Required]
             public string Description { get; set; }
             
-            public Namespace Namespace { get; set; }
+            public ETagNamespace Namespace { get; set; }
         }
         
         public void OnGet()

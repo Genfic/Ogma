@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Ogma3.Data.Enums;
 using Utils.Extensions;
 
 namespace Ogma3.Data.Models
@@ -22,10 +23,7 @@ namespace Ogma3.Data.Models
         [MinLength(CTConfig.CTag.MinNameLength)]
         public string Slug { get; private set; }
         public string? Description { get; set; } = null;
-
-        [JsonIgnore]
-        public Namespace? Namespace { get; set; } = null;
-        public long? NamespaceId { get; set; } = null;
+        public ETagNamespace? Namespace { get; set; }
         public IEnumerable<Story> Stories { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace Ogma3.Infrastructure.TagHelpers
             output.AddClass("tag", NullHtmlEncoder.Default);
             
             output.Attributes.Add("href", href);
-            output.Attributes.Add("title", Tag.NamespaceName);
+            output.Attributes.Add("title", Tag.Namespace);
 
             output.Content.AppendHtml(Tag.NamespaceColor == null
                 ? "<div class='bg'></div>"

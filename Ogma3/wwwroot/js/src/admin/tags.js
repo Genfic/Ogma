@@ -16,10 +16,8 @@ let atags_vue = new Vue({
 		err: [],
 		routes: {
 			tags: null,
-			namespaces: null
 		},
 		tags: [],
-		namespaces: [],
 	},
 	methods: {
 
@@ -32,11 +30,10 @@ let atags_vue = new Vue({
 			this.err = [];
 			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
 				this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
-			if (this.form.desc !== null && this.form.desc.length > this.lens.maxDescLength)
+			if (this.form.desc && this.form.desc.length > this.lens.maxDescLength)
 				this.err.push(`Description has to be at most ${this.lens.maxDescLength} characters long.`);
 			if (this.err.length > 0) return; 
 
-			console.info(this.form.name);
 			if (this.form.name) {
 
 				// If no ID has been set, that means it's a new tag.
@@ -45,8 +42,10 @@ let atags_vue = new Vue({
 					axios.post(this.routes.tags,
 						{
 							name: this.form.name,
-							namespaceId: this.form.namespace,
+							namespace: Number(this.form.namespace),
 							description: this.form.desc
+						}, {
+							headers: { 'RequestVerificationToken' : this.csrf }
 						})
 						.then(() => {
 							this.getTags();
@@ -62,8 +61,10 @@ let atags_vue = new Vue({
 						{
 							id: this.form.id,
 							name: this.form.name,
-							namespaceId: this.form.namespace,
+							namespace: Number(this.form.namespace),
 							description: this.form.desc
+						}, {
+							headers: { 'RequestVerificationToken' : this.csrf }
 						})
 						.then(() => {
 							this.getTags();
@@ -88,17 +89,6 @@ let atags_vue = new Vue({
 			axios.get(this.routes.tags + '/all')
 				.then(response => {
 					this.tags = response.data;
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		},
-        
-		// Get all namespaces
-		getNamespaces: function() {
-			axios.get(this.routes.namespaces)
-				.then(response => {
-					this.namespaces = response.data;
 				})
 				.catch(error => {
 					console.log(error);
@@ -136,17 +126,16 @@ let atags_vue = new Vue({
 	},
     
 	mounted() {
+		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
 		// Grab the routes from route helpers
 		this.routes.tags = document.getElementById('tag-route').dataset.route;
-		this.routes.namespaces = document.getElementById('ns-route').dataset.route;
 		// Get validation data
-		axios.get(this.routes.tags + '/validation')
+		axios.get(this.routes.tags + '/validation') 
 			.then(r => {
 				this.lens = r.data;
 			})
 			.catch(e => console.error(e));
 		// Grab the initial set of tags
 		this.getTags();
-		this.getNamespaces();
 	}
 });

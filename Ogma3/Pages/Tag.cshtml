@@ -1,9 +1,9 @@
 ﻿@page "{id}/{slug?}"
 @model TagModel
 @{
-    ViewData["Title"] = string.IsNullOrEmpty(Model.Tag.NamespaceName) 
+    ViewData["Title"] = Model.Tag.Namespace is null
         ? Model.Tag.Name
-        : $"{Model.Tag.NamespaceName}:{Model.Tag.Name}";
+        : $"{Model.Tag.Namespace}:{Model.Tag.Name}";
 }
 
 

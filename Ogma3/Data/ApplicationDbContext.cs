@@ -22,7 +22,6 @@ namespace Ogma3.Data
     {
         public DbSet<Tag> Tags { get; set; }
         public DbSet<StoryTag> StoryTags { get; set; }
-        public DbSet<Namespace> Namespaces { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
@@ -80,7 +79,8 @@ namespace Ogma3.Data
                 .MapEnum<EStoryStatus>()
                 .MapEnum<EClubMemberRoles>()
                 .MapEnum<EDeletedBy>()
-                .MapEnum<ENotificationEvent>();
+                .MapEnum<ENotificationEvent>()
+                .MapEnum<ETagNamespace>();
         }
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -92,10 +92,12 @@ namespace Ogma3.Data
             
             // Enums
             // NOTE: When adding an enum here, remember to also map it in `ApplicationDbContext()`
-            builder.HasPostgresEnum<EStoryStatus>();
-            builder.HasPostgresEnum<EClubMemberRoles>();
-            builder.HasPostgresEnum<EDeletedBy>();
-            builder.HasPostgresEnum<ENotificationEvent>();
+            builder
+                .HasPostgresEnum<EStoryStatus>()
+                .HasPostgresEnum<EClubMemberRoles>()
+                .HasPostgresEnum<EDeletedBy>()
+                .HasPostgresEnum<ENotificationEvent>()
+                .HasPostgresEnum<ETagNamespace>();
 
             // Load model configurations
             builder.ApplyConfigurationsFromAssembly(typeof(OgmaUserConfiguration).Assembly);

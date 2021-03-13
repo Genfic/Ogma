@@ -26,7 +26,7 @@ namespace Ogma3.Pages
         public async Task OnGetAsync()
         {
             var shortExpiry = TimeSpan.FromMinutes(5);
-            var longExpiry = DateTime.Today + TimeSpan.FromDays(1); // midnight the next day
+            var longExpiry = TimeSpan.FromHours(1);
             
             // Try getting recent stories from cache
             const string recentKey = "IndexRecent";

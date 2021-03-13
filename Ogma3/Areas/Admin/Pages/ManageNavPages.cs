@@ -8,7 +8,6 @@ namespace Ogma3.Areas.Admin.Pages
         public static string Index => "Index";
         public static string Settings => "Settings";
         public static string Tags => "Tags";
-        public static string Namespaces => "Namespaces";
         public static string Quotes => "Quotes";
         public static string InviteCodes => "InviteCodes";
         public static string Documents => "ManageDocuments";
@@ -24,7 +23,6 @@ namespace Ogma3.Areas.Admin.Pages
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         public static string SettingsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Settings);
         public static string TagsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Tags);
-        public static string NamespacesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Namespaces);
         public static string QuotesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Quotes);
         public static string InviteCodesNavClass(ViewContext viewContext) => PageNavClass(viewContext, InviteCodes);
         public static string DocumentsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Documents);

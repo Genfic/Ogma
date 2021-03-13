@@ -28,14 +28,15 @@ namespace Ogma3.Data.ModelConfigs
             builder
                 .Property(t => t.Description)
                 .HasMaxLength(CTConfig.CTag.MaxDescLength);
-            
-            // NAVIGATION
+
             builder
-                .HasOne(t => t.Namespace)
-                .WithMany()
-                .HasForeignKey(t => t.NamespaceId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
+                .Property(t => t.Namespace)
+                .IsRequired(false)
+                .HasDefaultValue(null);
+
+            // NAVIGATION
+
+
         }
     }
 }
