@@ -30,7 +30,7 @@ namespace Ogma3.Data.Models
         public bool IsPublished { get; set; }
         
         // Chapters
-        public  ICollection<Chapter> Chapters { get; set; }
+        public  IList<Chapter> Chapters { get; set; }
 
         // Tags
         public IEnumerable<Tag> Tags { get; set; }
@@ -43,7 +43,7 @@ namespace Ogma3.Data.Models
         public EStoryStatus Status { get; set; }
         
         // Votes
-        public IList<Vote> Votes { get; set; }
+        public ICollection<Vote> Votes { get; set; }
 
         public int WordCount { get; set; }
 

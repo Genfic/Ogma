@@ -1,13 +1,13 @@
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ogma3.Data.Enums
 {
     public enum ETagNamespace
     {
-        [Description("Content Warning")]
-        ContentWarning,
-        Genre,
-        Franchise,
+        [Display(Name = "Content Warning")]
+        ContentWarning = 1,
+        Genre = 2,
+        Franchise = 3,
     }
 
     public static class ETagNamespaceExtensions

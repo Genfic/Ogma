@@ -55,6 +55,13 @@
             "plugins": [
                 "@typescript-eslint"
             ]
+        },
+        {
+            "files": ["Ogma3/wwwroot/js/src/site.js"],
+            "globals": {
+                "getCookieValue": "off",
+                "setCookie": "off"
+            }
         }
     ]
 }

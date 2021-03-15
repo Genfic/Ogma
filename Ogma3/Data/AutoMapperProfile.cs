@@ -90,13 +90,13 @@ namespace Ogma3.Data
                 )
                 .ForMember(sd => sd.Tags,
                 opts
-                    => opts.MapFrom(s => s.Tags.OrderBy(t => t.Namespace))
+                    => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
                 );
             
             CreateMap<Story, StoryCard>()
                 .ForMember(sd => sd.Tags,
                     opts
-                        => opts.MapFrom(s => s.Tags.OrderBy(t => t.Namespace))
+                        => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
                 );
             
             CreateMap<Story, StoryMinimal>();

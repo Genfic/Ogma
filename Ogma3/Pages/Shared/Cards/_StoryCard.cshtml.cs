@@ -18,7 +18,7 @@ namespace Ogma3.Pages.Shared.Cards
         public string? CoverId { get; set; }
         public DateTime ReleaseDate { get; set; }
         public bool IsPublished { get; set; }
-        public ICollection<TagDto> Tags { get; set; }
+        public IList<TagDto> Tags { get; set; }
         public Rating Rating { get; set; }
         public EStoryStatus Status { get; set; }
         public int WordCount { get; set; }

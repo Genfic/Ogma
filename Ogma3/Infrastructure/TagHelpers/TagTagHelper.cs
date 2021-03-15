@@ -1,5 +1,6 @@
 #nullable enable
 
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
 using Ogma3.Data.DTOs;
+using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.TagHelpers
 {
@@ -31,7 +33,11 @@ namespace Ogma3.Infrastructure.TagHelpers
             output.AddClass("tag", NullHtmlEncoder.Default);
             
             output.Attributes.Add("href", href);
-            output.Attributes.Add("title", Tag.Namespace);
+            
+            if (Tag.Namespace is not null)
+            {
+                output.Attributes.Add("title", Tag.Namespace.GetAttribute<DisplayAttribute>()?.Name ?? Tag.Namespace.ToString());
+            }
 
             output.Content.AppendHtml(Tag.NamespaceColor == null
                 ? "<div class='bg'></div>"
