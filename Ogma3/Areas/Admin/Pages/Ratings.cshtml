@@ -9,47 +9,30 @@
     ViewData["ActivePage"] = ManageNavPages.Ratings;
 }
 
-<form id="namespace" method="post" v-on:submit.stop.prevent="createRating">
+<form id="namespace" class="auto" method="post" v-on:submit.stop.prevent="createRating">
 
     <ul v-if="err">
         <li class="text-danger" v-for="e in err">{{ e }}</li>
     </ul>
     
-    <div class="form-row">
-        <div class="col">
-            <div class="form-group">
-                <label asp-for="Input.Name"></label>
-                <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
-            </div>
-        </div>
+    <label asp-for="Input.Name"></label>
+    <input asp-for="Input.Name" v-model="form.name">
+
+    <label asp-for="Input.Description"></label>
+    <input asp-for="Input.Description" v-model="form.desc">
+
+    <label asp-for="Input.Icon"></label>
+    <input asp-for="Input.Icon" v-on:change="iconChanged" accept=".png,.jpg,.jpeg,.webp,.svg">
+
+    <label asp-for="Input.BlacklistedByDefault"></label>
+    <input asp-for="Input.BlacklistedByDefault" v-model="form.blacklist">
     
-        <div class="col">
-            <div class="form-group">
-                <label asp-for="Input.Description"></label>
-                <input asp-for="Input.Description" type="text" class="form-control" v-model="form.desc">
-            </div>
-        </div>
-    </div>
-    
-    <div class="form-row">
-        <div class="col">
-            <div class="form-group">
-                <label asp-for="Input.Icon"></label>
-                <input asp-for="Input.Icon" type="file" class="form-control" v-on:change="iconChanged" accept=".png,.jpg,.jpeg,.webp,.svg">
-            </div>
-        </div>
-        
-        <div class="col">
-            <div class="form-group">
-                <label asp-for="Input.BlacklistedByDefault"></label>
-                <input asp-for="Input.BlacklistedByDefault" class="form-control" v-model="form.blacklist">
-            </div>
-        </div>
-    </div>
-    
+    <label asp-for="Input.Order"></label>
+    <input asp-for="Input.Order" v-model="form.order">
+
     <input type="hidden" :value="form.id">
 
-    <div class="form-group">
+    <div class="form-row">
         <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
         <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
     </div>
@@ -61,7 +44,7 @@
     Loading...
 </button>
 
-<ul class="items-list">    
+<ul class="items-list">
     <li v-for="n in ratings">
         <div class="deco" :style="{ border: n.blacklistedByDefault ? '1px solid red' : '1px solid transparent'}">
             <img :src="cdn + n.icon" alt="" height="30" width="30">

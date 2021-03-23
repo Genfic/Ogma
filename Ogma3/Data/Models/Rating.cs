@@ -9,7 +9,8 @@ namespace Ogma3.Data.Models
         
         [MinLength(CTConfig.CRating.MinDescriptionLength)]
         public string Description { get; set; }
-        
+
+        public byte Order { get; set; }
         public string Icon { get; set; }
         public string IconId { get; set; }
         public bool BlacklistedByDefault { get; set; }

@@ -2,12 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Infrastructure.Attributes;
@@ -23,19 +26,18 @@ namespace Ogma3.Pages.Stories
         private readonly ApplicationDbContext _context;
         private readonly ImageUploader _uploader;
         private readonly OgmaConfig _config;
+        private readonly IMapper _mapper;
 
-
-        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config)
+        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config, IMapper mapper)
         {
             _context = context;
             _uploader = uploader;
             _config = config;
+            _mapper = mapper;
         }
 
-        public List<Rating> Ratings { get; set; }
-        
         [BindProperty] 
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new();
 
         public class InputModel
         {
@@ -82,45 +84,64 @@ namespace Ogma3.Pages.Stories
             [Required]
             public bool Published { get; set; }
         }
+        
+        public List<RatingDto> Ratings { get; set; }
+        public List<TagDto> Genres { get; set; }
+        public List<TagDto> ContentWarnings { get; set; }
+        public List<TagDto> Franchises { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        private async Task Hydrate()
+        {
+            Ratings = await _context.Ratings
+                .OrderBy(r => r.Order)
+                .ProjectTo<RatingDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var tags = await _context.Tags
+                .OrderBy(t => t.Name)
+                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();
+            ContentWarnings = tags.Where(t => t.Namespace == ETagNamespace.ContentWarning).ToList();
+            Franchises = tags.Where(t => t.Namespace == ETagNamespace.Franchise).ToList();
+        }
+
+        public async Task<IActionResult> OnGetAsync(long id)
         {
             // Get logged in user
             var uid = User.GetNumericId();
             if (uid == null) return Unauthorized();
             
             // Get story to edit and make sure author matches logged in user
-            var story = await _context.Stories
+            Input = await _context.Stories
+                .Where(s => s.Id == id)
+                .Where(s => s.AuthorId == uid)
                 .Include(s => s.Tags)
                 .Include(s => s.Rating)
+                .Select(story => new InputModel
+                {
+                    Id = story.Id,
+                    Title = story.Title,
+                    Description = story.Description,
+                    Hook = story.Hook,
+                    Rating = story.Rating.Id,
+                    Tags = story.Tags.AsQueryable().Select(st => st.Id).ToList(),
+                    Status = story.Status,
+                    Published = story.IsPublished
+                })
                 .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == id && s.AuthorId == uid);
+                .FirstOrDefaultAsync();
 
-            if (story == null) return NotFound();
-            
-            // Fill InputModel
-            Input = new InputModel
-            {
-                Id = story.Id,
-                Title = story.Title,
-                Description = story.Description,
-                Hook = story.Hook,
-                Rating = story.Rating.Id,
-                Tags = story.Tags.Select(st => st.Id).ToList(),
-                Status = story.Status,
-                Published = story.IsPublished
-            };
+            if (Input == null) return NotFound();
             
             // Fill Ratings dropdown
-            Ratings = await _context.Ratings.ToListAsync();
-
+            await Hydrate();
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(long? id)
+        public async Task<IActionResult> OnPostAsync(long id)
         {
-            Ratings = await _context.Ratings.ToListAsync();
-            
             if (ModelState.IsValid)
             {
                 var tags = await _context.Tags
@@ -144,6 +165,7 @@ namespace Ogma3.Pages.Stories
                 if(!story.IsPublished && Input.Published && story.ChapterCount <= 0)
                 {
                     ModelState.AddModelError("", "You cannot publish a story with no chapters");
+                    await Hydrate();
                     return Page();
                 }
 
@@ -179,10 +201,9 @@ namespace Ogma3.Pages.Stories
                 
                 return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
             }
-            else
-            {
-                return Page();
-            }
+
+            await Hydrate();
+            return Page();
         }
     }
 }

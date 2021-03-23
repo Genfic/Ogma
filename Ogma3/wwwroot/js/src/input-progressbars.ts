@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,no-redeclare
 interface String {
     properSplit(split: string|RegExp) : Array<string>
 }
@@ -14,6 +14,7 @@ interface String {
     
     
 	for (const i of inputs) {
+		console.log(`Attaching ${i.type}`);
         
 		// If there's no count specified, get max length. If that's not there, just use 0.
 		let max: number;
@@ -75,9 +76,10 @@ interface String {
 		i.after(counter); 
         
 		// Listen to input
+		console.log(`Listening to ${i.type}`);
 		i.addEventListener('input', () => {
+			
 			const length = currentSize();
-            
 			// Update character counter
 			count.innerText = `${length}/${max}`;
             

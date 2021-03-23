@@ -6,13 +6,14 @@ let ratings_vue = new Vue({
 			desc: null,
 			icon: null,
 			blacklist: null,
-			id: null
+			id: null,
+			order: null
 		},
 		err: [],
 		ratings: [],
 		route: null,
 		cdn: null,
-		xcsrf: null,
+		xcsrf: null
 	},
 	methods: {
 		iconChanged: function(e) {
@@ -21,23 +22,24 @@ let ratings_vue = new Vue({
 
 		// Contrary to its name, it also modifies a namespace if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createRating: function (e) {
+		createRating: function(e) {
 			e.preventDefault();
-            
+
 			if (this.form.name) {
 
 				const data = new FormData();
 
-				data.append('name', this.form.name);
-				data.append('description', this.form.desc);
-				data.append('blacklistedByDefault', this.form.blacklist ?? false);
+				data.append("name", this.form.name);
+				data.append("description", this.form.desc);
+				data.append("blacklistedByDefault", this.form.blacklist ?? false);
+				data.append('order', this.form.order);
 				if (this.form.icon)
-					data.append('icon', this.form.icon, this.form.icon.name);
-                
+					data.append("icon", this.form.icon, this.form.icon.name);
+
 				// If no ID has been set, that means it's a new rating.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					axios.post(this.route, data, { headers: { 'RequestVerificationToken': this.xcsrf } })
+					axios.post(this.route, data, { headers: { "RequestVerificationToken": this.xcsrf } })
 						.then(() => {
 							this.getRatings();
 						})
@@ -47,18 +49,17 @@ let ratings_vue = new Vue({
 
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.
-				} else {                    
-					axios.put(this.route + '/' + this.form.id, data, { headers: { 'RequestVerificationToken': this.xcsrf } })
+				} else {
+					axios.put(`${this.route}/${this.form.id}`, data, { headers: { "RequestVerificationToken": this.xcsrf } })
 						.then(() => {
 							this.getRatings();
 						})
 						.catch(error => {
 							console.log(error);
 						})
-					// Clear the form too
+						// Clear the form too
 						.then(() => {
-							this.form.name =
-                                this.form.id = null;
+							this.cancelEdit()
 						});
 				}
 
@@ -66,7 +67,7 @@ let ratings_vue = new Vue({
 		},
 
 		// Gets all existing namespaces
-		getRatings: function () {
+		getRatings: function() {
 			axios.get(this.route)
 				.then(response => {
 					this.ratings = response.data;
@@ -77,9 +78,9 @@ let ratings_vue = new Vue({
 		},
 
 		// Deletes a selected namespace
-		deleteRating: function (t) {
-			if(confirm("Delete permanently?")) {
-				axios.delete(this.route + '/' + t.id)
+		deleteRating: function(t) {
+			if (confirm("Delete permanently?")) {
+				axios.delete(this.route + "/" + t.id)
 					.then(() => {
 						this.getRatings();
 					})
@@ -90,28 +91,30 @@ let ratings_vue = new Vue({
 		},
 
 		// Throws a namespace from the list into the editor
-		editRating: function (t) {
+		editRating: function(t) {
 			this.form.name = t.name;
 			this.form.color = t.color;
 			this.form.id = t.id;
 			this.form.order = t.order;
 			this.form.blacklist = t.blacklistedByDefault;
+			this.form.desc = t.description;
 		},
 
 		// Clears the editor
-		cancelEdit: function () {
+		cancelEdit: function() {
 			this.form.name =
-                this.form.color =
-                    this.form.id = 
-                        this.form.order = null;
-		},
-	}, 
+				this.form.color =
+					this.form.id =
+						this.form.desc =
+							this.form.order = null;
+		}
+	},
 
 	mounted() {
 		// Grab the route from route helper
-		this.route = document.getElementById('route').dataset.route;
-		this.cdn   = document.getElementById('cdn').dataset.cdn;
-		this.xcsrf = document.querySelector('[name="__RequestVerificationToken"]').value;
+		this.route = document.getElementById("route").dataset.route;
+		this.cdn = document.getElementById("cdn").dataset.cdn;
+		this.xcsrf = document.querySelector("[name=\"__RequestVerificationToken\"]").value;
 		// Grab the initial set of namespaces
 		this.getRatings();
 	}

@@ -171,6 +171,10 @@ namespace Ogma3.Data
                     => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
                 );
             CreateMap<Club, ClubCard>();
+            
+            // Rating mappings
+            CreateMap<Rating, RatingDto>();
+            CreateMap<Rating, RatingApiDto>();
 
             // Folder mappings
             CreateMap<Folder, FolderCard>();

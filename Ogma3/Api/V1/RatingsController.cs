@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using B2Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,22 +23,24 @@ namespace Ogma3.Api.V1
         private readonly ApplicationDbContext _context;
         private readonly ImageUploader _uploader;
         private readonly IB2Client _b2Client;
+        private readonly IMapper _mapper;
 
-        public RatingsController(ApplicationDbContext context, ImageUploader uploader, IB2Client b2Client)
+        public RatingsController(ApplicationDbContext context, ImageUploader uploader, IB2Client b2Client, IMapper mapper)
         {
             _context = context;
             _uploader = uploader;
             _b2Client = b2Client;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IEnumerable<RatingApiDto>> GetRatings()
         {
-            var list = await _context.Ratings
-                .OrderBy(r => r.Id)
+            return await _context.Ratings
+                .OrderBy(r => r.Order)
+                .ProjectTo<RatingApiDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
-            return list.Select(RatingApiDto.FromRating);
         }
 
         [HttpPost]
@@ -47,7 +51,8 @@ namespace Ogma3.Api.V1
             {
                 Name = rating.Name,
                 Description = rating.Description,
-                BlacklistedByDefault = rating.BlacklistedByDefault
+                BlacklistedByDefault = rating.BlacklistedByDefault,
+                Order = rating.Order,
             };
 
             if (rating.Icon != null && rating.Icon.Length > 0)
@@ -79,6 +84,7 @@ namespace Ogma3.Api.V1
             r.Name = rating.Name;
             r.Description = rating.Description;
             r.BlacklistedByDefault = rating.BlacklistedByDefault;
+            r.Order = rating.Order;
             
             if (rating.Icon != null && rating.Icon.Length > 0)
             {
@@ -132,6 +138,7 @@ namespace Ogma3.Api.V1
             public string Name { get; set; }
             public string Description { get; set; }
             public bool BlacklistedByDefault { get; set; }
+            public byte Order { get; set; }
             public IFormFile Icon { get; set; }
         }
     }

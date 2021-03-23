@@ -26,6 +26,11 @@ namespace Ogma3.Data.ModelConfigs
                 .HasMaxLength(CTConfig.CRating.MaxDescriptionLength);
 
             builder
+                .Property(r => r.Order)
+                .IsRequired()
+                .HasDefaultValue(0);
+
+            builder
                 .Property(r => r.BlacklistedByDefault)
                 .IsRequired()
                 .HasDefaultValue(false);

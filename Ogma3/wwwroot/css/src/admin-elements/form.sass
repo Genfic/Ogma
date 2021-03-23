@@ -5,7 +5,7 @@ form
   &.auto
     display: grid
     grid-template-columns: auto 1fr
-    grid-auto-rows: 1fr
+    grid-auto-rows: auto
     align-items: center
     gap: .5rem
     margin-top: .5rem
@@ -30,6 +30,10 @@ form
     
   .input-field
     grid-column: 2
+    
+  .form-row
+    grid-column: 1 / 3
+    display: flex
     
   input[type=submit]
     grid-column: 1 / 3

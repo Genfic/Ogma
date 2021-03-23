@@ -2,12 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.DTOs;
 using Ogma3.Data.Enums;
 using Ogma3.Data.Models;
 using Ogma3.Data.Repositories;
@@ -25,16 +28,16 @@ namespace Ogma3.Pages.Stories
         private readonly ImageUploader _uploader;
         private readonly OgmaConfig _config;
         private readonly NotificationsRepository _notificationsRepo;
+        private readonly IMapper _mapper;
 
-        public CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config, NotificationsRepository notificationsRepo)
+        public CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config, NotificationsRepository notificationsRepo, IMapper mapper)
         {
             _context = context;
             _uploader = uploader;
             _config = config;
             _notificationsRepo = notificationsRepo;
+            _mapper = mapper;
         }
-
-        public List<Rating> Ratings { get; set; }
 
         [BindProperty] 
         public InputModel Input { get; set; }
@@ -77,20 +80,39 @@ namespace Ogma3.Pages.Stories
             public List<long> Tags { get; set; }
         }
 
-        public async Task OnGetAsync()
+        public List<RatingDto> Ratings { get; set; }
+        public List<TagDto> Genres { get; set; }
+        public List<TagDto> ContentWarnings { get; set; }
+        public List<TagDto> Franchises { get; set; }
+
+        private async Task Hydrate()
         {
             Input = new InputModel();
             Ratings = await _context.Ratings
-                .AsNoTracking()
+                .OrderBy(r => r.Order)
+                .ProjectTo<RatingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            var tags = await _context.Tags
+                .OrderBy(t => t.Name)
+                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();
+            ContentWarnings = tags.Where(t => t.Namespace == ETagNamespace.ContentWarning).ToList();
+            Franchises = tags.Where(t => t.Namespace == ETagNamespace.Franchise).ToList();
+        }
+        
+        public async Task OnGetAsync()
+        {
+            await Hydrate();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Ratings = await _context.Ratings.ToListAsync();
-
             if (!ModelState.IsValid)
             {
+                await Hydrate();
                 return Page();
             }
             
@@ -100,7 +122,6 @@ namespace Ogma3.Pages.Stories
             // Return if not logged in
             if (uid == null) return Unauthorized();
             
-            var rating = await _context.Ratings.FindAsync(Input.Rating);
             var tags = await _context.Tags
                 .Where(t => Input.Tags.Contains(t.Id))
                 .ToListAsync();
@@ -113,7 +134,7 @@ namespace Ogma3.Pages.Stories
                 Slug = Input.Title.Friendlify(),
                 Description = Input.Description,
                 Hook = Input.Hook,
-                Rating = rating,
+                RatingId = Input.Rating,
                 Tags = tags
             };
 
