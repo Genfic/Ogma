@@ -1,5 +1,4 @@
 'use strict';
-const { readdirSync } = require('fs');
 const {pipeline} = require('stream');
 
 const gulp = require('gulp');
@@ -7,7 +6,6 @@ const postcss = require('gulp-postcss');
 const {sass} = require('@mr-hope/gulp-sass');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
-const fiber = require('fibers');
 const cond = require('gulp-if');
 
 // CSS processors
@@ -52,7 +50,7 @@ const watchGlobs = {
 // CSS tasks
 const css = () => pipeline(gulp.src(`${roots.css}/*.sass`),
 	sourcemaps.init(),                   // Init maps
-	sass({fiber}),          // Compile SASS
+	sass(),                              // Compile SASS
 	gulp.dest(`${roots.css}/dist`),      // Output the raw CSS
 	postcss([                    // Postprocess it
 		autoprefixer,
@@ -119,15 +117,4 @@ function errorHandler(err) {
 	if (err) {
 		console.error(err);
 	}
-}
-
-// Deglobber
-function generateGlobs(dir, pattern) {
-	let dirs = 	readdirSync(dir, { withFileTypes: true })
-		.filter(dirent => dirent.isDirectory())
-		.map(dirent => `${dir}/${dirent.name}`);
-
-	dirs = [dir, ...dirs];
-
-	return dirs.map(d => `${d}/${pattern}`);
 }

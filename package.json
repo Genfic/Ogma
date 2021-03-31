@@ -5,27 +5,19 @@
 		"@typescript-eslint/eslint-plugin": "^4.17.0",
 		"@typescript-eslint/parser": "^4.17.0",
 		"autoprefixer": "^10.2.3",
-		"cssnano": "^5.0.0-rc.0",
 		"eslint": "^7.21.0",
-		"fibers": "^5.0.0",
 		"gulp": "^4.0.2",
 		"gulp-if": "^3.0.0",
 		"gulp-postcss": "^9.0.0",
 		"gulp-rename": "^2.0.0",
-		"gulp-sass": "^4.1.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-terser": "^2.0.1",
 		"gulp-typescript": "^6.0.0-alpha.1",
 		"lit-element": "^2.4.0",
 		"postcss": "^8.2.4",
 		"postcss-csso": "^5.0.0",
-		"postcss-discard-comments": "^4.0.2",
-		"sass": "^1.32.5",
 		"typescript": "^4.1.3",
 		"vue": "^2.6.12"
 	},
-	"name": "Ogma3",
-	"dependencies": {
-		"deglob": "^4.0.1"
-	}
+	"name": "Ogma3"
 }
