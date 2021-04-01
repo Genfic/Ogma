@@ -43,10 +43,10 @@ namespace Ogma3.Pages.Blog
                 var tags = q
                     .Split(' ')
                     .Where(x => x.StartsWith('#'))
-                    .Select(x => x.ToLower().Trim())
+                    .Select(x => x.ToLower().Trim().Trim('#'))
                     .ToArray();
                 if (tags.Length > 0)
-                    query = query.Where(b => tags.All(i => b.Hashtags.Contains(i)));
+                    query = query.Where(b => tags.Any(i => b.Hashtags.Contains(i)));
 
                 // Search in title
                 var search = q

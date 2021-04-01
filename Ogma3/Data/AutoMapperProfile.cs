@@ -129,7 +129,7 @@ namespace Ogma3.Data
                 .ForMember(
                     cd => cd.Body,
                     opts
-                        => opts.MapFrom(c => c.DeletedBy == null ? Markdown.ToHtml(c.Body, md) : null)
+                        => opts.MapFrom(c => c.DeletedBy == null ? Markdown.ToHtml(c.Body, md, null) : null)
                 );
             
             // Comment revision mappings
@@ -137,7 +137,7 @@ namespace Ogma3.Data
                 .ForMember(
                     crd => crd.Body,
                     opts
-                        => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md))
+                        => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md, null))
                 );
             
             // Tag mappings
