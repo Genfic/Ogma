@@ -13,11 +13,17 @@
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-terser": "^2.0.1",
 		"gulp-typescript": "^6.0.0-alpha.1",
+		"lighthouse": "^7.3.0",
 		"lit-element": "^2.4.0",
 		"postcss": "^8.2.4",
 		"postcss-csso": "^5.0.0",
 		"typescript": "^4.1.3",
 		"vue": "^2.6.12"
+	},
+	"scripts": {
+		"build": "gulp all",
+		"dev": "gulp watchAll",
+		"score": "lighthouse https://localhost:5001 --view"
 	},
 	"name": "Ogma3"
 }

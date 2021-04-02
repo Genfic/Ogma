@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
@@ -219,6 +220,10 @@ namespace Ogma3
 
             app.UseHttpsRedirection();
             
+            // Map file extensions
+            var extensionsProvider = new FileExtensionContentTypeProvider();
+            extensionsProvider.Mappings.Add(".avif", "image/avif");
+
             // Serve static files with cache headers and compression
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -228,9 +233,10 @@ namespace Ogma3
                     context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
                     {
                         Public = true,
-                        MaxAge = TimeSpan.FromDays(365)
+                        MaxAge = TimeSpan.FromDays(30)
                     };
-                }
+                },
+                ContentTypeProvider = extensionsProvider
             });
 
             app.UseRouting();

@@ -1,43 +1,25 @@
+@use "./src/mixins/alphas" as a
+
 // Variables
 $foreground: #131313
 $background: #efefef
 $accent: #0058ff
 
 $gold: #d5900e
-$red: red
-$green: green
+$red: #ff4848
+$green: #38ff38
+$blue: #4283ff
+$yellow: #ffff3e
 
 \:root
-  --foreground: #{$foreground}
-  --foreground-75: #{rgba($foreground, .75)}
-  --foreground-50: #{rgba($foreground, .50)}
-  --foreground-25: #{rgba($foreground, .25)}
-  --foreground-10: #{rgba($foreground, .10)}
+  +a.alphas('foreground', $foreground, 1, .75, .50, .25, .10)
+  +a.alphas('background', $background, 1, .75, .50, .25)
+  +a.alphas('accent', $accent, 1, .75, .50, .25, .10, .05)
 
-  --background: #{$background}
-  --background-75: #{rgba($background, .75)}
-  --background-50: #{rgba($background, .50)}
-  --background-25: #{rgba($background, .25)}
-
-  --accent: #{$accent}
-  --accent-75: #{rgba($accent, .75)}
-  --accent-50: #{rgba($accent, .50)}
-  --accent-25: #{rgba($accent, .25)}
-  --accent-10: #{rgba($accent, .10)}
-  --accent-5: #{rgba($accent, .05)}
+  +a.alphas('red', $red, 1, .75, .50, .25, .10)
+  +a.alphas('green', $green, 1, .75, .50, .25, .10)
+  +a.alphas('blue', $blue, 1, .75, .50, .25, .10)
+  +a.alphas('yellow', $yellow, 1, .75, .50, .25, .10)
 
   --gold: #{$gold}
-  
-  --red: #{$red}
-  --red-75: #{rgba($red, .75)}
-  --red-50: #{rgba($red, .50)}
-  --red-25: #{rgba($red, .25)}
-  --red-10: #{rgba($red, .10)}
-
-  --green: #{$green}
-  --green-75: #{rgba($green, .75)}
-  --green-50: #{rgba($green, .50)}
-  --green-25: #{rgba($green, .25)}
-  --green-10: #{rgba($green, .10)}
-  
   --ele-1: #{lighten($background, 2)}

@@ -1,22 +1,51 @@
 @use "../vars" as v
 @use "../mixins/active-border" as ab
 
+$padding: 1rem
+
 .alert
   position: relative
-  padding: 1rem
+  padding: $padding
+  display: flex
   +ab.active-border
+  
+  &:not(:first-child)
+    margin-top: .25rem
   
   &-success
     background-color: v.$green-10
     border-color: v.$green-25
     &:hover
       border-color: v.$green-50
+    >i.icon
+      color: v.$green
     
   &-danger
     background-color: v.$red-10
     border-color: v.$red-25
     &:hover
       border-color: v.$red-50
+    >i.icon
+      color: v.$red
+      
+  &-info
+    background-color: v.$blue-10
+    border-color: v.$blue-25
+    &:hover
+      border-color: v.$blue-50
+    >i.icon
+      color: v.$blue
+    
+  &-warning
+    background-color: v.$yellow-10
+    border-color: v.$yellow-25
+    &:hover
+      border-color: v.$yellow-50
+    >i.icon
+      color: v.$yellow
+      
+  >i.icon
+    margin-right: $padding
     
   >button.close
     position: absolute

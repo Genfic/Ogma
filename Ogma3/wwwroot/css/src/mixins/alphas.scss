@@ -1,0 +1,10 @@
+@mixin alphas($name, $color, $alphas...) {
+  @each $alpha in $alphas {
+    @if ($alpha == 1) {
+      --#{$name}: #{$color};
+    }
+    @else {
+      --#{$name}-#{$alpha * 100}: #{rgba($color, $alpha)};
+    }
+  }
+}

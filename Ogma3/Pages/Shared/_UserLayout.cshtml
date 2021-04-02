@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
 @using Ogma3.Api.V1
+@using Ogma3.Data.Enums
 @using Ogma3.Services
 @inject IWebHostEnvironment Env
 @{
@@ -72,12 +73,17 @@
 </header>
 
 <div class="container" id="site-content">
-
+    
+    @* <partial name="_Alert" model="@(new Alert { Message = "All's well!", AlertType = EAlertType.Success})"></partial> *@
+    @* <partial name="_Alert" model="@(new Alert { Message = "You should know it", AlertType = EAlertType.Info})"></partial> *@
+    @* <partial name="_Alert" model="@(new Alert { Message = "You sure m8?", AlertType = EAlertType.Warning})"></partial> *@
+    @* <partial name="_Alert" model="@(new Alert { Message = "RUN FOR THE HILLS!", AlertType = EAlertType.Danger})"></partial> *@
+    
     <noscript class="noscript">
         While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>
         Consider enabling it — you can check the site's <a href="https://github.com/Atulin/Ogma">source code</a> if you're unsure.
     </noscript>
-    
+
     <main role="main" class="pb-3" id="app">
         @RenderBody()
     </main>
