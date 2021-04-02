@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Details;
 

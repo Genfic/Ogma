@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<Data.Models.OgmaUser> _userManager;
+        private readonly UserManager<OgmaUser> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<Data.Models.OgmaUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<OgmaUser> userManager, IEmailSender sender)
         {
             _userManager = userManager;
             _sender = sender;

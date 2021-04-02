@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Votes;
 
 namespace Ogma3.Api.V1
 {

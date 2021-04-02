@@ -2,9 +2,28 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Ogma3.Data.Enums;
-using Ogma3.Data.ModelConfigs;
-using Ogma3.Data.Models;
+using Ogma3.Data.Blacklists;
+using Ogma3.Data.Blogposts;
+using Ogma3.Data.Chapters;
+using Ogma3.Data.Clubs;
+using Ogma3.Data.Comments;
+using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.Documents;
+using Ogma3.Data.Faqs;
+using Ogma3.Data.Folders;
+using Ogma3.Data.Icons;
+using Ogma3.Data.InviteCodes;
+using Ogma3.Data.ModeratorActions;
+using Ogma3.Data.Notifications;
+using Ogma3.Data.Quotes;
+using Ogma3.Data.Ratings;
+using Ogma3.Data.Reports;
+using Ogma3.Data.Roles;
+using Ogma3.Data.Shelfs;
+using Ogma3.Data.Stories;
+using Ogma3.Data.Tags;
+using Ogma3.Data.Users;
+using Ogma3.Data.Votes;
 
 namespace Ogma3.Data
 {

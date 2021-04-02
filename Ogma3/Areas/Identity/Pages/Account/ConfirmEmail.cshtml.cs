@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Blacklists;
+using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.Shelfs;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {

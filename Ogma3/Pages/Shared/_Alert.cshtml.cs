@@ -1,4 +1,4 @@
-using Ogma3.Data.Enums;
+using Ogma3.Data.Alerts;
 
 namespace Ogma3.Pages.Shared
 {

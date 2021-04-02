@@ -1,5 +1,6 @@
 using System;
-using Ogma3.Data.Models;
+using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.Roles;
 
 namespace Ogma3.Pages.Shared.Details
 {

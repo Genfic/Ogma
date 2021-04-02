@@ -2,6 +2,7 @@
 
 namespace Ogma3.Data
 {
+    // ReSharper disable once InconsistentNaming
     public static class CTConfig
     {
         public static class CFiles

@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<Data.Models.OgmaUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<OgmaUser> signInManager, ILogger<LogoutModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

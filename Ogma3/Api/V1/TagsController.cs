@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Tags;
 
 namespace Ogma3.Api.V1
 {

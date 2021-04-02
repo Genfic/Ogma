@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Ogma3.Data.Models;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Data
 {

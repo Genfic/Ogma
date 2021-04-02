@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
+using Ogma3.Data.Tags;
 
 namespace Ogma3.Areas.Admin.Pages
 {

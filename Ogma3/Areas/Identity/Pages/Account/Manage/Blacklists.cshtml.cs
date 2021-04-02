@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Blacklists;
+using Ogma3.Data.Ratings;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
 

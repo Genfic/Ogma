@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Clubs;
+using Ogma3.Data.CommentsThreads;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Details;
 

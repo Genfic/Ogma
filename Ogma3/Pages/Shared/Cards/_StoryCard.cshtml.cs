@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
+using Ogma3.Data.Ratings;
+using Ogma3.Data.Stories;
+using Ogma3.Data.Tags;
 
 namespace Ogma3.Pages.Shared.Cards
 {

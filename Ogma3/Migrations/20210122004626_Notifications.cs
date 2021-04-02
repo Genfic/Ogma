@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Ogma3.Data.Enums;
+using Ogma3.Data.Notifications;
 
 namespace Ogma3.Migrations
 {

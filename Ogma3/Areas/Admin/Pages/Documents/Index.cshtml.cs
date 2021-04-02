@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Documents;
 
 namespace Ogma3.Areas.Admin.Pages.Documents
 {

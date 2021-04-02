@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
+using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
@@ -72,7 +71,7 @@ namespace Ogma3.Pages.Clubs
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
 
-            var club = new Data.Models.Club
+            var club = new Data.Clubs.Club
             {
                 Name = Input.Name,
                 Slug = Input.Name.Friendlify(),

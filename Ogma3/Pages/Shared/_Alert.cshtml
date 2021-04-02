@@ -1,4 +1,4 @@
-@using Ogma3.Data.Enums
+@using Ogma3.Data.Alerts
 @model Alert
 
 <div class="alert alert-@(Model.AlertType.ToString().ToLower()) @(Model.IsDismissible ? "alert-dismissible" : "")" role="alert">

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Models;
+using Ogma3.Data.Roles;
 
 namespace Ogma3.Areas.Admin.Pages
 {

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Ogma3.Data.Models;
+using Ogma3.Data.Roles;
 
 namespace Ogma3.Services.Initializers
 {

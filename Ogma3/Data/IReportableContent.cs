@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Ogma3.Data.Models;
+using Ogma3.Data.Reports;
 
 namespace Ogma3.Data
 {

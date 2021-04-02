@@ -2,8 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
+using Ogma3.Data.Reports;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
 

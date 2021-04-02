@@ -10,8 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
+using Ogma3.Data.Ratings;
 using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Api.V1

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Ogma3.Data.Models;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {

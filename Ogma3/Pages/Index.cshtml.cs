@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Stories;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages

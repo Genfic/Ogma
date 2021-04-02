@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Ogma3.Data.Enums;
+using Ogma3.Data.Clubs;
 
 namespace Ogma3.Migrations
 {

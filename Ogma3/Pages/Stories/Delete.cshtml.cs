@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Stories;
 
 namespace Ogma3.Pages.Stories
 {

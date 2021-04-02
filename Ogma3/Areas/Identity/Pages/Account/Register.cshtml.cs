@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Users;
 using reCAPTCHA.AspNetCore;
 
 namespace Ogma3.Areas.Identity.Pages.Account

@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.AuthorizationData;
-using Ogma3.Data.Models;
+using Ogma3.Data.Bases;
+using Ogma3.Data.Blogposts;
+using Ogma3.Data.Chapters;
+using Ogma3.Data.ModeratorActions;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages
@@ -108,7 +112,7 @@ namespace Ogma3.Areas.Admin.Pages
 
             if (item.ContentBlock is null)
             {
-                item.ContentBlock = new Data.Models.ContentBlock
+                item.ContentBlock = new Data.Blacklists.ContentBlock
                 {
                     Reason = reason,
                     IssuerId = uid,

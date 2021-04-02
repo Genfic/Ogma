@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
-using Ogma3.Data.DTOs;
+using Ogma3.Data.Tags;
 using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.TagHelpers

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Services.FileUploader;
 

@@ -1,4 +1,4 @@
-using Ogma3.Data.Models;
+using Ogma3.Data.Blacklists;
 
 namespace Ogma3.Data
 {

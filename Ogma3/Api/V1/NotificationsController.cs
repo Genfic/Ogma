@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Ogma3.Data.Models;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Api.V1

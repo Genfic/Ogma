@@ -10,7 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.AuthorizationData;
-using Ogma3.Data.Models;
+using Ogma3.Data.Icons;
+using Ogma3.Data.Quotes;
+using Ogma3.Data.Ratings;
+using Ogma3.Data.Roles;
 
 namespace Ogma3.Services.Initializers
 {

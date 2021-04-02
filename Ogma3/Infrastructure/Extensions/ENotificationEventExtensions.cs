@@ -1,5 +1,5 @@
 using System;
-using Ogma3.Data.Enums;
+using Ogma3.Data.Notifications;
 
 namespace Ogma3.Infrastructure.Extensions
 {

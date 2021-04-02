@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
-using Ogma3.Data.Enums;
+using Ogma3.Data.Stories;
 
 namespace Ogma3.Migrations
 {

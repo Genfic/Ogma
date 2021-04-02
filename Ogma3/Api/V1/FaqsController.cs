@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
+using Ogma3.Data.Faqs;
 using Ogma3.Infrastructure;
 
 namespace Ogma3.Api.V1

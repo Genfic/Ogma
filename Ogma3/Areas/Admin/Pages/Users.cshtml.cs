@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
+using Ogma3.Data.Roles;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Admin.Pages
 {

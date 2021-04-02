@@ -1,5 +1,5 @@
 using System;
-using Ogma3.Data.DTOs;
+using Ogma3.Data.Chapters;
 
 namespace Ogma3.Pages.Shared.Details
 {

@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<Data.Models.OgmaUser> _userManager;
-        private readonly SignInManager<Data.Models.OgmaUser> _signInManager;
+        private readonly UserManager<OgmaUser> _userManager;
+        private readonly SignInManager<OgmaUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<Data.Models.OgmaUser> userManager, SignInManager<Data.Models.OgmaUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<OgmaUser> userManager, SignInManager<OgmaUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

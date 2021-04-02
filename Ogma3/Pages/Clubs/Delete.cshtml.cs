@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Enums;
+using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Clubs
@@ -21,7 +21,7 @@ namespace Ogma3.Pages.Clubs
         }
 
         [BindProperty]
-        public Data.Models.Club Club { get; set; }
+        public Data.Clubs.Club Club { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long? id)
         {

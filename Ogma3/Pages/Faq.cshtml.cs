@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Models;
 
 namespace Ogma3.Pages
 {
@@ -16,7 +15,7 @@ namespace Ogma3.Pages
             _context = context;
         }
 
-        public List<Data.Models.Faq> Faqs { get; set; }
+        public List<Data.Faqs.Faq> Faqs { get; set; }
         
         public async Task OnGetAsync()
         {

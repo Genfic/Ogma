@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.AuthorizationData;
-using Ogma3.Data.Models;
+using Ogma3.Data.Roles;
 
 namespace Ogma3.Api.V1
 {

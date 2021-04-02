@@ -4,8 +4,7 @@ using EllipticCurve;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Ogma3.Data.Enums;
-using Ogma3.Data.Models;
+using Ogma3.Data.Stories;
 
 namespace Ogma3.Infrastructure.TagHelpers
 {

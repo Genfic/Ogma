@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Users;
 
 namespace Ogma3.Pages.User
 {

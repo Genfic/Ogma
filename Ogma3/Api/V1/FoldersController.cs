@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.DTOs;
-using Ogma3.Data.Models;
-using Ogma3.Data.Repositories;
+using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Api.V1
