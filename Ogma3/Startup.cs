@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using B2Net;
 using B2Net.Models;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -195,6 +196,9 @@ namespace Ogma3
             
             // SignalR
             services.AddSignalR();
+            
+            // Linq2DB extension
+            LinqToDBForEFTools.Initialize();
         }
 
 
