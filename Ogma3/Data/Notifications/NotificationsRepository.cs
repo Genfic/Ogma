@@ -30,7 +30,7 @@ namespace Ogma3.Data.Notifications
             await _context.Notifications.AddAsync(notification);
 
             var notificationRecipients = recipientIds
-                .Select(u => new NotificationRecipients {RecipientId = u, Notification = notification});
+                .Select(u => new NotificationRecipients { RecipientId = u, Notification = notification });
             
             await _context.NotificationRecipients.AddRangeAsync(notificationRecipients);
 

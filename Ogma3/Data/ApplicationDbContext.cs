@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
@@ -24,6 +25,7 @@ using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Data.Votes;
+using Serilog;
 
 namespace Ogma3.Data
 {
@@ -91,8 +93,11 @@ namespace Ogma3.Data
         public DbSet<InviteCode> InviteCodes { get; set; }
 
 
+        public readonly ILoggerFactory MyLoggerFactory;
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
+            MyLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
+            
             // NOTE: When mapping an enum here, remember to also add it in `OnModelCreating()`
             NpgsqlConnection.GlobalTypeMapper
                 .MapEnum<EStoryStatus>()
@@ -120,6 +125,12 @@ namespace Ogma3.Data
 
             // Load model configurations
             builder.ApplyConfigurationsFromAssembly(typeof(OgmaUserConfiguration).Assembly);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
         }
     }
 }

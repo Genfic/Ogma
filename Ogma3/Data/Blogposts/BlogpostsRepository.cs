@@ -91,15 +91,11 @@ namespace Ogma3.Data.Blogposts
         /// </summary>
         /// <param name="id">ID of the blogpost</param>
         /// <returns>The blogpost as BlogpostDetails object</returns>
-        public async Task<BlogpostDetails> GetDetails(long id) // , bool publishedOnly = true)
+        public async Task<BlogpostDetails> GetDetails(long id)
         {
             return await _context.Blogposts
                 .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetDetails)} -> {id}")
                 .Where(b => b.Id == id)
-                // .Where(b => b.IsPublished) // || !publishedOnly)
-                // .Where(b => b.ContentBlockId == null) // || !publishedOnly)
-                .Include(b => b.AttachedChapter)
-                .Include(b => b.AttachedStory)
                 .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

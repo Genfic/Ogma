@@ -113,7 +113,8 @@ namespace Ogma3.Pages.Blog
                 Body = Input.Body.Trim(),
                 AuthorId = (long) uid,
                 WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
-                Hashtags = tags ?? Array.Empty<string>()
+                Hashtags = tags ?? Array.Empty<string>(),
+                CommentsThread = new CommentsThread()
             };
 
             if (Input.StoryMinimalId.HasValue)
@@ -124,17 +125,16 @@ namespace Ogma3.Pages.Blog
             {
                 post.AttachedChapterId = Input.ChapterMinimalId;
             }
-            
+
             await _context.Blogposts.AddAsync(post);
-            await _context.SaveChangesAsync();
-            
+
             // Subscribe author to the comment thread
             await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
             {
                 CommentsThread = post.CommentsThread,
                 OgmaUserId = (long) uid
             });
-            
+
             await _context.SaveChangesAsync();
 
             // Notify followers

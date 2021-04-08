@@ -1,6 +1,5 @@
 using System;
 using System.Text.Json.Serialization;
-using AutoMapper;
 using B2Net;
 using B2Net.Models;
 using LinqToDB.EntityFrameworkCore;
@@ -59,9 +58,8 @@ namespace Ogma3
         public void ConfigureServices(IServiceCollection services)
         {
         
-            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(
-                Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection")
-             ));
+            services.AddDbContext<ApplicationDbContext>(options => options
+                .UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             
             // Repositories
@@ -273,7 +271,5 @@ namespace Ogma3
                 ctx.Database.Migrate();
             }
         }
-        
-        
     }
 }
