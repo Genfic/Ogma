@@ -37,7 +37,7 @@
         <div class="o-form-group">
             <label>Attached story</label>
             <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Input.StoryMinimal"/>
-            <input type="hidden" name="StoryMinimalId" value="@Model.Input.StoryMinimal.Id">
+            <input type="hidden" asp-for="Input.StoryMinimalId">
         </div>
     }
     @if (Model.Input.ChapterMinimal != null)
@@ -45,7 +45,7 @@
         <div class="o-form-group">
             <label>Attached chapter</label>
             <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Input.ChapterMinimal"/>
-            <input type="hidden" name="ChapterMinimalId" value="@Model.Input.ChapterMinimal.Id">
+            <input type="hidden" asp-for="Input.ChapterMinimalId">
         </div>
     }
     @if (Model.Input.IsUnavailable)

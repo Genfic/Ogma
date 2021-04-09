@@ -2,6 +2,7 @@ using System;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
+using FluentValidation;
 using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,7 @@ using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
+using FluentValidation.AspNetCore;
 
 namespace Ogma3
 {
@@ -73,6 +75,10 @@ namespace Ogma3
             services.AddScoped<CommentsRepository>();
             services.AddScoped<FoldersRepository>();
             services.AddScoped<NotificationsRepository>();
+            
+            // Validators
+            services.AddTransient<IValidator<BlogpostEditDto>, BlogpostEditDtoValidation>();
+            services.AddTransient<IValidator<BlogpostCreateDto>, BlogpostCreateDtoValidation>();
 
             // Custom persistent config
             services.AddSingleton(OgmaConfig.Init("config.json"));
@@ -186,6 +192,7 @@ namespace Ogma3
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 })
+                .AddFluentValidation()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

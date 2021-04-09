@@ -59,24 +59,18 @@
         </div>
     </div>
     
-    @if (Model.Input.StoryMinimal != null)
+    @if (Model.Input.AttachedStory is not null)
     {
         <div class="o-form-group">
             <label>Attached story</label>
-            <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Input.StoryMinimal"/>
+            <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Input.AttachedStory"/>
         </div>
     }
-    @if (Model.Input.ChapterMinimal != null)
+    @if (Model.Input.AttachedChapter is not null)
     {
         <div class="o-form-group">
             <label>Attached chapter</label>
-            <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Input.ChapterMinimal"/>
-        </div>
-    }
-    @if (Model.Input.IsUnavailable)
-    {
-        <div class="o-form-group">
-            <label>Attached content is unavailable.</label>
+            <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Input.AttachedChapter"/>
         </div>
     }
     

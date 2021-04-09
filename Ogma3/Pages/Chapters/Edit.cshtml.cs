@@ -96,12 +96,12 @@ namespace Ogma3.Pages.Chapters
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(long id)
         {
             if (!ModelState.IsValid) return Page();
             
             // Get chapter
-            var chapter = await _context.Chapters.FindAsync(Input.Id);
+            var chapter = await _context.Chapters.FindAsync(id);
             if (chapter == null) return NotFound();
             
             // Get story

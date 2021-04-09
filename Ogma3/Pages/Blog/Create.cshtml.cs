@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,9 +11,7 @@ using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Stories;
-using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Pages.Shared.Minimals;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog
@@ -36,50 +33,14 @@ namespace Ogma3.Pages.Blog
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public BlogpostCreateDto Input { get; set; }
 
         public async Task<IActionResult> OnGet([FromQuery] long? story, [FromQuery] long? chapter)
         {
-            Input = new InputModel();
-
-            if (story.HasValue)
-            {
-                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) story);
-                Input.IsUnavailable = Input.StoryMinimal is null;
-            }
-            else if (chapter.HasValue)
-            {
-                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) chapter);
-                Input.IsUnavailable = Input.ChapterMinimal is null;
-            }
-            
+            await Init(story, chapter);
             return Page();
         }
 
-        public class InputModel
-        {
-            [Required]
-            [StringLength(CTConfig.CBlogpost.MaxTitleLength,
-                ErrorMessage = "The {0} must be between {1} and {2} characters long.",
-                MinimumLength = CTConfig.CBlogpost.MinTitleLength)]
-            public string Title { get; set; }
-            
-            [Required]
-            [StringLength(CTConfig.CBlogpost.MaxBodyLength,
-                ErrorMessage = "The {0} must be between {1} and {2} characters long.",
-                MinimumLength = CTConfig.CBlogpost.MinBodyLength)]
-            public string Body { get; set; }
-            
-            [RegularExpression("^([^,]*,){0,9}[^,]*$", ErrorMessage = "You can use no more than 10 tags")]
-            [BlogpostTagsValidation(10)]
-            public string Tags { get; set; }
-
-            public ChapterMinimal? ChapterMinimal { get; set; }
-            public long? ChapterMinimalId { get; set; }
-            public StoryMinimal? StoryMinimal { get; set; }
-            public long? StoryMinimalId { get; set; }
-            public bool IsUnavailable { get; set; }
-        }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -87,6 +48,7 @@ namespace Ogma3.Pages.Blog
         {
             if (!ModelState.IsValid)
             {
+                await Init(Input.StoryMinimalId, Input.ChapterMinimalId);
                 return Page();
             }
             
@@ -114,22 +76,15 @@ namespace Ogma3.Pages.Blog
                 AuthorId = (long) uid,
                 WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
                 Hashtags = tags ?? Array.Empty<string>(),
-                CommentsThread = new CommentsThread()
+                AttachedStoryId = Input.StoryMinimalId,
+                AttachedChapterId = Input.ChapterMinimalId,
+                CommentsThread = new CommentsThread(),
             };
-
-            if (Input.StoryMinimalId.HasValue)
-            {
-                post.AttachedStoryId = Input.StoryMinimalId;
-            } 
-            else if (Input.ChapterMinimalId.HasValue)
-            {
-                post.AttachedChapterId = Input.ChapterMinimalId;
-            }
 
             await _context.Blogposts.AddAsync(post);
 
             // Subscribe author to the comment thread
-            await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+            _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
             {
                 CommentsThread = post.CommentsThread,
                 OgmaUserId = (long) uid
@@ -148,6 +103,24 @@ namespace Ogma3.Pages.Blog
                 new { post.Id, post.Slug });
 
             return RedirectToPage("/User/Blog", new { name = uname });
+        }
+
+        private async Task Init(long? story, long? chapter)
+        {
+            Input = new BlogpostCreateDto();
+
+            if (story is not null)
+            {
+                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) story);
+                Input.StoryMinimalId = story;
+                Input.IsUnavailable = Input.StoryMinimal is null;
+            }
+            else if (chapter is not null)
+            {
+                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) chapter);
+                Input.ChapterMinimalId = chapter;
+                Input.IsUnavailable = Input.ChapterMinimal is null;
+            }
         }
     }
 }

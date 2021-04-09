@@ -76,7 +76,26 @@ namespace Tests.Utils
             };
             const string outString = "Hello, Bob! Goodbye, Bob! Have a nice night.";
 
-            Assert.Equal(inString.ReplaceWithPattern(pattern), outString);
+            Assert.Equal(outString, inString.ReplaceWithPattern(pattern));
+        }
+        
+        // Test string.Words()
+        [Fact]
+        public void TestWords()
+        {
+            Assert.Equal(3, "one two three".Words());
+        }
+
+        [Fact]
+        public void TestWords_Empty()
+        {
+            Assert.Equal(0, "".Words());
+        }
+        
+        [Fact]
+        public void TestWords_MoreWhitespace()
+        {
+            Assert.Equal(3, "one     two \t three   ".Words());
         }
     }
 }

@@ -56,8 +56,36 @@ namespace Utils.Extensions
         public static string Truncate(this string input, int length, string cap = "...")
         {
             return input.Length > length 
-                ? input.Substring(0, length) + cap 
+                ? input[..length] + cap 
                 : input;
+        }
+
+        /// <summary>
+        /// Get the amount of words in the given string
+        /// </summary>
+        /// <param name="input">String to count words in</param>
+        /// <returns>Amount of words</returns>
+        public static int Words(this string input)
+        {
+            var wasLetter = false;
+            var count = 0;
+            foreach (var ch in input)
+            {
+                if (char.IsWhiteSpace(ch))
+                {
+                    wasLetter = false;
+                }
+                else
+                {
+                    if (!wasLetter)
+                    {
+                        count++;
+                    }
+                    wasLetter = true;
+                }
+            }
+
+            return count;
         }
 
         public static IEnumerable<Header> GetMarkdownHeaders(this string input)
