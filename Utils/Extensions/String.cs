@@ -19,7 +19,7 @@ namespace Utils.Extensions
                 .ToLower()
                 .Trim('-');
         }
-        
+
         /// <summary>
         /// Replaces elements of the `template` according to the supplied `pattern`
         /// </summary>
@@ -34,7 +34,7 @@ namespace Utils.Extensions
             }
             return template;
         }
-        
+
         /// <summary>
         /// Removes all leading whitespace
         /// </summary>
@@ -42,7 +42,7 @@ namespace Utils.Extensions
         /// <returns>String without leading whitespace</returns>
         public static string RemoveLeadingWhiteSpace(this string input)
         {
-            var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            var lines = input.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             return string.Join(Environment.NewLine, lines.Select(s => s.TrimStart(' ', '\t')));
         }
 
@@ -55,8 +55,8 @@ namespace Utils.Extensions
         /// <returns>Truncated and capped string</returns>
         public static string Truncate(this string input, int length, string cap = "...")
         {
-            return input.Length > length 
-                ? input[..length] + cap 
+            return input.Length > length
+                ? input[..length] + cap
                 : input;
         }
 
@@ -81,6 +81,7 @@ namespace Utils.Extensions
                     {
                         count++;
                     }
+
                     wasLetter = true;
                 }
             }
@@ -88,15 +89,29 @@ namespace Utils.Extensions
             return count;
         }
 
+        /// <summary>
+        /// Parses a string containing comma-separated tags (possibly #tags) into an array of said tags.
+        /// Each tag in the resulting array is trimmed of any whitespace and # characters.
+        /// </summary>
+        /// <param name="input">String to parse into tags</param>
+        /// <returns>An array of strings representing the tags</returns>
+        public static string[] ParseHashtags(this string input)
+        {
+            return input.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(t => t.Trim('#').Friendlify())
+                .Distinct()
+                .ToArray();
+        }
+
         public static IEnumerable<Header> GetMarkdownHeaders(this string input)
         {
             var headers = new List<Header>();
-            
+
             var lines = input.Split(Environment.NewLine);
             foreach (var line in lines)
             {
                 if (!line.StartsWith('#')) continue;
-                
+
                 var head = new Header();
                 foreach (var c in line)
                 {
@@ -119,7 +134,7 @@ namespace Utils.Extensions
 
                 if (latest != null)
                 {
-                    head.Occurrence =  (byte) (latest.Occurrence + 1);
+                    head.Occurrence = (byte) (latest.Occurrence + 1);
                 }
 
                 headers.Add(head);
@@ -127,7 +142,7 @@ namespace Utils.Extensions
 
             return headers;
         }
-        
+
         public class Header
         {
             public byte Level { get; set; }

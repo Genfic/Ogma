@@ -77,8 +77,8 @@ namespace Ogma3
             services.AddScoped<NotificationsRepository>();
             
             // Validators
-            services.AddTransient<IValidator<BlogpostEditDto>, BlogpostEditDtoValidation>();
-            services.AddTransient<IValidator<BlogpostCreateDto>, BlogpostCreateDtoValidation>();
+            services.AddValidatorsFromAssemblyContaining<Startup>();
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
 
             // Custom persistent config
             services.AddSingleton(OgmaConfig.Init("config.json"));
@@ -172,7 +172,7 @@ namespace Ogma3
             services.AddMemoryCache();
             
             // Automapper
-            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddAutoMapper(typeof(Startup));
             
             // Runtime compilation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

@@ -1,9 +1,15 @@
 @page "{id}/{slug?}"
+@using System.Globalization
+@using Utils.Extensions
+@using Ogma3.Infrastructure.Extensions
+@using Ogma3.Data.AuthorizationData
+@using Ogma3.Data.Reports
+@using Ogma3.Api.V1
 @model Ogma3.Pages.Blog.DetailsModel
 
 @{
     var desc = Model.Blogpost.Body.Length > 150 
-        ? Model.Blogpost.Body.Substring(0, 150)
+        ? Model.Blogpost.Body[..150]
         : Model.Blogpost.Body;
 
     ViewData["Title"] = Model.Blogpost.Title;
@@ -19,4 +25,102 @@
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
-<partial name="Shared/Details/_BlogpostDetails" model="@Model.Blogpost" />
+<article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
+    <h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>
+
+    <time class="date" itemprop="datePublished" datetime="@Model.Blogpost.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+        @Model.Blogpost.PublishDate.FormatDateWithDaySuffix()
+    </time>
+
+    <div class="actions">
+        @if (User.IsUserSameAsLoggedIn(Model.Blogpost.AuthorId))
+        {
+            <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Blogpost.Id">
+                <icon class="icon" icon="edit"></icon>
+                <span class="name">Edit</span>
+            </a>
+        }         
+        @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+        {
+            <a title="Manage" class="action-btn red" target="_blank"
+               asp-area="Admin" asp-page="/ContentBlock" 
+               asp-route-type="blogpost" asp-route-id="@Model.Blogpost.Id">
+                <icon class="icon" icon="shield"></icon>
+            </a>
+        }
+        @if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            <button title="Report" class="action-btn red" v-on:click="report">
+                <icon class="icon" icon="flag"></icon>
+            </button>
+        }
+        @if (!Model.Blogpost.IsPublished)
+        {
+            <span class="not-published">
+                <icon class="icon" icon="visibility_off"></icon>
+            </span>
+        }
+        @if (Model.Blogpost.ContentBlockId != null)
+        {
+            <span class="not-published">
+                <icon class="icon" icon="shield"></icon>
+            </span>
+        }
+    </div>
+
+        @if (Model.Blogpost.IsUnavailable)
+        {
+            <div class="unavailable active-border">
+                <strong>Attached content is unavailable.</strong>
+                <p>This story or chapter has been deleted or unpublished.</p>
+            </div>
+        }
+        else
+        {
+            if (Model.Blogpost.AttachedStory != null)
+            {
+                <strong>Attached story</strong>
+                <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Blogpost.AttachedStory"/>
+            }
+            if (Model.Blogpost.AttachedChapter != null)
+            {
+                <strong>Attached chapter</strong>
+                <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Blogpost.AttachedChapter"/>
+            }
+        }
+    
+    <markdown class="body" preset="Blogpost" itemprop="articleBody">
+        @Model.Blogpost.Body
+    </markdown>
+
+    <div class="tags" itemprop="keywords">
+        @foreach (var t in Model.Blogpost.Hashtags)
+        {
+            <a asp-page="/Blog/Index" asp-route-q="#@t" class="tag active-border">
+                <span class="name">@t</span>
+            </a>
+        }
+    </div>
+
+    <div class="read-progress">
+        <div class="bar" :style="{width: `${progress * 100}%`}"></div>
+    </div>
+
+    <report-modal
+        ref="reportModal"
+        :item-id="@Model.Blogpost.Id"
+        item-type="@EReportableContentTypes.Blogpost"
+        reports-route="@Url.RouteUrl(nameof(ReportsController))">
+    </report-modal>
+
+    @Html.AntiForgeryToken()
+</article>
+
+<partial name="_Comments" model="@Model.Blogpost.CommentsThreadId"/>
+
+@section Scripts
+{
+    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/blogpost.min.js" asp-append-version="true"></script>
+}

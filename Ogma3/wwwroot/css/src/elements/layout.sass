@@ -27,11 +27,15 @@ body
     &-wide
       @extend #site-content
       max-width: min(100%, 1200px)
+    @media screen and (max-width: v.$mq-mobile)
+      margin-top: 0
   
   >footer
     width: 100%
     height: 60px
     display: flex
+    @media screen and (max-width: v.$mq-mobile)
+      margin-bottom: v.$nav-height + (v.$nav-v-pad * 2)
     
 .o-grid
   display: grid

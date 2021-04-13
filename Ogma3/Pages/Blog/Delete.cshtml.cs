@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -27,7 +28,22 @@ namespace Ogma3.Pages.Blog
         }
 
         [BindProperty]
-        public BlogpostSimpleDto Blogpost { get; set; }
+        public GetData Blogpost { get; set; }
+
+        public record GetData
+        {
+            public long Id { get; init; }
+            public string Title { get; init; }
+            public string Slug { get; init; }
+            public DateTime PublishDate { get; init; }
+            public bool IsPublished { get; init; }
+            public int CommentsThreadCommentsCount { get; init; }
+        }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Blogpost, GetData>();
+        }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -35,14 +51,12 @@ namespace Ogma3.Pages.Blog
 
             Blogpost = await _context.Blogposts
                 .Where(m => m.Id == id)
-                .ProjectTo<BlogpostSimpleDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<GetData>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsyncEF();
 
-            if (Blogpost == null)
-            {
-                return NotFound();
-            }
+            if (Blogpost == null) return NotFound();
+            
             return Page();
         }
 
@@ -57,7 +71,6 @@ namespace Ogma3.Pages.Blog
             if (uid == null || uname == null) return Unauthorized();
      
             await _context.Blogposts
-                .TagWith($"Deleting blogpost {id}")
                 .Where(b => b.Id == id && b.AuthorId == uid)
                 .DeleteAsync();
 

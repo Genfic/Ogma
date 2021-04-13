@@ -97,5 +97,23 @@ namespace Tests.Utils
         {
             Assert.Equal(3, "one     two \t three   ".Words());
         }
+
+        [Fact]
+        public void TestParseHashtags()
+        {
+            Assert.Equal(
+                new[] { "aaa", "bbb", "ccc" },
+                "aaa, bbb, ccc".ParseHashtags()
+            );
+        }
+
+        [Fact]
+        public void TestParseHashtags_WithHashChars()
+        {
+            Assert.Equal(
+                new[] { "aaa", "bbb", "ccc" },
+                "#aaa,  #bbb  , #  ccc".ParseHashtags()
+            );
+        }
     }
 }

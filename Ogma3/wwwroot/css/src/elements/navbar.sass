@@ -17,10 +17,15 @@ nav#top-nav
   transition: padding-top .2s ease-in-out, padding-bottom .2s ease-in-out
   
   @media screen and (max-width: v.$mq-mobile)
-    padding: .2rem 1rem
+    bottom: 0
+    top: unset
+    padding: .4rem 1rem
+    box-shadow: v.$shadow
+    border-bottom: none
+    border-top: 1px solid v.$foreground-50
   @media screen and (max-width: v.$mq-mobile-sm)
     flex-direction: column
-    padding: .1rem .5rem
+    padding: .2rem .5rem
     height: auto
     
   &.bottom
@@ -31,6 +36,10 @@ nav#top-nav
     padding-bottom: .1rem
     @media (prefers-reduced-motion)
       height: v.$nav-height
+    @media screen and (max-width: v.$mq-mobile)
+      padding: .4rem 1rem
+    @media screen and (max-width: v.$mq-mobile-sm)
+      padding: .2rem .5rem
     
   .navbar-nav
     display: flex

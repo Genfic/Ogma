@@ -17,7 +17,7 @@ new Vue({
 			let elBottom = this.$el.getBoundingClientRect().bottom;
 			let perc = elBottom - this.windowHeight;
          
-			this.progress = 1 - perc.normalize(0, this.containerHeight - (this.windowHeight)).clamp();
+			this.progress = 1 - perc.normalize(0, Math.max(this.containerHeight - this.windowHeight, 0)).clamp();
 		}
 	},
 	mounted() {

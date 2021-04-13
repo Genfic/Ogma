@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,17 +41,17 @@ namespace Ogma3.Pages.Blog
             if (!string.IsNullOrEmpty(q))
             {
                 // Search by tags
-                var tags = q
-                    .Split(' ')
+                var splitQuery = q.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                
+                var tags = splitQuery
                     .Where(x => x.StartsWith('#'))
-                    .Select(x => x.ToLower().Trim().Trim('#'))
+                    .Select(x => x.ToLower().Trim('#'))
                     .ToArray();
                 if (tags.Length > 0)
                     query = query.Where(b => tags.Any(i => b.Hashtags.Contains(i)));
 
                 // Search in title
-                var search = q
-                    .Split(' ')
+                var search = splitQuery
                     .Where(x => !x.StartsWith('#') && !string.IsNullOrEmpty(x))
                     .ToList();
                 if (search.Count > 0)

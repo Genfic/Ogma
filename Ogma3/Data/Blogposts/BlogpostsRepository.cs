@@ -85,20 +85,5 @@ namespace Ogma3.Data.Blogposts
                 .Where(b => b.ContentBlockId == null)
                 .CountAsync();
         }
-
-        /// <summary>
-        /// Get all details of the desired blogpost
-        /// </summary>
-        /// <param name="id">ID of the blogpost</param>
-        /// <returns>The blogpost as BlogpostDetails object</returns>
-        public async Task<BlogpostDetails> GetDetails(long id)
-        {
-            return await _context.Blogposts
-                .TagWith($"{nameof(BlogpostsRepository)}.{nameof(GetDetails)} -> {id}")
-                .Where(b => b.Id == id)
-                .ProjectTo<BlogpostDetails>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
     }
 }

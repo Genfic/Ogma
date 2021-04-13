@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +12,9 @@ using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Stories;
+using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared.Minimals;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog
@@ -33,7 +36,7 @@ namespace Ogma3.Pages.Blog
         }
 
         [BindProperty]
-        public BlogpostCreateDto Input { get; set; }
+        public PostData Input { get; set; }
 
         public async Task<IActionResult> OnGet([FromQuery] long? story, [FromQuery] long? chapter)
         {
@@ -41,6 +44,33 @@ namespace Ogma3.Pages.Blog
             return Page();
         }
 
+        public class PostData
+        {
+            public string Title { get; init; }
+            public string Body { get; init; }
+            public string Tags { get; init; }
+            public ChapterMinimal? ChapterMinimal { get; set; }
+            public long? ChapterMinimalId { get; set; }
+            public StoryMinimal? StoryMinimal { get; set; }
+            public long? StoryMinimalId { get; set; }
+            public bool IsUnavailable { get; set; }
+        }
+        
+        public class PostDataValidation : AbstractValidator<PostData>
+        {
+            public PostDataValidation()
+            {
+                RuleFor(b => b.Title)
+                    .NotEmpty()
+                    .Length(CTConfig.CBlogpost.MinTitleLength, CTConfig.CBlogpost.MaxTitleLength);
+                RuleFor(b => b.Body)
+                    .NotEmpty()
+                    .Length(CTConfig.CBlogpost.MinBodyLength, CTConfig.CBlogpost.MaxBodyLength);
+                RuleFor(b => b.Tags)
+                    .HashtagsFewerThan(CTConfig.CBlogpost.MaxTagsAmount)
+                    .HashtagsShorterThan(CTConfig.CBlogpost.MaxTagLength);
+            }
+        }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -59,29 +89,20 @@ namespace Ogma3.Pages.Blog
             // Return if not logged in
             if (uid == null || uname == null) return Unauthorized();
             
-            // Create array of hashtags
-            var tags = Input.Tags?
-                .Split(',')
-                .Where(t => !string.IsNullOrWhiteSpace(t))
-                .ToList()
-                .Select(t => t.Trim(' ', '#', ',').Friendlify())
-                .Distinct()
-                .ToArray();
-
+            // Create blogpost
             var post = new Blogpost
             {
                 Title = Input.Title.Trim(),
                 Slug = Input.Title.Trim().Friendlify(),
                 Body = Input.Body.Trim(),
                 AuthorId = (long) uid,
-                WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length,
-                Hashtags = tags ?? Array.Empty<string>(),
+                WordCount = Input.Body.Words(),
+                Hashtags = Input.Tags?.ParseHashtags() ?? Array.Empty<string>(),
                 AttachedStoryId = Input.StoryMinimalId,
                 AttachedChapterId = Input.ChapterMinimalId,
                 CommentsThread = new CommentsThread(),
             };
-
-            await _context.Blogposts.AddAsync(post);
+            _context.Blogposts.Add(post);
 
             // Subscribe author to the comment thread
             _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
@@ -107,7 +128,7 @@ namespace Ogma3.Pages.Blog
 
         private async Task Init(long? story, long? chapter)
         {
-            Input = new BlogpostCreateDto();
+            Input = new PostData();
 
             if (story is not null)
             {

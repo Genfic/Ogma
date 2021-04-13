@@ -157,14 +157,6 @@ namespace Ogma3.Data
             // Blogpost mappings
             CreateMap<Blogpost, BlogpostCard>();
             CreateMap<Blogpost, BlogpostMinimal>();
-            CreateMap<Blogpost, BlogpostSimpleDto>();
-            CreateMap<Blogpost, BlogpostEditDto>();
-            CreateMap<Blogpost, BlogpostDetails>()
-                .ForMember(
-                    bd => bd.CommentsCount,
-                    opts 
-                        => opts.MapFrom(b => b.CommentsThread.CommentsCount)
-                );
 
             // Club mappings
             CreateMap<Club, ClubBar>()
