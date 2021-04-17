@@ -40,7 +40,21 @@ namespace Ogma3.Pages.Blog
 
         public async Task<IActionResult> OnGet([FromQuery] long? story, [FromQuery] long? chapter)
         {
-            await Init(story, chapter);
+            Input = new PostData();
+
+            if (story is not null)
+            {
+                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) story);
+                Input.StoryMinimalId = story;
+                Input.IsUnavailable = Input.StoryMinimal is null;
+            }
+            else if (chapter is not null)
+            {
+                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) chapter);
+                Input.ChapterMinimalId = chapter;
+                Input.IsUnavailable = Input.ChapterMinimal is null;
+            }
+            
             return Page();
         }
 
@@ -55,6 +69,7 @@ namespace Ogma3.Pages.Blog
             public long? StoryMinimalId { get; set; }
             public bool IsUnavailable { get; set; }
         }
+        
         
         public class PostDataValidation : AbstractValidator<PostData>
         {
@@ -71,15 +86,13 @@ namespace Ogma3.Pages.Blog
                     .HashtagsShorterThan(CTConfig.CBlogpost.MaxTagLength);
             }
         }
-
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
+        
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                await Init(Input.StoryMinimalId, Input.ChapterMinimalId);
-                return Page();
+                return await OnGet(Input.StoryMinimalId, Input.ChapterMinimalId);
             }
             
             // Get logged in user
@@ -124,24 +137,6 @@ namespace Ogma3.Pages.Blog
                 new { post.Id, post.Slug });
 
             return RedirectToPage("/User/Blog", new { name = uname });
-        }
-
-        private async Task Init(long? story, long? chapter)
-        {
-            Input = new PostData();
-
-            if (story is not null)
-            {
-                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) story);
-                Input.StoryMinimalId = story;
-                Input.IsUnavailable = Input.StoryMinimal is null;
-            }
-            else if (chapter is not null)
-            {
-                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) chapter);
-                Input.ChapterMinimalId = chapter;
-                Input.IsUnavailable = Input.ChapterMinimal is null;
-            }
         }
     }
 }

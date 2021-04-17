@@ -1,6 +1,24 @@
 @use "../vars" as v
 @use "../mixins/focus" as f
 
+button#burger
+  position: fixed
+  bottom: .5rem
+  right: .5rem
+  background-color: v.$ele-1
+  border: 1px solid v.$foreground-10
+  border-radius: 50%
+  height: 48px
+  width: 48px
+  z-index: 999999999
+  color: v.$foreground
+  display: flex
+  align-items: center
+  justify-content: center
+  box-shadow: v.$shadow
+  @media screen and (min-width: v.$mq-mobile-sm)
+    display: none
+    
 nav#top-nav
   display: flex
   position: fixed
@@ -27,6 +45,10 @@ nav#top-nav
     flex-direction: column
     padding: .2rem .5rem
     height: auto
+    margin-bottom: -120%
+    transition: margin-bottom 100ms ease-in-out
+    &.visible
+      margin-bottom: 0
     
   &.bottom
     bottom: 0
@@ -40,10 +62,31 @@ nav#top-nav
       padding: .4rem 1rem
     @media screen and (max-width: v.$mq-mobile-sm)
       padding: .2rem .5rem
+      
+  >.brand
+    color: v.$foreground
+    padding: 0 .5rem
+    margin-right: 1rem
+    font-size: 1rem
+    line-height: inherit
+    white-space: nowrap        
+    display: flex
+    align-items: center
+    +f.focus      
+    &:hover
+      color: v.$foreground
+      background-color: v.$accent-10
+    @media screen and (max-width: v.$mq-mobile-sm)
+      min-height: 48px
     
   .navbar-nav
     display: flex
     flex-direction: row
+    @media screen and (max-width: v.$mq-mobile-sm)
+      flex-direction: column
+      padding: .2rem .5rem
+      &.left
+        margin-right: 0
         
     &.left
       margin-right: auto
@@ -52,7 +95,7 @@ nav#top-nav
       padding: 0
       display: flex
       align-items: center
-      justify-content: center
+      justify-content: stretch
       color: v.$foreground-75
       &:hover
         color: v.$foreground
@@ -66,15 +109,7 @@ nav#top-nav
         &:hover
           background-color: v.$accent-50
           border-color: v.$accent-75
-        
-      &.navbar-brand
-        color: v.$foreground-75
-        margin-right: 1rem
-        font-size: 1.25rem
-        line-height: inherit
-        white-space: nowrap
-        +f.focus
-      
+            
       .nav-link
         position: relative
         padding: 0 .5rem
@@ -83,6 +118,9 @@ nav#top-nav
         align-items: center
         color: v.$foreground
         +f.focus
+        @media screen and (max-width: v.$mq-mobile-sm)
+          width: 100%
+          min-height: 48px
           
         &.light
           color: v.$foreground-75
@@ -91,8 +129,6 @@ nav#top-nav
           >.name
             color: v.$foreground-75
             padding-left: .5ch
-            @media screen and (max-width: v.$mq-mobile)
-              display: none
               
         >.badge
           position: absolute

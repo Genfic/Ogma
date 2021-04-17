@@ -62,6 +62,11 @@
 <body>
 
 <header>
+    
+    <button id="burger">
+        <icon icon="menu"></icon>
+    </button>
+    
     <nav id="top-nav">
 
         <partial name="_MainNav"/>
@@ -118,5 +123,7 @@ else
 (_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'}).catch(console.error);})()
 </script>
     
+<mini-profiler />
+
 </body>
 </html>

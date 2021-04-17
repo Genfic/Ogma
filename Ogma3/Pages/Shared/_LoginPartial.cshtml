@@ -3,11 +3,11 @@
 @using Ogma3.Data.Users
 @using Ogma3.Services
 @using Utils
-@inject SignInManager<OgmaUser> SignInManager
-@inject OgmaUserManager UserManager
+@inject SignInManager<OgmaUser> _signInManager
+@inject OgmaUserManager _userManager
 
 <ul class="navbar-nav right">
-    @if (SignInManager.IsSignedIn(User))
+    @if (_signInManager.IsSignedIn(User))
     {
         var avatarExists = !string.IsNullOrEmpty(User.FindFirstValue(OgmaClaimTypes.Avatar));
         var avatar = avatarExists

@@ -2,6 +2,7 @@
 	let last_known_scroll_position = 0;
 	let ticking = false;
 	const nav: HTMLElement = document.getElementById('top-nav');
+	const btn: HTMLButtonElement = document.getElementById('burger') as HTMLButtonElement;
 
 	let lastPos = 0;
 	function changeNav(pos) {
@@ -19,5 +20,9 @@
 			});
 			ticking = true;
 		}
+	});
+	
+	btn.addEventListener('click', () => {
+		nav.classList.toggle('visible');
 	});
 })();

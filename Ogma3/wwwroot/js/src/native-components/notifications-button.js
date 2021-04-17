@@ -32,14 +32,14 @@ export class NotificationsButton extends LitElement {
             <a class="nav-link light" href="${this.href}" title="${this.count ?? 0} notifications">
                 <i class="material-icons-outlined wc-loaded">notifications</i>
                 ${(this.count ?? 0) > 0 
-		? html`<span class="badge">${this.count}</span>` 
-		: null 
-}
+					? html`<span class="badge">${this.count}</span>` 
+					: null 
+				}
             </a>
         `;
 	}
 
-	createRenderRoot() {
+	createRenderRoot() { 
 		return this;
 	}
 }

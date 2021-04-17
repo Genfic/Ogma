@@ -59,7 +59,10 @@ namespace Ogma3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Profiler
+            services.AddMiniProfiler().AddEntityFramework();
         
+            // Database
             services.AddDbContext<ApplicationDbContext>(options => options
                 .UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -211,6 +214,9 @@ namespace Ogma3
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager, ApplicationDbContext ctx)
         {
+            // Profiler
+            app.UseMiniProfiler();
+            
             // Request timestamp
             app.UseRequestTimestamp();
             

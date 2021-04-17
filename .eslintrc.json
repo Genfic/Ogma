@@ -16,8 +16,9 @@
             "warn",
             "tab",
             {
-                "MemberExpression": 1
-            }
+                "MemberExpression": 1,
+                "ignoredNodes": ["TemplateLiteral > *"]
+            } 
         ],
         "semi-style": [
             "warn",
