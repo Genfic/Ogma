@@ -116,12 +116,11 @@ namespace Ogma3.Pages.Chapters
             chapter.IsPublished = Input.IsPublished;
             await _context.SaveChangesAsync();
 
-            // NOTE: IDE will complain about non-nullable values, see https://github.com/linq2db/linq2db.EntityFrameworkCore/issues/135
             await _context.Stories
                 .Where(s => s.Id == chapter.StoryId)
-                .Set(s => s.WordCount, s => ((int?)s.Chapters
+                .Set(s => s.WordCount, s => s.Chapters
                     .Where(c => c.IsPublished)
-                    .Sum(c => c.WordCount)) ?? 0)
+                    .Sum(c => (int?)c.WordCount) ?? 0)
                 .Set(s => s.ChapterCount, s => s.Chapters.Count(c => c.IsPublished))
                 .Set(s => s.IsPublished, s => s.Chapters.Any(c => c.IsPublished))
                 .UpdateAsync();
