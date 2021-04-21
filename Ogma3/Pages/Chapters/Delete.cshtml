@@ -5,66 +5,43 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h2>@Model.Chapter.Title</h2>
 <div>
-    <h4>Chapter</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.Order)
+    <h3>Are you sure you want to delete this?</h3>
+    <hr/>
+    
+    <dl class="rows">
+        <dt>
+            Story:
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.Order)
+        <dd>
+            @Model.Chapter.StoryTitle
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.PublishDate)
+        <dt>
+            Published on:
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.PublishDate)
+        <dd>
+            @Model.Chapter.PublishDate
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.IsPublished)
+        <dt>
+            Published status:
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.IsPublished)
+        <dd>
+            @(Model.Chapter.IsPublished ? "Published" : "Not published")
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.Title)
+        <dt>
+            Comments:
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.Slug)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.Slug)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.Body)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.Body)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.StartNotes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.StartNotes)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Chapter.EndNotes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Chapter.EndNotes)
+        <dd>
+            @Model.Chapter.CommentsThreadCommentsCount
         </dd>
     </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="Chapter.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+
+    <form method="post" class="confirm">
+        <input type="hidden" asp-for="Chapter.Id"/>
+        <div class="buttons">
+            <input type="submit" value="Delete" class="button accept red"/>
+            <a asp-page="../Chapter" class="button cancel" asp-route-id="@Model.Chapter.Id" asp-route-slug="@Model.Chapter.Slug">Cancel</a>
+        </div>
     </form>
 </div>

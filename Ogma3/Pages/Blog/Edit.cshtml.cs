@@ -37,15 +37,16 @@ namespace Ogma3.Pages.Blog
         {
             // Get logged in user
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
             // Get post and make sure the user matches
             Input = await _context.Blogposts
-                .Where(m => m.Id == id && m.AuthorId == uid)
+                .Where(m => m.Id == id)
                 .ProjectTo<PostData>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsyncEF();
 
-            if (Input == null) return NotFound();
+            if (Input is null) return NotFound();
+            if (Input.AuthorId != uid) return Unauthorized();
             
             return Page();
         }
@@ -56,6 +57,7 @@ namespace Ogma3.Pages.Blog
             public string Title { get; set; }
             public string Body { get; set; }
             public string Tags { get; set; }
+            public long AuthorId { get; set; }
             public ChapterMinimal? AttachedChapter { get; set; }
             public StoryMinimal? AttachedStory { get; set; }
             public bool IsUnavailable { get; set; }
@@ -92,7 +94,7 @@ namespace Ogma3.Pages.Blog
             
             // Get logged in user
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
             await _context.Blogposts
                 .Where(m => m.Id == id && m.AuthorId == uid)

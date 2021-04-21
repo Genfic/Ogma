@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +12,7 @@ using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Utils.Extensions;
 
@@ -19,108 +23,94 @@ namespace Ogma3.Pages.Chapters
     {
         private readonly ApplicationDbContext _context;
         private readonly NotificationsRepository _notificationsRepo;
+        private readonly IMapper _mapper;
 
-        public CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
+        public CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo, IMapper mapper)
         {
             _context = context;
             _notificationsRepo = notificationsRepo;
+            _mapper = mapper;
         }
 
-        public class GetModel
+        public class GetData
         {
-            public long? AuthorId { get; set; }
-            public string Slug { get; set; }
-            public string Title { get; set; }
+            public long Id { get; set; }
+            public long? AuthorId { get; init; }
+            public string Slug { get; init; }
+            public string Title { get; init; }
+        }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Story, GetData>();
         }
 
         public async Task<IActionResult> OnGetAsync(long id)
         {
-            Input = new InputModel();
+            Input = new PostData();
 
-            // Get story
             Story = await _context.Stories
                 .Where(s => s.Id == id)
-                .Select(s => new GetModel
-                {
-                    AuthorId = s.AuthorId,
-                    Slug = s.Slug,
-                    Title = s.Title
-                })
-                .AsNoTracking()
+                .ProjectTo<GetData>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
             
-            // Redirect if story doesn't exist
-            if (Story == null) return RedirectToPage("../Index");
+            if (Story is null) return NotFound();
+            if (Story.AuthorId != User.GetNumericId()) return RedirectToPage("../Story", new { id, slug = Story.Slug });
             
-            // Check ownership, render page if it's ok
-            if (Story.AuthorId == User.GetNumericId()) return Page();
-            
-            // Redirect to the story itself if not an owner
-            return RedirectToPage("../Story", new { id, slug = Story.Slug });
+            return Page();
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
-        public GetModel Story { get; set; }
+        public PostData Input { get; set; }
+        public GetData Story { get; set; }
 
-        public class InputModel
+        public class PostData
         {
-            [Required]
-            [StringLength(
-                CTConfig.CChapter.MaxTitleLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.CChapter.MinTitleLength
-            )]
-            public string Title { get; set; }
-            
-            [Required]
-            [StringLength(
-                CTConfig.CChapter.MaxBodyLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.CChapter.MinBodyLength
-            )]
-            public string Body { get; set; }
-            
-            [StringLength(
-                CTConfig.CChapter.MaxNotesLength,
-                ErrorMessage = "The {0} cannot exceed {1} characters."
-            )]
+            public string Title { get; init; }
+            public string Body { get; init; }
             [Display(Name = "Start notes")]
-            public string StartNotes { get; set; }
-            
-            [StringLength(
-                CTConfig.CChapter.MaxNotesLength,
-                ErrorMessage = "The {0} cannot exceed {1} characters."
-            )]
+            public string StartNotes { get; init; }
             [Display(Name = "End notes")]
-            public string EndNotes { get; set; }
+            public string EndNotes { get; init; }
+        }
+
+        public class PostDataValidation : AbstractValidator<PostData>
+        {
+            public PostDataValidation()
+            {
+                RuleFor(s => s.Title)
+                    .NotEmpty()
+                    .Length(CTConfig.CChapter.MinTitleLength, CTConfig.CChapter.MaxTitleLength);
+                RuleFor(c => c.Body)
+                    .NotEmpty()
+                    .Length(CTConfig.CChapter.MinBodyLength, CTConfig.CChapter.MaxBodyLength);
+                RuleFor(c => c.StartNotes)
+                    .MaximumLength(CTConfig.CChapter.MaxNotesLength);
+                RuleFor(c => c.EndNotes)
+                    .MaximumLength(CTConfig.CChapter.MaxNotesLength);
+            }
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(long id)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
+            if (!ModelState.IsValid) return Page();
+            
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
 
             // Get the story to insert a chapter into. Include user in the search to check ownership.
             var story = await _context.Stories
                 .Where(s => s.Id == id)
-                .Where(s => s.AuthorId == User.GetNumericId())
+                .Where(s => s.AuthorId == uid)
                 .Include(s => s.Chapters)
+                .Include(s => s.Shelves.Where(x => x.TrackUpdates))
                 .FirstOrDefaultAsync();
 
             // Back to index if the story is null or author isn't the logged in user
-            if (story == null)
-            {
-                return RedirectToPage("../Index");
-            }
-
+            if (story == null) return Page();
+            
             // Get the order number of the latest chapter
             var latestChapter = story.Chapters
                 .OrderByDescending(c => c.Order)
@@ -131,13 +121,13 @@ namespace Ogma3.Pages.Chapters
             var chapter = new Chapter
             {
                 Title = Input.Title.Trim(),
+                Slug = Input.Title.Trim().Friendlify(),
                 Body = Input.Body.Trim(),
                 StartNotes = Input.StartNotes?.Trim(),
                 EndNotes = Input.EndNotes?.Trim(),
-                Slug = Input.Title.Trim().Friendlify(),
                 Order = latestChapter + 1,
                 CommentsThread = new CommentsThread(),
-                WordCount = Input.Body.Trim().Split(' ', '\t', '\n').Length
+                WordCount = Input.Body.Words()
             };
             
             // Recalculate words and chapters in the story
@@ -145,9 +135,7 @@ namespace Ogma3.Pages.Chapters
             story.ChapterCount = story.Chapters.Count + 1;
             
             // Create the chapter and add it to the story
-            story.Chapters.Add(chapter);
-            
-            await _context.SaveChangesAsync();            
+            story.Chapters.Add(chapter);       
             
             // Subscribe author to the comment thread
             await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
@@ -158,16 +146,9 @@ namespace Ogma3.Pages.Chapters
             
             await _context.SaveChangesAsync();
             
-            // Get a list of users that should receive a notifications
-            var notificationRecipients = await _context.Shelves
-                .Where(s => s.TrackUpdates)
-                .Where(s => s.Stories.Any(st => st.Id == story.Id))
-                .Select(s => s.OwnerId)
-                .ToListAsync();
-            
             // Notify
             await _notificationsRepo.Create(ENotificationEvent.WatchedStoryUpdated,
-                notificationRecipients,
+                story.Shelves.Select(s => s.OwnerId),
                 "/Chapter",
                 new { chapter.Id, chapter.Slug });
 

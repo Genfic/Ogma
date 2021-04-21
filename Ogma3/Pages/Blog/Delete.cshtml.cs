@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using LinqToDB;
-using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -30,9 +28,10 @@ namespace Ogma3.Pages.Blog
         [BindProperty]
         public GetData Blogpost { get; set; }
 
-        public record GetData
+        public class GetData
         {
             public long Id { get; init; }
+            public long AuthorId { get; set; }
             public string Title { get; init; }
             public string Slug { get; init; }
             public DateTime PublishDate { get; init; }
@@ -52,10 +51,10 @@ namespace Ogma3.Pages.Blog
             Blogpost = await _context.Blogposts
                 .Where(m => m.Id == id)
                 .ProjectTo<GetData>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsyncEF();
+                .FirstOrDefaultAsync();
 
-            if (Blogpost == null) return NotFound();
+            if (Blogpost is null) return NotFound();
+            if (Blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
             
             return Page();
         }
@@ -65,14 +64,17 @@ namespace Ogma3.Pages.Blog
             if (id == null) return NotFound();
             
             // Get logged in user
-            var uid = User.GetNumericId();
             var uname = User.GetUsername();
+            if (uname is null) return Unauthorized();
 
-            if (uid == null || uname == null) return Unauthorized();
-     
-            await _context.Blogposts
-                .Where(b => b.Id == id && b.AuthorId == uid)
-                .DeleteAsync();
+            var blogpost = await _context.Blogposts
+                .Where(b => b.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (blogpost is null) return NotFound();
+            if (blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
+            
+            _context.Blogposts.Remove(blogpost);
 
             await _context.SaveChangesAsync();
 

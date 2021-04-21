@@ -1,5 +1,6 @@
 @use '../vars' as v
 @use "../mixins/focus" as f
+@use "../mixins/active-border" as ab
 
 $notes-padding-x: .5rem
 $notes-padding-y: .25rem
@@ -100,6 +101,7 @@ $notes-padding-y: .25rem
       margin: .5rem 0
       color: v.$foreground-75
       border: 1px solid v.$foreground-25
+      +ab.active-border
     
       //&.start
       

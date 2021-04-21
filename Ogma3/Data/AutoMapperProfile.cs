@@ -75,7 +75,6 @@ namespace Ogma3.Data
             CreateMap<OgmaRole, RoleDto>();
 
             // Chapter mappings
-            CreateMap<Chapter, ChapterDetails>();
             CreateMap<Chapter, ChapterBasicDto>();
             CreateMap<Chapter, ChapterMinimal>();
 

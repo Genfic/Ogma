@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,24 +17,44 @@ namespace Ogma3.Pages.Chapters
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public DeleteModel(ApplicationDbContext context)
+        public DeleteModel(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [BindProperty]
-        public Chapter Chapter { get; set; }
+        public GetData Chapter { get; set; }
+        
+        public class GetData
+        {
+            public long Id { get; init; }
+            public long StoryAuthorId { get; init; }
+            public DateTime PublishDate { get; init; }
+            public bool IsPublished { get; init; }
+            public string Title { get; init; }
+            public string Slug { get; init; }
+            public int WordCount { get; init; }
+            public  int CommentsThreadCommentsCount { get; init; }
+            public string StoryTitle { get; init; }
+        }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Chapter, GetData>();
+        }
 
         public async Task<IActionResult> OnGetAsync(long id)
         {
             Chapter = await _context.Chapters
                 .Where(c => c.Id == id)
-                .Where(c => c.Story.AuthorId == User.GetNumericId())
-                .AsNoTracking()
+                .ProjectTo<GetData>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            if (Chapter == null) return NotFound();
+            if (Chapter is null) return NotFound();
+            if (Chapter.StoryAuthorId != User.GetNumericId()) return Unauthorized();
             
             return Page();
         }
@@ -39,32 +62,23 @@ namespace Ogma3.Pages.Chapters
         public async Task<IActionResult> OnPostAsync(long id)
         {
             // Get chapter
-            Chapter = await _context.Chapters
+            var chapter = await _context.Chapters
                 .Where(c => c.Id == id)
-                .Where(c => c.Story.AuthorId == User.GetNumericId())
-                .Include(c => c.CommentsThread)
+                .Include(c => c.Story)
                 .FirstOrDefaultAsync();
 
-            if (Chapter == null) return NotFound();
-            
-            // Get story for the chapter
-            var story = await _context.Stories
-                .Where(s => s.Id == Chapter.StoryId)
-                .Where(s => s.AuthorId == User.GetNumericId())
-                .Include(s => s.Chapters)
-                .FirstOrDefaultAsync();
-
-            if (story == null) return NotFound();
+            if (chapter is null) return NotFound();
+            if (chapter.Story.AuthorId != User.GetNumericId()) return Unauthorized();
 
             // Recalculate words and chapters in the story
-            story.WordCount = story.Chapters.Sum(c => c.WordCount) - Chapter.WordCount;
-            story.ChapterCount = story.Chapters.Count - 1;
+            chapter.Story.WordCount -= chapter.WordCount;
+            chapter.Story.ChapterCount -= 1;
 
-            _context.Chapters.Remove(Chapter);
+            _context.Chapters.Remove(chapter);
             
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("../Story", new { id = Chapter.StoryId });
+            return RedirectToPage("../Story", new { id = chapter.StoryId });
         }
     }
 }

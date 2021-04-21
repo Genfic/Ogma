@@ -1,11 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
+using LinqToDB;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
 using Utils.Extensions;
 
@@ -15,102 +20,91 @@ namespace Ogma3.Pages.Chapters
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
-        
-        public class InputModel
-        {
-            public long Id { get; set; }
-            
-            [Required]
-            [StringLength(
-                CTConfig.CChapter.MaxTitleLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.CChapter.MinTitleLength
-            )]
-            public string Title { get; set; }
-            
-            [Required]
-            [StringLength(
-                CTConfig.CChapter.MaxBodyLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.CChapter.MinBodyLength
-            )]
-            public string Body { get; set; }
-            
-            [StringLength(
-                CTConfig.CChapter.MaxNotesLength,
-                ErrorMessage = "The {0} cannot exceed {1} characters."
-            )]
-            [Display(Name = "Start notes")]
-            public string StartNotes { get; set; }
-            
-            [StringLength(
-                CTConfig.CChapter.MaxNotesLength,
-                ErrorMessage = "The {0} cannot exceed {1} characters."
-            )]
-            [Display(Name = "End notes")]
-            public string EndNotes { get; set; }
-
-            [Required]
-            public bool Published { get; set; }
-        }
+        public PostData Input { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long id)
         {
             // Get chapter
             var chapter = await _context.Chapters
                 .Where(c => c.Id == id)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+                .ProjectTo<PostData>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsyncEF();
             
             if (chapter == null) return NotFound();
-            
-            // Make sure the story's author is the logged in user
-            var authorized = await _context.Stories
-                .Where(s => s.Id == chapter.StoryId)
-                .Where(s => s.AuthorId == User.GetNumericId())
-                .AsNoTracking()
-                .AnyAsync();
+            if (chapter.StoryAuthorId != User.GetNumericId()) return Unauthorized();
 
-            if (!authorized) return Unauthorized();
-
-            Input = new InputModel
+            Input = new PostData
             {
                 Id = chapter.Id,
                 Title = chapter.Title,
                 Body = chapter.Body,
                 StartNotes = chapter.StartNotes,
                 EndNotes = chapter.EndNotes,
-                Published = chapter.IsPublished
+                IsPublished = chapter.IsPublished
             };
             
             return Page();
         }
+        
+        public class PostData
+        {
+            public long Id { get; init; }
+            public string Title { get; init; }
+            public string Body { get; init; }
+            [Display(Name = "Start notes")]
+            public string StartNotes { get; init; }
+            [Display(Name = "End notes")]
+            public string EndNotes { get; init; }
+            public bool IsPublished { get; init; }
+            public long StoryAuthorId { get; init; }
+        }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Chapter, PostData>();
+        }
+        
+        public class PostDataValidation : AbstractValidator<PostData>
+        {
+            public PostDataValidation()
+            {
+                RuleFor(b => b.Title)
+                    .NotEmpty()
+                    .Length(CTConfig.CChapter.MinTitleLength, CTConfig.CChapter.MaxTitleLength);
+                RuleFor(b => b.Body)
+                    .NotEmpty()
+                    .Length(CTConfig.CChapter.MinBodyLength, CTConfig.CChapter.MaxBodyLength);
+                RuleFor(c => c.StartNotes)
+                    .MaximumLength(CTConfig.CChapter.MaxNotesLength);
+                RuleFor(c => c.EndNotes)
+                    .MaximumLength(CTConfig.CChapter.MaxNotesLength);
+                RuleFor(c => c.IsPublished)
+                    .NotNull();
+            }
+        }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(long id)
         {
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+            
             if (!ModelState.IsValid) return Page();
+
+            var chapter = await _context.Chapters
+                .Where(c => c.Id == id)
+                .Where(c => c.Story.AuthorId == uid)
+                .FirstOrDefaultAsyncEF();
             
-            // Get chapter
-            var chapter = await _context.Chapters.FindAsync(id);
-            if (chapter == null) return NotFound();
-            
-            // Get story
-            var story = await _context.Stories
-                .Where(s => s.Id == chapter.StoryId)
-                .Where(s => s.AuthorId == User.GetNumericId())
-                .Include(s => s.Chapters)
-                .FirstOrDefaultAsync();
-            if (story == null) return NotFound();
+            if (chapter is null) return NotFound();
             
             // Update the chapter
             chapter.Title       = Input.Title.Trim();
@@ -118,22 +112,19 @@ namespace Ogma3.Pages.Chapters
             chapter.StartNotes  = Input.StartNotes?.Trim();
             chapter.EndNotes    = Input.EndNotes?.Trim();
             chapter.Slug        = Input.Title.Trim().Friendlify();
-            chapter.WordCount   = Input.Body.Trim().Split(' ', '\t', '\n').Length;
-            chapter.IsPublished = Input.Published;
+            chapter.WordCount   = Input.Body.Words();
+            chapter.IsPublished = Input.IsPublished;
             await _context.SaveChangesAsync();
 
-            // Recalculate words in the story
-            story.WordCount = story.Chapters.Sum(c => c.WordCount);
-            // Recalculate chapters in the story
-            story.ChapterCount = story.Chapters.Count(c => c.IsPublished);
-            await _context.SaveChangesAsync();
-            
-            // Check if story has any published chapter, and if not, unpublish it
-            if (!story.Chapters.Any(c => c.IsPublished))
-            {
-                story.IsPublished = false;
-                await _context.SaveChangesAsync();
-            }
+            // NOTE: IDE will complain about non-nullable values, see https://github.com/linq2db/linq2db.EntityFrameworkCore/issues/135
+            await _context.Stories
+                .Where(s => s.Id == chapter.StoryId)
+                .Set(s => s.WordCount, s => ((int?)s.Chapters
+                    .Where(c => c.IsPublished)
+                    .Sum(c => c.WordCount)) ?? 0)
+                .Set(s => s.ChapterCount, s => s.Chapters.Count(c => c.IsPublished))
+                .Set(s => s.IsPublished, s => s.Chapters.Any(c => c.IsPublished))
+                .UpdateAsync();
             
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
         }

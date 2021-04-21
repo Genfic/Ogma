@@ -54,9 +54,9 @@ namespace Ogma3.Data.Stories
         // Votes
         public ICollection<Vote> Votes { get; set; }
 
-        public int WordCount { get; set; }
+        public int WordCount { get; set; } = 0;
 
-        public int ChapterCount { get; set; }
+        public int ChapterCount { get; set; } = 0;
 
         // Just for relationship purposes
         [JsonIgnore]

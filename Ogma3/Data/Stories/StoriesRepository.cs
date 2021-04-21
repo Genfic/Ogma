@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Pages.Shared.Details;
@@ -102,7 +103,30 @@ namespace Ogma3.Data.Stories
                 .Where(b => b.AuthorId == authorId)
                 .SortByEnum(sort)
                 .Paginate(page, perPage)
-                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .Select(s => new StoryCard
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Slug = s.Slug,
+                    Hook = s.Hook,
+                    Cover = s.Cover,
+                    CoverId = s.CoverId,
+                    Rating = s.Rating,
+                    Status = s.Status,
+                    IsPublished = s.IsPublished,
+                    ReleaseDate = s.ReleaseDate,
+                    AuthorUserName = s.Author.UserName,
+                    ChapterCount = s.Chapters.Count,
+                    WordCount = s.Chapters.Sum(c => c.WordCount),
+                    Tags = s.Tags.Select(t => new TagDto
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        Slug = t.Slug,
+                        Namespace = t.Namespace,
+                        Description = t.Description
+                    }).ToList()
+                })
                 .AsNoTracking()
                 .ToListAsync();
         }

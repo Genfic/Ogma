@@ -1,4 +1,5 @@
 @page
+@using Ogma3.Infrastructure.Extensions
 @model Ogma3.Pages.Blog.CreateModel
 
 @{
@@ -6,6 +7,13 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<div class="button-group">
+    <a title="Cancel" class="action-btn large" asp-page="../User/Index" asp-route-name="@User.GetUsername()">
+         <icon class="icon" icon="arrow_back"></icon>
+         <span class="name">Cancel</span>
+     </a>
+</div>
 
 <form class="form" id="blogpost" method="post" v-on:submit="onSubmit">
     

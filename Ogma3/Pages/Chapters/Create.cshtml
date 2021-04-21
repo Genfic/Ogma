@@ -9,6 +9,13 @@
 
 <h4>New chapter for <em>@Model.Story.Title</em></h4>
 
+<div class="button-group">
+    <a title="Cancel" class="action-btn large" asp-page="../Story" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">
+         <icon class="icon" icon="arrow_back"></icon>
+         <span class="name">Cancel</span>
+     </a>
+</div>
+
 <form class="form" id="chapter" method="post" v-on:submit="onSubmit">
 
     <div asp-validation-summary="All">

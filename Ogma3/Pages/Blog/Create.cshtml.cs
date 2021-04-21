@@ -70,7 +70,6 @@ namespace Ogma3.Pages.Blog
             public bool IsUnavailable { get; set; }
         }
         
-        
         public class PostDataValidation : AbstractValidator<PostData>
         {
             public PostDataValidation()
@@ -87,7 +86,6 @@ namespace Ogma3.Pages.Blog
             }
         }
         
-        
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -100,7 +98,7 @@ namespace Ogma3.Pages.Blog
             var uname = User.GetUsername();
             
             // Return if not logged in
-            if (uid == null || uname == null) return Unauthorized();
+            if (uid is null || uname is null) return Unauthorized();
             
             // Create blogpost
             var post = new Blogpost

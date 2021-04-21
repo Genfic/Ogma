@@ -18,9 +18,9 @@ interface String {
         
 		// If there's no count specified, get max length. If that's not there, just use 0.
 		let max: number;
-		if (i.dataset.maxCount || i.dataset.valLengthMax) {
+		if (i.dataset.maxCount || i.dataset.valLengthMax || i.dataset.valMaxlengthMax) {
 			// `data-max-count` is set, so that's what we use
-			max = Number(i.dataset.maxCount ?? i.dataset.valLengthMax);
+			max = Number(i.dataset.maxCount ?? i.dataset.valLengthMax ?? i.dataset.valMaxlengthMax);
 		} else if(i.dataset.valFilesizeMax && i.type === 'file') {
 			// It's a file input with maximum file size defined, so we get that
 			max = Number(i.dataset.valFilesizeMax);
