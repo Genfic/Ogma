@@ -25,7 +25,9 @@
 
         <a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId" asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
         <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
-        <time class="date" itemprop="datePublished">@Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</time>
+        <time class="date" itemprop="datePublished" datetime="@Model.Chapter.PublishDate.ToString(CultureInfo.InvariantCulture)">
+            @Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+        </time>
 
         @if (User?.Identity?.IsAuthenticated ?? false)
         {
@@ -75,7 +77,7 @@
 
             @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
             {
-                <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</div>
+                <aside class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</aside>
             }
 
             <markdown preset="Basic" class="body" itemprop="text">
@@ -84,7 +86,7 @@
 
             @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
             {
-                <div class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</div>
+                <aside class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</aside>
             }
 
         </div>

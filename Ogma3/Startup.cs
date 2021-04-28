@@ -212,7 +212,7 @@ namespace Ogma3
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager, ApplicationDbContext ctx)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager)
         {
             // Profiler
             app.UseMiniProfiler();
@@ -277,12 +277,6 @@ namespace Ogma3
             
             // Compression
             app.UseResponseCompression();
-            
-            // Apply migrations
-            if (!env.IsDevelopment())
-            {
-                ctx.Database.Migrate();
-            }
         }
     }
 }

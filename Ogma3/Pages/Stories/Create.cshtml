@@ -1,5 +1,5 @@
 ﻿@page
-@inject OgmaConfig Config
+@inject OgmaConfig _config
 @model Ogma3.Pages.Stories.CreateModel
 
 @{
@@ -55,6 +55,7 @@
                            name="Input.Rating"
                            id="@r.Name.ToLower()"
                            value="@r.Id"
+                           checked="@(r.Id == Model.Input.Rating)"
                            class="radio">
 
                     <label class="radio-label active-border" for="@r.Name.ToLower()">
@@ -78,7 +79,11 @@
             @foreach (var g in Model.Genres)
             {
                 <div class="story-tag active-border" >
-                    <input type="checkbox" id="genre_@g.Name" name="Input.Tags[]" value="@g.Id">
+                    <input type="checkbox" 
+                           id="genre_@g.Name" 
+                           name="Input.Tags[]" 
+                           checked="@(Model.Input.Tags.Contains(g.Id))"
+                           value="@g.Id">
                     <label style="--col: @g.NamespaceColor" for="genre_@g.Name">@g.Name</label>
                 </div>
             }
@@ -93,7 +98,11 @@
             @foreach (var cw in Model.ContentWarnings)
             {
                 <div class="story-tag active-border" >
-                    <input type="checkbox" id="cw_@cw.Name" name="Input.Tags[]" value="@cw.Id">
+                    <input type="checkbox" 
+                           id="cw_@cw.Name" 
+                           name="Input.Tags[]" 
+                           checked="@(Model.Input.Tags.Contains(cw.Id))"
+                           value="@cw.Id">
                     <label style="--col: @cw.NamespaceColor" for="cw_@cw.Name">@cw.Name</label>
                 </div>
             }
@@ -108,7 +117,11 @@
             @foreach (var f in Model.Franchises)
             {
                 <div class="story-tag active-border" >
-                    <input type="checkbox" id="franchise_@f.Name" name="Input.Tags[]" value="@f.Id">
+                    <input type="checkbox" 
+                           id="franchise_@f.Name" 
+                           name="Input.Tags[]" 
+                           checked="@(Model.Input.Tags.Contains(f.Id))"
+                           value="@f.Id">
                     <label style="--col: @f.NamespaceColor" for="franchise_@f.Name">@f.Name</label>
                 </div>
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ using Ogma3.Data.Notifications;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
-using Ogma3.Infrastructure.Attributes;
+using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
@@ -39,55 +40,14 @@ namespace Ogma3.Pages.Stories
             _mapper = mapper;
         }
 
-        [BindProperty] 
-        public InputModel Input { get; set; }
-
-        public class InputModel
-        {
-            [Required]
-            [StringLength(
-                CTConfig.CStory.MaxTitleLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.CStory.MinTitleLength
-            )]
-            public string Title { get; set; }
-
-            [Required]
-            [StringLength(
-                CTConfig.CStory.MaxDescriptionLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.CStory.MinDescriptionLength
-            )]
-            public string Description { get; set; }
-
-            [Required]
-            [StringLength(
-                CTConfig.CStory.MaxHookLength,
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-                MinimumLength = CTConfig.CStory.MinHookLength
-            )]
-            public string Hook { get; set; }
-
-            [DataType(DataType.Upload)]
-            [MaxFileSize(CTConfig.CStory.CoverMaxWeight)]
-            [AllowedExtensions(new[] {".jpg", ".jpeg", ".png"})]
-            public IFormFile Cover { get; set; }
-
-            [Required] 
-            public long Rating { get; set; }
-
-            [Required] 
-            public List<long> Tags { get; set; }
-        }
-
         public List<RatingDto> Ratings { get; set; }
         public List<TagDto> Genres { get; set; }
         public List<TagDto> ContentWarnings { get; set; }
         public List<TagDto> Franchises { get; set; }
-
-        private async Task Hydrate()
+        
+        public async Task<IActionResult> OnGetAsync()
         {
-            Input = new InputModel();
+            Input ??= new InputModel();
             Ratings = await _context.Ratings
                 .OrderBy(r => r.Order)
                 .ProjectTo<RatingDto>(_mapper.ConfigurationProvider)
@@ -101,26 +61,52 @@ namespace Ogma3.Pages.Stories
             Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();
             ContentWarnings = tags.Where(t => t.Namespace == ETagNamespace.ContentWarning).ToList();
             Franchises = tags.Where(t => t.Namespace == ETagNamespace.Franchise).ToList();
+            
+            return Page();
+        }
+
+        [BindProperty] 
+        public InputModel Input { get; set; }
+
+        public class InputModel
+        {
+            public string Title { get; init; }
+            public string Description { get; init; }
+            public string Hook { get; init; }
+            [DataType(DataType.Upload)]
+            public IFormFile Cover { get; init; }
+            public long Rating { get; set; }
+            public List<long> Tags { get; set; }
         }
         
-        public async Task OnGetAsync()
+        public class InputModelValidation : AbstractValidator<InputModel>
         {
-            await Hydrate();
+            public InputModelValidation()
+            {
+                RuleFor(i => i.Title)
+                    .NotEmpty()
+                    .Length(CTConfig.CStory.MinTitleLength, CTConfig.CStory.MaxTitleLength);
+                RuleFor(i => i.Description)
+                    .NotEmpty()
+                    .Length(CTConfig.CStory.MinDescriptionLength, CTConfig.CStory.MaxDescriptionLength);
+                RuleFor(i => i.Hook)
+                    .NotEmpty()
+                    .Length(CTConfig.CStory.MinHookLength, CTConfig.CStory.MaxHookLength);
+                RuleFor(i => i.Cover)
+                    .FileSmallerThan(CTConfig.CStory.CoverMaxWeight)
+                    .FileHasExtension(new[] {".jpg", ".jpeg", ".png"});
+                RuleFor(i => i.Rating).NotEmpty();
+                RuleFor(i => i.Tags).NotEmpty();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                await Hydrate();
-                return Page();
-            }
+            if (!ModelState.IsValid) return await OnGetAsync();
             
             // Get logged in user
             var uid = User.GetNumericId();
-
-            // Return if not logged in
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
             var tags = await _context.Tags
                 .Where(t => Input.Tags.Contains(t.Id))
@@ -142,7 +128,7 @@ namespace Ogma3.Pages.Stories
             await _context.SaveChangesAsync();
 
             // Upload cover
-            if (Input.Cover != null && Input.Cover.Length > 0)
+            if (Input.Cover is {Length: > 0})
             {
                 var file = await _uploader.Upload(
                     Input.Cover, 

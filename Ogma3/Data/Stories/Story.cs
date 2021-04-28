@@ -19,23 +19,14 @@ namespace Ogma3.Data.Stories
     {
         public OgmaUser Author { get; set; }
         public long AuthorId { get; set; }
-
-        [MinLength(CTConfig.CStory.MinTitleLength)]
         public string Title { get; set; }
 
         public string Slug { get; set; }
-
-        [MinLength(CTConfig.CStory.MinDescriptionLength)]
         public string Description { get; set; }
-
-        [MinLength(CTConfig.CStory.MinHookLength)]
         public string Hook { get; set; }
-
         public string? Cover { get; set; }
         public string? CoverId { get; set; }
-
         public DateTime ReleaseDate { get; set; }
-        
         public bool IsPublished { get; set; }
         
         // Chapters
@@ -55,11 +46,9 @@ namespace Ogma3.Data.Stories
         public ICollection<Vote> Votes { get; set; }
 
         public int WordCount { get; set; } = 0;
-
         public int ChapterCount { get; set; } = 0;
 
         // Just for relationship purposes
-        [JsonIgnore]
         public ICollection<Folder> Folders { get; set; }
         
         public ContentBlock? ContentBlock { get; set; }

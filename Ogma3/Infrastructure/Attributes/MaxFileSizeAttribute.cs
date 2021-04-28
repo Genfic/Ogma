@@ -21,7 +21,7 @@ namespace Ogma3.Infrastructure.Attributes
             if (value == null)
                 return ValidationResult.Success;
             
-            if (!(value is IFormFile file)) 
+            if (value is not IFormFile file) 
                 return new ValidationResult("Object is not a valid file.");
             
             return file.Length > _maxFileSize 

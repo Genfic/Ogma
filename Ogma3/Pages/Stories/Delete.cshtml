@@ -40,19 +40,19 @@
             Score:
         </dt>
         <dd>
-            @Model.Story.Votes.Count
+            @Model.Story.VotesCount
         </dd>
         <dt>
             Chapters:
         </dt>
         <dd>
-            @Model.Story.Chapters.Count
+            @Model.Story.ChaptersCount
         </dd>
         <dt>
             Comments:
         </dt>
         <dd>
-            @Model.Story.Chapters.Sum(c => c.CommentsThread.CommentsCount)
+            @Model.Story.CommentsCount
         </dd>
     </dl>
     

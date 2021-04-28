@@ -26,30 +26,6 @@ namespace Ogma3.Data.Stories
             _uid = contextAccessor?.HttpContext?.User.GetNumericId();
         }
 
-        /// <summary>
-        /// Get `StoryDetails` viewmodel by story OD
-        /// </summary>
-        /// <param name="id">ID of the desired story</param>
-        /// <returns>Desired `StoryDetails` object</returns>
-        public async Task<StoryDetails> GetStoryDetails(long id)
-        {
-            return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetStoryDetails)} -> {id}")
-                .Where(s => s.Id == id)
-                .ProjectTo<StoryDetails>(_mapper.ConfigurationProvider, new{ currentUser = _uid })
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<StoryCard> GetCard(long storyId)
-        {
-            return await _context.Stories
-                .Where(s => s.Id == storyId)
-                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-
         public async Task<StoryMinimal> GetMinimal(long id)
         {
             return await _context.Stories
@@ -190,58 +166,6 @@ namespace Ogma3.Data.Stories
         }
 
         /// <summary>
-        /// Get `StoryCard` objects, sorted according to `EStorySortingOptions`, filtered, and paginated
-        /// </summary>
-        /// <param name="perPage">Number of objects per page</param>
-        /// <param name="page">Number of the desired page</param>
-        /// <param name="tags">Tags to search by</param>
-        /// <param name="searchQuery">Query to search the titles by</param>
-        /// <param name="ratingId">Rating to filter by</param>
-        /// <param name="sort">Sorting method</param>
-        /// <returns>Sorted, filtered, and paginated list of `StoryCard` objects</returns>
-        public async Task<List<StoryCard>> SearchAndSortStoryCards(
-            int perPage,
-            int page,
-            IList<long>? tags = null,
-            string? searchQuery = null, 
-            long? ratingId = null,
-            EStorySortingOptions sort = EStorySortingOptions.DateDescending
-        )
-        {
-            return await Search(tags, searchQuery, ratingId)
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(SearchAndSortStoryCards)} -> {perPage}, {page}, {searchQuery}. {ratingId}, {sort}")
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _uid)
-                .SortByEnum(sort)
-                .Paginate(page, perPage)
-                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        /// <summary>
-        /// Count `Story` search results
-        /// </summary>
-        /// <param name="tags">Tags to search by</param>
-        /// <param name="searchQuery">Query to search the titles by</param>
-        /// <param name="ratingId">Rating to filter by</param>
-        /// <returns>Number of stories that fit the requirements</returns>
-        public async Task<int> CountSearchResults(
-            IList<long>? tags = null, 
-            string? searchQuery = null, 
-            long? ratingId = null
-        )
-        {
-            return await Search(tags, searchQuery, ratingId)
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(CountSearchResults)} -> {searchQuery}. {ratingId}")
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _uid)
-                .CountAsync();
-        }
-
-        /// <summary>
         /// Count the number of stories written by a user
         /// </summary>
         /// <param name="id">ID of the user</param>
@@ -283,35 +207,6 @@ namespace Ogma3.Data.Stories
                 .Where(b => b.ContentBlockId == null)
                 .Where(s => s.Tags.Any(st => st.Id == tagId))
                 .CountAsync();
-        }
-        
-        
-        /// <summary>
-        /// Apply a filter on `IQueryable` 
-        /// </summary>
-        /// <param name="tags">Tags to search by</param>
-        /// <param name="searchQuery">Query to search the titles by</param>
-        /// <param name="ratingId">Rating to filter by</param>
-        /// <returns>`IQueryable` objects with applied filters</returns>
-        private IQueryable<Story> Search(ICollection<long> tags = null, string? searchQuery = null, long? ratingId = null)
-        {
-            // Prepare search query
-            var query = _context.Stories
-                .AsQueryable();
-            
-            // Search by title
-            if (!string.IsNullOrEmpty(searchQuery))
-                query = query.Where(s => EF.Functions.Like(s.Title.ToUpper(), $"%{searchQuery.Trim().ToUpper()}%"));
-            
-            // Search by rating
-            if (ratingId != null)
-                query = query.Where(s => s.Rating.Id == ratingId);
-            
-            // Search by tags
-            if (tags != null && tags.Count > 0)
-                query = query.Where(s => s.Tags.Any(st => tags.Contains(st.Id)));
-
-            return query;
         }
     }
 }

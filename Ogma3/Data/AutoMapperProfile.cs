@@ -75,34 +75,9 @@ namespace Ogma3.Data
             CreateMap<OgmaRole, RoleDto>();
 
             // Chapter mappings
-            CreateMap<Chapter, ChapterBasicDto>();
             CreateMap<Chapter, ChapterMinimal>();
 
             // Story mappings
-            CreateMap<Story, StoryDetails>()
-                .ForMember(
-                    sd => sd.CommentsCount,
-                    opts 
-                        => opts.MapFrom(s => s.Chapters.Sum(c => c.CommentsThread.CommentsCount))
-                )
-                .ForMember(
-                    sd => sd.Score,
-                    opts 
-                        => opts.MapFrom(s => s.Votes.Count)
-                )
-                .ForMember(
-                    sd => sd.Chapters,
-                    opts
-                    => opts.MapFrom(s => s.Chapters
-                        .Where(c => c.IsPublished || c.Story.AuthorId == currentUser)
-                        .Where(c => c.ContentBlockId == null || c.Story.AuthorId == currentUser)
-                    )
-                )
-                .ForMember(sd => sd.Tags,
-                opts
-                    => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
-                );
-            
             CreateMap<Story, StoryCard>()
                 .ForMember(sd => sd.Tags,
                     opts

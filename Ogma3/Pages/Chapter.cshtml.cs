@@ -61,12 +61,6 @@ namespace Ogma3.Pages
             public MappingProfile()
             {
                 CreateMap<Chapter, ChapterDetails>();
-                    // .ForMember(c => c.Previous, opts
-                    //     => opts.MapFrom(c =>
-                    //         c.Story.Chapters.Where(x => x.Order < c.Order).OrderBy(x => x.Order).LastOrDefault()))
-                    // .ForMember(c => c.Next, opts
-                    //     => opts.MapFrom(c =>
-                    //         c.Story.Chapters.Where(x => x.Order > c.Order).OrderBy(x => x.Order).FirstOrDefault()));
                 CreateMap<Chapter, ChapterMicroDto>();
             }
         }
@@ -81,6 +75,9 @@ namespace Ogma3.Pages
                 .Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid)
                 .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
+            
+            if (Chapter is null) return NotFound();
+            
             Chapter.Previous = await _context.Chapters
                 .Where(c => c.StoryId == Chapter.StoryId)
                 .Where(c => c.Order < Chapter.Order)
@@ -93,9 +90,7 @@ namespace Ogma3.Pages
                 .OrderBy(c => c.Order)
                 .ProjectTo<ChapterMicroDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
-
-            if (Chapter is null) return NotFound();
-
+            
             return Page();
         }
     }
