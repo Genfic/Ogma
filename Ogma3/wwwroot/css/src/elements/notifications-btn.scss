@@ -1,0 +1,20 @@
+@use '../vars' as v;
+
+.notifications-btn {
+  position: relative;
+  
+  span {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: v.$red;
+    padding: .2rem;
+    height: 1rem;
+    min-width: 1rem;
+    line-height: .4rem;
+    color: v.$foreground;
+    font-size: .8rem;
+    text-align: center;
+    border-radius: 9999999px;
+  }
+}

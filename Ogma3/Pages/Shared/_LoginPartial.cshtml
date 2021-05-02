@@ -27,12 +27,12 @@
         </li>
         
         <li class="nav-item">
-            <o-notifications href="/notifications" endpoint="@Url.RouteUrl(nameof(NotificationsController))/count"></o-notifications>
-            <noscript>
-                <a asp-page="/Notifications" title="Notifications">
-                    <i class="material-icons-outlined">notifications</i>
-                </a>
-            </noscript>
+            <a data-notifications="@Url.RouteUrl(nameof(NotificationsController))"
+               class="nav-link light notifications-btn"
+               asp-page="Notifications"
+               title="Notifications">
+                <icon icon="notifications"></icon>
+            </a>
         </li>
         
         <li class="nav-item">
@@ -60,4 +60,4 @@
 
 </ul>
 
-@Html.Resource(@<script type="module" async src="~/js/dist/native-components/notifications-button.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script defer src="~/js/dist/notifications-button.min.js" asp-append-version="true"></script>)

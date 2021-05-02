@@ -28,7 +28,7 @@ const settings_vue = new Vue({
 			this.theme = theme;
 
 			themeLink.setAttribute('rel', 'stylesheet');
-			themeLink.setAttribute('href', `/css/${theme}.min.css?v=${rnd}`);
+			themeLink.setAttribute('href', `/css/dist/${theme}.min.css?v=${rnd}`);
 
 			setCookie('theme', theme, date, true, 'lax');
 		}

@@ -97,8 +97,13 @@
     
 <script src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js" 
         crossorigin="anonymous"
-        asp-fallback-test="window.axios"
-        asp-fallback-src="~/lib/axios.min.js"></script>
+        asp-fallback-src="~/lib/axios.min.js"
+        asp-fallback-test="window.axios"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.4/dayjs.min.js"
+        crossorigin="anonymous"
+        asp-fallback-src="~/lib/dayjs.min.js"
+        asp-fallback-test="window.dayjs"></script>
     
 @if (Env.IsDevelopment())
 {
@@ -114,7 +119,7 @@ else
 }
 
 <script src="~/js/dist/site.min.js" asp-append-version="true"></script>
-<script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
+<script defer src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
     
 @await RenderSectionAsync("Scripts", required: false)
 @Html.RenderResources()
@@ -123,7 +128,9 @@ else
 (_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'}).catch(console.error);})()
 </script>
     
-<mini-profiler />
+@if (Env.IsDevelopment()) {
+    <mini-profiler />
+}
 
 </body>
 </html>

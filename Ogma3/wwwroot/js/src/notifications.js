@@ -1,5 +1,3 @@
-import dayjs from 'https://cdn.skypack.dev/-/dayjs@v1.10.4-MoS2QVkxh1TZYPgJA5zq/dist=es2020,mode=imports/optimized/dayjs.js';
-
 new Vue({
 	el: '#notifications',
 	data: {
@@ -12,7 +10,6 @@ new Vue({
 			axios.get(this.route)
 				.then(data => {
 					this.notifications = data.data;
-					document.querySelector('o-notifications').load();
 				})
 				.catch(console.error);
 		},
@@ -29,8 +26,7 @@ new Vue({
 		},
         
 		parseTime: function (time) {
-			let day = dayjs(time);
-			return day.format('DD MMMM YYYY, HH:mm');
+			return dayjs(time).format('DD MMMM YYYY, HH:mm');
 		}
 	},
 	mounted() {

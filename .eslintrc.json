@@ -43,7 +43,8 @@
         "require": "readonly",
         "exports": "readonly",
         "getCookieValue": "readonly",
-        "setCookie": "readonly"
+        "setCookie": "readonly",
+        "dayjs": "readonly"
     },
     "overrides": [
         {
