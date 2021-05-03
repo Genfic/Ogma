@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Blogposts;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
@@ -16,40 +20,50 @@ namespace Ogma3.Pages.User
         private const int PerPage = 25;
         
         private readonly UserRepository _userRepo;
-        private readonly BlogpostsRepository _blogpostsRepo;
-        public BlogModel(UserRepository userRepo, BlogpostsRepository blogpostsRepo)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        public BlogModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
         {
             _userRepo = userRepo;
-            _blogpostsRepo = blogpostsRepo;
+            _context = context;
+            _mapper = mapper;
         }
         
-        public ICollection<BlogpostCard> Posts { get;set; }
-        public ProfileBar ProfileBar { get; set; }
-        public Pagination Pagination { get; set; }
+        public ICollection<BlogpostCard> Posts { get; private set; }
+        public ProfileBar ProfileBar { get; private set; }
+        public Pagination Pagination { get; private set; }
+        
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
+            var uid = User.GetNumericId();
+            
             ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
-            if (ProfileBar == null) return NotFound();
+            if (ProfileBar is null) return NotFound();
 
-            var isCurrentUser = User.IsUserSameAsLoggedIn(ProfileBar.Id);
-
-            int count;
-            if (isCurrentUser)
-            {
-                Posts = await _blogpostsRepo.GetAllPaginatedCardsForUser(name, page, PerPage);
-                count = await _blogpostsRepo.CountAllForUser(name);
-            }
-            else
-            {
-                Posts = await _blogpostsRepo.GetPublicPaginatedCardsForUser(name, page, PerPage);
-                count = await _blogpostsRepo.CountPublicForUser(name);
+            // Start building the query
+            var query = _context.Blogposts
+                .Where(b => b.Author.NormalizedUserName == name.Normalize().ToUpper());
+            
+            if (uid != ProfileBar.Id)
+            {   // If the profile page doesn't belong to the current user, apply additional filters
+                query = query
+                    .Where(b => b.IsPublished)
+                    .Where(b => b.ContentBlockId == null);
             }
 
+            // Resolve query
+            Posts = await query
+                .OrderByDescending(b => b.PublishDate)
+                .Paginate(page, PerPage)
+                .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+            
             // Prepare pagination
             Pagination = new Pagination
             {
                 PerPage = PerPage,
-                ItemCount = count,
+                ItemCount = await query.CountAsync(),
                 CurrentPage = page
             };
             

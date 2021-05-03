@@ -38,76 +38,6 @@ namespace Ogma3.Data.Stories
         }
 
         /// <summary>
-        /// Get published `StoryCard` objects, sorted according to `EStorySortingOptions`
-        /// and paginated, with a blacklist applied
-        /// </summary>
-        /// <param name="perPage">Number of objects per page</param>
-        /// <param name="page">Number of the desired page</param>
-        /// <param name="authorId">ID of the author whose stories are to be fetched</param>
-        /// <param name="sort">Sorting method</param>
-        /// <returns>Sorted and paginated list of `StoryCard` objects</returns>
-        public async Task<List<StoryCard>> GetAndSortPaginatedStoryCards(
-            int perPage, 
-            int page, 
-            long authorId,
-            EStorySortingOptions sort = EStorySortingOptions.DateDescending
-        ) {
-            return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortPaginatedStoryCards)} -> {perPage}, {page}, {authorId}, {sort}")
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
-                .Where(b => b.AuthorId == authorId)
-                .Blacklist(_context, _uid)
-                .SortByEnum(sort)
-                .Paginate(page, perPage)
-                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        /// <summary>
-        /// Get `StoryCard` objects, sorted according to `EStorySortingOptions` and paginated
-        /// </summary>
-        /// <param name="perPage">Number of objects per page</param>
-        /// <param name="page">Number of the desired page</param>
-        /// <param name="sort">Sorting method</param>
-        /// <returns>Sorted and paginated list of `StoryCard` objects</returns>
-        public async Task<List<StoryCard>> GetAndSortOwnedPaginatedStoryCards(int perPage, int page, long authorId, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
-        {
-            return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetAndSortOwnedPaginatedStoryCards)} -> {perPage}, {page}, {sort}")
-                .Where(b => b.AuthorId == authorId)
-                .SortByEnum(sort)
-                .Paginate(page, perPage)
-                .Select(s => new StoryCard
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Slug = s.Slug,
-                    Hook = s.Hook,
-                    Cover = s.Cover,
-                    CoverId = s.CoverId,
-                    Rating = s.Rating,
-                    Status = s.Status,
-                    IsPublished = s.IsPublished,
-                    ReleaseDate = s.ReleaseDate,
-                    AuthorUserName = s.Author.UserName,
-                    ChapterCount = s.Chapters.Count,
-                    WordCount = s.Chapters.Sum(c => c.WordCount),
-                    Tags = s.Tags.Select(t => new TagDto
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        Slug = t.Slug,
-                        Namespace = t.Namespace,
-                        Description = t.Description
-                    }).ToList()
-                })
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        /// <summary>
         /// Get `StoryCard` objects, sorted according to `EStorySortingOptions` and paginated
         /// </summary>
         /// <param name="count">Number of objects</param>
@@ -164,35 +94,6 @@ namespace Ogma3.Data.Stories
                 .AsNoTracking()
                 .ToListAsync();
         }
-
-        /// <summary>
-        /// Count the number of stories written by a user
-        /// </summary>
-        /// <param name="id">ID of the user</param>
-        /// <returns>Number of stories written by the user</returns>
-        public async Task<int> CountForUser(long id)
-        {
-            return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(CountForUser)} -> {id}")
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
-                .Where(s => s.AuthorId == id)
-                .CountAsync();
-        }
-
-        /// <summary>
-        /// Count the number of stories written by a user
-        /// </summary>
-        /// <param name="id">ID of the user</param>
-        /// <returns>Number of stories written by the user</returns>
-        public async Task<int> CountOwnedForUser(long id)
-        {
-            return await _context.Stories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(CountForUser)} -> {id}")
-                .Where(s => s.Author.Id == id)
-                .CountAsync();
-        }
-
 
         /// <summary>
         /// Counts stories with the given tag

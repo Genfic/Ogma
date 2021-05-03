@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Icons;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User
@@ -24,10 +24,10 @@ namespace Ogma3.Pages.User
             _userRepo = userRepo;
         }
 
-        public bool IsCurrentUser { get; set; }
-        public List<Icon> Icons { get; set; }
-        public InputModel Input { get; set; }
-        public ProfileBar ProfileBar { get; set; }
+        public bool IsCurrentUser { get; private set; }
+        public List<Icon> Icons { get; private set; }
+        public InputModel Input { get; init; }
+        public ProfileBar ProfileBar { get; private set; }
 
         public class InputModel
         {
@@ -55,9 +55,9 @@ namespace Ogma3.Pages.User
         public async Task<IActionResult> OnGetAsync(string name)
         {
             ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
-            if (ProfileBar == null) return NotFound();
+            if (ProfileBar is null) return NotFound();
 
-            IsCurrentUser = ProfileBar.Id.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IsCurrentUser = ProfileBar.Id == User.GetNumericId();
             
             Icons = await _context.Icons
                 .AsNoTracking()

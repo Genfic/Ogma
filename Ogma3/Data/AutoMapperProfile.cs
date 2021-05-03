@@ -28,19 +28,19 @@ namespace Ogma3.Data
         public AutoMapperProfile()
         {
             long? currentUser = null;
-            
+
             var md = MarkdownPipelines.Comment;
 
             // User mappings
             CreateMap<OgmaUser, ProfileBar>()
                 .ForMember(
                     pb => pb.StoriesCount,
-                    opts 
+                    opts
                         => opts.MapFrom(u => u.Stories.Count(s => s.IsPublished))
                 )
                 .ForMember(
                     pb => pb.BlogpostsCount,
-                    opts 
+                    opts
                         => opts.MapFrom(u => u.Blogposts.Count(b => b.IsPublished))
                 )
                 .ForMember(
@@ -53,21 +53,21 @@ namespace Ogma3.Data
                     opts
                         => opts.MapFrom(u => u.Followers.Any(fu => fu.Id == currentUser))
                 );
-            
+
             CreateMap<OgmaUser, UserProfileDto>()
                 .IncludeBase<OgmaUser, ProfileBar>();
-            
+
             CreateMap<OgmaUser, UserSimpleDto>()
                 .ForMember(
                     usd => usd.Roles,
-                    opts 
+                    opts
                         => opts.MapFrom(u => u.Roles.OrderByDescending(r => r.Order))
                 );
-            
+
             CreateMap<OgmaUser, UserCard>()
                 .ForMember(
                     pb => pb.Roles,
-                    opts 
+                    opts
                         => opts.MapFrom(u => u.Roles.OrderByDescending(r => r.Order))
                 );
 
@@ -79,18 +79,17 @@ namespace Ogma3.Data
 
             // Story mappings
             CreateMap<Story, StoryCard>()
-                .ForMember(sd => sd.Tags,
-                    opts
-                        => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
+                .ForMember(sc => sc.Tags, opts
+                    => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
                 );
-            
+
             CreateMap<Story, StoryMinimal>();
 
             // Bookshelf mappings
             CreateMap<Shelf, BookshelfDetails>()
                 .ForMember(
                     s => s.Stories,
-                    opts 
+                    opts
                         => opts.MapFrom(s => s.Stories.Where(st => st.IsPublished || st.Author.Id == currentUser))
                 );
 
@@ -109,14 +108,14 @@ namespace Ogma3.Data
                 .ForMember(
                     cd => cd.Author,
                     opts
-                    => opts.MapFrom(c => c.DeletedBy == null ? c.Author : null)
+                        => opts.MapFrom(c => c.DeletedBy == null ? c.Author : null)
                 )
                 .ForMember(
                     cd => cd.Body,
                     opts
                         => opts.MapFrom(c => c.DeletedBy == null ? Markdown.ToHtml(c.Body, md, null) : null)
                 );
-            
+
             // Comment revision mappings
             CreateMap<CommentRevision, CommentRevisionDto>()
                 .ForMember(
@@ -124,7 +123,7 @@ namespace Ogma3.Data
                     opts
                         => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md, null))
                 );
-            
+
             // Tag mappings
             CreateMap<Tag, TagDto>();
 
@@ -136,21 +135,21 @@ namespace Ogma3.Data
             CreateMap<Club, ClubBar>()
                 .ForMember(
                     cb => cb.FounderId,
-                    opts 
+                    opts
                         => opts.MapFrom(c => c.ClubMembers.First(cm => cm.Role == EClubMemberRoles.Founder).MemberId)
                 )
                 .ForMember(
                     cb => cb.IsMember,
-                    opts 
+                    opts
                         => opts.MapFrom(c => c.ClubMembers.Any(cm => cm.MemberId == currentUser))
                 )
                 .ForMember(
                     cb => cb.StoriesCount,
                     opts
-                    => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
+                        => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
                 );
             CreateMap<Club, ClubCard>();
-            
+
             // Rating mappings
             CreateMap<Rating, RatingDto>();
             CreateMap<Rating, RatingApiDto>();
@@ -161,14 +160,14 @@ namespace Ogma3.Data
             CreateMap<Folder, FolderMinimalDto>();
             CreateMap<Folder, FolderMinimalWithParentDto>();
             CreateMap<Folder, FolderDto>();
-            
+
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();
-            
+
             // Document mappings
             CreateMap<Document, DocumentDto>();
             CreateMap<Document, DocumentVersionDto>();
-            
+
             // Report mappings
             CreateMap<Report, ReportDto>();
         }

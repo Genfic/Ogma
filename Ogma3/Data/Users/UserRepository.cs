@@ -44,26 +44,6 @@ namespace Ogma3.Data.Users
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<UserProfileDto> GetUserData(string name)
-        {
-            return await _context.Users
-                .TagWith($"{nameof(UserRepository)}.{nameof(GetUserData)} -> {name}")
-                .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider, new { currentUser = _uid })
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<UserProfileDto> GetUserData(long id)
-        {
-            return await _context.Users
-                .TagWith($"{nameof(UserRepository)}.{nameof(GetUserData)} -> {id}")
-                .Where(u => u.Id == id)
-                .ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider, new { currentUser = _uid })
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-
         public async Task<ICollection<UserCard>> GetStaff()
         {
             return await _context.Users

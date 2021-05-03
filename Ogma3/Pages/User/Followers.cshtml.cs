@@ -29,26 +29,25 @@ namespace Ogma3.Pages.User
             _mapper = mapper;
         }
         
-        public ProfileBar ProfileBar { get; set; }
-        public Pagination Pagination { get; set; }
-        
-        public List<UserCard> Users { get; set; }
+        public ProfileBar ProfileBar { get; private set; }
+        public Pagination Pagination { get; private set; }
+        public List<UserCard> Users { get; private set; }
 
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
             ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
-            if (ProfileBar == null) return NotFound();
+            if (ProfileBar is null) return NotFound();
 
             Users = await _context.FollowedUsers
-                .Where(u => u.FollowingUser.NormalizedUserName == name.ToUpper())
+                .Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
                 .Select(u => u.FollowedUser)
-                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
                 .Paginate(page, PerPage)
+                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
 
             var count = await _context.Users
-                .Where(u => u.NormalizedUserName == name.ToUpper())
+                .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
                 .Select(u => u.Followers)
                 .CountAsync();
             

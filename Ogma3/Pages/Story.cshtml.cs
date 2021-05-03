@@ -43,7 +43,9 @@ namespace Ogma3.Pages
             public Rating Rating { get; init; }
             public EStoryStatus Status { get; init; }
             public int WordCount { get; init; }
+            public int FullWordCount { get; init; }
             public int ChaptersCount { get; init; }
+            public int FullChaptersCount { get; init; }
             public int CommentsCount { get; init; }
             public int Score { get; init; }
             public long? ContentBlockId { get; init; }
@@ -81,11 +83,13 @@ namespace Ogma3.Pages
                     Score = s.Votes.Count,
                     Status = s.Status,
                     AuthorId = s.AuthorId,
+                    WordCount = s.WordCount,
+                    FullWordCount = s.AuthorId == uid ? s.Chapters.Sum(c => c.WordCount) : 0,
                     ChaptersCount = s.ChapterCount,
+                    FullChaptersCount = s.AuthorId == uid ? s.Chapters.Count : 0,
                     CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
                     IsPublished = s.IsPublished,
                     ReleaseDate = s.ReleaseDate,
-                    WordCount = s.WordCount,
                     ContentBlockId = s.ContentBlockId,
                     Tags = s.Tags
                         .OrderByDescending(t => t.Namespace.HasValue)

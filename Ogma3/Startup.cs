@@ -74,7 +74,6 @@ namespace Ogma3
             services.AddScoped<StoriesRepository>();
             services.AddScoped<TagsRepository>();
             services.AddScoped<ChaptersRepository>();
-            services.AddScoped<BlogpostsRepository>();
             services.AddScoped<CommentsRepository>();
             services.AddScoped<FoldersRepository>();
             services.AddScoped<NotificationsRepository>();

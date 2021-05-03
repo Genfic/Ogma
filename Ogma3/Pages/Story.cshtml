@@ -11,6 +11,8 @@
     ViewData["Title"] = Model.Story.Title;
     ViewData["Description"] = Model.Story.Hook;
     ViewData["Rating"] = Model.Story.Rating.Name;
+
+    var uid = User.GetNumericId();
 }
 
 @section OgMeta {
@@ -43,7 +45,7 @@
                 </a>
             }
 
-            @if (User.IsUserSameAsLoggedIn(Model.Story.AuthorId))
+            @if (Model.Story.AuthorId == uid)
             {
                 <a title="Edit" class="action-btn large" asp-page="./Stories/Edit" asp-route-id="@Model.Story.Id">
                     <icon class="icon" icon="edit"></icon>
@@ -121,6 +123,7 @@
     <div class="info">
         <span class="word-count">@Model.Story.WordCount.ToString("N0") words</span>
         <span class="chapter-count">@Model.Story.ChaptersCount chapters</span>
+        <span class="comment-count">@Model.Story.CommentsCount comments</span>
         <time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
             published @Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
         </time>
@@ -137,6 +140,18 @@
                              cdn="@_config.Cdn">
         </o-featured-in-clubs>
     </div>
+
+    @if (@Model.Story.AuthorId == uid)
+    {
+        <div class="author-info info">
+            <span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span>
+            <span class="chapter-count">@Model.Story.FullChaptersCount chapters</span>
+            <span class="comment-count">@Model.Story.CommentsCount comments</span>
+            <time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+                created @Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+            </time>
+        </div>
+    }
 
     <ol class="chapters">
         @if (Model.Story.Chapters.Count <= 0)
