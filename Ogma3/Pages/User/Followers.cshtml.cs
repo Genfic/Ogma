@@ -35,7 +35,7 @@ namespace Ogma3.Pages.User
 
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
-            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
+            ProfileBar = await _userRepo.GetProfileBar(name);
             if (ProfileBar is null) return NotFound();
 
             Users = await _context.FollowedUsers

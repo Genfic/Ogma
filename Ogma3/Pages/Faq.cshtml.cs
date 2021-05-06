@@ -15,7 +15,7 @@ namespace Ogma3.Pages
             _context = context;
         }
 
-        public List<Data.Faqs.Faq> Faqs { get; set; }
+        public List<Data.Faqs.Faq> Faqs { get; private set; }
         
         public async Task OnGetAsync()
         {

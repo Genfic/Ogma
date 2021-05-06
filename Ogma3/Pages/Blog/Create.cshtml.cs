@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
-using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
-using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Minimals;
@@ -23,16 +23,14 @@ namespace Ogma3.Pages.Blog
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly StoriesRepository _storiesRepo;
-        private readonly ChaptersRepository _chaptersRepo;
         private readonly NotificationsRepository _notificationsRepo;
+        private readonly IMapper _mapper;
 
-        public CreateModel(ApplicationDbContext context, StoriesRepository storiesRepo, ChaptersRepository chaptersRepo, NotificationsRepository notificationsRepo)
+        public CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo, IMapper mapper)
         {
             _context = context;
-            _storiesRepo = storiesRepo;
-            _chaptersRepo = chaptersRepo;
             _notificationsRepo = notificationsRepo;
+            _mapper = mapper;
         }
 
         [BindProperty]
@@ -44,13 +42,25 @@ namespace Ogma3.Pages.Blog
 
             if (story is not null)
             {
-                Input.StoryMinimal = await _storiesRepo.GetMinimal((long) story);
+                Input.StoryMinimal = await _context.Stories
+                    .Where(c => c.Id == story)
+                    .Where(c => c.IsPublished)
+                    .Where(b => b.ContentBlockId == null)
+                    .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
                 Input.StoryMinimalId = story;
                 Input.IsUnavailable = Input.StoryMinimal is null;
             }
             else if (chapter is not null)
             {
-                Input.ChapterMinimal = await _chaptersRepo.GetMinimal((long) chapter);
+                Input.ChapterMinimal = await _context.Chapters
+                    .Where(c => c.Id == chapter)
+                    .Where(c => c.IsPublished)
+                    .Where(b => b.ContentBlockId == null)
+                    .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
                 Input.ChapterMinimalId = chapter;
                 Input.IsUnavailable = Input.ChapterMinimal is null;
             }

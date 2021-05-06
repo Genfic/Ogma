@@ -37,12 +37,12 @@ namespace Ogma3.Pages.User
         {
             var uid = User.GetNumericId();
             
-            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
+            ProfileBar = await _userRepo.GetProfileBar(name);
             if (ProfileBar is null) return NotFound();
 
             // Start building the query
             var query = _context.Blogposts
-                .Where(b => b.Author.NormalizedUserName == name.Normalize().ToUpper());
+                .Where(b => b.AuthorId == ProfileBar.Id);
             
             if (uid != ProfileBar.Id)
             {   // If the profile page doesn't belong to the current user, apply additional filters

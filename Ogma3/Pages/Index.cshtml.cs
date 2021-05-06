@@ -19,9 +19,9 @@ namespace Ogma3.Pages
             _cache = cache;
         }
 
-        public List<StoryCard> RecentStories { get; set; }
-        public List<StoryCard> TopStories { get; set; }
-        public List<StoryCard> LastUpdatedStories { get; set; }
+        public List<StoryCard> RecentStories { get; private set; }
+        public List<StoryCard> TopStories { get; private set; }
+        public List<StoryCard> LastUpdatedStories { get; private set; }
         public async Task OnGetAsync()
         {
             var shortExpiry = TimeSpan.FromMinutes(5);

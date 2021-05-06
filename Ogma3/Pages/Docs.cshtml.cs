@@ -23,9 +23,9 @@ namespace Ogma3.Pages
             _mapper = mapper;
         }
 
-        public DocumentDto Document { get; set; }
-        public List<DocumentVersionDto> Versions { get; set; }
-        public IEnumerable<String.Header> Headers { get; set; }
+        public DocumentDto Document { get; private set; }
+        public List<DocumentVersionDto> Versions { get; private set; }
+        public IEnumerable<String.Header> Headers { get; private set; }
         
         public async Task<IActionResult> OnGetAsync(string slug, [FromQuery] uint? v)
         {

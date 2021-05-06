@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
-using Ogma3.Pages.Shared.Cards;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Data.Users
@@ -15,12 +11,10 @@ namespace Ogma3.Data.Users
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
-        private readonly IMapper _mapper;
         
-        public UserRepository(ApplicationDbContext context, IUserService userService, IMapper mapper)
+        public UserRepository(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
-            _mapper = mapper;
             _uid = userService.GetUser()?.GetNumericId();
         }
         
@@ -28,9 +22,8 @@ namespace Ogma3.Data.Users
         {
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
-                .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
+                .Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
+                .Select(UserMappings.ToProfileBar(_uid))
                 .FirstOrDefaultAsync();
         }
         
@@ -39,20 +32,8 @@ namespace Ogma3.Data.Users
             return await _context.Users
                 .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {id}")
                 .Where(u => u.Id == id)
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
+                .Select(UserMappings.ToProfileBar(_uid))
                 .FirstOrDefaultAsync();
-        }
-
-        public async Task<ICollection<UserCard>> GetStaff()
-        {
-            return await _context.Users
-                .TagWith($"{nameof(UserRepository)}.{nameof(GetStaff)}")
-                .Where(u => u.Roles.Any(ur => ur.IsStaff))
-                .ProjectTo<UserCard>(_mapper.ConfigurationProvider, new { currentUser = _uid })
-                .OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
-                .AsNoTracking()
-                .ToListAsync();
         }
     }
 }

@@ -18,15 +18,6 @@ namespace Ogma3.Data.Tags
             _mapper = mapper;
         }
 
-        public async Task<TagDto> GetTag(long id)
-        {
-            return await _context.Tags
-                .Where(t => t.Id == id)
-                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-
         public async Task<List<TagDto>> GetPaginated(int page = 1, int perPage = 10)
         {
             return await _context.Tags

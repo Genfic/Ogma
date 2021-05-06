@@ -32,38 +32,6 @@ namespace Ogma3.Data
             var md = MarkdownPipelines.Comment;
 
             // User mappings
-            CreateMap<OgmaUser, ProfileBar>()
-                .ForMember(
-                    pb => pb.StoriesCount,
-                    opts
-                        => opts.MapFrom(u => u.Stories.Count(s => s.IsPublished))
-                )
-                .ForMember(
-                    pb => pb.BlogpostsCount,
-                    opts
-                        => opts.MapFrom(u => u.Blogposts.Count(b => b.IsPublished))
-                )
-                .ForMember(
-                    pb => pb.IsBlockedBy,
-                    opts
-                        => opts.MapFrom(u => u.BlockedByUsers.Any(bu => bu.Id == currentUser))
-                )
-                .ForMember(
-                    pb => pb.IsFollowedBy,
-                    opts
-                        => opts.MapFrom(u => u.Followers.Any(fu => fu.Id == currentUser))
-                );
-
-            CreateMap<OgmaUser, UserProfileDto>()
-                .IncludeBase<OgmaUser, ProfileBar>();
-
-            CreateMap<OgmaUser, UserSimpleDto>()
-                .ForMember(
-                    usd => usd.Roles,
-                    opts
-                        => opts.MapFrom(u => u.Roles.OrderByDescending(r => r.Order))
-                );
-
             CreateMap<OgmaUser, UserCard>()
                 .ForMember(
                     pb => pb.Roles,

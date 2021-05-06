@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data.Stories;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
 
@@ -13,31 +18,50 @@ namespace Ogma3.Pages
     {
         private const int PerPage = 25;
         
-        private readonly TagsRepository _tagsRepo;
-        private readonly StoriesRepository _storiesRepo;
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
         
-        public TagModel(TagsRepository tagsRepo, StoriesRepository storiesRepo)
+        public TagModel(ApplicationDbContext context, IMapper mapper)
         {
-            _tagsRepo = tagsRepo;
-            _storiesRepo = storiesRepo;
+            _context = context;
+            _mapper = mapper;
         }
 
-        public TagDto Tag { get; set; }
-        public IList<StoryCard> Stories { get; set; }
-        public Pagination Pagination { get; set; }
+        public record TagInfo(string Name, ETagNamespace? Namespace);
+        
+        public TagInfo Tag { get; private set; }
+        public IList<StoryCard> Stories { get; private set; }
+        public Pagination Pagination { get; private set; }
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug, [FromQuery] int page = 1)
         {
-            Tag = await _tagsRepo.GetTag(id);
-            if (Tag == null) return NotFound();
+            var uid = User.GetNumericId();
+            
+            Tag = await _context.Tags
+                .Where(t => t.Id == id)
+                .Select(t => new TagInfo(t.Name, t.Namespace))
+                .FirstOrDefaultAsync();
+            
+            if (Tag is null) return NotFound();
 
-            Stories = await _storiesRepo.GetCardsWithTag(id, page, PerPage);
+            var query = _context.Stories
+                .Where(b => b.IsPublished)
+                .Where(b => b.ContentBlockId == null)
+                .Where(s => s.Tags.Any(st => st.Id == id))
+                .Blacklist(_context, uid);
+            
+            Stories = await query
+                .OrderByDescending(s => s.ReleaseDate)
+                .Paginate(page, PerPage)
+                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
 
             // Prepare pagination
             Pagination = new Pagination
             {
                 CurrentPage = page,
-                ItemCount = await _storiesRepo.CountWithTag(id),
+                ItemCount = await query.CountAsync(),
                 PerPage = PerPage
             };
             
