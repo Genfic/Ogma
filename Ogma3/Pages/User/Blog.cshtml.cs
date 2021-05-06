@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
+using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User
@@ -18,33 +19,32 @@ namespace Ogma3.Pages.User
     {
         private const int PerPage = 25;
         
+        private readonly UserRepository _userRepo;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public BlogModel(ApplicationDbContext context, IMapper mapper)
+        public BlogModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
         {
+            _userRepo = userRepo;
             _context = context;
             _mapper = mapper;
         }
-
-        public string Name { get; private set; }
-        public bool IsOwner { get; private set; }
+        
         public ICollection<BlogpostCard> Posts { get; private set; }
+        public ProfileBar ProfileBar { get; private set; }
         public Pagination Pagination { get; private set; }
         
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
-            Name = name;
+            var uid = User.GetNumericId();
             
-            var uname = User.GetUsername()?.Normalize().ToUpperInvariant();
-            if (uname is null) return NotFound();
-
-            IsOwner = string.Equals(name, uname, StringComparison.InvariantCultureIgnoreCase);
+            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
+            if (ProfileBar is null) return NotFound();
 
             // Start building the query
             var query = _context.Blogposts
                 .Where(b => b.Author.NormalizedUserName == name.Normalize().ToUpper());
             
-            if (!IsOwner)
+            if (uid != ProfileBar.Id)
             {   // If the profile page doesn't belong to the current user, apply additional filters
                 query = query
                     .Where(b => b.IsPublished)

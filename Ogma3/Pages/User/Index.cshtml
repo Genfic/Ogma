@@ -2,11 +2,11 @@
 @model Ogma3.Pages.User.IndexModel
 
 @{
-    ViewData["Title"] = $"{Model.Name}'s profile";
+    ViewData["Title"] = $"{Model.UserData.UserName}'s profile";
     ViewData["Tab"] = "Profile";
 }
 
-<vc:profile-bar name="@Model.Name" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.UserData" />
 
 @if (!string.IsNullOrEmpty(Model.UserData.Bio))
 {

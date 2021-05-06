@@ -23,7 +23,7 @@
     <meta property="og:description" content="@desc">
 }
 
-<vc:profile-bar name="@Model.Blogpost.AuthorUserName" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
 <article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
     <h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>

@@ -9,17 +9,21 @@ using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages
 {
     
     public class StoryModel : PageModel
     {
+        private readonly UserRepository _userRepo;
         private readonly ApplicationDbContext _context;
 
-        public StoryModel(ApplicationDbContext context)
+        public StoryModel(UserRepository userRepo, ApplicationDbContext context)
         {
+            _userRepo = userRepo;
             _context = context;
         }
 
@@ -27,7 +31,6 @@ namespace Ogma3.Pages
         {
             public long Id { get; init; }
             public long AuthorId { get; init; }
-            public string AuthorName { get; init; }
             public string Title { get; init; }
             public string Slug { get; init; }
             public string Description { get; init; }
@@ -59,6 +62,7 @@ namespace Ogma3.Pages
         }
         
         public StoryDetails Story { get; private set; }
+        public ProfileBar ProfileBar { get; private set; }
 
         public async Task<IActionResult> OnGetAsync(long id, string? slug)
         {
@@ -79,7 +83,6 @@ namespace Ogma3.Pages
                     Score = s.Votes.Count,
                     Status = s.Status,
                     AuthorId = s.AuthorId,
-                    AuthorName = s.Author.NormalizedUserName,
                     WordCount = s.WordCount,
                     FullWordCount = s.AuthorId == uid ? s.Chapters.Sum(c => c.WordCount) : 0,
                     ChaptersCount = s.ChapterCount,
@@ -88,10 +91,17 @@ namespace Ogma3.Pages
                     IsPublished = s.IsPublished,
                     ReleaseDate = s.ReleaseDate,
                     ContentBlockId = s.ContentBlockId,
-                    Tags = s.Tags.AsQueryable()
+                    Tags = s.Tags
                         .OrderByDescending(t => t.Namespace.HasValue)
                         .ThenByDescending(t => t.Namespace)
-                        .Select(TagMappings.ToTagDto)
+                        .Select(t => new TagDto
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            Slug = t.Slug,
+                            Namespace = t.Namespace,
+                            Description = t.Description
+                        })
                         .ToList(),
                     Chapters = s.Chapters
                         .Where(c => c.IsPublished || c.Story.AuthorId == uid)
@@ -111,6 +121,8 @@ namespace Ogma3.Pages
                 .FirstOrDefaultAsync();
 
             if (Story == null) return NotFound();
+            
+            ProfileBar = await _userRepo.GetProfileBar(Story.AuthorId);
             
             return Page();
         }

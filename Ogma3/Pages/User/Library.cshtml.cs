@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,18 +7,27 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Icons;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User
 {
     public class LibraryModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserRepository _userRepo;
 
-        public LibraryModel(ApplicationDbContext context)
+        public LibraryModel(ApplicationDbContext context, UserRepository userRepo)
         {
             _context = context;
+            _userRepo = userRepo;
         }
+
+        public bool IsCurrentUser { get; private set; }
+        public List<Icon> Icons { get; private set; }
+        public InputModel Input { get; init; }
+        public ProfileBar ProfileBar { get; private set; }
 
         public class InputModel
         {
@@ -44,24 +52,18 @@ namespace Ogma3.Pages.User
             public int Icon { get; set; }
         }
 
-        public string Name { get; set; }
-        public bool IsOwner { get; set; }
-        public List<Icon> Icons { get; private set; }
-        public InputModel Input { get; init; }
-
         public async Task<IActionResult> OnGetAsync(string name)
-        {            
-            Name = name;
-            
-            var uname = User.GetUsername()?.Normalize().ToUpperInvariant();
-            if (uname is null) return NotFound();
+        {
+            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
+            if (ProfileBar is null) return NotFound();
 
-            IsOwner = string.Equals(name, uname, StringComparison.InvariantCultureIgnoreCase);
+            IsCurrentUser = ProfileBar.Id == User.GetNumericId();
             
             Icons = await _context.Icons
                 .AsNoTracking()
                 .ToListAsync();
             
+
             return Page();
         }
 

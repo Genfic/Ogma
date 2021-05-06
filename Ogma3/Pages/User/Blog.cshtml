@@ -1,14 +1,15 @@
 @page "/user/{name}/blog"
+@using Ogma3.Infrastructure.Extensions
 @model Ogma3.Pages.User.BlogModel
 
 @{
-    ViewData["Title"] = $"{Model.Name}'s blog";
+    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s blog";
     ViewData["Tab"] = "Blog";
 }
 
-<vc:profile-bar name="@Model.Name" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
-@if (Model.IsOwner)
+@if (User.IsUserSameAsLoggedIn(Model.ProfileBar.Id))
 {
     <a asp-page="/Blog/Create" class="btn btn-block btn-outline-primary">
         <icon icon="add"></icon>
