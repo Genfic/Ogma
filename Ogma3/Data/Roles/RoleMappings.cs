@@ -9,7 +9,7 @@ namespace Ogma3.Data.Roles
         {
             Id = r.Id,
             Name = r.Name,
-            Order = r.Order,
+            Order = r.Order ?? 0,
             IsStaff = r.IsStaff,
             Color = r.Color
         };
