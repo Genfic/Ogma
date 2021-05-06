@@ -5,7 +5,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Services.UserService;
 
@@ -22,26 +21,6 @@ namespace Ogma3.Data.Users
             _context = context;
             _mapper = mapper;
             _uid = userService.GetUser()?.GetNumericId();
-        }
-        
-        public async Task<ProfileBar> GetProfileBar(string name)
-        {
-            return await _context.Users
-                .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
-                .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-        
-        public async Task<ProfileBar> GetProfileBar(long id)
-        {
-            return await _context.Users
-                .TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {id}")
-                .Where(u => u.Id == id)
-                .ProjectTo<ProfileBar>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<UserCard>> GetStaff()

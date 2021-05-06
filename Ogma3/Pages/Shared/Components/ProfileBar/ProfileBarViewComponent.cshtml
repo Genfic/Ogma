@@ -1,3 +1,4 @@
+@model ProfileBarViewComponent.ProfileBar
 @using System.Globalization
 @using Humanizer
 @using Ogma3.Api.V1
@@ -7,7 +8,6 @@
 @using Ogma3.Services
 @using Utils
 @using Utils.Extensions
-@model ProfileBar
 
 @{
     var tab = (string) ViewData["Tab"];
@@ -63,11 +63,6 @@
                     v-on:click="follow">
                 {{ isFollowed ? 'Following' : 'Follow' }}
             </button>
-            
-            @*<o-follow v-pre
-                      endpoint="@Url.RouteUrl(nameof(UsersController))"
-                      username="@Model.UserName.ToLower()"
-                      isfollowed="@Model.IsFollowedBy.ToString().ToLower()"></o-follow>*@
 
             <div class="o-dropdown left">
                 <input type="checkbox" id="o-dropdown-toggler">

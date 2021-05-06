@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
-using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Blog
@@ -19,23 +17,21 @@ namespace Ogma3.Pages.Blog
     public class DetailsModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserRepository _userRepo;
         private readonly IMapper _mapper;
 
-        public DetailsModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+        public DetailsModel(ApplicationDbContext context, IMapper mapper)
         {
-            _userRepo = userRepo;
             _context = context;
             _mapper = mapper;
         }
 
-        public Details Blogpost { get; set; }
-        public ProfileBar ProfileBar { get; set; }
+        public Details Blogpost { get; private set; }
         
         public class Details
         {
             public long Id { get; init; }
             public long AuthorId { get; init; }
+            public string AuthorUserName { get; init; }
             public string Title { get; init; }
             public string Slug { get; init; }
             public DateTime PublishDate { get; init; }
@@ -45,8 +41,8 @@ namespace Ogma3.Pages.Blog
             public bool IsPublished { get; init; }
             public int CommentsCount { get; init; }
             
-            public ChapterMinimal? AttachedChapter { get; set; }
-            public StoryMinimal? AttachedStory { get; set; }
+            public ChapterMinimal AttachedChapter { get; set; }
+            public StoryMinimal AttachedStory { get; set; }
             public bool IsUnavailable { get; set; }
             public long? ContentBlockId { get; set; }
         }
@@ -74,8 +70,6 @@ namespace Ogma3.Pages.Blog
             {
                 Blogpost.IsUnavailable = true;
             }
-            
-            ProfileBar = await _userRepo.GetProfileBar(Blogpost.AuthorId);
             
             return Page();
         }

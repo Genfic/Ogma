@@ -2,13 +2,13 @@
 @model Ogma3.Pages.User.Followers
 
 @{
-    ViewData["Title"] = $"Users following {Model.ProfileBar.UserName}";
+    ViewData["Title"] = $"Users following {Model.Name}";
     ViewData["Tab"] = "Follows";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<vc:profile-bar name="@Model.Name" />
 
-<h1>Users following @Model.ProfileBar.UserName</h1>
+<h1>Users following @Model.Name</h1>
 
 <hr>
 

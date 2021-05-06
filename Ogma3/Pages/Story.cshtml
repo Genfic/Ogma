@@ -21,7 +21,7 @@
     <meta property="og:description" content="@Model.Story.Hook">
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
+<vc:profile-bar name="@Model.Story.AuthorName" />
 
 <div id="story-app">
     <div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">

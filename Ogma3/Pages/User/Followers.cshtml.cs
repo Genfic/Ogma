@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
-using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User
@@ -18,28 +17,28 @@ namespace Ogma3.Pages.User
     {
         private const int PerPage = 25;
         
-        private readonly UserRepository _userRepo;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public Followers(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+        public Followers(ApplicationDbContext context, IMapper mapper)
         {
-            _userRepo = userRepo;
             _context = context;
             _mapper = mapper;
         }
-        
-        public ProfileBar ProfileBar { get; private set; }
+
+        public string Name { get; private set; }
         public Pagination Pagination { get; private set; }
         public List<UserCard> Users { get; private set; }
 
         public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
         {
-            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
-            if (ProfileBar is null) return NotFound();
+            Name = name;
+            
+            var uname = User.GetUsername()?.Normalize().ToUpperInvariant();
+            if (uname is null) return NotFound();
 
             Users = await _context.FollowedUsers
-                .Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
+                .Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpperInvariant())
                 .Select(u => u.FollowedUser)
                 .Paginate(page, PerPage)
                 .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
@@ -47,7 +46,7 @@ namespace Ogma3.Pages.User
                 .ToListAsync();
 
             var count = await _context.Users
-                .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
+                .Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
                 .Select(u => u.Followers)
                 .CountAsync();
             

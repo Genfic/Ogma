@@ -1,22 +1,20 @@
 ﻿@page "/user/{name}/stories"
-@using Ogma3.Infrastructure.Extensions
 @model Ogma3.Pages.User.StoriesModel
 
 @{
-    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s stories";
+    ViewData["Title"] = $"{Model.Name}'s stories";
     ViewData["Tab"] = "Stories";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<vc:profile-bar name="@Model.Name" />
 
-@if (User.IsUserSameAsLoggedIn(Model.ProfileBar.Id))
+@if (Model.IsOwner)
 {
     <a class="btn btn-block btn-outline-primary" asp-page="/Stories/Create"> 
         <icon icon="add"></icon>
         Create New
     </a>
 }
-
 
 @if (Model.Stories.Count <= 0)
 {

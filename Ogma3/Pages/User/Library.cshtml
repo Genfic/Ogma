@@ -3,14 +3,14 @@
 @model Ogma3.Pages.User.LibraryModel
 
 @{
-    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s library";
+    ViewData["Title"] = $"{Model.Name}'s library";
     ViewData["Tab"] = "Library";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<vc:profile-bar name="@Model.Name" />
 
 <div id="shelves">
-    @if (Model.IsCurrentUser)
+    @if (Model.IsOwner)
     {
         <form class="form" v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">
 
@@ -103,7 +103,7 @@
                 <h3 class="name">{{ s.name }} – {{ s.storiesCount }}</h3>
                 <span class="desc">{{ s.description }}</span>
             </a>
-            @if (Model.IsCurrentUser)
+            @if (Model.IsOwner)
             {
                 <div class="actions">
                     <button class="action" v-on:click="deleteShelf(s)">
@@ -118,7 +118,7 @@
     </ul>
 
     <div id="route" data-route="@Url.RouteUrl(nameof(ShelvesController))" v-if="!route"></div>
-    <div id="owner" data-owner="@Model.ProfileBar.UserName.ToUpper()" v-if="!owner"></div>
+    <div id="owner" data-owner="@Model.Name.ToUpperInvariant()" v-if="!owner"></div>
     @Html.AntiForgeryToken()
 </div>
 
