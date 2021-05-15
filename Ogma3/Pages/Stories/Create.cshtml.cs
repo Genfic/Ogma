@@ -75,7 +75,7 @@ namespace Ogma3.Pages.Stories
             public string Hook { get; init; }
             [DataType(DataType.Upload)]
             public IFormFile Cover { get; init; }
-            public long Rating { get; set; }
+            public long Rating { get; init; }
             public List<long> Tags { get; set; }
         }
         

@@ -49,10 +49,12 @@ namespace Ogma3.Data.Folders
                 .UsingEntity<FolderStory>(
                     fs => fs.HasOne(f => f.Story)
                         .WithMany()
-                        .HasForeignKey(f => f.StoryId),
+                        .HasForeignKey(f => f.StoryId)
+                        .IsRequired(),
                     fs => fs.HasOne(f => f.Folder)
                         .WithMany()
                         .HasForeignKey(f => f.FolderId)
+                        .IsRequired()
                 );
         }
     }

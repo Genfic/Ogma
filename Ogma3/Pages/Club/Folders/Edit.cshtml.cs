@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -21,36 +21,31 @@ namespace Ogma3.Pages.Club.Folders
             _context = context;
             _clubRepo = clubRepo;
         }
-
-        public long ClubId { get; set; }
         
         public async Task<IActionResult> OnGet(long clubId, long id)
         {
-            ClubId = clubId;
-            
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
             // Check if founder or admin
-            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
+            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
             if (!isFounder) return Unauthorized();
 
-            var folder = await _context.Folders
+            Input = await _context.Folders
                 .Where(f => f.ClubId == clubId)
                 .Where(f => f.Id == id)
-                .AsNoTracking()
+                .Select(f => new InputModel
+                {
+                    Id = f.Id,
+                    ClubId = f.ClubId,
+                    Name = f.Name,
+                    Description = f.Description,
+                    ParentId = f.ParentFolderId,
+                    Role = f.AccessLevel
+                })
                 .FirstOrDefaultAsync();
             
-            if (folder == null) return NotFound();
-            
-            Input = new InputModel
-            {
-                Id = folder.Id,
-                Name = folder.Name,
-                Description = folder.Description,
-                ParentId = folder.ParentFolderId,
-                Role = folder.AccessLevel
-            };
+            if (Input is null) return NotFound();
 
             return Page();
         }
@@ -60,34 +55,36 @@ namespace Ogma3.Pages.Club.Folders
         
         public class InputModel
         {
-            [Required]
-            public long Id { get; set; }
-            
-            [Required]
-            [MinLength(CTConfig.CFolder.MinNameLength)]
-            [MaxLength(CTConfig.CFolder.MaxNameLength)]
-            public string Name { get; set; }
-            
-            [MaxLength(CTConfig.CFolder.MaxDescriptionLength)]
-            public string Description { get; set; }
-
-            public long? ParentId { get; set; }
-            public EClubMemberRoles Role { get; set; }
+            public long Id { get; init; }
+            public long ClubId { get; init; }
+            public string Name { get; init; }
+            public string Description { get; init; }
+            public long? ParentId { get; init; }
+            public EClubMemberRoles Role { get; init; }
+        }
+        
+        public class PostDataValidation : AbstractValidator<InputModel>
+        {
+            public PostDataValidation()
+            {
+                RuleFor(b => b.Name)
+                    .NotEmpty()
+                    .Length(CTConfig.CFolder.MinNameLength, CTConfig.CFolder.MaxNameLength);
+                RuleFor(b => b.Description)
+                    .MaximumLength(CTConfig.CFolder.MaxDescriptionLength);
+            }
         }
 
-        public async Task<IActionResult> OnPostAsync(long clubId)
+        public async Task<IActionResult> OnPostAsync(long clubId, long id)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (!ModelState.IsValid) return Page();// await OnGet(clubId, id);
             
-            // Check if founder
-            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
-            if (!isFounder) return Unauthorized();
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+            
+            // Check if authorized
+            var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+            if (!isAuthorized) return Unauthorized();
             
             var folder = await _context.Folders
                 .Where(f => f.ClubId == clubId)
@@ -95,7 +92,7 @@ namespace Ogma3.Pages.Club.Folders
                 .Include(f => f.ChildFolders)
                 .FirstOrDefaultAsync();
 
-            if (folder == null) return NotFound();
+            if (folder is null) return NotFound();
 
             folder.Name = Input.Name;
             folder.Slug = Input.Name.Friendlify();

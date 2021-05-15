@@ -127,7 +127,6 @@ namespace Ogma3.Data
             CreateMap<Folder, FolderMinimal>();
             CreateMap<Folder, FolderMinimalDto>();
             CreateMap<Folder, FolderMinimalWithParentDto>();
-            CreateMap<Folder, FolderDto>();
 
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();

@@ -9,51 +9,64 @@
 }
 
 <form method="post" class="form" id="folder" v-on:submit="onSubmit">
-    
+
     <div asp-validation-summary="All">
         <span>Please correct the following errors</span>
     </div>
-    
-    <folder-tree :club-id="@Model.ClubId"
-                 label="Parent folder"
-                 :value="@Model.Input.ParentId"
-                 :current="@Model.Input.Id"
-                 route="@Url.RouteUrl(nameof(FoldersController))">
-    </folder-tree>
 
-    <input-counter ref="name"
-                   :min="@CTConfig.CFolder.MinNameLength"
-                   :max="@CTConfig.CFolder.MaxNameLength"
-                   validate-msg="@CTConfig.CFolder.ValidateLengthMsg"
-                   value="@Model.Input.Name"
-                   label="@nameof(Model.Input.Name)">
-    </input-counter>
+    <template id="folder-tree">
+        <folder-tree :club-id="@Model.Input.ClubId"
+                     label="Parent folder"
+                     name="Input.ParentId"
+                     :value="@Model.Input.ParentId"
+                     :current="@Model.Input.Id"
+                     route="@Url.RouteUrl(nameof(FoldersController))">
+        </folder-tree>
+    </template>
 
-    <textarea-counter ref="desc"
-                      :max="@CTConfig.CFolder.MaxDescriptionLength"
-                      validate-msg="@CTConfig.CFolder.ValidateLengthMsg"
-                      value="@Model.Input.Description"
-                      label="@nameof(Model.Input.Description)">
-    </textarea-counter>
+    <div class="o-form-group">
+        <label asp-for="Input.Name"></label>
+        <input asp-for="Input.Name" class="o-form-control active-border">
+        <span asp-validation-for="Input.Name"></span>
+    </div>
+
+    <div class="o-form-group">
+        <label asp-for="Input.Description"></label>
+        <textarea asp-for="Input.Description" class="o-form-control active-border" rows="3" data-wordcount="true"></textarea>
+        <span asp-validation-for="Input.Description"></span>
+    </div>
+
+    <div class="o-form-group club-role-slider">
+        <label asp-for="Input.Role"></label>
+        <p class="desc">Choose who can add stories to this folder</p>
+
+        <div class="selector active-border">
+            @foreach (var r in Enum.GetValues<EClubMemberRoles>())
+            {
+                <input type="radio"
+                       asp-for="Input.Role"
+                       id="@r"
+                       value="@((int) r)"
+                       checked="@(Model.Input.Role == r)">
+                <label for="@r" tabindex="0">@r</label>
+            }
+        </div>
+    </div>
     
-    <club-role-slider label="Role"
-                      desc="Choose who can add stories to this folder"
-                      :value="@((int)Model.Input.Role)"
-                      roles-str="@JsonSerializer.Serialize(Enum.GetNames(typeof(EClubMemberRoles)))">
-    </club-role-slider>
-    
-    <input type="hidden" name="id" value="@Model.Input.Id">
-    
+    <input type="hidden" asp-for="Input.Id">
+
     <div class="o-form-group">
         <button type="submit" class="btn btn-primary">Save changes</button>
     </div>
-    
+
 </form>
 
+<partial name="Shared/_ValidationScriptsPartial"/>
+
 @section Scripts {
-    <script src="~/js/dist/components/input-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/club-role-slider-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/folder.min.js" asp-append-version="true"></script>
+    <script>
+    new Vue({ el: '#folder-tree' })
+    </script>
 }

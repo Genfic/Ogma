@@ -70,7 +70,7 @@ namespace Ogma3.Data.Clubs
 
         public async Task<bool> CheckRoles(long clubId, long? userId, IEnumerable<EClubMemberRoles> roles)
         {
-            if (!userId.HasValue) return false;
+            if (userId is null) return false;
             
             return await _context.Clubs
                 .TagWith($"{nameof(ClubRepository)} : {nameof(CheckRoles)} — {clubId}, {userId}")
@@ -93,8 +93,20 @@ namespace Ogma3.Data.Clubs
             if (!string.IsNullOrEmpty(query))
                 q = q.Where(c => EF.Functions.Like(c.Name.ToUpper(), $"%{query.Trim().ToUpper()}%"));
 
-            return await q
-                .SortByEnum(sort)
+            return await (sort switch
+                {
+                    EClubSortingOptions.NameAscending => q.OrderBy(c => c.Name),
+                    EClubSortingOptions.NameDescending => q.OrderByDescending(c => c.Name),
+                    EClubSortingOptions.MembersAscending => q.OrderBy(c => c.ClubMembers.Count),
+                    EClubSortingOptions.MembersDescending => q.OrderByDescending(c => c.ClubMembers.Count),
+                    EClubSortingOptions.StoriesAscending => q.OrderBy(c => c.Folders.Sum(f => f.StoriesCount)),
+                    EClubSortingOptions.StoriesDescending => q.OrderByDescending(c => c.Folders.Sum(f => f.StoriesCount)),
+                    EClubSortingOptions.ThreadsAscending => q.OrderBy(c => c.Threads.Count),
+                    EClubSortingOptions.ThreadsDescending => q.OrderByDescending(c => c.Threads.Count),
+                    EClubSortingOptions.CreationDateAscending => q.OrderBy(c => c.CreationDate),
+                    EClubSortingOptions.CreationDateDescending => q.OrderByDescending(c => c.CreationDate),
+                    _ => q.OrderByDescending(c => c.CreationDate)
+                })
                 .Paginate(page, perPage)
                 .ProjectTo<ClubCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()

@@ -66,7 +66,7 @@ namespace Ogma3.Pages.Stories
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (Input == null) return NotFound();
+            if (Input is null) return NotFound();
             
             // Fill Ratings dropdown
             await Hydrate();

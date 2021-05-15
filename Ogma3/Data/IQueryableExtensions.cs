@@ -1,6 +1,8 @@
+#nullable enable
+
 using System;
 using System.Linq;
-using Ogma3.Data.Clubs;
+using LinqToDB.Mapping;
 using Ogma3.Data.Stories;
 
 namespace Ogma3.Data
@@ -46,33 +48,14 @@ namespace Ogma3.Data
             };
         }
 
-
-        public static IQueryable<Club> SortByEnum(this IQueryable<Club> query, EClubSortingOptions order)
-        {
-            return order switch
-            {
-                EClubSortingOptions.NameAscending => query.OrderBy(c => c.Name),
-                EClubSortingOptions.NameDescending => query.OrderByDescending(c => c.Name),
-                EClubSortingOptions.MembersAscending => query.OrderBy(c => c.ClubMembers.Count),
-                EClubSortingOptions.MembersDescending => query.OrderByDescending(c => c.ClubMembers.Count),
-                EClubSortingOptions.StoriesAscending => query.OrderBy(c => c.Folders.Sum(f => f.StoriesCount)),
-                EClubSortingOptions.StoriesDescending => query.OrderByDescending(c => c.Folders.Sum(f => f.StoriesCount)),
-                EClubSortingOptions.ThreadsAscending => query.OrderBy(c => c.Threads.Count),
-                EClubSortingOptions.ThreadsDescending => query.OrderByDescending(c => c.Threads.Count),
-                EClubSortingOptions.CreationDateAscending => query.OrderBy(c => c.CreationDate),
-                EClubSortingOptions.CreationDateDescending => query.OrderByDescending(c => c.CreationDate),
-                _ => query.OrderByDescending(c => c.CreationDate)
-            };
-        }
-
         public static IQueryable<Story> Blacklist(this IQueryable<Story> query, ApplicationDbContext ctx, long? userId)
         {
-            return userId.HasValue
+            return userId is not null
                 ? query
                     .Where(s => !ctx.BlacklistedRatings
                         .Where(br => br.UserId == userId)
-                        .Select(br => br.RatingId)
-                        .Contains(s.Rating.Id)
+                        .Select(br => br.Rating)
+                        .Contains(s.Rating)
                     )
                     .Where(s => !ctx.BlacklistedTags
                         .Where(bt => bt.UserId == userId)

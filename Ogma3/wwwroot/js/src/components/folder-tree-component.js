@@ -56,6 +56,10 @@ Vue.component('folder-tree', {
 			type: Number,
 			required: true
 		},
+		name: {
+			type: String,
+			default: 'parentId'
+		},
 		route: {
 			type: String,
 			required: true
@@ -117,7 +121,7 @@ Vue.component('folder-tree', {
         <div class="o-form-group">
             <label v-if="label" :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
             <p class="desc" v-if="desc">{{desc}}</p>
-            <input type="hidden" :value="sel" name="parentId">
+            <input type="hidden" :value="sel" :name="name">
             
             <div class="folder-tree active-border">
               

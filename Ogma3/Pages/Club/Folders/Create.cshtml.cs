@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
@@ -21,65 +21,68 @@ namespace Ogma3.Pages.Club.Folders
             _clubRepo = clubRepo;
         }
 
-        public long ClubId { get; set; }
+        public long ClubId { get; private set; }
         
         public async Task<IActionResult> OnGet(long clubId)
         {
             ClubId = clubId;
             
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
             // Check if founder
-            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
+            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
             if (!isFounder) return Unauthorized();
             
             return Page();
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public PostData Input { get; init; }
         
-        public class InputModel
+        public class PostData
         {
-            [Required]
-            [MinLength(CTConfig.CFolder.MinNameLength)]
-            [MaxLength(CTConfig.CFolder.MaxNameLength)]
-            public string Name { get; set; }
-            
-            [MaxLength(CTConfig.CFolder.MaxDescriptionLength)]
-            public string Description { get; set; }
-
-            public long? ParentId { get; set; }
+            public string Name { get; init; }
+            public string Description { get; init; }
+            public long? ParentId { get; init; }
+            public EClubMemberRoles Role { get; init; }
+        }
+        
+        public class PostDataValidation : AbstractValidator<PostData>
+        {
+            public PostDataValidation()
+            {
+                RuleFor(b => b.Name)
+                    .NotEmpty()
+                    .Length(CTConfig.CFolder.MinNameLength, CTConfig.CFolder.MaxNameLength);
+                RuleFor(b => b.Description)
+                    .MaximumLength(CTConfig.CFolder.MaxDescriptionLength);
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(long clubId)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
+            if (!ModelState.IsValid) return Page();
+            
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
-            // Check if founder
-            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
-            if (!isFounder) return Unauthorized();
-            
-            var folder = new Folder
+            // Check if authorized
+            var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+            if (!isAuthorized) return Unauthorized();
+
+            await _context.Folders.AddAsync(new Folder
             {
                 Name = Input.Name,
                 Slug = Input.Name.Friendlify(),
                 Description = Input.Description,
                 ClubId = clubId,
-                ParentFolderId = Input.ParentId
-            };
-
-            await _context.Folders.AddAsync(folder);
+                ParentFolderId = Input.ParentId,
+                AccessLevel = Input.Role
+            });
             await _context.SaveChangesAsync();
             
-            return RedirectToPage("./Index", new { clubId });
+            return RedirectToPage("./Index", new { id = clubId });
         }
     }
 }

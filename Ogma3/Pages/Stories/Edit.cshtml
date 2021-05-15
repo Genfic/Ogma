@@ -146,13 +146,13 @@
         <p class="desc" >Choose the status of your story</p>
       
         <div class="selector active-border">
-            @foreach(var s in Enum.GetValues<EStoryStatus>()) {
+            @foreach(var s in Enum.GetValues<EStoryStatus>().Reverse()) {
                 <input type="radio" 
                        asp-for="Input.Status"
-                       id="sel_@(s.ToString())"
+                       id="sel_@s"
                        value="@((int)s)"
                        checked="@(Model.Input.Status == s)">
-                <label for="sel_@s" tabindex="0">@s.ToString()</label>
+                <label for="sel_@s" tabindex="0">@s</label>
             }
         </div>
     </div>
