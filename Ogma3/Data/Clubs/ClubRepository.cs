@@ -33,26 +33,6 @@ namespace Ogma3.Data.Clubs
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<UserCard>> GetMembers(long clubId, int page, int perPage)
-        {
-            return await _context.ClubMembers
-                .Where(cm => cm.ClubId == clubId)
-                .Select(cm => cm.Member)
-                .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
-                .Paginate(page, perPage)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<List<ClubCard>> GetPaginatedClubCards(int page, int perPage)
-        {
-            return await _context.Clubs
-                .Paginate(page, perPage)
-                .ProjectTo<ClubCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
         public async Task<List<UserClubMinimalDto>> GetUserClubsMinimal(long userId)
         {
             return await _context.Clubs

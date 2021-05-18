@@ -2,43 +2,44 @@
 @model Ogma3.Pages.Club.Forums.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create new thread";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"] </h1>
 
-<h4>ClubThread</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ClubThread.Title" class="control-label"></label>
-                <input asp-for="ClubThread.Title" class="form-control" />
-                <span asp-validation-for="ClubThread.Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClubThread.Body" class="control-label"></label>
-                <input asp-for="ClubThread.Body" class="form-control" />
-                <span asp-validation-for="ClubThread.Body" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClubThread.ClubId" class="control-label"></label>
-                <input asp-for="ClubThread.ClubId" class ="form-control" type="number"/>
-                <span asp-validation-for="ClubThread.ClubId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form method="post" class="form">
+    
+    <div asp-validation-summary="All">
+        <span>Please correct the following errors</span>
     </div>
-</div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+    <div class="o-form-group">
+        <label asp-for="ClubThread.Title"></label>
+        <input asp-for="ClubThread.Title" class="o-form-control active-border"/>
+        <span asp-validation-for="ClubThread.Title"></span>
+    </div>
+    
+    <div class="o-form-group">
+        <label asp-for="ClubThread.Body"></label>
+        <textarea asp-for="ClubThread.Body" class="o-form-control active-border" rows="5"></textarea>
+        <span asp-validation-for="ClubThread.Body"></span>
+    </div>
+    
+    <input type="hidden" asp-for="ClubThread.ClubId">
+    
+    <div class="o-form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+    
+</form>
+
+<partial name="Shared/_ValidationScriptsPartial"/>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+}
+
+@section CSS
+{
+    <link rel="stylesheet" href="~/css/dist/editors.min.css" asp-append-version="true">
 }

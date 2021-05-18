@@ -70,7 +70,6 @@ namespace Ogma3
             // Repositories
             services.AddScoped<UserRepository>();
             services.AddScoped<ClubRepository>();
-            services.AddScoped<ThreadRepository>();
             services.AddScoped<StoriesRepository>();
             services.AddScoped<TagsRepository>();
             services.AddScoped<ChaptersRepository>();

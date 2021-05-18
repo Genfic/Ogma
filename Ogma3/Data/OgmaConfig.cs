@@ -69,6 +69,7 @@ namespace Ogma3.Data
         [AutoformCategory("Pagination")] public int ClubsPerPage { get; set; } = 25;
         [AutoformCategory("Pagination")] public int BlogpostsPerPage { get; set; } = 25;
         [AutoformCategory("Pagination")] public int StoriesPerPage { get; set; } = 25;
+        [AutoformCategory("Pagination")] public int ClubThreadsPerPage { get; set; } = 25;
 
         // Image sizes
         [AutoformCategory("Image sizes")] public int StoryCoverWidth { get; set; } = 250;

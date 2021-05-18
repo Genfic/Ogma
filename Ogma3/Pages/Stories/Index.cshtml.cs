@@ -20,6 +20,7 @@ namespace Ogma3.Pages.Stories
         private readonly ApplicationDbContext _context;
         private readonly OgmaConfig _config;
         private readonly IMapper _mapper;
+
         public IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper mapper)
         {
             _context = context;
@@ -27,59 +28,54 @@ namespace Ogma3.Pages.Stories
             _mapper = mapper;
         }
 
-        public List<Rating> Ratings { get; set; }
-        public List<StoryCard> Stories { get; set; }
-        public IEnumerable<long> Tags { get; set; }
+        public List<Rating> Ratings { get; private set; }
+        public List<StoryCard> Stories { get; private set; }
+        public IEnumerable<long> Tags { get; private set; }
         public EStorySortingOptions SortBy { get; set; }
-        public string SearchBy { get; set; }
-        public long? Rating { get; set; }
-        public Pagination Pagination { get; set; }
-        
+        public string SearchBy { get; private set; }
+        public long? Rating { get; private set; }
+        public Pagination Pagination { get; private set; }
+
         public async Task OnGetAsync(
             [FromQuery] IList<long> tags,
-            [FromQuery] string q = null, 
+            [FromQuery] string q = null,
             [FromQuery] EStorySortingOptions sort = EStorySortingOptions.DateDescending,
             [FromQuery] long? rating = null,
             [FromQuery] int page = 1
         )
         {
             var uid = User.GetNumericId();
-            
+
             SearchBy = q;
             SortBy = sort;
             Rating = rating;
             Tags = tags;
-            
+
             // Load ratings
             Ratings = await _context.Ratings.ToListAsync();
 
             // Load stories
-            Stories = await _context.Stories.AsQueryable()
+            var query = _context.Stories
+                .AsQueryable()
                 .Search(tags, q, rating)
                 .Where(b => b.IsPublished)
                 .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, uid)
+                .Blacklist(_context, uid);
+            
+            Stories = await query
                 .SortByEnum(sort)
                 .Paginate(page, _config.StoriesPerPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
-            
-            var count = await _context.Stories.AsQueryable()
-                .Search(tags, q, rating)
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, uid)
-                .CountAsync();
-            
+
             // Prepare pagination
             Pagination = new Pagination
             {
                 PerPage = _config.StoriesPerPage,
-                ItemCount = count,
+                ItemCount = await query.CountAsync(),
                 CurrentPage = page
             };
         }
-
     }
 }

@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,56 +20,70 @@ namespace Ogma3.Pages.Club.Forums
             _context = context;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
-
         public async Task<IActionResult> OnGetAsync(long id)
         {
-
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+            
             Input = await _context.ClubThreads
                 .Where(ct => ct.Id == id)
-                .Where(ct => ct.AuthorId == User.GetNumericId())
+                .Where(ct => ct.AuthorId == uid)
                 .Select(ct => new InputModel
                 {
                     Id = ct.Id,
+                    ClubId = ct.ClubId,
                     Title = ct.Title,
-                    Body = ct.Body,
+                    Body = ct.Body
                 })
                 .FirstOrDefaultAsync();
 
-            if (Input == null) return NotFound();
+            if (Input is null) return NotFound();
             
             return Page();
         }
+
+        [BindProperty]
+        public InputModel Input { get; set; }
         
         public class InputModel
         {
-            public long Id { get; set; }
-            
-            [Required]
-            [MinLength(CTConfig.CClubThread.MinTitleLength)]
-            [MaxLength(CTConfig.CClubThread.MaxTitleLength)]
-            public string Title { get; set; }
-
-            [Required]
-            [MinLength(CTConfig.CClubThread.MinBodyLength)]
-            [MaxLength(CTConfig.CClubThread.MaxBodyLength)]
-            public string Body { get; set; }
+            public long Id { get; init; }
+            public long ClubId { get; init; }
+            public string Title { get; init; }
+            public string Body { get; init; }
+        }
+        
+        public class InputModelValidator : AbstractValidator<InputModel>
+        {
+            public InputModelValidator()
+            {
+                RuleFor(m => m.Id)
+                    .NotEmpty();
+                RuleFor(m => m.ClubId)
+                    .NotEmpty();
+                RuleFor(m => m.Title)
+                    .NotEmpty()
+                    .Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
+                RuleFor(m => m.Body)
+                    .NotEmpty()
+                    .Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
+            }
         }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
 
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+
             var clubThread = await _context.ClubThreads
                 .Where(ct => ct.Id == Input.Id)
-                .Where(ct => ct.AuthorId == User.GetNumericId())
                 .FirstOrDefaultAsync();
             
-            if (clubThread == null) return NotFound();
-
+            if (clubThread is null) return NotFound();
+            if (clubThread.AuthorId != uid) return Unauthorized();
+            
             clubThread.Title = Input.Title;
             clubThread.Body = Input.Body;
 

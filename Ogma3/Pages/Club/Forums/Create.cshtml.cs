@@ -1,23 +1,22 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.CommentsThreads;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums
 {
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly OgmaUserManager _userManager;
 
-        public CreateModel(ApplicationDbContext context, OgmaUserManager userManager)
+        public CreateModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -34,33 +33,37 @@ namespace Ogma3.Pages.Club.Forums
 
         public class PostModel
         {
-            [Required]
-            [MinLength(CTConfig.CClubThread.MinTitleLength)]
-            [MaxLength(CTConfig.CClubThread.MaxTitleLength)]
-            public string Title { get; set; }
-        
-            [Required]
-            [MinLength(CTConfig.CClubThread.MinBodyLength)]
-            [MaxLength(CTConfig.CClubThread.MaxBodyLength)]
-            public string Body { get; set; }
-        
-            [Required]
-            public long ClubId { get; set; }
+            public string Title { get; init; }
+            public string Body { get; init; } 
+            public long ClubId { get; init; }
         }
         
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        public class PostModelValidator : AbstractValidator<PostModel>
+        {
+            public PostModelValidator()
+            {
+                RuleFor(p => p.Title)
+                    .NotEmpty()
+                    .Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
+                RuleFor(p => p.Body)
+                    .NotEmpty()
+                    .Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
+                RuleFor(p => p.ClubId)
+                    .NotEmpty();
+            }
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
             
-            var user = await _userManager.GetUserAsync(User);
+            // Get logged in user
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+            
             var clubThread = new ClubThread
             {
-                Author = user,
+                AuthorId = (long)uid,
                 Title = ClubThread.Title,
                 Body = ClubThread.Body,
                 ClubId = ClubThread.ClubId,

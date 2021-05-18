@@ -37,10 +37,10 @@ namespace Ogma3.Pages.Stories
             _mapper = mapper;
         }
         
-        public List<RatingDto> Ratings { get; set; }
-        public List<TagDto> Genres { get; set; }
-        public List<TagDto> ContentWarnings { get; set; }
-        public List<TagDto> Franchises { get; set; }
+        public List<RatingDto> Ratings { get; private set; }
+        public List<TagDto> Genres { get; private set; }
+        public List<TagDto> ContentWarnings { get; private set; }
+        public List<TagDto> Franchises { get; private set; }
 
         public async Task<IActionResult> OnGetAsync(long id)
         {

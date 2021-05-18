@@ -10,13 +10,26 @@
 
 @if (Model.ClubBar.IsMember)
 {
-    <a class="btn btn-block btn-outline-primary" asp-page="Create" asp-route-id="@Model.ClubBar.Id"> 
+    <a class="btn btn-block btn-outline-primary" asp-page="Create" asp-route-id="@Model.ClubBar.Id">
         <icon icon="add"></icon>
         Create new thread
     </a>
 }
 
-@foreach (var thread in Model.ThreadCards) {
-    <partial name="Shared/Cards/_ThreadCard" model="thread"/>
-}
+<br>
 
+<div>
+    @if (Model.ThreadCards.Count <= 0)
+    {
+        <h1>No threads found</h1>
+    }
+    else
+    {
+        @foreach (var thread in Model.ThreadCards)
+        {
+            <partial name="Shared/Cards/_ThreadCard" model="thread"/>
+        }
+
+        <partial name="_Pagination" model="Model.Pagination"/>
+    }
+</div>
