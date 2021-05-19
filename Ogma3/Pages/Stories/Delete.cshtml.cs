@@ -90,8 +90,10 @@ namespace Ogma3.Pages.Stories
             _context.Stories.Remove(story);
             
             // Delete cover
-            if (story.CoverId is not null && story.Cover is not null) 
+            if (story.CoverId is not null && story.Cover is not null)
+            {
                 await _b2Client.Files.Delete(story.CoverId, story.Cover.Replace(_ogmaConfig.Cdn, ""));
+            }
 
             // Save
             await _context.SaveChangesAsync();

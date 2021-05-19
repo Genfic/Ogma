@@ -24,13 +24,10 @@ namespace Ogma3.Pages.Club.Forums
         public ThreadDetails ClubThread { get; private set; }
         public ClubBar ClubBar { get; private set; }
 
-        public async Task<IActionResult> OnGetAsync(long clubId, long threadId)
+        public async Task<IActionResult> OnGetAsync(long id)
         {
-            ClubBar = await _clubRepo.GetClubBar(clubId);
-            if (ClubBar is null) return NotFound();
-            
             ClubThread = await _context.ClubThreads
-                .Where(ct => ct.Id == threadId)
+                .Where(ct => ct.Id == id)
                 .Select(ct => new ThreadDetails
                 {
                     Id = ct.Id,
@@ -51,6 +48,9 @@ namespace Ogma3.Pages.Club.Forums
                 .FirstOrDefaultAsync();
 
             if (ClubThread is null) return NotFound();
+            
+            ClubBar = await _clubRepo.GetClubBar(ClubThread.ClubId);
+            if (ClubBar is null) return NotFound();
             
             return Page();
         }

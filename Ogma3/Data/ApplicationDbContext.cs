@@ -93,10 +93,10 @@ namespace Ogma3.Data
         public DbSet<InviteCode> InviteCodes { get; set; }
 
 
-        public readonly ILoggerFactory MyLoggerFactory;
+        private readonly ILoggerFactory _myLoggerFactory;
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            MyLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
+            _myLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
             
             // NOTE: When mapping an enum here, remember to also add it in `OnModelCreating()`
             NpgsqlConnection.GlobalTypeMapper
@@ -124,13 +124,13 @@ namespace Ogma3.Data
                 .HasPostgresEnum<ETagNamespace>();
 
             // Load model configurations
-            builder.ApplyConfigurationsFromAssembly(typeof(OgmaUserConfiguration).Assembly);
+            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+            optionsBuilder.UseLoggerFactory(_myLoggerFactory);
         }
     }
 }

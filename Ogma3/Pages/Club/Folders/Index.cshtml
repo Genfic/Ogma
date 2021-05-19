@@ -1,6 +1,5 @@
-@page "/club/{id}/folders"
+@page "/club/{id:long}/{slug}/folders"
 @model Ogma3.Pages.Club.Folders.IndexModel
-
 
 @{
     ViewData["Title"] = $"{Model.ClubBar.Name} — Folders";

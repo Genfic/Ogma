@@ -7,6 +7,17 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<div class="button-group">
+    <a title="Cancel" class="action-btn large" asp-page="/Club/Index" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Slug">
+         <icon class="icon" icon="arrow_back"></icon>
+         <span class="name">Cancel</span>
+     </a>
+     <a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
+         <icon class="icon" icon="delete_forever"></icon>
+         <span class="name">Delete</span>
+     </a>
+</div>
+
 <form class="form" id="club" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
 
     <div asp-validation-summary="All">
@@ -40,6 +51,8 @@
         <input asp-for="Input.Icon" class="o-form-control active-border">
         <span asp-validation-for="Input.Icon"></span>
     </div>
+    
+    <input type="hidden" asp-for="Input.Id">
 
     <div class="o-form-group">
         <button type="submit" class="btn btn-primary">Save changes</button>

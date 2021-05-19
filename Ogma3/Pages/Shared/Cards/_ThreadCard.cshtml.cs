@@ -4,12 +4,11 @@ namespace Ogma3.Pages.Shared.Cards
 {
     public class ThreadCard
     {
-        public long Id { get; set; }
-        public long ClubId { get; set; }
-        public string Title { get; set; }
-        public DateTime CreationDate { get; set; }
-        public string AuthorName { get; set; }
-        public string AuthorAvatar { get; set; }
-        public int CommentsCount { get; set; }
+        public long Id { get; init; }
+        public string Title { get; init; }
+        public DateTime CreationDate { get; init; }
+        public string AuthorName { get; init; }
+        public string AuthorAvatar { get; init; }
+        public int CommentsCount { get; init; }
     }
 }

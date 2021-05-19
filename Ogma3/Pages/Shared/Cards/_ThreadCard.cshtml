@@ -5,7 +5,7 @@
 <div class="thread-card">
     <cdn-img class="img" src="@Model.AuthorAvatar" width="60" height="60" />
     
-    <a class="title" asp-page="/Club/Forums/Details" asp-route-clubId="@Model.ClubId" asp-route-threadId="@Model.Id">
+    <a class="title" asp-page="/Club/Forums/Details" asp-route-id="@Model.Id">
         @Model.Title
     </a>
     

@@ -4,6 +4,7 @@ namespace Ogma3.Pages.Shared.Cards
     {
         public long Id { get; init; }
         public string Name { get; init; }
+        public string Slug { get; init; }
         public string Hook { get; init; }
         public string Icon { get; init; }
         public int ThreadsCount { get; init; }

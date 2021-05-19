@@ -5,32 +5,35 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h2>@Model.Club.Name</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<hr>
-<dl class="rows">
-    <dt>
-        Created on:
-    </dt>
-    <dd>
-        @Model.Club.CreationDate
-    </dd>
-    <dt>
-        Hook:
-    </dt>
-    <dd>
-        <markdown>
-            @Model.Club.Hook
-        </markdown>
-    </dd>
-</dl>
+<div>
+    <h3>Are you sure you want to delete this?</h3>
+    <hr>
+    
+    <dl class="rows">
+        <dt>
+            Created on:
+        </dt>
+        <dd>
+            @Model.Club.CreationDate
+        </dd>
+        <dt>
+            Hook:
+        </dt>
+        <dd>
+            <markdown>
+                @Model.Club.Hook
+            </markdown>
+        </dd>
+    </dl>
+</div>
 
 <form method="post" class="confirm">
     <input type="hidden" asp-for="Club.Id" />
     <div class="buttons">
         <input type="submit" value="Delete" class="button accept red" />
-        <a asp-page="/Club/Index" class="button cancel" asp-route-id="@Model.Club.Id">Cancel</a>
+        <a asp-page="/Club/Index" class="button cancel" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">Cancel</a>
     </div>
 </form>
 

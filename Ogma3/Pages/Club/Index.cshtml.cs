@@ -37,7 +37,6 @@ namespace Ogma3.Pages.Club
                 .Select(ct => new ThreadCard
                 {
                     Id = ct.Id,
-                    ClubId = ct.ClubId,
                     Title = ct.Title,
                     CreationDate = ct.CreationDate,
                     AuthorName = ct.Author.UserName,

@@ -183,7 +183,6 @@ namespace Ogma3
             {
                 options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
                 options.Conventions
-                    .AddPageRoute("/Club/Index", "/club/{slug}-{id}")
                     .AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/.well-known/change-password");
             });
             
