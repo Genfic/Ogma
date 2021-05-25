@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
-using LinqToDB;
-using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
 using Ogma3.Infrastructure.CustomValidators;
@@ -30,24 +29,23 @@ namespace Ogma3.Pages.Blog
             _mapper = mapper;
         }
 
-        [BindProperty]
-        public PostData Input { get; set; }
+        [BindProperty] public PostData Input { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // Get logged in user
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            
+
             // Get post and make sure the user matches
             Input = await _context.Blogposts
                 .Where(m => m.Id == id)
                 .ProjectTo<PostData>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsyncEF();
+                .FirstOrDefaultAsync();
 
             if (Input is null) return NotFound();
             if (Input.AuthorId != uid) return Unauthorized();
-            
+
             return Page();
         }
 
@@ -63,7 +61,7 @@ namespace Ogma3.Pages.Blog
             public bool IsUnavailable { get; set; }
             public bool Published { get; set; }
         }
-        
+
         public class PostDataValidation : AbstractValidator<PostData>
         {
             public PostDataValidation()
@@ -79,11 +77,12 @@ namespace Ogma3.Pages.Blog
                     .HashtagsShorterThan(CTConfig.CBlogpost.MaxTagLength);
             }
         }
+
         public class MappingProfile : Profile
         {
             public MappingProfile() => CreateMap<Blogpost, PostData>()
-                .ForMember(pd => pd.Tags, opts 
-                        => opts.MapFrom(b => string.Join(", ", b.Hashtags)));
+                .ForMember(pd => pd.Tags, opts
+                    => opts.MapFrom(b => string.Join(", ", b.Hashtags)));
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -91,22 +90,28 @@ namespace Ogma3.Pages.Blog
         public async Task<IActionResult> OnPostAsync(long id)
         {
             if (!ModelState.IsValid) return Page();
-            
+
             // Get logged in user
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            
-            await _context.Blogposts
-                .Where(m => m.Id == id && m.AuthorId == uid)
-                .Set(b => b.Title, Input.Title.Trim())
-                .Set(b => b.Slug, Input.Title.Trim().Friendlify())
-                .Set(b => b.Body, Input.Body.Trim())
-                .Set(b => b.WordCount, Input.Body.Words())
-                .Set(b => b.Hashtags, Input.Tags?.ParseHashtags() ?? Array.Empty<string>())
-                .Set(b => b.IsPublished, Input.Published)
-                .UpdateAsync();
 
-            return RedirectToPage("./Post", new { id, slug = Input.Title.Trim().Friendlify() });
+            var post = await _context.Blogposts
+                .Where(b => b.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (post is null) return NotFound();
+            if (post.AuthorId != uid) return Unauthorized();
+            
+            post.Title = Input.Title.Trim();
+            post.Slug = Input.Title.Trim().Friendlify();
+            post.Body = Input.Body.Trim();
+            post.WordCount = Input.Body.Words();
+            post.Hashtags = Input.Tags?.ParseHashtags() ?? Array.Empty<string>();
+            post.IsPublished = Input.Published;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Post", new {id, slug = Input.Title.Trim().Friendlify()});
         }
     }
 }

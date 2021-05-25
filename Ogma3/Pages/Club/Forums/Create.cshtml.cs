@@ -74,7 +74,7 @@ namespace Ogma3.Pages.Club.Forums
             await _context.ClubThreads.AddAsync(clubThread);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index", new { id = ClubThread.ClubId });
+            return RedirectToPage("./Details", new { id = clubThread.Id });
         }
     }
 }
