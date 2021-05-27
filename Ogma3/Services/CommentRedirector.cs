@@ -14,26 +14,30 @@ namespace Ogma3.Services
             _context = context;
         }
 
-        public async Task<CommentRedirectionResult?> RedirectToComment(long commentId)
+        public async Task<CommentRedirectionResult> RedirectToComment(long commentId)
         {
             var comment = await _context.Comments
                 .Where(c => c.Id == commentId)
-                .Select(c => new
+                .Select(c => new CommentMeta
                 {
-                    CommentIds = c.CommentsThread.Comments.Select(e => e.Id),
-                    c.CommentsThread.User.UserName,
-                    c.CommentsThread.BlogpostId,
-                    c.CommentsThread.ChapterId,
-                    c.CommentsThread.ClubThreadId,
-                    c.CommentsThread.ClubThread
+                    // Get the ordinal number of the comment within the thread.
+                    // +1 because they're 1-indexed.
+                    Ordinal = c.CommentsThread.Comments
+                        .OrderBy(x => x.DateTime)
+                        .Select(x => x.Id)
+                        .ToList()
+                        .IndexOf(commentId) + 1,
+                    UserName = c.CommentsThread.User.UserName,
+                    BlogpostId = c.CommentsThread.BlogpostId,
+                    ChapterId = c.CommentsThread.ChapterId,
+                    ClubThreadId = c.CommentsThread.ClubThreadId,
+                    ClubId = c.CommentsThread.ClubThread.ClubId,
                 })
                 .FirstOrDefaultAsync();
 
             if (comment is null) return null;
-
-            // Get the ordinal number of the comment within the thread.
-            // +1 because they're 1-indexed.
-            var order = comment.CommentIds.ToList().IndexOf(commentId) + 1;
+            
+            var order = comment.Ordinal;
             
             // Figure out the redirect
             if (comment.UserName is not null)
@@ -43,11 +47,20 @@ namespace Ogma3.Services
             if (comment.ChapterId is not null)
                 return new CommentRedirectionResult("/Chapter",new {Id = comment.ChapterId}, $"comment-{order}");
             if (comment.ClubThreadId is not null)
-                return new CommentRedirectionResult("/Club/Forums/Details", new { comment.ClubThread.ClubId, ThreadId = comment.ClubThreadId}, $"comment-{order}");
+                return new CommentRedirectionResult("/Club/Forums/Details", new { comment.ClubId, ThreadId = comment.ClubThreadId}, $"comment-{order}");
 
             return null;
         }
-
         public record CommentRedirectionResult(string Url, object Params, string Fragment);
+
+        private record CommentMeta
+        {
+            public int Ordinal { get; init; }
+            public string UserName { get; init; }
+            public long? BlogpostId { get; init; }
+            public long? ChapterId { get; init; }
+            public long? ClubThreadId { get; init; }
+            public long? ClubId { get; init; }
+        }
     }
 }
