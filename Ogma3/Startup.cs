@@ -44,6 +44,8 @@ using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using FluentValidation.AspNetCore;
+using Ogma3.Infrastructure.Formatters;
+using Ogma3.Services.RssService;
 
 namespace Ogma3
 {
@@ -114,6 +116,8 @@ namespace Ogma3
             
             // Logged in user service
             services.AddTransient<IUserService, UserService>();
+            // RSS service
+            services.AddTransient<IRssService, RssService>();
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
@@ -198,6 +202,12 @@ namespace Ogma3
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
+            
+            // Custom formatters
+            services.AddControllers(options =>
+            {
+                options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration));
+            });
             
             // SignalR
             services.AddSignalR();
