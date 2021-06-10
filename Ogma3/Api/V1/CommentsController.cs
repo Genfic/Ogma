@@ -69,7 +69,7 @@ namespace Ogma3.Api.V1
             };
         }
 
-        [HttpGet("revisions/{id}")]
+        [HttpGet("revisions/{id:long}")]
         public async Task<IEnumerable<CommentRevisionDto>> GetRevisions(long id)
         {
             return await _context.CommentRevisions
@@ -79,11 +79,8 @@ namespace Ogma3.Api.V1
         }
 
         // GET: api/Comments/5
-        [HttpGet("{id}")]
-        public async Task<CommentDto> GetComment(long id)
-        {
-            return await _commentsRepo.GetSingle(id);
-        }
+        [HttpGet("{id:long}")]
+        public async Task<CommentDto> GetComment(long id) => await _commentsRepo.GetSingle(id);
 
         // GET: api/Comments/md?id=5
         [HttpGet("md")]
@@ -99,17 +96,17 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<CommentDto>> PutComment(PatchData data)
         {
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             
             var (body, commentId) = data;
             
             var comm = _context.Comments.FirstOrDefault(c => c.Id == commentId);
             
-            if (comm == null) return NotFound();
+            if (comm is null) return NotFound();
             if (uid != comm.AuthorId) return Unauthorized();
             
             // Create revision
-            await _context.CommentRevisions.AddAsync(new CommentRevision
+            _context.CommentRevisions.Add(new CommentRevision
             {
                 Body = comm.Body,
                 ParentId = comm.Id,
@@ -152,7 +149,7 @@ namespace Ogma3.Api.V1
                 .Include(ct => ct.Comments)
                 .FirstOrDefaultAsync();
 
-            if (thread == null) return NotFound();
+            if (thread is null) return NotFound();
             
             thread.Comments.Add(comment);
             thread.CommentsCount = thread.Comments.Count;
@@ -187,7 +184,7 @@ namespace Ogma3.Api.V1
         }
 
         // DELETE: api/Comments/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<ActionResult<CommentDto>> DeleteComment(long id)
@@ -200,7 +197,7 @@ namespace Ogma3.Api.V1
                 .Include(c => c.Revisions)
                 .FirstOrDefaultAsync();
             
-            if (comment == null) return NotFound();
+            if (comment is null) return NotFound();
             if (comment.AuthorId != uid) return Unauthorized();
 
             // Wipe comment

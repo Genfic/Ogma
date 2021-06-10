@@ -28,7 +28,7 @@ namespace Ogma3.Api.V1
         }
 
         // GET: api/Quotes/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [Throttle(Count = 10, TimeUnit = TimeUnit.Minute)]
         public async Task<ActionResult<Quote>> GetQuote(int id)
         {
@@ -36,7 +36,7 @@ namespace Ogma3.Api.V1
                 .AsNoTracking()
                 .FirstOrDefaultAsync(q => q.Id == id);
 
-            if (quote == null)
+            if (quote is null)
             {
                 return NotFound();
             }
@@ -64,7 +64,7 @@ namespace Ogma3.Api.V1
                 .ToListAsync())
                 .First();
             
-            if (q == null) return NotFound();
+            if (q is null) return NotFound();
             return q;
         }
         
@@ -72,7 +72,7 @@ namespace Ogma3.Api.V1
         // PUT: api/Quotes/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Quote>> PutQuote(int id, Quote q)
         {
@@ -107,7 +107,7 @@ namespace Ogma3.Api.V1
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Quote>> PostQuote(Quote q)
         {
-            await _context.Quotes.AddAsync(q);
+            _context.Quotes.Add(q);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetQuote", new { id = q.Id }, q);
         }
@@ -118,7 +118,7 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult> PostJson()
         {
             var data = await JsonSerializer.DeserializeAsync<IEnumerable<Quote>>(Request.Body);
-            if (data == null) return BadRequest();
+            if (data is null) return BadRequest();
             
             await _context.Quotes.AddRangeAsync(data);
             await _context.SaveChangesAsync();
@@ -128,12 +128,12 @@ namespace Ogma3.Api.V1
 
 
         // DELETE: api/Quotes/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Quote>> DeleteQuote(int id)
         {
             var ns = await _context.Quotes.FindAsync(id);
-            if (ns == null) return NotFound();
+            if (ns is null) return NotFound();
             
             _context.Quotes.Remove(ns);
             await _context.SaveChangesAsync();

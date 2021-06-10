@@ -41,44 +41,41 @@ namespace Ogma3.Api.V1
 
 
         // GET: api/Tags/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         public async Task<ActionResult<Tag>> GetTag(long id)
         {
             var tag = await _context.Tags
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (tag == null) return NotFound();
+            if (tag is null) return NotFound();
 
             return tag;
         }
 
         // GET: api/Tags/story/5
-        [HttpGet("story/{id}")]
+        [HttpGet("story/{id:long}")]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetStoryTags(long id)
         {
             var tags = await _tagsRepo.GetTagsOfStory(id);
 
-            if (tags == null || tags.Count <= 0) return NotFound();
+            if (tags is not {Count: > 0}) return NotFound();
             
             return tags;
         }
         
         // GET: api/Tags/validation
         [HttpGet("validation")]
-        public ActionResult GetTagValidation()
-        {
-            return Ok(new
-            {
+        public ActionResult GetTagValidation() 
+            => Ok(new {
                 CTConfig.CTag.MinNameLength,
                 CTConfig.CTag.MaxNameLength,
                 CTConfig.CTag.MaxDescLength,
             });
-        }
 
 
         // PUT: api/Tags/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutTag(long id, PostData data)
         {
@@ -109,7 +106,7 @@ namespace Ogma3.Api.V1
 
                 throw;
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException {Number: 2627 or 2601})
             {
                 return Conflict(new { message = $"A tag with the name '{tag.Name}' already exists" });
             }
@@ -131,13 +128,13 @@ namespace Ogma3.Api.V1
                 Namespace = eTagNamespace
             };
             
-            await _context.Tags.AddAsync(tag);
+            _context.Tags.Add(tag);
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException {Number: 2627 or 2601})
             {
                 return Conflict(new { message = $"A tag with the name '{tag.Name}' already exists" });
             }
@@ -147,12 +144,12 @@ namespace Ogma3.Api.V1
 
 
         // DELETE: api/Tags/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Tag>> DeleteTag(int id)
         {
             var tag = await _context.Tags.FindAsync(id);
-            if (tag == null)
+            if (tag is null)
             {
                 return NotFound();
             }

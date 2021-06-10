@@ -33,11 +33,10 @@ namespace Ogma3.Api.V1
         [HttpGet("user/{name}")]
         public async Task<ActionResult<IEnumerable<ShelfDto>>> GetUserShelvesAsync(string name)
         {
-            Log.Debug(">>>>>>>>>>> Fetching shelves for user {Name}", name);
             var uid = User?.GetNumericId();
             
             var shelves = await _context.Shelves
-                .Where(s => s.Owner.NormalizedUserName == name.ToUpper())
+                .Where(s => s.Owner.NormalizedUserName == name.Normalize().ToUpperInvariant())
                 .Where(s => s.OwnerId == uid || s.IsPublic)
                 .Select(ShelfMappings.ToShelfDto())
                 .ToListAsync();
@@ -50,11 +49,11 @@ namespace Ogma3.Api.V1
         /// </summary>
         /// <param name="story">Story to check for</param>
         /// <returns></returns>
-        [HttpGet("user/{story:int}")]
+        [HttpGet("user/{story:long}")]
         public async Task<ActionResult<IEnumerable<ShelfDto>>> GetCurrentUserShelvesAsync(long story)
         {
             var uid = User?.GetNumericId();
-            if (uid == null) return Ok();
+            if (uid is null) return Unauthorized();
 
             var shelves = await _context.Shelves
                 .Where(s => s.Owner.Id == uid)
@@ -77,7 +76,7 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<ShelfDto>> PostShelfAsync(PostData data)
         {
             var uid = User?.GetNumericId();
-            if (uid is null) return Unauthorized("Not logged in");
+            if (uid is null) return Unauthorized();
             
             var shelf = new Shelf
             {
@@ -90,7 +89,7 @@ namespace Ogma3.Api.V1
                 Color        = data.Color,
                 IconId       = data.Icon
             };
-            await _context.Shelves.AddAsync(shelf);
+            _context.Shelves.Add(shelf);
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -102,13 +101,13 @@ namespace Ogma3.Api.V1
         /// <param name="storyId">ID of the story to add</param>
         /// <returns></returns>
         // POST: api/Shelves/add/5/6
-        [HttpPost("add/{shelfId}/{storyId}")]
+        [HttpPost("add/{shelfId:long}/{storyId:long}")]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<ActionResult> AddToShelfAsync(long shelfId, long storyId)
         {
             var uid = User?.GetNumericId();
-            if (uid is null) return Unauthorized("Not logged in");
+            if (uid is null) return Unauthorized();
             
             var shelf = await _context.Shelves.FindAsync(shelfId);
 
@@ -117,7 +116,7 @@ namespace Ogma3.Api.V1
             // Check existence
             if (shelf is null || !storyExists) return NotFound();
             // Check ownership
-            if (shelf.OwnerId != uid) return Unauthorized("Not owner");
+            if (shelf.OwnerId != uid) return Unauthorized();
             
             var exists = _context.ShelfStories.Any(ss => ss.ShelfId == shelfId && ss.StoryId == storyId);
             var shelfStory = new ShelfStory
@@ -129,7 +128,7 @@ namespace Ogma3.Api.V1
             if (exists)
                 _context.ShelfStories.Remove(shelfStory);
             else
-                await _context.ShelfStories.AddAsync(shelfStory);
+                _context.ShelfStories.Add(shelfStory);
 
             await _context.SaveChangesAsync();
             return Ok(shelfStory);
@@ -142,20 +141,20 @@ namespace Ogma3.Api.V1
         /// <param name="data">New data of the shelf</param>
         /// <returns></returns>
         // PUT: api/Shelves/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<ActionResult<ShelfDto>> PutShelfAsync(long id, PostData data)
         {
             var uid = User?.GetNumericId();
-            if (uid is null) return Unauthorized("Not logged in");
+            if (uid is null) return Unauthorized();
             
             var shelf = await _context.Shelves.FindAsync(id);
 
             // Check existence
-            if (shelf == null) return NotFound();
+            if (shelf is null) return NotFound();
             // Check ownership
-            if (shelf.OwnerId != uid) return Unauthorized("Not owner");
+            if (shelf.OwnerId != uid) return Unauthorized();
             
             shelf.Name         = data.Name;
             shelf.Description  = data.Description;
@@ -175,19 +174,19 @@ namespace Ogma3.Api.V1
         /// <param name="id">ID of the shelf to delete</param>
         /// <returns></returns>
         // DELETE: api/Shelves/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [Authorize]
         public async Task<ActionResult> DeleteShelfAsync(long id)
         {
             var uid = User?.GetNumericId();
-            if (uid is null) return Unauthorized("Not logged in");
+            if (uid is null) return Unauthorized();
             
             var shelf = await _context.Shelves.FindAsync(id);
             
             // Check existence
-            if (shelf == null) return NotFound();
+            if (shelf is null) return NotFound();
             // Check ownership
-            if (shelf.OwnerId != uid) return Unauthorized("Not owner");
+            if (shelf.OwnerId != uid) return Unauthorized();
             
             _context.Shelves.Remove(shelf);
             await _context.SaveChangesAsync();
@@ -201,15 +200,12 @@ namespace Ogma3.Api.V1
         /// <returns></returns>
         // GET: api/Shelves/validation
         [HttpGet("validation")]
-        public ActionResult GetShelfValidation()
-        {
-            return Ok(new
-            {
+        public ActionResult GetShelfValidation() 
+            => Ok(new {
                 CTConfig.CShelf.MinNameLength,
                 CTConfig.CShelf.MaxNameLength,
                 CTConfig.CShelf.MaxDescriptionLength
             });
-        }
 
         public class PostData
         {

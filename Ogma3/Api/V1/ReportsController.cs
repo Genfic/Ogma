@@ -19,13 +19,6 @@ namespace Ogma3.Api.V1
             _context = context;
         }
 
-        // GET
-        [HttpGet]
-        public async Task GetReportsAsync()
-        {
-
-        }
-
         // POST
         [HttpPost]
         [Authorize]
@@ -67,12 +60,15 @@ namespace Ogma3.Api.V1
                     return BadRequest();
             }
 
-            await _context.Reports.AddAsync(report);
+            _context.Reports.Add(report);
             await _context.SaveChangesAsync();
 
             return new OkObjectResult(report);
         }
-
         public sealed record PostData(long ItemId, string Reason, EReportableContentTypes ItemType);
+        
+        
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
     }
 }

@@ -33,23 +33,15 @@ namespace Ogma3.Api.V1
                 .ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Faq>> GetFaq(long id)
-        {
-            return await _context.Faqs.FindAsync(id);
-        }
+        [HttpGet("{id:long}")]
+        public async Task<ActionResult<Faq>> GetFaq(long id) => await _context.Faqs.FindAsync(id);
 
         // PUT: api/Faqs/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutFaq(long id, Faq f)
         {
-            if (id != f.Id)
-            {
-                return BadRequest();
-            }
+            if (id != f.Id) return BadRequest();
 
             _context.Entry(new Faq
             {
@@ -72,7 +64,7 @@ namespace Ogma3.Api.V1
 
                 throw;
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException {Number: 2627 or 2601})
             {
                 return Conflict(new {message = $"A FAQ with the ID '{f.Id}' already exists"});
             }
@@ -82,13 +74,11 @@ namespace Ogma3.Api.V1
 
 
         // POST: api/Faqs
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Faq>> PostFaq(Faq f)
         {
-            await _context.Faqs.AddAsync(new Faq
+            _context.Faqs.Add(new Faq
             {
                 Question = f.Question,
                 Answer = f.Answer,
@@ -99,7 +89,7 @@ namespace Ogma3.Api.V1
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException {Number: 2627 or 2601})
             {
                 return Conflict(new {message = $"A FAQ with the ID '{f.Id}' already exists"});
             }
@@ -109,15 +99,12 @@ namespace Ogma3.Api.V1
 
 
         // DELETE: api/Faqs/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Faq>> DeleteFaq(long id)
         {
             var f = await _context.Faqs.FindAsync(id);
-            if (f == null)
-            {
-                return NotFound();
-            }
+            if (f is null) return NotFound();
 
             _context.Faqs.Remove(f);
             await _context.SaveChangesAsync();

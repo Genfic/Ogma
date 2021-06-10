@@ -36,7 +36,7 @@ namespace Ogma3.Api.V1
         {
             var user = await _context.Users
                 .AsNoTracking()
-                .Where(u => u.NormalizedUserName == name.ToUpper())
+                .Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
                 .Select(u => new { u.Avatar, u.Title, u.Email })
                 .FirstOrDefaultAsync();
 
@@ -72,9 +72,9 @@ namespace Ogma3.Api.V1
                 .Where(bu => bu.BlockedUserId == uid)
                 .FirstOrDefaultAsync();
             
-            if (existing == null)
+            if (existing is null)
             {
-                await _context.BlacklistedUsers.AddAsync(new UserBlock
+                _context.BlacklistedUsers.Add(new UserBlock
                 {
                     BlockingUserId = targetUserId,
                     BlockedUserId = (long) uid 
@@ -107,9 +107,9 @@ namespace Ogma3.Api.V1
                 .Where(bu => bu.FollowedUserId == targetUserId)
                 .FirstOrDefaultAsync();
             
-            if (existing == null)
+            if (existing is null)
             {
-                await _context.FollowedUsers.AddAsync(new UserFollow
+                _context.FollowedUsers.Add(new UserFollow
                 {
                     FollowingUserId = (long) uid ,
                     FollowedUserId = targetUserId
@@ -139,14 +139,14 @@ namespace Ogma3.Api.V1
             var user = await _context.Users
                 .Where(u => u.Id == userId)
                 .FirstOrDefaultAsync();
-            if (user == null) return NotFound();
+            if (user is null) return NotFound();
 
             // Ban/unban user
             if (days.HasValue)
             {
                 user.BannedUntil = DateTime.Now.AddDays((double) days);
                 await _userManager.UpdateSecurityStampAsync(user);
-                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                _context.ModeratorActions.Add(new ModeratorAction
                 {
                     StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserBan(user, User.GetUsername(), (DateTime) user.BannedUntil)
@@ -154,7 +154,7 @@ namespace Ogma3.Api.V1
             }
             else if (user.BannedUntil.HasValue)
             {
-                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                _context.ModeratorActions.Add(new ModeratorAction
                 {
                     StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserUnban(user, User.GetUsername(), (DateTime) user.BannedUntil)
@@ -184,13 +184,13 @@ namespace Ogma3.Api.V1
             var user = await _context.Users
                 .Where(u => u.Id == userId)
                 .FirstOrDefaultAsync();
-            if (user == null) return NotFound();
+            if (user is null) return NotFound();
 
             // Mute/unmute user
             if (days.HasValue && !user.MutedUntil.HasValue)
             {
                 user.MutedUntil = DateTime.Now.AddDays((double) days);
-                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                _context.ModeratorActions.Add(new ModeratorAction
                 {
                     StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserMute(user, User.GetUsername(), (DateTime) user.MutedUntil)
@@ -198,7 +198,7 @@ namespace Ogma3.Api.V1
             }
             else if (user.MutedUntil.HasValue)
             {
-                await _context.ModeratorActions.AddAsync(new ModeratorAction
+                _context.ModeratorActions.Add(new ModeratorAction
                 {
                     StaffMemberId = uid,
                     Description = ModeratorActionTemplates.UserUnmute(user, User.GetUsername(), (DateTime) user.MutedUntil)
@@ -269,10 +269,9 @@ namespace Ogma3.Api.V1
             return Ok();
         }
         
-        /// <summary>
-        /// Plain, parameterless `GET` needs to be here or fuckery happens
-        /// </summary>
-        [HttpGet] public IActionResult Ping() => Ok("Pong");
+
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
     }
 
     public sealed record BanData(long UserId, double? Days);

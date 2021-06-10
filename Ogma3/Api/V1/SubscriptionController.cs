@@ -67,10 +67,10 @@ namespace Ogma3.Api.V1
 
             return false;
         }
-
         public record ThreadData(long ThreadId);
+        
 
-        [HttpGet]
-        public string Ping() => "pong!";
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
     }
 }

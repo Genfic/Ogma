@@ -40,11 +40,11 @@ namespace Ogma3.Api.V1
         // PUT: api/Namespaces/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         [Authorize(Roles = RoleNames.Admin)]
         public async Task<ActionResult<OgmaRole>> PutRole(long id, PostData data)
         {
-            if (data.Id == null) return NotFound();
+            if (data.Id is null) return NotFound();
             if (id != data.Id) return BadRequest();
 
             var role = await _roleManager.FindByIdAsync(id.ToString());
@@ -99,7 +99,7 @@ namespace Ogma3.Api.V1
 
 
         // DELETE: api/Roles/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [Authorize(Roles = RoleNames.Admin)]
         public async Task<IActionResult> DeleteRole(long id)
         {
@@ -115,7 +115,7 @@ namespace Ogma3.Api.V1
             return Ok();
         }
 
-        public class PostData
+        public record PostData
         {
             public long? Id { get; set; }
             public string Name { get; set; }

@@ -36,7 +36,7 @@ namespace Ogma3.Api.V1
             return await _notificationsRepo.CountForUser((long) uid);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [Authorize]
         public async Task<IActionResult> DeleteAsync(long id)
         {

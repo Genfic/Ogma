@@ -24,20 +24,19 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<List<UserClubMinimalDto>>> GetUserClubs()
         {
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             return await _clubRepo.GetUserClubsMinimal((long) uid);
         }
         
         // GET: /api/clubs/story/3
-        [HttpGet("story/{id}")]
+        [HttpGet("story/{id:long}")]
         public async Task<ActionResult<List<ClubMinimalDto>>> GetClubsWithStory(long id)
         {
             return await _clubRepo.GetClubsWithStory(id);
         }
         
-        
-        [HttpGet]
-        public string Ping() => "Pong";
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
         
     }
 }

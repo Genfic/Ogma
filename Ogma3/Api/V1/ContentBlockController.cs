@@ -36,10 +36,6 @@ namespace Ogma3.Api.V1
         [HttpPost("blogpost")]
         public async Task<ActionResult> BlockBlogpost(PostData data) => await BlockContent<Blogpost>(data);
         
-        
-        [HttpGet]
-        public string Ping() => "Pong";
-
         private async Task<ActionResult> BlockContent<T>(PostData data) where T : BaseModel, IBlockableContent
         {
             var (itemId, reason) = data;
@@ -61,7 +57,10 @@ namespace Ogma3.Api.V1
 
             return Ok();
         }
-
         public sealed record PostData(long ObjectId, string Reason);
+        
+        
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
     }
 }

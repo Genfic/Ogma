@@ -72,7 +72,7 @@ namespace Ogma3.Api.V1
         
         
         // GET: api/InviteCodes/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         [Authorize]
         public async Task<ActionResult<InviteCodeApiDto>> GetInviteCode(long id)
         {
@@ -83,10 +83,7 @@ namespace Ogma3.Api.V1
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (code == null)
-            {
-                return NotFound();
-            }
+            if (code is null) return NotFound();
 
             return code;
         }
@@ -109,7 +106,7 @@ namespace Ogma3.Api.V1
                 Code = GenerateCode(),
                 IssuedBy = currentUser
             };
-            await _context.InviteCodes.AddAsync(code);
+            _context.InviteCodes.Add(code);
 
             await _context.SaveChangesAsync();
             
@@ -128,7 +125,7 @@ namespace Ogma3.Api.V1
                 Code = GenerateCode(),
                 IssuedBy = currentUser
             };
-            await _context.InviteCodes.AddAsync(code);
+            _context.InviteCodes.Add(code);
 
             await _context.SaveChangesAsync();
             
@@ -136,7 +133,7 @@ namespace Ogma3.Api.V1
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<long>> DeleteInviteCode(long id)
         {
@@ -150,7 +147,7 @@ namespace Ogma3.Api.V1
         private static string GenerateCode()
         {
             var unix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            var unixStr = unix.ToString("0000000000").Substring(10);
+            var unixStr = unix.ToString("0000000000")[10..];
 
             var random = new Random();
             var bytes = new byte[5];

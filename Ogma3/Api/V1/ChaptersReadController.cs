@@ -23,7 +23,7 @@ namespace Ogma3.Api.V1
         }
 
         // GET api/chaptersread/5
-        [HttpGet("{story}")]
+        [HttpGet("{story:long}")]
         [Authorize]
         public async Task<ActionResult<List<long>>> GetChaptersRead(long story)
         {
@@ -34,7 +34,7 @@ namespace Ogma3.Api.V1
                 .Select(cr => cr.Chapters)
                 .FirstOrDefaultAsync();
 
-            if (chaptersRead == null) return NoContent();
+            if (chaptersRead is null) return NoContent();
             
             return new OkObjectResult(new { Read = chaptersRead });
         }
@@ -62,7 +62,7 @@ namespace Ogma3.Api.V1
                     UserId = (long) uid,
                     Chapters = new List<long> { chapter }
                 };
-                await _context.ChaptersRead.AddAsync(newCr);
+                _context.ChaptersRead.Add(newCr);
                 res = newCr.Chapters;
             }
             else // just update the existing one

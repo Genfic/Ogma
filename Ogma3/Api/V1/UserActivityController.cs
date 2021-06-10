@@ -24,14 +24,13 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             await _context.Database.ExecuteSqlInterpolatedAsync(
-                $"UPDATE \"AspNetUsers\" SET \"LastActive\" = {DateTime.Now.ToUniversalTime()} WHERE \"Id\" = {uid}"
+                $@"UPDATE ""AspNetUsers"" SET ""LastActive"" = {DateTime.Now.ToUniversalTime()} WHERE ""Id"" = {uid}"
             );
             return Ok();
         }
         
-        /// <summary>
-        /// Plain, parameterless `GET` needs to be here or fuckery happens
-        /// </summary>
-        [HttpGet] public IActionResult Ping() => Ok("Pong");
+
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
     }
 }

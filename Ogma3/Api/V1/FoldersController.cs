@@ -24,12 +24,12 @@ namespace Ogma3.Api.V1
         }
 
         // GET api/folders/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         [Authorize]
         public async Task<ActionResult<ICollection<FolderMinimalWithParentDto>>> GetChaptersRead(long id)
         {
             var uid = User.GetNumericId();
-            if (uid == null) return Unauthorized();
+            if (uid is null) return Unauthorized();
             return Ok(await _foldersRepo.GetClubFolders(id, (long) uid));
         }
         
@@ -64,10 +64,10 @@ namespace Ogma3.Api.V1
             await _context.SaveChangesAsync();
             return Ok(folderStory);
         }
-
-        [HttpGet]
-        public string Ping() => "Pong";
-
         public sealed record PostData(long FolderId, long StoryId);
+        
+        
+        // Don't delete or this whole controller will break
+        [HttpGet] public string Ping() => "Pong";
     }
 }

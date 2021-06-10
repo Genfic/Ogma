@@ -22,12 +22,12 @@ namespace Ogma3.Api.V1
         }
         
         // GET api/clubjoin/5
-        [HttpGet("{club}")]
+        [HttpGet("{club:long}")]
         [Authorize]
         public async Task<ActionResult<bool>> GetClubMember(long club)
         {
             var uid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (uid == null) return NotFound();
+            if (uid is null) return NotFound();
             
             var isMember = await _context.ClubMembers
                 .AnyAsync(cm => cm.ClubId == club && cm.MemberId == Convert.ToInt64(uid));
@@ -41,7 +41,7 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<bool>> PostClubMember(PostModel data)
         {
             var uid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (uid == null) return NotFound();
+            if (uid is null) return NotFound();
 
             var nUid = Convert.ToInt64(uid);
             
@@ -60,9 +60,9 @@ namespace Ogma3.Api.V1
             
             // If no such member exists, add one
             bool isMember;
-            if (clubMember == null)
+            if (clubMember is null)
             {
-                await _context.ClubMembers.AddAsync(member);
+                _context.ClubMembers.Add(member);
                 isMember = true;
             }
             else // If the member does exist, remove them
@@ -92,10 +92,8 @@ namespace Ogma3.Api.V1
 
             return new OkObjectResult(isMember);
         }
+        
+        public sealed record PostModel(long ClubId);
 
-        public sealed class PostModel
-        {
-            public long ClubId { get; set; }
-        }
     }
 }

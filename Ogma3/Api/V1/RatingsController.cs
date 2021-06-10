@@ -51,17 +51,17 @@ namespace Ogma3.Api.V1
                 Name = rating.Name,
                 Description = rating.Description,
                 BlacklistedByDefault = rating.BlacklistedByDefault,
-                Order = rating.Order,
+                Order = rating.Order
             };
 
-            if (rating.Icon != null && rating.Icon.Length > 0)
+            if (rating.Icon is {Length: > 0})
             {
                 var fileData = await _uploader.Upload(rating.Icon, "ratings", rating.Name+"_rating");
                 r.Icon = fileData.Path;
                 r.IconId = fileData.FileId;
             }
             
-            await _context.Ratings.AddAsync(r);
+            _context.Ratings.Add(r);
 
             try
             {
@@ -74,7 +74,7 @@ namespace Ogma3.Api.V1
             }
         }
         
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutRating([FromForm] PostData rating, long id)
         {
@@ -85,9 +85,9 @@ namespace Ogma3.Api.V1
             r.BlacklistedByDefault = rating.BlacklistedByDefault;
             r.Order = rating.Order;
             
-            if (rating.Icon != null && rating.Icon.Length > 0)
+            if (rating.Icon is {Length: > 0})
             {
-                if (r.IconId != null && r.Icon != null)
+                if (r.IconId is not null && r.Icon is not null)
                 {
                     await _b2Client.Files.Delete(r.IconId, r.Icon);
                 }
@@ -108,14 +108,14 @@ namespace Ogma3.Api.V1
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRating(long id)
         {
             var r = await _context.Ratings.FindAsync(id);
             _context.Ratings.Remove(r);            
             
-            if (r.Icon != null && r.IconId != null)
+            if (r.Icon is not null && r.IconId is not null)
             {
                 await _b2Client.Files.Delete(r.IconId, r.Icon);
             }
@@ -132,13 +132,13 @@ namespace Ogma3.Api.V1
             return Ok();
         }
         
-        public class PostData
+        public record PostData
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public bool BlacklistedByDefault { get; set; }
-            public byte Order { get; set; }
-            public IFormFile Icon { get; set; }
+            public string Name { get; init; }
+            public string Description { get; init; }
+            public bool BlacklistedByDefault { get; init; }
+            public byte Order { get; init; }
+            public IFormFile Icon { get; init; }
         }
     }
 }

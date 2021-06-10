@@ -24,7 +24,7 @@ namespace Ogma3.Api.V1
         }
 
         // GET api/votes/5
-        [HttpGet("{storyId}")]
+        [HttpGet("{storyId:long}")]
         public async Task<CountReturn> GetVotes(long storyId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -57,10 +57,10 @@ namespace Ogma3.Api.V1
                 .FirstOrDefaultAsync(v => v.User == user && v.StoryId == data.StoryId);
             var didVote = false;
 
-            if (story == null) return NotFound();
+            if (story is null) return NotFound();
 
             // Check if the vote already exists
-            if (vote == null)
+            if (vote is null)
             {
                 story.Votes.Add(new Vote
                 {
