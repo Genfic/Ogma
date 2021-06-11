@@ -50,3 +50,6 @@ postgres/postgres.env
 
 # Lighthouse reports
 *.report.html
+
+# Experimental
+Ogma3/wwwroot/lib/comments/
