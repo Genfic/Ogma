@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Details;
 
@@ -42,7 +43,11 @@ namespace Ogma3.Pages.Club.Forums
                         .OrderBy(ur => ur.Order)
                         .First(),
                     Body = ct.Body,
-                    CommentsThread = ct.CommentsThread
+                    CommentsThread = new CommentsThreadDto
+                    {
+                        Id = ct.CommentsThread.Id,
+                        LockDate = ct.CommentsThread.LockDate
+                    }
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

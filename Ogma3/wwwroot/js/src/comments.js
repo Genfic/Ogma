@@ -1,72 +1,84 @@
 let comments_vue = new Vue({
-	el: '#comments-container',
+	el: "#comments-container",
 	data: {
-		body: '',
+		body: "",
 		thread: null,
 		route: null,
 		csrf: null,
-        
+		threadRoute: null,
+		subscribeRoute: null,
+
 		maxLength: null,
-        
+
 		comments: [],
 		total: 0,
-        
+
 		// Pagination
 		page: null,
 		perPage: null,
-        
+
 		// Name of the OP
 		opName: null,
-        
+
 		// Auth status
 		isAuthenticated: false,
-        
+		canLock: false,
+
+		// Subscription status
+		isSubscribed: false,
+		
+		// Lock status
+		isLocked: false,
+
 		highlight: null,
-		collapse: JSON.parse(window.localStorage.getItem('collapse-deleted'))
+		collapse: JSON.parse(window.localStorage.getItem("collapse-deleted"))
 	},
 	methods: {
 
 		// Submit the comment, load comments again, clean textarea
-		submit: function (e) {
+		submit: function(e) {
 			e.preventDefault();
-            
+
 			if (this.body.length >= this.maxLength) return;
-            
+
 			let data = {
 				body: this.body,
 				thread: Number(this.thread)
 			};
-            
-			axios.post(this.route, data,{
-					headers: { 'RequestVerificationToken' : this.csrf }
-				})
+
+			axios.post(this.route, data, {
+				headers: { "RequestVerificationToken": this.csrf }
+			})
 				.then(() => {
 					this.highlight = this.total + 1;
 					this.page = 1;
 					this.load();
-					this.body = '';
+					this.body = "";
 				})
 				.catch(console.error);
 		},
 
 		// Load comments for the thread
-		load: function () {
+		load: function() {
 			const params = {
 				thread: this.thread,
 				page: this.page,
 				highlight: this.highlight
 			};
-                        
+
 			axios.get(this.route, { params: params })
 				.then(res => {
 					this.total = res.data.total;
 					this.page = res.data.page ?? this.page;
-					this.isAuthenticated = res.headers['x-authenticated'].toLowerCase() === 'true';
-                    
+					this.isAuthenticated = res.headers["x-authenticated"].toLowerCase() === "true";
+
 					this.comments = res.data.elements.map(
-						(val, key) => ({val, key: (res.data.total - (this.page * this.perPage)) + (this.perPage - (key + 1))})
+						(val, key) => ({
+							val,
+							key: (res.data.total - (this.page * this.perPage)) + (this.perPage - (key + 1))
+						})
 					);
-                    
+
 					if (this.highlight) {
 						Vue.nextTick(() => comments_vue.changeHighlight());
 					} else {
@@ -74,69 +86,95 @@ let comments_vue = new Vue({
 					}
 				})
 				.catch(console.error);
-		}, 
-        
+		},
+
 		// Handle Enter key input
 		enter: function(e) {
 			if (e.ctrlKey) this.submit(e);
 		},
-        
+
 		// Navigate to the previous page
-		prevPage: function () {
+		prevPage: function() {
 			let page = Math.max(1, this.page - 1);
 			this.changePage(page);
 		},
-        
+
 		// Navigate to the next page
-		nextPage: function () {
+		nextPage: function() {
 			let page = Math.min(this.page + 1, Math.ceil(this.total / this.perPage));
 			this.changePage(page);
 		},
-        
+
 		// Navigate to the selected page
-		changePage: function (idx) {
+		changePage: function(idx) {
 			this.page = idx;
 			this.navigateToPage();
 			this.load();
 		},
-        
+
 		// Highlights the selected comment and scrolls it into view
 		changeHighlight: function(idx = null, e = null) {
 			if (e) e.preventDefault();
 			this.highlight = idx ?? this.highlight;
 			document
 				.getElementById(`comment-${this.highlight}`)
-				.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'});
+				.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 			history.replaceState(undefined, undefined, `#comment-${this.highlight}`);
 		},
 
 		// Navigates to `this.page` page
-		navigateToPage: function () {
+		navigateToPage: function() {
 			if (this.page > 1) {
 				history.replaceState(null, null, `#page-${this.page}`);
 			} else {
-				history.replaceState(null, null, window.location.href.split('#')[0]);
+				history.replaceState(null, null, window.location.href.split("#")[0]);
 			}
 			if (this.highlight) this.highlight = null;
 		},
-        
+
 		// Open the report modal
-		report: function (id) {
+		report: function(id) {
 			this.$refs.reportModal.mutId = id;
 			this.$refs.reportModal.visible = true;
+		},
+
+		// Subscribe or unsubscribe from the thread
+		subscribe: function() {
+			if (this.isSubscribed) {
+				axios.delete(`${this.subscribeRoute}/thread`, {
+					data: { threadId: this.thread },
+					headers: { "RequestVerificationToken": this.csrf },
+				})
+					.then(res => this.isSubscribed = res.data)
+					.catch(console.error);
+
+			} else {
+				axios.post(`${this.subscribeRoute}/thread`, { threadId: this.thread }, {
+					headers: { "RequestVerificationToken": this.csrf }
+				})
+					.then(res => this.isSubscribed = res.data)
+					.catch(console.error);
+			}
+		},
+		
+		// Lock or unlock the thread
+		lock: function() {
+			axios.post(`${this.threadRoute}/lock`, {id: this.thread})
+				.then(res => this.isLocked = res.data)
+				.catch(console.error);
 		}
 	},
-    
+
 	computed: {
-		comms: function () {
+		comms: function() {
 			// Check collapse preference
-			if(this.collapse !== true) return this.comments;
-            
+			if (this.collapse !== true) return this.comments;
+
 			// If `collapse-deleted` is true, collapse the deleted comments
 			let o = [];
 			let concat = 0;
-            
-			for(const c of this.comments) {
+
+			for (const c of this.comments) {
 				if (!c.val.deletedBy) {
 					if (concat !== 0) o.push({ snip: `Removed ${concat} comments.` });
 					concat = 0;
@@ -145,30 +183,47 @@ let comments_vue = new Vue({
 					concat += 1;
 				}
 			}
-            
+
 			return o;
 		}
 	},
 
 	mounted() {
-		this.thread = document.getElementById('thread').dataset.thread;
-		this.route = document.getElementById('route').dataset.route;
-		this.perPage = document.getElementById('per-page').dataset.count;
-		this.maxLength = document.getElementById('max-length').dataset.length;
-		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
-        
-		let hash = window.location.hash.split('-');
-        
-		if (hash[0] === '#page' && hash[1]) {
+		this.thread = document.getElementById("thread").dataset.thread;
+		this.route = document.getElementById("route").dataset.route;
+		this.threadRoute = document.getElementById("thread-route").dataset.route;
+		this.subscribeRoute = document.getElementById("subscribe-route").dataset.route;
+		this.perPage = document.getElementById("per-page").dataset.count;
+		this.maxLength = document.getElementById("max-length").dataset.length;
+		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
+
+		let hash = window.location.hash.split("-");
+
+		if (hash[0] === "#page" && hash[1]) {
 			this.page = Math.max(1, Number(hash[1] ?? 1));
-		} else if (hash[0] === '#comment' && hash[1]) {
+		} else if (hash[0] === "#comment" && hash[1]) {
 			this.page = 1;
 			this.highlight = Number(hash[1]);
 		} else {
 			this.page = 1;
-			history.replaceState(undefined, undefined, '');
+			history.replaceState(undefined, undefined, "");
 		}
-        
-		this.load(); 
+
+		// Subscription status
+		axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)
+			.then(res => this.isSubscribed = res.data)
+			.catch(console.error);
+		
+		// Lock permissions
+		axios.get(`${this.threadRoute}/permissions/${this.thread}`)
+			.then(res => this.canLock = res.data)
+			.catch(console.error);
+		
+		// Lock status
+		axios.get(`${this.threadRoute}/lock/status/${this.thread}`)
+			.then(res => this.isLocked = res.data)
+			.catch(console.error);
+		
+		this.load();
 	}
 });

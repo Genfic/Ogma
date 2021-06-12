@@ -1,4 +1,5 @@
 using System;
+using Ogma3.Data.Clubs;
 
 namespace Ogma3.Pages.Shared.Bars
 {
@@ -14,7 +15,8 @@ namespace Ogma3.Pages.Shared.Bars
         public int ClubMembersCount { get; set; }
         public int ThreadsCount { get; set; }
         public int StoriesCount { get; set; }
-        public bool IsMember { get; set; }
+        public bool IsMember => Role is not null;
         public long FounderId { get; set; }
+        public EClubMemberRoles? Role { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Roles;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User
@@ -22,7 +23,7 @@ namespace Ogma3.Pages.User
         public class UserProfileDto : ProfileBar
         {
             public string Bio { get; init; }
-            public long CommentsThreadId { get; init; }
+            public CommentsThreadDto CommentsThread { get; init; }
         }
 
         public UserProfileDto UserData { get; private set; }
@@ -40,7 +41,11 @@ namespace Ogma3.Pages.User
                     Email = u.Email,
                     Title = u.Title,
                     Bio = u.Bio,
-                    CommentsThreadId = u.CommentsThread.Id,
+                    CommentsThread = new CommentsThreadDto
+                    {
+                        Id = u.CommentsThread.Id,
+                        LockDate = u.CommentsThread.LockDate
+                    },
                     LastActive = u.LastActive,
                     RegistrationDate = u.RegistrationDate,
                     FollowersCount = u.Followers.Count,

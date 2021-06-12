@@ -1,5 +1,6 @@
 @use '../vars' as v
 @use "../mixins/active-border" as ab
+@use "sass:math"
 
 .md
 
@@ -31,7 +32,7 @@
   @for $level from 1 to 7
     h#{$level}
       font-size: #{1 + ((6 - $level) * .2)}rem
-      margin-top: #{((((7 - $level) - 1) / (6 - 1)) * (2 - 1)) + 1}rem // Normalize to [1rem, 2rem] range
+      margin-top: #{((math.div((7 - $level) - 1 , 6 - 1)) * (2 - 1)) + 1}rem // Normalize to [1rem, 2rem] range 
       
   // Code
   code

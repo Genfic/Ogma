@@ -1,17 +1,23 @@
 @using static Ogma3.Services.HtmlExtensions
 @using Ogma3.Api.V1
 @using Ogma3.Data.Reports
-@inject OgmaConfig Config
-@model long
+@inject OgmaConfig _config
+@model CommentsThreadDto
 
 <div class="comments-container" id="comments-container" v-cloak>
 
-    <div id="thread" data-thread="@Model" v-if="!thread"></div>
+    <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
     <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
-    <div id="per-page" data-count="@Config.CommentsPerPage" v-if="!perPage"></div>
+    <div id="thread-route" data-route="@Url.RouteUrl(nameof(CommentsThreadController))" v-if="!threadRoute"></div>
+    <div id="subscribe-route" data-route="@Url.RouteUrl(nameof(SubscriptionController))" v-if="!subscribeRoute"></div>
+    <div id="per-page" data-count="@_config.CommentsPerPage" v-if="!perPage"></div>
     <div id="max-length" data-length="@CTConfig.CComment.MaxBodyLength" v-if="!maxLength"></div>
 
-    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    @if (Model.LockDate is not null)
+    {
+        <span>Thread is locked.</span>
+    }
+    else if (User.Identity is {IsAuthenticated: true })
     {
         <form asp-antiforgery="true">
             <textarea class="comment-box active-border" 
@@ -51,7 +57,25 @@
     
     <br>
     
-    <o-subscribe v-pre endpoint="@Url.RouteUrl(nameof(SubscriptionController))" threadId="@Model"></o-subscribe>
+    @if (User.Identity is {IsAuthenticated: true })
+    {
+        <div class="buttons">
+            <button class="action-btn" :class="isSubscribed ? 'active' : null"
+                    v-on:click="subscribe"
+                    :title="isSubscribed ? 'Unsubscribe' : 'Subscribe'">
+                <i class="material-icons-outlined">{{isSubscribed ? 'notifications_active' : 'notifications'}}</i>&nbsp;
+                {{isSubscribed ? 'Subscribed!' : 'Subscribe'}}
+            </button>
+            
+            <button class="action-btn" :class="isLocked ? 'active' : null"
+                    v-if="canLock"
+                    v-on:click="lock">
+                <i class="material-icons-outlined">{{isLocked ? 'lock' : 'lock_open'}}</i>&nbsp;
+                {{ isLocked ? 'Unlock' : 'Lock' }}
+            </button>
+
+        </div>
+    }
     
     <div class="pagination" v-if="comments && total > perPage">
         <button class="prev button" v-on:click="prevPage">Previous</button>
@@ -73,7 +97,7 @@
         <template v-for="c in comms">
             <template v-if="!c.snip">
                 <comment :key="c.key"
-                         cdn="@Config.Cdn"
+                         cdn="@_config.Cdn"
                          :comment="c.val"
                          :idx="c.key"
                          :csrf="csrf"
@@ -119,8 +143,7 @@
 </div>
 
 @Html.Resource(@<script type="module" src="~/js/dist/components/comment-component.min.js" asp-append-version="true"></script>)
-@Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
-@Html.Resource(@<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
-@Html.Resource(@<script type="module" src="~/js/dist/native-components/subscribe-thread-button.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script async src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)
+@Html.Resource(@<script async src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>)
 
 @Html.Resource(@<script defer src="~/js/dist/comments.min.js" asp-append-version="true"></script>)

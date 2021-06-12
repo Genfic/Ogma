@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared;
 
 namespace Ogma3.Pages
 {
@@ -40,7 +41,7 @@ namespace Ogma3.Pages
             public string Body { get; init; }
             public string StartNotes { get; init; }
             public string EndNotes { get; init; }
-            public long CommentsThreadId { get; init; }
+            public CommentsThreadDto CommentsThread { get; init; }
             public bool IsPublished { get; init; }
             public long? ContentBlockId { get; init; }
             public ChapterMicroDto? Previous { get; set; }

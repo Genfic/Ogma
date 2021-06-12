@@ -23,5 +23,6 @@ namespace Ogma3.Data.Clubs
 
         public Club Club { get; set; }
         public long ClubId { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }

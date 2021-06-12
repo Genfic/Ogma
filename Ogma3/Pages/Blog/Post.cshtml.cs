@@ -11,6 +11,7 @@ using Ogma3.Data;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Minimals;
 
@@ -41,7 +42,7 @@ namespace Ogma3.Pages.Blog
             public DateTime PublishDate { get; init; }
             public string Body { get; init; }
             public IEnumerable<string> Hashtags { get; init; }
-            public long CommentsThreadId { get; init; }
+            public CommentsThreadDto CommentsThread { get; init; }
             public bool IsPublished { get; init; }
             public int CommentsCount { get; init; }
             

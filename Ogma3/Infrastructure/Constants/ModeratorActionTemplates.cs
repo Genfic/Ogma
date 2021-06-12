@@ -4,7 +4,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using Ogma3.Data.Users;
 
-namespace Ogma3.Data
+namespace Ogma3.Infrastructure.Constants
 {
     public static class ModeratorActionTemplates
     {
@@ -34,5 +34,11 @@ namespace Ogma3.Data
             => $"{type.Humanize()} ***\"{title}\"*** (id: {id}) has been blocked by **{modName}**";
         public static string ContentUnblocked(string type, string title, long id, string modName)
             => $"{type.Humanize()} ***\"{title}\"*** (id: {id}) has been unblocked by **{modName}**";
+        
+        // Thread lock templates
+        public static string ThreadLocked(string type, long id, long threadId, string modName)
+            => $"Comment thread for **{type}** (id: {id}) with the ID **{threadId}** was locked by **{modName}**";
+        public static string ThreadUnlocked(string type, long id, long threadId, string modName)
+            => $"Comment thread for **{type}** (id: {id}) with the ID **{threadId}** was unlocked by **{modName}**";
     }
 }

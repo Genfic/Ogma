@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
@@ -13,6 +14,7 @@ namespace Ogma3.Data.CommentsThreads
         public IList<Comment> Comments { get; set; }
 
         public int CommentsCount { get; set; }
+        public DateTime? LockDate { get; set; }
         
         public OgmaUser? User { get; set; }
         public long? UserId { get; set; }

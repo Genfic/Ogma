@@ -84,10 +84,7 @@ namespace Ogma3.Api.V1
 
         // GET: api/Comments/md?id=5
         [HttpGet("md")]
-        public async Task<string> GetMarkdown([FromQuery]long id)
-        {
-            return await _commentsRepo.GetMarkdown(id);
-        }
+        public async Task<string> GetMarkdown([FromQuery]long id) => await _commentsRepo.GetMarkdown(id);
 
         // PATCH: api/Comments
         [HttpPatch]
@@ -126,6 +123,7 @@ namespace Ogma3.Api.V1
 
             return dto;
         }
+        public sealed record PatchData (string Body, long Id);
         
         // POST: api/Comments
         [HttpPost]
@@ -148,8 +146,9 @@ namespace Ogma3.Api.V1
                 .Where(ct => ct.Id == threadId)
                 .Include(ct => ct.Comments)
                 .FirstOrDefaultAsync();
-
+            
             if (thread is null) return NotFound();
+            if (thread.LockDate is not null) return Unauthorized();
             
             thread.Comments.Add(comment);
             thread.CommentsCount = thread.Comments.Count;
@@ -182,6 +181,7 @@ namespace Ogma3.Api.V1
             var dto = _mapper.Map<Comment, CommentDto>(comment);
             return CreatedAtAction("GetComment", new { id = comment.Id }, dto);
         }
+        public sealed record PostData (string Body, long Thread);
 
         // DELETE: api/Comments/5
         [HttpDelete("{id:long}")]
@@ -216,10 +216,5 @@ namespace Ogma3.Api.V1
 
             return _mapper.Map<Comment, CommentDto>(comment);
         }
-
-        
-        // Data classes
-        public sealed record PostData (string Body, long Thread);
-        public sealed record PatchData (string Body, long Id);
     }
 }

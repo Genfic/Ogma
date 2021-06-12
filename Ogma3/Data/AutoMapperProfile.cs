@@ -5,6 +5,7 @@ using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
+using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Documents;
 using Ogma3.Data.Folders;
 using Ogma3.Data.InviteCodes;
@@ -16,6 +17,7 @@ using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure;
+using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 using Ogma3.Pages.Shared.Details;
@@ -83,6 +85,9 @@ namespace Ogma3.Data
                     opts
                         => opts.MapFrom(c => c.DeletedBy == null ? Markdown.ToHtml(c.Body, md, null) : null)
                 );
+            
+            // CommentsThread mappings
+            CreateMap<CommentsThread, CommentsThreadDto>();
 
             // Comment revision mappings
             CreateMap<CommentRevision, CommentRevisionDto>()
@@ -107,14 +112,16 @@ namespace Ogma3.Data
                         => opts.MapFrom(c => c.ClubMembers.First(cm => cm.Role == EClubMemberRoles.Founder).MemberId)
                 )
                 .ForMember(
-                    cb => cb.IsMember,
-                    opts
-                        => opts.MapFrom(c => c.ClubMembers.Any(cm => cm.MemberId == currentUser))
-                )
-                .ForMember(
                     cb => cb.StoriesCount,
                     opts
                         => opts.MapFrom(c => c.Folders.Sum(f => f.StoriesCount))
+                )
+                .ForMember(
+                    cb => cb.Role,
+                    opts
+                        => opts.MapFrom(c => c.ClubMembers.Any(cm => cm.MemberId == currentUser)
+                            ? c.ClubMembers.First(cm => cm.MemberId == currentUser).Role 
+                            : (EClubMemberRoles?) null)
                 );
             CreateMap<Club, ClubCard>();
 

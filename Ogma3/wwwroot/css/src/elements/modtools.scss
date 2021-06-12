@@ -1,0 +1,23 @@
+@use "../vars" as v;
+
+.modtools {
+  display: flex;
+  width: 100%;
+  padding: .5rem;
+  background: repeating-linear-gradient(
+                  -45deg,
+                  v.$foreground-10,
+                  v.$foreground-10 15px,
+                  transparent 16px,
+                  transparent 30px
+  );
+
+  span {
+    margin-right: auto;
+    font-weight: 700;
+  }
+  
+  .button-group {
+    background: v.$background;
+  } 
+}

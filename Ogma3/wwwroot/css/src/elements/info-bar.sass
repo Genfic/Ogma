@@ -1,6 +1,7 @@
 @use '../vars' as v
 @use '../mixins/active-border' as ab
 @use "../mixins/focus" as f
+@use "sass:math"
 
 $avatarSize: 8.5rem
 $margin: .5rem
@@ -70,7 +71,7 @@ $margin: .5rem
     grid-row: 1
     grid-column: 2
     font-size: 2rem
-    margin-bottom: $margin / 2
+    margin-bottom: math.div($margin, 2)
     font-weight: 300
     color: v.$foreground
 

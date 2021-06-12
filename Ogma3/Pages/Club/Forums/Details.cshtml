@@ -1,4 +1,7 @@
 @page "/club/thread/{id:long}"
+@using Ogma3.Data.Clubs
+@using Ogma3.Api.V1
+@using Ogma3.Data.AuthorizationData
 @model Ogma3.Pages.Club.Forums.DetailsModel
 
 @{
@@ -8,4 +11,14 @@
 
 <partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
+@if (Model.ClubBar.Role is <= EClubMemberRoles.Moderator || User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+{
+    <div class="modtools active-border">
+        <span>Modtools</span>
+        <div class="button-group">
+            <button class="action-btn">Delete</button>
+        </div>
+    </div>
+}
+    
 <partial name="Shared/Details/_ThreadDetails" model="@Model.ClubThread"/>
