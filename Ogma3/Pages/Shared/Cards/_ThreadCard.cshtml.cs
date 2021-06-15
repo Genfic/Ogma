@@ -10,5 +10,7 @@ namespace Ogma3.Pages.Shared.Cards
         public string AuthorName { get; init; }
         public string AuthorAvatar { get; init; }
         public int CommentsCount { get; init; }
+        public long ClubId { get; init; }
+        public bool IsPinned { get; init; }
     }
 }

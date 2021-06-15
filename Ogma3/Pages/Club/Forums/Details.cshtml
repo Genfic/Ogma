@@ -1,7 +1,9 @@
-@page "/club/thread/{id:long}"
+@page "/club/{clubId:long}/thread/{threadId:long}"
 @using Ogma3.Data.Clubs
-@using Ogma3.Api.V1
 @using Ogma3.Data.AuthorizationData
+@using Ogma3.Infrastructure.Extensions
+@using Utils.Extensions
+@using System.Globalization
 @model Ogma3.Pages.Club.Forums.DetailsModel
 
 @{
@@ -16,9 +18,71 @@
     <div class="modtools active-border">
         <span>Modtools</span>
         <div class="button-group">
-            <button class="action-btn">Delete</button>
+            <a asp-page="/Club/Forums/Delete" asp-route-id="@Model.ClubThread.Id" class="action-btn">
+                Delete
+            </a>
+            <a asp-page="/Club/Forums/Pin" asp-route-id="@Model.ClubThread.Id" class="action-btn">
+                @(Model.ClubThread.IsPinned ? "Unpin" : "Pin")
+            </a>
         </div>
     </div>
 }
-    
-<partial name="Shared/Details/_ThreadDetails" model="@Model.ClubThread"/>
+<h1>
+    @if (Model.ClubThread.IsPinned)
+    {
+        <icon icon="push_pin"></icon>
+    }
+    @Model.ClubThread.Title
+</h1>
+
+<div class="comment">
+
+    <div class="author">
+        <a asp-page="/User/Index" asp-route-name="@Model.ClubThread.AuthorName" class="name">
+            @Model.ClubThread.AuthorName
+        </a>
+
+        @if (Model.ClubThread.AuthorRole != null)
+        {
+            <div class="role-tag">
+                <span class="name">@Model.ClubThread.AuthorRole.Name</span>
+                <div class="bg" style="background-color: @Model.ClubThread.AuthorRole.Color"></div>
+            </div>
+        }
+
+        <cdn-img src="@Model.ClubThread.AuthorAvatar" alt="@Model.ClubThread.AuthorName's avatar" class="avatar"/>
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+
+            <time class="time"
+                  datetime="@Model.ClubThread.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
+                  title="@Model.ClubThread.CreationDate.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)">
+                @Model.ClubThread.CreationDate.FormatDateWithDaySuffix()
+            </time>
+
+            @if (User.GetNumericId() == Model.ClubThread.AuthorId)
+            {
+                <div class="actions">
+                    <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.ClubThread.Id">
+                        <icon icon="edit"></icon>
+                    </a>
+                    <a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.ClubThread.Id">
+                        <icon icon="delete_forever"></icon>
+                    </a>
+                </div>
+            }
+
+        </div>
+
+        <markdown class="body" preset="All">
+            @Model.ClubThread.Body
+        </markdown>
+
+    </div>
+
+</div>
+
+<partial name="_Comments" model="@Model.ClubThread.CommentsThread"/>

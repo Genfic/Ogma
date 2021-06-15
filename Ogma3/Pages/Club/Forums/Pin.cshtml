@@ -1,0 +1,27 @@
+@page "/club/thread/{id:long}/pin"
+@model Ogma3.Pages.Club.Forums.Pin
+
+@{
+    ViewData["Title"] = $"Pin {Model.Data.Title}";
+    ViewData["Tab"] = "Forums";
+}
+
+<h2>@Model.Data.Title</h2>
+
+<div>
+    <h3>Are you sure you want to @(Model.Data.IsPinned ? "unpin" : "pin") this thread?</h3>
+    <hr/>
+
+    <form method="post" class="confirm">
+        <input type="hidden" asp-for="Data.Id"/>
+        <div class="buttons">
+            <input type="submit" value="@(Model.Data.IsPinned ? "Unpin" : "Pin") it!" class="button accept green"/>
+            <a asp-page="./Details"
+               class="button cancel"
+               asp-route-clubId="@Model.Data.ClubId"
+               asp-route-threadId="@Model.Data.Id">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>

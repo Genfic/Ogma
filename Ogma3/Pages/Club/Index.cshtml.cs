@@ -38,6 +38,8 @@ namespace Ogma3.Pages.Club
                 {
                     Id = ct.Id,
                     Title = ct.Title,
+                    ClubId = ct.ClubId,
+                    IsPinned = ct.IsPinned,
                     CreationDate = ct.CreationDate,
                     AuthorName = ct.Author.UserName,
                     AuthorAvatar = ct.Author.Avatar,

@@ -2,27 +2,34 @@
 @using Humanizer
 @model ThreadCard
 
-<div class="thread-card">
-    <cdn-img class="img" src="@Model.AuthorAvatar" width="60" height="60" />
-    
-    <a class="title" asp-page="/Club/Forums/Details" asp-route-id="@Model.Id">
+<div class="thread-card @(Model.IsPinned ? "pinned" : "")">
+    <cdn-img class="img" src="@Model.AuthorAvatar" width="70" height="70"/>
+
+    <a class="title"
+       asp-page="/Club/Forums/Details"
+       asp-route-clubId="@Model.ClubId"
+       asp-route-threadId="@Model.Id">
+        @if (Model.IsPinned)
+        {
+            <icon icon="push_pin"></icon>
+        }
         @Model.Title
     </a>
-    
+
     <div class="meta">
-        
+
         <span class="author">
             @Model.AuthorName
         </span>
 
-        <time class="date" 
+        <time class="date"
               datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
               title="@Model.CreationDate.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)">
             @Model.CreationDate.Humanize(culture: CultureInfo.InvariantCulture, utcDate: false)
         </time>
-        
+
     </div>
-    
+
     <div class="comment-count">
         <icon class="icon" icon="mode_comment"></icon>
         @Model.CommentsCount

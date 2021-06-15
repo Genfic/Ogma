@@ -38,12 +38,15 @@ namespace Ogma3.Pages.Club.Forums
                 .Where(ct => ct.ClubId == id);
 
             ThreadCards = await query
-                .OrderByDescending(ct => ct.CreationDate)
+                .OrderByDescending(ct => ct.IsPinned)
+                .ThenByDescending(ct => ct.CreationDate)
                 .Paginate(page, _config.ClubThreadsPerPage)
                 .Select(ct => new ThreadCard
                 {
                     Id = ct.Id,
                     Title = ct.Title,
+                    ClubId = ct.ClubId,
+                    IsPinned = ct.IsPinned,
                     CreationDate = ct.CreationDate,
                     AuthorName = ct.Author.UserName,
                     AuthorAvatar = ct.Author.Avatar,
