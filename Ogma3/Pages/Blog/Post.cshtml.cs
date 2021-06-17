@@ -30,8 +30,8 @@ namespace Ogma3.Pages.Blog
             _mapper = mapper;
         }
 
-        public Details Blogpost { get; set; }
-        public ProfileBar ProfileBar { get; set; }
+        public Details Blogpost { get; private set; }
+        public ProfileBar ProfileBar { get; private set; }
         
         public class Details
         {

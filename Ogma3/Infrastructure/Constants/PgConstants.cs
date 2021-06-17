@@ -1,4 +1,4 @@
-namespace Ogma3.Infrastructure
+namespace Ogma3.Infrastructure.Constants
 {
     public static class PgConstants
     {

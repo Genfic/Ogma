@@ -37,7 +37,7 @@ namespace Ogma3.Pages.Clubs
         {
             public long Id { get; init; }
             public string Name { get; init; }
-            public string Slug { get; set; }
+            public string Slug { get; init; }
             public string Hook { get; init; }
             public string Description { get; init; }
             [DataType(DataType.Upload)] 

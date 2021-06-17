@@ -29,36 +29,36 @@ namespace Ogma3.Pages
             
             // Try getting recent stories from cache
             const string recentKey = "IndexRecent";
-            var recentsCached = _cache.TryGetValue(recentKey, out List<StoryCard> recent);
-            if (recentsCached)
+            if (_cache.TryGetValue(recentKey, out List<StoryCard> recent))
+            {
                 RecentStories = recent;
+            }
             else
             {
-                Console.WriteLine(">> No Cache: recent");
                 RecentStories = await _storiesRepo.GetTopStoryCards(10);
                 _cache.Set(recentKey, RecentStories, shortExpiry);
             }
             
             // Try getting top stories from cache
             const string topKey = "IndexTop";
-            var topCached = _cache.TryGetValue(topKey, out List<StoryCard> top);
-            if (topCached)
+            if (_cache.TryGetValue(topKey, out List<StoryCard> top))
+            {
                 TopStories = top;
+            }
             else
             {
-                Console.WriteLine(">> No Cache: top");
                 TopStories = await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.ScoreDescending);
                 _cache.Set(topKey, TopStories, longExpiry);
             }
             
             // Try getting recently updated stories from cache
             const string updatedKey = "IndexUpdated";
-            var updatedCached = _cache.TryGetValue(updatedKey, out List<StoryCard> updated);
-            if (updatedCached)
+            if (_cache.TryGetValue(updatedKey, out List<StoryCard> updated))
+            {
                 LastUpdatedStories = updated;
+            }
             else
             {
-                Console.WriteLine(">> No Cache: updated");
                 LastUpdatedStories = await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending);
                 _cache.Set(updatedKey, LastUpdatedStories, shortExpiry);
             }

@@ -26,10 +26,10 @@ namespace Ogma3.Pages.Blog
             _config = config;
         }
         
-        public IList<BlogpostCard> Posts { get;set; }
-        public string SearchBy { get; set; }
-        public EBlogpostSortingOptions SortBy { get; set; }
-        public Pagination Pagination { get; set; }
+        public IList<BlogpostCard> Posts { get; private set; }
+        public string SearchBy { get; private set; }
+        public EBlogpostSortingOptions SortBy { get; private set; }
+        public Pagination Pagination { get; private set; }
 
         public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
         {

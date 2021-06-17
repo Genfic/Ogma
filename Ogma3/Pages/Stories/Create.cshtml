@@ -82,7 +82,6 @@
                     <input type="checkbox" 
                            id="genre_@g.Name" 
                            name="Input.Tags[]" 
-                           checked="@(Model.Input.Tags.Contains(g.Id))"
                            value="@g.Id">
                     <label style="--col: @g.NamespaceColor" for="genre_@g.Name">@g.Name</label>
                 </div>
@@ -101,7 +100,6 @@
                     <input type="checkbox" 
                            id="cw_@cw.Name" 
                            name="Input.Tags[]" 
-                           checked="@(Model.Input.Tags.Contains(cw.Id))"
                            value="@cw.Id">
                     <label style="--col: @cw.NamespaceColor" for="cw_@cw.Name">@cw.Name</label>
                 </div>
@@ -120,7 +118,6 @@
                     <input type="checkbox" 
                            id="franchise_@f.Name" 
                            name="Input.Tags[]" 
-                           checked="@(Model.Input.Tags.Contains(f.Id))"
                            value="@f.Id">
                     <label style="--col: @f.NamespaceColor" for="franchise_@f.Name">@f.Name</label>
                 </div>

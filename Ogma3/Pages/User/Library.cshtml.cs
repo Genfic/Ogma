@@ -63,7 +63,6 @@ namespace Ogma3.Pages.User
                 .AsNoTracking()
                 .ToListAsync();
             
-
             return Page();
         }
 

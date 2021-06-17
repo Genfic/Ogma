@@ -6,13 +6,11 @@ using Ogma3.Data.Chapters;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
 using Ogma3.Data.CommentsThreads;
-using Ogma3.Data.Documents;
 using Ogma3.Data.Folders;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Roles;
-using Ogma3.Data.Shelfs;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
@@ -20,7 +18,6 @@ using Ogma3.Infrastructure;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
-using Ogma3.Pages.Shared.Details;
 using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Data
@@ -54,14 +51,6 @@ namespace Ogma3.Data
                 );
 
             CreateMap<Story, StoryMinimal>();
-
-            // Bookshelf mappings
-            CreateMap<Shelf, BookshelfDetails>()
-                .ForMember(
-                    s => s.Stories,
-                    opts
-                        => opts.MapFrom(s => s.Stories.Where(st => st.IsPublished || st.Author.Id == currentUser))
-                );
 
             // Comment mappings
             CreateMap<Comment, CommentDto>()
@@ -137,10 +126,6 @@ namespace Ogma3.Data
 
             // Invite code mappings
             CreateMap<InviteCode, InviteCodeApiDto>();
-
-            // Document mappings
-            CreateMap<Document, DocumentDto>();
-            CreateMap<Document, DocumentVersionDto>();
 
             // Report mappings
             CreateMap<Report, ReportDto>();

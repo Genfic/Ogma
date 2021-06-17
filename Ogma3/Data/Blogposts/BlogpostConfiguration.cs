@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.CommentsThreads;
-using Ogma3.Infrastructure;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Blogposts
 {

@@ -2,19 +2,19 @@
 @model Ogma3.Pages.User.IndexModel
 
 @{
-    ViewData["Title"] = $"{Model.UserData.UserName}'s profile";
+    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s profile";
     ViewData["Tab"] = "Profile";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.UserData" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
-@if (!string.IsNullOrEmpty(Model.UserData.Bio))
+@if (!string.IsNullOrEmpty(Model.Data.Bio))
 {
     <markdown preset="All">
-        @Model.UserData.Bio
+        @Model.Data.Bio
     </markdown>
 
     <hr>
 }
 
-<partial name="_Comments" model="@Model.UserData.CommentsThread" />
+<partial name="_Comments" model="@Model.Data.CommentsThread" />

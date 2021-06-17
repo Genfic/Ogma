@@ -35,7 +35,7 @@ namespace Ogma3.Services.FileUploader
             int? height = null, 
             int tries = 10
         ) {
-            if (file == null || file.Length <= 0) 
+            if (file is not {Length: > 0}) 
                 throw new ArgumentException("File cannot be null or empty");
             
             // Read file extension
@@ -45,7 +45,7 @@ namespace Ogma3.Services.FileUploader
             await using var ms = new MemoryStream();
             await file.CopyToAsync(ms);
 
-            if (width.HasValue || height.HasValue)
+            if (width is not null || height is not null)
             {
                 Log.Information($">>> Resizing image {name}");
                 

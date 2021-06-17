@@ -2,7 +2,7 @@
 @using Microsoft.Extensions.Hosting
 @using Ogma3.Api.V1
 @using Ogma3.Services
-@inject IWebHostEnvironment Env
+@inject IWebHostEnvironment _env
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
     var theme = value ?? "light";
@@ -105,7 +105,7 @@
         asp-fallback-src="~/lib/dayjs.min.js"
         asp-fallback-test="window.dayjs"></script>
     
-@if (Env.IsDevelopment())
+@if (_env.IsDevelopment())
 {
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
             asp-fallback-src="~/lib/vue/vue.js"
@@ -128,7 +128,7 @@ else
 (_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'}).catch(console.error);})()
 </script>
     
-@if (Env.IsDevelopment()) {
+@if (_env.IsDevelopment()) {
     <mini-profiler />
 }
 

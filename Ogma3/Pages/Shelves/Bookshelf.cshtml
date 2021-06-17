@@ -4,5 +4,19 @@
 @{
     ViewData["Title"] = $"{Model.Shelf.Name}";
 }
+<div id="bookshelf-details">
+    <h1 class="name">
+        <icon style="background-color: @Model.Shelf.Color" class="icon" icon="@Model.Shelf.IconName"></icon>
+        @Model.Shelf.Name
+    </h1>
 
-<partial name="Shared/Details/_BookshelfDetails" model="Model.Shelf"/>
+    @if (!string.IsNullOrEmpty(Model.Shelf.Description))
+    {
+        <h2 class="desc">@Model.Shelf.Description</h2>
+    }
+
+    @foreach (var story in Model.Shelf.Stories)
+    {
+        <partial name="Shared/Cards/_StoryCard" model="@story"/>
+    }
+</div>

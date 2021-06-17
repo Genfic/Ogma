@@ -29,7 +29,6 @@ namespace Ogma3.Pages
                 .Where(u => u.Roles.Any(ur => ur.IsStaff))
                 .OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
                 .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
                 .ToListAsync();
         }
     }

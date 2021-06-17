@@ -1,11 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Roles;
-using Ogma3.Infrastructure.Extensions;
+using Ogma3.Data.Users;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 
@@ -14,50 +15,41 @@ namespace Ogma3.Pages.User
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserRepository _userRepo;
+        private readonly IMapper _mapper;
 
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context, UserRepository userRepo, IMapper mapper)
         {
             _context = context;
+            _userRepo = userRepo;
+            _mapper = mapper;
         }
+
+        public ProfileBar ProfileBar { get; private set; }
+        public ProfileDetails Data { get; private set; }
         
-        public class UserProfileDto : ProfileBar
+        public class ProfileDetails
         {
             public string Bio { get; init; }
             public CommentsThreadDto CommentsThread { get; init; }
         }
-
-        public UserProfileDto UserData { get; private set; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<OgmaUser, ProfileDetails>();
+        }
+        
         public async Task<IActionResult> OnGetAsync(string name)
         {
-            var uid = User.GetNumericId();
-            
-            UserData = await _context.Users
+            Data = await _context.Users
                 .Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
-                .Select(u => new UserProfileDto
-                {
-                    Id = u.Id,
-                    UserName = u.UserName,
-                    Avatar = u.Avatar,
-                    Email = u.Email,
-                    Title = u.Title,
-                    Bio = u.Bio,
-                    CommentsThread = new CommentsThreadDto
-                    {
-                        Id = u.CommentsThread.Id,
-                        LockDate = u.CommentsThread.LockDate
-                    },
-                    LastActive = u.LastActive,
-                    RegistrationDate = u.RegistrationDate,
-                    FollowersCount = u.Followers.Count,
-                    BlogpostsCount = u.Blogposts.Count(b => b.IsPublished),
-                    StoriesCount = u.Stories.Count(s => s.IsPublished),
-                    IsBlockedBy = u.BlockedByUsers.Any(bu => bu.Id == uid),
-                    IsFollowedBy = u.Followers.Any(fu => fu.Id == uid),
-                    Roles = u.Roles.AsQueryable().Select(RoleMappings.ToRoleDto).ToList()
-                })
+                .ProjectTo<ProfileDetails>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            if (UserData is null) return NotFound();
+            if (Data is null) return NotFound();
+            
+            ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
+            if (ProfileBar is null) return NotFound();
 
             return Page();
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
@@ -22,11 +23,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
-using Ogma3.Data.Blogposts;
-using Ogma3.Data.Chapters;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
-using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Folders;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
@@ -38,7 +36,6 @@ using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;
-using Ogma3.Services.SignalR;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
@@ -51,9 +48,16 @@ namespace Ogma3
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                .AddEnvironmentVariables()
+                // WARN: It probably should not be used in prod, switch to DI instead
+                .AddUserSecrets(Assembly.GetAssembly(GetType()))
+                .Build();
+            // Configuration = configuration;
         }
         
         public IConfiguration Configuration { get; }
@@ -74,7 +78,6 @@ namespace Ogma3
             services.AddScoped<ClubRepository>();
             services.AddScoped<StoriesRepository>();
             services.AddScoped<TagsRepository>();
-            services.AddScoped<ChaptersRepository>();
             services.AddScoped<CommentsRepository>();
             services.AddScoped<FoldersRepository>();
             services.AddScoped<NotificationsRepository>();
@@ -209,9 +212,6 @@ namespace Ogma3
                 options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration));
             });
             
-            // SignalR
-            services.AddSignalR();
-            
             // Linq2DB extension
             LinqToDBForEFTools.Initialize();
         }
@@ -264,7 +264,7 @@ namespace Ogma3
                     context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
                     {
                         Public = true,
-                        MaxAge = TimeSpan.FromDays(30)
+                        MaxAge = TimeSpan.FromDays(365)
                     };
                 },
                 ContentTypeProvider = extensionsProvider
@@ -279,7 +279,6 @@ namespace Ogma3
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                endpoints.MapHub<NotificationHub>("/notifications-hub");
             });
             
             // Compression

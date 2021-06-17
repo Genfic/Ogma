@@ -71,7 +71,7 @@ namespace Ogma3.Pages.Club.Folders
             var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
             if (!isAuthorized) return Unauthorized();
 
-            await _context.Folders.AddAsync(new Folder
+            _context.Folders.Add(new Folder
             {
                 Name = Input.Name,
                 Slug = Input.Name.Friendlify(),

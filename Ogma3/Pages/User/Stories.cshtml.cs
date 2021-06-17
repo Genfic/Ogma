@@ -23,6 +23,7 @@ namespace Ogma3.Pages.User
         private readonly UserRepository _userRepo;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        
         public StoriesModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
         {
             _userRepo = userRepo;

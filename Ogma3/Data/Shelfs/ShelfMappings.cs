@@ -18,12 +18,12 @@ namespace Ogma3.Data.Shelfs
             Color = shelf.Color,
             StoriesCount = shelf.Stories != null ? shelf.Stories.Count : 0,
             IconName = shelf.Icon != null ? shelf.Icon.Name : null,
-            IconId = shelf.Icon != null ? shelf.Icon.Id : (long?) null,
+            IconId = shelf.Icon != null ? shelf.Icon.Id : null,
             DoesContainBook = bookId == null
                 ? null
                 : shelf.Stories != null 
                     ? shelf.Stories.Any(ss => ss.Id == bookId) 
-                    : (bool?) null
+                    : null
         };
     }
 }
