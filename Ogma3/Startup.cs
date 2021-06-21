@@ -189,8 +189,7 @@ namespace Ogma3
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
-                options.Conventions
-                    .AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/.well-known/change-password");
+                options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/.well-known/change-password");
             });
             
             // MVC

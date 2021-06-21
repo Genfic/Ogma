@@ -28,41 +28,26 @@ namespace Ogma3.Pages
             var longExpiry = TimeSpan.FromHours(1);
             
             // Try getting recent stories from cache
-            const string recentKey = "IndexRecent";
-            if (_cache.TryGetValue(recentKey, out List<StoryCard> recent))
+            RecentStories = await _cache.GetOrCreateAsync("IndexRecent", async entry =>
             {
-                RecentStories = recent;
-            }
-            else
-            {
-                RecentStories = await _storiesRepo.GetTopStoryCards(10);
-                _cache.Set(recentKey, RecentStories, shortExpiry);
-            }
+                entry.AbsoluteExpirationRelativeToNow = shortExpiry;
+                return await _storiesRepo.GetTopStoryCards(10);
+            });
             
             // Try getting top stories from cache
-            const string topKey = "IndexTop";
-            if (_cache.TryGetValue(topKey, out List<StoryCard> top))
+            TopStories = await _cache.GetOrCreateAsync("IndexTop", async entry =>
             {
-                TopStories = top;
-            }
-            else
-            {
-                TopStories = await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.ScoreDescending);
-                _cache.Set(topKey, TopStories, longExpiry);
-            }
+                entry.AbsoluteExpirationRelativeToNow = longExpiry;
+                return await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.ScoreDescending);
+            });
             
             // Try getting recently updated stories from cache
-            const string updatedKey = "IndexUpdated";
-            if (_cache.TryGetValue(updatedKey, out List<StoryCard> updated))
+            LastUpdatedStories = await _cache.GetOrCreateAsync("IndexUpdated", async entry =>
             {
-                LastUpdatedStories = updated;
-            }
-            else
-            {
-                LastUpdatedStories = await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending);
-                _cache.Set(updatedKey, LastUpdatedStories, shortExpiry);
-            }
-            
+                entry.AbsoluteExpirationRelativeToNow = shortExpiry;
+                return await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending);
+            });
+
         }
     }
 }
