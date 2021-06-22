@@ -2,9 +2,9 @@
 @inject OgmaConfig _config
 @using Ogma3.Api.V1
 @using Ogma3.Infrastructure.Extensions
-@using Ogma3.Data.AuthorizationData
 @using Ogma3.Data.Reports
 @using System.Globalization
+@using Ogma3.Infrastructure.Constants
 @model Ogma3.Pages.StoryModel
 
 @{
@@ -141,7 +141,7 @@
         </o-featured-in-clubs>
     </div>
 
-    @if (@Model.Story.AuthorId == uid)
+    @if (Model.Story.AuthorId == uid)
     {
         <div class="author-info info">
             <span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span>

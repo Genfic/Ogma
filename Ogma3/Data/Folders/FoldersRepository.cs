@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Pages.Shared.Cards;
-using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Data.Folders
 {

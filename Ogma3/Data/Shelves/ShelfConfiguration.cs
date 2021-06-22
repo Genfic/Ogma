@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 
-namespace Ogma3.Data.Shelfs
+namespace Ogma3.Data.Shelves
 {
     public class ShelfConfiguration : BaseConfiguration<Shelf>
     {

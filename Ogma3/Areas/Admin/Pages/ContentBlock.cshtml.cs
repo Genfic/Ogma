@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -76,13 +75,13 @@ namespace Ogma3.Areas.Admin.Pages
         {
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            var luid = (long) uid;
+            var staffId = (long) uid;
 
             var result = Type switch
             {
-                "story" => await TryBlockUnblockContent<Story>(Id, data.Reason ?? "", luid),
-                "chapter" => await TryBlockUnblockContent<Chapter>(Id, data.Reason ?? "", luid),
-                "blogpost" => await TryBlockUnblockContent<Blogpost>(Id, data.Reason ?? "", luid),
+                "story" => await TryBlockUnblockContent<Story>(Id, data.Reason ?? "", staffId),
+                "chapter" => await TryBlockUnblockContent<Chapter>(Id, data.Reason ?? "", staffId),
+                "blogpost" => await TryBlockUnblockContent<Blogpost>(Id, data.Reason ?? "", staffId),
                 _ => false
             };
 
@@ -95,7 +94,7 @@ namespace Ogma3.Areas.Admin.Pages
         {
             var modId = User.GetNumericId();
             if (modId is null) return false;
-            var luid = (long) modId;
+            var staffId = (long) modId;
             
             var item = await _context.Set<T>()
                 .Where(i => i.Id == itemId)
@@ -123,7 +122,7 @@ namespace Ogma3.Areas.Admin.Pages
                 // Log the action
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = luid,
+                    StaffMemberId = staffId,
                     Description = ModeratorActionTemplates.ContentBlocked(Type, title, itemId, User.GetUsername())
                 });
             }
@@ -133,7 +132,7 @@ namespace Ogma3.Areas.Admin.Pages
             
                 await _context.ModeratorActions.AddAsync(new ModeratorAction
                 {
-                    StaffMemberId = luid,
+                    StaffMemberId = staffId,
                     Description = ModeratorActionTemplates.ContentUnblocked(Type, title, itemId, User.GetUsername())
                 });
             }

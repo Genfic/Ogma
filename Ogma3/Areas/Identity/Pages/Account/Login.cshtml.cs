@@ -89,12 +89,12 @@ namespace Ogma3.Areas.Identity.Pages.Account
             var banDate = await _userManager.GetBanDate(Input.Name);
             if (banDate <= DateTime.Now)
             {
-                _logger.LogInformation($"User's ban has ended: {Input.Name}");
+                _logger.LogInformation("User's ban has ended: {Name}", Input.Name);
                 await _userManager.Unban(Input.Name);
             }
             else if (banDate is not null)
             {
-                _logger.LogInformation($"Banned user attempted login: {Input.Name}");
+                _logger.LogInformation("Banned user attempted login: {Name}", Input.Name);
                 ModelState.AddModelError(string.Empty, $"Your account has been banned until {banDate}.");
                 return Page();
             }
@@ -104,7 +104,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             var result = await _signInManager.PasswordSignInAsync(Input.Name, Input.Password, Input.RememberMe, true);
             if (result.Succeeded)
             {
-                _logger.LogInformation("User logged in.");
+                _logger.LogInformation("User logged in");
                 return LocalRedirect(returnUrl);
             }
             if (result.RequiresTwoFactor)
@@ -113,7 +113,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             }
             if (result.IsLockedOut)
             {
-                _logger.LogWarning("User account locked out.");
+                _logger.LogWarning("User account locked out");
                 return RedirectToPage("./Lockout");
             }
                 

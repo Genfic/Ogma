@@ -1,4 +1,4 @@
-namespace Ogma3.Data.AuthorizationData
+namespace Ogma3.Infrastructure.Constants
 {
     public class RoleClaimNames
     {

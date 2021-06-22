@@ -38,12 +38,14 @@
     
     <form method="post" class="confirm" id="folder">
 
-        <folder-tree :club-id="@Model.Folder.ClubId"
-                     label="Move stories to"
-                     :value="@Model.Folder.Id"
-                     :current="@Model.Folder.Id"
-                     route="@Url.RouteUrl(nameof(FoldersController))">
-        </folder-tree>
+        <template id="folder-tree">
+            <folder-tree :club-id="@Model.Folder.ClubId"
+                         label="Move stories to"
+                         :value="@Model.Folder.Id"
+                         :current="@Model.Folder.Id"
+                         route="@Url.RouteUrl(nameof(FoldersController))">
+            </folder-tree>
+        </template>
 
         <input type="hidden" asp-for="Folder.Id"/>
 
@@ -59,5 +61,7 @@
 
 @section Scripts {
     <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/folder.min.js" asp-append-version="true"></script>
+    <script>
+    new Vue({ el: '#folder-tree' })
+    </script>
 }

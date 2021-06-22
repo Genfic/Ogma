@@ -9,7 +9,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class TwoFactorAuthenticationModel : PageModel
     {
-        private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
+        private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
 
         private readonly UserManager<OgmaUser> _userManager;
         private readonly SignInManager<OgmaUser> _signInManager;
@@ -30,7 +30,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
         public int RecoveryCodesLeft { get; set; }
 
         [BindProperty]
-        public bool Is2faEnabled { get; set; }
+        public bool Is2FaEnabled { get; set; }
 
         public bool IsMachineRemembered { get; set; }
 
@@ -46,7 +46,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             }
 
             HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
-            Is2faEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
+            Is2FaEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
             IsMachineRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
             RecoveryCodesLeft = await _userManager.CountRecoveryCodesAsync(user);
 

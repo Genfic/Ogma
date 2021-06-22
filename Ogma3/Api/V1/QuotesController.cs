@@ -70,8 +70,6 @@ namespace Ogma3.Api.V1
         
 
         // PUT: api/Quotes/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Quote>> PutQuote(int id, Quote q)
@@ -101,8 +99,6 @@ namespace Ogma3.Api.V1
 
 
         // POST: api/Quotes
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Quote>> PostQuote(Quote q)

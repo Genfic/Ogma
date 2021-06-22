@@ -42,21 +42,5 @@ namespace Ogma3.Data.Stories
                 .AsNoTracking()
                 .ToListAsync();
         }
-
-        public async Task<List<StoryCard>> GetPaginatedCardsOfFolder(long folderId, int page, int perPage)
-        {
-            return await _context.FolderStories
-                .TagWith($"{nameof(StoriesRepository)}.{nameof(GetPaginatedCardsOfFolder)} -> {folderId}")
-                .Where(s => s.FolderId == folderId)
-                .Select(s => s.Story)
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
-                .Blacklist(_context, _uid)
-                .OrderByDescending(s => s.ReleaseDate)
-                .Paginate(page, perPage)
-                .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
-        }
     }
 }

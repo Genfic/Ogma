@@ -3,7 +3,7 @@ using MarkdigExtensions.Hashtags;
 using MarkdigExtensions.Mentions;
 using MarkdigExtensions.Spoiler;
 
-namespace Ogma3.Infrastructure
+namespace Ogma3.Infrastructure.Constants
 {
     public static class MarkdownPipelines
     {

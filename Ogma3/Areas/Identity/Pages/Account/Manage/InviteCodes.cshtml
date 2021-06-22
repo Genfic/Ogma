@@ -1,7 +1,7 @@
 @page
 @using Ogma3.Api.V1
 @using Ogma3.Data
-@inject OgmaConfig Cfg
+@inject OgmaConfig _cfg
 @model Ogma3.Areas.Identity.Pages.Account.Manage.InviteCodes
 
 @{
@@ -10,7 +10,7 @@
 }
 
 <button class="btn btn-primary btn-block" v-on:click="createCode">
-    Issue code ({{codes.length}}/@Cfg.MaxInvitesPerUser)
+    Issue code ({{codes.length}}/@_cfg.MaxInvitesPerUser)
 </button>
 
 <button v-if="codes.length <= 0" class="btn btn-primary" type="button" disabled>

@@ -138,7 +138,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             // If everything went fine...
             if (result.Succeeded)
             {
-                _logger.LogInformation("User created a new account with password.");
+                _logger.LogInformation("User created a new account with password");
                 
                 // Modify invite code
                 inviteCode.UsedBy = user;

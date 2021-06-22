@@ -1,5 +1,5 @@
 @page
-@inject Ogma3.Data.OgmaConfig Config
+@inject Ogma3.Data.OgmaConfig _config
 @using System.Globalization
 @using Ogma3.Api.V1
 @model Ogma3.Areas.Admin.Pages.Users
@@ -29,7 +29,7 @@
             <td>Title</td><td>@u.Title</td>
         </tr>
         <tr>
-            <td>Avatar</td><td><a href="@(Config.Cdn + @u.Avatar)">@u.Avatar</a></td>
+            <td>Avatar</td><td><a href="@(_config.Cdn + u.Avatar)">@u.Avatar</a></td>
         </tr>
         <tr>
             <td>Registration date</td><td>@u.RegistrationDate</td>

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Markdig;
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Infrastructure;
+using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Comparers;
@@ -83,12 +82,10 @@ namespace Ogma3.Api.V1
                 await _context.SaveChangesAsync();
                 return true;
             }
-            else
-            {
-                _context.BlacklistedUsers.Remove(existing);
-                await _context.SaveChangesAsync();
-                return false;
-            }
+
+            _context.BlacklistedUsers.Remove(existing);
+            await _context.SaveChangesAsync();
+            return false;
         }
 
         // api/Users/follow
@@ -118,12 +115,10 @@ namespace Ogma3.Api.V1
                 await _context.SaveChangesAsync();
                 return true;
             }
-            else
-            {
-                _context.FollowedUsers.Remove(existing);
-                await _context.SaveChangesAsync();
-                return false;
-            }
+
+            _context.FollowedUsers.Remove(existing);
+            await _context.SaveChangesAsync();
+            return false;
         }
         
         [HttpPost("ban")]

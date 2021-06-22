@@ -1,7 +1,7 @@
 ﻿@using Ogma3.Data.Users
-@inject SignInManager<OgmaUser> SignInManager
+@inject SignInManager<OgmaUser> _signInManager
 @{
-    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    var hasExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-pills flex-column">
     <li class="nav-item">

@@ -1,7 +1,7 @@
 ﻿@page "/login"
 @using Ogma3.Api.V1
 @using Ogma3.Data
-@inject OgmaConfig Config;
+@inject OgmaConfig _config;
 @model LoginModel
 
 @{
@@ -93,7 +93,7 @@
     @* </div> *@
 </div>
 
-<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@Config.Cdn" v-if="!cdn"></div>
+<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@_config.Cdn" v-if="!cdn"></div>
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(UsersController))" v-if="!route"></div>
 @section Scripts {
     <script src="~/js/dist/login.min.js" asp-append-version="true"></script>

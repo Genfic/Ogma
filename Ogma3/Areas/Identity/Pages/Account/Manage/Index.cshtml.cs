@@ -103,7 +103,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             }
 
             // If new avatar provided, replace the old one
-            if (Input.Avatar != null && Input.Avatar.Length > 0)
+            if (Input.Avatar is { Length: > 0 })
             {
                 // Delete the old avatar if exists
                 if (user.Avatar != null && user.AvatarId != null)

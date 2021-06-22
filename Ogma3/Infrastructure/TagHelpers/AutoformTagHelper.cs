@@ -81,10 +81,10 @@ namespace Ogma3.Infrastructure.TagHelpers
             output.Content.AppendHtml("<button type='submit' class='btn btn-primary'>Save</button>");
             output.Content.AppendHtml("</div>");
 
-            var XCSRF = Generator.GenerateAntiforgery(ViewContext);
-            if (XCSRF != null)
+            var xcsrf = Generator.GenerateAntiforgery(ViewContext);
+            if (xcsrf is not null)
             {
-                output.PostContent.AppendHtml(XCSRF);
+                output.PostContent.AppendHtml(xcsrf);
             }
         }
     }

@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.Folders;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
-using Ogma3.Data.Shelfs;
+using Ogma3.Data.Shelves;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Data.Votes;
@@ -45,8 +43,8 @@ namespace Ogma3.Data.Stories
         // Votes
         public ICollection<Vote> Votes { get; set; }
 
-        public int WordCount { get; set; } = 0;
-        public int ChapterCount { get; set; } = 0;
+        public int WordCount { get; set; }
+        public int ChapterCount { get; set; }
 
         // Just for relationship purposes
         public ICollection<Folder> Folders { get; set; }

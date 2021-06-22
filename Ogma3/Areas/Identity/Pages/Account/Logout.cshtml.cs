@@ -24,7 +24,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            _logger.LogInformation("User logged out");
             
             return returnUrl != null 
                 ? RedirectToPage(returnUrl) 

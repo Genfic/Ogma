@@ -84,9 +84,7 @@ namespace Ogma3.Pages.Blog
                 .ForMember(pd => pd.Tags, opts
                     => opts.MapFrom(b => string.Join(", ", b.Hashtags)));
         }
-
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         public async Task<IActionResult> OnPostAsync(long id)
         {
             if (!ModelState.IsValid) return Page();

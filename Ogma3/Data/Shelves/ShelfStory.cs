@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Ogma3.Data.Stories;
 
-namespace Ogma3.Data.Shelfs
+namespace Ogma3.Data.Shelves
 {
     public class ShelfStory
     {

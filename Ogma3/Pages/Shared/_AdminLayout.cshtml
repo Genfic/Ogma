@@ -2,7 +2,7 @@
 @using Microsoft.Extensions.Hosting
 @using Ogma3.Services
 @using System.Globalization
-@inject IWebHostEnvironment Env
+@inject IWebHostEnvironment _env
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
     var theme = value ?? "light";
@@ -39,7 +39,7 @@
     @await RenderSectionAsync("CSS", false)
     @Html.RenderResources("css")
     
-    @if (Env.IsDevelopment())
+    @if (_env.IsDevelopment())
     {
         <script src="~/lib/vue/vue.js"
                 asp-fallback-src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
@@ -92,7 +92,7 @@
 <script async src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
 <script type="module" src="~/js/dist/clock.min.js" asp-append-version="true"></script>
     
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 @Html.RenderResources()
     
 </body>

@@ -117,21 +117,21 @@ namespace Ogma3.Pages.Clubs
             club.Description = Input.Description;
 
             await _context.SaveChangesAsync();
+
+            if (Input.Icon is not { Length: > 0 }) return RedirectToPage("/Club/Index", new { club.Id, club.Slug });
             
-            if (Input.Icon is {Length: > 0})
-            {
-                var file = await _uploader.Upload(
-                    Input.Icon,
-                    "club-icons",
-                    $"{club.Id}-{club.Name.Friendlify()}",
-                    _config.ClubIconWidth,
-                    _config.ClubIconHeight
-                );
-                club.IconId = file.FileId;
-                club.Icon = file.Path;
-                // Final save
-                await _context.SaveChangesAsync();
-            }
+            var file = await _uploader.Upload(
+                Input.Icon,
+                "club-icons",
+                $"{club.Id}-{club.Name.Friendlify()}",
+                _config.ClubIconWidth,
+                _config.ClubIconHeight
+            );
+            club.IconId = file.FileId;
+            club.Icon = file.Path;
+            
+            // Final save
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("/Club/Index", new {club.Id, club.Slug});
         }

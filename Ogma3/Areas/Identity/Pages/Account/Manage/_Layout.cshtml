@@ -17,7 +17,7 @@
 </div>
 
 @section Scripts {
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", false)
     <script src="~/js/dist/alerts.min.js" asp-append-version="true"></script>
 }
 @section CSS

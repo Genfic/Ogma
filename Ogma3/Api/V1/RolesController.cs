@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Roles;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Api.V1
 {
@@ -38,8 +38,6 @@ namespace Ogma3.Api.V1
         }
 
         // PUT: api/Namespaces/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id:long}")]
         [Authorize(Roles = RoleNames.Admin)]
         public async Task<ActionResult<OgmaRole>> PutRole(long id, PostData data)
@@ -67,8 +65,6 @@ namespace Ogma3.Api.V1
 
 
         // POST: api/Roles
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize(Roles = RoleNames.Admin)]
         public async Task<ActionResult<OgmaRole>> PostRole(OgmaRole data)

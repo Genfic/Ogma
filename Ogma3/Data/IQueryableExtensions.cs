@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using LinqToDB.Mapping;
 using Ogma3.Data.Stories;
 
 namespace Ogma3.Data

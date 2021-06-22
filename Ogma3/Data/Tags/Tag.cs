@@ -22,7 +22,7 @@ namespace Ogma3.Data.Tags
 
         [MinLength(CTConfig.CTag.MinNameLength)]
         public string Slug { get; private set; }
-        public string? Description { get; set; } = null;
+        public string? Description { get; set; }
         public ETagNamespace? Namespace { get; set; }
         public IEnumerable<Story> Stories { get; set; }
     }

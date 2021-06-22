@@ -14,7 +14,7 @@ using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
-using Ogma3.Infrastructure;
+using Ogma3.Infrastructure.Constants;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;

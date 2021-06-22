@@ -1,7 +1,7 @@
 ﻿@page
 @using Ogma3.Api.V1
 @using Ogma3.Data
-@inject OgmaConfig Cfg;
+@inject OgmaConfig _cfg;
 @model Ogma3.Areas.Admin.Pages.Ratings
 
 @{
@@ -65,7 +65,7 @@
 </ul>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(RatingsController))" v-if="!route"></div>
-<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@Cfg.Cdn" v-if="!route"></div>
+<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@_cfg.Cdn" v-if="!route"></div>
 
 @section Scripts
 {

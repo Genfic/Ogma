@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -11,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.CommentsThreads;
-using Ogma3.Data.Shelfs;
+using Ogma3.Data.Shelves;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
@@ -109,41 +108,40 @@ namespace Ogma3.Areas.Identity.Pages.Account
             
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
 
-            if (result.Succeeded)
-            {
-                // Setup default blacklists
-                var defaultBlockedRatings = await _context.Ratings
-                    .Where(r => r.BlacklistedByDefault)
-                    .Select(r => r.Id)
-                    .ToListAsync();
-                var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
-                {
-                    User = user,
-                    RatingId = dbr
-                });
-                await _context.BlacklistedRatings.AddRangeAsync(blockedRatings);
-                
-                // Setup profile comment thread subscription
-                var thread = await _context.CommentThreads
-                    .FirstOrDefaultAsync(ct => ct.UserId == user.Id);
-                await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
-                {
-                    CommentsThread = thread,
-                    OgmaUser = user
-                });
-                
-                // Setup default bookshelves
-                var shelves = new Shelf[]
-                {
-                    new() { Name = "Favourites", Description = "My favourite stories", Color = "#ffff00", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 12 },
-                    new() { Name = "Read Later", Description = "What I plan to read", Color = "#5555ff", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 22 },
-                };
-                await _context.Shelves.AddRangeAsync(shelves);
-
-
-                await _context.SaveChangesAsync();
-            }
+            if (!result.Succeeded) return Page();
             
+            // Setup default blacklists
+            var defaultBlockedRatings = await _context.Ratings
+                .Where(r => r.BlacklistedByDefault)
+                .Select(r => r.Id)
+                .ToListAsync();
+            var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
+            {
+                User = user,
+                RatingId = dbr
+            });
+            await _context.BlacklistedRatings.AddRangeAsync(blockedRatings);
+                
+            // Setup profile comment thread subscription
+            var thread = await _context.CommentThreads
+                .FirstOrDefaultAsync(ct => ct.UserId == user.Id);
+            await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+            {
+                CommentsThread = thread,
+                OgmaUser = user
+            });
+                
+            // Setup default bookshelves
+            var shelves = new Shelf[]
+            {
+                new() { Name = "Favourites", Description = "My favourite stories", Color = "#ffff00", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 12 },
+                new() { Name = "Read Later", Description = "What I plan to read", Color = "#5555ff", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 22 },
+            };
+            await _context.Shelves.AddRangeAsync(shelves);
+
+
+            await _context.SaveChangesAsync();
+
             return Page();
         }
     }

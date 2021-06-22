@@ -121,7 +121,7 @@ else
 <script src="~/js/dist/site.min.js" asp-append-version="true"></script>
 <script defer src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
     
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 @Html.RenderResources()
 
 <script>

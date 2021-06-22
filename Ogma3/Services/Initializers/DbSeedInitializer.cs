@@ -9,11 +9,11 @@ using Extensions.Hosting.AsyncInitialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Icons;
 using Ogma3.Data.Quotes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Roles;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Services.Initializers
 {
@@ -60,30 +60,25 @@ namespace Ogma3.Services.Initializers
             RoleBuilder rb;
             
             var adminRole = new OgmaRole { Name = RoleNames.Admin, IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue};
-            rb = new RoleBuilder(adminRole, _roleManager);
-            await rb.Build();
+            await new RoleBuilder(adminRole, _roleManager).Build();
             
             var modRole = new OgmaRole { Name = RoleNames.Moderator, IsStaff = true, Color = "#aaff00", Order = byte.MaxValue - 5};
-            rb = new RoleBuilder(modRole, _roleManager);
-            await rb.Build();
+            await new RoleBuilder(modRole, _roleManager).Build();
             
             var helperRole = new OgmaRole { Name = RoleNames.Helper, IsStaff = true, Color = "#ffdd11", Order = byte.MaxValue - 10};
-            rb = new RoleBuilder(helperRole, _roleManager);
-            await rb.Build();
-            
+            await new RoleBuilder(helperRole, _roleManager).Build();
+
             var reviewerRole = new OgmaRole { Name = RoleNames.Reviewer, IsStaff = true, Color = "#ffdd11", Order = byte.MaxValue - 15};
-            rb = new RoleBuilder(reviewerRole, _roleManager);
-            await rb.Build();
+            await new RoleBuilder(reviewerRole, _roleManager).Build();
             
             var supporterRole = new OgmaRole { Name = RoleNames.Supporter, IsStaff = false, Color = "#ffdd11", Order = byte.MaxValue - 20};
-            rb = new RoleBuilder(supporterRole, _roleManager);
-            await rb.Build();
+            await new RoleBuilder(supporterRole, _roleManager).Build();
         }
 
         private async Task SeedUserRoles()
         {
             var user = await _userManager.FindByNameAsync("Angius");
-            if (user != null)
+            if (user is not null)
             {
                 await _userManager.AddToRoleAsync(user, "Admin");
             }
@@ -93,7 +88,7 @@ namespace Ogma3.Services.Initializers
         {
             foreach (var rating in Data.Ratings)
             {
-                if (_context.Ratings.FirstOrDefault(r => r.Name == rating.Name) == null)
+                if (_context.Ratings.FirstOrDefault(r => r.Name == rating.Name) is null)
                 {
                     _context.Ratings.Add(rating);
                 }
@@ -105,7 +100,7 @@ namespace Ogma3.Services.Initializers
         {
             foreach (var i in Data.Icons)
             {
-                if (_context.Icons.FirstOrDefault(ico => ico.Name == i) == null)
+                if (_context.Icons.FirstOrDefault(ico => ico.Name == i) is null)
                 {
                     _context.Icons.Add(new Icon {Name = i});
                 }

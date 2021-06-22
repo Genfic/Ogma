@@ -30,7 +30,7 @@ namespace Ogma3.Areas.Admin.Pages.Documents
             public string Body { get; set; }
         }
 
-        public async void OnGetAsync()
+        public void OnGetAsync()
         {
         }
 

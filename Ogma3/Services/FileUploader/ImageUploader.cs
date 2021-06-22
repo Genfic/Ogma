@@ -47,8 +47,6 @@ namespace Ogma3.Services.FileUploader
 
             if (width is not null || height is not null)
             {
-                Log.Information($">>> Resizing image {name}");
-                
                 // Create the appropriate decoder
                 IImageDecoder decoder = ext.ToUpper() switch
                 {
@@ -87,7 +85,6 @@ namespace Ogma3.Services.FileUploader
                 try
                 {
                     var result = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-                    Log.Information($">>> Uploaded image {name} to {fileName}");
                     return new FileUploaderResult
                     {
                         FileId = result.FileId,

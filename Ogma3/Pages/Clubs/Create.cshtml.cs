@@ -92,20 +92,20 @@ namespace Ogma3.Pages.Clubs
             await _context.Clubs.AddAsync(club);
             await _context.SaveChangesAsync();
 
-            if (Input.Icon is {Length: > 0})
-            {
-                var file = await _uploader.Upload(
-                    Input.Icon,
-                    "club-icons",
-                    $"{club.Id}-{club.Name.Friendlify()}",
-                    _config.ClubIconWidth,
-                    _config.ClubIconHeight
-                );
-                club.IconId = file.FileId;
-                club.Icon = file.Path;
-                // Final save
-                await _context.SaveChangesAsync();
-            }
+            if (Input.Icon is not { Length: > 0 }) return RedirectToPage("./Index");
+            
+            var file = await _uploader.Upload(
+                Input.Icon,
+                "club-icons",
+                $"{club.Id}-{club.Name.Friendlify()}",
+                _config.ClubIconWidth,
+                _config.ClubIconHeight
+            );
+            club.IconId = file.FileId;
+            club.Icon = file.Path;
+            
+            // Final save
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

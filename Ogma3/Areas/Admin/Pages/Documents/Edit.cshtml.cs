@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.AuthorizationData;
 using Ogma3.Data.Documents;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Areas.Admin.Pages.Documents
 {

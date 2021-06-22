@@ -1,4 +1,4 @@
-namespace Ogma3.Data.Shelfs
+namespace Ogma3.Data.Shelves
 {
     public class ShelfDto
     {

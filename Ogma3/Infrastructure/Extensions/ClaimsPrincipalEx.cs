@@ -24,7 +24,7 @@ namespace Ogma3.Infrastructure.Extensions
         {
             var user = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var castResult = long.TryParse(user, out var userId);
-            return castResult ? userId : (long?) null;
+            return castResult ? userId : null;
         }
 
         public static string? GetUsername(this ClaimsPrincipal principal)

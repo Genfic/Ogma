@@ -1,8 +1,8 @@
 @using Ogma3.Services.Middleware
-@using Ogma3.Data.AuthorizationData
 @using Ogma3.Data.Users
-@inject SignInManager<OgmaUser> SignInManager
-@inject OgmaConfig Config
+@using Ogma3.Infrastructure.Constants
+@inject SignInManager<OgmaUser> _signInManager
+@inject OgmaConfig _config
 
 @{
     var genTime = DateTime.UtcNow - (DateTime) (Context?.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
@@ -36,9 +36,9 @@
         <div class="col">
             <span class="header">Links</span>
 
-            <a asp-area="" asp-page="/Docs" asp-route-slug="@Config.AboutDoc" class="item">About</a>
+            <a asp-area="" asp-page="/Docs" asp-route-slug="@_config.AboutDoc" class="item">About</a>
 
-            <a asp-area="" asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">Privacy</a>
+            <a asp-area="" asp-page="/Docs" asp-route-slug="@_config.PrivacyPolicyDoc" class="item">Privacy</a>
 
             <a asp-area="" asp-page="/Staff" class="item">Staff</a>
 
@@ -50,7 +50,7 @@
             
             <a asp-controller="Rss" asp-action="GetBlogposts" class="item"><icon icon="rss_feed" class="rss"></icon>Blogpost RSS</a>
 
-            @if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
+            @if (_signInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
             {
                 <a class="item" asp-area="Admin" asp-page="/Index">Admin</a>
             }

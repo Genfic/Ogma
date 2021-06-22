@@ -1,4 +1,4 @@
-namespace Ogma3.Data
+namespace Ogma3.Infrastructure.Constants
 {
     public class OgmaClaimTypes
     {

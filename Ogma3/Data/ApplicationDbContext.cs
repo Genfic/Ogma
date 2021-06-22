@@ -20,7 +20,7 @@ using Ogma3.Data.Quotes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Roles;
-using Ogma3.Data.Shelfs;
+using Ogma3.Data.Shelves;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
-using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Folders

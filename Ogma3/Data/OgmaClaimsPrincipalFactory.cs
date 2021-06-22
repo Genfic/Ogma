@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
-using Utils;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data
 {

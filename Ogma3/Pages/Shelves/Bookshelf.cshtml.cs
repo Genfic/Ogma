@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Shelfs;
+using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
 

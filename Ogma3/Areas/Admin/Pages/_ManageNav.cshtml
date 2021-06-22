@@ -1,4 +1,4 @@
-@using Ogma3.Data.AuthorizationData
+@using Ogma3.Infrastructure.Constants
 
 <ul class="nav nav-pills flex-column">
 
@@ -8,7 +8,7 @@
         </a>
     </li>
 
-    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(RoleNames.Admin))
+    @if (User.Identity is {IsAuthenticated: true } && User.IsInRole(RoleNames.Admin))
     {
         <li class="nav-item">
             <a class="nav-link @ManageNavPages.SettingsNavClass(ViewContext)" id="settings" asp-page="/Settings" asp-area="Admin">

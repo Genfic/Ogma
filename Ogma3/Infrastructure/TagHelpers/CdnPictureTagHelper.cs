@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data;
 
@@ -25,7 +23,7 @@ namespace Ogma3.Infrastructure.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var url = _config.Cdn + Src.Trim('/');
-            var bareUrl = url.Substring(0, url.LastIndexOf('.'));
+            var bareUrl = url[..url.LastIndexOf('.')];
 
             if (!string.IsNullOrEmpty(Buster)) url += $"?v={Buster}";
             

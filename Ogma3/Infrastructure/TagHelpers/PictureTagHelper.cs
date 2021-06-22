@@ -50,7 +50,7 @@ namespace Ogma3.Infrastructure.TagHelpers
             output.CopyHtmlAttribute(SrcAttributeName, context);
             ProcessUrlAttribute(SrcAttributeName, output);
             
-            var bareUrl = Src.Substring(0, Src.LastIndexOf('.'));
+            var bareUrl = Src[..Src.LastIndexOf('.')];
             
             if (AppendVersion)
             {

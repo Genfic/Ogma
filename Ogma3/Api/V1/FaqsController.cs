@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Faqs;
-using Ogma3.Infrastructure;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Api.V1
 {
