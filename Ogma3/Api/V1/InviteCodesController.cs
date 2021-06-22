@@ -59,11 +59,6 @@ namespace Ogma3.Api.V1
             var query = _context.InviteCodes
                 .Include(ic => ic.UsedBy)
                 .AsNoTracking();
-
-            Console.WriteLine(JsonSerializer.Serialize(
-                User.Claims.Select(c => new { c.Type, c.Value }), 
-                new JsonSerializerOptions{WriteIndented = true})
-            );
             
             return await query
                 .ProjectTo<InviteCodeApiDto>(_mapper.ConfigurationProvider)

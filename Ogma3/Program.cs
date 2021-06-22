@@ -27,7 +27,7 @@ namespace Ogma3
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Log.Fatal(e, "Fatal error occurred when trying to read logger tokens");
                     return;
                 }
             }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Votes;
+using Serilog;
 
 namespace Ogma3.Api.V1
 {
@@ -49,12 +50,15 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult> PostVote([FromBody] VoteData data)
         {
             var user = await _userManager.GetUserAsync(User);
+            
             var story = await _context.Stories
                 .Where(s => s.Id == data.StoryId)
                 .Include(s => s.Votes)
                 .FirstOrDefaultAsync();
+            
             var vote = await _context.Votes
                 .FirstOrDefaultAsync(v => v.User == user && v.StoryId == data.StoryId);
+            
             var didVote = false;
 
             if (story is null) return NotFound();
@@ -80,7 +84,7 @@ namespace Ogma3.Api.V1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Error(e, "Exception occurred when user {User} tried voting for story {Story}", user.Id, data.StoryId);
                 return StatusCode(500);
             }
 

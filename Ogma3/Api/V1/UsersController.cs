@@ -11,6 +11,7 @@ using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Comparers;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Serilog;
 using Utils;
 
 namespace Ogma3.Api.V1
@@ -259,7 +260,7 @@ namespace Ogma3.Api.V1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Error(e, "Exception occurred when staff member {Staff} tried adding roles {Role} to user {User}", uid, roles, userId);
                 return BadRequest(e.Message);
             }
             return Ok();

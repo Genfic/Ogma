@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Serilog;
 
 namespace Ogma3.Api.V1
 {
@@ -86,7 +87,7 @@ namespace Ogma3.Api.V1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Error(e, "Exception occurred when user {User} tried joining club {Club}", uid, data.ClubId);
                 return StatusCode(500);
             }
 

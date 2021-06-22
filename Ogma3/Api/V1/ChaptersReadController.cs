@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
+using Serilog;
 
 namespace Ogma3.Api.V1
 {
@@ -95,7 +96,7 @@ namespace Ogma3.Api.V1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Error(e, "Exception occurred when marking chapter {Chapter} as read by {User}", chapter, uid);
                 return StatusCode(500);
             }
         }

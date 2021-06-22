@@ -14,6 +14,7 @@ using Ogma3.Data.Quotes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Roles;
 using Ogma3.Infrastructure.Constants;
+using Serilog;
 
 namespace Ogma3.Services.Initializers
 {
@@ -39,7 +40,7 @@ namespace Ogma3.Services.Initializers
             }
             else
             {
-                Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COULD NOT READ `seed.json`");
+                Log.Fatal("Could not read seed.json file to seed the database");
             }
         }
         
