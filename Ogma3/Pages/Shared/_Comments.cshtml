@@ -4,7 +4,7 @@
 @inject OgmaConfig _config
 @model CommentsThreadDto
 
-<div class="comments-container" id="comments-container" v-cloak>
+<div class="comments-container" :class="isReady ? 'ready' : null" id="comments-container" v-cloak>
 
     <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
     <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
@@ -13,13 +13,11 @@
     <div id="per-page" data-count="@_config.CommentsPerPage" v-if="!perPage"></div>
     <div id="max-length" data-length="@CTConfig.CComment.MaxBodyLength" v-if="!maxLength"></div>
 
-    @if (Model.LockDate is not null)
+    @if (User.Identity is {IsAuthenticated: true })
     {
-        <span>Thread is locked.</span>
-    }
-    else if (User.Identity is {IsAuthenticated: true })
-    {
-        <form asp-antiforgery="true">
+        <span v-if="isLocked">Thread is locked.</span>
+    
+        <form v-else asp-antiforgery="true">
             <textarea class="comment-box active-border" 
                       v-model="body" 
                       v-on:keydown.enter="enter" 

@@ -112,3 +112,8 @@ Number.prototype.clamp = function (min = 0, max = 1) {
 String.prototype.properSplit = function (split) {
 	return this.length === 0 || this === null || this === undefined ? [] : this.split(split);
 };
+
+// Set Vue error handling
+Vue.config.errorHandler = function (err) {
+	console.info(err.message); // "Oops"
+};

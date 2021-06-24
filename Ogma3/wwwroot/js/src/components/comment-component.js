@@ -1,5 +1,3 @@
-import dayjs from 'https://cdn.skypack.dev/-/dayjs@v1.10.4-MoS2QVkxh1TZYPgJA5zq/dist=es2020,mode=imports/optimized/dayjs.js';
-
 Vue.component('comment', {
 	props: {
 		cdn: {
@@ -44,50 +42,43 @@ Vue.component('comment', {
 	},
 
 	methods: {
-		del: function () {
+		del: async function () {
 			if (confirm("Are you sure you want to delete?")) {
-				axios.delete(`${this.route}/${this.comment.id}`, {
+				const {data} = await axios.delete(`${this.route}/${this.comment.id}`, {
 					headers: { "RequestVerificationToken": this.csrf }
-				})
-					.then(res => this.mutComment = res.data)
-					.catch(console.error);
+				});
+				this.mutComment = data;
 			}
 		},
 
-		edit: function () {
+		edit: async function () {
 			if (this.editData && this.editData.id === this.comment.id) return;
 
 			this.editData = null;
-			axios.get(`${this.route}/md`, {
+			const {data} = await axios.get(`${this.route}/md`, {
 				params: {
 					id: this.comment.id
 				}
-			})
-				.then(res => {
-					this.editData = {
-						id: this.comment.id,
-						body: res.data
-					};
-				})
-				.catch(console.error);
+			});
+			
+			this.editData = {
+				id: this.comment.id,
+				body: data
+			};
 		},
 
-		update: function (e) {
+		update: async function (e) {
 			e.preventDefault();
-
-			let data = {
+			
+			const {data} = await axios.patch(this.route, {
 				body: this.editData.body,
 				id: Number(this.editData.id)
-			};
-
-			axios.patch(this.route, data, {
+			}, {
 				headers: { "RequestVerificationToken": this.csrf }
-			})
-				.then(res => {
-					Object.assign(this.mutComment, res.data);
-					this.editData = null;
-				})
-				.catch(console.error);
+			});
+			
+			Object.assign(this.mutComment, data);
+			this.editData = null;
 		},
         
 		report: function() {
@@ -95,19 +86,17 @@ Vue.component('comment', {
 		},
 
 		// Handle Enter key input
-		enter: function(e) {
-			if (e.ctrlKey) this.update(e);
+		enter: async function(e) {
+			if (e.ctrlKey) await this.update(e);
 		},
 
-		history: function () {
+		history: async function () {
 			if (this.revisions.length > 0) {
 				this.revisions = [];
 			} else if (this.revisionsCache !== null) {
 				this.revisions = this.revisionsCache;
 			} else {
-				axios.get(`${this.route}/revisions/${this.comment.id}`)
-					.then(res => this.revisionsCache = this.revisions = res.data)
-					.catch(console.error);
+				this.revisionsCache = this.revisions = (await axios.get(`${this.route}/revisions/${this.comment.id}`)).data;
 			}
 		},
 
@@ -217,13 +206,13 @@ Vue.component('comment', {
                v-html="mutComment.body"></div>
 
           <form class="form" v-if="editData && editData.id === mutComment.id">
-                    <textarea class="comment-box"
-                              v-model="editData.body"
-                              v-on:keydown.enter="enter"
-                              name="body" id="edit-body"
-                              rows="3"
-                              aria-label="Comment">
-                    </textarea>
+            <textarea class="comment-box"
+                      v-model="editData.body"
+                      v-on:keydown.enter="enter"
+                      name="body" id="edit-body"
+                      rows="3"
+                      aria-label="Comment">
+            </textarea>
 
             <div class="buttons">
               <button class="confirm active-border" v-on:click="update">

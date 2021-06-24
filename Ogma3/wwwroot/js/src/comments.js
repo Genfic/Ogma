@@ -31,85 +31,84 @@ let comments_vue = new Vue({
 		isLocked: false,
 
 		highlight: null,
-		collapse: JSON.parse(window.localStorage.getItem("collapse-deleted"))
+		collapse: JSON.parse(window.localStorage.getItem("collapse-deleted")),
+		
+		isReady: false
 	},
 	methods: {
 
 		// Submit the comment, load comments again, clean textarea
-		submit: function(e) {
+		submit: async function(e) {
 			e.preventDefault();
 
 			if (this.body.length >= this.maxLength) return;
-
-			let data = {
+			
+			await axios.post(this.route, {
 				body: this.body,
 				thread: Number(this.thread)
-			};
-
-			axios.post(this.route, data, {
+			}, {
 				headers: { "RequestVerificationToken": this.csrf }
-			})
-				.then(() => {
-					this.highlight = this.total + 1;
-					this.page = 1;
-					this.load();
-					this.body = "";
-				})
-				.catch(console.error);
+			});
+			
+			this.highlight = this.total + 1;
+			this.page = 1;
+			await this.load();
+			this.body = "";
 		},
 
 		// Load comments for the thread
-		load: function() {
+		load: async function() {
 			const params = {
 				thread: this.thread,
 				page: this.page,
 				highlight: this.highlight
 			};
+			
+			const res = await axios.get(this.route, { params: params });
+			
+			this.total = res.data.total;
+			this.page = res.data.page ?? this.page;
+			this.isAuthenticated = res.headers["x-authenticated"].toLowerCase() === "true";
 
-			axios.get(this.route, { params: params })
-				.then(res => {
-					this.total = res.data.total;
-					this.page = res.data.page ?? this.page;
-					this.isAuthenticated = res.headers["x-authenticated"].toLowerCase() === "true";
-
-					this.comments = res.data.elements.map(
-						(val, key) => ({
-							val,
-							key: (res.data.total - (this.page * this.perPage)) + (this.perPage - (key + 1))
-						})
-					);
-
-					if (this.highlight) {
-						Vue.nextTick(() => comments_vue.changeHighlight());
-					} else {
-						this.navigateToPage();
-					}
+			this.comments = res.data.elements.map(
+				(val, key) => ({
+					val,
+					key: (res.data.total - (this.page * this.perPage)) + (this.perPage - (key + 1))
 				})
-				.catch(console.error);
+			);
+
+			if (this.highlight) {
+				this.$nextTick(() => comments_vue.changeHighlight());
+			} else {
+				this.navigateToPage();
+			}
+
+			if (this.isReady) return;
+			this.$nextTick(function () {
+				this.isReady = true;
+			});
 		},
 
 		// Handle Enter key input
-		enter: function(e) {
-			if (e.ctrlKey) this.submit(e);
+		enter: async function(e) {
+			if (e.ctrlKey) await this.submit(e);
 		},
 
 		// Navigate to the previous page
-		prevPage: function() {
-			let page = Math.max(1, this.page - 1);
-			this.changePage(page);
+		prevPage: async function() {
+			await this.changePage(Math.max(1, this.page - 1));
 		},
 
 		// Navigate to the next page
-		nextPage: function() {
-			let page = Math.min(this.page + 1, Math.ceil(this.total / this.perPage));
-			this.changePage(page);
+		nextPage: async function() {
+			await this.changePage(Math.min(this.page + 1, Math.ceil(this.total / this.perPage)));
 		},
 
 		// Navigate to the selected page
-		changePage: function(idx) {
+		changePage: async function(idx) {
 			this.page = idx;
 			this.navigateToPage();
-			this.load();
+			await this.load();
 		},
 
 		// Highlights the selected comment and scrolls it into view
@@ -124,11 +123,12 @@ let comments_vue = new Vue({
 
 		// Navigates to `this.page` page
 		navigateToPage: function() {
-			if (this.page > 1) {
-				history.replaceState(null, null, `#page-${this.page}`);
-			} else {
-				history.replaceState(null, null, window.location.href.split("#")[0]);
-			}
+			const fragment = this.page > 1
+				? `#page-${this.page}`
+				: window.location.href.split("#")[0];
+			
+			history.replaceState(null, null, fragment);
+
 			if (this.highlight) this.highlight = null;
 		},
 
@@ -158,10 +158,8 @@ let comments_vue = new Vue({
 		},
 		
 		// Lock or unlock the thread
-		lock: function() {
-			axios.post(`${this.threadRoute}/lock`, {id: this.thread})
-				.then(res => this.isLocked = res.data)
-				.catch(console.error);
+		lock: async function() {
+			this.isLocked = (await axios.post(`${this.threadRoute}/lock`, {id: this.thread})).data;
 		}
 	},
 
@@ -188,7 +186,7 @@ let comments_vue = new Vue({
 		}
 	},
 
-	mounted() {
+	async mounted() {
 		this.thread = document.getElementById("thread").dataset.thread;
 		this.route = document.getElementById("route").dataset.route;
 		this.threadRoute = document.getElementById("thread-route").dataset.route;
@@ -210,20 +208,14 @@ let comments_vue = new Vue({
 		}
 
 		// Subscription status
-		axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)
-			.then(res => this.isSubscribed = res.data)
-			.catch(console.error);
+		this.isSubscribed = (await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)).data;
 		
 		// Lock permissions
-		axios.get(`${this.threadRoute}/permissions/${this.thread}`)
-			.then(res => this.canLock = res.data)
-			.catch(console.error);
+		this.canLock = (await axios.get(`${this.threadRoute}/permissions/${this.thread}`)).data;
 		
 		// Lock status
-		axios.get(`${this.threadRoute}/lock/status/${this.thread}`)
-			.then(res => this.isLocked = res.data)
-			.catch(console.error);
+		this.isLocked = (await axios.get(`${this.threadRoute}/lock/status/${this.thread}`)).data;
 		
-		this.load();
+		await this.load();
 	}
 });
