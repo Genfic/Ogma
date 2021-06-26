@@ -22,7 +22,7 @@
 		}
 	});
 	
-	btn.addEventListener('click', () => {
+	btn?.addEventListener('click', () => {
 		nav.classList.toggle('visible');
 	});
 })();

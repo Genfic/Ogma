@@ -1,4 +1,4 @@
-Vue.component('folder-item', {
+Vue.component("folder-item", {
 	props: {
 		folder: {
 			type: Object,
@@ -16,41 +16,40 @@ Vue.component('folder-item', {
 		}
 	},
 	methods: {
-		bus: function (data) {
+		bus: function(data) {
 			console.log(this.folder);
-			if (data !== this.current)
-			{
-				this.$emit('bus', data);
+			if (data !== this.current) {
+				this.$emit("bus", data);
 			}
-		},
+		}
 	},
 	template: `
-      <div class="folder" 
+      <div class="folder"
            :class="[
                folder.id === current || disabled ? 'disabled' : null,
                folder.canAdd ? null : 'locked'
            ]"
            v-cloak>
-        <span v-on:click.self="bus(folder.id)" 
-              :class="sel === folder.id ? 'active' : null"
-              :tabindex="folder.id === current || disabled || !folder.canAdd ? -1 : 0">
-          {{folder.name}}
-        </span> 
-        <template v-if="folder.children.length > 0">
-            <folder-item v-for="f in folder.children" 
-                         :folder="f" 
-                         :key="f.id"
-                         @bus="bus"
-                         :sel="sel"
-                         :current="current"
-                         :disabled="folder.id === current">
-            </folder-item>  
-        </template> 
-    </div>
-    `
+      <span v-on:click.self="bus(folder.id)"
+            :class="sel === folder.id ? 'active' : null"
+            :tabindex="folder.id === current || disabled || !folder.canAdd ? -1 : 0">
+          {{ folder.name }}
+        </span>
+      <template v-if="folder.children.length > 0">
+        <folder-item v-for="f in folder.children"
+                     :folder="f"
+                     :key="f.id"
+                     @bus="bus"
+                     :sel="sel"
+                     :current="current"
+                     :disabled="folder.id === current">
+        </folder-item>
+      </template>
+      </div>
+	`
 });
 
-Vue.component('folder-tree', {
+Vue.component("folder-tree", {
 	props: {
 		clubId: {
 			type: Number,
@@ -58,14 +57,14 @@ Vue.component('folder-tree', {
 		},
 		name: {
 			type: String,
-			default: 'parentId'
+			default: "parentId"
 		},
 		route: {
 			type: String,
 			required: true
 		},
 		label: {
-			type: String,
+			type: String
 		},
 		value: {
 			type: Number,
@@ -73,7 +72,7 @@ Vue.component('folder-tree', {
 		},
 		current: {
 			type: Number,
-			default: null,
+			default: null
 		},
 		desc: {
 			type: String,
@@ -84,67 +83,63 @@ Vue.component('folder-tree', {
 			default: true
 		}
 	},
-	data: function () { 
+	data: function() {
 		return {
 			folders: [],
 			tree: [],
 			sel: this.value,
-			name: this.label?.replace(/\s+/g, '')
+			name: this.label?.replace(/\s+/g, "")
 		};
 	},
 	methods: {
-		unflatten: function () {
+		unflatten: function() {
 			let hashTable = Object.create(null);
-			this.folders.forEach( aData => hashTable[aData.id] = { ...aData, children : [] } );
-			this.folders.forEach( aData => {
-				if( aData.parentFolderId ) {
+			this.folders.forEach(aData => hashTable[aData.id] = { ...aData, children: [] });
+			this.folders.forEach(aData => {
+				if (aData.parentFolderId) {
 					hashTable[aData.parentFolderId].children.push(hashTable[aData.id]);
-				}
-				else {
+				} else {
 					this.tree.push(hashTable[aData.id]);
 				}
 			});
 		},
-		bus: function (data) {
+		bus: function(data) {
 			this.sel = data;
 		}
 	},
-	mounted() {
-		axios.get(`${this.route}/${this.clubId}`)
-			.then(res => {
-				this.folders = res.data;
-				this.unflatten();
-			})
-			.catch(console.error);
+	async mounted() {
+		const { data } = await axios.get(`${this.route}/${this.clubId}`);
+		this.folders = data;
+		this.unflatten();
 	},
 	template: `
-        <div class="o-form-group">
-            <label v-if="label" :for="name">{{label.replace( /([A-Z])/g, " $1" )}}</label>
-            <p class="desc" v-if="desc">{{desc}}</p>
-            <input type="hidden" :value="sel" :name="name">
-            
-            <div class="folder-tree active-border">
+      <div class="o-form-group">
+      <label v-if="label" :for="name">{{ label.replace(/([A-Z])/g, " $1") }}</label>
+      <p class="desc" v-if="desc">{{ desc }}</p>
+      <input type="hidden" :value="sel" :name="name">
+
+      <div class="folder-tree active-border">
               
                 <span v-if="showNone" v-on:click.self="sel = null"
-                    :class="sel === null ? 'active' : null"
-                    tabindex="0">
+                      :class="sel === null ? 'active' : null"
+                      tabindex="0">
                   None
                 </span>
-              
-                  <template v-if="tree.length > 0">
-                    <folder-item v-for="f in tree"
-                                 :folder="f"
-                                 :key="f.id"
-                                 @bus="bus"
-                                 :sel="sel"
-                                 :current="current">
-                    </folder-item>
-                  </template>
 
-                <template v-else>
-                  No folders found
-                </template>
-            </div>
-        </div>
-    `
+        <template v-if="tree.length > 0">
+          <folder-item v-for="f in tree"
+                       :folder="f"
+                       :key="f.id"
+                       @bus="bus"
+                       :sel="sel"
+                       :current="current">
+          </folder-item>
+        </template>
+
+        <template v-else>
+          No folders found
+        </template>
+      </div>
+      </div>
+	`
 });

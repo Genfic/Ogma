@@ -1,4 +1,4 @@
-let anamespaces_vue = new Vue({
+new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -9,7 +9,7 @@ let anamespaces_vue = new Vue({
 		},
 		lens: {
 			minNameLength: 5,
-			maxNameLength: 10,
+			maxNameLength: 10
 		},
 		err: [],
 		namespaces: [],
@@ -20,7 +20,7 @@ let anamespaces_vue = new Vue({
 
 		// Contrary to its name, it also modifies a namespace if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createNamespace: function (e) {
+		createNamespace: async function(e) {
 			e.preventDefault();
 
 			// Validation
@@ -34,71 +34,48 @@ let anamespaces_vue = new Vue({
 				// If no ID has been set, that means it's a new namespace.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					axios.post(this.route,
+					await axios.post(this.route,
 						{
 							name: this.form.name,
 							color: this.form.color,
 							order: Number(this.form.order)
-						})
-						.then(() => {
-							this.getNamespaces();
-						})
-						.catch(error => {
-							console.log(error);
 						});
+					await this.getNamespaces();
 
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.
 				} else {
-					axios.put(this.route + '/' + this.form.id,
+					await axios.put(`${this.route}/${this.form.id}`,
 						{
 							id: this.form.id,
 							name: this.form.name,
 							color: this.form.color,
 							order: Number(this.form.order)
-						})
-						.then(() => {
-							this.getNamespaces();
-						})
-						.catch(error => {
-							console.log(error);
-						})
-					// Clear the form too
-						.then(() => {
-							this.form.name =
-                                this.form.id = null;
 						});
+					await this.getNamespaces();
+					this.form.name =
+						this.form.id = null;
 				}
 
 			}
 		},
 
 		// Gets all existing namespaces
-		getNamespaces: function () {
-			axios.get(this.route)
-				.then(response => {
-					this.namespaces = response.data;
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		getNamespaces: async function() {
+			const { data } = await axios.get(this.route);
+			this.namespaces = data;
 		},
 
 		// Deletes a selected namespace
-		deleteNamespace: function (t) {
-			if(confirm("Delete permanently?")) {
-				axios.delete(this.route + '/' + t.id)
-					.then(() => {
-						this.getNamespaces();
-					})
-					.catch(error => {
-						console.log(error);
-					});
+		deleteNamespace: async function(t) {
+			if (confirm("Delete permanently?")) {
+				await axios.delete(`${this.route}/${t.id}`);
+				await this.getNamespaces();
 			}
 		},
 
 		// Throws a namespace from the list into the editor
-		editNamespace: function (t) {
+		editNamespace: function(t) {
 			this.form.name = t.name;
 			this.form.color = t.color;
 			this.form.id = t.id;
@@ -106,24 +83,21 @@ let anamespaces_vue = new Vue({
 		},
 
 		// Clears the editor
-		cancelEdit: function () {
+		cancelEdit: function() {
 			this.form.name =
-                this.form.color =
-                    this.form.id = 
-                        this.form.order = null;
-		},
-	}, 
+				this.form.color =
+					this.form.id =
+						this.form.order = null;
+		}
+	},
 
-	mounted() {
+	async mounted() {
 		// Grab the route from route helper
-		this.route = document.getElementById('route').dataset.route;
+		this.route = document.getElementById("route").dataset.route;
 		// Get validation data
-		axios.get(this.route + '/validation')
-			.then(r => {
-				this.lens = r.data;
-			})
-			.catch(e => console.error(e));
+		const { data } = await axios.get(this.route + "/validation");
+		this.lens = data;
 		// Grab the initial set of namespaces
-		this.getNamespaces();
+		await this.getNamespaces();
 	}
 });

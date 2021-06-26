@@ -1,4 +1,4 @@
-let quotes_vue = new Vue({
+new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -8,55 +8,47 @@ let quotes_vue = new Vue({
 		quotes: [],
 		route: null,
 		json: null,
-		search: '',
+		search: ""
 	},
 	methods: {
-        
+
 		// Gets all existing namespaces
-		getQuotes: function () {
-			axios.get(this.route)
-				.then(response => {
-					this.quotes = response.data;
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		getQuotes: async function() {
+			const { data } = await axios.get(this.route);
+			this.quotes = data;
 		},
-        
-		deleteQuote: function(q) {
-			if(confirm("Delete permanently?")) {
-				axios.delete(this.route + '/' + q.id)
-					.then(res => {
-						this.quotes = this.quotes.filter(i => i.id !== res.data.id);
-					})
-					.catch(console.error); 
+
+		deleteQuote: async function(q) {
+			if (confirm("Delete permanently?")) {
+				const { data } = await axios.delete(`${this.route}/${q.id}`);
+				this.quotes = this.quotes.filter(i => i.id !== data.id);
 			}
 		},
-        
-		editQuote: function() {},
-                
+
+		editQuote: function() {
+		},
+
 		// Upload Json
-		fromJson: function() {
-			axios.post('/api/quotes/json', JSON.parse(this.json))
-				.then(console.log)
-				.catch(console.error);
+		fromJson: async function() {
+			const res = await axios.post("/api/quotes/json", JSON.parse(this.json));
+			console.log(res);
 		}
 	},
-    
+
 	watch: {
 		search() {
 			for (const q of this.quotes) {
-				q.show = this.search 
+				q.show = this.search
 					? q.body.toLowerCase().includes(this.search.toLowerCase()) || q.author.toLowerCase().includes(this.search.toLowerCase())
 					: true;
 			}
 		}
 	},
 
-	mounted() {
+	async mounted() {
 		// Grab the route from route helper
-		this.route = document.getElementById('route').dataset.route;
+		this.route = document.getElementById("route").dataset.route;
 		// Grab the initial set of namespaces
-		this.getQuotes();
+		await this.getQuotes();
 	}
 });

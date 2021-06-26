@@ -1,4 +1,4 @@
-new Vue({ 
+new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -7,10 +7,10 @@ new Vue({
 			id: null
 		},
 		lens: {
-			minNameLength:5,
-			maxNameLength:20,
-			minDescLength:10,
-			maxDescLength:100
+			minNameLength: 5,
+			maxNameLength: 20,
+			minDescLength: 10,
+			maxDescLength: 100
 		},
 		err: [],
 		categories: [],
@@ -20,82 +20,59 @@ new Vue({
 
 		// Contrary to its name, it also modifies a category if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createCategory: function(e) {
+		createCategory: async function(e) {
 			e.preventDefault();
-            
-            
+
+
 			// Validation
 			this.err = [];
-			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength) 
+			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
 				this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
-			if (this.form.desc.length > this.lens.maxDescLength || this.form.desc.length < this.lens.minDescLength) 
+			if (this.form.desc.length > this.lens.maxDescLength || this.form.desc.length < this.lens.minDescLength)
 				this.err.push(`Description has to be between ${this.lens.minDescLength} and ${this.lens.maxDescLength} characters long.`);
 			if (this.err.length > 0) return;
-            
+
 
 			if (this.form.name && this.form.desc) {
 
 				// If no ID has been set, that means it's a new category.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					axios.post(this.route,
+					await axios.post(this.route,
 						{
 							name: this.form.name,
 							description: this.form.desc
-						})
-						.then(() => {
-							this.getCategories();
-						})
-						.catch(error => {
-							console.log(error);
 						});
-                    
+					await this.getCategories();
+
 					// If the ID is set, that means it's an existing category.
 					// Thus, we PUT it.
 				} else {
-					axios.put(this.route + '/' + this.form.id,
+					await axios.put(this.route + "/" + this.form.id,
 						{
 							id: this.form.id,
 							name: this.form.name,
 							description: this.form.desc
-						})
-						.then(() => {
-							this.getCategories();
-						})
-						.catch(error => {
-							console.log(error);
-						})
-					// Clear the form too
-						.then(() => {
-							this.form.name =
-                                this.form.desc =
-                                    this.form.id = null;
 						});
+					await this.getCategories();
+					this.form.name =
+						this.form.desc =
+							this.form.id = null;
 				}
 
 			}
 		},
 
 		// Gets all existing categories
-		getCategories: function() {
-			axios.get(this.route)
-				.then(response => {
-					this.categories = response.data;
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		getCategories: async function() {
+			const { data } = await axios.get(this.route);
+			this.categories = data;
 		},
 
 		// Deletes a selected category
-		deleteCategory: function(t) {
-			axios.delete(this.route + '/' + t.id) 
-				.then(() => {
-					this.getCategories(); 
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		deleteCategory: async function(t) {
+			await axios.delete(this.route + "/" + t.id);
+			await this.getCategories();
 		},
 
 		// Throws a category from the list into the editor
@@ -108,21 +85,18 @@ new Vue({
 		// Clears the editor
 		cancelEdit: function() {
 			this.form.name =
-                this.form.desc =
-                    this.form.id = null;
+				this.form.desc =
+					this.form.id = null;
 		}
 	},
-    
-	mounted() {
+
+	async mounted() {
 		// Grab the route from route helper
-		this.route = document.getElementById('route').dataset.route;
+		this.route = document.getElementById("route").dataset.route;
 		// Get validation
-		axios.get(this.route + '/validation')
-			.then(r => {
-				this.lens = r.data;
-			})
-			.catch(e => console.error(e));
+		const { data } = await axios.get(this.route + "/validation");
+		this.lens = data;
 		// Grab the initial set of categories
-		this.getCategories();
+		await this.getCategories();
 	}
 });

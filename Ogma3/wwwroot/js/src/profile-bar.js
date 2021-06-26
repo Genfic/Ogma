@@ -12,24 +12,20 @@ new Vue({
 		done: false,
 	},
 	methods: {
-		follow: function () {
-			axios.post(this.route + '/follow',
+		follow: async function () {
+			const {data} = await axios.post(this.route + '/follow',
 				{ name: this.name },
-				{
-					headers: { 'RequestVerificationToken': this.xcsrf }
-				}
-			)
-				.then(res => this.isFollowed = res.data)
-				.catch(console.error);
+				{ headers: { 'RequestVerificationToken': this.xcsrf } }
+			);
+			this.isFollowed = data;
 		},
         
-		block: function () {
-			axios.post(this.route + '/block',
+		block: async function () {
+			const {data} = await axios.post(this.route + '/block',
 				{ name: this.name }, 
 				{ headers: { 'RequestVerificationToken': this.xcsrf } }
-			)
-				.then(res => this.isBlocked = res.data)
-				.catch(console.error);
+			);
+			this.isBlocked = data;
 		},
         
 		report: function () {

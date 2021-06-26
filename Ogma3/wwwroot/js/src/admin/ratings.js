@@ -22,7 +22,7 @@ let ratings_vue = new Vue({
 
 		// Contrary to its name, it also modifies a namespace if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createRating: function(e) {
+		createRating: async function(e) {
 			e.preventDefault();
 
 			if (this.form.name) {
@@ -31,62 +31,43 @@ let ratings_vue = new Vue({
 
 				data.append("name", this.form.name);
 				data.append("description", this.form.desc);
-				data.append("blacklistedByDefault", this.form.blacklist ?? false);
-				data.append('order', this.form.order);
+				data.append("blacklistedByDefault", (this.form.blacklist ?? false).toString());
+				data.append("order", this.form.order);
 				if (this.form.icon)
 					data.append("icon", this.form.icon, this.form.icon.name);
 
 				// If no ID has been set, that means it's a new rating.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					axios.post(this.route, data, { headers: { "RequestVerificationToken": this.xcsrf } })
-						.then(() => {
-							this.getRatings();
-						})
-						.catch(error => {
-							console.log(error);
-						});
+					await axios.post(this.route, data, { 
+						headers: { "RequestVerificationToken": this.xcsrf } 
+					});
+					await this.getRatings();
 
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.
 				} else {
-					axios.put(`${this.route}/${this.form.id}`, data, { headers: { "RequestVerificationToken": this.xcsrf } })
-						.then(() => {
-							this.getRatings();
-						})
-						.catch(error => {
-							console.log(error);
-						})
-						// Clear the form too
-						.then(() => {
-							this.cancelEdit()
-						});
+					await axios.put(`${this.route}/${this.form.id}`, data, {
+						headers: { "RequestVerificationToken": this.xcsrf } 
+					});
+					await this.getRatings();
+					this.cancelEdit();
 				}
 
 			}
 		},
 
 		// Gets all existing namespaces
-		getRatings: function() {
-			axios.get(this.route)
-				.then(response => {
-					this.ratings = response.data;
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		getRatings: async function() {
+			const { data } = await axios.get(this.route);
+			this.ratings = data;
 		},
 
 		// Deletes a selected namespace
-		deleteRating: function(t) {
+		deleteRating: async function(t) {
 			if (confirm("Delete permanently?")) {
-				axios.delete(this.route + "/" + t.id)
-					.then(() => {
-						this.getRatings();
-					})
-					.catch(error => {
-						console.log(error);
-					});
+				await axios.delete(this.route + "/" + t.id);
+				await this.getRatings();
 			}
 		},
 
@@ -110,12 +91,12 @@ let ratings_vue = new Vue({
 		}
 	},
 
-	mounted() {
+	async mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		this.cdn = document.getElementById("cdn").dataset.cdn;
 		this.xcsrf = document.querySelector("[name=\"__RequestVerificationToken\"]").value;
 		// Grab the initial set of namespaces
-		this.getRatings();
+		await this.getRatings();
 	}
 });

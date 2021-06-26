@@ -21,7 +21,7 @@ const search_vue = new Vue({
 				this.dis[key] = !val;
 			}
 			this.dis.tags = this.$refs.tags.checkDisabled();
-			Vue.nextTick(() => e.target.submit());
+			this.$nextTick(() => e.target.submit());
 		}
 	},
 	mounted() {

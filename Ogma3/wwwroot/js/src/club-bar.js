@@ -7,15 +7,12 @@ new Vue({
 		joined: null,
 	},
 	methods: {
-		join: function () {
-			axios.post(this.route,
+		join: async function () {
+			const {data} = await axios.post(this.route,
 				{ ClubId: this.id }, 
 				{ headers: {"RequestVerificationToken": this.xcsrf} }
-			)
-				.then(res => {
-					this.joined = res.data;
-				})
-				.catch(console.error);
+			);
+			this.joined = data;
 		},
 		report: function () {
 			this.$refs.reportModal.visible = true;

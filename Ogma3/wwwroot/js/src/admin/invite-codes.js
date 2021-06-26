@@ -1,51 +1,38 @@
-import dayjs from 'https://cdn.skypack.dev/-/dayjs@v1.10.4-MoS2QVkxh1TZYPgJA5zq/dist=es2020,mode=imports/optimized/dayjs.js';
-
 new Vue({
 	el: "#app",
 	data: {
 		codes: [],
 		route: null,
-		xcsrf: null,
+		xcsrf: null
 	},
 	methods: {
 
-		createCode: function() {
-			axios.post(this.route+'/no-limit', null, { headers: { RequestVerificationToken: this.xcsrf } })
-				.then(response => {
-					this.codes.push(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		createCode: async function() {
+			const { data } = axios.post(this.route + "/no-limit", null, {
+				headers: { RequestVerificationToken: this.xcsrf }
+			});
+			this.codes.push(data);
 		},
 
 		// Gets all existing namespaces
-		getCodes: function () {
-			axios.get(this.route+'/all')
-				.then(response => {
-					this.codes = response.data;
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		getCodes: async function() {
+			const { data } = await axios.get(`${this.route}/all`);
+			this.codes = data;
 		},
 
 		// Deletes a selected namespace
-		deleteCode: function (t) {
-			if(confirm("Delete permanently?")) {
-				axios.delete(this.route + '/' + t.id, { headers: { RequestVerificationToken: this.xcsrf } })
-					.then(() => {
-						this.getCodes();
-					})
-					.catch(error => {
-						console.log(error);
-					});
+		deleteCode: async function(t) {
+			if (confirm("Delete permanently?")) {
+				await axios.delete(this.route + "/" + t.id, {
+					headers: { RequestVerificationToken: this.xcsrf }
+				});
+				await this.getCodes();
 			}
 		},
-        
+
 		copyCode: function(t) {
 			navigator.clipboard.writeText(t.code).then(
-				( ) => alert("Copied"), 
+				() => alert("Copied"),
 				(e) => {
 					alert("Could not copy");
 					console.error(e);
@@ -54,17 +41,17 @@ new Vue({
 		},
 
 		// Parse date
-		date: function (dt) {
-			return dayjs(dt).format('DD MMM YYYY, HH:mm');
+		date: function(dt) {
+			return dayjs(dt).format("DD MMM YYYY, HH:mm");
 		}
-	}, 
+	},
 
-	mounted() {
+	async mounted() {
 		// Grab the route from route helper
-		this.route = document.getElementById('route').dataset.route;
+		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector('[name=__RequestVerificationToken]').value; 
+		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of namespaces
-		this.getCodes();
+		await this.getCodes();
 	}
 });

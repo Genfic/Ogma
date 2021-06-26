@@ -13,16 +13,15 @@ new Vue({
 		manageMute: function () {
 			this.$refs.manageMute.visible = true;
 		},
-		saveRoles: function () {
+		saveRoles: async function () {
 			this.roles = [...document.querySelectorAll('input[type=checkbox]:checked')].map(e => Number(e.value));
-			axios.post(`${this.rolesRoute}/roles`, {
+			await axios.post(`${this.rolesRoute}/roles`, {
 				UserId: this.userId,
 				Roles: this.roles
 			},{
 				headers: { "RequestVerificationToken" : this.csrf }
-			})
-				.then(() => location.reload())
-				.catch(console.error);
+			});
+			location.reload();
 		}
 	},
 	mounted() {

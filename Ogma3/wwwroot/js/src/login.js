@@ -10,20 +10,17 @@ new Vue({
 		route: null
 	},
 	methods: {
-		checkDetails: function (e) {
+		checkDetails: async function (e) {
 			e.preventDefault();
             
 			if (this.name) {
-				axios.get(`${this.route}/signin/${this.name}`)
-					.catch(e => console.error(e))
-					.then(r => {
-						if(r.status === 200) {
-							let d = r.data;
-							this.avatar = d.avatar;
-							this.title = d.title;
-						}
-						this.checked = true;
-					});
+				const {data, status} = await axios.get(`${this.route}/signin/${this.name}`);
+
+				if(status === 200) {
+					this.avatar = data.avatar;
+					this.title = data.title;
+					this.checked = true;
+				}
 			}
 		},
 		reset: function () {

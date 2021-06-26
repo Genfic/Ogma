@@ -1,37 +1,31 @@
 new Vue({
-	el: '#notifications',
+	el: "#notifications",
 	data: {
 		notifications: [],
 		route: null,
-		csrf: null,
+		csrf: null
 	},
 	methods: {
-		fetch: function () {
-			axios.get(this.route)
-				.then(data => {
-					this.notifications = data.data;
-				})
-				.catch(console.error);
+		fetch: async function() {
+			const { data } = await axios.get(this.route);
+			this.notifications = data;
 		},
-        
-		deleteNotif: function (id) {
-			axios.delete(`${this.route}/${id}`,
+
+		deleteNotif: async function(id) {
+			await axios.delete(`${this.route}/${id}`,
 				{
-					headers: { "RequestVerificationToken" : this.csrf }
-				})
-				.then(() => {
-					this.fetch();
-				})
-				.catch(console.error);
+					headers: { "RequestVerificationToken": this.csrf }
+				});
+			await this.fetch();
 		},
-        
-		parseTime: function (time) {
-			return dayjs(time).format('DD MMMM YYYY, HH:mm');
+
+		parseTime: function(time) {
+			return dayjs(time).format("DD MMMM YYYY, HH:mm");
 		}
 	},
-	mounted() {
-		this.route = document.querySelector('[data-route]').dataset.route;
-		this.fetch();
-		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
+	async mounted() {
+		this.route = document.querySelector("[data-route]").dataset.route;
+		await this.fetch();
+		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
 	}
 }); 
