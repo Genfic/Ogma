@@ -26,13 +26,13 @@ let comments_vue = new Vue({
 
 		// Subscription status
 		isSubscribed: false,
-		
+
 		// Lock status
 		isLocked: false,
 
 		highlight: null,
 		collapse: JSON.parse(window.localStorage.getItem("collapse-deleted")),
-		
+
 		isReady: false
 	},
 	methods: {
@@ -42,14 +42,14 @@ let comments_vue = new Vue({
 			e.preventDefault();
 
 			if (this.body.length >= this.maxLength) return;
-			
+
 			await axios.post(this.route, {
 				body: this.body,
 				thread: Number(this.thread)
 			}, {
 				headers: { "RequestVerificationToken": this.csrf }
 			});
-			
+
 			this.highlight = this.total + 1;
 			this.page = 1;
 			await this.load();
@@ -63,9 +63,9 @@ let comments_vue = new Vue({
 				page: this.page,
 				highlight: this.highlight
 			};
-			
+
 			const res = await axios.get(this.route, { params: params });
-			
+
 			this.total = res.data.total;
 			this.page = res.data.page ?? this.page;
 			this.isAuthenticated = res.headers["x-authenticated"].toLowerCase() === "true";
@@ -84,7 +84,7 @@ let comments_vue = new Vue({
 			}
 
 			if (this.isReady) return;
-			this.$nextTick(function () {
+			this.$nextTick(function() {
 				this.isReady = true;
 			});
 		},
@@ -126,7 +126,7 @@ let comments_vue = new Vue({
 			const fragment = this.page > 1
 				? `#page-${this.page}`
 				: window.location.href.split("#")[0];
-			
+
 			history.replaceState(null, null, fragment);
 
 			if (this.highlight) this.highlight = null;
@@ -143,7 +143,7 @@ let comments_vue = new Vue({
 			if (this.isSubscribed) {
 				axios.delete(`${this.subscribeRoute}/thread`, {
 					data: { threadId: this.thread },
-					headers: { "RequestVerificationToken": this.csrf },
+					headers: { "RequestVerificationToken": this.csrf }
 				})
 					.then(res => this.isSubscribed = res.data)
 					.catch(console.error);
@@ -156,10 +156,12 @@ let comments_vue = new Vue({
 					.catch(console.error);
 			}
 		},
-		
+
 		// Lock or unlock the thread
 		lock: async function() {
-			this.isLocked = (await axios.post(`${this.threadRoute}/lock`, {id: this.thread})).data;
+			if (!this.canLock) return false;
+			this.isLocked = (await axios.post(`${this.threadRoute}/lock`, { id: this.thread })).data;
+			return this.isLocked;
 		}
 	},
 
@@ -209,13 +211,22 @@ let comments_vue = new Vue({
 
 		// Subscription status
 		this.isSubscribed = (await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)).data;
-		
+
 		// Lock permissions
 		this.canLock = (await axios.get(`${this.threadRoute}/permissions/${this.thread}`)).data;
-		
+
 		// Lock status
 		this.isLocked = (await axios.get(`${this.threadRoute}/lock/status/${this.thread}`)).data;
-		
+
 		await this.load();
 	}
 });
+
+(() => {
+	document
+		.getElementById("lock-thread")
+		?.addEventListener("click", async (e) => {
+			let status = await comments_vue.lock();
+			e.target.innerText = status === true ? "Unlock" : "Lock";
+		});
+})();

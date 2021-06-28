@@ -15,7 +15,7 @@
 
     @if (User.Identity is {IsAuthenticated: true })
     {
-        <span v-if="isLocked">Thread is locked.</span>
+        <div class="info" v-if="isLocked">Thread is locked.</div>
     
         <form v-else asp-antiforgery="true">
             <textarea class="comment-box active-border" 
@@ -46,14 +46,12 @@
     }
     else
     {
-        <span>
+        <div class="info">
             <a asp-area="Identity" asp-page="/Account/Login">Log in</a> or 
             <a asp-area="Identity" asp-page="/Account/Register">register</a> 
             to be able to leave comments
-        </span>
+        </div>
     }
-    
-    <br>
     
     @if (User.Identity is {IsAuthenticated: true })
     {

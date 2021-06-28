@@ -14,9 +14,17 @@ $btn-height: 2.5rem
     opacity: 1
     transition: opacity 300ms ease-in-out
     
+  >.info
+    +ab.active-border
+    margin-bottom: .5rem
+    padding: 1rem
+    //box-shadow: inset 0 0 0 2px v.$red-10
+    background-color: v.$ele-1
+    
   >form
     display: flex
     flex-direction: column
+    margin-bottom: 1rem
     
     >.comment-box
       padding: .5rem
