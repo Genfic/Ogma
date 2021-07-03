@@ -1,16 +1,21 @@
-using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Quotes
 {
     public class Quote : BaseModel
     {
-        [Required]
-        [MinLength(3)]
-        public string Body { get; set; }
+        public string Body { get; init; }
+        public string Author { get; init; }
         
-        [Required]
-        [MinLength(3)]
-        public string Author { get; set; }
+        public class QuoteConfiguration : BaseConfiguration<Quote>
+        {
+            public override void Configure(EntityTypeBuilder<Quote> builder)
+            {
+                base.Configure(builder);
+                builder.Property(q => q.Body).IsRequired();
+                builder.Property(q => q.Author).IsRequired();
+            }
+        }
     }
 }

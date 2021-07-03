@@ -16,12 +16,10 @@ namespace Ogma3.Data.InviteCodes
                 _code = value;
             }
         }
-
         public string NormalizedCode { get; private set; }
         
         public OgmaUser? UsedBy { get; set; }
         public long? UsedById { get; set; }
-
         public OgmaUser IssuedBy { get; set; }
         public long IssuedById { get; set; }
         public DateTime? UsedDate { get; set; }

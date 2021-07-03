@@ -140,5 +140,20 @@ namespace Ogma3.Api.V1
             public byte Order { get; init; }
             public IFormFile Icon { get; init; }
         }
+        
+        public class RatingApiDto
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public byte Order { get; set; }
+            public string Icon { get; set; }
+            public bool BlacklistedByDefault { get; set; }
+        
+            public class RatingApiDtoMapping : Profile
+            {
+                public RatingApiDtoMapping() => CreateMap<Rating, RatingApiDto>();
+            }
+        }
     }
 }

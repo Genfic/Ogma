@@ -77,9 +77,6 @@ namespace Ogma3
             services.AddScoped<UserRepository>();
             services.AddScoped<ClubRepository>();
             services.AddScoped<StoriesRepository>();
-            services.AddScoped<TagsRepository>();
-            services.AddScoped<CommentsRepository>();
-            services.AddScoped<FoldersRepository>();
             services.AddScoped<NotificationsRepository>();
             
             // Validators

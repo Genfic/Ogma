@@ -4,10 +4,9 @@ namespace Ogma3.Data.CommentsThreads
 {
     public class CommentsThreadSubscriber
     {
-        public CommentsThread CommentsThread { get; set; }
-        public long CommentsThreadId { get; set; }
-
-        public OgmaUser OgmaUser { get; set; }
-        public long OgmaUserId { get; set; }
+        public CommentsThread CommentsThread { get; init; }
+        public long CommentsThreadId { get; init; }
+        public OgmaUser OgmaUser { get; init; }
+        public long OgmaUserId { get; init; }
     }
 }

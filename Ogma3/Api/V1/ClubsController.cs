@@ -32,12 +32,34 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            return await _clubRepo.GetUserClubsMinimal((long) uid);
+
+            return await _context.Clubs
+                .Where(c => c.ClubMembers.Any(cm => cm.MemberId == (long)uid))
+                .OrderBy(c => c.Name)
+                .Select(c => new UserClubMinimalDto(c.Id, c.Name, c.Icon))
+                .AsNoTracking()
+                .ToListAsync();
         }
-        
+        public record UserClubMinimalDto(long Id, string Name, string Icon);
+
         // GET: /api/clubs/story/3
         [HttpGet("story/{id:long}")]
-        public async Task<ActionResult<List<ClubMinimalDto>>> GetClubsWithStory(long id) => await _clubRepo.GetClubsWithStory(id);
+        public async Task<ActionResult<List<ClubMinimalDto>>> GetClubsWithStory(long id)
+        {
+            return await _context.Clubs
+                .Where(c => c.Folders
+                    .Any(f => f.Stories
+                        .Any(s => s.Id == id)
+                    )
+                )
+                .Select(c => new ClubMinimalDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Icon = c.Icon
+                })
+                .ToListAsync();
+        }
 
         [HttpDelete]
         [Authorize]
@@ -53,7 +75,7 @@ namespace Ogma3.Api.V1
             }
             else
             {
-                var roles = new[] {EClubMemberRoles.Founder, EClubMemberRoles.Admin, EClubMemberRoles.Moderator};
+                var roles = new[] { EClubMemberRoles.Founder, EClubMemberRoles.Admin, EClubMemberRoles.Moderator };
 
                 canDelete = await _context.ClubThreads
                     .Where(ct => ct.Id == id)
@@ -64,7 +86,7 @@ namespace Ogma3.Api.V1
             }
 
             if (!canDelete) return Unauthorized();
-                
+
             var topic = await _context.ClubThreads.FindAsync(id);
             topic.DeletedAt = DateTime.Now;
             var res = await _context.SaveChangesAsync();
@@ -73,7 +95,7 @@ namespace Ogma3.Api.V1
         }
 
         // Don't delete or this whole controller will break
-        [HttpGet] public string Ping() => "Pong";
-        
+        [HttpGet]
+        public string Ping() => "Pong";
     }
 }

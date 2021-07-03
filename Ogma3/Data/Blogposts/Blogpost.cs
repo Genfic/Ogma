@@ -13,23 +13,15 @@ namespace Ogma3.Data.Blogposts
 {
     public class Blogpost : BaseModel, IBlockableContent, IReportableContent
     {
-        [MinLength(CTConfig.CBlogpost.MinTitleLength)]
         public string Title { get; set; }
         public string Slug { get; set; }
         public DateTime PublishDate { get; set; }
-
         public bool IsPublished { get; set; }
-        
         public OgmaUser Author { get; set; }
         public long AuthorId { get; set; }
-        
-        [MinLength(CTConfig.CBlogpost.MinBodyLength)]
         public string Body { get; set; }
-
         public CommentsThread CommentsThread { get; set; }
-        
         public int WordCount { get; set; }
-        
         public string[] Hashtags { get; set; }
 
         // Attachments

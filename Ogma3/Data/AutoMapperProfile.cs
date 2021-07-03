@@ -116,7 +116,6 @@ namespace Ogma3.Data
 
             // Rating mappings
             CreateMap<Rating, RatingDto>();
-            CreateMap<Rating, RatingApiDto>();
 
             // Folder mappings
             CreateMap<Folder, FolderCard>();

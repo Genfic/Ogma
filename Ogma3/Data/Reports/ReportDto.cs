@@ -5,12 +5,9 @@ namespace Ogma3.Data.Reports
     public class ReportDto
     {
         public long Id { get; set; }
-        
         public string ReporterUserName { get; set; }
         public long ReporterId { get; set; }
-
         public DateTime ReportDate { get; set; }
-
         public string Reason { get; set; }
 
         // Blockable content

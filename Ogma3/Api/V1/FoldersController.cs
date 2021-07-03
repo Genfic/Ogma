@@ -14,12 +14,10 @@ namespace Ogma3.Api.V1
     [ApiController]
     public class FoldersController : ControllerBase
     {
-        private readonly FoldersRepository _foldersRepo;
         private readonly ApplicationDbContext _context;
 
-        public FoldersController(FoldersRepository foldersRepo, ApplicationDbContext context)
+        public FoldersController(ApplicationDbContext context)
         {
-            _foldersRepo = foldersRepo;
             _context = context;
         }
 
@@ -30,7 +28,21 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            return Ok(await _foldersRepo.GetClubFolders(id, (long) uid));
+            
+            var folder = await _context.Folders
+                .Where(f => f.ClubId == id)
+                .Select(f => new FolderMinimalWithParentDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Slug = f.Slug,
+                    ParentFolderId = f.ParentFolderId,
+                    CanAdd = f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == (long) uid).Role <= f.AccessLevel
+                })
+                .AsNoTracking()
+                .ToListAsync();
+            
+            return Ok(folder);
         }
         
         [HttpPost("add-story")]

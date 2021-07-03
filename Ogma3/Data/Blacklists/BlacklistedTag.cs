@@ -5,9 +5,9 @@ namespace Ogma3.Data.Blacklists
 {
     public class BlacklistedTag
     {
-        public OgmaUser User { get; set; }
-        public long UserId { get; set; }
-        public Tag Tag { get; set; }
-        public long TagId { get; set; }
+        public OgmaUser User { get; init; }
+        public long UserId { get; init; }
+        public Tag Tag { get; init; }
+        public long TagId { get; init; }
     }
 }

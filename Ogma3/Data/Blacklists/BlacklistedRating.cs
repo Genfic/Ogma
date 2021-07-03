@@ -5,9 +5,9 @@ namespace Ogma3.Data.Blacklists
 {
     public class BlacklistedRating
     {
-        public OgmaUser User { get; set; }
-        public long UserId { get; set; }
-        public Rating Rating { get; set; }
-        public long RatingId { get; set; }
+        public OgmaUser User { get; init; }
+        public long UserId { get; init; }
+        public Rating Rating { get; init; }
+        public long RatingId { get; init; }
     }
 }

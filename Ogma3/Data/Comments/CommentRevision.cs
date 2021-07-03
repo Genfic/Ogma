@@ -6,12 +6,9 @@ namespace Ogma3.Data.Comments
 {
     public class CommentRevision : BaseModel
     {
-        public DateTime EditTime { get; set; }
-
-        [MinLength(CTConfig.CComment.MinBodyLength)]
-        public string Body { get; set; }
-
-        public Comment Parent { get; set; }
-        public long ParentId { get; set; }
+        public DateTime EditTime { get; init; }
+        public string Body { get; init; }
+        public Comment Parent { get; init; }
+        public long ParentId { get; init; }
     }
 }

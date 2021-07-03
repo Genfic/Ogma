@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -7,6 +9,7 @@ using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Reports
 {
@@ -14,15 +17,10 @@ namespace Ogma3.Data.Reports
     {
         public OgmaUser Reporter { get; set; }
         public long ReporterId { get; set; }
-
-        [Required]
-        public DateTime ReportDate { get; set; } = DateTime.Now;
-
-        [Required]
+        public DateTime ReportDate { get; set; }
         public string Reason { get; set; }
 
         // Blockable content
-        [Required]
         public string ContentType { get; set; }
         
         public Comment? Comment { get; set; }
@@ -42,5 +40,19 @@ namespace Ogma3.Data.Reports
 
         public Club? Club { get; set; }
         public long? ClubId { get; set; }
+        
+        public class ReportConfiguration : BaseConfiguration<Report>
+        {
+            public override void Configure(EntityTypeBuilder<Report> builder)
+            {
+                base.Configure(builder);
+                builder
+                    .Property(b => b.ReportDate)
+                    .IsRequired()
+                    .HasDefaultValueSql(PgConstants.CurrentTimestamp);
+                builder.Property(b => b.Reason).IsRequired();
+                builder.Property(b => b.ContentType).IsRequired();
+            }
+        }
     }
 }

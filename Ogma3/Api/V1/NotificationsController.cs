@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
 
@@ -12,10 +15,12 @@ namespace Ogma3.Api.V1
     public class NotificationsController : ControllerBase
     {
         private readonly NotificationsRepository _notificationsRepo;
+        private readonly ApplicationDbContext _context;
 
-        public NotificationsController(NotificationsRepository notificationsRepo)
+        public NotificationsController(NotificationsRepository notificationsRepo, ApplicationDbContext context)
         {
             _notificationsRepo = notificationsRepo;
+            _context = context;
         }
 
         [HttpGet]
@@ -24,7 +29,10 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            return await _notificationsRepo.GetForUser((long) uid);
+            return await _context.NotificationRecipients
+                .Where(nr => nr.RecipientId == (long) uid)
+                .Select(nr => nr.Notification)
+                .ToListAsync();
         }
 
         [HttpGet("count")]
@@ -33,7 +41,9 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            return await _notificationsRepo.CountForUser((long) uid);
+            return await _context.NotificationRecipients
+                .Where(nr => nr.RecipientId == (long) uid)
+                .CountAsync();
         }
 
         [HttpDelete("{id:long}")]
@@ -42,7 +52,16 @@ namespace Ogma3.Api.V1
         {
             var uid = User.GetNumericId();
             if (uid is null) return Unauthorized();
-            await _notificationsRepo.Delete(id, (long) uid);
+            
+            var notificationRecipient = await _context.NotificationRecipients
+                .Where(nr => nr.RecipientId == (long) uid)
+                .Where(nr => nr.NotificationId == id)
+                .FirstOrDefaultAsync();
+            if (notificationRecipient is null) return NotFound();
+            
+            _context.NotificationRecipients.Remove(notificationRecipient);
+            await _context.SaveChangesAsync();
+
             return Ok();
         }
     }

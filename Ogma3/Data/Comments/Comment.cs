@@ -12,14 +12,10 @@ namespace Ogma3.Data.Comments
     {
         public CommentsThread CommentsThread { get; set; }
         public long CommentsThreadId { get; set; }
-
         public  OgmaUser? Author { get; set; }
         public long? AuthorId { get; set; }
-
         public DateTime DateTime { get; set; }
         public DateTime? LastEdit { get; set; }
-
-        [MinLength(CTConfig.CComment.MinBodyLength)]
         public string Body { get; set; }
 
         // Metadata about comment deletion

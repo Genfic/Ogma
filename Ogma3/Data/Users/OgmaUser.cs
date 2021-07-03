@@ -33,32 +33,22 @@ namespace Ogma3.Data.Users
 
         public CommentsThread CommentsThread { get; set; } = new();
         
-        [JsonIgnore]
         public ICollection<UserRole>? UserRoles { get; set; }
         
-        [JsonIgnore] 
         public ICollection<Story> Stories { get; set; }
 
-        [JsonIgnore]
         public ICollection<Blogpost> Blogposts { get; set; }
 
-        [JsonIgnore]
         public ICollection<OgmaRole> Roles { get; set; }
 
         // Blacklist
-        [JsonIgnore]
         public ICollection<BlacklistedRating> BlacklistedRatings { get; set; }
-        [JsonIgnore]
         public ICollection<BlacklistedTag> BlacklistedTags { get; set; }
-        [JsonIgnore]
         public ICollection<OgmaUser> BlockedUsers { get; set; }
-        [JsonIgnore]
         public ICollection<OgmaUser> BlockedByUsers { get; set; }
         
         // Follows
-        [JsonIgnore]
         public ICollection<OgmaUser> Followers { get; set; }
-        [JsonIgnore]
         public ICollection<OgmaUser> Following { get; set; }
         
         // Subscriptions
@@ -70,10 +60,5 @@ namespace Ogma3.Data.Users
 
         public ICollection<Report> Reports { get; set; }
         public ICollection<Notification> Notifications { get; set; }
-        
-        public bool IsLoggedIn(ClaimsPrincipal claimsPrincipal)
-        {
-            return Id.ToString() == claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
     }
 }    

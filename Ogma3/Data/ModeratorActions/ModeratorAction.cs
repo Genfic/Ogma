@@ -6,10 +6,10 @@ namespace Ogma3.Data.ModeratorActions
 {
     public class ModeratorAction : BaseModel
     {
-        public OgmaUser StaffMember { get; set; }
-        public long StaffMemberId { get; set; }
-        public string Description { get; set; }
-        public DateTime DateTime { get; set; }
+        public OgmaUser StaffMember { get; init; }
+        public long StaffMemberId { get; init; }
+        public string Description { get; init; }
+        public DateTime DateTime { get; init; }
         
     }
 }

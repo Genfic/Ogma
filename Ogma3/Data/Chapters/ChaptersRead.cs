@@ -7,11 +7,10 @@ namespace Ogma3.Data.Chapters
 {
     public class ChaptersRead : BaseModel
     {
-        public Story Story { get; set; }
-        public long StoryId { get; set; }
-        public OgmaUser User { get; set; }
-        public long UserId { get; set; }
-        
-        public List<long> Chapters { get; set; }
+        public Story Story { get; init; }
+        public long StoryId { get; init; }
+        public OgmaUser User { get; init; }
+        public long UserId { get; init; }
+        public List<long> Chapters { get; init; }
     }
 }

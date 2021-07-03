@@ -36,33 +36,5 @@ namespace Ogma3.Data.Notifications
 
             await _context.SaveChangesAsync();
         }
-
-        public async Task<List<Notification>> GetForUser(long user)
-        {
-            return await _context.NotificationRecipients
-                .Where(nr => nr.RecipientId == user)
-                .Select(nr => nr.Notification)
-                .ToListAsync();
-        }
-
-        public async Task<int> CountForUser(long user)
-        {
-            return await _context.NotificationRecipients
-                .Where(nr => nr.RecipientId == user)
-                .CountAsync();
-        }
-
-        public async Task Delete(long id, long uid)
-        {
-            var notificationRecipient = await _context.NotificationRecipients
-                .Where(nr => nr.RecipientId == uid)
-                .Where(nr => nr.NotificationId == id)
-                .FirstOrDefaultAsync();
-            
-            if (notificationRecipient is null) return;
-
-            _context.NotificationRecipients.Remove(notificationRecipient);
-            await _context.SaveChangesAsync();
-        }
     }
 }

@@ -5,12 +5,11 @@ namespace Ogma3.Data.Clubs
 {
     public class ClubMember
     {
-        public OgmaUser Member { get; set; }
-        public long MemberId { get; set; }
-        public Club Club { get; set; }
-        public long ClubId { get; set; }
-
-        public EClubMemberRoles Role { get; set; }
-        public DateTime MemberSince { get; set; }
+        public OgmaUser Member { get; init; }
+        public long MemberId { get; init; }
+        public Club Club { get; init; }
+        public long ClubId { get; init; }
+        public EClubMemberRoles Role { get; init; }
+        public DateTime MemberSince { get; init; }
     }
 }

@@ -32,21 +32,6 @@ namespace Ogma3.Data.Clubs
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<UserClubMinimalDto>> GetUserClubsMinimal(long userId)
-        {
-            return await _context.Clubs
-                .Where(c => c.ClubMembers.Any(cm => cm.MemberId == userId))
-                .OrderBy(c => c.Name)
-                .Select(c => new UserClubMinimalDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Icon = c.Icon
-                })
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
         public async Task<bool> CheckRoles(long clubId, long? userId, IEnumerable<EClubMemberRoles> roles)
         {
             if (userId is null) return false;
@@ -58,23 +43,6 @@ namespace Ogma3.Data.Clubs
                     .Any(cm => cm.MemberId == userId && roles.Contains(cm.Role))
                 )
                 .AnyAsync();
-        }
-
-        public async Task<List<ClubMinimalDto>> GetClubsWithStory(long storyId)
-        {
-            return await _context.Clubs
-                .Where(c => c.Folders
-                    .Any(f => f.Stories
-                        .Any(s => s.Id == storyId)
-                    )
-                )
-                .Select(c => new ClubMinimalDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Icon = c.Icon
-                })
-                .ToListAsync();
         }
     }
 }

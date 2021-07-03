@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -15,12 +17,12 @@ namespace Ogma3.Api.V1
     public class TagsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly TagsRepository _tagsRepo;
+        private readonly IMapper _mapper;
         
-        public TagsController(ApplicationDbContext context, TagsRepository tagsRepo)
+        public TagsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
-            _tagsRepo = tagsRepo;
+            _mapper = mapper;
         }
 
         // GET: api/Tags/all
@@ -29,14 +31,21 @@ namespace Ogma3.Api.V1
         // [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetAll()
         {
-            return await _tagsRepo.GetAll();
+            return await _context.Tags
+                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         // GET: api/Tags?page=1&perPage=10
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetTags([FromQuery] int page, [FromQuery] int perPage)
         {
-            return await _tagsRepo.GetPaginated(page, perPage);
+            return await _context.Tags
+                .Paginate(page, perPage)
+                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
 
@@ -57,7 +66,12 @@ namespace Ogma3.Api.V1
         [HttpGet("story/{id:long}")]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetStoryTags(long id)
         {
-            var tags = await _tagsRepo.GetTagsOfStory(id);
+            var tags = await _context.StoryTags
+                .Where(st => st.StoryId == id)
+                .Select(st => st.Tag)
+                .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
 
             if (tags is not {Count: > 0}) return NotFound();
             
