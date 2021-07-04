@@ -213,7 +213,7 @@ let comments_vue = new Vue({
 		this.isSubscribed = (await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)).data;
 
 		// Lock permissions
-		this.canLock = (await axios.get(`${this.threadRoute}/permissions/${this.thread}`)).data;
+		this.canLock = (await axios.get(`${this.threadRoute}/permissions/${this.thread}`)).data.isAllowed;
 
 		// Lock status
 		this.isLocked = (await axios.get(`${this.threadRoute}/lock/status/${this.thread}`)).data;

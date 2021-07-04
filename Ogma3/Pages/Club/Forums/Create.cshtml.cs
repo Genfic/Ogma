@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.ClubThreads;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Extensions;
 

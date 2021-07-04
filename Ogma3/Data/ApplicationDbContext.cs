@@ -6,7 +6,9 @@ using Npgsql;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
+using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.ClubThreads;
 using Ogma3.Data.Comments;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Documents;
@@ -74,6 +76,7 @@ namespace Ogma3.Data
         
         // Moderation
         public DbSet<ModeratorAction> ModeratorActions { get; set; }
+        public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; }
         public DbSet<ContentBlock> ContentBlocks { get; set; }
         public DbSet<Report> Reports { get; set; }
         

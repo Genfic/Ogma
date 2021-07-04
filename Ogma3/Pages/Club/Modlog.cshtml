@@ -1,0 +1,27 @@
+@page "{id:long}/{slug}"
+@model Ogma3.Pages.Club.Modlog
+
+@{
+    ViewData["Title"] = Model.ClubBar.Name;
+    ViewData["Tab"] = "Home";
+}
+
+<partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
+
+<table class="o-table">
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Description</th>
+    </tr>
+    @foreach (var action in Model.Actions)
+    {
+        <tr>
+            <td>@action.Id</td>
+            <td>@action.CreationDate</td>
+            <td><markdown preset="Basic">@action.Description</markdown></td>
+        </tr>
+    }
+</table>
+
+<partial name="_Pagination" model="Model.Pagination"/>

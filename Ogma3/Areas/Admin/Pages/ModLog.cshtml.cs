@@ -23,7 +23,7 @@ namespace Ogma3.Areas.Admin.Pages
         public ICollection<ModeratorAction> Actions { get; set; }
         public Pagination Pagination { get; set; }
 
-        public async Task OnGet([FromQuery] int page = 1)
+        public async Task OnGet(long id, [FromQuery] int page = 1)
         {
             Actions = await _context.ModeratorActions
                 .OrderByDescending(ma => ma.DateTime)

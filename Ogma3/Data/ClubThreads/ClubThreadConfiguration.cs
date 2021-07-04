@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Constants;
 
-namespace Ogma3.Data.Clubs
+namespace Ogma3.Data.ClubThreads
 {
     public class ClubThreadConfiguration : BaseConfiguration<ClubThread>
     {

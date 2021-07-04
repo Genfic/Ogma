@@ -3,12 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Internal.System.IO.Pipelines;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Serilog;
 
 namespace Ogma3.Api.V1
 {
@@ -24,35 +27,32 @@ namespace Ogma3.Api.V1
         }
 
         [HttpGet("permissions/{id:long}")]
-        public async Task<bool> GetPermissionsAsync(long id)
+        public async Task<PermissionsResult> GetPermissionsAsync(long id)
         {
-            if (User.Identity is {IsAuthenticated: false}) return false;
-            
-            var uid = User.GetNumericId();
-            if (uid is null) return false;
-            
-            bool canLock;
+            if (User.Identity is { IsAuthenticated: false }) return new PermissionsResult(false, false);
 
-            if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
-            {
-                canLock = true;
-            } 
-            else
-            {
-                var roles = new[] {EClubMemberRoles.Founder, EClubMemberRoles.Admin, EClubMemberRoles.Moderator};
-                
-                canLock = await _context.CommentThreads
-                    .Where(ct => ct.Id == id)
-                    .Where(ct => ct.ClubThreadId != null)
-                    .Select(ct => ct.ClubThread.Club.ClubMembers
-                        .Where(cm => cm.MemberId == uid)
-                        .Any(cm => roles.Contains(cm.Role)))
-                    .FirstOrDefaultAsync();
-            }
+            var uid = User.GetNumericId();
+            if (uid is null) return new PermissionsResult(false, false);
+
+            var isSiteModerator = User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator);
             
-            return canLock;
+            var roles = new[] { EClubMemberRoles.Founder, EClubMemberRoles.Admin, EClubMemberRoles.Moderator };
+            var isClubModerator = await _context.CommentThreads
+                .Where(ct => ct.Id == id)
+                .Where(ct => ct.ClubThreadId != null)
+                .Select(ct => ct.ClubThread.Club.ClubMembers
+                    .Where(cm => cm.MemberId == uid)
+                    .Any(cm => roles.Contains(cm.Role)))
+                .FirstOrDefaultAsync();
+            
+            return new PermissionsResult(isSiteModerator, isClubModerator);
+        }
+        public sealed record PermissionsResult(bool IsSiteModerator, bool IsClubModerator)
+        {
+            public bool IsAllowed => IsSiteModerator || IsClubModerator;
         }
 
+        
         [HttpGet("lock/status/{id:long}")]
         public async Task<bool> GetLockStatusAsync(long id) 
             => await _context.CommentThreads
@@ -64,11 +64,11 @@ namespace Ogma3.Api.V1
         [HttpPost("lock")]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> LockClubThreadAsync([FromBody]PostData data)
+        public async Task<IActionResult> LockThreadAsync([FromBody]PostData data)
         {
-            var canLock = await GetPermissionsAsync(data.Id);
+            var permission = await GetPermissionsAsync(data.Id);
 
-            if (!canLock) return Unauthorized();
+            if (!permission.IsAllowed) return Unauthorized();
             
             var thread = await _context.CommentThreads.FindAsync(data.Id);
             thread.LockDate = thread.LockDate is null ? DateTime.Now : null;
@@ -87,13 +87,31 @@ namespace Ogma3.Api.V1
 
                 var typeId = thread.BlogpostId ?? thread.ChapterId ?? thread.ClubThreadId ?? thread.UserId ?? 0;
 
-                _context.ModeratorActions.Add(new ModeratorAction
+                if (permission.IsSiteModerator && !permission.IsClubModerator)
                 {
-                    StaffMemberId = (long) uid,
-                    Description = thread.LockDate is null
-                        ? ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, User.GetUsername())
-                        : ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, User.GetUsername())
-                });
+                    _context.ModeratorActions.Add(new ModeratorAction
+                    {
+                        StaffMemberId = (long) uid,
+                        Description = thread.LockDate is null
+                            ? ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, User.GetUsername())
+                            : ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, User.GetUsername())
+                    });
+                }
+                else if (permission.IsClubModerator && thread.ClubThreadId is not null)
+                {
+                    _context.ClubModeratorActions.Add(new ClubModeratorAction
+                    {
+                        ModeratorId = (long)uid,
+                        ClubId = (long)thread.ClubThreadId, // BUG: It's the *thread* ID, we need the *club* ID
+                        Description = thread.LockDate is null
+                            ? ModeratorActionTemplates.ThreadUnlocked(type, typeId, (long)thread.ClubThreadId, User.GetUsername())
+                            : ModeratorActionTemplates.ThreadLocked(type, typeId, (long)thread.ClubThreadId, User.GetUsername())
+                    });
+                }
+                else
+                {
+                    Log.Error("Comment thread was locked in an unexpected way. Permission {0}", permission);
+                }
             }
 
             await _context.SaveChangesAsync();

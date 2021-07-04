@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Ogma3.Data.Bases;
+using Ogma3.Data.ClubThreads;
 using Ogma3.Data.Folders;
 using Ogma3.Data.Reports;
 
