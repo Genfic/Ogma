@@ -10,26 +10,26 @@
 
 <o-quotebox endpoint="@Url.RouteUrl(nameof(QuotesController))/random"></o-quotebox>
 
-<div id="tabs" class="tab-view mt-3">
+<div id="tabs" class="tab-view mt-3" x-data="{tab: 1}">
     <div class="tabs">
         <button class="tab"
-                :class="tabindex === 0 ? 'active' : ''"
-                v-on:click="tabindex = 0">
+                x-bind:class="tab === 1 && 'active'"
+                x-on:click="tab = 1">
             Top
         </button>
         <button class="tab"
-                :class="tabindex === 1 ? 'active' : ''"
-                v-on:click="tabindex = 1">
+                x-bind:class="tab === 2 && 'active'"
+                x-on:click="tab = 2">
             New
         </button>    
         <button class="tab"
-                :class="tabindex === 2 ? 'active' : ''"
-                v-on:click="tabindex = 2">
+                x-bind:class="tab === 3 && 'active'"
+                x-on:click="tab = 3">
             Updated
         </button>  
     </div>
     
-    <div class="tab-body" v-if="tabindex === 0">
+    <div class="tab-body" x-show="tab === 1">
         <h2 class="title">Top stories of all time</h2>
 
         <div>
@@ -40,7 +40,7 @@
         </div>
     </div>
     
-    <div class="tab-body" v-if="tabindex === 1">
+    <div class="tab-body" x-show="tab === 2">
         <h2 class="title">Newest stories</h2>
         
         <div>
@@ -51,7 +51,7 @@
         </div>
     </div>
     
-    <div class="tab-body" v-if="tabindex === 2">
+    <div class="tab-body" x-show="tab === 3">
         <h2 class="title">Freshly updated</h2>
         
         <div>
@@ -66,6 +66,5 @@
 
 @section Scripts
 {
-    <script src="~/js/dist/tabs.min.js" asp-append-version="true" async></script>
     <script src="~/js/dist/native-components/quote-box.min.js" asp-append-version="true" type="module"></script>
 }

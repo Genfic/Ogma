@@ -67,7 +67,6 @@ namespace Ogma3.Api.V1
         public async Task<IActionResult> LockThreadAsync([FromBody]PostData data)
         {
             var permission = await GetPermissionsAsync(data.Id);
-
             if (!permission.IsAllowed) return Unauthorized();
             
             var thread = await _context.CommentThreads.FindAsync(data.Id);
@@ -99,13 +98,17 @@ namespace Ogma3.Api.V1
                 }
                 else if (permission.IsClubModerator && thread.ClubThreadId is not null)
                 {
+                    var clubId = await _context.ClubThreads
+                        .Where(ct => ct.CommentsThread.Id == data.Id)
+                        .Select(ct => ct.ClubId)
+                        .FirstOrDefaultAsync();
                     _context.ClubModeratorActions.Add(new ClubModeratorAction
                     {
                         ModeratorId = (long)uid,
-                        ClubId = (long)thread.ClubThreadId, // BUG: It's the *thread* ID, we need the *club* ID
+                        ClubId = clubId,
                         Description = thread.LockDate is null
-                            ? ModeratorActionTemplates.ThreadUnlocked(type, typeId, (long)thread.ClubThreadId, User.GetUsername())
-                            : ModeratorActionTemplates.ThreadLocked(type, typeId, (long)thread.ClubThreadId, User.GetUsername())
+                            ? ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, User.GetUsername())
+                            : ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, User.GetUsername())
                     });
                 }
                 else

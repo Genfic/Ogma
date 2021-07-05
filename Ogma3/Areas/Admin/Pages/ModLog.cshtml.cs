@@ -20,10 +20,10 @@ namespace Ogma3.Areas.Admin.Pages
             _context = context;
         }
         
-        public ICollection<ModeratorAction> Actions { get; set; }
-        public Pagination Pagination { get; set; }
+        public ICollection<ModeratorAction> Actions { get; private set; }
+        public Pagination Pagination { get; private set; }
 
-        public async Task OnGet(long id, [FromQuery] int page = 1)
+        public async Task OnGet([FromQuery] int page = 1)
         {
             Actions = await _context.ModeratorActions
                 .OrderByDescending(ma => ma.DateTime)

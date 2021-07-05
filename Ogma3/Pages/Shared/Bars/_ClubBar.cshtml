@@ -5,12 +5,12 @@
 @model ClubBar
 
 @{
-    var tab = (string) ViewData["Tab"];
+    var tab = (string)ViewData["Tab"];
 }
 
 <div class="info-bar club-bar" id="club-bar">
 
-    <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130" />
+    <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130"/>
 
     <h1 class="name">@Model.Name</h1>
 
@@ -21,74 +21,74 @@
     <div class="info">
         <div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
         <div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
-        <div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ?"story" : "stories")</div>
+        <div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ? "story" : "stories")</div>
     </div>
-    
+
     <div class="buttons">
-        <button class="button max @(Model.IsMember ? "leave" : "join")" 
-                :class="joined ? 'leave' : 'join'" 
+        <button class="button max @(Model.IsMember ? "leave" : "join")"
+                :class="joined ? 'leave' : 'join'"
                 id="join-btn"
-                v-on:click="join"
-            >
+                v-on:click="join">
             <span v-if="joined === null">@(Model.IsMember ? "Leave club" : "Join club")</span>
             <span v-else>{{ joined ? 'Leave club' : 'Join club' }}</span>
         </button>
-        
-        <div class="o-dropdown left">
-            <input type="checkbox" id="o-dropdown-toggler">
-            
-            <label for="o-dropdown-toggler">
+
+        <div class="o-dropdown left" x-data="{open: false}">
+
+            <button class="action-btn max" x-on:click="open = !open">
                 <icon icon="more_vert"></icon>
-            </label>
-            
-            <ul class="menu">
-                    
-               <a class="item active" title="Edit club"  asp-page="/Clubs/Edit" asp-route-id="@Model.Id">
+            </button>
+
+            <ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
+                
+                <a class="item active"
+                   title="Edit club"
+                   asp-page="/Clubs/Edit"
+                   asp-route-id="@Model.Id">
+                    <icon icon="edit"></icon>
                     Edit
                 </a>
-                    
+
                 @if (User.Identity?.IsAuthenticated ?? false)
                 {
                     <li title="Report" class="item active red" v-on:click="report">
+                        <icon icon="flag"></icon>
                         Report
                     </li>
                 }
+
+                <a class="item active"
+                   title="Moderation log"
+                   asp-page="/Club/Modlog"
+                   asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+                    <icon icon="security"></icon>
+                    Modlog
+                </a>
             </ul>
         </div>
-        
-        @* @if (User.IsUserSameAsLoggedIn(Model.FounderId)) *@
-        @* { *@
-        @*     <a class="button" title="Edit club"  asp-page="/Clubs/Edit" asp-route-id="@Model.Id"> *@
-        @*         <icon class="icon" icon="edit"></icon> *@
-        @*     </a> *@
-        @* *@
-        @*     <a class="button" title="Delete club" asp-page="/Clubs/Delete" asp-route-id="@Model.Id"> *@
-        @*         <icon class="icon" icon="delete_forever"></icon> *@
-        @*     </a> *@
-        @* } *@
     </div>
 
     <nav class="nav">
-        <a class="nav-item @(tab == "Home" ? "active" : null)" 
-           asp-page="/Club/Index" 
+        <a class="nav-item @(tab == "Home" ? "active" : null)"
+           asp-page="/Club/Index"
            asp-route-id="@Model.Id"
            asp-route-slug="@Model.Slug">
             Home
         </a>
-        <a class="nav-item @(tab == "Members" ? "active" : null)" 
-           asp-page="/Club/Members" 
+        <a class="nav-item @(tab == "Members" ? "active" : null)"
+           asp-page="/Club/Members"
            asp-route-id="@Model.Id"
            asp-route-slug="@Model.Slug">
             Members
         </a>
-        <a class="nav-item @(tab == "Forums" ? "active" : null)" 
-           asp-page="/Club/Forums/Index" 
+        <a class="nav-item @(tab == "Forums" ? "active" : null)"
+           asp-page="/Club/Forums/Index"
            asp-route-id="@Model.Id"
            asp-route-slug="@Model.Slug">
             Forums
         </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)" 
-           asp-page="/Club/Folders/Index" 
+        <a class="nav-item @(tab == "Stories" ? "active" : null)"
+           asp-page="/Club/Folders/Index"
            asp-route-id="@Model.Id"
            asp-route-slug="@Model.Slug">
             Stories
@@ -99,7 +99,7 @@
     <div v-if="!id" id="data-id" data-id="@Model.Id" style="display: none"></div>
     <div v-if="joined === null" id="data-joined" data-joined="@Model.IsMember" style="display: none"></div>
     @Html.AntiForgeryToken()
-    
+
     <report-modal
         ref="reportModal"
         :item-id="@Model.Id"

@@ -38,6 +38,7 @@ namespace Ogma3.Pages.Club
                 .Where(cma => cma.ClubId == id);
 
             Actions = await query
+                .OrderByDescending(ma => ma.CreationDate)
                 .Paginate(page, PerPage)
                 .ToListAsync();
             

@@ -64,14 +64,13 @@
                 {{ isFollowed ? 'Following' : 'Follow' }}
             </button>
             
-            <div class="o-dropdown left">
-                <input type="checkbox" id="o-dropdown-toggler">
+            <div class="o-dropdown left" x-data="{open: false}">
                 
-                <label for="o-dropdown-toggler">
+                <button class="action-btn max" x-on:click="open = !open">
                     <icon icon="more_vert"></icon>
-                </label>
+                </button>
                 
-                <ul class="menu">
+                <ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
                         
                     <li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
                         {{ isBlocked ? 'Unblock' : 'Block' }}
