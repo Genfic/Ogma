@@ -126,9 +126,13 @@ namespace Ogma3
             // Argon2 hasher
             services.UpgradePasswordSecurity().UseArgon2<OgmaUser>();
 
+            // HttpClient factory
+            services.AddHttpClient();
+            
             // Email
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.AddTransient<IEmailSender, SendGridMailer>();
+            services.Configure<SendGridOptions>(Configuration);
+            services.Configure<MailGunOptions>(Configuration);
             
             // Backblaze
             var b2Options = Configuration.GetSection("B2").Get<B2Options>();

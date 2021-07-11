@@ -7,13 +7,13 @@ using SendGrid.Helpers.Mail;
 
 namespace Ogma3.Services.Mailer
 {
-    public class EmailSender : IEmailSender
+    public class SendGridMailer : IEmailSender
     {
 
-        private readonly AuthMessageSenderOptions _options;
+        private readonly SendGridOptions _options;
         private readonly OgmaConfig _config;
         
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor, OgmaConfig config)
+        public SendGridMailer(IOptions<SendGridOptions> optionsAccessor, OgmaConfig config)
         {
             _config = config;
             _options = optionsAccessor.Value;
