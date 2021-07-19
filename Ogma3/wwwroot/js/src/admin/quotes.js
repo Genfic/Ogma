@@ -20,7 +20,7 @@ new Vue({
 
 		deleteQuote: async function(q) {
 			if (confirm("Delete permanently?")) {
-				const { data } = await axios.delete(`${this.route}/${q.id}`);
+				const { data } = await axios.delete(this.route, { data: { id: q.id }});
 				this.quotes = this.quotes.filter(i => i.id !== data.id);
 			}
 		},

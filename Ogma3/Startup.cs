@@ -41,6 +41,7 @@ using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Ogma3.Infrastructure.Formatters;
 using Ogma3.Services.RssService;
 
@@ -130,8 +131,7 @@ namespace Ogma3
             services.AddHttpClient();
             
             // Email
-            services.AddTransient<IEmailSender, SendGridMailer>();
-            services.Configure<SendGridOptions>(Configuration);
+            services.AddTransient<IEmailSender, MailGunMailer>();
             services.Configure<MailGunOptions>(Configuration);
             
             // Backblaze
@@ -205,6 +205,9 @@ namespace Ogma3
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
+            
+            // MediatR
+            services.AddMediatR(typeof(Startup));
             
             // Custom formatters
             services.AddControllers(options =>

@@ -39,6 +39,7 @@ namespace Ogma3.Api.V1
         // POST api/clubjoin
         [HttpPost]
         [Authorize]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult<bool>> PostClubMember(PostModel data)
         {
             var uid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

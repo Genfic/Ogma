@@ -9,8 +9,7 @@ new Vue({
 	methods: {
 		join: async function () {
 			const {data} = await axios.post(this.route,
-				{ ClubId: this.id }, 
-				{ headers: {"RequestVerificationToken": this.xcsrf} }
+				{ ClubId: this.id }
 			);
 			this.joined = data;
 		},
@@ -22,7 +21,6 @@ new Vue({
 		this.route = document.getElementById('data-route').dataset.route;
 		this.id = Number(document.getElementById('data-id').dataset.id);
 		this.joined = document.getElementById('data-joined').dataset.joined.toLowerCase() === 'true';
-		this.xcsrf = document.querySelector('[name=__RequestVerificationToken]').value;
 	},
 	beforeCreate() {
 		document.getElementById('join-btn').classList.remove('join', 'leave');
