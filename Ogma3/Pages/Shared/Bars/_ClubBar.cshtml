@@ -25,12 +25,16 @@
     </div>
 
     <div class="buttons">
-        <button class="button max @(Model.IsMember ? "leave" : "join")"
-                :class="joined ? 'leave' : 'join'"
+        <button class="button max"
+                x-data="{joined: @Model.IsMember.ToString().ToLower()}"
+                x-bind:class="joined ? 'leave' : 'join'"
                 id="join-btn"
-                v-on:click="join">
-            <span v-if="joined === null">@(Model.IsMember ? "Leave club" : "Join club")</span>
-            <span v-else>{{ joined ? 'Leave club' : 'Join club' }}</span>
+                x-on:click="
+                    axios.post('@Url.RouteUrl(nameof(ClubJoinController))',
+                	    { ClubId: @Model.Id }, 
+                    ).then(res => joined = res.data);
+                ">
+            <span x-text="joined ? 'Leave club' : 'Join club'"></span>
         </button>
 
         <div class="o-dropdown left" x-data="{open: false}">
@@ -94,11 +98,6 @@
             Stories
         </a>
     </nav>
-
-    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(ClubJoinController))" style="display: none"></div>
-    <div v-if="!id" id="data-id" data-id="@Model.Id" style="display: none"></div>
-    <div v-if="joined === null" id="data-joined" data-joined="@Model.IsMember" style="display: none"></div>
-    @Html.AntiForgeryToken()
 
     <report-modal
         ref="reportModal"
