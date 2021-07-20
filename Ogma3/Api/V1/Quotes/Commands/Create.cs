@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.ActionResults;
+using Ogma3.Services;
 using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands
@@ -42,12 +44,18 @@ namespace Ogma3.Api.V1.Quotes.Commands
                     Log.Error("Creation error in {Src}: {Msg}", ex.Source, ex.Message);
                     return new ServerErrorResult("Database Creation Error");
                 }
+                
+                Jog.Log(new
+                {
+                    Action = nameof(QuotesController.GetQuote),
+                    Controller = nameof(QuotesController),
+                });
 
                 return new CreatedAtActionResult(
                     nameof(QuotesController.GetQuote),
-                    nameof(QuotesController),
-                    new { quote.Id },
-                    quote
+                    nameof(QuotesController).Replace("Controller", "", StringComparison.InvariantCultureIgnoreCase),
+                    new { id = quote.Id },
+                    new QuoteDto { Author = quote.Author, Body = quote.Body }
                 );
             }
         }

@@ -19,13 +19,13 @@ namespace Ogma3.Api.V1.Quotes
         public QuotesController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
-        public async Task<ActionResult<List<QuoteDto>>> GetQuotes()
+        public async Task<ActionResult<List<Quote>>> GetQuotes()
             => await _mediator.Send(new GetAll.Query());
 
         // GET: api/Quotes/5
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:long}")]
         [Throttle(Count = 10, TimeUnit = TimeUnit.Minute)]
-        public async Task<ActionResult<QuoteDto>> GetQuote(int id)
+        public async Task<ActionResult<QuoteDto>> GetQuote(long id)
             => await _mediator.Send(new GetOne.Query(id));
 
         // GET: api/Quotes/random
@@ -38,18 +38,21 @@ namespace Ogma3.Api.V1.Quotes
         // POST: api/Quotes
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult<Quote>> PostQuote(Create.Command q) 
             => await _mediator.Send(q);
 
         // PUT: api/Quotes/5
         [HttpPut]
         [Authorize(Roles = "Admin")]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult<Quote>> PutQuote(Update.Command q)
             => await _mediator.Send(q);
 
         // POST: api/Quotes/json
         [HttpPost("json")]
         [Authorize(Roles = "Admin")]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> PostJson()
             => await _mediator.Send(new CreateFromJson.Command(Request.Body));
 

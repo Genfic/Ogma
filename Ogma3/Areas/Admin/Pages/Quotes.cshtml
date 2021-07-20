@@ -8,7 +8,8 @@
 }
 
 <form class="form" v-on:submit.prevent="this.$event.preventDefault()">
-    @if (User.IsInRole("Admin")){
+    @if (User.IsInRole("Admin"))
+    {
         <details>
             <summary>Load from Json</summary>
             <div class="o-form-group">
@@ -17,13 +18,20 @@
             </div>
         </details>
     }
-    
+
     <div class="o-form-group">
         <input type="text" class="o-form-control active-border" v-model="search" placeholder="Search...">
     </div>
 </form>
 
-<ul class="items-list">    
+<br>
+
+<button class="btn btn-block btn-outline-primary" v-on:click="openEditor">
+    <icon icon="add"></icon>
+    Create New
+</button>
+
+<ul class="items-list">
     <li v-for="q in quotes" v-show="!search || q.show">
         <div class="main">
             <span class="name">{{ q.body }}</span>
@@ -33,12 +41,34 @@
             <button class="action" v-on:click="deleteQuote(q)">
                 <icon icon="delete_forever"></icon>
             </button>
-            <button class="action" v-on:click="editQuote(q)">
+            <button class="action" v-on:click="openEditor(q)">
                 <icon icon="edit"></icon>
             </button>
         </div>
     </li>
 </ul>
+
+<div v-show="editorOpen" class="my-modal" v-on:click.stop.self="closeEditor">
+    <form class="content form" v-on:submit.prevent="saveQuote">
+        
+        <strong>{{ form.id === null ? 'Create' : 'Edit' }} quote</strong>
+        
+        <div class="o-form-group">
+            <label for="author">Author</label>
+            <input type="text" name="author" id="author" v-model="form.author">
+        </div>
+
+        <div class="o-form-group">
+            <label for="body">Body</label>
+            <textarea name="body" id="body" cols="40" rows="5" v-model="form.body"></textarea>
+        </div>
+
+        <div class="o-form-group">
+            <input type="submit" :value="form.id === null ? 'Create' : 'Save'">
+        </div>
+
+    </form>
+</div>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(QuotesController))" v-if="!route"></div>
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,23 +14,21 @@ namespace Ogma3.Api.V1.Quotes.Queries
 {
     public static class GetAll
     {
-        public sealed record Query : IRequest<ActionResult<List<QuoteDto>>>;
+        public sealed record Query : IRequest<ActionResult<List<Quote>>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<List<QuoteDto>>>
+        public class Handler : IRequestHandler<Query, ActionResult<List<Quote>>>
         {
             private readonly ApplicationDbContext _context;
-            private readonly IMapper _mapper;
 
-            public Handler(ApplicationDbContext context, IMapper mapper)
+            public Handler(ApplicationDbContext context)
             {
                 _context = context;
-                _mapper = mapper;
             }
 
-            public async Task<ActionResult<List<QuoteDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<List<Quote>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var quotes = await _context.Quotes
-                    .ProjectTo<QuoteDto>(_mapper.ConfigurationProvider)
+                    .OrderBy(q => q.Id)
                     .ToListAsync(cancellationToken);
                 
                 return new OkObjectResult(quotes);

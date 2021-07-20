@@ -2,13 +2,16 @@ new Vue({
 	el: "#app",
 	data: {
 		form: {
+			id: null,
 			body: null,
 			author: null
 		},
 		quotes: [],
 		route: null,
 		json: null,
-		search: ""
+		search: "",
+		
+		editorOpen: false,
 	},
 	methods: {
 
@@ -24,14 +27,27 @@ new Vue({
 				this.quotes = this.quotes.filter(i => i.id !== data.id);
 			}
 		},
+		
+		openEditor: function(q) {
+			this.editorOpen = true;
+			this.form = q;
+		},
+		closeEditor: function() {
+			this.editorOpen = false;
+			Object.keys(this.form).forEach((i) => this.form[i] = null);
+		},
 
-		editQuote: function() {
+		saveQuote: async function() {
+			if (this.form.id) {
+				await axios.put(this.route, this.form);
+			} else {
+				await axios.post(this.route, this.form);
+			}
 		},
 
 		// Upload Json
 		fromJson: async function() {
-			const res = await axios.post("/api/quotes/json", JSON.parse(this.json));
-			console.log(res);
+			await axios.post(`${this.route}/json`, JSON.parse(this.json));
 		}
 	},
 
