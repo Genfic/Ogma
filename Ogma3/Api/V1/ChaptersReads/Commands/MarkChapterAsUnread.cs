@@ -42,11 +42,11 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands
                 if (chaptersReadObj is null) return new OkResult();
 
                 chaptersReadObj.Chapters.Remove(chapter);
+                _context.Entry(chaptersReadObj).State = EntityState.Modified;
 
                 if (chaptersReadObj.Chapters.Count < 1)
                 {
                     _context.ChaptersRead.Remove(chaptersReadObj);
-                    _context.Entry(chaptersReadObj).State = EntityState.Modified;
                 }
 
                 // Save
