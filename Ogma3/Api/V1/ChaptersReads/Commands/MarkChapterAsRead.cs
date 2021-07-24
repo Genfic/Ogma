@@ -54,12 +54,12 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands
                 else
                 {
                     chaptersReadObj.Chapters.Add(chapter);
+                    _context.Entry(chaptersReadObj).State = EntityState.Modified;
                 }
 
                 // Save
                 try
                 {
-                    // BUG: Changes to the `chaptersReadObj.Chapters` HashSet do not persist https://github.com/npgsql/efcore.pg/issues/1927
                     await _context.SaveChangesAsync(cancellationToken);
                     return new OkObjectResult(new { Read = chaptersReadObj.Chapters });
                 }
