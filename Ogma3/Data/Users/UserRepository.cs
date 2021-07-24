@@ -15,7 +15,7 @@ namespace Ogma3.Data.Users
         public UserRepository(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
-            _uid = userService.GetUser()?.GetNumericId();
+            _uid = userService.User?.GetNumericId();
         }
         
         public async Task<ProfileBar> GetProfileBar(string name)

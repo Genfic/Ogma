@@ -12,9 +12,7 @@ namespace Ogma3.Services.UserService
         public UserService(IHttpContextAccessor? accessor) {
             _accessor = accessor;
         }
-
-        public ClaimsPrincipal? GetUser() {
-            return _accessor?.HttpContext?.User;
-        }
+        
+        public ClaimsPrincipal? User => _accessor?.HttpContext?.User;
     }
 }

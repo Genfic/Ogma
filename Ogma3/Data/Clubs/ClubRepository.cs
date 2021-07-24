@@ -20,7 +20,7 @@ namespace Ogma3.Data.Clubs
         {
             _context = context;
             _mapper = mapper;
-            _uid = userService.GetUser()?.GetNumericId();
+            _uid = userService.User?.GetNumericId();
         }
 
         public async Task<ClubBar> GetClubBar(long clubId)

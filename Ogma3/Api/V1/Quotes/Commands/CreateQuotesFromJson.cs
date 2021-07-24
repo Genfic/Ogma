@@ -13,7 +13,7 @@ using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands
 {
-    public static class CreateFromJson
+    public static class CreateQuotesFromJson
     {
         public sealed record Command(Stream Data) : IRequest<IActionResult>;
         

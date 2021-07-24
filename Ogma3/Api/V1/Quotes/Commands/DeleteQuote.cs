@@ -10,9 +10,9 @@ using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands
 {
-    public static class Update
+    public static class DeleteQuote
     {
-        public sealed record Command(long Id, string Body, string Author) : IRequest<ActionResult<Quote>>;
+        public sealed record Command(long Id) : IRequest<ActionResult<Quote>>;
         
         public class CreateQuoteHandler : IRequestHandler<Command, ActionResult<Quote>>
         {
@@ -25,26 +25,25 @@ namespace Ogma3.Api.V1.Quotes.Commands
 
             public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var (id, body, author) = request;
-                var quote = new Quote
-                {
-                    Id = id,
-                    Body = body,
-                    Author = author
-                };
-                _context.Entry(quote).State = EntityState.Modified;
+                var quote = await _context.Quotes
+                    .FirstOrDefaultAsync(q => q.Id == request.Id, cancellationToken);
+
+                if (quote is null) return new NotFoundResult();
+                
+                _context.Remove(quote);
                 try
                 {
                     await _context.SaveChangesAsync(cancellationToken);
                 }
                 catch (DbUpdateException ex)
                 {
-                    Log.Error("Update error in {Src}: {Msg}", ex.Source, ex.Message);
-                    return new ServerErrorResult("Database Update Error");
+                    Log.Error("Delete error in {Src}: {Msg}", ex.Source, ex.Message);
+                    return new ServerErrorResult("Database Delete Error");
                 }
 
                 return new OkObjectResult(quote);
             }
         }
+        
     }
 }

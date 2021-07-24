@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,7 +11,7 @@ using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands
 {
-    public static class Create
+    public static class CreateQuote
     {
         public sealed record Command(string Body, string Author) : IRequest<ActionResult<Quote>>;
 
@@ -53,7 +52,7 @@ namespace Ogma3.Api.V1.Quotes.Commands
 
                 return new CreatedAtActionResult(
                     nameof(QuotesController.GetQuote),
-                    nameof(QuotesController).Replace("Controller", "", StringComparison.InvariantCultureIgnoreCase),
+                    nameof(QuotesController)[..^10],
                     new { id = quote.Id },
                     new QuoteDto { Author = quote.Author, Body = quote.Body }
                 );

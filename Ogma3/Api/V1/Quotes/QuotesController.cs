@@ -39,14 +39,14 @@ namespace Ogma3.Api.V1.Quotes
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult<Quote>> PostQuote(Create.Command q) 
+        public async Task<ActionResult<Quote>> PostQuote(CreateQuote.Command q) 
             => await _mediator.Send(q);
 
         // PUT: api/Quotes/5
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult<Quote>> PutQuote(Update.Command q)
+        public async Task<ActionResult<Quote>> PutQuote(UpdateQuote.Command q)
             => await _mediator.Send(q);
 
         // POST: api/Quotes/json
@@ -54,13 +54,13 @@ namespace Ogma3.Api.V1.Quotes
         [Authorize(Roles = "Admin")]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> PostJson()
-            => await _mediator.Send(new CreateFromJson.Command(Request.Body));
+            => await _mediator.Send(new CreateQuotesFromJson.Command(Request.Body));
 
         // DELETE: api/Quotes/5
         [HttpDelete]
         [Authorize(Roles = "Admin")]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult<Quote>> DeleteQuote(Delete.Command q) 
+        public async Task<ActionResult<Quote>> DeleteQuote(DeleteQuote.Command q) 
             => await _mediator.Send(q);
     }
 }
