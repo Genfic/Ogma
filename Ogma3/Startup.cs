@@ -215,6 +215,9 @@ namespace Ogma3
                 options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration));
             });
             
+            // Swagger
+            services.AddSwaggerDocument();
+            
             // Linq2DB extension
             LinqToDBForEFTools.Initialize();
         }
@@ -277,6 +280,10 @@ namespace Ogma3
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            // Swagger
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             
             app.UseEndpoints(endpoints =>
             {
