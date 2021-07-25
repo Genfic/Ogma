@@ -7,9 +7,18 @@ new Vue({
 		joined: null,
 	},
 	methods: {
+		joinOrLeave: async function(){
+			this.joined ? await this.leave() : await this.join();
+		},
 		join: async function () {
 			const {data} = await axios.post(this.route,
 				{ ClubId: this.id }
+			);
+			this.joined = data;
+		},
+		leave: async function() {
+			const {data} = await axios.delete(this.route,
+				{ data: { ClubId: this.id } }
 			);
 			this.joined = data;
 		},

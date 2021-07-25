@@ -21,7 +21,7 @@ namespace Ogma3.Data.Clubs
             
             // NAVIGATION
             builder
-                .HasKey(cm => new {cm.ClubId, cm.MemberId});
+                .HasKey(cm => new { cm.ClubId, cm.MemberId });
             
             builder
                 .HasOne(cm => cm.Club)

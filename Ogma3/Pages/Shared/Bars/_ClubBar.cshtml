@@ -1,5 +1,6 @@
 @using System.Globalization
 @using Ogma3.Api.V1
+@using Ogma3.Api.V1.ClubJoin
 @using Ogma3.Data.Reports
 @using Ogma3.Services
 @model ClubBar
@@ -28,7 +29,7 @@
         <button class="button max @(Model.IsMember ? "leave" : "join")"
                 :class="joined ? 'leave' : 'join'"
                 id="join-btn"
-                v-on:click="join">
+                v-on:click="joinOrLeave">
             <span v-if="joined === null">@(Model.IsMember ? "Leave club" : "Join club")</span>
             <span v-else>{{ joined ? 'Leave club' : 'Join club' }}</span>
         </button>
