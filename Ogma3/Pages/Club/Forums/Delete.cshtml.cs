@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.ClubThreads;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums
@@ -47,7 +48,6 @@ namespace Ogma3.Pages.Club.Forums
                     CreationDate = ct.CreationDate,
                     Replies = ct.CommentsThread.CommentsCount
                 })
-                .AsNoTracking()
                 .FirstOrDefaultAsync();
             
             if (ClubThread is null) return NotFound();
@@ -60,15 +60,22 @@ namespace Ogma3.Pages.Club.Forums
         {
             var thread = await _context.ClubThreads
                 .Where(ct => ct.Id == id)
+                .Select(ct => new
+                {
+                    ct.Id,
+                    ct.AuthorId,
+                    ct.ClubId,
+                    ct.Club.Slug
+                })
                 .FirstOrDefaultAsync();
 
             if (thread is null) return NotFound();
             if (!await CanDelete(thread.AuthorId, thread.ClubId)) return Unauthorized();
             
-            _context.ClubThreads.Remove(thread);
+            _context.ClubThreads.Remove(new ClubThread { Id = thread.Id });
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index", new { id = thread.ClubId });
+            return RedirectToPage("Index", new { id = thread.ClubId, slug = thread.Slug });
         }
 
         private async Task<bool> CanDelete(long? authorId, long clubId)

@@ -4,7 +4,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
-using Ogma3.Data.Clubs;
 using Ogma3.Data.ClubThreads;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Extensions;
@@ -75,7 +74,7 @@ namespace Ogma3.Pages.Club.Forums
             await _context.ClubThreads.AddAsync(clubThread);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Details", new { id = clubThread.Id });
+            return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
         }
     }
 }

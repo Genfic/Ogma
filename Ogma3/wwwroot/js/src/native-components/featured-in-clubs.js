@@ -38,7 +38,7 @@ export class FeaturedInClubs extends LitElement {
                         ${this.clubs.length > 0 ? html`
                             <div class="clubs">
                                 ${this.clubs.map(c => html`
-                                    <a href="/club/${c.name.toLowerCase().replace(' ', '-')}-${c.id}"
+                                    <a href="/club/${c.id}/${c.name.toLowerCase().replace(' ', '-')}"
                                        target="_blank"
                                        class="club"
                                        tabindex="0">

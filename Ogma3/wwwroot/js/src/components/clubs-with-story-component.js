@@ -37,7 +37,7 @@ Vue.component("clubs-with-story", {
         </div>
 
         <div v-if="clubs.length > 0" class="clubs">
-          <a :href="'/club/'+c.name.toLowerCase().replace(' ', '-')+'-'+c.id"
+          <a :href="'/club/'+c.id+'/'+c.name.toLowerCase().replace(' ', '-')"
              target="_blank"
              class="club"
              tabindex="0"
