@@ -14,11 +14,7 @@ namespace Ogma3.Api.V1.ChaptersReads
     public class ChaptersReadController : Controller
     {
         private readonly IMediator _mediator;
-        
-        public ChaptersReadController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        public ChaptersReadController(IMediator mediator) => _mediator = mediator;
 
         // GET api/chaptersread/5
         [HttpGet("{story:long}")]

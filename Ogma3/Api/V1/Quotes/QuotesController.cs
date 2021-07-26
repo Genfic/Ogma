@@ -15,7 +15,6 @@ namespace Ogma3.Api.V1.Quotes
     public class QuotesController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public QuotesController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]

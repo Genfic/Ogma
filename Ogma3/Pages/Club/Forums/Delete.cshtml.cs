@@ -58,7 +58,7 @@ namespace Ogma3.Pages.Club.Forums
         
         public async Task<IActionResult> OnPostAsync(long id)
         {
-            var thread = await _context.ClubThreads
+            var th = await _context.ClubThreads
                 .Where(ct => ct.Id == id)
                 .Select(ct => new
                 {
@@ -69,13 +69,18 @@ namespace Ogma3.Pages.Club.Forums
                 })
                 .FirstOrDefaultAsync();
 
-            if (thread is null) return NotFound();
-            if (!await CanDelete(thread.AuthorId, thread.ClubId)) return Unauthorized();
-            
-            _context.ClubThreads.Remove(new ClubThread { Id = thread.Id });
+            if (th is null) return NotFound();
+            if (!await CanDelete(th.AuthorId, th.ClubId)) return Unauthorized();
+
+            var thread = _context.ClubThreads.Attach(new ClubThread
+            {
+                Id = th.Id
+            });
+            thread.Entity.DeletedAt = DateTime.Now;
+
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("Index", new { id = thread.ClubId, slug = thread.Slug });
+            return RedirectToPage("Index", new { id = th.ClubId, slug = th.Slug });
         }
 
         private async Task<bool> CanDelete(long? authorId, long clubId)

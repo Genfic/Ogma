@@ -32,6 +32,7 @@ namespace Ogma3.Pages.Club
 
             ThreadCards = await _context.ClubThreads
                 .Where(ct => ct.ClubId == id)
+                .Where(ct => ct.DeletedAt == null)
                 .OrderByDescending(ct => ct.CreationDate)
                 .Take(3)
                 .Select(ct => new ThreadCard

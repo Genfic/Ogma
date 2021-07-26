@@ -12,11 +12,7 @@ namespace Ogma3.Api.V1.ClubJoin
     public class ClubJoinController : ControllerBase
     {
         private readonly IMediator _mediator;
-
-        public ClubJoinController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        public ClubJoinController(IMediator mediator) => _mediator = mediator;
 
         // GET api/clubjoin/5
         [HttpGet("{club:long}")]

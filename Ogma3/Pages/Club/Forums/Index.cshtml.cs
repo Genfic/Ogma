@@ -35,7 +35,8 @@ namespace Ogma3.Pages.Club.Forums
             if (ClubBar is null) return NotFound();
 
             var query = _context.ClubThreads
-                .Where(ct => ct.ClubId == id);
+                .Where(ct => ct.ClubId == id)
+                .Where(ct => ct.DeletedAt == null);
 
             ThreadCards = await query
                 .OrderByDescending(ct => ct.IsPinned)
