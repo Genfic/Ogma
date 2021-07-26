@@ -15,17 +15,25 @@ export class FeaturedInClubs extends LitElement {
 		super();
 	}
 
-	connectedCallback() {
+	async connectedCallback() {
 		super.connectedCallback();
 		this.classList.add('wc-loaded');
-		axios.get(`${this.endpoint}/story/${this.storyId}`)
-			.then(res => this.clubs = res.data)
-			.catch(console.error);
+		await this._fetch();
+	}
+	
+	async _fetch() {
+		const { data } = await axios.get(`${this.endpoint}/story/${this.storyId}`);
+		this.clubs = data;
+	}
+	
+	async _open() {
+		this.visible = true;
+		await this._fetch();
 	}
 
 	render() {
 		return html`
-            <a @click="${() => this.visible = !this.visible}">Featured in clubs</a>
+            <a @click="${async () => await this._open()}">Featured in clubs</a>
             
             ${this.visible ? html`
                 <div class="club-folder-selector my-modal" @click="${() => this.visible = false}" >
