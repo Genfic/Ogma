@@ -16,16 +16,14 @@ export class VoteButton extends LitElement {
 		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
 	}
     
-	connectedCallback() {
+	async connectedCallback() {
 		super.connectedCallback();
 		this.classList.add('wc-loaded');
 
-		axios.get(this.endpoint + '/' + this.storyId)
-			.then(res => {
-				this.score = res.data.count;
-				this.voted = res.data.didVote;
-			})
-			.catch(console.error);
+		const { data } = await axios.get(`${this.endpoint}/${this.storyId}`);
+
+		this.score = data.count;
+		this.voted = data.didVote;
 	}
 
 	render() {
@@ -37,17 +35,20 @@ export class VoteButton extends LitElement {
         `;
 	}
     
-	_vote() {
-		axios.post(this.endpoint, {
-			storyId: this.storyId
-		}, {
-			headers: { "RequestVerificationToken" : this.csrf }
-		})
-			.then(res => {
-				this.score = res.data.count;
-				this.voted = res.data.didVote;
-			})
-			.catch(console.error);
+	async _vote() {
+		const body = { storyId: this.storyId };
+		const options = { headers: { "RequestVerificationToken": this.csrf } };
+
+		const res = async () => this.voted 
+			? await axios.delete(this.endpoint, {
+				...options, data: body
+			}) 
+			: await axios.post(this.endpoint, body, options);
+		
+		const { data } = await res();
+		
+		this.score = data.count;
+		this.voted = data.didVote;
 	}
 
 	createRenderRoot() {

@@ -20,13 +20,8 @@ namespace Ogma3.Api.V1
     public class ContentBlockController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        public ContentBlockController(ApplicationDbContext context) => _context = context;
 
-        public ContentBlockController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        
         [HttpPost("story")]
         public async Task<ActionResult> BlockStory(PostData data) => await BlockContent<Story>(data);
         
@@ -39,14 +34,14 @@ namespace Ogma3.Api.V1
         private async Task<ActionResult> BlockContent<T>(PostData data) where T : BaseModel, IBlockableContent
         {
             var (itemId, reason) = data;
+
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
             
             var item = await _context.Set<T>()
                 .Where(i => i.Id == itemId)
                 .FirstOrDefaultAsync();
             if (item is null) return NotFound();
-
-            var uid = User.GetNumericId();
-            if (uid is null) return Unauthorized();
 
             item.ContentBlock = new ContentBlock
             {
