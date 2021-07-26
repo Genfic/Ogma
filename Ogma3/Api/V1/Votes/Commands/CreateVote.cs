@@ -16,7 +16,7 @@ namespace Ogma3.Api.V1.Votes.Commands
         public sealed record Query(long StoryId) : IRequest<ActionResult<Result>>;
 
         public class Handler : IRequestHandler<Query, ActionResult<Result>>
-        {   
+        {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
 
