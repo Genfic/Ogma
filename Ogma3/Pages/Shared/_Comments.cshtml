@@ -1,5 +1,6 @@
 @using static Ogma3.Services.HtmlExtensions
 @using Ogma3.Api.V1
+@using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
 @inject OgmaConfig _config
 @model CommentsThreadDto
@@ -9,7 +10,7 @@
     <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
     <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
     <div id="thread-route" data-route="@Url.RouteUrl(nameof(CommentsThreadController))" v-if="!threadRoute"></div>
-    <div id="subscribe-route" data-route="@Url.RouteUrl(nameof(SubscriptionController))" v-if="!subscribeRoute"></div>
+    <div id="subscribe-route" data-route="@Url.RouteUrl(nameof(SubscriptionsController))" v-if="!subscribeRoute"></div>
     <div id="per-page" data-count="@_config.CommentsPerPage" v-if="!perPage"></div>
     <div id="max-length" data-length="@CTConfig.CComment.MaxBodyLength" v-if="!maxLength"></div>
 
