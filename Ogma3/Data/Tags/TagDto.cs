@@ -1,3 +1,5 @@
+using AutoMapper;
+
 namespace Ogma3.Data.Tags
 {
     public class TagDto
@@ -9,5 +11,10 @@ namespace Ogma3.Data.Tags
         public ETagNamespace? Namespace { get; set; }
         public string NamespaceColor => Namespace.GetColor();
         public uint? NamespaceId => (uint?) Namespace;
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Tag, TagDto>();
+        }
     }
 }

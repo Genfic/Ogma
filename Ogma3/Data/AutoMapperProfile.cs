@@ -12,7 +12,6 @@ using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;
-using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Pages.Shared;
@@ -85,9 +84,6 @@ namespace Ogma3.Data
                     opts
                         => opts.MapFrom(cr => Markdown.ToHtml(cr.Body, md, null))
                 );
-
-            // Tag mappings
-            CreateMap<Tag, TagDto>();
 
             // Blogpost mappings
             CreateMap<Blogpost, BlogpostCard>();

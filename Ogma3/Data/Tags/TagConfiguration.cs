@@ -12,9 +12,12 @@ namespace Ogma3.Data.Tags
             
             // CONSTRAINTS
             builder
-                .HasIndex(t => t.Name)
+                .HasIndex(t => new { t.Name, t.Namespace })
                 .IsUnique();
 
+            builder
+                .HasIndex(t => t.Name);
+            
             builder
                 .Property(t => t.Name)
                 .IsRequired()
@@ -33,10 +36,6 @@ namespace Ogma3.Data.Tags
                 .Property(t => t.Namespace)
                 .IsRequired(false)
                 .HasDefaultValue(null);
-
-            // NAVIGATION
-
-
         }
     }
 }

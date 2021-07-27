@@ -8,18 +8,18 @@ namespace Ogma3.Data.Tags
 {
     public class Tag : BaseModel
     {
-        private readonly string _name;
+        private string _name;
         public string Name { 
             get => _name;
-            init
+            set
             {
                 _name = value;
                 Slug = value.Friendlify();
             } 
         }
         public string Slug { get; private set; }
-        public string? Description { get; init; }
-        public ETagNamespace? Namespace { get; init; }
-        public IEnumerable<Story> Stories { get; init; }
+        public string? Description { get; set; }
+        public ETagNamespace? Namespace { get; set; }
+        public IEnumerable<Story> Stories { get; set; }
     }
 }

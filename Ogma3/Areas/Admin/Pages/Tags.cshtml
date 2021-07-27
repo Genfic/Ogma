@@ -1,25 +1,27 @@
 ﻿@page
-@using Ogma3.Api.V1
+@using Ogma3.Api.V1.Tags
+@using Ogma3.Data
 @using Ogma3.Data.Tags
+@using System.Text.Json
 @model Ogma3.Areas.Admin.Pages.Tags
 
 @{
     ViewData["Title"] = "Tags";
     ViewData["ActivePage"] = ManageNavPages.Tags;
 }
-    
+
 <form id="tag" class="form" method="post" v-on:submit.stop.prevent="createTag">
-    
+
     <ul v-if="err" style="margin: 0">
         <li class="text-danger" v-for="e in err">{{ e }}</li>
     </ul>
-        
+
     <div class="o-form-group">
         <label asp-for="Input.Name"></label>
         <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
         <span class="text-danger"></span>
     </div>
-        
+
     <div class="o-form-group">
         <label asp-for="Input.Description"></label>
         <input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
@@ -36,22 +38,22 @@
         </select>
         <span class="text-danger"></span>
     </div>
-    
+
     <input type="hidden" :value="form.id">
-        
+
     <div class="o-form-group">
         <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
         <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
     </div>
-        
+
 </form>
 
 <button v-if="tags.length <= 0" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-  Loading...
+    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+    Loading...
 </button>
 
-<ul class="items-list">    
+<ul class="items-list">
     <li v-for="t in tags">
         <div class="deco" :style="{backgroundColor: t.namespaceColor}"></div>
         <div class="main">
@@ -69,7 +71,19 @@
     </li>
 </ul>
 
-<div id="tag-route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(TagsController))" v-if="!routes.tags"></div>
+<div v-if="!route" id="static-data">
+    @JsonSerializer.Serialize(new
+    {
+        Route = Url.RouteUrl(nameof(TagsController)),
+        Validation = new
+        {
+            CTConfig.CTag.MinNameLength,
+            CTConfig.CTag.MaxNameLength,
+            CTConfig.CTag.MaxDescLength
+        }
+    })
+</div>
+
 @section Scripts
 {
     <script src="~/js/dist/admin/tags.min.js" asp-append-version="true"></script>

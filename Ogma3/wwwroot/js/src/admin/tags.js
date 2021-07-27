@@ -10,13 +10,10 @@ let atags_vue = new Vue({
 		lens: {
 			minNameLength: 5,
 			maxNameLength: 20,
-			minDescLength: 10,
 			maxDescLength: 100
 		},
 		err: [],
-		routes: {
-			tags: null
-		},
+		route: null,
 		tags: []
 	},
 	methods: {
@@ -32,35 +29,30 @@ let atags_vue = new Vue({
 				this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
 			if (this.form.desc && this.form.desc.length > this.lens.maxDescLength)
 				this.err.push(`Description has to be at most ${this.lens.maxDescLength} characters long.`);
-			if (this.err.length > 0) return;
+			if (this.err.length > 0) return; 
 
 			if (this.form.name) {
 
+				const body = {
+					name: this.form.name,
+					namespace: Number(this.form.namespace),
+					description: this.form.desc
+				};
+				
+				const options = {
+					headers: { "RequestVerificationToken": this.csrf }
+				};
+				
 				// If no ID has been set, that means it's a new tag.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.routes.tags,
-						{
-							name: this.form.name,
-							namespace: Number(this.form.namespace),
-							description: this.form.desc
-						}, {
-							headers: { "RequestVerificationToken": this.csrf }
-						});
+					await axios.post(this.route, body, options);
 					await this.getTags();
 
 					// If the ID is set, that means it's an existing tag.
 					// Thus, we PUT it.
 				} else {
-					await axios.put(this.routes.tags + "/" + this.form.id,
-						{
-							id: this.form.id,
-							name: this.form.name,
-							namespace: Number(this.form.namespace),
-							description: this.form.desc
-						}, {
-							headers: { "RequestVerificationToken": this.csrf }
-						});
+					await axios.put(this.route, { id: this.form.id, ...body }, options);
 					await this.getTags();
 					// Clear the form too
 					this.form.name =
@@ -74,14 +66,14 @@ let atags_vue = new Vue({
 
 		// Gets all existing tags
 		getTags: async function() {
-			const { data } = await axios.get(this.routes.tags + "/all");
+			const { data } = await axios.get(`${this.route}/all`);
 			this.tags = data;
 		},
 
 		// Deletes a selected tag
 		deleteTag: async function(t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(this.routes.tags + "/" + t.id);
+				await axios.delete(`${this.route}/${t.id}`);
 				await this.getTags();
 			}
 		},
@@ -105,12 +97,12 @@ let atags_vue = new Vue({
 
 	async mounted() {
 		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-		// Grab the routes from route helpers
-		this.routes.tags = document.getElementById("tag-route").dataset.route;
-		// Get validation data
-		const { data } = await axios.get(this.routes.tags + "/validation");
-		this.lens = data;
-		// Grab the initial set of tags
+		
+		const { Route, Validation } = JSON.parse(document.getElementById('static-data').innerText);
+				
+		this.route = Route;
+		this.lens = Validation;
+		
 		await this.getTags();
 	}
 });
