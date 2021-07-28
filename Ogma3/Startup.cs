@@ -43,6 +43,7 @@ using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Ogma3.Infrastructure.Formatters;
+using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.RssService;
 
 namespace Ogma3
@@ -119,6 +120,8 @@ namespace Ogma3
             services.AddTransient<IUserService, UserService>();
             // RSS service
             services.AddTransient<IRssService, RssService>();
+            // Code generator service
+            services.AddSingleton<ICodeGenerator, CodeGenerator>();
             
             // Claims
             services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();

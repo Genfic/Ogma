@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Services;
+using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.InviteCodes.Commands
@@ -22,13 +22,15 @@ namespace Ogma3.Api.V1.InviteCodes.Commands
             private readonly ApplicationDbContext _context;
             private readonly IMapper _mapper;
             private readonly OgmaConfig _config;
+            private readonly ICodeGenerator _codeGenerator;
             private readonly long? _uid;
 
-            public Handler(ApplicationDbContext context, IMapper mapper, IUserService userService, OgmaConfig config)
+            public Handler(ApplicationDbContext context, IMapper mapper, OgmaConfig config, ICodeGenerator codeGenerator, IUserService userService)
             {
                 _context = context;
                 _mapper = mapper;
                 _config = config;
+                _codeGenerator = codeGenerator;
                 _uid = userService.User?.GetNumericId();
             }
             
@@ -45,7 +47,7 @@ namespace Ogma3.Api.V1.InviteCodes.Commands
             
                 var code = new InviteCode
                 {
-                    Code = CodeGenerator.InviteCode(),
+                    Code = _codeGenerator.GetInviteCode(),
                     IssuedById = (long)_uid
                 };
                 _context.InviteCodes.Add(code);

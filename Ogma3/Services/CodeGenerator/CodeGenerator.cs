@@ -1,17 +1,19 @@
 using System;
 
-namespace Ogma3.Services
+namespace Ogma3.Services.CodeGenerator
 {
-    public static class CodeGenerator
+    public class CodeGenerator : ICodeGenerator
     {
-        public static string InviteCode()
+        private readonly Random _rng;
+        public CodeGenerator() => _rng = new Random();
+
+        public string GetInviteCode()
         {
             var unix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var unixStr = unix.ToString("0000000000")[10..];
 
-            var random = new Random();
             var bytes = new byte[5];
-            random.NextBytes(bytes);
+            _rng.NextBytes(bytes);
 
             var hexArray = Array.ConvertAll(bytes, x => x.ToString("X2"));
             var hexStr = string.Concat(hexArray);
