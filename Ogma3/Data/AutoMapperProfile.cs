@@ -7,7 +7,6 @@ using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Folders;
-using Ogma3.Data.InviteCodes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Roles;
@@ -118,9 +117,6 @@ namespace Ogma3.Data
             CreateMap<Folder, FolderMinimal>();
             CreateMap<Folder, FolderMinimalDto>();
             CreateMap<Folder, FolderMinimalWithParentDto>();
-
-            // Invite code mappings
-            CreateMap<InviteCode, InviteCodeApiDto>();
 
             // Report mappings
             CreateMap<Report, ReportDto>();

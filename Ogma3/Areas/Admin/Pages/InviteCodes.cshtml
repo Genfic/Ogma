@@ -1,5 +1,5 @@
 @page
-@using Ogma3.Api.V1
+@using Ogma3.Api.V1.InviteCodes
 @model Ogma3.Areas.Admin.Pages.InviteCodes
 
 @{
@@ -16,13 +16,15 @@
     Loading...
 </button>
 
-<ul class="items-list">    
-    <li v-for="n in codes">
-        
-        <div class="deco" v-bind:style="{background: n.userName ? 'green' : 'gray'}"></div>
+<ul class="items-list">
+    <li v-for="n in codes" :class="n.id === newCode ? 'hl' : null">
+
+        <div class="deco" v-bind:style="{background: n.usedDate ? 'green' : 'gray'}"></div>
 
         <div class="main">
-            <h3 class="name"><span class="monospace">{{ n.code }}</span></h3>
+            <h3 class="name">
+                <span class="monospace">{{ n.code }}</span>
+            </h3>
             <span class="desc">
                 <span>Issued by <strong>{{n.issuedByUserName}}</strong> on <strong>{{date(n.issueDate)}}</strong></span>
                 <br>
@@ -40,7 +42,13 @@
         </div>
 
     </li>
+    
+    <li v-if="completed">
+        <span class="ph">That's it!</span>
+    </li>
 </ul>
+
+<button v-if="!completed" class="btn" v-on:click="loadMore">{{ loading ? 'Loading...' : 'Load More' }}</button>
 
 @Html.AntiForgeryToken()
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))" v-if="!route"></div>

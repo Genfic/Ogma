@@ -4,21 +4,34 @@ ul.items-list
   min-width: 100%
   margin-top: 1rem
   
-  & li
+  li
     contain: content
     display: flex
     min-width: 100%
     border: 1px solid v.$foreground-25
-    margin: .2rem
+    margin: .2rem 0
+    background-color: v.$ele-1
+
     &:hover
       border-color: v.$foreground
       
-    & .count
+    &.hl
+      outline: 2px solid transparent
+      animation: ease-in-out 5s fadeOutline
+      animation-iteration-count: 1
+      
+      @keyframes fadeOutline
+        0%
+          outline-color: v.$accent-75
+        100%
+          outline-color: transparent
+      
+    .count
       align-self: center
       font-size: 2rem
       min-width: 5rem 
     
-    & .main
+    .main
       margin: .5rem
       display: flex
       flex-direction: column
@@ -34,7 +47,7 @@ ul.items-list
       a
         color: v.$foreground
     
-    & .deco
+    .deco
       height: auto
       min-width: 5px
       margin-right: .5rem
@@ -51,7 +64,7 @@ ul.items-list
       >i
         min-width: unset
     
-    & .name
+    .name
       font-size: 1.2rem
       text-decoration: none
       text-overflow: ellipsis
@@ -61,18 +74,19 @@ ul.items-list
         font-size: 90%
         padding-left: .5rem        
       
-    & .desc
+    .desc
       color: v.$foreground-75
       text-overflow: ellipsis
       
-    & .actions
+    .actions
       display: flex
-      height: auto
+      align-self: baseline
+      padding: .25rem
+      gap: .25rem
       
       >.action
-        height: auto
-        margin: .2rem
-        padding: 0 .5rem
+        display: flex
+        padding: .5rem
         border: 1px solid v.$foreground-25
         color: v.$foreground-50
         background-color: transparent
@@ -83,3 +97,9 @@ ul.items-list
         
         >i.material-icons-outlined
           font-size: 1.2rem
+          
+    .ph
+      align-self: center
+      justify-self: center
+      margin: .5rem auto
+      

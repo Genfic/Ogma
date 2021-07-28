@@ -10,7 +10,7 @@ new Vue({
 		createCode: async function() {
 			const { data } = await axios.post(this.route, null,
 				{ headers: { RequestVerificationToken: this.xcsrf } }
-			);
+			).catch(e => alert(e.response.data));
 			this.codes.push(data);
 		},
 
