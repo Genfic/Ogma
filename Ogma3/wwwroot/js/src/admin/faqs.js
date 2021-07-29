@@ -20,27 +20,25 @@ new Vue({
 
 			if (this.form.question && this.form.answer) {
 
-				let data = {
+				const data = {
 					question: this.form.question,
 					answer: this.form.answer
+				};
+				
+				const options = {
+					headers: { "RequestVerificationToken": this.xcsrf }
 				};
 
 				// If no ID has been set, that means it's a new rating.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route, data, {
-						headers: { "RequestVerificationToken": this.xcsrf }
-					});
+					await axios.post(this.route, data, options);
 					await this.getFaqs();
 
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.
 				} else {
-					data.id = this.form.id;
-
-					await axios.put(`${this.route}/${this.form.id}`, data, {
-						headers: { "RequestVerificationToken": this.xcsrf }
-					});
+					await axios.put(this.route, { id: this.form.id, ...data }, options);
 					await this.getFaqs();
 					this.cancelEdit();
 				}

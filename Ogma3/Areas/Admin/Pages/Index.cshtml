@@ -6,6 +6,12 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Admin Area Here, Bitches!</h1>
+<div class="counters">
+    @foreach (var (k, v) in Model.Counts)
+    {
+        <div class="counter">
+            <span class="name">@k</span>
+            <span class="value">@v</span>
+        </div>
+    }
 </div>

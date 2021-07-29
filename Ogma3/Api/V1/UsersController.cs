@@ -12,7 +12,6 @@ using Ogma3.Infrastructure.Comparers;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Serilog;
-using Utils;
 
 namespace Ogma3.Api.V1
 {
@@ -29,31 +28,6 @@ namespace Ogma3.Api.V1
             _context = context;
             _userManager = userManager;
             _uid = User?.GetNumericId();
-        }
-
-        // GET: api/Users/signin/John
-        [HttpGet("signin/{name}")]
-        public async Task<ActionResult<SignInData>> GetSignInData(string name)
-        {
-            var user = await _context.Users
-                .AsNoTracking()
-                .Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
-                .Select(u => new { u.Avatar, u.Title, u.Email })
-                .FirstOrDefaultAsync();
-
-            return user is null
-                ? new SignInData
-                {
-                    Avatar = Lorem.Picsum(200),
-                    Title = string.Empty,
-                    // HasMfa = false
-                }
-                : new SignInData
-                {
-                    Avatar = user.Avatar ?? Lorem.Gravatar(user.Email),
-                    Title = user.Title,
-                    // HasMfa = user.TwoFactorEnabled
-                };
         }
 
         // api/Users/block
