@@ -78,7 +78,7 @@ new Vue({
 	},
 	async mounted() {
 		this.route = document.getElementById("route").dataset.route;
-		this.xcsrf = document.querySelector("[name=\"__RequestVerificationToken\"]").value;
+		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		await this.getFaqs();
 	}
 });

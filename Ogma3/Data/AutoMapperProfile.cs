@@ -109,9 +109,6 @@ namespace Ogma3.Data
                 );
             CreateMap<Club, ClubCard>();
 
-            // Rating mappings
-            CreateMap<Rating, RatingDto>();
-
             // Folder mappings
             CreateMap<Folder, FolderCard>();
             CreateMap<Folder, FolderMinimal>();

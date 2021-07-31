@@ -20,33 +20,27 @@ let roles_vue = new Vue({
 			e.preventDefault();
 			if (this.form.name) {
 
+				const data = {
+					name: this.form.name,
+					color: this.form.color,
+					isStaff: this.form.isStaff,
+					order: Number(this.form.order)
+				};
+
+				const options = {
+					headers: { RequestVerificationToken: this.xcsrf }
+				};
+
 				// If no ID has been set, that means it's a new role.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route,
-						{
-							name: this.form.name,
-							color: this.form.color,
-							isStaff: this.form.isStaff,
-							order: Number(this.form.order)
-						}, {
-							headers: { RequestVerificationToken: this.xcsrf }
-						});
+					await axios.post(this.route, data, options);
 					await this.getRoles();
 
-					// If the ID is set, that means it's an existing role.
-					// Thus, we PUT it.
+				// If the ID is set, that means it's an existing role.
+				// Thus, we PUT it.
 				} else {
-					await axios.put(this.route + "/" + this.form.id,
-						{
-							id: this.form.id,
-							name: this.form.name,
-							color: this.form.color,
-							isStaff: this.form.isStaff,
-							order: Number(this.form.order)
-						}, {
-							headers: { RequestVerificationToken: this.xcsrf }
-						});
+					await axios.put(this.route, { id: this.form.id, ...data }, options);
 					await this.getRoles();
 					this.cancelEdit();
 				}

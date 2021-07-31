@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
-@using Ogma3.Api.V1
+@using Ogma3.Api.V1.UserActivity
 @using Ogma3.Services
 @inject IWebHostEnvironment _env
 @{
@@ -128,7 +128,7 @@ else
 @Html.RenderResources()
 
 <script>
-(_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'}).catch(console.error);})()
+(_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'});})()
 </script>
     
 @if (_env.IsDevelopment()) {

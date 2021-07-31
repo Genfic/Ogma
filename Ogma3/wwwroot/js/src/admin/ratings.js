@@ -36,20 +36,21 @@ let ratings_vue = new Vue({
 				if (this.form.icon)
 					data.append("icon", this.form.icon, this.form.icon.name);
 
+				const options = {
+					headers: { "RequestVerificationToken": this.xcsrf }
+				};
+				
 				// If no ID has been set, that means it's a new rating.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route, data, { 
-						headers: { "RequestVerificationToken": this.xcsrf } 
-					});
+					await axios.post(this.route, data, options);
 					await this.getRatings();
 
-					// If the ID is set, that means it's an existing namespace.
-					// Thus, we PUT it.
+				// If the ID is set, that means it's an existing namespace.
+				// Thus, we PUT it.
 				} else {
-					await axios.put(`${this.route}/${this.form.id}`, data, {
-						headers: { "RequestVerificationToken": this.xcsrf } 
-					});
+					data.append("id", this.form.id);
+					await axios.put(this.route, data, options);
 					await this.getRatings();
 					this.cancelEdit();
 				}
@@ -66,7 +67,7 @@ let ratings_vue = new Vue({
 		// Deletes a selected namespace
 		deleteRating: async function(t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(this.route + "/" + t.id);
+				await axios.delete(`${this.route}/${t.id}`);
 				await this.getRatings();
 			}
 		},
@@ -95,7 +96,7 @@ let ratings_vue = new Vue({
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		this.cdn = document.getElementById("cdn").dataset.cdn;
-		this.xcsrf = document.querySelector("[name=\"__RequestVerificationToken\"]").value;
+		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of namespaces
 		await this.getRatings();
 	}
