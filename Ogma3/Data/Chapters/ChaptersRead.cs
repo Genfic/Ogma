@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ogma3.Data.Bases;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
 

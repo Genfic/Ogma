@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Comments

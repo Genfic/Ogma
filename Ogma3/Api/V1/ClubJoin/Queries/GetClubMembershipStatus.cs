@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using LinqToDB.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;

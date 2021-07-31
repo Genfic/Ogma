@@ -7,7 +7,6 @@ using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Folders;
-using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;

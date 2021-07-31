@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Votes.Commands;
 using Ogma3.Api.V1.Votes.Queries;
-using Ogma3.Data;
 
 namespace Ogma3.Api.V1.Votes
 {

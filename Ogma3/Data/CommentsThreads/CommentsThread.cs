@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
-using Ogma3.Data.Clubs;
 using Ogma3.Data.ClubThreads;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Users;

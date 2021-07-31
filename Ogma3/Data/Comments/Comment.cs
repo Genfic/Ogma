@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Ogma3.Data.Bases;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Reports;

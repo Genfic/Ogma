@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.InviteCodes.Commands
 {
     public static class AdminIssueInviteCode
     {
-        public sealed record Query() : IRequest<ActionResult<InviteCodeDto>>;
+        public sealed record Query : IRequest<ActionResult<InviteCodeDto>>;
 
         public class Handler : IRequestHandler<Query, ActionResult<InviteCodeDto>>
         {

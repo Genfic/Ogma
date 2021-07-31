@@ -11,7 +11,7 @@ namespace Ogma3.Api.V1.Faqs.Queries
 {
     public static class GetAllFaqs
     {
-        public sealed record Query() : IRequest<ActionResult<List<Faq>>>;
+        public sealed record Query : IRequest<ActionResult<List<Faq>>>;
 
         public class Handler : IRequestHandler<Query, ActionResult<List<Faq>>>
         {

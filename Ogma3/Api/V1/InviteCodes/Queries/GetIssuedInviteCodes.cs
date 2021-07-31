@@ -16,7 +16,7 @@ namespace Ogma3.Api.V1.InviteCodes.Queries
 {
     public static class GetIssuedInviteCodes
     {
-        public sealed record Query() : IRequest<ActionResult<List<InviteCodeDto>>>;
+        public sealed record Query : IRequest<ActionResult<List<InviteCodeDto>>>;
 
         public class Handler : IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
         {
