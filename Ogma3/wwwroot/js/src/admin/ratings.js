@@ -52,9 +52,9 @@ let ratings_vue = new Vue({
 					data.append("id", this.form.id);
 					await axios.put(this.route, data, options);
 					await this.getRatings();
-					this.cancelEdit();
 				}
 
+				this.cancelEdit();
 			}
 		},
 
@@ -67,7 +67,9 @@ let ratings_vue = new Vue({
 		// Deletes a selected namespace
 		deleteRating: async function(t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`);
+				await axios.delete(`${this.route}/${t.id}`, {
+					headers: { "RequestVerificationToken": this.xcsrf }
+				});
 				await this.getRatings();
 			}
 		},
@@ -84,11 +86,8 @@ let ratings_vue = new Vue({
 
 		// Clears the editor
 		cancelEdit: function() {
-			this.form.name =
-				this.form.color =
-					this.form.id =
-						this.form.desc =
-							this.form.order = null;
+			Object.keys(this.form).forEach((i) => this.form[i] = null);
+			this.$refs.file.value = null;
 		}
 	},
 

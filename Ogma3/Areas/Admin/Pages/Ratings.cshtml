@@ -22,7 +22,7 @@
     <input asp-for="Input.Description" v-model="form.desc">
 
     <label asp-for="Input.Icon"></label>
-    <input asp-for="Input.Icon" v-on:change="iconChanged" accept=".png,.jpg,.jpeg,.webp,.svg">
+    <input asp-for="Input.Icon" v-on:change="iconChanged" ref="file" accept=".svg">
 
     <label asp-for="Input.BlacklistedByDefault"></label>
     <input asp-for="Input.BlacklistedByDefault" v-model="form.blacklist">
