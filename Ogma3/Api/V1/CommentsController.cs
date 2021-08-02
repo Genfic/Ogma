@@ -132,11 +132,10 @@ namespace Ogma3.Api.V1
             if (uid != comm.AuthorId) return Unauthorized();
 
             // Create revision
-            _context.CommentRevisions.Add(new CommentRevision
+            comm.Revisions.Add(new CommentRevision
             {
                 Body = comm.Body,
                 ParentId = comm.Id,
-                EditTime = DateTime.Now
             });
 
             // Edit the comment

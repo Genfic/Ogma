@@ -40,6 +40,7 @@ using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Ogma3.Infrastructure.Formatters;
+using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.RssService;
 
@@ -208,6 +209,7 @@ namespace Ogma3
             
             // MediatR
             services.AddMediatR(typeof(Startup));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<>));
             
             // Custom formatters
             services.AddControllers(options =>

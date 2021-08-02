@@ -52,6 +52,12 @@ namespace Ogma3.Data.Comments
                 .WithOne(r => r.Comment)
                 .HasForeignKey(r => r.CommentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .HasMany(c => c.Revisions)
+                .WithOne(r => r.Parent)
+                .HasForeignKey(r => r.ParentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

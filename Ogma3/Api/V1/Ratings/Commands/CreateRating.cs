@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,23 @@ namespace Ogma3.Api.V1.Ratings.Commands
 {
     public static class CreateRating
     {
-        public sealed record Query (string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon) 
+        public sealed record Command (string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon) 
             : IRequest<ActionResult<RatingApiDto>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<RatingApiDto>>
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(r => r.Name)
+                    .MinimumLength(CTConfig.CRating.MinNameLength)
+                    .MaximumLength(CTConfig.CRating.MaxNameLength);
+                RuleFor(r => r.Description)
+                    .MinimumLength(CTConfig.CRating.MinDescriptionLength)
+                    .MaximumLength(CTConfig.CRating.MaxDescriptionLength);
+            }
+        }
+        
+        public class Handler : IRequestHandler<Command, ActionResult<RatingApiDto>>
         {
             private readonly ApplicationDbContext _context;
             private readonly ImageUploader _uploader;
@@ -26,7 +40,7 @@ namespace Ogma3.Api.V1.Ratings.Commands
                 _uploader = uploader;
             }
 
-            public async Task<ActionResult<RatingApiDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var (name, description, blacklistedByDefault, order, formFile) = request;
                 

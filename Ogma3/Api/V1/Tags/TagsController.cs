@@ -41,13 +41,13 @@ namespace Ogma3.Api.V1.Tags
         // PUT: api/Tags/5
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutTag(UpdateTag.Query data)
+        public async Task<IActionResult> PutTag(UpdateTag.Command data)
             => await _mediator.Send(data);
         
         // POST: api/Tags
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PostTag(CreateTag.Query data)
+        public async Task<IActionResult> PostTag(CreateTag.Command data)
             => await _mediator.Send(data);
         
         // DELETE: api/Tags/5

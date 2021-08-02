@@ -29,13 +29,13 @@ namespace Ogma3.Api.V1.Roles
         // PUT: api/Namespaces/5
         [HttpPut]
         [Authorize(Roles = RoleNames.Admin)]
-        public async Task<ActionResult<RoleDto>> PutRole(UpdateRole.Query data)
+        public async Task<ActionResult<RoleDto>> PutRole(UpdateRole.Command data)
             => await _mediator.Send(data);
         
         // POST: api/Roles
         [HttpPost]
         [Authorize(Roles = RoleNames.Admin)]
-        public async Task<ActionResult<RoleDto>> PostRole(CreateRole.Query data)
+        public async Task<ActionResult<RoleDto>> PostRole(CreateRole.Command data)
             => await _mediator.Send(data);
         
         // DELETE: api/Roles/5

@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,15 @@ namespace Ogma3.Api.V1.Quotes.Commands
     public static class CreateQuote
     {
         public sealed record Command(string Body, string Author) : IRequest<ActionResult<Quote>>;
-
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(q => q.Body).NotEmpty();
+                RuleFor(q => q.Author).NotEmpty();
+            }
+        }
+        
         public class CreateQuoteHandler : IRequestHandler<Command, ActionResult<Quote>>
         {
             private readonly ApplicationDbContext _context;

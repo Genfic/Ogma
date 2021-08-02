@@ -26,12 +26,12 @@ namespace Ogma3.Api.V1.Ratings
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<RatingApiDto>> PostRating([FromForm] CreateRating.Query data)
+        public async Task<ActionResult<RatingApiDto>> PostRating([FromForm] CreateRating.Command data)
             => await _mediator.Send(data);
 
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<RatingApiDto>> PutRating([FromForm] UpdateRating.Query data)
+        public async Task<ActionResult<RatingApiDto>> PutRating([FromForm] UpdateRating.Command data)
             => await _mediator.Send(data);
 
         [HttpDelete("{id:long}")]

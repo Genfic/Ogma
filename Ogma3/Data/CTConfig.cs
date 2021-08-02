@@ -30,12 +30,6 @@ namespace Ogma3.Data
             public const int MaxDescLength = 100;
         }
         
-        public static class CNamespace
-        {
-            public const int MinNameLength = 5;
-            public const int MaxNameLength = 10;
-        }
-        
         public static class CRating
         {
             public const int MinNameLength = 5;

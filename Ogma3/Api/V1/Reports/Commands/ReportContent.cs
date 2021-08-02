@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
@@ -12,7 +13,14 @@ namespace Ogma3.Api.V1.Reports.Commands
     public static class ReportContent
     {
         public sealed record Query(long ItemId, string Reason, EReportableContentTypes ItemType) : IRequest<ActionResult<long>>;
-
+        public class CommandValidator : AbstractValidator<Query>
+        {
+            public CommandValidator()
+            {
+                RuleFor(r => r.Reason).MinimumLength(30).MaximumLength(500);
+            }
+        }
+        
         public class Handler : IRequestHandler<Query, ActionResult<long>>
         {
             private readonly ApplicationDbContext _context;
