@@ -10,15 +10,15 @@ namespace Ogma3.Api.V1.Tags.Commands
 {
     public static class DeleteTag
     {
-        public sealed record Query(long Id) : IRequest<ActionResult<long>>;
+        public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<long>>
+        public class Handler : IRequestHandler<Command, ActionResult<long>>
         {
             private readonly ApplicationDbContext _context;
 
             public Handler(ApplicationDbContext context) => _context = context;
 
-            public async Task<ActionResult<long>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var tag = await _context.Tags
                     .Where(t => t.Id == request.Id)

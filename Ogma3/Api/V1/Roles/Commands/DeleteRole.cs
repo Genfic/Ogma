@@ -9,14 +9,14 @@ namespace Ogma3.Api.V1.Roles.Commands
 {
     public static class DeleteRole
     {
-        public sealed record Query(long Id) : IRequest<IActionResult>;
+        public sealed record Command(long Id) : IRequest<IActionResult>;
 
-        public class Handler : IRequestHandler<Query, IActionResult>
+        public class Handler : IRequestHandler<Command, IActionResult>
         {
             private readonly RoleManager<OgmaRole> _roleManager;
             public Handler(RoleManager<OgmaRole> roleManager) => _roleManager = roleManager;
 
-            public async Task<IActionResult> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 var role = await _roleManager.FindByIdAsync(request.Id.ToString());
 

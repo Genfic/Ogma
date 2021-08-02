@@ -32,18 +32,18 @@ namespace Ogma3.Api.V1.InviteCodes
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<InviteCodeDto>> PostInviteCode()
-            => await _mediator.Send(new IssueInviteCode.Query());
+            => await _mediator.Send(new IssueInviteCode.Command());
 
 
         [HttpPost("no-limit")]
         [Authorize(Roles = RoleNames.Admin + ", " + RoleNames.Moderator)]
         public async Task<ActionResult<InviteCodeDto>> PostInviteCodeNoLimit()
-            => await _mediator.Send(new AdminIssueInviteCode.Query());
+            => await _mediator.Send(new AdminIssueInviteCode.Command());
 
 
         [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<long>> DeleteInviteCode(long id)
-            => await _mediator.Send(new DeleteInviteCode.Query(id));
+            => await _mediator.Send(new DeleteInviteCode.Command(id));
     }
 }

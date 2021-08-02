@@ -36,7 +36,7 @@ namespace Ogma3.Infrastructure.CustomValidators
 
     public static class FileExtensionValidatorExtension
     {
-        public static IRuleBuilderOptions<T, IFormFile> FileHasExtension<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, string[] allowedExtensions)
+        public static IRuleBuilderOptions<T, IFormFile> FileHasExtension<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, params string[] allowedExtensions)
             => ruleBuilder.SetValidator(new FileExtensionValidator<T>(allowedExtensions));
     }
 }

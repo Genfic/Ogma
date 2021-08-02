@@ -13,9 +13,9 @@ namespace Ogma3.Api.V1.Votes.Commands
 {
     public static class CreateVote
     {
-        public sealed record Query(long StoryId) : IRequest<ActionResult<Result>>;
+        public sealed record Command(long StoryId) : IRequest<ActionResult<Result>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<Result>>
+        public class Handler : IRequestHandler<Command, ActionResult<Result>>
         {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -26,7 +26,7 @@ namespace Ogma3.Api.V1.Votes.Commands
                 _uid = userService?.User?.GetNumericId();
             }
             
-            public async Task<ActionResult<Result>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<Result>> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (_uid is null) return new UnauthorizedResult();
                 

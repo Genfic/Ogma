@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
+using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 
@@ -26,6 +27,10 @@ namespace Ogma3.Api.V1.Ratings.Commands
                 RuleFor(r => r.Description)
                     .MinimumLength(CTConfig.CRating.MinDescriptionLength)
                     .MaximumLength(CTConfig.CRating.MaxDescriptionLength);
+                RuleFor(r => r.Icon)
+                    .FileHasExtension("svg")
+                    .FileSmallerThan(100 * 1024)
+                    .When(r => r.Icon is not null);
             }
         }
         

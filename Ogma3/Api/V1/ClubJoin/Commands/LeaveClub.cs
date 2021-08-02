@@ -12,9 +12,9 @@ namespace Ogma3.Api.V1.ClubJoin.Commands
 {
     public static class LeaveClub
     {
-        public sealed record Query(long ClubId) : IRequest<ActionResult<bool>>;
+        public sealed record Command(long ClubId) : IRequest<ActionResult<bool>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<bool>>
+        public class Handler : IRequestHandler<Command, ActionResult<bool>>
         {            
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -25,7 +25,7 @@ namespace Ogma3.Api.V1.ClubJoin.Commands
                 _uid = userService?.User?.GetNumericId();
             }
             
-            public async Task<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (_uid is null) return new UnauthorizedResult();
 

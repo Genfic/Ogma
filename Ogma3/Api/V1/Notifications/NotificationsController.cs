@@ -28,6 +28,6 @@ namespace Ogma3.Api.V1.Notifications
         [HttpDelete("{id:long}")]
         [Authorize]
         public async Task<IActionResult> DeleteAsync(long id)
-            => await _mediator.Send(new DeleteNotification.Query(id));
+            => await _mediator.Send(new DeleteNotification.Command(id));
     }
 }

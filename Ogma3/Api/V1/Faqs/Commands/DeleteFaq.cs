@@ -10,14 +10,14 @@ namespace Ogma3.Api.V1.Faqs.Commands
 {
     public static class DeleteFaq
     {
-        public sealed record Query(long Id) : IRequest<ActionResult<long>>;
+        public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<long>>
+        public class Handler : IRequestHandler<Command, ActionResult<long>>
         {
             private readonly ApplicationDbContext _context;
             public Handler(ApplicationDbContext context) => _context = context;
 
-            public async Task<ActionResult<long>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var faq = await _context.Faqs
                     .Where(f => f.Id == request.Id)

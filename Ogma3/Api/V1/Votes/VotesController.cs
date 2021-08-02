@@ -22,12 +22,12 @@ namespace Ogma3.Api.V1.Votes
         // POST api/votes
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<CreateVote.Result>> PostVote([FromBody] CreateVote.Query data)
+        public async Task<ActionResult<CreateVote.Result>> PostVote([FromBody] CreateVote.Command data)
             => await _mediator.Send(data);
 
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult<DeleteVote.Result>> DeleteVote([FromBody] DeleteVote.Query data)
+        public async Task<ActionResult<DeleteVote.Result>> DeleteVote([FromBody] DeleteVote.Command data)
             => await _mediator.Send(data);
     }
 }

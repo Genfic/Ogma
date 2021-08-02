@@ -15,7 +15,7 @@ namespace Ogma3.Api.V1.UserActivity
         // POST
         [HttpHead]
         public async Task<IActionResult> UpdateLastActiveAsync()
-            => await _mediator.Send(new UpdateLastActive.Query());
+            => await _mediator.Send(new UpdateLastActive.Command());
         
         // Don't delete or this whole controller will break
         [HttpGet] public string Ping() => "Pong";

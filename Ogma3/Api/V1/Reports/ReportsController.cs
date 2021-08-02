@@ -18,7 +18,7 @@ namespace Ogma3.Api.V1.Reports
         [HttpPost]
         [Authorize]
         [Throttle(Count = 3, TimeUnit = TimeUnit.Hour)]
-        public async Task<ActionResult<long>> PostReportsAsync([FromBody] ReportContent.Query data)
+        public async Task<ActionResult<long>> PostReportsAsync([FromBody] ReportContent.Command data)
             => await _mediator.Send(data);
         
         // Don't delete or this whole controller will break

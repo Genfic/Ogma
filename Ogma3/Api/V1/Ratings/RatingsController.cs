@@ -37,6 +37,6 @@ namespace Ogma3.Api.V1.Ratings
         [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<long>> DeleteRating(long id)
-            => await _mediator.Send(new DeleteRating.Query(id));
+            => await _mediator.Send(new DeleteRating.Command(id));
     }
 }

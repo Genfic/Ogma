@@ -28,19 +28,19 @@ namespace Ogma3.Api.V1.Faqs
         // PUT: api/Faqs/5
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutFaq(UpdateFaq.Query data)
+        public async Task<IActionResult> PutFaq(UpdateFaq.Command data)
             => await _mediator.Send(data);
         
         // POST: api/Faqs
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Faq>> PostFaq(CreateFaq.Query data)
+        public async Task<ActionResult<Faq>> PostFaq(CreateFaq.Command data)
             => await _mediator.Send(data);
         
         // DELETE: api/Faqs/5
         [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<long>> DeleteFaq(long id)
-            => await _mediator.Send(new DeleteFaq.Query(id));
+            => await _mediator.Send(new DeleteFaq.Command(id));
     }
 }

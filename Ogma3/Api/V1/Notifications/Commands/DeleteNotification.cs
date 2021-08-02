@@ -12,9 +12,9 @@ namespace Ogma3.Api.V1.Notifications.Commands
 {
     public static class DeleteNotification
     {
-        public sealed record Query(long NotificationId) : IRequest<IActionResult>;
+        public sealed record Command(long NotificationId) : IRequest<IActionResult>;
 
-        public class Handler : IRequestHandler<Query, IActionResult>
+        public class Handler : IRequestHandler<Command, IActionResult>
         {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -25,7 +25,7 @@ namespace Ogma3.Api.V1.Notifications.Commands
                 _uid = userService?.User?.GetNumericId();
             }
             
-            public async Task<IActionResult> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (_uid is null) return new UnauthorizedResult();
             

@@ -32,6 +32,13 @@ namespace Ogma3.Infrastructure.CustomValidators
 
     public static class FileSizeValidatorExtension
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="max">Maximum file size in bytes</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static IRuleBuilderOptions<T, IFormFile> FileSmallerThan<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, uint max)
             => ruleBuilder.SetValidator(new FileSizeValidator<T>(max));
     }

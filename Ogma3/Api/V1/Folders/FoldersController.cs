@@ -24,7 +24,7 @@ namespace Ogma3.Api.V1.Folders
 
         [HttpPost("add-story")]
         [Authorize]
-        public async Task<ActionResult<FolderStory>> AddStory(AddStoryToFolder.Query data)
+        public async Task<ActionResult<FolderStory>> AddStory(AddStoryToFolder.Command data)
             => await _mediator.Send(data);
 
         // Don't delete or this whole controller will break

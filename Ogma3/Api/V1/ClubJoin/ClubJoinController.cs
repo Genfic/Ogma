@@ -24,13 +24,13 @@ namespace Ogma3.Api.V1.ClubJoin
         [HttpPost]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult<bool>> JoinClub(JoinClub.Query data)
+        public async Task<ActionResult<bool>> JoinClub(JoinClub.Command data)
             => await _mediator.Send(data);
 
         [HttpDelete]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult<bool>> LeaveClub(LeaveClub.Query data)
+        public async Task<ActionResult<bool>> LeaveClub(LeaveClub.Command data)
             => await _mediator.Send(data);
     }
 }

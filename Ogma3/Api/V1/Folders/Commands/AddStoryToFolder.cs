@@ -13,9 +13,9 @@ namespace Ogma3.Api.V1.Folders.Commands
 {
     public static class AddStoryToFolder
     {
-        public sealed record Query(long FolderId, long StoryId) : IRequest<ActionResult<FolderStory>>;
+        public sealed record Command(long FolderId, long StoryId) : IRequest<ActionResult<FolderStory>>;
 
-        public class Handler : IRequestHandler<Query, ActionResult<FolderStory>>
+        public class Handler : IRequestHandler<Command, ActionResult<FolderStory>>
         {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -26,7 +26,7 @@ namespace Ogma3.Api.V1.Folders.Commands
                 _uid = userService?.User?.GetNumericId();
             }
             
-            public async Task<ActionResult<FolderStory>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<FolderStory>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var (folderId, storyId) = request;
             

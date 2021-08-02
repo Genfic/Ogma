@@ -20,12 +20,12 @@ namespace Ogma3.Api.V1.Subscriptions
 
         [HttpPost("thread")]
         [Authorize]
-        public async Task<ActionResult<bool>> SubscribeThreadAsync(SubscribeCommentsThread.Query data)
+        public async Task<ActionResult<bool>> SubscribeThreadAsync(SubscribeCommentsThread.Command data)
             => await _mediator.Send(data);
 
         [HttpDelete("thread")]
         [Authorize]
-        public async Task<ActionResult<bool>> UnsubscribeThreadAsync(UnsubscribeCommentsThread.Query data)
+        public async Task<ActionResult<bool>> UnsubscribeThreadAsync(UnsubscribeCommentsThread.Command data)
             => await _mediator.Send(data);
 
         // Don't delete or this whole controller will break

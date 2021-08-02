@@ -13,22 +13,22 @@ namespace Ogma3.Api.V1.Faqs.Commands
 {
     public static class UpdateFaq
     {
-        public sealed record Query(long Id, string Question, string Answer) : IRequest<IActionResult>;
-        public class QueryValidation : AbstractValidator<Query>
+        public sealed record Command(long Id, string Question, string Answer) : IRequest<IActionResult>;
+        public class CommandValidator : AbstractValidator<Command>
         {
-            public QueryValidation()
+            public CommandValidator()
             {
                 RuleFor(f => f.Question).NotEmpty();
                 RuleFor(f => f.Answer).NotEmpty();
             }
         }
         
-        public class Handler : IRequestHandler<Query, IActionResult>
+        public class Handler : IRequestHandler<Command, IActionResult>
         {
             private readonly ApplicationDbContext _context;
             public Handler(ApplicationDbContext context) => _context = context;
 
-            public async Task<IActionResult> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 var (id, question, answer) = request;
                 

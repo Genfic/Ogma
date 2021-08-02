@@ -12,16 +12,13 @@ namespace Ogma3.Api.V1.Reports.Commands
 {
     public static class ReportContent
     {
-        public sealed record Query(long ItemId, string Reason, EReportableContentTypes ItemType) : IRequest<ActionResult<long>>;
-        public class CommandValidator : AbstractValidator<Query>
+        public sealed record Command(long ItemId, string Reason, EReportableContentTypes ItemType) : IRequest<ActionResult<long>>;
+        public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
-            {
-                RuleFor(r => r.Reason).MinimumLength(30).MaximumLength(500);
-            }
+            public CommandValidator() => RuleFor(r => r.Reason).MinimumLength(30).MaximumLength(500);
         }
         
-        public class Handler : IRequestHandler<Query, ActionResult<long>>
+        public class Handler : IRequestHandler<Command, ActionResult<long>>
         {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -32,7 +29,7 @@ namespace Ogma3.Api.V1.Reports.Commands
                 _uid = userService.User?.GetNumericId();
             }
 
-            public async Task<ActionResult<long>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (_uid is null) return new UnauthorizedResult();
                 

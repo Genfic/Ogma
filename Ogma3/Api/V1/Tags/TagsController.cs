@@ -54,7 +54,7 @@ namespace Ogma3.Api.V1.Tags
         [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<long>> DeleteTag(long id)
-            => await _mediator.Send(new DeleteTag.Query(id));
+            => await _mediator.Send(new DeleteTag.Command(id));
 
     }
 }

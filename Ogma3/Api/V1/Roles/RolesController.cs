@@ -42,6 +42,6 @@ namespace Ogma3.Api.V1.Roles
         [HttpDelete("{id:long}")]
         [Authorize(Roles = RoleNames.Admin)]
         public async Task<IActionResult> DeleteRole(long id)
-            => await _mediator.Send(new DeleteRole.Query(id));
+            => await _mediator.Send(new DeleteRole.Command(id));
     }
 }
