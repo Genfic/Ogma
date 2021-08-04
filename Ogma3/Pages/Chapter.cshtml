@@ -37,39 +37,37 @@
                     <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
-
-                <div class="actions">
-                    @if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
-                    {
-                        <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
-                            <icon class="icon" icon="edit"></icon>
-                            <span class="name">Edit</span>
-                        </a>
-                    }
-                    @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
-                    {
-                        <a title="Manage" class="action-btn red" target="_blank"
-                           asp-area="Admin" asp-page="/ContentBlock"
-                           asp-route-type="chapter" asp-route-id="@Model.Chapter.Id">
-                            <icon class="icon" icon="shield"></icon>
-                        </a>
-                    }
-                    <button title="Report" class="action-btn red" v-on:click="report">
-                        <icon class="icon" icon="flag"></icon>
-                    </button>
-                </div>
+                
                 @if (!Model.Chapter.IsPublished)
                 {
                     <span class="not-published">
                         <icon class="icon" icon="visibility_off"></icon>
                     </span>
                 }
-                @if (Model.Chapter.ContentBlockId != null)
+                @if (Model.Chapter.ContentBlockId is not null)
                 {
-                    <span class="not-published">
-                        <icon class="icon" icon="shield"></icon>
+                    <span class="not-published" title="Content blocked by moderator">
+                        <icon class="icon" icon="lock"></icon>
                     </span>
                 }
+                @if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
+                {
+                    <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
+                        <icon class="icon" icon="edit"></icon>
+                        <span class="name">Edit</span>
+                    </a>
+                }
+                @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+                {
+                    <a title="Manage" class="action-btn red" target="_blank"
+                       asp-area="Admin" asp-page="/ContentBlock"
+                       asp-route-type="chapter" asp-route-id="@Model.Chapter.Id">
+                        <icon class="icon" icon="shield"></icon>
+                    </a>
+                }
+                <button title="Report" class="action-btn red" v-on:click="report">
+                    <icon class="icon" icon="flag"></icon>
+                </button>
             </div>
         }
 

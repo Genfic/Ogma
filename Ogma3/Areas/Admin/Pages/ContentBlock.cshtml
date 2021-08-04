@@ -51,7 +51,7 @@ else
 
     <form method="POST" class="auto">
         <label for="reason">Reason</label>
-        <input type="text" name="reason" id="reason" value="@reason">
+        <input type="text" name="reason" id="reason" value="@reason" readonly="@(blocked ? true : false)">
         <input type="submit" value="@(blocked ? "Unblock" : "Block")">
     </form>
 }

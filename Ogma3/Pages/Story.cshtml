@@ -62,6 +62,18 @@
                     <span class="name">New chapter</span>
                 </a>
             }
+            @if (!Model.Story.IsPublished)
+            {
+                <span class="action-btn large red">
+                    <icon class="icon" icon="visibility_off"></icon>
+                </span>
+            }
+            @if (Model.Story.ContentBlockId is not null)
+            {
+                <span class="action-btn large red" title="Content blocked by moderator">
+                    <icon class="icon" icon="lock"></icon>
+                </span>
+            }
             @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
             {
                 <a title="Manage" class="action-btn large red" target="_blank"
@@ -69,18 +81,6 @@
                    asp-route-type="story" asp-route-id="@Model.Story.Id">
                     <icon class="icon" icon="shield"></icon>
                 </a>
-            }
-            @if (!Model.Story.IsPublished)
-            {
-                <span class="action-btn large red">
-                    <icon class="icon" icon="visibility_off"></icon>
-                </span>
-            }
-            @if (Model.Story.ContentBlockId != null)
-            {
-                <span class="action-btn large red">
-                    <icon class="icon" icon="shield"></icon>
-                </span>
             }
             @if (User.Identity?.IsAuthenticated ?? false)
             {

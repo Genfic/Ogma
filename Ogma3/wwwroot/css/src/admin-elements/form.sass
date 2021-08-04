@@ -19,7 +19,7 @@ form
     background-color: transparent
     color: v.$foreground
     padding: .25rem .5rem
-    +ab.active-border
+    +ab.active-border   
     
   select
     >option
@@ -41,3 +41,11 @@ form
     color: v.$foreground
     padding: .5rem
     +ab.active-border
+    
+  input[readonly]
+    color: v.$foreground-75
+    &:focus
+      outline: none
+      border: 1px solid v.$foreground-25
+    &:hover
+      border: 1px solid v.$foreground-25
