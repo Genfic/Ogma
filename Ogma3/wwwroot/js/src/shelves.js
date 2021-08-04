@@ -13,11 +13,6 @@ new Vue({
 			icon: null,
 			id: null
 		},
-		lens: {
-			minNameLength: 3,
-			maxNameLength: 50,
-			maxDescLength: 255
-		},
 		showForm: false,
 		csrf: null,
 		err: null,
@@ -31,34 +26,27 @@ new Vue({
 		// It was simply easier to slap both functionalities into a single function.
 		createShelf: async function(e) {
 			e.preventDefault();
-
-			// Validation
-			this.err = [];
-			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
-				this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
-			if (this.form.desc && this.form.desc.length > this.lens.maxDescLength)
-				this.err.push(`Description has to be less than ${this.lens.maxDescLength} characters long.`);
-			if (this.err.length > 0) return;
-
-
+			
 			if (this.form.name) {
 
-				let shelf = {
+				const shelf = {
 					name: this.form.name,
 					description: this.form.desc,
 					isPublic: this.form.pub,
-					isQuick: this.form.quick,
+					isQuickAdd: this.form.quick,
 					trackUpdates: this.form.track,
 					color: this.form.color,
 					icon: Number(this.form.icon)
+				};
+				
+				const options = {
+					headers: { "RequestVerificationToken": this.csrf }
 				};
 
 				// If no ID has been set, that means it's a new shelf.
 				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route, shelf, {
-						headers: { "RequestVerificationToken": this.csrf }
-					});
+					await axios.post(this.route, shelf, options);
 
 					await this.getShelves();
 					this.cancelEdit();
@@ -67,9 +55,7 @@ new Vue({
 					// Thus, we PUT it.
 				} else {
 					shelf.id = this.form.id;
-					await axios.put(`${this.route}/${this.form.id}`, shelf, {
-						headers: { "RequestVerificationToken": this.csrf }
-					});
+					await axios.put(this.route, { id: this.form.id, ...shelf }, options);
 
 					await this.getShelves();
 					this.cancelEdit();
@@ -80,7 +66,7 @@ new Vue({
 		},
 		// Gets all existing shelves
 		getShelves: async function() {
-			const {data, status} = await axios.get(`${this.route}/user/${this.owner}`);
+			const {data, status} = await axios.get(`${this.route}/${this.owner}?page=1`);
 			this.shelves = status === 200 
 				? data 
 				: null;
@@ -104,7 +90,7 @@ new Vue({
 			this.form.desc = t.description;
 			this.form.id = t.id;
 			this.form.color = t.color;
-			this.form.quick = t.isQuick;
+			this.form.quick = t.isQuickAdd;
 			this.form.pub = t.isPublic;
 			this.form.track = t.trackUpdates;
 			this.form.icon = t.iconId;
@@ -113,12 +99,9 @@ new Vue({
 
 		// Clears the editor
 		cancelEdit: function() {
-			this.form.name =
-				this.form.desc =
-					this.form.id =
-						this.form.color = null;
-			this.form.isQuick =
-				this.form.isPublic = false;
+			Object.keys(this.form).forEach((i) => this.form[i] = null);
+			this.form.isQuickAdd = this.form.isPublic = false;
+			this.showForm = false;
 		}
 	},
 
@@ -129,9 +112,6 @@ new Vue({
 		this.route = document.getElementById("route").dataset.route;
 		// Get owner
 		this.owner = document.getElementById("owner").dataset.owner;
-		// Get validation
-		const {data} = await axios.get(`${this.route}/validation`);
-		this.lens = data;
 		
 		// Grab the initial set of shelves
 		await this.getShelves();

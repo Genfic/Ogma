@@ -1,5 +1,5 @@
 @page "/user/{name}/library"
-@using Ogma3.Api.V1
+@using Ogma3.Api.V1.Shelves
 @model Ogma3.Pages.User.LibraryModel
 
 @{
@@ -74,14 +74,17 @@
 
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-                <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
             </div>
 
         </form>
 
-        <button class="btn btn-block btn-outline-primary" v-on:click="showForm = !showForm">
+        <button class="btn btn-block btn-outline-primary" 
+                v-on:click="() => {
+                    if (showForm) cancelEdit();
+                    else showForm = true;
+                }">
             <icon icon="add"></icon>
-            {{ showForm ? "Hide" : "Create New" }}
+            {{ showForm ? "Cancel" : "Create New" }}
         </button>
     }
 
