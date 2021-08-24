@@ -1,3 +1,5 @@
+using AutoMapper;
+
 namespace Ogma3.Pages.Shared.Cards
 {
     public record ClubCard
@@ -10,5 +12,10 @@ namespace Ogma3.Pages.Shared.Cards
         public int ThreadsCount { get; init; }
         public int ClubMembersCount { get; init; }
         public int StoriesCount { get; init; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Data.Clubs.Club, ClubCard>();
+        }
     }
 }

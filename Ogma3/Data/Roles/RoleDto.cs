@@ -1,3 +1,5 @@
+using AutoMapper;
+
 namespace Ogma3.Data.Roles
 {
     public class RoleDto
@@ -7,5 +9,10 @@ namespace Ogma3.Data.Roles
         public string? Color { get; set; }
         public bool IsStaff { get; set; }
         public int Order { get; set; }
+
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<OgmaRole, RoleDto>();
+        }
     }
 }

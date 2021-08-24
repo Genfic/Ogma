@@ -1,4 +1,6 @@
 using System;
+using AutoMapper;
+using Ogma3.Data.Blogposts;
 
 namespace Ogma3.Pages.Shared.Cards
 {
@@ -13,5 +15,10 @@ namespace Ogma3.Pages.Shared.Cards
         public string Body { get; set; }
         public int WordCount { get; set; }
         public string[] Hashtags { get; set; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Blogpost, BlogpostCard>();
+        }
     }
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
@@ -23,5 +25,13 @@ namespace Ogma3.Pages.Shared.Cards
         public EStoryStatus Status { get; set; }
         public int WordCount { get; set; }
         public int ChapterCount { get; set; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Story, StoryCard>()
+                    .ForMember(sc => sc.Tags, opts
+                        => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
+                    );
+        }
     }
 }

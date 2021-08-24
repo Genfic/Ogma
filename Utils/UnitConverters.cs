@@ -5,11 +5,21 @@ namespace Utils
     public class UnitConverters
     {
         private static readonly string[] SizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
         public static string SizeSuffix(long value, int decimalPlaces = 1)
         {
-            if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException(nameof(decimalPlaces)); }
-            if (value < 0) { return "-" + SizeSuffix(-value); } 
-            if (value == 0) { return string.Format($"{{0:n{decimalPlaces}}} B", 0); }
+            if (decimalPlaces < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(decimalPlaces));
+            }
+
+            switch (value)
+            {
+                case < 0:
+                    return $"-{SizeSuffix(-value)}";
+                case 0:
+                    return string.Format($"{{0:n{decimalPlaces}}} B", 0);
+            }
 
             // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
             var mag = (int)Math.Log(value, 1024);
@@ -28,7 +38,7 @@ namespace Utils
 
             return string.Format(
                 $"{{0:n{decimalPlaces}}} {{1}}",
-                adjustedSize, 
+                adjustedSize,
                 SizeSuffixes[mag]
             );
         }

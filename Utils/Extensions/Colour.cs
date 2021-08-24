@@ -1,6 +1,8 @@
 using System;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 
 namespace Utils.Extensions
 {
@@ -13,11 +15,11 @@ namespace Utils.Extensions
         /// <returns>Resulting string</returns>
         public static string ToHexCss(this Color input)
         {
-            string r = input.R.ToString("X2"),
-                g = input.G.ToString("X2"),
-                b = input.B.ToString("X2");
+            var r = input.R.ToString("X2");
+            var g = input.G.ToString("X2");
+            var b = input.B.ToString("X2");
 
-            return "#" + r + g + b;
+            return $"#{r}{g}{b}";
         }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace Utils.Extensions
         public static Color ParseHexColor(this string input)
         {
             var hex = input.Trim('#');
-            var values = hex.Length switch
+            var values = (hex.Length switch
             {
                 3 => new[]
                 {
@@ -59,13 +61,8 @@ namespace Utils.Extensions
                     hex[6..8]
                 },
                 _ => throw new ArgumentException("Incorrect format")
-            };
-            return Color.FromArgb(
-                int.Parse(values[0], NumberStyles.HexNumber),
-                int.Parse(values[1], NumberStyles.HexNumber),
-                int.Parse(values[2], NumberStyles.HexNumber),
-                int.Parse(values[3], NumberStyles.HexNumber)
-            );
+            }).Select(s => int.Parse(s, NumberStyles.HexNumber)).ToArray();
+            return Color.FromArgb(values[0], values[1], values[2], values[3]);
         }
 
         /// <summary>

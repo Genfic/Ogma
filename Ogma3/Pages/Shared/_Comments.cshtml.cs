@@ -1,4 +1,6 @@
 using System;
+using AutoMapper;
+using Ogma3.Data.CommentsThreads;
 
 namespace Ogma3.Pages.Shared
 {
@@ -6,5 +8,10 @@ namespace Ogma3.Pages.Shared
     {
         public long Id { get; init; }
         public DateTime? LockDate { get; init; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<CommentsThread, CommentsThreadDto>();
+        }
     }
 }

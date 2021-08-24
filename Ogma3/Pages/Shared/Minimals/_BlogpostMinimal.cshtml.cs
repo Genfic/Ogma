@@ -1,4 +1,6 @@
 using System;
+using AutoMapper;
+using Ogma3.Data.Blogposts;
 
 namespace Ogma3.Pages.Shared.Minimals
 {
@@ -9,5 +11,10 @@ namespace Ogma3.Pages.Shared.Minimals
         public string Title { get; set; }
         public string Slug { get; set; }
         public DateTime PublishDate { get; set; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Blogpost, BlogpostMinimal>();
+        }
     }
 }

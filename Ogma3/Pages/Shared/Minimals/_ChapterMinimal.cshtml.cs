@@ -1,4 +1,6 @@
 using System;
+using AutoMapper;
+using Ogma3.Data.Chapters;
 
 namespace Ogma3.Pages.Shared.Minimals
 {
@@ -11,5 +13,10 @@ namespace Ogma3.Pages.Shared.Minimals
         public string Slug { get; set; }
         public DateTime PublishDate { get; set; }
         public bool IsPublished { get; set; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Chapter, ChapterMinimal>();
+        }
     }
 }

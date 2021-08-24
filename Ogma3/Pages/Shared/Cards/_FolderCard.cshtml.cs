@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AutoMapper;
 using Ogma3.Data.Folders;
 
 namespace Ogma3.Pages.Shared.Cards
@@ -13,5 +14,10 @@ namespace Ogma3.Pages.Shared.Cards
 
         public int StoriesCount { get; set; }
         public IEnumerable<FolderMinimalDto> ChildFolders { get; set; }
+        
+        public class MappingProfile : Profile
+        {
+            public MappingProfile() => CreateMap<Folder, FolderCard>();
+        }
     }
 }

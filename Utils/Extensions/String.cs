@@ -42,8 +42,10 @@ namespace Utils.Extensions
         /// <returns>String without leading whitespace</returns>
         public static string RemoveLeadingWhiteSpace(this string input)
         {
-            var lines = input.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
-            return string.Join(Environment.NewLine, lines.Select(s => s.TrimStart(' ', '\t')));
+            var lines = input
+                .Split(new[] {Environment.NewLine}, StringSplitOptions.None)
+                .Select(s => s.TrimStart(' ', '\t'));
+            return string.Join(Environment.NewLine, lines);
         }
 
         /// <summary>
