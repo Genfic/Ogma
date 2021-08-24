@@ -14,7 +14,7 @@ new Vue({
 			e.preventDefault();
             
 			if (this.name) {
-				const {data, status} = await axios.get(`${this.route}/${this.name}`);
+				const {data, status} = await axios.get(`${this.route}?name=${this.name}`);
 
 				if(status === 200) {
 					this.avatar = data.avatar;

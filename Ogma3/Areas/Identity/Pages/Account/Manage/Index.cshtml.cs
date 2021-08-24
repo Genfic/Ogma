@@ -1,104 +1,109 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using B2Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Users;
-using Ogma3.Infrastructure.Attributes;
+using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly OgmaUserManager _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly SignInManager<OgmaUser> _signInManager;
         private readonly IB2Client _b2Client;
         private readonly ImageUploader _uploader;
         private readonly OgmaConfig _ogmaConfig;
 
         public IndexModel(
-            OgmaUserManager userManager,
+            ApplicationDbContext context,
             SignInManager<OgmaUser> signInManager,
             IB2Client b2Client,
-            ImageUploader uploader, 
-            OgmaConfig ogmaConfig)
+            ImageUploader uploader,
+            OgmaConfig ogmaConfig
+        )
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _b2Client = b2Client;
             _uploader = uploader;
             _ogmaConfig = ogmaConfig;
+            _context = context;
         }
-
         
-        public string Username { get; set; }
-
         [TempData]
         public string StatusMessage { get; set; }
 
-        [BindProperty]
+        [BindProperty] 
         public InputModel Input { get; set; }
-
         
         public class InputModel
         {
-            [Display(Name = "Avatar")]
+            public string Username { get; init; }
             [DataType(DataType.Upload)]
-            [MaxFileSize(CTConfig.CFiles.AvatarMaxWeight)]
-            [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png" })]
-            public IFormFile Avatar { get; set; }
-            
-            [Display(Name = "Title")]
-            [StringLength(CTConfig.CUser.MaxTitleLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
-            public string Title { get; set; }
-            
-            [Display(Name = "Bio")]
-            [StringLength(CTConfig.CUser.MaxBioLength, ErrorMessage = "The {0} must be no longer than {1} characters long.")]
-            public string Bio { get; set; }
+            public IFormFile Avatar { get; init; }
+            public string Title { get; init; }
+            public string Bio { get; init; }
         }
 
-        private async Task LoadAsync(OgmaUser user)
+        public class InputModelValidation : AbstractValidator<InputModel>
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var userTitle = await _userManager.GetTitleAsync(user);
-            var userBio = await _userManager.GetBioAsync(user);
-            
-            Username = userName;
-
-            Input = new InputModel
+            public InputModelValidation()
             {
-                Title = userTitle,
-                Bio = userBio,
-            };
+                RuleFor(x => x.Avatar)
+                    .FileSmallerThan(CTConfig.CFiles.AvatarMaxWeight)
+                    .FileHasExtension(".jpg", ".jpeg", ".png");
+                RuleFor(x => x.Title)
+                    .MaximumLength(CTConfig.CUser.MaxTitleLength);
+                RuleFor(x => x.Bio)
+                    .MaximumLength(CTConfig.CUser.MaxBioLength);
+            }
+        }
+
+        private async Task LoadAsync(long? uid)
+        {
+            Input = await _context.Users
+                .Where(u => u.Id == uid)
+                .Select(u => new InputModel
+                {
+                    Username = u.UserName,
+                    Title = u.Title,
+                    Bio = u.Bio
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
 
-            await LoadAsync(user);
+            await LoadAsync(uid);
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound("Unable to load user");
-            }
-
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
+            
+            var user = await _context.Users
+                .Where(u => u.Id == uid)
+                .FirstOrDefaultAsync();
+            
+            if (user is null) return NotFound("Unable to load user");
+            
             if (!ModelState.IsValid)
             {
-                await LoadAsync(user);
+                await LoadAsync(uid);
                 return Page();
             }
 
@@ -106,15 +111,15 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             if (Input.Avatar is { Length: > 0 })
             {
                 // Delete the old avatar if exists
-                if (user.Avatar != null && user.AvatarId != null)
+                if (user.Avatar is not null && user.AvatarId is not null)
                 {
                     await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_ogmaConfig.Cdn, ""));
                 }
 
                 // Upload the new one
                 var file = await _uploader.Upload(
-                    Input.Avatar, 
-                    "avatars", 
+                    Input.Avatar,
+                    "avatars",
                     $"U-{user.NormalizedUserName}",
                     _ogmaConfig.AvatarWidth,
                     _ogmaConfig.AvatarHeight
@@ -133,7 +138,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 user.Bio = Input.Bio;
             }
 
-            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

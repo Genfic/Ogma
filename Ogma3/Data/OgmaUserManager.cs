@@ -23,39 +23,6 @@ namespace Ogma3.Data
         {
         }
 
-        public async Task<string> GetTitleAsync(OgmaUser user)
-        {
-            ThrowIfDisposed();
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
-            return oUser.Title;
-        }
-
-        public async Task<string> GetBioAsync(OgmaUser user)
-        {
-            ThrowIfDisposed();
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
-            return oUser.Bio;
-        }
-
-        public async Task<string> GetAvatarAsync(OgmaUser user)
-        {
-            ThrowIfDisposed();
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            var oUser = await Store.FindByIdAsync(user.Id.ToString(), CancellationToken);
-            return oUser.Avatar;
-        }
-
         public async Task<DateTime?> GetBanDate(string name)
         {
             ThrowIfDisposed();

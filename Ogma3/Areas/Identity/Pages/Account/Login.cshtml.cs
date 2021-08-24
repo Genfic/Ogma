@@ -21,46 +21,40 @@ namespace Ogma3.Areas.Identity.Pages.Account
         private readonly OgmaUserManager _userManager;
         private readonly SignInManager<OgmaUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IEmailSender _emailSender;
 
-        public LoginModel(SignInManager<OgmaUser> signInManager, 
+        public LoginModel(SignInManager<OgmaUser> signInManager,
             ILogger<LoginModel> logger,
-            OgmaUserManager userManager,
-            IEmailSender emailSender)
+            OgmaUserManager userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
             _logger = logger;
         }
 
-        [BindProperty]
+        [BindProperty] 
         public InputModel Input { get; set; }
         
-
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        [TempData]
+        [TempData] 
         public string ErrorMessage { get; set; }
-
         
         public class InputModel
         {
-            [Required]
-            public string Name { get; set; }
+            [Required] 
+            public string Name { get; init; }
 
             [Required]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public string Password { get; init; }
 
-            [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
+            [Display(Name = "Remember me?")] 
+            public bool RememberMe { get; init; }
         }
 
 
-        
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -78,13 +72,13 @@ namespace Ogma3.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
 
             if (!ModelState.IsValid) return Page();
-            
+
             // Check ban
             var banDate = await _userManager.GetBanDate(Input.Name);
             if (banDate <= DateTime.Now)
@@ -98,7 +92,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, $"Your account has been banned until {banDate}.");
                 return Page();
             }
-            
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             var result = await _signInManager.PasswordSignInAsync(Input.Name, Input.Password, Input.RememberMe, true);
@@ -107,20 +101,20 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 _logger.LogInformation("User logged in");
                 return LocalRedirect(returnUrl);
             }
+
             if (result.RequiresTwoFactor)
             {
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
             }
+
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User account locked out");
                 return RedirectToPage("./Lockout");
             }
-                
+
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return Page();
-
-            // If we got this far, something failed, redisplay form
         }
     }
 }
