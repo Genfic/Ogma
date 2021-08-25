@@ -58,7 +58,7 @@ namespace Ogma3.Services.RssService
                     b.Body.Substring(0, 250),
                     new Uri(_domain + _urlHelper.Page("/Blog/Post", new { b.Id, b.Slug })),
                     b.Slug,
-                    b.PublishDate
+                    b.PublicationDate ?? b.CreationDate
                 ))
                 .ToArrayAsync();
 

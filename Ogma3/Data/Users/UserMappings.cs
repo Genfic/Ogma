@@ -18,7 +18,7 @@ namespace Ogma3.Data.Users
             LastActive = u.LastActive,
             RegistrationDate = u.RegistrationDate,
             FollowersCount = u.Followers.Count,
-            BlogpostsCount = u.Blogposts.Count(b => b.IsPublished),
+            BlogpostsCount = u.Blogposts.Count(b => b.PublicationDate != null),
             StoriesCount = u.Stories.Count(s => s.PublicationDate != null),
             IsBlockedBy = u.BlockedByUsers.Any(bu => bu.Id == uid),
             IsFollowedBy = u.Followers.Any(fu => fu.Id == uid),

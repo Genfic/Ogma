@@ -12,8 +12,12 @@
         
         <i class="dot"></i>
         
-        <time class="date" datetime="@Model.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-            @Model.ReleaseDate.FormatDateWithDaySuffix()
-        </time>
+        @if (Model.PublicationDate is not null)
+        {
+            var date = (DateTime)Model.PublicationDate;
+            <time class="date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+                @date.FormatDateWithDaySuffix()
+            </time>
+        }
     </div>
 </a>

@@ -10,12 +10,12 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Blogposts
 {
-    public class Blogpost : BaseModel, IBlockableContent, IReportableContent
+    public class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
     {
         public string Title { get; set; }
         public string Slug { get; set; }
-        public DateTime PublishDate { get; set; }
-        public bool IsPublished { get; set; }
+        public DateTime? PublicationDate { get; set; }
+        public DateTime CreationDate { get; set; }
         public OgmaUser Author { get; set; }
         public long AuthorId { get; set; }
         public string Body { get; set; }

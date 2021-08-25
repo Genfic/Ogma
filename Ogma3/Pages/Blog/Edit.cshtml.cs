@@ -40,11 +40,13 @@ namespace Ogma3.Pages.Blog
             // Get post and make sure the user matches
             Input = await _context.Blogposts
                 .Where(m => m.Id == id)
+                .Where(b => b.AuthorId == uid)
                 .ProjectTo<PostData>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
             if (Input is null) return NotFound();
-            if (Input.AuthorId != uid) return Unauthorized();
+
+            Input.Published = Input.PublicationDate is not null;
 
             return Page();
         }
@@ -60,6 +62,7 @@ namespace Ogma3.Pages.Blog
             public StoryMinimal? AttachedStory { get; set; }
             public bool IsUnavailable { get; set; }
             public bool Published { get; set; }
+            public DateTime? PublicationDate { get; set; }
         }
 
         public class PostDataValidation : AbstractValidator<PostData>
@@ -105,7 +108,7 @@ namespace Ogma3.Pages.Blog
             post.Body = Input.Body.Trim();
             post.WordCount = Input.Body.Words();
             post.Hashtags = Input.Tags?.ParseHashtags() ?? Array.Empty<string>();
-            post.IsPublished = Input.Published;
+            post.PublicationDate = Input.Published ? DateTime.Now : null;
 
             await _context.SaveChangesAsync();
 

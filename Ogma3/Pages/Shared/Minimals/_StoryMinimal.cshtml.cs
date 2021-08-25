@@ -10,8 +10,7 @@ namespace Ogma3.Pages.Shared.Minimals
         public string Title { get; set; }
         public string AuthorUserName { get; set; }
         public string Slug { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public bool IsPublished { get; set; }
+        public DateTime? PublicationDate { get; set; }
         
         public class MappingProfile : Profile
         {

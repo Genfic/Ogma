@@ -32,13 +32,17 @@
     <div class="info">
         <span class="word-count">@Model.WordCount.ToString("N0") words</span>
         
-        <time class="release-date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-            published @Model.PublishDate.FormatDateWithDaySuffix()
-        </time>
+        @if (Model.PublicationDate is not null)
+        {
+            var date = (DateTime)Model.PublicationDate;
+            <time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+                published @date.FormatDateWithDaySuffix()
+            </time>
+        }
         
         <span class="author">by @Model.AuthorUserName</span>
         
-        @if (!Model.IsPublished)
+        @if (Model.PublicationDate is null)
         {
             <span class="not-published">
                 <icon class="icon" icon="visibility_off"></icon>

@@ -40,7 +40,7 @@
         <span asp-validation-for="Input.Tags"></span>
     </div>
     
-    @if (Model.Input.StoryMinimal != null)
+    @if (Model.Input.StoryMinimal is not null)
     {
         <div class="o-form-group">
             <label>Attached story</label>
@@ -48,7 +48,7 @@
             <input type="hidden" asp-for="Input.StoryMinimalId">
         </div>
     }
-    @if (Model.Input.ChapterMinimal != null)
+    @if (Model.Input.ChapterMinimal is not null)
     {
         <div class="o-form-group">
             <label>Attached chapter</label>

@@ -28,9 +28,19 @@
 <article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
     <h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>
 
-    <time class="date" itemprop="datePublished" datetime="@Model.Blogpost.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-        @Model.Blogpost.PublishDate.FormatDateWithDaySuffix()
-    </time>
+    @if (Model.Blogpost.PublicationDate is not null)
+    {
+        var date = (DateTime)Model.Blogpost.PublicationDate;
+        <time class="date" itemprop="datePublished" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+            @date.FormatDateWithDaySuffix()
+        </time>
+    }
+    else
+    {
+        <span class="date not-published">
+            Not published
+        </span>
+    }
 
     <div class="actions">
         @if (User.IsUserSameAsLoggedIn(Model.Blogpost.AuthorId))
@@ -39,12 +49,6 @@
                 <icon class="icon" icon="edit"></icon>
                 <span class="name">Edit</span>
             </a>
-        }
-        @if (!Model.Blogpost.IsPublished)
-        {
-            <span class="not-published">
-                <icon class="icon" icon="visibility_off"></icon>
-            </span>
         }
         @if (Model.Blogpost.ContentBlockId is not null)
         {
@@ -68,7 +72,7 @@
         }
     </div>
 
-        @if (Model.Blogpost.IsUnavailable)
+    @if (Model.IsUnavailable)
         {
             <div class="unavailable active-border">
                 <strong>Attached content is unavailable.</strong>

@@ -3,22 +3,20 @@
 @model ChapterMinimal
 
 <a asp-page="/Chapter" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
-    <span class="title @(!Model.IsPublished ? "not-published" : null)">
-        @Model.Title
-        @if (!Model.IsPublished)
-        {
-            <icon class="icon" icon="visibility_off" title="Unpublished"></icon>
-        }
-    </span>
+    <span class="title">@Model.Title</span>
 
     <div class="info">
         <span class="author">By @Model.StoryAuthorUserName</span>
 
         <i class="dot"></i>
 
-        <time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-            @Model.PublishDate.FormatDateWithDaySuffix()
-        </time>
+        @if (Model.PublicationDate is not null)
+        {
+            var date = (DateTime)Model.PublicationDate;
+            <time class="date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+                @date.FormatDateWithDaySuffix()
+            </time>
+        }
 
         <i class="dot"></i>
 

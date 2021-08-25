@@ -1,4 +1,5 @@
 using System;
+using B2Net.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
@@ -25,14 +26,14 @@ namespace Ogma3.Data.Blogposts
                 .HasMaxLength(CTConfig.CBlogpost.MaxTitleLength);
 
             builder
-                .Property(b => b.PublishDate)
+                .Property(b => b.CreationDate)
                 .IsRequired()
                 .HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
             builder
-                .Property(b => b.IsPublished)
-                .HasDefaultValue(false);
-
+                .Property(b => b.PublicationDate)
+                .HasDefaultValue(null);
+            
             builder
                 .Property(b => b.Body)
                 .IsRequired()

@@ -67,8 +67,8 @@ namespace Ogma3.Pages.Blog
             {
                 EBlogpostSortingOptions.TitleAscending  => query.OrderBy(s => s.Title),
                 EBlogpostSortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-                EBlogpostSortingOptions.DateAscending   => query.OrderBy(s => s.PublishDate),
-                EBlogpostSortingOptions.DateDescending  => query.OrderByDescending(s => s.PublishDate),
+                EBlogpostSortingOptions.DateAscending   => query.OrderBy(s => s.PublicationDate),
+                EBlogpostSortingOptions.DateDescending  => query.OrderByDescending(s => s.PublicationDate),
                 EBlogpostSortingOptions.WordsAscending  => query.OrderBy(s => s.WordCount),
                 EBlogpostSortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
                 _ => query.OrderByDescending(s => s.WordCount)
@@ -77,7 +77,7 @@ namespace Ogma3.Pages.Blog
             // Finalize query
             Posts = await query
                 .Include(b => b.Author)
-                .Where(b => b.IsPublished)
+                .Where(b => b.PublicationDate != null)
                 .Where(b => b.ContentBlockId == null)
                 .Paginate(page, _config.BlogpostsPerPage)
                 .Take(_config.BlogpostsPerPage)

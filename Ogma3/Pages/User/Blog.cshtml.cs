@@ -47,13 +47,13 @@ namespace Ogma3.Pages.User
             if (uid != ProfileBar.Id)
             {   // If the profile page doesn't belong to the current user, apply additional filters
                 query = query
-                    .Where(b => b.IsPublished)
+                    .Where(b => b.PublicationDate != null)
                     .Where(b => b.ContentBlockId == null);
             }
 
             // Resolve query
             Posts = await query
-                .OrderByDescending(b => b.PublishDate)
+                .OrderByDescending(b => b.CreationDate)
                 .Paginate(page, PerPage)
                 .ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()

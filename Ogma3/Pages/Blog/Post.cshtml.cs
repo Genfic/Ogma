@@ -32,6 +32,8 @@ namespace Ogma3.Pages.Blog
 
         public Details Blogpost { get; private set; }
         public ProfileBar ProfileBar { get; private set; }
+
+        public bool IsUnavailable { get; private set; }
         
         public class Details
         {
@@ -39,16 +41,13 @@ namespace Ogma3.Pages.Blog
             public long AuthorId { get; init; }
             public string Title { get; init; }
             public string Slug { get; init; }
-            public DateTime PublishDate { get; init; }
+            public DateTime? PublicationDate { get; init; }
             public string Body { get; init; }
             public IEnumerable<string> Hashtags { get; init; }
             public CommentsThreadDto CommentsThread { get; init; }
-            public bool IsPublished { get; init; }
             public int CommentsCount { get; init; }
-            
             public ChapterMinimal? AttachedChapter { get; set; }
             public StoryMinimal? AttachedStory { get; set; }
-            public bool IsUnavailable { get; set; }
             public long? ContentBlockId { get; set; }
         }
         
@@ -61,19 +60,19 @@ namespace Ogma3.Pages.Blog
         {
             Blogpost = await _context.Blogposts
                 .Where(b => b.Id == id)
+                .Where(b => b.PublicationDate != null || b.AuthorId == User.GetNumericId())
                 .ProjectTo<Details>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            if (Blogpost == null) return NotFound();
-            if (!Blogpost.IsPublished && User.GetNumericId() != Blogpost.AuthorId) return NotFound();
+            if (Blogpost is null) return NotFound();
 
-            if (Blogpost.AttachedChapter is not null && !Blogpost.AttachedChapter.IsPublished)
+            if (Blogpost.AttachedChapter is not null && Blogpost.AttachedChapter.PublicationDate is null)
             {
-                Blogpost.IsUnavailable = true;
+                IsUnavailable = true;
             }
-            else if (Blogpost.AttachedStory is not null && !Blogpost.AttachedStory.IsPublished)
+            else if (Blogpost.AttachedStory is not null && Blogpost.AttachedStory.PublicationDate is null)
             {
-                Blogpost.IsUnavailable = true;
+                IsUnavailable = true;
             }
             
             ProfileBar = await _userRepo.GetProfileBar(Blogpost.AuthorId);
