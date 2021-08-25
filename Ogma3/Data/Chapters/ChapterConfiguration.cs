@@ -14,14 +14,13 @@ namespace Ogma3.Data.Chapters
             
             // CONSTRAINTS
             builder
-                .Property(c => c.PublishDate)
-                .IsRequired()
-                .HasDefaultValueSql(PgConstants.CurrentTimestamp);
+                .Property(c => c.PublicationDate)
+                .HasDefaultValue(null);
             
             builder
-                .Property(p => p.IsPublished)
+                .Property(p => p.CreationDate)
                 .IsRequired()
-                .HasDefaultValue(false);
+                .HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
             builder
                 .Property(c => c.Title)

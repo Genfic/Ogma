@@ -36,7 +36,7 @@ namespace Ogma3.Infrastructure.TagHelpers
             else
             {
                 count = await _context.Stories
-                    .Where(s => s.IsPublished)
+                    .Where(s => s.PublicationDate != null)
                     .CountAsync();
                 _cache.Set(name, count, TimeSpan.FromMinutes(CacheTime));
             }

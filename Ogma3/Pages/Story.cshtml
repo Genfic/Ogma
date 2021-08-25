@@ -153,7 +153,7 @@
             <span class="chapter-count">@Model.Story.FullChaptersCount chapters</span>
             <span class="comment-count">@Model.Story.CommentsCount comments</span>
             <time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                created @Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+                created @Model.Story.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
             </time>
         </div>
     }
@@ -167,9 +167,10 @@
         }
         else
         {
-            foreach (var c in Model.Story.Chapters.OrderBy(c => c.Order))
+            var order = 1;
+            foreach (var c in Model.Story.Chapters)
             {
-                <li class="chapter">
+                <li class="chapter @(c.IsPublished ? "" : "unpublished")">
                     <div class="left">
 
                         <button class="read-status"
@@ -178,7 +179,7 @@
                             <i class="material-icons-outlined">visibility_off</i>
                         </button>
 
-                        <span class="order">@c.Order</span>
+                        <span class="order">@(order++)</span>
 
                         <a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">@c.Title</a>
 

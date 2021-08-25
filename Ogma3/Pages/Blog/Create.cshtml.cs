@@ -43,8 +43,8 @@ namespace Ogma3.Pages.Blog
             if (story is not null)
             {
                 Input.StoryMinimal = await _context.Stories
-                    .Where(c => c.Id == story)
-                    .Where(c => c.IsPublished)
+                    .Where(s => s.Id == story)
+                    .Where(s => s.PublicationDate != null)
                     .Where(b => b.ContentBlockId == null)
                     .ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
@@ -56,7 +56,7 @@ namespace Ogma3.Pages.Blog
             {
                 Input.ChapterMinimal = await _context.Chapters
                     .Where(c => c.Id == chapter)
-                    .Where(c => c.IsPublished)
+                    .Where(c => c.PublicationDate != null)
                     .Where(b => b.ContentBlockId == null)
                     .ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
                     .AsNoTracking()

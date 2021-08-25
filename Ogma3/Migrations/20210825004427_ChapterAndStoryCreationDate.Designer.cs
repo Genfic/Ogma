@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -15,9 +16,10 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210825004427_ChapterAndStoryCreationDate")]
+    partial class ChapterAndStoryCreationDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,7 +276,7 @@ namespace Ogma3.Migrations
                     b.Property<long>("Order")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("PublicationDate")
+                    b.Property<DateTime?>("PublishDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Slug")
@@ -1120,11 +1122,16 @@ namespace Ogma3.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<DateTime?>("PublicationDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<bool>("IsPublished")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<long>("RatingId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Slug")
                         .IsRequired()

@@ -58,8 +58,8 @@ namespace Ogma3.Pages.Stories
             var query = _context.Stories
                 .AsQueryable()
                 .Search(tags, q, rating)
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
+                .Where(s => s.PublicationDate != null)
+                .Where(s => s.ContentBlockId == null)
                 .Blacklist(_context, uid);
             
             Stories = await query

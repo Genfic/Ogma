@@ -45,13 +45,13 @@ namespace Ogma3.Pages
             if (Tag is null) return NotFound();
 
             var query = _context.Stories
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
+                .Where(s => s.PublicationDate != null)
+                .Where(s => s.ContentBlockId == null)
                 .Where(s => s.Tags.Any(st => st.Id == id))
                 .Blacklist(_context, uid);
             
             Stories = await query
-                .OrderByDescending(s => s.ReleaseDate)
+                .OrderByDescending(s => s.PublicationDate)
                 .Paginate(page, PerPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()

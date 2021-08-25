@@ -89,10 +89,10 @@ namespace Ogma3.Pages.Club.Folders
             Stories = await _context.FolderStories
                 .Where(s => s.FolderId == id)
                 .Select(s => s.Story)
-                .Where(b => b.IsPublished)
-                .Where(b => b.ContentBlockId == null)
+                .Where(s => s.PublicationDate != null)
+                .Where(s => s.ContentBlockId == null)
                 .Blacklist(_context, uid)
-                .OrderByDescending(s => s.ReleaseDate)
+                .OrderByDescending(s => s.PublicationDate)
                 .Paginate(page, _config.StoriesPerPage)
                 .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
                 .AsNoTracking()

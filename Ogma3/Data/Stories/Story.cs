@@ -13,25 +13,22 @@ using Ogma3.Data.Votes;
 
 namespace Ogma3.Data.Stories
 {
-    public class Story : BaseModel, IBlockableContent, IReportableContent
+    public class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent
     {
         public OgmaUser Author { get; set; }
         public long AuthorId { get; set; }
         public string Title { get; set; }
-
         public string Slug { get; set; }
         public string Description { get; set; }
         public string Hook { get; set; }
         public string? Cover { get; set; }
         public string? CoverId { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public bool IsPublished { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime? PublicationDate { get; set; }
         
-        // Chapters
         public  IList<Chapter> Chapters { get; set; }
-
-        // Tags
         public IEnumerable<Tag> Tags { get; set; }
+        public ICollection<Vote> Votes { get; set; }
 
         // Rating
         public Rating Rating { get; set; }
@@ -40,9 +37,6 @@ namespace Ogma3.Data.Stories
         // Status
         public EStoryStatus Status { get; set; }
         
-        // Votes
-        public ICollection<Vote> Votes { get; set; }
-
         public int WordCount { get; set; }
         public int ChapterCount { get; set; }
 

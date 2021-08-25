@@ -13,10 +13,6 @@ namespace Ogma3.Data.Stories
 
             // CONSTRAINTS
             builder
-                .Property(p => p.IsPublished)
-                .HasDefaultValue(false);
-
-            builder
                 .Property(s => s.Title)
                 .IsRequired()
                 .HasMaxLength(CTConfig.CStory.MaxTitleLength);
@@ -37,14 +33,13 @@ namespace Ogma3.Data.Stories
                 .HasMaxLength(CTConfig.CStory.MaxHookLength);
 
             builder
-                .Property(s => s.ReleaseDate)
+                .Property(s => s.CreationDate)
                 .IsRequired()
                 .HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
             builder
-                .Property(s => s.IsPublished)
-                .IsRequired()
-                .HasDefaultValue(false);
+                .Property(s => s.PublicationDate)
+                .HasDefaultValue(null);
 
             builder
                 .Property(s => s.Status)

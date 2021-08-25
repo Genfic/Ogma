@@ -49,8 +49,8 @@ namespace Ogma3.Pages.User
             if (ProfileBar.Id != uid)
             {   // If the profile page doesn't belong to the current user, apply additional filters
                 query = query
-                    .Where(b => b.IsPublished)
-                    .Where(b => b.ContentBlockId == null)
+                    .Where(s => s.PublicationDate != null)
+                    .Where(s => s.ContentBlockId == null)
                     .Blacklist(_context, uid);
             }
 

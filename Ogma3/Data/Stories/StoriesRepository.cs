@@ -33,7 +33,7 @@ namespace Ogma3.Data.Stories
         {
             return await _context.Stories
                 .TagWith($"{nameof(StoriesRepository)}.{nameof(GetTopStoryCards)} -> {count}, {sort}")
-                .Where(b => b.IsPublished)
+                .Where(b => b.PublicationDate != null)
                 .Where(b => b.ContentBlockId == null)
                 .Blacklist(_context, _uid)
                 .SortByEnum(sort)

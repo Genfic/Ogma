@@ -25,9 +25,19 @@
 
         <a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId" asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
         <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
-        <time class="date" itemprop="datePublished" datetime="@Model.Chapter.PublishDate.ToString(CultureInfo.InvariantCulture)">
-            @Model.Chapter.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-        </time>
+        @if (Model.Chapter.PublicationDate is not null)
+        {
+            var date = (DateTime)Model.Chapter.PublicationDate;
+            <time class="date" itemprop="datePublished" datetime="@date.ToString(CultureInfo.InvariantCulture)">
+                @date.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+            </time>
+        }
+        else
+        {
+            <span class="date not-published">
+                Not published
+            </span>
+        }
 
         @if (User?.Identity?.IsAuthenticated ?? false)
         {
@@ -37,13 +47,7 @@
                     <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
-                
-                @if (!Model.Chapter.IsPublished)
-                {
-                    <span class="not-published">
-                        <icon class="icon" icon="visibility_off"></icon>
-                    </span>
-                }
+
                 @if (Model.Chapter.ContentBlockId is not null)
                 {
                     <span class="not-published" title="Content blocked by moderator">

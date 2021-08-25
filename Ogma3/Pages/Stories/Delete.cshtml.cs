@@ -31,7 +31,8 @@ namespace Ogma3.Pages.Stories
             public long Id { get; init; }
             public string Title { get; init; }
             public string Slug { get; init; }
-            public DateTime ReleaseDate { get; init; }
+            public DateTime? ReleaseDate { get; init; }
+            public DateTime CreationDate { get; set; }
             public string Hook { get; init; }
             public bool IsPublished { get; init; }
             public EStoryStatus Status { get; init; }
@@ -57,9 +58,10 @@ namespace Ogma3.Pages.Stories
                     Id = s.Id,
                     Title = s.Title,
                     Slug = s.Slug,
-                    ReleaseDate = s.ReleaseDate,
+                    ReleaseDate = s.PublicationDate,
+                    CreationDate = s.CreationDate,
                     Hook = s.Hook,
-                    IsPublished = s.IsPublished,
+                    IsPublished = s.PublicationDate != null,
                     Status = s.Status,
                     VotesCount = s.Votes.Count,
                     ChaptersCount = s.ChapterCount,

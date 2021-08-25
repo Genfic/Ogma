@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace Ogma3.Pages.Stories
                     Rating = story.Rating.Id,
                     Tags = story.Tags.Select(st => st.Id).ToList(),
                     Status = story.Status,
-                    Published = story.IsPublished
+                    Published = story.PublicationDate != null
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -138,7 +139,7 @@ namespace Ogma3.Pages.Stories
             if (story is null) return NotFound();
                 
             // Check if it can be published
-            if(!story.IsPublished && Input.Published && story.ChapterCount <= 0)
+            if (story.PublicationDate is null && Input.Published && story.ChapterCount <= 0)
             {
                 ModelState.AddModelError("", "You cannot publish a story with no chapters");
                 await Hydrate();
@@ -153,7 +154,7 @@ namespace Ogma3.Pages.Stories
             story.Rating = await _context.Ratings.FindAsync(Input.Rating);
             story.Tags = tags;
             story.Status = Input.Status;
-            story.IsPublished = Input.Published;
+            story.PublicationDate = Input.Published ? DateTime.Now : null;
                 
             _context.Update(story);
             await _context.SaveChangesAsync();

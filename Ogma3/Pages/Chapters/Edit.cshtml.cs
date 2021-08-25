@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -34,23 +35,15 @@ namespace Ogma3.Pages.Chapters
         public async Task<IActionResult> OnGetAsync(long id)
         {
             // Get chapter
-            var chapter = await _context.Chapters
+            Input = await _context.Chapters
                 .Where(c => c.Id == id)
+                .Where(c => c.Story.AuthorId == User.GetNumericId())
                 .ProjectTo<PostData>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsyncEF();
             
-            if (chapter == null) return NotFound();
-            if (chapter.StoryAuthorId != User.GetNumericId()) return Unauthorized();
+            if (Input is null) return NotFound();
 
-            Input = new PostData
-            {
-                Id = chapter.Id,
-                Title = chapter.Title,
-                Body = chapter.Body,
-                StartNotes = chapter.StartNotes,
-                EndNotes = chapter.EndNotes,
-                IsPublished = chapter.IsPublished
-            };
+            Input.IsPublished = Input.PublicationDate is not null;
             
             return Page();
         }
@@ -64,8 +57,8 @@ namespace Ogma3.Pages.Chapters
             public string StartNotes { get; init; }
             [Display(Name = "End notes")]
             public string EndNotes { get; init; }
-            public bool IsPublished { get; init; }
-            public long StoryAuthorId { get; init; }
+            public DateTime? PublicationDate { get; set; }
+            public bool IsPublished { get; set; }
         }
         
         public class MappingProfile : Profile
@@ -113,16 +106,15 @@ namespace Ogma3.Pages.Chapters
             chapter.EndNotes    = Input.EndNotes?.Trim();
             chapter.Slug        = Input.Title.Trim().Friendlify();
             chapter.WordCount   = Input.Body.Words();
-            chapter.IsPublished = Input.IsPublished;
+            chapter.PublicationDate = Input.IsPublished ? DateTime.Now : null;
             await _context.SaveChangesAsync();
 
             await _context.Stories
                 .Where(s => s.Id == chapter.StoryId)
                 .Set(s => s.WordCount, s => s.Chapters
-                    .Where(c => c.IsPublished)
+                    .Where(c => c.PublicationDate != null)
                     .Sum(c => (int?)c.WordCount) ?? 0)
-                .Set(s => s.ChapterCount, s => s.Chapters.Count(c => c.IsPublished))
-                .Set(s => s.IsPublished, s => s.Chapters.Any(c => c.IsPublished))
+                .Set(s => s.ChapterCount, s => s.Chapters.Count(c => c.PublicationDate != null))
                 .UpdateAsync();
             
             return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });

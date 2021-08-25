@@ -37,6 +37,7 @@ namespace Ogma3.Pages
             public string Hook { get; init; }
             public string? Cover { get; init; }
             public DateTime ReleaseDate { get; init; }
+            public DateTime CreationDate { get; set; }
             public bool IsPublished { get; init; }
             public  ICollection<ChapterBasicDto> Chapters { get; init; }
             public ICollection<TagDto> Tags { get; init; }
@@ -54,10 +55,10 @@ namespace Ogma3.Pages
         public class ChapterBasicDto
         {
             public long Id { get; init; }
-            public uint Order { get; init; }
             public string Slug { get; init; }
             public string Title { get; init; }
             public DateTime PublishDate { get; init; }
+            public bool IsPublished { get; set; }
             public int WordCount { get; init; }
         }
         
@@ -70,7 +71,7 @@ namespace Ogma3.Pages
             
             Story = await _context.Stories
                 .Where(s => s.Id == id)
-                .Where(s => s.IsPublished || s.AuthorId == uid)
+                .Where(s => s.PublicationDate != null || s.AuthorId == uid)
                 .Select(s => new StoryDetails
                 {
                     Id = s.Id,
@@ -88,8 +89,9 @@ namespace Ogma3.Pages
                     ChaptersCount = s.ChapterCount,
                     FullChaptersCount = s.AuthorId == uid ? s.Chapters.Count : 0,
                     CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
-                    IsPublished = s.IsPublished,
-                    ReleaseDate = s.ReleaseDate,
+                    IsPublished = s.PublicationDate != null,
+                    ReleaseDate = s.PublicationDate ?? s.CreationDate,
+                    CreationDate = s.CreationDate,
                     ContentBlockId = s.ContentBlockId,
                     Tags = s.Tags
                         .OrderByDescending(t => t.Namespace.HasValue)
@@ -104,15 +106,16 @@ namespace Ogma3.Pages
                         })
                         .ToList(),
                     Chapters = s.Chapters
-                        .Where(c => c.IsPublished || c.Story.AuthorId == uid)
+                        .Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
                         .Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid)
+                        .OrderBy(c => c.Order)
                         .Select(c => new ChapterBasicDto
                         {
                             Id = c.Id,
                             Title = c.Title,
                             Slug = c.Slug,
-                            PublishDate = c.PublishDate,
-                            Order = c.Order,
+                            PublishDate = c.PublicationDate ?? c.CreationDate,
+                            IsPublished = c.PublicationDate != null,
                             WordCount = c.WordCount
                         })
                         .ToList()
@@ -120,7 +123,7 @@ namespace Ogma3.Pages
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (Story == null) return NotFound();
+            if (Story is null) return NotFound();
             
             ProfileBar = await _userRepo.GetProfileBar(Story.AuthorId);
             

@@ -32,12 +32,13 @@ namespace Ogma3.Services.RssService
         {
             var stories = await _context.Stories
                 .Where(s => !s.Rating.BlacklistedByDefault)
+                .Where(s => s.PublicationDate != null)
                 .Select(s => new SyndicationItem(
                     s.Title,
                     s.Hook,
                     new Uri(_domain + _urlHelper.Page("/Story", new { s.Id, s.Slug })),
                     s.Slug,
-                    s.ReleaseDate
+                    s.PublicationDate ?? s.CreationDate
                 ))
                 .ToArrayAsync();
 

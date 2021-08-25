@@ -37,12 +37,11 @@ namespace Ogma3.Pages
             public string Title { get; init; }
             public string Slug { get; init; }
             public uint Order { get; init; }
-            public DateTime PublishDate { get; init; }
+            public DateTime? PublicationDate { get; init; }
             public string Body { get; init; }
             public string StartNotes { get; init; }
             public string EndNotes { get; init; }
             public CommentsThreadDto CommentsThread { get; init; }
-            public bool IsPublished { get; init; }
             public long? ContentBlockId { get; init; }
             public ChapterMicroDto? Previous { get; set; }
             public ChapterMicroDto? Next { get; set; }
@@ -72,7 +71,7 @@ namespace Ogma3.Pages
 
             Chapter = await _context.Chapters
                 .Where(c => c.Id == id)
-                .Where(c => c.IsPublished || c.Story.AuthorId == uid)
+                .Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
                 .Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid)
                 .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
@@ -81,12 +80,14 @@ namespace Ogma3.Pages
             
             Chapter.Previous = await _context.Chapters
                 .Where(c => c.StoryId == Chapter.StoryId)
+                .Where(c => c.PublicationDate != null)
                 .Where(c => c.Order < Chapter.Order)
                 .OrderBy(c => c.Order)
                 .ProjectTo<ChapterMicroDto>(_mapper.ConfigurationProvider)
                 .LastOrDefaultAsync();
             Chapter.Next = await _context.Chapters
                 .Where(c => c.StoryId == Chapter.StoryId)
+                .Where(c => c.PublicationDate != null)
                 .Where(c => c.Order > Chapter.Order)
                 .OrderBy(c => c.Order)
                 .ProjectTo<ChapterMicroDto>(_mapper.ConfigurationProvider)

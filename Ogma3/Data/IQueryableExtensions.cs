@@ -35,15 +35,15 @@ namespace Ogma3.Data
             {
                 EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
                 EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-                EStorySortingOptions.DateAscending => query.OrderBy(s => s.ReleaseDate),
-                EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.ReleaseDate),
+                EStorySortingOptions.DateAscending => query.OrderBy(s => s.CreationDate),
+                EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.CreationDate),
                 EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
                 EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
                 EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.Votes.Count),
                 EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.Votes.Count),
-                EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
-                EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s => s.Chapters.OrderBy(c => c.PublishDate).First().PublishDate),
-                _ => query.OrderByDescending(s => s.ReleaseDate)
+                EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.Chapters.OrderBy(c => c.PublicationDate).First().PublicationDate),
+                EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s => s.Chapters.OrderBy(c => c.PublicationDate).First().PublicationDate),
+                _ => query.OrderByDescending(s => s.CreationDate)
             };
         }
 
