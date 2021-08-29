@@ -39,6 +39,7 @@ using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using FluentValidation.AspNetCore;
 using MediatR;
+using NJsonSchema.Generation;
 using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Services.CodeGenerator;
@@ -217,8 +218,11 @@ namespace Ogma3
                 options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration));
             });
             
-            // Swagger
-            services.AddSwaggerDocument();
+            // OpenAPI
+            services.AddOpenApiDocument(settings =>
+            {
+                settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+            });
             
             // Linq2DB extension
             LinqToDBForEFTools.Initialize();

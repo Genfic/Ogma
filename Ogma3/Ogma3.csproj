@@ -560,6 +560,11 @@
     <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\openapi" />
+  </ItemGroup>
+
   <!--  Automatic migrations on production -->
 <!--  <Target Name="PrePublishTarget" AfterTargets="Publish">-->
 <!--    <Exec Command="dotnet-ef database update" />-->
