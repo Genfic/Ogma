@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 105.78">
-    <path d="M0 0h100v100H0z" fill="#ff9c2a"/>
-    <text transform="translate(13.11 82.03)" font-size="93" fill="#fff" stroke="#000" stroke-miterlimit="10"
-          font-family="MyriadPro-Regular, Myriad Pro">M
-    </text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 105.78"><path fill="#ff9c2a" d="M0 0h100v100H0z"/><text fill="#fff" stroke="#000" stroke-miterlimit="10" font-family="MyriadPro-Regular, Myriad Pro" font-size="93" transform="translate(13.11 82.03)">M</text></svg>
