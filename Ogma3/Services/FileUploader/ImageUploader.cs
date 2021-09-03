@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Gif;
@@ -92,8 +93,8 @@ namespace Ogma3.Services.FileUploader
                 }
                 catch (B2Exception e)
                 {
-                    Console.WriteLine($"⚠ Backblaze Error: {e.Message}");
-                    Console.WriteLine($"  Tries left: {--counter}");
+                    Log.Error("⚠ Backblaze Error: {Message}", e.Message);
+                    Log.Information("  Tries left: {Count}", --counter);
                 }
             }
             throw new Exception("Could not upload file. Check server logs.");

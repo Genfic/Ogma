@@ -20,7 +20,7 @@ namespace Ogma3.Data.Chapters
             {
                 builder
                     .HasKey(cr => new { cr.StoryId, cr.UserId });
-                
+
                 builder
                     .Property(cr => cr.Chapters)
                     .HasConversion(
