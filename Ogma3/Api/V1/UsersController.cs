@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Comparers;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.Middleware;
 using Serilog;
 
 namespace Ogma3.Api.V1
@@ -21,13 +25,13 @@ namespace Ogma3.Api.V1
     {
         private readonly ApplicationDbContext _context;
         private readonly OgmaUserManager _userManager;
-        private readonly long? _uid;
+        private readonly IMemoryCache _cache;
 
-        public UsersController(ApplicationDbContext context, OgmaUserManager userManager)
+        public UsersController(ApplicationDbContext context, OgmaUserManager userManager, IMemoryCache cache)
         {
             _context = context;
             _userManager = userManager;
-            _uid = User?.GetNumericId();
+            _cache = cache;
         }
 
         // api/Users/block
@@ -35,7 +39,7 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<bool>> BlockUser(BlockPostData data)
         {
             var uid = User.GetNumericId();
-            if (!uid.HasValue) return Unauthorized();
+            if (uid is null) return Unauthorized();
 
             var targetUserId = await _context.Users
                 .Where(u => u.NormalizedUserName == data.Name.Normalize().ToUpper())
@@ -68,7 +72,7 @@ namespace Ogma3.Api.V1
         public async Task<ActionResult<bool>> FollowUser(BlockPostData data)
         {
             var uid = User.GetNumericId();
-            if (!uid.HasValue) return Unauthorized();
+            if (uid is null) return Unauthorized();
 
             var targetUserId = await _context.Users
                 .Where(u => u.NormalizedUserName == data.Name.Normalize().ToUpper())
@@ -103,8 +107,8 @@ namespace Ogma3.Api.V1
             var (userId, days) = data;
             
             // Check if user is logged in
-            if (_uid is null) return Unauthorized();
-            var uid = (long)_uid;
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
 
             // Get user to be banned
             var user = await _context.Users
@@ -113,21 +117,22 @@ namespace Ogma3.Api.V1
             if (user is null) return NotFound();
 
             // Ban/unban user
-            if (days.HasValue)
+            if (days is not null)
             {
                 user.BannedUntil = DateTime.Now.AddDays((double) days);
                 await _userManager.UpdateSecurityStampAsync(user);
+
                 _context.ModeratorActions.Add(new ModeratorAction
                 {
-                    StaffMemberId = uid,
+                    StaffMemberId = (long)uid,
                     Description = ModeratorActionTemplates.UserBan(user, User.GetUsername(), (DateTime) user.BannedUntil)
                 });
             }
-            else if (user.BannedUntil.HasValue)
+            else if (user.BannedUntil is not null)
             {
                 _context.ModeratorActions.Add(new ModeratorAction
                 {
-                    StaffMemberId = uid,
+                    StaffMemberId = (long)uid,
                     Description = ModeratorActionTemplates.UserUnban(user, User.GetUsername(), (DateTime) user.BannedUntil)
                 });
                 user.BannedUntil = null;
@@ -137,6 +142,8 @@ namespace Ogma3.Api.V1
                 return BadRequest();
             }
 
+            _cache.Set(UserBanMiddleware.CacheKey(user.UserName), user.BannedUntil);
+            
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -148,8 +155,8 @@ namespace Ogma3.Api.V1
             var (userId, days) = data;
             
             // Check if user is logged in
-            if (_uid is null) return Unauthorized();
-            var uid = (long)_uid;
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
             
             // Get user to be muted
             var user = await _context.Users
@@ -163,7 +170,7 @@ namespace Ogma3.Api.V1
                 user.MutedUntil = DateTime.Now.AddDays((double) days);
                 _context.ModeratorActions.Add(new ModeratorAction
                 {
-                    StaffMemberId = uid,
+                    StaffMemberId = (long)uid,
                     Description = ModeratorActionTemplates.UserMute(user, User.GetUsername(), (DateTime) user.MutedUntil)
                 });
             }
@@ -171,7 +178,7 @@ namespace Ogma3.Api.V1
             {
                 _context.ModeratorActions.Add(new ModeratorAction
                 {
-                    StaffMemberId = uid,
+                    StaffMemberId = (long)uid,
                     Description = ModeratorActionTemplates.UserUnmute(user, User.GetUsername(), (DateTime) user.MutedUntil)
                 });
                 user.MutedUntil = null;
@@ -192,8 +199,8 @@ namespace Ogma3.Api.V1
             var (userId, roles) = data;
             
             // Check if user is logged in
-            if (_uid is null) return Unauthorized();
-            var uid = (long)_uid;
+            var uid = User.GetNumericId();
+            if (uid is null) return Unauthorized();
             
             var user = await _context.Users
                 .Where(u => u.Id == userId)
@@ -212,7 +219,7 @@ namespace Ogma3.Api.V1
             }
             await _context.ModeratorActions.AddRangeAsync(removedRoles.Select(r => new ModeratorAction
             {
-                StaffMemberId = uid,
+                StaffMemberId = (long)uid,
                 Description = ModeratorActionTemplates.UserRoleRemoved(user, User.GetUsername(), r.Name)
             }));
             
@@ -224,7 +231,7 @@ namespace Ogma3.Api.V1
             }
             await _context.ModeratorActions.AddRangeAsync(addedRoles.Select(r => new ModeratorAction
             {
-                StaffMemberId = uid,
+                StaffMemberId = (long)uid,
                 Description = ModeratorActionTemplates.UserRoleAdded(user, User.GetUsername(), r.Name)
             }));
 
@@ -247,12 +254,5 @@ namespace Ogma3.Api.V1
 
     public sealed record BanData(long UserId, double? Days);
     public sealed record RoleData(long UserId, IEnumerable<long> Roles);
-    public sealed record SignInData
-    {
-        public string Avatar { get; init; }
-        public string Title { get; init; }
-        // public bool HasMfa { get; init; }
-    }
-
     public sealed record BlockPostData(string Name);
 }

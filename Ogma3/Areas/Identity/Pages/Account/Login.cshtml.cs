@@ -79,20 +79,6 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
             if (!ModelState.IsValid) return Page();
 
-            // Check ban
-            var banDate = await _userManager.GetBanDate(Input.Name);
-            if (banDate <= DateTime.Now)
-            {
-                _logger.LogInformation("User's ban has ended: {Name}", Input.Name);
-                await _userManager.Unban(Input.Name);
-            }
-            else if (banDate is not null)
-            {
-                _logger.LogInformation("Banned user attempted login: {Name}", Input.Name);
-                ModelState.AddModelError(string.Empty, $"Your account has been banned until {banDate}.");
-                return Page();
-            }
-
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             var result = await _signInManager.PasswordSignInAsync(Input.Name, Input.Password, Input.RememberMe, true);

@@ -286,6 +286,7 @@ namespace Ogma3
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseBanMiddleware();
             
             // Swagger
             app.UseOpenApi();

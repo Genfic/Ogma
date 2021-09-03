@@ -21,13 +21,19 @@ namespace Ogma3.Data
         {
             var principal = await base.CreateAsync(user);
             
-            ((ClaimsIdentity)principal.Identity)?.AddClaims(new []
+            ((ClaimsIdentity)principal.Identity)?.AddClaims(new Claim[]
             {
-                new Claim(OgmaClaimTypes.Avatar, user.Avatar ?? string.Empty),
-                new Claim(OgmaClaimTypes.Title, user.Title ?? string.Empty),
+                new (ClaimTypes.Avatar, user.Avatar ?? string.Empty),
+                new (ClaimTypes.Title, user.Title ?? string.Empty),
             });
 
             return principal;
+        }
+        
+        public static class ClaimTypes
+        {
+            public const string Avatar = "Avatar";
+            public const string Title  = "Title";
         }
     }
 }
