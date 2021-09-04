@@ -2,11 +2,10 @@ new Vue({
 	el: '#app',
 	data: {
 		name: null,
-		avatar: 'key.webp',
+		avatar: 'https://picsum.photos/200',
 		title: null,
 		checked: false,        
         
-		cdn: null,
 		route: null
 	},
 	methods: {
@@ -30,18 +29,9 @@ new Vue({
 		}
 	},
     
-	computed: {
-		getAvatar: function() {
-			return this.avatar?.includes('picsum') || this.avatar?.includes('gravatar')
-				? this.avatar 
-				: this.cdn + (this.avatar ?? 'key.webp');
-		}
-	},
-    
 	mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById('route').dataset.route; 
-		this.cdn = document.getElementById('cdn').dataset.cdn;
 	}
 });
 

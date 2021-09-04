@@ -16,6 +16,7 @@ using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
@@ -121,7 +122,8 @@ namespace Ogma3.Pages.Stories
                 Description = Input.Description,
                 Hook = Input.Hook,
                 RatingId = Input.Rating,
-                Tags = tags
+                Tags = tags,
+                Cover = "/img/placeholders/ph-250.png"
             };
 
             await _context.Stories.AddAsync(story);
@@ -133,7 +135,7 @@ namespace Ogma3.Pages.Stories
                 var file = await _uploader.Upload(
                     Input.Cover, 
                     "covers", 
-                    $"{story.Id}-{story.Slug}",
+                    story.Id.ToString(),
                     _config.StoryCoverWidth,
                     _config.StoryCoverHeight
                 );

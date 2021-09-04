@@ -39,7 +39,8 @@ using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using FluentValidation.AspNetCore;
 using MediatR;
-using NJsonSchema.Generation;
+using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Services.CodeGenerator;
@@ -201,7 +202,15 @@ namespace Ogma3
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 })
-                .AddFluentValidation()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    options.ConfigureClientsideValidation(clientside =>
+                    {
+                        clientside.ClientValidatorFactories[typeof(FileSizeValidator<>)] = (_, rule, component) =>
+                            new FileSizeClientValidator(rule, component);
+                    });
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

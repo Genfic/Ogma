@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 using reCAPTCHA.AspNetCore;
+using Serilog;
+using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account
 {
@@ -25,7 +27,6 @@ namespace Ogma3.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<OgmaUser> _signInManager;
         private readonly UserManager<OgmaUser> _userManager;
-        private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IRecaptchaService _reCaptcha;
         private readonly ApplicationDbContext _context;
@@ -33,23 +34,20 @@ namespace Ogma3.Areas.Identity.Pages.Account
         public RegisterModel(
             UserManager<OgmaUser> userManager,
             SignInManager<OgmaUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender, 
-            IRecaptchaService reCaptcha, 
+            IEmailSender emailSender,
+            IRecaptchaService reCaptcha,
             ApplicationDbContext context
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
             _emailSender = emailSender;
             _reCaptcha = reCaptcha;
             _context = context;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
-        
+        [BindProperty] public InputModel Input { get; set; }
+
         [Required(ErrorMessage = "ReCaptcha is required")]
         [BindProperty(Name = "g-recaptcha-response")]
         public string ReCaptchaResponse { get; set; }
@@ -60,40 +58,42 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [StringLength(
-                CTConfig.CUser.MaxNameLength, 
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.CUser.MinNameLength
-                )]
             public string Name { get; set; }
-
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(
-                CTConfig.CUser.MaxPassLength, 
-                ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-                MinimumLength = CTConfig.CUser.MinPassLength
-                )]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare(nameof(Password), ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Required]
-            [StringLength(13, ErrorMessage = "The invite code should be exactly 13 characters long", MinimumLength = 13)]
             [DataType(DataType.Password)]
             [Display(Name = "Invite code")]
             public string? InviteCode { get; set; }
-            
+        }
+        
+        public class InputModelValidation : AbstractValidator<InputModel>
+        {
+            public InputModelValidation()
+            {
+                RuleFor(im => im.Name)
+                    .NotEmpty()
+                    .MinimumLength(CTConfig.CUser.MinNameLength)
+                    .MaximumLength(CTConfig.CUser.MaxNameLength);
+                RuleFor(im => im.Email)
+                    .NotEmpty()
+                    .EmailAddress();
+                RuleFor(im => im.Password)
+                    .NotEmpty()
+                    .MinimumLength(CTConfig.CUser.MinPassLength)
+                    .MaximumLength(CTConfig.CUser.MaxPassLength);
+                RuleFor(im => im.ConfirmPassword)
+                    .Equal(im => im.Password);
+                RuleFor(im => im.InviteCode)
+                    .NotEmpty()
+                    .Length(13);
+            }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -108,7 +108,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (!ModelState.IsValid) return Page();
-            
+
             // Check ReCaptcha
             var reResponse = await _reCaptcha.Validate(ReCaptchaResponse);
             if (!reResponse.success)
@@ -116,35 +116,48 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 ModelState.TryAddModelError("ReCaptcha", "Incorrect ReCaptcha");
                 return Page();
             }
-            
+
             // Check if invite code is correct
             var inviteCode = await _context.InviteCodes
                 .FirstOrDefaultAsync(ic => ic.NormalizedCode == Input.InviteCode.ToUpper());
-            if (inviteCode == null)
+            if (inviteCode is null)
             {
                 ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
                 return Page();
             }
-            if (inviteCode.UsedDate != null)
+
+            if (inviteCode.UsedDate is not null)
             {
                 ModelState.TryAddModelError("InviteCode", "This invite code has been used");
                 return Page();
             }
+
+            // Generate Gravatar
+            var avatar = Gravatar.Generate(Input.Email, new Gravatar.Options
+            {
+                Default = Gravatar.AvatarGenMethods.Identicon, 
+                Rating = Gravatar.Ratings.G
+            });
             
             // Create user
-            var user = new OgmaUser { UserName = Input.Name, Email = Input.Email };
+            var user = new OgmaUser
+            {
+                UserName = Input.Name,
+                Email = Input.Email,
+                Avatar = avatar
+            };
             var result = await _userManager.CreateAsync(user, Input.Password);
-            
+
             // If everything went fine...
             if (result.Succeeded)
             {
-                _logger.LogInformation("User created a new account with password");
-                
+                Log.Information("User {Name} created an account!", Input.Name);
+
                 // Modify invite code
                 inviteCode.UsedBy = user;
                 inviteCode.UsedDate = DateTime.Now;
                 await _context.SaveChangesAsync();
-                
+
                 // Send confirmation code
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -164,6 +177,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
 
                 return LocalRedirect(returnUrl);
             }
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);

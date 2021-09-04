@@ -37,72 +37,21 @@ namespace Ogma3.Areas.Identity.Pages.Account
         [Required]
         public string Code { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string userName, string code)
+        public IActionResult OnGet(string userName, string code)
         {
             UserName = userName;
             Code = code;
-            
-            // if (userName == null || code == null)
-            // {
-            //     return RedirectToPage("/Index");
-            // }
-            //
-            // var user = await _userManager.FindByNameAsync(userName);
-            // if (user == null)
-            // {
-            //     return NotFound($"Unable to load user with name '{userName}'.");
-            // }
-            //
-            // code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            // var result = await _userManager.ConfirmEmailAsync(user, code);
-            //
-            // StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
-            //
-            // if (result.Succeeded)
-            // {
-            //     // Setup default blacklists
-            //     var defaultBlockedRatings = await _context.Ratings
-            //         .Where(r => r.BlacklistedByDefault)
-            //         .AsNoTracking()
-            //         .ToListAsync();
-            //     var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
-            //     {
-            //         User = user,
-            //         Rating = dbr
-            //     });
-            //     await _context.BlacklistedRatings.AddRangeAsync(blockedRatings);
-            //     
-            //     // Setup profile comment thread subscription
-            //     var thread = await _context.CommentThreads
-            //         .FirstOrDefaultAsync(ct => ct.UserId == user.Id);
-            //     await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
-            //     {
-            //         CommentsThread = thread,
-            //         OgmaUser = user
-            //     });
-            //     
-            //     // TODO: set up default bookshelves
-            //
-            //
-            //     await _context.SaveChangesAsync();
-            // }
             
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
+            if (!ModelState.IsValid) return Page();
+            
             var user = await _userManager.FindByNameAsync(UserName);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with name '{UserName}'.");
-            }
-
+            if (user is null) return NotFound($"Unable to load user with name '{UserName}'.");
+            
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             
@@ -138,8 +87,7 @@ namespace Ogma3.Areas.Identity.Pages.Account
                 new() { Name = "Read Later", Description = "What I plan to read", Color = "#5555ff", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 22 },
             };
             await _context.Shelves.AddRangeAsync(shelves);
-
-
+            
             await _context.SaveChangesAsync();
 
             return Page();

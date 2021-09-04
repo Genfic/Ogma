@@ -17,8 +17,7 @@
 <div class="info-bar profile-bar" id="profile-bar">
 
     <cdn-img class="img" 
-             src="@(Model.Avatar ?? Lorem.Gravatar(Model.Email))" 
-             no-cdn="@(string.IsNullOrEmpty(Model.Avatar))"
+             src="@Model.Avatar"
              alt="@Model.UserName's avatar" 
              loading="lazy" 
              height="130" width="130" />

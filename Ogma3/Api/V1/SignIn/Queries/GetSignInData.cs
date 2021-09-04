@@ -27,7 +27,7 @@ namespace Ogma3.Api.V1.SignIn.Queries
 
                 return user is null
                     ? new Result(Lorem.Picsum(200), string.Empty)
-                    : new Result(user.Avatar ?? Lorem.Gravatar(user.Email), user.Title);
+                    : new Result(user.Avatar, user.Title);
             }
         }
 

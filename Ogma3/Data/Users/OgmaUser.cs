@@ -20,7 +20,7 @@ namespace Ogma3.Data.Users
         public string? Bio { get; set; }
 
         [PersonalData]
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; }
         public string? AvatarId { get; set; }
 
         [PersonalData]

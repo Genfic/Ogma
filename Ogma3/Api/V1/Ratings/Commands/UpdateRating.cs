@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 

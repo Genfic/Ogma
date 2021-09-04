@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
@@ -79,6 +80,7 @@ namespace Ogma3.Pages.Clubs
                 Slug = Input.Name.Friendlify(),
                 Hook = Input.Hook,
                 Description = Input.Description,
+                Icon = "/img/placeholders/ph-250.png",
                 ClubMembers = new List<ClubMember>
                 {
                     new()
@@ -97,7 +99,7 @@ namespace Ogma3.Pages.Clubs
             var file = await _uploader.Upload(
                 Input.Icon,
                 "club-icons",
-                $"{club.Id}-{club.Name.Friendlify()}",
+                club.Id.ToString(),
                 _config.ClubIconWidth,
                 _config.ClubIconHeight
             );

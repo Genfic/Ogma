@@ -5,32 +5,25 @@ namespace Ogma3.Infrastructure.TagHelpers
 {
     public class CdnImgTagHelper : TagHelper
     {
-        private readonly OgmaConfig _ogmaConfig;
-        public CdnImgTagHelper(OgmaConfig ogmaConfig)
-        {
-            _ogmaConfig = ogmaConfig;
-        }
-
         public string Src { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
         public bool Eager { get; set; } = false;
-        public bool NoCdn { get; set; } = false;
-
         public string? Buster { get; set; } = null;
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var src = string.IsNullOrEmpty(Src) ? "ph-250.png" : Src;
-            var url = NoCdn ? src.Trim('/') : _ogmaConfig.Cdn + src.Trim('/');
+            var src = string.IsNullOrEmpty(Src) 
+                ? "/img/placeholders/ph-250.png" 
+                : Src;
 
             if (Width.HasValue) output.Attributes.SetAttribute("width", Width ?? Height);
             if (Height.HasValue) output.Attributes.SetAttribute("height", Height ?? Width);
 
-            if (!string.IsNullOrEmpty(Buster)) url += $"?v={Buster}";
+            if (!string.IsNullOrEmpty(Buster)) src += $"?v={Buster}";
             
             output.TagName = "img";
-            output.Attributes.SetAttribute("src", url);
+            output.Attributes.SetAttribute("src", src);
 
             if (!Eager)
             {

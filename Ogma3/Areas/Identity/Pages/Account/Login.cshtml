@@ -1,7 +1,6 @@
 ﻿@page "/login"
 @using Ogma3.Api.V1.SignIn
 @using Ogma3.Data
-@inject OgmaConfig _config;
 @model LoginModel
 
 @{
@@ -20,7 +19,7 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             
             <img width="240" height="240"
-                 :src="getAvatar" 
+                 :src="avatar" 
                  class="avatar" 
                  :class="checked ? 'checked' : null" 
                  :alt="`${name}'s avatar`">
@@ -94,7 +93,6 @@
     @* </div> *@
 </div>
 
-<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@_config.Cdn" v-if="!cdn"></div>
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(SignInController))" v-if="!route"></div>
 @section Scripts {
     <script src="~/js/dist/login.min.js" asp-append-version="true"></script>

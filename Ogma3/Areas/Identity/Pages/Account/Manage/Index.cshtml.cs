@@ -11,8 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage
 {
@@ -50,6 +52,8 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
             public string Username { get; init; }
             [DataType(DataType.Upload)]
             public IFormFile Avatar { get; init; }
+
+            public bool DeleteAvatar { get; set; } = false;
             public string Title { get; init; }
             public string Bio { get; init; }
         }
@@ -126,6 +130,20 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 );
                 user.AvatarId = file.FileId;
                 user.Avatar = file.Path;
+            }
+            else if (Input.DeleteAvatar)
+            {
+                if (user.Avatar is not null && user.AvatarId is not null)
+                {
+                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_ogmaConfig.Cdn, ""));
+                }
+
+                user.AvatarId = null;
+                user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
+                {
+                    Default = Gravatar.AvatarGenMethods.Identicon,
+                    Rating = Gravatar.Ratings.G
+                });
             }
 
             if (Input.Title != user.Title)

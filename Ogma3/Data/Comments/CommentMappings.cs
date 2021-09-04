@@ -21,11 +21,9 @@ namespace Ogma3.Data.Comments
             EditCount = c.EditCount,
             LastEdit = c.LastEdit,
             IsBlocked = c.Author.BlockedByUsers.Any(bu => bu.Id == uid),
-            Author = c.DeletedBy != null
-                ? null
-                : new UserSimpleDto
+            Author = c.DeletedBy != null ? null : new UserSimpleDto
                 {
-                    Avatar = c.Author.Avatar ?? Lorem.Gravatar(c.Author.Email, 200),
+                    Avatar = c.Author.Avatar,
                     Title = c.Author.Title,
                     UserName = c.Author.UserName,
                     Roles = c.Author.Roles.AsQueryable().Select(RoleMappings.ToRoleDto)

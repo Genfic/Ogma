@@ -1,8 +1,6 @@
 ﻿#nullable enable
 
-using System.Linq;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,32 +35,21 @@ namespace Utils
             using var client = new HttpClient();
             return await client.GetStringAsync(sb.ToString());
         }
-
-        public static string Gravatar(string email, int size = 200)
-        {
-            using var md5 = MD5.Create();
-            var data = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()))
-                .Select(x => x.ToString("x2"));
-            var hash = string.Join("", data);
-            return $"https://www.gravatar.com/avatar/{hash}?s={size}";
-        }
     }
 
-    public record IpsumOptions
-    {
-        public IpsumLength? Length { get; init; }
-        public bool Decorate { get; init; }
-        public bool Link { get; init; }
-        public bool Ulist { get; init; }
-        public bool Olist { get; init; }
-        public bool Dlist { get; init; }
-        public bool Blockquotes { get; init; }
-        public bool Codeblocks { get; init; }
-        public bool Headers { get; init; }
-        public bool Allcaps { get; init; }
-        public bool Prude { get; init; }
-        public bool Plaintext { get; init; }
-    }
+    public record IpsumOptions(
+        IpsumLength? Length, 
+        bool Decorate, 
+        bool Link, 
+        bool Ulist, 
+        bool Olist, 
+        bool Dlist, 
+        bool Blockquotes,
+        bool Codeblocks, 
+        bool Headers, 
+        bool Allcaps, 
+        bool Prude, 
+        bool Plaintext);
 
     public enum IpsumLength
     {
