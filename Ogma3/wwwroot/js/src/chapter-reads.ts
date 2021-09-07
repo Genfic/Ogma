@@ -59,14 +59,9 @@
 
 	async function _getStatus() {
 		const res = await fetch(`${route.dataset.reads}/${story.dataset.storyId}`);
-
-		if (res.status == 204) {
-			return [];
-		} else {
-			const data = await res.json();
-			reads = data.read;
-			_update();
-		}
+		
+		reads = await res.json();
+		_update();
 	}
 
 })();

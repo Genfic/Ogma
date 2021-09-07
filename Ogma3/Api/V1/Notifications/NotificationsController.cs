@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Notifications.Commands;
 using Ogma3.Api.V1.Notifications.Queries;
@@ -27,7 +28,8 @@ namespace Ogma3.Api.V1.Notifications
 
         [HttpDelete("{id:long}")]
         [Authorize]
-        public async Task<IActionResult> DeleteAsync(long id)
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteAsync(long id)
             => await _mediator.Send(new DeleteNotification.Command(id));
     }
 }

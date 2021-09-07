@@ -23,11 +23,11 @@ namespace Ogma3.Api.V1.ChaptersReads
         
         // POST api/chaptersread
         [HttpPost]
-        public async Task<IActionResult> PostChaptersRead(MarkChapterAsRead.Command post)
+        public async Task<ActionResult<MarkChapterAsRead.Response>> PostChaptersRead(MarkChapterAsRead.Command post)
             => await _mediator.Send(post);
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteChaptersRead(MarkChapterAsUnread.Command post)
+        public async Task<ActionResult<MarkChapterAsUnread.Response>> DeleteChaptersRead(MarkChapterAsUnread.Command post)
             => await _mediator.Send(post);
     }
 }

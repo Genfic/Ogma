@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Tags.Commands;
 using Ogma3.Api.V1.Tags.Queries;
@@ -41,13 +42,17 @@ namespace Ogma3.Api.V1.Tags
         // PUT: api/Tags/5
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutTag(UpdateTag.Command data)
+        [ProducesResponseType(StatusCodes.Status409Conflict)] 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> PutTag(UpdateTag.Command data)
             => await _mediator.Send(data);
         
         // POST: api/Tags
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PostTag(CreateTag.Command data)
+        [ProducesResponseType(StatusCodes.Status409Conflict), ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult> PostTag(CreateTag.Command data)
             => await _mediator.Send(data);
         
         // DELETE: api/Tags/5

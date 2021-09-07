@@ -17,9 +17,9 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands
 {
     public static class MarkChapterAsRead
     {
-        public sealed record Command(long Chapter, long Story) : IRequest<IActionResult>;
+        public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<Response>>;
 
-        public class MarkChapterAsReadHandler : IRequestHandler<Command, IActionResult>
+        public class MarkChapterAsReadHandler : IRequestHandler<Command, ActionResult<Response>>
         {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -30,7 +30,7 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands
                 _uid = userService?.User?.GetNumericId();
             }
 
-            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (_uid is null) return new UnauthorizedResult();
 
@@ -61,7 +61,7 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands
                 try
                 {
                     await _context.SaveChangesAsync(cancellationToken);
-                    return new OkObjectResult(new { Read = chaptersReadObj.Chapters });
+                    return new OkObjectResult(new Response(chaptersReadObj.Chapters));
                 }
                 catch (Exception e)
                 {
@@ -70,5 +70,7 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands
                 }
             }
         }
+
+        public sealed record Response(HashSet<long> Read);
     }
 }

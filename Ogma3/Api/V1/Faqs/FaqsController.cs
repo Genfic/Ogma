@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Faqs.Commands;
 using Ogma3.Api.V1.Faqs.Queries;
@@ -28,7 +29,8 @@ namespace Ogma3.Api.V1.Faqs
         // PUT: api/Faqs/5
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutFaq(UpdateFaq.Command data)
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> PutFaq(UpdateFaq.Command data)
             => await _mediator.Send(data);
         
         // POST: api/Faqs
@@ -40,6 +42,7 @@ namespace Ogma3.Api.V1.Faqs
         // DELETE: api/Faqs/5
         [HttpDelete("{id:long}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<long>> DeleteFaq(long id)
             => await _mediator.Send(new DeleteFaq.Command(id));
     }

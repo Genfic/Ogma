@@ -12,9 +12,9 @@ namespace Ogma3.Api.V1.UserActivity.Commands
 {
     public static class UpdateLastActive
     {
-        public sealed record Command : IRequest<IActionResult>;
+        public sealed record Command : IRequest<OkResult>;
 
-        public class Handler : IRequestHandler<Command, IActionResult>
+        public class Handler : IRequestHandler<Command, OkResult>
         {
             private readonly ApplicationDbContext _context;
             private readonly long? _uid;
@@ -25,7 +25,7 @@ namespace Ogma3.Api.V1.UserActivity.Commands
                 _uid = userService.User?.GetNumericId();
             }
 
-            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<OkResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 await _context.Database.ExecuteSqlInterpolatedAsync(
                     $@"UPDATE ""AspNetUsers"" SET ""LastActive"" = {DateTime.Now.ToUniversalTime()} WHERE ""Id"" = {_uid}", 

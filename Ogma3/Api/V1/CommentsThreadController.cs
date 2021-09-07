@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -53,7 +54,7 @@ namespace Ogma3.Api.V1
 
         
         [HttpGet("lock/status/{id:long}")]
-        public async Task<bool> GetLockStatusAsync(long id) 
+        public async Task<ActionResult<bool>> GetLockStatusAsync(long id) 
             => await _context.CommentThreads
                 .Where(ct => ct.Id == id)
                 .Select(ct => ct.LockDate != null)
@@ -63,7 +64,9 @@ namespace Ogma3.Api.V1
         [HttpPost("lock")]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> LockThreadAsync([FromBody]PostData data)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> LockThreadAsync([FromBody]PostData data)
         {
             var permission = await GetPermissionsAsync(data.Id);
             if (!permission.IsAllowed) return Unauthorized();

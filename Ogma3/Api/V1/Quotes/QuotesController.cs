@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Quotes.Commands;
 using Ogma3.Api.V1.Quotes.Queries;
@@ -52,7 +53,8 @@ namespace Ogma3.Api.V1.Quotes
         [HttpPost("json")]
         [Authorize(Roles = "Admin")]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> PostJson()
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<CreateQuotesFromJson.Response>> PostJson()
             => await _mediator.Send(new CreateQuotesFromJson.Command(Request.Body));
 
         // DELETE: api/Quotes/5

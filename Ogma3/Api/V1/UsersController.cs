@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -102,6 +103,10 @@ namespace Ogma3.Api.V1
         
         [HttpPost("ban")]
         [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> BanUser(BanData data)
         {
             var (userId, days) = data;
@@ -150,6 +155,10 @@ namespace Ogma3.Api.V1
         
         [HttpPost("mute")]
         [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> MuteUser(BanData data)
         {
             var (userId, days) = data;
@@ -193,7 +202,10 @@ namespace Ogma3.Api.V1
         }
 
         [HttpPost("roles")]
-        [Authorize(Roles = RoleNames.Admin)]
+        [Authorize(Roles = RoleNames.Admin)]        
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> ManageRoles(RoleData data)
         {
             var (userId, roles) = data;

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.UserActivity.Commands;
 
@@ -14,7 +15,8 @@ namespace Ogma3.Api.V1.UserActivity
 
         // POST
         [HttpHead]
-        public async Task<IActionResult> UpdateLastActiveAsync()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<OkResult> UpdateLastActiveAsync()
             => await _mediator.Send(new UpdateLastActive.Command());
         
         // Don't delete or this whole controller will break

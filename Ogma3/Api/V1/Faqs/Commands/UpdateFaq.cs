@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Faqs.Commands
 {
     public static class UpdateFaq
     {
-        public sealed record Command(long Id, string Question, string Answer) : IRequest<IActionResult>;
+        public sealed record Command(long Id, string Question, string Answer) : IRequest<ActionResult>;
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
@@ -23,12 +23,12 @@ namespace Ogma3.Api.V1.Faqs.Commands
             }
         }
         
-        public class Handler : IRequestHandler<Command, IActionResult>
+        public class Handler : IRequestHandler<Command, ActionResult>
         {
             private readonly ApplicationDbContext _context;
             public Handler(ApplicationDbContext context) => _context = context;
 
-            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 var (id, question, answer) = request;
                 

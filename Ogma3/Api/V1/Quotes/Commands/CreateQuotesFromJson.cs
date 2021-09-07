@@ -15,9 +15,9 @@ namespace Ogma3.Api.V1.Quotes.Commands
 {
     public static class CreateQuotesFromJson
     {
-        public sealed record Command(Stream Data) : IRequest<IActionResult>;
+        public sealed record Command(Stream Data) : IRequest<ActionResult<Response>>;
         
-        public class CreateQuoteHandler : IRequestHandler<Command, IActionResult>
+        public class CreateQuoteHandler : IRequestHandler<Command, ActionResult<Response>>
         {
             private readonly ApplicationDbContext _context;
 
@@ -26,7 +26,7 @@ namespace Ogma3.Api.V1.Quotes.Commands
                 _context = context;
             }
 
-            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var data = await JsonSerializer.DeserializeAsync<IEnumerable<Quote>>(request.Data, cancellationToken: cancellationToken);
                 if (data is null) return new BadRequestResult();
@@ -35,7 +35,7 @@ namespace Ogma3.Api.V1.Quotes.Commands
                 try
                 {
                     var insertedRows = await _context.SaveChangesAsync(cancellationToken);
-                    return new OkObjectResult(new { insertedRows });
+                    return new OkObjectResult(new Response(insertedRows));
                 }
                 catch (DbUpdateException ex)
                 {
@@ -44,6 +44,7 @@ namespace Ogma3.Api.V1.Quotes.Commands
                 }
             }
         }
-        
+
+        public sealed record Response(int InsertedRows);
     }
 }

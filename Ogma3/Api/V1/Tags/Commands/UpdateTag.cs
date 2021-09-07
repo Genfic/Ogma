@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Tags.Commands
 {
     public static class UpdateTag
     {
-        public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace) : IRequest<IActionResult>;
+        public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace) : IRequest<ActionResult>;
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
@@ -26,12 +26,12 @@ namespace Ogma3.Api.V1.Tags.Commands
             }
         }
         
-        public class Handler : IRequestHandler<Command, IActionResult>
+        public class Handler : IRequestHandler<Command, ActionResult>
         {
             private readonly ApplicationDbContext _context;
             public Handler(ApplicationDbContext context) => _context = context;
 
-            public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 var (id, name, description, ns) = request;
                 

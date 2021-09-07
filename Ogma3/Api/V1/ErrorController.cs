@@ -8,15 +8,17 @@ namespace Ogma3.Api.V1
     public class ErrorController : ControllerBase
     {
         [HttpGet]
-        public IActionResult OnGet([FromQuery] int? code)
+        public ActionResult<Result> OnGet([FromQuery] int? code)
         {
             var text = code.HasValue 
                 ? ReasonPhrases.GetReasonPhrase((int) code) 
                 : "Unknown Error";
-            return new JsonResult(new { Code = code, Reason = text })
+            return new JsonResult(new Result(code, text))
             {
                 StatusCode = code ?? 0
             };
         }
+
+        public sealed record Result(int? Code, string Reason);
     }
 }
