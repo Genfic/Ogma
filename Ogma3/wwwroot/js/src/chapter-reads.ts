@@ -1,49 +1,46 @@
+import { ChaptersReadClient, MarkChapterAsReadCommand, MarkChapterAsUnreadCommand } from "../../lib/openapi/OpenAPI";
+
 (async () => {
-	const route = document.querySelector("[data-reads]") as HTMLElement;
+	console.log('runs');
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
 	const buttons = [...document.querySelectorAll("button.read-status")] as HTMLButtonElement[];
 	const csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
 
+	const client = new ChaptersReadClient();
+	const storyId: number = Number(story.dataset.storyId);
+
+	story.remove();
+	
 	const headers = {
 		"RequestVerificationToken": csrf,
 		"Content-Type": "application/json"
 	};
-	
-	const _body = (id: number) => JSON.stringify({
-		story: Number(story.dataset.storyId),
-		chapter: id
-	});
 
-	route.remove();
-	story.remove();
-
-	let reads: Array<number> = [];
+	let reads: number[] = [];
 	
 	await _getStatus();
 
-	const _readOrUnread = (id: number) => reads.includes(id) ? _markUnread(id) : _markRead(id);
-	for (const b of buttons) {
-		b.addEventListener("click", () => _readOrUnread(Number(b.dataset.id)));
+	async function _readOrUnread(id: number) {
+		console.log("clicks");
+		return reads.includes(id) ? await _markUnread(id) : await _markRead(id);
 	}
 
 	async function _markRead(id: number) {
-		const res = await fetch(route.dataset.reads, {
-			method: "post",
-			headers: headers,
-			body: _body(id)
-		});
-		const data = await res.json();
+		console.log('marks');
+		const data = await client.postChaptersRead(new MarkChapterAsReadCommand({
+			story: storyId,
+			chapter: id
+		}));
 		reads = data.read;
 		_update();
 	}
 
 	async function _markUnread(id: number) {
-		const res = await fetch(route.dataset.reads, {
-			method: "delete",
-			headers: headers,
-			body: _body(id)
-		});
-		const data = await res.json();
+		console.log('unmarks');
+		const data = await client.deleteChaptersRead(new MarkChapterAsUnreadCommand({
+			story: storyId,
+			chapter: id
+		}));
 		reads = data.read;
 		_update();
 	}
@@ -58,15 +55,17 @@
 	}
 
 	async function _getStatus() {
-		const res = await fetch(`${route.dataset.reads}/${story.dataset.storyId}`);
-
-		if (res.status == 204) {
-			return [];
-		} else {
-			const data = await res.json();
-			reads = data.read;
-			_update();
-		}
+		reads = await client.getChaptersRead(storyId);
 	}
+
+	for (let b of buttons) {
+		console.log(b.dataset.id);
+		b.addEventListener("click", async () => {
+			console.log('listener clicks');
+			return await _readOrUnread(Number(b.dataset.id));
+		});
+	}
+	
+	buttons[0].addEventListener('mouseover', () => console.log('hello'));
 
 })();

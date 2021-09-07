@@ -255,6 +255,11 @@
     <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\LICENSE" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\Ogma3\wwwroot\js\dist\pack\alerts.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\Ogma3\wwwroot\js\dist\pack\chapter-reads.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\Ogma3\wwwroot\js\dist\pack\input-progressbars.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\Ogma3\wwwroot\js\dist\pack\navbar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\Ogma3\wwwroot\js\dist\pack\passwords.js" />
   </ItemGroup>
 
 
@@ -377,7 +382,7 @@
     <Content Update="wwwroot\js\src\components\textarea-counter-component.min.js">
       <DependentUpon>textarea-counter-component.js</DependentUpon>
     </Content>
-    <Content Update="wwwroot\js\src\site.js">
+    <Content Update="wwwroot\js\src\site.ts">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -558,11 +563,7 @@
     <TypeScriptCompile Include="wwwroot\js\src\chapter-reads.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
     <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\openapi" />
+    <TypeScriptCompile Include="wwwroot\lib\openapi\OpenAPI.ts" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

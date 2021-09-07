@@ -39,11 +39,11 @@
     },
     "globals": {
         "axios": "readonly",
-        "Vue": "readonly",
+//        "Vue": "readonly",
         "require": "readonly",
         "exports": "readonly",
-        "getCookieValue": "readonly",
-        "setCookie": "readonly",
+//        "getCookieValue": "readonly",
+//        "setCookie": "readonly",
         "dayjs": "readonly"
     },
     "overrides": [

@@ -34,9 +34,7 @@ namespace Ogma3.Api.V1.ChaptersReads.Queries
                     .Select(cr => cr.Chapters)
                     .FirstOrDefaultAsync(cancellationToken);
 
-                return chaptersRead is null 
-                    ? new NoContentResult() 
-                    : new OkObjectResult(new { Read = chaptersRead });
+                return new OkObjectResult(chaptersRead ?? new HashSet<long>());
             }
         }
         
