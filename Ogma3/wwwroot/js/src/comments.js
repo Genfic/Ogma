@@ -7,6 +7,7 @@ let comments_vue = new Vue({
 		csrf: null,
 		threadRoute: null,
 		subscribeRoute: null,
+		type: null,
 
 		maxLength: null,
 
@@ -45,7 +46,8 @@ let comments_vue = new Vue({
 
 			await axios.post(this.route, {
 				body: this.body,
-				thread: Number(this.thread)
+				thread: Number(this.thread),
+				type: this.type
 			}, {
 				headers: { "RequestVerificationToken": this.csrf }
 			});
@@ -191,6 +193,7 @@ let comments_vue = new Vue({
 	async mounted() {
 		this.thread = document.getElementById("thread").dataset.thread;
 		this.route = document.getElementById("route").dataset.route;
+		this.type = document.getElementById("type").dataset.type;
 		this.threadRoute = document.getElementById("thread-route").dataset.route;
 		this.subscribeRoute = document.getElementById("subscribe-route").dataset.route;
 		this.perPage = document.getElementById("per-page").dataset.count;

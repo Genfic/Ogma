@@ -9,10 +9,7 @@ namespace Ogma3.Services
     {
         private readonly ApplicationDbContext _context;
 
-        public CommentRedirector(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public CommentRedirector(ApplicationDbContext context) => _context = context;
 
         public async Task<CommentRedirectionResult> RedirectToComment(long commentId)
         {
@@ -27,40 +24,46 @@ namespace Ogma3.Services
                         .Select(x => x.Id)
                         .ToList()
                         .IndexOf(commentId) + 1,
-                    UserName = c.CommentsThread.User.UserName,
-                    BlogpostId = c.CommentsThread.BlogpostId,
-                    ChapterId = c.CommentsThread.ChapterId,
-                    ClubThreadId = c.CommentsThread.ClubThreadId,
+                    Name = c.CommentsThread.User.UserName,
                     ClubId = c.CommentsThread.ClubThread.ClubId,
+                    Id = c.CommentsThread.BlogpostId ?? c.CommentsThread.ChapterId ?? c.CommentsThread.ClubThreadId,
+                    Which = c.CommentsThread.UserId != null ? ThreadType.User :
+                        c.CommentsThread.BlogpostId != null ? ThreadType.Blogpost :
+                        c.CommentsThread.ChapterId != null ? ThreadType.Chapter :
+                        c.CommentsThread.ClubThreadId != null ? ThreadType.Club : null
                 })
                 .FirstOrDefaultAsync();
 
             if (comment is null) return null;
             
             var order = comment.Ordinal;
-            
-            // Figure out the redirect
-            if (comment.UserName is not null)
-                return new CommentRedirectionResult("/User/Index", new { Name = comment.UserName }, $"comment-{order}");
-            if (comment.BlogpostId is not null)
-                return new CommentRedirectionResult("/Blog/Post", new { Id = comment.BlogpostId }, $"comment-{order}");
-            if (comment.ChapterId is not null)
-                return new CommentRedirectionResult("/Chapter",new {Id = comment.ChapterId}, $"comment-{order}");
-            if (comment.ClubThreadId is not null)
-                return new CommentRedirectionResult("/Club/Forums/Details", new { comment.ClubId, ThreadId = comment.ClubThreadId}, $"comment-{order}");
 
-            return null;
+            return comment.Which switch
+            {
+                ThreadType.User => new CommentRedirectionResult("/User/Index", new { comment.Name }, $"comment-{order}"),
+                ThreadType.Blogpost => new CommentRedirectionResult("/Blog/Post", new { comment.Id }, $"comment-{order}"),
+                ThreadType.Chapter => new CommentRedirectionResult("/Chapter",new { comment.Id}, $"comment-{order}"),
+                ThreadType.Club => new CommentRedirectionResult("/Club/Forums/Details", new { comment.ClubId, ThreadId = comment.Id}, $"comment-{order}"),
+                _ => null
+            };
         }
         public record CommentRedirectionResult(string Url, object Params, string Fragment);
-
+        
+        private enum ThreadType
+        {
+            User, 
+            Blogpost, 
+            Chapter, 
+            Club
+        }
+        
         private record CommentMeta
         {
             public int Ordinal { get; init; }
-            public string UserName { get; init; }
-            public long? BlogpostId { get; init; }
-            public long? ChapterId { get; init; }
-            public long? ClubThreadId { get; init; }
-            public long? ClubId { get; init; }
+            public ThreadType? Which { get; set; }
+            public string? Name { get; set; }
+            public long? Id { get; set; }
+            public long ClubId { get; set; }
         }
     }
 }

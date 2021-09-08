@@ -117,7 +117,7 @@ namespace Ogma3
                 .AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
             
             // Logged in user service
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
             // RSS service
             services.AddTransient<IRssService, RssService>();
             // Code generator service

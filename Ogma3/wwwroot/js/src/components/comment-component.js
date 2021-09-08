@@ -1,9 +1,5 @@
 Vue.component('comment', {
 	props: {
-		cdn: {
-			type: String,
-			required: true
-		},
 		comment: {
 			type: Object,
 			required: true
@@ -115,12 +111,6 @@ Vue.component('comment', {
 		date: function (dt) {
 			return dayjs(dt).format('DD MMM YYYY, HH:mm');
 		},
-        
-		avatar: function (url) {
-			return url.includes('gravatar')
-				? url
-				: this.cdn + url;
-		}
 	},
 	template: `
       <div :id="'comment-' + (idx + 1)"
@@ -159,7 +149,7 @@ Vue.component('comment', {
             <div class="bg" :style="{backgroundColor: mutComment.author.roles[0].color}"></div>
           </div>
 
-          <img :src="avatar(mutComment.author.avatar)" :alt="mutComment.author.userName + '\\'s avatar'" 
+          <img :src="mutComment.author.avatar" :alt="mutComment.author.userName + '\\'s avatar'" 
                class="avatar"
                loading="lazy">
 

@@ -8,7 +8,8 @@ namespace Ogma3.Pages.Shared
     {
         public long Id { get; init; }
         public DateTime? LockDate { get; init; }
-        
+        public string Type { get; set; }
+
         public class MappingProfile : Profile
         {
             public MappingProfile() => CreateMap<CommentsThread, CommentsThreadDto>();

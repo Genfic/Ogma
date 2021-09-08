@@ -1,5 +1,6 @@
 @using static Ogma3.Services.HtmlExtensions
 @using Ogma3.Api.V1
+@using Ogma3.Api.V1.Comments
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
@@ -9,6 +10,7 @@
 <div class="comments-container" :class="isReady ? 'ready' : null" id="comments-container" v-cloak>
 
     <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
+    <div id="type" data-type="@Model.Type" v-if="!type"></div>
     <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
     <div id="thread-route" data-route="@Url.RouteUrl(nameof(CommentsThreadController))" v-if="!threadRoute"></div>
     <div id="subscribe-route" data-route="@Url.RouteUrl(nameof(SubscriptionsController))" v-if="!subscribeRoute"></div>
@@ -95,7 +97,6 @@
         <template v-for="c in comms">
             <template v-if="!c.snip">
                 <comment :key="c.key"
-                         cdn="@_config.Cdn"
                          :comment="c.val"
                          :idx="c.key"
                          :csrf="csrf"

@@ -47,6 +47,8 @@ namespace Ogma3.Pages.User
                 .FirstOrDefaultAsync();
 
             if (Data is null) return NotFound();
+
+            Data.CommentsThread.Type = nameof(OgmaUser);
             
             ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
             if (ProfileBar is null) return NotFound();

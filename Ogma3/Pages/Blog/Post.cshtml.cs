@@ -74,6 +74,8 @@ namespace Ogma3.Pages.Blog
             {
                 IsUnavailable = true;
             }
+
+            Blogpost.CommentsThread.Type = nameof(Data.Blogposts.Blogpost);
             
             ProfileBar = await _userRepo.GetProfileBar(Blogpost.AuthorId);
             

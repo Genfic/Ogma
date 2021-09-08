@@ -70,6 +70,8 @@ namespace Ogma3.Pages.Club.Forums
                 .FirstOrDefaultAsync();
 
             if (ClubThread is null) return NotFound();
+
+            ClubThread.CommentsThread.Type = nameof(Data.ClubThreads.ClubThread);
             
             ClubBar = await _clubRepo.GetClubBar(ClubThread.ClubId);
             if (ClubBar is null) return NotFound();

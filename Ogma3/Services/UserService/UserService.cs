@@ -9,10 +9,8 @@ namespace Ogma3.Services.UserService
     {
         private readonly IHttpContextAccessor? _accessor;
 
-        public UserService(IHttpContextAccessor? accessor) {
-            _accessor = accessor;
-        }
-        
+        public UserService(IHttpContextAccessor? accessor) => _accessor = accessor;
+
         public ClaimsPrincipal? User => _accessor?.HttpContext?.User;
     }
 }

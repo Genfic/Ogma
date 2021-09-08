@@ -93,6 +93,8 @@ namespace Ogma3.Pages
                 .ProjectTo<ChapterMicroDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
             
+            Chapter.CommentsThread.Type = nameof(Data.Chapters.Chapter);
+            
             return Page();
         }
     }

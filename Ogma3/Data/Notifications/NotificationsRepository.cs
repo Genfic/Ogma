@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +26,7 @@ namespace Ogma3.Data.Notifications
             {
                 Body = body,
                 Event = @event,
-                Url = _urlHelper.Page(page, routeData) + (fragment is null ? null : "#" + fragment)
+                Url = _urlHelper.Page(page, routeData) + (fragment is null ? string.Empty : $"#{fragment}")
             };
             await _context.Notifications.AddAsync(notification);
 
