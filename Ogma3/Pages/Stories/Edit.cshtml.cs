@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,14 +29,14 @@ namespace Ogma3.Pages.Stories
     {
         private readonly ApplicationDbContext _context;
         private readonly ImageUploader _uploader;
-        private readonly OgmaConfig _config;
+        private readonly OgmaConfig _ogmaConfig;
         private readonly IMapper _mapper;
 
-        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config, IMapper mapper)
+        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig, IMapper mapper)
         {
             _context = context;
             _uploader = uploader;
-            _config = config;
+            _ogmaConfig = ogmaConfig;
             _mapper = mapper;
         }
         
@@ -168,11 +169,11 @@ namespace Ogma3.Pages.Stories
                     Input.Cover, 
                     "covers", 
                     story.Id.ToString(),
-                    _config.StoryCoverWidth,
-                    _config.StoryCoverHeight
+                    _ogmaConfig.StoryCoverWidth,
+                    _ogmaConfig.StoryCoverHeight
                 );
                 story.CoverId = file.FileId;
-                story.Cover = file.Path;
+                story.Cover = Path.Join(_ogmaConfig.Cdn, file.Path);
                 // Final save
                 await _context.SaveChangesAsync();
             }

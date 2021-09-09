@@ -1,10 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Http;
+using Ogma3.Data;
 using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -18,10 +20,12 @@ namespace Ogma3.Services.FileUploader
     public class ImageUploader : IFileUploader
     {
         private readonly IB2Client _b2Client;
+        private readonly OgmaConfig _ogmaConfig;
 
-        public ImageUploader(IB2Client b2Client)
+        public ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig)
         {
             _b2Client = b2Client;
+            _ogmaConfig = ogmaConfig;
         }
 
         /// <inheritdoc cref="IFileUploader"/>
@@ -100,5 +104,8 @@ namespace Ogma3.Services.FileUploader
             throw new Exception("Could not upload file. Check server logs.");
 
         }
+
+        public async Task Delete(string name, string id, CancellationToken cancellationToken = default) 
+            => _ = await _b2Client.Files.Delete(id, name.Replace(_ogmaConfig.Cdn, string.Empty).Trim('/'), cancellationToken);
     }
 }

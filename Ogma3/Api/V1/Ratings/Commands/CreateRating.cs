@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -39,11 +40,13 @@ namespace Ogma3.Api.V1.Ratings.Commands
         {
             private readonly ApplicationDbContext _context;
             private readonly ImageUploader _uploader;
+            private readonly OgmaConfig _ogmaConfig;
 
-            public Handler(ApplicationDbContext context, ImageUploader uploader)
+            public Handler(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
             {
                 _context = context;
                 _uploader = uploader;
+                _ogmaConfig = ogmaConfig;
             }
 
             public async Task<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -60,8 +63,8 @@ namespace Ogma3.Api.V1.Ratings.Commands
 
                 if (formFile is {Length: > 0})
                 {
-                    var fileData = await _uploader.Upload(formFile, "ratings", $"{name.Friendlify().ToUpper()}_rating");
-                    rating.Icon = fileData.Path;
+                    var fileData = await _uploader.Upload(formFile, "ratings", name.Friendlify().ToUpper());
+                    rating.Icon = Path.Join(_ogmaConfig.Cdn, fileData.Path);
                     rating.IconId = fileData.FileId;
                 }
             

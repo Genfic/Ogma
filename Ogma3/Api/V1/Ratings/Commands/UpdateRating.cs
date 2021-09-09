@@ -1,8 +1,8 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using B2Net;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -43,13 +43,13 @@ namespace Ogma3.Api.V1.Ratings.Commands
         {
             private readonly ApplicationDbContext _context;
             private readonly ImageUploader _uploader;
-            private readonly IB2Client _b2Client;
+            private readonly OgmaConfig _ogmaConfig;
 
-            public Handler(ApplicationDbContext context, ImageUploader uploader, IB2Client b2Client)
+            public Handler(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
             {
                 _context = context;
                 _uploader = uploader;
-                _b2Client = b2Client;
+                _ogmaConfig = ogmaConfig;
             }
 
             public async Task<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -69,10 +69,10 @@ namespace Ogma3.Api.V1.Ratings.Commands
                 {
                     if (!string.Equals(name, rating.Name, StringComparison.OrdinalIgnoreCase))
                     {
-                        await _b2Client.Files.Delete(rating.IconId, rating.Icon, cancellationToken);
+                        await _uploader.Delete( rating.Icon, rating.IconId, cancellationToken);
                     }
-                    var fileData = await _uploader.Upload(formFile, "ratings", $"{name.Friendlify().ToUpper()}_rating");
-                    rating.Icon = fileData.Path;
+                    var fileData = await _uploader.Upload(formFile, "ratings", name.Friendlify().ToUpper());
+                    rating.Icon = Path.Join(_ogmaConfig.Cdn, fileData.Path);
                     rating.IconId = fileData.FileId;
                 }
             

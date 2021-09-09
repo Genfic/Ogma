@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using B2Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Pages.Stories
 {
@@ -16,14 +16,12 @@ namespace Ogma3.Pages.Stories
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly IB2Client _b2Client;
-        private readonly OgmaConfig _ogmaConfig;
+        private readonly ImageUploader _uploader;
         
-        public DeleteModel(ApplicationDbContext context, IB2Client b2Client, OgmaConfig ogmaConfig)
+        public DeleteModel(ApplicationDbContext context, ImageUploader uploader)
         {
             _context = context;
-            _b2Client = b2Client;
-            _ogmaConfig = ogmaConfig;
+            _uploader = uploader;
         }
         
         public class GetData
@@ -94,7 +92,7 @@ namespace Ogma3.Pages.Stories
             // Delete cover
             if (story.CoverId is not null && story.Cover is not null)
             {
-                await _b2Client.Files.Delete(story.CoverId, story.Cover.Replace(_ogmaConfig.Cdn, ""));
+                await _uploader.Delete(story.Cover, story.CoverId);
             }
 
             // Save

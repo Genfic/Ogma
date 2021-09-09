@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using B2Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Pages.Clubs
 {
@@ -16,14 +16,12 @@ namespace Ogma3.Pages.Clubs
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly IB2Client _b2Client;
-        private readonly OgmaConfig _config;
+        private readonly ImageUploader _uploader;
 
-        public DeleteModel(ApplicationDbContext context, IB2Client b2Client, OgmaConfig config)
+        public DeleteModel(ApplicationDbContext context, ImageUploader uploader)
         {
             _context = context;
-            _b2Client = b2Client;
-            _config = config;
+            _uploader = uploader;
         }
 
         [BindProperty]
@@ -33,7 +31,7 @@ namespace Ogma3.Pages.Clubs
         {
             public long Id { get; init; }
             public string Name { get; init; }
-            public string Slug { get; set; }
+            public string Slug { get; init; }
             public string Hook { get; init; }
             public DateTime CreationDate { get; init; }
             public long FounderId { get; init; }
@@ -90,7 +88,7 @@ namespace Ogma3.Pages.Clubs
 
             if (club.Icon is not null && club.IconId is not null)
             {
-                await _b2Client.Files.Delete(club.IconId, club.Icon.Replace(_config.Cdn, ""));
+                await _uploader.Delete(club.Icon, club.IconId);
             }
 
             await _context.SaveChangesAsync();

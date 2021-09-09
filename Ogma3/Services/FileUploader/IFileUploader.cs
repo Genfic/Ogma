@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -16,5 +17,7 @@ namespace Ogma3.Services.FileUploader
         /// <param name="tries">How many times should the upload be attempted</param>
         /// <returns>`FileUploaderResult` object</returns>
         Task<FileUploaderResult> Upload(IFormFile file, string folder, string name, int? width = null, int? height = null, int tries = 10);
+
+        Task Delete(string name, string id, CancellationToken cancellationToken = default);
     }
 }

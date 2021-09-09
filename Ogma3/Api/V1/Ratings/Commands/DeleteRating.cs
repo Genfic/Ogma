@@ -1,11 +1,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using B2Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Api.V1.Ratings.Commands
 {
@@ -16,12 +16,12 @@ namespace Ogma3.Api.V1.Ratings.Commands
         public class Handler : IRequestHandler<Command, ActionResult<long>>
         {
             private readonly ApplicationDbContext _context;
-            private readonly IB2Client _b2Client;
+            private readonly ImageUploader _uploader;
 
-            public Handler(ApplicationDbContext context, IB2Client b2Client)
+            public Handler(ApplicationDbContext context, ImageUploader uploader)
             {
                 _context = context;
-                _b2Client = b2Client;
+                _uploader = uploader;
             }
 
             public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
@@ -36,7 +36,7 @@ namespace Ogma3.Api.V1.Ratings.Commands
 
                 if (r.Icon is not null && r.IconId is not null)
                 {
-                    await _b2Client.Files.Delete(r.IconId, r.Icon, cancellationToken);
+                    await _uploader.Delete(r.Icon, r.IconId, cancellationToken);
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);

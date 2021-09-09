@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using B2Net;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -22,20 +22,16 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
     {
         private readonly ApplicationDbContext _context;
         private readonly SignInManager<OgmaUser> _signInManager;
-        private readonly IB2Client _b2Client;
         private readonly ImageUploader _uploader;
         private readonly OgmaConfig _ogmaConfig;
 
         public IndexModel(
             ApplicationDbContext context,
             SignInManager<OgmaUser> signInManager,
-            IB2Client b2Client,
             ImageUploader uploader,
             OgmaConfig ogmaConfig
-        )
-        {
+        ) {
             _signInManager = signInManager;
-            _b2Client = b2Client;
             _uploader = uploader;
             _ogmaConfig = ogmaConfig;
             _context = context;
@@ -117,7 +113,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                 // Delete the old avatar if exists
                 if (user.Avatar is not null && user.AvatarId is not null)
                 {
-                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_ogmaConfig.Cdn, ""));
+                    await _uploader.Delete(user.Avatar, user.AvatarId);
                 }
 
                 // Upload the new one
@@ -129,13 +125,13 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage
                     _ogmaConfig.AvatarHeight
                 );
                 user.AvatarId = file.FileId;
-                user.Avatar = file.Path;
+                user.Avatar = Path.Join(_ogmaConfig.Cdn, file.Path);
             }
             else if (Input.DeleteAvatar)
             {
                 if (user.Avatar is not null && user.AvatarId is not null)
                 {
-                    await _b2Client.Files.Delete(user.AvatarId, user.Avatar.Replace(_ogmaConfig.Cdn, ""));
+                    await _uploader.Delete(user.Avatar, user.AvatarId);
                 }
 
                 user.AvatarId = null;

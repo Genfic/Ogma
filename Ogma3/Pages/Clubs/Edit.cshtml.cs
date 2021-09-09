@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -22,13 +23,13 @@ namespace Ogma3.Pages.Clubs
     {
         private readonly ApplicationDbContext _context;
         private readonly ImageUploader _uploader;
-        private readonly OgmaConfig _config;
+        private readonly OgmaConfig _ogmaConfig;
 
-        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig config)
+        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
         {
             _context = context;
             _uploader = uploader;
-            _config = config;
+            _ogmaConfig = ogmaConfig;
         }
 
         [BindProperty] 
@@ -125,11 +126,11 @@ namespace Ogma3.Pages.Clubs
                 Input.Icon,
                 "club-icons",
                 club.Id.ToString(),
-                _config.ClubIconWidth,
-                _config.ClubIconHeight
+                _ogmaConfig.ClubIconWidth,
+                _ogmaConfig.ClubIconHeight
             );
             club.IconId = file.FileId;
-            club.Icon = file.Path;
+            club.Icon = Path.Join(_ogmaConfig.Cdn, file.Path);
             
             // Final save
             await _context.SaveChangesAsync();
