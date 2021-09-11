@@ -1,7 +1,6 @@
-using Utils;
 using Xunit;
 
-namespace Tests.Utils
+namespace Utils.Tests.Utils
 {
     public class UnitConvertersTest
     {

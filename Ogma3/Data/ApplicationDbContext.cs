@@ -27,6 +27,7 @@ using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Data.Votes;
+using Ogma3.Infrastructure.PostgresEnumHelper;
 using Serilog;
 
 namespace Ogma3.Data
@@ -43,57 +44,57 @@ namespace Ogma3.Data
         IdentityUserToken<long>
     >
     {
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<StoryTag> StoryTags { get; set; }
-        public DbSet<Story> Stories { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Chapter> Chapters { get; set; }
-        public DbSet<ChaptersRead> ChaptersRead { get; set; }
-        public DbSet<CommentsThread> CommentThreads { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<CommentRevision> CommentRevisions { get; set; }
-        public DbSet<Vote> Votes { get; set; }
-        public DbSet<Shelf> Shelves { get; set; }
-        public DbSet<ShelfStory> ShelfStories { get; set; }
-        public DbSet<Blogpost> Blogposts { get; set; }
-        public DbSet<UserRole> OgmaUserRoles { get; set; }
-        public DbSet<OgmaRole> OgmaRoles { get; set; }
-        public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; }
+        public DbSet<Tag> Tags { get; set; } = null!;
+        public DbSet<StoryTag> StoryTags { get; set; } = null!;
+        public DbSet<Story> Stories { get; set; } = null!;
+        public DbSet<Rating> Ratings { get; set; } = null!;
+        public DbSet<Chapter> Chapters { get; set; } = null!;
+        public DbSet<ChaptersRead> ChaptersRead { get; set; } = null!;
+        public DbSet<CommentsThread> CommentThreads { get; set; } = null!;
+        public DbSet<Comment> Comments { get; set; } = null!;
+        public DbSet<CommentRevision> CommentRevisions { get; set; } = null!;
+        public DbSet<Vote> Votes { get; set; } = null!;
+        public DbSet<Shelf> Shelves { get; set; } = null!;
+        public DbSet<ShelfStory> ShelfStories { get; set; } = null!;
+        public DbSet<Blogpost> Blogposts { get; set; } = null!;
+        public DbSet<UserRole> OgmaUserRoles { get; set; } = null!;
+        public DbSet<OgmaRole> OgmaRoles { get; set; } = null!;
+        public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; } = null!;
 
         // Clubs
-        public DbSet<Club> Clubs { get; set; }
-        public DbSet<ClubMember> ClubMembers { get; set; }
-        public DbSet<ClubThread> ClubThreads { get; set; }
-        public DbSet<Folder> Folders { get; set; }
-        public DbSet<FolderStory> FolderStories { get; set; }
+        public DbSet<Club> Clubs { get; set; } = null!;
+        public DbSet<ClubMember> ClubMembers { get; set; } = null!;
+        public DbSet<ClubThread> ClubThreads { get; set; } = null!;
+        public DbSet<Folder> Folders { get; set; } = null!;
+        public DbSet<FolderStory> FolderStories { get; set; } = null!;
 
 
         // Secondary
-        public DbSet<Document> Documents { get; set; }
-        public DbSet<Icon> Icons { get; set; }
-        public DbSet<Quote> Quotes { get; set; }
-        public DbSet<Faq> Faqs { get; set; }
+        public DbSet<Document> Documents { get; set; } = null!;
+        public DbSet<Icon> Icons { get; set; } = null!;
+        public DbSet<Quote> Quotes { get; set; } = null!;
+        public DbSet<Faq> Faqs { get; set; } = null!;
         
         // Moderation
-        public DbSet<ModeratorAction> ModeratorActions { get; set; }
-        public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; }
-        public DbSet<ContentBlock> ContentBlocks { get; set; }
-        public DbSet<Report> Reports { get; set; }
+        public DbSet<ModeratorAction> ModeratorActions { get; set; } = null!;
+        public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; } = null!;
+        public DbSet<ContentBlock> ContentBlocks { get; set; } = null!;
+        public DbSet<Report> Reports { get; set; } = null!;
         
         // Blacklists
-        public DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
-        public DbSet<BlacklistedTag> BlacklistedTags { get; set; }
-        public DbSet<UserBlock> BlacklistedUsers { get; set; }
+        public DbSet<BlacklistedRating> BlacklistedRatings { get; set; } = null!;
+        public DbSet<BlacklistedTag> BlacklistedTags { get; set; } = null!;
+        public DbSet<UserBlock> BlacklistedUsers { get; set; } = null!;
         
         // Follows
-        public DbSet<UserFollow> FollowedUsers { get; set; }
+        public DbSet<UserFollow> FollowedUsers { get; set; } = null!;
         
         // Notifications
-        public DbSet<Notification> Notifications { get; set; }
-        public DbSet<NotificationRecipients> NotificationRecipients { get; set; }
+        public DbSet<Notification> Notifications { get; set; } = null!;
+        public DbSet<NotificationRecipients> NotificationRecipients { get; set; } = null!;
 
         // Invite codes
-        public DbSet<InviteCode> InviteCodes { get; set; }
+        public DbSet<InviteCode> InviteCodes { get; set; } = null!;
 
 
         private readonly ILoggerFactory _myLoggerFactory;
@@ -101,13 +102,8 @@ namespace Ogma3.Data
         {
             _myLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
             
-            // NOTE: When mapping an enum here, remember to also add it in `OnModelCreating()`
-            NpgsqlConnection.GlobalTypeMapper
-                .MapEnum<EStoryStatus>()
-                .MapEnum<EClubMemberRoles>()
-                .MapEnum<EDeletedBy>()
-                .MapEnum<ENotificationEvent>()
-                .MapEnum<ETagNamespace>();
+            // Map all enums with `[PostgresEnum]` attribute
+            NpgsqlConnection.GlobalTypeMapper.MapPostgresEnums(typeof(Startup).Assembly);
         }
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -117,14 +113,8 @@ namespace Ogma3.Data
             // Extensions
             builder.HasPostgresExtension("uuid-ossp");
             
-            // Enums
-            // NOTE: When adding an enum here, remember to also map it in `ApplicationDbContext()`
-            builder
-                .HasPostgresEnum<EStoryStatus>()
-                .HasPostgresEnum<EClubMemberRoles>()
-                .HasPostgresEnum<EDeletedBy>()
-                .HasPostgresEnum<ENotificationEvent>()
-                .HasPostgresEnum<ETagNamespace>();
+            // Register all enums with `[PostgresEnum]` attribute
+            builder.RegisterPostgresEnums(typeof(Startup).Assembly);
 
             // Load model configurations
             builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);

@@ -1,5 +1,8 @@
+using Ogma3.Infrastructure.PostgresEnumHelper;
+
 namespace Ogma3.Data.Notifications
 {
+    [PostgresEnum]
     public enum ENotificationEvent
     {
         System, // x

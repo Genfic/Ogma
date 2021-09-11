@@ -1,5 +1,8 @@
+using Ogma3.Infrastructure.PostgresEnumHelper;
+
 namespace Ogma3.Data.Clubs
 {
+    [PostgresEnum]
     public enum EClubMemberRoles
     {
         Founder = 1,
