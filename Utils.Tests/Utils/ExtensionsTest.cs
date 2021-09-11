@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Utils.Extensions;
 using Xunit;
 
-namespace Tests.Utils
+namespace UtilsTests.Utils
 {
     public class ExtensionsTest
     {

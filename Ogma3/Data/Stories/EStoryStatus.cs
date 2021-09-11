@@ -1,7 +1,9 @@
 using System.ComponentModel;
+using Ogma3.Codegen.PostgresEnumRegistrationGenerator;
 
 namespace Ogma3.Data.Stories
 {
+    [PostgresEnum]
     public enum EStoryStatus
     {
         [Description("In Progress")]

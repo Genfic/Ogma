@@ -5,11 +5,15 @@
     <UserSecretsId>aspnet-Ogma3-F6D42650-6752-41E8-81E2-FCAB6D0941CB</UserSecretsId>
     <LangVersion>9</LangVersion>
     <PackageId>Ogma3</PackageId>
-    <Authors>Ogma3</Authors>
-    <Company>Ogma3</Company>
+    <Authors>Angius</Authors>
+    <Company>Genfic</Company>
     <Product>Ogma3</Product>
     <Nullable>disable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
 
@@ -62,6 +66,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Ogma3.Codegen\Ogma3.Codegen.csproj" OutputItemType="Analyzer" />
     <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>
 

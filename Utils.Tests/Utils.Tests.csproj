@@ -6,6 +6,10 @@
         <IsPackable>false</IsPackable>
 
         <LangVersion>9</LangVersion>
+
+        <AssemblyName>Utils.Tests</AssemblyName>
+
+        <RootNamespace>UtilsTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
