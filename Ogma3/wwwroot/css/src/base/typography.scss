@@ -52,3 +52,9 @@ kbd {
   border-radius: 3px;
   background-color: v.$foreground-10;
 }
+
+// Consistent bold
+// See: https://css-tricks.com/firefoxs-bolder-default-is-a-problem-for-variable-fonts/
+b, strong {
+  font-weight: bolder;
+}

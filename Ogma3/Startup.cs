@@ -4,13 +4,15 @@ using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using LinqToDB.EntityFrameworkCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,33 +20,30 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
+using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
+using Ogma3.Infrastructure.Formatters;
+using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Services;
+using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.Middleware;
+using Ogma3.Services.RssService;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
-using FluentValidation.AspNetCore;
-using MediatR;
-using Ogma3.Infrastructure.CustomValidators;
-using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
-using Ogma3.Infrastructure.Formatters;
-using Ogma3.Infrastructure.MediatR.Behaviours;
-using Ogma3.Services.CodeGenerator;
-using Ogma3.Services.RssService;
 
 namespace Ogma3
 {
@@ -207,7 +206,7 @@ namespace Ogma3
                     options.RegisterValidatorsFromAssemblyContaining<Startup>();
                     options.ConfigureClientsideValidation(clientside =>
                     {
-                        clientside.ClientValidatorFactories[typeof(FileSizeValidator<>)] = (_, rule, component) =>
+                        clientside.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
                             new FileSizeClientValidator(rule, component);
                     });
                 })

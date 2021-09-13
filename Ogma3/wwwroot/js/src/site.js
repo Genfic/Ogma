@@ -106,7 +106,7 @@ Number.prototype.clamp = function (min = 0, max = 1) {
 
 /**
  * Properly splits a string, that is returns an empty array of the string is empty, null, or undefined
- * @param {number} split What to split the string on
+ * @param {string|RegExp} split What to split the string on
  * @returns {Array}
  */
 String.prototype.properSplit = function (split) {
