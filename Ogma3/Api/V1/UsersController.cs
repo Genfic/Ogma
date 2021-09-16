@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using NSwag.Annotations;
 using Ogma3.Data;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Users;
@@ -261,7 +260,7 @@ namespace Ogma3.Api.V1
         
 
         // Don't delete or this whole controller will break
-        [HttpGet] public string Ping() => "Pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
     }
 
     public sealed record BanData(long UserId, double? Days);

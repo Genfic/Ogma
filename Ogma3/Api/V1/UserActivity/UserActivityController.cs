@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Ogma3.Api.V1.UserActivity.Commands;
 
 namespace Ogma3.Api.V1.UserActivity
@@ -20,6 +21,6 @@ namespace Ogma3.Api.V1.UserActivity
             => await _mediator.Send(new UpdateLastActive.Command());
         
         // Don't delete or this whole controller will break
-        [HttpGet] public string Ping() => "Pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
     }
 }

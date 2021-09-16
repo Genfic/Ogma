@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Ogma3.Api.V1.ContentBlocks.Commands;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -41,6 +42,6 @@ namespace Ogma3.Api.V1.ContentBlocks
             => await _mediator.Send(data);
 
         // Don't delete or this whole controller will break
-        [HttpGet] public string Ping() => "Pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
     }
 }

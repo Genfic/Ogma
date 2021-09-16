@@ -29,7 +29,7 @@ namespace Ogma3.Api.V1.Notifications
         [HttpDelete("{id:long}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeleteAsync(long id)
+        public async Task<ActionResult> DeleteNotification(long id)
             => await _mediator.Send(new DeleteNotification.Command(id));
     }
 }

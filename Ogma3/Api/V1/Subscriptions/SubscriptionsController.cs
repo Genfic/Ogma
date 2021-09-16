@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Ogma3.Api.V1.Subscriptions.Commands;
 using Ogma3.Api.V1.Subscriptions.Queries;
 
@@ -29,7 +30,6 @@ namespace Ogma3.Api.V1.Subscriptions
             => await _mediator.Send(data);
 
         // Don't delete or this whole controller will break
-        [HttpGet]
-        public string Ping() => "Pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
     }
 }

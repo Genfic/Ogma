@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Ogma3.Api.V1.Reports.Commands;
 using Ogma3.Infrastructure.Attributes;
 
@@ -22,6 +23,6 @@ namespace Ogma3.Api.V1.Reports
             => await _mediator.Send(data);
         
         // Don't delete or this whole controller will break
-        [HttpGet] public string Ping() => "Pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
     }
 }

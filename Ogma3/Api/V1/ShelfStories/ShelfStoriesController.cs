@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Ogma3.Api.V1.ShelfStories.Commands;
 using Ogma3.Api.V1.ShelfStories.Queries;
 using Ogma3.Data.Shelves;
@@ -38,7 +39,6 @@ namespace Ogma3.Api.V1.ShelfStories
         public async Task<ActionResult<RemoveBookFromShelf.Result>> RemoveFromShelf(long shelfId, long storyId)
             => await _mediator.Send(new RemoveBookFromShelf.Command(shelfId, storyId));
 
-        [HttpGet]
-        public string Ping() => "pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "pong";
     }
 }

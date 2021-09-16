@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NSwag.Annotations;
 using Ogma3.Data;
 using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
@@ -126,7 +127,7 @@ namespace Ogma3.Api.V1
 
         
         // Don't delete or this whole controller will break
-        [HttpGet] public string Ping() => "Pong";
+        [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
 
         public sealed record PostData(long Id);
     }
