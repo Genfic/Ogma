@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Infractions;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 
@@ -41,8 +42,14 @@ namespace Ogma3.Areas.Admin.Pages
                     LastActive = u.LastActive,
                     StoriesCount = u.Stories.Count,
                     BlogpostsCount = u.Blogposts.Count,
-                    BannedUntil = u.BannedUntil,
-                    MutedUntil = u.MutedUntil
+                    BannedUntil = u.Infractions
+                        .Where(i => i.Type == InfractionType.Ban)
+                        .Select(i => i.ActiveUntil)
+                        .FirstOrDefault(),
+                    MutedUntil = u.Infractions
+                        .Where(i => i.Type == InfractionType.Mute)
+                        .Select(i => i.ActiveUntil)
+                        .FirstOrDefault(),
                 })
                 .FirstOrDefaultAsync();
             if (OgmaUser is null) return NotFound();

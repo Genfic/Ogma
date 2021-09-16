@@ -1,0 +1,44 @@
+@use "../vars" as v;
+
+.ban-info {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+details.infraction {
+  margin-top: .5rem;
+  
+  summary {
+    &.passed {
+      text-decoration: line-through v.$foreground-75;
+    }
+  }
+  
+  .time {
+    font-size: 85%;
+    color: v.$foreground-75;
+    &:hover {
+      color: v.$foreground;
+    }
+  }
+  
+  .reason {
+    border-top: 1px solid v.$foreground-50;
+    padding-top: .5rem;
+    margin-top: .5rem;
+  }
+  
+  .type {
+    &.ban {
+      color: v.$red-75;
+    }
+
+    &.mute {
+      color: rgba(255, 128, 0, 0.75);
+    }
+
+    &.warning {
+      color: rgba(255, 251, 0, 0.75);
+    }
+  }
+}

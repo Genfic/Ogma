@@ -15,6 +15,7 @@ using Ogma3.Data.Documents;
 using Ogma3.Data.Faqs;
 using Ogma3.Data.Folders;
 using Ogma3.Data.Icons;
+using Ogma3.Data.Infractions;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Notifications;
@@ -80,6 +81,7 @@ namespace Ogma3.Data
         public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; } = null!;
         public DbSet<ContentBlock> ContentBlocks { get; set; } = null!;
         public DbSet<Report> Reports { get; set; } = null!;
+        public DbSet<Infraction> Infractions { get; set; } = null!;
         
         // Blacklists
         public DbSet<BlacklistedRating> BlacklistedRatings { get; set; } = null!;

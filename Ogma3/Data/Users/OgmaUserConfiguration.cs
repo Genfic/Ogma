@@ -31,14 +31,6 @@ namespace Ogma3.Data.Users
                 .ValueGeneratedOnAdd();
             
             builder
-                .Property(u => u.BannedUntil)
-                .HasDefaultValue(null);
-            
-            builder
-                .Property(u => u.MutedUntil)
-                .HasDefaultValue(null);
-            
-            builder
                 .Ignore(u => u.PhoneNumber)
                 .Ignore(u => u.PhoneNumberConfirmed);
             

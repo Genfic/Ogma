@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
+using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
 using Serilog;
 
@@ -23,27 +24,30 @@ namespace Ogma3.Services.Middleware
             _next = next;
         }
         
-        public static string CacheKey(string name) => $"{name.ToUpperInvariant().Normalize()}Ban";
+        public static string CacheKey(long id) => $"u{id}_Ban";
         
         public async Task InvokeAsync(HttpContext context, ApplicationDbContext dbContext)
         {
-            var username = context.User.GetUsername()?.ToUpperInvariant()?.Normalize();
-            if (username is null)
+            var uid = context.User.GetNumericId();
+            if (uid is null)
             {
                 await _next(context);
                 return;
             }
 
-            var banDate = await _cache.GetOrCreateAsync(CacheKey(username), async entry =>
+            var banDate = await _cache.GetOrCreateAsync(CacheKey((long)uid), async entry =>
             {
                 entry.SlidingExpiration = TimeSpan.FromMinutes(30);
-                return await dbContext.Users
-                    .Where(u => u.NormalizedUserName == username)
-                    .Select(u => u.BannedUntil)
+                return await dbContext.Infractions
+                    .Where(i => i.UserId == uid)
+                    .Where(i => i.Type == InfractionType.Ban)
+                    .Where(i => i.RemovedAt == null)
+                    .OrderByDescending(i => i.ActiveUntil)
+                    .Select(i => i.ActiveUntil)
                     .FirstOrDefaultAsync();
             });
 
-            if (banDate is null)
+            if (banDate == default)
             {
                 await _next(context);
                 return;
@@ -51,7 +55,7 @@ namespace Ogma3.Services.Middleware
 
             if (banDate > DateTime.Now)
             {
-                Log.Information("Banned user {Name} tried accessing the site", username);
+                Log.Information("Banned user {Uid} tried accessing the site", uid);
                 if (context.Request.Path.StartsWithSegments("/api"))
                 {
                     context.Response.Clear();
@@ -69,15 +73,6 @@ namespace Ogma3.Services.Middleware
             }
             else
             {
-                var user = await dbContext.Users
-                    .Where(u => u.NormalizedUserName == username)
-                    .FirstOrDefaultAsync();
-                user.BannedUntil = null;
-                await dbContext.SaveChangesAsync();
-                    
-                _cache.Set(CacheKey(username), user.BannedUntil);
-                Log.Information("Banned user {Name} was automatically unbanned", username);
-                    
                 await _next(context);
             }
         }

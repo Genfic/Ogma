@@ -3,6 +3,7 @@ new Vue({
 	data: {
 		csrf: null,
 		rolesRoute: null,
+		infractionsRoute: null,
 		roles: [],
 		userId: null,
 	},
@@ -27,6 +28,7 @@ new Vue({
 	mounted() {
 		this.csrf = document.querySelector('input[name=__RequestVerificationToken]').value;
 		this.rolesRoute = document.getElementById('rolesRoute').dataset.route;
+		this.infractionsRoute = document.getElementById('infractionsRoute').dataset.route;
 		this.userId = Number(document.getElementById('id').innerText);
 	}
 });
