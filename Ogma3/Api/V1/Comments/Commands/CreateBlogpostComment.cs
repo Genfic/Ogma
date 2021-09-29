@@ -2,12 +2,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using MediatR;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data.Comments;
+using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services;
@@ -50,6 +51,12 @@ namespace Ogma3.Api.V1.Comments.Commands
             public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (_uid is null) return new UnauthorizedResult();
+                
+                // Check if user is muted
+                var isMuted = await _context.Infractions
+                    .Where(i => i.UserId == _uid && i.Type == InfractionType.Mute)
+                    .AnyAsync(cancellationToken);
+                if (isMuted) return new UnauthorizedResult();
 
                 var (body, threadId) = request;
 
