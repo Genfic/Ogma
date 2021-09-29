@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-Ogma3-F6D42650-6752-41E8-81E2-FCAB6D0941CB</UserSecretsId>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>9</LangVersion>
     <PackageId>Ogma3</PackageId>
     <Authors>Ogma3</Authors>
     <Company>Ogma3</Company>

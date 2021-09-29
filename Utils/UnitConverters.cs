@@ -2,7 +2,7 @@ using System;
 
 namespace Utils
 {
-    public class UnitConverters
+    public static class UnitConverters
     {
         private static readonly string[] SizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
