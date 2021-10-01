@@ -255,6 +255,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\LICENSE" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\bundles\bundle.min.js" />
   </ItemGroup>
 
 
