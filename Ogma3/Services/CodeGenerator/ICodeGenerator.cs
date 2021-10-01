@@ -1,7 +1,6 @@
-namespace Ogma3.Services.CodeGenerator
+namespace Ogma3.Services.CodeGenerator;
+
+public interface ICodeGenerator
 {
-    public interface ICodeGenerator
-    {
-        string GetInviteCode();
-    }
+    string GetInviteCode();
 }

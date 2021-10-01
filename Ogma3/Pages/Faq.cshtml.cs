@@ -4,24 +4,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 
-namespace Ogma3.Pages
+namespace Ogma3.Pages;
+
+public class Faq : PageModel
 {
-    public class Faq : PageModel
+    private readonly ApplicationDbContext _context;
+
+    public Faq(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public Faq(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public List<Data.Faqs.Faq> Faqs { get; private set; }
+    public List<Data.Faqs.Faq> Faqs { get; private set; }
         
-        public async Task OnGetAsync()
-        {
-            Faqs = await _context.Faqs
-                .AsNoTracking()
-                .ToListAsync();
-        }
+    public async Task OnGetAsync()
+    {
+        Faqs = await _context.Faqs
+            .AsNoTracking()
+            .ToListAsync();
     }
 }

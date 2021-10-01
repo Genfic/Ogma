@@ -8,31 +8,30 @@ using Ogma3.Data.Reports;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
 
-namespace Ogma3.Data.Blogposts
+namespace Ogma3.Data.Blogposts;
+
+public class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
-    public class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
-    {
-        public string Title { get; set; }
-        public string Slug { get; set; }
-        public DateTime? PublicationDate { get; set; }
-        public DateTime CreationDate { get; set; }
-        public OgmaUser Author { get; set; }
-        public long AuthorId { get; set; }
-        public string Body { get; set; }
-        public CommentsThread CommentsThread { get; set; }
-        public int WordCount { get; set; }
-        public string[] Hashtags { get; set; }
+    public string Title { get; set; }
+    public string Slug { get; set; }
+    public DateTime? PublicationDate { get; set; }
+    public DateTime CreationDate { get; set; }
+    public OgmaUser Author { get; set; }
+    public long AuthorId { get; set; }
+    public string Body { get; set; }
+    public CommentsThread CommentsThread { get; set; }
+    public int WordCount { get; set; }
+    public string[] Hashtags { get; set; }
 
-        // Attachments
-        public Story? AttachedStory { get; set; }
-        public long? AttachedStoryId { get; set; }
+    // Attachments
+    public Story? AttachedStory { get; set; }
+    public long? AttachedStoryId { get; set; }
         
-        public Chapter? AttachedChapter { get; set; }
-        public long? AttachedChapterId { get; set; }
+    public Chapter? AttachedChapter { get; set; }
+    public long? AttachedChapterId { get; set; }
 
-        public ContentBlock? ContentBlock { get; set; }
-        public long? ContentBlockId { get; set; }
+    public ContentBlock? ContentBlock { get; set; }
+    public long? ContentBlockId { get; set; }
         
-        public ICollection<Report> Reports { get; set; }
-    }
+    public ICollection<Report> Reports { get; set; }
 }

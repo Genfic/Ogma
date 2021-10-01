@@ -10,46 +10,45 @@ using Ogma3.Data.Clubs;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 
-namespace Ogma3.Pages.Club
+namespace Ogma3.Pages.Club;
+
+public class Modlog : PageModel
 {
-    public class Modlog : PageModel
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly ClubRepository _clubRepo;
+    private readonly ApplicationDbContext _context;
+    private readonly ClubRepository _clubRepo;
         
-        private const int PerPage = 50;
+    private const int PerPage = 50;
 
-        public Modlog(ApplicationDbContext context, ClubRepository clubRepo)
-        {
-            _context = context;
-            _clubRepo = clubRepo;
-        }
+    public Modlog(ApplicationDbContext context, ClubRepository clubRepo)
+    {
+        _context = context;
+        _clubRepo = clubRepo;
+    }
 
-        public ICollection<ClubModeratorAction> Actions { get; private set; }
-        public ClubBar ClubBar { get; private set; }
-        public Pagination Pagination { get; private set; }
+    public ICollection<ClubModeratorAction> Actions { get; private set; }
+    public ClubBar ClubBar { get; private set; }
+    public Pagination Pagination { get; private set; }
 
-        public async Task<ActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
-        {
-            ClubBar = await _clubRepo.GetClubBar(id);
-            if (ClubBar is null) return NotFound();
+    public async Task<ActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
+    {
+        ClubBar = await _clubRepo.GetClubBar(id);
+        if (ClubBar is null) return NotFound();
 
-            var query = _context.ClubModeratorActions
-                .Where(cma => cma.ClubId == id);
+        var query = _context.ClubModeratorActions
+            .Where(cma => cma.ClubId == id);
 
-            Actions = await query
-                .OrderByDescending(ma => ma.CreationDate)
-                .Paginate(page, PerPage)
-                .ToListAsync();
+        Actions = await query
+            .OrderByDescending(ma => ma.CreationDate)
+            .Paginate(page, PerPage)
+            .ToListAsync();
             
-            Pagination = new Pagination
-            {
-                PerPage = PerPage,
-                CurrentPage = page,
-                ItemCount = await query.CountAsync()
-            };
+        Pagination = new Pagination
+        {
+            PerPage = PerPage,
+            CurrentPage = page,
+            ItemCount = await query.CountAsync()
+        };
 
-            return Page();
-        }
+        return Page();
     }
 }

@@ -16,126 +16,125 @@ using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 
-namespace Ogma3.Pages.Clubs
+namespace Ogma3.Pages.Clubs;
+
+[Authorize]
+public class EditModel : PageModel
 {
-    [Authorize]
-    public class EditModel : PageModel
+    private readonly ApplicationDbContext _context;
+    private readonly ImageUploader _uploader;
+    private readonly OgmaConfig _ogmaConfig;
+
+    public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ImageUploader _uploader;
-        private readonly OgmaConfig _ogmaConfig;
+        _context = context;
+        _uploader = uploader;
+        _ogmaConfig = ogmaConfig;
+    }
 
-        public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
+    [BindProperty] 
+    public InputModel Input { get; set; }
+
+    public class InputModel
+    {
+        public long Id { get; init; }
+        public string Name { get; init; }
+        public string Slug { get; init; }
+        public string Hook { get; init; }
+        public string Description { get; init; }
+        [DataType(DataType.Upload)] 
+        public IFormFile Icon { get; init; }
+        public long FounderId { get; init; }
+    }
+
+    public class InputModelValidator : AbstractValidator<InputModel>
+    {
+        public InputModelValidator()
         {
-            _context = context;
-            _uploader = uploader;
-            _ogmaConfig = ogmaConfig;
+            RuleFor(m => m.Id)
+                .NotEmpty();
+            RuleFor(m => m.Name)
+                .NotEmpty()
+                .Length(CTConfig.CClub.MinNameLength, CTConfig.CClub.MaxNameLength);
+            RuleFor(m => m.Hook)
+                .NotEmpty()
+                .Length(CTConfig.CClub.MinHookLength, CTConfig.CClub.MaxHookLength);
+            RuleFor(m => m.Description)
+                .MaximumLength(CTConfig.CClub.MaxDescriptionLength);
+            RuleFor(m => m.Icon)
+                .FileSmallerThan(CTConfig.CClub.CoverMaxWeight)
+                .FileHasExtension(new[] {".jpg", ".jpeg", ".png", ".webp"});
         }
+    }
 
-        [BindProperty] 
-        public InputModel Input { get; set; }
+    public async Task<IActionResult> OnGetAsync(long? id)
+    {
+        if (id is null) return NotFound();
 
-        public class InputModel
-        {
-            public long Id { get; init; }
-            public string Name { get; init; }
-            public string Slug { get; init; }
-            public string Hook { get; init; }
-            public string Description { get; init; }
-            [DataType(DataType.Upload)] 
-            public IFormFile Icon { get; init; }
-            public long FounderId { get; init; }
-        }
+        var uid = User.GetNumericId();
+        if (uid is null) return Unauthorized();
 
-        public class InputModelValidator : AbstractValidator<InputModel>
-        {
-            public InputModelValidator()
+        Input = await _context.Clubs
+            .Where(c => c.Id == id)
+            .Select(c => new InputModel
             {
-                RuleFor(m => m.Id)
-                    .NotEmpty();
-                RuleFor(m => m.Name)
-                    .NotEmpty()
-                    .Length(CTConfig.CClub.MinNameLength, CTConfig.CClub.MaxNameLength);
-                RuleFor(m => m.Hook)
-                    .NotEmpty()
-                    .Length(CTConfig.CClub.MinHookLength, CTConfig.CClub.MaxHookLength);
-                RuleFor(m => m.Description)
-                    .MaximumLength(CTConfig.CClub.MaxDescriptionLength);
-                RuleFor(m => m.Icon)
-                    .FileSmallerThan(CTConfig.CClub.CoverMaxWeight)
-                    .FileHasExtension(new[] {".jpg", ".jpeg", ".png", ".webp"});
-            }
-        }
+                Id = c.Id,
+                Name = c.Name,
+                Slug = c.Slug,
+                Hook = c.Hook,
+                Description = c.Description,
+                FounderId = c.ClubMembers.FirstOrDefault(cm => cm.Role == EClubMemberRoles.Founder).MemberId
+            })
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        public async Task<IActionResult> OnGetAsync(long? id)
-        {
-            if (id is null) return NotFound();
+        if (Input is null) return NotFound();
+        if (Input.FounderId != uid) return Unauthorized();
 
-            var uid = User.GetNumericId();
-            if (uid is null) return Unauthorized();
-
-            Input = await _context.Clubs
-                .Where(c => c.Id == id)
-                .Select(c => new InputModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Slug = c.Slug,
-                    Hook = c.Hook,
-                    Description = c.Description,
-                    FounderId = c.ClubMembers.FirstOrDefault(cm => cm.Role == EClubMemberRoles.Founder).MemberId
-                })
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-
-            if (Input is null) return NotFound();
-            if (Input.FounderId != uid) return Unauthorized();
-
-            return Page();
-        }
+        return Page();
+    }
         
-        public async Task<IActionResult> OnPostAsync(long? id)
-        {
-            if (!ModelState.IsValid) return Page();
+    public async Task<IActionResult> OnPostAsync(long? id)
+    {
+        if (!ModelState.IsValid) return Page();
 
-            var uid = User.GetNumericId();
-            if (uid is null) return Unauthorized();
+        var uid = User.GetNumericId();
+        if (uid is null) return Unauthorized();
 
-            var club = await _context.Clubs
-                .Where(c => c.Id == id)
-                .FirstOrDefaultAsync();
-            if (club is null) return NotFound();
+        var club = await _context.Clubs
+            .Where(c => c.Id == id)
+            .FirstOrDefaultAsync();
+        if (club is null) return NotFound();
 
-            var authorized = await _context.ClubMembers
-                .Where(cm => cm.ClubId == id)
-                .Where(cm => cm.MemberId == uid)
-                .Where(cm => cm.Role == EClubMemberRoles.Founder)
-                .AnyAsync();
-            if (!authorized) return Unauthorized();
+        var authorized = await _context.ClubMembers
+            .Where(cm => cm.ClubId == id)
+            .Where(cm => cm.MemberId == uid)
+            .Where(cm => cm.Role == EClubMemberRoles.Founder)
+            .AnyAsync();
+        if (!authorized) return Unauthorized();
                 
-            club.Name = Input.Name;
-            club.Slug = Input.Name.Friendlify();
-            club.Hook = Input.Hook;
-            club.Description = Input.Description;
+        club.Name = Input.Name;
+        club.Slug = Input.Name.Friendlify();
+        club.Hook = Input.Hook;
+        club.Description = Input.Description;
 
-            await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
-            if (Input.Icon is not { Length: > 0 }) return RedirectToPage("/Club/Index", new { club.Id, club.Slug });
+        if (Input.Icon is not { Length: > 0 }) return RedirectToPage("/Club/Index", new { club.Id, club.Slug });
             
-            var file = await _uploader.Upload(
-                Input.Icon,
-                "club-icons",
-                club.Id.ToString(),
-                _ogmaConfig.ClubIconWidth,
-                _ogmaConfig.ClubIconHeight
-            );
-            club.IconId = file.FileId;
-            club.Icon = Path.Join(_ogmaConfig.Cdn, file.Path);
+        var file = await _uploader.Upload(
+            Input.Icon,
+            "club-icons",
+            club.Id.ToString(),
+            _ogmaConfig.ClubIconWidth,
+            _ogmaConfig.ClubIconHeight
+        );
+        club.IconId = file.FileId;
+        club.Icon = Path.Join(_ogmaConfig.Cdn, file.Path);
             
-            // Final save
-            await _context.SaveChangesAsync();
+        // Final save
+        await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Club/Index", new {club.Id, club.Slug});
-        }
+        return RedirectToPage("/Club/Index", new {club.Id, club.Slug});
     }
 }

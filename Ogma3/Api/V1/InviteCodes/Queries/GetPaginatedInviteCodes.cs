@@ -10,36 +10,35 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
 
-namespace Ogma3.Api.V1.InviteCodes.Queries
+namespace Ogma3.Api.V1.InviteCodes.Queries;
+
+public static class GetPaginatedInviteCodes
 {
-    public static class GetPaginatedInviteCodes
+    public sealed record Query(int Page, int PerPage) : IRequest<ActionResult<List<InviteCodeDto>>>;
+
+    public class Handler : IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
     {
-        public sealed record Query(int Page, int PerPage) : IRequest<ActionResult<List<InviteCodeDto>>>;
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public class Handler : IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
+        public Handler(ApplicationDbContext context, IMapper mapper)
         {
-            private readonly ApplicationDbContext _context;
-            private readonly IMapper _mapper;
+            _context = context;
+            _mapper = mapper;
+        }
 
-            public Handler(ApplicationDbContext context, IMapper mapper)
-            {
-                _context = context;
-                _mapper = mapper;
-            }
-
-            public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var (page, perPage) = request;
+        public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
+        {
+            var (page, perPage) = request;
                 
-                var codes = await _context.InviteCodes
-                    .OrderByDescending(ic => ic.UsedDate)
-                    .ThenByDescending(ic => ic.IssueDate)
-                    .Paginate(page, perPage)
-                    .ProjectTo<InviteCodeDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+            var codes = await _context.InviteCodes
+                .OrderByDescending(ic => ic.UsedDate)
+                .ThenByDescending(ic => ic.IssueDate)
+                .Paginate(page, perPage)
+                .ProjectTo<InviteCodeDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
-                return new OkObjectResult(codes);
-            }
+            return new OkObjectResult(codes);
         }
     }
 }

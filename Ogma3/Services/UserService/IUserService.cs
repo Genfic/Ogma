@@ -1,10 +1,9 @@
 #nullable enable
 using System.Security.Claims;
 
-namespace Ogma3.Services.UserService
+namespace Ogma3.Services.UserService;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        public ClaimsPrincipal? User { get; }
-    }
+    public ClaimsPrincipal? User { get; }
 }

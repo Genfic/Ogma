@@ -9,31 +9,30 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
 
-namespace Ogma3.Api.V1.Ratings.Queries
+namespace Ogma3.Api.V1.Ratings.Queries;
+
+public static class GetRatingById
 {
-    public static class GetRatingById
+    public sealed record Query(long Id) : IRequest<ActionResult<RatingApiDto>>;
+
+    public class Handler : IRequestHandler<Query, ActionResult<RatingApiDto>>
     {
-        public sealed record Query(long Id) : IRequest<ActionResult<RatingApiDto>>;
-
-        public class Handler : IRequestHandler<Query, ActionResult<RatingApiDto>>
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        public Handler(ApplicationDbContext context, IMapper mapper)
         {
-            private readonly ApplicationDbContext _context;
-            private readonly IMapper _mapper;
-            public Handler(ApplicationDbContext context, IMapper mapper)
-            {
-                _context = context;
-                _mapper = mapper;
-            }
+            _context = context;
+            _mapper = mapper;
+        }
 
-            public async Task<ActionResult<RatingApiDto>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var ratings = await _context.Ratings
-                    .Where(r => r.Id == request.Id)
-                    .ProjectTo<RatingApiDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+        public async Task<ActionResult<RatingApiDto>> Handle(Query request, CancellationToken cancellationToken)
+        {
+            var ratings = await _context.Ratings
+                .Where(r => r.Id == request.Id)
+                .ProjectTo<RatingApiDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
-                return new OkObjectResult(ratings);
-            }
+            return new OkObjectResult(ratings);
         }
     }
 }

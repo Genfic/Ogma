@@ -9,54 +9,53 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 
-namespace Ogma3.Api.V1.Tags.Commands
+namespace Ogma3.Api.V1.Tags.Commands;
+
+public static class UpdateTag
 {
-    public static class UpdateTag
+    public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace) : IRequest<ActionResult>;
+    public class CommandValidator : AbstractValidator<Command>
     {
-        public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace) : IRequest<ActionResult>;
-        public class CommandValidator : AbstractValidator<Command>
+        public CommandValidator()
         {
-            public CommandValidator()
-            {
-                RuleFor(t => t.Name)
-                    .MinimumLength(CTConfig.CTag.MinNameLength)
-                    .MaximumLength(CTConfig.CTag.MaxNameLength);
-                RuleFor(t => t.Description)
-                    .MaximumLength(CTConfig.CTag.MaxDescLength);
-            }
+            RuleFor(t => t.Name)
+                .MinimumLength(CTConfig.CTag.MinNameLength)
+                .MaximumLength(CTConfig.CTag.MaxNameLength);
+            RuleFor(t => t.Description)
+                .MaximumLength(CTConfig.CTag.MaxDescLength);
         }
+    }
         
-        public class Handler : IRequestHandler<Command, ActionResult>
+    public class Handler : IRequestHandler<Command, ActionResult>
+    {
+        private readonly ApplicationDbContext _context;
+        public Handler(ApplicationDbContext context) => _context = context;
+
+        public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context) => _context = context;
-
-            public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var (id, name, description, ns) = request;
+            var (id, name, description, ns) = request;
                 
-                // Different ID but the same (name, namespace) tuple means update would make the tag a duplicate
-                var duplicateExists = await _context.Tags
-                    .Where(t => t.Id != id)
-                    .Where(t => t.Name == name && t.Namespace == ns)
-                    .AnyAsync(cancellationToken);
+            // Different ID but the same (name, namespace) tuple means update would make the tag a duplicate
+            var duplicateExists = await _context.Tags
+                .Where(t => t.Id != id)
+                .Where(t => t.Name == name && t.Namespace == ns)
+                .AnyAsync(cancellationToken);
 
-                if (duplicateExists) return new ConflictObjectResult($"Tag {name} already exists in the {ns} namespace.");
+            if (duplicateExists) return new ConflictObjectResult($"Tag {name} already exists in the {ns} namespace.");
 
-                var tag = await _context.Tags
-                    .Where(t => t.Id == id)
-                    .FirstOrDefaultAsync(cancellationToken);
+            var tag = await _context.Tags
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync(cancellationToken);
 
-                if (tag is null) return new NotFoundResult();
+            if (tag is null) return new NotFoundResult();
 
-                tag.Name = name ?? tag.Name;
-                tag.Description = description;
-                tag.Namespace = ns;
+            tag.Name = name ?? tag.Name;
+            tag.Description = description;
+            tag.Namespace = ns;
                 
-                await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                return new OkObjectResult(tag);
-            }
+            return new OkObjectResult(tag);
         }
     }
 }

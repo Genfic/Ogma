@@ -12,42 +12,41 @@ using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
-namespace Ogma3.Api.V1.Shelves.Queries
+namespace Ogma3.Api.V1.Shelves.Queries;
+
+public static class GetPaginatedUserShelves
 {
-    public static class GetPaginatedUserShelves
+    public sealed record Query(string UserName, int Page) : IRequest<ActionResult<List<ShelfDto>>>;
+
+    public class Handler : IRequestHandler<Query, ActionResult<List<ShelfDto>>>
     {
-        public sealed record Query(string UserName, int Page) : IRequest<ActionResult<List<ShelfDto>>>;
-
-        public class Handler : IRequestHandler<Query, ActionResult<List<ShelfDto>>>
-        {
-            private readonly ApplicationDbContext _context;
-            private readonly IMapper _mapper;
-            private readonly OgmaConfig _config;
-            private readonly long? _uid;
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly OgmaConfig _config;
+        private readonly long? _uid;
             
-            public Handler(ApplicationDbContext context, IMapper mapper, IUserService userService, OgmaConfig config)
-            {
-                _context = context;
-                _mapper = mapper;
-                _config = config;
-                _uid = userService.User?.GetNumericId();
-            }
+        public Handler(ApplicationDbContext context, IMapper mapper, IUserService userService, OgmaConfig config)
+        {
+            _context = context;
+            _mapper = mapper;
+            _config = config;
+            _uid = userService.User?.GetNumericId();
+        }
 
-            public async Task<ActionResult<List<ShelfDto>>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                if (_uid is null) return new UnauthorizedResult();
+        public async Task<ActionResult<List<ShelfDto>>> Handle(Query request, CancellationToken cancellationToken)
+        {
+            if (_uid is null) return new UnauthorizedResult();
 
-                var (userName, page) = request;
+            var (userName, page) = request;
                 
-                var shelves = await _context.Shelves
-                    .Where(s => s.Owner.NormalizedUserName == userName.Normalize().ToUpperInvariant())
-                    .Where(s => s.OwnerId == _uid || s.IsPublic)
-                    .Paginate(page, _config.ShelvesPerPage)
-                    .ProjectTo<ShelfDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+            var shelves = await _context.Shelves
+                .Where(s => s.Owner.NormalizedUserName == userName.Normalize().ToUpperInvariant())
+                .Where(s => s.OwnerId == _uid || s.IsPublic)
+                .Paginate(page, _config.ShelvesPerPage)
+                .ProjectTo<ShelfDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
-                return new OkObjectResult(shelves);
-            }
+            return new OkObjectResult(shelves);
         }
     }
 }

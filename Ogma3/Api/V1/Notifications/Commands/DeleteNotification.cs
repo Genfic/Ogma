@@ -8,41 +8,40 @@ using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
-namespace Ogma3.Api.V1.Notifications.Commands
+namespace Ogma3.Api.V1.Notifications.Commands;
+
+public static class DeleteNotification
 {
-    public static class DeleteNotification
+    public sealed record Command(long NotificationId) : IRequest<ActionResult>;
+
+    public class Handler : IRequestHandler<Command, ActionResult>
     {
-        public sealed record Command(long NotificationId) : IRequest<ActionResult>;
+        private readonly ApplicationDbContext _context;
+        private readonly long? _uid;
 
-        public class Handler : IRequestHandler<Command, ActionResult>
+        public Handler(ApplicationDbContext context, IUserService userService)
         {
-            private readonly ApplicationDbContext _context;
-            private readonly long? _uid;
-
-            public Handler(ApplicationDbContext context, IUserService userService)
-            {
-                _context = context;
-                _uid = userService?.User?.GetNumericId();
-            }
+            _context = context;
+            _uid = userService?.User?.GetNumericId();
+        }
             
-            public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
-            {
-                if (_uid is null) return new UnauthorizedResult();
+        public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
+        {
+            if (_uid is null) return new UnauthorizedResult();
             
-                var notificationRecipient = await _context.NotificationRecipients
-                    .Where(nr => nr.RecipientId == (long) _uid)
-                    .Where(nr => nr.NotificationId == request.NotificationId)
-                    .FirstOrDefaultAsync(cancellationToken);
+            var notificationRecipient = await _context.NotificationRecipients
+                .Where(nr => nr.RecipientId == (long) _uid)
+                .Where(nr => nr.NotificationId == request.NotificationId)
+                .FirstOrDefaultAsync(cancellationToken);
                 
-                if (notificationRecipient is null) return new NotFoundResult();
+            if (notificationRecipient is null) return new NotFoundResult();
             
-                _context.NotificationRecipients.Remove(notificationRecipient);
+            _context.NotificationRecipients.Remove(notificationRecipient);
                 
-                await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                return new OkResult();
+            return new OkResult();
 
-            }
         }
     }
 }

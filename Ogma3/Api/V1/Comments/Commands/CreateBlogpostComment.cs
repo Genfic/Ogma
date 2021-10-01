@@ -15,100 +15,99 @@ using Ogma3.Services;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 
-namespace Ogma3.Api.V1.Comments.Commands
-{
-    public static class CreateBlogpostComment
-    {
-        public sealed record Command(string Body, long ThreadId) : IRequest<ActionResult<CommentDto>>;
+namespace Ogma3.Api.V1.Comments.Commands;
 
-        public class CommandValidator : AbstractValidator<Command>
+public static class CreateBlogpostComment
+{
+    public sealed record Command(string Body, long ThreadId) : IRequest<ActionResult<CommentDto>>;
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator()
         {
-            public CommandValidator()
-            {
-                RuleFor(c => c.Body)
-                    .MinimumLength(CTConfig.CComment.MinBodyLength)
-                    .MaximumLength(CTConfig.CComment.MaxBodyLength);
-            }
+            RuleFor(c => c.Body)
+                .MinimumLength(CTConfig.CComment.MinBodyLength)
+                .MaximumLength(CTConfig.CComment.MaxBodyLength);
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, ActionResult<CommentDto>>
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly CommentRedirector _redirector;
+        private readonly NotificationsRepository _notificationsRepo;
+        private readonly long? _uid;
+            
+        public Handler(ApplicationDbContext context, IMapper mapper, CommentRedirector redirector, NotificationsRepository notificationsRepo, IUserService userService)
+        {
+            _context = context;
+            _mapper = mapper;
+            _redirector = redirector;
+            _notificationsRepo = notificationsRepo;
+            _uid = userService?.User?.GetNumericId();
         }
 
-        public class Handler : IRequestHandler<Command, ActionResult<CommentDto>>
+        public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
-            private readonly IMapper _mapper;
-            private readonly CommentRedirector _redirector;
-            private readonly NotificationsRepository _notificationsRepo;
-            private readonly long? _uid;
-            
-            public Handler(ApplicationDbContext context, IMapper mapper, CommentRedirector redirector, NotificationsRepository notificationsRepo, IUserService userService)
+            if (_uid is null) return new UnauthorizedResult();
+                
+            // Check if user is muted
+            var isMuted = await _context.Infractions
+                .Where(i => i.UserId == _uid && i.Type == InfractionType.Mute)
+                .AnyAsync(cancellationToken);
+            if (isMuted) return new UnauthorizedResult();
+
+            var (body, threadId) = request;
+
+            var thread = await _context.CommentThreads
+                .Where(ct => ct.Id == threadId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (thread is null) return new NotFoundResult();
+            if (thread.LockDate is not null) return new UnauthorizedResult();
+                
+            var comment = new Comment
             {
-                _context = context;
-                _mapper = mapper;
-                _redirector = redirector;
-                _notificationsRepo = notificationsRepo;
-                _uid = userService?.User?.GetNumericId();
-            }
+                AuthorId = (long)_uid,
+                Body = body,
+                CommentsThreadId = threadId
+            };
+                
+            _context.Comments.Add(comment);
+            thread.CommentsCount++;
 
-            public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
+            await _context.SaveChangesAsync(cancellationToken);
+
+            if (thread.UserId != _uid)
             {
-                if (_uid is null) return new UnauthorizedResult();
-                
-                // Check if user is muted
-                var isMuted = await _context.Infractions
-                    .Where(i => i.UserId == _uid && i.Type == InfractionType.Mute)
-                    .AnyAsync(cancellationToken);
-                if (isMuted) return new UnauthorizedResult();
+                // Create notification
+                var subscribers = await _context.CommentsThreadSubscribers
+                    .Where(cts => cts.CommentsThreadId == thread.Id)
+                    .Select(cts => cts.OgmaUserId)
+                    .ToListAsync(cancellationToken);
 
-                var (body, threadId) = request;
-
-                var thread = await _context.CommentThreads
-                    .Where(ct => ct.Id == threadId)
-                    .FirstOrDefaultAsync(cancellationToken);
-
-                if (thread is null) return new NotFoundResult();
-                if (thread.LockDate is not null) return new UnauthorizedResult();
-                
-                var comment = new Comment
+                var redirection = await _redirector.RedirectToComment(comment.Id);
+                if (redirection is not null)
                 {
-                    AuthorId = (long)_uid,
-                    Body = body,
-                    CommentsThreadId = threadId
-                };
-                
-                _context.Comments.Add(comment);
-                thread.CommentsCount++;
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                if (thread.UserId != _uid)
-                {
-                    // Create notification
-                    var subscribers = await _context.CommentsThreadSubscribers
-                        .Where(cts => cts.CommentsThreadId == thread.Id)
-                        .Select(cts => cts.OgmaUserId)
-                        .ToListAsync(cancellationToken);
-
-                    var redirection = await _redirector.RedirectToComment(comment.Id);
-                    if (redirection is not null)
-                    {
-                        await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
-                            subscribers,
-                            redirection.Url,
-                            redirection.Params,
-                            redirection.Fragment,
-                            comment.Body.Truncate(50)
-                        );
-                    }
-
-                    await _context.SaveChangesAsync(cancellationToken);
+                    await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
+                        subscribers,
+                        redirection.Url,
+                        redirection.Params,
+                        redirection.Fragment,
+                        comment.Body.Truncate(50)
+                    );
                 }
 
-                return new CreatedAtActionResult(
-                    nameof(CommentsController.GetComment),
-                    nameof(CommentsController)[..^10],
-                    new { comment.Id },
-                    _mapper.Map<Comment, CommentDto>(comment)
-                );
+                await _context.SaveChangesAsync(cancellationToken);
             }
+
+            return new CreatedAtActionResult(
+                nameof(CommentsController.GetComment),
+                nameof(CommentsController)[..^10],
+                new { comment.Id },
+                _mapper.Map<Comment, CommentDto>(comment)
+            );
         }
     }
 }

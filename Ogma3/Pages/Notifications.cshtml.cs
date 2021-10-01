@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Ogma3.Pages
+namespace Ogma3.Pages;
+
+public class Notifications : PageModel
 {
-    public class Notifications : PageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-        }
     }
 }

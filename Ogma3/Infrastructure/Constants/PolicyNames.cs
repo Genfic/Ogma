@@ -1,7 +1,6 @@
-namespace Ogma3.Infrastructure.Constants
+namespace Ogma3.Infrastructure.Constants;
+
+public static class PolicyNames
 {
-    public static class PolicyNames
-    {
-        public const string InviteCodesManager = "InviteCodesManager";
-    }
+    public const string InviteCodesManager = "InviteCodesManager";
 }

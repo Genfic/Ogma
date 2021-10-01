@@ -31,101 +31,100 @@ using Ogma3.Data.Votes;
 using Ogma3.Infrastructure.PostgresEnumHelper;
 using Serilog;
 
-namespace Ogma3.Data
+namespace Ogma3.Data;
+
+public class ApplicationDbContext : IdentityDbContext
+<
+    OgmaUser,
+    OgmaRole,
+    long,
+    IdentityUserClaim<long>,
+    UserRole,
+    IdentityUserLogin<long>,
+    IdentityRoleClaim<long>,
+    IdentityUserToken<long>
+>
 {
-    public class ApplicationDbContext : IdentityDbContext
-    <
-        OgmaUser,
-        OgmaRole,
-        long,
-        IdentityUserClaim<long>,
-        UserRole,
-        IdentityUserLogin<long>,
-        IdentityRoleClaim<long>,
-        IdentityUserToken<long>
-    >
+    public DbSet<Tag> Tags { get; set; } = null!;
+    public DbSet<StoryTag> StoryTags { get; set; } = null!;
+    public DbSet<Story> Stories { get; set; } = null!;
+    public DbSet<Rating> Ratings { get; set; } = null!;
+    public DbSet<Chapter> Chapters { get; set; } = null!;
+    public DbSet<ChaptersRead> ChaptersRead { get; set; } = null!;
+    public DbSet<CommentsThread> CommentThreads { get; set; } = null!;
+    public DbSet<Comment> Comments { get; set; } = null!;
+    public DbSet<CommentRevision> CommentRevisions { get; set; } = null!;
+    public DbSet<Vote> Votes { get; set; } = null!;
+    public DbSet<Shelf> Shelves { get; set; } = null!;
+    public DbSet<ShelfStory> ShelfStories { get; set; } = null!;
+    public DbSet<Blogpost> Blogposts { get; set; } = null!;
+    public DbSet<UserRole> OgmaUserRoles { get; set; } = null!;
+    public DbSet<OgmaRole> OgmaRoles { get; set; } = null!;
+    public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; } = null!;
+
+    // Clubs
+    public DbSet<Club> Clubs { get; set; } = null!;
+    public DbSet<ClubMember> ClubMembers { get; set; } = null!;
+    public DbSet<ClubThread> ClubThreads { get; set; } = null!;
+    public DbSet<Folder> Folders { get; set; } = null!;
+    public DbSet<FolderStory> FolderStories { get; set; } = null!;
+
+
+    // Secondary
+    public DbSet<Document> Documents { get; set; } = null!;
+    public DbSet<Icon> Icons { get; set; } = null!;
+    public DbSet<Quote> Quotes { get; set; } = null!;
+    public DbSet<Faq> Faqs { get; set; } = null!;
+        
+    // Moderation
+    public DbSet<ModeratorAction> ModeratorActions { get; set; } = null!;
+    public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; } = null!;
+    public DbSet<ContentBlock> ContentBlocks { get; set; } = null!;
+    public DbSet<Report> Reports { get; set; } = null!;
+    public DbSet<Infraction> Infractions { get; set; } = null!;
+        
+    // Blacklists
+    public DbSet<BlacklistedRating> BlacklistedRatings { get; set; } = null!;
+    public DbSet<BlacklistedTag> BlacklistedTags { get; set; } = null!;
+    public DbSet<UserBlock> BlacklistedUsers { get; set; } = null!;
+        
+    // Follows
+    public DbSet<UserFollow> FollowedUsers { get; set; } = null!;
+        
+    // Notifications
+    public DbSet<Notification> Notifications { get; set; } = null!;
+    public DbSet<NotificationRecipients> NotificationRecipients { get; set; } = null!;
+
+    // Invite codes
+    public DbSet<InviteCode> InviteCodes { get; set; } = null!;
+
+
+    private readonly ILoggerFactory _myLoggerFactory;
+    public ApplicationDbContext(DbContextOptions options) : base(options)
     {
-        public DbSet<Tag> Tags { get; set; } = null!;
-        public DbSet<StoryTag> StoryTags { get; set; } = null!;
-        public DbSet<Story> Stories { get; set; } = null!;
-        public DbSet<Rating> Ratings { get; set; } = null!;
-        public DbSet<Chapter> Chapters { get; set; } = null!;
-        public DbSet<ChaptersRead> ChaptersRead { get; set; } = null!;
-        public DbSet<CommentsThread> CommentThreads { get; set; } = null!;
-        public DbSet<Comment> Comments { get; set; } = null!;
-        public DbSet<CommentRevision> CommentRevisions { get; set; } = null!;
-        public DbSet<Vote> Votes { get; set; } = null!;
-        public DbSet<Shelf> Shelves { get; set; } = null!;
-        public DbSet<ShelfStory> ShelfStories { get; set; } = null!;
-        public DbSet<Blogpost> Blogposts { get; set; } = null!;
-        public DbSet<UserRole> OgmaUserRoles { get; set; } = null!;
-        public DbSet<OgmaRole> OgmaRoles { get; set; } = null!;
-        public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; } = null!;
-
-        // Clubs
-        public DbSet<Club> Clubs { get; set; } = null!;
-        public DbSet<ClubMember> ClubMembers { get; set; } = null!;
-        public DbSet<ClubThread> ClubThreads { get; set; } = null!;
-        public DbSet<Folder> Folders { get; set; } = null!;
-        public DbSet<FolderStory> FolderStories { get; set; } = null!;
-
-
-        // Secondary
-        public DbSet<Document> Documents { get; set; } = null!;
-        public DbSet<Icon> Icons { get; set; } = null!;
-        public DbSet<Quote> Quotes { get; set; } = null!;
-        public DbSet<Faq> Faqs { get; set; } = null!;
-        
-        // Moderation
-        public DbSet<ModeratorAction> ModeratorActions { get; set; } = null!;
-        public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; } = null!;
-        public DbSet<ContentBlock> ContentBlocks { get; set; } = null!;
-        public DbSet<Report> Reports { get; set; } = null!;
-        public DbSet<Infraction> Infractions { get; set; } = null!;
-        
-        // Blacklists
-        public DbSet<BlacklistedRating> BlacklistedRatings { get; set; } = null!;
-        public DbSet<BlacklistedTag> BlacklistedTags { get; set; } = null!;
-        public DbSet<UserBlock> BlacklistedUsers { get; set; } = null!;
-        
-        // Follows
-        public DbSet<UserFollow> FollowedUsers { get; set; } = null!;
-        
-        // Notifications
-        public DbSet<Notification> Notifications { get; set; } = null!;
-        public DbSet<NotificationRecipients> NotificationRecipients { get; set; } = null!;
-
-        // Invite codes
-        public DbSet<InviteCode> InviteCodes { get; set; } = null!;
-
-
-        private readonly ILoggerFactory _myLoggerFactory;
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        {
-            _myLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
+        _myLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
             
-            // Map all enums with `[PostgresEnum]` attribute
-            NpgsqlConnection.GlobalTypeMapper.MapPostgresEnums(typeof(Startup).Assembly);
-        }
+        // Map all enums with `[PostgresEnum]` attribute
+        NpgsqlConnection.GlobalTypeMapper.MapPostgresEnums(typeof(Startup).Assembly);
+    }
         
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
 
-            // Extensions
-            builder.HasPostgresExtension("uuid-ossp");
+        // Extensions
+        builder.HasPostgresExtension("uuid-ossp");
             
-            // Register all enums with `[PostgresEnum]` attribute
-            builder.RegisterPostgresEnums(typeof(Startup).Assembly);
+        // Register all enums with `[PostgresEnum]` attribute
+        builder.RegisterPostgresEnums(typeof(Startup).Assembly);
 
-            // Load model configurations
-            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
-        }
+        // Load model configurations
+        builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseLoggerFactory(_myLoggerFactory);
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseLoggerFactory(_myLoggerFactory);
     }
 }

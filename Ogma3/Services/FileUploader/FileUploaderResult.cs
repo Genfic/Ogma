@@ -1,8 +1,7 @@
-namespace Ogma3.Services.FileUploader
+namespace Ogma3.Services.FileUploader;
+
+public class FileUploaderResult
 {
-    public class FileUploaderResult
-    {
-        public string FileId { get; set; }
-        public string Path { get; set; }
-    }
+    public string FileId { get; set; }
+    public string Path { get; set; }
 }

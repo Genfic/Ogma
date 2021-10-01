@@ -2,15 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Roles;
 
-namespace Ogma3.Areas.Admin.Pages
+namespace Ogma3.Areas.Admin.Pages;
+
+public class Roles : PageModel
 {
-    public class Roles : PageModel
+    [BindProperty]
+    public OgmaRole Input { get; set; }
+    public void OnGet()
     {
-        [BindProperty]
-        public OgmaRole Input { get; set; }
-        public void OnGet()
-        {
             
-        }
     }
 }

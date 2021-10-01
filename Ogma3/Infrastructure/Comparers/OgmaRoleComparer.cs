@@ -1,27 +1,26 @@
 using System.Collections.Generic;
 using Ogma3.Data.Roles;
 
-namespace Ogma3.Infrastructure.Comparers
+namespace Ogma3.Infrastructure.Comparers;
+
+public class OgmaRoleComparer : IEqualityComparer<OgmaRole>
 {
-    public class OgmaRoleComparer : IEqualityComparer<OgmaRole>
+    public bool Equals(OgmaRole x, OgmaRole y)
     {
-        public bool Equals(OgmaRole x, OgmaRole y)
-        {
-            if (ReferenceEquals(x, y)) 
-                return true;
+        if (ReferenceEquals(x, y)) 
+            return true;
 
-            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
-                return false;
+        if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+            return false;
             
-            return x.Id == y.Id;
-        }
+        return x.Id == y.Id;
+    }
 
-        public int GetHashCode(OgmaRole obj)
-        {
-            var hashId = obj.Id.GetHashCode();
-            var hashName = obj.Name.GetHashCode();
+    public int GetHashCode(OgmaRole obj)
+    {
+        var hashId = obj.Id.GetHashCode();
+        var hashName = obj.Name.GetHashCode();
             
-            return hashId ^ hashName;
-        }
+        return hashId ^ hashName;
     }
 }

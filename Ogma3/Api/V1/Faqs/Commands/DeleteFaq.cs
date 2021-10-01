@@ -6,31 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 
-namespace Ogma3.Api.V1.Faqs.Commands
+namespace Ogma3.Api.V1.Faqs.Commands;
+
+public static class DeleteFaq
 {
-    public static class DeleteFaq
+    public sealed record Command(long Id) : IRequest<ActionResult<long>>;
+
+    public class Handler : IRequestHandler<Command, ActionResult<long>>
     {
-        public sealed record Command(long Id) : IRequest<ActionResult<long>>;
+        private readonly ApplicationDbContext _context;
+        public Handler(ApplicationDbContext context) => _context = context;
 
-        public class Handler : IRequestHandler<Command, ActionResult<long>>
+        public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context) => _context = context;
+            var faq = await _context.Faqs
+                .Where(f => f.Id == request.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var faq = await _context.Faqs
-                    .Where(f => f.Id == request.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+            if (faq is null) return new NotFoundResult();
 
-                if (faq is null) return new NotFoundResult();
+            _context.Remove(faq);
 
-                _context.Remove(faq);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return new OkObjectResult(faq.Id);
-            }
+            return new OkObjectResult(faq.Id);
         }
     }
 }

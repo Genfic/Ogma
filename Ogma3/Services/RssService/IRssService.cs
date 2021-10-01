@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 using Ogma3.Infrastructure.Formatters;
 
-namespace Ogma3.Services.RssService
+namespace Ogma3.Services.RssService;
+
+public interface IRssService
 {
-    public interface IRssService
-    {
-        Task<RssResult> GetStoriesAsync();
-        Task<RssResult> GetBlogpostsAsync();
-    }
+    Task<RssResult> GetStoriesAsync();
+    Task<RssResult> GetBlogpostsAsync();
 }

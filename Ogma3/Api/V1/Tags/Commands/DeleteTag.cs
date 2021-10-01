@@ -6,31 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 
-namespace Ogma3.Api.V1.Tags.Commands
+namespace Ogma3.Api.V1.Tags.Commands;
+
+public static class DeleteTag
 {
-    public static class DeleteTag
+    public sealed record Command(long Id) : IRequest<ActionResult<long>>;
+
+    public class Handler : IRequestHandler<Command, ActionResult<long>>
     {
-        public sealed record Command(long Id) : IRequest<ActionResult<long>>;
+        private readonly ApplicationDbContext _context;
 
-        public class Handler : IRequestHandler<Command, ActionResult<long>>
+        public Handler(ApplicationDbContext context) => _context = context;
+
+        public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
+            var tag = await _context.Tags
+                .Where(t => t.Id == request.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            public Handler(ApplicationDbContext context) => _context = context;
+            if (tag is null) return new NotFoundResult();
 
-            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var tag = await _context.Tags
-                    .Where(t => t.Id == request.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+            _context.Tags.Remove(tag);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                if (tag is null) return new NotFoundResult();
-
-                _context.Tags.Remove(tag);
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return new OkObjectResult(tag.Id);
-            }
+            return new OkObjectResult(tag.Id);
         }
     }
 }

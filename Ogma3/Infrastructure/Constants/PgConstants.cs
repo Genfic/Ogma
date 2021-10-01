@@ -1,8 +1,7 @@
-namespace Ogma3.Infrastructure.Constants
+namespace Ogma3.Infrastructure.Constants;
+
+public static class PgConstants
 {
-    public static class PgConstants
-    {
-        public const string CurrentTimestamp = "CURRENT_TIMESTAMP";
-        public const string DuplicatePrimaryKeyError = "23505";
-    }
+    public const string CurrentTimestamp = "CURRENT_TIMESTAMP";
+    public const string DuplicatePrimaryKeyError = "23505";
 }

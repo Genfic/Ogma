@@ -1,42 +1,30 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Ogma3.Infrastructure.ActionResults;
-using Serilog;
 
-namespace Ogma3.Infrastructure.MediatR.Behaviours
+namespace Ogma3.Infrastructure.MediatR.Behaviours;
+
+public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
-    public class ValidationBehaviour<TRequest> : IPipelineBehavior<TRequest, IActionResult>
+    private readonly IEnumerable<IValidator<TRequest>> _validators;
+    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
+
+    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        private readonly IValidator<TRequest> _validator;
-        public ValidationBehaviour(IValidator<TRequest> validator) => _validator = validator;
+        var failures = _validators
+            .Select(v => v.Validate(request))
+            .SelectMany(result => result.Errors)
+            .Where(f => f != null)
+            .ToList();
 
-        public async Task<IActionResult> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<IActionResult> next)
+        if (failures.Any())
         {
-            Log.Information("Entered validation behaviour");
-            
-            var result = await _validator.ValidateAsync(request, cancellationToken);
-            if (result.IsValid) return await next();
-
-            var errors = result.Errors
-                .GroupBy(e => e.PropertyName)
-                .ToDictionary(
-                    e => e.First().PropertyName, 
-                    e => e.Select(v => v.ErrorMessage).ToArray()
-                );
-            
-            Log.Information("Validation errors are happening");
-            
-            return new ProblemResult(new ValidationProblemDetails(errors)
-            {
-                Status = StatusCodes.Status422UnprocessableEntity,
-                Title = "Validation error",
-                Detail = "Data sent did not pass the validation process"
-            });
+            throw new ValidationException(failures);
         }
+
+        return next();
     }
 }

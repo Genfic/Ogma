@@ -7,25 +7,24 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Faqs;
 
-namespace Ogma3.Api.V1.Faqs.Queries
+namespace Ogma3.Api.V1.Faqs.Queries;
+
+public static class GetSingleFaq
 {
-    public static class GetSingleFaq
+    public sealed record Query(long FaqId) : IRequest<ActionResult<Faq>>;
+
+    public class Handler : IRequestHandler<Query, ActionResult<Faq>>
     {
-        public sealed record Query(long FaqId) : IRequest<ActionResult<Faq>>;
+        private readonly ApplicationDbContext _context;
+        public Handler(ApplicationDbContext context) => _context = context;
 
-        public class Handler : IRequestHandler<Query, ActionResult<Faq>>
+        public async Task<ActionResult<Faq>> Handle(Query request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context) => _context = context;
+            var faq = await _context.Faqs
+                .Where(f => f.Id == request.FaqId)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            public async Task<ActionResult<Faq>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var faq = await _context.Faqs
-                    .Where(f => f.Id == request.FaqId)
-                    .FirstOrDefaultAsync(cancellationToken);
-
-                return new OkObjectResult(faq);
-            }
+            return new OkObjectResult(faq);
         }
     }
 }

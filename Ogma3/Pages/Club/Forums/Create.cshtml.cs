@@ -8,73 +8,72 @@ using Ogma3.Data.ClubThreads;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Extensions;
 
-namespace Ogma3.Pages.Club.Forums
+namespace Ogma3.Pages.Club.Forums;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly ApplicationDbContext _context;
+
+    public CreateModel(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public CreateModel(ApplicationDbContext context)
+    [BindProperty]
+    public PostModel ClubThread { get; set; }
+
+    public IActionResult OnGet(long id)
+    {
+        ClubThread = new PostModel
         {
-            _context = context;
-        }
+            ClubId = id
+        };
+        return Page();
+    }
 
-        [BindProperty]
-        public PostModel ClubThread { get; set; }
-
-        public IActionResult OnGet(long id)
-        {
-            ClubThread = new PostModel
-            {
-                ClubId = id
-            };
-            return Page();
-        }
-
-        public class PostModel
-        {
-            public string Title { get; init; }
-            public string Body { get; init; } 
-            public long ClubId { get; init; }
-        }
+    public class PostModel
+    {
+        public string Title { get; init; }
+        public string Body { get; init; } 
+        public long ClubId { get; init; }
+    }
         
-        public class PostModelValidator : AbstractValidator<PostModel>
+    public class PostModelValidator : AbstractValidator<PostModel>
+    {
+        public PostModelValidator()
         {
-            public PostModelValidator()
-            {
-                RuleFor(p => p.Title)
-                    .NotEmpty()
-                    .Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
-                RuleFor(p => p.Body)
-                    .NotEmpty()
-                    .Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
-                RuleFor(p => p.ClubId)
-                    .NotEmpty();
-            }
+            RuleFor(p => p.Title)
+                .NotEmpty()
+                .Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
+            RuleFor(p => p.Body)
+                .NotEmpty()
+                .Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
+            RuleFor(p => p.ClubId)
+                .NotEmpty();
         }
+    }
 
-        public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid) return Page();
+            
+        // Get logged in user
+        var uid = User.GetNumericId();
+        if (uid is null) return Unauthorized();
+            
+        var clubThread = new ClubThread
         {
-            if (!ModelState.IsValid) return Page();
-            
-            // Get logged in user
-            var uid = User.GetNumericId();
-            if (uid is null) return Unauthorized();
-            
-            var clubThread = new ClubThread
-            {
-                AuthorId = (long)uid,
-                Title = ClubThread.Title,
-                Body = ClubThread.Body,
-                ClubId = ClubThread.ClubId,
-                CreationDate = DateTime.Now,
-                CommentsThread = new CommentsThread()
-            };
+            AuthorId = (long)uid,
+            Title = ClubThread.Title,
+            Body = ClubThread.Body,
+            ClubId = ClubThread.ClubId,
+            CreationDate = DateTime.Now,
+            CommentsThread = new CommentsThread()
+        };
 
-            await _context.ClubThreads.AddAsync(clubThread);
-            await _context.SaveChangesAsync();
+        await _context.ClubThreads.AddAsync(clubThread);
+        await _context.SaveChangesAsync();
 
-            return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
-        }
+        return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
     }
 }

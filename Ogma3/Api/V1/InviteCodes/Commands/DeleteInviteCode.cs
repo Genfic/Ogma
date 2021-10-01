@@ -6,30 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 
-namespace Ogma3.Api.V1.InviteCodes.Commands
+namespace Ogma3.Api.V1.InviteCodes.Commands;
+
+public static class DeleteInviteCode
 {
-    public static class DeleteInviteCode
+    public sealed record Command(long CodeId) : IRequest<ActionResult<long>>;
+
+    public class Handler : IRequestHandler<Command, ActionResult<long>>
     {
-        public sealed record Command(long CodeId) : IRequest<ActionResult<long>>;
+        private readonly ApplicationDbContext _context;
+        public Handler(ApplicationDbContext context) => _context = context;
 
-        public class Handler : IRequestHandler<Command, ActionResult<long>>
+        public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context) => _context = context;
+            var code = await _context.InviteCodes
+                .Where(ic => ic.Id == request.CodeId)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var code = await _context.InviteCodes
-                    .Where(ic => ic.Id == request.CodeId)
-                    .FirstOrDefaultAsync(cancellationToken);
+            if (code is null) return new NotFoundResult();
 
-                if (code is null) return new NotFoundResult();
+            _context.InviteCodes.Remove(code);
 
-                _context.InviteCodes.Remove(code);
-
-                await _context.SaveChangesAsync(cancellationToken);
-                return new OkObjectResult(code.Id);
-            }
+            await _context.SaveChangesAsync(cancellationToken);
+            return new OkObjectResult(code.Id);
         }
     }
 }

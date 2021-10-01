@@ -8,46 +8,45 @@ using Ogma3.Data;
 using Ogma3.Data.Faqs;
 using Ogma3.Infrastructure.Constants;
 
-namespace Ogma3.Api.V1.Faqs.Commands
+namespace Ogma3.Api.V1.Faqs.Commands;
+
+public static class CreateFaq
 {
-    public static class CreateFaq
+    public sealed record Command(string Question, string Answer) : IRequest<ActionResult<Faq>>;
+    public class CommandValidator : AbstractValidator<Command>
     {
-        public sealed record Command(string Question, string Answer) : IRequest<ActionResult<Faq>>;
-        public class CommandValidator : AbstractValidator<Command>
+        public CommandValidator()
         {
-            public CommandValidator()
-            {
-                RuleFor(f => f.Question).NotEmpty();
-                RuleFor(f => f.Answer).NotEmpty();
-            }
+            RuleFor(f => f.Question).NotEmpty();
+            RuleFor(f => f.Answer).NotEmpty();
         }
+    }
         
-        public class Handler : IRequestHandler<Command, ActionResult<Faq>>
+    public class Handler : IRequestHandler<Command, ActionResult<Faq>>
+    {
+        private readonly ApplicationDbContext _context;
+        public Handler(ApplicationDbContext context) => _context = context;
+
+        public async Task<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context) => _context = context;
+            var (question, answer) = request;
 
-            public async Task<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
+            var faq = new Faq
             {
-                var (question, answer) = request;
-
-                var faq = new Faq
-                {
-                    Question = question,
-                    Answer = answer,
-                    AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All)
-                };
-                _context.Faqs.Add(faq);
+                Question = question,
+                Answer = answer,
+                AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All)
+            };
+            _context.Faqs.Add(faq);
                 
-                await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                return new CreatedAtActionResult(
-                    nameof(FaqsController.GetFaq),
-                    nameof(FaqsController)[..^10],
-                    new { faq.Id },
-                    faq
-                );
-            }
+            return new CreatedAtActionResult(
+                nameof(FaqsController.GetFaq),
+                nameof(FaqsController)[..^10],
+                new { faq.Id },
+                faq
+            );
         }
     }
 }

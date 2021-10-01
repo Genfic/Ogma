@@ -1,34 +1,32 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Ogma3.Data;
 
-namespace Ogma3.Infrastructure.TagHelpers
+namespace Ogma3.Infrastructure.TagHelpers;
+
+public class CdnImgTagHelper : TagHelper
 {
-    public class CdnImgTagHelper : TagHelper
+    public string Src { get; set; }
+    public int? Width { get; set; }
+    public int? Height { get; set; }
+    public bool Eager { get; set; } = false;
+    public string? Buster { get; set; } = null;
+
+    public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        public string Src { get; set; }
-        public int? Width { get; set; }
-        public int? Height { get; set; }
-        public bool Eager { get; set; } = false;
-        public string? Buster { get; set; } = null;
+        var src = string.IsNullOrEmpty(Src) 
+            ? "/img/placeholders/ph-250.png" 
+            : Src;
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
-        {
-            var src = string.IsNullOrEmpty(Src) 
-                ? "/img/placeholders/ph-250.png" 
-                : Src;
+        if (Width.HasValue) output.Attributes.SetAttribute("width", Width ?? Height);
+        if (Height.HasValue) output.Attributes.SetAttribute("height", Height ?? Width);
 
-            if (Width.HasValue) output.Attributes.SetAttribute("width", Width ?? Height);
-            if (Height.HasValue) output.Attributes.SetAttribute("height", Height ?? Width);
-
-            if (!string.IsNullOrEmpty(Buster)) src += $"?v={Buster}";
+        if (!string.IsNullOrEmpty(Buster)) src += $"?v={Buster}";
             
-            output.TagName = "img";
-            output.Attributes.SetAttribute("src", src);
+        output.TagName = "img";
+        output.Attributes.SetAttribute("src", src);
 
-            if (!Eager)
-            {
-                output.Attributes.SetAttribute("loading", "lazy");
-            }
+        if (!Eager)
+        {
+            output.Attributes.SetAttribute("loading", "lazy");
         }
     }
 }

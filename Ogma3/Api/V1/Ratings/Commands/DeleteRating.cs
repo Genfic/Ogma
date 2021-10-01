@@ -7,42 +7,41 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Services.FileUploader;
 
-namespace Ogma3.Api.V1.Ratings.Commands
+namespace Ogma3.Api.V1.Ratings.Commands;
+
+public static class DeleteRating
 {
-    public static class DeleteRating
+    public sealed record Command(long RatingId) : IRequest<ActionResult<long>>;
+
+    public class Handler : IRequestHandler<Command, ActionResult<long>>
     {
-        public sealed record Command(long RatingId) : IRequest<ActionResult<long>>;
+        private readonly ApplicationDbContext _context;
+        private readonly ImageUploader _uploader;
 
-        public class Handler : IRequestHandler<Command, ActionResult<long>>
+        public Handler(ApplicationDbContext context, ImageUploader uploader)
         {
-            private readonly ApplicationDbContext _context;
-            private readonly ImageUploader _uploader;
+            _context = context;
+            _uploader = uploader;
+        }
 
-            public Handler(ApplicationDbContext context, ImageUploader uploader)
+        public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+        {
+            var r = await _context.Ratings
+                .Where(r => r.Id == request.RatingId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (r is null) return new NotFoundResult();
+
+            _context.Ratings.Remove(r);
+
+            if (r.Icon is not null && r.IconId is not null)
             {
-                _context = context;
-                _uploader = uploader;
+                await _uploader.Delete(r.Icon, r.IconId, cancellationToken);
             }
 
-            public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var r = await _context.Ratings
-                    .Where(r => r.Id == request.RatingId)
-                    .FirstOrDefaultAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                if (r is null) return new NotFoundResult();
-
-                _context.Ratings.Remove(r);
-
-                if (r.Icon is not null && r.IconId is not null)
-                {
-                    await _uploader.Delete(r.Icon, r.IconId, cancellationToken);
-                }
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return new OkObjectResult(r.Id);
-            }
+            return new OkObjectResult(r.Id);
         }
     }
 }

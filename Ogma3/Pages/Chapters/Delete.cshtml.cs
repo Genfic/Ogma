@@ -11,74 +11,73 @@ using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
 
-namespace Ogma3.Pages.Chapters
+namespace Ogma3.Pages.Chapters;
+
+[Authorize]
+public class DeleteModel : PageModel
 {
-    [Authorize]
-    public class DeleteModel : PageModel
+    private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
+
+    public DeleteModel(ApplicationDbContext context, IMapper mapper)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        _context = context;
+        _mapper = mapper;
+    }
 
-        public DeleteModel(ApplicationDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        [BindProperty]
-        public GetData Chapter { get; set; }
+    [BindProperty]
+    public GetData Chapter { get; set; }
         
-        public class GetData
-        {
-            public long Id { get; init; }
-            public long StoryAuthorId { get; init; }
-            public DateTime PublishDate { get; init; }
-            public bool IsPublished { get; init; }
-            public string Title { get; init; }
-            public string Slug { get; init; }
-            public int WordCount { get; init; }
-            public  int CommentsThreadCommentsCount { get; init; }
-            public string StoryTitle { get; init; }
-        }
+    public class GetData
+    {
+        public long Id { get; init; }
+        public long StoryAuthorId { get; init; }
+        public DateTime PublishDate { get; init; }
+        public bool IsPublished { get; init; }
+        public string Title { get; init; }
+        public string Slug { get; init; }
+        public int WordCount { get; init; }
+        public  int CommentsThreadCommentsCount { get; init; }
+        public string StoryTitle { get; init; }
+    }
         
-        public class MappingProfile : Profile
-        {
-            public MappingProfile() => CreateMap<Chapter, GetData>();
-        }
+    public class MappingProfile : Profile
+    {
+        public MappingProfile() => CreateMap<Chapter, GetData>();
+    }
 
-        public async Task<IActionResult> OnGetAsync(long id)
-        {
-            Chapter = await _context.Chapters
-                .Where(c => c.Id == id)
-                .ProjectTo<GetData>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
+    public async Task<IActionResult> OnGetAsync(long id)
+    {
+        Chapter = await _context.Chapters
+            .Where(c => c.Id == id)
+            .ProjectTo<GetData>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
 
-            if (Chapter is null) return NotFound();
-            if (Chapter.StoryAuthorId != User.GetNumericId()) return Unauthorized();
+        if (Chapter is null) return NotFound();
+        if (Chapter.StoryAuthorId != User.GetNumericId()) return Unauthorized();
             
-            return Page();
-        }
+        return Page();
+    }
 
-        public async Task<IActionResult> OnPostAsync(long id)
-        {
-            // Get chapter
-            var chapter = await _context.Chapters
-                .Where(c => c.Id == id)
-                .Include(c => c.Story)
-                .FirstOrDefaultAsync();
+    public async Task<IActionResult> OnPostAsync(long id)
+    {
+        // Get chapter
+        var chapter = await _context.Chapters
+            .Where(c => c.Id == id)
+            .Include(c => c.Story)
+            .FirstOrDefaultAsync();
 
-            if (chapter is null) return NotFound();
-            if (chapter.Story.AuthorId != User.GetNumericId()) return Unauthorized();
+        if (chapter is null) return NotFound();
+        if (chapter.Story.AuthorId != User.GetNumericId()) return Unauthorized();
 
-            // Recalculate words and chapters in the story
-            chapter.Story.WordCount -= chapter.WordCount;
-            chapter.Story.ChapterCount -= 1;
+        // Recalculate words and chapters in the story
+        chapter.Story.WordCount -= chapter.WordCount;
+        chapter.Story.ChapterCount -= 1;
 
-            _context.Chapters.Remove(chapter);
+        _context.Chapters.Remove(chapter);
             
-            await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
-            return RedirectToPage("../Story", new { id = chapter.StoryId });
-        }
+        return RedirectToPage("../Story", new { id = chapter.StoryId });
     }
 }

@@ -1,12 +1,11 @@
-namespace Ogma3.Data.Reports
+namespace Ogma3.Data.Reports;
+
+public enum EReportableContentTypes
 {
-    public enum EReportableContentTypes
-    {
-        Comment,
-        User,
-        Story,
-        Chapter,
-        Blogpost,
-        Club
-    }
+    Comment,
+    User,
+    Story,
+    Chapter,
+    Blogpost,
+    Club
 }

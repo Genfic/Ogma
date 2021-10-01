@@ -6,41 +6,40 @@ using Ogma3.Data.Clubs;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
 
-namespace Ogma3.Data.ClubModeratorActions
+namespace Ogma3.Data.ClubModeratorActions;
+
+public class ClubModeratorAction : BaseModel
 {
-    public class ClubModeratorAction : BaseModel
-    {
-        public OgmaUser Moderator { get; set; }
-        public long ModeratorId { get; set; }
-        public string Description { get; set; }
-        public DateTime CreationDate { get; set; }
-        public Club Club { get; set; }
-        public long ClubId { get; set; }
+    public OgmaUser Moderator { get; set; }
+    public long ModeratorId { get; set; }
+    public string Description { get; set; }
+    public DateTime CreationDate { get; set; }
+    public Club Club { get; set; }
+    public long ClubId { get; set; }
         
-        public class ModeratorActionConfiguration : BaseConfiguration<ClubModeratorAction>
+    public class ModeratorActionConfiguration : BaseConfiguration<ClubModeratorAction>
+    {
+        public override void Configure(EntityTypeBuilder<ClubModeratorAction> builder)
         {
-            public override void Configure(EntityTypeBuilder<ClubModeratorAction> builder)
-            {
-                base.Configure(builder);
+            base.Configure(builder);
             
-                builder
-                    .Property(ma => ma.Description)
-                    .IsRequired();
-                builder
-                    .Property(ma => ma.CreationDate)
-                    .IsRequired()
-                    .HasDefaultValueSql(PgConstants.CurrentTimestamp);
-                builder
-                    .HasOne(ma => ma.Moderator)
-                    .WithMany()
-                    .HasForeignKey(ma => ma.ModeratorId)
-                    .OnDelete(DeleteBehavior.SetNull);
-                builder
-                    .HasOne(ma => ma.Club)
-                    .WithMany()
-                    .HasForeignKey(ma => ma.ModeratorId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            }
+            builder
+                .Property(ma => ma.Description)
+                .IsRequired();
+            builder
+                .Property(ma => ma.CreationDate)
+                .IsRequired()
+                .HasDefaultValueSql(PgConstants.CurrentTimestamp);
+            builder
+                .HasOne(ma => ma.Moderator)
+                .WithMany()
+                .HasForeignKey(ma => ma.ModeratorId)
+                .OnDelete(DeleteBehavior.SetNull);
+            builder
+                .HasOne(ma => ma.Club)
+                .WithMany()
+                .HasForeignKey(ma => ma.ModeratorId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

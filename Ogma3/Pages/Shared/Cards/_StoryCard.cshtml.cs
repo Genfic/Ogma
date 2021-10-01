@@ -6,31 +6,30 @@ using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 
-namespace Ogma3.Pages.Shared.Cards
+namespace Ogma3.Pages.Shared.Cards;
+
+public class StoryCard
 {
-    public class StoryCard
+    public long Id { get; set; }
+    public string AuthorUserName { get; set; }
+    public string Title { get; set; }
+    public string Slug { get; set; }
+    public string Hook { get; set; }
+    public string? Cover { get; set; }
+        
+    public string? CoverId { get; set; }
+    public DateTime? PublicationDate { get; set; }
+    public IList<TagDto> Tags { get; set; }
+    public Rating Rating { get; set; }
+    public EStoryStatus Status { get; set; }
+    public int WordCount { get; set; }
+    public int ChapterCount { get; set; }
+        
+    public class MappingProfile : Profile
     {
-        public long Id { get; set; }
-        public string AuthorUserName { get; set; }
-        public string Title { get; set; }
-        public string Slug { get; set; }
-        public string Hook { get; set; }
-        public string? Cover { get; set; }
-        
-        public string? CoverId { get; set; }
-        public DateTime? PublicationDate { get; set; }
-        public IList<TagDto> Tags { get; set; }
-        public Rating Rating { get; set; }
-        public EStoryStatus Status { get; set; }
-        public int WordCount { get; set; }
-        public int ChapterCount { get; set; }
-        
-        public class MappingProfile : Profile
-        {
-            public MappingProfile() => CreateMap<Story, StoryCard>()
-                    .ForMember(sc => sc.Tags, opts
-                        => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
-                    );
-        }
+        public MappingProfile() => CreateMap<Story, StoryCard>()
+            .ForMember(sc => sc.Tags, opts
+                => opts.MapFrom(s => s.Tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace))
+            );
     }
 }

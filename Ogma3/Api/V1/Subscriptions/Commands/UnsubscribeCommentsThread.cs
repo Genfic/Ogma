@@ -8,40 +8,39 @@ using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
-namespace Ogma3.Api.V1.Subscriptions.Commands
+namespace Ogma3.Api.V1.Subscriptions.Commands;
+
+public static class UnsubscribeCommentsThread
 {
-    public static class UnsubscribeCommentsThread
+    public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
+
+    public class Handler : IRequestHandler<Command, ActionResult<bool>>
     {
-        public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
+        private readonly ApplicationDbContext _context;
+        private readonly long? _uid;
 
-        public class Handler : IRequestHandler<Command, ActionResult<bool>>
+        public Handler(ApplicationDbContext context, IUserService userService)
         {
-            private readonly ApplicationDbContext _context;
-            private readonly long? _uid;
+            _context = context;
+            _uid = userService?.User?.GetNumericId();
+        }
 
-            public Handler(ApplicationDbContext context, IUserService userService)
-            {
-                _context = context;
-                _uid = userService?.User?.GetNumericId();
-            }
+        public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
+        {
+            if (_uid is null) return new UnauthorizedResult();
 
-            public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                if (_uid is null) return new UnauthorizedResult();
-
-                var subscriber = await _context.CommentsThreadSubscribers
-                    .Where(cts => cts.OgmaUserId == _uid)
-                    .Where(cts => cts.CommentsThreadId == request.ThreadId)
-                    .FirstOrDefaultAsync(cancellationToken);
+            var subscriber = await _context.CommentsThreadSubscribers
+                .Where(cts => cts.OgmaUserId == _uid)
+                .Where(cts => cts.CommentsThreadId == request.ThreadId)
+                .FirstOrDefaultAsync(cancellationToken);
                 
-                if (subscriber is null) return new OkObjectResult(false);
+            if (subscriber is null) return new OkObjectResult(false);
 
-                _context.CommentsThreadSubscribers.Remove(subscriber);
+            _context.CommentsThreadSubscribers.Remove(subscriber);
 
-                await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                return new OkObjectResult(false);
-            }
+            return new OkObjectResult(false);
         }
     }
 }

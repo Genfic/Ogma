@@ -8,81 +8,80 @@ using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
 using Utils.Extensions;
 
-namespace Ogma3.Pages.Club.Folders
+namespace Ogma3.Pages.Club.Folders;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly ApplicationDbContext _context;
+    private readonly ClubRepository _clubRepo;
+
+    public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ClubRepository _clubRepo;
+        _context = context;
+        _clubRepo = clubRepo;
+    }
 
-        public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
-        {
-            _context = context;
-            _clubRepo = clubRepo;
-        }
-
-        public long ClubId { get; private set; }
+    public long ClubId { get; private set; }
         
-        public async Task<IActionResult> OnGet(long clubId)
-        {
-            ClubId = clubId;
+    public async Task<IActionResult> OnGet(long clubId)
+    {
+        ClubId = clubId;
             
-            var uid = User.GetNumericId();
-            if (uid is null) return Unauthorized();
+        var uid = User.GetNumericId();
+        if (uid is null) return Unauthorized();
             
-            // Check if founder
-            var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
-            if (!isFounder) return Unauthorized();
+        // Check if founder
+        var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+        if (!isFounder) return Unauthorized();
             
-            return Page();
-        }
+        return Page();
+    }
 
-        [BindProperty]
-        public PostData Input { get; init; }
+    [BindProperty]
+    public PostData Input { get; init; }
         
-        public class PostData
-        {
-            public string Name { get; init; }
-            public string Description { get; init; }
-            public long? ParentId { get; init; }
-            public EClubMemberRoles Role { get; init; }
-        }
+    public class PostData
+    {
+        public string Name { get; init; }
+        public string Description { get; init; }
+        public long? ParentId { get; init; }
+        public EClubMemberRoles Role { get; init; }
+    }
         
-        public class PostDataValidation : AbstractValidator<PostData>
+    public class PostDataValidation : AbstractValidator<PostData>
+    {
+        public PostDataValidation()
         {
-            public PostDataValidation()
-            {
-                RuleFor(b => b.Name)
-                    .NotEmpty()
-                    .Length(CTConfig.CFolder.MinNameLength, CTConfig.CFolder.MaxNameLength);
-                RuleFor(b => b.Description)
-                    .MaximumLength(CTConfig.CFolder.MaxDescriptionLength);
-            }
+            RuleFor(b => b.Name)
+                .NotEmpty()
+                .Length(CTConfig.CFolder.MinNameLength, CTConfig.CFolder.MaxNameLength);
+            RuleFor(b => b.Description)
+                .MaximumLength(CTConfig.CFolder.MaxDescriptionLength);
         }
+    }
 
-        public async Task<IActionResult> OnPostAsync(long clubId)
+    public async Task<IActionResult> OnPostAsync(long clubId)
+    {
+        if (!ModelState.IsValid) return Page();
+            
+        var uid = User.GetNumericId();
+        if (uid is null) return Unauthorized();
+            
+        // Check if authorized
+        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+        if (!isAuthorized) return Unauthorized();
+
+        _context.Folders.Add(new Folder
         {
-            if (!ModelState.IsValid) return Page();
+            Name = Input.Name,
+            Slug = Input.Name.Friendlify(),
+            Description = Input.Description,
+            ClubId = clubId,
+            ParentFolderId = Input.ParentId,
+            AccessLevel = Input.Role
+        });
+        await _context.SaveChangesAsync();
             
-            var uid = User.GetNumericId();
-            if (uid is null) return Unauthorized();
-            
-            // Check if authorized
-            var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
-            if (!isAuthorized) return Unauthorized();
-
-            _context.Folders.Add(new Folder
-            {
-                Name = Input.Name,
-                Slug = Input.Name.Friendlify(),
-                Description = Input.Description,
-                ClubId = clubId,
-                ParentFolderId = Input.ParentId,
-                AccessLevel = Input.Role
-            });
-            await _context.SaveChangesAsync();
-            
-            return RedirectToPage("./Index", new { id = clubId });
-        }
+        return RedirectToPage("./Index", new { id = clubId });
     }
 }
