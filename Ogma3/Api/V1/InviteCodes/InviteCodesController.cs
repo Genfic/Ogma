@@ -25,7 +25,7 @@ public class InviteCodesController : ControllerBase
         
     // GET: api/InviteCodes/paginated?page=1&perPage=10
     [HttpGet("paginated")]
-    [Authorize(Roles = RoleNames.Admin + ", " + RoleNames.Moderator)]
+    [Authorize(Roles = $"{RoleNames.Admin}, {RoleNames.Moderator}")]
     public async Task<ActionResult<List<InviteCodeDto>>> GetPaginatedInviteCodes([FromQuery] GetPaginatedInviteCodes.Query query)
         => await _mediator.Send(query);
         
@@ -36,13 +36,13 @@ public class InviteCodesController : ControllerBase
 
 
     [HttpPost("no-limit")]
-    [Authorize(Roles = RoleNames.Admin + ", " + RoleNames.Moderator)]
+    [Authorize(Roles = $"{RoleNames.Admin}, {RoleNames.Moderator}")]
     public async Task<ActionResult<InviteCodeDto>> PostInviteCodeNoLimit()
         => await _mediator.Send(new AdminIssueInviteCode.Command());
 
 
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<ActionResult<long>> DeleteInviteCode(long id)
         => await _mediator.Send(new DeleteInviteCode.Command(id));
 }

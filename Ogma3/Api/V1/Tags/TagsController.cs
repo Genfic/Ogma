@@ -20,7 +20,7 @@ public class TagsController : ControllerBase
 
     // GET: api/Tags/all
     [HttpGet("all")]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+    [Authorize(Roles = $"{RoleNames.Admin},{RoleNames.Moderator}")]
     public async Task<ActionResult<List<TagDto>>> GetAll()
         => await _mediator.Send(new GetAllTags.Query());
 
@@ -41,7 +41,7 @@ public class TagsController : ControllerBase
         
     // PUT: api/Tags/5
     [HttpPut]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [ProducesResponseType(StatusCodes.Status409Conflict)] 
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,14 +50,14 @@ public class TagsController : ControllerBase
         
     // POST: api/Tags
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [ProducesResponseType(StatusCodes.Status409Conflict), ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> PostTag(CreateTag.Command data)
         => await _mediator.Send(data);
         
     // DELETE: api/Tags/5
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<ActionResult<long>> DeleteTag(long id)
         => await _mediator.Send(new DeleteTag.Command(id));
 

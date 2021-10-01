@@ -15,7 +15,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-[Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+[Authorize(Roles = $"{RoleNames.Admin},{RoleNames.Moderator}")]
 public class ContentBlock : PageModel
 {
     private readonly ApplicationDbContext _context;

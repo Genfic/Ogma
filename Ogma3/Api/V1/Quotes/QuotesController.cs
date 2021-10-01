@@ -8,6 +8,7 @@ using Ogma3.Api.V1.Quotes.Commands;
 using Ogma3.Api.V1.Quotes.Queries;
 using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.Attributes;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Api.V1.Quotes;
 
@@ -37,21 +38,21 @@ public class QuotesController : ControllerBase
 
     // POST: api/Quotes
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [IgnoreAntiforgeryToken]
     public async Task<ActionResult<Quote>> PostQuote(CreateQuote.Command q) 
         => await _mediator.Send(q);
 
     // PUT: api/Quotes/5
     [HttpPut]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [IgnoreAntiforgeryToken]
     public async Task<ActionResult<Quote>> PutQuote(UpdateQuote.Command q)
         => await _mediator.Send(q);
 
     // POST: api/Quotes/json
     [HttpPost("json")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [IgnoreAntiforgeryToken]
     [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CreateQuotesFromJson.Response>> PostJson()
@@ -59,7 +60,7 @@ public class QuotesController : ControllerBase
 
     // DELETE: api/Quotes/5
     [HttpDelete]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [IgnoreAntiforgeryToken]
     public async Task<ActionResult<Quote>> DeleteQuote(DeleteQuote.Command q) 
         => await _mediator.Send(q);

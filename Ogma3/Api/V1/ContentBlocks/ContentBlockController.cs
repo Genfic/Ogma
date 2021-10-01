@@ -14,7 +14,7 @@ namespace Ogma3.Api.V1.ContentBlocks;
 
 [Route("api/[controller]", Name = nameof(ContentBlockController))]
 [ApiController]
-[Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+[Authorize(Roles = $"{RoleNames.Admin},{RoleNames.Moderator}")]
 public class ContentBlockController : ControllerBase
 {
     private readonly IMediator _mediator;

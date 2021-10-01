@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Faqs.Commands;
 using Ogma3.Api.V1.Faqs.Queries;
 using Ogma3.Data.Faqs;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Api.V1.Faqs;
 
@@ -28,20 +29,20 @@ public class FaqsController : ControllerBase
 
     // PUT: api/Faqs/5
     [HttpPut]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> PutFaq(UpdateFaq.Command data)
         => await _mediator.Send(data);
         
     // POST: api/Faqs
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<ActionResult<Faq>> PostFaq(CreateFaq.Command data)
         => await _mediator.Send(data);
         
     // DELETE: api/Faqs/5
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<long>> DeleteFaq(long id)
         => await _mediator.Send(new DeleteFaq.Command(id));

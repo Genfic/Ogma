@@ -11,7 +11,7 @@ namespace Ogma3.Api.V1.Infractions;
 
 [Route("api/[controller]", Name = nameof(InfractionsController))]
 [ApiController]
-[Authorize(Roles = RoleNames.Admin + "," + RoleNames.Moderator)]
+[Authorize(Roles = $"{RoleNames.Admin},{RoleNames.Moderator}")]
 public class InfractionsController : ControllerBase
 {
     private readonly IMediator _mediator;
