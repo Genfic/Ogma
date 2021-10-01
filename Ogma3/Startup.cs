@@ -31,6 +31,7 @@ using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
+using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Services;
@@ -200,6 +201,7 @@ public class Startup
             .AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add<ValidationExceptionFilter>();
             })
             .AddFluentValidation(options =>
             {

@@ -17,7 +17,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         var failures = _validators
             .Select(v => v.Validate(request))
             .SelectMany(result => result.Errors)
-            .Where(f => f != null)
+            .Where(f => f is not null)
             .ToList();
 
         if (failures.Any())
