@@ -14,7 +14,7 @@
     var u = Model.OgmaUser;
 
     <a asp-page="/User/Index" asp-route-name="@u.Name.ToLower()">Visit profile</a>
-    
+
     <table class="o-table">
         <tr>
             <td>Id</td><td id="id">@u.Id</td>
@@ -29,7 +29,10 @@
             <td>Title</td><td>@u.Title</td>
         </tr>
         <tr>
-            <td>Avatar</td><td><a href="@u.Avatar">@u.Avatar</a></td>
+            <td>Avatar</td>
+            <td>
+                <a href="@u.Avatar">@u.Avatar</a>
+            </td>
         </tr>
         <tr>
             <td>Registration date</td><td>@u.RegistrationDate</td>
@@ -79,7 +82,7 @@
             </td>
         </tr>
     </table>
-    
+
     <manage-ban ref="manageBan"
                 action-name="Ban"
                 :user-id="@u.Id"
@@ -87,7 +90,7 @@
                 ban-date="@u.BannedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
                 :duration="@Math.Round(((u.BannedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
     </manage-ban>
-    
+
     <manage-ban ref="manageMute"
                 action-name="Mute"
                 :user-id="@u.Id"
@@ -95,23 +98,29 @@
                 ban-date="@u.MutedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
                 :duration="@Math.Round(((u.MutedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
     </manage-ban>
-    
-    @Html.AntiForgeryToken()
-    <div id="rolesRoute" v-if="!rolesRoute" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
-    <div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div>
 }
 else
 {
     <form class="form" method="get">
         <div class="o-form-group">
             <label for="name">Go to user</label>
-            <input class="o-form-control active-border" type="text" name="name" id="name">
+            <input class="o-form-control active-border"
+                   v-on:input="getNames"
+                   v-model="input"
+                   type="text"
+                   name="name"
+                   id="name">
         </div>
+        @* TODO: Add actual display of found names here for autocompletion *@
         <div class="o-form-group">
             <input class="o-form-control active-border" type="submit" value="Go">
         </div>
     </form>
 }
+
+@Html.AntiForgeryToken()
+<div id="rolesRoute" v-if="!rolesRoute" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
+<div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div> 
 
 @section Scripts {
     <script src="~/js/dist/admin/components/manage-ban-component.min.js" asp-append-version="true"></script>

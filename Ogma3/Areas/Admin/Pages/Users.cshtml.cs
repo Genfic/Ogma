@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,22 +15,22 @@ namespace Ogma3.Areas.Admin.Pages;
 public class Users : PageModel
 {
     private readonly ApplicationDbContext _context;
+    public Users(ApplicationDbContext context) => _context = context;
 
-    public Users(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
-    public UserDetailsDto? OgmaUser { get; set; }
-    public List<OgmaRole> Roles { get; set; }
+    public UserDetailsDto? OgmaUser { get; private set; }
+    public List<OgmaRole> Roles { get; private set; }
         
     public async Task<ActionResult> OnGet([FromQuery] string? name)
     {
         if (string.IsNullOrEmpty(name)) return Page();
             
-        OgmaUser = await _context.Users
-            .Where(u => u.NormalizedUserName == name.ToUpper())
-            .Select(u => new UserDetailsDto
+        var query = _context.Users.AsQueryable();
+            
+            query = name.StartsWith("id:", StringComparison.InvariantCultureIgnoreCase)
+                ? query.Where(u => u.Id == int.Parse(name.Replace("id:", "", StringComparison.InvariantCultureIgnoreCase)))
+                : query.Where(u => u.NormalizedUserName == name.ToUpper());
+            
+        OgmaUser = await query.Select(u => new UserDetailsDto
             {
                 Id = u.Id,
                 Name = u.UserName,

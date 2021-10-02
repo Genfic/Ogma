@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 using Ogma3.Api.V1.Users.Commands;
+using Ogma3.Api.V1.Users.Queries;
 using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Api.V1.Users;
@@ -50,6 +52,13 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ManageRoles(UpdateRoles.Command command)
         => await _mediator.Send(command);
+
+    [HttpGet("names")]
+    [Authorize(Roles = $"{RoleNames.Admin}, {RoleNames.Moderator}, {RoleNames.Helper}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public async Task<ActionResult<List<string>>> FindNames([FromQuery]FindName.Query query)
+        => await _mediator.Send(query);
         
 
     // Don't delete or this whole controller will break

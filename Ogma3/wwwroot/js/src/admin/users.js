@@ -6,16 +6,21 @@ new Vue({
 		infractionsRoute: null,
 		roles: [],
 		userId: null,
+		
+		names: [],
+		input: '',
 	},
 	methods: {
 		manageBan: function () {
 			this.$refs.manageBan.visible = true;
 		},
+		
 		manageMute: function () {
 			this.$refs.manageMute.visible = true;
 		},
+		
 		saveRoles: async function () {
-			this.roles = [...document.querySelectorAll('input[type=checkbox]:checked')].map(e => Number(e.value));
+			this.roles = [...document.querySelectorAll('input[type=checkbox][name=roles]:checked')].map(e => Number(e.value));
 			await axios.post(`${this.rolesRoute}/roles`, {
 				UserId: this.userId,
 				Roles: this.roles
@@ -23,6 +28,15 @@ new Vue({
 				headers: { "RequestVerificationToken" : this.csrf }
 			});
 			location.reload();
+		},
+		
+		getNames: async function() {
+			if (this.input.length < 3) this.names = [];
+			const { data } = await axios.get(`${this.rolesRoute}/names`, { params: { name: this.input }})
+				.catch(e => {
+					if(e.response.status !== 422) throw e;
+				});
+			this.names = data;
 		}
 	},
 	mounted() {
