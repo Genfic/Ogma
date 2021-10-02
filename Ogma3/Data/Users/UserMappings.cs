@@ -20,7 +20,7 @@ public static class UserMappings
         FollowersCount = u.Followers.Count,
         BlogpostsCount = u.Blogposts.Count(b => b.PublicationDate != null),
         StoriesCount = u.Stories.Count(s => s.PublicationDate != null),
-        IsBlockedBy = u.BlockedByUsers.Any(bu => bu.Id == uid),
+        IsBlockedBy = u.Blockers.Any(bu => bu.Id == uid),
         IsFollowedBy = u.Followers.Any(fu => fu.Id == uid),
         Roles = u.Roles.AsQueryable().Select(RoleMappings.ToRoleDto).ToList()
     };

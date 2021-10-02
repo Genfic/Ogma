@@ -1,11 +1,11 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ogma3.Infrastructure;
 using Serilog;
 using Serilog.Events;
 
@@ -15,28 +15,12 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        var telegramToken = Environment.GetEnvironmentVariable("TELEGRAM_TOKEN");
         var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
-            
-        if (telegramToken is null)
-        {
-            try
-            {
-                using var sr = new StreamReader("./logger-tokens.txt");
-                telegramToken = await sr.ReadToEndAsync();
-            }
-            catch (Exception e)
-            {
-                Log.Fatal(e, "Fatal error occurred when trying to read logger tokens");
-                return;
-            }
-        }
 
-        var split = telegramToken.Split('|');
-            
+        var (telegramToken, telegramId) = await TelegramCredentials.Get();
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
-            .WriteTo.Telegram(split[0], split[1], restrictedToMinimumLevel: LogEventLevel.Error)
+            .WriteTo.Telegram(telegramToken, telegramId, restrictedToMinimumLevel: LogEventLevel.Error)
             .WriteTo.Seq(seqUrl, LogEventLevel.Debug)
             .WriteTo.Console(LogEventLevel.Information)
             .MinimumLevel.Debug()

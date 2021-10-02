@@ -19,7 +19,7 @@ public static class CommentMappings
         DeletedBy = c.DeletedBy,
         EditCount = c.EditCount,
         LastEdit = c.LastEdit,
-        IsBlocked = c.Author.BlockedByUsers.Any(bu => bu.Id == uid),
+        IsBlocked = c.Author.Blockers.Any(bu => bu.Id == uid),
         Author = c.DeletedBy != null ? null : new UserSimpleDto
         {
             Avatar = c.Author.Avatar,

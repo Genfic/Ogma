@@ -43,8 +43,8 @@ public class OgmaUser : IdentityUser<long>, IReportableContent
     // Blacklist
     public ICollection<BlacklistedRating> BlacklistedRatings { get; set; }
     public ICollection<BlacklistedTag> BlacklistedTags { get; set; }
-    public ICollection<OgmaUser> BlockedUsers { get; set; }
-    public ICollection<OgmaUser> BlockedByUsers { get; set; }
+    public ICollection<OgmaUser> Blockers { get; set; }
+    public ICollection<OgmaUser> Blocking { get; set; }
         
     // Follows
     public ICollection<OgmaUser> Followers { get; set; }

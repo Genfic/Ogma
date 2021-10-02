@@ -69,6 +69,7 @@ public class StoryModel : PageModel
         var uid = User.GetNumericId();
             
         Story = await _context.Stories
+            .TagWith($"Fetching story {id} — {slug}")
             .Where(s => s.Id == id)
             .Where(s => s.PublicationDate != null || s.AuthorId == uid)
             .Select(s => new StoryDetails

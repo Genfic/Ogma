@@ -1,13 +1,12 @@
 @using System.Globalization
 @using Humanizer
-@using Ogma3.Api.V1
-@using Ogma3.Api.V1.Reports
-@using Ogma3.Data.Reports
-@using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
-@using Utils
 @using Utils.Extensions
+@using Ogma3.Infrastructure.Constants
+@using Ogma3.Api.V1.Users
+@using Ogma3.Data.Reports
+@using Ogma3.Api.V1.Reports
 @model ProfileBar
 
 @{
@@ -56,7 +55,7 @@
     </div>
     
     <div class="buttons">
-        @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User?.Identity?.IsAuthenticated ?? false))
+        @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User.Identity?.IsAuthenticated ?? false))
         {
             <button class="button max join" 
                     :title="isFollowed ? 'Unfollow' : 'Follow'"

@@ -13,19 +13,27 @@ new Vue({
 	},
 	methods: {
 		follow: async function () {
-			const {data} = await axios.post(this.route + '/follow',
-				{ name: this.name },
-				{ headers: { 'RequestVerificationToken': this.xcsrf } }
-			);
-			this.isFollowed = data;
+			const res = await fetch(`${this.route}/follow`, {
+				method: this.isFollowed ? 'DELETE' : 'POST',
+				headers: {
+					'RequestVerificationToken': this.xcsrf,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ name: this.name })
+			});
+			this.isFollowed = (await res.text()).toLowerCase() === 'true';
 		},
         
 		block: async function () {
-			const {data} = await axios.post(this.route + '/block',
-				{ name: this.name }, 
-				{ headers: { 'RequestVerificationToken': this.xcsrf } }
-			);
-			this.isBlocked = data;
+			const res = await fetch(`${this.route}/block`, {
+				method: this.isBlocked ? 'DELETE' : 'POST',
+				headers: { 
+					'RequestVerificationToken': this.xcsrf,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ name: this.name })
+			});
+			this.isBlocked = (await res.text()).toLowerCase() === 'true';
 		},
         
 		report: function () {

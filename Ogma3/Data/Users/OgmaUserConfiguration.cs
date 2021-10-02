@@ -67,8 +67,8 @@ public class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
             );
             
         builder
-            .HasMany(u => u.BlockedUsers)
-            .WithMany(u => u.BlockedByUsers)
+            .HasMany(u => u.Blockers)
+            .WithMany(u => u.Blocking)
             .UsingEntity<UserBlock>(
                 ub => ub.HasOne(e => e.BlockingUser)
                     .WithMany()

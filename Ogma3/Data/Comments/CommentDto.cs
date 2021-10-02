@@ -30,7 +30,7 @@ public class CommentDto
                     => opts.MapFrom(c => c.AuthorId == currentUser)
                 )
                 .ForMember(cd => cd.IsBlocked, opts
-                    => opts.MapFrom(c => c.Author.BlockedByUsers.Any(bu => bu.Id == currentUser))
+                    => opts.MapFrom(c => c.Author.Blockers.Any(bu => bu.Id == currentUser))
                 )
                 .ForMember(cd => cd.Author, opts
                     => opts.MapFrom(c => c.DeletedBy == null ? c.Author : null)
