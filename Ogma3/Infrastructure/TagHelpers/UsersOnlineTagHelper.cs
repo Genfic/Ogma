@@ -35,19 +35,17 @@ public class UsersOnlineTagHelper : TagHelper
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         const string name = nameof(UsersOnlineTagHelper) + "_cache";
-            
-        int count;
-        if (_cache.TryGetValue(name, out int c))
+
+        var count = await _cache.GetOrCreateAsync(name, async entry =>
         {
-            count = c;
-        }
-        else
-        {
-            count = await _context.Users
-                .Where(u => DateTime.Now - u.LastActive < TimeSpan.FromMinutes(Tolerance))
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
+
+            var minutesAgo = DateTime.UtcNow.AddMinutes(-Tolerance);
+            return await _context.Users
+                .TagWith("Getting currently-active users")
+                .Where(u => u.LastActive >= minutesAgo)
                 .CountAsync();
-            _cache.Set(name, count, TimeSpan.FromMinutes(CacheTime));
-        }
+        });
 
         output.TagName = "span";
         output.Content.SetContent(count.ToString());

@@ -5,7 +5,6 @@ using B2Net;
 using B2Net.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using LinqToDB.EntityFrameworkCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -236,9 +235,6 @@ public class Startup
 
         // OpenAPI
         services.AddOpenApiDocument(settings => { settings.SchemaNameGenerator = new NSwagNestedNameGenerator(); });
-
-        // Linq2DB extension
-        LinqToDBForEFTools.Initialize();
     }
 
 

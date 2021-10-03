@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
-using LinqToDB;
-using LinqToDB.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
@@ -39,7 +38,7 @@ public class EditModel : PageModel
             .Where(c => c.Id == id)
             .Where(c => c.Story.AuthorId == User.GetNumericId())
             .ProjectTo<PostData>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsyncEF();
+            .FirstOrDefaultAsync();
             
         if (Input is null) return NotFound();
 
@@ -95,7 +94,8 @@ public class EditModel : PageModel
         var chapter = await _context.Chapters
             .Where(c => c.Id == id)
             .Where(c => c.Story.AuthorId == uid)
-            .FirstOrDefaultAsyncEF();
+            .Include(c => c.Story)
+            .FirstOrDefaultAsync();
             
         if (chapter is null) return NotFound();
             
@@ -109,13 +109,16 @@ public class EditModel : PageModel
         chapter.PublicationDate = Input.IsPublished ? DateTime.Now : null;
         await _context.SaveChangesAsync();
 
-        await _context.Stories
-            .Where(s => s.Id == chapter.StoryId)
-            .Set(s => s.WordCount, s => s.Chapters
-                .Where(c => c.PublicationDate != null)
-                .Sum(c => (int?)c.WordCount) ?? 0)
-            .Set(s => s.ChapterCount, s => s.Chapters.Count(c => c.PublicationDate != null))
-            .UpdateAsync();
+        chapter.Story.WordCount = await _context.Chapters
+            .Where(c => c.StoryId == chapter.StoryId)
+            .Where(c => c.PublicationDate != null)
+            .SumAsync(c => c.WordCount);
+        
+        chapter.Story.ChapterCount = await _context.Chapters
+            .Where(c => c.StoryId == chapter.StoryId)
+            .CountAsync(c => c.PublicationDate != null);
+        
+        await _context.SaveChangesAsync();
             
         return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
     }

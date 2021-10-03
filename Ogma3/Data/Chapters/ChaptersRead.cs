@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Converters;
 
 namespace Ogma3.Data.Chapters;
 
@@ -23,10 +24,7 @@ public class ChaptersRead
 
             builder
                 .Property(cr => cr.Chapters)
-                .HasConversion(
-                    v => new List<long>(v),
-                    v => new HashSet<long>(v)
-                );
+                .HasConversion(new NpgHashsetConverter<long>());
         }
     }
 }

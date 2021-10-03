@@ -31,20 +31,26 @@
         <tr>
             <td>Avatar</td>
             <td>
-                <a href="@u.Avatar">@u.Avatar</a>
+                <a href="@u.Avatar"
+                   target="_blank"
+                   v-on:mouseover="showImage($event)"
+                   v-on:mousemove="updateImage($event)"
+                   v-on:mouseleave="hideImage">
+                    @u.Avatar
+                </a>
             </td>
         </tr>
         <tr>
-            <td>Registration date</td><td>@u.RegistrationDate</td>
+            <td class="nb">Registration date</td><td>@u.RegistrationDate</td>
         </tr>
         <tr>
-            <td>Last active</td><td>@u.LastActive</td>
+            <td class="nb">Last active</td><td>@u.LastActive</td>
         </tr>
         <tr>
-            <td>Stories count</td><td>@u.StoriesCount</td>
+            <td class="nb">Stories count</td><td>@u.StoriesCount</td>
         </tr>
         <tr>
-            <td>Blogposts count</td><td>@u.BlogpostsCount</td>
+            <td class="nb">Blogposts count</td><td>@u.BlogpostsCount</td>
         </tr>
         <tr>
             <td>Roles</td>
@@ -60,7 +66,7 @@
             </td>
         </tr>
         <tr>
-            <td>Banned until</td>
+            <td class="nb">Banned until</td>
             <td>
                 <div class="flex">
                     <time datetime="@u.BannedUntil?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
@@ -71,7 +77,7 @@
             </td>
         </tr>
         <tr>
-            <td>Muted until</td>
+            <td class="nb">Muted until</td>
             <td>
                 <div class="flex">
                     <time datetime="@u.MutedUntil?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
@@ -102,25 +108,32 @@
 else
 {
     <form class="form" method="get">
-        <div class="o-form-group">
-            <label for="name">Go to user</label>
-            <input class="o-form-control active-border"
-                   v-on:input="getNames"
-                   v-model="input"
-                   type="text"
-                   name="name"
-                   id="name">
-        </div>
-        @* TODO: Add actual display of found names here for autocompletion *@
-        <div class="o-form-group">
-            <input class="o-form-control active-border" type="submit" value="Go">
+        <div class="form-row">
+            
+            <div class="o-form-group">
+                <label for="name">Go to user</label>
+                <input class="o-form-control active-border"
+                       v-on:input="getNames"
+                       v-model="input"
+                       list="names"
+                       type="text"
+                       name="name"
+                       id="name">
+                <datalist id="names">
+                    <option v-for="n in names" :value="n" :key="n" />
+                </datalist>
+            </div>
+
+            <div class="o-form-group keep-size">
+                <input class="o-form-control active-border" type="submit" value="Go">
+            </div>
         </div>
     </form>
 }
 
 @Html.AntiForgeryToken()
 <div id="rolesRoute" v-if="!rolesRoute" data-route="@Url.RouteUrl(nameof(UsersController))"></div>
-<div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div> 
+<div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div>
 
 @section Scripts {
     <script src="~/js/dist/admin/components/manage-ban-component.min.js" asp-append-version="true"></script>

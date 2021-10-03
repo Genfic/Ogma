@@ -9,6 +9,8 @@ new Vue({
 		
 		names: [],
 		input: '',
+		
+		image: null,
 	},
 	methods: {
 		manageBan: function () {
@@ -31,12 +33,33 @@ new Vue({
 		},
 		
 		getNames: async function() {
-			if (this.input.length < 3) this.names = [];
-			const { data } = await axios.get(`${this.rolesRoute}/names`, { params: { name: this.input }})
-				.catch(e => {
-					if(e.response.status !== 422) throw e;
-				});
-			this.names = data;
+			if (this.input.length < 3) {
+				this.names = [];
+			} else {
+				const { data } = await axios.get(`${this.rolesRoute}/names`, { params: { name: this.input } });
+				this.names = data;
+			}
+		},
+		
+		showImage: function(e) {
+			if (!this.image) {
+				this.image = document.createElement('img');
+				this.image.src = e.target.href;
+				this.image.style.position = 'absolute';
+				this.image.style.pointerEvents = 'none';
+
+				document.body.append(this.image);
+			}
+			this.image.style.display = 'block';
+		},
+		
+		updateImage: function(e) {
+			this.image.style.left = `${e.clientX}px`;
+			this.image.style.top = `${e.clientY}px`;
+		},
+		
+		hideImage: function() {
+			this.image.style.display = 'none';
 		}
 	},
 	mounted() {

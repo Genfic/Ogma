@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
@@ -32,7 +32,7 @@ public static class GetClubMembershipStatus
             var isMember = await _context.ClubMembers
                 .Where(cm => cm.ClubId == request.ClubId)
                 .Where(cm => cm.MemberId == _uid)
-                .AnyAsync(token: cancellationToken);
+                .AnyAsync(cancellationToken);
             
             return new OkObjectResult(isMember);
         }

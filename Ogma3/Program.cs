@@ -15,6 +15,9 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        // TODO: Reverts to old datetime behaviour, tracked by #50
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        
         var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
 
         var (telegramToken, telegramId) = await TelegramCredentials.Get();

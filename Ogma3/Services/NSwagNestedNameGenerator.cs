@@ -10,7 +10,7 @@ public class NSwagNestedNameGenerator : ISchemaNameGenerator
 {
     public string Generate(Type type)
     {
-        var typeAttribute = type.ToCachedType().GetTypeAttribute<JsonSchemaAttribute>();
+        var typeAttribute = type.ToCachedType().GetInheritedAttribute<JsonSchemaAttribute>();
             
         if (!string.IsNullOrEmpty(typeAttribute?.Name))
             return typeAttribute.Name;
