@@ -31,4 +31,4 @@ jobs:
     - name: Run bundle size
       uses: actions/setup-python@v2.2.2
       working-directory: ./Ogma3
-      run: python3 bundlesize.py
+    - run: python3 bundlesize.py
