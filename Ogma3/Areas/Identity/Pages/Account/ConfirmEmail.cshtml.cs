@@ -26,39 +26,39 @@ public class ConfirmEmailModel : PageModel
         _context = context;
     }
 
-    [TempData]
-    public string StatusMessage { get; set; }
-        
+    [TempData] 
+    public string StatusMessage { get; private set; }
+
     [BindProperty] 
-    [Required]
+    [Required] 
     public string UserName { get; set; }
 
-    [BindProperty]
-    [Required]
+    [BindProperty] 
+    [Required] 
     public string Code { get; set; }
 
     public IActionResult OnGet(string userName, string code)
     {
         UserName = userName;
         Code = code;
-            
+
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid) return Page();
-            
+
         var user = await _userManager.FindByNameAsync(UserName);
         if (user is null) return NotFound($"Unable to load user with name '{UserName}'.");
-            
+
         var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
         var result = await _userManager.ConfirmEmailAsync(user, code);
-            
+
         StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
 
         if (!result.Succeeded) return Page();
-            
+
         // Setup default blacklists
         var defaultBlockedRatings = await _context.Ratings
             .Where(r => r.BlacklistedByDefault)
@@ -69,25 +69,49 @@ public class ConfirmEmailModel : PageModel
             User = user,
             RatingId = dbr
         });
-        await _context.BlacklistedRatings.AddRangeAsync(blockedRatings);
-                
+        _context.BlacklistedRatings.AddRange(blockedRatings);
+
         // Setup profile comment thread subscription
         var thread = await _context.CommentThreads
-            .FirstOrDefaultAsync(ct => ct.UserId == user.Id);
-        await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+            .Where(ct => ct.UserId == user.Id)
+            .FirstOrDefaultAsync();
+
+        _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
         {
             CommentsThread = thread,
             OgmaUser = user
         });
-                
+
         // Setup default bookshelves
         var shelves = new Shelf[]
         {
-            new() { Name = "Favourites", Description = "My favourite stories", Color = "#ffff00", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 12 },
-            new() { Name = "Read Later", Description = "What I plan to read", Color = "#5555ff", IsDefault = true, IsPublic = true, TrackUpdates = true, IsQuickAdd = true, Owner = user, IconId = 22 },
+            new()
+            {
+                Name = "Favourites", 
+                Description = "My favourite stories", 
+                Color = "#ffff00", 
+                IsDefault = true, 
+                IsPublic = true,
+                TrackUpdates = true, 
+                IsQuickAdd = true, 
+                OwnerId = user.Id, 
+                IconId = 12
+            },
+            new()
+            {
+                Name = "Read Later", 
+                Description = "What I plan to read", 
+                Color = "#5555ff", 
+                IsDefault = true, 
+                IsPublic = true,
+                TrackUpdates = true, 
+                IsQuickAdd = true, 
+                OwnerId = user.Id, 
+                IconId = 22
+            },
         };
-        await _context.Shelves.AddRangeAsync(shelves);
-            
+        _context.Shelves.AddRange(shelves);
+
         await _context.SaveChangesAsync();
 
         return Page();

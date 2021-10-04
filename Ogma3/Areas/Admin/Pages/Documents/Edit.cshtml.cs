@@ -23,6 +23,7 @@ public class EditModel : PageModel
 
     [BindProperty]
     public InputModel Input { get; set; }
+    
     public class InputModel
     {
         [Required]
@@ -62,9 +63,11 @@ public class EditModel : PageModel
             .Where(d => d.Slug == Input.Slug)
             .FirstOrDefaultAsync();
 
+        if (oldVersion is null) return Page();
+
         var now = DateTime.Now;
             
-        await _context.Documents.AddAsync(new Document
+        _context.Documents.Add(new Document
         {
             Title   = oldVersion.Title,
             Slug    = oldVersion.Slug,

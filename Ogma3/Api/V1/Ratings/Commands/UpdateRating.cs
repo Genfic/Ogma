@@ -60,6 +60,8 @@ public static class UpdateRating
                 .Where(r => r.Id == id)
                 .FirstOrDefaultAsync(cancellationToken);
 
+            if (rating is null) return new NotFoundResult();
+
             rating.Name = name;
             rating.Description = description;
             rating.BlacklistedByDefault = blacklistedByDefault;
@@ -75,8 +77,6 @@ public static class UpdateRating
                 rating.Icon = Path.Join(_ogmaConfig.Cdn, fileData.Path);
                 rating.IconId = fileData.FileId;
             }
-            
-            _context.Ratings.Update(rating);
 
             await _context.SaveChangesAsync(cancellationToken);
 

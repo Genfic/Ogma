@@ -92,7 +92,7 @@ public class CreateModel : PageModel
             }
         };
 
-        await _context.Clubs.AddAsync(club);
+        _context.Clubs.Add(club);
         await _context.SaveChangesAsync();
 
         if (Input.Icon is not { Length: > 0 }) return RedirectToPage("./Index");

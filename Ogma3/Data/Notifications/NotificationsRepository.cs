@@ -28,12 +28,12 @@ public class NotificationsRepository
             Event = @event,
             Url = _urlHelper.Page(page, routeData) + (fragment is null ? string.Empty : $"#{fragment}")
         };
-        await _context.Notifications.AddAsync(notification);
+        _context.Notifications.Add(notification);
 
         var notificationRecipients = recipientIds
             .Select(u => new NotificationRecipients { RecipientId = u, Notification = notification });
             
-        await _context.NotificationRecipients.AddRangeAsync(notificationRecipients);
+        _context.NotificationRecipients.AddRange(notificationRecipients);
 
         await _context.SaveChangesAsync();
     }

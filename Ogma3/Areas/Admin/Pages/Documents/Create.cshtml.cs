@@ -38,7 +38,7 @@ public class CreateModel : PageModel
     {
         var now = DateTime.Now;
             
-        await _context.Documents.AddAsync(new Document
+        _context.Documents.Add(new Document
         {
             Title = Input.Title,
             Slug = Input.Title.Friendlify(),

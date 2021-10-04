@@ -120,7 +120,7 @@ public class ContentBlock : PageModel
             };
                 
             // Log the action
-            await _context.ModeratorActions.AddAsync(new ModeratorAction
+            _context.ModeratorActions.Add(new ModeratorAction
             {
                 StaffMemberId = staffId,
                 Description = ModeratorActionTemplates.ContentBlocked(Type, title, itemId, User.GetUsername())
@@ -130,7 +130,7 @@ public class ContentBlock : PageModel
         {
             _context.ContentBlocks.Remove(item.ContentBlock);
             
-            await _context.ModeratorActions.AddAsync(new ModeratorAction
+            _context.ModeratorActions.Add(new ModeratorAction
             {
                 StaffMemberId = staffId,
                 Description = ModeratorActionTemplates.ContentUnblocked(Type, title, itemId, User.GetUsername())

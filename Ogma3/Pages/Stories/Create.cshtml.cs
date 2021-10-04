@@ -127,7 +127,7 @@ public class CreateModel : PageModel
             Cover = "/img/placeholders/ph-250.png"
         };
 
-        await _context.Stories.AddAsync(story);
+        _context.Stories.Add(story);
         await _context.SaveChangesAsync();
 
         // Upload cover

@@ -157,8 +157,7 @@ public class EditModel : PageModel
         story.Tags = tags;
         story.Status = Input.Status;
         story.PublicationDate = Input.Published ? DateTime.Now : null;
-                
-        _context.Update(story);
+        
         await _context.SaveChangesAsync();
                 
         // Handle cover upload

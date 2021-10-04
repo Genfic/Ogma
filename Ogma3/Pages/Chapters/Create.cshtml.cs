@@ -136,7 +136,7 @@ public class CreateModel : PageModel
         story.Chapters.Add(chapter);       
             
         // Subscribe author to the comment thread
-        await _context.CommentsThreadSubscribers.AddAsync(new CommentsThreadSubscriber
+        _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
         {
             CommentsThread = chapter.CommentsThread,
             OgmaUserId = (long) uid

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Extensions.Hosting.AsyncInitialization;
@@ -23,7 +23,7 @@ public class DbSeedInitializer : IAsyncInitializer
     private readonly OgmaUserManager _userManager;
     private readonly RoleManager<OgmaRole> _roleManager;
 
-    private JsonData Data { get; set; }
+    private JsonData Data { get; }
         
     public DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager)
     {
@@ -33,7 +33,8 @@ public class DbSeedInitializer : IAsyncInitializer
             
         using var sr = new StreamReader("seed.json");
         var data = JsonSerializer.Deserialize<JsonData>(sr.ReadToEnd());
-        if (data != null)
+        
+        if (data is not null)
         {
             Data = data;
         }
@@ -42,23 +43,21 @@ public class DbSeedInitializer : IAsyncInitializer
             Log.Fatal("Could not read seed.json file to seed the database");
         }
     }
-        
-        
+    private sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
+
+
     public async Task InitializeAsync()
     {
         await SeedRoles();
         await SeedUserRoles();
-        SeedRatings();
-        SeedIcons();
+        await SeedRatings();
+        await SeedIcons();
         await SeedQuotes();
     }
         
-        
-        
+    
     private async Task SeedRoles()
     {
-        RoleBuilder rb;
-            
         var adminRole = new OgmaRole { Name = RoleNames.Admin, IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue};
         await new RoleBuilder(adminRole, _roleManager).Build();
             
@@ -80,41 +79,41 @@ public class DbSeedInitializer : IAsyncInitializer
         var user = await _userManager.FindByNameAsync("Angius");
         if (user is not null)
         {
-            await _userManager.AddToRoleAsync(user, "Admin");
+            await _userManager.AddToRoleAsync(user, RoleNames.Admin);
         }
     }
 
-    private void SeedRatings()
+    private async Task SeedRatings()
     {
         foreach (var rating in Data.Ratings)
         {
-            if (_context.Ratings.FirstOrDefault(r => r.Name == rating.Name) is null)
+            if (!await _context.Ratings.AnyAsync(r => r.Name == rating.Name))
             {
                 _context.Ratings.Add(rating);
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 
-    private void SeedIcons()
+    private async Task SeedIcons()
     {
         foreach (var i in Data.Icons)
         {
-            if (_context.Icons.FirstOrDefault(ico => ico.Name == i) is null)
+            if (!await _context.Icons.AnyAsync(ico => ico.Name == i))
             {
-                _context.Icons.Add(new Icon {Name = i});
+                _context.Icons.Add(new Icon { Name = i });
             }
         }
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
         
     private async Task SeedQuotes()
     {
         if (await _context.Quotes.AnyAsync()) return;
             
-        using var wc = new WebClient();
-        var json = wc.DownloadString(Data.QuotesUrl);
+        using var hc = new HttpClient();
+        var json = await hc.GetStringAsync(Data.QuotesUrl);
             
         if (string.IsNullOrEmpty(json)) return;
             
@@ -122,26 +121,14 @@ public class DbSeedInitializer : IAsyncInitializer
             .Deserialize<ICollection<JsonQuote>>(json)
             ?.Select(q => new Quote{ Body = q.Quote, Author = q.Author});
 
-        if (quotes == null) return;
+        if (quotes is null) return;
             
-        await _context.Quotes.AddRangeAsync(quotes);
+        _context.Quotes.AddRange(quotes);
             
         await _context.SaveChangesAsync();
     }
+
+    // ReSharper disable once ClassNeverInstantiated.Local
+    private sealed record JsonQuote(string Quote, string Author);
         
-    #region deserialization classes
-        
-    private class JsonQuote
-    {
-        public string Quote { get; set; }
-        public string Author { get; set; }
-    }
-    private class JsonData
-    {
-        public string[] Icons { get; set; }
-        public Rating[] Ratings { get; set; }
-        public string QuotesUrl { get; set; }
-    }
-        
-    #endregion
 }

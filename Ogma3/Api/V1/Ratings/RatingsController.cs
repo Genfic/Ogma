@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Ratings.Commands;
 using Ogma3.Api.V1.Ratings.Queries;
@@ -32,6 +33,8 @@ public class RatingsController : ControllerBase
 
     [HttpPut]
     [Authorize(Roles = RoleNames.Admin)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<RatingApiDto>> PutRating([FromForm] UpdateRating.Command data)
         => await _mediator.Send(data);
 

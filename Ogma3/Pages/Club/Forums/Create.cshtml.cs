@@ -71,7 +71,7 @@ public class CreateModel : PageModel
             CommentsThread = new CommentsThread()
         };
 
-        await _context.ClubThreads.AddAsync(clubThread);
+        _context.ClubThreads.Add(clubThread);
         await _context.SaveChangesAsync();
 
         return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
