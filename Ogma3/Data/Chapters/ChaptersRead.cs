@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
@@ -24,7 +27,12 @@ public class ChaptersRead
 
             builder
                 .Property(cr => cr.Chapters)
-                .HasConversion(new NpgHashsetConverter<long>());
+                .HasConversion(new NpgHashsetConverter<long>())
+                .Metadata.SetValueComparer(new ValueComparer<HashSet<long>>(
+                    (a, b) => a.SetEquals(b), 
+                    l => l.Aggregate(0, (i, l1) => HashCode.Combine(i, l1.GetHashCode())),
+                    h => h.ToHashSet()
+                ));
         }
     }
 }
