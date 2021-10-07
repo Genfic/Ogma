@@ -33,19 +33,19 @@
 
     <div class="o-form-group">
         <label asp-for="Input.Body"></label>
-        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true"></textarea>
+        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
         <span asp-validation-for="Input.Body"></span>
     </div>
     
     <div class="o-form-group">
         <label asp-for="Input.StartNotes"></label>
-        <textarea asp-for="Input.StartNotes" class="o-form-control active-border" rows="5"></textarea>
+        <textarea asp-for="Input.StartNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
         <span asp-validation-for="Input.StartNotes"></span>
     </div>
     
     <div class="o-form-group">
         <label asp-for="Input.EndNotes"></label>
-        <textarea asp-for="Input.EndNotes" class="o-form-control active-border" rows="5"></textarea>
+        <textarea asp-for="Input.EndNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
         <span asp-validation-for="Input.EndNotes"></span>
     </div>
     
@@ -76,5 +76,6 @@
 
 @section Scripts { 
     <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }
 

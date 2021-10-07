@@ -1,5 +1,5 @@
-@using System.Globalization
 @using Utils.Extensions
+@using System.Globalization
 @model StoryCard
 
 <div class="story-card">
@@ -24,7 +24,7 @@
     </header>
 
     <div class="hook">
-        <markdown>
+        <markdown preset="Basic">
             @Model.Hook
         </markdown>
     </div>

@@ -1,15 +1,15 @@
 ﻿@page "{id}/{slug?}"
 @inject OgmaConfig _config
 @using Ogma3.Infrastructure.Extensions
-@using Ogma3.Data.Reports
+@using Ogma3.Api.V1.Votes
+@using Ogma3.Infrastructure.Constants
+@using Ogma3.Api.V1.ShelfStories
 @using System.Globalization
-@using Ogma3.Api.V1.ChaptersReads
 @using Ogma3.Api.V1.Clubs
 @using Ogma3.Api.V1.Folders
 @using Ogma3.Api.V1.Reports
-@using Ogma3.Api.V1.ShelfStories
-@using Ogma3.Api.V1.Votes
-@using Ogma3.Infrastructure.Constants
+@using Ogma3.Data.Reports
+@using Ogma3.Api.V1.ChaptersReads
 @model Ogma3.Pages.StoryModel
 
 @{
@@ -118,7 +118,7 @@
             <cdn-img src="@Model.Story.Cover" alt="@Model.Story.Title cover image" class="cover" height="160" width="160" itemprop="thumbnailUrl"/>
 
             <div class="description" itemprop="abstract">
-                <markdown>@Model.Story.Description</markdown>
+                <markdown preset="Basic">@Model.Story.Description</markdown>
             </div>
 
         </div>

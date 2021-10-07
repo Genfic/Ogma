@@ -10,7 +10,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public class MarkdownTagHelper : TagHelper
 {
-    public Presets Preset { get; set; }
+    public Presets Preset { get; set; } = Presets.Basic;
 
     public string Class { get; set; } = "";
 

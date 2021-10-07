@@ -24,14 +24,14 @@
     <div class="o-form-group">
         <label asp-for="Input.Description"></label>
         <p class="desc">The long description, shown when user opens your story's page</p>
-        <textarea asp-for="Input.Description" class="o-form-control active-border" rows="10" data-wordcount="true"></textarea>
+        <textarea asp-for="Input.Description" class="o-form-control active-border" rows="10" data-wordcount="true" data-md="true"></textarea>
         <span asp-validation-for="Input.Description"></span>
     </div>
 
     <div class="o-form-group">
         <label asp-for="Input.Hook"></label>
         <p class="desc">The short description that appears on story lists</p>
-        <input asp-for="Input.Hook" class="o-form-control active-border">
+        <input asp-for="Input.Hook" class="o-form-control active-border" data-md="true">
         <span asp-validation-for="Input.Hook"></span>
     </div>
 
@@ -135,6 +135,7 @@
 
 @section Scripts {
     <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }
 
 @section CSS

@@ -25,9 +25,9 @@ public class ConfirmEmailModel : PageModel
         _userManager = userManager;
         _context = context;
     }
-
-    [TempData] 
-    public string StatusMessage { get; private set; }
+    
+    // ReSharper disable once MemberCanBePrivate.Global
+    [TempData] public string StatusMessage { get; set; }
 
     [BindProperty] 
     [Required] 

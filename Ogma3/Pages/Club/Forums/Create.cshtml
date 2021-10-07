@@ -21,7 +21,7 @@
     
     <div class="o-form-group">
         <label asp-for="ClubThread.Body"></label>
-        <textarea asp-for="ClubThread.Body" class="o-form-control active-border" rows="5"></textarea>
+        <textarea asp-for="ClubThread.Body" class="o-form-control active-border" rows="5" data-md="true"></textarea>
         <span asp-validation-for="ClubThread.Body"></span>
     </div>
     
@@ -37,6 +37,7 @@
 
 @section Scripts {
     <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }
 
 @section CSS
