@@ -33,12 +33,12 @@ using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.MediatR.Behaviours;
+using Ogma3.Infrastructure.Middleware;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
-using Ogma3.Services.Middleware;
 using Ogma3.Services.RssService;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
@@ -81,6 +81,11 @@ public class Startup
             .AddScoped<ClubRepository>()
             .AddScoped<StoriesRepository>()
             .AddScoped<NotificationsRepository>();
+        
+        // Middleware
+        services
+            .AddTransient<RequestTimestampMiddleware>()
+            .AddTransient<UserBanMiddleware>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<Startup>();
@@ -292,7 +297,7 @@ public class Startup
         app.UseAuthorization();
         app.UseBanMiddleware();
 
-        // Swagger
+        // OpenAPI
         app.UseOpenApi();
         app.UseSwaggerUi3();
 

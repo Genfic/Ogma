@@ -8,7 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Services.Middleware;
+using Ogma3.Infrastructure.Middleware;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Infractions.Commands;

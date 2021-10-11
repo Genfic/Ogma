@@ -23,7 +23,12 @@
 	"scripts": {
 		"build": "gulp all",
 		"dev": "gulp watchAll",
-		"score": "lighthouse https://localhost:5001 --view"
+		"score": "lighthouse https://localhost:5001 --view",
+		"swc": "swc ./Ogma3/wwwroot/js/src -s -d ./Ogma3/wwwroot/js/dist"
 	},
-	"name": "Ogma3"
+	"name": "Ogma3",
+	"dependencies": {
+		"@swc/cli": "^0.1.51",
+		"@swc/core": "^1.2.93"
+	}
 }

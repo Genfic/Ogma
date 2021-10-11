@@ -24,7 +24,7 @@ public class ThrottleAttribute : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext filterContext)
     {
         var cache = filterContext.HttpContext.RequestServices.GetService<IMemoryCache>();
-        var seconds = Convert.ToInt32(TimeUnit);
+        var seconds = (int)TimeUnit;
 
         var controllerActionDescriptor = (ControllerActionDescriptor) filterContext.ActionDescriptor;
         var key = string.Join(
@@ -38,7 +38,7 @@ public class ThrottleAttribute : ActionFilterAttribute
  
         // increment the cache value
         var cnt = 1;
-        if (cache.Get(key) != null) {
+        if (cache.Get(key) is not null) {
             cnt = (int)cache.Get(key) + 1;
         }
 
@@ -52,7 +52,7 @@ public class ThrottleAttribute : ActionFilterAttribute
             
         filterContext.Result = new ContentResult
         {
-            Content = "You are allowed to make only " + Count + " requests per " + TimeUnit.ToString().ToLower()
+            Content = $"You are allowed to make only {Count} requests per {TimeUnit.ToString().ToLower()}"
         };
         filterContext.HttpContext.Response.StatusCode = 429;
         filterContext.HttpContext.Response.Headers.Add("Retry-After", (seconds / Count).ToString());

@@ -1,12 +1,12 @@
-@using Ogma3.Services.Middleware
 @using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Constants
+@using Ogma3.Infrastructure.Middleware
 @inject SignInManager<OgmaUser> _signInManager
 @inject OgmaConfig _config
 
 @{
     var genTime = DateTime.UtcNow - (DateTime) (Context?.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
-    var renderTime = DateTime.Now - (DateTime) ViewData["render_start"];
+    var renderTime = DateTime.Now - (DateTime) (ViewData["render_start"] ?? DateTime.UtcNow);
 }
 
 <footer class="footer">

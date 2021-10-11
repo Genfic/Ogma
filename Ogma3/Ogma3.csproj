@@ -255,6 +255,11 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\bundles\bundle.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\markdown-toolbar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\markdown-toolbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\markdown-toolbar.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js.map" />
   </ItemGroup>
 
 

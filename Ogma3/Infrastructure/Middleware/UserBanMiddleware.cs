@@ -11,34 +11,34 @@ using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
 using Serilog;
 
-namespace Ogma3.Services.Middleware;
+namespace Ogma3.Infrastructure.Middleware;
 
-public class UserBanMiddleware
+public class UserBanMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly IMemoryCache _cache;
+    private readonly ApplicationDbContext _context;
         
-    public UserBanMiddleware(IMemoryCache cache, RequestDelegate next)
+    public UserBanMiddleware(IMemoryCache cache, ApplicationDbContext context)
     {
         _cache = cache;
-        _next = next;
+        _context = context;
     }
         
     public static string CacheKey(long id) => $"u{id}_Ban";
-        
-    public async Task InvokeAsync(HttpContext context, ApplicationDbContext dbContext)
+
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var uid = context.User.GetNumericId();
         if (uid is null)
         {
-            await _next(context);
+            await next(context);
             return;
         }
 
         var banDate = await _cache.GetOrCreateAsync(CacheKey((long)uid), async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(30);
-            return await dbContext.Infractions
+            return await _context.Infractions
                 .Where(i => i.UserId == uid)
                 .Where(i => i.Type == InfractionType.Ban)
                 .Where(i => i.RemovedAt == null)
@@ -49,7 +49,7 @@ public class UserBanMiddleware
 
         if (banDate == default)
         {
-            await _next(context);
+            await next(context);
             return;
         }
 
@@ -64,7 +64,7 @@ public class UserBanMiddleware
             }
             else if (context.Request.Path.StartsWithSegments("/Ban"))
             {
-                await _next(context);
+                await next(context);
             }
             else
             {
@@ -73,15 +73,13 @@ public class UserBanMiddleware
         }
         else
         {
-            await _next(context);
+            await next(context);
         }
     }
 }
     
 public static class UserBanMiddlewareExtension
 {
-    public static IApplicationBuilder UseBanMiddleware(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<UserBanMiddleware>();
-    }
+    public static IApplicationBuilder UseBanMiddleware(this IApplicationBuilder builder) 
+        => builder.UseMiddleware<UserBanMiddleware>();
 }
