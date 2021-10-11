@@ -9,23 +9,18 @@ details.infraction {
   margin-top: .5rem;
   
   summary {
+    color: v.$foreground-50;
+    
     &.passed {
       text-decoration: line-through v.$foreground-75;
     }
-  }
-  
-  .time {
-    font-size: 85%;
-    color: v.$foreground-75;
-    &:hover {
+    
+    >time {
       color: v.$foreground;
     }
   }
   
   .reason {
-    border-top: 1px solid v.$foreground-50;
-    padding-top: .5rem;
-    margin-top: .5rem;
   }
   
   .type {
@@ -39,6 +34,10 @@ details.infraction {
 
     &.warning {
       color: rgba(255, 251, 0, 0.75);
+    }
+    
+    &.note {
+      color: royalblue;
     }
   }
 }

@@ -13,12 +13,15 @@ new Vue({
 		image: null,
 	},
 	methods: {
-		manageBan: function () {
-			this.$refs.manageBan.visible = true;
+		manageInfractions: function() {
+			this.$refs.manage.visible = true;	
 		},
 		
-		manageMute: function () {
-			this.$refs.manageMute.visible = true;
+		removeInfraction: async function(id) {
+			const res = await axios.delete(`${this.infractionsRoute}/${id}`, {
+				headers: { "RequestVerificationToken": this.csrf }
+			});
+			if (res) location.reload();
 		},
 		
 		saveRoles: async function () {
@@ -45,6 +48,7 @@ new Vue({
 			if (!this.image) {
 				this.image = document.createElement('img');
 				this.image.src = e.target.href;
+				this.image.height = 200;
 				this.image.style.position = 'absolute';
 				this.image.style.pointerEvents = 'none';
 

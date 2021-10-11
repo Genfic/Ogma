@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.V1.Infractions.Commands;
 using Ogma3.Api.V1.Infractions.Queries;
@@ -26,12 +27,12 @@ public class InfractionsController : ControllerBase
         => await _mediator.Send(new GetInfractionDetails.Query(id));
 
     [HttpPost]
-    [IgnoreAntiforgeryToken]
     public async Task<ActionResult<CreateInfraction.Response>> AddInfraction(CreateInfraction.Command command)
         => await _mediator.Send(command);
 
     [HttpDelete("{id:long}")]
-    [IgnoreAntiforgeryToken]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(DeactivateInfraction.Response), StatusCodes.Status200OK)]
     public async Task<ActionResult<DeactivateInfraction.Response>> DeactivateInfraction(long id)
         => await _mediator.Send(new DeactivateInfraction.Command(id));
 }

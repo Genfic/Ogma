@@ -21,9 +21,8 @@
     
     <details class="infraction">
         <summary class="@(isDone ? "passed" : null)">
-            <b class="type @i.Type.ToString().ToLower()">@i.Type</b> until <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
+            <b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
         </summary>
-        <div class="time">Issued on <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time></div>
         @if(i.RemovedAt is {} d)
         {
             <div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time></div>

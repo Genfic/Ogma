@@ -32,7 +32,9 @@ public static class DeactivateInfraction
             var infraction = await _context.Infractions
                 .Where(i => i.Id == request.InfractionId)
                 .FirstOrDefaultAsync(cancellationToken);
-                
+
+            if (infraction is null) return new NotFoundResult();
+            
             infraction.RemovedAt = DateTime.Now;
             infraction.RemovedById = (long)_uid;
 

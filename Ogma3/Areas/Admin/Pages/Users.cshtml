@@ -1,7 +1,8 @@
 @page
-@using System.Globalization
+@using System.Text.Json
 @using Ogma3.Api.V1.Infractions
 @using Ogma3.Api.V1.Users
+@using Ogma3.Data.Infractions
 @model Ogma3.Areas.Admin.Pages.Users
 
 @{
@@ -13,6 +14,8 @@
 {
     var u = Model.OgmaUser;
 
+    <h3>User Info</h3>
+    
     <a asp-page="/User/Index" asp-route-name="@u.Name.ToLower()">Visit profile</a>
 
     <table class="o-table">
@@ -65,45 +68,40 @@
                 <button v-on:click="saveRoles">Save</button>
             </td>
         </tr>
-        <tr>
-            <td class="nb">Banned until</td>
-            <td>
-                <div class="flex">
-                    <time datetime="@u.BannedUntil?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                        @u.BannedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)
-                    </time>
-                    <button v-on:click="manageBan">Manage</button>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td class="nb">Muted until</td>
-            <td>
-                <div class="flex">
-                    <time datetime="@u.MutedUntil?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                        @u.MutedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)
-                    </time>
-                    <button v-on:click="manageMute">Manage</button>
-                </div>
-            </td>
-        </tr>
     </table>
-
-    <manage-ban ref="manageBan"
-                action-name="Ban"
-                :user-id="@u.Id"
-                route="@Url.RouteUrl(nameof(UsersController))"
-                ban-date="@u.BannedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
-                :duration="@Math.Round(((u.BannedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
-    </manage-ban>
-
-    <manage-ban ref="manageMute"
-                action-name="Mute"
-                :user-id="@u.Id"
-                route="@Url.RouteUrl(nameof(UsersController))"
-                ban-date="@u.MutedUntil?.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)"
-                :duration="@Math.Round(((u.MutedUntil ?? DateTime.Now) - DateTime.Now).TotalDays)">
-    </manage-ban>
+    
+    <br>
+    <h3>Infractions</h3>
+    
+    <button class="btn btn-primary" v-on:click="manageInfractions">Create new</button>
+    
+    @foreach (var i in Model.OgmaUser.Infractions)
+    {
+        var isDone = i.ActiveUntil < DateTime.Now || i.RemovedAt is not null;
+    
+        <details class="infraction">
+            <summary class="@(isDone ? "passed" : null)">
+                <b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
+            </summary>
+            @if(i.RemovedAt is {} d)
+            {
+                <div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time> by @i.RemovedBy</div>
+            }
+            <div class="reason"><b>Reason:</b> @i.Reason</div>
+            @if (i.RemovedAt is null)
+            {
+                <br>
+                <button class="btn" v-on:click="removeInfraction(@i.Id)">Remove</button>
+            }
+        </details>
+    }
+    
+    <manage-infraction
+        ref="manage"
+        route="@Url.RouteUrl(nameof(InfractionsController))"
+        :types="@(JsonSerializer.Serialize(Enum.GetNames<InfractionType>()))"
+        :user-id="@Model.OgmaUser.Id">
+    </manage-infraction>
 }
 else
 {
@@ -136,6 +134,6 @@ else
 <div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div>
 
 @section Scripts {
-    <script src="~/js/dist/admin/components/manage-ban-component.min.js" asp-append-version="true"></script>
+    <script src="~/js/dist/admin/components/manage-infraction-component.min.js" asp-append-version="true"></script>
     <script src="~/js/dist/admin/users.min.js" asp-append-version="true"></script>
 }
