@@ -92,9 +92,15 @@ $title-height: 2rem
           
         >.title
           color: v.$foreground
+          display: flex
+          align-items: center
           &:hover
             color: v.$accent
             text-decoration: underline
+            
+        >.warning
+          font-size: inherit
+          color: v.$yellow-75
           
         >.date
           font-size: .8rem

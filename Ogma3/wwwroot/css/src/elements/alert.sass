@@ -6,41 +6,40 @@ $padding: 1rem
 .alert
   position: relative
   padding: $padding
-  display: flex
   +ab.active-border
   
   &:not(:first-child)
     margin-top: .25rem
   
   &-success
-    background-color: v.$green-10
-    border-color: v.$green-25
+    background-color: v.$green-25
+    border-color: v.$green-50
     &:hover
-      border-color: v.$green-50
+      border-color: v.$green-75
     >i.icon
       color: v.$green
     
   &-danger
-    background-color: v.$red-10
-    border-color: v.$red-25
+    background-color: v.$red-25
+    border-color: v.$red-50
     &:hover
-      border-color: v.$red-50
+      border-color: v.$red-75
     >i.icon
       color: v.$red
       
   &-info
-    background-color: v.$blue-10
-    border-color: v.$blue-25
+    background-color: v.$blue-25
+    border-color: v.$blue-50
     &:hover
-      border-color: v.$blue-50
+      border-color: v.$blue-75
     >i.icon
       color: v.$blue
     
   &-warning
-    background-color: v.$yellow-10
-    border-color: v.$yellow-25
+    background-color: v.$yellow-25
+    border-color: v.$yellow-50
     &:hover
-      border-color: v.$yellow-50
+      border-color: v.$yellow-75
     >i.icon
       color: v.$yellow
       

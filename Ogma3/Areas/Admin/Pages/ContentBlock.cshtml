@@ -8,14 +8,15 @@
     ViewData["ActivePage"] = ManageNavPages.ContentBlock;
 }
 
-@if (Model.Type is null)
+@if (Model.Item is null)
 {
     <form method="GET" class="auto">
         <label for="type">Type</label>
         <select name="type" id="type">
-            <option value="story">Story</option>
-            <option value="chapter">Chapter</option>
-            <option value="blogpost">Blogpost</option>
+            @foreach (var t in Enum.GetNames<ContentBlock.ItemType>())
+            {
+                <option value="@t">@t</option>
+            }
         </select>
         
         <label for="id">Id</label>
@@ -26,32 +27,23 @@
 }
 else
 {
-    var blocked = false;
-    var reason = "";
-    
-    if (Model.Story is not null)
+    <h3><span class="text-faded">@(Model.Item?.Type):</span> @Model.Item.Title</h3>
+    if (Model.Item.Subtitle is not null)
     {
-        blocked = Model.Story.ContentBlockId != null;
-        reason = Model.Story.ContentBlock?.Reason;
-        <h2>Story: @Model.Story.Title</h2>
-    }
-    else if (Model.Chapter is not null)
-    {
-        blocked = Model.Chapter.ContentBlockId != null;
-        reason = Model.Chapter.ContentBlock?.Reason;
-        <h2>Chapter: @Model.Chapter.Title</h2>
-        <h3>Story: @Model.Chapter.Story.Title</h3>
-    }
-    else if (Model.Blogpost is not null)
-    {
-        blocked = Model.Blogpost.ContentBlockId != null;
-        reason = Model.Blogpost.ContentBlock?.Reason;
-        <h2>Blogpost: @Model.Blogpost.Title</h2>
+        <h4>@Model.Item.Subtitle</h4>
     }
 
-    <form method="POST" class="auto">
+    <form method="POST" class="auto" asp-page-handler="@(Model.Item.Blocked ? "Unblock" : "Block")">
+        @if (TempData["error"] is not null)
+        {
+            <div class="validation-summary-errors">@TempData["error"]</div>
+        }
         <label for="reason">Reason</label>
-        <input type="text" name="reason" id="reason" value="@reason" readonly="@(blocked ? true : false)">
-        <input type="submit" value="@(blocked ? "Unblock" : "Block")">
+        <input type="text" name="reason" id="reason" value="@Model.Item.Reason" readonly="@Model.Item.Blocked">
+
+        <input type="hidden" name="type" value="@Model.Type">
+        <input type="hidden" name="id" value="@Model.Id">
+
+        <input type="submit" value="@(Model.Item.Blocked ? "Unblock" : "Block")">
     </form>
 }

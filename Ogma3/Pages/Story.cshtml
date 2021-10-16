@@ -13,7 +13,7 @@
 @model Ogma3.Pages.StoryModel
 
 @{
-    ViewData["Title"] = Model.Story.Title;
+    ViewData["Title"] = Model.Story!.Title;
     ViewData["Description"] = Model.Story.Hook;
     ViewData["Rating"] = Model.Story.Rating.Name;
 
@@ -27,6 +27,12 @@
 }
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
+
+@if (Model.Story.ContentBlock is not null)
+{
+    <partial name="Shared/_ContentBlockCard" model="Model.Story.ContentBlock"/>
+    <br>
+}
 
 <div id="story-app">
     <div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
@@ -66,12 +72,6 @@
             {
                 <span class="action-btn large red">
                     <icon class="icon" icon="visibility_off"></icon>
-                </span>
-            }
-            @if (Model.Story.ContentBlockId is not null)
-            {
-                <span class="action-btn large red" title="Content blocked by moderator">
-                    <icon class="icon" icon="lock"></icon>
                 </span>
             }
             @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
@@ -179,9 +179,16 @@
                             <i class="material-icons-outlined">visibility_off</i>
                         </button>
 
-                        <span class="order">@(order++)</span>
+                        <span class="order">@(order++)</span>        
+                        
+                        @if (c.IsBlocked)
+                        {
+                            <icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
+                        }
 
-                        <a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">@c.Title</a>
+                        <a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+                            @c.Title
+                        </a>
 
                         <time class="date" datetime="@c.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
                             @c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)

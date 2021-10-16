@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
@@ -19,11 +21,17 @@ public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, O
     public override async Task<ClaimsPrincipal> CreateAsync(OgmaUser user)
     {
         var principal = await base.CreateAsync(user);
+
+        var isStaff = await RoleManager.Roles
+            .Where(r => r.IsStaff)
+            .Where(r => r.Users.Any(u => u.Id == user.Id))
+            .AnyAsync();
             
         ((ClaimsIdentity)principal.Identity)?.AddClaims(new Claim[]
         {
             new (ClaimTypes.Avatar, user.Avatar ?? string.Empty),
             new (ClaimTypes.Title, user.Title ?? string.Empty),
+            new (ClaimTypes.IsStaff, isStaff.ToString())
         });
 
         return principal;
@@ -33,5 +41,6 @@ public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, O
     {
         public const string Avatar = "Avatar";
         public const string Title  = "Title";
+        public const string IsStaff = "IsStaff";
     }
 }

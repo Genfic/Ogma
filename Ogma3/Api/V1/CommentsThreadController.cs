@@ -67,12 +67,16 @@ public class CommentsThreadController : ControllerBase
     [IgnoreAntiforgeryToken]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<bool>> LockThreadAsync([FromBody]PostData data)
     {
         var permission = await GetPermissionsAsync(data.Id);
         if (!permission.IsAllowed) return Unauthorized();
             
         var thread = await _context.CommentThreads.FindAsync(data.Id);
+
+        if (thread is null) return NotFound();
+        
         thread.LockDate = thread.LockDate is null ? DateTime.Now : null;
 
         if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
@@ -116,7 +120,7 @@ public class CommentsThreadController : ControllerBase
             }
             else
             {
-                Log.Error("Comment thread was locked in an unexpected way. Permission {0}", permission);
+                Log.Error("Comment thread was locked in an unexpected way. Permission {Permission}", permission);
             }
         }
 

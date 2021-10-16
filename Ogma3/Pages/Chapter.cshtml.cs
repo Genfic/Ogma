@@ -1,5 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -24,36 +26,36 @@ public class ChapterModel : PageModel
         _mapper = mapper;
     }
 
-    public ChapterDetails Chapter { get; set; }
+    public ChapterDetails? Chapter { get; private set; }
 
     public class ChapterDetails
     {
         public long StoryId { get; init; }
-        public string StoryTitle { get; init; }
-        public string StorySlug { get; init; }
+        public string StoryTitle { get; init; } = null!;
+        public string StorySlug { get; init; } = null!;
         public long StoryAuthorId { get; init; }
-        public string StoryRatingName { get; init; }
+        public string StoryRatingName { get; init; } = null!;
         public long Id { get; init; }
-        public string Title { get; init; }
-        public string Slug { get; init; }
+        public string Title { get; init; } = null!;
+        public string Slug { get; init; } = null!;
         public uint Order { get; init; }
         public DateTime? PublicationDate { get; init; }
-        public string Body { get; init; }
-        public string StartNotes { get; init; }
-        public string EndNotes { get; init; }
-        public CommentsThreadDto CommentsThread { get; init; }
-        public long? ContentBlockId { get; init; }
+        public string Body { get; init; } = null!;
+        public string? StartNotes { get; init; }
+        public string? EndNotes { get; init; }
+        public CommentsThreadDto CommentsThread { get; init; } = null!;
         public ChapterMicroDto? Previous { get; set; }
         public ChapterMicroDto? Next { get; set; }
+        public ContentBlockCard? ContentBlock { get; set; }
     }
 
     public class ChapterMicroDto
     {
         public long Id { get; init; }
-        public string Title { get; init; }
-        public string Slug { get; init; }
+        public string Title { get; init; } = null!;
+        public string Slug { get; init; } = null!;
 
-        public uint Order { get; set; }
+        public uint Order { get; init; }
     }
 
     public class MappingProfile : Profile
@@ -72,8 +74,8 @@ public class ChapterModel : PageModel
         Chapter = await _context.Chapters
             .Where(c => c.Id == id)
             .Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
-            .Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid)
-            .ProjectTo<ChapterDetails>(_mapper.ConfigurationProvider)
+            .Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid || User.IsStaff())
+            .Select(MapChapterDetails)
             .FirstOrDefaultAsync();
             
         if (Chapter is null) return NotFound();
@@ -81,6 +83,7 @@ public class ChapterModel : PageModel
         Chapter.Previous = await _context.Chapters
             .Where(c => c.StoryId == Chapter.StoryId)
             .Where(c => c.PublicationDate != null)
+            .Where(c => c.ContentBlockId == null)
             .Where(c => c.Order < Chapter.Order)
             .OrderBy(c => c.Order)
             .ProjectTo<ChapterMicroDto>(_mapper.ConfigurationProvider)
@@ -88,6 +91,7 @@ public class ChapterModel : PageModel
         Chapter.Next = await _context.Chapters
             .Where(c => c.StoryId == Chapter.StoryId)
             .Where(c => c.PublicationDate != null)
+            .Where(c => c.ContentBlockId == null)
             .Where(c => c.Order > Chapter.Order)
             .OrderBy(c => c.Order)
             .ProjectTo<ChapterMicroDto>(_mapper.ConfigurationProvider)
@@ -97,4 +101,33 @@ public class ChapterModel : PageModel
             
         return Page();
     }
+
+    private static Expression<Func<Chapter, ChapterDetails>> MapChapterDetails => c => new ChapterDetails
+    {
+        Id = c.Id,
+        Title = c.Title,
+        Slug = c.Slug,
+        Order = c.Order,
+        Body = c.Body,
+        StartNotes = c.StartNotes,
+        EndNotes = c.EndNotes,
+        StoryRatingName = c.Story.Rating.Name,
+        PublicationDate = c.PublicationDate,
+        StoryId = c.StoryId,
+        StoryTitle = c.Story.Title,
+        StorySlug = c.Story.Slug,
+        StoryAuthorId = c.Story.AuthorId,
+        CommentsThread = new CommentsThreadDto
+        {
+            Id = c.CommentsThread.Id,
+            LockDate = c.CommentsThread.LockDate,
+            Type = nameof(Data.Chapters.Chapter)
+        },
+        ContentBlock = c.ContentBlock == null ? null : new ContentBlockCard
+        {
+            Reason = c.ContentBlock.Reason,
+            DateTime = c.ContentBlock.DateTime,
+            IssuerUserName = c.ContentBlock.Issuer.UserName
+        }
+    };
 }

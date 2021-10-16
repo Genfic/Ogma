@@ -1,13 +1,13 @@
 ﻿@page "{id}/{slug?}"
-@using System.Globalization
 @using Ogma3.Infrastructure.Extensions
+@using System.Globalization
+@using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.Reports
-@using Ogma3.Infrastructure.Constants
 @model Ogma3.Pages.ChapterModel
 
 @{
-    var desc = $"{Model.Chapter.StoryTitle} – chapter {Model.Chapter.Order}";
+    var desc = $"{Model.Chapter!.StoryTitle} – chapter {Model.Chapter.Order}";
 
     ViewData["Title"] = Model.Chapter.Title;
     ViewData["Description"] = desc;
@@ -39,7 +39,7 @@
             </span>
         }
 
-        @if (User?.Identity?.IsAuthenticated ?? false)
+        @if (User.Identity?.IsAuthenticated ?? false)
         {
             <div class="actions">
 
@@ -47,13 +47,7 @@
                     <icon class="icon" icon="note_add"></icon>
                     <span class="name">Write about it</span>
                 </a>
-
-                @if (Model.Chapter.ContentBlockId is not null)
-                {
-                    <span class="not-published" title="Content blocked by moderator">
-                        <icon class="icon" icon="lock"></icon>
-                    </span>
-                }
+                
                 @if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
                 {
                     <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
@@ -75,6 +69,11 @@
             </div>
         }
 
+        @if (Model.Chapter.ContentBlock is not null)
+        {
+            <partial name="Shared/_ContentBlockCard" model="Model.Chapter.ContentBlock"/>
+        }
+        
         <div class="body-container">
 
             @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))

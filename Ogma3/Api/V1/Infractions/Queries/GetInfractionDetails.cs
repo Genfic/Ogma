@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using System.Threading;
@@ -34,7 +35,7 @@ public static class GetInfractionDetails
                     Reason = i.Reason,
                     Type = i.Type,
                     IssuedByName = i.IssuedBy.UserName,
-                    RemovedByName = i.RemovedBy.UserName
+                    RemovedByName = i.RemovedBy == null ? null : i.RemovedBy.UserName
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -45,14 +46,14 @@ public static class GetInfractionDetails
     public sealed record Result
     {
         public long Id { get; init; }
-        public string UserName { get; init; }
+        public string UserName { get; init; } = null!;
         public long UserId { get; init; }
         public DateTime IssueDate { get; init; }
         public DateTime ActiveUntil { get; init; }
         public DateTime? RemovedAt { get; init; }
-        public string Reason { get; init; }
+        public string Reason { get; init; } = null!;
         public InfractionType Type { get; init; }
-        public string IssuedByName { get; init; }
+        public string IssuedByName { get; init; } = null!;
         public string? RemovedByName { get; init; }
     }
 }

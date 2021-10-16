@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,8 @@ public static class UpdateRoles
                 .Where(u => u.Id == userId)
                 .Include(u => u.Roles)
                 .FirstOrDefaultAsync(cancellationToken);
+
+            if (user is null) return new NotFoundResult();
 
             var newRoles = await _context.OgmaRoles
                 .Where(ur => roles.Contains(ur.Id))

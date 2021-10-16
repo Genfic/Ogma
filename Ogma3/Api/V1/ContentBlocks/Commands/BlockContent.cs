@@ -14,6 +14,7 @@ namespace Ogma3.Api.V1.ContentBlocks.Commands;
 
 public static class BlockContent
 {
+    // ReSharper disable once UnusedTypeParameter
     public sealed record Command<T>(long ObjectId, string Reason) : IRequest<ActionResult> where T : BaseModel, IBlockableContent;
 
     public class Handler<T> : IRequestHandler<Command<T>, ActionResult> where T : BaseModel, IBlockableContent

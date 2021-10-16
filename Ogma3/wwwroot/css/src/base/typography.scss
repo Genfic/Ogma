@@ -41,8 +41,14 @@ a {
   &-green {
     color: v.$green;
   }
+  &-yellow {
+    color: v.$yellow;
+  }
   &-red {
     color: v.$red;
+  }
+  &-faded {
+    color: v.$foreground-75;
   }
 }
     

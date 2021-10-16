@@ -9,7 +9,10 @@
     <Company>Ogma3</Company>
     <Product>Ogma3</Product>
     <Nullable>disable</Nullable>
+<!--    <WarningsAsErrors>Nullable</WarningsAsErrors>-->
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
 

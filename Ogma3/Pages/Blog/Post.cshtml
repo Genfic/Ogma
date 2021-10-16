@@ -1,14 +1,14 @@
 @page "{id}/{slug?}"
-@using System.Globalization
 @using Utils.Extensions
 @using Ogma3.Infrastructure.Extensions
+@using System.Globalization
+@using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.Reports
-@using Ogma3.Infrastructure.Constants
 @model Ogma3.Pages.Blog.DetailsModel
 
 @{
-    var desc = Model.Blogpost.Body.Length > 150 
+    var desc = Model.Blogpost!.Body.Length > 150 
         ? Model.Blogpost.Body[..150]
         : Model.Blogpost.Body;
 
@@ -50,12 +50,6 @@
                 <span class="name">Edit</span>
             </a>
         }
-        @if (Model.Blogpost.ContentBlockId is not null)
-        {
-            <span class="not-published" title="Content blocked by moderator">
-                <icon class="icon" icon="lock"></icon>
-            </span>
-        }
         @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
         {
             <a title="Manage" class="action-btn red" target="_blank"
@@ -64,13 +58,18 @@
                 <icon class="icon" icon="shield"></icon>
             </a>
         }
-        @if (User?.Identity?.IsAuthenticated ?? false)
+        @if (User.Identity?.IsAuthenticated ?? false)
         {
             <button title="Report" class="action-btn red" v-on:click="report">
                 <icon class="icon" icon="flag"></icon>
             </button>
         }
     </div>
+    
+    @if (Model.Blogpost.ContentBlock is not null)
+    {
+        <partial name="Shared/_ContentBlockCard" model="Model.Blogpost.ContentBlock"/>
+    }
 
     @if (Model.IsUnavailable)
         {

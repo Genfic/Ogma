@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -19,83 +20,86 @@ namespace Ogma3.Areas.Admin.Pages;
 public class ContentBlock : PageModel
 {
     private readonly ApplicationDbContext _context;
+    public ContentBlock(ApplicationDbContext context) => _context = context;
 
-    public ContentBlock(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    [BindProperty] 
+    public ItemType? Type { get; set; }
 
-    [BindProperty]
-    public string Type { get; set; }
-    [BindProperty]
+    [BindProperty] 
     public long Id { get; set; }
-    public Story? Story { get; set; }
-    public Chapter? Chapter { get; set; }
-    public Blogpost? Blogpost { get; set; }
+    
+    public ItemData? Item { get; private set; }
 
-    public async Task<ActionResult> OnGet(string? type, long? id)
+    public async Task<ActionResult> OnGet(ItemType? type, long? id)
     {
         if (type is null || id is null)
         {
             return Page();
         }
-            
-        Type = type;
-        Id = (long) id;
 
-        switch (type)
+        Type = type;
+        Id = (long)id;
+
+        Item = type switch
         {
-            case "story":
-                Story = await _context.Stories
-                    .Where(i => i.Id == id)
-                    .Include(i => i.ContentBlock)
-                    .FirstOrDefaultAsync();
-                break;
-            case "chapter":
-                Chapter = await _context.Chapters
-                    .Where(i => i.Id == id)
-                    .Include(i => i.ContentBlock)
-                    .Include(i => i.Story)
-                    .FirstOrDefaultAsync();
-                break;
-            case "blogpost":
-                Blogpost = await _context.Blogposts
-                    .Where(i => i.Id == id)
-                    .Include(i => i.ContentBlock)
-                    .FirstOrDefaultAsync();
-                break;
-            default:
-                return NotFound();
-        }
+            ItemType.Story => await _context.Stories.Where(s => s.Id == id)
+                .Select(s => new ItemData
+                {
+                    Blocked = s.ContentBlockId != null,
+                    Reason = s.ContentBlock == null ? null : s.ContentBlock.Reason,
+                    Title = s.Title,
+                    Type = nameof(Story)
+                })
+                .FirstOrDefaultAsync(),
+            ItemType.Chapter => await _context.Chapters.Where(c => c.Id == id)
+                .Select(c => new ItemData
+                {
+                    Blocked = c.ContentBlockId != null,
+                    Reason = c.ContentBlock == null ? null : c.ContentBlock.Reason,
+                    Title = c.Title,
+                    Subtitle = c.Story.Title,
+                    Type = nameof(Chapter)
+                })
+                .FirstOrDefaultAsync(),
+            ItemType.Blogpost => await _context.Blogposts.Where(b => b.Id == id)
+                .Select(b => new ItemData
+                {
+                    Blocked = b.ContentBlockId != null,
+                    Reason = b.ContentBlock == null ? null : b.ContentBlock.Reason,
+                    Title = b.Title,
+                    Type = nameof(Blogpost)
+                })
+                .FirstOrDefaultAsync(),
+            _ => null
+        };
 
         return Page();
     }
 
-    public async Task<ActionResult> OnPost([FromForm] PostData data)
+    public async Task<ActionResult> OnPostBlock([FromForm] PostData data)
     {
-        var uid = User.GetNumericId();
-        if (uid is null) return Unauthorized();
-        var staffId = (long) uid;
-
-        var result = Type switch
+        if (data.Reason.Length < 20)
         {
-            "story" => await TryBlockUnblockContent<Story>(Id, data.Reason ?? "", staffId),
-            "chapter" => await TryBlockUnblockContent<Chapter>(Id, data.Reason ?? "", staffId),
-            "blogpost" => await TryBlockUnblockContent<Blogpost>(Id, data.Reason ?? "", staffId),
+            TempData["error"] = "Reason has to be at least 20 characters long";
+            return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
+        }
+
+        if (User.GetNumericId() is not { } staffId) return Unauthorized();
+        _ = Type switch
+        {
+            ItemType.Story => await TryBlockContent<Story>(Id, data.Reason, staffId),
+            ItemType.Chapter => await TryBlockContent<Chapter>(Id, data.Reason, staffId),
+            ItemType.Blogpost => await TryBlockContent<Blogpost>(Id, data.Reason, staffId),
             _ => false
         };
 
-        if (!result) ModelState.AddModelError("", $"Could not block/unblock the {Type}");
-
         return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
     }
-        
-    private async Task<bool> TryBlockUnblockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
+    
+    private async Task<bool> TryBlockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
     {
-        var modId = User.GetNumericId();
-        if (modId is null) return false;
-        var staffId = (long) modId;
-            
+        if (User.GetNumericId() is not { } staffId) return false;
+
         var item = await _context.Set<T>()
             .Where(i => i.Id == itemId)
             .Include(i => i.ContentBlock)
@@ -110,37 +114,89 @@ public class ContentBlock : PageModel
             _ => ""
         };
 
-        if (item.ContentBlock is null)
+        if (item.ContentBlock is not null) return true;
+        
+        item.ContentBlock = new Data.Blacklists.ContentBlock
         {
-            item.ContentBlock = new Data.Blacklists.ContentBlock
-            {
-                Reason = reason,
-                IssuerId = uid,
-                Type = typeof(T).Name
-            };
-                
-            // Log the action
-            _context.ModeratorActions.Add(new ModeratorAction
-            {
-                StaffMemberId = staffId,
-                Description = ModeratorActionTemplates.ContentBlocked(Type, title, itemId, User.GetUsername())
-            });
-        }
-        else
-        {
-            _context.ContentBlocks.Remove(item.ContentBlock);
-            
-            _context.ModeratorActions.Add(new ModeratorAction
-            {
-                StaffMemberId = staffId,
-                Description = ModeratorActionTemplates.ContentUnblocked(Type, title, itemId, User.GetUsername())
-            });
-        }
-            
-        await _context.SaveChangesAsync();
+            Reason = reason,
+            IssuerId = uid,
+            Type = typeof(T).Name
+        };
 
+        // Log the action
+        _context.ModeratorActions.Add(new ModeratorAction
+        {
+            StaffMemberId = staffId,
+            Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, User.GetUsername())
+        });
+
+        await _context.SaveChangesAsync();
         return true;
     }
+    
+    public async Task<ActionResult> OnPostUnblock([FromForm] PostData data)
+    {
+        if (User.GetNumericId() is not { } staffId) return Unauthorized();
+        
+        _ = Type switch
+        {
+            ItemType.Story => await TryUnblockContent<Story>(Id, data.Reason, staffId),
+            ItemType.Chapter => await TryUnblockContent<Chapter>(Id, data.Reason, staffId),
+            ItemType.Blogpost => await TryUnblockContent<Blogpost>(Id, data.Reason, staffId),
+            _ => false
+        };
 
-    public sealed record PostData(string Reason);
+        return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
+    }
+    
+    private async Task<bool> TryUnblockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
+    {
+        if (User.GetNumericId() is not { } staffId) return false;
+
+        var item = await _context.Set<T>()
+            .Where(i => i.Id == itemId)
+            .Include(i => i.ContentBlock)
+            .FirstOrDefaultAsync();
+        if (item is null) return false;
+
+        var title = item switch
+        {
+            Story s => s.Title,
+            Chapter c => c.Title,
+            Blogpost b => b.Title,
+            _ => ""
+        };
+
+        if (item.ContentBlock is null) return true;
+
+        item.ContentBlock = null;
+
+        // Log the action
+        _context.ModeratorActions.Add(new ModeratorAction
+        {
+            StaffMemberId = staffId,
+            Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, User.GetUsername())
+        });
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    
+    public enum ItemType
+    {
+        Blogpost,
+        Story,
+        Chapter
+    }
+
+    public sealed record PostData(string Reason = "");
+
+    public sealed class ItemData
+    {
+        public bool Blocked { get; init; }
+        public string? Reason { get; init; }
+        public string Title { get; init; } = "";
+        public string? Subtitle { get; init; }
+        public string Type { get; init; } = null!;
+    }
 }
