@@ -1,4 +1,4 @@
-@use "./src/mixins/alphas" as a
+@use "./src/mixins/generators" as a
 
 // Variables
 $foreground: #131313
@@ -20,6 +20,11 @@ $yellow: #ffff3e
   +a.alphas('green', $green, 1, .75, .50, .25, .10)
   +a.alphas('blue', $blue, 1, .75, .50, .25, .10)
   +a.alphas('yellow', $yellow, 1, .75, .50, .25, .10)
+
+  +a.blends('red', $background, $red, 100, 75, 50, 25, 10)
+  +a.blends('green', $background, $green, 100, 75, 50, 25, 10)
+  +a.blends('blue', $background, $blue, 100, 75, 50, 25, 10)
+  +a.blends('yellow', $background, $yellow, 100, 75, 50, 25, 10)
 
   --gold: #{$gold}
   --ele-1: #{lighten($background, 2)}

@@ -557,20 +557,6 @@
     </Compile>
   </ItemGroup>
 
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\js\src\alerts.ts" />
-    <TypeScriptCompile Include="wwwroot\js\src\chapter-reads.ts" />
-    <TypeScriptCompile Include="wwwroot\js\src\editors\markdown-toolbar.ts" />
-    <TypeScriptCompile Include="wwwroot\js\src\input-progressbars.ts" />
-    <TypeScriptCompile Include="wwwroot\js\src\passwords.ts" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\openapi" />
-  </ItemGroup>
-
   <!--  Automatic migrations on production -->
 <!--  <Target Name="PrePublishTarget" AfterTargets="Publish">-->
 <!--    <Exec Command="dotnet-ef database update" />-->
