@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "module": "ESNext",
+    "module": "CommonJS",
     "target": "ES2017",
     "sourceMap": true
   },

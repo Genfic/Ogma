@@ -191,14 +191,8 @@ let comments_vue = new Vue({
 	},
 
 	async mounted() {
-		this.thread = document.getElementById("thread").dataset.thread;
-		this.route = document.getElementById("route").dataset.route;
-		this.type = document.getElementById("type").dataset.type;
-		this.threadRoute = document.getElementById("thread-route").dataset.route;
-		this.subscribeRoute = document.getElementById("subscribe-route").dataset.route;
-		this.perPage = document.getElementById("per-page").dataset.count;
-		this.maxLength = document.getElementById("max-length").dataset.length;
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
+		// get initial data from SSR
+		Object.assign(this.$data, ssrData);
 
 		let hash = window.location.hash.split("-");
 

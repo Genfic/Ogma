@@ -1,21 +1,28 @@
 @using static Ogma3.Services.HtmlExtensions
-@using Ogma3.Api.V1
+@using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Api.V1.Comments
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.Subscriptions
+@using Ogma3.Api.V1
 @using Ogma3.Data.Reports
 @inject OgmaConfig _config
-@model CommentsThreadDto
+@inject IAntiforgery _xcsrf
+@model CommentsThreadDto   
+ 
+<script>
+const ssrData = {
+    thread: @Model!.Id,
+    type: '@Model.Type',
+    route: '@Url.RouteUrl(nameof(CommentsController))',
+    threadRoute: '@Url.RouteUrl(nameof(CommentsThreadController))',
+    subscribeRoute: '@Url.RouteUrl(nameof(SubscriptionsController))',
+    perPage: @_config.CommentsPerPage,
+    maxLength: @CTConfig.CComment.MaxBodyLength,
+    csrf: '@_xcsrf.GetAndStoreTokens(Context).RequestToken'
+}
+</script>
 
 <div class="comments-container" :class="isReady ? 'ready' : null" id="comments-container" v-cloak>
-
-    <div id="thread" data-thread="@Model.Id" v-if="!thread"></div>
-    <div id="type" data-type="@Model.Type" v-if="!type"></div>
-    <div id="route" data-route="@Url.RouteUrl(nameof(CommentsController))" v-if="!route"></div>
-    <div id="thread-route" data-route="@Url.RouteUrl(nameof(CommentsThreadController))" v-if="!threadRoute"></div>
-    <div id="subscribe-route" data-route="@Url.RouteUrl(nameof(SubscriptionsController))" v-if="!subscribeRoute"></div>
-    <div id="per-page" data-count="@_config.CommentsPerPage" v-if="!perPage"></div>
-    <div id="max-length" data-length="@CTConfig.CComment.MaxBodyLength" v-if="!maxLength"></div>
 
     @if (User.Identity is {IsAuthenticated: true })
     {
