@@ -24,6 +24,12 @@ public class TagsController : ControllerBase
     public async Task<ActionResult<List<TagDto>>> GetAll()
         => await _mediator.Send(new GetAllTags.Query());
 
+    [HttpGet("search")]
+    public ActionResult<List<TagDto>> Search(string name)
+    {
+        return NotFound(name);
+    }
+
     // GET: api/Tags?page=1&perPage=10
     [HttpGet]
     public async Task<ActionResult<List<TagDto>>> GetTags([FromQuery] GetPaginatedTags.Query query)

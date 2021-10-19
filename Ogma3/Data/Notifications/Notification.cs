@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
@@ -8,8 +9,8 @@ namespace Ogma3.Data.Notifications;
 public class Notification : BaseModel
 {
     public string? Body { get; init; }
-    public string Url { get; init; }
+    public string Url { get; init; } = null!;
     public DateTime DateTime { get; init; }
     public ENotificationEvent Event { get; init; }
-    public ICollection<OgmaUser> Recipients { get; init; }
+    public ICollection<OgmaUser> Recipients { get; init; } = null!;
 }

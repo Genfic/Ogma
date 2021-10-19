@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using AutoMapper;
@@ -15,7 +16,7 @@ public class CommentDto
     public DateTime? LastEdit { get; set; }
     public ushort EditCount { get; set; }
     public bool Owned { get; set; }
-    public string Body { get; set; }
+    public string Body { get; set; } = null!;
     public EDeletedBy? DeletedBy { get; set; }
     public bool IsBlocked { get; set; }
         
@@ -30,7 +31,7 @@ public class CommentDto
                     => opts.MapFrom(c => c.AuthorId == currentUser)
                 )
                 .ForMember(cd => cd.IsBlocked, opts
-                    => opts.MapFrom(c => c.Author.Blockers.Any(bu => bu.Id == currentUser))
+                    => opts.MapFrom(c => c.Author != null && c.Author.Blockers.Any(bu => bu.Id == currentUser))
                 )
                 .ForMember(cd => cd.Author, opts
                     => opts.MapFrom(c => c.DeletedBy == null ? c.Author : null)

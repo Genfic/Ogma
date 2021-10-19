@@ -49,6 +49,7 @@ namespace Ogma3;
 
 public class Startup
 {
+    // ReSharper disable once UnusedParameter.Local
     public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
         Configuration = new ConfigurationBuilder()

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ public class CreateModel : PageModel
     }
 
     [BindProperty]
-    public PostData Input { get; set; }
+    public PostData Input { get; set; } = null!;
 
     public async Task<IActionResult> OnGet([FromQuery] long? story, [FromQuery] long? chapter)
     {
@@ -70,9 +71,9 @@ public class CreateModel : PageModel
 
     public class PostData
     {
-        public string Title { get; init; }
-        public string Body { get; init; }
-        public string Tags { get; init; }
+        public string Title { get; init; } = null!;
+        public string Body { get; init; } = null!;
+        public string? Tags { get; init; }
         public ChapterMinimal? ChapterMinimal { get; set; }
         public long? ChapterMinimalId { get; set; }
         public StoryMinimal? StoryMinimal { get; set; }

@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,10 +28,10 @@ public class IndexModel : PageModel
     }
 
 
-    public IList<ClubCard> Clubs { get; private set; }
+    public IList<ClubCard> Clubs { get; private set; } = null!;
     public string? Query { get; private set; }
     public EClubSortingOptions SortBy { get; set; }
-    public Pagination Pagination { get; private set; }
+    public Pagination Pagination { get; private set; } = null!;
         
     public async Task OnGetAsync(
         [FromQuery] int page = 1, 

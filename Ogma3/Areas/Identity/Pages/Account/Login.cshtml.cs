@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Ogma3.Data;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
@@ -16,15 +15,11 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public class LoginModel : PageModel
 {
-    private readonly OgmaUserManager _userManager;
     private readonly SignInManager<OgmaUser> _signInManager;
     private readonly ILogger<LoginModel> _logger;
 
-    public LoginModel(SignInManager<OgmaUser> signInManager,
-        ILogger<LoginModel> logger,
-        OgmaUserManager userManager)
+    public LoginModel(SignInManager<OgmaUser> signInManager, ILogger<LoginModel> logger)
     {
-        _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
     }

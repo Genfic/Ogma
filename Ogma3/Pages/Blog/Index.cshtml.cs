@@ -48,15 +48,22 @@ public class IndexModel : PageModel
                 .Select(x => x.ToLower().Trim('#'))
                 .ToArray();
             if (tags.Length > 0)
-                query = query.Where(b => tags.Any(i => b.Hashtags.Contains(i)));
+            {
+                query = query
+                    .TagWith("Searching for blogposts with tags")
+                    .Where(b => tags.Any(i => b.Hashtags.Contains(i)));
+            }
 
             // Search in title
             var search = splitQuery
                 .Where(x => !x.StartsWith('#') && !string.IsNullOrEmpty(x))
-                .ToList();
-            if (search.Count > 0)
-                query = query.Where(b => EF.Functions.Like(b.Title.ToUpper(), $"%{string.Join(' ', search)}%".ToUpper()));
-
+                .ToArray();
+            if (search.Length > 0)
+            {
+                query = query
+                    .TagWith("Searching for blogposts with title")
+                    .Where(b => EF.Functions.Like(b.Title.ToUpper(), $"%{string.Join(' ', search)}%".ToUpper()));
+            }
         }
             
         // Save post count at this stage

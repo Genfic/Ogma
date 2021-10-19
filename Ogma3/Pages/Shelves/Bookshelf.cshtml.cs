@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,15 +25,15 @@ public class Bookshelf : PageModel
         _mapper = mapper;
     }
 
-    public BookshelfDetails Shelf { get; private set; }
+    public BookshelfDetails Shelf { get; private set; } = null!;
         
     public class BookshelfDetails
     {
-        public string Name { get; init; }
-        public string Description { get; init; }
-        public string Color { get; init; }
-        public string IconName { get; init; }
-        public ICollection<StoryCard> Stories { get; init; }
+        public string Name { get; init; } = null!;
+        public string Description { get; init; } = null!;
+        public string Color { get; init; } = null!;
+        public string IconName { get; init; } = null!;
+        public ICollection<StoryCard> Stories { get; init; } = null!;
     }
 
     public class MappingProfile : Profile
@@ -44,14 +45,16 @@ public class Bookshelf : PageModel
     {
         var uid = User.GetNumericId();
             
-        Shelf = await _context.Shelves
+        var shelf = await _context.Shelves
             .Where(s => s.Id == id)
             .Where(s => s.IsPublic || s.OwnerId == uid)
             .ProjectTo<BookshelfDetails>(_mapper.ConfigurationProvider)
             .AsNoTracking()
             .FirstOrDefaultAsync();
             
-        if (Shelf is null) return NotFound();
+        if (shelf is null) return NotFound();
+        
+        Shelf = shelf;
 
         return Page();
     }

@@ -14,16 +14,11 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 public class EmailModel : PageModel
 {
     private readonly UserManager<OgmaUser> _userManager;
-    private readonly SignInManager<OgmaUser> _signInManager;
     private readonly IEmailSender _emailSender;
 
-    public EmailModel(
-        UserManager<OgmaUser> userManager,
-        SignInManager<OgmaUser> signInManager,
-        IEmailSender emailSender)
+    public EmailModel(UserManager<OgmaUser> userManager, IEmailSender emailSender)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
         _emailSender = emailSender;
     }
 

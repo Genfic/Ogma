@@ -1,3 +1,4 @@
+#nullable enable
 using Ogma3.Data.Blacklists;
 
 namespace Ogma3.Data;

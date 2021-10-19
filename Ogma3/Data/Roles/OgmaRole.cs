@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ public class OgmaRole : IdentityRole<long>
     public bool IsStaff { get; set; }
     public string? Color { get; set; }
     public byte? Order { get; set; }
-    public IEnumerable<OgmaUser> Users { get; set; }
+    public IEnumerable<OgmaUser> Users { get; set; } = null!;
         
     public class OgmaRoleConfig : IEntityTypeConfiguration<OgmaRole>
     {

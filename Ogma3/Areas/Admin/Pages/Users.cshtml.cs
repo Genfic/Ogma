@@ -91,7 +91,7 @@ public class Users : PageModel
         public DateTime? RemovedAt { get; init; }
         public string Reason { get; init; } = null!;
         public InfractionType Type { get; init; }
-        public string IssuedBy { get; init; }
-        public string? RemovedBy { get; init; } = null!;
+        public string IssuedBy { get; init; } = null!;
+        public string? RemovedBy { get; init; }
     }
 }

@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,8 +17,9 @@ public class NotificationsRepository
 
     public NotificationsRepository(ApplicationDbContext context, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
     {
+        if (actionContextAccessor is not { ActionContext: { } } aca) throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
         _context = context;
-        _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+        _urlHelper = urlHelperFactory.GetUrlHelper(aca.ActionContext);
     }
 
     public async Task Create(ENotificationEvent @event, IEnumerable<long> recipientIds, string page, object routeData, string? fragment = null, string? body = null)

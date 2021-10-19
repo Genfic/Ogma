@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +30,8 @@ public class EditModel : PageModel
         _mapper = mapper;
     }
 
-    [BindProperty] public PostData Input { get; set; }
+    [BindProperty] 
+    public PostData Input { get; set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
@@ -38,14 +40,15 @@ public class EditModel : PageModel
         if (uid is null) return Unauthorized();
 
         // Get post and make sure the user matches
-        Input = await _context.Blogposts
+        var input = await _context.Blogposts
             .Where(m => m.Id == id)
             .Where(b => b.AuthorId == uid)
             .ProjectTo<PostData>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
-        if (Input is null) return NotFound();
-
+        if (input is null) return NotFound();
+        
+        Input = input;
         Input.Published = Input.PublicationDate is not null;
 
         return Page();
@@ -54,9 +57,9 @@ public class EditModel : PageModel
     public class PostData
     {
         public long Id { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public string Tags { get; set; }
+        public string Title { get; set; } = null!;
+        public string Body { get; set; } = null!;
+        public string? Tags { get; set; }
         public long AuthorId { get; set; }
         public ChapterMinimal? AttachedChapter { get; set; }
         public StoryMinimal? AttachedStory { get; set; }

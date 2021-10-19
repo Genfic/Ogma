@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +6,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Infrastructure.Extensions;
 
-public static class IQueryableExtensions
+public static class QueryableExtensions
 {
     /// <summary>
     /// Apply a filter on `IQueryable` 
@@ -17,7 +18,7 @@ public static class IQueryableExtensions
     /// <returns>`IQueryable` objects with applied filters</returns>
     public static IQueryable<Story> Search(
         this IQueryable<Story> stories, 
-        ICollection<long> tags = null, 
+        ICollection<long>? tags = null, 
         string? searchQuery = null, 
         long? ratingId = null
     ) {

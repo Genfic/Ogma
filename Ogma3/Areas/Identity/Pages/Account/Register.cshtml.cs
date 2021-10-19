@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -46,31 +47,31 @@ public class RegisterModel : PageModel
         _context = context;
     }
 
-    [BindProperty] public InputModel Input { get; set; }
+    [BindProperty] 
+    public InputModel Input { get; set; } = null!;
 
     [Required(ErrorMessage = "ReCaptcha is required")]
     [BindProperty(Name = "g-recaptcha-response")]
-    public string ReCaptchaResponse { get; set; }
+    public string ReCaptchaResponse { get; set; } = null!;
 
-    public string ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; }
 
-    public IList<AuthenticationScheme> ExternalLogins { get; set; }
+    public IList<AuthenticationScheme> ExternalLogins { get; set; } = null!;
 
     public class InputModel
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public string Name { get; init; } = null!;
+        public string Email { get; init; } = null!;
 
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; init; } = null!;
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; init; } = null!;
 
-        [DataType(DataType.Password)]
         [Display(Name = "Invite code")]
-        public string? InviteCode { get; set; }
+        public string? InviteCode { get; init; }
     }
         
     public class InputModelValidation : AbstractValidator<InputModel>
@@ -96,13 +97,13 @@ public class RegisterModel : PageModel
         }
     }
 
-    public async Task OnGetAsync(string returnUrl = null)
+    public async Task OnGetAsync(string? returnUrl = null)
     {
         ReturnUrl = returnUrl;
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
     }
 
-    public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+    public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         returnUrl ??= Url.Content("~/");
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -119,7 +120,8 @@ public class RegisterModel : PageModel
 
         // Check if invite code is correct
         var inviteCode = await _context.InviteCodes
-            .FirstOrDefaultAsync(ic => ic.NormalizedCode == Input.InviteCode.ToUpper());
+            .Where(ic => Input.InviteCode != null && ic.NormalizedCode == Input.InviteCode.ToUpper())
+            .FirstOrDefaultAsync();
         if (inviteCode is null)
         {
             ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
@@ -161,6 +163,7 @@ public class RegisterModel : PageModel
             // Send confirmation code
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            
             var callbackUrl = Url.Page(
                 "/Account/ConfirmEmail",
                 null,
@@ -168,7 +171,7 @@ public class RegisterModel : PageModel
                 Request.Scheme);
 
             await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.\n\nAlternatively, go to <pre>/confirm-email</pre> and enter the code <pre>{code}</pre>.");
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl ?? "")}'>clicking here</a>.\n\nAlternatively, go to <pre>/confirm-email</pre> and enter the code <pre>{code}</pre>.");
 
             if (_userManager.Options.SignIn.RequireConfirmedAccount)
             {

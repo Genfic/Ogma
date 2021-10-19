@@ -1,4 +1,5 @@
 @{
+    #nullable enable
     string? GetClass(string page) 
         => (ViewData["ActivePage"] as string ?? "").Equals(page)
             ? "active"

@@ -39,7 +39,8 @@ public class MailGunMailer : IEmailSender
 
         if (!response.IsSuccessStatusCode)
         {
-            Log.Error("Error trying to send email to [{To}], with subject [{Subject}] and body [{Body}]. Status: [{Status}]", email, subject, htmlMessage, response.StatusCode);
+            var msg = await response.Content.ReadAsStringAsync();
+            Log.Error("Error trying to send email to [{To}], with subject [{Subject}].\n | Status: [{Status}]\n | Message: [{Msg}]", email, subject, response.StatusCode, msg);
         }
     }
 }

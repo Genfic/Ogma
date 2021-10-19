@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,8 +23,8 @@ public class IndexModel : PageModel
         _clubRepo = clubRepo;
     }
         
-    public ClubBar ClubBar { get; private set; }
-    public IList<ThreadCard> ThreadCards { get; private set; }
+    public ClubBar ClubBar { get; private set; } = null!;
+    public IList<ThreadCard> ThreadCards { get; private set; } = null!;
         
     public async Task<IActionResult> OnGetAsync(long id, string? slug)
     {

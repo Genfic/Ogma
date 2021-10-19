@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,16 @@ namespace Ogma3.Pages.Shared.Cards;
 public class StoryCard
 {
     public long Id { get; set; }
-    public string AuthorUserName { get; set; }
-    public string Title { get; set; }
-    public string Slug { get; set; }
-    public string Hook { get; set; }
+    public string AuthorUserName { get; set; } = null!;
+    public string Title { get; set; } = null!;
+    public string Slug { get; set; } = null!;
+    public string Hook { get; set; } = null!;
     public string? Cover { get; set; }
         
     public string? CoverId { get; set; }
     public DateTime? PublicationDate { get; set; }
-    public IList<TagDto> Tags { get; set; }
-    public Rating Rating { get; set; }
+    public IList<TagDto> Tags { get; set; } = null!;
+    public Rating Rating { get; set; } = null!;
     public EStoryStatus Status { get; set; }
     public int WordCount { get; set; }
     public int ChapterCount { get; set; }

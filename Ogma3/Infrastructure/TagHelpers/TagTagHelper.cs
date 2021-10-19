@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -17,7 +18,8 @@ public class TagTagHelper : TagHelper
 
     public TagTagHelper(IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
     {
-        _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+        if (actionContextAccessor is not { ActionContext: {}} aca) throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
+        _urlHelper = urlHelperFactory.GetUrlHelper(aca.ActionContext);
         Tag = new TagDto();
     }
 

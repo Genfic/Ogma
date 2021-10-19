@@ -121,7 +121,7 @@ Vue.component("tag-search-select", {
 		}
 	},
 	async created() {
-		const { data } = await axios.get(this.tagsApi + "/all");
+		const { data } = await axios.get(`${this.tagsApi}/all`);
 		this.options = data;
 		this.loading = false;
 

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
@@ -11,22 +12,22 @@ namespace Ogma3.Data.CommentsThreads;
 
 public class CommentsThread : BaseModel
 {
-    public IList<Comment> Comments { get; set; }
+    public IList<Comment> Comments { get; set; } = null!;
 
     public int CommentsCount { get; set; }
     public DateTime? LockDate { get; set; }
         
-    public OgmaUser? User { get; set; }
-    public long? UserId { get; set; }
+    public OgmaUser? User { get; set; } = null;
+    public long? UserId { get; set; } = null;
         
-    public Chapter? Chapter { get; set; }
-    public long? ChapterId { get; set; }
+    public Chapter? Chapter { get; set; } = null;
+    public long? ChapterId { get; set; } = null;
         
-    public Blogpost? Blogpost { get; set; }
-    public long? BlogpostId { get; set; }
+    public Blogpost? Blogpost { get; set; } = null;
+    public long? BlogpostId { get; set; } = null;
         
-    public ClubThread? ClubThread { get; set; }
-    public long? ClubThreadId { get; set; }
+    public ClubThread? ClubThread { get; set; } = null;
+    public long? ClubThreadId { get; set; } = null;
 
-    public ICollection<OgmaUser> Subscribers { get; set; }
+    public ICollection<OgmaUser> Subscribers { get; set; } = null!;
 }

@@ -134,22 +134,20 @@ public class ContentBlock : PageModel
         return true;
     }
     
-    public async Task<ActionResult> OnPostUnblock([FromForm] PostData data)
+    public async Task<ActionResult> OnPostUnblock()
     {
-        if (User.GetNumericId() is not { } staffId) return Unauthorized();
-        
         _ = Type switch
         {
-            ItemType.Story => await TryUnblockContent<Story>(Id, data.Reason, staffId),
-            ItemType.Chapter => await TryUnblockContent<Chapter>(Id, data.Reason, staffId),
-            ItemType.Blogpost => await TryUnblockContent<Blogpost>(Id, data.Reason, staffId),
+            ItemType.Story => await TryUnblockContent<Story>(Id),
+            ItemType.Chapter => await TryUnblockContent<Chapter>(Id),
+            ItemType.Blogpost => await TryUnblockContent<Blogpost>(Id),
             _ => false
         };
 
         return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
     }
     
-    private async Task<bool> TryUnblockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
+    private async Task<bool> TryUnblockContent<T>(long itemId) where T : BaseModel, IBlockableContent
     {
         if (User.GetNumericId() is not { } staffId) return false;
 

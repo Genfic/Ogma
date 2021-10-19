@@ -1,3 +1,4 @@
+#nullable enable
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data;
 
@@ -6,19 +7,15 @@ namespace Ogma3.Infrastructure.TagHelpers;
 public class CdnPictureTagHelper : TagHelper
 {
     private readonly OgmaConfig _config;
+    public CdnPictureTagHelper(OgmaConfig config) => _config = config;
 
-    public CdnPictureTagHelper(OgmaConfig config)
-    {
-        _config = config;
-    }
-        
-    public string Src { get; set; }
+    public string Src { get; set; } = null!;
     public int Width { get; set; }
     public int Height { get; set; }
     public bool Eager { get; set; } = false;
-    public string[] SourceFormats { get; set; }
+    public string[] SourceFormats { get; set; } = null!;
     public string? Buster { get; set; } = null;
-    public string Alt { get; set; }
+    public string Alt { get; set; } = null!;
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,13 +15,13 @@ namespace Ogma3.Data.Reports;
 
 public class Report : BaseModel
 {
-    public OgmaUser Reporter { get; set; }
+    public OgmaUser Reporter { get; set; } = null!;
     public long ReporterId { get; set; }
     public DateTime ReportDate { get; set; }
-    public string Reason { get; set; }
+    public string Reason { get; set; } = null!;
 
     // Blockable content
-    public string ContentType { get; set; }
+    public string ContentType { get; set; } = null!;
         
     public Comment? Comment { get; set; }
     public long? CommentId { get; set; }

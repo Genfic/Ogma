@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using AutoMapper;
 
@@ -6,12 +7,12 @@ namespace Ogma3.Data.Reports;
 public class ReportDto
 {
     public long Id { get; set; }
-    public string ReporterUserName { get; set; }
+    public string ReporterUserName { get; set; } = null!;
     public long ReporterId { get; set; }
     public DateTime ReportDate { get; set; }
-    public string Reason { get; set; }
+    public string Reason { get; set; } = null!;
     // Blockable content
-    public string ContentType { get; set; }
+    public string ContentType { get; set; } = null!;
     public long? CommentId { get; set; }
     public long? CommentCommentsThreadId { get; set; }
     public string? UserUserName { get; set; }

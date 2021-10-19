@@ -1,8 +1,8 @@
 ﻿@page "/register"
-@using Microsoft.Extensions.Options
+@inject IOptions<RecaptchaSettings> _recaptchaSettings
 @using reCAPTCHA.AspNetCore
 @using reCAPTCHA.AspNetCore.Templates
-@inject IOptions<RecaptchaSettings> _recaptchaSettings
+@using Microsoft.Extensions.Options
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -53,7 +53,7 @@
         </form>
 </div>             
 @{
-    if ((Model.ExternalLogins?.Count ?? 0) > 0)
+    if (Model.ExternalLogins.Count > 0)
     {
      <div class="col-md-6 col-md-offset-2">
          <section>

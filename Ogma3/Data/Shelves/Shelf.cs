@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Icons;
@@ -8,9 +9,9 @@ namespace Ogma3.Data.Shelves;
 
 public class Shelf : BaseModel
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public OgmaUser Owner { get; set; }
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public OgmaUser Owner { get; set; } = null!;
     public long OwnerId { get; set; }
     public bool IsDefault { get; set; }
     public bool IsPublic { get; set; }
@@ -21,5 +22,5 @@ public class Shelf : BaseModel
     public long? IconId { get; set; }
         
     // Stories
-    public ICollection<Story> Stories { get; set; }
+    public ICollection<Story> Stories { get; set; } = null!;
 }

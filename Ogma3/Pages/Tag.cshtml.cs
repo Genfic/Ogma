@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -29,21 +30,22 @@ public class TagModel : PageModel
 
     public record TagInfo(string Name, ETagNamespace? Namespace);
         
-    public TagInfo Tag { get; private set; }
-    public IList<StoryCard> Stories { get; private set; }
-    public Pagination Pagination { get; private set; }
+    public TagInfo Tag { get; private set; } = null!;
+    public IList<StoryCard> Stories { get; private set; } = null!;
+    public Pagination Pagination { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(long id, string? slug, [FromQuery] int page = 1)
     {
         var uid = User.GetNumericId();
             
-        Tag = await _context.Tags
+        var tag = await _context.Tags
             .Where(t => t.Id == id)
             .Select(t => new TagInfo(t.Name, t.Namespace))
             .FirstOrDefaultAsync();
             
-        if (Tag is null) return NotFound();
-
+        if (tag is null) return NotFound();
+        Tag = tag;
+        
         var query = _context.Stories
             .Where(s => s.PublicationDate != null)
             .Where(s => s.ContentBlockId == null)

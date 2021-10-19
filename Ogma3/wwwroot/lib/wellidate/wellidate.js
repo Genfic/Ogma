@@ -1,5 +1,5 @@
 /*!
- * Wellidate 2.2.1
+ * Wellidate 2.2.3
  *
  * Copyright © NonFactors
  *
@@ -47,6 +47,8 @@
                     if (!isValid) {
                         validatable.isValid = false;
                         validatable.error(method);
+
+                        break;
                     } else if (typeof isValid !== "boolean") {
                         pending.push(isValid);
                         validatable.pending();
@@ -58,8 +60,6 @@
                             }
                         });
                     }
-
-                    break;
                 }
             }
 
@@ -819,7 +819,8 @@
             equalto: {
                 message: "Please enter the same value again.",
                 isValid() {
-                    const other = document.getElementById(this.other);
+                    const id = `${this.element.id.split('_')[0]}_${this.other.split('.')[1]}`;
+                    const other = document.getElementById(id);
 
                     return other && this.normalizeValue() === this.normalizeValue(other);
                 }

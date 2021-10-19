@@ -149,6 +149,6 @@ public static class String
     {
         public byte Level { get; set; }
         public byte Occurrence { get; set; }
-        public string Body { get; set; }
+        public string Body { get; set; } = null!;
     }
 }

@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -21,7 +22,7 @@ public static class Gravatar
             
         if (!string.IsNullOrEmpty(options.Default)) avatar = avatar.SetQueryParam("d", options.Default);
         if (options.ForceDefault) avatar = avatar.SetQueryParam("f", "y");
-        if (options.Rating is not null) avatar = avatar.SetQueryParam("r", options!.Rating!.ToString()!.ToLower());
+        if (options.Rating is {} r) avatar = avatar.SetQueryParam("r", r.ToString().ToLower());
 
         return avatar;
     }
@@ -32,6 +33,7 @@ public static class Gravatar
         Ratings? Rating = null
     );
         
+    // ReSharper disable once InconsistentNaming
     public enum Ratings { G, PG, R, X }
         
     public static class AvatarGenMethods

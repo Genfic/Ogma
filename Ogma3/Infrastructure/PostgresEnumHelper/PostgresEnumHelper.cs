@@ -54,7 +54,7 @@ public static class PostgresEnumHelper
             var method = typeof(NpgsqlModelBuilderExtensions)
                 .GetMethods()
                 .Where(mi => mi.Name == nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum))
-                .Single(mi => mi.IsGenericMethod)
+                .SingleOrDefault(mi => mi.IsGenericMethod)
                 ?.MakeGenericMethod(type);
                 
             if (method is {} m)

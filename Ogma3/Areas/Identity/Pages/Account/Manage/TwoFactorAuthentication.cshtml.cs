@@ -2,27 +2,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public class TwoFactorAuthenticationModel : PageModel
 {
-    private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
+    // private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
 
     private readonly UserManager<OgmaUser> _userManager;
     private readonly SignInManager<OgmaUser> _signInManager;
-    private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
-    public TwoFactorAuthenticationModel(
-        UserManager<OgmaUser> userManager,
-        SignInManager<OgmaUser> signInManager,
-        ILogger<TwoFactorAuthenticationModel> logger)
+    public TwoFactorAuthenticationModel(UserManager<OgmaUser> userManager, SignInManager<OgmaUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _logger = logger;
     }
 
     public bool HasAuthenticator { get; set; }

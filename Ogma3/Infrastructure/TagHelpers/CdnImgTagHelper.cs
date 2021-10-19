@@ -1,10 +1,11 @@
+#nullable enable
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
 public class CdnImgTagHelper : TagHelper
 {
-    public string Src { get; set; }
+    public string Src { get; set; } = null!;
     public int? Width { get; set; }
     public int? Height { get; set; }
     public bool Eager { get; set; } = false;
