@@ -15,7 +15,7 @@ const csso = require('postcss-csso');
 
 // JS processors
 const typescript = require('gulp-typescript');
-const tsProject = typescript.createProject('tsconfig.json');
+const tsProject = typescript.createProject('./Ogma3/wwwroot/js/tsconfig.json');
 const terser = require('gulp-terser');
 
 // Dirs

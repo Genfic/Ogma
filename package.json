@@ -27,7 +27,8 @@
 		"swc": "swc ./Ogma3/wwwroot/js/src -s -d ./Ogma3/wwwroot/js/dist",
 		"t:cssdemo": "deno run --allow-net --allow-read ./tools/css-demo.ts",
 		"t:preloads": "deno run --allow-read ./tools/generate-preloads.ts",
-		"t:imports": "deno run --allow-read ./tools/generate-imports.ts"
+		"t:imports": "deno run --allow-read ./tools/generate-imports.ts",
+		"t:bundlesize": "deno run --allow-read ./tools/bundlesize.ts"
 	},
 	"name": "Ogma3",
 	"dependencies": {

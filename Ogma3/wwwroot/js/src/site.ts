@@ -96,21 +96,6 @@ Number.prototype.clamp = function (min: number = 0, max: number = 1): number {
 	return this;
 };
 
-/**
- * Check if the given variable is an object
- * @param {any} obj Variable to check
- * @returns {boolean} True if the variable is an object, false if it's a primitive
- */
-const isObject = (obj: any): boolean => obj === Object(obj);
-
-
-/**
- * Creates a deep copy of the object through parsing and serializing JSON
- */
-const _deepCopy = function(o: object): object {
-	return JSON.parse(JSON.stringify({...o, __isCopied__: true}));
-}
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                   ///
@@ -159,8 +144,21 @@ const setCookie = (name: string, value: string, expires: Date|null = null, secur
 }
 
 /**
+ * Check if the given variable is an object
+ * @param {any} obj Variable to check
+ * @returns {boolean} True if the variable is an object, false if it's a primitive
+ */
+const isObject = (obj: any): boolean => obj === Object(obj);
+
+
+/**
+ * Creates a deep copy of the object through parsing and serializing JSON
+ */
+const _deepCopy = (o: object): object => JSON.parse(JSON.stringify({...o, __isCopied__: true}))
+
+
+/**
  * Logger object to create better logging experience
- * @type {{warn: (function(*): void), debug: (function(*): void), log: (function(*): void), error: (function(*): void), info: (function(*): void)}}
  */
 ((window || global) as any).log = {
 	log:	o => console.log(isObject(o) ? _deepCopy(o) : o),

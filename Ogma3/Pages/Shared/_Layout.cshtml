@@ -1,0 +1,158 @@
+﻿@using Ogma3.Services
+@using Microsoft.Extensions.Hosting
+@using System.Globalization
+@using Microsoft.AspNetCore.Hosting
+@using Ogma3.Api.V1.UserActivity
+@inject IWebHostEnvironment _env
+@{
+    Context.Request.Cookies.TryGetValue("theme", out var value);
+    var theme = value ?? "light";
+
+    var isAdmin = ViewData["is-admin"];
+    
+    ViewData["render_start"] = DateTime.Now;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @* Preconnects, preloads and prefetches *@
+    <link rel="preconnect" href="https://cdn.genfic.net">
+    <link rel="preconnect" href="https://cdn.skypack.dev">
+    
+    <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/MaterialIconsOutlined-Regular.woff2">
+    @* <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/Raleway-Italic-VF.woff2"> *@
+    <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/Raleway-VF.woff2">
+    
+    
+    @* Base meta *@
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    
+    @* Theme Color for Chrome, Firefox OS and Opera *@
+    <meta name="theme-color" content="#995E31">
+    
+    @* Short description of the document (limit to 150 characters) *@
+    <meta name="description" content="@(ViewData["Description"] ?? "The one-stop-shop for everything fiction")">
+    
+    @* Control the behavior of search engine crawling and indexing *@
+    @if (isAdmin is null)
+    {
+        <meta name="robots" content="index,follow"> @* All Search Engines *@
+        <meta name="googlebot" content="index,follow"> @* Google Specific *@
+    }
+    else
+    {
+        <meta name="robots" content="noindex,nofollow">@* All Search Engines *@
+        <meta name="googlebot" content="noindex,nofollow">@* Google Specific *@
+    }
+    
+    @* Gives a general age rating based on the document's content *@
+    <meta name="rating" content="@ViewData["Rating"]">
+    
+    @* Tells the browser what color schemes are supported *@
+    <meta name="color-scheme" content="dark light">
+    
+    @* OpenGraph meta *@
+    <meta property="og:title" content="@ViewData["Title"]">
+    @await RenderSectionAsync("OgMeta", false)
+    
+    @if (theme == "system") {
+        <link rel="stylesheet" href="~/css/dist/light.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/dist/dark.min.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
+    } else {
+        <link rel="stylesheet" href="@( $"~/css/dist/{theme}.min.css" )" asp-append-version="true"/>
+    }
+    
+    <link id="theme-ph">
+    
+    <link rel="stylesheet" href="~/css/dist/style.min.css" asp-append-version="true">
+    
+    @await RenderSectionAsync("CSS", false)
+    @Html.RenderResources("css")
+</head>
+<body>
+
+<header>
+    
+    <button id="burger">
+        <icon icon="menu"></icon>
+    </button>
+    
+    <nav id="top-nav">
+
+        <partial name="_MainNav"/>
+        
+        @if (isAdmin is not null)
+        {
+            <o-clock date="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"></o-clock>
+        }
+
+        <partial name="_LoginPartial"/>
+
+    </nav>
+</header>
+
+<div class="container" id="site-content">
+    
+    <noscript class="noscript">
+        While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>
+        Consider enabling it — you can check the site's <a href="https://github.com/Atulin/Ogma">source code</a> if you're unsure.
+    </noscript>
+
+    @RenderBody()
+    
+</div>
+
+<partial name="_Footer" />
+    
+<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" 
+        crossorigin="anonymous"
+        asp-fallback-src="~/lib/axios.min.js"
+        asp-fallback-test="window.axios"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.4/dayjs.min.js"
+        crossorigin="anonymous"
+        asp-fallback-src="~/lib/dayjs.min.js"
+        asp-fallback-test="window.dayjs"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
+        crossorigin="anonymous"></script>
+    
+@if (_env.IsDevelopment())
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"
+            asp-fallback-src="~/lib/vue/vue.js"
+            asp-fallback-test="window.Vue"></script>
+}
+else
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+            asp-fallback-src="~/lib/vue/vue.min.js"
+            asp-fallback-test="window.Vue"></script>
+}
+
+<script src="~/js/dist/site.min.js" asp-append-version="true"></script>
+<script defer src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
+
+@if (isAdmin is not null)
+{
+    <script type="module" src="~/js/dist/native-components/clock.min.js" asp-append-version="true"></script>
+}
+    
+@await RenderSectionAsync("Scripts", false)
+@Html.RenderResources()
+
+@if (isAdmin is null)
+{
+    <script>
+    (_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'});})()
+    </script>
+}
+    
+@if (_env.IsDevelopment()) {
+    <mini-profiler />
+}
+
+</body>
+</html>
