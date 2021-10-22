@@ -15,7 +15,7 @@ new Vue({
 		// Contrary to its name, it also modifies a namespace if needed.
 		// It was simply easier to slap both functionalities into a single function.
 		createFaq: async function(e) {
-			console.log(e);
+			log.log(e);
 			e.preventDefault();
 
 			if (this.form.question && this.form.answer) {

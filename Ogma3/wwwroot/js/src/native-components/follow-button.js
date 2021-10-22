@@ -1,4 +1,4 @@
-import {LitElement, html} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
+import {html, LitElement} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
 
 export class FollowButton extends LitElement {
 	static get properties() {
@@ -38,7 +38,7 @@ export class FollowButton extends LitElement {
 			}
 		)
 			.then(res => this.isFollowed = res.data.toString())
-			.catch(console.error);
+			.catch(log.error);
 	}
 
 	createRenderRoot() {

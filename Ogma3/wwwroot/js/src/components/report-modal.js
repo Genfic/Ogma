@@ -45,7 +45,7 @@ Vue.component("report-modal", {
 			} catch (e) {
 				this.message = "An error has occurred.";
 				this.btnClass = "red";
-				console.error(e);
+				log.error(e);
 			}
 		}
 	},

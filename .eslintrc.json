@@ -59,7 +59,9 @@
             ]
         },
         {
-            "files": ["Ogma3/wwwroot/js/src/site.js"],
+            "files": [
+                "Ogma3/wwwroot/js/src/site.ts"
+            ],
             "globals": {
                 "getCookieValue": "off",
                 "setCookie": "off"

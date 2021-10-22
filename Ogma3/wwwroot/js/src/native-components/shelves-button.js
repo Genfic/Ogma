@@ -1,7 +1,4 @@
-import {
-	LitElement,
-	html
-} from "https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js";
+import {html, LitElement} from "https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js";
 
 export class ShelvesButton extends LitElement {
 	static get properties() {
@@ -25,7 +22,7 @@ export class ShelvesButton extends LitElement {
 
 	async connectedCallback() {
 		super.connectedCallback();
-		console.log(this.endpoint);
+		log.log(this.endpoint);
 		await this._getQuickShelves();
 		this.classList.add("wc-loaded");
 	}

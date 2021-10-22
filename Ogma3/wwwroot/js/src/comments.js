@@ -148,14 +148,14 @@ let comments_vue = new Vue({
 					headers: { "RequestVerificationToken": this.csrf }
 				})
 					.then(res => this.isSubscribed = res.data)
-					.catch(console.error);
+					.catch(log.error);
 
 			} else {
 				axios.post(`${this.subscribeRoute}/thread`, { threadId: this.thread }, {
 					headers: { "RequestVerificationToken": this.csrf }
 				})
 					.then(res => this.isSubscribed = res.data)
-					.catch(console.error);
+					.catch(log.error);
 			}
 		},
 

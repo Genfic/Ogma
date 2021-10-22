@@ -1,15 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,no-redeclare
-interface String {
-    properSplit(split: string|RegExp) : Array<string>
-}
-
-enum InputType {
-	Validated,
-	File,
-	Regular
-}
-
 (() => {
+	enum InputType {
+		Validated,
+		File,
+		Regular
+	}
+	
 	// This monstrosity grabs all `input` and `textarea` tags and puts them inside a single array
 	// so that it's easier to use. Because of course `querySelectorAll()` returns some weird shit instead
 	// of a proper array. Thank fuck for the spread operator.
@@ -19,14 +14,14 @@ enum InputType {
 	] as (HTMLInputElement|HTMLTextAreaElement)[];
     
     
-	for (const i of inputs) {
-		console.log(`Attaching ${i.type}`);
+	for (const input of inputs) {
+		log.log(`Attaching ${input.type}`);
 		
 		let type: InputType;
-		if (i.dataset.maxCount || i.dataset.valLengthMax || i.dataset.valMaxlengthMax) {
+		if (input.dataset.maxCount || input.dataset.valLengthMax || input.dataset.valMaxlengthMax) {
 			// One of the validation parameters is set so it's a validated input
 			type = InputType.Validated;
-		} else if (i.dataset.valFilesizeMax && i.type === 'file') {
+		} else if (input.dataset.valFilesizeMax && input.type === 'file') {
 			// File size validation parameter is set and the input type is file, so it's a file
 			type = InputType.File;
 		} else {
@@ -36,25 +31,25 @@ enum InputType {
         
 		// If there's no count specified, get max length. If that's not there, just use 0.
 		const max: number = {
-			[InputType.Validated]:  Number(i.dataset.maxCount ?? i.dataset.valLengthMax ?? i.dataset.valMaxlengthMax),
-			[InputType.File]:       Number(i.dataset.valFilesizeMax),
-			[InputType.Regular]:    i.maxLength ?? 0
+			[InputType.Validated]:  Number(input.dataset.maxCount ?? input.dataset.valLengthMax ?? input.dataset.valMaxlengthMax),
+			[InputType.File]:       Number(input.dataset.valFilesizeMax),
+			[InputType.Regular]:    input.maxLength ?? 0
 		}[type];
 		
 		// Sometimes we have the minimum value as well, if not let's just ensure it's not 0 or less
-		const min: number = Number(i.dataset.valLengthMin) ?? 0;
+		const min: number = Number(input.dataset.valLengthMin) ?? 0;
         
 		// Function to get the current size
 		const currentSize: () => number = function (): number {
-			if (i.dataset.maxCount) {
+			if (input.dataset.maxCount) {
 				// `data-max-count` is set, so we're counting comma-separated values
-				return i.value.split(',').length;
-			} else if(i.dataset.valFilesizeMax && i.type === 'file') {
+				return input.value.split(',').length;
+			} else if(input.dataset.valFilesizeMax && input.type === 'file') {
 				// It's a file input with maximum file size defined, so we get the file size
-				return (i as HTMLInputElement).files[0]?.size ?? 0;
+				return (input as HTMLInputElement).files[0]?.size ?? 0;
 			} else {
 				// Just a regular ol' input, get the value length
-				return i.value.length;
+				return input.value.length;
 			}
 		};
         
@@ -77,9 +72,9 @@ enum InputType {
         
 		// If the `data-wordcount` property is there, create a wordcount element and append it
 		let wordcount: HTMLElement;
-		if (i.dataset.wordcount) {
+		if (input.dataset.wordcount) {
 			wordcount = document.createElement('span');
-			wordcount.innerText = i.value.properSplit(/\s+/).length.toString() + ' words';
+			wordcount.innerText = input.value.properSplit(/\s+/).length.toString() + ' words';
 			counter.appendChild(wordcount);
 		}
         
@@ -87,11 +82,11 @@ enum InputType {
 		counter.appendChild(count);
         
 		// Append the whole thing right after the target input element
-		i.after(counter); 
+		input.after(counter); 
         
 		// Listen to input
-		console.log(`Listening to ${i.type}`);
-		i.addEventListener('input', () => {			
+		log.log(`Listening to ${input.type}`);
+		input.addEventListener('input', () => {			
 			const length = currentSize();
 			// Update character counter
 			count.innerText = `${length}/${max}${type === InputType.File ? ' bytes' : ''}`;
@@ -100,8 +95,8 @@ enum InputType {
 			progress.style.width = `${Math.min(100, 100 * (length / max))}%`;
 
 			// If `data-wordcount` has been specified, update that as well
-			if (i.dataset.wordcount) {
-				wordcount.innerText = (i.value.properSplit(/\s+/) ?? []).length.toString() + ' words';
+			if (input.dataset.wordcount) {
+				wordcount.innerText = (input.value.properSplit(/\s+/) ?? []).length.toString() + ' words';
 			}
             
 			// Check if the input is valid

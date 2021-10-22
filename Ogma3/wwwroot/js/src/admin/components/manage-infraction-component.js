@@ -31,7 +31,7 @@ Vue.component("manage-infraction", {
 		},
 
 		create: async function() {
-			console.log('submit');
+			log.log('submit');
 			await axios.post(this.route, {
 				userId: this.userId,
 				reason: this.reason,

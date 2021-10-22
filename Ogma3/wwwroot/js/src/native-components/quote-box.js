@@ -1,7 +1,4 @@
-import {
-	LitElement,
-	html
-} from "https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js";
+import {html, LitElement} from "https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js";
 
 export class QuoteBox extends LitElement {
 	static get properties() {
@@ -41,8 +38,8 @@ export class QuoteBox extends LitElement {
 			({ body: this.body, author: this.author } = res.data);
 			window.localStorage.setItem("quote", JSON.stringify(res.data));
 		} catch (e) {
-			if (e.response.status === 429) console.log("Too many requests, loading from cache");
-			else console.error(e);
+			if (e.response.status === 429) log.log("Too many requests, loading from cache");
+			else log.error(e);
 			({ body: this.body, author: this.author } = JSON.parse(window.localStorage.getItem("quote")));
 		}
 	}

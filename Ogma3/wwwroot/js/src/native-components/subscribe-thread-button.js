@@ -1,4 +1,4 @@
-import {LitElement, html} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
+import {html, LitElement} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
 
 export class SubscribeThreadButton extends LitElement {
 	static get properties() {
@@ -23,7 +23,7 @@ export class SubscribeThreadButton extends LitElement {
 			.then(res => {
 				this.subscribed = res.data;
 			})
-			.catch(console.error);
+			.catch(log.error);
 	}
 
 	render() {
@@ -44,7 +44,7 @@ export class SubscribeThreadButton extends LitElement {
 			})
 				.then(data => data.json())
 				.then(json => this.subscribed = json)
-				.catch(console.error);
+				.catch(log.error);
 		} else {
 			fetch(`${this.endpoint}/thread`, {
 				method: 'DELETE',
@@ -53,7 +53,7 @@ export class SubscribeThreadButton extends LitElement {
 			})
 				.then(data => data.json())
 				.then(json => this.subscribed = json)
-				.catch(console.error);
+				.catch(log.error);
 
 		}
 	}

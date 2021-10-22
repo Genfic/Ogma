@@ -1,13 +1,14 @@
 (function () {
-	let themeLink = document.querySelector('link#theme-ph');
-	let themeBtn = document.getElementById('theme-swap');
+	let themeLink = document.querySelector('link#theme-ph') as HTMLLinkElement;
+	let themeBtn = document.getElementById('theme-swap') as HTMLButtonElement;
 
-	let rnd = Math
-		.random()
+	let rnd: string = Math.random()
 		.toString(36)
 		.replace(/[^a-z]+/g, '')
 		.substr(0, 5);
+	
 	let date = new Date();
+	
 	date.setFullYear(date.getFullYear() + 100);
 
 	themeBtn.addEventListener('click', () => {

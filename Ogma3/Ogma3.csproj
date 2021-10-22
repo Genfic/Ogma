@@ -263,6 +263,13 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\markdown-toolbar.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
   </ItemGroup>
 
 
@@ -384,10 +391,6 @@
     </Content>
     <Content Update="wwwroot\js\src\components\textarea-counter-component.min.js">
       <DependentUpon>textarea-counter-component.js</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\src\site.js">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Update="wwwroot\js\src\site.min.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

@@ -13,7 +13,7 @@ new Vue({
 			this.$refs.reportModal.visible = true;
 		},
 		handleScroll: function () {
-			// console.log(this.lastScroll)
+			// log.log(this.lastScroll)
 			let elBottom = this.$el.getBoundingClientRect().bottom;
 			let perc = elBottom - this.windowHeight;
          

@@ -25,7 +25,7 @@ new Vue({
 				() => alert("Copied"),
 				(e) => {
 					alert("Could not copy");
-					console.error(e);
+					log.error(e);
 				}
 			);
 		},

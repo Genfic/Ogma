@@ -23,7 +23,7 @@ Vue.component('input-blog-tags', {
 		}
 	},
 	data: function () {
-		console.log(this.value);
+		log.log(this.value);
 		return {
 			text: this.value,
 			name: this.label.replace(/\s+/g, '')

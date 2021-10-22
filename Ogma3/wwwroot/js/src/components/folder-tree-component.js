@@ -17,7 +17,7 @@ Vue.component("folder-item", {
 	},
 	methods: {
 		bus: function(data) {
-			console.log(this.folder);
+			log.log(this.folder);
 			if (data !== this.current) {
 				this.$emit("bus", data);
 			}
