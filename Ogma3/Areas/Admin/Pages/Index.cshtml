@@ -1,5 +1,5 @@
 @page
-@using Ogma3.Areas.Admin.Components
+@using Humanizer
 @model Ogma3.Areas.Admin.Pages.Index
 
 @{
@@ -17,4 +17,21 @@
     }
 </div>
 
-<component type="typeof(DbSizes)" render-mode="Server"/>
+<table>
+    <tr>
+        <th>
+            Table
+        </th>
+        <th colspan="2">
+            Size
+        </th>
+    </tr>
+    @foreach (var size in Model.DbSizes)
+    {
+        <tr>
+            <td>@size.Name</td>
+            <td>@(size.Size)b</td>
+            <td>@size.Size.Bits()</td>
+        </tr>
+    }
+</table>

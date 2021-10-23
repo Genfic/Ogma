@@ -78,7 +78,6 @@ public class Startup
             .AddDbContext<ApplicationDbContext>(options => options
                 .UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection"))
             )
-            .AddDbContextFactory<ApplicationDbContext>(lifetime: ServiceLifetime.Scoped)
             .AddDatabaseDeveloperPageExceptionFilter();
 
         // Repositories
@@ -236,15 +235,6 @@ public class Startup
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
         
-        // Blazor
-        services.AddServerSideBlazor().AddCircuitOptions(options =>
-        {
-            if (Env.IsDevelopment())
-            {
-                options.DetailedErrors = true;
-            }
-        });
-
         // MediatR
         services
             .AddMediatR(typeof(Startup))
@@ -292,7 +282,6 @@ public class Startup
         extensionsProvider.Mappings.Add(".avif", "image/avif");
 
         // Serve static files with cache headers and compression
-        app.UseStaticFiles(); 
         app.UseStaticFiles(new StaticFileOptions
         {
             HttpsCompression = HttpsCompressionMode.Compress,
@@ -321,7 +310,6 @@ public class Startup
         {
             endpoints.MapRazorPages();
             endpoints.MapControllers();
-            endpoints.MapBlazorHub();
         });
 
         // Compression
