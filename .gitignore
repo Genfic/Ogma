@@ -53,3 +53,4 @@ postgres/postgres.env
 
 # Experimental
 Ogma3/wwwroot/lib/comments/
+Ogma3/wwwroot/lib/admin/

@@ -34,6 +34,7 @@ using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Infrastructure.Middleware;
+using Ogma3.Infrastructure.NSwag.OperationProcessors;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
@@ -244,7 +245,18 @@ public class Startup
         services.AddControllers(options => { options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration)); });
 
         // OpenAPI
-        services.AddOpenApiDocument(settings => { settings.SchemaNameGenerator = new NSwagNestedNameGenerator(); });
+        services.AddOpenApiDocument(settings =>
+        {
+            settings.DocumentName = "public";
+            settings.OperationProcessors.Insert(0, new ExcludeInternalApisProcessor());
+            settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+        });
+        services.AddOpenApiDocument(settings =>
+        {
+            settings.DocumentName = "internal";
+            settings.OperationProcessors.Insert(0, new IncludeInternalApisProcessor());
+            settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+        });
     }
 
 
@@ -305,7 +317,7 @@ public class Startup
         // OpenAPI
         app.UseOpenApi();
         app.UseSwaggerUi3();
-
+        
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();

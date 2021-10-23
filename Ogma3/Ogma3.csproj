@@ -271,6 +271,19 @@
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
     <_ContentIncludedByDefault Remove="Areas\Admin\Components\DbSizes.razor" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-infraction-component.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-infraction-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lib\client.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lib\client.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lib\client.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lit-components\TableInfo.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lit-components\TableInfo.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lit-components\TableInfo.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\clock.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\clock.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\site.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\themeswap.js" />
   </ItemGroup>
 
 
@@ -562,6 +575,11 @@
     <Compile Update="Pages\Tag.cshtml.cs">
       <DependentUpon>Tag.cshtml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\admin\src\components\table-info" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

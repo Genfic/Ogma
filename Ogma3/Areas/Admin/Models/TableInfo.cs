@@ -5,14 +5,11 @@ namespace Ogma3.Areas.Admin.Models;
 
 public class TableInfo
 {
-    public string Name { get; set; }
-    public int Size { get; set; }
+    public string Name { get; init; }
+    public int Size { get; init; }
     
     public class Configuration : IEntityTypeConfiguration<TableInfo>
     {
-        public void Configure(EntityTypeBuilder<TableInfo> builder)
-        {
-            builder.HasNoKey();
-        }
+        public void Configure(EntityTypeBuilder<TableInfo> builder) => builder.HasNoKey();
     }
 }

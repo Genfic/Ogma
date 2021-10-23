@@ -1,5 +1,4 @@
 @page
-@using Humanizer
 @model Ogma3.Areas.Admin.Pages.Index
 
 @{
@@ -17,21 +16,11 @@
     }
 </div>
 
-<table>
-    <tr>
-        <th>
-            Table
-        </th>
-        <th colspan="2">
-            Size
-        </th>
-    </tr>
-    @foreach (var size in Model.DbSizes)
-    {
-        <tr>
-            <td>@size.Name</td>
-            <td>@(size.Size)b</td>
-            <td>@size.Size.Bits()</td>
-        </tr>
-    }
-</table>
+<br>
+
+<table-info></table-info>
+
+@section Scripts
+{
+    <script type="module" src="~/js/dist/admin/lit-components/table-info.min.js" asp-append-version="true"></script>
+}

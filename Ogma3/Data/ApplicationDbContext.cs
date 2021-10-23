@@ -101,6 +101,7 @@ public class ApplicationDbContext : IdentityDbContext
     
     // Keyless
     public DbSet<TableInfo> TableInfos { get; set; } = null!;
+    public DbSet<TableRowCount> TableRowCounts { get; set; } = null!;
     
 
     private readonly ILoggerFactory _myLoggerFactory;
