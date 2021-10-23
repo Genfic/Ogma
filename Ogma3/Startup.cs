@@ -49,6 +49,8 @@ namespace Ogma3;
 
 public class Startup
 {
+    private IWebHostEnvironment Env { get; }
+    
     // ReSharper disable once UnusedParameter.Local
     public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
@@ -60,6 +62,7 @@ public class Startup
             .AddUserSecrets(Assembly.GetAssembly(GetType()))
             .Build();
         // Configuration = configuration;
+        Env = env;
     }
 
     private IConfiguration Configuration { get; }
@@ -73,7 +76,9 @@ public class Startup
         // Database
         services
             .AddDbContext<ApplicationDbContext>(options => options
-                .UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection")))
+                .UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection"))
+            )
+            .AddDbContextFactory<ApplicationDbContext>(lifetime: ServiceLifetime.Scoped)
             .AddDatabaseDeveloperPageExceptionFilter();
 
         // Repositories
@@ -230,6 +235,15 @@ public class Startup
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
+        
+        // Blazor
+        services.AddServerSideBlazor().AddCircuitOptions(options =>
+        {
+            if (Env.IsDevelopment())
+            {
+                options.DetailedErrors = true;
+            }
+        });
 
         // MediatR
         services
@@ -278,6 +292,7 @@ public class Startup
         extensionsProvider.Mappings.Add(".avif", "image/avif");
 
         // Serve static files with cache headers and compression
+        app.UseStaticFiles(); 
         app.UseStaticFiles(new StaticFileOptions
         {
             HttpsCompression = HttpsCompressionMode.Compress,
@@ -306,6 +321,7 @@ public class Startup
         {
             endpoints.MapRazorPages();
             endpoints.MapControllers();
+            endpoints.MapBlazorHub();
         });
 
         // Compression

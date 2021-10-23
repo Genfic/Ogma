@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using Ogma3.Areas.Admin.Models;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -97,7 +98,10 @@ public class ApplicationDbContext : IdentityDbContext
 
     // Invite codes
     public DbSet<InviteCode> InviteCodes { get; set; } = null!;
-
+    
+    // Keyless
+    public DbSet<TableInfo> TableInfos { get; set; } = null!;
+    
 
     private readonly ILoggerFactory _myLoggerFactory;
     public ApplicationDbContext(DbContextOptions options) : base(options)
