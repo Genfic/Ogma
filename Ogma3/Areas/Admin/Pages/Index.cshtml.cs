@@ -11,7 +11,7 @@ public class Index : PageModel
     private readonly ApplicationDbContext _context;
     public Index(ApplicationDbContext context) => _context = context;
 
-    public Dictionary<string, int> Counts { get; set; }
+    public Dictionary<string, int> Counts { get; private set; }
     public async Task OnGet()
     {
         Counts = new Dictionary<string, int>

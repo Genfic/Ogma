@@ -20,9 +20,12 @@
 
 @section Scripts {
     @await RenderSectionAsync("Scripts", false)
+    <script src="_framework/blazor.server.js"></script>
 }
 
 @section CSS {
     <link rel="stylesheet" href="~/css/dist/admin.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/dist/editors.min.css" asp-append-version="true">
+    @* ReSharper disable once Html.PathError *@
+    <link rel="stylesheet" href="Ogma3.styles.css" asp-append-version="true">
 }
