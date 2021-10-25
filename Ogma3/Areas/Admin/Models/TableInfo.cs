@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Ogma3.Areas.Admin.Models;
 
+[Keyless]
 public class TableInfo
 {
     public string Name { get; init; }
@@ -10,6 +11,6 @@ public class TableInfo
     
     public class Configuration : IEntityTypeConfiguration<TableInfo>
     {
-        public void Configure(EntityTypeBuilder<TableInfo> builder) => builder.HasNoKey();
+        public void Configure(EntityTypeBuilder<TableInfo> builder) => builder.HasNoKey().ToView(null);
     }
 }

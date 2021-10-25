@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Ogma3.Areas.Admin.Models;
 
+[Keyless]
 public class TableRowCount
 {
     public string Name { get; init; }
@@ -10,6 +11,6 @@ public class TableRowCount
     
     public class Configuration : IEntityTypeConfiguration<TableRowCount>
     {
-        public void Configure(EntityTypeBuilder<TableRowCount> builder) => builder.HasNoKey();
+        public void Configure(EntityTypeBuilder<TableRowCount> builder) => builder.HasNoKey().ToView(null);
     }
 }

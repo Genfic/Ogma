@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Ogma3.Infrastructure;
+using Ogma3.Infrastructure.Logging;
 using Serilog;
 using Serilog.Events;
 
@@ -20,7 +20,7 @@ public class Program
         
         var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
 
-        var (telegramToken, telegramId) = await TelegramCredentials.Get();
+        var (telegramToken, telegramId) = await Telegram.GetCredentials();
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Telegram(telegramToken, telegramId, restrictedToMinimumLevel: LogEventLevel.Error)

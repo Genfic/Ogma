@@ -35,8 +35,8 @@ public static class QueryableExtensions
         {
             EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
             EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-            EStorySortingOptions.DateAscending => query.OrderBy(s => s.CreationDate),
-            EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.CreationDate),
+            EStorySortingOptions.DateAscending => query.OrderBy(s => s.PublicationDate),
+            EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.PublicationDate),
             EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
             EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
             EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.Votes.Count),

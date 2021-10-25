@@ -18,9 +18,19 @@ public class OgmaRole : IdentityRole<long>
     {
         public void Configure(EntityTypeBuilder<OgmaRole> builder)
         {
-            builder.Property(r => r.IsStaff).IsRequired().HasDefaultValue(false);
-            builder.Property(r => r.Color).HasDefaultValue(null);
-            builder.Property(r => r.Order).HasDefaultValue(null);
+            builder.Property(r => r.IsStaff)
+                .IsRequired()
+                .HasDefaultValue(false);
+            builder.Property(r => r.Color)
+                .HasDefaultValue(null);
+            builder.Property(r => r.Order)
+                .HasDefaultValue(null);
         }
+    }
+
+    public OgmaRole Normalize()
+    {
+        NormalizedName = Name.ToUpperInvariant().Normalize();
+        return this;
     }
 }

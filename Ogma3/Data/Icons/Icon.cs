@@ -12,6 +12,10 @@ public class Icon : BaseModel
         public override void Configure(EntityTypeBuilder<Icon> builder)
         {
             base.Configure(builder);
+
+            builder
+                .HasIndex(i => i.Name)
+                .IsUnique();
                 
             builder
                 .Property(i => i.Name)
