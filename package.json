@@ -28,7 +28,7 @@
 		"t:cssdemo":	"deno run --allow-read --allow-net ./Tools/css-demo.ts",
 		"t:preloads":	"deno run --allow-read ./Tools/generate-preloads.ts",
 		"t:imports":	"deno run --allow-read ./Tools/generate-imports.ts",
-		"t:bundlesize":	"deno run --allow-read ./Tools/bundlesize.ts"
+		"t:bundlesize":	"deno run --allow-read --unstable ./Tools/bundlesize.ts"
 	},
 	"name": "Ogma3",
 	"dependencies": {

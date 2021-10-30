@@ -110,19 +110,19 @@ Number.prototype.clamp = function (min: number = 0, max: number = 1): number {
  * @param {number} alpha Opacity value between 0 and 1
  * @returns {string} Resulting RGBA value formatted as `rgba(255, 255, 255, 1)`
  */
-const hexToRgba = (hex: string, alpha: number = 1): string => {
+function hexToRgba(hex: string, alpha: number = 1): string {
 	let str = hex.replace('#', '');
 	let values = str.match(/.{1,2}/g);
 	let rgb = values.map((c: string) => parseInt(c, 16));
 	return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
-} 
-
+}
+ 
 /**
  * Reads cookie value by name
  * @param {string} name Name of the cookie to get value from
  * @returns {string} Returns the value of the cookie
  */
-const getCookieValue = (name: string): string => {
+function getCookieValue(name: string): string {
 	let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
 	return b ? b.pop() : '';
 }
@@ -135,7 +135,7 @@ const getCookieValue = (name: string): string => {
  * @param {boolean} secure Whether the cookie is secure
  * @param {string|null} sameSite SameSite setting
  */
-const setCookie = (name: string, value: string, expires: Date|null = null, secure: boolean = false, sameSite: string|null = null) => {
+function setCookie(name: string, value: string, expires: Date | null = null, secure: boolean = false, sameSite: string | null = null) {
 	let cookie = `${name}=${value}`;
 	if (expires) cookie += `; expires=${expires.toUTCString()}`;
 	if (secure) cookie += `; secure=${String(secure)}`;
@@ -148,14 +148,16 @@ const setCookie = (name: string, value: string, expires: Date|null = null, secur
  * @param {any} obj Variable to check
  * @returns {boolean} True if the variable is an object, false if it's a primitive
  */
-const isObject = (obj: any): boolean => obj === Object(obj);
-
+function isObject(obj: any): boolean {
+	return obj === Object(obj);
+}
 
 /**
  * Creates a deep copy of the object through parsing and serializing JSON
  */
-const _deepCopy = (o: object): object => JSON.parse(JSON.stringify({...o, __isCopied__: true}))
-
+function _deepCopy(o: object): object {
+	return JSON.parse(JSON.stringify({...o, __isCopied__: true}));
+}
 
 /**
  * Logger object to create better logging experience

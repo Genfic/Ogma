@@ -17,10 +17,7 @@ public class AutoformTagHelper : TagHelper
 
     private IHtmlGenerator Generator { get; }
         
-    public AutoformTagHelper(IHtmlGenerator generator)
-    {
-        Generator = generator;
-    }
+    public AutoformTagHelper(IHtmlGenerator generator) => Generator = generator;
 
     public ModelExpression For { get; set; }
         

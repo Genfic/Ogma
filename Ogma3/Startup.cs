@@ -50,8 +50,6 @@ namespace Ogma3;
 
 public class Startup
 {
-    private IWebHostEnvironment Env { get; }
-    
     // ReSharper disable once UnusedParameter.Local
     public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
@@ -63,7 +61,6 @@ public class Startup
             .AddUserSecrets(Assembly.GetAssembly(GetType()))
             .Build();
         // Configuration = configuration;
-        Env = env;
     }
 
     private IConfiguration Configuration { get; }
@@ -125,8 +122,16 @@ public class Startup
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddUserManager<OgmaUserManager>()
             .AddDefaultTokenProviders()
-            .AddUserStore<UserStore<OgmaUser, OgmaRole, ApplicationDbContext, long, IdentityUserClaim<long>, UserRole,
-                IdentityUserLogin<long>, IdentityUserToken<long>, IdentityRoleClaim<long>>>()
+            .AddUserStore<UserStore<
+                OgmaUser,
+                OgmaRole, 
+                ApplicationDbContext, 
+                long, 
+                IdentityUserClaim<long>, 
+                UserRole,
+                IdentityUserLogin<long>, 
+                IdentityUserToken<long>, 
+                IdentityRoleClaim<long>>>()
             .AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
 
         // Add services
@@ -154,8 +159,7 @@ public class Startup
 
         // Backblaze
         var b2Options = Configuration.GetSection("B2").Get<B2Options>();
-        var b2Client = new B2Client(B2Client.Authorize(b2Options));
-        services.AddSingleton<IB2Client>(b2Client);
+        services.AddSingleton<IB2Client>(new B2Client(b2Options));
 
         // File uploader
         services.AddSingleton<ImageUploader>();

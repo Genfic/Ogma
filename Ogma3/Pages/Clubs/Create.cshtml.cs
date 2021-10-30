@@ -64,7 +64,7 @@ public class CreateModel : PageModel
                 .MaximumLength(CTConfig.CClub.MaxDescriptionLength);
             RuleFor(m => m.Icon)
                 .FileSmallerThan(CTConfig.CClub.CoverMaxWeight)
-                .FileHasExtension(new[] {".jpg", ".jpeg", ".png", ".webp"});
+                .FileHasExtension(".jpg", ".jpeg", ".png", ".webp");
         }
     }
 

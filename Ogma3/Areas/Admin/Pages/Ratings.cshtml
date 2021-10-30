@@ -1,7 +1,5 @@
 ﻿@page
 @using Ogma3.Api.V1.Ratings
-@using Ogma3.Data
-@inject OgmaConfig _cfg;
 @model Ogma3.Areas.Admin.Pages.Ratings
 
 @{
@@ -47,7 +45,7 @@
 <ul class="items-list">
     <li v-for="n in ratings">
         <div class="deco" :style="{ border: n.blacklistedByDefault ? '1px solid red' : '1px solid transparent'}">
-            <img :src="cdn + n.icon" alt="" height="30" width="30">
+            <img :src="n.icon" alt="" height="30" width="30">
         </div>
         <div class="main">
             <h3 class="name">{{ n.name }}</h3>
@@ -65,7 +63,6 @@
 </ul>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(RatingsController))" v-if="!route"></div>
-<div id="cdn" style="background:indianred;padding:5rem" data-cdn="@_cfg.Cdn" v-if="!route"></div>
 
 @section Scripts
 {

@@ -57,6 +57,7 @@ form.form
       
         
   .o-form-group
+    position: relative
     display: flex
     flex-direction: column 
     margin-top: 1rem
@@ -64,7 +65,7 @@ form.form
     input, 
     textarea
       padding: .5rem
-      background-color: v.$background
+      background-color: v.$ele-1
       color: v.$foreground
       
       &[disabled]
@@ -137,6 +138,26 @@ form.form
       background-color: v.$red-10
       padding: .25rem
       font-size: .9rem
+      
+    aside.info
+      position: absolute
+      left: calc(100% + 1rem)
+      top: 1.5rem
+      min-width: 15rem
+      background-color: v.$ele-1
+      border: 1px solid v.$foreground-25
+      padding: .5rem
+      pointer-events: none
+      opacity: 0
+      transition: opacity 200ms ease-in-out
+      &.visible
+        opacity: 100%
+      > *
+        margin: 0
+      @media screen and (max-width: v.$mq-mobile)
+        left: 0
+        top: 100%
+        z-index: 999
       
   .o-form-control
     +f.focus

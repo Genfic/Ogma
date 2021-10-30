@@ -1,5 +1,7 @@
 @page
+@using Microsoft.AspNetCore.Antiforgery
 @model Ogma3.Areas.Admin.Pages.Index
+@inject IAntiforgery _xcsrf
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -18,9 +20,14 @@
 
 <br>
 
+<cache-info></cache-info>
+
+<br>
+
 <table-info></table-info>
 
 @section Scripts
 {
     <script type="module" src="~/js/dist/admin/lit-components/table-info.min.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/dist/admin/lit-components/cache-info.min.js" asp-append-version="true"></script>
 }

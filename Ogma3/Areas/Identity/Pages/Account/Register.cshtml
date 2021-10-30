@@ -3,6 +3,7 @@
 @using reCAPTCHA.AspNetCore
 @using reCAPTCHA.AspNetCore.Templates
 @using Microsoft.Extensions.Options
+@using Ogma3.Data
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -21,30 +22,44 @@
                 <label asp-for="Input.Name"></label>
                 <input asp-for="Input.Name" class="o-form-control active-border" autocomplete="username"/>
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
+                <aside class="info" asp-for="Input.Name">Can consist of alphanumeric characters, dashes, underscores, and spaces</aside>
             </div>
 
             <div class="o-form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="o-form-control active-border" autocomplete="email"/>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <aside class="info" asp-for="Input.Email">No worries, we will never send you unwanted spam</aside>
             </div>
 
             <div class="o-form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password"/>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <aside class="info" asp-for="Input.Password">
+                    The password must contain at least:
+                    <ul>
+                        <li class="nb">one digit</li>
+                        <li class="nb">one lowercase character</li>
+                        <li class="nb">one uppercase character</li>
+                        <li class="nb">one special character</li>
+                    </ul>
+                    and must be at least @CTConfig.CUser.MinPassLength characters long
+                </aside>
             </div>
 
             <div class="o-form-group">
                 <label asp-for="Input.ConfirmPassword"></label>
                 <input asp-for="Input.ConfirmPassword" class="o-form-control active-border" autocomplete="new-password"/>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                <aside class="info" asp-for="Input.ConfirmPassword">Just to be safe</aside>
             </div>
             
             <div class="o-form-group">
                 <label asp-for="Input.InviteCode"></label>
                 <input asp-for="Input.InviteCode" class="o-form-control active-border" autocomplete="one-time-code">
                 <span asp-validation-for="Input.InviteCode" class="text-danger"></span>
+                <aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our Discord!</aside>
             </div>
             
             @(Html.Recaptcha<RecaptchaV2Checkbox>(_recaptchaSettings?.Value))
@@ -52,31 +67,30 @@
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
 </div>             
-@{
-    if (Model.ExternalLogins.Count > 0)
-    {
-     <div class="col-md-6 col-md-offset-2">
-         <section>
-             <h4>Use another service to register.</h4>
-             <hr />
-             <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                 <div>
-                     <p>
-                         @foreach (var provider in Model.ExternalLogins)
-                         {
-                             <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                         }
-                     </p>
-                 </div>
-             </form>
-         </section>
-     </div>                 
-    }
+@if (Model.ExternalLogins.Count > 0)
+{
+ <div class="col-md-6 col-md-offset-2">
+     <section>
+         <h4>Use another service to register.</h4>
+         <hr />
+         <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+             <div>
+                 <p>
+                     @foreach (var provider in Model.ExternalLogins)
+                     {
+                         <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                     }
+                 </p>
+             </div>
+         </form>
+     </section>
+ </div>                 
 }
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/dist/account/register.min.js" asp-append-version="true"></script>
 }
 @section CSS {
     <link rel="stylesheet" href="~/css/dist/login.min.css" asp-append-version="true">

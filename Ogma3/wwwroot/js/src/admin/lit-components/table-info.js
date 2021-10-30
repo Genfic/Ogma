@@ -73,7 +73,6 @@ export class TableInfo extends LitElement {
 	async _load() {
 		const res = await fetch('/admin/api/telemetry/gettableinfo');
 		this.tableInfo = await res.json();
-		console.log(this.tableInfo);
 	}
 	
 	_sort(by) {

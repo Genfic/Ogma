@@ -72,11 +72,7 @@ exports.watchCss = watchCss;
 const js = () => pipeline(gulp.src([`${roots.js}/src/**/*.js`]),
 	rename({suffix: '.min'}),
 	sourcemaps.init(),
-	terser({
-		mangle: {
-			toplevel: false
-		}
-	}),
+	terser(),
 	sourcemaps.write('./'),
 	gulp.dest(`${roots.js}/dist`),
 	errorHandler);
@@ -91,11 +87,7 @@ const ts = () => pipeline(gulp.src([`${roots.js}/src/**/*.ts`]),
 	tsProject(),
 	gulp.dest(`${roots.js}/dist`),
 	rename({suffix: '.min'}),
-	terser({
-		mangle: {
-			toplevel: true
-		}
-	}),
+	terser(),
 	sourcemaps.write('./'),
 	gulp.dest(`${roots.js}/dist`),
 	errorHandler);

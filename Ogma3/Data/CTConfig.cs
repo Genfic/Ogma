@@ -32,7 +32,7 @@ public static class CTConfig
         
     public static class CRating
     {
-        public const int MinNameLength = 5;
+        public const int MinNameLength = 4;
         public const int MaxNameLength = 20;
 
         public const int MinDescriptionLength = 5;

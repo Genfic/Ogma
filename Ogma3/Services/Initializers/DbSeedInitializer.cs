@@ -93,13 +93,7 @@ public class DbSeedInitializer : IAsyncInitializer
     {
         await _context.Ratings.UpsertRange(Data.Ratings)
             .On(i => i.Name)
-            .WhenMatched((o, n) => new Rating
-            {
-                Name = n.Name,
-                Description = n.Description,
-                Icon = n.Icon,
-                IconId = n.IconId,
-            })
+            .NoUpdate()
             .RunAsync();
     }
 

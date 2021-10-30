@@ -96,7 +96,7 @@ public class CreateModel : PageModel
                 .Length(CTConfig.CStory.MinHookLength, CTConfig.CStory.MaxHookLength);
             RuleFor(i => i.Cover)
                 .FileSmallerThan(CTConfig.CStory.CoverMaxWeight)
-                .FileHasExtension(new[] {".jpg", ".jpeg", ".png"});
+                .FileHasExtension(".jpg", ".jpeg", ".png");
             RuleFor(i => i.Rating).NotEmpty();
             RuleFor(i => i.Tags).NotEmpty();
         }

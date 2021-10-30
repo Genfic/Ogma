@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using System.ServiceModel.Syndication;
@@ -19,12 +20,16 @@ public class RssService : IRssService
         
     private readonly string _domain;
 
-    public RssService(ApplicationDbContext context, IConfiguration config, IUrlHelperFactory urlHelperFactory,
-        IActionContextAccessor actionContextAccessor)
+    public RssService(ApplicationDbContext context, IConfiguration config, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
     {
         _context = context;
 
-        _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+        if (actionContextAccessor.ActionContext is not {} ac)
+        {
+            throw new NullReferenceException("Action context was `null`");
+        }
+
+        _urlHelper = urlHelperFactory.GetUrlHelper(ac);
         _domain = $"https://{config.GetValue<string>("Domain")}";
     }
 

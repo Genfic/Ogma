@@ -30,7 +30,7 @@ public static class CreateRating
                 .MinimumLength(CTConfig.CRating.MinDescriptionLength)
                 .MaximumLength(CTConfig.CRating.MaxDescriptionLength);
             RuleFor(r => r.Icon)
-                .FileHasExtension("svg")
+                .FileHasExtension(".svg")
                 .FileSmallerThan(100 * 1024)
                 .When(r => r.Icon is not null);
         }

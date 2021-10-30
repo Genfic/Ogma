@@ -12,7 +12,6 @@ let ratings_vue = new Vue({
 		err: [],
 		ratings: [],
 		route: null,
-		cdn: null,
 		xcsrf: null
 	},
 	methods: {
@@ -94,7 +93,6 @@ let ratings_vue = new Vue({
 	async mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
-		this.cdn = document.getElementById("cdn").dataset.cdn;
 		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of namespaces
 		await this.getRatings();
