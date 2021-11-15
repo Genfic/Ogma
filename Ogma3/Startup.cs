@@ -88,7 +88,8 @@ public class Startup
         // Middleware
         services
             .AddTransient<RequestTimestampMiddleware>()
-            .AddTransient<UserBanMiddleware>();
+            .AddTransient<UserBanMiddleware>()
+            .AddTransient<RedirectMiddleware>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<Startup>();
@@ -214,7 +215,6 @@ public class Startup
             .AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
-                options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/.well-known/change-password");
             })
             .AddRazorRuntimeCompilation();
 
@@ -291,7 +291,9 @@ public class Startup
         app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
             appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"); });
 
-        app.UseHttpsRedirection();
+        // Redirects
+        app.UseHttpsRedirection()
+            .UseRedirectMiddleware();
 
         // Map file extensions
         var extensionsProvider = new FileExtensionContentTypeProvider();
