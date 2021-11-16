@@ -55,7 +55,7 @@ public class UserBanMiddleware : IMiddleware
 
         if (banDate > DateTime.Now)
         {
-            Log.Information("Banned user {Uid} tried accessing the site", uid);
+            Log.Information("Banned user {UserId} tried accessing the site", uid);
             if (context.Request.Path.StartsWithSegments("/api"))
             {
                 context.Response.Clear();

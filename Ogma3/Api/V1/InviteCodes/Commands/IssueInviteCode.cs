@@ -47,7 +47,7 @@ public static class IssueInviteCode
             
             var code = new InviteCode
             {
-                Code = _codeGenerator.GetInviteCode(),
+                Code = _codeGenerator.GetInviteCode(true),
                 IssuedById = (long)_uid
             };
             _context.InviteCodes.Add(code);

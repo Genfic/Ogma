@@ -84,12 +84,11 @@ public class Startup
             .AddScoped<ClubRepository>()
             .AddScoped<StoriesRepository>()
             .AddScoped<NotificationsRepository>();
-        
+
         // Middleware
         services
             .AddTransient<RequestTimestampMiddleware>()
-            .AddTransient<UserBanMiddleware>()
-            .AddTransient<RedirectMiddleware>();
+            .AddTransient<UserBanMiddleware>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<Startup>();
@@ -125,13 +124,13 @@ public class Startup
             .AddDefaultTokenProviders()
             .AddUserStore<UserStore<
                 OgmaUser,
-                OgmaRole, 
-                ApplicationDbContext, 
-                long, 
-                IdentityUserClaim<long>, 
+                OgmaRole,
+                ApplicationDbContext,
+                long,
+                IdentityUserClaim<long>,
                 UserRole,
-                IdentityUserLogin<long>, 
-                IdentityUserToken<long>, 
+                IdentityUserLogin<long>,
+                IdentityUserToken<long>,
                 IdentityRoleClaim<long>>>()
             .AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
 
@@ -189,10 +188,8 @@ public class Startup
             options.Cookie.SameSite = SameSiteMode.Lax;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
-            options.Events.OnRedirectToLogin =
-                HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.OnRedirectToLogin);
-            options.Events.OnRedirectToAccessDenied =
-                HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.OnRedirectToLogin);
+            options.Events.OnRedirectToLogin = HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.OnRedirectToLogin);
+            options.Events.OnRedirectToAccessDenied = HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.OnRedirectToLogin);
         });
 
         // Compression
@@ -239,7 +236,7 @@ public class Startup
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
-        
+
         // MediatR
         services
             .AddMediatR(typeof(Startup))
@@ -292,8 +289,11 @@ public class Startup
             appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"); });
 
         // Redirects
-        app.UseHttpsRedirection()
-            .UseRedirectMiddleware();
+        app.UseHttpsRedirection();
+        app.UseRedirectMiddleware(options =>
+        {
+            options.Redirects.Add("/.well-known/change-password", "/identity/account/manage/changepassword");
+        });
 
         // Map file extensions
         var extensionsProvider = new FileExtensionContentTypeProvider();
@@ -313,7 +313,6 @@ public class Startup
             },
             ContentTypeProvider = extensionsProvider
         });
-
         app.UseRouting();
 
         app.UseAuthentication();
@@ -323,7 +322,7 @@ public class Startup
         // OpenAPI
         app.UseOpenApi();
         app.UseSwaggerUi3();
-        
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();

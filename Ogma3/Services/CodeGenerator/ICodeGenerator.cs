@@ -2,5 +2,5 @@ namespace Ogma3.Services.CodeGenerator;
 
 public interface ICodeGenerator
 {
-    string GetInviteCode();
+    string GetInviteCode(bool isBase64 = false);
 }

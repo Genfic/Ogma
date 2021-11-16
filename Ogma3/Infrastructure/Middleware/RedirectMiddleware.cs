@@ -1,34 +1,50 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class RedirectMiddleware : IMiddleware
+public class RedirectMiddleware
 {
-    private readonly Dictionary<string, string> _redirects = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["/.well-known/change-password"] = "/identity/account/manage/changepassword"
-    }; 
+    private readonly RequestDelegate _next;
+    private readonly RedirectMiddlewareOptions _options;
     
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options)
     {
-        if (_redirects.TryGetValue(context.Request.Path, out var redirect))
+        _next = next;
+        _options = options.Value;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        if (_options.Redirects.TryGetValue(context.Request.Path, out var redirect))
         {
             Log.Information("Redirecting from {Source} to {Target}", context.Request.Path, redirect);
             context.Response.Redirect(redirect);
             return;
         }
 
-        await next(context);
+        await _next(context);
     }
 }
 
 public static class RedirectMiddlewareExtensions
 {
-    public static IApplicationBuilder UseRedirectMiddleware(this IApplicationBuilder builder) 
-        => builder.UseMiddleware<RedirectMiddleware>();
+    public static IApplicationBuilder UseRedirectMiddleware(this IApplicationBuilder builder, Action<RedirectMiddlewareOptions> config)
+    {
+        var options = new RedirectMiddlewareOptions();
+        config(options);
+        return builder.UseMiddleware<RedirectMiddleware>(Options.Create(options));
+    }
+}
+
+public class RedirectMiddlewareOptions
+{
+    public Dictionary<string, string> Redirects { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 }

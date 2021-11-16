@@ -22,7 +22,7 @@ public static class RoutingHelpers
         // Check if this is an ApiController
         var endpoint = context.GetEndpoint();
 
-        return endpoint != null && endpoint.Metadata.Any(o => o is ApiControllerAttribute);
+        return endpoint is not null && endpoint.Metadata.Any(o => o is ApiControllerAttribute);
     }
         
     public static Func<RedirectContext<CookieAuthenticationOptions>, Task> HandleApiRequest(int statusCode, Func<RedirectContext<CookieAuthenticationOptions>, Task> original)
