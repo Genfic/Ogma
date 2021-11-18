@@ -27,7 +27,6 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
     <PackageReference Include="HaemmerElectronics.SeppPenner.Serilog.Sinks.Telegram" Version="1.0.16" />
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
-    <PackageReference Include="JpProject.AspNetCore.PasswordHasher.Argon2" Version="3.0.3" />
     <PackageReference Include="Markdig" Version="0.26.0" />
     <PackageReference Include="MarkdigExtensions" Version="1.0.0" />
     <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="1.2.0" />
@@ -52,6 +51,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.22" />
+    <PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" Version="5.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.14.1" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
