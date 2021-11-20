@@ -31,7 +31,7 @@ public class CreateModel : PageModel
         if (uid is null) return Unauthorized();
             
         // Check if founder
-        var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+        var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
         if (!isFounder) return Unauthorized();
             
         return Page();
@@ -68,7 +68,7 @@ public class CreateModel : PageModel
         if (uid is null) return Unauthorized();
             
         // Check if authorized
-        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
         if (!isAuthorized) return Unauthorized();
 
         _context.Folders.Add(new Folder

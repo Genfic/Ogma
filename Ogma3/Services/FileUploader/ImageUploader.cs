@@ -8,6 +8,7 @@ using B2Net.Models;
 using Microsoft.AspNetCore.Http;
 using Ogma3.Data;
 using Serilog;
+using SerilogTimings;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Gif;
@@ -37,7 +38,7 @@ public class ImageUploader : IFileUploader
         string name, 
         int? width = null, 
         int? height = null, 
-        int tries = 10
+        int tries = 5
     ) {
         if (file is not {Length: > 0}) 
             throw new ArgumentException("File cannot be null or empty");
@@ -51,6 +52,7 @@ public class ImageUploader : IFileUploader
 
         if (width is not null || height is not null)
         {
+            using var op = Operation.Time("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
             // Create the appropriate decoder
             IImageDecoder decoder = ext.ToUpper() switch
             {
@@ -86,6 +88,8 @@ public class ImageUploader : IFileUploader
         var counter = tries;
         while (counter >= 0)
         {
+            using var op = Operation.Time("Uploading image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
+
             try
             {
                 var result = await _b2Client.Files.Upload(ms.ToArray(), fileName);
@@ -97,10 +101,10 @@ public class ImageUploader : IFileUploader
             }
             catch (B2Exception e)
             {
-                Log.Error("⚠ Backblaze Error: {Message}", e.Message);
-                Log.Information("  Tries left: {Count}", --counter);
+                Log.Error("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
             }
         }
+        Log.Error("Couldn't upload file {Name} ({Size} bytes)", file.Name, file.Length);
         throw new Exception("Could not upload file. Check server logs.");
 
     }

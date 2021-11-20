@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -32,7 +31,7 @@ public class ClubRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<bool> CheckRoles(long clubId, long? userId, IEnumerable<EClubMemberRoles> roles)
+    public async Task<bool> CheckRoles(long clubId, long? userId, params EClubMemberRoles[] roles)
     {
         if (userId is null) return false;
             
@@ -42,6 +41,14 @@ public class ClubRepository
             .Where(c => c.ClubMembers
                 .Any(cm => cm.MemberId == userId && roles.Contains(cm.Role))
             )
+            .AnyAsync();
+    }
+
+    public async Task<bool> IsMember(long? userId, long clubId)
+    {
+        return await _context.ClubMembers
+            .Where(cm => cm.MemberId == userId)
+            .Where(cm => cm.ClubId == clubId)
             .AnyAsync();
     }
 }

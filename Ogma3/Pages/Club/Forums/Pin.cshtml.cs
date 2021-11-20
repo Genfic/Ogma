@@ -56,11 +56,7 @@ public class Pin : PageModel
             
         var thread = await _context.ClubThreads
             .Where(ct => ct.Id == id)
-            .FirstOrDefaultAsync();
-
-        var canPin = await _context.ClubThreads
-            .Where(ct => ct.Id == id)
-            .Select(ct => ct.Club.ClubMembers
+            .Where(ct => ct.Club.ClubMembers
                 .Where(cm => cm.MemberId == uid)
                 .Any(cm => new[]
                 {
@@ -70,7 +66,7 @@ public class Pin : PageModel
                 }.Contains(cm.Role)))
             .FirstOrDefaultAsync();
 
-        if (!canPin) return Unauthorized();
+        if (thread is null) return NotFound();
 
         thread.IsPinned = !thread.IsPinned;
         await _context.SaveChangesAsync();

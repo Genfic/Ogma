@@ -9,6 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Serilog;
 
 namespace Ogma3.Pages.Clubs;
 
@@ -34,7 +35,6 @@ public class DeleteModel : PageModel
         public string Slug { get; init; }
         public string Hook { get; init; }
         public DateTime CreationDate { get; init; }
-        public long FounderId { get; init; }
     }
 
     public async Task<IActionResult> OnGetAsync(long? id)
@@ -46,21 +46,22 @@ public class DeleteModel : PageModel
             
         Club = await _context.Clubs
             .Where(c => c.Id == id)
+            .Where(c => c.ClubMembers
+                .Where(cm => cm.MemberId == uid)
+                .Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
             .Select(c => new GetData
             {
                 Id = c.Id,
                 Name = c.Name,
                 Slug = c.Slug,
                 Hook = c.Hook,
-                CreationDate = c.CreationDate,
-                FounderId = c.ClubMembers.FirstOrDefault(m => m.Role == EClubMemberRoles.Founder).MemberId
+                CreationDate = c.CreationDate
             })
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
         if (Club is null) return NotFound();
-        if (Club.FounderId != uid) return Unauthorized();
-            
+
         return Page();
     }
 
@@ -70,20 +71,24 @@ public class DeleteModel : PageModel
             
         var uid = User.GetNumericId();
         if (uid is null) return Unauthorized();
+        
+        Log.Information("User {UserId} attempted to delete club {ClubId}", uid, id);
             
         var club = await _context.Clubs
             .Where(c => c.Id == id)
+            .Where(c => c.ClubMembers
+                .Where(cm => cm.MemberId == uid)
+                .Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
             .FirstOrDefaultAsync();
             
-        if (club is null) return NotFound();
+        if (club is null)
+        {
+            Log.Information("User {UserId} did not succeed in deleting club {ClubId}", uid, id);
+            return NotFound();
+        }
 
-        var founderId = await _context.ClubMembers
-            .Where(cm => cm.ClubId == club.Id && cm.Role == EClubMemberRoles.Founder)
-            .Select(cm => cm.MemberId)
-            .FirstOrDefaultAsync();
-
-        if (founderId != uid) return Unauthorized();
-            
+        
+        Log.Information("User {UserId} succeeded in deleting club {ClubId}", uid, id);
         _context.Clubs.Remove(club);
 
         if (club.Icon is not null && club.IconId is not null)

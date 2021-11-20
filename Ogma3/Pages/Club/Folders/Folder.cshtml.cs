@@ -80,11 +80,7 @@ public class FolderModel : PageModel
             .FirstOrDefaultAsync();
         if (Folder is null) return NotFound();
 
-        EditPermitted = await _clubRepo.CheckRoles(ClubBar.Id, uid, new[]
-        {
-            EClubMemberRoles.Founder, 
-            EClubMemberRoles.Admin
-        });
+        EditPermitted = await _clubRepo.CheckRoles(ClubBar.Id, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
 
         Stories = await _context.FolderStories
             .Where(s => s.FolderId == id)

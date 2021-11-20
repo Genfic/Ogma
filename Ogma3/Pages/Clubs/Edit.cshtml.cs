@@ -14,6 +14,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Serilog;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Clubs;
@@ -44,7 +45,6 @@ public class EditModel : PageModel
         public string Description { get; init; }
         [DataType(DataType.Upload)] 
         public IFormFile Icon { get; init; }
-        public long FounderId { get; init; }
     }
 
     public class InputModelValidator : AbstractValidator<InputModel>
@@ -76,20 +76,21 @@ public class EditModel : PageModel
 
         Input = await _context.Clubs
             .Where(c => c.Id == id)
+            .Where(c => c.ClubMembers
+                .Where(cm => cm.MemberId == uid)
+                .Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
             .Select(c => new InputModel
             {
                 Id = c.Id,
                 Name = c.Name,
                 Slug = c.Slug,
                 Hook = c.Hook,
-                Description = c.Description,
-                FounderId = c.ClubMembers.FirstOrDefault(cm => cm.Role == EClubMemberRoles.Founder).MemberId
+                Description = c.Description
             })
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
         if (Input is null) return NotFound();
-        if (Input.FounderId != uid) return Unauthorized();
 
         return Page();
     }
@@ -100,24 +101,27 @@ public class EditModel : PageModel
 
         var uid = User.GetNumericId();
         if (uid is null) return Unauthorized();
+        
+        Log.Information("User {UserId} attempted to edit club {ClubId}", uid, id);
 
         var club = await _context.Clubs
             .Where(c => c.Id == id)
+            .Where(c => c.ClubMembers
+                .Where(cm => cm.MemberId == uid)
+                .Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
             .FirstOrDefaultAsync();
-        if (club is null) return NotFound();
+        if (club is null)
+        {
+            Log.Information("User {UserId} did not succeed in editing club {ClubId}", uid, id);
+            return NotFound();
+        }
 
-        var authorized = await _context.ClubMembers
-            .Where(cm => cm.ClubId == id)
-            .Where(cm => cm.MemberId == uid)
-            .Where(cm => cm.Role == EClubMemberRoles.Founder)
-            .AnyAsync();
-        if (!authorized) return Unauthorized();
-                
         club.Name = Input.Name;
         club.Slug = Input.Name.Friendlify();
         club.Hook = Input.Hook;
         club.Description = Input.Description;
 
+        Log.Information("User {UserId} succeeded in editing club {ClubId}", uid, id);
         await _context.SaveChangesAsync();
 
         if (Input.Icon is not { Length: > 0 }) return RedirectToPage("/Club/Index", new { club.Id, club.Slug });

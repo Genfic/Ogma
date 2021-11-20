@@ -24,7 +24,7 @@ public class EditModel : PageModel
     {
         var uid = User.GetNumericId();
         if (uid is null) return Unauthorized();
-            
+        
         Input = await _context.ClubThreads
             .Where(ct => ct.Id == id)
             .Where(ct => ct.AuthorId == uid)

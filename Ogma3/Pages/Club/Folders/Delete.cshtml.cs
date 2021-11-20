@@ -39,7 +39,7 @@ public class DeleteModel : PageModel
         if (uid is null) return Unauthorized();
             
         // Check if authorized
-        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
+        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
         if (!isAuthorized) return Unauthorized();
 
         Folder = await _context.Folders
@@ -67,7 +67,7 @@ public class DeleteModel : PageModel
         if (uid == null) return Unauthorized();
             
         // Check if authorized
-        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{EClubMemberRoles.Founder, EClubMemberRoles.Admin});
+        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
         if (!isAuthorized) return Unauthorized();
             
         var folder = await _context.Folders

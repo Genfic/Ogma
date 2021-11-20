@@ -28,7 +28,7 @@ public class EditModel : PageModel
         if (uid is null) return Unauthorized();
             
         // Check if founder or admin
-        var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+        var isFounder = await _clubRepo.CheckRoles(clubId, (long) uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
         if (!isFounder) return Unauthorized();
 
         Input = await _context.Folders
@@ -83,7 +83,7 @@ public class EditModel : PageModel
         if (uid is null) return Unauthorized();
             
         // Check if authorized
-        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, new[]{ EClubMemberRoles.Founder, EClubMemberRoles.Admin });
+        var isAuthorized = await _clubRepo.CheckRoles(clubId, (long) uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
         if (!isAuthorized) return Unauthorized();
             
         var folder = await _context.Folders

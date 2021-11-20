@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
+using Ogma3.Data.Clubs;
 using Ogma3.Data.ClubThreads;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Extensions;
@@ -13,17 +14,23 @@ namespace Ogma3.Pages.Club.Forums;
 public class CreateModel : PageModel
 {
     private readonly ApplicationDbContext _context;
+    private readonly ClubRepository _clubRepo;
 
-    public CreateModel(ApplicationDbContext context)
+    public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
     {
         _context = context;
+        _clubRepo = clubRepo;
     }
 
     [BindProperty]
     public PostModel ClubThread { get; set; }
 
-    public IActionResult OnGet(long id)
+    public async Task<IActionResult> OnGet(long id)
     {
+        var uid = User.GetNumericId();
+
+        if (!await _clubRepo.IsMember(uid, id)) return Unauthorized();
+        
         ClubThread = new PostModel
         {
             ClubId = id
@@ -60,6 +67,8 @@ public class CreateModel : PageModel
         // Get logged in user
         var uid = User.GetNumericId();
         if (uid is null) return Unauthorized();
+
+        if (!await _clubRepo.IsMember(uid, ClubThread.ClubId)) return Unauthorized();
             
         var clubThread = new ClubThread
         {
