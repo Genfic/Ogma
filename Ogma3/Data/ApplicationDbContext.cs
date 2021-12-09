@@ -46,62 +46,62 @@ public class ApplicationDbContext : IdentityDbContext
     IdentityUserToken<long>
 >
 {
-    public DbSet<Tag> Tags { get; set; } = null!;
-    public DbSet<StoryTag> StoryTags { get; set; } = null!;
-    public DbSet<Story> Stories { get; set; } = null!;
-    public DbSet<Rating> Ratings { get; set; } = null!;
-    public DbSet<Chapter> Chapters { get; set; } = null!;
-    public DbSet<ChaptersRead> ChaptersRead { get; set; } = null!;
-    public DbSet<CommentsThread> CommentThreads { get; set; } = null!;
-    public DbSet<Comment> Comments { get; set; } = null!;
-    public DbSet<CommentRevision> CommentRevisions { get; set; } = null!;
-    public DbSet<Vote> Votes { get; set; } = null!;
-    public DbSet<Shelf> Shelves { get; set; } = null!;
-    public DbSet<ShelfStory> ShelfStories { get; set; } = null!;
-    public DbSet<Blogpost> Blogposts { get; set; } = null!;
-    public DbSet<UserRole> OgmaUserRoles { get; set; } = null!;
-    public DbSet<OgmaRole> OgmaRoles { get; set; } = null!;
-    public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; } = null!;
+    public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<StoryTag> StoryTags => Set<StoryTag>();
+    public DbSet<Story> Stories => Set<Story>();
+    public DbSet<Rating> Ratings => Set<Rating>();
+    public DbSet<Chapter> Chapters => Set<Chapter>();
+    public DbSet<ChaptersRead> ChaptersRead => Set<ChaptersRead>();
+    public DbSet<CommentsThread> CommentThreads => Set<CommentsThread>();
+    public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<CommentRevision> CommentRevisions => Set<CommentRevision>();
+    public DbSet<Vote> Votes => Set<Vote>();
+    public DbSet<Shelf> Shelves => Set<Shelf>();
+    public DbSet<ShelfStory> ShelfStories => Set<ShelfStory>();
+    public DbSet<Blogpost> Blogposts => Set<Blogpost>();
+    public DbSet<UserRole> OgmaUserRoles => Set<UserRole>();
+    public DbSet<OgmaRole> OgmaRoles => Set<OgmaRole>();
+    public DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers => Set<CommentsThreadSubscriber>();
 
     // Clubs
-    public DbSet<Club> Clubs { get; set; } = null!;
-    public DbSet<ClubMember> ClubMembers { get; set; } = null!;
-    public DbSet<ClubThread> ClubThreads { get; set; } = null!;
-    public DbSet<Folder> Folders { get; set; } = null!;
-    public DbSet<FolderStory> FolderStories { get; set; } = null!;
+    public DbSet<Club> Clubs => Set<Club>();
+    public DbSet<ClubMember> ClubMembers => Set<ClubMember>();
+    public DbSet<ClubThread> ClubThreads => Set<ClubThread>();
+    public DbSet<Folder> Folders => Set<Folder>();
+    public DbSet<FolderStory> FolderStories => Set<FolderStory>();
 
 
     // Secondary
-    public DbSet<Document> Documents { get; set; } = null!;
-    public DbSet<Icon> Icons { get; set; } = null!;
-    public DbSet<Quote> Quotes { get; set; } = null!;
-    public DbSet<Faq> Faqs { get; set; } = null!;
+    public DbSet<Document> Documents => Set<Document>();
+    public DbSet<Icon> Icons => Set<Icon>();
+    public DbSet<Quote> Quotes => Set<Quote>();
+    public DbSet<Faq> Faqs => Set<Faq>();
         
     // Moderation
-    public DbSet<ModeratorAction> ModeratorActions { get; set; } = null!;
-    public DbSet<ClubModeratorAction> ClubModeratorActions { get; set; } = null!;
-    public DbSet<ContentBlock> ContentBlocks { get; set; } = null!;
-    public DbSet<Report> Reports { get; set; } = null!;
-    public DbSet<Infraction> Infractions { get; set; } = null!;
+    public DbSet<ModeratorAction> ModeratorActions => Set<ModeratorAction>();
+    public DbSet<ClubModeratorAction> ClubModeratorActions => Set<ClubModeratorAction>();
+    public DbSet<ContentBlock> ContentBlocks => Set<ContentBlock>();
+    public DbSet<Report> Reports => Set<Report>();
+    public DbSet<Infraction> Infractions => Set<Infraction>();
         
     // Blacklists
-    public DbSet<BlacklistedRating> BlacklistedRatings { get; set; } = null!;
-    public DbSet<BlacklistedTag> BlacklistedTags { get; set; } = null!;
-    public DbSet<UserBlock> BlacklistedUsers { get; set; } = null!;
+    public DbSet<BlacklistedRating> BlacklistedRatings => Set<BlacklistedRating>();
+    public DbSet<BlacklistedTag> BlacklistedTags => Set<BlacklistedTag>();
+    public DbSet<UserBlock> BlacklistedUsers => Set<UserBlock>();
         
     // Follows
-    public DbSet<UserFollow> FollowedUsers { get; set; } = null!;
+    public DbSet<UserFollow> FollowedUsers => Set<UserFollow>();
         
     // Notifications
-    public DbSet<Notification> Notifications { get; set; } = null!;
-    public DbSet<NotificationRecipients> NotificationRecipients { get; set; } = null!;
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<NotificationRecipients> NotificationRecipients => Set<NotificationRecipients>();
 
     // Invite codes
-    public DbSet<InviteCode> InviteCodes { get; set; } = null!;
+    public DbSet<InviteCode> InviteCodes => Set<InviteCode>();
     
     // Keyless
-    public DbSet<TableInfo> TableInfos { get; set; } = null!;
-    public DbSet<TableRowCount> TableRowCounts { get; set; } = null!;
+    public DbSet<TableInfo> TableInfos => Set<TableInfo>();
+    public DbSet<TableRowCount> TableRowCounts => Set<TableRowCount>();
     
 
     private readonly ILoggerFactory _myLoggerFactory;

@@ -49,7 +49,7 @@ public static class String
     }
 
     /// <summary>
-    /// Truncates a string to the given length and caps it of
+    /// Truncates a string to the given length and caps it off
     /// </summary>
     /// <param name="input">String to be truncated</param>
     /// <param name="length">Truncation length</param>
@@ -71,7 +71,7 @@ public static class String
     {
         var wasLetter = false;
         var count = 0;
-        foreach (var ch in input)
+        foreach (var ch in input.AsSpan())
         {
             if (char.IsWhiteSpace(ch))
             {

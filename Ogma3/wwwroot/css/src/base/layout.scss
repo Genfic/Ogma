@@ -1,0 +1,70 @@
+@use "../vars" as v;
+
+html {
+    position: relative;
+    min-height: 100%;
+    font-size: 14px;
+    @media (min-width: 768px) {
+        font-size: 16px;
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Raleway Var', 'Arial', sans-serif;
+    padding-left: calc(100vw - 100%);
+    background-color: v.$background;
+    color: v.$foreground;
+
+    > header {
+        width: 100%;
+    }
+
+    > #site-content {
+        margin-top: v.$nav-height + (v.$nav-v-pad * 2);
+        padding: 15px v.$body-padding-horizontal;
+        flex: 1;
+        width: v.$body-width;
+        scrollbar-gutter: stable both-edges;
+
+        &-wide {
+            @extend #site-content;
+            max-width: min(100%, 1200px);
+        }
+
+        @media screen and (max-width: v.$mq-mobile) {
+            margin-top: 0;
+        }
+    }
+
+    > footer {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        @media screen and (max-width: v.$mq-mobile) {
+            margin-bottom: v.$nav-height + (v.$nav-v-pad * 2);
+        }
+    }
+}
+
+.o-grid {
+    display: grid;
+    width: 100%;
+    gap: .25rem;
+    padding: 0;
+    margin: 0;
+    @media screen and (max-width: v.$mq-mobile) {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.two-columns {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    &.three-columns {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
