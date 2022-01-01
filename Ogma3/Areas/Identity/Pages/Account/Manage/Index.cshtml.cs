@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,9 +50,10 @@ public class IndexModel : PageModel
         [DataType(DataType.Upload)]
         public IFormFile Avatar { get; init; }
 
-        public bool DeleteAvatar { get; set; } = false;
+        public bool DeleteAvatar { get; set; }
         public string Title { get; init; }
         public string Bio { get; init; }
+        public string Links { get; set; }
     }
 
     public class InputModelValidation : AbstractValidator<InputModel>
@@ -65,6 +67,8 @@ public class IndexModel : PageModel
                 .MaximumLength(CTConfig.CUser.MaxTitleLength);
             RuleFor(x => x.Bio)
                 .MaximumLength(CTConfig.CUser.MaxBioLength);
+            RuleFor(x => x.Links)
+                .MaximumLines(CTConfig.CUser.MaxLinksAmount);
         }
     }
 
@@ -76,7 +80,8 @@ public class IndexModel : PageModel
             {
                 Username = u.UserName,
                 Title = u.Title,
-                Bio = u.Bio
+                Bio = u.Bio,
+                Links = string.Join('\n', u.Links)
             })
             .FirstOrDefaultAsync();
     }
@@ -111,7 +116,7 @@ public class IndexModel : PageModel
         if (Input.Avatar is { Length: > 0 })
         {
             // Delete the old avatar if exists
-            if (user.Avatar is not null && user.AvatarId is not null)
+            if (user.AvatarId is not null)
             {
                 await _uploader.Delete(user.Avatar, user.AvatarId);
             }
@@ -129,7 +134,7 @@ public class IndexModel : PageModel
         }
         else if (Input.DeleteAvatar)
         {
-            if (user.Avatar is not null && user.AvatarId is not null)
+            if (user.AvatarId is not null)
             {
                 await _uploader.Delete(user.Avatar, user.AvatarId);
             }
@@ -151,6 +156,11 @@ public class IndexModel : PageModel
         {
             user.Bio = Input.Bio;
         }
+
+        user.Links = Input.Links
+            .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(l => Uri.TryCreate(l, UriKind.RelativeOrAbsolute, out  _))
+            .ToList();
 
         await _context.SaveChangesAsync();
 

@@ -20,6 +20,7 @@ public static class CTConfig
 
         public const int MaxTitleLength = 20;
         public const int MaxBioLength = 10_000;
+        public const int MaxLinksAmount = 5;
     }
         
     public static class CTag

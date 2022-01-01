@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -31,6 +32,7 @@ public class IndexModel : PageModel
     public class ProfileDetails
     {
         public string Bio { get; init; }
+        public IEnumerable<string> Links { get; set; }
         public CommentsThreadDto CommentsThread { get; init; }
     }
         

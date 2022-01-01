@@ -6,15 +6,29 @@
     ViewData["Tab"] = "Profile";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
-@if (!string.IsNullOrEmpty(Model.Data.Bio))
-{
-    <markdown preset="All">
+<div id="profile">
+
+    <markdown class="bio" preset="All">
         @Model.Data.Bio
     </markdown>
 
-    <hr>
-}
+    @if (Model.Data.Links.Any())
+    {
+        <ul class="links">
+            @foreach (var link in Model.Data.Links)
+            {
+                var host = link.Split("://")[^1];
 
-<partial name="_Comments" model="@Model.Data.CommentsThread" />
+                <a href="//@host" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.google.com/s2/favicons?domain=@link" alt="@link">
+                    <span>@(host.Replace("www.", ""))</span>
+                </a>
+            }
+        </ul>
+    }
+
+</div>
+
+<partial name="_Comments" model="@Model.Data.CommentsThread"/>

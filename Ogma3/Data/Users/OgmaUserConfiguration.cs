@@ -17,6 +17,12 @@ public class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
         builder
             .Property(u => u.Bio)
             .HasMaxLength(CTConfig.CUser.MaxBioLength);
+
+        builder
+            .Property(u => u.Links)
+            .IsRequired()
+            .HasMaxLength(CTConfig.CUser.MaxLinksAmount)
+            .HasDefaultValueSql(PgConstants.EmptyArray);
             
         builder
             .Property(u => u.RegistrationDate)

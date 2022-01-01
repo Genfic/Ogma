@@ -21,6 +21,9 @@ public class OgmaUser : IdentityUser<long>, IReportableContent
     [PersonalData]
     public string? Bio { get; set; }
 
+    [PersonalData] 
+    public List<string> Links { get; set; } = new();
+
     [PersonalData]
     public string Avatar { get; set; } = null!;
     public string? AvatarId { get; set; }
