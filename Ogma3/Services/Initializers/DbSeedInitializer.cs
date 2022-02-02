@@ -81,7 +81,7 @@ public class DbSeedInitializer : IAsyncInitializer
     {
         var user = await _context.Users
             .Where(u => u.NormalizedUserName == "ANGIUS")
-            .Where(u => u.Roles.Any(r => r.NormalizedName == RoleNames.Admin.ToUpper()))
+            .Where(u => u.Roles.All(r => r.NormalizedName != RoleNames.Admin.ToUpper()))
             .FirstOrDefaultAsync();
         if (user is not null)
         {
