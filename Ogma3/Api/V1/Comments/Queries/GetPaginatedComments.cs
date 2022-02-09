@@ -62,7 +62,7 @@ public static class GetPaginatedComments
                 .Paginate(p, _ogmaConfig.CommentsPerPage)
                 .ToListAsync(cancellationToken);
             
-            comments.ForEach(c => c.Body = c.Body is null ? null : Markdown.ToHtml(c.Body, MarkdownPipelines.Comment));
+            comments.ForEach(c => c.Body = Markdown.ToHtml(c.Body, MarkdownPipelines.Comment));
             
             return new PaginationResult<CommentDto>
             {

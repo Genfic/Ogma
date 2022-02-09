@@ -38,8 +38,6 @@ public static class DeleteComment
             if (comment.AuthorId != _uid) return new UnauthorizedResult();
         
             // Wipe comment
-            comment.Author = null;
-            comment.AuthorId = null;
             comment.DeletedBy = EDeletedBy.User;
             comment.DeletedByUserId = _uid;
             comment.Body = string.Empty;

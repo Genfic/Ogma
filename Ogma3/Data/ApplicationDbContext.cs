@@ -130,6 +130,8 @@ public class ApplicationDbContext : IdentityDbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseLoggerFactory(_myLoggerFactory);
+        optionsBuilder
+            .UseLoggerFactory(_myLoggerFactory)
+            .UseBatchEF_Npgsql();
     }
 }

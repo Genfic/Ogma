@@ -12,8 +12,8 @@ public class Comment : BaseModel, IReportableContent
 {
     public CommentsThread CommentsThread { get; set; } = null!;
     public long CommentsThreadId { get; set; }
-    public  OgmaUser? Author { get; set; }
-    public long? AuthorId { get; set; }
+    public OgmaUser Author { get; set; } = null!;
+    public long AuthorId { get; set; }
     public DateTime DateTime { get; set; } = DateTime.Now;
     public DateTime? LastEdit { get; set; }
     public string Body { get; set; } = null!;

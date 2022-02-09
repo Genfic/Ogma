@@ -66,6 +66,13 @@ public static class CreateProfileComment
 
             if (thread is null) return new NotFoundResult();
             if (thread.LockDate is not null) return new UnauthorizedResult();
+            
+            // Check if comment author is blocked by the profile owner
+            var isBlocked = await _context.BlacklistedUsers
+                .Where(b => b.BlockingUserId == thread.UserId && b.BlockedUserId == _uid)
+                .AnyAsync(cancellationToken);
+
+            if (isBlocked) return new UnauthorizedResult();
                 
             var comment = new Comment
             {

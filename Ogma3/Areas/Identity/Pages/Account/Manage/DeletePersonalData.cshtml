@@ -9,19 +9,23 @@
 
 <div class="alert alert-danger" role="alert">
     <p>
-        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+        <strong>Deleting this data will permanently remove your data, and this cannot be recovered.</strong>
     </p>
+</div>
+        
+<div class="alert alert-warning">
+    <p>This could take a while, the page might hang for a moment</p>
 </div>
 
 <div>
-    <form id="delete-user" method="post" class="form">
+    <form id="delete-user" method="post" class="form" autocomplete="off">
         <div asp-validation-summary="All" class="text-danger"></div>
         
         @if (Model.RequirePassword)
         {
             <div class="o-form-group">
                 <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="o-form-control active-border" />
+                <input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
         }

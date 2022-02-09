@@ -62,7 +62,7 @@ public class Program
             .UseSerilog()
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseUrls("https://+:5001", "https://+:8200", "https://+:80");
+                webBuilder.UseUrls("https://+:5001", "https://+:8001", "https://+:80");
                 webBuilder.ConfigureKestrel(options =>
                     {
                         options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);

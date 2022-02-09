@@ -11,7 +11,7 @@ namespace Ogma3.Data.Comments;
 public class CommentDto
 {
     public long Id { get; set; }
-    public UserSimpleDto? Author { get; set; }
+    public UserSimpleDto Author { get; set; } = null!;
     public DateTime DateTime { get; set; }
     public DateTime? LastEdit { get; set; }
     public ushort EditCount { get; set; }
@@ -31,7 +31,7 @@ public class CommentDto
                     => opts.MapFrom(c => c.AuthorId == currentUser)
                 )
                 .ForMember(cd => cd.IsBlocked, opts
-                    => opts.MapFrom(c => c.Author != null && c.Author.Blockers.Any(bu => bu.Id == currentUser))
+                    => opts.MapFrom(c => c.Author.Blockers.Any(bu => bu.Id == currentUser))
                 )
                 .ForMember(cd => cd.Author, opts
                     => opts.MapFrom(c => c.DeletedBy == null ? c.Author : null)

@@ -34,6 +34,8 @@ public class OgmaUser : IdentityUser<long>, IReportableContent
     [PersonalData]
     public DateTime LastActive { get; set; }
 
+    public DateTime? DeletedAt { get; set; }
+
     public CommentsThread CommentsThread { get; set; } = new();
         
     public ICollection<UserRole>? UserRoles { get; set; }

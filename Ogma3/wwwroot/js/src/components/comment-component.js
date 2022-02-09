@@ -40,10 +40,10 @@ Vue.component('comment', {
 	methods: {
 		del: async function () {
 			if (confirm("Are you sure you want to delete?")) {
-				const {data} = await axios.delete(`${this.route}/${this.comment.id}`, {
+				await axios.delete(`${this.route}/${this.comment.id}`, {
 					headers: { "RequestVerificationToken": this.csrf }
 				});
-				this.mutComment = data;
+				this.mutComment = { ...this.mutComment, deletedBy: 'User' };
 			}
 		},
 
@@ -126,7 +126,7 @@ Vue.component('comment', {
       </template>
 
       <!-- Deleted comment -->
-      <template v-else-if="!mutComment.author">
+      <template v-else-if="mutComment.deletedBy">
         <div class="main">
           <div class="header">
 
