@@ -69,6 +69,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<ClubThread> ClubThreads => Set<ClubThread>();
     public DbSet<Folder> Folders => Set<Folder>();
     public DbSet<FolderStory> FolderStories => Set<FolderStory>();
+    public DbSet<ClubBan> ClubBans => Set<ClubBan>();
 
 
     // Secondary

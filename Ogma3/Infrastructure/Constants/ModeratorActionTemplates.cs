@@ -11,12 +11,6 @@ public static class ModeratorActionTemplates
     private static string HumanizeTimespan(this TimeSpan ts) 
         => ts.Humanize(3, minUnit: TimeUnit.Minute, culture: CultureInfo.InvariantCulture);
         
-    // Ban templates
-    public static string UserBan(OgmaUser user, string modName, DateTime until) 
-        => $"User **{user.UserName}** (id: {user.Id}) has been banned until {until} by **{modName}**.";
-    public static string UserUnban(OgmaUser user, string modName, DateTime until) 
-        => $"User **{user.UserName}** (id: {user.Id}) has been unbanned {(until - DateTime.Now).HumanizeTimespan()} early by **{modName}**.";
-        
     // Mute templates
     public static string UserMute(OgmaUser user, string modName, DateTime until) 
         => $"User **{user.UserName}** (id: {user.Id}) has been muted until {until} by **{modName}**.";
@@ -40,4 +34,8 @@ public static class ModeratorActionTemplates
         => $"Comment thread for **{type}** (id: {id}) with the ID **{threadId}** was locked by **{modName}**";
     public static string ThreadUnlocked(string type, long id, long threadId, string modName)
         => $"Comment thread for **{type}** (id: {id}) with the ID **{threadId}** was unlocked by **{modName}**";
+    
+    // Ban templates
+    public static string UserBan(string bannedName, string modName, string reason)
+        => $"User **{bannedName}** was banned by **{modName}** for the following reason:\n*{reason}*";
 }

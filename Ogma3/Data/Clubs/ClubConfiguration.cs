@@ -55,5 +55,20 @@ public class ClubConfiguration : BaseConfiguration<Club>
             .WithOne(r => r.Club)
             .HasForeignKey(r => r.ClubId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(c => c.BannedUsers)
+            .WithMany(u => u.ClubsBannedFrom)
+            .UsingEntity<ClubBan>(ent => ent
+                .HasOne(cb => cb.User)
+                .WithMany()
+                .HasForeignKey(cb => cb.UserId)
+                .OnDelete(DeleteBehavior.Cascade),
+            ent => ent
+                .HasOne(cb => cb.Club)
+                .WithMany()
+                .HasForeignKey(cb => cb.ClubId)
+                .OnDelete(DeleteBehavior.Cascade)
+            );
     }
 }

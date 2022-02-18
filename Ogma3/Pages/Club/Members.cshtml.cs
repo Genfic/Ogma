@@ -37,9 +37,9 @@ public class Members : PageModel
         ClubMembers = await _context.ClubMembers
             .Where(cm => cm.ClubId == id)
             .Select(cm => cm.Member)
+            .Where(cm => cm.ClubsBannedFrom.All(c => c.Id != id))
             .Paginate(1, 50)
             .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
-            .AsNoTracking()
             .ToListAsync();
 
         return Page();

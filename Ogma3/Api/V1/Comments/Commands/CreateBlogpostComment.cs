@@ -45,7 +45,7 @@ public static class CreateBlogpostComment
             _mapper = mapper;
             _redirector = redirector;
             _notificationsRepo = notificationsRepo;
-            _uid = userService?.User?.GetNumericId();
+            _uid = userService.User?.GetNumericId();
         }
 
         public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
