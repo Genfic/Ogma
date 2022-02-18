@@ -72,7 +72,10 @@ public static class BanUser
             });
             var result = await _context.SaveChangesAsync(cancellationToken);
 
-            if (result <= 0) return new ServerErrorResult("Something went wrong...");
+            if (result <= 0) return new ServerErrorResult("Something went wrong with the ban");
+            
+            // Remove the user from club
+            await _context.DeleteRangeAsync<ClubMember>(cm => cm.ClubId == clubId && cm.MemberId == userId, cancellationToken: cancellationToken);
 
             // Log it
             _context.ClubModeratorActions.Add(new ClubModeratorAction
