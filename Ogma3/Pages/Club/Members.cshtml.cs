@@ -43,6 +43,5 @@ public class Members : PageModel
             .ToListAsync();
 
         return Page();
-
     }
 }

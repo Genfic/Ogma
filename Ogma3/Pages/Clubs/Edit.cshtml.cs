@@ -67,10 +67,8 @@ public class EditModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnGetAsync(long? id)
+    public async Task<IActionResult> OnGetAsync(long id)
     {
-        if (id is null) return NotFound();
-
         var uid = User.GetNumericId();
         if (uid is null) return Unauthorized();
 

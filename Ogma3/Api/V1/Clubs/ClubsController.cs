@@ -32,6 +32,11 @@ public class ClubsController : ControllerBase
     public async Task<ActionResult<bool>> BanUser(BanUser.Command command)
         => await _mediator.Send(command);
 
+    [HttpDelete("user/ban")]
+    [IgnoreAntiforgeryToken]
+    public async Task<ActionResult<bool>> UnbanUser(UnbanUser.Command command)
+        => await _mediator.Send(command);
+
     // Don't delete or this whole controller will break
     [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
 }

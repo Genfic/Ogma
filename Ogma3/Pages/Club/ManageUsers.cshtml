@@ -1,3 +1,50 @@
-@page
+@page "/club/{id:long}/edit/manage-members"
 @model Ogma3.Pages.Club.ManageUsers
 
+@{
+    ViewData["Title"] = $"{Model.Club.Name} — Manage Members";
+    ViewData["Tab"] = "Members";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="button-group">
+    <a title="Cancel" class="action-btn large" asp-page="/Club/Index" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">
+        <icon class="icon" icon="arrow_back"></icon>
+        <span class="name">Back to club</span>
+    </a>
+    <a title="Delete" class="action-btn large" asp-page="/Clubs/Edit" asp-route-id="@Model.Club.Id">
+        <icon class="icon" icon="edit"></icon>
+        <span class="name">Back to editing</span>
+    </a>
+</div>
+
+<hr>
+
+<ul class="two-columns o-grid">
+    @foreach (var user in Model.Users)
+    {
+        <div class="user-card">
+
+            <cdn-img src="@user.Avatar" class="avatar"/>
+
+            <a asp-page="/User/Index" asp-route-name="@user.Name.ToUpper()" class="name">
+                @if (user.IsBanned)
+                {
+                    <span class='text-red'>@user.Name (banned)</span>
+                }
+                else
+                {
+                    <span>@user.Name</span>
+                }
+            </a>
+
+            <div class="roles">
+                <div class="role-tag">
+                    <span class="name">@user.Role</span>
+                </div>
+            </div>
+
+        </div>
+    }
+</ul>

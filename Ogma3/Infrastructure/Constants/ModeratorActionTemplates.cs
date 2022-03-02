@@ -38,4 +38,7 @@ public static class ModeratorActionTemplates
     // Ban templates
     public static string UserBan(string bannedName, string modName, string reason)
         => $"User **{bannedName}** was banned by **{modName}** for the following reason:\n*{reason}*";
+
+    public static string UserUnban(string bannedName, string modName)
+        => $"User **{bannedName}** was unbanned by **{modName}**";
 }

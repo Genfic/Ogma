@@ -10,12 +10,16 @@
 <div class="button-group">
     <a title="Cancel" class="action-btn large" asp-page="/Club/Index" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Slug">
          <icon class="icon" icon="arrow_back"></icon>
-         <span class="name">Cancel</span>
+         <span class="name">Back to club</span>
      </a>
-     <a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
-         <icon class="icon" icon="delete_forever"></icon>
-         <span class="name">Delete</span>
-     </a>
+    <a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
+        <icon class="icon" icon="delete_forever"></icon>
+        <span class="name">Delete</span>
+    </a>
+    <a title="Manage Users" class="action-btn large" asp-page="/Club/ManageUsers" asp-route-id="@Model.Input.Id">
+        <icon class="icon" icon="people"></icon>
+        <span class="name">Manage Users</span>
+    </a>
 </div>
 
 <form class="form" id="club" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">

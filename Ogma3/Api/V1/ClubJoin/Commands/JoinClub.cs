@@ -28,19 +28,26 @@ public static class JoinClub
             
         public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is not {} uid) return new UnauthorizedResult();
 
             var isMember = await _context.ClubMembers
-                .Where(cm => cm.MemberId == _uid)
+                .Where(cm => cm.MemberId == uid)
                 .Where(cm => cm.ClubId == request.ClubId)
                 .AnyAsync(cancellationToken);
                 
             if (isMember) return new OkObjectResult(true);
-                
+
+            var isBanned = await _context.ClubBans
+                .Where(cb => cb.ClubId == request.ClubId)
+                .Where(cb => cb.UserId == uid)
+                .AnyAsync(cancellationToken);
+
+            if (isBanned) return new UnauthorizedObjectResult("You're banned from this club");
+            
             _context.ClubMembers.Add(new ClubMember
             {
                 ClubId = request.ClubId,
-                MemberId = (long)_uid,
+                MemberId = uid,
                 Role = EClubMemberRoles.User
             });
 
