@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Ogma3.Infrastructure.ActionResults;
 
 [DefaultStatusCode(DefaultStatusCode)]
-public class ServerErrorResult : ObjectResult
+public class ServerErrorObjectResult : ObjectResult
 {
     private const int DefaultStatusCode = StatusCodes.Status500InternalServerError;
         
-    public ServerErrorResult() : base(DefaultStatusCode)
+    public ServerErrorObjectResult(object value) : base(value)
     {
         StatusCode = DefaultStatusCode;
     }

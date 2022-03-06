@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Services.UserService;
 
@@ -28,7 +29,7 @@ public static class CreateInfraction
         }
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<Response>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -42,7 +43,7 @@ public static class CreateInfraction
 
         public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var (userId, reason, dateTime, type) = request;
             var infraction = new Infraction
@@ -61,7 +62,7 @@ public static class CreateInfraction
                 _cache.Set(UserBanMiddleware.CacheKey(infraction.UserId), infraction.ActiveUntil);
             }
 
-            return new OkObjectResult(new Response(infraction.Id, (long)_uid, userId));
+            return Ok(new Response(infraction.Id, (long)_uid, userId));
         }
     }
 

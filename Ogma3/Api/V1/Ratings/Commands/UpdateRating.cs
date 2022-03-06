@@ -12,6 +12,7 @@ using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 
@@ -39,7 +40,7 @@ public static class UpdateRating
         }
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<RatingApiDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<RatingApiDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly ImageUploader _uploader;
@@ -60,7 +61,7 @@ public static class UpdateRating
                 .Where(r => r.Id == id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (rating is null) return new NotFoundResult();
+            if (rating is null) return NotFound();
 
             rating.Name = name;
             rating.Description = description;
@@ -80,7 +81,7 @@ public static class UpdateRating
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(RatingsController.GetRating),
                 nameof(RatingsController)[..^10],
                 new { rating.Id },

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments.Commands;
@@ -15,7 +16,7 @@ public static class DeleteComment
 {
     public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<long>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -27,15 +28,15 @@ public static class DeleteComment
 
         public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
         
             var comment = await _context.Comments
                 .Where(c => c.Id == request.Id)
                 .Include(c => c.Revisions)
                 .FirstOrDefaultAsync(cancellationToken);
         
-            if (comment is null) return new NotFoundResult();
-            if (comment.AuthorId != _uid) return new UnauthorizedResult();
+            if (comment is null) return NotFound();
+            if (comment.AuthorId != _uid) return Unauthorized();
         
             // Wipe comment
             comment.DeletedBy = EDeletedBy.User;
@@ -49,7 +50,7 @@ public static class DeleteComment
         
             await _context.SaveChangesAsync(cancellationToken);
         
-            return new OkObjectResult(comment.Id);
+            return Ok(comment.Id);
         }
     }
 }

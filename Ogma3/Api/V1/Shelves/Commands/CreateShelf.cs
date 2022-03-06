@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Shelves.Commands;
@@ -36,7 +37,7 @@ public static class CreateShelf
         }
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<ShelfDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<ShelfDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -48,7 +49,7 @@ public static class CreateShelf
 
         public async Task<ActionResult<ShelfDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var (name, description, isQuickAdd, isPublic, trackUpdates, color, icon) = request;
             var shelf = new Shelf
@@ -66,7 +67,7 @@ public static class CreateShelf
             _context.Add(shelf);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(ShelvesController.GetShelf),
                 nameof(ShelvesController)[..^10],
                 new { shelf.Id },

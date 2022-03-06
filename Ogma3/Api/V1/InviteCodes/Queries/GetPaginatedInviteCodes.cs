@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.InviteCodes.Queries;
 
@@ -16,7 +17,7 @@ public static class GetPaginatedInviteCodes
 {
     public sealed record Query(int Page, int PerPage) : IRequest<ActionResult<List<InviteCodeDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -38,7 +39,7 @@ public static class GetPaginatedInviteCodes
                 .ProjectTo<InviteCodeDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(codes);
+            return Ok(codes);
         }
     }
 }

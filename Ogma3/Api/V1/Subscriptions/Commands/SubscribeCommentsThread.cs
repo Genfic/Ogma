@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Subscriptions.Commands;
@@ -15,7 +16,7 @@ public static class SubscribeCommentsThread
 {
     public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<bool>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -28,14 +29,14 @@ public static class SubscribeCommentsThread
 
         public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var isSubscribed = await _context.CommentsThreadSubscribers
                 .Where(cts => cts.OgmaUserId == _uid)
                 .Where(cts => cts.CommentsThreadId == request.ThreadId)
                 .AnyAsync(cancellationToken);
                 
-            if (isSubscribed) return new OkObjectResult(true);
+            if (isSubscribed) return Ok(true);
                 
             _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
             {
@@ -45,7 +46,7 @@ public static class SubscribeCommentsThread
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(true);
+            return Ok(true);
         }
     }
 }

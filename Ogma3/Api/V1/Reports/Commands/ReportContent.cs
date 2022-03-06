@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Reports;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Reports.Commands;
@@ -18,7 +19,7 @@ public static class ReportContent
         public CommandValidator() => RuleFor(r => r.Reason).MinimumLength(30).MaximumLength(500);
     }
         
-    public class Handler : IRequestHandler<Command, ActionResult<long>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -31,7 +32,7 @@ public static class ReportContent
 
         public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var (itemId, reason, itemType) = request;
 
@@ -63,13 +64,13 @@ public static class ReportContent
                     report.ClubId = itemId;
                     break;
                 default:
-                    return new BadRequestResult();
+                    return BadRequest();
             }
 
             _context.Reports.Add(report);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(report.Id);
+            return Ok(report.Id);
         }
     }
 }

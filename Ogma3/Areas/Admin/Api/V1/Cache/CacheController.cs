@@ -28,7 +28,7 @@ public class CacheController : ControllerBase
             return Ok(mc.Count);
         }
 
-        return new ServerErrorResult("Could not count cache elements!");
+        return new ServerErrorObjectResult("Could not count cache elements!");
     }
 
     [HttpDelete]
@@ -45,7 +45,7 @@ public class CacheController : ControllerBase
         }
 
         _logger.LogWarning("Could not purge cache!");
-        return new ServerErrorResult("Could not purge cache!");
+        return new ServerErrorObjectResult("Could not purge cache!");
 
     }
 }

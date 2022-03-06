@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.UserActivity.Commands;
@@ -14,7 +15,7 @@ public static class UpdateLastActive
 {
     public sealed record Command : IRequest<OkResult>;
 
-    public class Handler : IRequestHandler<Command, OkResult>
+    public class Handler : BaseHandler, IRequestHandler<Command, OkResult>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -31,7 +32,7 @@ public static class UpdateLastActive
                 $@"UPDATE ""AspNetUsers"" SET ""LastActive"" = {DateTime.Now.ToUniversalTime()} WHERE ""Id"" = {_uid}", 
                 cancellationToken
             );
-            return new OkResult();
+            return Ok();
         }
     }
 }

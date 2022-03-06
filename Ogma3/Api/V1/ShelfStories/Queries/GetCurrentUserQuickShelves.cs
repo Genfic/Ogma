@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories.Queries;
@@ -16,7 +17,7 @@ public static class GetCurrentUserQuickShelves
 {
     public sealed record Query(long StoryId) : IRequest<ActionResult<List<ShelfDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<ShelfDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<ShelfDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -29,7 +30,7 @@ public static class GetCurrentUserQuickShelves
 
         public async Task<ActionResult<List<ShelfDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var shelves = await _context.Shelves
                 .Where(s => s.OwnerId == _uid)
@@ -43,7 +44,7 @@ public static class GetCurrentUserQuickShelves
                 ))
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(shelves);
+            return Ok(shelves);
         }
     }
         

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Shelves.Queries;
@@ -17,7 +18,7 @@ public static class GetShelf
 {
     public sealed record Query(long ShelfId) : IRequest<ActionResult<ShelfDto>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<ShelfDto>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<ShelfDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +33,7 @@ public static class GetShelf
 
         public async Task<ActionResult<ShelfDto>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var shelf = await _context.Shelves
                 .Where(s => s.Id == request.ShelfId)
@@ -41,8 +42,8 @@ public static class GetShelf
                 .FirstOrDefaultAsync(cancellationToken);
 
             return shelf is null 
-                ? new NotFoundResult() 
-                : new OkObjectResult(shelf);
+                ? NotFound() 
+                : Ok(shelf);
         }
     }
 }

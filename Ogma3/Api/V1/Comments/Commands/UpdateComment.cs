@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments.Commands;
@@ -28,7 +29,7 @@ public static class UpdateComment
         }
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<CommentDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -43,7 +44,7 @@ public static class UpdateComment
 
         public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
         
             var (body, commentId) = request;
         
@@ -51,8 +52,8 @@ public static class UpdateComment
                 .Where(c => c.Id == commentId)
                 .FirstOrDefaultAsync(cancellationToken);
         
-            if (comm is null) return new NotFoundResult();
-            if (_uid != comm.AuthorId) return new UnauthorizedResult();
+            if (comm is null) return NotFound();
+            if (_uid != comm.AuthorId) return Unauthorized();
         
             // Create revision
             _context.CommentRevisions.Add(new CommentRevision

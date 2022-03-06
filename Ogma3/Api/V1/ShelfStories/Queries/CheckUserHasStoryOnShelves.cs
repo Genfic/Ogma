@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories.Queries;
@@ -15,7 +16,7 @@ public static class CheckUserHasStoryOnShelves
 {
     public sealed record Query(long ShelfId) : IRequest<ActionResult<List<long>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<long>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<long>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -28,7 +29,7 @@ public static class CheckUserHasStoryOnShelves
 
         public async Task<ActionResult<List<long>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var shelves = await _context.Shelves
                 .Where(s => s.OwnerId == _uid)
@@ -36,7 +37,7 @@ public static class CheckUserHasStoryOnShelves
                 .Select(s => s.Id)
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(shelves);
+            return Ok(shelves);
         }
     }
 }

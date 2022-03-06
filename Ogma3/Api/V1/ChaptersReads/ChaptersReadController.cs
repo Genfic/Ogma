@@ -11,7 +11,7 @@ namespace Ogma3.Api.V1.ChaptersReads;
 [Route("api/[controller]", Name = nameof(ChaptersReadController))]
 [ApiController]
 [Authorize]
-public class ChaptersReadController : Controller
+public class ChaptersReadController : ControllerBase
 {
     private readonly IMediator _mediator;
     public ChaptersReadController(IMediator mediator) => _mediator = mediator;

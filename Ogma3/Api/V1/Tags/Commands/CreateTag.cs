@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Tags.Commands;
 
@@ -26,7 +27,7 @@ public static class CreateTag
         }
     }
         
-    public class Handler : IRequestHandler<Command, ActionResult>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;
@@ -39,7 +40,7 @@ public static class CreateTag
                 .Where(t => t.Name == name && t.Namespace == ns)
                 .AnyAsync(cancellationToken);
 
-            if (tagExist) return new ConflictObjectResult($"Tag {name} already exists in the {ns} namespace.");
+            if (tagExist) return Conflict($"Tag {name} already exists in the {ns} namespace.");
 
             var entity = _context.Tags.Add(new Tag
             {
@@ -49,7 +50,7 @@ public static class CreateTag
             });
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(TagsController.GetTag),
                 nameof(TagsController)[..^10],
                 new { entity.Entity.Id }, 

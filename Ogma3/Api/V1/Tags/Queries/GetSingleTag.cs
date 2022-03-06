@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Tags.Queries;
 
@@ -15,7 +16,7 @@ public static class GetSingleTag
 {
     public sealed record Query(long TagId) : IRequest<ActionResult<TagDto>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<TagDto>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<TagDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -34,8 +35,8 @@ public static class GetSingleTag
                 .FirstOrDefaultAsync(cancellationToken);
 
             return tag is null 
-                ? new NotFoundResult() 
-                : new OkObjectResult(tag);
+                ? NotFound() 
+                : Ok(tag);
         }
     }
 }

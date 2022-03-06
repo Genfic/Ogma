@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Shelves.Queries;
@@ -18,7 +19,7 @@ public static class GetPaginatedUserShelves
 {
     public sealed record Query(string UserName, int Page) : IRequest<ActionResult<List<ShelfDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<ShelfDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<ShelfDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -35,7 +36,7 @@ public static class GetPaginatedUserShelves
 
         public async Task<ActionResult<List<ShelfDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var (userName, page) = request;
                 
@@ -46,7 +47,7 @@ public static class GetPaginatedUserShelves
                 .ProjectTo<ShelfDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(shelves);
+            return Ok(shelves);
         }
     }
 }

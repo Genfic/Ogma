@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Shelves;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Shelves.Commands;
@@ -41,7 +42,7 @@ public static class UpdateShelf
         }
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<ShelfDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<ShelfDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -53,7 +54,7 @@ public static class UpdateShelf
 
         public async Task<ActionResult<ShelfDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var (id, name, description, isQuickAdd, isPublic, trackUpdates, color, icon) = request;
 
@@ -61,7 +62,7 @@ public static class UpdateShelf
                 .Where(s => s.Id == id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (shelf.OwnerId != _uid) return new UnauthorizedResult();
+            if (shelf.OwnerId != _uid) return Unauthorized();
                 
             shelf.Name = name;
             shelf.Description = description;
@@ -73,7 +74,7 @@ public static class UpdateShelf
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(ShelvesController.GetShelf),
                 nameof(ShelvesController)[..^10],
                 new { shelf.Id },

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Tags.Commands;
 
@@ -26,7 +27,7 @@ public static class UpdateTag
         }
     }
         
-    public class Handler : IRequestHandler<Command, ActionResult>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;
@@ -41,13 +42,13 @@ public static class UpdateTag
                 .Where(t => t.Name == name && t.Namespace == ns)
                 .AnyAsync(cancellationToken);
 
-            if (duplicateExists) return new ConflictObjectResult($"Tag {name} already exists in the {ns} namespace.");
+            if (duplicateExists) return Conflict($"Tag {name} already exists in the {ns} namespace.");
 
             var tag = await _context.Tags
                 .Where(t => t.Id == id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (tag is null) return new NotFoundResult();
+            if (tag is null) return NotFound();
 
             tag.Name = name ?? tag.Name;
             tag.Description = description;
@@ -55,7 +56,7 @@ public static class UpdateTag
                 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(tag);
+            return Ok(tag);
         }
     }
 }

@@ -7,8 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Infrastructure.ActionResults;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 using Serilog;
 
@@ -18,7 +18,7 @@ public static class MarkChapterAsUnread
 {
     public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<Response>>;
 
-    public class MarkChapterAsReadHandler : IRequestHandler<Command, ActionResult<Response>>
+    public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -31,7 +31,7 @@ public static class MarkChapterAsUnread
 
         public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var (chapter, story) = request;
 
@@ -40,7 +40,7 @@ public static class MarkChapterAsUnread
                 .Where(cr => cr.UserId == _uid)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (chaptersReadObj is null) return new OkResult();
+            if (chaptersReadObj is null) return Ok();
 
             chaptersReadObj.Chapters.Remove(chapter);
             _context.Entry(chaptersReadObj).State = EntityState.Modified;
@@ -54,13 +54,13 @@ public static class MarkChapterAsUnread
             try
             {
                 await _context.SaveChangesAsync(cancellationToken);
-                return new OkObjectResult(new Response(chaptersReadObj.Chapters));
+                return Ok(new Response(chaptersReadObj.Chapters));
             }
             catch (Exception e)
             {
                 Log.Error(e, "Exception occurred when marking chapter {Chapter} as unread by {User}", chapter,
                     _uid);
-                return new ServerErrorResult("Database remove error");
+                return ServerError("Database remove error");
             }
         }
     }

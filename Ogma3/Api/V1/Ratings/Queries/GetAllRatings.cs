@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Ratings.Queries;
 
@@ -16,7 +17,7 @@ public static class GetAllRatings
 {
     public sealed record Query : IRequest<ActionResult<List<RatingApiDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<RatingApiDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<RatingApiDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -33,7 +34,7 @@ public static class GetAllRatings
                 .ProjectTo<RatingApiDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(ratings);
+            return Ok(ratings);
         }
     }
 }

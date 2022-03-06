@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Infractions.Queries;
 
@@ -15,7 +16,7 @@ public static class GetInfractionDetails
 {
     public sealed record Query(long InfractionId) : IRequest<ActionResult<Result>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<Result>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<Result>>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;
@@ -39,7 +40,7 @@ public static class GetInfractionDetails
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return new OkObjectResult(infraction);
+            return Ok(infraction);
         }
     }
 

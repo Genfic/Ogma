@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data.Roles;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Roles.Commands;
 
@@ -16,7 +17,7 @@ public static class UpdateRole
         public CommandValidator() => RuleFor(r => r.Name).NotEmpty();
     }
         
-    public class Handler : IRequestHandler<Command, ActionResult<RoleDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<RoleDto>>
     {
         private readonly RoleManager<OgmaRole> _roleManager;
         public Handler(RoleManager<OgmaRole> roleManager) => _roleManager = roleManager;
@@ -34,7 +35,7 @@ public static class UpdateRole
                 
             await _roleManager.UpdateAsync(role);
    
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(RolesController.GetRole),
                 nameof(RolesController)[..^10],
                 new { role.Id },

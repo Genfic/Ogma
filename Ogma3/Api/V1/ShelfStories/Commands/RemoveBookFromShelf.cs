@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories.Commands;
@@ -14,7 +15,7 @@ public static class RemoveBookFromShelf
 {
     public sealed record Command(long ShelfId, long StoryId) : IRequest<ActionResult<Result>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<Result>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Result>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -27,7 +28,7 @@ public static class RemoveBookFromShelf
 
         public async Task<ActionResult<Result>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var (shelfId, storyId) = request;
 
@@ -36,12 +37,12 @@ public static class RemoveBookFromShelf
                 .Where(ss => ss.StoryId == storyId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (shelfStory is null) return new NotFoundResult();
+            if (shelfStory is null) return NotFound();
 
             _context.ShelfStories.Remove(shelfStory);
 
             await _context.SaveChangesAsync(cancellationToken);
-            return new OkObjectResult(new Result(shelfId, storyId));
+            return Ok(new Result(shelfId, storyId));
         }
     }
         

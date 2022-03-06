@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
-using Ogma3.Infrastructure.ActionResults;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Clubs.Commands;
@@ -24,7 +24,7 @@ public static class BanUser
         public CommandValidator() => RuleFor(c => c.Reason).NotEmpty();
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<bool>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -36,7 +36,7 @@ public static class BanUser
 
         public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is not {} uid) return new UnauthorizedResult();
+            if (_uid is not {} uid) return Unauthorized();
             
             var (userId, clubId, reason) = request;
             
@@ -53,14 +53,14 @@ public static class BanUser
                 .ToListAsync(cancellationToken);
 
             var issuer = users.FirstOrDefault(u => u.Id == _uid);
-            if (issuer is null) return new UnauthorizedResult();
+            if (issuer is null) return Unauthorized();
             
             var user = users.FirstOrDefault(u => u.Id == userId);
-            if (user is null) return new NotFoundResult();
+            if (user is null) return NotFound();
             
             // Check privileges
-            if (issuer.Role == EClubMemberRoles.User) return new UnauthorizedObjectResult("Insufficient privileges");
-            if (issuer.Role > user.Role) return new UnauthorizedObjectResult("Can't ban someone with a higher role");
+            if (issuer.Role == EClubMemberRoles.User) return Unauthorized("Insufficient privileges");
+            if (issuer.Role > user.Role) return Unauthorized("Can't ban someone with a higher role");
             
             // Everything is fine, time to ban
             _context.ClubBans.Add(new ClubBan
@@ -72,7 +72,7 @@ public static class BanUser
             });
             var result = await _context.SaveChangesAsync(cancellationToken);
 
-            if (result <= 0) return new ServerErrorResult("Something went wrong with the ban");
+            if (result <= 0) return ServerError("Something went wrong with the ban");
             
             // Remove the user from club
             await _context.DeleteRangeAsync<ClubMember>(cm => cm.ClubId == clubId && cm.MemberId == userId, cancellationToken: cancellationToken);
@@ -86,7 +86,7 @@ public static class BanUser
             });
             await _context.SaveChangesAsync(cancellationToken);
             
-            return new OkObjectResult(true);
+            return Ok(true);
         }
     }
 }

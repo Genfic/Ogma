@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Roles;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Roles.Queries;
 
@@ -14,7 +15,7 @@ public static class GetAllRoles
 {
     public sealed record Query : IRequest<ActionResult<List<RoleDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<RoleDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<RoleDto>>>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;
@@ -27,7 +28,7 @@ public static class GetAllRoles
                 .Select(RoleMappings.ToRoleDto)
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(roles);
+            return Ok(roles);
         }
     }
 }

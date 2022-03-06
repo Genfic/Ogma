@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Tags.Queries;
 
@@ -16,7 +17,7 @@ public static class GetAllTags
 {
     public sealed record Query : IRequest<ActionResult<List<TagDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<TagDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<TagDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -34,7 +35,7 @@ public static class GetAllTags
                 .ProjectTo<TagDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(tags);
+            return Ok(tags);
         }
     }
 }

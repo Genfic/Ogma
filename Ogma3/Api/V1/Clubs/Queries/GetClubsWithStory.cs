@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Clubs.Queries;
 
@@ -13,7 +14,7 @@ public static class GetClubsWithStory
 {
     public sealed record Query(long StoryId) : IRequest<ActionResult<List<Result>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<Result>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
     {
         private readonly ApplicationDbContext _context;
 
@@ -31,7 +32,7 @@ public static class GetClubsWithStory
                 .Select(c => new Result(c.Id, c.Name, c.Icon))
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(clubs);
+            return Ok(clubs);
         }
     }
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
-using Ogma3.Infrastructure.ActionResults;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands;
@@ -14,7 +14,7 @@ public static class UpdateQuote
 {
     public sealed record Command(long Id, string Body, string Author) : IRequest<ActionResult<Quote>>;
         
-    public class CreateQuoteHandler : IRequestHandler<Command, ActionResult<Quote>>
+    public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
     {
         private readonly ApplicationDbContext _context;
 
@@ -40,10 +40,10 @@ public static class UpdateQuote
             catch (DbUpdateException ex)
             {
                 Log.Error("Update error in {Src}: {Msg}", ex.Source, ex.Message);
-                return new ServerErrorResult("Database Update Error");
+                return ServerError("Database Update Error");
             }
 
-            return new OkObjectResult(quote);
+            return Ok(quote);
         }
     }
 }

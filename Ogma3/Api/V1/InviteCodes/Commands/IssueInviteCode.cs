@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.UserService;
 
@@ -17,7 +18,7 @@ public static class IssueInviteCode
 {
     public sealed record Command : IRequest<ActionResult<InviteCodeDto>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<InviteCodeDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<InviteCodeDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -36,14 +37,14 @@ public static class IssueInviteCode
             
         public async Task<ActionResult<InviteCodeDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var issuedCount = await _context.InviteCodes
                 .Where(ic => ic.IssuedById == _uid)
                 .CountAsync(cancellationToken);
             
             if (issuedCount >= _config.MaxInvitesPerUser) 
-                return new UnauthorizedObjectResult($"You cannot generate more than {_config.MaxInvitesPerUser} codes");
+                return Unauthorized($"You cannot generate more than {_config.MaxInvitesPerUser} codes");
             
             var code = new InviteCode
             {

@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
-using Ogma3.Infrastructure.ActionResults;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 using Serilog;
 
@@ -19,7 +19,7 @@ public static class MarkChapterAsRead
 {
     public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<Response>>;
 
-    public class MarkChapterAsReadHandler : IRequestHandler<Command, ActionResult<Response>>
+    public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -32,7 +32,7 @@ public static class MarkChapterAsRead
 
         public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var (chapter, story) = request;
 
@@ -61,12 +61,12 @@ public static class MarkChapterAsRead
             try
             {
                 await _context.SaveChangesAsync(cancellationToken);
-                return new OkObjectResult(new Response(chaptersReadObj.Chapters));
+                return Ok(new Response(chaptersReadObj.Chapters));
             }
             catch (Exception e)
             {
                 Log.Error(e, "Exception occurred when marking chapter {Chapter} as read by {User}", chapter, _uid);
-                return new ServerErrorResult("Database insert error");
+                return ServerError("Database insert error");
             }
         }
     }

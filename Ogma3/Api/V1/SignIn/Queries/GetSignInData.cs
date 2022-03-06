@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Utils;
 
 namespace Ogma3.Api.V1.SignIn.Queries;
@@ -13,7 +14,7 @@ public static class GetSignInData
 {
     public sealed record Query(string Name) : IRequest<ActionResult<Result>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<Result>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<Result>>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;

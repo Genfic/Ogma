@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Notifications.Commands;
@@ -14,7 +15,7 @@ public static class DeleteNotification
 {
     public sealed record Command(long NotificationId) : IRequest<ActionResult>;
 
-    public class Handler : IRequestHandler<Command, ActionResult>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -27,20 +28,20 @@ public static class DeleteNotification
             
         public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
             
             var notificationRecipient = await _context.NotificationRecipients
                 .Where(nr => nr.RecipientId == (long) _uid)
                 .Where(nr => nr.NotificationId == request.NotificationId)
                 .FirstOrDefaultAsync(cancellationToken);
                 
-            if (notificationRecipient is null) return new NotFoundResult();
+            if (notificationRecipient is null) return NotFound();
             
             _context.NotificationRecipients.Remove(notificationRecipient);
                 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkResult();
+            return Ok();
 
         }
     }

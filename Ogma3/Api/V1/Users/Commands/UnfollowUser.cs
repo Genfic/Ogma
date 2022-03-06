@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Users.Commands;
@@ -14,7 +15,7 @@ public static class UnfollowUser
 {
     public sealed record Command(string Name) : IRequest<ActionResult<bool>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<bool>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -26,7 +27,7 @@ public static class UnfollowUser
 
         public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var targetUserId = await _context.Users
                 .Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
@@ -37,12 +38,12 @@ public static class UnfollowUser
                 .Where(bu => bu.FollowingUserId == _uid && bu.FollowedUserId == targetUserId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (follow is null) return new OkObjectResult(false);
+            if (follow is null) return Ok(false);
 
             _context.FollowedUsers.Remove(follow);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(false);
+            return Ok(false);
         }
     }
 }

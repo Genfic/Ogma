@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.InviteCodes.Commands;
 
@@ -12,7 +13,7 @@ public static class DeleteInviteCode
 {
     public sealed record Command(long CodeId) : IRequest<ActionResult<long>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<long>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;
@@ -23,12 +24,12 @@ public static class DeleteInviteCode
                 .Where(ic => ic.Id == request.CodeId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (code is null) return new NotFoundResult();
+            if (code is null) return NotFound();
 
             _context.InviteCodes.Remove(code);
 
             await _context.SaveChangesAsync(cancellationToken);
-            return new OkObjectResult(code.Id);
+            return Ok(code.Id);
         }
     }
 }

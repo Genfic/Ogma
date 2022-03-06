@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Tags.Commands;
 
@@ -12,7 +13,7 @@ public static class DeleteTag
 {
     public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<long>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
     {
         private readonly ApplicationDbContext _context;
 
@@ -24,12 +25,12 @@ public static class DeleteTag
                 .Where(t => t.Id == request.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (tag is null) return new NotFoundResult();
+            if (tag is null) return NotFound();
 
             _context.Tags.Remove(tag);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(tag.Id);
+            return Ok(tag.Id);
         }
     }
 }

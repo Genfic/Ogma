@@ -8,6 +8,7 @@ using Ogma3.Data;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blacklists;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ContentBlocks.Commands;
@@ -17,7 +18,7 @@ public static class BlockContent
     // ReSharper disable once UnusedTypeParameter
     public sealed record Command<T>(long ObjectId, string Reason) : IRequest<ActionResult> where T : BaseModel, IBlockableContent;
 
-    public class Handler<T> : IRequestHandler<Command<T>, ActionResult> where T : BaseModel, IBlockableContent
+    public class Handler<T> : BaseHandler, IRequestHandler<Command<T>, ActionResult> where T : BaseModel, IBlockableContent
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -31,12 +32,12 @@ public static class BlockContent
         {
             var (itemId, reason) = request;
 
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
             
             var item = await _context.Set<T>()
                 .Where(i => i.Id == itemId)
                 .FirstOrDefaultAsync(cancellationToken);
-            if (item is null) return new NotFoundResult();
+            if (item is null) return NotFound();
 
             item.ContentBlock = new ContentBlock
             {
@@ -45,7 +46,7 @@ public static class BlockContent
             };
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkResult();
+            return Ok();
         }
     }
 }

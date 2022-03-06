@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
-using Ogma3.Infrastructure.ActionResults;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services;
 using Serilog;
 
@@ -24,7 +24,7 @@ public static class CreateQuote
         }
     }
         
-    public class CreateQuoteHandler : IRequestHandler<Command, ActionResult<Quote>>
+    public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
     {
         private readonly ApplicationDbContext _context;
 
@@ -50,7 +50,7 @@ public static class CreateQuote
             catch (DbUpdateException ex)
             {
                 Log.Error("Creation error in {Src}: {Msg}", ex.Source, ex.Message);
-                return new ServerErrorResult("Database Creation Error");
+                return ServerError("Database Creation Error");
             }
                 
             Jog.Log(new
@@ -59,7 +59,7 @@ public static class CreateQuote
                 Controller = nameof(QuotesController),
             });
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(QuotesController.GetQuote),
                 nameof(QuotesController)[..^10],
                 new { id = quote.Id },

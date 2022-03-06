@@ -12,6 +12,7 @@ using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Comparers;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 using Serilog;
 
@@ -21,7 +22,7 @@ public static class UpdateRoles
 {
     public sealed record Command(long UserId, IEnumerable<long> Roles) : IRequest<IActionResult>;
 
-    public class Handler : IRequestHandler<Command, IActionResult>
+    public class Handler : BaseHandler, IRequestHandler<Command, IActionResult>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -39,14 +40,14 @@ public static class UpdateRoles
             var (userId, roles) = request;
 
             // Check if user is logged in
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var user = await _context.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Roles)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (user is null) return new NotFoundResult();
+            if (user is null) return NotFound();
 
             var newRoles = await _context.OgmaRoles
                 .Where(ur => roles.Contains(ur.Id))
@@ -85,10 +86,10 @@ public static class UpdateRoles
             catch (Exception e)
             {
                 Log.Error(e, "Exception occurred when staff member {Staff} tried adding roles {Role} to user {User}", _uid, roles, userId);
-                return new BadRequestResult();
+                return BadRequest();
             }
 
-            return new OkResult();
+            return Ok();
         }
     }
 }

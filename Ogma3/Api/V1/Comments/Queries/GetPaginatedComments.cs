@@ -12,6 +12,7 @@ using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments.Queries;
@@ -20,7 +21,7 @@ public static class GetPaginatedComments
 {
     public sealed record Query(long Thread, int? Page, long? Highlight) : IRequest<ActionResult<PaginationResult<CommentDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<PaginationResult<CommentDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<PaginationResult<CommentDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;

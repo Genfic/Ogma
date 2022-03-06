@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Folders.Commands;
@@ -15,7 +16,7 @@ public static class AddStoryToFolder
 {
     public sealed record Command(long FolderId, long StoryId) : IRequest<ActionResult<FolderStory>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<FolderStory>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<FolderStory>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -34,15 +35,15 @@ public static class AddStoryToFolder
                 .Where(f => f.Id == folderId)
                 .Where(f => f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == _uid).Role <= f.AccessLevel)
                 .AnyAsync(cancellationToken);
-            if (!folderExists) return new NotFoundObjectResult("Folder not found or insufficient permissions");
+            if (!folderExists) return NotFound("Folder not found or insufficient permissions");
 
             var storyExists = await _context.Stories
                 .AnyAsync(s => s.Id == storyId, cancellationToken);
-            if (!storyExists) return new NotFoundObjectResult("Story not found");
+            if (!storyExists) return NotFound("Story not found");
             
             var exists = await _context.FolderStories
                 .AnyAsync(fs => fs.FolderId == folderId && fs.StoryId == storyId, cancellationToken);
-            if (exists) return new ConflictObjectResult("Already exists");
+            if (exists) return Conflict("Already exists");
 
             var entity = _context.FolderStories.Add(new FolderStory
             {
@@ -51,7 +52,7 @@ public static class AddStoryToFolder
             });
             
             await _context.SaveChangesAsync(cancellationToken);
-            return new OkObjectResult(entity.Entity);
+            return Ok(entity.Entity);
         }
     }
 }

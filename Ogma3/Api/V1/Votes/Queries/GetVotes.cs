@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Votes.Queries;
@@ -14,7 +15,7 @@ public static class GetVotes
 {
     public sealed record Query(long StoryId) : IRequest<ActionResult<Result>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<Result>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<Result>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -35,7 +36,7 @@ public static class GetVotes
                 .Where(v => v.UserId == _uid)
                 .AnyAsync(cancellationToken);
 
-            return new OkObjectResult(new Result(count, didUserVote));
+            return Ok(new Result(count, didUserVote));
         }
     }
 

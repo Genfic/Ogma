@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
-using Ogma3.Infrastructure.ActionResults;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Clubs.Commands;
@@ -18,7 +18,7 @@ public static class UnbanUser
 {
     public sealed record Command(long UserId, long ClubId) : IRequest<ActionResult<bool>>;
     
-    public class Handler : IRequestHandler<Command, ActionResult<bool>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -30,7 +30,7 @@ public static class UnbanUser
 
         public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is not {} uid) return new UnauthorizedResult();
+            if (_uid is not {} uid) return Unauthorized();
             
             var (userId, clubId) = request;
             
@@ -47,20 +47,20 @@ public static class UnbanUser
                 .ToListAsync(cancellationToken);
 
             var issuer = users.FirstOrDefault(u => u.Id == _uid);
-            if (issuer is null) return new UnauthorizedResult();
+            if (issuer is null) return Unauthorized();
             
             var user = users.FirstOrDefault(u => u.Id == userId);
-            if (user is null) return new NotFoundResult();
+            if (user is null) return NotFound();
             
             // Check privileges
-            if (issuer.Role == EClubMemberRoles.User) return new UnauthorizedObjectResult("Insufficient privileges");
-            if (issuer.Role > user.Role) return new UnauthorizedObjectResult("Can't unban someone with a higher role");
+            if (issuer.Role == EClubMemberRoles.User) return Unauthorized("Insufficient privileges");
+            if (issuer.Role > user.Role) return Unauthorized("Can't unban someone with a higher role");
             
             // Everything is fine, time to ban
             var result = await _context
                 .DeleteRangeAsync<ClubBan>(cb => cb.ClubId == clubId && cb.UserId == userId, cancellationToken: cancellationToken);
 
-            if (result <= 0) return new ServerErrorResult("Something went wrong with the ban");
+            if (result <= 0) return ServerError("Something went wrong with the ban");
             
             // Log it
             _context.ClubModeratorActions.Add(new ClubModeratorAction
@@ -71,7 +71,7 @@ public static class UnbanUser
             });
             await _context.SaveChangesAsync(cancellationToken);
             
-            return new OkObjectResult(true);
+            return Ok(true);
         }
     }
 }

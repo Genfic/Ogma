@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Users.Commands;
@@ -15,7 +16,7 @@ public static class BlockUser
 {
     public sealed record Command(string Name) : IRequest<ActionResult<bool>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<bool>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -27,7 +28,7 @@ public static class BlockUser
 
         public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var targetUserId = await _context.Users
                 .Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
@@ -38,7 +39,7 @@ public static class BlockUser
                 .Where(bu => bu.BlockingUserId == _uid && bu.BlockedUserId == targetUserId)
                 .AnyAsync(cancellationToken);
 
-            if (exists) return new OkObjectResult(true);
+            if (exists) return Ok(true);
 
             _context.BlacklistedUsers.Add(new UserBlock
             {
@@ -47,7 +48,7 @@ public static class BlockUser
             });
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(true);
+            return Ok(true);
         }
     }
 }

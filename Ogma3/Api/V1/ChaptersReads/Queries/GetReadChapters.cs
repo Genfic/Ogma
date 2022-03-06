@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ChaptersReads.Queries;
@@ -15,7 +16,7 @@ public static class GetReadChapters
 {
     public sealed record Query(long Id) : IRequest<ActionResult<ICollection<long>>>;
         
-    public class Handler : IRequestHandler<Query, ActionResult<ICollection<long>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<ICollection<long>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -34,7 +35,7 @@ public static class GetReadChapters
                 .Select(cr => cr.Chapters)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return new OkObjectResult(chaptersRead ?? new HashSet<long>());
+            return Ok(chaptersRead ?? new HashSet<long>());
         }
     }
         

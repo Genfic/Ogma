@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Notifications.Queries;
@@ -17,7 +18,7 @@ public static class GetUserNotifications
 {
     public sealed record Query : IRequest<ActionResult<List<Result>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<Result>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -30,14 +31,14 @@ public static class GetUserNotifications
 
         public async Task<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
             var notifications = await _context.NotificationRecipients
                 .Where(nr => nr.RecipientId == (long)_uid)
                 .Select(nr => nr.Notification)
                 .Select(n => new Result(n.Id, n.Body, n.Url, n.DateTime, n.Event))
                 .ToListAsync(cancellationToken);
 
-            return new OkObjectResult(notifications);
+            return Ok(notifications);
         }
     }
 

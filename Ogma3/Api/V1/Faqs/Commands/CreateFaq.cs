@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Faqs;
 using Ogma3.Infrastructure.Constants;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Faqs.Commands;
 
@@ -22,7 +23,7 @@ public static class CreateFaq
         }
     }
         
-    public class Handler : IRequestHandler<Command, ActionResult<Faq>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Faq>>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;
@@ -41,7 +42,7 @@ public static class CreateFaq
                 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(FaqsController.GetFaq),
                 nameof(FaqsController)[..^10],
                 new { faq.Id },

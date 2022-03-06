@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Api.V1.Ratings.Commands;
@@ -13,7 +14,7 @@ public static class DeleteRating
 {
     public sealed record Command(long RatingId) : IRequest<ActionResult<long>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<long>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
     {
         private readonly ApplicationDbContext _context;
         private readonly ImageUploader _uploader;
@@ -30,7 +31,7 @@ public static class DeleteRating
                 .Where(r => r.Id == request.RatingId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (r is null) return new NotFoundResult();
+            if (r is null) return NotFound();
 
             _context.Ratings.Remove(r);
 
@@ -41,7 +42,7 @@ public static class DeleteRating
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(r.Id);
+            return Ok(r.Id);
         }
     }
 }

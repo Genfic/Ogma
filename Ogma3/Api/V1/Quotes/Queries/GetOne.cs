@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Quotes.Queries;
 
@@ -15,7 +16,7 @@ public static class GetOne
 {
     public sealed record Query(long Id) : IRequest<ActionResult<QuoteDto>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<QuoteDto>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<QuoteDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -34,8 +35,8 @@ public static class GetOne
                 .FirstOrDefaultAsync(cancellationToken);
                 
             return quote is null 
-                ? new NotFoundResult()
-                : new OkObjectResult(quote);
+                ? NotFound()
+                : Ok(quote);
         }
     }
 }

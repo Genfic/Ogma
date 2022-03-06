@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.UserService;
 
@@ -15,7 +16,7 @@ public static class AdminIssueInviteCode
 {
     public sealed record Command : IRequest<ActionResult<InviteCodeDto>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<InviteCodeDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<InviteCodeDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +33,7 @@ public static class AdminIssueInviteCode
             
         public async Task<ActionResult<InviteCodeDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             var code = new InviteCode
             {

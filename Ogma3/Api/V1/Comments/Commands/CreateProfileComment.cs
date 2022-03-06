@@ -11,6 +11,7 @@ using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
@@ -31,7 +32,7 @@ public static class CreateProfileComment
         }
     }
 
-    public class Handler : IRequestHandler<Command, ActionResult<CommentDto>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -50,13 +51,13 @@ public static class CreateProfileComment
 
         public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
                 
             // Check if user is muted
             var isMuted = await _context.Infractions
                 .Where(i => i.UserId == _uid && i.Type == InfractionType.Mute)
                 .AnyAsync(cancellationToken);
-            if (isMuted) return new UnauthorizedResult();
+            if (isMuted) return Unauthorized();
 
             var (body, threadId) = request;
 
@@ -64,15 +65,15 @@ public static class CreateProfileComment
                 .Where(ct => ct.Id == threadId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (thread is null) return new NotFoundResult();
-            if (thread.LockDate is not null) return new UnauthorizedResult();
+            if (thread is null) return NotFound();
+            if (thread.LockDate is not null) return Unauthorized();
             
             // Check if comment author is blocked by the profile owner
             var isBlocked = await _context.BlacklistedUsers
                 .Where(b => b.BlockingUserId == thread.UserId && b.BlockedUserId == _uid)
                 .AnyAsync(cancellationToken);
 
-            if (isBlocked) return new UnauthorizedResult();
+            if (isBlocked) return Unauthorized();
                 
             var comment = new Comment
             {
@@ -109,7 +110,7 @@ public static class CreateProfileComment
                 await _context.SaveChangesAsync(cancellationToken);
             }
 
-            return new CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(CommentsController.GetComment),
                 nameof(CommentsController)[..^10],
                 new { comment.Id },

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Infractions.Commands;
@@ -15,7 +16,7 @@ public static class DeactivateInfraction
 {
     public sealed record Command(long InfractionId) : IRequest<ActionResult<Response>>;
 
-    public class Handler : IRequestHandler<Command, ActionResult<Response>>
+    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -27,20 +28,20 @@ public static class DeactivateInfraction
 
         public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
 
             var infraction = await _context.Infractions
                 .Where(i => i.Id == request.InfractionId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (infraction is null) return new NotFoundResult();
+            if (infraction is null) return NotFound();
             
             infraction.RemovedAt = DateTime.Now;
             infraction.RemovedById = (long)_uid;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new OkObjectResult(new Response(infraction.Id, (long)_uid, infraction.UserId));
+            return Ok(new Response(infraction.Id, (long)_uid, infraction.UserId));
         }
     }
 

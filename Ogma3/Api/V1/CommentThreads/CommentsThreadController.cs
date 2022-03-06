@@ -14,7 +14,7 @@ using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Serilog;
 
-namespace Ogma3.Api.V1;
+namespace Ogma3.Api.V1.CommentThreads;
 
 [Route("api/[controller]", Name = nameof(CommentsThreadController))]
 [ApiController]

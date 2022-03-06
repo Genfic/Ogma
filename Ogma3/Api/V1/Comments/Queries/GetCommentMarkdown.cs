@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Comments.Queries;
 
@@ -12,7 +13,7 @@ public static class GetCommentMarkdown
 {
     public sealed record Query(long Id) : IRequest<ActionResult<string>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<string>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<string>>
     {
         private readonly ApplicationDbContext _context;
         public Handler(ApplicationDbContext context) => _context = context;

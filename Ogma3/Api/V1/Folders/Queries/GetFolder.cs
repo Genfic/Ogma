@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Folders.Queries;
@@ -15,7 +16,7 @@ public static class GetFolder
 {
     public sealed record Query(long Id) : IRequest<ActionResult<List<Result>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<Result>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly long? _uid;
@@ -28,7 +29,7 @@ public static class GetFolder
             
         public async Task<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if (_uid is null) return new UnauthorizedResult();
+            if (_uid is null) return Unauthorized();
             
             var folder = await _context.Folders
                 .Where(f => f.ClubId == request.Id)
@@ -41,7 +42,7 @@ public static class GetFolder
                 ))
                 .ToListAsync(cancellationToken);
             
-            return new OkObjectResult(folder);
+            return Ok(folder);
         }
     }
 

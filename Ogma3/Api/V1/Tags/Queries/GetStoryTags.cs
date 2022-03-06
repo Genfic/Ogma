@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Infrastructure.MediatR.Bases;
 
 namespace Ogma3.Api.V1.Tags.Queries;
 
@@ -16,7 +17,7 @@ public static class GetStoryTags
 {
     public sealed record Query(long StoryId) : IRequest<ActionResult<List<TagDto>>>;
 
-    public class Handler : IRequestHandler<Query, ActionResult<List<TagDto>>>
+    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<TagDto>>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -37,8 +38,8 @@ public static class GetStoryTags
                 .ToListAsync(cancellationToken);
 
             return tags is { Count: > 0 } 
-                ? new OkObjectResult(tags) 
-                : new NotFoundResult();
+                ? Ok(tags) 
+                : NotFound();
         }
     }
 }
