@@ -40,6 +40,8 @@ public static class GetInfractionDetails
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 
+            if (infraction is null) return NotFound();
+
             return Ok(infraction);
         }
     }
