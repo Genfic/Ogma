@@ -19,7 +19,7 @@ public class GenerateAvatar
         var initials = Initials(name);
         
         // Generate colours
-        var seed = name.Sum(ch => ch);
+        var seed = name.GetDeterministicHashCode();
         var rng = new Random(seed);
 
         var hue = rng.Next(0, 360);
