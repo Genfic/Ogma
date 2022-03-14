@@ -29,13 +29,13 @@ public class MailGunMailer : IEmailSender
             
         var content = new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            ["from"] = $"Genfic <mailgun@{_options.MailGunDomain}>",
+            ["from"] = $"Genfic <noreply@{_options.MailGunDomain}>",
             ["to"] = email,
             ["subject"] = subject,
             ["html"] = htmlMessage,
         });
 
-        var response = await client.PostAsync($"https://api.mailgun.net/v3/{_options.MailGunDomain}/messages", content);
+        var response = await client.PostAsync($"https://api.eu.mailgun.net/v3/{_options.MailGunDomain}/messages", content);
 
         if (!response.IsSuccessStatusCode)
         {
