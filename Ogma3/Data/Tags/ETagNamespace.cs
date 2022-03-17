@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Ogma3.Infrastructure.PostgresEnumHelper;
-using SourceGenerators.Attributes;
 
 namespace Ogma3.Data.Tags;
 
 [PostgresEnum]
-[PgTestAttr]
 public enum ETagNamespace
 {
     [Display(Name = "Content Warning")]

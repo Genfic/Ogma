@@ -1,9 +1,10 @@
+#nullable enable
 using System;
 
-namespace SourceGenerators.Attributes;
+namespace PostgresEnumHelpers.Generated;
 
 [AttributeUsage(AttributeTargets.Enum)]
-public class PgTestAttr : Attribute
+public class PostgresEnumAttribute : Attribute
 {
-    
+    public string? Alias { get; }
 }

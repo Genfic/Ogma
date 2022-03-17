@@ -6,14 +6,11 @@ public static class PostgresEnumGeneratorStrings
 #nullable enable
 using System;
 
-namespace Ogma3.Infrastructure.PostgresEnumHelper;
+namespace PostgresEnumHelpers.Generated;
 
 [AttributeUsage(AttributeTargets.Enum)]
 public class PostgresEnumAttribute : Attribute
 {
-    public string? Name { get; }
-
-    public PostgresEnumAttribute(string? name = null) => Name = name;
-    public PostgresEnumAttribute() => Name = null;
+    public string? Alias { get; }
 }";
 }

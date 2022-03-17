@@ -49,5 +49,39 @@ public static class RoslynHelpers
         // return the final namespace
         return nameSpace;
     }
+    
+    public static EnumDeclarationSyntax? GetSemanticTargetForGeneration(this GeneratorSyntaxContext context)
+    {
+        // we know the node is a EnumDeclarationSyntax thanks to IsSyntaxTargetForGeneration
+        var enumDeclarationSyntax = (EnumDeclarationSyntax)context.Node;
+
+        // loop through all the attributes on the method
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var attributeListSyntax in enumDeclarationSyntax.AttributeLists)
+        {
+            foreach (var attributeSyntax in attributeListSyntax.Attributes)
+            {
+                if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
+                {
+                    // weird, we couldn't get the symbol, ignore it
+                    continue;
+                }
+
+                var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
+                var fullName = attributeContainingTypeSymbol.ToDisplayString();
+
+                // Is the attribute the [EnumExtensions] attribute?
+                if (fullName == "PostgresEnumHelpers.Generated.PostgresEnumAttribute")
+                {
+                    // return the enum
+                    return enumDeclarationSyntax;
+                }
+            }
+        }
+
+        // we didn't find the attribute we were looking for
+        return null;
+    }  
+    
 
 }
