@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ogma3.Generated;
 using Ogma3.Infrastructure.Logging;
 using Serilog;
 using Serilog.Events;
@@ -15,6 +16,8 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        new TestClass().Testing();
+        
         // TODO: Reverts to old datetime behaviour, tracked by #50
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
