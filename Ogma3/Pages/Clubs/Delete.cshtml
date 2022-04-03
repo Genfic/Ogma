@@ -29,11 +29,11 @@
     </dl>
 </div>
 
-<form method="post" class="confirm">
+<form method="post" >
     <input type="hidden" asp-for="Club.Id" />
-    <div class="buttons">
-        <input type="submit" value="Delete" class="button accept red" />
-        <a asp-page="/Club/Index" class="button cancel" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">Cancel</a>
+    <div class="button-group">
+        <input type="submit" value="Delete" class="btn red" />
+        <a asp-page="/Club/Index" class="btn" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">Cancel</a>
     </div>
 </form>
 

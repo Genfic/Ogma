@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using FluentValidation;
+using Flurl;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +20,6 @@ using Ogma3.Data;
 using Ogma3.Data.Users;
 using reCAPTCHA.AspNetCore;
 using Serilog;
-using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -31,20 +31,22 @@ public class RegisterModel : PageModel
     private readonly IEmailSender _emailSender;
     private readonly IRecaptchaService _reCaptcha;
     private readonly ApplicationDbContext _context;
+    private readonly OgmaConfig _config;
 
     public RegisterModel(
         UserManager<OgmaUser> userManager,
         SignInManager<OgmaUser> signInManager,
         IEmailSender emailSender,
         IRecaptchaService reCaptcha,
-        ApplicationDbContext context
-    )
-    {
+        ApplicationDbContext context, 
+        OgmaConfig config
+    ) {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
         _reCaptcha = reCaptcha;
         _context = context;
+        _config = config;
     }
 
     [BindProperty] 
@@ -135,11 +137,12 @@ public class RegisterModel : PageModel
         }
 
         // Generate Gravatar
-        var avatar = Gravatar.Generate(Input.Email, new Gravatar.Options
-        {
-            Default = Gravatar.AvatarGenMethods.Identicon, 
-            Rating = Gravatar.Ratings.G
-        });
+        var avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{Input.Name}.png").ToString();
+        // var avatar = Gravatar.Generate(Input.Email, new Gravatar.Options
+        // {
+        //     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{Input.Name}.png").ToString(), 
+        //     Rating = Gravatar.Ratings.G
+        // });
             
         // Create user
         var user = new OgmaUser

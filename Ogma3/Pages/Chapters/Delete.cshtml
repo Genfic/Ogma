@@ -37,11 +37,11 @@
         </dd>
     </dl>
 
-    <form method="post" class="confirm">
-        <input type="hidden" asp-for="Chapter.Id"/>
-        <div class="buttons">
-            <input type="submit" value="Delete" class="button accept red"/>
-            <a asp-page="../Chapter" class="button cancel" asp-route-id="@Model.Chapter.Id" asp-route-slug="@Model.Chapter.Slug">Cancel</a>
+    <form method="post">
+        <input type="hidden" asp-for="Chapter.Id" />
+        <div class="button-group">
+            <input type="submit" value="Delete" class="btn red" />
+            <a asp-page="../Chapter" class="btn" asp-route-id="@Model.Chapter.Id" asp-route-slug="@Model.Chapter.Slug">Cancel</a>
         </div>
     </form>
 </div>

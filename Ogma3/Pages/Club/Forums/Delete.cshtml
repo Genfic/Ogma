@@ -25,12 +25,12 @@
         </dd>
     </dl>
 
-    <form method="post" class="confirm">
+    <form method="post">
         <input type="hidden" asp-for="ClubThread.Id"/>
-        <div class="buttons">
-            <input type="submit" value="Delete" class="button accept red"/>
+        <div class="button-group">
+            <input type="submit" value="Delete" class="btn red"/>
             <a asp-page="./Details"
-               class="button cancel"
+               class="btn"
                asp-route-clubId="@Model.ClubThread.ClubId"
                asp-route-threadId="@Model.ClubThread.Id">
                 Cancel

@@ -12,12 +12,12 @@
     <h3>Are you sure you want to @(Model.Data.IsPinned ? "unpin" : "pin") this thread?</h3>
     <hr/>
 
-    <form method="post" class="confirm">
+    <form method="post" >
         <input type="hidden" asp-for="Data.Id"/>
-        <div class="buttons">
-            <input type="submit" value="@(Model.Data.IsPinned ? "Unpin" : "Pin") it!" class="button accept green"/>
+        <div class="button-group">
+            <input type="submit" value="@(Model.Data.IsPinned ? "Unpin" : "Pin") it!" class="btn green"/>
             <a asp-page="./Details"
-               class="button cancel"
+               class="btn"
                asp-route-clubId="@Model.Data.ClubId"
                asp-route-threadId="@Model.Data.Id">
                 Cancel

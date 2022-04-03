@@ -1,8 +1,8 @@
 ﻿@page
-@using Ogma3.Api.V1.Tags
-@using Ogma3.Data
 @using Ogma3.Data.Tags
 @using System.Text.Json
+@using Ogma3.Api.V1.Tags
+@using Ogma3.Data
 @model Ogma3.Areas.Admin.Pages.Tags
 
 @{
@@ -10,38 +10,29 @@
     ViewData["ActivePage"] = ManageNavPages.Tags;
 }
 
-<form id="tag" class="form" method="post" v-on:submit.stop.prevent="createTag">
+<form id="tag" class="auto" method="post" v-on:submit.stop.prevent="createTag">
 
     <ul v-if="err" style="margin: 0">
         <li class="text-danger" v-for="e in err">{{ e }}</li>
     </ul>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Name"></label>
-        <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
-        <span class="text-danger"></span>
-    </div>
+    <label asp-for="Input.Name"></label>
+    <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
 
-    <div class="o-form-group">
-        <label asp-for="Input.Description"></label>
-        <input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
-        <span class="text-danger"></span>
-    </div>
+    <label asp-for="Input.Description"></label>
+    <input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
 
-    <div class="o-form-group">
-        <label asp-for="Input.Namespace"></label>
-        <select asp-for="Input.Namespace"
-                asp-items="Html.GetEnumSelectList<ETagNamespace>()"
-                v-model="form.namespace"
-                class="o-form-control">
-            <option value="null" selected>None</option>
-        </select>
-        <span class="text-danger"></span>
-    </div>
-
+    <label asp-for="Input.Namespace"></label>
+    <select asp-for="Input.Namespace"
+            asp-items="Html.GetEnumSelectList<ETagNamespace>()"
+            v-model="form.namespace"
+            class="o-form-control">
+        <option value="null" selected>None</option>
+    </select>
+    
     <input type="hidden" :value="form.id">
 
-    <div class="o-form-group">
+    <div class="form-row">
         <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
         <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
     </div>

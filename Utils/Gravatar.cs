@@ -11,7 +11,7 @@ public static class Gravatar
     public static string Generate(string email, Options? options = null)
     {
         const string url = "https://www.gravatar.com/avatar";
-            
+
         using var md5 = MD5.Create();
         var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
         var emailHash = string.Join("", hash.Select(x => x.ToString("x2")));
@@ -19,10 +19,10 @@ public static class Gravatar
         var avatar = new Url(url).AppendPathSegment(emailHash);
 
         if (options is null) return avatar;
-            
+
         if (!string.IsNullOrEmpty(options.Default)) avatar = avatar.SetQueryParam("d", options.Default);
         if (options.ForceDefault) avatar = avatar.SetQueryParam("f", "y");
-        if (options.Rating is {} r) avatar = avatar.SetQueryParam("r", r.ToString().ToLower());
+        if (options.Rating is { } r) avatar = avatar.SetQueryParam("r", r.ToString().ToLower());
 
         return avatar;
     }
@@ -32,10 +32,16 @@ public static class Gravatar
         bool ForceDefault = false,
         Ratings? Rating = null
     );
-        
+
     // ReSharper disable once InconsistentNaming
-    public enum Ratings { G, PG, R, X }
-        
+    public enum Ratings
+    {
+        G,
+        PG,
+        R,
+        X
+    }
+
     public static class AvatarGenMethods
     {
         public const string None = "404";

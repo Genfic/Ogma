@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,6 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
-using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -24,17 +24,17 @@ public class IndexModel : PageModel
     private readonly ApplicationDbContext _context;
     private readonly SignInManager<OgmaUser> _signInManager;
     private readonly ImageUploader _uploader;
-    private readonly OgmaConfig _ogmaConfig;
+    private readonly OgmaConfig _config;
 
     public IndexModel(
         ApplicationDbContext context,
         SignInManager<OgmaUser> signInManager,
         ImageUploader uploader,
-        OgmaConfig ogmaConfig
+        OgmaConfig config
     ) {
         _signInManager = signInManager;
         _uploader = uploader;
-        _ogmaConfig = ogmaConfig;
+        _config = config;
         _context = context;
     }
         
@@ -126,11 +126,11 @@ public class IndexModel : PageModel
                 Input.Avatar,
                 "avatars",
                 $"U-{user.NormalizedUserName}",
-                _ogmaConfig.AvatarWidth,
-                _ogmaConfig.AvatarHeight
+                _config.AvatarWidth,
+                _config.AvatarHeight
             );
             user.AvatarId = file.FileId;
-            user.Avatar = Path.Join(_ogmaConfig.Cdn, file.Path);
+            user.Avatar = Path.Join(_config.Cdn, file.Path);
         }
         else if (Input.DeleteAvatar)
         {
@@ -140,11 +140,12 @@ public class IndexModel : PageModel
             }
 
             user.AvatarId = null;
-            user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
-            {
-                Default = Gravatar.AvatarGenMethods.Identicon,
-                Rating = Gravatar.Ratings.G
-            });
+            user.Avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString();
+            // user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
+            // {
+            //     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString(), 
+            //     Rating = Gravatar.Ratings.G
+            // });
         }
 
         if (Input.Title != user.Title)

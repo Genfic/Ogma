@@ -7,46 +7,24 @@
     ViewData["ActivePage"] = ManageNavPages.Roles;
 }
     
-<form id="namespace" method="post" v-on:submit.stop.prevent="createRole">
+<form id="namespace" class="auto" method="post" v-on:submit.stop.prevent="createRole">
 
-    <div class="form-row">
+    <label asp-for="Input.Name"></label>
+    <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
+
+    <label asp-for="Input.Color"></label>
+    <input asp-for="Input.Color" type="color" class="o-form-control" v-model="form.color">
+
+    <label asp-for="Input.IsStaff"></label>
+    <input asp-for="Input.IsStaff" type="checkbox" class="o-form-control" v-model="form.isStaff">
+
+    <label asp-for="Input.Order"></label>
+    <input asp-for="Input.Order" type="number" class="o-form-control" min="0" v-model="form.order">
+
     
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Input.Name"></label>
-                <input asp-for="Input.Name" type="text" class="form-control" v-model="form.name">
-            </div>
-        </div>
-        
-        <div class="col-md-2">
-            <div class="form-group">
-                <label asp-for="Input.Color"></label>
-                <input asp-for="Input.Color" type="color" class="form-control" v-model="form.color">
-                <span class="text-danger"></span>
-            </div>
-        </div>
-        
-        <div class="col-md-2">
-            <div class="form-group">
-                <label asp-for="Input.IsStaff"></label>
-                <input asp-for="Input.IsStaff" type="checkbox" class="form-control" v-model="form.isStaff">
-                <span class="text-danger"></span>
-            </div>
-        </div>
-        
-        <div class="col-md-2">
-            <div class="form-group">
-                <label asp-for="Input.Order"></label>
-                <input asp-for="Input.Order" type="number" class="form-control" min="0" v-model="form.order">
-                <span class="text-danger"></span>
-            </div>
-        </div>
-        
-    </div>
-
     <input type="hidden" :value="form.id">
 
-    <div class="form-group">
+    <div class="form-row">
         <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
         <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
     </div>

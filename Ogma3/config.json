@@ -1,5 +1,6 @@
 {
   "Cdn": "//cdn.genfic.net/file/Ogma-net/",
+  "AvatarServiceUrl": "https://images.genfic.net/avatar",
   "AdminEmail": "admin@genfic.net",
   "MaxInvitesPerUser": 5,
   "PrivacyPolicyDoc": "privacy-policy",
@@ -8,10 +9,13 @@
   "ClubsPerPage": 25,
   "BlogpostsPerPage": 25,
   "StoriesPerPage": 25,
+  "ClubThreadsPerPage": 25,
+  "ShelvesPerPage": 50,
   "StoryCoverWidth": 200,
   "StoryCoverHeight": 200,
   "ClubIconWidth": 250,
   "ClubIconHeight": 250,
   "AvatarWidth": 250,
-  "AvatarHeight": 250
+  "AvatarHeight": 250,
+  "MinReportLength": 30
 }

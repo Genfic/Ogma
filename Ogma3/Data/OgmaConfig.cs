@@ -57,6 +57,8 @@ public class OgmaConfig
     #region Data proper
 
     public string Cdn { get; set; }
+
+    public string AvatarServiceUrl { get; set; }
     public string AdminEmail { get; set; }
     public int MaxInvitesPerUser { get; set; }
 
