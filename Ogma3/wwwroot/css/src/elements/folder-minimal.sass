@@ -1,29 +1,30 @@
 @use "../vars" as v
 
 .folder-minimal
-  display: flex
-  flex-direction: row
-  padding: .5rem
-    
-  .icon
-    margin-right: .5rem
-  
-  .name
-    flex: 1
-    font-weight: bold
-    text-decoration: underline
-    text-decoration-skip-ink: auto
-    color: v.$foreground
-    &:hover
-      color: v.$accent
-        
-  .count
     display: flex
     flex-direction: row
-    align-items: center
-    justify-content: center
-    
-    strong
-      font-size: 110%
-      margin-right: .5ch
+    padding: .5rem
+
+    .icon
+        margin-right: .5rem
+
+    .name
+        flex: 1
+        font-weight: bold
+        text-decoration: underline
+        text-decoration-skip-ink: auto
+        color: v.$foreground
+
+        &:hover
+            color: v.$accent
+
+    .count
+        display: flex
+        flex-direction: row
+        align-items: center
+        justify-content: center
+
+        strong
+            font-size: 110%
+            margin-right: .5ch
     

@@ -1,50 +1,50 @@
 Vue.component("manage-infraction", {
-	props: {
-		route: {
-			type: String,
-			required: true
-		},
-		userId: {
-			type: Number,
-			required: true
-		},
-		types: {
-			type: Array,
-			required: true
-		}
-	},
-	data: function() {
-		return {
-			type: null,
-			date: null,
-			reason: null,
-			
-			csrf: null,
-			visible: false
-		};
-	},
-	methods: {
+    props: {
+        route: {
+            type: String,
+            required: true
+        },
+        userId: {
+            type: Number,
+            required: true
+        },
+        types: {
+            type: Array,
+            required: true
+        }
+    },
+    data: function () {
+        return {
+            type: null,
+            date: null,
+            reason: null,
 
-		hide: function() {
-			this.type = this.date = this.reason = null;
-			this.visible = false;
-		},
+            csrf: null,
+            visible: false
+        };
+    },
+    methods: {
 
-		create: async function() {
-			log.log('submit');
-			await axios.post(this.route, {
-				userId: this.userId,
-				reason: this.reason,
-				endDate: this.date,
-				type: this.type
-			}, {
-				headers: { "RequestVerificationToken": this.csrf }
-			});
-			location.reload();
-		},
+        hide: function () {
+            this.type = this.date = this.reason = null;
+            this.visible = false;
+        },
 
-	},
-	template: `
+        create: async function () {
+            log.log('submit');
+            await axios.post(this.route, {
+                userId: this.userId,
+                reason: this.reason,
+                endDate: this.date,
+                type: this.type
+            }, {
+                headers: {"RequestVerificationToken": this.csrf}
+            });
+            location.reload();
+        },
+
+    },
+    template: `
 		<div class="my-modal" v-if="visible" @click.self="hide">
 			<div class="content">
 				<strong>Create infraction</strong>
@@ -80,7 +80,7 @@ Vue.component("manage-infraction", {
 			</div>
 		</div>
 	`,
-	mounted() {
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-	}
+    mounted() {
+        this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
+    }
 });

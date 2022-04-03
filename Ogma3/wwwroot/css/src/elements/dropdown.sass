@@ -2,32 +2,32 @@
 @use "../mixins/active-border" as ab
 
 .o-dropdown
-  position: relative
-  
-  button
-    height: 100%
-    
-  .menu
-    position: absolute
-    background-color: v.$background
-    border: 1px solid v.$foreground-50
-    padding: .5rem
-    
-    a.item
-      color: v.$foreground
-    
-    .item
-      white-space: nowrap
-      
-      i
-        font-size: 1rem
-      
-      &.active
-        cursor: pointer
-        
-        &:hover
-          color: v.$accent-75
-    
-  &.left
+    position: relative
+
+    button
+        height: 100%
+
     .menu
-      right: 0
+        position: absolute
+        background-color: v.$background
+        border: 1px solid v.$foreground-50
+        padding: .5rem
+
+        a.item
+            color: v.$foreground
+
+        .item
+            white-space: nowrap
+
+            i
+                font-size: 1rem
+
+            &.active
+                cursor: pointer
+
+                &:hover
+                    color: v.$accent-75
+
+    &.left
+        .menu
+            right: 0

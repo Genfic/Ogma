@@ -2,33 +2,33 @@
 @use '../mixins/active-border' as ab
 
 .pagination
-  display: flex
-  width: 100%
-  justify-content: space-between
-  
-  & .button
-    display: inline-block
-    text-align: center
-    border-radius: 0
-    padding: .5rem
+    display: flex
     width: 100%
-    background-color: v.$background
-    color: v.$foreground
-    text-decoration: none
-    @include ab.active-border
-  
-    &.prev
-      margin-right: .5px
-      
-    &.page
-      margin: 0 .5px
+    justify-content: space-between
 
-    &.next
-      margin-left: .5px
-      
-    &.ph
-      cursor: default
+    & .button
+        display: inline-block
+        text-align: center
+        border-radius: 0
+        padding: .5rem
+        width: 100%
+        background-color: v.$background
+        color: v.$foreground
+        text-decoration: none
+        @include ab.active-border
 
-    &.active
-      background-color: v.$accent-25
-      font-weight: bold
+        &.prev
+            margin-right: .5px
+
+        &.page
+            margin: 0 .5px
+
+        &.next
+            margin-left: .5px
+
+        &.ph
+            cursor: default
+
+        &.active
+            background-color: v.$accent-25
+            font-weight: bold

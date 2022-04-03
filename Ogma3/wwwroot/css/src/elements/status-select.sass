@@ -2,27 +2,27 @@
 @use "../mixins/focus" as f
 
 .status-select
-  
-  .selector
-    display: flex
-    width: 100%
-    min-height: 48px
-    flex-wrap: wrap
 
-    input[type=radio]
-      display: none
+    .selector
+        display: flex
+        width: 100%
+        min-height: 48px
+        flex-wrap: wrap
 
-      &:checked+label
-        background-color: v.$accent-25
+        input[type=radio]
+            display: none
 
-      &:hover+label
-        background-color: v.$accent-50
+            &:checked + label
+                background-color: v.$accent-25
 
-    label
-      flex: 1
-      display: flex
-      align-items: center
-      justify-content: center
-      cursor: pointer
-      padding: .5rem
-      +f.focus
+            &:hover + label
+                background-color: v.$accent-50
+
+        label
+            flex: 1
+            display: flex
+            align-items: center
+            justify-content: center
+            cursor: pointer
+            padding: .5rem
+            +f.focus

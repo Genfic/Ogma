@@ -2,53 +2,56 @@
 @use '../mixins/active-border' as ab
 
 .action-btn
-  display: flex
-  align-items: center
-  justify-content: center
-  padding: 0 .5rem
-  margin-right: .1rem
-  background-color: transparent
-  color: v.$foreground-75
-  +ab.active-border
-  
-  &.inline
-    display: inline-flex
-  
-  &.small
-    font-size: 1.2rem
-    
-  &.large
-    padding: .5rem
-    
-  &.red
-    background-color: v.$red-10
-    &:hover
-      background-color: v.$red-25
-      
-    &-hl
-      &:hover
-        background-color: v.$red-25
-      
-    
-  &.green
-    background-color: v.$green-10
-    &:hover
-      background-color: v.$green-25
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 0 .5rem
+    margin-right: .1rem
+    background-color: transparent
+    color: v.$foreground-75
+    +ab.active-border
 
-    &-hl
-      &:hover
-        background-color: v.$green-25
-  
-  >.icon
-    font-size: inherit
-    & + *
-      margin-left: .5rem
-      
-  >.name
-    @media screen and (max-width: v.$mq-mobile)
-      display: none
-  
-  &:hover
-    color: v.$foreground
-    text-decoration: none
-    background-color: v.$accent-10
+    &.inline
+        display: inline-flex
+
+    &.small
+        font-size: 1.2rem
+
+    &.large
+        padding: .5rem
+
+    &.red
+        background-color: v.$red-10
+
+        &:hover
+            background-color: v.$red-25
+
+        &-hl
+            &:hover
+                background-color: v.$red-25
+
+
+    &.green
+        background-color: v.$green-10
+
+        &:hover
+            background-color: v.$green-25
+
+        &-hl
+            &:hover
+                background-color: v.$green-25
+
+    > .icon
+        font-size: inherit
+
+        & + *
+            margin-left: .5rem
+
+    > .name
+        @media screen and (max-width: v.$mq-mobile)
+            display: none
+
+    &:hover
+        color: v.$foreground
+        text-decoration: none
+        background-color: v.$accent-10

@@ -2,57 +2,58 @@
 @use '../mixins/focus' as f
 
 .blogpost-details
-  display: flex
-  flex: 1
-  flex-direction: column
-  margin: 4px 0 0
-  padding: 4px
-  overflow-anchor: auto
-  
-  >.title
-    text-align: center
-    margin: .5rem
-    
-  .date
-    text-align: center
-    margin: 0
-    &.not-published
-      color: v.$red
-    
-  .actions
-    margin: .5rem 0
     display: flex
-    justify-content: center
+    flex: 1
+    flex-direction: column
+    margin: 4px 0 0
+    padding: 4px
+    overflow-anchor: auto
 
-    .not-published
-      display: flex
-      align-items: center
-      justify-content: center
-      color: v.$red-75
-      font-size: 1rem
-    
-  .body
-    text-align: justify
-    margin-top: 1em
-    line-height: 1.75
-    
-  .tags
-    display: flex
-    
-    >.tag
-      padding: .25rem
-      text-decoration: none
-      +f.focus
-      
-      &:hover
-        background-color: v.$accent-10
-      
-      >.name
-        &:before
-          content: '#'
-          color: v.$foreground-50
-        
-  .unavailable
-    padding: .5rem
-    margin: .5rem 0
-    background-color: v.$red-10
+    > .title
+        text-align: center
+        margin: .5rem
+
+    .date
+        text-align: center
+        margin: 0
+
+        &.not-published
+            color: v.$red
+
+    .actions
+        margin: .5rem 0
+        display: flex
+        justify-content: center
+
+        .not-published
+            display: flex
+            align-items: center
+            justify-content: center
+            color: v.$red-75
+            font-size: 1rem
+
+    .body
+        text-align: justify
+        margin-top: 1em
+        line-height: 1.75
+
+    .tags
+        display: flex
+
+        > .tag
+            padding: .25rem
+            text-decoration: none
+            +f.focus
+
+            &:hover
+                background-color: v.$accent-10
+
+            > .name
+                &:before
+                    content: '#'
+                    color: v.$foreground-50
+
+    .unavailable
+        padding: .5rem
+        margin: .5rem 0
+        background-color: v.$red-10

@@ -1,18 +1,18 @@
 main#app {
-  display: grid;
-  grid: "head head" auto
+    display: grid;
+    grid: "head head" auto
         "nav body" 1fr / auto 1fr;
-  gap: 1rem 2rem;
-  
-  .head {
-    grid-area: head;
-  }
-  
-  .side-nav {
-    grid-area: nav; 
-  }
-  
-  .admin-body {
-    grid-area: body;
-  }
+    gap: 1rem 2rem;
+
+    .head {
+        grid-area: head;
+    }
+
+    .side-nav {
+        grid-area: nav;
+    }
+
+    .admin-body {
+        grid-area: body;
+    }
 }

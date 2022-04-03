@@ -1,21 +1,19 @@
 @mixin alphas($name, $color, $alphas...) {
-  @each $alpha in $alphas {
-    @if ($alpha == 1) {
-      --#{$name}: #{$color};
+    @each $alpha in $alphas {
+        @if ($alpha == 1) {
+            --#{$name}: #{$color};
+        } @else {
+            --#{$name}-#{$alpha * 100}: #{rgba($color, $alpha)};
+        }
     }
-    @else {
-      --#{$name}-#{$alpha * 100}: #{rgba($color, $alpha)};
-    }
-  }
 }
 
 @mixin blends($name, $base, $color, $percentages...) {
-  @each $percentage in $percentages {
-    @if ($percentage == 100) {
-      --#{$name}-g: #{$color};
+    @each $percentage in $percentages {
+        @if ($percentage == 100) {
+            --#{$name}-g: #{$color};
+        } @else {
+            --#{$name}-g-#{$percentage}: #{mix($color, $base, $percentage * 1%)}
+        }
     }
-    @else {
-      --#{$name}-g-#{$percentage}: #{mix($color, $base, $percentage * 1%)}
-    }
-  }
 }

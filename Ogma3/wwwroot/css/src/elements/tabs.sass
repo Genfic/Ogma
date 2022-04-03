@@ -1,36 +1,39 @@
 @use "../vars" as v
 
 .tab-view
-  
-  .tabs
-    display: flex
-    align-items: flex-end
-    border-bottom: 1px solid v.$foreground-75
-    
-    .tab
-      padding: .5rem 1rem
-      background-color: v.$background
-      color: v.$foreground-75
-      border: 1px solid v.$foreground-25
-      border-right: none
-      border-bottom: none
-      text-align: center
-      &:hover,
-      &:focus
-        color: v.$foreground
-        background: v.$accent-10
-      &:first-child
-        border-top-left-radius: .25rem
-        margin-left: 1rem
-      &:last-child
-        border-right: 1px solid v.$foreground-25
-        border-top-right-radius: .25rem
 
-      &.active
-        border-top: .25rem solid v.$accent
-        border-top-right-radius: .25rem
-        border-top-left-radius: .25rem
-    
-  .tab-body
-    >.title
-      margin: 1rem 0 .5rem
+    .tabs
+        display: flex
+        align-items: flex-end
+        border-bottom: 1px solid v.$foreground-75
+
+        .tab
+            padding: .5rem 1rem
+            background-color: v.$background
+            color: v.$foreground-75
+            border: 1px solid v.$foreground-25
+            border-right: none
+            border-bottom: none
+            text-align: center
+
+            &:hover,
+            &:focus
+                color: v.$foreground
+                background: v.$accent-10
+
+            &:first-child
+                border-top-left-radius: .25rem
+                margin-left: 1rem
+
+            &:last-child
+                border-right: 1px solid v.$foreground-25
+                border-top-right-radius: .25rem
+
+            &.active
+                border-top: .25rem solid v.$accent
+                border-top-right-radius: .25rem
+                border-top-left-radius: .25rem
+
+    .tab-body
+        > .title
+            margin: 1rem 0 .5rem

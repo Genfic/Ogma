@@ -1,19 +1,19 @@
 (() => {
-	let inputs = document.querySelectorAll('input.o-form-control');
-   
-	for (let i of inputs) {
-		i.dataset.init = i.value;
+    let inputs = document.querySelectorAll('input.o-form-control');
 
-		i.addEventListener('input', e => {
-			log.log(e.target.value !== e.target.dataset.init);
+    for (let i of inputs) {
+        i.dataset.init = i.value;
 
-			if (e.target.value !== e.target.dataset.init) {
-				e.target.classList.add('changed');
-			} else {
-				e.target.classList.remove('changed');
-			}
+        i.addEventListener('input', e => {
+            log.log(e.target.value !== e.target.dataset.init);
 
-		});
-	}
-   
+            if (e.target.value !== e.target.dataset.init) {
+                e.target.classList.add('changed');
+            } else {
+                e.target.classList.remove('changed');
+            }
+
+        });
+    }
+
 })();

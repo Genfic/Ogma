@@ -3,199 +3,209 @@
 @use '../mixins/active-border' as ab
 
 form.form
-  display: flex
-  flex-direction: column
-  overflow-anchor: auto
-  
-  .form-row
     display: flex
-    flex-direction: row
-    padding: .5rem 0
-    align-items: flex-end
-    
-    .o-form-group
-      flex: 1
-      padding: 0 .5rem
-      margin: 0
-      &:first-child
-        padding-left: 0
-      &:last-child
-        padding-right: 0
-        
-      &.keep-size
-        flex: 0
-    
-  .input-group
-    display: grid
-    grid-template: 1 / 1
-      
-    >*
-      grid-column: 1
-      grid-row: 1
-      
-    .input-group-append
-      align-self: center
-      justify-self: end
-      padding: .5rem
-      
-    &.push
-      display: flex
-      
-      .o-form-control
-        flex: 1
-      
-      .input-group-append
+    flex-direction: column
+    overflow-anchor: auto
+
+    .form-row
         display: flex
-        padding: 0
-        align-self: stretch
-        
-        button
-          margin-left: 2px
-          i
-            font-size: 1rem
-      
-  .o-form-group
-    position: relative
-    display: flex
-    flex-direction: column 
-    margin-top: 1rem
-    
-    input, 
-    textarea
-      padding: .5rem
-      background-color: v.$ele-1
-      color: v.$foreground
-      
-      &[disabled]
-        color: v.$foreground-50
-        
-    textarea
-      min-height: 3rem
-      resize: vertical
-      
-    input[type=color]
-      cursor: pointer
-      padding: .25rem
-      min-height: 48px
-      min-width: 48px
-      +ab.active-border
-      
-    label
-      font-weight: 600
-      font-size: .95rem
-      margin: 0
-      white-space: nowrap
-      
-    .ratings
-      display: grid
-      grid-template-columns: repeat(2, 1fr)
-      grid-gap: .5rem
-      margin-top: .5rem
-      
-      @media only screen and (max-width: v.$mq-mobile)
+        flex-direction: row
+        padding: .5rem 0
+        align-items: flex-end
+
+        .o-form-group
+            flex: 1
+            padding: 0 .5rem
+            margin: 0
+
+            &:first-child
+                padding-left: 0
+
+            &:last-child
+                padding-right: 0
+
+            &.keep-size
+                flex: 0
+
+    .input-group
+        display: grid
+        grid-template: 1 / 1
+
+        > *
+            grid-column: 1
+            grid-row: 1
+
+        .input-group-append
+            align-self: center
+            justify-self: end
+            padding: .5rem
+
+        &.push
+            display: flex
+
+            .o-form-control
+                flex: 1
+
+            .input-group-append
+                display: flex
+                padding: 0
+                align-self: stretch
+
+                button
+                    margin-left: 2px
+
+                    i
+                        font-size: 1rem
+
+    .o-form-group
+        position: relative
         display: flex
         flex-direction: column
-        >.rating
-          margin-bottom: .5rem
-        
-      .rating
-        position: relative
-      
-        .radio
-          opacity: 0
-          position: absolute
-          
-          &:checked+.radio-label
-            background: v.$accent-25
-            border-color: v.$accent
-            
-          &:focus+.radio-label
-            border-color: v.$accent
-            box-shadow: 0 0 0 3px v.$accent-25
-            
-        .radio-label
-          display: flex
-          cursor: pointer
-          
-          >img
-            flex-basis: 3rem
-            height: 100%
-            
-          >.main
-            display: block
-            margin-left: .5rem
-            >*
-              display: block
-            >strong
-              font-weight: 600
-            >span
-              font-weight: 500
+        margin-top: 1rem
 
-    .field-validation-error
-      color: v.$red
-      background-color: v.$red-10
-      padding: .25rem
-      font-size: .9rem
-      
-    aside.info
-      position: absolute
-      left: calc(100% + 1rem)
-      top: 1.5rem
-      min-width: 15rem
-      background-color: v.$ele-1
-      border: 1px solid v.$foreground-25
-      padding: .5rem
-      pointer-events: none
-      opacity: 0
-      transition: opacity 200ms ease-in-out
-      &.visible
-        opacity: 100%
-      > *
-        margin: 0
-      @media screen and (max-width: v.$mq-mobile)
-        left: 0
-        top: 100%
-        z-index: 999
-      
-  .o-form-control
-    +f.focus
-    
-    &.changed
-      background-color: v.$red-25
-  
+        input,
+        textarea
+            padding: .5rem
+            background-color: v.$ele-1
+            color: v.$foreground
+
+            &[disabled]
+                color: v.$foreground-50
+
+        textarea
+            min-height: 3rem
+            resize: vertical
+
+        input[type=color]
+            cursor: pointer
+            padding: .25rem
+            min-height: 48px
+            min-width: 48px
+            +ab.active-border
+
+        label
+            font-weight: 600
+            font-size: .95rem
+            margin: 0
+            white-space: nowrap
+
+        .ratings
+            display: grid
+            grid-template-columns: repeat(2, 1fr)
+            grid-gap: .5rem
+            margin-top: .5rem
+
+            @media only screen and (max-width: v.$mq-mobile)
+                display: flex
+                flex-direction: column
+                > .rating
+                    margin-bottom: .5rem
+
+            .rating
+                position: relative
+
+                .radio
+                    opacity: 0
+                    position: absolute
+
+                    &:checked + .radio-label
+                        background: v.$accent-25
+                        border-color: v.$accent
+
+                    &:focus + .radio-label
+                        border-color: v.$accent
+                        box-shadow: 0 0 0 3px v.$accent-25
+
+                .radio-label
+                    display: flex
+                    cursor: pointer
+
+                    > img
+                        flex-basis: 3rem
+                        height: 100%
+
+                    > .main
+                        display: block
+                        margin-left: .5rem
+
+                        > *
+                            display: block
+
+                        > strong
+                            font-weight: 600
+
+                        > span
+                            font-weight: 500
+
+        .field-validation-error
+            color: v.$red
+            background-color: v.$red-10
+            padding: .25rem
+            font-size: .9rem
+
+        aside.info
+            position: absolute
+            left: calc(100% + 1rem)
+            top: 1.5rem
+            min-width: 15rem
+            background-color: v.$ele-1
+            border: 1px solid v.$foreground-25
+            padding: .5rem
+            pointer-events: none
+            opacity: 0
+            transition: opacity 200ms ease-in-out
+
+            &.visible
+                opacity: 100%
+
+            > *
+                margin: 0
+
+            @media screen and (max-width: v.$mq-mobile)
+                left: 0
+                top: 100%
+                z-index: 999
+
+    .o-form-control
+        +f.focus
+
+        &.changed
+            background-color: v.$red-25
+
 
 .select-group
-  display: flex
-  flex-direction: row
-  background-color: v.$background
+    display: flex
+    flex-direction: row
+    background-color: v.$background
 
-  label
-    display: inline-flex
-    align-items: center
-    justify-content: center
-    cursor: pointer
-    padding: .25rem
-    margin: 0
-    flex: 1
-    +ab.active-border
+    label
+        display: inline-flex
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        padding: .25rem
+        margin: 0
+        flex: 1
+        +ab.active-border
 
-    &:hover
-      background-color: v.$accent-5
+        &:hover
+            background-color: v.$accent-5
 
-  input[type=checkbox],
-  input[type=radio]
-    position: absolute !important
-    height: 1px
-    width: 1px
-    overflow: hidden
-    clip: rect(1px 1px 1px 1px) /* IE6, IE7 */
-    clip: rect(1px, 1px, 1px, 1px)
+    input[type=checkbox],
+    input[type=radio]
+        position: absolute !important
+        height: 1px
+        width: 1px
+        overflow: hidden
+        clip: rect(1px 1px 1px 1px)
+        /* IE6, IE7 */
+        clip: rect(1px, 1px, 1px, 1px)
 
-    &:checked
-      & + label
-        background-color: v.$accent-25
-        
-    &:focus
-      & + label
-        border-color: v.$accent
-        box-shadow: 0 0 0 3px v.$accent-25
+        &:checked
+            & + label
+                background-color: v.$accent-25
+
+        &:focus
+            & + label
+                border-color: v.$accent
+                box-shadow: 0 0 0 3px v.$accent-25

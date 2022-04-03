@@ -5,155 +5,164 @@ $title-height: 2rem
 
 #story-app
 
-  >.story-details
-    overflow-y: auto
-    overflow-anchor: auto
-    
-    >.titlebar
-      display: flex
-      align-items: baseline
-      flex-direction: row
-      padding-bottom: .5rem
-      
-      >.rating
-        height: $title-height * 0.7
-        width: $title-height * 0.7
-        margin-right: .5rem
-      
-      >h1.title
-        font-size: $title-height
-        line-height: $title-height * 1.5
-        word-wrap: break-word
-        word-break: break-all
-    
-    >.tags
-      display: flex
-      flex-direction: row
-      flex-wrap: wrap
-  
-    >.main
-      padding-top: .5rem
-      text-align: justify
-      
-      >.cover
-        float: left
-        margin-right: 10px
-        margin-bottom: 10px
-        width: 10rem
-        object-fit: contain
-        border: 1px solid v.$foreground-25
-        
-      & h2.author
-        color: v.$foreground
-        font-weight: 500
-        font-size: 1rem
-        
-    >.actions
-      display: flex
-      flex-wrap: wrap-reverse
-      margin-bottom: .5rem
-  
-      .spacer
-        flex: 1
-        
-  >.chapters
-    margin-top: 1rem
-    >span
-      font-weight: bold
-      
-    >.chapter
-      display: flex
-      justify-content: space-between
-      padding: .5rem
-      color: v.$foreground
-      border-top: 1px solid v.$foreground-25
-      &:last-child
-        border-bottom: 1px solid v.$foreground-25
-      &:hover
-        background-color: v.$accent-5
-        
-      &.unpublished
-        opacity: .6
-        .title
-          text-decoration: line-through
-      
-      >.left
-        display: flex
-        align-items: center
-        >*
-          padding: 0 .25rem
-  
-        >.order
-          color: v.$foreground-75
-          border-right: 1px solid v.$foreground-10
-          border-left: 1px solid v.$foreground-10
-          padding: 0 .5rem
-          margin: 0 .2rem
-          
-        >.title
-          color: v.$foreground
-          display: flex
-          align-items: center
-          &:hover
-            color: v.$accent
-            text-decoration: underline
-            
-        >.warning
-          font-size: inherit
-          color: v.$yellow-75
-          
-        >.date
-          font-size: .8rem
-          color: v.$foreground-75
-          &:hover
-            color: v.$foreground
-            
-        >.read-status
-          padding: 0
-          width: 1.2rem
-          height: 1.2rem
-          background-color: transparent
-          color: v.$foreground-25
-          border: none
-          
-          &.active
+    > .story-details
+        overflow-y: auto
+        overflow-anchor: auto
+
+        > .titlebar
             display: flex
-            align-items: center
-            justify-content: center
+            align-items: baseline
+            flex-direction: row
+            padding-bottom: .5rem
+
+            > .rating
+                height: $title-height * 0.7
+                width: $title-height * 0.7
+                margin-right: .5rem
+
+            > h1.title
+                font-size: $title-height
+                line-height: $title-height * 1.5
+                word-wrap: break-word
+                word-break: break-all
+
+        > .tags
+            display: flex
+            flex-direction: row
+            flex-wrap: wrap
+
+        > .main
+            padding-top: .5rem
+            text-align: justify
+
+            > .cover
+                float: left
+                margin-right: 10px
+                margin-bottom: 10px
+                width: 10rem
+                object-fit: contain
+                border: 1px solid v.$foreground-25
+
+            & h2.author
+                color: v.$foreground
+                font-weight: 500
+                font-size: 1rem
+
+        > .actions
+            display: flex
+            flex-wrap: wrap-reverse
+            margin-bottom: .5rem
+
+            .spacer
+                flex: 1
+
+    > .chapters
+        margin-top: 1rem
+
+        > span
+            font-weight: bold
+
+        > .chapter
+            display: flex
+            justify-content: space-between
+            padding: .5rem
+            color: v.$foreground
+            border-top: 1px solid v.$foreground-25
+
+            &:last-child
+                border-bottom: 1px solid v.$foreground-25
+
+            &:hover
+                background-color: v.$accent-5
+
+            &.unpublished
+                opacity: .6
+
+                .title
+                    text-decoration: line-through
+
+            > .left
+                display: flex
+                align-items: center
+
+                > *
+                    padding: 0 .25rem
+
+                > .order
+                    color: v.$foreground-75
+                    border-right: 1px solid v.$foreground-10
+                    border-left: 1px solid v.$foreground-10
+                    padding: 0 .5rem
+                    margin: 0 .2rem
+
+                > .title
+                    color: v.$foreground
+                    display: flex
+                    align-items: center
+
+                    &:hover
+                        color: v.$accent
+                        text-decoration: underline
+
+                > .warning
+                    font-size: inherit
+                    color: v.$yellow-75
+
+                > .date
+                    font-size: .8rem
+                    color: v.$foreground-75
+
+                    &:hover
+                        color: v.$foreground
+
+                > .read-status
+                    padding: 0
+                    width: 1.2rem
+                    height: 1.2rem
+                    background-color: transparent
+                    color: v.$foreground-25
+                    border: none
+
+                    &.active
+                        display: flex
+                        align-items: center
+                        justify-content: center
+                        color: v.$foreground-75
+
+                    i
+                        color: inherit
+                        font-size: inherit
+                        line-height: 1.2rem
+
+    //>.right
+      //>.word-count
+
+    > .info
+        border-top: 1px solid v.$foreground-25
+        margin-top: 1rem
+        display: flex
+
+        &.author-info
+            border: none
+            margin: 0
+
+            .comment-count
+                visibility: hidden
+
+        .spacer
+            flex: 1
+
+        *
             color: v.$foreground-75
-            
-          i
-            color: inherit
-            font-size: inherit
-            line-height: 1.2rem
-        
-      //>.right
-        //>.word-count
-          
-  >.info
-    border-top: 1px solid v.$foreground-25
-    margin-top: 1rem
-    display: flex
-    
-    &.author-info
-      border: none
-      margin: 0
-      .comment-count
-        visibility: hidden
-    
-    .spacer
-      flex: 1
-  
-    *
-      color: v.$foreground-75
-      &:hover
-        color: v.$foreground
-      
-    >*
-      padding: 0 .25rem
-        
-    a
-      cursor: pointer
+
+            &:hover
+                color: v.$foreground
+
+        > *
+            padding: 0 .25rem
+
+        a
+            cursor: pointer
       
       
     

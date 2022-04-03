@@ -5,7 +5,7 @@
     for (const input of inputs) {
         const info = document.querySelector(`[data-for="${input.id}"]`);
         if (!info) continue;
-        
+
         input.addEventListener('focusin', () => {
             info.classList.add(classname)
         });

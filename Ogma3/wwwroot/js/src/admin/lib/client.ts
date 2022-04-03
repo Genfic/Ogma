@@ -23,7 +23,10 @@ export const getTableInfo = (baseUrl?: string): Promise<TableInfo[]> => {
 
         const processGetTableInfo = (response: Response): Promise<TableInfo[]> => {
             const status = response.status;
-            let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+            let _headers: any = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v: any, k: any) => _headers[k] = v);
+            }
             if (status === 200) {
                 return response.json().then((_responseText) => {
                     let result200: any = null;
@@ -32,8 +35,7 @@ export const getTableInfo = (baseUrl?: string): Promise<TableInfo[]> => {
                         result200 = [] as any;
                         for (let item of resultData200)
                             result200!.push(TableInfo.fromJS(item));
-                    }
-                    else {
+                    } else {
                         result200 = <any>null;
                     }
                     return result200;
@@ -66,7 +68,10 @@ export const getImportantItemCounts = (baseUrl?: string): Promise<{ [key: string
 
         const processGetImportantItemCounts = (response: Response): Promise<{ [key: string]: number; }> => {
             const status = response.status;
-            let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+            let _headers: any = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v: any, k: any) => _headers[k] = v);
+            }
             if (status === 200) {
                 return response.json().then((_responseText) => {
                     let result200: any = null;
@@ -77,8 +82,7 @@ export const getImportantItemCounts = (baseUrl?: string): Promise<{ [key: string
                             if (resultData200.hasOwnProperty(key))
                                 (<any>result200)![key] = resultData200[key];
                         }
-                    }
-                    else {
+                    } else {
                         result200 = <any>null;
                     }
                     return result200;
@@ -108,18 +112,18 @@ export class TableInfo implements ITableInfo {
         }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.size = _data["size"];
-        }
-    }
-
     static fromJS(data: any): TableInfo {
         data = typeof data === 'object' ? data : {};
         let result = new TableInfo();
         result.init(data);
         return result;
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.size = _data["size"];
+        }
     }
 
     toJSON(data?: any) {
@@ -141,6 +145,7 @@ export class ApiException extends Error {
     response: string;
     headers: { [key: string]: any; };
     result: any;
+    protected isApiException = true;
 
     constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super();
@@ -151,8 +156,6 @@ export class ApiException extends Error {
         this.headers = headers;
         this.result = result;
     }
-
-    protected isApiException = true;
 
     static isApiException(obj: any): obj is ApiException {
         return obj.isApiException === true;
