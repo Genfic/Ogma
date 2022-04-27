@@ -1,12 +1,11 @@
 ﻿@using System.Security.Claims
-@using Ogma3.Api.V1.Notifications
-@using Ogma3.Data.Users
 @using Ogma3.Services
-@inject SignInManager<OgmaUser> _signInManager
-@inject OgmaUserManager _userManager
+@using Ogma3.Data.Users
+@using Ogma3.Api.V1.Notifications
+@inject SignInManager<OgmaUser> SignInManager
 
 <ul class="navbar-nav right">
-    @if (_signInManager.IsSignedIn(User))
+    @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
             <a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">

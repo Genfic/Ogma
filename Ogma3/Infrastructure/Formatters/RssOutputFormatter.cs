@@ -63,7 +63,7 @@ public class RssOutputFormatter : TextOutputFormatter
         stream.Seek(0, SeekOrigin.Begin);
 
         var result = new byte[stream.Length];
-        await stream.ReadAsync(result.AsMemory(0, (int) stream.Length));
+        _ = await stream.ReadAsync(result.AsMemory(0, (int) stream.Length));
             
         var cd = new ContentDisposition
         {

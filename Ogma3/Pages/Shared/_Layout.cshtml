@@ -3,7 +3,7 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Hosting
 @using Ogma3.Api.V1.UserActivity
-@inject IWebHostEnvironment _env
+@inject IWebHostEnvironment Env
 @{
     Context.Request.Cookies.TryGetValue("theme", out var value);
     var theme = value ?? "light";
@@ -119,7 +119,7 @@
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
         crossorigin="anonymous"></script>
     
-@if (_env.IsDevelopment())
+@if (Env.IsDevelopment())
 {
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"
             asp-fallback-src="~/lib/vue/vue.js"
@@ -150,7 +150,7 @@ else
     </script>
 }
     
-@if (_env.IsDevelopment()) {
+@if (Env.IsDevelopment()) {
     <mini-profiler />
 }
 

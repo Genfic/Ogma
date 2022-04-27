@@ -5,8 +5,8 @@
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
-@inject OgmaConfig _config
-@inject IAntiforgery _xcsrf
+@inject OgmaConfig Config
+@inject IAntiforgery Xcsrf
 @model CommentsThreadDto   
  
 <script>
@@ -16,9 +16,9 @@ const ssrData = {
     route: '@Url.RouteUrl(nameof(CommentsController))',
     threadRoute: '@Url.RouteUrl(nameof(CommentsThreadController))',
     subscribeRoute: '@Url.RouteUrl(nameof(SubscriptionsController))',
-    perPage: @_config.CommentsPerPage,
+    perPage: @Config.CommentsPerPage,
     maxLength: @CTConfig.CComment.MaxBodyLength,
-    csrf: '@_xcsrf.GetAndStoreTokens(Context).RequestToken'
+    csrf: '@Xcsrf.GetAndStoreTokens(Context).RequestToken'
 }
 </script>
 

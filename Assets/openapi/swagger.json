@@ -1,0 +1,6018 @@
+{
+  "x-generator": "NSwag v13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My Title",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:5001"
+    }
+  ],
+  "paths": {
+    "/api/error": {
+      "get": {
+        "tags": [
+          "Error"
+        ],
+        "operationId": "Error_OnGet",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorControllerResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/votes/{storyId}": {
+      "get": {
+        "tags": [
+          "Votes"
+        ],
+        "operationId": "Votes_GetVotes",
+        "parameters": [
+          {
+            "name": "storyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVotesResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/votes": {
+      "post": {
+        "tags": [
+          "Votes"
+        ],
+        "operationId": "Votes_PostVote",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVoteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateVoteResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Votes"
+        ],
+        "operationId": "Votes_DeleteVote",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteVoteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVoteResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/block": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_BlockUser",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_UnblockUser",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnblockUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/follow": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_FollowUser",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_UnfollowUser",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnfollowUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/roles": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ManageRoles",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRolesCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/users/names": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_FindNames",
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/useractivity": {
+      "head": {
+        "tags": [
+          "UserActivity"
+        ],
+        "operationId": "UserActivity_UpdateLastActive",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/tags/all": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TagDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags/search": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_Search",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TagDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_GetTags",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TagDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_PutTag",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTagCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_PostTag",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTagCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/tags/{id}": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_GetTag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_DeleteTag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags/story/{id}": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "operationId": "Tags_GetStoryTags",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TagDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/subscriptions/thread": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "Subscriptions_IsSubscribedToThread",
+        "parameters": [
+          {
+            "name": "ThreadId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "Subscriptions_SubscribeThread",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscribeCommentsThreadCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "Subscriptions_UnsubscribeThread",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnsubscribeCommentsThreadCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/signin": {
+      "get": {
+        "tags": [
+          "SignIn"
+        ],
+        "operationId": "SignIn_GetSignIn",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSignInDataResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shelves/{id}": {
+      "get": {
+        "tags": [
+          "Shelves"
+        ],
+        "operationId": "Shelves_GetShelf",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShelfDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Shelves"
+        ],
+        "operationId": "Shelves_DeleteShelf",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shelves/{name}": {
+      "get": {
+        "tags": [
+          "Shelves"
+        ],
+        "operationId": "Shelves_GetUserShelves",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShelfDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shelves": {
+      "post": {
+        "tags": [
+          "Shelves"
+        ],
+        "operationId": "Shelves_PostShelf",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShelfCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShelfDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Shelves"
+        ],
+        "operationId": "Shelves_PutShelf",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateShelfCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShelfDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shelfstories/{storyId}/quick": {
+      "get": {
+        "tags": [
+          "ShelfStories"
+        ],
+        "operationId": "ShelfStories_GetUserQuickShelves",
+        "parameters": [
+          {
+            "name": "storyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShelfDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shelfstories/{storyId}": {
+      "get": {
+        "tags": [
+          "ShelfStories"
+        ],
+        "operationId": "ShelfStories_GetUserShelvesPaginated",
+        "parameters": [
+          {
+            "name": "storyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetPaginatedUserShelvesResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shelfstories/{shelfId}/{storyId}": {
+      "post": {
+        "tags": [
+          "ShelfStories"
+        ],
+        "operationId": "ShelfStories_AddToShelf",
+        "parameters": [
+          {
+            "name": "shelfId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "storyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddBookToShelfResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ShelfStories"
+        ],
+        "operationId": "ShelfStories_RemoveFromShelf",
+        "parameters": [
+          {
+            "name": "shelfId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "storyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveBookFromShelfResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/roles": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_GetRoles",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_PutRole",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_PostRole",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/roles/{id}": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_GetRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_DeleteRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports": {
+      "post": {
+        "tags": [
+          "Reports"
+        ],
+        "operationId": "Reports_PostReports",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportContentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ratings": {
+      "get": {
+        "tags": [
+          "Ratings"
+        ],
+        "operationId": "Ratings_GetRatings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RatingApiDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ratings"
+        ],
+        "operationId": "Ratings_PostRating",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Description": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "BlacklistedByDefault": {
+                    "type": "boolean"
+                  },
+                  "Order": {
+                    "type": "integer",
+                    "format": "byte"
+                  },
+                  "Icon": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingApiDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Ratings"
+        ],
+        "operationId": "Ratings_PutRating",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "Name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Description": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "BlacklistedByDefault": {
+                    "type": "boolean"
+                  },
+                  "Order": {
+                    "type": "integer",
+                    "format": "byte"
+                  },
+                  "Icon": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingApiDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ratings/{id}": {
+      "get": {
+        "tags": [
+          "Ratings"
+        ],
+        "operationId": "Ratings_GetRating",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingApiDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ratings"
+        ],
+        "operationId": "Ratings_DeleteRating",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quotes": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_GetQuotes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Quote"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_PostQuote",
+        "requestBody": {
+          "x-name": "q",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuoteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_PutQuote",
+        "requestBody": {
+          "x-name": "q",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuoteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_DeleteQuote",
+        "requestBody": {
+          "x-name": "q",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteQuoteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quotes/{id}": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_GetQuote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quotes/random": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_GetRandomQuote",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quotes/json": {
+      "post": {
+        "tags": [
+          "Quotes"
+        ],
+        "operationId": "Quotes_PostJson",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateQuotesFromJsonResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "Notifications_GetUserNotifications",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetUserNotificationsResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notifications/count": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "Notifications_CountUserNotifications",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notifications/{id}": {
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "Notifications_DeleteNotification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitecodes": {
+      "get": {
+        "tags": [
+          "InviteCodes"
+        ],
+        "operationId": "InviteCodes_GetInviteCodes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InviteCodeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "InviteCodes"
+        ],
+        "operationId": "InviteCodes_PostInviteCode",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteCodeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitecodes/paginated": {
+      "get": {
+        "tags": [
+          "InviteCodes"
+        ],
+        "operationId": "InviteCodes_GetPaginatedInviteCodes",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InviteCodeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitecodes/no-limit": {
+      "post": {
+        "tags": [
+          "InviteCodes"
+        ],
+        "operationId": "InviteCodes_PostInviteCodeNoLimit",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteCodeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitecodes/{id}": {
+      "delete": {
+        "tags": [
+          "InviteCodes"
+        ],
+        "operationId": "InviteCodes_DeleteInviteCode",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/infractions": {
+      "get": {
+        "tags": [
+          "Infractions"
+        ],
+        "operationId": "Infractions_GetInfractions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetUserInfractionsResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Infractions"
+        ],
+        "operationId": "Infractions_AddInfraction",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInfractionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateInfractionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/infractions/details": {
+      "get": {
+        "tags": [
+          "Infractions"
+        ],
+        "operationId": "Infractions_GetInfractionDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInfractionDetailsResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/infractions/{id}": {
+      "delete": {
+        "tags": [
+          "Infractions"
+        ],
+        "operationId": "Infractions_DeactivateInfraction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeactivateInfractionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/folders/{id}": {
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "Folders_GetFoldersOfClub",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetFolderResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/folders/add-story": {
+      "post": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "Folders_AddStory",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddStoryToFolderCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolderStory"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/faqs": {
+      "get": {
+        "tags": [
+          "Faqs"
+        ],
+        "operationId": "Faqs_GetFaqs",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Faq"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Faqs"
+        ],
+        "operationId": "Faqs_PutFaq",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFaqCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Faqs"
+        ],
+        "operationId": "Faqs_PostFaq",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFaqCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Faq"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/faqs/{id}": {
+      "get": {
+        "tags": [
+          "Faqs"
+        ],
+        "operationId": "Faqs_GetFaq",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Faq"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Faqs"
+        ],
+        "operationId": "Faqs_DeleteFaq",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contentblock/story": {
+      "post": {
+        "tags": [
+          "ContentBlock"
+        ],
+        "operationId": "ContentBlock_BlockStory",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandOfStory"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/contentblock/chapter": {
+      "post": {
+        "tags": [
+          "ContentBlock"
+        ],
+        "operationId": "ContentBlock_BlockChapter",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandOfChapter"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/contentblock/blogpost": {
+      "post": {
+        "tags": [
+          "ContentBlock"
+        ],
+        "operationId": "ContentBlock_BlockBlogpost",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandOfBlogpost"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/commentsthread/permissions/{id}": {
+      "get": {
+        "tags": [
+          "CommentsThread"
+        ],
+        "operationId": "CommentsThread_GetPermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentsThreadControllerPermissionsResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/commentsthread/lock/status/{id}": {
+      "get": {
+        "tags": [
+          "CommentsThread"
+        ],
+        "operationId": "CommentsThread_GetLockStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/commentsthread/lock": {
+      "post": {
+        "tags": [
+          "CommentsThread"
+        ],
+        "operationId": "CommentsThread_LockThread",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentsThreadControllerPostData"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_GetComments",
+        "parameters": [
+          {
+            "name": "Thread",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Highlight",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "nullable": true
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResultOfCommentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_PostComments",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentsControllerPostData"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_PutComment",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/{id}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_GetComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_DeleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/revisions/{id}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_GetRevisions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRevisionResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/md": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_GetMarkdown",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clubs/user": {
+      "get": {
+        "tags": [
+          "Clubs"
+        ],
+        "operationId": "Clubs_GetUserClubs",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetJoinedClubsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clubs/story/{id}": {
+      "get": {
+        "tags": [
+          "Clubs"
+        ],
+        "operationId": "Clubs_GetClubsWithStory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetClubsWithStoryResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clubs/user/ban": {
+      "post": {
+        "tags": [
+          "Clubs"
+        ],
+        "operationId": "Clubs_BanUser",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BanUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clubs"
+        ],
+        "operationId": "Clubs_UnbanUser",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnbanUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clubjoin/{club}": {
+      "get": {
+        "tags": [
+          "ClubJoin"
+        ],
+        "operationId": "ClubJoin_CheckMembershipStatus",
+        "parameters": [
+          {
+            "name": "club",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clubjoin": {
+      "post": {
+        "tags": [
+          "ClubJoin"
+        ],
+        "operationId": "ClubJoin_JoinClub",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinClubCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ClubJoin"
+        ],
+        "operationId": "ClubJoin_LeaveClub",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveClubCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chaptersread/{story}": {
+      "get": {
+        "tags": [
+          "ChaptersRead"
+        ],
+        "operationId": "ChaptersRead_GetChaptersRead",
+        "parameters": [
+          {
+            "name": "story",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chaptersread": {
+      "post": {
+        "tags": [
+          "ChaptersRead"
+        ],
+        "operationId": "ChaptersRead_PostChaptersRead",
+        "requestBody": {
+          "x-name": "post",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkChapterAsReadCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkChapterAsReadResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ChaptersRead"
+        ],
+        "operationId": "ChaptersRead_DeleteChaptersRead",
+        "requestBody": {
+          "x-name": "post",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkChapterAsUnreadCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkChapterAsUnreadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorControllerResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetVotesResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "didVote": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateVoteResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "didVote": {
+            "type": "boolean"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "CreateVoteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storyId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DeleteVoteResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "didVote": {
+            "type": "boolean"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteVoteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storyId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": {
+          "nullable": true
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "BlockUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UnblockUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "FollowUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UnfollowUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateRolesCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "TagDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "namespace": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ETagNamespace"
+              }
+            ]
+          },
+          "namespaceColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "namespaceId": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "ETagNamespace": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "ContentWarning",
+          "Genre",
+          "Franchise"
+        ],
+        "enum": [
+          "ContentWarning",
+          "Genre",
+          "Franchise"
+        ]
+      },
+      "UpdateTagCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "namespace": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ETagNamespace"
+              }
+            ]
+          }
+        }
+      },
+      "CreateTagCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "namespace": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ETagNamespace"
+              }
+            ]
+          }
+        }
+      },
+      "SubscribeCommentsThreadCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "threadId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "UnsubscribeCommentsThreadCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "threadId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetSignInDataResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ShelfDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "isQuickAdd": {
+            "type": "boolean"
+          },
+          "trackUpdates": {
+            "type": "boolean"
+          },
+          "color": {
+            "type": "string"
+          },
+          "storiesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "iconName": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        }
+      },
+      "CreateShelfCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isQuickAdd": {
+            "type": "boolean"
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "trackUpdates": {
+            "type": "boolean"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "icon": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "UpdateShelfCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isQuickAdd": {
+            "type": "boolean"
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "trackUpdates": {
+            "type": "boolean"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "icon": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetPaginatedUserShelvesResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconName": {
+            "type": "string",
+            "nullable": true
+          },
+          "doesContainBook": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AddBookToShelfResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "shelfId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "storyId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "RemoveBookFromShelfResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "shelfId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "storyId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "RoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "isStaff": {
+            "type": "boolean"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UpdateRoleCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isStaff": {
+            "type": "boolean"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "byte",
+            "nullable": true
+          }
+        }
+      },
+      "CreateRoleCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isStaff": {
+            "type": "boolean"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "byte",
+            "nullable": true
+          }
+        }
+      },
+      "ReportContentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "itemId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemType": {
+            "$ref": "#/components/schemas/EReportableContentTypes"
+          }
+        }
+      },
+      "EReportableContentTypes": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Comment",
+          "User",
+          "Story",
+          "Chapter",
+          "Blogpost",
+          "Club"
+        ],
+        "enum": [
+          "Comment",
+          "User",
+          "Story",
+          "Chapter",
+          "Blogpost",
+          "Club"
+        ]
+      },
+      "RatingApiDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "byte"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "blacklistedByDefault": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Quote": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "body": {
+                "type": "string",
+                "nullable": true
+              },
+              "author": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "BaseModel": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "QuoteDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateQuoteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateQuoteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateQuotesFromJsonResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "insertedRows": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DeleteQuoteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetUserNotificationsResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "event": {
+            "$ref": "#/components/schemas/ENotificationEvent"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ENotificationEvent": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "System",
+          "WatchedStoryUpdated",
+          "WatchedThreadNewComment",
+          "FollowedAuthorNewBlogpost",
+          "FollowedAuthorNewStory",
+          "CommentReply"
+        ],
+        "enum": [
+          "System",
+          "WatchedStoryUpdated",
+          "WatchedThreadNewComment",
+          "FollowedAuthorNewBlogpost",
+          "FollowedAuthorNewStory",
+          "CommentReply"
+        ]
+      },
+      "InviteCodeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string"
+          },
+          "normalizedCode": {
+            "type": "string"
+          },
+          "usedByUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "issuedByUserName": {
+            "type": "string"
+          },
+          "issueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "GetUserInfractionsResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "activeUntil": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "removed": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetInfractionDetailsResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "issueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "activeUntil": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "removedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/InfractionType"
+          },
+          "issuedByName": {
+            "type": "string"
+          },
+          "removedByName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "InfractionType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Note",
+          "Warning",
+          "Mute",
+          "Ban"
+        ],
+        "enum": [
+          "Note",
+          "Warning",
+          "Mute",
+          "Ban"
+        ]
+      },
+      "CreateInfractionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "issuedBy": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "issuedAgainst": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CreateInfractionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "$ref": "#/components/schemas/InfractionType"
+          }
+        }
+      },
+      "DeactivateInfractionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "issuedBy": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "issuedAgainst": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetFolderResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentFolderId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "canAdd": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FolderStory": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folder": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Folder"
+              }
+            ]
+          },
+          "folderId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "story": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Story"
+              }
+            ]
+          },
+          "storyId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Folder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "club": {
+                "$ref": "#/components/schemas/Club"
+              },
+              "clubId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "parentFolder": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Folder"
+                  }
+                ]
+              },
+              "parentFolderId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "childFolders": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              },
+              "stories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Story"
+                }
+              },
+              "storiesCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "accessLevel": {
+                "$ref": "#/components/schemas/EClubMemberRoles"
+              }
+            }
+          }
+        ]
+      },
+      "Club": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "slug": {
+                "type": "string",
+                "nullable": true
+              },
+              "hook": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "icon": {
+                "type": "string",
+                "nullable": true
+              },
+              "iconId": {
+                "type": "string",
+                "nullable": true
+              },
+              "creationDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "clubMembers": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/ClubMember"
+                }
+              },
+              "bannedUsers": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              },
+              "threads": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/ClubThread"
+                }
+              },
+              "folders": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              },
+              "reports": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ClubMember": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "member": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OgmaUser"
+              }
+            ]
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "club": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Club"
+              }
+            ]
+          },
+          "clubId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "$ref": "#/components/schemas/EClubMemberRoles"
+          },
+          "memberSince": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OgmaUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUserOfLong"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "bio": {
+                "type": "string",
+                "nullable": true
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "avatar": {
+                "type": "string"
+              },
+              "avatarId": {
+                "type": "string",
+                "nullable": true
+              },
+              "registrationDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastActive": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "deletedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "commentsThread": {
+                "$ref": "#/components/schemas/CommentsThread"
+              },
+              "userRoles": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/UserRole"
+                }
+              },
+              "stories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Story"
+                }
+              },
+              "blogposts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Blogpost"
+                }
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaRole"
+                }
+              },
+              "blacklistedRatings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BlacklistedRating"
+                }
+              },
+              "blacklistedTags": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BlacklistedTag"
+                }
+              },
+              "blockers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              },
+              "blocking": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              },
+              "following": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              },
+              "subscribedThreads": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommentsThread"
+                }
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              },
+              "infractions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Infraction"
+                }
+              },
+              "clubsBannedFrom": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Club"
+                }
+              },
+              "notifications": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CommentsThread": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "comments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              },
+              "commentsCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "lockDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "user": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "userId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "chapter": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Chapter"
+                  }
+                ]
+              },
+              "chapterId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "blogpost": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Blogpost"
+                  }
+                ]
+              },
+              "blogpostId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "clubThread": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ClubThread"
+                  }
+                ]
+              },
+              "clubThreadId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "subscribers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Comment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "commentsThread": {
+                "$ref": "#/components/schemas/CommentsThread"
+              },
+              "commentsThreadId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "author": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "authorId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "dateTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastEdit": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "body": {
+                "type": "string"
+              },
+              "deletedBy": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/EDeletedBy"
+                  }
+                ]
+              },
+              "deletedByUser": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "deletedByUserId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "revisions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommentRevision"
+                }
+              },
+              "editCount": {
+                "type": "integer"
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EDeletedBy": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "User",
+          "Staff"
+        ],
+        "enum": [
+          "User",
+          "Staff"
+        ]
+      },
+      "CommentRevision": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "editTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "body": {
+                "type": "string",
+                "nullable": true
+              },
+              "parent": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                ]
+              },
+              "parentId": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "Report": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "reporter": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "reporterId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "reportDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "contentType": {
+                "type": "string"
+              },
+              "comment": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                ]
+              },
+              "commentId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "user": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "userId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "story": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Story"
+                  }
+                ]
+              },
+              "storyId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "chapter": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Chapter"
+                  }
+                ]
+              },
+              "chapterId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "blogpost": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Blogpost"
+                  }
+                ]
+              },
+              "blogpostId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "club": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Club"
+                  }
+                ]
+              },
+              "clubId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Story": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "author": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "authorId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "title": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "hook": {
+                "type": "string"
+              },
+              "cover": {
+                "type": "string",
+                "nullable": true
+              },
+              "coverId": {
+                "type": "string",
+                "nullable": true
+              },
+              "creationDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "publicationDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "chapters": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Chapter"
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              },
+              "votes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Vote"
+                }
+              },
+              "rating": {
+                "$ref": "#/components/schemas/Rating"
+              },
+              "ratingId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "status": {
+                "$ref": "#/components/schemas/EStoryStatus"
+              },
+              "wordCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "chapterCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "folders": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              },
+              "contentBlock": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ContentBlock"
+                  }
+                ]
+              },
+              "contentBlockId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              },
+              "shelves": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Shelf"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Chapter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "order": {
+                "type": "integer"
+              },
+              "creationDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "publicationDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "title": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "startNotes": {
+                "type": "string",
+                "nullable": true
+              },
+              "endNotes": {
+                "type": "string",
+                "nullable": true
+              },
+              "wordCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "commentsThread": {
+                "$ref": "#/components/schemas/CommentsThread"
+              },
+              "story": {
+                "$ref": "#/components/schemas/Story"
+              },
+              "storyId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "contentBlock": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ContentBlock"
+                  }
+                ]
+              },
+              "contentBlockId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ContentBlock": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "issuerId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "reason": {
+                "type": "string",
+                "nullable": true
+              },
+              "dateTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "type": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Tag": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "namespace": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ETagNamespace"
+                  }
+                ]
+              },
+              "stories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Story"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Vote": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "user": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "userId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "storyId": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "Rating": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "order": {
+                "type": "integer",
+                "format": "byte"
+              },
+              "icon": {
+                "type": "string",
+                "nullable": true
+              },
+              "iconId": {
+                "type": "string",
+                "nullable": true
+              },
+              "blacklistedByDefault": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "EStoryStatus": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "InProgress",
+          "Completed",
+          "OnHiatus",
+          "Cancelled"
+        ],
+        "enum": [
+          "InProgress",
+          "Completed",
+          "OnHiatus",
+          "Cancelled"
+        ]
+      },
+      "Shelf": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "owner": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "ownerId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "isDefault": {
+                "type": "boolean"
+              },
+              "isPublic": {
+                "type": "boolean"
+              },
+              "isQuickAdd": {
+                "type": "boolean"
+              },
+              "trackUpdates": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string",
+                "nullable": true
+              },
+              "icon": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Icon"
+                  }
+                ]
+              },
+              "iconId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "stories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Story"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Icon": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Blogpost": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "publicationDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "creationDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "author": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "authorId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "body": {
+                "type": "string"
+              },
+              "commentsThread": {
+                "$ref": "#/components/schemas/CommentsThread"
+              },
+              "wordCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "hashtags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "attachedStory": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Story"
+                  }
+                ]
+              },
+              "attachedStoryId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "attachedChapter": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Chapter"
+                  }
+                ]
+              },
+              "attachedChapterId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "contentBlock": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ContentBlock"
+                  }
+                ]
+              },
+              "contentBlockId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ClubThread": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "nullable": true
+              },
+              "body": {
+                "type": "string",
+                "nullable": true
+              },
+              "author": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "authorId": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              },
+              "creationDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "commentsThread": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CommentsThread"
+                  }
+                ]
+              },
+              "club": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Club"
+                  }
+                ]
+              },
+              "clubId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "deletedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "isPinned": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "UserRole": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUserRoleOfLong"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "user",
+              "role"
+            ],
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "role": {
+                "$ref": "#/components/schemas/OgmaRole"
+              }
+            }
+          }
+        ]
+      },
+      "OgmaRole": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityRoleOfLong"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "isStaff": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string",
+                "nullable": true
+              },
+              "order": {
+                "type": "integer",
+                "format": "byte",
+                "nullable": true
+              },
+              "users": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "IdentityRoleOfLong": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedName": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "IdentityUserRoleOfLong": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BlacklistedRating": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OgmaUser"
+              }
+            ]
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "rating": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              }
+            ]
+          },
+          "ratingId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BlacklistedTag": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OgmaUser"
+              }
+            ]
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tag": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Tag"
+              }
+            ]
+          },
+          "tagId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Infraction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "userId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "issueDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "activeUntil": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "removedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "reason": {
+                "type": "string"
+              },
+              "type": {
+                "$ref": "#/components/schemas/InfractionType"
+              },
+              "issuedBy": {
+                "$ref": "#/components/schemas/OgmaUser"
+              },
+              "issuedById": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "removedBy": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OgmaUser"
+                  }
+                ]
+              },
+              "removedById": {
+                "type": "integer",
+                "format": "int64",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Notification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "body": {
+                "type": "string",
+                "nullable": true
+              },
+              "url": {
+                "type": "string"
+              },
+              "dateTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "event": {
+                "$ref": "#/components/schemas/ENotificationEvent"
+              },
+              "recipients": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OgmaUser"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "IdentityUserOfLong": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "EClubMemberRoles": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Founder",
+          "Admin",
+          "Moderator",
+          "User"
+        ],
+        "enum": [
+          "Founder",
+          "Admin",
+          "Moderator",
+          "User"
+        ]
+      },
+      "AddStoryToFolderCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folderId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "storyId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Faq": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "question": {
+                "type": "string",
+                "nullable": true
+              },
+              "answer": {
+                "type": "string",
+                "nullable": true
+              },
+              "answerRendered": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "UpdateFaqCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "answer": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateFaqCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "answer": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CommandOfStory": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CommandOfChapter": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CommandOfBlogpost": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CommentsThreadControllerPermissionsResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSiteModerator": {
+            "type": "boolean"
+          },
+          "isClubModerator": {
+            "type": "boolean"
+          },
+          "isAllowed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CommentsThreadControllerPostData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PaginationResultOfCommentDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "elements": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CommentDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserSimpleDto"
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastEdit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "editCount": {
+            "type": "integer"
+          },
+          "owned": {
+            "type": "boolean"
+          },
+          "body": {
+            "type": "string"
+          },
+          "deletedBy": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EDeletedBy"
+              }
+            ]
+          },
+          "isBlocked": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserSimpleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatar": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/RoleDto"
+            }
+          }
+        }
+      },
+      "GetRevisionResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "editTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CommentsControllerPostData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "thread": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateCommentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GetJoinedClubsResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetClubsWithStoryResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "BanUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "clubId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UnbanUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "clubId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "JoinClubCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clubId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "LeaveClubCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clubId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "MarkChapterAsReadResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "read": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "MarkChapterAsReadCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "chapter": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "story": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "MarkChapterAsUnreadResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "read": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "MarkChapterAsUnreadCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "chapter": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "story": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    }
+  }
+}

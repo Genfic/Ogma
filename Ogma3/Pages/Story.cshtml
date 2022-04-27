@@ -1,5 +1,5 @@
 ﻿@page "{id}/{slug?}"
-@inject OgmaConfig _config
+@inject OgmaConfig Config
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Api.V1.Votes
 @using Ogma3.Infrastructure.Constants
@@ -142,7 +142,7 @@
         <o-featured-in-clubs v-pre
                              endpoint="@Url.RouteUrl(nameof(ClubsController))"
                              storyId="@Model.Story.Id"
-                             cdn="@_config.Cdn">
+                             cdn="@Config.Cdn">
         </o-featured-in-clubs>
     </div>
 
@@ -207,7 +207,7 @@
     {
         <club-folder-selector
             ref="folderSelect"
-            cdn="@_config.Cdn"
+            cdn="@Config.Cdn"
             :story-id="@Model.Story.Id"
             clubs-route="@Url.RouteUrl(nameof(ClubsController))"
             folders-route="@Url.RouteUrl(nameof(FoldersController))">

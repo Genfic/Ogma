@@ -1,5 +1,5 @@
 ﻿@page "/register"
-@inject IOptions<RecaptchaSettings> _recaptchaSettings
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
 @using reCAPTCHA.AspNetCore
 @using reCAPTCHA.AspNetCore.Templates
 @using Microsoft.Extensions.Options
@@ -62,7 +62,7 @@
                 <aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our Discord!</aside>
             </div>
             
-            @(Html.Recaptcha<RecaptchaV2Checkbox>(_recaptchaSettings?.Value))
+            @(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
 
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
