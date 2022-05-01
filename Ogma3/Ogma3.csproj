@@ -288,6 +288,28 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\site.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\themeswap.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\src\pcomps\counter.tsx" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\.gitignore" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\dist\assets\ColourPicker.06e1d624.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\dist\assets\Counter.64a60eee.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\dist\assets\vendor.e9b3ff04.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\dist\favicon.ico" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\index.html" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\package-lock.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\package.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\public\favicon.ico" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\README.md" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\assets\svelte.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\components\ColourPicker.svelte" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\components\Counter.svelte" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\components\TableInfo.svelte" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\lib\api-clients.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\main.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\src\vite-env.d.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\svelte.config.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\tsconfig.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\vite.config.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\admin\yarn.lock" />
   </ItemGroup>
 
 
@@ -575,11 +597,6 @@
     <Compile Update="Pages\Tag.cshtml.cs">
       <DependentUpon>Tag.cshtml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\admin\src\components\table-info" />
   </ItemGroup>
 
   <!--  Automatic migrations on production -->

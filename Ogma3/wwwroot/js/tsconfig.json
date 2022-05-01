@@ -1,12 +1,14 @@
 {
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "module": "CommonJS",
-    "target": "ES2017",
-    "sourceMap": true
-  },
-  "exclude": [
-    "node_modules",
-    "tools"
-  ]
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "module": "CommonJS",
+        "target": "ES2017",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "exclude": [
+        "node_modules",
+        "tools"
+    ]
 }

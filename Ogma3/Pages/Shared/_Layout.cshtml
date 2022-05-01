@@ -105,6 +105,13 @@
 </div>
 
 <partial name="_Footer" />
+
+@* <environment names="Production"> *@
+    <script asp-src-include="~/bundles/assets/main.*.js" async></script>
+@* </environment> *@
+@* <environment names="Development"> *@
+    @* <script type="module" src="http://localhost:3000/main.js"></script> *@
+@* </environment> *@
     
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" 
         crossorigin="anonymous"

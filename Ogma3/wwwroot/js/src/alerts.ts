@@ -1,4 +1,4 @@
-(() => {
+export default (() => {
     const alerts = [...document.getElementsByClassName('alert-dismissible')] as HTMLElement[];
 
     for (const a of alerts) {

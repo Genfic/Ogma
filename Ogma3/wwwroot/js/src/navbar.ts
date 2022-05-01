@@ -1,4 +1,4 @@
-(() => {
+export default (() => {
     let last_known_scroll_position = 0;
     let ticking = false;
     const nav: HTMLElement = document.getElementById('top-nav');

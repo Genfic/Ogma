@@ -2,10 +2,11 @@
 	"devDependencies": {
 		"@hail2u/css-mqpacker": "github:hail2u/node-css-mqpacker#v8.0.1",
 		"@mr-hope/gulp-sass": "^3.0.0",
-		"@typescript-eslint/eslint-plugin": "^5.10.0",
-		"@typescript-eslint/parser": "^5.10.0",
+		"@preact/preset-vite": "^2.2.0",
+		"@typescript-eslint/eslint-plugin": "^5.21.0",
+		"@typescript-eslint/parser": "^5.21.0",
 		"autoprefixer": "^10.3.*",
-		"eslint": "^8.8.0",
+		"eslint": "^8.14.0",
 		"gulp": "^4.0.2",
 		"gulp-if": "^3.0.0",
 		"gulp-postcss": "^9.0.*",
@@ -18,21 +19,25 @@
 		"postcss": "^8.3.*",
 		"postcss-csso": "^6.0.0",
 		"typescript": "^4.5.0",
+		"vite": "^2.9.6",
 		"vue": "^2.6.12"
 	},
 	"scripts": {
-		"build":		"gulp all",
-		"dev":			"gulp watchAll",
-		"score":		"lighthouse https://localhost:5001 --view",
-		"swc":			"swc ./Ogma3/wwwroot/js/src -s -d ./Ogma3/wwwroot/js/dist",
-		"t:cssdemo":	"deno run --allow-read --allow-net ./Tools/css-demo.ts",
-		"t:preloads":	"deno run --allow-read ./Tools/generate-preloads.ts",
-		"t:imports":	"deno run --allow-read ./Tools/generate-imports.ts",
-		"t:bundlesize":	"deno run --allow-read --unstable ./Tools/bundlesize.ts"
+		"build": "gulp all",
+		"dev": "gulp watchAll",
+		"score": "lighthouse https://localhost:5001 --view",
+		"swc": "swc ./Ogma3/wwwroot/js/src -s -d ./Ogma3/wwwroot/js/dist",
+		"t:cssdemo": "deno run --allow-read --allow-net ./Tools/css-demo.ts",
+		"t:preloads": "deno run --allow-read ./Tools/generate-preloads.ts",
+		"t:imports": "deno run --allow-read ./Tools/generate-imports.ts",
+		"t:bundlesize": "deno run --allow-read --unstable ./Tools/bundlesize.ts"
 	},
 	"name": "Ogma3",
 	"dependencies": {
 		"@swc/cli": "^0.1.51",
-		"@swc/core": "^1.2.93"
+		"@swc/core": "^1.2.93",
+		"dayjs": "^1.11.1",
+		"lit": "^2.2.3",
+		"preact": "^10.7.1"
 	}
 }
