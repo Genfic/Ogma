@@ -85,7 +85,7 @@
         
         @if (isAdmin is not null)
         {
-            <o-clock date="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"></o-clock>
+            <o-clock date="@DateTime.Now.ToString("o", CultureInfo.InvariantCulture)"></o-clock>
         }
 
         <partial name="_LoginPartial"/>
@@ -95,16 +95,18 @@
 
 <div class="container" id="site-content">
     
-    <noscript class="noscript">
-        While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>
-        Consider enabling it — you can check the site's <a href="https://github.com/Atulin/Ogma">source code</a> if you're unsure.
-    </noscript>
+	<noscript class="noscript">
+		While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>
+		Consider enabling it — you can check the site's <a href="https://github.com/Atulin/Ogma">source code</a> if you're unsure.
+	</noscript>
 
-    @RenderBody()
+	@RenderBody()
     
 </div>
 
 <partial name="_Footer" />
+
+<script src="~/js/bundle/components.js" asp-append-version="true"></script>
     
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" 
         crossorigin="anonymous"
@@ -135,11 +137,6 @@ else
 <script src="~/js/dist/site.min.js" asp-append-version="true"></script>
 <script defer src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
 
-@if (isAdmin is not null)
-{
-    <script type="module" src="~/js/dist/native-components/clock.min.js" asp-append-version="true"></script>
-}
-    
 @await RenderSectionAsync("Scripts", false)
 @Html.RenderResources()
 

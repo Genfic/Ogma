@@ -1,71 +1,78 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "eslint:recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2016
-    },
-    "plugins": [],
-    "rules": {
-        "indent": [
-            "warn",
-            "tab",
-            {
-                "MemberExpression": 1,
-                "ignoredNodes": ["TemplateLiteral > *"]
-            } 
-        ],
-        "semi-style": [
-            "warn",
-            "last"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "semi-spacing": [
-            "error",
-            {
-                "before": false,
-                "after": true
-            }
-        ],
-        "no-unused-vars": "off"
-    },
-    "globals": {
-        "axios": "readonly",
-        "Vue": "readonly",
-        "require": "readonly",
-        "exports": "readonly",
-        "getCookieValue": "readonly",
-        "setCookie": "readonly",
-        "dayjs": "readonly"
-    },
-    "overrides": [
-        {
-            "files": [
-                "Ogma3/wwroot/js/src/**/*.{ts,tsx}"
-            ],
-            "extends": [
-                "plugin:@typescript-eslint/recommended"
-            ],
-            "plugins": [
-                "@typescript-eslint"
-            ]
-        },
-        {
-            "files": [
-                "Ogma3/wwwroot/js/src/site.ts"
-            ],
-            "globals": {
-                "getCookieValue": "off",
-                "setCookie": "off"
-            }
-        }
-    ]
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 2016
+	},
+	"plugins": [],
+	"rules": {
+		"indent": [
+			"warn",
+			"tab",
+			{
+				"MemberExpression": 1,
+				"ignoredNodes": [
+					"TemplateLiteral > *",
+					"FunctionExpression > .params[decorators.length > 0]",
+					"FunctionExpression > .params > :matches(Decorator, :not(:first-child))",
+					"ClassBody.body > PropertyDefinition[decorators.length > 0] > .key"
+				]
+			}
+		],
+		"semi-style": [
+			"warn",
+			"last"
+		],
+		"semi": [
+			"error",
+			"always"
+		],
+		"semi-spacing": [
+			"error",
+			{
+				"before": false,
+				"after": true
+			}
+		],
+		"no-unused-vars": "off",
+		"object-curly-spacing": ["error", "always"]
+	},
+	"globals": {
+		"axios": "readonly",
+		"Vue": "readonly",
+		"require": "readonly",
+		"exports": "readonly",
+		"getCookieValue": "readonly",
+		"setCookie": "readonly"
+//		"dayjs": "readonly"
+	},
+	"overrides": [
+		{
+			"files": [
+				"Ogma3/wwroot/js/src/**/*.{ts,tsx}"
+			],
+			"extends": [
+				"plugin:@typescript-eslint/recommended"
+			],
+			"plugins": [
+				"@typescript-eslint"
+			]
+		},
+		{
+			"files": [
+				"Ogma3/wwwroot/js/src/site.ts"
+			],
+			"globals": {
+				"getCookieValue": "off",
+				"setCookie": "off"
+			}
+		}
+	]
 }
