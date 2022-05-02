@@ -14,41 +14,42 @@ namespace Ogma3.Api.V1.Users.Commands;
 
 public static class BlockUser
 {
-    public sealed record Command(string Name) : IRequest<ActionResult<bool>>;
+	public sealed record Command(string Name) : IRequest<ActionResult<bool>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
 
-            var targetUserId = await _context.Users
-                .Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
-                .Select(u => u.Id)
-                .FirstOrDefaultAsync(cancellationToken);
+		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            var exists = await _context.BlacklistedUsers
-                .Where(bu => bu.BlockingUserId == _uid && bu.BlockedUserId == targetUserId)
-                .AnyAsync(cancellationToken);
+			var targetUserId = await _context.Users
+				.Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
+				.Select(u => u.Id)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            if (exists) return Ok(true);
+			var exists = await _context.BlacklistedUsers
+				.Where(bu => bu.BlockingUserId == _uid && bu.BlockedUserId == targetUserId)
+				.AnyAsync(cancellationToken);
 
-            _context.BlacklistedUsers.Add(new UserBlock
-            {
-                BlockingUserId = (long)_uid,
-                BlockedUserId = targetUserId
-            });
-            await _context.SaveChangesAsync(cancellationToken);
+			if (exists) return Ok(true);
 
-            return Ok(true);
-        }
-    }
+			_context.BlacklistedUsers.Add(new UserBlock
+			{
+				BlockingUserId = (long)_uid,
+				BlockedUserId = targetUserId
+			});
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return Ok(true);
+		}
+	}
 }

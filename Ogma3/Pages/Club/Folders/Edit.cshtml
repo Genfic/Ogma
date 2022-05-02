@@ -1,71 +1,71 @@
 @page "/club/{clubid}/folder/{id}/edit"
 @using Ogma3.Api.V1.Folders
 @using Ogma3.Data.Clubs
-@model Ogma3.Pages.Club.Folders.EditModel
+@model EditModel
 
 @{
-    ViewData["Title"] = "Create a new folder";
+	ViewData["Title"] = "Create a new folder";
 }
 
 <form method="post" class="form" id="folder" v-on:submit="onSubmit">
 
-    <div asp-validation-summary="All">
-        <span>Please correct the following errors</span>
-    </div>
+	<div asp-validation-summary="All">
+		<span>Please correct the following errors</span>
+	</div>
 
-    <template id="folder-tree">
-        <folder-tree :club-id="@Model.Input.ClubId"
-                     label="Parent folder"
-                     name="Input.ParentId"
-                     :value="@Model.Input.ParentId"
-                     :current="@Model.Input.Id"
-                     route="@Url.RouteUrl(nameof(FoldersController))">
-        </folder-tree>
-    </template>
+	<template id="folder-tree">
+		<folder-tree :club-id="@Model.Input.ClubId"
+		             label="Parent folder"
+		             name="Input.ParentId"
+		             :value="@Model.Input.ParentId"
+		             :current="@Model.Input.Id"
+		             route="@Url.RouteUrl(nameof(FoldersController))">
+		</folder-tree>
+	</template>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Name"></label>
-        <input asp-for="Input.Name" class="o-form-control active-border">
-        <span asp-validation-for="Input.Name"></span>
-    </div>
+	<div class="o-form-group">
+		<label asp-for="Input.Name"></label>
+		<input asp-for="Input.Name" class="o-form-control active-border">
+		<span asp-validation-for="Input.Name"></span>
+	</div>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Description"></label>
-        <textarea asp-for="Input.Description" class="o-form-control active-border" rows="3" data-wordcount="true"></textarea>
-        <span asp-validation-for="Input.Description"></span>
-    </div>
+	<div class="o-form-group">
+		<label asp-for="Input.Description"></label>
+		<textarea asp-for="Input.Description" class="o-form-control active-border" rows="3" data-wordcount="true"></textarea>
+		<span asp-validation-for="Input.Description"></span>
+	</div>
 
-    <div class="o-form-group club-role-slider">
-        <label asp-for="Input.Role"></label>
-        <p class="desc">Choose who can add stories to this folder</p>
+	<div class="o-form-group club-role-slider">
+		<label asp-for="Input.Role"></label>
+		<p class="desc">Choose who can add stories to this folder</p>
 
-        <div class="selector active-border">
-            @foreach (var r in Enum.GetValues<EClubMemberRoles>())
-            {
-                <input type="radio"
-                       asp-for="Input.Role"
-                       id="@r"
-                       value="@((int) r)"
-                       checked="@(Model.Input.Role == r)">
-                <label for="@r" tabindex="0">@r</label>
-            }
-        </div>
-    </div>
-    
-    <input type="hidden" asp-for="Input.Id">
+		<div class="selector active-border">
+			@foreach (var r in Enum.GetValues<EClubMemberRoles>())
+			{
+				<input type="radio"
+				       asp-for="Input.Role"
+				       id="@r"
+				       value="@((int)r)"
+				       checked="@(Model.Input.Role == r)">
+				<label for="@r" tabindex="0">@r</label>
+			}
+		</div>
+	</div>
 
-    <div class="o-form-group">
-        <button type="submit" class="btn btn-primary">Save changes</button>
-    </div>
+	<input type="hidden" asp-for="Input.Id">
+
+	<div class="o-form-group">
+		<button type="submit" class="btn btn-primary">Save changes</button>
+	</div>
 
 </form>
 
 <partial name="Shared/_ValidationScriptsPartial"/>
 
 @section Scripts {
-    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-    <script>
+	<script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
+	<script>
     new Vue({ el: '#folder-tree' })
     </script>
 }

@@ -5,6 +5,6 @@ namespace Ogma3.Services.RssService;
 
 public interface IRssService
 {
-    Task<RssResult> GetStoriesAsync();
-    Task<RssResult> GetBlogpostsAsync();
+	Task<RssResult> GetStoriesAsync();
+	Task<RssResult> GetBlogpostsAsync();
 }

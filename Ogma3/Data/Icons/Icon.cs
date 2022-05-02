@@ -5,22 +5,22 @@ namespace Ogma3.Data.Icons;
 
 public class Icon : BaseModel
 {
-    public string Name { get; init; }
-        
-    public class IconConfiguration : BaseConfiguration<Icon>
-    {
-        public override void Configure(EntityTypeBuilder<Icon> builder)
-        {
-            base.Configure(builder);
+	public string Name { get; init; }
 
-            builder
-                .HasIndex(i => i.Name)
-                .IsUnique();
-                
-            builder
-                .Property(i => i.Name)
-                .IsRequired()
-                .HasMaxLength(32);
-        }
-    }
+	public class IconConfiguration : BaseConfiguration<Icon>
+	{
+		public override void Configure(EntityTypeBuilder<Icon> builder)
+		{
+			base.Configure(builder);
+
+			builder
+				.HasIndex(i => i.Name)
+				.IsUnique();
+
+			builder
+				.Property(i => i.Name)
+				.IsRequired()
+				.HasMaxLength(32);
+		}
+	}
 }

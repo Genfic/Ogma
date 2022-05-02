@@ -11,26 +11,26 @@ namespace Ogma3.Api.V1.Tags.Commands;
 
 public static class DeleteTag
 {
-    public sealed record Command(long Id) : IRequest<ActionResult<long>>;
+	public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
-    {
-        private readonly ApplicationDbContext _context;
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
+	{
+		private readonly ApplicationDbContext _context;
 
-        public Handler(ApplicationDbContext context) => _context = context;
+		public Handler(ApplicationDbContext context) => _context = context;
 
-        public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var tag = await _context.Tags
-                .Where(t => t.Id == request.Id)
-                .FirstOrDefaultAsync(cancellationToken);
+		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var tag = await _context.Tags
+				.Where(t => t.Id == request.Id)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            if (tag is null) return NotFound();
+			if (tag is null) return NotFound();
 
-            _context.Tags.Remove(tag);
-            await _context.SaveChangesAsync(cancellationToken);
+			_context.Tags.Remove(tag);
+			await _context.SaveChangesAsync(cancellationToken);
 
-            return Ok(tag.Id);
-        }
-    }
+			return Ok(tag.Id);
+		}
+	}
 }

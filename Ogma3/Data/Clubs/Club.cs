@@ -10,16 +10,16 @@ namespace Ogma3.Data.Clubs;
 
 public class Club : BaseModel, IReportableContent
 {
-    public string Name { get; set; }
-    public string Slug { get; set; }
-    public string Hook { get; set; }
-    public string Description { get; set; }
-    public string Icon { get; set; }
-    public string IconId { get; set; }
-    public DateTime CreationDate { get; set; }
-    public ICollection<ClubMember> ClubMembers { get; set; } = new List<ClubMember>();
-    public ICollection<OgmaUser> BannedUsers { get; set; } = new List<OgmaUser>();
-    public ICollection<ClubThread> Threads { get; set; }
-    public ICollection<Folder> Folders { get; set; }
-    public ICollection<Report> Reports { get; set; }
+	public string Name { get; set; }
+	public string Slug { get; set; }
+	public string Hook { get; set; }
+	public string Description { get; set; }
+	public string Icon { get; set; }
+	public string IconId { get; set; }
+	public DateTime CreationDate { get; set; }
+	public ICollection<ClubMember> ClubMembers { get; set; } = new List<ClubMember>();
+	public ICollection<OgmaUser> BannedUsers { get; set; } = new List<OgmaUser>();
+	public ICollection<ClubThread> Threads { get; set; }
+	public ICollection<Folder> Folders { get; set; }
+	public ICollection<Report> Reports { get; set; }
 }

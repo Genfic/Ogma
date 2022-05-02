@@ -1,32 +1,32 @@
 @use "src/vars" as v
 
 .login-form
-    .left
-        width: min(100%, 240px)
+	.left
+		width: min(100%, 240px)
 
-        &.wide
-            width: min(100%, 310px)
+		&.wide
+			width: min(100%, 310px)
 
-        .form
-            display: flex
-            flex-direction: column
-            align-items: stretch
+		.form
+			display: flex
+			flex-direction: column
+			align-items: stretch
 
-            .avatar
-                border: 1px solid v.$foreground-25
-                width: 100%
+			.avatar
+				border: 1px solid v.$foreground-25
+				width: 100%
 
-                &:hover
-                    border-color: v.$foreground-50
+				&:hover
+					border-color: v.$foreground-50
 
-                &:not(.checked)
-                    filter: invert(.95)
-                    mix-blend-mode: difference
+				&:not(.checked)
+					filter: invert(.95)
+					mix-blend-mode: difference
 
-            .title
-                margin: .25rem 0
-                text-align: center
+			.title
+				margin: .25rem 0
+				text-align: center
 
-            .g-recaptcha
-                align-self: center
-                margin: .5rem 0
+			.g-recaptcha
+				align-self: center
+				margin: .5rem 0

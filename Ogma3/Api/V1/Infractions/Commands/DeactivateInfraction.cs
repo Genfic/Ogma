@@ -14,36 +14,37 @@ namespace Ogma3.Api.V1.Infractions.Commands;
 
 public static class DeactivateInfraction
 {
-    public sealed record Command(long InfractionId) : IRequest<ActionResult<Response>>;
+	public sealed record Command(long InfractionId) : IRequest<ActionResult<Response>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
 
-            var infraction = await _context.Infractions
-                .Where(i => i.Id == request.InfractionId)
-                .FirstOrDefaultAsync(cancellationToken);
+		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            if (infraction is null) return NotFound();
-            
-            infraction.RemovedAt = DateTime.Now;
-            infraction.RemovedById = (long)_uid;
+			var infraction = await _context.Infractions
+				.Where(i => i.Id == request.InfractionId)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
+			if (infraction is null) return NotFound();
 
-            return Ok(new Response(infraction.Id, (long)_uid, infraction.UserId));
-        }
-    }
+			infraction.RemovedAt = DateTime.Now;
+			infraction.RemovedById = (long)_uid;
 
-    public sealed record Response(long Id, long IssuedBy, long IssuedAgainst);
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return Ok(new Response(infraction.Id, (long)_uid, infraction.UserId));
+		}
+	}
+
+	public sealed record Response(long Id, long IssuedBy, long IssuedAgainst);
 }

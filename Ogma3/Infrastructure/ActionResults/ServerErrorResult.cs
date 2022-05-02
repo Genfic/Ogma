@@ -7,10 +7,10 @@ namespace Ogma3.Infrastructure.ActionResults;
 [DefaultStatusCode(DefaultStatusCode)]
 public class ServerErrorResult : ObjectResult
 {
-    private const int DefaultStatusCode = StatusCodes.Status500InternalServerError;
-        
-    public ServerErrorResult() : base(DefaultStatusCode)
-    {
-        StatusCode = DefaultStatusCode;
-    }
+	private const int DefaultStatusCode = StatusCodes.Status500InternalServerError;
+
+	public ServerErrorResult() : base(DefaultStatusCode)
+	{
+		StatusCode = DefaultStatusCode;
+	}
 }

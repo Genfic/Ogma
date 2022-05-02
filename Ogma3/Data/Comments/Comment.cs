@@ -1,4 +1,6 @@
 #nullable enable
+
+
 using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
@@ -10,23 +12,23 @@ namespace Ogma3.Data.Comments;
 
 public class Comment : BaseModel, IReportableContent
 {
-    public CommentsThread CommentsThread { get; set; } = null!;
-    public long CommentsThreadId { get; set; }
-    public OgmaUser Author { get; set; } = null!;
-    public long AuthorId { get; set; }
-    public DateTime DateTime { get; set; } = DateTime.Now;
-    public DateTime? LastEdit { get; set; }
-    public string Body { get; set; } = null!;
+	public CommentsThread CommentsThread { get; set; } = null!;
+	public long CommentsThreadId { get; set; }
+	public OgmaUser Author { get; set; } = null!;
+	public long AuthorId { get; set; }
+	public DateTime DateTime { get; set; } = DateTime.Now;
+	public DateTime? LastEdit { get; set; }
+	public string Body { get; set; } = null!;
 
-    // Metadata about comment deletion
-    public EDeletedBy? DeletedBy { get; set; }
-        
-    public OgmaUser? DeletedByUser { get; set; }
-    public long? DeletedByUserId { get; set; }
-        
-    // Metadata about edits
-    public IList<CommentRevision> Revisions { get; set; } = null!;
-    public ushort EditCount { get; set; }
+	// Metadata about comment deletion
+	public EDeletedBy? DeletedBy { get; set; }
 
-    public ICollection<Report> Reports { get; set; } = null!;
+	public OgmaUser? DeletedByUser { get; set; }
+	public long? DeletedByUserId { get; set; }
+
+	// Metadata about edits
+	public IList<CommentRevision> Revisions { get; set; } = null!;
+	public ushort EditCount { get; set; }
+
+	public ICollection<Report> Reports { get; set; } = null!;
 }

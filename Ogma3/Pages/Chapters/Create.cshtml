@@ -1,8 +1,8 @@
 ﻿@page "/story/{id}/add-chapter"
-@model Ogma3.Pages.Chapters.CreateModel
+@model CreateModel
 
 @{
-    ViewData["Title"] = "Create Chapter";
+	ViewData["Title"] = "Create Chapter";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,53 +10,52 @@
 <h4>New chapter for <em>@Model.Story.Title</em></h4>
 
 <div class="button-group">
-    <a title="Cancel" class="action-btn large" asp-page="../Story" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">
-         <icon class="icon" icon="arrow_back"></icon>
-         <span class="name">Cancel</span>
-     </a>
+	<a title="Cancel" class="action-btn large" asp-page="../Story" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">
+		<icon class="icon" icon="arrow_back"></icon>
+		<span class="name">Cancel</span>
+	</a>
 </div>
 
 <form class="form" id="chapter" method="post" v-on:submit="onSubmit">
 
-    <div asp-validation-summary="All">
-        <span>Please correct the following errors</span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Title"></label>
-        <input asp-for="Input.Title" class="o-form-control active-border">
-        <span asp-validation-for="Input.Title"></span>
-    </div>
+	<div asp-validation-summary="All">
+		<span>Please correct the following errors</span>
+	</div>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Body"></label>
-        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
-        <span asp-validation-for="Input.Body"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.StartNotes"></label>
-        <textarea asp-for="Input.StartNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
-        <span asp-validation-for="Input.StartNotes"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.EndNotes"></label>
-        <textarea asp-for="Input.EndNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
-        <span asp-validation-for="Input.EndNotes"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <input type="submit" value="Create" class="btn btn-primary"/>
-    </div>
-    
+	<div class="o-form-group">
+		<label asp-for="Input.Title"></label>
+		<input asp-for="Input.Title" class="o-form-control active-border">
+		<span asp-validation-for="Input.Title"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.Body"></label>
+		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
+		<span asp-validation-for="Input.Body"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.StartNotes"></label>
+		<textarea asp-for="Input.StartNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
+		<span asp-validation-for="Input.StartNotes"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.EndNotes"></label>
+		<textarea asp-for="Input.EndNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
+		<span asp-validation-for="Input.EndNotes"></span>
+	</div>
+
+	<div class="o-form-group">
+		<input type="submit" value="Create" class="btn btn-primary"/>
+	</div>
+
 </form>
 
 
 <partial name="Shared/_ValidationScriptsPartial"/>
 
-@section Scripts { 
-    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
+@section Scripts {
+	<script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }
-

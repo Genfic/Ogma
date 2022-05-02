@@ -6,12 +6,12 @@ namespace Ogma3.Pages.Shared;
 
 public class CommentsThreadDto
 {
-    public long Id { get; init; }
-    public DateTime? LockDate { get; init; }
-    public string Type { get; set; }
+	public long Id { get; init; }
+	public DateTime? LockDate { get; init; }
+	public string Type { get; set; }
 
-    public class MappingProfile : Profile
-    {
-        public MappingProfile() => CreateMap<CommentsThread, CommentsThreadDto>();
-    }
+	public class MappingProfile : Profile
+	{
+		public MappingProfile() => CreateMap<CommentsThread, CommentsThreadDto>();
+	}
 }

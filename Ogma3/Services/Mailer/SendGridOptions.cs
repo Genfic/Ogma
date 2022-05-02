@@ -2,6 +2,6 @@
 
 public class SendGridOptions
 {
-    public string SendGridUser { get; init; }
-    public string SendGridKey { get; init; }
+	public string SendGridUser { get; init; }
+	public string SendGridKey { get; init; }
 }

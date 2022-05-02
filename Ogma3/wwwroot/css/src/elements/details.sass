@@ -2,30 +2,30 @@
 @use "../mixins/active-border" as ab
 
 details
-    position: relative
-    margin: .2rem 0
-    background-color: v.$ele-1
-    +ab.active-border
+	position: relative
+	margin: .2rem 0
+	background-color: v.$ele-1
+	+ab.active-border
 
-    summary
-        padding: .5rem
-        cursor: pointer
+	summary
+		padding: .5rem
+		cursor: pointer
 
-        > *
-            display: inline
+		> *
+			display: inline
 
-    &[open]
-        padding: .5rem
+	&[open]
+		padding: .5rem
 
-        summary
-            padding: 0 0 .5rem
-            margin-bottom: .5rem
-            border-bottom: 1px solid v.$foreground-50
+		summary
+			padding: 0 0 .5rem
+			margin-bottom: .5rem
+			border-bottom: 1px solid v.$foreground-50
 
-    .actions
-        display: flex
-        position: absolute
-        top: 0
-        right: 0
+	.actions
+		display: flex
+		position: absolute
+		top: 0
+		right: 0
     
     

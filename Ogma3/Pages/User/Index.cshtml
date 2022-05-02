@@ -1,33 +1,33 @@
 @page "{name}"
-@model Ogma3.Pages.User.IndexModel
+@model IndexModel
 
 @{
-    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s profile";
-    ViewData["Tab"] = "Profile";
+	ViewData["Title"] = $"{Model.ProfileBar.UserName}'s profile";
+	ViewData["Tab"] = "Profile";
 }
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
 <div id="profile">
 
-    <markdown class="bio" preset="All">
-        @Model.Data.Bio
-    </markdown>
+	<markdown class="bio" preset="All">
+		@Model.Data.Bio
+	</markdown>
 
-    @if (Model.Data.Links.Any())
-    {
-        <ul class="links">
-            @foreach (var link in Model.Data.Links)
-            {
-                var host = link.Split("://")[^1];
+	@if (Model.Data.Links.Any())
+	{
+		<ul class="links">
+			@foreach (var link in Model.Data.Links)
+			{
+				var host = link.Split("://")[^1];
 
-                <a href="//@host" target="_blank" rel="noopener noreferrer">
-                    <img src="https://www.google.com/s2/favicons?domain=@link" alt="@link">
-                    <span>@(host.Replace("www.", ""))</span>
-                </a>
-            }
-        </ul>
-    }
+				<a href="//@host" target="_blank" rel="noopener noreferrer">
+					<img src="https://www.google.com/s2/favicons?domain=@link" alt="@link">
+					<span>@(host.Replace("www.", ""))</span>
+				</a>
+			}
+		</ul>
+	}
 
 </div>
 

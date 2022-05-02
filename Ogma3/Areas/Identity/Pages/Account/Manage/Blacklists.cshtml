@@ -1,88 +1,87 @@
 @page
-
 @using System.Text.Json
 @using Ogma3.Api.V1.Tags
-@model Ogma3.Areas.Identity.Pages.Account.Manage.Blacklists
+@model Blacklists
 
 @{
-    ViewData["Title"] = "Blacklists";
-    ViewData["ActivePage"] = ManageNavPages.Blacklists;
+	ViewData["Title"] = "Blacklists";
+	ViewData["ActivePage"] = ManageNavPages.Blacklists;
 }
 
 <h4>@ViewData["Title"]</h4>
 
 <form class="form" id="blacklists-form" method="post">
-    
-    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="o-form-group">
-        <h5>Ratings</h5>
-        <p class="desc">Select ratings to blacklist</p>
+	<div asp-validation-summary="All" class="text-danger"></div>
 
-        <div class="ratings">
+	<div class="o-form-group">
+		<h5>Ratings</h5>
+		<p class="desc">Select ratings to blacklist</p>
 
-            @foreach (var r in Model.Ratings)
-            {
-                <div class="rating">
+		<div class="ratings">
 
-                    <input type="checkbox" 
-                           name="BlacklistedRatings"
-                           id="@r.Name"
-                           value="@r.Id" 
-                           checked="@(Model.BlacklistedRatings?.Contains(r.Id) ?? false)"
-                           class="radio">
-            
-                    <label class="radio-label active-border" for="@r.Name">
-                        <cdn-img src="@r.Icon" alt="'Rating: @r.Name" height="50" width="50" />
-                        <div class="main">
-                            <strong>@r.Name</strong>
-                            <span>@r.Description</span>
-                        </div>
-                    </label>
-                </div>
-            }
-            
-        </div>
-    </div>
-    
-    
-    <div class="o-form-group">
-        <h5>Tags</h5>
-        <p class="desc">Select tags to blacklist</p>
-        
-        <tag-search-select label="BlacklistedTags"
-                           ref="tags"
-                           hide-labels
-                           :preselected="@JsonSerializer.Serialize(Model.BlacklistedTags)"
-                           tags-api="@Url.RouteUrl(nameof(TagsController))">
-        </tag-search-select>
-        
-        
-    </div>
-    
-    
-    <div class="o-form-group">
-        <h5>Users</h5>
-        <p class="desc">Users you blocked</p>
-        
-        @foreach (var u in Model.BlockedUsers)
-        {
-            <partial name="Shared/Cards/_UserCard" model="u"/>
-        }
-        
-        @* <input type="text" name="BlacklistedUsers"> *@
-        
-    </div>
+			@foreach (var r in Model.Ratings)
+			{
+				<div class="rating">
 
-    <br>
-    
-    <div class="o-form-group">
-        <button id="update-blacklists-button" type="submit" class="btn btn-primary">Save</button>
-    </div>
+					<input type="checkbox"
+					       name="BlacklistedRatings"
+					       id="@r.Name"
+					       value="@r.Id"
+					       checked="@(Model.BlacklistedRatings?.Contains(r.Id) ?? false)"
+					       class="radio">
+
+					<label class="radio-label active-border" for="@r.Name">
+						<cdn-img src="@r.Icon" alt="'Rating: @r.Name" height="50" width="50"/>
+						<div class="main">
+							<strong>@r.Name</strong>
+							<span>@r.Description</span>
+						</div>
+					</label>
+				</div>
+			}
+
+		</div>
+	</div>
+
+
+	<div class="o-form-group">
+		<h5>Tags</h5>
+		<p class="desc">Select tags to blacklist</p>
+
+		<tag-search-select label="BlacklistedTags"
+		                   ref="tags"
+		                   hide-labels
+		                   :preselected="@JsonSerializer.Serialize(Model.BlacklistedTags)"
+		                   tags-api="@Url.RouteUrl(nameof(TagsController))">
+		</tag-search-select>
+
+
+	</div>
+
+
+	<div class="o-form-group">
+		<h5>Users</h5>
+		<p class="desc">Users you blocked</p>
+
+		@foreach (var u in Model.BlockedUsers)
+		{
+			<partial name="Shared/Cards/_UserCard" model="u"/>
+		}
+
+		@* <input type="text" name="BlacklistedUsers"> *@
+
+	</div>
+
+	<br>
+
+	<div class="o-form-group">
+		<button id="update-blacklists-button" type="submit" class="btn btn-primary">Save</button>
+	</div>
 </form>
 
 @section Scripts {
-    <script src="~/js/dist/vue-directives/closeable.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/account/blacklists.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/vue-directives/closeable.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/account/blacklists.min.js" asp-append-version="true"></script>
 }

@@ -1,19 +1,21 @@
 @page
-@model Ogma3.Pages.Faq
+@model Faq
 
 @{
-    ViewData["Title"] = "FAQ";
-    ViewData["Description"] = "Frequently asked questions";
+	ViewData["Title"] = "FAQ";
+	ViewData["Description"] = "Frequently asked questions";
 }
 
 <h1>FAQ</h1>
 
 <div id="faqs">
-    @foreach (var faq in Model.Faqs)
-    {
-        <details>
-            <summary><h4>@faq.Question</h4></summary>
-            @Html.Raw(faq.AnswerRendered)
-        </details>
-    }
+	@foreach (var faq in Model.Faqs)
+	{
+		<details>
+			<summary>
+				<h4>@faq.Question</h4>
+			</summary>
+			@Html.Raw(faq.AnswerRendered)
+		</details>
+	}
 </div>

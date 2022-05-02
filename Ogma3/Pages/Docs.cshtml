@@ -1,43 +1,43 @@
 @page "{slug}"
 @using Utils.Extensions
-@model Ogma3.Pages.Docs
+@model Docs
 
 @{
-    ViewData["Title"] = Model.Document.Title;
+	ViewData["Title"] = Model.Document.Title;
 }
 
 <article class="document">
-    <h1 class="header">@Model.Document.Title</h1>
-    
-    @if (Model.Headers.Any())
-    {
-        <div class="toc">
-            @foreach (var h in Model.Headers)
-            {
-                <a href="#@h.Body.Friendlify()@(h.Occurrence > 0 ? "-" + h.Occurrence : "")"
-                   class="toc-h @("h" + h.Level)">
-                    @h.Body
-                </a>
-            }
-        </div>
-    }
-    
-    <markdown preset="All">
-        @Model.Document.Body 
-    </markdown>
+	<h1 class="header">@Model.Document.Title</h1>
 
-    <details class="border-top">
-        <summary class="mt-3">Version history</summary>
-        <ul class="my-list">
-            @foreach (var ver in Model.Versions)
-            {
-                <li class="item">
-                    <a asp-page="/Docs" asp-route-v="@ver.Version" asp-route-slug="@ver.Slug">
-                        version @ver.Version — @ver.CreationTime
-                        @(ver.Version == Model.Document.Version ? "«" : "")
-                    </a>
-                </li>
-            }
-        </ul>
-    </details>
+	@if (Model.Headers.Any())
+	{
+		<div class="toc">
+			@foreach (var h in Model.Headers)
+			{
+				<a href="#@h.Body.Friendlify()@(h.Occurrence > 0 ? "-" + h.Occurrence : "")"
+				   class="toc-h @("h" + h.Level)">
+					@h.Body
+				</a>
+			}
+		</div>
+	}
+
+	<markdown preset="All">
+		@Model.Document.Body
+	</markdown>
+
+	<details class="border-top">
+		<summary class="mt-3">Version history</summary>
+		<ul class="my-list">
+			@foreach (var ver in Model.Versions)
+			{
+				<li class="item">
+					<a asp-page="/Docs" asp-route-v="@ver.Version" asp-route-slug="@ver.Slug">
+						version @ver.Version — @ver.CreationTime
+						@(ver.Version == Model.Document.Version ? "«" : "")
+					</a>
+				</li>
+			}
+		</ul>
+	</details>
 </article>

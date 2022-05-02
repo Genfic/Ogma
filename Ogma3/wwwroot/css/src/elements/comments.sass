@@ -4,92 +4,92 @@
 $btn-height: 2.5rem
 
 .comments-container
-    margin-top: 2rem
-    width: 70%
-    opacity: 0
-    @media screen and (max-width: v.$mq-mobile)
-        width: 100%
+	margin-top: 2rem
+	width: 70%
+	opacity: 0
+	@media screen and (max-width: v.$mq-mobile)
+		width: 100%
 
-    &.ready
-        opacity: 1
-        transition: opacity 300ms ease-in-out
+	&.ready
+		opacity: 1
+		transition: opacity 300ms ease-in-out
 
-    > .info
-        +ab.active-border
-        margin-bottom: .5rem
-        padding: 1rem
-        //box-shadow: inset 0 0 0 2px v.$red-10
-        background-color: v.$ele-1
+	> .info
+		+ab.active-border
+		margin-bottom: .5rem
+		padding: 1rem
+		//box-shadow: inset 0 0 0 2px v.$red-10
+		background-color: v.$ele-1
 
-    > form
-        display: flex
-        flex-direction: column
-        margin-bottom: 1rem
+	> form
+		display: flex
+		flex-direction: column
+		margin-bottom: 1rem
 
-        > .comment-box
-            padding: .5rem
-            min-height: 5rem
-            background-color: v.$background
-            color: v.$foreground
+		> .comment-box
+			padding: .5rem
+			min-height: 5rem
+			background-color: v.$background
+			color: v.$foreground
 
-        > .counter
-            font-size: .8rem
+		> .counter
+			font-size: .8rem
 
-        > .buttons
-            margin-top: .1rem
-            display: flex
+		> .buttons
+			margin-top: .1rem
+			display: flex
 
-        & .comment-btn
-            flex: 1
-            height: $btn-height
-            background-color: v.$background
-            color: v.$foreground
-            margin: 1px 1px 0 0
+		& .comment-btn
+			flex: 1
+			height: $btn-height
+			background-color: v.$background
+			color: v.$foreground
+			margin: 1px 1px 0 0
 
-            > i.material-icons-outlined
-                font-size: inherit !important
-                vertical-align: middle
+			> i.material-icons-outlined
+				font-size: inherit !important
+				vertical-align: middle
 
-        & .help-btn
-            display: flex
-            align-items: center
-            justify-content: center
-            flex: 0 0 $btn-height
-            margin: 1px 0 0 0
-            height: $btn-height
-            color: v.$foreground
+		& .help-btn
+			display: flex
+			align-items: center
+			justify-content: center
+			flex: 0 0 $btn-height
+			margin: 1px 0 0 0
+			height: $btn-height
+			color: v.$foreground
 
-    > .buttons
-        display: flex
+	> .buttons
+		display: flex
 
-        > button
-            margin-bottom: .1rem
+		> button
+			margin-bottom: .1rem
 
-            &.active
-                > .material-icons-outlined
-                    color: v.$accent
+			&.active
+				> .material-icons-outlined
+					color: v.$accent
 
-    > .comments
-        padding-top: .5rem
+	> .comments
+		padding-top: .5rem
 
-        .snip
-            width: 100%
-            display: flex
-            flex-direction: row
-            margin: .5rem 0
-            color: v.$foreground-50
+		.snip
+			width: 100%
+			display: flex
+			flex-direction: row
+			margin: .5rem 0
+			color: v.$foreground-50
 
-            &:hover
-                color: v.$foreground
+			&:hover
+				color: v.$foreground
 
-            &:before, &:after
-                content: ""
-                flex: 1 1
-                border-bottom: 2px solid v.$foreground-50
-                margin: auto
+			&:before, &:after
+				content: ""
+				flex: 1 1
+				border-bottom: 2px solid v.$foreground-50
+				margin: auto
 
-            &:before
-                margin-right: .5rem
+			&:before
+				margin-right: .5rem
 
-            &:after
-                margin-left: .5rem
+			&:after
+				margin-left: .5rem

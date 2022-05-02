@@ -17,29 +17,29 @@ namespace Ogma3.Api.V1.InviteCodes.Queries;
 
 public static class GetIssuedInviteCodes
 {
-    public sealed record Query : IRequest<ActionResult<List<InviteCodeDto>>>;
+	public sealed record Query : IRequest<ActionResult<List<InviteCodeDto>>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly long? _uid;
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly IMapper _mapper;
+		private readonly long? _uid;
 
-        public Handler(ApplicationDbContext context, IMapper mapper, IUserService userService)
-        {
-            _context = context;
-            _mapper = mapper;
-            _uid = userService.User?.GetNumericId();
-        }
+		public Handler(ApplicationDbContext context, IMapper mapper, IUserService userService)
+		{
+			_context = context;
+			_mapper = mapper;
+			_uid = userService.User?.GetNumericId();
+		}
 
-        public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            var codes = await _context.InviteCodes
-                .Where(ic => ic.IssuedById == _uid)
-                .ProjectTo<InviteCodeDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+		public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			var codes = await _context.InviteCodes
+				.Where(ic => ic.IssuedById == _uid)
+				.ProjectTo<InviteCodeDto>(_mapper.ConfigurationProvider)
+				.ToListAsync(cancellationToken);
 
-            return Ok(codes);
-        }
-    }
+			return Ok(codes);
+		}
+	}
 }

@@ -1,31 +1,31 @@
 @{
-    #nullable enable
-    string? GetClass(string page) 
-        => (ViewData["ActivePage"] as string ?? "").Equals(page)
-            ? "active"
-            : null;
+	#nullable enable
+	string? GetClass(string page)
+		=> (ViewData["ActivePage"] as string ?? "").Equals(page)
+			? "active"
+			: null;
 }
 
 <nav id="sub-nav">
 
-    <a class="nav-link text-dark @GetClass("Home")" asp-area="" asp-page="/Index">
-        <icon icon="home"></icon>
-        <span class="name">Home</span>
-    </a>
+	<a class="nav-link text-dark @GetClass("Home")" asp-area="" asp-page="/Index">
+		<icon icon="home"></icon>
+		<span class="name">Home</span>
+	</a>
 
-    <a class="nav-link text-dark @GetClass("Stories")" asp-area="" asp-page="/Stories/Index">
-        <icon icon="menu_book"></icon>
-        <span class="name">Stories</span>
-    </a>
+	<a class="nav-link text-dark @GetClass("Stories")" asp-area="" asp-page="/Stories/Index">
+		<icon icon="menu_book"></icon>
+		<span class="name">Stories</span>
+	</a>
 
-    <a class="nav-link text-dark @GetClass("Blogs")" asp-area="" asp-page="/Blog/Index">
-        <icon icon="book"></icon>
-        <span class="name">Blogs</span>
-    </a>
+	<a class="nav-link text-dark @GetClass("Blogs")" asp-area="" asp-page="/Blog/Index">
+		<icon icon="book"></icon>
+		<span class="name">Blogs</span>
+	</a>
 
-    <a class="nav-link text-dark @GetClass("Clubs")" asp-area="" asp-page="/Clubs/Index">
-        <icon icon="groups"></icon>
-        <span class="name">Clubs</span>
-    </a>
+	<a class="nav-link text-dark @GetClass("Clubs")" asp-area="" asp-page="/Clubs/Index">
+		<icon icon="groups"></icon>
+		<span class="name">Clubs</span>
+	</a>
 
 </nav>

@@ -4,35 +4,35 @@
 $avatar-size: 5rem
 
 .user-card
-    contain: content
-    display: grid
-    grid-template-rows: repeat(3, auto)
-    grid-template-columns: auto 1fr
-    gap: .25rem
-    height: calc(#{$avatar-size} + 2px)
-    // adjust for border
-    overflow-anchor: auto
-    +ab.active-border
+	contain: content
+	display: grid
+	grid-template-rows: repeat(3, auto)
+	grid-template-columns: auto 1fr
+	gap: .25rem
+	height: calc(#{$avatar-size} + 2px)
+	// adjust for border
+	overflow-anchor: auto
+	+ab.active-border
 
-    > .avatar
-        grid-row: 1 / 4
-        grid-column: 1
-        height: $avatar-size
-        object-fit: contain
+	> .avatar
+		grid-row: 1 / 4
+		grid-column: 1
+		height: $avatar-size
+		object-fit: contain
 
-    > .name
-        grid-row: 1
-        grid-column: 2
-        color: v.$foreground
-        font-weight: 500
-        font-size: 1.1rem
+	> .name
+		grid-row: 1
+		grid-column: 2
+		color: v.$foreground
+		font-weight: 500
+		font-size: 1.1rem
 
-    > .roles
-        grid-row: 2
-        grid-column: 2
-        display: flex
+	> .roles
+		grid-row: 2
+		grid-column: 2
+		display: flex
 
-    > .title
-        grid-row: 3
-        grid-column: 2
-        font-size: .9rem
+	> .title
+		grid-row: 3
+		grid-column: 2
+		font-size: .9rem

@@ -14,20 +14,21 @@ namespace Ogma3.Api.V1.Folders;
 [ApiController]
 public class FoldersController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    public FoldersController(IMediator mediator) => _mediator = mediator;
+	private readonly IMediator _mediator;
+	public FoldersController(IMediator mediator) => _mediator = mediator;
 
-    // GET api/folders/5
-    [HttpGet("{id:long}")]
-    [Authorize]
-    public async Task<ActionResult<List<GetFolder.Result>>> GetFoldersOfClub(long id)
-        => await _mediator.Send(new GetFolder.Query(id));
+	// GET api/folders/5
+	[HttpGet("{id:long}")]
+	[Authorize]
+	public async Task<ActionResult<List<GetFolder.Result>>> GetFoldersOfClub(long id)
+		=> await _mediator.Send(new GetFolder.Query(id));
 
-    [HttpPost("add-story")]
-    [Authorize]
-    public async Task<ActionResult<FolderStory>> AddStory(AddStoryToFolder.Command data)
-        => await _mediator.Send(data);
+	[HttpPost("add-story")]
+	[Authorize]
+	public async Task<ActionResult<FolderStory>> AddStory(AddStoryToFolder.Command data)
+		=> await _mediator.Send(data);
 
-    // Don't delete or this whole controller will break
-    [HttpGet, OpenApiIgnore] public string Ping() => "Pong";
+	// Don't delete or this whole controller will break
+	[HttpGet, OpenApiIgnore]
+	public string Ping() => "Pong";
 }

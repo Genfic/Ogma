@@ -1,4 +1,6 @@
 #nullable enable
+
+
 using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
@@ -11,19 +13,19 @@ namespace Ogma3.Data.Chapters;
 
 public class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
-    public uint Order { get; set; }
-    public DateTime CreationDate { get; set; }
-    public DateTime? PublicationDate { get; set; }
-    public string Title { get; set; } = null!;
-    public string Slug { get; set; } = null!;
-    public string Body { get; set; } = null!;
-    public string? StartNotes { get; set; }
-    public string? EndNotes { get; set; }
-    public int WordCount { get; set; }
-    public  CommentsThread CommentsThread { get; set; } = null!;
-    public Story Story { get; set; } = null!;
-    public long StoryId { get; set; }
-    public ContentBlock? ContentBlock { get; set; }
-    public long? ContentBlockId { get; set; }
-    public ICollection<Report> Reports { get; set; } = null!;
+	public uint Order { get; set; }
+	public DateTime CreationDate { get; set; }
+	public DateTime? PublicationDate { get; set; }
+	public string Title { get; set; } = null!;
+	public string Slug { get; set; } = null!;
+	public string Body { get; set; } = null!;
+	public string? StartNotes { get; set; }
+	public string? EndNotes { get; set; }
+	public int WordCount { get; set; }
+	public CommentsThread CommentsThread { get; set; } = null!;
+	public Story Story { get; set; } = null!;
+	public long StoryId { get; set; }
+	public ContentBlock? ContentBlock { get; set; }
+	public long? ContentBlockId { get; set; }
+	public ICollection<Report> Reports { get; set; } = null!;
 }

@@ -15,71 +15,72 @@ namespace Ogma3.Api.V1.Shelves.Commands;
 
 public static class UpdateShelf
 {
-    public sealed record Command(
-        long Id,
-        string Name, 
-        string Description, 
-        bool IsQuickAdd, 
-        bool IsPublic, 
-        bool TrackUpdates, 
-        string Color, 
-        long Icon
-    ) : IRequest<ActionResult<ShelfDto>>;
+	public sealed record Command(
+		long Id,
+		string Name,
+		string Description,
+		bool IsQuickAdd,
+		bool IsPublic,
+		bool TrackUpdates,
+		string Color,
+		long Icon
+	) : IRequest<ActionResult<ShelfDto>>;
 
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator()
-        {
-            RuleFor(s => s.Id)
-                .NotEmpty();
-            RuleFor(s => s.Name)
-                .MaximumLength(CTConfig.CShelf.MaxNameLength)
-                .MinimumLength(CTConfig.CShelf.MinNameLength);
-            RuleFor(s => s.Description)
-                .MaximumLength(CTConfig.CShelf.MaxDescriptionLength);
-            RuleFor(s => s.Color)
-                .Length(7);
-        }
-    }
+	public class CommandValidator : AbstractValidator<Command>
+	{
+		public CommandValidator()
+		{
+			RuleFor(s => s.Id)
+				.NotEmpty();
+			RuleFor(s => s.Name)
+				.MaximumLength(CTConfig.CShelf.MaxNameLength)
+				.MinimumLength(CTConfig.CShelf.MinNameLength);
+			RuleFor(s => s.Description)
+				.MaximumLength(CTConfig.CShelf.MaxDescriptionLength);
+			RuleFor(s => s.Color)
+				.Length(7);
+		}
+	}
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<ShelfDto>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<ShelfDto>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public async Task<ActionResult<ShelfDto>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
-                
-            var (id, name, description, isQuickAdd, isPublic, trackUpdates, color, icon) = request;
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
 
-            var shelf = await _context.Shelves
-                .Where(s => s.Id == id)
-                .FirstOrDefaultAsync(cancellationToken);
+		public async Task<ActionResult<ShelfDto>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            if (shelf.OwnerId != _uid) return Unauthorized();
-                
-            shelf.Name = name;
-            shelf.Description = description;
-            shelf.IsQuickAdd = isQuickAdd;
-            shelf.IsPublic = isPublic;
-            shelf.TrackUpdates = trackUpdates;
-            shelf.Color = color;
-            shelf.IconId = icon;
+			var (id, name, description, isQuickAdd, isPublic, trackUpdates, color, icon) = request;
 
-            await _context.SaveChangesAsync(cancellationToken);
+			var shelf = await _context.Shelves
+				.Where(s => s.Id == id)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            return CreatedAtAction(
-                nameof(ShelvesController.GetShelf),
-                nameof(ShelvesController)[..^10],
-                new { shelf.Id },
-                shelf
-            );
-        }
-    }
+			if (shelf.OwnerId != _uid) return Unauthorized();
+
+			shelf.Name = name;
+			shelf.Description = description;
+			shelf.IsQuickAdd = isQuickAdd;
+			shelf.IsPublic = isPublic;
+			shelf.TrackUpdates = trackUpdates;
+			shelf.Color = color;
+			shelf.IconId = icon;
+
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return CreatedAtAction(
+				nameof(ShelvesController.GetShelf),
+				nameof(ShelvesController)[..^10],
+				new { shelf.Id },
+				shelf
+			);
+		}
+	}
 }

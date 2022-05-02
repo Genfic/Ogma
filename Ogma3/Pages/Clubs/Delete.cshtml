@@ -1,39 +1,38 @@
 @page "{id}"
-@model Ogma3.Pages.Clubs.DeleteModel
+@model DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+	ViewData["Title"] = "Delete";
 }
 
 <h2>@Model.Club.Name</h2>
 
 <div>
-    <h3>Are you sure you want to delete this?</h3>
-    <hr>
-    
-    <dl class="rows">
-        <dt>
-            Created on:
-        </dt>
-        <dd>
-            @Model.Club.CreationDate
-        </dd>
-        <dt>
-            Hook:
-        </dt>
-        <dd>
-            <markdown>
-                @Model.Club.Hook
-            </markdown>
-        </dd>
-    </dl>
+	<h3>Are you sure you want to delete this?</h3>
+	<hr>
+
+	<dl class="rows">
+		<dt>
+			Created on:
+		</dt>
+		<dd>
+			@Model.Club.CreationDate
+		</dd>
+		<dt>
+			Hook:
+		</dt>
+		<dd>
+			<markdown>
+				@Model.Club.Hook
+			</markdown>
+		</dd>
+	</dl>
 </div>
 
-<form method="post" >
-    <input type="hidden" asp-for="Club.Id" />
-    <div class="button-group">
-        <input type="submit" value="Delete" class="btn red" />
-        <a asp-page="/Club/Index" class="btn" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">Cancel</a>
-    </div>
+<form method="post">
+	<input type="hidden" asp-for="Club.Id"/>
+	<div class="button-group">
+		<input type="submit" value="Delete" class="btn red"/>
+		<a asp-page="/Club/Index" class="btn" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">Cancel</a>
+	</div>
 </form>
-

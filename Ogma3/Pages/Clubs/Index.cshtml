@@ -1,51 +1,51 @@
 @page
 @using Ogma3.Data.Clubs
-@model Ogma3.Pages.Clubs.IndexModel
+@model IndexModel
 
 @{
-    ViewData["Title"] = "Clubs";
-    ViewData["ActivePage"] = "Clubs";
+	ViewData["Title"] = "Clubs";
+	ViewData["ActivePage"] = "Clubs";
 }
 
-<partial name="_SubNavigation" />
+<partial name="_SubNavigation"/>
 
 <form id="search" class="search" method="GET">
-    <label for="title">Query</label>
-    <input class="active-border" id="title" name="q" type="text" value="@Model.Query">
- 
-    <label for="sort">Sort</label>
-    <select class="active-border"
-            name="sort"
-            id="sort"
-            asp-for="SortBy"
-            asp-items="Html.GetEnumSelectList<EClubSortingOptions>()">
-    </select>
-    
-    <input class="active-border" type="submit" value="Search">
+	<label for="title">Query</label>
+	<input class="active-border" id="title" name="q" type="text" value="@Model.Query">
+
+	<label for="sort">Sort</label>
+	<select class="active-border"
+	        name="sort"
+	        id="sort"
+	        asp-for="SortBy"
+	        asp-items="Html.GetEnumSelectList<EClubSortingOptions>()">
+	</select>
+
+	<input class="active-border" type="submit" value="Search">
 </form>
 
-<a class="btn btn-block btn-outline-primary" asp-page="Create"> 
-    <icon icon="add"></icon>
-    Create new club
+<a class="btn btn-block btn-outline-primary" asp-page="Create">
+	<icon icon="add"></icon>
+	Create new club
 </a>
 
 <br>
 
 <div class="two-columns o-grid">
-    @if (Model.Clubs.Count <= 0)
-    {
-        <h1>No stories found</h1>
-    }
-    else
-    {
-        foreach (var club in Model.Clubs)
-        {
-            <partial name="Shared/Cards/_ClubCard" model="@club"/>
-        }
-    }
+	@if (Model.Clubs.Count <= 0)
+	{
+		<h1>No stories found</h1>
+	}
+	else
+	{
+		foreach (var club in Model.Clubs)
+		{
+			<partial name="Shared/Cards/_ClubCard" model="@club"/>
+		}
+	}
 </div>
-        
+
 @if (Model.Clubs.Count > 0)
 {
-    <partial name="_Pagination" model="Model.Pagination"/>
+	<partial name="_Pagination" model="Model.Pagination"/>
 }

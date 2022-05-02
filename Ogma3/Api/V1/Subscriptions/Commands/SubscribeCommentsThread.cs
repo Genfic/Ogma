@@ -14,39 +14,39 @@ namespace Ogma3.Api.V1.Subscriptions.Commands;
 
 public static class SubscribeCommentsThread
 {
-    public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
+	public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService?.User?.GetNumericId();
-        }
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService?.User?.GetNumericId();
+		}
 
-        public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
+		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            var isSubscribed = await _context.CommentsThreadSubscribers
-                .Where(cts => cts.OgmaUserId == _uid)
-                .Where(cts => cts.CommentsThreadId == request.ThreadId)
-                .AnyAsync(cancellationToken);
-                
-            if (isSubscribed) return Ok(true);
-                
-            _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
-            {
-                OgmaUserId = (long)_uid,
-                CommentsThreadId = request.ThreadId
-            });
+			var isSubscribed = await _context.CommentsThreadSubscribers
+				.Where(cts => cts.OgmaUserId == _uid)
+				.Where(cts => cts.CommentsThreadId == request.ThreadId)
+				.AnyAsync(cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
+			if (isSubscribed) return Ok(true);
 
-            return Ok(true);
-        }
-    }
+			_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+			{
+				OgmaUserId = (long)_uid,
+				CommentsThreadId = request.ThreadId
+			});
+
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return Ok(true);
+		}
+	}
 }

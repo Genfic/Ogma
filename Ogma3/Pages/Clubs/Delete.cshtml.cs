@@ -16,88 +16,87 @@ namespace Ogma3.Pages.Clubs;
 [Authorize]
 public class DeleteModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ImageUploader _uploader;
+	private readonly ApplicationDbContext _context;
+	private readonly ImageUploader _uploader;
 
-    public DeleteModel(ApplicationDbContext context, ImageUploader uploader)
-    {
-        _context = context;
-        _uploader = uploader;
-    }
+	public DeleteModel(ApplicationDbContext context, ImageUploader uploader)
+	{
+		_context = context;
+		_uploader = uploader;
+	}
 
-    [BindProperty]
-    public GetData Club { get; set; }
+	[BindProperty] public GetData Club { get; set; }
 
-    public class GetData
-    {
-        public long Id { get; init; }
-        public string Name { get; init; }
-        public string Slug { get; init; }
-        public string Hook { get; init; }
-        public DateTime CreationDate { get; init; }
-    }
+	public class GetData
+	{
+		public long Id { get; init; }
+		public string Name { get; init; }
+		public string Slug { get; init; }
+		public string Hook { get; init; }
+		public DateTime CreationDate { get; init; }
+	}
 
-    public async Task<IActionResult> OnGetAsync(long? id)
-    {
-        if (id is null) return NotFound();
-            
-        var uid = User.GetNumericId();
-        if (uid is null) return Unauthorized();
-            
-        Club = await _context.Clubs
-            .Where(c => c.Id == id)
-            .Where(c => c.ClubMembers
-                .Where(cm => cm.MemberId == uid)
-                .Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
-            .Select(c => new GetData
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Slug = c.Slug,
-                Hook = c.Hook,
-                CreationDate = c.CreationDate
-            })
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
+	public async Task<IActionResult> OnGetAsync(long? id)
+	{
+		if (id is null) return NotFound();
 
-        if (Club is null) return NotFound();
+		var uid = User.GetNumericId();
+		if (uid is null) return Unauthorized();
 
-        return Page();
-    }
+		Club = await _context.Clubs
+			.Where(c => c.Id == id)
+			.Where(c => c.ClubMembers
+				.Where(cm => cm.MemberId == uid)
+				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
+			.Select(c => new GetData
+			{
+				Id = c.Id,
+				Name = c.Name,
+				Slug = c.Slug,
+				Hook = c.Hook,
+				CreationDate = c.CreationDate
+			})
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
 
-    public async Task<IActionResult> OnPostAsync(long? id)
-    {
-        if (id is null) return NotFound();
-            
-        var uid = User.GetNumericId();
-        if (uid is null) return Unauthorized();
-        
-        Log.Information("User {UserId} attempted to delete club {ClubId}", uid, id);
-            
-        var club = await _context.Clubs
-            .Where(c => c.Id == id)
-            .Where(c => c.ClubMembers
-                .Where(cm => cm.MemberId == uid)
-                .Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
-            .FirstOrDefaultAsync();
-            
-        if (club is null)
-        {
-            Log.Information("User {UserId} did not succeed in deleting club {ClubId}", uid, id);
-            return NotFound();
-        }
+		if (Club is null) return NotFound();
 
-        
-        Log.Information("User {UserId} succeeded in deleting club {ClubId}", uid, id);
-        _context.Clubs.Remove(club);
+		return Page();
+	}
 
-        if (club.Icon is not null && club.IconId is not null)
-        {
-            await _uploader.Delete(club.Icon, club.IconId);
-        }
+	public async Task<IActionResult> OnPostAsync(long? id)
+	{
+		if (id is null) return NotFound();
 
-        await _context.SaveChangesAsync();
-            
-        return RedirectToPage("./Index");
-    }
+		var uid = User.GetNumericId();
+		if (uid is null) return Unauthorized();
+
+		Log.Information("User {UserId} attempted to delete club {ClubId}", uid, id);
+
+		var club = await _context.Clubs
+			.Where(c => c.Id == id)
+			.Where(c => c.ClubMembers
+				.Where(cm => cm.MemberId == uid)
+				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
+			.FirstOrDefaultAsync();
+
+		if (club is null)
+		{
+			Log.Information("User {UserId} did not succeed in deleting club {ClubId}", uid, id);
+			return NotFound();
+		}
+
+
+		Log.Information("User {UserId} succeeded in deleting club {ClubId}", uid, id);
+		_context.Clubs.Remove(club);
+
+		if (club.Icon is not null && club.IconId is not null)
+		{
+			await _uploader.Delete(club.Icon, club.IconId);
+		}
+
+		await _context.SaveChangesAsync();
+
+		return RedirectToPage("./Index");
+	}
 }

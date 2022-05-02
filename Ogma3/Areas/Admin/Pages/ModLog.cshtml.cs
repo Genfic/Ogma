@@ -12,30 +12,30 @@ namespace Ogma3.Areas.Admin.Pages;
 
 public class ModLog : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private const int PerPage = 50;
+	private readonly ApplicationDbContext _context;
+	private const int PerPage = 50;
 
-    public ModLog(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-        
-    public ICollection<ModeratorAction> Actions { get; private set; }
-    public Pagination Pagination { get; private set; }
+	public ModLog(ApplicationDbContext context)
+	{
+		_context = context;
+	}
 
-    public async Task OnGet([FromQuery] int page = 1)
-    {
-        Actions = await _context.ModeratorActions
-            .OrderByDescending(ma => ma.DateTime)
-            .Paginate(page, PerPage)
-            .ToListAsync();
-        var count = await _context.ModeratorActions.CountAsync();
+	public ICollection<ModeratorAction> Actions { get; private set; }
+	public Pagination Pagination { get; private set; }
 
-        Pagination = new Pagination
-        {
-            PerPage = PerPage,
-            CurrentPage = page,
-            ItemCount = count
-        };
-    }
+	public async Task OnGet([FromQuery] int page = 1)
+	{
+		Actions = await _context.ModeratorActions
+			.OrderByDescending(ma => ma.DateTime)
+			.Paginate(page, PerPage)
+			.ToListAsync();
+		var count = await _context.ModeratorActions.CountAsync();
+
+		Pagination = new Pagination
+		{
+			PerPage = PerPage,
+			CurrentPage = page,
+			ItemCount = count
+		};
+	}
 }

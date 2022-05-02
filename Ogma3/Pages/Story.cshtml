@@ -10,240 +10,240 @@
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.ChaptersReads
-@model Ogma3.Pages.StoryModel
+@model StoryModel
 
 @{
-    ViewData["Title"] = Model.Story!.Title;
-    ViewData["Description"] = Model.Story.Hook;
-    ViewData["Rating"] = Model.Story.Rating.Name;
+	ViewData["Title"] = Model.Story!.Title;
+	ViewData["Description"] = Model.Story.Hook;
+	ViewData["Rating"] = Model.Story.Rating.Name;
 
-    var uid = User.GetNumericId();
+	var uid = User.GetNumericId();
 }
 
 @section OgMeta {
-    <meta property="og:type" content="book">
-    <meta property="og:url" content="@Url.PageLink("/Story", values: new {Model.Story.Id, Model.Story.Slug})">
-    <meta property="og:description" content="@Model.Story.Hook">
+	<meta property="og:type" content="book">
+	<meta property="og:url" content="@Url.PageLink("/Story", values: new { Model.Story.Id, Model.Story.Slug })">
+	<meta property="og:description" content="@Model.Story.Hook">
 }
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
 @if (Model.Story.ContentBlock is not null)
 {
-    <partial name="Shared/_ContentBlockCard" model="Model.Story.ContentBlock"/>
-    <br>
+	<partial name="Shared/_ContentBlockCard" model="Model.Story.ContentBlock"/>
+	<br>
 }
 
 <div id="story-app">
-    <div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
+	<div id="story-details" class="story-details" itemscope itemtype="https://schema.org/Book">
 
-        <div class="actions">
+		<div class="actions">
 
-            <o-vote v-pre endpoint="@Url.RouteUrl(nameof(VotesController))" storyId="@Model.Story.Id"></o-vote>
+			<o-vote v-pre endpoint="@Url.RouteUrl(nameof(VotesController))" storyId="@Model.Story.Id"></o-vote>
 
-            <noscript>
-                <span class="votes action-btn large" title="Score">
-                    <i class="material-icons-outlined">star_border</i>
-                    <span class="count">@Model.Story.Score</span>
-                </span>
-            </noscript>
+			<noscript>
+				<span class="votes action-btn large" title="Score">
+					<i class="material-icons-outlined">star_border</i>
+					<span class="count">@Model.Story.Score</span>
+				</span>
+			</noscript>
 
-            @if (User.Identity?.IsAuthenticated ?? false)
-            {
-                <a title="Write about it" class="action-btn large" asp-page="./Blog/Create" asp-route-story="@Model.Story.Id">
-                    <icon class="icon" icon="note_add"></icon>
-                    <span class="name">Write about it</span>
-                </a>
-            }
+			@if (User.Identity?.IsAuthenticated ?? false)
+			{
+				<a title="Write about it" class="action-btn large" asp-page="./Blog/Create" asp-route-story="@Model.Story.Id">
+					<icon class="icon" icon="note_add"></icon>
+					<span class="name">Write about it</span>
+				</a>
+			}
 
-            @if (Model.Story.AuthorId == uid)
-            {
-                <a title="Edit" class="action-btn large" asp-page="./Stories/Edit" asp-route-id="@Model.Story.Id">
-                    <icon class="icon" icon="edit"></icon>
-                    <span class="name">Edit</span>
-                </a>
+			@if (Model.Story.AuthorId == uid)
+			{
+				<a title="Edit" class="action-btn large" asp-page="./Stories/Edit" asp-route-id="@Model.Story.Id">
+					<icon class="icon" icon="edit"></icon>
+					<span class="name">Edit</span>
+				</a>
 
-                <a title="New chapter" class="action-btn large" asp-page="./Chapters/Create" asp-route-id="@Model.Story.Id">
-                    <icon class="icon" icon="post_add"></icon>
-                    <span class="name">New chapter</span>
-                </a>
-            }
-            @if (!Model.Story.IsPublished)
-            {
-                <span class="action-btn large red">
-                    <icon class="icon" icon="visibility_off"></icon>
-                </span>
-            }
-            @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
-            {
-                <a title="Manage" class="action-btn large red" target="_blank"
-                   asp-area="Admin" asp-page="/ContentBlock"
-                   asp-route-type="story" asp-route-id="@Model.Story.Id">
-                    <icon class="icon" icon="shield"></icon>
-                </a>
-            }
-            @if (User.Identity?.IsAuthenticated ?? false)
-            {
-                <button title="Report" class="action-btn large red" v-on:click="report">
-                    <icon class="icon" icon="flag"></icon>
-                </button>
-            }
+				<a title="New chapter" class="action-btn large" asp-page="./Chapters/Create" asp-route-id="@Model.Story.Id">
+					<icon class="icon" icon="post_add"></icon>
+					<span class="name">New chapter</span>
+				</a>
+			}
+			@if (!Model.Story.IsPublished)
+			{
+				<span class="action-btn large red">
+					<icon class="icon" icon="visibility_off"></icon>
+				</span>
+			}
+			@if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+			{
+				<a title="Manage" class="action-btn large red" target="_blank"
+				   asp-area="Admin" asp-page="/ContentBlock"
+				   asp-route-type="story" asp-route-id="@Model.Story.Id">
+					<icon class="icon" icon="shield"></icon>
+				</a>
+			}
+			@if (User.Identity?.IsAuthenticated ?? false)
+			{
+				<button title="Report" class="action-btn large red" v-on:click="report">
+					<icon class="icon" icon="flag"></icon>
+				</button>
+			}
 
-            @if (User.Identity?.IsAuthenticated ?? false)
-            {
-                <div class="spacer"></div>
-                <o-shelves v-pre endpoint="@Url.RouteUrl(nameof(ShelfStoriesController))" storyId="@Model.Story.Id"></o-shelves>
-            }
+			@if (User.Identity?.IsAuthenticated ?? false)
+			{
+				<div class="spacer"></div>
+				<o-shelves v-pre endpoint="@Url.RouteUrl(nameof(ShelfStoriesController))" storyId="@Model.Story.Id"></o-shelves>
+			}
 
-        </div>
+		</div>
 
-        @* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
+		@* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
 
-        <div class="titlebar">
-            <cdn-img src="@Model.Story.Rating.Icon" alt="Rated: @Model.Story.Rating.Name" title="Rating: @Model.Story.Rating.Name" class="rating"/>
-            <span style="display:none" itemprop="contentRating">@Model.Story.Rating.Name</span>
-            <h1 class="title" itemprop="name">@Model.Story.Title</h1>
-        </div>
+		<div class="titlebar">
+			<cdn-img src="@Model.Story.Rating.Icon" alt="Rated: @Model.Story.Rating.Name" title="Rating: @Model.Story.Rating.Name" class="rating"/>
+			<span style="display:none" itemprop="contentRating">@Model.Story.Rating.Name</span>
+			<h1 class="title" itemprop="name">@Model.Story.Title</h1>
+		</div>
 
-        <div class="tags" itemprop="keywords">
-            <story-status status="@Model.Story.Status"></story-status>
-            @foreach (var t in Model.Story.Tags)
-            {
-                <tag tag="@t"></tag>
-            }
-        </div>
+		<div class="tags" itemprop="keywords">
+			<story-status status="@Model.Story.Status"></story-status>
+			@foreach (var t in Model.Story.Tags)
+			{
+				<tag tag="@t"></tag>
+			}
+		</div>
 
-        <div class="main">
+		<div class="main">
 
-            <cdn-img src="@Model.Story.Cover" alt="@Model.Story.Title cover image" class="cover" height="160" width="160" itemprop="thumbnailUrl"/>
+			<cdn-img src="@Model.Story.Cover" alt="@Model.Story.Title cover image" class="cover" height="160" width="160" itemprop="thumbnailUrl"/>
 
-            <div class="description" itemprop="abstract">
-                <markdown preset="Basic">@Model.Story.Description</markdown>
-            </div>
+			<div class="description" itemprop="abstract">
+				<markdown preset="Basic">@Model.Story.Description</markdown>
+			</div>
 
-        </div>
-        @* </cache> *@
-    </div>
+		</div>
+		@* </cache> *@
+	</div>
 
-    <div class="info">
-        <span class="word-count">@Model.Story.WordCount.ToString("N0") words</span>
-        <span class="chapter-count">@Model.Story.ChaptersCount chapters</span>
-        <span class="comment-count">@Model.Story.CommentsCount comments</span>
-        <time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
-            published @Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-        </time>
+	<div class="info">
+		<span class="word-count">@Model.Story.WordCount.ToString("N0") words</span>
+		<span class="chapter-count">@Model.Story.ChaptersCount chapters</span>
+		<span class="comment-count">@Model.Story.CommentsCount comments</span>
+		<time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
+			published @Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+		</time>
 
-        <div class="spacer"></div>
+		<div class="spacer"></div>
 
-        @if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <a v-on:click="addToFolder">Add to folder</a>
-        }
-        <o-featured-in-clubs v-pre
-                             endpoint="@Url.RouteUrl(nameof(ClubsController))"
-                             storyId="@Model.Story.Id"
-                             cdn="@Config.Cdn">
-        </o-featured-in-clubs>
-    </div>
+		@if (User.Identity?.IsAuthenticated ?? false)
+		{
+			<a v-on:click="addToFolder">Add to folder</a>
+		}
+		<o-featured-in-clubs v-pre
+		                     endpoint="@Url.RouteUrl(nameof(ClubsController))"
+		                     storyId="@Model.Story.Id"
+		                     cdn="@Config.Cdn">
+		</o-featured-in-clubs>
+	</div>
 
-    @if (Model.Story.AuthorId == uid)
-    {
-        <div class="author-info info">
-            <span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span>
-            <span class="chapter-count">@Model.Story.FullChaptersCount chapters</span>
-            <span class="comment-count">@Model.Story.CommentsCount comments</span>
-            <time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                created @Model.Story.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-            </time>
-        </div>
-    }
+	@if (Model.Story.AuthorId == uid)
+	{
+		<div class="author-info info">
+			<span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span>
+			<span class="chapter-count">@Model.Story.FullChaptersCount chapters</span>
+			<span class="comment-count">@Model.Story.CommentsCount comments</span>
+			<time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+				created @Model.Story.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+			</time>
+		</div>
+	}
 
-    <ol class="chapters">
-        @if (Model.Story.Chapters.Count <= 0)
-        {
-            <li class="chapter">
-                <div class="title">No chapters found</div>
-            </li>
-        }
-        else
-        {
-            var order = 1;
-            foreach (var c in Model.Story.Chapters)
-            {
-                <li class="chapter @(c.IsPublished ? "" : "unpublished")">
-                    <div class="left">
+	<ol class="chapters">
+		@if (Model.Story.Chapters.Count <= 0)
+		{
+			<li class="chapter">
+				<div class="title">No chapters found</div>
+			</li>
+		}
+		else
+		{
+			var order = 1;
+			foreach (var c in Model.Story.Chapters)
+			{
+				<li class="chapter @(c.IsPublished ? "" : "unpublished")">
+					<div class="left">
 
-                        <button class="read-status"
-                                aria-label="Chapter read status"
-                                data-id="@c.Id">
-                            <i class="material-icons-outlined">visibility_off</i>
-                        </button>
+						<button class="read-status"
+						        aria-label="Chapter read status"
+						        data-id="@c.Id">
+							<i class="material-icons-outlined">visibility_off</i>
+						</button>
 
-                        <span class="order">@(order++)</span>        
-                        
-                        @if (c.IsBlocked)
-                        {
-                            <icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
-                        }
+						<span class="order">@(order++)</span>
 
-                        <a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
-                            @c.Title
-                        </a>
+						@if (c.IsBlocked)
+						{
+							<icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
+						}
 
-                        <time class="date" datetime="@c.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                            @c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-                        </time>
+						<a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+							@c.Title
+						</a>
 
-                    </div>
-                    <div class="right">
-                        <span class="word-count">@c.WordCount.ToString("N0") words</span>
-                    </div>
-                </li>
-            }
-        }
-    </ol>
+						<time class="date" datetime="@c.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+							@c.PublishDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+						</time>
 
-    @if (User.Identity?.IsAuthenticated ?? false)
-    {
-        <club-folder-selector
-            ref="folderSelect"
-            cdn="@Config.Cdn"
-            :story-id="@Model.Story.Id"
-            clubs-route="@Url.RouteUrl(nameof(ClubsController))"
-            folders-route="@Url.RouteUrl(nameof(FoldersController))">
-        </club-folder-selector>
-    }
+					</div>
+					<div class="right">
+						<span class="word-count">@c.WordCount.ToString("N0") words</span>
+					</div>
+				</li>
+			}
+		}
+	</ol>
 
-    <report-modal
-        ref="reportModal"
-        :item-id="@Model.Story.Id"
-        item-type="@EReportableContentTypes.Story"
-        reports-route="@Url.RouteUrl(nameof(ReportsController))">
-    </report-modal>
+	@if (User.Identity?.IsAuthenticated ?? false)
+	{
+		<club-folder-selector
+			ref="folderSelect"
+			cdn="@Config.Cdn"
+			:story-id="@Model.Story.Id"
+			clubs-route="@Url.RouteUrl(nameof(ClubsController))"
+			folders-route="@Url.RouteUrl(nameof(FoldersController))">
+		</club-folder-selector>
+	}
 
-    <div id="reads-route" data-reads="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
-    <div id="story-id" data-story-id="@Model.Story.Id"></div>
-    @Html.AntiForgeryToken()
+	<report-modal
+		ref="reportModal"
+		:item-id="@Model.Story.Id"
+		item-type="@EReportableContentTypes.Story"
+		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+	</report-modal>
+
+	<div id="reads-route" data-reads="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
+	<div id="story-id" data-story-id="@Model.Story.Id"></div>
+	@Html.AntiForgeryToken()
 </div>
 
 @section Scripts
 {
-    <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
 
-    <script src="~/js/dist/story.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/story.min.js" asp-append-version="true"></script>
 
-    <script src="~/js/dist/native-components/vote-button.min.js"
-            asp-append-version="true"
-            type="module"></script>
-    <script src="~/js/dist/native-components/shelves-button.min.js"
-            asp-append-version="true"
-            type="module"></script>
-    <script src="~/js/dist/native-components/featured-in-clubs.min.js"
-            asp-append-version="true"
-            type="module"></script>
-    
-    <script src="~/js/dist/chapter-reads.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/native-components/vote-button.min.js"
+	        asp-append-version="true"
+	        type="module"></script>
+	<script src="~/js/dist/native-components/shelves-button.min.js"
+	        asp-append-version="true"
+	        type="module"></script>
+	<script src="~/js/dist/native-components/featured-in-clubs.min.js"
+	        asp-append-version="true"
+	        type="module"></script>
+
+	<script src="~/js/dist/chapter-reads.min.js" asp-append-version="true"></script>
 }

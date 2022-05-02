@@ -7,133 +7,133 @@ $avatarSize: 8.5rem
 $margin: .5rem
 
 .info-bar
-    display: grid
-    grid-template-columns: $avatarSize 1fr auto
-    grid-template-rows: auto auto 1fr
-    gap: .25rem
+	display: grid
+	grid-template-columns: $avatarSize 1fr auto
+	grid-template-rows: auto auto 1fr
+	gap: .25rem
 
-    padding: 0 15px
+	padding: 0 15px
 
-    min-height: $avatarSize + $margin
-    margin-bottom: $margin
-    border-bottom: 1px solid v.$foreground-25
-    @media only screen and (max-width: v.$mq-mobile)
-        grid-template-columns: auto auto
-        grid-template-rows: auto auto auto 1fr
-        height: auto
-        padding: 0
+	min-height: $avatarSize + $margin
+	margin-bottom: $margin
+	border-bottom: 1px solid v.$foreground-25
+	@media only screen and (max-width: v.$mq-mobile)
+		grid-template-columns: auto auto
+		grid-template-rows: auto auto auto 1fr
+		height: auto
+		padding: 0
 
-    > .nav
-        grid-row: 3
-        grid-column: 3
-        align-self: end
+	> .nav
+		grid-row: 3
+		grid-column: 3
+		align-self: end
 
-        display: flex
-        justify-content: flex-end
-        align-items: flex-end
-        @media only screen and (max-width: v.$mq-mobile)
-            grid-row: 4
-            grid-column: 1 / 4
+		display: flex
+		justify-content: flex-end
+		align-items: flex-end
+		@media only screen and (max-width: v.$mq-mobile)
+			grid-row: 4
+			grid-column: 1 / 4
 
-        & .nav-item
-            color: v.$foreground-75
-            text-decoration: none
-            padding: $margin
-            border: 1px solid v.$foreground-25
-            border-right: none
-            border-bottom: none
-            text-align: center
+		& .nav-item
+			color: v.$foreground-75
+			text-decoration: none
+			padding: $margin
+			border: 1px solid v.$foreground-25
+			border-right: none
+			border-bottom: none
+			text-align: center
 
-            &:hover,
-            &:focus
-                color: v.$foreground
-                background: v.$accent-10
+			&:hover,
+			&:focus
+				color: v.$foreground
+				background: v.$accent-10
 
-            &:first-child
-                border-top-left-radius: .25rem
+			&:first-child
+				border-top-left-radius: .25rem
 
-            &:last-child
-                border-right: 1px solid v.$foreground-25
-                border-top-right-radius: .25rem
+			&:last-child
+				border-right: 1px solid v.$foreground-25
+				border-top-right-radius: .25rem
 
-            @media only screen and (max-width: v.$mq-mobile)
-                flex: 1
+			@media only screen and (max-width: v.$mq-mobile)
+				flex: 1
 
-            &.active
-                border-top: .25rem solid v.$accent
-                border-top-right-radius: .25rem
-                border-top-left-radius: .25rem
+			&.active
+				border-top: .25rem solid v.$accent
+				border-top-right-radius: .25rem
+				border-top-left-radius: .25rem
 
-    > .img
-        grid-row: 1 / 4
-        grid-column: 1
-        object-fit: contain
-        align-self: baseline
-        height: $avatarSize
+	> .img
+		grid-row: 1 / 4
+		grid-column: 1
+		object-fit: contain
+		align-self: baseline
+		height: $avatarSize
 
-    > .name
-        grid-row: 1
-        grid-column: 2
-        font-size: 2rem
-        margin-bottom: math.div($margin, 2)
-        font-weight: 300
-        color: v.$foreground
+	> .name
+		grid-row: 1
+		grid-column: 2
+		font-size: 2rem
+		margin-bottom: math.div($margin, 2)
+		font-weight: 300
+		color: v.$foreground
 
-    > .date
-        grid-row: 2
-        grid-column: 2 / 3
-        font-size: 1.1rem
-        font-weight: 100
+	> .date
+		grid-row: 2
+		grid-column: 2 / 3
+		font-size: 1.1rem
+		font-weight: 100
 
-    > .info
-        grid-row: 3
-        grid-column: 2 / 3
-        display: flex
-        flex-direction: column
-        justify-content: flex-end
-        flex-grow: 1
-        font-size: .9rem
-        margin-bottom: $margin
+	> .info
+		grid-row: 3
+		grid-column: 2 / 3
+		display: flex
+		flex-direction: column
+		justify-content: flex-end
+		flex-grow: 1
+		font-size: .9rem
+		margin-bottom: $margin
 
-    > .buttons
-        grid-row: 1
-        grid-column: 3
-        display: flex
-        justify-content: flex-end
+	> .buttons
+		grid-row: 1
+		grid-column: 3
+		display: flex
+		justify-content: flex-end
 
-        > a
-            display: flex
-            align-items: center
-            justify-content: center
-            padding: .5rem
-            color: v.$foreground-75
-            text-decoration: none
+		> a
+			display: flex
+			align-items: center
+			justify-content: center
+			padding: .5rem
+			color: v.$foreground-75
+			text-decoration: none
 
-        > .button
-            background-color: v.$accent-10
-            margin-left: .25rem
-            +ab.active-border
-            +f.focus
+		> .button
+			background-color: v.$accent-10
+			margin-left: .25rem
+			+ab.active-border
+			+f.focus
 
-            &:first-child
-                margin-left: 0
+			&:first-child
+				margin-left: 0
 
-            &:hover
-                background-color: v.$accent-25
+			&:hover
+				background-color: v.$accent-25
 
-            &.max
-                flex: 1
+			&.max
+				flex: 1
 
-            &.join
-                color: v.$foreground
-                background-color: v.$green-25
+			&.join
+				color: v.$foreground
+				background-color: v.$green-25
 
-                &:hover
-                    background-color: v.$green-50
+				&:hover
+					background-color: v.$green-50
 
-            &.leave
-                color: v.$foreground
-                background-color: v.$red-25
+			&.leave
+				color: v.$foreground
+				background-color: v.$red-25
 
-                &:hover
-                    background-color: v.$red-50
+				&:hover
+					background-color: v.$red-50

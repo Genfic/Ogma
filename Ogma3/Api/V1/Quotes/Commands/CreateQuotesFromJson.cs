@@ -15,35 +15,35 @@ namespace Ogma3.Api.V1.Quotes.Commands;
 
 public static class CreateQuotesFromJson
 {
-    public sealed record Command(Stream Data) : IRequest<ActionResult<Response>>;
-        
-    public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
-    {
-        private readonly ApplicationDbContext _context;
+	public sealed record Command(Stream Data) : IRequest<ActionResult<Response>>;
 
-        public CreateQuoteHandler(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	{
+		private readonly ApplicationDbContext _context;
 
-        public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var data = await JsonSerializer.DeserializeAsync<IEnumerable<Quote>>(request.Data, cancellationToken: cancellationToken);
-            if (data is null) return BadRequest();
+		public CreateQuoteHandler(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-            _context.Quotes.AddRange(data);
-            try
-            {
-                var insertedRows = await _context.SaveChangesAsync(cancellationToken);
-                return Ok(new Response(insertedRows));
-            }
-            catch (DbUpdateException ex)
-            {
-                Log.Error("Bulk Insert error in {Src}: {Msg}", ex.Source, ex.Message);
-                return ServerError("Database Bulk Insert Error");
-            }
-        }
-    }
+		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var data = await JsonSerializer.DeserializeAsync<IEnumerable<Quote>>(request.Data, cancellationToken: cancellationToken);
+			if (data is null) return BadRequest();
 
-    public sealed record Response(int InsertedRows);
+			_context.Quotes.AddRange(data);
+			try
+			{
+				var insertedRows = await _context.SaveChangesAsync(cancellationToken);
+				return Ok(new Response(insertedRows));
+			}
+			catch (DbUpdateException ex)
+			{
+				Log.Error("Bulk Insert error in {Src}: {Msg}", ex.Source, ex.Message);
+				return ServerError("Database Bulk Insert Error");
+			}
+		}
+	}
+
+	public sealed record Response(int InsertedRows);
 }

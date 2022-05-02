@@ -1,17 +1,17 @@
-@using System.Globalization
 @using Utils.Extensions
+@using System.Globalization
 @model Ogma3.Data.Notifications.Notification
 
 <div class="notification active-border">
-    <a class="link" href="@Model.Url">@Model.Body</a>
-    <time class="time" datetime="@Model.DateTime.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-        @Model.DateTime.FormatDateWithDaySuffix()
-    </time>
-    
-    <div class="actions">
-        <button class="action-btn large" data-delete="@Model.Id" title="Delete">
-            <icon icon="delete_forever"></icon>
-        </button>
-    </div>
-    
+	<a class="link" href="@Model.Url">@Model.Body</a>
+	<time class="time" datetime="@Model.DateTime.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+		@Model.DateTime.FormatDateWithDaySuffix()
+	</time>
+
+	<div class="actions">
+		<button class="action-btn large" data-delete="@Model.Id" title="Delete">
+			<icon icon="delete_forever"></icon>
+		</button>
+	</div>
+
 </div>

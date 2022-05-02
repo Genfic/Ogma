@@ -4,137 +4,141 @@
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.Reports
-@model Ogma3.Pages.ChapterModel
+@model ChapterModel
 
 @{
-    var desc = $"{Model.Chapter!.StoryTitle} – chapter {Model.Chapter.Order}";
+	var desc = $"{Model.Chapter!.StoryTitle} – chapter {Model.Chapter.Order}";
 
-    ViewData["Title"] = Model.Chapter.Title;
-    ViewData["Description"] = desc;
-    ViewData["Rating"] = Model.Chapter.StoryRatingName;
+	ViewData["Title"] = Model.Chapter.Title;
+	ViewData["Description"] = desc;
+	ViewData["Rating"] = Model.Chapter.StoryRatingName;
 }
 
 @section OgMeta {
-     <meta property="og:type" content="book.chapter">
-     <meta property="og:url" content="@Url.PageLink("/Chapter", values: new { Model.Chapter.Id, Model.Chapter.Slug })">
-     <meta property="og:description" content="@desc">
+	<meta property="og:type" content="book.chapter">
+	<meta property="og:url" content="@Url.PageLink("/Chapter", values: new { Model.Chapter.Id, Model.Chapter.Slug })">
+	<meta property="og:description" content="@desc">
 }
 
 <div class="chapter-container">
-    <article class="chapter-details" id="chapter-app" itemscope itemtype="https://bib.schema.org/Chapter">
+	<article class="chapter-details" id="chapter-app" itemscope itemtype="https://bib.schema.org/Chapter">
 
-        <a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId" asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
-        <h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
-        @if (Model.Chapter.PublicationDate is not null)
-        {
-            var date = (DateTime)Model.Chapter.PublicationDate;
-            <time class="date" itemprop="datePublished" datetime="@date.ToString(CultureInfo.InvariantCulture)">
-                @date.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-            </time>
-        }
-        else
-        {
-            <span class="date not-published">
-                Not published
-            </span>
-        }
+		<a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId" asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
+		<h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
+		@if (Model.Chapter.PublicationDate is not null)
+		{
+			var date = (DateTime)Model.Chapter.PublicationDate;
+			<time class="date" itemprop="datePublished" datetime="@date.ToString(CultureInfo.InvariantCulture)">
+				@date.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+			</time>
+		}
+		else
+		{
+			<span class="date not-published">
+				Not published
+			</span>
+		}
 
-        @if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <div class="actions">
+		@if (User.Identity?.IsAuthenticated ?? false)
+		{
+			<div class="actions">
 
-                <a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-chapter="@Model.Chapter.Id">
-                    <icon class="icon" icon="note_add"></icon>
-                    <span class="name">Write about it</span>
-                </a>
-                
-                @if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
-                {
-                    <a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
-                        <icon class="icon" icon="edit"></icon>
-                        <span class="name">Edit</span>
-                    </a>
-                }
-                @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
-                {
-                    <a title="Manage" class="action-btn red" target="_blank"
-                       asp-area="Admin" asp-page="/ContentBlock"
-                       asp-route-type="chapter" asp-route-id="@Model.Chapter.Id">
-                        <icon class="icon" icon="shield"></icon>
-                    </a>
-                }
-                <button title="Report" class="action-btn red" v-on:click="report">
-                    <icon class="icon" icon="flag"></icon>
-                </button>
-            </div>
-        }
+				<a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-chapter="@Model.Chapter.Id">
+					<icon class="icon" icon="note_add"></icon>
+					<span class="name">Write about it</span>
+				</a>
 
-        @if (Model.Chapter.ContentBlock is not null)
-        {
-            <partial name="Shared/_ContentBlockCard" model="Model.Chapter.ContentBlock"/>
-        }
-        
-        <div class="body-container">
+				@if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
+				{
+					<a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
+						<icon class="icon" icon="edit"></icon>
+						<span class="name">Edit</span>
+					</a>
+				}
+				@if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+				{
+					<a title="Manage" class="action-btn red" target="_blank"
+					   asp-area="Admin" asp-page="/ContentBlock"
+					   asp-route-type="chapter" asp-route-id="@Model.Chapter.Id">
+						<icon class="icon" icon="shield"></icon>
+					</a>
+				}
+				<button title="Report" class="action-btn red" v-on:click="report">
+					<icon class="icon" icon="flag"></icon>
+				</button>
+			</div>
+		}
 
-            @if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
-            {
-                <aside class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.StartNotes</aside>
-            }
+		@if (Model.Chapter.ContentBlock is not null)
+		{
+			<partial name="Shared/_ContentBlockCard" model="Model.Chapter.ContentBlock"/>
+		}
 
-            <markdown preset="Basic" class="body" itemprop="text">
-                @Model.Chapter.Body
-            </markdown>
+		<div class="body-container">
 
-            @if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
-            {
-                <aside class="start notes"><span class="an">Author's notes:</span> @Model.Chapter.EndNotes</aside>
-            }
+			@if (!string.IsNullOrEmpty(Model.Chapter.StartNotes))
+			{
+				<aside class="start notes">
+					<span class="an">Author's notes:</span> @Model.Chapter.StartNotes
+				</aside>
+			}
 
-        </div>
-        
-        <div class="read-progress">
-            <div class="bar" :style="{width: (progress * 100) + '%'}"></div>
-        </div>
+			<markdown preset="Basic" class="body" itemprop="text">
+				@Model.Chapter.Body
+			</markdown>
 
-        <report-modal
-            ref="reportModal"
-            :item-id="@Model.Chapter.Id"
-            item-type="@EReportableContentTypes.Chapter"
-            reports-route="@Url.RouteUrl(nameof(ReportsController))">
-        </report-modal>
+			@if (!string.IsNullOrEmpty(Model.Chapter.EndNotes))
+			{
+				<aside class="start notes">
+					<span class="an">Author's notes:</span> @Model.Chapter.EndNotes
+				</aside>
+			}
 
-        @Html.AntiForgeryToken()
-    </article>
-    
-    <div class="navigation">
-        @if (Model.Chapter.Previous is not null)
-        {
-            <a asp-page="/Chapter"
-               asp-route-id="@Model.Chapter.Previous.Id"
-               asp-route-slug="@Model.Chapter.Previous.Slug"
-               class="previous active-border">
-                <span class="action">Previous</span>
-                <span class="title">@Model.Chapter.Previous.Title</span>
-            </a>
-        }
-        @if (Model.Chapter.Next is not null)
-        {
-            <a asp-page="/Chapter"
-               asp-route-id="@Model.Chapter.Next.Id"
-               asp-route-slug="@Model.Chapter.Next.Slug"
-               class="next active-border">
-                <span class="action">Next</span>
-                <span class="title">@Model.Chapter.Next.Title</span>
-            </a>
-        }
-    </div>
-    
-    <partial name="_Comments" model="@Model.Chapter.CommentsThread" />
+		</div>
+
+		<div class="read-progress">
+			<div class="bar" :style="{width: (progress * 100) + '%'}"></div>
+		</div>
+
+		<report-modal
+			ref="reportModal"
+			:item-id="@Model.Chapter.Id"
+			item-type="@EReportableContentTypes.Chapter"
+			reports-route="@Url.RouteUrl(nameof(ReportsController))">
+		</report-modal>
+
+		@Html.AntiForgeryToken()
+	</article>
+
+	<div class="navigation">
+		@if (Model.Chapter.Previous is not null)
+		{
+			<a asp-page="/Chapter"
+			   asp-route-id="@Model.Chapter.Previous.Id"
+			   asp-route-slug="@Model.Chapter.Previous.Slug"
+			   class="previous active-border">
+				<span class="action">Previous</span>
+				<span class="title">@Model.Chapter.Previous.Title</span>
+			</a>
+		}
+		@if (Model.Chapter.Next is not null)
+		{
+			<a asp-page="/Chapter"
+			   asp-route-id="@Model.Chapter.Next.Id"
+			   asp-route-slug="@Model.Chapter.Next.Slug"
+			   class="next active-border">
+				<span class="action">Next</span>
+				<span class="title">@Model.Chapter.Next.Title</span>
+			</a>
+		}
+	</div>
+
+	<partial name="_Comments" model="@Model.Chapter.CommentsThread"/>
 </div>
 
 @section Scripts
 {
-    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/chapter.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/chapter.min.js" asp-append-version="true"></script>
 }

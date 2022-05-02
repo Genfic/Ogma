@@ -13,41 +13,42 @@ namespace Ogma3.Api.V1.Faqs.Commands;
 
 public static class CreateFaq
 {
-    public sealed record Command(string Question, string Answer) : IRequest<ActionResult<Faq>>;
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator()
-        {
-            RuleFor(f => f.Question).NotEmpty();
-            RuleFor(f => f.Answer).NotEmpty();
-        }
-    }
-        
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Faq>>
-    {
-        private readonly ApplicationDbContext _context;
-        public Handler(ApplicationDbContext context) => _context = context;
+	public sealed record Command(string Question, string Answer) : IRequest<ActionResult<Faq>>;
 
-        public async Task<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var (question, answer) = request;
+	public class CommandValidator : AbstractValidator<Command>
+	{
+		public CommandValidator()
+		{
+			RuleFor(f => f.Question).NotEmpty();
+			RuleFor(f => f.Answer).NotEmpty();
+		}
+	}
 
-            var faq = new Faq
-            {
-                Question = question,
-                Answer = answer,
-                AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All)
-            };
-            _context.Faqs.Add(faq);
-                
-            await _context.SaveChangesAsync(cancellationToken);
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Faq>>
+	{
+		private readonly ApplicationDbContext _context;
+		public Handler(ApplicationDbContext context) => _context = context;
 
-            return CreatedAtAction(
-                nameof(FaqsController.GetFaq),
-                nameof(FaqsController)[..^10],
-                new { faq.Id },
-                faq
-            );
-        }
-    }
+		public async Task<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var (question, answer) = request;
+
+			var faq = new Faq
+			{
+				Question = question,
+				Answer = answer,
+				AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All)
+			};
+			_context.Faqs.Add(faq);
+
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return CreatedAtAction(
+				nameof(FaqsController.GetFaq),
+				nameof(FaqsController)[..^10],
+				new { faq.Id },
+				faq
+			);
+		}
+	}
 }

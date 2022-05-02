@@ -4,75 +4,75 @@
 $title-height: 2rem
 
 .club-card
-    contain: content
-    width: 100%
-    display: grid
-    grid-template-rows: auto 1fr auto
-    grid-auto-columns: 10rem 1fr
-    grid-column-gap: .25rem
-    margin: 0
-    background-color: v.$ele-1
-    +ab.active-border
+	contain: content
+	width: 100%
+	display: grid
+	grid-template-rows: auto 1fr auto
+	grid-auto-columns: 10rem 1fr
+	grid-column-gap: .25rem
+	margin: 0
+	background-color: v.$ele-1
+	+ab.active-border
 
-    &:hover
-        > .info
-            border-color: v.$foreground-50
+	&:hover
+		> .info
+			border-color: v.$foreground-50
 
-    .title
-        color: v.$accent
+	.title
+		color: v.$accent
 
-        &:hover
-            color: v.$accent-75
-            text-decoration: underline
+		&:hover
+			color: v.$accent-75
+			text-decoration: underline
 
-    > .img
-        grid-row: 1 / 3
-        grid-column: 1
-        object-fit: contain
-        align-self: baseline
-        height: auto
+	> .img
+		grid-row: 1 / 3
+		grid-column: 1
+		object-fit: contain
+		align-self: baseline
+		height: auto
 
-    > .date
-        grid-row: 1
-        grid-column: 2
-        margin: 0 4px
+	> .date
+		grid-row: 1
+		grid-column: 2
+		margin: 0 4px
 
-        font-size: $title-height
-        line-height: $title-height
+		font-size: $title-height
+		line-height: $title-height
 
-        color: v.$foreground
+		color: v.$foreground
 
-        overflow: hidden
-        text-overflow: ellipsis
+		overflow: hidden
+		text-overflow: ellipsis
 
-        &:hover
-            color: v.$foreground-75
-            text-decoration: underline
-            text-decoration-skip-ink: auto
+		&:hover
+			color: v.$foreground-75
+			text-decoration: underline
+			text-decoration-skip-ink: auto
 
-        > h3
-            overflow: hidden
-            text-overflow: ellipsis
-            display: inline
+		> h3
+			overflow: hidden
+			text-overflow: ellipsis
+			display: inline
 
-    > .hook
-        grid-row: 2
-        grid-column: 2
-        margin: 2px 4px
+	> .hook
+		grid-row: 2
+		grid-column: 2
+		margin: 2px 4px
 
-        overflow: hidden
-        text-overflow: ellipsis
+		overflow: hidden
+		text-overflow: ellipsis
 
-    > .info
-        display: flex
-        grid-row: 3
-        grid-column: 1 / 3
-        border-top: 1px solid v.$foreground-25
+	> .info
+		display: flex
+		grid-row: 3
+		grid-column: 1 / 3
+		border-top: 1px solid v.$foreground-25
 
-        > *
-            padding: 0 .25rem
-            color: v.$foreground-75
-            cursor: default
+		> *
+			padding: 0 .25rem
+			color: v.$foreground-75
+			cursor: default
 
-            &:hover
-                color: v.$foreground
+			&:hover
+				color: v.$foreground

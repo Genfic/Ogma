@@ -15,26 +15,27 @@ namespace Ogma3.Api.V1.Ratings.Queries;
 
 public static class GetAllRatings
 {
-    public sealed record Query : IRequest<ActionResult<List<RatingApiDto>>>;
+	public sealed record Query : IRequest<ActionResult<List<RatingApiDto>>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<RatingApiDto>>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        public Handler(ApplicationDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<RatingApiDto>>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly IMapper _mapper;
 
-        public async Task<ActionResult<List<RatingApiDto>>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            var ratings = await _context.Ratings
-                .OrderBy(r => r.Order)
-                .ProjectTo<RatingApiDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+		public Handler(ApplicationDbContext context, IMapper mapper)
+		{
+			_context = context;
+			_mapper = mapper;
+		}
 
-            return Ok(ratings);
-        }
-    }
+		public async Task<ActionResult<List<RatingApiDto>>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			var ratings = await _context.Ratings
+				.OrderBy(r => r.Order)
+				.ProjectTo<RatingApiDto>(_mapper.ConfigurationProvider)
+				.ToListAsync(cancellationToken);
+
+			return Ok(ratings);
+		}
+	}
 }

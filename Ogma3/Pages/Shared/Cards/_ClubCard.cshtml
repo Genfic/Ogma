@@ -1,20 +1,20 @@
 @model ClubCard
 
 <div class="club-card">
-    <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" width="160" height="160" />
+	<cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" width="160" height="160"/>
 
-    <a asp-page="/Club/Index" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
-        <h3>@Model.Name</h3>
-    </a>
+	<a asp-page="/Club/Index" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
+		<h3>@Model.Name</h3>
+	</a>
 
-    <markdown class="hook" preset="Basic">
-        @Model.Hook
-    </markdown>
+	<markdown class="hook" preset="Basic">
+		@Model.Hook
+	</markdown>
 
-    <div class="info">
-        <div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
-        <div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
-        <div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ?"story" : "stories")</div>
-    </div>
+	<div class="info">
+		<div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
+		<div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
+		<div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ? "story" : "stories")</div>
+	</div>
 
 </div>

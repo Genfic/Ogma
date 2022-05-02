@@ -8,19 +8,19 @@ namespace Ogma3.Pages;
 
 public class Faq : PageModel
 {
-    private readonly ApplicationDbContext _context;
+	private readonly ApplicationDbContext _context;
 
-    public Faq(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+	public Faq(ApplicationDbContext context)
+	{
+		_context = context;
+	}
 
-    public List<Data.Faqs.Faq> Faqs { get; private set; }
-        
-    public async Task OnGetAsync()
-    {
-        Faqs = await _context.Faqs
-            .AsNoTracking()
-            .ToListAsync();
-    }
+	public List<Data.Faqs.Faq> Faqs { get; private set; }
+
+	public async Task OnGetAsync()
+	{
+		Faqs = await _context.Faqs
+			.AsNoTracking()
+			.ToListAsync();
+	}
 }

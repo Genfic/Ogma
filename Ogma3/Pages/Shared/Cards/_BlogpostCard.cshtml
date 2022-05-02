@@ -1,53 +1,53 @@
-@using System.Globalization
 @using Utils.Extensions
+@using System.Globalization
 @model BlogpostCard
 
 <div class="blogpost-card">
-    <a class="title" asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
-        <h3>@Model.Title</h3>
-    </a>
-    
-    <markdown class="excerpt">
-        @{
-            var exc = Model.Body.Split('\n')[0];
-            var words = exc.Split(' ');
-        }
-        @(
-            words.Length > 80 
-                ? words.Take(80).ToArray().JoinToString(' ')+"..." 
-                : exc
-        )
-    </markdown>
-    
-    @if (Model.Hashtags.Length > 0)
-    {
-        <div class="tags">
-            @foreach (var t in Model.Hashtags)
-            {
-                <span class="tag">@t</span>
-            }
-        </div>
-    }
-    
-    <div class="info">
-        <span class="word-count">@Model.WordCount.ToString("N0") words</span>
-        
-        @if (Model.PublicationDate is not null)
-        {
-            var date = (DateTime)Model.PublicationDate;
-            <time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                published @date.FormatDateWithDaySuffix()
-            </time>
-        }
-        
-        <span class="author">by @Model.AuthorUserName</span>
-        
-        @if (Model.PublicationDate is null)
-        {
-            <span class="not-published">
-                <icon class="icon" icon="visibility_off"></icon>
-                Not published
-            </span>
-        }
-    </div>
+	<a class="title" asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+		<h3>@Model.Title</h3>
+	</a>
+
+	<markdown class="excerpt">
+		@{
+			var exc = Model.Body.Split('\n')[0];
+			var words = exc.Split(' ');
+		}
+		@(
+				words.Length > 80
+					? words.Take(80).ToArray().JoinToString(' ') + "..."
+					: exc
+			)
+	</markdown>
+
+	@if (Model.Hashtags.Length > 0)
+	{
+		<div class="tags">
+			@foreach (var t in Model.Hashtags)
+			{
+				<span class="tag">@t</span>
+			}
+		</div>
+	}
+
+	<div class="info">
+		<span class="word-count">@Model.WordCount.ToString("N0") words</span>
+
+		@if (Model.PublicationDate is not null)
+		{
+			var date = (DateTime)Model.PublicationDate;
+			<time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+				published @date.FormatDateWithDaySuffix()
+			</time>
+		}
+
+		<span class="author">by @Model.AuthorUserName</span>
+
+		@if (Model.PublicationDate is null)
+		{
+			<span class="not-published">
+				<icon class="icon" icon="visibility_off"></icon>
+				Not published
+			</span>
+		}
+	</div>
 </div>

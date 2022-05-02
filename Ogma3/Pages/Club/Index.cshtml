@@ -1,30 +1,30 @@
 @page "{id:long}/{slug}"
-@model Ogma3.Pages.Club.IndexModel
+@model IndexModel
 
 @{
-    ViewData["Title"] = Model.ClubBar.Name;
-    ViewData["Tab"] = "Home";
+	ViewData["Title"] = Model.ClubBar.Name;
+	ViewData["Tab"] = "Home";
 }
 
 <partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
 <div class="thread-list">
-    @if (Model.ThreadCards.Any())
-    {
-        foreach (var t in Model.ThreadCards)
-        {
-            <partial name="Shared/Cards/_ThreadCard" model="t"/>
-        }
-    }
-    else
-    {
-        <div class="thread-card">No threads yet!</div>
-    }
+	@if (Model.ThreadCards.Any())
+	{
+		foreach (var t in Model.ThreadCards)
+		{
+			<partial name="Shared/Cards/_ThreadCard" model="t"/>
+		}
+	}
+	else
+	{
+		<div class="thread-card">No threads yet!</div>
+	}
 
 </div>
 
 <hr>
 
 <markdown class="desc" preset="All">
-    @Model.ClubBar.Description
+	@Model.ClubBar.Description
 </markdown>

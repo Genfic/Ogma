@@ -4,125 +4,125 @@
 
 .md {
 
-    // Paragraphs
-    p {
-        padding-bottom: .5rem;
+	// Paragraphs
+	p {
+		padding-bottom: .5rem;
 
-        &:last-child {
-            padding-bottom: 0;
-        }
-    }
+		&:last-child {
+			padding-bottom: 0;
+		}
+	}
 
-    // Emphasis
-    strong {
-        font-weight: 750;
-    }
+	// Emphasis
+	strong {
+		font-weight: 750;
+	}
 
-    em {
-        font-style: italic;
-    }
+	em {
+		font-style: italic;
+	}
 
-    strike {
-        text-decoration: line-through;
-    }
+	strike {
+		text-decoration: line-through;
+	}
 
-    ins {
-        text-decoration: underline;
-    }
+	ins {
+		text-decoration: underline;
+	}
 
-    // Headers
-    h1, h2, h3, h4, h5, h6 {
-        scroll-margin-top: v.$nav-height + (v.$nav-v-pad * 2) * 1.5;
-        margin-bottom: .25rem;
-        margin-top: .5rem;
-    }
+	// Headers
+	h1, h2, h3, h4, h5, h6 {
+		scroll-margin-top: v.$nav-height + (v.$nav-v-pad * 2) * 1.5;
+		margin-bottom: .25rem;
+		margin-top: .5rem;
+	}
 
-    @for $level from 1 to 7 {
-        h#{$level} {
-            font-size: #{1 + ((6 - $level) * .2)}rem;
-            margin-top: #{((math.div((7 - $level) - 1 , 6 - 1)) * (2 - 1)) + 1}rem; // Normalize to [1rem, 2rem] range
-        }
-    }
+	@for $level from 1 to 7 {
+		h#{$level} {
+			font-size: #{1 + ((6 - $level) * .2)}rem;
+			margin-top: #{((math.div((7 - $level) - 1 , 6 - 1)) * (2 - 1)) + 1}rem; // Normalize to [1rem, 2rem] range
+		}
+	}
 
-    // Code
-    code {
-        font-size: 87.5%;
-        color: #e83e8c;
-        word-break: break-word;
-    }
+	// Code
+	code {
+		font-size: 87.5%;
+		color: #e83e8c;
+		word-break: break-word;
+	}
 
-    pre {
-        position: relative;
-        width: max-content;
-        color: v.$foreground-75;
-        font-size: .95rem;
-        padding: .1rem .2rem;
-        border-radius: .2rem;
-        @include ab.active-border;
+	pre {
+		position: relative;
+		width: max-content;
+		color: v.$foreground-75;
+		font-size: .95rem;
+		padding: .1rem .2rem;
+		border-radius: .2rem;
+		@include ab.active-border;
 
-        > code {
-            font-size: inherit;
-            color: inherit;
-            word-break: normal;
-        }
-    }
+		> code {
+			font-size: inherit;
+			color: inherit;
+			word-break: normal;
+		}
+	}
 
-    // Quote
-    blockquote {
-        font-style: italic;
-        padding-left: .5rem;
-        margin: .5rem .5rem .5rem 1ch;
-        border-left: 2px solid v.$foreground-10;
+	// Quote
+	blockquote {
+		font-style: italic;
+		padding-left: .5rem;
+		margin: .5rem .5rem .5rem 1ch;
+		border-left: 2px solid v.$foreground-10;
 
-        &:hover {
-            border-left-color: v.$foreground-25;
-        }
-    }
+		&:hover {
+			border-left-color: v.$foreground-25;
+		}
+	}
 
-    // Table
-    table {
-        margin: .5rem 0;
-        border-collapse: collapse;
+	// Table
+	table {
+		margin: .5rem 0;
+		border-collapse: collapse;
 
-        tbody {
-            tr {
-                border-bottom: 1px solid v.$foreground-25;
+		tbody {
+			tr {
+				border-bottom: 1px solid v.$foreground-25;
 
-                &:first-child {
-                    border-top: 1px solid v.$foreground-25;
-                }
+				&:first-child {
+					border-top: 1px solid v.$foreground-25;
+				}
 
-                &:hover {
-                    background-color: v.$foreground-10;
-                }
-            }
-        }
+				&:hover {
+					background-color: v.$foreground-10;
+				}
+			}
+		}
 
-        td {
-            padding: .5rem;
-        }
-    }
+		td {
+			padding: .5rem;
+		}
+	}
 
-    // Spoilers
-    .spoiler {
-        color: transparent;
-        background-color: v.$foreground-50;
-        border-bottom: 1px dotted v.$foreground;
-        cursor: help;
-        transition: color 50ms ease-in-out, background-color 50ms ease-in-out;
+	// Spoilers
+	.spoiler {
+		color: transparent;
+		background-color: v.$foreground-50;
+		border-bottom: 1px dotted v.$foreground;
+		cursor: help;
+		transition: color 50ms ease-in-out, background-color 50ms ease-in-out;
 
-        &::selection {
-            color: transparent;
-            background-color: v.$foreground-50;
-        }
+		&::selection {
+			color: transparent;
+			background-color: v.$foreground-50;
+		}
 
-        &:hover {
-            color: v.$foreground;
-            background-color: transparent;
+		&:hover {
+			color: v.$foreground;
+			background-color: transparent;
 
-            &::selection {
-                color: v.$background;
-            }
-        }
-    }
+			&::selection {
+				color: v.$background;
+			}
+		}
+	}
 }

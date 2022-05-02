@@ -3,130 +3,132 @@
 @using Ogma3.Api.V1.Infractions
 @using Ogma3.Api.V1.Users
 @using Ogma3.Data.Infractions
-@model Ogma3.Areas.Admin.Pages.Users
+@model Users
 
 @{
-    ViewData["Title"] = "Users";
-    ViewData["ActivePage"] = ManageNavPages.Users;
+	ViewData["Title"] = "Users";
+	ViewData["ActivePage"] = ManageNavPages.Users;
 }
 
 @if (Model.OgmaUser is not null)
 {
-    var u = Model.OgmaUser;
+	var u = Model.OgmaUser;
 
-    <h3>User Info</h3>
-    
-    <a asp-page="/User/Index" asp-route-name="@u.Name.ToLower()">Visit profile</a>
+	<h3>User Info</h3>
 
-    <table class="o-table">
-        <tr>
-            <td>Id</td><td id="id">@u.Id</td>
-        </tr>
-        <tr>
-            <td>Name</td><td>@u.Name</td>
-        </tr>
-        <tr>
-            <td>Email</td><td>@u.Email</td>
-        </tr>
-        <tr>
-            <td>Title</td><td>@u.Title</td>
-        </tr>
-        <tr>
-            <td>Avatar</td>
-            <td>
-                <a href="@u.Avatar"
-                   target="_blank"
-                   v-on:mouseover="showImage($event)"
-                   v-on:mousemove="updateImage($event)"
-                   v-on:mouseleave="hideImage">
-                    @u.Avatar
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td class="nb">Registration date</td><td>@u.RegistrationDate</td>
-        </tr>
-        <tr>
-            <td class="nb">Last active</td><td>@u.LastActive</td>
-        </tr>
-        <tr>
-            <td class="nb">Stories count</td><td>@u.StoriesCount</td>
-        </tr>
-        <tr>
-            <td class="nb">Blogposts count</td><td>@u.BlogpostsCount</td>
-        </tr>
-        <tr>
-            <td>Roles</td>
-            <td>
-                <div class="select-group">
-                    @foreach (var r in Model.Roles)
-                    {
-                        <input id="@r.Name" type="checkbox" name="roles" value="@r.Id" checked="@u.RoleNames.Contains(r.Name)">
-                        <label for="@r.Name">@r.Name</label>
-                    }
-                </div>
-                <button v-on:click="saveRoles">Save</button>
-            </td>
-        </tr>
-    </table>
-    
-    <br>
-    <h3>Infractions</h3>
-    
-    <button class="btn btn-primary" v-on:click="manageInfractions">Create new</button>
-    
-    @foreach (var i in Model.OgmaUser.Infractions)
-    {
-        var isDone = i.ActiveUntil < DateTime.Now || i.RemovedAt is not null;
-    
-        <details class="infraction">
-            <summary class="@(isDone ? "passed" : null)">
-                <b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
-            </summary>
-            @if(i.RemovedAt is {} d)
-            {
-                <div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time> by @i.RemovedBy</div>
-            }
-            <div class="reason"><b>Reason:</b> @i.Reason</div>
-            @if (i.RemovedAt is null)
-            {
-                <br>
-                <button class="btn" v-on:click="removeInfraction(@i.Id)">Remove</button>
-            }
-        </details>
-    }
-    
-    <manage-infraction
-        ref="manage"
-        route="@Url.RouteUrl(nameof(InfractionsController))"
-        :types="@(JsonSerializer.Serialize(Enum.GetNames<InfractionType>()))"
-        :user-id="@Model.OgmaUser.Id">
-    </manage-infraction>
+	<a asp-page="/User/Index" asp-route-name="@u.Name.ToLower()">Visit profile</a>
+
+	<table class="o-table">
+		<tr>
+			<td>Id</td><td id="id">@u.Id</td>
+		</tr>
+		<tr>
+			<td>Name</td><td>@u.Name</td>
+		</tr>
+		<tr>
+			<td>Email</td><td>@u.Email</td>
+		</tr>
+		<tr>
+			<td>Title</td><td>@u.Title</td>
+		</tr>
+		<tr>
+			<td>Avatar</td>
+			<td>
+				<a href="@u.Avatar"
+				   target="_blank"
+				   v-on:mouseover="showImage($event)"
+				   v-on:mousemove="updateImage($event)"
+				   v-on:mouseleave="hideImage">
+					@u.Avatar
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td class="nb">Registration date</td><td>@u.RegistrationDate</td>
+		</tr>
+		<tr>
+			<td class="nb">Last active</td><td>@u.LastActive</td>
+		</tr>
+		<tr>
+			<td class="nb">Stories count</td><td>@u.StoriesCount</td>
+		</tr>
+		<tr>
+			<td class="nb">Blogposts count</td><td>@u.BlogpostsCount</td>
+		</tr>
+		<tr>
+			<td>Roles</td>
+			<td>
+				<div class="select-group">
+					@foreach (var r in Model.Roles)
+					{
+						<input id="@r.Name" type="checkbox" name="roles" value="@r.Id" checked="@u.RoleNames.Contains(r.Name)">
+						<label for="@r.Name">@r.Name</label>
+					}
+				</div>
+				<button v-on:click="saveRoles">Save</button>
+			</td>
+		</tr>
+	</table>
+
+	<br>
+	<h3>Infractions</h3>
+
+	<button class="btn btn-primary" v-on:click="manageInfractions">Create new</button>
+
+	@foreach (var i in Model.OgmaUser.Infractions)
+	{
+		var isDone = i.ActiveUntil < DateTime.Now || i.RemovedAt is not null;
+
+		<details class="infraction">
+			<summary class="@(isDone ? "passed" : null)">
+				<b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
+			</summary>
+			@if (i.RemovedAt is {} d)
+			{
+				<div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time> by @i.RemovedBy</div>
+			}
+			<div class="reason">
+				<b>Reason:</b> @i.Reason
+			</div>
+			@if (i.RemovedAt is null)
+			{
+				<br>
+				<button class="btn" v-on:click="removeInfraction(@i.Id)">Remove</button>
+			}
+		</details>
+	}
+
+	<manage-infraction
+		ref="manage"
+		route="@Url.RouteUrl(nameof(InfractionsController))"
+		:types="@(JsonSerializer.Serialize(Enum.GetNames<InfractionType>()))"
+		:user-id="@Model.OgmaUser.Id">
+	</manage-infraction>
 }
 else
 {
-    <form class="form" method="get">
-        <div class="form-row">
-            
-            <div class="o-form-group">
-                <label for="name">Go to user</label>
-                <input class="o-form-control active-border"
-                       v-on:input="getNames"
-                       v-model="input"
-                       list="names"
-                       type="text"
-                       name="name"
-                       id="name">
-                <datalist id="names">
-                    <option v-for="n in names" :value="n" :key="n" />
-                </datalist>
-            </div>
+	<form class="form" method="get">
+		<div class="form-row">
 
-            <div class="o-form-group keep-size">
-                <input class="o-form-control active-border" type="submit" value="Go">
-            </div>
-        </div>
-    </form>
+			<div class="o-form-group">
+				<label for="name">Go to user</label>
+				<input class="o-form-control active-border"
+				       v-on:input="getNames"
+				       v-model="input"
+				       list="names"
+				       type="text"
+				       name="name"
+				       id="name">
+				<datalist id="names">
+					<option v-for="n in names" :value="n" :key="n"/>
+				</datalist>
+			</div>
+
+			<div class="o-form-group keep-size">
+				<input class="o-form-control active-border" type="submit" value="Go">
+			</div>
+		</div>
+	</form>
 }
 
 @Html.AntiForgeryToken()
@@ -134,6 +136,6 @@ else
 <div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div>
 
 @section Scripts {
-    <script src="~/js/dist/admin/components/manage-infraction-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/admin/users.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/admin/components/manage-infraction-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/admin/users.min.js" asp-append-version="true"></script>
 }

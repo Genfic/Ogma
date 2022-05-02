@@ -1,14 +1,14 @@
 @page
-@model Ogma3.Areas.Admin.Pages.Settings
+@model Settings
 
 @{
-    ViewData["Title"] = "Settings";
-    ViewData["ActivePage"] = ManageNavPages.Settings;
+	ViewData["Title"] = "Settings";
+	ViewData["ActivePage"] = ManageNavPages.Settings;
 }
 
 <autoform for="@Model.Config"></autoform>
 
 @section Scripts
 {
-   <script src="~/js/dist/admin/settings.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/admin/settings.min.js" asp-append-version="true"></script>
 }

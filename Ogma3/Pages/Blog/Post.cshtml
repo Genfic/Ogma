@@ -5,125 +5,125 @@
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.Reports
-@model Ogma3.Pages.Blog.DetailsModel
+@model DetailsModel
 
 @{
-    var desc = Model.Blogpost!.Body.Length > 150 
-        ? Model.Blogpost.Body[..150]
-        : Model.Blogpost.Body;
+	var desc = Model.Blogpost!.Body.Length > 150
+		? Model.Blogpost.Body[..150]
+		: Model.Blogpost.Body;
 
-    ViewData["Title"] = Model.Blogpost.Title;
-    ViewData["Description"] = desc;
-    ViewData["Tab"] = "Blog";
+	ViewData["Title"] = Model.Blogpost.Title;
+	ViewData["Description"] = desc;
+	ViewData["Tab"] = "Blog";
 }
 
 @section OgMeta {
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="@Url.PageLink("/Blog/Post", values: new { Model.Blogpost.Id, Model.Blogpost.Slug })">
-    <meta property="og:description" content="@desc">
+	<meta property="og:type" content="article">
+	<meta property="og:url" content="@Url.PageLink("/Blog/Post", values: new { Model.Blogpost.Id, Model.Blogpost.Slug })">
+	<meta property="og:description" content="@desc">
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
 <article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
-    <h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>
+	<h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>
 
-    @if (Model.Blogpost.PublicationDate is not null)
-    {
-        var date = (DateTime)Model.Blogpost.PublicationDate;
-        <time class="date" itemprop="datePublished" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-            @date.FormatDateWithDaySuffix()
-        </time>
-    }
-    else
-    {
-        <span class="date not-published">
-            Not published
-        </span>
-    }
+	@if (Model.Blogpost.PublicationDate is not null)
+	{
+		var date = (DateTime)Model.Blogpost.PublicationDate;
+		<time class="date" itemprop="datePublished" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+			@date.FormatDateWithDaySuffix()
+		</time>
+	}
+	else
+	{
+		<span class="date not-published">
+			Not published
+		</span>
+	}
 
-    <div class="actions">
-        @if (User.IsUserSameAsLoggedIn(Model.Blogpost.AuthorId))
-        {
-            <a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Blogpost.Id">
-                <icon class="icon" icon="edit"></icon>
-                <span class="name">Edit</span>
-            </a>
-        }
-        @if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
-        {
-            <a title="Manage" class="action-btn red" target="_blank"
-               asp-area="Admin" asp-page="/ContentBlock" 
-               asp-route-type="blogpost" asp-route-id="@Model.Blogpost.Id">
-                <icon class="icon" icon="shield"></icon>
-            </a>
-        }
-        @if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <button title="Report" class="action-btn red" v-on:click="report">
-                <icon class="icon" icon="flag"></icon>
-            </button>
-        }
-    </div>
-    
-    @if (Model.Blogpost.ContentBlock is not null)
-    {
-        <partial name="Shared/_ContentBlockCard" model="Model.Blogpost.ContentBlock"/>
-    }
+	<div class="actions">
+		@if (User.IsUserSameAsLoggedIn(Model.Blogpost.AuthorId))
+		{
+			<a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Blogpost.Id">
+				<icon class="icon" icon="edit"></icon>
+				<span class="name">Edit</span>
+			</a>
+		}
+		@if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
+		{
+			<a title="Manage" class="action-btn red" target="_blank"
+			   asp-area="Admin" asp-page="/ContentBlock"
+			   asp-route-type="blogpost" asp-route-id="@Model.Blogpost.Id">
+				<icon class="icon" icon="shield"></icon>
+			</a>
+		}
+		@if (User.Identity?.IsAuthenticated ?? false)
+		{
+			<button title="Report" class="action-btn red" v-on:click="report">
+				<icon class="icon" icon="flag"></icon>
+			</button>
+		}
+	</div>
 
-    @if (Model.IsUnavailable)
-        {
-            <div class="unavailable active-border">
-                <strong>Attached content is unavailable.</strong>
-                <p>This story or chapter has been deleted or unpublished.</p>
-            </div>
-        }
-        else
-        {
-            if (Model.Blogpost.AttachedStory is not null)
-            {
-                <strong>Attached story</strong>
-                <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Blogpost.AttachedStory"/>
-            }
-            if (Model.Blogpost.AttachedChapter is not null)
-            {
-                <strong>Attached chapter</strong>
-                <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Blogpost.AttachedChapter"/>
-            }
-        }
-    
-    <markdown class="body" preset="Blogpost" itemprop="articleBody">
-        @Model.Blogpost.Body
-    </markdown>
+	@if (Model.Blogpost.ContentBlock is not null)
+	{
+		<partial name="Shared/_ContentBlockCard" model="Model.Blogpost.ContentBlock"/>
+	}
 
-    <div class="tags" itemprop="keywords">
-        @foreach (var t in Model.Blogpost.Hashtags)
-        {
-            <a asp-page="/Blog/Index" asp-route-q="#@t" class="tag active-border">
-                <span class="name">@t</span>
-            </a>
-        }
-    </div>
+	@if (Model.IsUnavailable)
+	{
+		<div class="unavailable active-border">
+			<strong>Attached content is unavailable.</strong>
+			<p>This story or chapter has been deleted or unpublished.</p>
+		</div>
+	}
+	else
+	{
+		if (Model.Blogpost.AttachedStory is not null)
+		{
+			<strong>Attached story</strong>
+			<partial name="Shared/Minimals/_StoryMinimal" model="@Model.Blogpost.AttachedStory"/>
+		}
+		if (Model.Blogpost.AttachedChapter is not null)
+		{
+			<strong>Attached chapter</strong>
+			<partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Blogpost.AttachedChapter"/>
+		}
+	}
 
-    <div class="read-progress">
-        <div class="bar" :style="{width: `${progress * 100}%`}"></div>
-    </div>
+	<markdown class="body" preset="Blogpost" itemprop="articleBody">
+		@Model.Blogpost.Body
+	</markdown>
 
-    <report-modal
-        ref="reportModal"
-        :item-id="@Model.Blogpost.Id"
-        item-type="@EReportableContentTypes.Blogpost"
-        reports-route="@Url.RouteUrl(nameof(ReportsController))">
-    </report-modal>
+	<div class="tags" itemprop="keywords">
+		@foreach (var t in Model.Blogpost.Hashtags)
+		{
+			<a asp-page="/Blog/Index" asp-route-q="#@t" class="tag active-border">
+				<span class="name">@t</span>
+			</a>
+		}
+	</div>
 
-    @Html.AntiForgeryToken()
+	<div class="read-progress">
+		<div class="bar" :style="{width: `${progress * 100}%`}"></div>
+	</div>
+
+	<report-modal
+		ref="reportModal"
+		:item-id="@Model.Blogpost.Id"
+		item-type="@EReportableContentTypes.Blogpost"
+		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+	</report-modal>
+
+	@Html.AntiForgeryToken()
 </article>
 
 <partial name="_Comments" model="@Model.Blogpost.CommentsThread"/>
 
 @section Scripts
 {
-    <script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/blogpost.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/blogpost.min.js" asp-append-version="true"></script>
 }

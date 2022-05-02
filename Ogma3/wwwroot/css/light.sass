@@ -12,19 +12,19 @@ $blue: #4283ff
 $yellow: #ffff3e
 
 \:root
-    +a.alphas('foreground', $foreground, 1, .75, .50, .25, .10)
-    +a.alphas('background', $background, 1, .75, .50, .25)
-    +a.alphas('accent', $accent, 1, .75, .50, .25, .10, .05)
+	+a.alphas('foreground', $foreground, 1, .75, .50, .25, .10)
+	+a.alphas('background', $background, 1, .75, .50, .25)
+	+a.alphas('accent', $accent, 1, .75, .50, .25, .10, .05)
 
-    +a.alphas('red', $red, 1, .75, .50, .25, .10)
-    +a.alphas('green', $green, 1, .75, .50, .25, .10)
-    +a.alphas('blue', $blue, 1, .75, .50, .25, .10)
-    +a.alphas('yellow', $yellow, 1, .75, .50, .25, .10)
+	+a.alphas('red', $red, 1, .75, .50, .25, .10)
+	+a.alphas('green', $green, 1, .75, .50, .25, .10)
+	+a.alphas('blue', $blue, 1, .75, .50, .25, .10)
+	+a.alphas('yellow', $yellow, 1, .75, .50, .25, .10)
 
-    +a.blends('red', $background, $red, 100, 75, 50, 25, 10)
-    +a.blends('green', $background, $green, 100, 75, 50, 25, 10)
-    +a.blends('blue', $background, $blue, 100, 75, 50, 25, 10)
-    +a.blends('yellow', $background, $yellow, 100, 75, 50, 25, 10)
+	+a.blends('red', $background, $red, 100, 75, 50, 25, 10)
+	+a.blends('green', $background, $green, 100, 75, 50, 25, 10)
+	+a.blends('blue', $background, $blue, 100, 75, 50, 25, 10)
+	+a.blends('yellow', $background, $yellow, 100, 75, 50, 25, 10)
 
-    --gold: #{$gold}
-    --ele-1: #{lighten($background, 2)}
+	--gold: #{$gold}
+	--ele-1: #{lighten($background, 2)}

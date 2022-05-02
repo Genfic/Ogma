@@ -12,40 +12,40 @@ namespace Ogma3.Areas.Admin.Api.V1.Cache;
 [Authorize(Roles = RoleNames.Admin)]
 public class CacheController : ControllerBase
 {
-    private readonly IMemoryCache _cache;
-    private readonly ILogger<CacheController> _logger;
-    public CacheController(IMemoryCache cache, ILogger<CacheController> logger)
-    {
-        _cache = cache;
-        _logger = logger;
-    }
+	private readonly IMemoryCache _cache;
+	private readonly ILogger<CacheController> _logger;
 
-    [HttpGet]
-    public IActionResult GetCache()
-    {
-        if (_cache is MemoryCache mc)
-        {
-            return Ok(mc.Count);
-        }
+	public CacheController(IMemoryCache cache, ILogger<CacheController> logger)
+	{
+		_cache = cache;
+		_logger = logger;
+	}
 
-        return new ServerErrorObjectResult("Could not count cache elements!");
-    }
+	[HttpGet]
+	public IActionResult GetCache()
+	{
+		if (_cache is MemoryCache mc)
+		{
+			return Ok(mc.Count);
+		}
 
-    [HttpDelete]
-    [IgnoreAntiforgeryToken]
-    public IActionResult DeleteCache()
-    {
-        _logger.LogWarning("Purging all caches...");
-        
-        if (_cache is MemoryCache mc)
-        {
-            mc.Compact(1.0);
-            _logger.LogWarning("Cache purged!");
-            return Ok("Cache purged!");
-        }
+		return new ServerErrorObjectResult("Could not count cache elements!");
+	}
 
-        _logger.LogWarning("Could not purge cache!");
-        return new ServerErrorObjectResult("Could not purge cache!");
+	[HttpDelete]
+	[IgnoreAntiforgeryToken]
+	public IActionResult DeleteCache()
+	{
+		_logger.LogWarning("Purging all caches...");
 
-    }
+		if (_cache is MemoryCache mc)
+		{
+			mc.Compact(1.0);
+			_logger.LogWarning("Cache purged!");
+			return Ok("Cache purged!");
+		}
+
+		_logger.LogWarning("Could not purge cache!");
+		return new ServerErrorObjectResult("Could not purge cache!");
+	}
 }

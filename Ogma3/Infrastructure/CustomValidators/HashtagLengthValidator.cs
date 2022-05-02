@@ -6,29 +6,29 @@ namespace Ogma3.Infrastructure.CustomValidators;
 
 public class HashtagLengthValidator<T> : IPropertyValidator<T, string>
 {
-    private readonly uint _max;
+	private readonly uint _max;
 
-    public HashtagLengthValidator(uint max)
-    {
-        _max = max;
-    }
+	public HashtagLengthValidator(uint max)
+	{
+		_max = max;
+	}
 
-    public bool IsValid(ValidationContext<T> context, string value)
-    {
-        if (!value.Split(',').Any(t => t.Length > _max)) return true;
-            
-        context.MessageFormatter.AppendArgument("MaxLength", _max);
-        return false;
-    }
+	public bool IsValid(ValidationContext<T> context, string value)
+	{
+		if (!value.Split(',').Any(t => t.Length > _max)) return true;
 
-    public string Name => "HashtagLengthValidator";
+		context.MessageFormatter.AppendArgument("MaxLength", _max);
+		return false;
+	}
 
-    public string GetDefaultMessageTemplate(string errorCode)
-        => "No tag can be longer than {MaxLength} characters";
+	public string Name => "HashtagLengthValidator";
+
+	public string GetDefaultMessageTemplate(string errorCode)
+		=> "No tag can be longer than {MaxLength} characters";
 }
 
 public static class HashtagLengthValidator
 {
-    public static IRuleBuilderOptions<T, string> HashtagsShorterThan<T>(this IRuleBuilder<T, string> ruleBuilder, uint max)
-        => ruleBuilder.SetValidator(new HashtagLengthValidator<T>(max));
+	public static IRuleBuilderOptions<T, string> HashtagsShorterThan<T>(this IRuleBuilder<T, string> ruleBuilder, uint max)
+		=> ruleBuilder.SetValidator(new HashtagLengthValidator<T>(max));
 }

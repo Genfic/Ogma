@@ -2,18 +2,18 @@
 @model Ogma3.Areas.Admin.Pages.Index
 
 @{
-    ViewData["Title"] = "Dashboard";
-    ViewData["ActivePage"] = ManageNavPages.Index;
+	ViewData["Title"] = "Dashboard";
+	ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
 <div class="counters">
-    @foreach (var (k, v) in Model.Counts)
-    {
-        <div class="counter">
-            <span class="name">@k</span>
-            <span class="value">@v</span>
-        </div>
-    }
+	@foreach (var (k, v) in Model.Counts)
+	{
+		<div class="counter">
+			<span class="name">@k</span>
+			<span class="value">@v</span>
+		</div>
+	}
 </div>
 
 <br>
@@ -26,6 +26,6 @@
 
 @section Scripts
 {
-    <script type="module" src="~/js/dist/admin/lit-components/table-info.min.js" asp-append-version="true"></script>
-    <script type="module" src="~/js/dist/admin/lit-components/cache-info.min.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/dist/admin/lit-components/table-info.min.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/dist/admin/lit-components/cache-info.min.js" asp-append-version="true"></script>
 }

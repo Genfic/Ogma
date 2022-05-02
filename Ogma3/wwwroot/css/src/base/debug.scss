@@ -1,13 +1,13 @@
 pre.debug {
-    padding: .5rem;
-    font-size: .9rem;
-    letter-spacing: .05rem;
-    box-shadow: 0 0 0 4px black;
-    outline: 4px dashed yellow;
+	padding: .5rem;
+	font-size: .9rem;
+	letter-spacing: .05rem;
+	box-shadow: 0 0 0 4px black;
+	outline: 4px dashed yellow;
 }
 
 // Highlight links with empty href
 a[href=""] {
-    box-shadow: 0 0 0 4px black;
-    outline: 4px dashed yellow;
+	box-shadow: 0 0 0 4px black;
+	outline: 4px dashed yellow;
 }

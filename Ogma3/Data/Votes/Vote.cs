@@ -7,25 +7,25 @@ namespace Ogma3.Data.Votes;
 
 public class Vote : BaseModel
 {
-    public OgmaUser User { get; init; }
-    public long UserId { get; init; }
-    public long StoryId { get; init; }
-        
-    public class VoteConfiguration : BaseConfiguration<Vote>
-    {
-        public override void Configure(EntityTypeBuilder<Vote> builder)
-        {
-            base.Configure(builder);
-            
-            builder
-                .HasOne(v => v.User)
-                .WithMany()
-                .HasForeignKey(v => v.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            builder
-                .HasIndex(v => new { v.UserId, v.StoryId })
-                .IsUnique();
-        }
-    }
+	public OgmaUser User { get; init; }
+	public long UserId { get; init; }
+	public long StoryId { get; init; }
+
+	public class VoteConfiguration : BaseConfiguration<Vote>
+	{
+		public override void Configure(EntityTypeBuilder<Vote> builder)
+		{
+			base.Configure(builder);
+
+			builder
+				.HasOne(v => v.User)
+				.WithMany()
+				.HasForeignKey(v => v.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			builder
+				.HasIndex(v => new { v.UserId, v.StoryId })
+				.IsUnique();
+		}
+	}
 }

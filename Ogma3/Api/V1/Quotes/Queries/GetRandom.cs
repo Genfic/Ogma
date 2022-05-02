@@ -13,23 +13,23 @@ namespace Ogma3.Api.V1.Quotes.Queries;
 
 public static class GetRandom
 {
-    public sealed record Query : IRequest<ActionResult<QuoteDto>>;
+	public sealed record Query : IRequest<ActionResult<QuoteDto>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<QuoteDto>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<QuoteDto>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly IMapper _mapper;
 
-        public Handler(ApplicationDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+		public Handler(ApplicationDbContext context, IMapper mapper)
+		{
+			_context = context;
+			_mapper = mapper;
+		}
 
-        public async Task<ActionResult<QuoteDto>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            var quote = await _context.Quotes
-                .FromSqlRaw(@"
+		public async Task<ActionResult<QuoteDto>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			var quote = await _context.Quotes
+				.FromSqlRaw(@"
                         SELECT *
                         FROM ""Quotes""
                         OFFSET floor(random() * (
@@ -38,13 +38,13 @@ public static class GetRandom
                         ))
                         LIMIT 1
                     ")
-                .AsNoTracking()
-                .ProjectTo<QuoteDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(cancellationToken);
+				.AsNoTracking()
+				.ProjectTo<QuoteDto>(_mapper.ConfigurationProvider)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            return quote is null
-                ? NotFound()
-                : Ok(quote);
-        }
-    }
+			return quote is null
+				? NotFound()
+				: Ok(quote);
+		}
+	}
 }

@@ -1,38 +1,38 @@
 @use '../vars' as v
 
 .counter
-    text-align: end
-    position: relative
-    display: flex
+	text-align: end
+	position: relative
+	display: flex
 
-    &:hover
-        > .o-progress-bar
-            background-color: v.$accent-25
+	&:hover
+		> .o-progress-bar
+			background-color: v.$accent-25
 
-        &.invalid
-            > .o-progress-bar
-                background-color: v.$red-25
+		&.invalid
+			> .o-progress-bar
+				background-color: v.$red-25
 
-    > .o-progress-bar
-        position: absolute
-        background-color: v.$accent-10
-        top: 0
-        bottom: 0
-        height: 100%
-        transition: width .05s ease, background-color .1s ease-in-out
+	> .o-progress-bar
+		position: absolute
+		background-color: v.$accent-10
+		top: 0
+		bottom: 0
+		height: 100%
+		transition: width .05s ease, background-color .1s ease-in-out
 
-    & span
-        margin: .05rem .2rem
+	& span
+		margin: .05rem .2rem
 
-        &:first-child
-            margin-right: 0
+		&:first-child
+			margin-right: 0
 
-        &:last-child
-            margin-left: 0
-            flex: 1
+		&:last-child
+			margin-left: 0
+			flex: 1
 
-    &.invalid
-        color: red
+	&.invalid
+		color: red
 
-        > .o-progress-bar
-            background-color: v.$red-10
+		> .o-progress-bar
+			background-color: v.$red-10

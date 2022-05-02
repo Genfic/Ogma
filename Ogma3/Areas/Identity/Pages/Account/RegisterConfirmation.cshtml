@@ -5,18 +5,17 @@
 @using Microsoft.Extensions.Options
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+	ViewData["Title"] = "Register confirmation";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    Please check your email to confirm your account.
+	Please check your email to confirm your account.
 </p>
 
 <form method="post">
-    <input type="hidden" value="@Model.Email">
-    @(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
-    <button class="btn btn-primary">Resend email</button>
+	<input type="hidden" value="@Model.Email">
+	@(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
+	<button class="btn btn-primary">Resend email</button>
 </form>
-

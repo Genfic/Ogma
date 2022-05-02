@@ -13,76 +13,75 @@ namespace Ogma3.Pages.Club.Forums;
 
 public class CreateModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ClubRepository _clubRepo;
+	private readonly ApplicationDbContext _context;
+	private readonly ClubRepository _clubRepo;
 
-    public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
-    {
-        _context = context;
-        _clubRepo = clubRepo;
-    }
+	public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
+	{
+		_context = context;
+		_clubRepo = clubRepo;
+	}
 
-    [BindProperty]
-    public PostModel ClubThread { get; set; }
+	[BindProperty] public PostModel ClubThread { get; set; }
 
-    public async Task<IActionResult> OnGet(long id)
-    {
-        var uid = User.GetNumericId();
+	public async Task<IActionResult> OnGet(long id)
+	{
+		var uid = User.GetNumericId();
 
-        if (!await _clubRepo.IsMember(uid, id)) return Unauthorized();
-        
-        ClubThread = new PostModel
-        {
-            ClubId = id
-        };
-        return Page();
-    }
+		if (!await _clubRepo.IsMember(uid, id)) return Unauthorized();
 
-    public class PostModel
-    {
-        public string Title { get; init; }
-        public string Body { get; init; } 
-        public long ClubId { get; init; }
-    }
-        
-    public class PostModelValidator : AbstractValidator<PostModel>
-    {
-        public PostModelValidator()
-        {
-            RuleFor(p => p.Title)
-                .NotEmpty()
-                .Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
-            RuleFor(p => p.Body)
-                .NotEmpty()
-                .Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
-            RuleFor(p => p.ClubId)
-                .NotEmpty();
-        }
-    }
+		ClubThread = new PostModel
+		{
+			ClubId = id
+		};
+		return Page();
+	}
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid) return Page();
-            
-        // Get logged in user
-        var uid = User.GetNumericId();
-        if (uid is null) return Unauthorized();
+	public class PostModel
+	{
+		public string Title { get; init; }
+		public string Body { get; init; }
+		public long ClubId { get; init; }
+	}
 
-        if (!await _clubRepo.IsMember(uid, ClubThread.ClubId)) return Unauthorized();
-            
-        var clubThread = new ClubThread
-        {
-            AuthorId = (long)uid,
-            Title = ClubThread.Title,
-            Body = ClubThread.Body,
-            ClubId = ClubThread.ClubId,
-            CreationDate = DateTime.Now,
-            CommentsThread = new CommentsThread()
-        };
+	public class PostModelValidator : AbstractValidator<PostModel>
+	{
+		public PostModelValidator()
+		{
+			RuleFor(p => p.Title)
+				.NotEmpty()
+				.Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
+			RuleFor(p => p.Body)
+				.NotEmpty()
+				.Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
+			RuleFor(p => p.ClubId)
+				.NotEmpty();
+		}
+	}
 
-        _context.ClubThreads.Add(clubThread);
-        await _context.SaveChangesAsync();
+	public async Task<IActionResult> OnPostAsync()
+	{
+		if (!ModelState.IsValid) return Page();
 
-        return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
-    }
+		// Get logged in user
+		var uid = User.GetNumericId();
+		if (uid is null) return Unauthorized();
+
+		if (!await _clubRepo.IsMember(uid, ClubThread.ClubId)) return Unauthorized();
+
+		var clubThread = new ClubThread
+		{
+			AuthorId = (long)uid,
+			Title = ClubThread.Title,
+			Body = ClubThread.Body,
+			ClubId = ClubThread.ClubId,
+			CreationDate = DateTime.Now,
+			CommentsThread = new CommentsThread()
+		};
+
+		_context.ClubThreads.Add(clubThread);
+		await _context.SaveChangesAsync();
+
+		return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
+	}
 }

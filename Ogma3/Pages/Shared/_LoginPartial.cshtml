@@ -5,50 +5,50 @@
 @inject SignInManager<OgmaUser> SignInManager
 
 <ul class="navbar-nav right">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
-                <cdn-img src="@User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar)"
-                         width="30" height="30" 
-                         eager="true"
-                         class="avatar"
-                         alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar" />
-                <span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
-            </a>
-        </li>
-        
-        <li class="nav-item">
-            <a data-notifications="@Url.RouteUrl(nameof(NotificationsController))"
-               class="nav-link light notifications-btn"
-               asp-page="/Notifications"
-               title="Notifications">
-                <icon icon="notifications"></icon>
-            </a>
-        </li>
-        
-        <li class="nav-item">
-            <a class="nav-link light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Account">
-                <icon icon="person"></icon>
-            </a>
-        </li>
-        
-        <li class="nav-item">
-            <a class="nav-link light" asp-area="Identity" asp-page="/Account/Logout" title="Log out">
-                <icon icon="exit_to_app"></icon>
-            </a>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item register">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        
-        <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<li class="nav-item">
+			<a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
+				<cdn-img src="@User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar)"
+				         width="30" height="30"
+				         eager="true"
+				         class="avatar"
+				         alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar"/>
+				<span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a data-notifications="@Url.RouteUrl(nameof(NotificationsController))"
+			   class="nav-link light notifications-btn"
+			   asp-page="/Notifications"
+			   title="Notifications">
+				<icon icon="notifications"></icon>
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Account">
+				<icon icon="person"></icon>
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link light" asp-area="Identity" asp-page="/Account/Logout" title="Log out">
+				<icon icon="exit_to_app"></icon>
+			</a>
+		</li>
+	}
+	else
+	{
+		<li class="nav-item register">
+			<a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+		</li>
+	}
 
 </ul>
 

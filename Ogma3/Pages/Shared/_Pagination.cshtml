@@ -2,26 +2,26 @@
 
 @if (Model.ItemCount > Model.PerPage)
 {
-    <div class="pagination">
-        <a class="prev button" href="?page=@(Math.Max(1, Model.CurrentPage - 1))">Previous</a>
-        @if (Model.CurrentPage > 5)
-        {
-            <div class="ph button">...</div>
-        }
-        @for (var i = 1; i <= (int)Math.Ceiling((double)Model.ItemCount / Model.PerPage); i++)
-        {
-            if (i >= Model.CurrentPage - 4 && i <= Math.Max(Model.CurrentPage, 5))
-            {
-                <a href="?page=@i"
-                   class="page button @(i == Model.CurrentPage ? "active" : "")">
-                    @i
-                </a>
-            }
-        }
-        @if (Model.ItemCount / Model.PerPage > 5 && Model.CurrentPage != Model.ItemCount / Model.PerPage)
-        {
-            <div class="ph button">...</div>
-        }
-        <a class="next button" href="?page=@(Math.Min(Model.CurrentPage + 1, (int)Math.Ceiling((double)Model.ItemCount / Model.PerPage)))">Next</a>
-    </div>
+	<div class="pagination">
+		<a class="prev button" href="?page=@(Math.Max(1, Model.CurrentPage - 1))">Previous</a>
+		@if (Model.CurrentPage > 5)
+		{
+			<div class="ph button">...</div>
+		}
+		@for (var i = 1; i <= (int)Math.Ceiling((double)Model.ItemCount / Model.PerPage); i++)
+		{
+			if (i >= Model.CurrentPage - 4 && i <= Math.Max(Model.CurrentPage, 5))
+			{
+				<a href="?page=@i"
+				   class="page button @(i == Model.CurrentPage ? "active" : "")">
+					@i
+				</a>
+			}
+		}
+		@if (Model.ItemCount / Model.PerPage > 5 && Model.CurrentPage != Model.ItemCount / Model.PerPage)
+		{
+			<div class="ph button">...</div>
+		}
+		<a class="next button" href="?page=@(Math.Min(Model.CurrentPage + 1, (int)Math.Ceiling((double)Model.ItemCount / Model.PerPage)))">Next</a>
+	</div>
 }

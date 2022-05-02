@@ -1,29 +1,29 @@
 @page
 @using Ogma3.Api.V1.Notifications
-@model Ogma3.Pages.Notifications
+@model Notifications
 
 @{
-    ViewData["Title"] = "Notifications";
+	ViewData["Title"] = "Notifications";
 }
 <h1>@ViewData["Title"]</h1>
 
 <div id="notifications">
-    
-    <div v-for="notif in notifications" class="notification active-border">
-        <a class="link" :href="notif.url">{{notif.message}}</a>
-        <span class="body">{{notif.body}}</span>
-        
-        <time class="time" :datetime="notif.dateTime">
-            {{parseTime(notif.dateTime)}}
-        </time>
 
-        <div class="actions">
-            <button class="action-btn large" title="Delete" v-on:click="deleteNotif(notif.id)">
-                <i class="material-icons-outlined">delete_forever</i>
-            </button>
-        </div>
-    </div>
-    
+	<div v-for="notif in notifications" class="notification active-border">
+		<a class="link" :href="notif.url">{{notif.message}}</a>
+		<span class="body">{{notif.body}}</span>
+
+		<time class="time" :datetime="notif.dateTime">
+			{{parseTime(notif.dateTime)}}
+		</time>
+
+		<div class="actions">
+			<button class="action-btn large" title="Delete" v-on:click="deleteNotif(notif.id)">
+				<i class="material-icons-outlined">delete_forever</i>
+			</button>
+		</div>
+	</div>
+
 </div>
 
 @Html.AntiForgeryToken()
@@ -31,5 +31,5 @@
 
 @section Scripts
 {
-    <script type="module" src="~/js/dist/notifications.min.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/dist/notifications.min.js" asp-append-version="true"></script>
 }

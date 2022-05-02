@@ -10,19 +10,21 @@ namespace Ogma3.Areas.Admin.Pages.Documents;
 
 public class IndexModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    public IndexModel(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+	private readonly ApplicationDbContext _context;
 
-    public List<Document> Docs { get; set; }
-    public async Task OnGetAsync()
-    {
-        Docs = await _context.Documents
-            .Where(d => !d.RevisionDate.HasValue)
-            .OrderBy(d => d.Slug)
-            .AsNoTracking()
-            .ToListAsync();
-    }
+	public IndexModel(ApplicationDbContext context)
+	{
+		_context = context;
+	}
+
+	public List<Document> Docs { get; set; }
+
+	public async Task OnGetAsync()
+	{
+		Docs = await _context.Documents
+			.Where(d => !d.RevisionDate.HasValue)
+			.OrderBy(d => d.Slug)
+			.AsNoTracking()
+			.ToListAsync();
+	}
 }

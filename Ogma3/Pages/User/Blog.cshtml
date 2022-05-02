@@ -1,33 +1,32 @@
 @page "/user/{name}/blog"
 @using Ogma3.Infrastructure.Extensions
-@model Ogma3.Pages.User.BlogModel
+@model BlogModel
 
 @{
-    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s blog";
-    ViewData["Tab"] = "Blog";
+	ViewData["Title"] = $"{Model.ProfileBar.UserName}'s blog";
+	ViewData["Tab"] = "Blog";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
 @if (User.IsUserSameAsLoggedIn(Model.ProfileBar.Id))
 {
-    <a asp-page="/Blog/Create" class="btn btn-block btn-outline-primary">
-        <icon icon="add"></icon>
-        Create New
-    </a>
+	<a asp-page="/Blog/Create" class="btn btn-block btn-outline-primary">
+		<icon icon="add"></icon>
+		Create New
+	</a>
 }
 
 @if (Model.Posts.Count <= 0)
 {
-    <h1>No blog posts found</h1>
+	<h1>No blog posts found</h1>
 }
 else
 {
-    foreach (var post in Model.Posts) {
-        <partial name="Shared/Cards/_BlogpostCard" model="@post" />
-    }
-    
-    <partial name="_Pagination" model="Model.Pagination"/>
+	foreach (var post in Model.Posts)
+	{
+		<partial name="Shared/Cards/_BlogpostCard" model="@post"/>
+	}
 
+	<partial name="_Pagination" model="Model.Pagination"/>
 }
-

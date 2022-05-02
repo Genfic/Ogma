@@ -15,31 +15,31 @@ namespace Ogma3.Api.V1.Ratings;
 [ApiController]
 public class RatingsController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    public RatingsController(IMediator mediator) => _mediator = mediator;
+	private readonly IMediator _mediator;
+	public RatingsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpGet]
-    public async Task<ActionResult<List<RatingApiDto>>> GetRatings()
-        => await _mediator.Send(new GetAllRatings.Query());
+	[HttpGet]
+	public async Task<ActionResult<List<RatingApiDto>>> GetRatings()
+		=> await _mediator.Send(new GetAllRatings.Query());
 
-    [HttpGet("{id:long}")]
-    public async Task<ActionResult<RatingApiDto>> GetRating(long id)
-        => await _mediator.Send(new GetRatingById.Query(id));
+	[HttpGet("{id:long}")]
+	public async Task<ActionResult<RatingApiDto>> GetRating(long id)
+		=> await _mediator.Send(new GetRatingById.Query(id));
 
-    [HttpPost]
-    [Authorize(Roles = RoleNames.Admin)]
-    public async Task<ActionResult<RatingApiDto>> PostRating([FromForm] CreateRating.Command data)
-        => await _mediator.Send(data);
+	[HttpPost]
+	[Authorize(Roles = RoleNames.Admin)]
+	public async Task<ActionResult<RatingApiDto>> PostRating([FromForm] CreateRating.Command data)
+		=> await _mediator.Send(data);
 
-    [HttpPut]
-    [Authorize(Roles = RoleNames.Admin)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<RatingApiDto>> PutRating([FromForm] UpdateRating.Command data)
-        => await _mediator.Send(data);
+	[HttpPut]
+	[Authorize(Roles = RoleNames.Admin)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	[ProducesResponseType(StatusCodes.Status201Created)]
+	public async Task<ActionResult<RatingApiDto>> PutRating([FromForm] UpdateRating.Command data)
+		=> await _mediator.Send(data);
 
-    [HttpDelete("{id:long}")]
-    [Authorize(Roles = RoleNames.Admin)]
-    public async Task<ActionResult<long>> DeleteRating(long id)
-        => await _mediator.Send(new DeleteRating.Command(id));
+	[HttpDelete("{id:long}")]
+	[Authorize(Roles = RoleNames.Admin)]
+	public async Task<ActionResult<long>> DeleteRating(long id)
+		=> await _mediator.Send(new DeleteRating.Command(id));
 }

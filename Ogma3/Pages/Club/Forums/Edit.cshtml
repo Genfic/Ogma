@@ -1,47 +1,47 @@
 @page "/club/thread/{id:long}/edit"
-@model Ogma3.Pages.Club.Forums.EditModel
+@model EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit";
 }
 
 <h1>@ViewData["Title"] </h1>
 
 <form method="post" class="form">
-    
-    <div asp-validation-summary="All">
-        <span>Please correct the following errors</span>
-    </div>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Title"></label>
-        <input asp-for="Input.Title" class="o-form-control active-border"/>
-        <span asp-validation-for="Input.Title"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Body"></label>
-        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="5" data-md="true"></textarea>
-        <span asp-validation-for="Input.Body"></span>
-    </div>
-    
-    <input type="hidden" asp-for="Input.Id">
-    <input type="hidden" asp-for="Input.ClubId">
-    
-    <div class="o-form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-    
+	<div asp-validation-summary="All">
+		<span>Please correct the following errors</span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.Title"></label>
+		<input asp-for="Input.Title" class="o-form-control active-border"/>
+		<span asp-validation-for="Input.Title"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.Body"></label>
+		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="5" data-md="true"></textarea>
+		<span asp-validation-for="Input.Body"></span>
+	</div>
+
+	<input type="hidden" asp-for="Input.Id">
+	<input type="hidden" asp-for="Input.ClubId">
+
+	<div class="o-form-group">
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
+
 </form>
 
 <partial name="Shared/_ValidationScriptsPartial"/>
 
 @section Scripts {
-    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
+	<script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }
 
 @section CSS
 {
-    <link rel="stylesheet" href="~/css/dist/editors.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/dist/editors.min.css" asp-append-version="true">
 }

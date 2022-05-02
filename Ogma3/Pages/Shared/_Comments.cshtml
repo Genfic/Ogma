@@ -8,7 +8,7 @@
 @inject OgmaConfig Config
 @inject IAntiforgery Xcsrf
 @model CommentsThreadDto   
- 
+
 <script>
 const ssrData = {
     thread: @Model!.Id,
@@ -24,127 +24,127 @@ const ssrData = {
 
 <div class="comments-container" :class="isReady ? 'ready' : null" id="comments-container" v-cloak>
 
-    @if (User.Identity is {IsAuthenticated: true })
-    {
-        <div class="info" v-if="isLocked">Thread is locked.</div>
-    
-        <form v-else asp-antiforgery="true">
-            <textarea class="comment-box active-border" 
+	@if (User.Identity is {IsAuthenticated: true })
+	{
+		<div class="info" v-if="isLocked">Thread is locked.</div>
+
+		<form v-else asp-antiforgery="true">
+			<textarea class="comment-box active-border" 
                       v-model="body" 
                       v-on:keydown.enter="enter" 
                       name="body" id="body" 
                       rows="3" 
                       aria-label="Comment">
             </textarea>
-            
-            <div class="counter" :class="body.length < maxLength ? '' : 'invalid'">
-                <div class="o-progress-bar"
-                     :style="{ width: Math.min(100, 100 * (body.length / maxLength)) + '%' }">
-                </div>
-                <span>{{ body.length.toLocaleString() }}/{{ maxLength?.toLocaleString() }}</span>
-            </div>
 
-            <div class="buttons">
-                <button class="comment-btn active-border" v-on:click="submit">
-                    <icon icon="add_comment"></icon>
-                    Comment
-                </button>
-                <a class="help-btn active-border" target="_blank" asp-page="/Markdown" asp-area="">
-                    <icon icon="help_outline"></icon>
-                </a>
-            </div>
-        </form>
-    }
-    else
-    {
-        <div class="info">
-            <a asp-area="Identity" asp-page="/Account/Login">Log in</a> or 
-            <a asp-area="Identity" asp-page="/Account/Register">register</a> 
-            to be able to leave comments
-        </div>
-    }
-    
-    @if (User.Identity is {IsAuthenticated: true })
-    {
-        <div class="buttons">
-            <button class="action-btn" :class="isSubscribed ? 'active' : null"
-                    v-on:click="subscribe"
-                    :title="isSubscribed ? 'Unsubscribe' : 'Subscribe'">
-                <i class="material-icons-outlined">{{isSubscribed ? 'notifications_active' : 'notifications'}}</i>&nbsp;
-                {{isSubscribed ? 'Subscribed!' : 'Subscribe'}}
-            </button>
-            
-            <button class="action-btn" :class="isLocked ? 'active' : null"
-                    v-if="canLock"
-                    v-on:click="lock">
-                <i class="material-icons-outlined">{{isLocked ? 'lock' : 'lock_open'}}</i>&nbsp;
-                {{ isLocked ? 'Unlock' : 'Lock' }}
-            </button>
+			<div class="counter" :class="body.length < maxLength ? '' : 'invalid'">
+				<div class="o-progress-bar"
+				     :style="{ width: Math.min(100, 100 * (body.length / maxLength)) + '%' }">
+				</div>
+				<span>{{ body.length.toLocaleString() }}/{{ maxLength?.toLocaleString() }}</span>
+			</div>
 
-        </div>
-    }
-    
-    <div class="pagination" v-if="comments && total > perPage">
-        <button class="prev button" v-on:click="prevPage">Previous</button>
-        <button class="ph button" v-if="page > 5">...</button>
-        <button v-for="idx in Math.ceil(total / perPage)"
-                :key="idx"
-                v-on:click="changePage(idx)"
-                :class="idx === page ? 'active' : ''"
-                v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
-                class="page button">
-            {{idx}}
-        </button>
-        <button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
-        <button class="next button" v-on:click="nextPage">Next</button>
-    </div>
+			<div class="buttons">
+				<button class="comment-btn active-border" v-on:click="submit">
+					<icon icon="add_comment"></icon>
+					Comment
+				</button>
+				<a class="help-btn active-border" target="_blank" asp-page="/Markdown" asp-area="">
+					<icon icon="help_outline"></icon>
+				</a>
+			</div>
+		</form>
+	}
+	else
+	{
+		<div class="info">
+			<a asp-area="Identity" asp-page="/Account/Login">Log in</a> or
+			<a asp-area="Identity" asp-page="/Account/Register">register</a>
+			to be able to leave comments
+		</div>
+	}
 
-    <div class="comments">
-    
-        <template v-for="c in comms">
-            <template v-if="!c.snip">
-                <comment :key="c.key"
-                         :comment="c.val"
-                         :idx="c.key"
-                         :csrf="csrf"
-                         :route="route"
-                         :is-authenticated="isAuthenticated"
-                         :highlight="highlight === (c.key + 1)"
-                         v-on:report="report"
-                         v-on:change-hl="changeHighlight"/>
-            </template>
-            <template v-else>
-                <div class="snip">{{c.snip}}</div>
-            </template>
-        </template>
+	@if (User.Identity is {IsAuthenticated: true })
+	{
+		<div class="buttons">
+			<button class="action-btn" :class="isSubscribed ? 'active' : null"
+			        v-on:click="subscribe"
+			        :title="isSubscribed ? 'Unsubscribe' : 'Subscribe'">
+				<i class="material-icons-outlined">{{isSubscribed ? 'notifications_active' : 'notifications'}}</i>&nbsp;
+				{{isSubscribed ? 'Subscribed!' : 'Subscribe'}}
+			</button>
 
-        <template v-if="comms.length <= 0">
-            <h4>No comments found :(</h4>
-        </template>
+			<button class="action-btn" :class="isLocked ? 'active' : null"
+			        v-if="canLock"
+			        v-on:click="lock">
+				<i class="material-icons-outlined">{{isLocked ? 'lock' : 'lock_open'}}</i>&nbsp;
+				{{ isLocked ? 'Unlock' : 'Lock' }}
+			</button>
 
-    </div>
-    
-    <div class="pagination" v-if="comments && total > perPage">
-        <button class="prev button" v-on:click="prevPage">Previous</button>
-        <button class="ph button" v-if="page > 5">...</button>
-        <button v-for="idx in Math.ceil(total / perPage)"
-                :key="idx"
-                v-on:click="changePage(idx)"
-                :class="idx === page ? 'active' : ''"
-                v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
-                class="page button">
-            {{idx}}
-        </button>
-        <button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
-        <button class="next button" v-on:click="nextPage">Next</button>
-    </div>
-    
-    <report-modal
-        ref="reportModal"
-        :item-id="0"
-        item-type="@EReportableContentTypes.Comment"
-        reports-route="@Url.RouteUrl(nameof(ReportsController))">
-    </report-modal>
+		</div>
+	}
+
+	<div class="pagination" v-if="comments && total > perPage">
+		<button class="prev button" v-on:click="prevPage">Previous</button>
+		<button class="ph button" v-if="page > 5">...</button>
+		<button v-for="idx in Math.ceil(total / perPage)"
+		        :key="idx"
+		        v-on:click="changePage(idx)"
+		        :class="idx === page ? 'active' : ''"
+		        v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
+		        class="page button">
+			{{idx}}
+		</button>
+		<button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
+		<button class="next button" v-on:click="nextPage">Next</button>
+	</div>
+
+	<div class="comments">
+
+		<template v-for="c in comms">
+			<template v-if="!c.snip">
+				<comment :key="c.key"
+				         :comment="c.val"
+				         :idx="c.key"
+				         :csrf="csrf"
+				         :route="route"
+				         :is-authenticated="isAuthenticated"
+				         :highlight="highlight === (c.key + 1)"
+				         v-on:report="report"
+				         v-on:change-hl="changeHighlight"/>
+			</template>
+			<template v-else>
+				<div class="snip">{{c.snip}}</div>
+			</template>
+		</template>
+
+		<template v-if="comms.length <= 0">
+			<h4>No comments found :(</h4>
+		</template>
+
+	</div>
+
+	<div class="pagination" v-if="comments && total > perPage">
+		<button class="prev button" v-on:click="prevPage">Previous</button>
+		<button class="ph button" v-if="page > 5">...</button>
+		<button v-for="idx in Math.ceil(total / perPage)"
+		        :key="idx"
+		        v-on:click="changePage(idx)"
+		        :class="idx === page ? 'active' : ''"
+		        v-if="idx >= page - 4 && idx <= Math.max(page, 5)"
+		        class="page button">
+			{{idx}}
+		</button>
+		<button class="ph button" v-if="total / perPage > 5 && page !== total / perPage">...</button>
+		<button class="next button" v-on:click="nextPage">Next</button>
+	</div>
+
+	<report-modal
+		ref="reportModal"
+		:item-id="0"
+		item-type="@EReportableContentTypes.Comment"
+		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+	</report-modal>
 
 </div>
 

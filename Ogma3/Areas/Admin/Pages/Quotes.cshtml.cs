@@ -7,7 +7,7 @@ namespace Ogma3.Areas.Admin.Pages;
 [Authorize(Roles = RoleNames.Admin)]
 public class Quotes : PageModel
 {
-    public void OnGet()
-    {
-    }
+	public void OnGet()
+	{
+	}
 }

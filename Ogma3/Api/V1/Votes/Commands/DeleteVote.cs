@@ -13,40 +13,40 @@ namespace Ogma3.Api.V1.Votes.Commands;
 
 public static class DeleteVote
 {
-    public sealed record Command(long StoryId) : IRequest<ActionResult<Result>>;
+	public sealed record Command(long StoryId) : IRequest<ActionResult<Result>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Result>>
-    {   
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Result>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService?.User?.GetNumericId();
-        }
-            
-        public async Task<ActionResult<Result>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
-                
-            var vote = await _context.Votes
-                .Where(v => v.StoryId == request.StoryId)
-                .Where(v => v.UserId == _uid)
-                .FirstOrDefaultAsync(cancellationToken);
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService?.User?.GetNumericId();
+		}
 
-            if (vote is null) return Ok(new Result(false));
+		public async Task<ActionResult<Result>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            _context.Votes.Remove(vote);
-            await _context.SaveChangesAsync(cancellationToken);
+			var vote = await _context.Votes
+				.Where(v => v.StoryId == request.StoryId)
+				.Where(v => v.UserId == _uid)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            var count = await _context.Votes
-                .Where(v => v.StoryId == request.StoryId)
-                .CountAsync(cancellationToken);
+			if (vote is null) return Ok(new Result(false));
 
-            return Ok(new Result(false, count));
-        }
-    }
+			_context.Votes.Remove(vote);
+			await _context.SaveChangesAsync(cancellationToken);
 
-    public sealed record Result(bool DidVote, int? Count = null);
+			var count = await _context.Votes
+				.Where(v => v.StoryId == request.StoryId)
+				.CountAsync(cancellationToken);
+
+			return Ok(new Result(false, count));
+		}
+	}
+
+	public sealed record Result(bool DidVote, int? Count = null);
 }

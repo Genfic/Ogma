@@ -1,4 +1,6 @@
 #nullable enable
+
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,41 +16,41 @@ namespace Ogma3.Pages.Club;
 
 public class IndexModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ClubRepository _clubRepo;
+	private readonly ApplicationDbContext _context;
+	private readonly ClubRepository _clubRepo;
 
-    public IndexModel(ApplicationDbContext context, ClubRepository clubRepo)
-    {
-        _context = context;
-        _clubRepo = clubRepo;
-    }
-        
-    public ClubBar ClubBar { get; private set; } = null!;
-    public IList<ThreadCard> ThreadCards { get; private set; } = null!;
-        
-    public async Task<IActionResult> OnGetAsync(long id, string? slug)
-    {
-        ClubBar = await _clubRepo.GetClubBar(id);
-        if (ClubBar is null) return NotFound();
+	public IndexModel(ApplicationDbContext context, ClubRepository clubRepo)
+	{
+		_context = context;
+		_clubRepo = clubRepo;
+	}
 
-        ThreadCards = await _context.ClubThreads
-            .Where(ct => ct.ClubId == id)
-            .Where(ct => ct.DeletedAt == null)
-            .OrderByDescending(ct => ct.CreationDate)
-            .Take(3)
-            .Select(ct => new ThreadCard
-            {
-                Id = ct.Id,
-                Title = ct.Title,
-                ClubId = ct.ClubId,
-                IsPinned = ct.IsPinned,
-                CreationDate = ct.CreationDate,
-                AuthorName = ct.Author.UserName,
-                AuthorAvatar = ct.Author.Avatar,
-                CommentsCount = ct.CommentsThread.Comments.Count
-            })
-            .ToListAsync();
+	public ClubBar ClubBar { get; private set; } = null!;
+	public IList<ThreadCard> ThreadCards { get; private set; } = null!;
 
-        return Page();
-    }
+	public async Task<IActionResult> OnGetAsync(long id, string? slug)
+	{
+		ClubBar = await _clubRepo.GetClubBar(id);
+		if (ClubBar is null) return NotFound();
+
+		ThreadCards = await _context.ClubThreads
+			.Where(ct => ct.ClubId == id)
+			.Where(ct => ct.DeletedAt == null)
+			.OrderByDescending(ct => ct.CreationDate)
+			.Take(3)
+			.Select(ct => new ThreadCard
+			{
+				Id = ct.Id,
+				Title = ct.Title,
+				ClubId = ct.ClubId,
+				IsPinned = ct.IsPinned,
+				CreationDate = ct.CreationDate,
+				AuthorName = ct.Author.UserName,
+				AuthorAvatar = ct.Author.Avatar,
+				CommentsCount = ct.CommentsThread.Comments.Count
+			})
+			.ToListAsync();
+
+		return Page();
+	}
 }

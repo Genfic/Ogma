@@ -1,33 +1,33 @@
 ﻿@page "/user/{name}/stories"
 @using Ogma3.Infrastructure.Extensions
-@model Ogma3.Pages.User.StoriesModel
+@model StoriesModel
 
 @{
-    ViewData["Title"] = $"{Model.ProfileBar.UserName}'s stories";
-    ViewData["Tab"] = "Stories";
+	ViewData["Title"] = $"{Model.ProfileBar.UserName}'s stories";
+	ViewData["Tab"] = "Stories";
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
 @if (User.IsUserSameAsLoggedIn(Model.ProfileBar.Id))
 {
-    <a class="btn btn-block btn-outline-primary" asp-page="/Stories/Create"> 
-        <icon icon="add"></icon>
-        Create New
-    </a>
+	<a class="btn btn-block btn-outline-primary" asp-page="/Stories/Create">
+		<icon icon="add"></icon>
+		Create New
+	</a>
 }
 
 
 @if (Model.Stories.Count <= 0)
 {
-    <h1>No stories found</h1>
+	<h1>No stories found</h1>
 }
 else
 {
-    @foreach (var story in Model.Stories)
-    {
-        <partial name="Shared/Cards/_StoryCard" model="story"/>
-    }
-    
-    <partial name="_Pagination" model="Model.Pagination"/>
+	@foreach (var story in Model.Stories)
+	{
+		<partial name="Shared/Cards/_StoryCard" model="story"/>
+	}
+
+	<partial name="_Pagination" model="Model.Pagination"/>
 }

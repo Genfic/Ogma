@@ -4,7 +4,7 @@ namespace Ogma3.Pages;
 
 public class Notifications : PageModel
 {
-    public void OnGet()
-    {
-    }
+	public void OnGet()
+	{
+	}
 }

@@ -1,13 +1,13 @@
 @page
-@model Ogma3.Pages.StaffModel
+@model StaffModel
 
 <h1>Staff</h1>
 
 <hr>
 
 <div class="two-columns o-grid">
-    @foreach (var s in Model.Staff)
-    {
-        <partial name="Shared/Cards/_UserCard" model="s"/>
-    }
+	@foreach (var s in Model.Staff)
+	{
+		<partial name="Shared/Cards/_UserCard" model="s"/>
+	}
 </div>

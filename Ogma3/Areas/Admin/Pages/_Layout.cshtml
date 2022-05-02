@@ -1,28 +1,28 @@
 ﻿@{
-    Layout = "/Pages/Shared/_Layout.cshtml";
-    ViewData["is-admin"] = true;
+	Layout = "/Pages/Shared/_Layout.cshtml";
+	ViewData["is-admin"] = true;
 }
 
 <div class="container" id="site-content-wide">
-    <main role="main" class="pb-3" id="app">
-        <h1 class="head">Admin panel - @ViewData["Title"]</h1>
+	<main role="main" class="pb-3" id="app">
+		<h1 class="head">Admin panel - @ViewData["Title"]</h1>
 
-        <div class="side-nav">
-            <partial name="_ManageNav"></partial>
-        </div>
+		<div class="side-nav">
+			<partial name="_ManageNav"></partial>
+		</div>
 
-        <div class="admin-body">
-            @RenderBody()
-        </div>
+		<div class="admin-body">
+			@RenderBody()
+		</div>
 
-    </main>
+	</main>
 </div>
 
 @section Scripts {
-    @await RenderSectionAsync("Scripts", false)
+	@await RenderSectionAsync("Scripts", false)
 }
 
 @section CSS {
-    <link rel="stylesheet" href="~/css/dist/admin.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/css/dist/editors.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/dist/admin.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/dist/editors.min.css" asp-append-version="true">
 }

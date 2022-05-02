@@ -1,32 +1,37 @@
 @page
 @using System.Globalization
-@model Ogma3.Pages.Ban
+@model Ban
 
 @{
-    ViewData["Title"] = "You've been banned";
+	ViewData["Title"] = "You've been banned";
 }
 
 <div class="ban-info">
-    <h1>You have been banned</h1>
-    <h2>Until <time datetime="@Model.BannedUntil.ToString("o")">
-        @Model.BannedUntil.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-    </time></h2>
+	<h1>You have been banned</h1>
+	<h2>
+		Until
+		<time datetime="@Model.BannedUntil.ToString("o")">
+			@Model.BannedUntil.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+		</time>
+	</h2>
 </div>
 
 <h3>And here's why:</h3>
 
 @foreach (var i in Model.Infractions)
 {
-    var isDone = (i.ActiveUntil < DateTime.Now || (i.RemovedAt is not null));
-    
-    <details class="infraction">
-        <summary class="@(isDone ? "passed" : null)">
-            <b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
-        </summary>
-        @if(i.RemovedAt is {} d)
-        {
-            <div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time></div>
-        }
-        <div class="reason"><b>Reason:</b> @i.Reason</div>
-    </details>
+	var isDone = (i.ActiveUntil < DateTime.Now || (i.RemovedAt is not null));
+
+	<details class="infraction">
+		<summary class="@(isDone ? "passed" : null)">
+			<b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
+		</summary>
+		@if (i.RemovedAt is {} d)
+		{
+			<div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time></div>
+		}
+		<div class="reason">
+			<b>Reason:</b> @i.Reason
+		</div>
+	</details>
 }

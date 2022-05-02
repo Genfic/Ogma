@@ -14,29 +14,28 @@ namespace Ogma3.Api.V1.ChaptersReads.Queries;
 
 public static class GetReadChapters
 {
-    public sealed record Query(long Id) : IRequest<ActionResult<ICollection<long>>>;
-        
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<ICollection<long>>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public sealed record Query(long Id) : IRequest<ActionResult<ICollection<long>>>;
 
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService?.User?.GetNumericId();
-        }
-            
-        public async Task<ActionResult<ICollection<long>>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            var chaptersRead = await _context.ChaptersRead
-                .Where(cr => cr.StoryId == request.Id)
-                .Where(cr => cr.UserId == _uid)
-                .Select(cr => cr.Chapters)
-                .FirstOrDefaultAsync(cancellationToken);
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<ICollection<long>>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-            return Ok(chaptersRead ?? new HashSet<long>());
-        }
-    }
-        
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService?.User?.GetNumericId();
+		}
+
+		public async Task<ActionResult<ICollection<long>>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			var chaptersRead = await _context.ChaptersRead
+				.Where(cr => cr.StoryId == request.Id)
+				.Where(cr => cr.UserId == _uid)
+				.Select(cr => cr.Chapters)
+				.FirstOrDefaultAsync(cancellationToken);
+
+			return Ok(chaptersRead ?? new HashSet<long>());
+		}
+	}
 }

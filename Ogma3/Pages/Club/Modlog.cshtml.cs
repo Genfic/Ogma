@@ -14,41 +14,41 @@ namespace Ogma3.Pages.Club;
 
 public class Modlog : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ClubRepository _clubRepo;
-        
-    private const int PerPage = 50;
+	private readonly ApplicationDbContext _context;
+	private readonly ClubRepository _clubRepo;
 
-    public Modlog(ApplicationDbContext context, ClubRepository clubRepo)
-    {
-        _context = context;
-        _clubRepo = clubRepo;
-    }
+	private const int PerPage = 50;
 
-    public ICollection<ClubModeratorAction> Actions { get; private set; }
-    public ClubBar ClubBar { get; private set; }
-    public Pagination Pagination { get; private set; }
+	public Modlog(ApplicationDbContext context, ClubRepository clubRepo)
+	{
+		_context = context;
+		_clubRepo = clubRepo;
+	}
 
-    public async Task<ActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
-    {
-        ClubBar = await _clubRepo.GetClubBar(id);
-        if (ClubBar is null) return NotFound();
+	public ICollection<ClubModeratorAction> Actions { get; private set; }
+	public ClubBar ClubBar { get; private set; }
+	public Pagination Pagination { get; private set; }
 
-        var query = _context.ClubModeratorActions
-            .Where(cma => cma.ClubId == id);
+	public async Task<ActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
+	{
+		ClubBar = await _clubRepo.GetClubBar(id);
+		if (ClubBar is null) return NotFound();
 
-        Actions = await query
-            .OrderByDescending(ma => ma.CreationDate)
-            .Paginate(page, PerPage)
-            .ToListAsync();
-            
-        Pagination = new Pagination
-        {
-            PerPage = PerPage,
-            CurrentPage = page,
-            ItemCount = await query.CountAsync()
-        };
+		var query = _context.ClubModeratorActions
+			.Where(cma => cma.ClubId == id);
 
-        return Page();
-    }
+		Actions = await query
+			.OrderByDescending(ma => ma.CreationDate)
+			.Paginate(page, PerPage)
+			.ToListAsync();
+
+		Pagination = new Pagination
+		{
+			PerPage = PerPage,
+			CurrentPage = page,
+			ItemCount = await query.CountAsync()
+		};
+
+		return Page();
+	}
 }

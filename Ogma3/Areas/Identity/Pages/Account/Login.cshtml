@@ -3,99 +3,101 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+	ViewData["Title"] = "Log in";
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 <hr>
-<partial name="_StatusMessage" model="Model.ErrorMessage" />
+<partial name="_StatusMessage" model="Model.ErrorMessage"/>
 
 <div class="login-form">
-    <section class="left">
-        <form class="form" id="account" method="post">
+	<section class="left">
+		<form class="form" id="account" method="post">
 
-            <div asp-validation-summary="All" class="text-danger"></div>
-            
-            <img width="240" height="240"
-                 :src="avatar" 
-                 class="avatar" 
-                 :class="checked ? 'checked' : null" 
-                 :alt="`${name}'s avatar`">
-            <h5 v-if="title" class="title">{{title}}</h5>
-            
-            <div class="o-form-group">
-                <label asp-for="Input.Name"></label>
-                <input asp-for="Input.Name" class="o-form-control active-border" v-model="name" :readonly="checked" autocomplete="username"/>
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
-            </div>
-            
-            <div class="o-form-group" v-if="checked">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="o-form-control active-border" autocomplete="current-password" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                <p>
-                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                </p>
-            </div>
-            
-            <div class="o-form-group" v-if="checked">
-                <div class="checkbox">
-                    <label asp-for="Input.RememberMe">
-                        <input asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-            </div>
-            
-            <div class="o-form-group" v-if="!checked">
-                <button class="btn btn-primary" v-on:click="checkDetails">Next</button>
-            </div>
-            
-            <div class="o-form-group" v-if="checked">
-                <button class="btn btn-secondary" v-on:click.prevent="reset">Back</button>
-                <button type="submit" class="btn btn-primary">Log in</button>
-            </div>
-        </form>
-        
-        
-    </section>
-    @* <div class="col-md-6 col-md-offset-2"> *@
-    @*     <section> *@
-    @*         <h4>Use another service to log in.</h4> *@
-    @*         <hr /> *@
-    @*         @{ *@
-    @*             if ((Model.ExternalLogins?.Count ?? 0) == 0) *@
-    @*             { *@
-    @*                 <div> *@
-    @*                     <p> *@
-    @*                         There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a> *@
-    @*                         for details on setting up this ASP.NET application to support logging in via external services. *@
-    @*                     </p> *@
-    @*                 </div> *@
-    @*             } *@
-    @*             else *@
-    @*             { *@
-    @*                 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal"> *@
-    @*                     <div> *@
-    @*                         <p> *@
-    @*                             @foreach (var provider in Model.ExternalLogins) *@
-    @*                             { *@
-    @*                                 <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button> *@
-    @*                             } *@
-    @*                         </p> *@
-    @*                     </div> *@
-    @*                 </form> *@
-    @*             } *@
-    @*         } *@
-    @*     </section> *@
-    @* </div> *@
+			<div asp-validation-summary="All" class="text-danger"></div>
+
+			<img width="240" height="240"
+			     :src="avatar"
+			     class="avatar"
+			     :class="checked ? 'checked' : null"
+			     :alt="`${name}'s avatar`">
+			<h5 v-if="title" class="title">{{title}}</h5>
+
+			<div class="o-form-group">
+				<label asp-for="Input.Name"></label>
+				<input asp-for="Input.Name" class="o-form-control active-border" v-model="name" :readonly="checked" autocomplete="username"/>
+				<span asp-validation-for="Input.Name" class="text-danger"></span>
+			</div>
+
+			<div class="o-form-group" v-if="checked">
+				<label asp-for="Input.Password"></label>
+				<input asp-for="Input.Password" class="o-form-control active-border" autocomplete="current-password"/>
+				<span asp-validation-for="Input.Password" class="text-danger"></span>
+				<p>
+					<a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+				</p>
+			</div>
+
+			<div class="o-form-group" v-if="checked">
+				<div class="checkbox">
+					<label asp-for="Input.RememberMe">
+						<input asp-for="Input.RememberMe"/>
+						@Html.DisplayNameFor(m => m.Input.RememberMe)
+					</label>
+				</div>
+			</div>
+
+			<div class="o-form-group" v-if="!checked">
+				<button class="btn btn-primary" v-on:click="checkDetails">Next</button>
+			</div>
+
+			<div class="o-form-group" v-if="checked">
+				<button class="btn btn-secondary" v-on:click.prevent="reset">Back</button>
+				<button type="submit" class="btn btn-primary">Log in</button>
+			</div>
+		</form>
+
+
+	</section>
+	@* <div class="col-md-6 col-md-offset-2"> *@
+	@*     <section> *@
+	@*         <h4>Use another service to log in.</h4> *@
+	@*         <hr /> *@
+	@*         @{ *@
+	@*             if ((Model.ExternalLogins?.Count ?? 0) == 0) *@
+	@*             { *@
+	@*                 <div> *@
+	@*                     <p> *@
+	@*                         There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a> *@
+	@*                         for details on setting up this ASP.NET application to support logging in via external services. *@
+	@*                     </p> *@
+	@*                 </div> *@
+	@*             } *@
+	@*             else *@
+	@*             { *@
+	@*                 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal"> *@
+	@*                     <div> *@
+	@*                         <p> *@
+	@*                             @foreach (var provider in Model.ExternalLogins) *@
+	@*                             { *@
+	@*                                 <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button> *@
+	@*                             } *@
+	@*                         </p> *@
+	@*                     </div> *@
+	@*                 </form> *@
+	@*             } *@
+	@*         } *@
+	@*     </section> *@
+	@* </div> *@
 </div>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(SignInController))" v-if="!route"></div>
+
 @section Scripts {
-    <script src="~/js/dist/login.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/login.min.js" asp-append-version="true"></script>
 }
+
 @section CSS {
-    <link rel="stylesheet" href="~/css/dist/login.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/dist/login.min.css" asp-append-version="true">
 }

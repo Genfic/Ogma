@@ -5,8 +5,8 @@ namespace Ogma3.Data.Bases;
 
 public abstract class BaseModel
 {
-    [Key]
-    [Required]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long Id { get; set; }
+	[Key]
+	[Required]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public long Id { get; set; }
 }

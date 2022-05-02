@@ -1,111 +1,111 @@
+@using Ogma3.Services
 @using System.Globalization
 @using Ogma3.Api.V1.ClubJoin
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Data.Reports
-@using Ogma3.Services
 @model ClubBar
 
 @{
-    var tab = (string)ViewData["Tab"];
+	var tab = (string)ViewData["Tab"];
 }
 
 <div class="info-bar club-bar" id="club-bar">
 
-    <cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130"/>
+	<cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130"/>
 
-    <h1 class="name">@Model.Name</h1>
+	<h1 class="name">@Model.Name</h1>
 
-    <time class="date" datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-        Founded @Model.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-    </time>
+	<time class="date" datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+		Founded @Model.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+	</time>
 
-    <div class="info">
-        <div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
-        <div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
-        <div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ? "story" : "stories")</div>
-    </div>
+	<div class="info">
+		<div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
+		<div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
+		<div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ? "story" : "stories")</div>
+	</div>
 
-    <div class="buttons">
-        <button class="button max @(Model.IsMember ? "leave" : "join")"
-                :class="joined ? 'leave' : 'join'"
-                id="join-btn"
-                v-on:click="joinOrLeave">
-            <span v-if="joined === null">@(Model.IsMember ? "Leave club" : "Join club")</span>
-            <span v-else>{{ joined ? 'Leave club' : 'Join club' }}</span>
-        </button>
+	<div class="buttons">
+		<button class="button max @(Model.IsMember ? "leave" : "join")"
+		        :class="joined ? 'leave' : 'join'"
+		        id="join-btn"
+		        v-on:click="joinOrLeave">
+			<span v-if="joined === null">@(Model.IsMember ? "Leave club" : "Join club")</span>
+			<span v-else>{{ joined ? 'Leave club' : 'Join club' }}</span>
+		</button>
 
-        <div class="o-dropdown left" x-data="{open: false}">
+		<div class="o-dropdown left" x-data="{open: false}">
 
-            <button class="action-btn max" x-on:click="open = !open">
-                <icon icon="more_vert"></icon>
-            </button>
+			<button class="action-btn max" x-on:click="open = !open">
+				<icon icon="more_vert"></icon>
+			</button>
 
-            <ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
-                
-                <a class="item active"
-                   title="Edit club"
-                   asp-page="/Clubs/Edit"
-                   asp-route-id="@Model.Id">
-                    <icon icon="edit"></icon>
-                    Edit
-                </a>
+			<ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
 
-                @if (User.Identity?.IsAuthenticated ?? false)
-                {
-                    <li title="Report" class="item active red" v-on:click="report">
-                        <icon icon="flag"></icon>
-                        Report
-                    </li>
-                }
+				<a class="item active"
+				   title="Edit club"
+				   asp-page="/Clubs/Edit"
+				   asp-route-id="@Model.Id">
+					<icon icon="edit"></icon>
+					Edit
+				</a>
 
-                <a class="item active"
-                   title="Moderation log"
-                   asp-page="/Club/Modlog"
-                   asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
-                    <icon icon="security"></icon>
-                    Modlog
-                </a>
-            </ul>
-        </div>
-    </div>
+				@if (User.Identity?.IsAuthenticated ?? false)
+				{
+					<li title="Report" class="item active red" v-on:click="report">
+						<icon icon="flag"></icon>
+						Report
+					</li>
+				}
 
-    <nav class="nav">
-        <a class="nav-item @(tab == "Home" ? "active" : null)"
-           asp-page="/Club/Index"
-           asp-route-id="@Model.Id"
-           asp-route-slug="@Model.Slug">
-            Home
-        </a>
-        <a class="nav-item @(tab == "Members" ? "active" : null)"
-           asp-page="/Club/Members"
-           asp-route-id="@Model.Id"
-           asp-route-slug="@Model.Slug">
-            Members
-        </a>
-        <a class="nav-item @(tab == "Forums" ? "active" : null)"
-           asp-page="/Club/Forums/Index"
-           asp-route-id="@Model.Id"
-           asp-route-slug="@Model.Slug">
-            Forums
-        </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)"
-           asp-page="/Club/Folders/Index"
-           asp-route-id="@Model.Id"
-           asp-route-slug="@Model.Slug">
-            Stories
-        </a>
-    </nav>
+				<a class="item active"
+				   title="Moderation log"
+				   asp-page="/Club/Modlog"
+				   asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+					<icon icon="security"></icon>
+					Modlog
+				</a>
+			</ul>
+		</div>
+	</div>
 
-    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(ClubJoinController))" style="display: none"></div>
-    <div v-if="!id" id="data-id" data-id="@Model.Id" style="display: none"></div>
-    <div v-if="joined === null" id="data-joined" data-joined="@Model.IsMember" style="display: none"></div>
+	<nav class="nav">
+		<a class="nav-item @(tab == "Home" ? "active" : null)"
+		   asp-page="/Club/Index"
+		   asp-route-id="@Model.Id"
+		   asp-route-slug="@Model.Slug">
+			Home
+		</a>
+		<a class="nav-item @(tab == "Members" ? "active" : null)"
+		   asp-page="/Club/Members"
+		   asp-route-id="@Model.Id"
+		   asp-route-slug="@Model.Slug">
+			Members
+		</a>
+		<a class="nav-item @(tab == "Forums" ? "active" : null)"
+		   asp-page="/Club/Forums/Index"
+		   asp-route-id="@Model.Id"
+		   asp-route-slug="@Model.Slug">
+			Forums
+		</a>
+		<a class="nav-item @(tab == "Stories" ? "active" : null)"
+		   asp-page="/Club/Folders/Index"
+		   asp-route-id="@Model.Id"
+		   asp-route-slug="@Model.Slug">
+			Stories
+		</a>
+	</nav>
 
-    <report-modal
-        ref="reportModal"
-        :item-id="@Model.Id"
-        item-type="@EReportableContentTypes.Club"
-        reports-route="@Url.RouteUrl(nameof(ReportsController))">
-    </report-modal>
+	<div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(ClubJoinController))" style="display: none"></div>
+	<div v-if="!id" id="data-id" data-id="@Model.Id" style="display: none"></div>
+	<div v-if="joined === null" id="data-joined" data-joined="@Model.IsMember" style="display: none"></div>
+
+	<report-modal
+		ref="reportModal"
+		:item-id="@Model.Id"
+		item-type="@EReportableContentTypes.Club"
+		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+	</report-modal>
 </div>
 
 @Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)

@@ -1,8 +1,8 @@
 @page
-@model Ogma3.Pages.Settings
+@model Settings
 
 @{
-    ViewData["Title"] = "Local settings";
+	ViewData["Title"] = "Local settings";
 }
 
 <h1>Local settings</h1>
@@ -12,18 +12,18 @@
 <hr>
 
 <dl id="local-settings">
-    <dt>Collapse deleted comments</dt>
-    <dd>
-        <button v-on:click="updateCollapse" :class="collapseDeleted ? 'on' : null">{{ collapseDeleted ? 'on' : 'off' }}</button>
-    </dd>
-    
-    <dt>Theme</dt>
-    <dd>
-        <button v-on:click="swapTheme">{{ theme }}</button>
-    </dd>
+	<dt>Collapse deleted comments</dt>
+	<dd>
+		<button v-on:click="updateCollapse" :class="collapseDeleted ? 'on' : null">{{ collapseDeleted ? 'on' : 'off' }}</button>
+	</dd>
+
+	<dt>Theme</dt>
+	<dd>
+		<button v-on:click="swapTheme">{{ theme }}</button>
+	</dd>
 </dl>
 
 @section Scripts
 {
-    <script src="~/js/dist/local-settings.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/local-settings.min.js" asp-append-version="true"></script>
 }

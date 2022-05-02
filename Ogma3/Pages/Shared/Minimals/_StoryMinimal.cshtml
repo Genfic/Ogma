@@ -1,23 +1,23 @@
-@using System.Globalization
 @using Utils.Extensions
+@using System.Globalization
 @model StoryMinimal
 
 <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
 
-    <span class="title">@Model.Title</span>
+	<span class="title">@Model.Title</span>
 
-    <div class="info">
+	<div class="info">
 
-        <span class="author">By @Model.AuthorUserName</span>
-        
-        <i class="dot"></i>
-        
-        @if (Model.PublicationDate is not null)
-        {
-            var date = (DateTime)Model.PublicationDate;
-            <time class="date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                @date.FormatDateWithDaySuffix()
-            </time>
-        }
-    </div>
+		<span class="author">By @Model.AuthorUserName</span>
+
+		<i class="dot"></i>
+
+		@if (Model.PublicationDate is not null)
+		{
+			var date = (DateTime)Model.PublicationDate;
+			<time class="date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+				@date.FormatDateWithDaySuffix()
+			</time>
+		}
+	</div>
 </a>

@@ -17,103 +17,99 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public class ConfirmEmailModel : PageModel
 {
-    private readonly OgmaUserManager _userManager;
-    private readonly ApplicationDbContext _context;
+	private readonly OgmaUserManager _userManager;
+	private readonly ApplicationDbContext _context;
 
-    public ConfirmEmailModel(OgmaUserManager userManager, ApplicationDbContext context)
-    {
-        _userManager = userManager;
-        _context = context;
-    }
-    
-    // ReSharper disable once MemberCanBePrivate.Global
-    [TempData] public string StatusMessage { get; set; }
+	public ConfirmEmailModel(OgmaUserManager userManager, ApplicationDbContext context)
+	{
+		_userManager = userManager;
+		_context = context;
+	}
 
-    [BindProperty] 
-    [Required] 
-    public string UserName { get; set; }
+	// ReSharper disable once MemberCanBePrivate.Global
+	[TempData] public string StatusMessage { get; set; }
 
-    [BindProperty] 
-    [Required] 
-    public string Code { get; set; }
+	[BindProperty] [Required] public string UserName { get; set; }
 
-    public IActionResult OnGet(string userName, string code)
-    {
-        UserName = userName;
-        Code = code;
+	[BindProperty] [Required] public string Code { get; set; }
 
-        return Page();
-    }
+	public IActionResult OnGet(string userName, string code)
+	{
+		UserName = userName;
+		Code = code;
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid) return Page();
+		return Page();
+	}
 
-        var user = await _userManager.FindByNameAsync(UserName);
-        if (user is null) return NotFound($"Unable to load user with name '{UserName}'.");
+	public async Task<IActionResult> OnPostAsync()
+	{
+		if (!ModelState.IsValid) return Page();
 
-        var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
-        var result = await _userManager.ConfirmEmailAsync(user, code);
+		var user = await _userManager.FindByNameAsync(UserName);
+		if (user is null) return NotFound($"Unable to load user with name '{UserName}'.");
 
-        StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+		var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
+		var result = await _userManager.ConfirmEmailAsync(user, code);
 
-        if (!result.Succeeded) return Page();
+		StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
 
-        // Setup default blacklists
-        var defaultBlockedRatings = await _context.Ratings
-            .Where(r => r.BlacklistedByDefault)
-            .Select(r => r.Id)
-            .ToListAsync();
-        var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
-        {
-            User = user,
-            RatingId = dbr
-        });
-        _context.BlacklistedRatings.AddRange(blockedRatings);
+		if (!result.Succeeded) return Page();
 
-        // Setup profile comment thread subscription
-        var thread = await _context.CommentThreads
-            .Where(ct => ct.UserId == user.Id)
-            .FirstOrDefaultAsync();
+		// Setup default blacklists
+		var defaultBlockedRatings = await _context.Ratings
+			.Where(r => r.BlacklistedByDefault)
+			.Select(r => r.Id)
+			.ToListAsync();
+		var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
+		{
+			User = user,
+			RatingId = dbr
+		});
+		_context.BlacklistedRatings.AddRange(blockedRatings);
 
-        _context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
-        {
-            CommentsThread = thread,
-            OgmaUser = user
-        });
+		// Setup profile comment thread subscription
+		var thread = await _context.CommentThreads
+			.Where(ct => ct.UserId == user.Id)
+			.FirstOrDefaultAsync();
 
-        // Setup default bookshelves
-        var shelves = new Shelf[]
-        {
-            new()
-            {
-                Name = "Favourites", 
-                Description = "My favourite stories", 
-                Color = "#ffff00", 
-                IsDefault = true, 
-                IsPublic = true,
-                TrackUpdates = true, 
-                IsQuickAdd = true, 
-                OwnerId = user.Id, 
-                IconId = 12
-            },
-            new()
-            {
-                Name = "Read Later", 
-                Description = "What I plan to read", 
-                Color = "#5555ff", 
-                IsDefault = true, 
-                IsPublic = true,
-                TrackUpdates = true, 
-                IsQuickAdd = true, 
-                OwnerId = user.Id, 
-                IconId = 22
-            },
-        };
-        _context.Shelves.AddRange(shelves);
+		_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		{
+			CommentsThread = thread,
+			OgmaUser = user
+		});
 
-        await _context.SaveChangesAsync();
+		// Setup default bookshelves
+		var shelves = new Shelf[]
+		{
+			new()
+			{
+				Name = "Favourites",
+				Description = "My favourite stories",
+				Color = "#ffff00",
+				IsDefault = true,
+				IsPublic = true,
+				TrackUpdates = true,
+				IsQuickAdd = true,
+				OwnerId = user.Id,
+				IconId = 12
+			},
+			new()
+			{
+				Name = "Read Later",
+				Description = "What I plan to read",
+				Color = "#5555ff",
+				IsDefault = true,
+				IsPublic = true,
+				TrackUpdates = true,
+				IsQuickAdd = true,
+				OwnerId = user.Id,
+				IconId = 22
+			},
+		};
+		_context.Shelves.AddRange(shelves);
 
-        return Page();
-    }
+		await _context.SaveChangesAsync();
+
+		return Page();
+	}
 }

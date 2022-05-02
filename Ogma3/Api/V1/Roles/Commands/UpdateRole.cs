@@ -11,36 +11,37 @@ namespace Ogma3.Api.V1.Roles.Commands;
 
 public static class UpdateRole
 {
-    public sealed record Command(long Id, string Name, bool IsStaff, string Color, byte? Order) : IRequest<ActionResult<RoleDto>>;
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator() => RuleFor(r => r.Name).NotEmpty();
-    }
-        
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<RoleDto>>
-    {
-        private readonly RoleManager<OgmaRole> _roleManager;
-        public Handler(RoleManager<OgmaRole> roleManager) => _roleManager = roleManager;
+	public sealed record Command(long Id, string Name, bool IsStaff, string Color, byte? Order) : IRequest<ActionResult<RoleDto>>;
 
-        public async Task<ActionResult<RoleDto>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var (id, name, isStaff, color, order) = request;
+	public class CommandValidator : AbstractValidator<Command>
+	{
+		public CommandValidator() => RuleFor(r => r.Name).NotEmpty();
+	}
 
-            var role = await _roleManager.FindByIdAsync(id.ToString());
-                
-            role.Name = name;
-            role.IsStaff = isStaff;
-            role.Color = color;
-            role.Order = order;
-                
-            await _roleManager.UpdateAsync(role);
-   
-            return CreatedAtAction(
-                nameof(RolesController.GetRole),
-                nameof(RolesController)[..^10],
-                new { role.Id },
-                role
-            );
-        }
-    }
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<RoleDto>>
+	{
+		private readonly RoleManager<OgmaRole> _roleManager;
+		public Handler(RoleManager<OgmaRole> roleManager) => _roleManager = roleManager;
+
+		public async Task<ActionResult<RoleDto>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var (id, name, isStaff, color, order) = request;
+
+			var role = await _roleManager.FindByIdAsync(id.ToString());
+
+			role.Name = name;
+			role.IsStaff = isStaff;
+			role.Color = color;
+			role.Order = order;
+
+			await _roleManager.UpdateAsync(role);
+
+			return CreatedAtAction(
+				nameof(RolesController.GetRole),
+				nameof(RolesController)[..^10],
+				new { role.Id },
+				role
+			);
+		}
+	}
 }

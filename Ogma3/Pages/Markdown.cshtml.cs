@@ -4,7 +4,7 @@ namespace Ogma3.Pages;
 
 public class Markdown : PageModel
 {
-    public void OnGet()
-    {
-    }
+	public void OnGet()
+	{
+	}
 }

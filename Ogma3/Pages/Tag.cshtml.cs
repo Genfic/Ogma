@@ -1,4 +1,6 @@
 ﻿#nullable enable
+
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,56 +19,56 @@ namespace Ogma3.Pages;
 
 public class TagModel : PageModel
 {
-    private const int PerPage = 25;
-        
-    private readonly ApplicationDbContext _context;
-    private readonly IMapper _mapper;
-        
-    public TagModel(ApplicationDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+	private const int PerPage = 25;
 
-    public record TagInfo(string Name, ETagNamespace? Namespace);
-        
-    public TagInfo Tag { get; private set; } = null!;
-    public IList<StoryCard> Stories { get; private set; } = null!;
-    public Pagination Pagination { get; private set; } = null!;
+	private readonly ApplicationDbContext _context;
+	private readonly IMapper _mapper;
 
-    public async Task<IActionResult> OnGetAsync(long id, string? slug, [FromQuery] int page = 1)
-    {
-        var uid = User.GetNumericId();
-            
-        var tag = await _context.Tags
-            .Where(t => t.Id == id)
-            .Select(t => new TagInfo(t.Name, t.Namespace))
-            .FirstOrDefaultAsync();
-            
-        if (tag is null) return NotFound();
-        Tag = tag;
-        
-        var query = _context.Stories
-            .Where(s => s.PublicationDate != null)
-            .Where(s => s.ContentBlockId == null)
-            .Where(s => s.Tags.Any(st => st.Id == id))
-            .Blacklist(_context, uid);
-            
-        Stories = await query
-            .OrderByDescending(s => s.PublicationDate)
-            .Paginate(page, PerPage)
-            .ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
-            .AsNoTracking()
-            .ToListAsync();
+	public TagModel(ApplicationDbContext context, IMapper mapper)
+	{
+		_context = context;
+		_mapper = mapper;
+	}
 
-        // Prepare pagination
-        Pagination = new Pagination
-        {
-            CurrentPage = page,
-            ItemCount = await query.CountAsync(),
-            PerPage = PerPage
-        };
-            
-        return Page();
-    }
+	public record TagInfo(string Name, ETagNamespace? Namespace);
+
+	public TagInfo Tag { get; private set; } = null!;
+	public IList<StoryCard> Stories { get; private set; } = null!;
+	public Pagination Pagination { get; private set; } = null!;
+
+	public async Task<IActionResult> OnGetAsync(long id, string? slug, [FromQuery] int page = 1)
+	{
+		var uid = User.GetNumericId();
+
+		var tag = await _context.Tags
+			.Where(t => t.Id == id)
+			.Select(t => new TagInfo(t.Name, t.Namespace))
+			.FirstOrDefaultAsync();
+
+		if (tag is null) return NotFound();
+		Tag = tag;
+
+		var query = _context.Stories
+			.Where(s => s.PublicationDate != null)
+			.Where(s => s.ContentBlockId == null)
+			.Where(s => s.Tags.Any(st => st.Id == id))
+			.Blacklist(_context, uid);
+
+		Stories = await query
+			.OrderByDescending(s => s.PublicationDate)
+			.Paginate(page, PerPage)
+			.ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+			.AsNoTracking()
+			.ToListAsync();
+
+		// Prepare pagination
+		Pagination = new Pagination
+		{
+			CurrentPage = page,
+			ItemCount = await query.CountAsync(),
+			PerPage = PerPage
+		};
+
+		return Page();
+	}
 }

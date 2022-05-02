@@ -1,67 +1,67 @@
 @page "/club/{clubid}/folder/{id}/delete"
 @using Ogma3.Api.V1.Folders
-@model Ogma3.Pages.Club.Folders.DeleteModel
+@model DeleteModel
 
 @{
-    ViewData["Title"] = "Delete folder";
+	ViewData["Title"] = "Delete folder";
 }
 
 <h2>@Model.Folder.Name</h2>
 
 <div>
-    <h3>Are you sure you want to delete this folder?</h3>
-    
-    <hr />
-    
-    <div asp-validation-summary="All">
-        <span>Please correct the following errors</span>
-    </div>
-    
-    <hr>
-    
-    <dl class="rows">
-        <dt>
-            Description:
-        </dt>
-        <dd>
-            <markdown preset="Basic">
-                @Model.Folder.Description
-            </markdown>
-        </dd>
-        <dt>
-            Stories:
-        </dt>
-        <dd>
-            @Model.Folder.StoriesCount
-        </dd>
-    </dl>
-    
-    <form method="post" class="confirm" id="folder">
+	<h3>Are you sure you want to delete this folder?</h3>
 
-        <template id="folder-tree">
-            <folder-tree :club-id="@Model.Folder.ClubId"
-                         label="Move stories to"
-                         :value="@Model.Folder.Id"
-                         :current="@Model.Folder.Id"
-                         route="@Url.RouteUrl(nameof(FoldersController))">
-            </folder-tree>
-        </template>
+	<hr/>
 
-        <input type="hidden" asp-for="Folder.Id"/>
+	<div asp-validation-summary="All">
+		<span>Please correct the following errors</span>
+	</div>
 
-        <hr>
-        
-        <div class="buttons">
-            <input type="submit" value="Delete" class="button accept red"/>
-            <a asp-page="./Folder" class="button cancel" asp-route-id="@Model.Folder.Id" asp-route-clubId="@Model.Folder.ClubId">Cancel</a>
-        </div>
-    </form>
-    
+	<hr>
+
+	<dl class="rows">
+		<dt>
+			Description:
+		</dt>
+		<dd>
+			<markdown preset="Basic">
+				@Model.Folder.Description
+			</markdown>
+		</dd>
+		<dt>
+			Stories:
+		</dt>
+		<dd>
+			@Model.Folder.StoriesCount
+		</dd>
+	</dl>
+
+	<form method="post" class="confirm" id="folder">
+
+		<template id="folder-tree">
+			<folder-tree :club-id="@Model.Folder.ClubId"
+			             label="Move stories to"
+			             :value="@Model.Folder.Id"
+			             :current="@Model.Folder.Id"
+			             route="@Url.RouteUrl(nameof(FoldersController))">
+			</folder-tree>
+		</template>
+
+		<input type="hidden" asp-for="Folder.Id"/>
+
+		<hr>
+
+		<div class="buttons">
+			<input type="submit" value="Delete" class="button accept red"/>
+			<a asp-page="./Folder" class="button cancel" asp-route-id="@Model.Folder.Id" asp-route-clubId="@Model.Folder.ClubId">Cancel</a>
+		</div>
+	</form>
+
 </div>
 
 @section Scripts {
-    <script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-    <script>
+	<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
+	<script>
     new Vue({ el: '#folder-tree' })
     </script>
 }

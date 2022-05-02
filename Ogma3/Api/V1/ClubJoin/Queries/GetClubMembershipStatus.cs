@@ -13,29 +13,29 @@ namespace Ogma3.Api.V1.ClubJoin.Queries;
 
 public static class GetClubMembershipStatus
 {
-    public sealed record Query(long ClubId) : IRequest<ActionResult<bool>>;
+	public sealed record Query(long ClubId) : IRequest<ActionResult<bool>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<bool>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<bool>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService?.User?.GetNumericId();
-        }
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService?.User?.GetNumericId();
+		}
 
-        public async Task<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Ok(false);
-            
-            var isMember = await _context.ClubMembers
-                .Where(cm => cm.ClubId == request.ClubId)
-                .Where(cm => cm.MemberId == _uid)
-                .AnyAsync(cancellationToken);
-            
-            return Ok(isMember);
-        }
-    }
+		public async Task<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Ok(false);
+
+			var isMember = await _context.ClubMembers
+				.Where(cm => cm.ClubId == request.ClubId)
+				.Where(cm => cm.MemberId == _uid)
+				.AnyAsync(cancellationToken);
+
+			return Ok(isMember);
+		}
+	}
 }

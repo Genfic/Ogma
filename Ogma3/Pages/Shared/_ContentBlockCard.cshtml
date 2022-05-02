@@ -3,13 +3,13 @@
 
 @if (Model is not null)
 {
-    <div class="alert alert-warning">
-        This content was blocked by <strong>@Model.IssuerUserName</strong> on
-        <time datetime="@Model.DateTime.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-            <strong>@Model.DateTime.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)</strong>
-        </time>
-        for the following reason:
-        <br>
-        <em>@Model.Reason</em>
-    </div>
+	<div class="alert alert-warning">
+		This content was blocked by <strong>@Model.IssuerUserName</strong> on
+		<time datetime="@Model.DateTime.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+			<strong>@Model.DateTime.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)</strong>
+		</time>
+		for the following reason:
+		<br>
+		<em>@Model.Reason</em>
+	</div>
 }

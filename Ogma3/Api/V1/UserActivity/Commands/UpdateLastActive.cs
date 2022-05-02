@@ -13,26 +13,26 @@ namespace Ogma3.Api.V1.UserActivity.Commands;
 
 public static class UpdateLastActive
 {
-    public sealed record Command : IRequest<OkResult>;
+	public sealed record Command : IRequest<OkResult>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, OkResult>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public class Handler : BaseHandler, IRequestHandler<Command, OkResult>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
 
-        public async Task<OkResult> Handle(Command request, CancellationToken cancellationToken)
-        {
-            await _context.Database.ExecuteSqlInterpolatedAsync(
-                $@"UPDATE ""AspNetUsers"" SET ""LastActive"" = {DateTime.Now.ToUniversalTime()} WHERE ""Id"" = {_uid}", 
-                cancellationToken
-            );
-            return Ok();
-        }
-    }
+		public async Task<OkResult> Handle(Command request, CancellationToken cancellationToken)
+		{
+			await _context.Database.ExecuteSqlInterpolatedAsync(
+				$@"UPDATE ""AspNetUsers"" SET ""LastActive"" = {DateTime.Now.ToUniversalTime()} WHERE ""Id"" = {_uid}",
+				cancellationToken
+			);
+			return Ok();
+		}
+	}
 }

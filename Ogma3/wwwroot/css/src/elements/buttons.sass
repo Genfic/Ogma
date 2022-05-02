@@ -3,65 +3,65 @@
 @use "../mixins/focus" as f
 
 .btn
-    cursor: pointer
-    background-color: transparent
-    color: v.$accent
-    display: flex
-    align-items: center
-    justify-content: center
-    padding: .5rem
-    +ab.active-border
-    +f.focus
+	cursor: pointer
+	background-color: transparent
+	color: v.$accent
+	display: flex
+	align-items: center
+	justify-content: center
+	padding: .5rem
+	+ab.active-border
+	+f.focus
 
-    &.red
-        background-color: v.$red-10
-        color: v.$foreground
+	&.red
+		background-color: v.$red-10
+		color: v.$foreground
 
-        &:hover
-            background-color: v.$red-25
+		&:hover
+			background-color: v.$red-25
 
-        &-hl
-            &:hover
-                background-color: v.$red-25
+		&-hl
+			&:hover
+				background-color: v.$red-25
 
 
-    &.green
-        background-color: v.$green-10
-        color: v.$foreground
+	&.green
+		background-color: v.$green-10
+		color: v.$foreground
 
-        &:hover
-            background-color: v.$green-25
+		&:hover
+			background-color: v.$green-25
 
-        &-hl
-            &:hover
-                background-color: v.$green-25
+		&-hl
+			&:hover
+				background-color: v.$green-25
 
 .btn-primary
-    color: v.$background
-    background-color: v.$accent-75
-    border-color: v.$accent
+	color: v.$background
+	background-color: v.$accent-75
+	border-color: v.$accent
 
-    &:hover
-        color: v.$foreground
-        background-color: v.$accent-25
-        border-color: v.$accent-75
+	&:hover
+		color: v.$foreground
+		background-color: v.$accent-25
+		border-color: v.$accent-75
 
 button.accept-policy
-    font-size: 1rem
-    line-height: inherit
+	font-size: 1rem
+	line-height: inherit
 
 
 .button-group
-    display: flex
+	display: flex
 
-    &.toolbar
-        gap: .2rem
-        margin-bottom: .2rem
+	&.toolbar
+		gap: .2rem
+		margin-bottom: .2rem
 
-        > .btn
-            min-width: 2.5rem
-            padding: .5rem
+		> .btn
+			min-width: 2.5rem
+			padding: .5rem
 
-            > *
-                font-size: 1.1rem
+			> *
+				font-size: 1.1rem
     

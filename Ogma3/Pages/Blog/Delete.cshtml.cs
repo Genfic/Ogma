@@ -16,68 +16,67 @@ namespace Ogma3.Pages.Blog;
 [Authorize]
 public class DeleteModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IMapper _mapper;
+	private readonly ApplicationDbContext _context;
+	private readonly IMapper _mapper;
 
-    public DeleteModel(ApplicationDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+	public DeleteModel(ApplicationDbContext context, IMapper mapper)
+	{
+		_context = context;
+		_mapper = mapper;
+	}
 
-    [BindProperty]
-    public GetData Blogpost { get; set; }
+	[BindProperty] public GetData Blogpost { get; set; }
 
-    public class GetData
-    {
-        public long Id { get; init; }
-        public long AuthorId { get; set; }
-        public string Title { get; init; }
-        public string Slug { get; init; }
-        public DateTime PublishDate { get; init; }
-        public bool IsPublished { get; init; }
-        public int CommentsThreadCommentsCount { get; init; }
-    }
-        
-    public class MappingProfile : Profile
-    {
-        public MappingProfile() => CreateMap<Blogpost, GetData>();
-    }
+	public class GetData
+	{
+		public long Id { get; init; }
+		public long AuthorId { get; set; }
+		public string Title { get; init; }
+		public string Slug { get; init; }
+		public DateTime PublishDate { get; init; }
+		public bool IsPublished { get; init; }
+		public int CommentsThreadCommentsCount { get; init; }
+	}
 
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id == null) return NotFound();
+	public class MappingProfile : Profile
+	{
+		public MappingProfile() => CreateMap<Blogpost, GetData>();
+	}
 
-        Blogpost = await _context.Blogposts
-            .Where(m => m.Id == id)
-            .ProjectTo<GetData>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+	public async Task<IActionResult> OnGetAsync(int? id)
+	{
+		if (id == null) return NotFound();
 
-        if (Blogpost is null) return NotFound();
-        if (Blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
-            
-        return Page();
-    }
+		Blogpost = await _context.Blogposts
+			.Where(m => m.Id == id)
+			.ProjectTo<GetData>(_mapper.ConfigurationProvider)
+			.FirstOrDefaultAsync();
 
-    public async Task<IActionResult> OnPostAsync(int? id)
-    {
-        if (id == null) return NotFound();
-            
-        // Get logged in user
-        var uname = User.GetUsername();
-        if (uname is null) return Unauthorized();
+		if (Blogpost is null) return NotFound();
+		if (Blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
 
-        var blogpost = await _context.Blogposts
-            .Where(b => b.Id == id)
-            .FirstOrDefaultAsync();
+		return Page();
+	}
 
-        if (blogpost is null) return NotFound();
-        if (blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
-            
-        _context.Blogposts.Remove(blogpost);
+	public async Task<IActionResult> OnPostAsync(int? id)
+	{
+		if (id == null) return NotFound();
 
-        await _context.SaveChangesAsync();
+		// Get logged in user
+		var uname = User.GetUsername();
+		if (uname is null) return Unauthorized();
 
-        return RedirectToPage("/User/Blog", new { name = uname });
-    }
+		var blogpost = await _context.Blogposts
+			.Where(b => b.Id == id)
+			.FirstOrDefaultAsync();
+
+		if (blogpost is null) return NotFound();
+		if (blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
+
+		_context.Blogposts.Remove(blogpost);
+
+		await _context.SaveChangesAsync();
+
+		return RedirectToPage("/User/Blog", new { name = uname });
+	}
 }

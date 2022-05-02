@@ -16,83 +16,82 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public class Blacklists : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IMapper _mapper;
+	private readonly ApplicationDbContext _context;
+	private readonly IMapper _mapper;
 
-    public Blacklists(ApplicationDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-    public IEnumerable<Rating> Ratings { get; set; }
-    public IEnumerable<UserCard> BlockedUsers { get; set; }
-        
-    public async Task<IActionResult> OnGetAsync()
-    {
-        var uid = User.GetNumericId();
-        if (uid == null) return Unauthorized();
-            
-        BlacklistedRatings = await _context.BlacklistedRatings
-            .Where(br => br.UserId == uid)
-            .Select(br => br.RatingId)
-            .ToListAsync();
-        BlacklistedTags = await _context.BlacklistedTags
-            .Where(bt => bt.UserId == uid)
-            .Select(bt => bt.TagId)
-            .ToListAsync();
-        BlockedUsers = await _context.BlacklistedUsers
-            .Where(bu => bu.BlockingUserId == uid)
-            .Select(bu => bu.BlockedUser)
-            .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+	public Blacklists(ApplicationDbContext context, IMapper mapper)
+	{
+		_context = context;
+		_mapper = mapper;
+	}
 
-        Ratings = await _context.Ratings.ToListAsync();
-            
-        return Page();
-    }
+	public IEnumerable<Rating> Ratings { get; set; }
+	public IEnumerable<UserCard> BlockedUsers { get; set; }
 
-    [BindProperty]
-    public IEnumerable<long> BlacklistedRatings { get; set; }
-    [BindProperty]
-    public IEnumerable<long> BlacklistedTags { get; set; }
-        
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var uid = User.GetNumericId();
-        if (uid == null) return Unauthorized();
+	public async Task<IActionResult> OnGetAsync()
+	{
+		var uid = User.GetNumericId();
+		if (uid == null) return Unauthorized();
 
-        var user = await _context.Users
-            .Where(u => u.Id == uid)
-            .Include(u => u.BlacklistedRatings)
-            .Include(u => u.BlacklistedTags)
-            .FirstOrDefaultAsync();
-        if (user == null) return Unauthorized();
-            
-        // Clear blacklists
-        _context.BlacklistedRatings.RemoveRange(user.BlacklistedRatings);
-        _context.BlacklistedTags.RemoveRange(user.BlacklistedTags);
+		BlacklistedRatings = await _context.BlacklistedRatings
+			.Where(br => br.UserId == uid)
+			.Select(br => br.RatingId)
+			.ToListAsync();
+		BlacklistedTags = await _context.BlacklistedTags
+			.Where(bt => bt.UserId == uid)
+			.Select(bt => bt.TagId)
+			.ToListAsync();
+		BlockedUsers = await _context.BlacklistedUsers
+			.Where(bu => bu.BlockingUserId == uid)
+			.Select(bu => bu.BlockedUser)
+			.ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+			.ToListAsync();
 
-        await _context.SaveChangesAsync();
-            
-        // Add blacklisted ratings
-        user.BlacklistedRatings = BlacklistedRatings
-            .Select(rating => new BlacklistedRating
-            {
-                RatingId = rating, 
-                UserId = (long) uid
-            })
-            .ToList();
-        // And tags
-        user.BlacklistedTags = BlacklistedTags
-            .Select(tag => new BlacklistedTag
-            {
-                TagId = tag,
-                UserId = (long) uid
-            })
-            .ToList();
+		Ratings = await _context.Ratings.ToListAsync();
 
-        await _context.SaveChangesAsync();
-            
-        return RedirectToPage();
-    }
+		return Page();
+	}
+
+	[BindProperty] public IEnumerable<long> BlacklistedRatings { get; set; }
+	[BindProperty] public IEnumerable<long> BlacklistedTags { get; set; }
+
+	public async Task<IActionResult> OnPostAsync()
+	{
+		var uid = User.GetNumericId();
+		if (uid == null) return Unauthorized();
+
+		var user = await _context.Users
+			.Where(u => u.Id == uid)
+			.Include(u => u.BlacklistedRatings)
+			.Include(u => u.BlacklistedTags)
+			.FirstOrDefaultAsync();
+		if (user == null) return Unauthorized();
+
+		// Clear blacklists
+		_context.BlacklistedRatings.RemoveRange(user.BlacklistedRatings);
+		_context.BlacklistedTags.RemoveRange(user.BlacklistedTags);
+
+		await _context.SaveChangesAsync();
+
+		// Add blacklisted ratings
+		user.BlacklistedRatings = BlacklistedRatings
+			.Select(rating => new BlacklistedRating
+			{
+				RatingId = rating,
+				UserId = (long)uid
+			})
+			.ToList();
+		// And tags
+		user.BlacklistedTags = BlacklistedTags
+			.Select(tag => new BlacklistedTag
+			{
+				TagId = tag,
+				UserId = (long)uid
+			})
+			.ToList();
+
+		await _context.SaveChangesAsync();
+
+		return RedirectToPage();
+	}
 }

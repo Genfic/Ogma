@@ -10,119 +10,119 @@
 @model ProfileBar
 
 @{
-    var tab = (string) ViewData["Tab"];
+	var tab = (string)ViewData["Tab"];
 }
 
 <div class="info-bar profile-bar" id="profile-bar">
 
-    <cdn-img class="img" 
-             src="@Model.Avatar"
-             alt="@Model.UserName's avatar" 
-             loading="lazy" 
-             height="130" width="130" />
+	<cdn-img class="img"
+	         src="@Model.Avatar"
+	         alt="@Model.UserName's avatar"
+	         loading="lazy"
+	         height="130" width="130"/>
 
-    <h1 class="name">@Model.UserName</h1>
-    
-    <div class="roles">
-        @foreach (var r in Model.Roles)
-        {
-            <div class="role-tag">
-                <div class="bg" style="background-color: @r.Color"></div>
-                <span class="name">@r.Name</span>
-            </div>
-        }
-    </div>
-    
-    
-    <div class="info">
-        <h2 class="title">@Model.Title</h2>
-        
-        <div class="time">
-            <span>Member since</span>
-            <time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-                @Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-            </time>
-        </div>
-        
-        <div class="time">
-            <span>Last seen</span>
-            <time datetime="@Model.LastActive.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
-                  title="@Model.LastActive.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture)">
-                @Model.LastActive.Humanize(culture: CultureInfo.InvariantCulture)
-            </time>
-        </div>
-        
-    </div>
-    
-    <div class="buttons">
-        @if (!User.IsUserSameAsLoggedIn(Model.Id) && (User.Identity?.IsAuthenticated ?? false))
-        {
-            <button class="button max join" 
-                    :title="isFollowed ? 'Unfollow' : 'Follow'"
-                    v-on:click="follow">
-                {{ isFollowed ? 'Following' : 'Follow' }}
-            </button>
-            
-            <div class="o-dropdown left" x-data="{open: false}">
-                
-                <button class="action-btn max" x-on:click="open = !open">
-                    <icon icon="more_vert"></icon>
-                </button>
-                
-                <ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
-                        
-                    <li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
-                        {{ isBlocked ? 'Unblock' : 'Block' }}
-                    </li>
-                        
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        <li title="Report" class="item active red" v-on:click="report">
-                            Report
-                        </li>
-                    }
+	<h1 class="name">@Model.UserName</h1>
 
-                    @if (User.IsInRole(RoleNames.Admin))
-                    {
-                        <a asp-area="Admin"
-                           asp-page="/Users"
-                           asp-route-name="@Model.UserName"
-                           class="item active">
-                            Manage
-                        </a>
-                    }
-                </ul>
-            </div>
-        }
-    </div>
+	<div class="roles">
+		@foreach (var r in Model.Roles)
+		{
+			<div class="role-tag">
+				<div class="bg" style="background-color: @r.Color"></div>
+				<span class="name">@r.Name</span>
+			</div>
+		}
+	</div>
 
-    <nav class="nav">
-        <a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">
-            Home
-        </a>
-        <a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="@Model.UserName">
-            Stories (@Model.StoriesCount)
-        </a>
-        <a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="@Model.UserName">
-            Blog (@Model.BlogpostsCount)
-        </a>
-        <a class="nav-item @(tab == "Library" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="@Model.UserName">
-            Library
-        </a>
-    </nav>
 
-    <div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))" style="display: none"></div>
-    <div v-if="!name"  id="data-name" data-name="@Model.UserName.Friendlify()" style="display: none"></div>
-    <div v-if="!done"  id="data-blocked" data-blocked="@Model.IsBlockedBy" style="display: none"></div>
-    <div v-if="!done"  id="data-followed" data-followed="@Model.IsFollowedBy" style="display: none"></div>
-    @Html.AntiForgeryToken()
-    
-    <report-modal
-        ref="reportModal"
-        :item-id="@Model.Id"
-        item-type="@EReportableContentTypes.User"
-        reports-route="@Url.RouteUrl(nameof(ReportsController))">
-    </report-modal>
+	<div class="info">
+		<h2 class="title">@Model.Title</h2>
+
+		<div class="time">
+			<span>Member since</span>
+			<time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
+				@Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
+			</time>
+		</div>
+
+		<div class="time">
+			<span>Last seen</span>
+			<time datetime="@Model.LastActive.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
+			      title="@Model.LastActive.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture)">
+				@Model.LastActive.Humanize(culture: CultureInfo.InvariantCulture)
+			</time>
+		</div>
+
+	</div>
+
+	<div class="buttons">
+		@if (!User.IsUserSameAsLoggedIn(Model.Id) && (User.Identity?.IsAuthenticated ?? false))
+		{
+			<button class="button max join"
+			        :title="isFollowed ? 'Unfollow' : 'Follow'"
+			        v-on:click="follow">
+				{{ isFollowed ? 'Following' : 'Follow' }}
+			</button>
+
+			<div class="o-dropdown left" x-data="{open: false}">
+
+				<button class="action-btn max" x-on:click="open = !open">
+					<icon icon="more_vert"></icon>
+				</button>
+
+				<ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
+
+					<li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
+						{{ isBlocked ? 'Unblock' : 'Block' }}
+					</li>
+
+					@if (User.Identity?.IsAuthenticated ?? false)
+					{
+						<li title="Report" class="item active red" v-on:click="report">
+							Report
+						</li>
+					}
+
+					@if (User.IsInRole(RoleNames.Admin))
+					{
+						<a asp-area="Admin"
+						   asp-page="/Users"
+						   asp-route-name="@Model.UserName"
+						   class="item active">
+							Manage
+						</a>
+					}
+				</ul>
+			</div>
+		}
+	</div>
+
+	<nav class="nav">
+		<a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">
+			Home
+		</a>
+		<a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="@Model.UserName">
+			Stories (@Model.StoriesCount)
+		</a>
+		<a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="@Model.UserName">
+			Blog (@Model.BlogpostsCount)
+		</a>
+		<a class="nav-item @(tab == "Library" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="@Model.UserName">
+			Library
+		</a>
+	</nav>
+
+	<div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))" style="display: none"></div>
+	<div v-if="!name" id="data-name" data-name="@Model.UserName.Friendlify()" style="display: none"></div>
+	<div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy" style="display: none"></div>
+	<div v-if="!done" id="data-followed" data-followed="@Model.IsFollowedBy" style="display: none"></div>
+	@Html.AntiForgeryToken()
+
+	<report-modal
+		ref="reportModal"
+		:item-id="@Model.Id"
+		item-type="@EReportableContentTypes.User"
+		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+	</report-modal>
 </div>
 
 @Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>)

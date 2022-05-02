@@ -1,63 +1,63 @@
 @page
 @using Ogma3.Api.V1.Roles
-@model Ogma3.Areas.Admin.Pages.Roles
+@model Roles
 
 @{
-    ViewData["Title"] = "Roles";
-    ViewData["ActivePage"] = ManageNavPages.Roles;
+	ViewData["Title"] = "Roles";
+	ViewData["ActivePage"] = ManageNavPages.Roles;
 }
-    
+
 <form id="namespace" class="auto" method="post" v-on:submit.stop.prevent="createRole">
 
-    <label asp-for="Input.Name"></label>
-    <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
+	<label asp-for="Input.Name"></label>
+	<input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
 
-    <label asp-for="Input.Color"></label>
-    <input asp-for="Input.Color" type="color" class="o-form-control" v-model="form.color">
+	<label asp-for="Input.Color"></label>
+	<input asp-for="Input.Color" type="color" class="o-form-control" v-model="form.color">
 
-    <label asp-for="Input.IsStaff"></label>
-    <input asp-for="Input.IsStaff" type="checkbox" class="o-form-control" v-model="form.isStaff">
+	<label asp-for="Input.IsStaff"></label>
+	<input asp-for="Input.IsStaff" type="checkbox" class="o-form-control" v-model="form.isStaff">
 
-    <label asp-for="Input.Order"></label>
-    <input asp-for="Input.Order" type="number" class="o-form-control" min="0" v-model="form.order">
+	<label asp-for="Input.Order"></label>
+	<input asp-for="Input.Order" type="number" class="o-form-control" min="0" v-model="form.order">
 
-    
-    <input type="hidden" :value="form.id">
 
-    <div class="form-row">
-        <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-        <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
-    </div>
+	<input type="hidden" :value="form.id">
+
+	<div class="form-row">
+		<button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
+		<button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
+	</div>
 
 </form>
 
 <button v-if="roles.length <= 0" class="btn btn-primary" type="button" disabled>
-    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-    Loading...
+	<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+	Loading...
 </button>
 
-<ul class="items-list">    
-    <li v-for="n in roles">
-        <div class="deco" v-bind:style="{background: n.color}">
-            <span class="text">{{n.order}}</span>
-        </div>
-        <div class="main">
-            <h3 class="name">{{ n.name }}<icon v-if="n.isStaff" class="icon" icon="security"></icon></h3>
-        </div>
-        <div class="actions">
-            <button class="action" v-on:click="deleteRole(n)">
-                <icon icon="delete_forever"></icon>
-            </button>
-            <button class="action" v-on:click="editRole(n)">
-                <icon icon="edit"></icon>
-            </button>
-        </div>
-    </li>
+<ul class="items-list">
+	<li v-for="n in roles">
+		<div class="deco" v-bind:style="{background: n.color}">
+			<span class="text">{{n.order}}</span>
+		</div>
+		<div class="main">
+			<h3 class="name">{{ n.name }}<icon v-if="n.isStaff" class="icon" icon="security"></icon></h3>
+		</div>
+		<div class="actions">
+			<button class="action" v-on:click="deleteRole(n)">
+				<icon icon="delete_forever"></icon>
+			</button>
+			<button class="action" v-on:click="editRole(n)">
+				<icon icon="edit"></icon>
+			</button>
+		</div>
+	</li>
 </ul>
 
 <div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(RolesController))" v-if="!route"></div>
 
 @section Scripts
 {
-    <script src="~/js/dist/admin/roles.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/admin/roles.min.js" asp-append-version="true"></script>
 }

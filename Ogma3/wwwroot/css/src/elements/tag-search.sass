@@ -1,78 +1,78 @@
 @use '../vars' as v
 .tag-search-select
-    width: 100%
+	width: 100%
 
-    & .output
-        visibility: collapse
-        display: contents
-        height: 0
-        width: 0
+	& .output
+		visibility: collapse
+		display: contents
+		height: 0
+		width: 0
 
-    & .tag-search
-        &.inline
-            display: flex
-            align-items: center
+	& .tag-search
+		&.inline
+			display: flex
+			align-items: center
 
-            & .tags
-                flex-grow: 1
+			& .tags
+				flex-grow: 1
 
-        & .searchbar
-            display: flex
-            flex-direction: column
-            width: 100%
-            position: relative
+		& .searchbar
+			display: flex
+			flex-direction: column
+			width: 100%
+			position: relative
 
-        & .tags
-            min-height: 2.5rem
-            padding: .15rem
-            border: 1px solid v.$foreground-50
-            display: flex
-            flex-wrap: wrap
-            justify-content: stretch
+		& .tags
+			min-height: 2.5rem
+			padding: .15rem
+			border: 1px solid v.$foreground-50
+			display: flex
+			flex-wrap: wrap
+			justify-content: stretch
 
-            > .tag
-                contain: content
-                flex-grow: 1
+			> .tag
+				contain: content
+				flex-grow: 1
 
-                &:first-child
-                    margin-left: 4px
+				&:first-child
+					margin-left: 4px
 
-                & .material-icons-outlined
-                    font-size: 1.2rem
-                    cursor: pointer
+				& .material-icons-outlined
+					font-size: 1.2rem
+					cursor: pointer
 
-                    &:hover
-                        background-color: v.$background-25
+					&:hover
+						background-color: v.$background-25
 
-            & .search
-                flex-grow: 100
-                width: 1rem
-                padding: .5rem
-                margin: 0
-                background-color: transparent
-                color: v.$foreground
-                border: none
+			& .search
+				flex-grow: 100
+				width: 1rem
+				padding: .5rem
+				margin: 0
+				background-color: transparent
+				color: v.$foreground
+				border: none
 
-        & .search-results
-            max-height: 6rem
-            overflow-y: scroll
-            border: 1px solid v.$foreground-50
-            background-color: v.$background
-            border-top: none
-            position: absolute
-            top: 100%
-            left: 0
-            width: 100%
+		& .search-results
+			max-height: 6rem
+			overflow-y: scroll
+			border: 1px solid v.$foreground-50
+			background-color: v.$background
+			border-top: none
+			position: absolute
+			top: 100%
+			left: 0
+			width: 100%
 
-            > li
-                flex: 1
-                padding: .2rem
-                margin: .1rem
-                cursor: pointer
-                border: 1px solid v.$foreground-25
-                background-color: v.$background
+			> li
+				flex: 1
+				padding: .2rem
+				margin: .1rem
+				cursor: pointer
+				border: 1px solid v.$foreground-25
+				background-color: v.$background
 
-                &:hover, &.hl
-                    box-shadow: inset 0 0 2px 1px v.$accent-75
-                    border: 1px solid v.$foreground-75
+				&:hover, &.hl
+					box-shadow: inset 0 0 2px 1px v.$accent-75
+					border: 1px solid v.$foreground-75
           

@@ -1,26 +1,26 @@
 @use '../vars' as v
 
 .votes
-    display: flex
-    align-items: center
-    border: none
-    background-color: transparent
+	display: flex
+	align-items: center
+	border: none
+	background-color: transparent
 
-    &:focus
-        border: 1px solid v.$accent-50
+	&:focus
+		border: 1px solid v.$accent-50
 
-    &:hover
-        background-color: v.$accent-10
+	&:hover
+		background-color: v.$accent-10
 
-    &.active
-        > i
-            color: v.$gold
-            animation: spin .2s ease-in-out
+	&.active
+		> i
+			color: v.$gold
+			animation: spin .2s ease-in-out
 
 @keyframes spin
-    0%
-        transform: rotate(0)
-    50%
-        transform: rotate(180deg)
-    100%
-        transform: rotate(360deg)
+	0%
+		transform: rotate(0)
+	50%
+		transform: rotate(180deg)
+	100%
+		transform: rotate(360deg)

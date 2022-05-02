@@ -12,20 +12,20 @@ namespace Ogma3.Api.V1.Roles.Queries;
 
 public static class GetRoleById
 {
-    public sealed record Query(long RoleId) : IRequest<ActionResult<RoleDto>>;
+	public sealed record Query(long RoleId) : IRequest<ActionResult<RoleDto>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<RoleDto>>
-    {
-        private readonly ApplicationDbContext _context;
-        public Handler(ApplicationDbContext context) => _context = context;
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<RoleDto>>
+	{
+		private readonly ApplicationDbContext _context;
+		public Handler(ApplicationDbContext context) => _context = context;
 
-        public async Task<ActionResult<RoleDto>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            var role = await _context.Roles
-                .Where(r => r.Id == request.RoleId)
-                .FirstOrDefaultAsync(cancellationToken);
+		public async Task<ActionResult<RoleDto>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			var role = await _context.Roles
+				.Where(r => r.Id == request.RoleId)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            return Ok(role);
-        }
-    }
+			return Ok(role);
+		}
+	}
 }

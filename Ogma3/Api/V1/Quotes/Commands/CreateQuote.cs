@@ -14,57 +14,58 @@ namespace Ogma3.Api.V1.Quotes.Commands;
 
 public static class CreateQuote
 {
-    public sealed record Command(string Body, string Author) : IRequest<ActionResult<Quote>>;
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator()
-        {
-            RuleFor(q => q.Body).NotEmpty();
-            RuleFor(q => q.Author).NotEmpty();
-        }
-    }
-        
-    public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
-    {
-        private readonly ApplicationDbContext _context;
+	public sealed record Command(string Body, string Author) : IRequest<ActionResult<Quote>>;
 
-        public CreateQuoteHandler(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+	public class CommandValidator : AbstractValidator<Command>
+	{
+		public CommandValidator()
+		{
+			RuleFor(q => q.Body).NotEmpty();
+			RuleFor(q => q.Author).NotEmpty();
+		}
+	}
 
-        public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var (body, author) = request;
-            var quote = new Quote
-            {
-                Body = body,
-                Author = author
-            };
-            _context.Quotes.Add(quote);
+	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
+	{
+		private readonly ApplicationDbContext _context;
 
-            try
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch (DbUpdateException ex)
-            {
-                Log.Error("Creation error in {Src}: {Msg}", ex.Source, ex.Message);
-                return ServerError("Database Creation Error");
-            }
-                
-            Jog.Log(new
-            {
-                Action = nameof(QuotesController.GetQuote),
-                Controller = nameof(QuotesController),
-            });
+		public CreateQuoteHandler(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-            return CreatedAtAction(
-                nameof(QuotesController.GetQuote),
-                nameof(QuotesController)[..^10],
-                new { id = quote.Id },
-                new QuoteDto { Author = quote.Author, Body = quote.Body }
-            );
-        }
-    }
+		public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var (body, author) = request;
+			var quote = new Quote
+			{
+				Body = body,
+				Author = author
+			};
+			_context.Quotes.Add(quote);
+
+			try
+			{
+				await _context.SaveChangesAsync(cancellationToken);
+			}
+			catch (DbUpdateException ex)
+			{
+				Log.Error("Creation error in {Src}: {Msg}", ex.Source, ex.Message);
+				return ServerError("Database Creation Error");
+			}
+
+			Jog.Log(new
+			{
+				Action = nameof(QuotesController.GetQuote),
+				Controller = nameof(QuotesController),
+			});
+
+			return CreatedAtAction(
+				nameof(QuotesController.GetQuote),
+				nameof(QuotesController)[..^10],
+				new { id = quote.Id },
+				new QuoteDto { Author = quote.Author, Body = quote.Body }
+			);
+		}
+	}
 }

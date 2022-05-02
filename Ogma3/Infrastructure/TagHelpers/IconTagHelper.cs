@@ -6,12 +6,12 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public class IconTagHelper : TagHelper
 {
-    public string Icon { get; set; } = "bug_report";
-        
-    public override void Process(TagHelperContext context, TagHelperOutput output)
-    {
-        output.TagName = "i";
-        output.AddClass("material-icons-outlined", HtmlEncoder.Default);
-        output.Content.SetHtmlContent(Icon);
-    }
+	public string Icon { get; set; } = "bug_report";
+
+	public override void Process(TagHelperContext context, TagHelperOutput output)
+	{
+		output.TagName = "i";
+		output.AddClass("material-icons-outlined", HtmlEncoder.Default);
+		output.Content.SetHtmlContent(Icon);
+	}
 }

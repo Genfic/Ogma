@@ -2,64 +2,64 @@
 @using Ogma3.Api.V1.Quotes
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
-    ViewData["ActivePage"] = "Home";
+	ViewData["Title"] = "Home page";
+	ViewData["ActivePage"] = "Home";
 }
 
-<partial name="_SubNavigation" />
+<partial name="_SubNavigation"/>
 
 <quote-box endpoint="@Url.RouteUrl(nameof(QuotesController))/random"></quote-box>
 
 <div id="tabs" class="tab-view mt-3" x-data="{tab: 1}">
-    <div class="tabs">
-        <button class="tab"
-                x-bind:class="tab === 1 && 'active'"
-                x-on:click="tab = 1">
-            Top
-        </button>
-        <button class="tab"
-                x-bind:class="tab === 2 && 'active'"
-                x-on:click="tab = 2">
-            New
-        </button>    
-        <button class="tab"
-                x-bind:class="tab === 3 && 'active'"
-                x-on:click="tab = 3">
-            Updated
-        </button>  
-    </div>
-    
-    <div class="tab-body" x-show="tab === 1">
-        <h2 class="title">Top stories of all time</h2>
+	<div class="tabs">
+		<button class="tab"
+		        x-bind:class="tab === 1 && 'active'"
+		        x-on:click="tab = 1">
+			Top
+		</button>
+		<button class="tab"
+		        x-bind:class="tab === 2 && 'active'"
+		        x-on:click="tab = 2">
+			New
+		</button>
+		<button class="tab"
+		        x-bind:class="tab === 3 && 'active'"
+		        x-on:click="tab = 3">
+			Updated
+		</button>
+	</div>
 
-        <div>
-            @foreach (var story in Model.TopStories)
-            {
-                <partial name="Shared/Cards/_StoryCard" model="@story" />
-            }
-        </div>
-    </div>
-    
-    <div class="tab-body" x-show="tab === 2">
-        <h2 class="title">Newest stories</h2>
-        
-        <div>
-            @foreach (var story in Model.RecentStories)
-            {
-                <partial name="Shared/Cards/_StoryCard" model="@story" />
-            }
-        </div>
-    </div>
-    
-    <div class="tab-body" x-show="tab === 3">
-        <h2 class="title">Freshly updated</h2>
-        
-        <div>
-            @foreach (var story in Model.LastUpdatedStories)
-            {
-                <partial name="Shared/Cards/_StoryCard" model="@story" />
-            }
-        </div>
-    </div>
-    
+	<div class="tab-body" x-show="tab === 1">
+		<h2 class="title">Top stories of all time</h2>
+
+		<div>
+			@foreach (var story in Model.TopStories)
+			{
+				<partial name="Shared/Cards/_StoryCard" model="@story"/>
+			}
+		</div>
+	</div>
+
+	<div class="tab-body" x-show="tab === 2">
+		<h2 class="title">Newest stories</h2>
+
+		<div>
+			@foreach (var story in Model.RecentStories)
+			{
+				<partial name="Shared/Cards/_StoryCard" model="@story"/>
+			}
+		</div>
+	</div>
+
+	<div class="tab-body" x-show="tab === 3">
+		<h2 class="title">Freshly updated</h2>
+
+		<div>
+			@foreach (var story in Model.LastUpdatedStories)
+			{
+				<partial name="Shared/Cards/_StoryCard" model="@story"/>
+			}
+		</div>
+	</div>
+
 </div>

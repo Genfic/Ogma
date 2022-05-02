@@ -1,24 +1,23 @@
 @model FolderCard
 
 <div class="folder-card active-border">
-    <a class="name" asp-page="/Club/Folders/Folder" asp-route-id="@Model.Id" asp-route-clubid="@Model.ClubId" asp-route-slug="@Model.Slug">
-        @Model.Name
-    </a>
-    
-    <markdown preset="Basic" class="desc">@Model.Description</markdown>
-    
-    <div class="children">
-        @foreach (var inner in Model.ChildFolders)
-        {
-            <a class="child active-border" asp-page="/Club/Folders/Folder" asp-route-id="@inner.Id" asp-route-slug="@inner.Slug" asp-route-clubid="@Model.ClubId">
-                @inner.Name
-            </a>
-        }
-    </div>
-    
-    <div class="count">
-        <strong>@Model.StoriesCount</strong>
-        <span>stories</span>
-    </div>
-</div>
+	<a class="name" asp-page="/Club/Folders/Folder" asp-route-id="@Model.Id" asp-route-clubid="@Model.ClubId" asp-route-slug="@Model.Slug">
+		@Model.Name
+	</a>
 
+	<markdown preset="Basic" class="desc">@Model.Description</markdown>
+
+	<div class="children">
+		@foreach (var inner in Model.ChildFolders)
+		{
+			<a class="child active-border" asp-page="/Club/Folders/Folder" asp-route-id="@inner.Id" asp-route-slug="@inner.Slug" asp-route-clubid="@Model.ClubId">
+				@inner.Name
+			</a>
+		}
+	</div>
+
+	<div class="count">
+		<strong>@Model.StoriesCount</strong>
+		<span>stories</span>
+	</div>
+</div>

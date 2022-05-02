@@ -16,54 +16,54 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands;
 
 public static class MarkChapterAsUnread
 {
-    public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<Response>>;
+	public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<Response>>;
 
-    public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public MarkChapterAsReadHandler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService?.User?.GetNumericId();
-        }
+		public MarkChapterAsReadHandler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService?.User?.GetNumericId();
+		}
 
-        public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
+		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            var (chapter, story) = request;
+			var (chapter, story) = request;
 
-            var chaptersReadObj = await _context.ChaptersRead
-                .Where(cr => cr.StoryId == story)
-                .Where(cr => cr.UserId == _uid)
-                .FirstOrDefaultAsync(cancellationToken);
+			var chaptersReadObj = await _context.ChaptersRead
+				.Where(cr => cr.StoryId == story)
+				.Where(cr => cr.UserId == _uid)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            if (chaptersReadObj is null) return Ok();
+			if (chaptersReadObj is null) return Ok();
 
-            chaptersReadObj.Chapters.Remove(chapter);
-            _context.Entry(chaptersReadObj).State = EntityState.Modified;
+			chaptersReadObj.Chapters.Remove(chapter);
+			_context.Entry(chaptersReadObj).State = EntityState.Modified;
 
-            if (chaptersReadObj.Chapters.Count < 1)
-            {
-                _context.ChaptersRead.Remove(chaptersReadObj);
-            }
+			if (chaptersReadObj.Chapters.Count < 1)
+			{
+				_context.ChaptersRead.Remove(chaptersReadObj);
+			}
 
-            // Save
-            try
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-                return Ok(new Response(chaptersReadObj.Chapters));
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception occurred when marking chapter {Chapter} as unread by {User}", chapter,
-                    _uid);
-                return ServerError("Database remove error");
-            }
-        }
-    }
-        
-    public sealed record Response(HashSet<long> Read);
+			// Save
+			try
+			{
+				await _context.SaveChangesAsync(cancellationToken);
+				return Ok(new Response(chaptersReadObj.Chapters));
+			}
+			catch (Exception e)
+			{
+				Log.Error(e, "Exception occurred when marking chapter {Chapter} as unread by {User}", chapter,
+					_uid);
+				return ServerError("Database remove error");
+			}
+		}
+	}
+
+	public sealed record Response(HashSet<long> Read);
 }

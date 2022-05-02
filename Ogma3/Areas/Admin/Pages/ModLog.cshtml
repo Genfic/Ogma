@@ -1,25 +1,27 @@
 @page
-@model Ogma3.Areas.Admin.Pages.ModLog
+@model ModLog
 
 @{
-    ViewData["Title"] = "Modlog";
-    ViewData["ActivePage"] = ManageNavPages.ModLog;
+	ViewData["Title"] = "Modlog";
+	ViewData["ActivePage"] = ManageNavPages.ModLog;
 }
 
 <table class="o-table">
-    <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Description</th>
-    </tr>
-    @foreach (var action in Model.Actions)
-    {
-        <tr>
-            <td>@action.Id</td>
-            <td>@action.DateTime</td>
-            <td><markdown preset="Basic">@action.Description</markdown></td>
-        </tr>
-    }
+	<tr>
+		<th>ID</th>
+		<th>Date</th>
+		<th>Description</th>
+	</tr>
+	@foreach (var action in Model.Actions)
+	{
+		<tr>
+			<td>@action.Id</td>
+			<td>@action.DateTime</td>
+			<td>
+				<markdown preset="Basic">@action.Description</markdown>
+			</td>
+		</tr>
+	}
 </table>
 
 <partial name="_Pagination" model="Model.Pagination"/>

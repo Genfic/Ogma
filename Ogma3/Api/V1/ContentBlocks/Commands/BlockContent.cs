@@ -15,38 +15,39 @@ namespace Ogma3.Api.V1.ContentBlocks.Commands;
 
 public static class BlockContent
 {
-    // ReSharper disable once UnusedTypeParameter
-    public sealed record Command<T>(long ObjectId, string Reason) : IRequest<ActionResult> where T : BaseModel, IBlockableContent;
+	// ReSharper disable once UnusedTypeParameter
+	public sealed record Command<T>(long ObjectId, string Reason) : IRequest<ActionResult> where T : BaseModel, IBlockableContent;
 
-    public class Handler<T> : BaseHandler, IRequestHandler<Command<T>, ActionResult> where T : BaseModel, IBlockableContent
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+	public class Handler<T> : BaseHandler, IRequestHandler<Command<T>, ActionResult> where T : BaseModel, IBlockableContent
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public async Task<ActionResult> Handle(Command<T> request, CancellationToken cancellationToken)
-        {
-            var (itemId, reason) = request;
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
 
-            if (_uid is null) return Unauthorized();
-            
-            var item = await _context.Set<T>()
-                .Where(i => i.Id == itemId)
-                .FirstOrDefaultAsync(cancellationToken);
-            if (item is null) return NotFound();
+		public async Task<ActionResult> Handle(Command<T> request, CancellationToken cancellationToken)
+		{
+			var (itemId, reason) = request;
 
-            item.ContentBlock = new ContentBlock
-            {
-                Reason = reason,
-                IssuerId = (long) _uid
-            };
-            await _context.SaveChangesAsync(cancellationToken);
+			if (_uid is null) return Unauthorized();
 
-            return Ok();
-        }
-    }
+			var item = await _context.Set<T>()
+				.Where(i => i.Id == itemId)
+				.FirstOrDefaultAsync(cancellationToken);
+			if (item is null) return NotFound();
+
+			item.ContentBlock = new ContentBlock
+			{
+				Reason = reason,
+				IssuerId = (long)_uid
+			};
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return Ok();
+		}
+	}
 }

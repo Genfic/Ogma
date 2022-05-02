@@ -15,35 +15,35 @@ namespace Ogma3.Api.V1.Faqs;
 [ApiController]
 public class FaqsController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    public FaqsController(IMediator mediator) => _mediator = mediator;
-        
-    // GET: api/Faqs
-    [HttpGet]
-    public async Task<ActionResult<List<Faq>>> GetFaqs()
-        => await _mediator.Send(new GetAllFaqs.Query());
+	private readonly IMediator _mediator;
+	public FaqsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpGet("{id:long}")]
-    public async Task<ActionResult<Faq>> GetFaq(long id)
-        => await _mediator.Send(new GetSingleFaq.Query(id));
+	// GET: api/Faqs
+	[HttpGet]
+	public async Task<ActionResult<List<Faq>>> GetFaqs()
+		=> await _mediator.Send(new GetAllFaqs.Query());
 
-    // PUT: api/Faqs/5
-    [HttpPut]
-    [Authorize(Roles = RoleNames.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> PutFaq(UpdateFaq.Command data)
-        => await _mediator.Send(data);
-        
-    // POST: api/Faqs
-    [HttpPost]
-    [Authorize(Roles = RoleNames.Admin)]
-    public async Task<ActionResult<Faq>> PostFaq(CreateFaq.Command data)
-        => await _mediator.Send(data);
-        
-    // DELETE: api/Faqs/5
-    [HttpDelete("{id:long}")]
-    [Authorize(Roles = RoleNames.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<long>> DeleteFaq(long id)
-        => await _mediator.Send(new DeleteFaq.Command(id));
+	[HttpGet("{id:long}")]
+	public async Task<ActionResult<Faq>> GetFaq(long id)
+		=> await _mediator.Send(new GetSingleFaq.Query(id));
+
+	// PUT: api/Faqs/5
+	[HttpPut]
+	[Authorize(Roles = RoleNames.Admin)]
+	[ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<ActionResult> PutFaq(UpdateFaq.Command data)
+		=> await _mediator.Send(data);
+
+	// POST: api/Faqs
+	[HttpPost]
+	[Authorize(Roles = RoleNames.Admin)]
+	public async Task<ActionResult<Faq>> PostFaq(CreateFaq.Command data)
+		=> await _mediator.Send(data);
+
+	// DELETE: api/Faqs/5
+	[HttpDelete("{id:long}")]
+	[Authorize(Roles = RoleNames.Admin)]
+	[ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<ActionResult<long>> DeleteFaq(long id)
+		=> await _mediator.Send(new DeleteFaq.Command(id));
 }

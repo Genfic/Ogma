@@ -1,92 +1,92 @@
 @page
+@using Ogma3.Data.Stories
 @using System.Text.Json
 @using Ogma3.Api.V1.Tags
-@using Ogma3.Data.Stories
-@model Ogma3.Pages.Stories.IndexModel
+@model IndexModel
 
 @{
-    ViewData["Title"] = "Browse stories";
-    ViewData["ActivePage"] = "Stories";
+	ViewData["Title"] = "Browse stories";
+	ViewData["ActivePage"] = "Stories";
 }
 
-<partial name="_SubNavigation" />
+<partial name="_SubNavigation"/>
 
 <form id="search" class="search" method="GET" v-on:submit.prevent="submit($event)">
-    
-    <div class="inline title field">
-        <label for="query">Title</label>
-        <input class="active-border" 
-               id="query" 
-               name="q" 
-               type="text" 
-               v-on:input="els.query = $event.target.value"
-               :disabled="dis.query"
-               value="@Model.SearchBy">
-    </div>
-    
-    <div class="inline rating field">
-        <label for="rating">Rating</label>
-        <select class="active-border"
-                name="rating"
-                v-on:input="els.rating = $event.target.value"
-                :disabled="dis.rating"
-                id="rating">
-            <option value="">---</option>
-            @foreach (var r in Model.Ratings)
-            {
-                <option selected="@(r.Id == Model.Rating)" value="@r.Id">@r.Name</option>
-            }
-        </select>
-    </div>
-    
-    <div class="inline sort field">
-        <label for="sort">Sort</label>
-        <select class="active-border"
-                name="sort"
-                id="sort"
-                v-on:input="els.sort = $event.target.value"
-                :disabled="dis.sort"
-                asp-for="SortBy"
-                asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
-        </select>
-    </div>
-    
-    <div class="inline tags field">
-        <tag-search-select label="Tags"
-                           ref="tags"
-                           inline
-                           disable-when-empty
-                           :preselected="@JsonSerializer.Serialize(Model.Tags)"
-                           tags-api="@Url.RouteUrl(nameof(TagsController))">
-        </tag-search-select>
-    </div>
-    
-    <div class="inline submit field">
-        <input class="inline active-border" type="submit" value="Search">
-    </div>
+
+	<div class="inline title field">
+		<label for="query">Title</label>
+		<input class="active-border"
+		       id="query"
+		       name="q"
+		       type="text"
+		       v-on:input="els.query = $event.target.value"
+		       :disabled="dis.query"
+		       value="@Model.SearchBy">
+	</div>
+
+	<div class="inline rating field">
+		<label for="rating">Rating</label>
+		<select class="active-border"
+		        name="rating"
+		        v-on:input="els.rating = $event.target.value"
+		        :disabled="dis.rating"
+		        id="rating">
+			<option value="">---</option>
+			@foreach (var r in Model.Ratings)
+			{
+				<option selected="@(r.Id == Model.Rating)" value="@r.Id">@r.Name</option>
+			}
+		</select>
+	</div>
+
+	<div class="inline sort field">
+		<label for="sort">Sort</label>
+		<select class="active-border"
+		        name="sort"
+		        id="sort"
+		        v-on:input="els.sort = $event.target.value"
+		        :disabled="dis.sort"
+		        asp-for="SortBy"
+		        asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
+		</select>
+	</div>
+
+	<div class="inline tags field">
+		<tag-search-select label="Tags"
+		                   ref="tags"
+		                   inline
+		                   disable-when-empty
+		                   :preselected="@JsonSerializer.Serialize(Model.Tags)"
+		                   tags-api="@Url.RouteUrl(nameof(TagsController))">
+		</tag-search-select>
+	</div>
+
+	<div class="inline submit field">
+		<input class="inline active-border" type="submit" value="Search">
+	</div>
 </form>
 
 <br>
 
 <div>
-    @if (Model.Stories.Count <= 0)
-    {
-        <h1>No stories found</h1>
-    }
-    else
-    {
-        foreach (var story in Model.Stories)
-        {
-            <partial name="Shared/Cards/_StoryCard" model="@story"/>
-        }
-        
-        <partial name="_Pagination" model="Model.Pagination"/>
-    }
+	@if (Model.Stories.Count <= 0)
+	{
+		<h1>No stories found</h1>
+	}
+	else
+	{
+		foreach (var story in Model.Stories)
+		{
+			<partial name="Shared/Cards/_StoryCard" model="@story"/>
+		}
+
+		<partial name="_Pagination" model="Model.Pagination"/>
+	}
 </div>
 
 @section Scripts
 {
-    <script src="~/js/dist/vue-directives/closeable.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/search/story.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/vue-directives/closeable.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/tag-search-select-component.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/search/story.min.js" asp-append-version="true"></script>
 }

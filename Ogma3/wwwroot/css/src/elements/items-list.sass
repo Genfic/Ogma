@@ -1,107 +1,107 @@
 @use '../vars' as v
 
 ul.items-list
-    min-width: 100%
-    margin-top: 1rem
+	min-width: 100%
+	margin-top: 1rem
 
-    li
-        contain: content
-        display: flex
-        min-width: 100%
-        border: 1px solid v.$foreground-25
-        margin: .2rem 0
-        background-color: v.$ele-1
+	li
+		contain: content
+		display: flex
+		min-width: 100%
+		border: 1px solid v.$foreground-25
+		margin: .2rem 0
+		background-color: v.$ele-1
 
-        &:hover
-            border-color: v.$foreground
+		&:hover
+			border-color: v.$foreground
 
-        &.hl
-            outline: 2px solid transparent
-            animation: ease-in-out 5s fadeOutline
-            animation-iteration-count: 1
+		&.hl
+			outline: 2px solid transparent
+			animation: ease-in-out 5s fadeOutline
+			animation-iteration-count: 1
 
-            @keyframes fadeOutline
-                0%
-                    outline-color: v.$accent-75
-                100%
-                    outline-color: transparent
+			@keyframes fadeOutline
+				0%
+					outline-color: v.$accent-75
+				100%
+					outline-color: transparent
 
-        .count
-            align-self: center
-            font-size: 2rem
-            min-width: 5rem
+		.count
+			align-self: center
+			font-size: 2rem
+			min-width: 5rem
 
-        .main
-            margin: .5rem
-            display: flex
-            flex-direction: column
-            flex: 1
-            color: v.$foreground
-            background: transparent
-            border: none
-            text-decoration: none
-            text-align: left
+		.main
+			margin: .5rem
+			display: flex
+			flex-direction: column
+			flex: 1
+			color: v.$foreground
+			background: transparent
+			border: none
+			text-decoration: none
+			text-align: left
 
-            &:hover
-                color: v.$foreground-75
+			&:hover
+				color: v.$foreground-75
 
-            a
-                color: v.$foreground
+			a
+				color: v.$foreground
 
-        .deco
-            height: auto
-            min-width: 5px
-            margin-right: .5rem
-            display: flex
-            align-items: center
+		.deco
+			height: auto
+			min-width: 5px
+			margin-right: .5rem
+			display: flex
+			align-items: center
 
-            > *
-                margin: 0 .4rem
-                min-width: 3ch
-                font-weight: bold
-                color: v.$background
-                text-shadow: 1px 1px 0 v.$foreground-75
+			> *
+				margin: 0 .4rem
+				min-width: 3ch
+				font-weight: bold
+				color: v.$background
+				text-shadow: 1px 1px 0 v.$foreground-75
 
-            > i
-                min-width: unset
+			> i
+				min-width: unset
 
-        .name
-            font-size: 1.2rem
-            text-decoration: none
-            text-overflow: ellipsis
+		.name
+			font-size: 1.2rem
+			text-decoration: none
+			text-overflow: ellipsis
 
-            > .icon
-                color: v.$foreground-50
-                font-size: 90%
-                padding-left: .5rem
+			> .icon
+				color: v.$foreground-50
+				font-size: 90%
+				padding-left: .5rem
 
-        .desc
-            color: v.$foreground-75
-            text-overflow: ellipsis
+		.desc
+			color: v.$foreground-75
+			text-overflow: ellipsis
 
-        .actions
-            display: flex
-            align-self: baseline
-            padding: .25rem
-            gap: .25rem
+		.actions
+			display: flex
+			align-self: baseline
+			padding: .25rem
+			gap: .25rem
 
-            > .action
-                display: flex
-                padding: .5rem
-                border: 1px solid v.$foreground-25
-                color: v.$foreground-50
-                background-color: transparent
+			> .action
+				display: flex
+				padding: .5rem
+				border: 1px solid v.$foreground-25
+				color: v.$foreground-50
+				background-color: transparent
 
-                &:hover
-                    background-color: v.$accent-10
-                    color: v.$foreground-75
-                    border-color: v.$foreground
+				&:hover
+					background-color: v.$accent-10
+					color: v.$foreground-75
+					border-color: v.$foreground
 
-                > i.material-icons-outlined
-                    font-size: 1.2rem
+				> i.material-icons-outlined
+					font-size: 1.2rem
 
-        .ph
-            align-self: center
-            justify-self: center
-            margin: .5rem auto
+		.ph
+			align-self: center
+			justify-self: center
+			margin: .5rem auto
       

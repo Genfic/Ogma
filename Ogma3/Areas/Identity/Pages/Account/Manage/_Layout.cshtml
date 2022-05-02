@@ -1,26 +1,27 @@
 ﻿@{
-    Layout = "/Pages/Shared/_UserLayout.cshtml";
+	Layout = "/Pages/Shared/_UserLayout.cshtml";
 }
 
 <h1>Manage your account</h1>
 
 <div id="account">
-    <h4 class="account__header">Change your account settings</h4>
+	<h4 class="account__header">Change your account settings</h4>
 
-    <nav class="account__nav">
-        <partial name="Manage/_ManageNav"></partial>
-    </nav>
-    <div class="account__body">
-        @RenderBody()
-    </div>
+	<nav class="account__nav">
+		<partial name="Manage/_ManageNav"></partial>
+	</nav>
+	<div class="account__body">
+		@RenderBody()
+	</div>
 
 </div>
 
 @section Scripts {
-    @await RenderSectionAsync("Scripts", false)
-    <script src="~/js/dist/alerts.min.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", false)
+	<script src="~/js/dist/alerts.min.js" asp-append-version="true"></script>
 }
+
 @section CSS
 {
-    <link rel="stylesheet" type="text/css" href="~/css/dist/account.min.css" asp-append-version="true"/>
+	<link rel="stylesheet" type="text/css" href="~/css/dist/account.min.css" asp-append-version="true"/>
 }

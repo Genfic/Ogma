@@ -1,31 +1,33 @@
 @page
-@model Ogma3.Areas.Identity.Pages.Account.Manage.Infractions
+@model Infractions
 
 @{
-    ViewData["Title"] = "Infractions";
-    ViewData["ActivePage"] = ManageNavPages.Infractions;
+	ViewData["Title"] = "Infractions";
+	ViewData["ActivePage"] = ManageNavPages.Infractions;
 }
 
 <h4>@ViewData["Title"]</h4>
 
 @if (Model.AllInfractions is { Count: <= 0 })
 {
-    <strong>You're clear! 🎉</strong>
+	<strong>You're clear! 🎉</strong>
 }
 
 @foreach (var i in Model.AllInfractions)
 {
-    var isDone = (i.ActiveUntil < DateTime.Now || (i.RemovedAt is not null));
-    
-    <details class="infraction">
-        <summary class="@(isDone ? "passed" : null)">
-            <b class="type @i.Type.ToString().ToLower()">@i.Type</b> until <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
-        </summary>
-        <div class="time">Issued on <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time></div>
-        @if(i.RemovedAt is {} d)
-        {
-            <div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time></div>
-        }
-        <div class="reason"><b>Reason:</b> @i.Reason</div>
-    </details>
+	var isDone = (i.ActiveUntil < DateTime.Now || (i.RemovedAt is not null));
+
+	<details class="infraction">
+		<summary class="@(isDone ? "passed" : null)">
+			<b class="type @i.Type.ToString().ToLower()">@i.Type</b> until <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
+		</summary>
+		<div class="time">Issued on <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time></div>
+		@if (i.RemovedAt is {} d)
+		{
+			<div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time></div>
+		}
+		<div class="reason">
+			<b>Reason:</b> @i.Reason
+		</div>
+	</details>
 }

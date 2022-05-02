@@ -11,44 +11,43 @@ namespace Ogma3.Areas.Admin.Pages.Documents;
 
 public class CreateModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    public CreateModel(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+	private readonly ApplicationDbContext _context;
 
-    [BindProperty]
-    public InputModel Input { get; set; }
-    public class InputModel
-    {
-        public long Id { get; set; }
-            
-        [Required]
-        public string Title { get; set; }
-            
-        [Required]
-        public string Body { get; set; }
-    }
+	public CreateModel(ApplicationDbContext context)
+	{
+		_context = context;
+	}
 
-    public void OnGetAsync()
-    {
-    }
+	[BindProperty] public InputModel Input { get; set; }
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var now = DateTime.Now;
-            
-        _context.Documents.Add(new Document
-        {
-            Title = Input.Title,
-            Slug = Input.Title.Friendlify(),
-            Body = Input.Body,
-            Version = 1,
-            CreationTime = now,
-            RevisionDate = null
-        });
-            
-        await _context.SaveChangesAsync();
-        return RedirectToPage("./Index");
-    }
+	public class InputModel
+	{
+		public long Id { get; set; }
+
+		[Required] public string Title { get; set; }
+
+		[Required] public string Body { get; set; }
+	}
+
+	public void OnGetAsync()
+	{
+	}
+
+	public async Task<IActionResult> OnPostAsync()
+	{
+		var now = DateTime.Now;
+
+		_context.Documents.Add(new Document
+		{
+			Title = Input.Title,
+			Slug = Input.Title.Friendlify(),
+			Body = Input.Body,
+			Version = 1,
+			CreationTime = now,
+			RevisionDate = null
+		});
+
+		await _context.SaveChangesAsync();
+		return RedirectToPage("./Index");
+	}
 }

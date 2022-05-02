@@ -3,79 +3,79 @@
 @using System.Text.Json
 @using Ogma3.Api.V1.Tags
 @using Ogma3.Data
-@model Ogma3.Areas.Admin.Pages.Tags
+@model Tags
 
 @{
-    ViewData["Title"] = "Tags";
-    ViewData["ActivePage"] = ManageNavPages.Tags;
+	ViewData["Title"] = "Tags";
+	ViewData["ActivePage"] = ManageNavPages.Tags;
 }
 
 <form id="tag" class="auto" method="post" v-on:submit.stop.prevent="createTag">
 
-    <ul v-if="err" style="margin: 0">
-        <li class="text-danger" v-for="e in err">{{ e }}</li>
-    </ul>
+	<ul v-if="err" style="margin: 0">
+		<li class="text-danger" v-for="e in err">{{ e }}</li>
+	</ul>
 
-    <label asp-for="Input.Name"></label>
-    <input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
+	<label asp-for="Input.Name"></label>
+	<input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
 
-    <label asp-for="Input.Description"></label>
-    <input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
+	<label asp-for="Input.Description"></label>
+	<input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
 
-    <label asp-for="Input.Namespace"></label>
-    <select asp-for="Input.Namespace"
-            asp-items="Html.GetEnumSelectList<ETagNamespace>()"
-            v-model="form.namespace"
-            class="o-form-control">
-        <option value="null" selected>None</option>
-    </select>
-    
-    <input type="hidden" :value="form.id">
+	<label asp-for="Input.Namespace"></label>
+	<select asp-for="Input.Namespace"
+	        asp-items="Html.GetEnumSelectList<ETagNamespace>()"
+	        v-model="form.namespace"
+	        class="o-form-control">
+		<option value="null" selected>None</option>
+	</select>
 
-    <div class="form-row">
-        <button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-        <button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
-    </div>
+	<input type="hidden" :value="form.id">
+
+	<div class="form-row">
+		<button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
+		<button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
+	</div>
 
 </form>
 
 <button v-if="tags.length <= 0" class="btn btn-primary" type="button" disabled>
-    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-    Loading...
+	<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+	Loading...
 </button>
 
 <ul class="items-list">
-    <li v-for="t in tags">
-        <div class="deco" :style="{backgroundColor: t.namespaceColor}"></div>
-        <div class="main">
-            <h3 class="name">{{ t.name }}</h3>
-            <span class="desc">{{ t.description }}</span>
-        </div>
-        <div class="actions">
-            <button class="action" v-on:click="deleteTag(t)">
-                <icon icon="delete_forever"></icon>
-            </button>
-            <button class="action" v-on:click="editTag(t)">
-                <icon icon="edit"></icon>
-            </button>
-        </div>
-    </li>
+	<li v-for="t in tags">
+		<div class="deco" :style="{backgroundColor: t.namespaceColor}"></div>
+		<div class="main">
+			<h3 class="name">{{ t.name }}</h3>
+			<span class="desc">{{ t.description }}</span>
+		</div>
+		<div class="actions">
+			<button class="action" v-on:click="deleteTag(t)">
+				<icon icon="delete_forever"></icon>
+			</button>
+			<button class="action" v-on:click="editTag(t)">
+				<icon icon="edit"></icon>
+			</button>
+		</div>
+	</li>
 </ul>
 
 <div v-if="!route" id="static-data">
-    @JsonSerializer.Serialize(new
-    {
-        Route = Url.RouteUrl(nameof(TagsController)),
-        Validation = new
-        {
-            CTConfig.CTag.MinNameLength,
-            CTConfig.CTag.MaxNameLength,
-            CTConfig.CTag.MaxDescLength
-        }
-    })
+	@JsonSerializer.Serialize(new
+	{
+		Route = Url.RouteUrl(nameof(TagsController)),
+		Validation = new
+		{
+			CTConfig.CTag.MinNameLength,
+			CTConfig.CTag.MaxNameLength,
+			CTConfig.CTag.MaxDescLength
+		}
+	})
 </div>
 
 @section Scripts
 {
-    <script src="~/js/dist/admin/tags.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/admin/tags.min.js" asp-append-version="true"></script>
 }

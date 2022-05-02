@@ -1,17 +1,17 @@
 ﻿@page "{id}/{slug?}"
-@using System.ComponentModel.DataAnnotations
 @using Utils.Extensions
+@using System.ComponentModel.DataAnnotations
 @model TagModel
 @{
-    if (Model.Tag.Namespace is null)
-    {
-        ViewData["Title"] = Model.Tag.Name;
-    }
-    else
-    {
-        var nsn = Model.Tag.Namespace.GetAttribute<DisplayAttribute>()?.Name ?? Model.Tag.Namespace.ToString();
-        ViewData["Title"] = $"{nsn}: {Model.Tag.Name}";
-    }
+	if (Model.Tag.Namespace is null)
+	{
+		ViewData["Title"] = Model.Tag.Name;
+	}
+	else
+	{
+		var nsn = Model.Tag.Namespace.GetAttribute<DisplayAttribute>()?.Name ?? Model.Tag.Namespace.ToString();
+		ViewData["Title"] = $"{nsn}: {Model.Tag.Name}";
+	}
 }
 
 
@@ -19,14 +19,14 @@
 
 @if (Model.Stories.Count <= 0)
 {
-    <h1>No stories found</h1>
+	<h1>No stories found</h1>
 }
 else
 {
-    @foreach (var story in Model.Stories)
-    {
-        <partial name="Shared/Cards/_StoryCard" model="story"/>
-    }
-    
-    <partial name="_Pagination" model="Model.Pagination"/>
+	@foreach (var story in Model.Stories)
+	{
+		<partial name="Shared/Cards/_StoryCard" model="story"/>
+	}
+
+	<partial name="_Pagination" model="Model.Pagination"/>
 }

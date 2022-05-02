@@ -2,28 +2,28 @@
 @model Ogma3.Areas.Admin.Pages.Documents.CreateModel
 
 @{
-    ViewData["Title"] = "Create Document";
-    ViewData["ActivePage"] = ManageNavPages.Documents;
+	ViewData["Title"] = "Create Document";
+	ViewData["ActivePage"] = ManageNavPages.Documents;
 }
 
 <form method="post" id="editor" class="form">
-    
-    <div class="o-form-group">
-        <label asp-for="@Model.Input.Title"></label>
-        <input asp-for="@Model.Input.Title" type="text" class="o-form-control active-border">
-    </div>
 
-    <div class="o-form-group">
-        <label asp-for="@Model.Input.Body"></label>
-        <textarea asp-for="@Model.Input.Body" 
+	<div class="o-form-group">
+		<label asp-for="@Model.Input.Title"></label>
+		<input asp-for="@Model.Input.Title" type="text" class="o-form-control active-border">
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="@Model.Input.Body"></label>
+		<textarea asp-for="@Model.Input.Body" 
             cols="30" rows="10" 
             class="o-form-control active-border">
         </textarea>
-    </div>
+	</div>
 
-    <input asp-for="@Model.Input.Id" type="hidden">
+	<input asp-for="@Model.Input.Id" type="hidden">
 
-    <div class="o-form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
+	<div class="o-form-group">
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
 </form>

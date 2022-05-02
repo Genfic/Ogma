@@ -21,152 +21,150 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public class IndexModel : PageModel
 {
-    private readonly ApplicationDbContext _context;
-    private readonly SignInManager<OgmaUser> _signInManager;
-    private readonly ImageUploader _uploader;
-    private readonly OgmaConfig _config;
+	private readonly ApplicationDbContext _context;
+	private readonly SignInManager<OgmaUser> _signInManager;
+	private readonly ImageUploader _uploader;
+	private readonly OgmaConfig _config;
 
-    public IndexModel(
-        ApplicationDbContext context,
-        SignInManager<OgmaUser> signInManager,
-        ImageUploader uploader,
-        OgmaConfig config
-    ) {
-        _signInManager = signInManager;
-        _uploader = uploader;
-        _config = config;
-        _context = context;
-    }
-        
-    [TempData]
-    public string StatusMessage { get; set; }
+	public IndexModel(
+		ApplicationDbContext context,
+		SignInManager<OgmaUser> signInManager,
+		ImageUploader uploader,
+		OgmaConfig config
+	)
+	{
+		_signInManager = signInManager;
+		_uploader = uploader;
+		_config = config;
+		_context = context;
+	}
 
-    [BindProperty] 
-    public InputModel Input { get; set; }
-        
-    public class InputModel
-    {
-        public string Username { get; init; }
-        [DataType(DataType.Upload)]
-        public IFormFile Avatar { get; init; }
+	[TempData] public string StatusMessage { get; set; }
 
-        public bool DeleteAvatar { get; set; }
-        public string Title { get; init; }
-        public string Bio { get; init; }
-        public string Links { get; set; }
-    }
+	[BindProperty] public InputModel Input { get; set; }
 
-    public class InputModelValidation : AbstractValidator<InputModel>
-    {
-        public InputModelValidation()
-        {
-            RuleFor(x => x.Avatar)
-                .FileSmallerThan(CTConfig.CFiles.AvatarMaxWeight)
-                .FileHasExtension(".jpg", ".jpeg", ".png");
-            RuleFor(x => x.Title)
-                .MaximumLength(CTConfig.CUser.MaxTitleLength);
-            RuleFor(x => x.Bio)
-                .MaximumLength(CTConfig.CUser.MaxBioLength);
-            RuleFor(x => x.Links)
-                .MaximumLines(CTConfig.CUser.MaxLinksAmount);
-        }
-    }
+	public class InputModel
+	{
+		public string Username { get; init; }
+		[DataType(DataType.Upload)] public IFormFile Avatar { get; init; }
 
-    private async Task LoadAsync(long? uid)
-    {
-        Input = await _context.Users
-            .Where(u => u.Id == uid)
-            .Select(u => new InputModel
-            {
-                Username = u.UserName,
-                Title = u.Title,
-                Bio = u.Bio,
-                Links = string.Join('\n', u.Links)
-            })
-            .FirstOrDefaultAsync();
-    }
+		public bool DeleteAvatar { get; set; }
+		public string Title { get; init; }
+		public string Bio { get; init; }
+		public string Links { get; set; }
+	}
 
-    public async Task<IActionResult> OnGetAsync()
-    {
-        var uid = User.GetNumericId();
-        if (uid is null) return Unauthorized();
+	public class InputModelValidation : AbstractValidator<InputModel>
+	{
+		public InputModelValidation()
+		{
+			RuleFor(x => x.Avatar)
+				.FileSmallerThan(CTConfig.CFiles.AvatarMaxWeight)
+				.FileHasExtension(".jpg", ".jpeg", ".png");
+			RuleFor(x => x.Title)
+				.MaximumLength(CTConfig.CUser.MaxTitleLength);
+			RuleFor(x => x.Bio)
+				.MaximumLength(CTConfig.CUser.MaxBioLength);
+			RuleFor(x => x.Links)
+				.MaximumLines(CTConfig.CUser.MaxLinksAmount);
+		}
+	}
 
-        await LoadAsync(uid);
-        return Page();
-    }
+	private async Task LoadAsync(long? uid)
+	{
+		Input = await _context.Users
+			.Where(u => u.Id == uid)
+			.Select(u => new InputModel
+			{
+				Username = u.UserName,
+				Title = u.Title,
+				Bio = u.Bio,
+				Links = string.Join('\n', u.Links)
+			})
+			.FirstOrDefaultAsync();
+	}
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var uid = User.GetNumericId();
-        if (uid is null) return Unauthorized();
-            
-        var user = await _context.Users
-            .Where(u => u.Id == uid)
-            .FirstOrDefaultAsync();
-            
-        if (user is null) return NotFound("Unable to load user");
-            
-        if (!ModelState.IsValid)
-        {
-            await LoadAsync(uid);
-            return Page();
-        }
+	public async Task<IActionResult> OnGetAsync()
+	{
+		var uid = User.GetNumericId();
+		if (uid is null) return Unauthorized();
 
-        // If new avatar provided, replace the old one
-        if (Input.Avatar is { Length: > 0 })
-        {
-            // Delete the old avatar if exists
-            if (user.AvatarId is not null)
-            {
-                await _uploader.Delete(user.Avatar, user.AvatarId);
-            }
+		await LoadAsync(uid);
+		return Page();
+	}
 
-            // Upload the new one
-            var file = await _uploader.Upload(
-                Input.Avatar,
-                "avatars",
-                $"U-{user.NormalizedUserName}",
-                _config.AvatarWidth,
-                _config.AvatarHeight
-            );
-            user.AvatarId = file.FileId;
-            user.Avatar = Path.Join(_config.Cdn, file.Path);
-        }
-        else if (Input.DeleteAvatar)
-        {
-            if (user.AvatarId is not null)
-            {
-                await _uploader.Delete(user.Avatar, user.AvatarId);
-            }
+	public async Task<IActionResult> OnPostAsync()
+	{
+		var uid = User.GetNumericId();
+		if (uid is null) return Unauthorized();
 
-            user.AvatarId = null;
-            user.Avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString();
-            // user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
-            // {
-            //     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString(), 
-            //     Rating = Gravatar.Ratings.G
-            // });
-        }
+		var user = await _context.Users
+			.Where(u => u.Id == uid)
+			.FirstOrDefaultAsync();
 
-        if (Input.Title != user.Title)
-        {
-            user.Title = Input.Title;
-        }
+		if (user is null) return NotFound("Unable to load user");
 
-        if (Input.Bio != user.Bio)
-        {
-            user.Bio = Input.Bio;
-        }
+		if (!ModelState.IsValid)
+		{
+			await LoadAsync(uid);
+			return Page();
+		}
 
-        user.Links = Input.Links
-            .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(l => Uri.TryCreate(l, UriKind.RelativeOrAbsolute, out  _))
-            .ToList();
+		// If new avatar provided, replace the old one
+		if (Input.Avatar is { Length: > 0 })
+		{
+			// Delete the old avatar if exists
+			if (user.AvatarId is not null)
+			{
+				await _uploader.Delete(user.Avatar, user.AvatarId);
+			}
 
-        await _context.SaveChangesAsync();
+			// Upload the new one
+			var file = await _uploader.Upload(
+				Input.Avatar,
+				"avatars",
+				$"U-{user.NormalizedUserName}",
+				_config.AvatarWidth,
+				_config.AvatarHeight
+			);
+			user.AvatarId = file.FileId;
+			user.Avatar = Path.Join(_config.Cdn, file.Path);
+		}
+		else if (Input.DeleteAvatar)
+		{
+			if (user.AvatarId is not null)
+			{
+				await _uploader.Delete(user.Avatar, user.AvatarId);
+			}
 
-        await _signInManager.RefreshSignInAsync(user);
-        StatusMessage = "Your profile has been updated";
-        return RedirectToPage();
-    }
+			user.AvatarId = null;
+			user.Avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString();
+			// user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
+			// {
+			//     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString(), 
+			//     Rating = Gravatar.Ratings.G
+			// });
+		}
+
+		if (Input.Title != user.Title)
+		{
+			user.Title = Input.Title;
+		}
+
+		if (Input.Bio != user.Bio)
+		{
+			user.Bio = Input.Bio;
+		}
+
+		user.Links = Input.Links
+			.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+			.Where(l => Uri.TryCreate(l, UriKind.RelativeOrAbsolute, out _))
+			.ToList();
+
+		await _context.SaveChangesAsync();
+
+		await _signInManager.RefreshSignInAsync(user);
+		StatusMessage = "Your profile has been updated";
+		return RedirectToPage();
+	}
 }

@@ -14,43 +14,44 @@ namespace Ogma3.Api.V1.Comments.Commands;
 
 public static class DeleteComment
 {
-    public sealed record Command(long Id) : IRequest<ActionResult<long>>;
+	public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
-        
-            var comment = await _context.Comments
-                .Where(c => c.Id == request.Id)
-                .Include(c => c.Revisions)
-                .FirstOrDefaultAsync(cancellationToken);
-        
-            if (comment is null) return NotFound();
-            if (comment.AuthorId != _uid) return Unauthorized();
-        
-            // Wipe comment
-            comment.DeletedBy = EDeletedBy.User;
-            comment.DeletedByUserId = _uid;
-            comment.Body = string.Empty;
-            comment.LastEdit = null;
-            comment.EditCount = 0;
-        
-            // Wipe revisions
-            comment.Revisions.Clear();
-        
-            await _context.SaveChangesAsync(cancellationToken);
-        
-            return Ok(comment.Id);
-        }
-    }
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
+
+		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
+
+			var comment = await _context.Comments
+				.Where(c => c.Id == request.Id)
+				.Include(c => c.Revisions)
+				.FirstOrDefaultAsync(cancellationToken);
+
+			if (comment is null) return NotFound();
+			if (comment.AuthorId != _uid) return Unauthorized();
+
+			// Wipe comment
+			comment.DeletedBy = EDeletedBy.User;
+			comment.DeletedByUserId = _uid;
+			comment.Body = string.Empty;
+			comment.LastEdit = null;
+			comment.EditCount = 0;
+
+			// Wipe revisions
+			comment.Revisions.Clear();
+
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return Ok(comment.Id);
+		}
+	}
 }

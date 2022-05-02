@@ -2,43 +2,45 @@
 @model Ogma3.Areas.Admin.Pages.Documents.IndexModel
 
 @{
-    ViewData["Title"] = "Documents";
-    ViewData["ActivePage"] = ManageNavPages.Documents;
+	ViewData["Title"] = "Documents";
+	ViewData["ActivePage"] = ManageNavPages.Documents;
 }
 
 <a class="btn btn-block btn-outline-primary" asp-page="./Create">
-    <icon icon="add"></icon>
-    Create New
+	<icon icon="add"></icon>
+	Create New
 </a>
 
 @if (Model.Docs == null)
 {
-    <h1>The docs are null again, call the admin</h1>
+	<h1>The docs are null again, call the admin</h1>
 }
 else if (Model.Docs.Count > 0)
 {
-    <ul class="items-list">
-        @foreach (var doc in Model.Docs)
-        {
-            <li>
-                <div class="main">
-                    <a asp-area="" asp-page="/Docs" asp-route-slug="@doc.Slug" target="_blank">
-                        <h3 class="name">@doc.Title <span class="monospace">@($"v{doc.Version}")</span></h3>
-                    </a>
-                </div>
-                <div class="actions">
-                    <a class="action">
-                        <icon icon="delete_forever"></icon>
-                    </a>
-                    <a asp-page="./Edit" asp-route-slug="@doc.Slug" class="action">
-                        <icon icon="edit"></icon>
-                    </a>
-                </div>
-            </li> 
-        }
-    </ul>
+	<ul class="items-list">
+		@foreach (var doc in Model.Docs)
+		{
+			<li>
+				<div class="main">
+					<a asp-area="" asp-page="/Docs" asp-route-slug="@doc.Slug" target="_blank">
+						<h3 class="name">
+							@doc.Title <span class="monospace">@($"v{doc.Version}")</span>
+						</h3>
+					</a>
+				</div>
+				<div class="actions">
+					<a class="action">
+						<icon icon="delete_forever"></icon>
+					</a>
+					<a asp-page="./Edit" asp-route-slug="@doc.Slug" class="action">
+						<icon icon="edit"></icon>
+					</a>
+				</div>
+			</li>
+		}
+	</ul>
 }
 else
 {
-    <h1>No documents found</h1>
+	<h1>No documents found</h1>
 }

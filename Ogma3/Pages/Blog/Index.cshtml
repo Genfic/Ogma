@@ -1,44 +1,44 @@
 @page
 @using Ogma3.Services
 @using Ogma3.Data.Blogposts
-@model Ogma3.Pages.Blog.IndexModel
+@model IndexModel
 
 @{
-    ViewData["Title"] = "Blogpost search";
-    ViewData["ActivePage"] = "Blogs";
+	ViewData["Title"] = "Blogpost search";
+	ViewData["ActivePage"] = "Blogs";
 }
 
-<partial name="_SubNavigation" />
+<partial name="_SubNavigation"/>
 
 <form id="search" class="search" method="GET">
-    <label for="title">Query</label>
-    <input class="active-border" id="title" name="q" type="text" value="@Model.SearchBy">
-    
-    <label for="sort">Sort</label>
-    <select class="active-border"
-            name="sort"
-            id="sort"
-            asp-for="SortBy"
-            asp-items="Html.GetEnumSelectList<EBlogpostSortingOptions>()">
-    </select>
-    
-    <input class="active-border" type="submit" value="Search">
+	<label for="title">Query</label>
+	<input class="active-border" id="title" name="q" type="text" value="@Model.SearchBy">
+
+	<label for="sort">Sort</label>
+	<select class="active-border"
+	        name="sort"
+	        id="sort"
+	        asp-for="SortBy"
+	        asp-items="Html.GetEnumSelectList<EBlogpostSortingOptions>()">
+	</select>
+
+	<input class="active-border" type="submit" value="Search">
 </form>
 
 <br>
 
 @if (Model.Posts.Count <= 0)
 {
-    <h1>No blog posts found</h1>
+	<h1>No blog posts found</h1>
 }
 else
 {
-    foreach (var post in Model.Posts) {
-        <partial name="Shared/Cards/_BlogpostCard" model="@post" />
-    }
-    
-    <partial name="_Pagination" model="Model.Pagination" />
+	foreach (var post in Model.Posts)
+	{
+		<partial name="Shared/Cards/_BlogpostCard" model="@post"/>
+	}
 
+	<partial name="_Pagination" model="Model.Pagination"/>
 }
 
 

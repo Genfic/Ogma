@@ -1,92 +1,91 @@
 @page "{id:int}"
 @using Utils.Extensions
-@model Ogma3.Pages.Blog.EditModel
+@model EditModel
 
 @{
-    ViewData["Title"] = "Edit Blogpost";
+	ViewData["Title"] = "Edit Blogpost";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="button-group">
-    <a title="Cancel" class="action-btn large" asp-page="./Post" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
-         <icon class="icon" icon="arrow_back"></icon>
-         <span class="name">Cancel</span>
-     </a>
-     <a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
-         <icon class="icon" icon="delete_forever"></icon>
-         <span class="name">Delete</span>
-     </a>
+	<a title="Cancel" class="action-btn large" asp-page="./Post" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
+		<icon class="icon" icon="arrow_back"></icon>
+		<span class="name">Cancel</span>
+	</a>
+	<a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-id="@Model.Input.Id">
+		<icon class="icon" icon="delete_forever"></icon>
+		<span class="name">Delete</span>
+	</a>
 </div>
 
 <form class="form" id="blogpost" method="post" v-on:submit="onSubmit">
-    
-    <div asp-validation-summary="All">
-        <span>Please correct the following errors</span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Title"></label>
-        <input asp-for="Input.Title" class="o-form-control active-border">
-        <span asp-validation-for="Input.Title"></span>
-    </div>
 
-    <div class="o-form-group">
-        <label asp-for="Input.Body"></label>
-        <textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
-        <span asp-validation-for="Input.Body"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Tags"></label>
-        <p class="desc">Comma-separated tags</p>
-        <input asp-for="Input.Tags" data-max-count="10" class="o-form-control active-border">
-        <span asp-validation-for="Input.Tags"></span>
-    </div>
-    
-    <div class="o-form-group keep-size">
-        <label asp-for="Input.Published"></label>
-        <p class="desc">Control whether the post is published or not</p>
+	<div asp-validation-summary="All">
+		<span>Please correct the following errors</span>
+	</div>
 
-        <div class="toggle-input">
-            <input asp-for="Input.Published">
-          
-            <label asp-for="Input.Published">
-                <span class="toggle"></span>
-                <span class="label-on">On</span>
-                <span class="label-off">Off</span>
-            </label>
-        </div>
-    </div>
-    
-    @if (Model.Input.AttachedStory is not null)
-    {
-        <div class="o-form-group">
-            <label>Attached story</label>
-            <partial name="Shared/Minimals/_StoryMinimal" model="@Model.Input.AttachedStory"/>
-        </div>
-    }
-    @if (Model.Input.AttachedChapter is not null)
-    {
-        <div class="o-form-group">
-            <label>Attached chapter</label>
-            <partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Input.AttachedChapter"/>
-        </div>
-    }
-    
-    <br>
+	<div class="o-form-group">
+		<label asp-for="Input.Title"></label>
+		<input asp-for="Input.Title" class="o-form-control active-border">
+		<span asp-validation-for="Input.Title"></span>
+	</div>
 
-    <div class="o-form-group">
-        <input type="submit" value="Update" class="btn btn-primary"/>
-    </div>
+	<div class="o-form-group">
+		<label asp-for="Input.Body"></label>
+		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
+		<span asp-validation-for="Input.Body"></span>
+	</div>
 
-    
+	<div class="o-form-group">
+		<label asp-for="Input.Tags"></label>
+		<p class="desc">Comma-separated tags</p>
+		<input asp-for="Input.Tags" data-max-count="10" class="o-form-control active-border">
+		<span asp-validation-for="Input.Tags"></span>
+	</div>
+
+	<div class="o-form-group keep-size">
+		<label asp-for="Input.Published"></label>
+		<p class="desc">Control whether the post is published or not</p>
+
+		<div class="toggle-input">
+			<input asp-for="Input.Published">
+
+			<label asp-for="Input.Published">
+				<span class="toggle"></span>
+				<span class="label-on">On</span>
+				<span class="label-off">Off</span>
+			</label>
+		</div>
+	</div>
+
+	@if (Model.Input.AttachedStory is not null)
+	{
+		<div class="o-form-group">
+			<label>Attached story</label>
+			<partial name="Shared/Minimals/_StoryMinimal" model="@Model.Input.AttachedStory"/>
+		</div>
+	}
+	@if (Model.Input.AttachedChapter is not null)
+	{
+		<div class="o-form-group">
+			<label>Attached chapter</label>
+			<partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Input.AttachedChapter"/>
+		</div>
+	}
+
+	<br>
+
+	<div class="o-form-group">
+		<input type="submit" value="Update" class="btn btn-primary"/>
+	</div>
+
+
 </form>
 
 <partial name="Shared/_ValidationScriptsPartial"/>
 
-@section Scripts { 
-    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
+@section Scripts {
+	<script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }
-

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <LangVersion>10</LangVersion>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>10</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Flurl" Version="3.0.4" />
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Flurl" Version="3.0.4"/>
+	</ItemGroup>
 
 </Project>

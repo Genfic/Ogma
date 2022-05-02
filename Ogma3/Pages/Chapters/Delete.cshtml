@@ -1,47 +1,47 @@
 ﻿@page
-@model Ogma3.Pages.Chapters.DeleteModel
+@model DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+	ViewData["Title"] = "Delete";
 }
 
 <h2>@Model.Chapter.Title</h2>
 <div>
-    <h3>Are you sure you want to delete this?</h3>
-    <hr/>
-    
-    <dl class="rows">
-        <dt>
-            Story:
-        </dt>
-        <dd>
-            @Model.Chapter.StoryTitle
-        </dd>
-        <dt>
-            Published on:
-        </dt>
-        <dd>
-            @Model.Chapter.PublishDate
-        </dd>
-        <dt>
-            Published status:
-        </dt>
-        <dd>
-            @(Model.Chapter.IsPublished ? "Published" : "Not published")
-        </dd>
-        <dt>
-            Comments:
-        </dt>
-        <dd>
-            @Model.Chapter.CommentsThreadCommentsCount
-        </dd>
-    </dl>
+	<h3>Are you sure you want to delete this?</h3>
+	<hr/>
 
-    <form method="post">
-        <input type="hidden" asp-for="Chapter.Id" />
-        <div class="button-group">
-            <input type="submit" value="Delete" class="btn red" />
-            <a asp-page="../Chapter" class="btn" asp-route-id="@Model.Chapter.Id" asp-route-slug="@Model.Chapter.Slug">Cancel</a>
-        </div>
-    </form>
+	<dl class="rows">
+		<dt>
+			Story:
+		</dt>
+		<dd>
+			@Model.Chapter.StoryTitle
+		</dd>
+		<dt>
+			Published on:
+		</dt>
+		<dd>
+			@Model.Chapter.PublishDate
+		</dd>
+		<dt>
+			Published status:
+		</dt>
+		<dd>
+			@(Model.Chapter.IsPublished ? "Published" : "Not published")
+		</dd>
+		<dt>
+			Comments:
+		</dt>
+		<dd>
+			@Model.Chapter.CommentsThreadCommentsCount
+		</dd>
+	</dl>
+
+	<form method="post">
+		<input type="hidden" asp-for="Chapter.Id"/>
+		<div class="button-group">
+			<input type="submit" value="Delete" class="btn red"/>
+			<a asp-page="../Chapter" class="btn" asp-route-id="@Model.Chapter.Id" asp-route-slug="@Model.Chapter.Slug">Cancel</a>
+		</div>
+	</form>
 </div>

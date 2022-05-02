@@ -6,8 +6,6 @@ namespace Ogma3.Data.Users;
 
 public class UserRole : IdentityUserRole<long>
 {
-    [Required]
-    public OgmaUser User { get; set; }
-    [Required]
-    public OgmaRole Role { get; set; }
+	[Required] public OgmaUser User { get; set; }
+	[Required] public OgmaRole Role { get; set; }
 }

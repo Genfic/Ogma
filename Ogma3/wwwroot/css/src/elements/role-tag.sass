@@ -2,31 +2,31 @@
 @use '../mixins/active-border' as ab
 
 .role-tag
-    display: grid
-    grid-template-areas: "main"
-    font-size: .8rem
-    line-height: .8rem
-    margin: .1rem .2rem
-    cursor: default
-    +ab.active-border
+	display: grid
+	grid-template-areas: "main"
+	font-size: .8rem
+	line-height: .8rem
+	margin: .1rem .2rem
+	cursor: default
+	+ab.active-border
 
-    &:first-child
-        margin-left: 0
+	&:first-child
+		margin-left: 0
 
-    &:last-child
-        margin-right: 0
+	&:last-child
+		margin-right: 0
 
-    &:hover
-        > .bg
-            opacity: .6
+	&:hover
+		> .bg
+			opacity: .6
 
-    > .bg
-        grid-area: main
-        left: 0
-        top: 0
-        opacity: .5
+	> .bg
+		grid-area: main
+		left: 0
+		top: 0
+		opacity: .5
 
-    > .name
-        grid-area: main
-        margin: .1rem .2rem
-        z-index: 10
+	> .name
+		grid-area: main
+		margin: .1rem .2rem
+		z-index: 10

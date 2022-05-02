@@ -13,24 +13,24 @@ namespace Ogma3.Api.V1.Quotes.Queries;
 
 public static class GetAll
 {
-    public sealed record Query : IRequest<ActionResult<List<Quote>>>;
+	public sealed record Query : IRequest<ActionResult<List<Quote>>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Quote>>>
-    {
-        private readonly ApplicationDbContext _context;
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Quote>>>
+	{
+		private readonly ApplicationDbContext _context;
 
-        public Handler(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public Handler(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-        public async Task<ActionResult<List<Quote>>> Handle(Query request, CancellationToken cancellationToken)
-        {
-            var quotes = await _context.Quotes
-                .OrderBy(q => q.Id)
-                .ToListAsync(cancellationToken);
-                
-            return Ok(quotes);
-        }
-    }
+		public async Task<ActionResult<List<Quote>>> Handle(Query request, CancellationToken cancellationToken)
+		{
+			var quotes = await _context.Quotes
+				.OrderBy(q => q.Id)
+				.ToListAsync(cancellationToken);
+
+			return Ok(quotes);
+		}
+	}
 }

@@ -11,30 +11,28 @@ namespace Ogma3.Areas.Admin.Pages;
 [Authorize(Roles = RoleNames.Admin)]
 public class Settings : PageModel
 {
-    private readonly OgmaConfig _config;
+	private readonly OgmaConfig _config;
 
-    public Settings(OgmaConfig config)
-    {
-        _config = config;
-    }
+	public Settings(OgmaConfig config)
+	{
+		_config = config;
+	}
 
-    [BindProperty]
-    public OgmaConfig Config { get; set; }
+	[BindProperty] public OgmaConfig Config { get; set; }
 
-    public void OnGet()
-    {
-        Config = _config;
-    }
+	public void OnGet()
+	{
+		Config = _config;
+	}
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        foreach (var prop in typeof(OgmaConfig).GetProperties().Where(p => p.CanWrite))
-        {
-            prop.SetValue(_config, prop.GetValue(Config, null), null);
-        }
-            
-        await _config.PersistAsync();
-        return RedirectToPage("./Settings");
-    }
+	public async Task<IActionResult> OnPostAsync()
+	{
+		foreach (var prop in typeof(OgmaConfig).GetProperties().Where(p => p.CanWrite))
+		{
+			prop.SetValue(_config, prop.GetValue(Config, null), null);
+		}
 
+		await _config.PersistAsync();
+		return RedirectToPage("./Settings");
+	}
 }

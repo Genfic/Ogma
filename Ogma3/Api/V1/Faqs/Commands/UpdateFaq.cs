@@ -14,38 +14,39 @@ namespace Ogma3.Api.V1.Faqs.Commands;
 
 public static class UpdateFaq
 {
-    public sealed record Command(long Id, string Question, string Answer) : IRequest<ActionResult>;
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator()
-        {
-            RuleFor(f => f.Question).NotEmpty();
-            RuleFor(f => f.Answer).NotEmpty();
-        }
-    }
-        
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult>
-    {
-        private readonly ApplicationDbContext _context;
-        public Handler(ApplicationDbContext context) => _context = context;
+	public sealed record Command(long Id, string Question, string Answer) : IRequest<ActionResult>;
 
-        public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var (id, question, answer) = request;
-                
-            var faq = await _context.Faqs
-                .Where(f => f.Id == id)
-                .FirstOrDefaultAsync(cancellationToken);
+	public class CommandValidator : AbstractValidator<Command>
+	{
+		public CommandValidator()
+		{
+			RuleFor(f => f.Question).NotEmpty();
+			RuleFor(f => f.Answer).NotEmpty();
+		}
+	}
 
-            if (faq is null) return NotFound();
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult>
+	{
+		private readonly ApplicationDbContext _context;
+		public Handler(ApplicationDbContext context) => _context = context;
 
-            faq.Question = question;
-            faq.Answer = answer;
-            faq.AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All);
+		public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var (id, question, answer) = request;
 
-            await _context.SaveChangesAsync(cancellationToken);
+			var faq = await _context.Faqs
+				.Where(f => f.Id == id)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            return Ok();
-        }
-    }
+			if (faq is null) return NotFound();
+
+			faq.Question = question;
+			faq.Answer = answer;
+			faq.AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All);
+
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return Ok();
+		}
+	}
 }

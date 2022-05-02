@@ -4,59 +4,58 @@
 
 <div class="story-card">
 
-    <cdn-img class="image"
-             buster="@Model!.CoverId"
-             src="@Model.Cover"
-             alt="@Model.Title"
-             width="160" height="160"/>
+	<cdn-img class="image"
+	         buster="@Model!.CoverId"
+	         src="@Model.Cover"
+	         alt="@Model.Title"
+	         width="160" height="160"/>
 
-    <header class="title">
-        
-        <h3>
-            <cdn-img src="@Model.Rating.Icon"
-                     alt="Rated: @Model.Rating.Name"
-                     title="Rating: @Model.Rating.Name"
-                     class="rating"/>
-            <a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">@Model.Title</a>
-        </h3>
-          
-        <a class="author" asp-page="/User/Index" asp-route-name="@Model.AuthorUserName">By&nbsp;@Model.AuthorUserName</a>
-    </header>
+	<header class="title">
 
-    <div class="hook">
-        <markdown preset="Basic">
-            @Model.Hook
-        </markdown>
-    </div>
+		<h3>
+			<cdn-img src="@Model.Rating.Icon"
+			         alt="Rated: @Model.Rating.Name"
+			         title="Rating: @Model.Rating.Name"
+			         class="rating"/>
+			<a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">@Model.Title</a>
+		</h3>
 
-    <div class="tags">
-        <story-status status="@Model.Status"></story-status>
-        @foreach (var t in Model.Tags)
-        {
-            <tag tag="t"></tag>
-        }
-    </div>
+		<a class="author" asp-page="/User/Index" asp-route-name="@Model.AuthorUserName">By&nbsp;@Model.AuthorUserName</a>
+	</header>
 
-    <div class="info">
-        
-        <span class="word-count">@Model.WordCount.ToString("N0") words</span>
-        
-        <span class="chapter-count">@Model.ChapterCount @(Model.ChapterCount == 1 ? "chapter" : "chapters")</span>
-        
-        @if (Model.PublicationDate is not null)
-        {
-            var date = (DateTime)Model.PublicationDate;
-            <time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-                published @date.FormatDateWithDaySuffix()
-            </time>
-        }
-        else
-        {
-            <span class="not-published">
-                <icon class="icon" icon="visibility_off"></icon>
-                Not published
-            </span>
-        }
-    </div>
+	<div class="hook">
+		<markdown preset="Basic">
+			@Model.Hook
+		</markdown>
+	</div>
+
+	<div class="tags">
+		<story-status status="@Model.Status"></story-status>
+		@foreach (var t in Model.Tags)
+		{
+			<tag tag="t"></tag>
+		}
+	</div>
+
+	<div class="info">
+
+		<span class="word-count">@Model.WordCount.ToString("N0") words</span>
+
+		<span class="chapter-count">@Model.ChapterCount @(Model.ChapterCount == 1 ? "chapter" : "chapters")</span>
+
+		@if (Model.PublicationDate is not null)
+		{
+			var date = (DateTime)Model.PublicationDate;
+			<time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
+				published @date.FormatDateWithDaySuffix()
+			</time>
+		}
+		else
+		{
+			<span class="not-published">
+				<icon class="icon" icon="visibility_off"></icon>
+				Not published
+			</span>
+		}
+	</div>
 </div>
-

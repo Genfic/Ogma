@@ -1,49 +1,51 @@
 @page
-@model Ogma3.Areas.Admin.Pages.ContentBlock
+@model ContentBlock
 
 @{
-    ViewData["Title"] = Model.Type is null 
-        ? "Block content" 
-        : $"Block {Model.Type}";
-    ViewData["ActivePage"] = ManageNavPages.ContentBlock;
+	ViewData["Title"] = Model.Type is null
+		? "Block content"
+		: $"Block {Model.Type}";
+	ViewData["ActivePage"] = ManageNavPages.ContentBlock;
 }
 
 @if (Model.Item is null)
 {
-    <form method="GET" class="auto">
-        <label for="type">Type</label>
-        <select name="type" id="type">
-            @foreach (var t in Enum.GetNames<ContentBlock.ItemType>())
-            {
-                <option value="@t">@t</option>
-            }
-        </select>
-        
-        <label for="id">Id</label>
-        <input type="number" name="id" id="id">
+	<form method="GET" class="auto">
+		<label for="type">Type</label>
+		<select name="type" id="type">
+			@foreach (var t in Enum.GetNames<ContentBlock.ItemType>())
+			{
+				<option value="@t">@t</option>
+			}
+		</select>
 
-        <input type="submit" value="Search">
-    </form>
+		<label for="id">Id</label>
+		<input type="number" name="id" id="id">
+
+		<input type="submit" value="Search">
+	</form>
 }
 else
 {
-    <h3><span class="text-faded">@(Model.Item?.Type):</span> @Model.Item.Title</h3>
-    if (Model.Item.Subtitle is not null)
-    {
-        <h4>@Model.Item.Subtitle</h4>
-    }
+	<h3>
+		<span class="text-faded">@(Model.Item?.Type):</span> @Model.Item.Title
+	</h3>
+	if (Model.Item.Subtitle is not null)
+	{
+		<h4>@Model.Item.Subtitle</h4>
+	}
 
-    <form method="POST" class="auto" asp-page-handler="@(Model.Item.Blocked ? "Unblock" : "Block")">
-        @if (TempData["error"] is not null)
-        {
-            <div class="validation-summary-errors">@TempData["error"]</div>
-        }
-        <label for="reason">Reason</label>
-        <input type="text" name="reason" id="reason" value="@Model.Item.Reason" readonly="@Model.Item.Blocked">
+	<form method="POST" class="auto" asp-page-handler="@(Model.Item.Blocked ? "Unblock" : "Block")">
+		@if (TempData["error"] is not null)
+		{
+			<div class="validation-summary-errors">@TempData["error"]</div>
+		}
+		<label for="reason">Reason</label>
+		<input type="text" name="reason" id="reason" value="@Model.Item.Reason" readonly="@Model.Item.Blocked">
 
-        <input type="hidden" name="type" value="@Model.Type">
-        <input type="hidden" name="id" value="@Model.Id">
+		<input type="hidden" name="type" value="@Model.Type">
+		<input type="hidden" name="id" value="@Model.Id">
 
-        <input type="submit" value="@(Model.Item.Blocked ? "Unblock" : "Block")">
-    </form>
+		<input type="submit" value="@(Model.Item.Blocked ? "Unblock" : "Block")">
+	</form>
 }

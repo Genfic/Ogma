@@ -13,38 +13,38 @@ namespace Ogma3.Api.V1.ShelfStories.Commands;
 
 public static class RemoveBookFromShelf
 {
-    public sealed record Command(long ShelfId, long StoryId) : IRequest<ActionResult<Result>>;
+	public sealed record Command(long ShelfId, long StoryId) : IRequest<ActionResult<Result>>;
 
-    public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Result>>
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly long? _uid;
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Result>>
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly long? _uid;
 
-        public Handler(ApplicationDbContext context, IUserService userService)
-        {
-            _context = context;
-            _uid = userService.User?.GetNumericId();
-        }
+		public Handler(ApplicationDbContext context, IUserService userService)
+		{
+			_context = context;
+			_uid = userService.User?.GetNumericId();
+		}
 
-        public async Task<ActionResult<Result>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            if (_uid is null) return Unauthorized();
+		public async Task<ActionResult<Result>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			if (_uid is null) return Unauthorized();
 
-            var (shelfId, storyId) = request;
+			var (shelfId, storyId) = request;
 
-            var shelfStory = await _context.ShelfStories
-                .Where(ss => ss.ShelfId == shelfId)
-                .Where(ss => ss.StoryId == storyId)
-                .FirstOrDefaultAsync(cancellationToken);
+			var shelfStory = await _context.ShelfStories
+				.Where(ss => ss.ShelfId == shelfId)
+				.Where(ss => ss.StoryId == storyId)
+				.FirstOrDefaultAsync(cancellationToken);
 
-            if (shelfStory is null) return NotFound();
+			if (shelfStory is null) return NotFound();
 
-            _context.ShelfStories.Remove(shelfStory);
+			_context.ShelfStories.Remove(shelfStory);
 
-            await _context.SaveChangesAsync(cancellationToken);
-            return Ok(new Result(shelfId, storyId));
-        }
-    }
-        
-    public sealed record Result(long ShelfId, long StoryId);
+			await _context.SaveChangesAsync(cancellationToken);
+			return Ok(new Result(shelfId, storyId));
+		}
+	}
+
+	public sealed record Result(long ShelfId, long StoryId);
 }

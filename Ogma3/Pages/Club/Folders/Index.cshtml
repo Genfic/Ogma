@@ -1,16 +1,16 @@
 @page "/club/{id:long}/{slug}/folders"
-@model Ogma3.Pages.Club.Folders.IndexModel
+@model IndexModel
 
 @{
-    ViewData["Title"] = $"{Model.ClubBar.Name} — Folders";
-    ViewData["Tab"] = "Stories";
+	ViewData["Title"] = $"{Model.ClubBar.Name} — Folders";
+	ViewData["Tab"] = "Stories";
 }
 
 <partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
 <ul class="folders-list">
-    @foreach (var folder in Model.Folders)
-    {
-        <partial name="Shared/Cards/_FolderCard" model="folder"/>
-    }
+	@foreach (var folder in Model.Folders)
+	{
+		<partial name="Shared/Cards/_FolderCard" model="folder"/>
+	}
 </ul>

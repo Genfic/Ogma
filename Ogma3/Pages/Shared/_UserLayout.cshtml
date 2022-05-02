@@ -1,19 +1,19 @@
 ﻿@{
-    Layout = "/Pages/Shared/_Layout.cshtml";
+	Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
 <main role="main" class="pb-3" id="app">
-    @RenderBody()
+	@RenderBody()
 </main>
 
 @section Scripts {
-    @await RenderSectionAsync("Scripts", false)
+	@await RenderSectionAsync("Scripts", false)
 }
 
 @section CSS {
-    @await RenderSectionAsync("CSS", false)
+	@await RenderSectionAsync("CSS", false)
 }
 
 @section OgMeta {
-    @await RenderSectionAsync("OgMeta", false)
+	@await RenderSectionAsync("OgMeta", false)
 }

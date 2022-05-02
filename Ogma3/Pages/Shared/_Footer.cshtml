@@ -5,117 +5,117 @@
 @inject OgmaConfig Config
 
 @{
-    var genTime = DateTime.UtcNow - (DateTime) (Context?.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
-    var renderTime = DateTime.Now - (DateTime) (ViewData["render_start"] ?? DateTime.UtcNow);
+	var genTime = DateTime.UtcNow - (DateTime)(Context?.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
+	var renderTime = DateTime.Now - (DateTime)(ViewData["render_start"] ?? DateTime.UtcNow);
 }
 
 <footer class="footer">
 
-    <div class="cols">
+	<div class="cols">
 
-        <div class="col">
-            <span class="header">Stats</span>
+		<div class="col">
+			<span class="header">Stats</span>
 
-            <span class="item">
-                Request time <span class="hl" title="@(genTime.TotalMilliseconds) ms">@(genTime.TotalSeconds.ToString("F3"))</span> seconds
-            </span>
+			<span class="item">
+				Request time <span class="hl" title="@(genTime.TotalMilliseconds) ms">@(genTime.TotalSeconds.ToString("F3"))</span> seconds
+			</span>
 
-            <span class="item">
-                Render time <span class="hl" title="@(renderTime.TotalMilliseconds) ms">@(renderTime.TotalSeconds.ToString("F3"))</span> seconds
-            </span>
-            
-            <span class="item">
-                <users-online class="hl" tolerance="5" cache-time="10"></users-online> users online
-            </span>
-            
-            <span class="item">
-                Serving <story-count class="hl" cache-time="60"></story-count> stories
-            </span>
-        </div>
+			<span class="item">
+				Render time <span class="hl" title="@(renderTime.TotalMilliseconds) ms">@(renderTime.TotalSeconds.ToString("F3"))</span> seconds
+			</span>
 
-        <div class="col">
-            <span class="header">Links</span>
+			<span class="item">
+				<users-online class="hl" tolerance="5" cache-time="10"></users-online> users online
+			</span>
 
-            <a asp-area="" asp-page="/Docs" asp-route-slug="@Config.AboutDoc" class="item">About</a>
+			<span class="item">
+				Serving <story-count class="hl" cache-time="60"></story-count> stories
+			</span>
+		</div>
 
-            <a asp-area="" asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">Privacy</a>
+		<div class="col">
+			<span class="header">Links</span>
 
-            <a asp-area="" asp-page="/Staff" class="item">Staff</a>
+			<a asp-area="" asp-page="/Docs" asp-route-slug="@Config.AboutDoc" class="item">About</a>
 
-            <a asp-area="" asp-page="/Markdown" class="item">Markdown reference</a>
+			<a asp-area="" asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">Privacy</a>
 
-            <a asp-area="" asp-page="/Settings" class="item">Local settings</a>
-            
-            <a asp-controller="Rss" asp-action="GetStories" class="item"><icon icon="rss_feed" class="rss"></icon>Stories RSS</a>
-            
-            <a asp-controller="Rss" asp-action="GetBlogposts" class="item"><icon icon="rss_feed" class="rss"></icon>Blogpost RSS</a>
+			<a asp-area="" asp-page="/Staff" class="item">Staff</a>
 
-            @if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
-            {
-                <a class="item" asp-area="Admin" asp-page="/Index">Admin</a>
-            }
-        </div>
+			<a asp-area="" asp-page="/Markdown" class="item">Markdown reference</a>
 
-        <div class="col">
-            <span class="header">Follow and support</span>
-            
-            @{ var formats = new[] {"avif", "webp"};}
+			<a asp-area="" asp-page="/Settings" class="item">Local settings</a>
 
-            <a href="https://www.subscribestar.com/genfic" target="_blank" rel="noopener" class="item follow substar">
-                <picture src="/img/subscribestar.png"
-                         height="24" width="24"
-                         asp-append-version="true"
-                         source-formats="@formats"
-                         alt="SubscribeStar logo">
-                </picture>
-                SubscribeStar
-            </a>
+			<a asp-controller="Rss" asp-action="GetStories" class="item"><icon icon="rss_feed" class="rss"></icon>Stories RSS</a>
 
-            <a href="https://www.patreon.com/genfic" target="_blank" rel="noopener" class="item follow patreon">
-                <picture src="/img/patreon.png"
-                         height="24" width="24"
-                         asp-append-version="true"
-                         source-formats="@formats"
-                         alt="Patreon logo">
-                </picture>
-                Patreon
-            </a>
+			<a asp-controller="Rss" asp-action="GetBlogposts" class="item"><icon icon="rss_feed" class="rss"></icon>Blogpost RSS</a>
 
-            <a href="https://ko-fi.com/genfic" target="_blank" rel="noopener" class="item follow kofi">
-                <picture src="/img/kofi.png"
-                         height="24" width="24"
-                         asp-append-version="true"
-                         source-formats="@formats"
-                         alt="Ko-Fi logo">
-                </picture>
-                Ko-fi
-            </a>
+			@if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
+			{
+				<a class="item" asp-area="Admin" asp-page="/Index">Admin</a>
+			}
+		</div>
 
-            <a href="https://discord.gg/BNVZmJb" target="_blank" rel="noopener" class="item follow discord">
-                <picture src="/img/discord.png"
-                         height="24" width="24"
-                         asp-append-version="true"
-                         source-formats="@formats"
-                         alt="Discord logo">
-                </picture>
-                Discord
-            </a>
+		<div class="col">
+			<span class="header">Follow and support</span>
 
-            <a href="https://twitter.com/GenficNet" target="_blank" rel="noopener" class="item follow twitter">
-                <picture src="/img/twitter.png"
-                         height="24" width="24"
-                         asp-append-version="true"
-                         source-formats="@formats"
-                         alt="Twitter logo">
-                </picture>
-                Twitter
-            </a>
-        </div>
+			@{ var formats = new[] { "avif", "webp" }; }
 
-    </div>
+			<a href="https://www.subscribestar.com/genfic" target="_blank" rel="noopener" class="item follow substar">
+				<picture src="/img/subscribestar.png"
+				         height="24" width="24"
+				         asp-append-version="true"
+				         source-formats="@formats"
+				         alt="SubscribeStar logo">
+				</picture>
+				SubscribeStar
+			</a>
 
-    <div class="bottom">
-        <span class="copy-text">&copy;2019-@DateTime.Now.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
-    </div>
+			<a href="https://www.patreon.com/genfic" target="_blank" rel="noopener" class="item follow patreon">
+				<picture src="/img/patreon.png"
+				         height="24" width="24"
+				         asp-append-version="true"
+				         source-formats="@formats"
+				         alt="Patreon logo">
+				</picture>
+				Patreon
+			</a>
+
+			<a href="https://ko-fi.com/genfic" target="_blank" rel="noopener" class="item follow kofi">
+				<picture src="/img/kofi.png"
+				         height="24" width="24"
+				         asp-append-version="true"
+				         source-formats="@formats"
+				         alt="Ko-Fi logo">
+				</picture>
+				Ko-fi
+			</a>
+
+			<a href="https://discord.gg/BNVZmJb" target="_blank" rel="noopener" class="item follow discord">
+				<picture src="/img/discord.png"
+				         height="24" width="24"
+				         asp-append-version="true"
+				         source-formats="@formats"
+				         alt="Discord logo">
+				</picture>
+				Discord
+			</a>
+
+			<a href="https://twitter.com/GenficNet" target="_blank" rel="noopener" class="item follow twitter">
+				<picture src="/img/twitter.png"
+				         height="24" width="24"
+				         asp-append-version="true"
+				         source-formats="@formats"
+				         alt="Twitter logo">
+				</picture>
+				Twitter
+			</a>
+		</div>
+
+	</div>
+
+	<div class="bottom">
+		<span class="copy-text">&copy;2019-@DateTime.Now.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
+	</div>
 
 </footer>

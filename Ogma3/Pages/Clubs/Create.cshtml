@@ -1,8 +1,8 @@
 @page
-@model Ogma3.Pages.Clubs.CreateModel
+@model CreateModel
 
 @{
-    ViewData["Title"] = "Create a new club";
+	ViewData["Title"] = "Create a new club";
 }
 
 
@@ -10,47 +10,47 @@
 
 <form class="form" id="club" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
 
-    <div asp-validation-summary="All">
-        <span>Please correct the following errors</span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Name"></label>
-        <span class="desc">Try something catchy</span>
-        <input asp-for="Input.Name" class="o-form-control active-border">
-        <span asp-validation-for="Input.Name"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Hook"></label>
-        <span class="desc">The short description that will appear on the clubs list</span>
-        <input asp-for="Input.Hook" class="o-form-control active-border">
-        <span asp-validation-for="Input.Hook"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Description"></label>
-        <span class="desc">This will show on the club's home page</span>
-        <textarea asp-for="Input.Description" class="o-form-control active-border" rows="5" data-md="true"></textarea>
-        <span asp-validation-for="Input.Description"></span>
-    </div>
-    
-    <div class="o-form-group">
-        <label asp-for="Input.Icon"></label>
-        <span class="desc">Something that will set your club apart</span>
-        <input asp-for="Input.Icon" class="o-form-control active-border">
-        <span asp-validation-for="Input.Icon"></span>
-    </div>
+	<div asp-validation-summary="All">
+		<span>Please correct the following errors</span>
+	</div>
 
-    <div class="o-form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
-    </div>
+	<div class="o-form-group">
+		<label asp-for="Input.Name"></label>
+		<span class="desc">Try something catchy</span>
+		<input asp-for="Input.Name" class="o-form-control active-border">
+		<span asp-validation-for="Input.Name"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.Hook"></label>
+		<span class="desc">The short description that will appear on the clubs list</span>
+		<input asp-for="Input.Hook" class="o-form-control active-border">
+		<span asp-validation-for="Input.Hook"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.Description"></label>
+		<span class="desc">This will show on the club's home page</span>
+		<textarea asp-for="Input.Description" class="o-form-control active-border" rows="5" data-md="true"></textarea>
+		<span asp-validation-for="Input.Description"></span>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="Input.Icon"></label>
+		<span class="desc">Something that will set your club apart</span>
+		<input asp-for="Input.Icon" class="o-form-control active-border">
+		<span asp-validation-for="Input.Icon"></span>
+	</div>
+
+	<div class="o-form-group">
+		<button type="submit" class="btn btn-primary">Create</button>
+	</div>
 
 </form>
 
 <partial name="Shared/_ValidationScriptsPartial"/>
 
 @section Scripts {
-    <script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
-    <script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
+	<script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/editors/markdown-toolbar.min.js" asp-append-version="true" async></script>
 }

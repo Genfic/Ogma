@@ -16,49 +16,49 @@ namespace Ogma3.Pages.User;
 
 public class Followers : PageModel
 {
-    private const int PerPage = 25;
-        
-    private readonly UserRepository _userRepo;
-    private readonly ApplicationDbContext _context;
-    private readonly IMapper _mapper;
+	private const int PerPage = 25;
 
-    public Followers(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
-    {
-        _userRepo = userRepo;
-        _context = context;
-        _mapper = mapper;
-    }
-        
-    public ProfileBar ProfileBar { get; private set; }
-    public Pagination Pagination { get; private set; }
-    public List<UserCard> Users { get; private set; }
+	private readonly UserRepository _userRepo;
+	private readonly ApplicationDbContext _context;
+	private readonly IMapper _mapper;
 
-    public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
-    {
-        ProfileBar = await _userRepo.GetProfileBar(name);
-        if (ProfileBar is null) return NotFound();
+	public Followers(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+	{
+		_userRepo = userRepo;
+		_context = context;
+		_mapper = mapper;
+	}
 
-        Users = await _context.FollowedUsers
-            .Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
-            .Select(u => u.FollowedUser)
-            .Paginate(page, PerPage)
-            .ProjectTo<UserCard>(_mapper.ConfigurationProvider)
-            .AsNoTracking()
-            .ToListAsync();
+	public ProfileBar ProfileBar { get; private set; }
+	public Pagination Pagination { get; private set; }
+	public List<UserCard> Users { get; private set; }
 
-        var count = await _context.Users
-            .Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
-            .Select(u => u.Followers)
-            .CountAsync();
-            
-        // Prepare pagination
-        Pagination = new Pagination
-        {
-            PerPage = PerPage,
-            ItemCount = count,
-            CurrentPage = page
-        };
-            
-        return Page();
-    }
+	public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
+	{
+		ProfileBar = await _userRepo.GetProfileBar(name);
+		if (ProfileBar is null) return NotFound();
+
+		Users = await _context.FollowedUsers
+			.Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
+			.Select(u => u.FollowedUser)
+			.Paginate(page, PerPage)
+			.ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+			.AsNoTracking()
+			.ToListAsync();
+
+		var count = await _context.Users
+			.Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
+			.Select(u => u.Followers)
+			.CountAsync();
+
+		// Prepare pagination
+		Pagination = new Pagination
+		{
+			PerPage = PerPage,
+			ItemCount = count,
+			CurrentPage = page
+		};
+
+		return Page();
+	}
 }

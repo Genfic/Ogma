@@ -12,37 +12,36 @@ namespace Ogma3.Api.V1.Quotes.Commands;
 
 public static class DeleteQuote
 {
-    public sealed record Command(long Id) : IRequest<ActionResult<Quote>>;
-        
-    public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
-    {
-        private readonly ApplicationDbContext _context;
+	public sealed record Command(long Id) : IRequest<ActionResult<Quote>>;
 
-        public CreateQuoteHandler(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
+	{
+		private readonly ApplicationDbContext _context;
 
-        public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var quote = await _context.Quotes
-                .FirstOrDefaultAsync(q => q.Id == request.Id, cancellationToken);
+		public CreateQuoteHandler(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-            if (quote is null) return NotFound();
-                
-            _context.Remove(quote);
-            try
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch (DbUpdateException ex)
-            {
-                Log.Error("Delete error in {Src}: {Msg}", ex.Source, ex.Message);
-                return ServerError("Database Delete Error");
-            }
+		public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
+		{
+			var quote = await _context.Quotes
+				.FirstOrDefaultAsync(q => q.Id == request.Id, cancellationToken);
 
-            return Ok(quote);
-        }
-    }
-        
+			if (quote is null) return NotFound();
+
+			_context.Remove(quote);
+			try
+			{
+				await _context.SaveChangesAsync(cancellationToken);
+			}
+			catch (DbUpdateException ex)
+			{
+				Log.Error("Delete error in {Src}: {Msg}", ex.Source, ex.Message);
+				return ServerError("Database Delete Error");
+			}
+
+			return Ok(quote);
+		}
+	}
 }

@@ -9,22 +9,22 @@ namespace Ogma3.Infrastructure.Filters;
 
 public class ValidationExceptionFilter : IExceptionFilter
 {
-    public void OnException(ExceptionContext context)
-    {
-        if (context.Exception is not ValidationException ex) return;
-        
-        var errors = ex.Errors
-            .GroupBy(e => e.PropertyName)
-            .ToDictionary(
-                e => e.First().PropertyName, 
-                e => e.Select(v => v.ErrorMessage).ToHashSet().ToArray()
-            );
-            
-        context.Result = new ProblemResult(new ValidationProblemDetails(errors)
-        {
-            Status = StatusCodes.Status422UnprocessableEntity,
-            Title = "Validation error",
-            Detail = "Data sent did not pass the validation process"
-        });
-    }
+	public void OnException(ExceptionContext context)
+	{
+		if (context.Exception is not ValidationException ex) return;
+
+		var errors = ex.Errors
+			.GroupBy(e => e.PropertyName)
+			.ToDictionary(
+				e => e.First().PropertyName,
+				e => e.Select(v => v.ErrorMessage).ToHashSet().ToArray()
+			);
+
+		context.Result = new ProblemResult(new ValidationProblemDetails(errors)
+		{
+			Status = StatusCodes.Status422UnprocessableEntity,
+			Title = "Validation error",
+			Detail = "Data sent did not pass the validation process"
+		});
+	}
 }

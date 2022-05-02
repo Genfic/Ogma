@@ -1,10 +1,10 @@
 @page "/club/{clubId}/folder/{id}/{slug}"
-@model Ogma3.Pages.Club.Folders.FolderModel
+@model FolderModel
 
 
 @{
-    ViewData["Title"] = $"{Model.ClubBar.Name} — {Model.Folder.Name}";
-    ViewData["Tab"] = "Stories";
+	ViewData["Title"] = $"{Model.ClubBar.Name} — {Model.Folder.Name}";
+	ViewData["Tab"] = "Stories";
 }
 
 <partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
@@ -17,33 +17,33 @@
 
 @if (Model.EditPermitted)
 {
-    <a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
-    <a asp-page="./Delete" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Delete</a>
+	<a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
+	<a asp-page="./Delete" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Delete</a>
 }
 
 <hr>
 
 <div class="folder-list tile-list">
-    @foreach (var folder in Model.Folder.ChildFolders)
-    {
-        <partial name="Shared/Minimals/_FolderMinimal" model="folder"/>
-    }
+	@foreach (var folder in Model.Folder.ChildFolders)
+	{
+		<partial name="Shared/Minimals/_FolderMinimal" model="folder"/>
+	}
 </div>
 
 <hr>
 
 <div>
-    @if (Model.Stories.Count <= 0)
-    {
-        <h3>No stories found</h3>
-    }
-    else
-    {
-        foreach (var story in Model.Stories)
-        {
-            <partial name="Shared/Cards/_StoryCard" model="@story"/>
-        }
-        
-        <partial name="_Pagination" model="Model.Pagination"/>
-    }
+	@if (Model.Stories.Count <= 0)
+	{
+		<h3>No stories found</h3>
+	}
+	else
+	{
+		foreach (var story in Model.Stories)
+		{
+			<partial name="Shared/Cards/_StoryCard" model="@story"/>
+		}
+
+		<partial name="_Pagination" model="Model.Pagination"/>
+	}
 </div>
