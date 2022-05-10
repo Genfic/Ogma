@@ -1,39 +1,48 @@
-import {html, LitElement} from 'https://cdn.skypack.dev/pin/lit-element@v2.4.0-wL9urDabdrJ7grkk3BAP/min/lit-element.js';
+import { html, LitElement } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { http } from "../helpers/http";
+import { log } from "../helpers/logger";
 
+interface Club {
+	id: number;
+	name: string;
+	icon: string;
+}
+
+@customElement('o-featured-in-clubs')
 export class FeaturedInClubs extends LitElement {
-    constructor() {
-        super();
-    }
+	constructor() {
+		super();
+	}
+	
+	@property() endpoint: string;
+	@property() storyId: number;
+	@state() private visible: boolean;
+	@state() private clubs: Club[];
 
-    static get properties() {
-        return {
-            endpoint: {type: String},
-            storyId: {type: Number},
-            cdn: {type: String},
-            visible: {type: Boolean, attribute: false,},
-            clubs: {type: Array, attribute: false}
-        };
-    }
+	async connectedCallback() {
+		super.connectedCallback();
+		this.classList.add('wc-loaded');
+		await this.fetch();
+	}
 
-    async connectedCallback() {
-        super.connectedCallback();
-        this.classList.add('wc-loaded');
-        await this._fetch();
-    }
+	private async fetch() {
+		const response = await http.get<Club[]>(`${this.endpoint}/story/${this.storyId}`);
+		if (response.isSuccess) {
+			this.clubs = response.getValue();
+		} else {
+			log.error(`Error fetching data: ${response.error}`);
+		}
+	}
 
-    async _fetch() {
-        const {data} = await axios.get(`${this.endpoint}/story/${this.storyId}`);
-        this.clubs = data;
-    }
+	private async open() {
+		this.visible = true;
+		await this.fetch();
+	}
 
-    async _open() {
-        this.visible = true;
-        await this._fetch();
-    }
-
-    render() {
-        return html`
-            <a @click="${async () => await this._open()}">Featured in clubs</a>
+	render() {
+		return html`
+            <a @click="${async () => await this.open()}">Featured in clubs</a>
 
             ${this.visible ? html`
                 <div class="club-folder-selector my-modal" @click="${() => this.visible = false}">
@@ -50,7 +59,7 @@ export class FeaturedInClubs extends LitElement {
                                        target="_blank"
                                        class="club"
                                        tabindex="0">
-                                        <img src="${this.cdn}${c.icon ?? 'ph-250.png'}" 
+                                        <img src="${c.icon ?? 'ph-250.png'}" 
                                              alt="${c.name}" 
                                              width="24"
                                              height="24">
@@ -67,11 +76,9 @@ export class FeaturedInClubs extends LitElement {
                 </div>
             ` : null}
         `;
-    }
+	}
 
-    createRenderRoot() {
-        return this;
-    }
+	createRenderRoot() {
+		return this;
+	}
 }
-
-window.customElements.define('o-featured-in-clubs', FeaturedInClubs);

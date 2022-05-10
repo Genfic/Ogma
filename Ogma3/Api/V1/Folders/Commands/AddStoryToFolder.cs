@@ -31,11 +31,11 @@ public static class AddStoryToFolder
 		{
 			var (folderId, storyId) = request;
 
-			var folderExists = await _context.Folders
+			var folder = await _context.Folders
 				.Where(f => f.Id == folderId)
 				.Where(f => f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == _uid).Role <= f.AccessLevel)
-				.AnyAsync(cancellationToken);
-			if (!folderExists) return NotFound("Folder not found or insufficient permissions");
+				.FirstOrDefaultAsync(cancellationToken);
+			if (folder is null) return NotFound("Folder not found or insufficient permissions");
 
 			var storyExists = await _context.Stories
 				.AnyAsync(s => s.Id == storyId, cancellationToken);
@@ -50,6 +50,7 @@ public static class AddStoryToFolder
 				FolderId = folderId,
 				StoryId = storyId,
 			});
+			folder.StoriesCount++;
 
 			await _context.SaveChangesAsync(cancellationToken);
 			return Ok(entity.Entity);

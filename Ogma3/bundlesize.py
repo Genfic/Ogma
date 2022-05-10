@@ -2,7 +2,7 @@ import glob
 import gzip
 import os
 
-files = glob.glob('./wwwroot/js/dist/**/*.min.js', recursive=True)
+files = glob.glob('./wwwroot/js/dist/**/*.js', recursive=True)
 
 total_size = 0
 

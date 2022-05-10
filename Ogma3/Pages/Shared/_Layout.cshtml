@@ -137,8 +137,8 @@ else
 	        asp-fallback-test="window.Vue"></script>
 }
 
-<script src="~/js/dist/site.min.js" asp-append-version="true"></script>
-<script defer src="~/js/dist/navbar.min.js" asp-append-version="true"></script>
+<script src="~/js/dist/site.js" asp-append-version="true"></script>
+<script defer src="~/js/dist/navbar.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", false)
 @Html.RenderResources()

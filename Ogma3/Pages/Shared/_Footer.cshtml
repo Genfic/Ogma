@@ -5,7 +5,7 @@
 @inject OgmaConfig Config
 
 @{
-	var genTime = DateTime.UtcNow - (DateTime)(Context?.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
+	var genTime = DateTime.UtcNow - (DateTime)(Context.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
 	var renderTime = DateTime.Now - (DateTime)(ViewData["render_start"] ?? DateTime.UtcNow);
 }
 

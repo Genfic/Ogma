@@ -19,11 +19,11 @@ interface String {
  * @returns {string} Resulting string
  */
 String.prototype.replaceAll = function (oldCh: string, newCh: string): string {
-    let out = '';
-    for (let c of this) {
-        out += c === oldCh ? newCh : c;
-    }
-    return out;
+	let out = '';
+	for (let c of this) {
+		out += c === oldCh ? newCh : c;
+	}
+	return out;
 };
 
 /**
@@ -32,7 +32,7 @@ String.prototype.replaceAll = function (oldCh: string, newCh: string): string {
  * @returns {string} Source string, or alternative if source is null or empty.
  */
 String.prototype.ifNullOrEmpty = function (alternative: string): string {
-    return this === null || this.length <= 0 ? alternative : this;
+	return this === null || this.length <= 0 ? alternative : this;
 };
 
 /**
@@ -41,7 +41,7 @@ String.prototype.ifNullOrEmpty = function (alternative: string): string {
  * @returns {Array<string>}
  */
 String.prototype.properSplit = function (split: string | RegExp): Array<string> {
-    return this.length === 0 || this === null || this === undefined ? [] : this.split(split);
+	return this.length === 0 || this === null || this === undefined ? [] : this.split(split);
 };
 
 interface Array<T> {
@@ -55,10 +55,10 @@ interface Array<T> {
  * @param {any} element Element to remove
  */
 Array.prototype.remove = function (element): void {
-    let idx = this.indexOf(element);
-    if (idx > -1) {
-        this.splice(idx, 1);
-    }
+	let idx = this.indexOf(element);
+	if (idx > -1) {
+		this.splice(idx, 1);
+	}
 };
 
 /**
@@ -66,8 +66,8 @@ Array.prototype.remove = function (element): void {
  * @param {object} element Element to push
  */
 Array.prototype.pushUnique = function (element) {
-    if (this.includes(element)) return;
-    this.push(element);
+	if (this.includes(element)) return;
+	this.push(element);
 };
 
 interface Number {
@@ -83,8 +83,8 @@ interface Number {
  * @returns {number} The given number normalized into [0, 1] range
  */
 Number.prototype.normalize = function (min: number, max: number): number {
-    if (max < min) throw 'Max cannot be less than min';
-    return (this - min) / (max - min);
+	if (max < min) throw 'Max cannot be less than min';
+	return (this - min) / (max - min);
 };
 
 /**
@@ -94,10 +94,10 @@ Number.prototype.normalize = function (min: number, max: number): number {
  * @returns {number}
  */
 Number.prototype.clamp = function (min: number = 0, max: number = 1): number {
-    if (max < min) throw 'Max cannot be less than min';
-    if (this < min) return min;
-    if (this > max) return max;
-    return this;
+	if (max < min) throw 'Max cannot be less than min';
+	if (this < min) return min;
+	if (this > max) return max;
+	return this;
 };
 
 
@@ -115,10 +115,10 @@ Number.prototype.clamp = function (min: number = 0, max: number = 1): number {
  * @returns {string} Resulting RGBA value formatted as `rgba(255, 255, 255, 1)`
  */
 function hexToRgba(hex: string, alpha: number = 1): string {
-    let str = hex.replace('#', '');
-    let values = str.match(/.{1,2}/g);
-    let rgb = values.map((c: string) => parseInt(c, 16));
-    return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
+	let str = hex.replace('#', '');
+	let values = str.match(/.{1,2}/g);
+	let rgb = values.map((c: string) => parseInt(c, 16));
+	return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
 }
 
 /**
@@ -127,8 +127,8 @@ function hexToRgba(hex: string, alpha: number = 1): string {
  * @returns {string} Returns the value of the cookie
  */
 function getCookieValue(name: string): string {
-    let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return b ? b.pop() : '';
+	let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : '';
 }
 
 /**
@@ -140,11 +140,11 @@ function getCookieValue(name: string): string {
  * @param {string|null} sameSite SameSite setting
  */
 function setCookie(name: string, value: string, expires: Date | null = null, secure: boolean = false, sameSite: string | null = null) {
-    let cookie = `${name}=${value}`;
-    if (expires) cookie += `; expires=${expires.toUTCString()}`;
-    if (secure) cookie += `; secure=${String(secure)}`;
-    if (sameSite) cookie += `; samesite=${sameSite}`;
-    document.cookie = cookie;
+	let cookie = `${name}=${value}`;
+	if (expires) cookie += `; expires=${expires.toUTCString()}`;
+	if (secure) cookie += `; secure=${String(secure)}`;
+	if (sameSite) cookie += `; samesite=${sameSite}`;
+	document.cookie = cookie;
 }
 
 /**
@@ -153,30 +153,31 @@ function setCookie(name: string, value: string, expires: Date | null = null, sec
  * @returns {boolean} True if the variable is an object, false if it's a primitive
  */
 function isObject(obj: any): boolean {
-    return obj === Object(obj);
+	return obj === Object(obj);
 }
 
 /**
  * Creates a deep copy of the object through parsing and serializing JSON
  */
 function _deepCopy(o: object): object {
-    return JSON.parse(JSON.stringify({...o, __isCopied__: true}));
+	return JSON.parse(JSON.stringify({ ...o, __isCopied__: true }));
 }
 
 /**
  * Logger object to create better logging experience
  */
 ((window || global) as any).log = {
-    log: o => console.log(isObject(o) ? _deepCopy(o) : o),
-    info: o => console.info(isObject(o) ? _deepCopy(o) : o),
-    warn: o => console.warn(isObject(o) ? _deepCopy(o) : o),
-    error: o => console.error(isObject(o) ? _deepCopy(o) : o),
-    debug: o => console.debug(isObject(o) ? _deepCopy(o) : o)
-}
+	log: o => console.log(isObject(o) ? _deepCopy(o) : o),
+	info: o => console.info(isObject(o) ? _deepCopy(o) : o),
+	warn: o => console.warn(isObject(o) ? _deepCopy(o) : o),
+	error: o => console.error(isObject(o) ? _deepCopy(o) : o),
+	debug: o => console.debug(isObject(o) ? _deepCopy(o) : o)
+};
 
 
 // Set Vue error handling
 // @ts-ignore
 Vue.config.errorHandler = function (err) {
-    log.info(err.message); // "Oops"
+	log.info(err.message); // "Oops"
 };
+Vue.config.ignoredElements = [/o-*/];

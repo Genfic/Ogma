@@ -4,6 +4,20 @@ export class http {
 	static get = <T>(url: string, headers: object = {}, config: object = {}) =>
 		http.request<T>(url, "GET", null, headers, config);
 
+	static post = <T>(
+		url: string,
+		payload: object,
+		headers: object = {},
+		config: object = {}
+	) => http.request<T>(url, "POST", payload, headers, config);
+
+	static delete = <T>(
+		url: string,
+		payload: object,
+		headers: object = {},
+		config: object = {}
+	) => http.request<T>(url, "DELETE", payload, headers, config);
+
 	static request = async <TResponse>(
 		url: string,
 		method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD",

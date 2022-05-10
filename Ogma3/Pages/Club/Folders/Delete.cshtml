@@ -37,31 +37,39 @@
 	</dl>
 
 	<form method="post" class="confirm" id="folder">
-
-		<template id="folder-tree">
-			<folder-tree :club-id="@Model.Folder.ClubId"
-			             label="Move stories to"
-			             :value="@Model.Folder.Id"
-			             :current="@Model.Folder.Id"
-			             route="@Url.RouteUrl(nameof(FoldersController))">
-			</folder-tree>
-		</template>
+		
+		<o-folder-tree id="folder-selector"
+						clubId="@Model.Folder.ClubId"
+		               label="Move stories to"
+		               value="@Model.Folder.Id"
+		               current="@Model.Folder.Id"
+		               route="@Url.RouteUrl(nameof(FoldersController))">
+		</o-folder-tree>
 
 		<input type="hidden" asp-for="Folder.Id"/>
+		<input type="hidden" asp-for="TargetFolder"/>
 
 		<hr>
 
 		<div class="buttons">
 			<input type="submit" value="Delete" class="button accept red"/>
-			<a asp-page="./Folder" class="button cancel" asp-route-id="@Model.Folder.Id" asp-route-clubId="@Model.Folder.ClubId">Cancel</a>
+			<a asp-page="./Folder" 
+			   class="button cancel" 
+			   asp-route-id="@Model.Folder.Id" 
+			   asp-route-clubId="@Model.Folder.ClubId" 
+			   asp-route-slug="@Model.Folder.Slug">Cancel</a>
 		</div>
 	</form>
 
 </div>
 
 @section Scripts {
-	<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-	<script>
-    new Vue({ el: '#folder-tree' })
-    </script>
+	<script >
+	const $ = (sel) => document.getElementById(sel);
+		$('folder').addEventListener('submit', (e) => {
+			e.preventDefault();	
+			$('TargetFolder').value = $('folder-selector').selected;
+			e.target.submit();
+		})
+	</script>
 }

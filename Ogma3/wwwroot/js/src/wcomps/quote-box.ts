@@ -14,23 +14,9 @@ export class QuoteBox extends LitElement {
 		super();
 	}
 
-	static get properties() {
-		return {
-			endpoint: { type: String },
-			loading: { type: Boolean, attribute: false },
-			body: { type: String, attribute: false },
-			author: { type: String, attribute: false },
-		};
-	}
-
-	@property()
-	endpoint: string;
-
-	@state()
-	private loading: boolean;
-
-	@state()
-	private quote: Quote;
+	@property() endpoint: string;
+	@state() private loading: boolean;
+	@state() private quote: Quote;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -50,10 +36,8 @@ export class QuoteBox extends LitElement {
 					? html`
 							<em class="body">${this.quote.body}</em>
 							<span class="author">${this.quote.author}</span>
-					`
-					: html`
-						<span>Loading the quote...</span>
-					`}
+					  `
+					: html` <span>Loading the quote...</span> `}
 			</div>
 		`;
 	}

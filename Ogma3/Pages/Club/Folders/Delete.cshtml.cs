@@ -21,11 +21,13 @@ public class DeleteModel : PageModel
 	}
 
 
+	[BindProperty] public long TargetFolder { get; set; }
 	[BindProperty] public DeleteViewModel Folder { get; set; }
 
 	public class DeleteViewModel
 	{
 		public string Name { get; init; }
+		public string Slug { get; init; }
 		public string Description { get; init; }
 		public int StoriesCount { get; init; }
 		public long ClubId { get; init; }
@@ -49,6 +51,7 @@ public class DeleteModel : PageModel
 				Id = f.Id,
 				ClubId = f.ClubId,
 				Name = f.Name,
+				Slug = f.Slug,
 				Description = f.Description,
 				StoriesCount = f.StoriesCount
 			})
@@ -84,9 +87,22 @@ public class DeleteModel : PageModel
 			return Page();
 		}
 
+		var relationships = await _context.FolderStories
+			.Where(fs => fs.FolderId == folder.Id)
+			.ToListAsync();
+
+		var newRelationships = relationships.Select(r => new Data.Folders.FolderStory
+		{
+			FolderId = TargetFolder,
+			StoryId = r.StoryId
+		});
+
+		_context.FolderStories.RemoveRange(relationships);
+		_context.FolderStories.AddRange(newRelationships);
+
 		_context.Folders.Remove(folder);
 		await _context.SaveChangesAsync();
 
-		return RedirectToPage("./Index", new { id = clubId });
+		return RedirectToPage("./Folder", new { id = TargetFolder, slug = "" });
 	}
 }

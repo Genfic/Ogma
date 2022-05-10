@@ -7,21 +7,18 @@
 	ViewData["Title"] = "Create a new folder";
 }
 
-<form method="post" class="form" id="folder" v-on:submit="onSubmit">
+<form method="post" class="form" id="folder">
 
 	<div asp-validation-summary="All">
 		<span>Please correct the following errors</span>
 	</div>
 
-	<template id="folder-tree">
-		<folder-tree :club-id="@Model.Input.ClubId"
-		             label="Parent folder"
-		             name="Input.ParentId"
-		             :value="@Model.Input.ParentId"
-		             :current="@Model.Input.Id"
-		             route="@Url.RouteUrl(nameof(FoldersController))">
-		</folder-tree>
-	</template>
+	<o-folder-tree id="folder-selector"
+	               clubId="@Model.Input.ClubId"
+	               label="Parent folder"
+	               route="@Url.RouteUrl(nameof(FoldersController))">
+	</o-folder-tree>
+	<input type="hidden" asp-for="Input.ParentId">
 
 	<div class="o-form-group">
 		<label asp-for="Input.Name"></label>
@@ -63,9 +60,13 @@
 <partial name="Shared/_ValidationScriptsPartial"/>
 
 @section Scripts {
-	<script src="~/js/dist/input-progressbars.min.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-	<script>
-    new Vue({ el: '#folder-tree' })
-    </script>
+	<script src="~/js/dist/input-progressbars.js" asp-append-version="true"></script>
+		<script >
+    	const $ = (sel) => document.getElementById(sel);
+    		$('folder').addEventListener('submit', (e) => {
+    			e.preventDefault();	
+    			$('Input_ParentId').value = $('folder-selector').selected;
+    			e.target.submit();
+    		})
+    	</script>
 }

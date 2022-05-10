@@ -3,6 +3,12 @@
 
 .folder-tree
 	padding: .25rem
+	
+	o-folder-tree-item:last-child
+		.folder
+			border: none
+			&:before
+				border-left: 1px solid v.$foreground-75
 
 	.folder
 		position: relative
@@ -23,11 +29,11 @@
 				color: v.$foreground
 				pointer-events: none
 
-		&:last-child
-			border: none
-
-			&:before
-				border-left: 1px solid v.$foreground-75
+		//&:last-child
+		//	border: none
+		//
+		//	&:before
+		//		border-left: 1px solid v.$foreground-75
 
 		&:before
 			content: ""

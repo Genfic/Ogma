@@ -1,5 +1,5 @@
 ﻿@page "{id}/{slug?}"
-@inject OgmaConfig Config
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Infrastructure.TagHelpers
 @using Ogma3.Api.V1.Votes
@@ -20,6 +20,7 @@
 	ViewData["Rating"] = Model.Story.Rating.Name;
 
 	var uid = User.GetNumericId();
+	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 @section OgMeta {
@@ -41,7 +42,7 @@
 
 		<div class="actions">
 
-			<o-vote v-pre endpoint="@Url.RouteUrl(nameof(VotesController))" storyId="@Model.Story.Id"></o-vote>
+			<o-vote v-pre endpoint="@Url.RouteUrl(nameof(VotesController))" storyId="@Model.Story.Id" csrf="@csrf"></o-vote>
 
 			<noscript>
 				<span class="votes action-btn large" title="Score">
@@ -139,13 +140,17 @@
 
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
-			<a v-on:click="addToFolder">Add to folder</a>
+					<o-club-folder-selector storyId="@Model.Story.Id"
+            		                        clubsRoute="@Url.RouteUrl(nameof(ClubsController))"
+            		                        foldersRoute="@Url.RouteUrl(nameof(FoldersController))"
+            		                        csrf="@csrf">
+            		</o-club-folder-selector>
 		}
-		<o-featured-in-clubs v-pre
-		                     endpoint="@Url.RouteUrl(nameof(ClubsController))"
-		                     storyId="@Model.Story.Id"
-		                     cdn="@Config.Cdn">
+		
+		<o-featured-in-clubs endpoint="@Url.RouteUrl(nameof(ClubsController))"
+		                     storyId="@Model.Story.Id">
 		</o-featured-in-clubs>
+		
 		<a asp-controller="Rss" asp-action="GetChapters" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
 			<icon icon="rss_feed"></icon>
 		</a>
@@ -208,17 +213,6 @@
 		}
 	</ol>
 
-	@if (User.Identity?.IsAuthenticated ?? false)
-	{
-		<club-folder-selector
-			ref="folderSelect"
-			cdn="@Config.Cdn"
-			:story-id="@Model.Story.Id"
-			clubs-route="@Url.RouteUrl(nameof(ClubsController))"
-			folders-route="@Url.RouteUrl(nameof(FoldersController))">
-		</club-folder-selector>
-	}
-
 	<report-modal
 		ref="reportModal"
 		:item-id="@Model.Story.Id"
@@ -233,22 +227,16 @@
 
 @section Scripts
 {
-	<script src="~/js/dist/components/folder-tree-component.min.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/club-folder-selector-component.min.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/textarea-counter-component.min.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/report-modal.min.js" asp-append-version="true"></script>
+	@* <script src="~/js/dist/components/folder-tree-component.js" asp-append-version="true"></script> *@
+	@* <script src="~/js/dist/components/club-folder-selector-component.js" asp-append-version="true"></script> *@
+	<script src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>
+	<script src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>
 
-	<script src="~/js/dist/story.min.js" asp-append-version="true"></script>
+	@* <script src="~/js/dist/story.js" asp-append-version="true"></script> *@
 
-	<script src="~/js/dist/native-components/vote-button.min.js"
-	        asp-append-version="true"
-	        type="module"></script>
-	<script src="~/js/dist/native-components/shelves-button.min.js"
-	        asp-append-version="true"
-	        type="module"></script>
-	<script src="~/js/dist/native-components/featured-in-clubs.min.js"
+	<script src="~/js/dist/native-components/shelves-button.js"
 	        asp-append-version="true"
 	        type="module"></script>
 
-	<script src="~/js/dist/chapter-reads.min.js" asp-append-version="true"></script>
+	<script src="~/js/dist/chapter-reads.js" asp-append-version="true"></script>
 }
