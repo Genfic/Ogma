@@ -1,6 +1,7 @@
 ﻿@page "{id}/{slug?}"
 @inject OgmaConfig Config
 @using Ogma3.Infrastructure.Extensions
+@using Ogma3.Infrastructure.TagHelpers
 @using Ogma3.Api.V1.Votes
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Api.V1.ShelfStories
@@ -10,6 +11,7 @@
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.ChaptersReads
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model StoryModel
 
 @{
@@ -144,6 +146,9 @@
 		                     storyId="@Model.Story.Id"
 		                     cdn="@Config.Cdn">
 		</o-featured-in-clubs>
+		<a asp-controller="Rss" asp-action="GetChapters" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
+			<icon icon="rss_feed"></icon>
+		</a>
 	</div>
 
 	@if (Model.Story.AuthorId == uid)

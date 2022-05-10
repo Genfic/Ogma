@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Mime;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
+using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.Formatters;
 
@@ -21,8 +21,7 @@ public class RssOutputFormatter : TextOutputFormatter
 	{
 		_config = config;
 		SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/rss+xml"));
-		SupportedEncodings.Add(Encoding.UTF8);
-		SupportedEncodings.Add(Encoding.UTF32);
+		SupportedEncodings.AddMany(Encoding.UTF8, Encoding.UTF32);
 	}
 
 	protected override bool CanWriteType(Type type)
@@ -33,24 +32,26 @@ public class RssOutputFormatter : TextOutputFormatter
 
 	public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
 	{
+		var now = DateTime.Now;
+		
 		var domain = $"https://{_config.GetValue<string>("Domain")}";
 
 		var data = (RssResult)context.Object;
-		if (data is null) throw new ArgumentException("Passed object was not of type RssResult");
+		if (data is not {} d) throw new ArgumentException("Passed object was not of type RssResult");
 
 		var feed = new SyndicationFeed(
-			data.Title,
-			data.Description,
+			d.Title,
+			d.Description,
 			new Uri(domain),
 			"RssUrl",
-			DateTime.Now
+			now
 		)
 		{
-			Copyright = new TextSyndicationContent($"2019 — {DateTime.Now.Year}"),
-			Items = data.Items
+			Copyright = new TextSyndicationContent($"2019 — {now.Year}"),
+			Items = d.Items
 		};
 
-		var stream = new MemoryStream();
+		using var stream = new MemoryStream();
 		await using var writer = XmlWriter.Create(stream, new XmlWriterSettings
 		{
 			Encoding = Encoding.UTF8,
@@ -65,13 +66,6 @@ public class RssOutputFormatter : TextOutputFormatter
 
 		var result = new byte[stream.Length];
 		_ = await stream.ReadAsync(result.AsMemory(0, (int)stream.Length));
-
-		var cd = new ContentDisposition
-		{
-			Inline = true,
-			FileName = "rss"
-		};
-		context.HttpContext.Response.Headers.Add("Content-Disposition", cd.ToString());
 
 		await context.HttpContext.Response.WriteAsync(selectedEncoding.GetString(result), selectedEncoding);
 	}

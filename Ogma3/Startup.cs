@@ -40,12 +40,10 @@ using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
-using Ogma3.Services.RssService;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
-
 
 namespace Ogma3;
 
@@ -109,8 +107,6 @@ public class Startup
 
 		// ActionContextAccessor
 		services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
-		// UrlHelperFactory
 		services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
 		// Identity
@@ -138,7 +134,6 @@ public class Startup
 		// Add services
 		services
 			.AddScoped<IUserService, UserService>()
-			.AddTransient<IRssService, RssService>()
 			.AddSingleton<ICodeGenerator, CodeGenerator>();
 
 		// Claims
@@ -247,13 +242,15 @@ public class Startup
 		services.AddOpenApiDocument(settings =>
 		{
 			settings.DocumentName = "public";
-			settings.OperationProcessors.Insert(0, new ExcludeInternalApisProcessor());
+			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
+			settings.OperationProcessors.Insert(1, new ExcludeInternalApisProcessor());
 			settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 		services.AddOpenApiDocument(settings =>
 		{
 			settings.DocumentName = "internal";
-			settings.OperationProcessors.Insert(0, new IncludeInternalApisProcessor());
+			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
+			settings.OperationProcessors.Insert(1, new IncludeInternalApisProcessor());
 			settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 	}
@@ -319,7 +316,11 @@ public class Startup
 
 		// OpenAPI
 		app.UseOpenApi();
-		app.UseSwaggerUi3();
+		app.UseSwaggerUi3(config =>
+		{
+			config.TransformToExternalPath = (s, _) => s;
+			config.CustomStylesheetPath = "https://cdn.genfic.net/file/Ogma-net/swagger-dark.css";
+		});
 
 		app.UseEndpoints(endpoints =>
 		{
