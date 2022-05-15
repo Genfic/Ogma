@@ -579,7 +579,6 @@
 
 
 	<ItemGroup>
-		<Folder Include="wwwroot\js\bundle" />
 		<Folder Include="wwwroot\lib\admin\src\components\table-info" />
 	</ItemGroup>
 

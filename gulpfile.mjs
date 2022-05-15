@@ -15,16 +15,15 @@ import mqpacker from "@hail2u/css-mqpacker";
 import csso from "postcss-csso";
 
 // JS processors
-import * as minifyHTML from 'rollup-plugin-minify-html-literals';
 import terser from "gulp-terser";
 import gulpEsbuild from "gulp-esbuild";
 
 // Rollup
 import * as rollup from "rollup";
 import resolve from "@rollup/plugin-node-resolve";
-import rollupTs from "@rollup/plugin-typescript";
 import multi from "@rollup/plugin-multi-entry";
 import esbuild from "rollup-plugin-esbuild";
+import minifyHTML from "rollup-plugin-html-literals"; //'rollup-plugin-minify-html-literals';
 
 // Dirs
 const root = "./Ogma3/wwwroot";
@@ -111,14 +110,14 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/
 			plugins: [
 				multi(),
 				resolve(),
+				minifyHTML(),
 				esbuild({
 					tsconfig: "./Ogma3/wwwroot/js/tsconfig.json",
 					minify: true,
 				}),
-				// minifyHTML({}),
 			]
 		});
-		return bundle.write({
+		return await bundle.write({
 			file: out,
 			format: "umd",
 			name: "components",

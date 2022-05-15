@@ -1,12 +1,14 @@
-@using static Ogma3.Services.HtmlExtensions
+@inject OgmaConfig Config
+@inject IAntiforgery Xcsrf
+@using Ogma3.Services
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Api.V1.Comments
 @using Ogma3.Api.V1.CommentThreads
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
-@inject OgmaConfig Config
-@inject IAntiforgery Xcsrf
+@using Ogma3.Infrastructure.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model CommentsThreadDto   
 
 <script>
