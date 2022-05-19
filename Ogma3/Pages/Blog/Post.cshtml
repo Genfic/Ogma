@@ -21,6 +21,7 @@
 	<meta property="og:type" content="article">
 	<meta property="og:url" content="@Url.PageLink("/Blog/Post", values: new { Model.Blogpost.Id, Model.Blogpost.Slug })">
 	<meta property="og:description" content="@desc">
+	<meta property="og:image" content="http:@Model.ProfileBar.Avatar">
 }
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>

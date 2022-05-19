@@ -6,6 +6,13 @@
 	ViewData["Tab"] = "Profile";
 }
 
+@section OgMeta {
+	<meta property="og:type" content="person">
+	<meta property="og:url" content="@Url.PageLink("/User/Index", values: new { name = Model.ProfileBar.UserName })">
+	<meta property="og:description" content="@Model.ProfileBar.Title">
+	<meta property="og:image" content="http:@Model.ProfileBar.Avatar">
+}
+
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
 <div id="profile">

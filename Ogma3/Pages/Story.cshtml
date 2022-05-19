@@ -27,6 +27,7 @@
 	<meta property="og:type" content="book">
 	<meta property="og:url" content="@Url.PageLink("/Story", values: new { Model.Story.Id, Model.Story.Slug })">
 	<meta property="og:description" content="@Model.Story.Hook">
+	<meta property="og:image" content="https:@Model.Story.Cover">
 }
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>

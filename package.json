@@ -37,7 +37,7 @@
 		"build": "gulp all",
 		"dev": "gulp watchAll",
 		"score": "lighthouse https://localhost:5001 --view",
-		"swc": "swc ./Ogma3/wwwroot/js/src -s -d ./Ogma3/wwwroot/js/dist",
+		"serve": "test-serve.bat",
 		"t:cssdemo": "deno run --allow-read --allow-net ./Tools/css-demo.ts",
 		"t:preloads": "deno run --allow-read ./Tools/generate-preloads.ts",
 		"t:imports": "deno run --allow-read ./Tools/generate-imports.ts",
