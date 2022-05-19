@@ -95,7 +95,7 @@
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
 				<div class="spacer"></div>
-				<o-shelves v-pre endpoint="@Url.RouteUrl(nameof(ShelfStoriesController))" storyId="@Model.Story.Id"></o-shelves>
+				<o-shelves v-pre endpoint="@Url.RouteUrl(nameof(ShelfStoriesController))" storyId="@Model.Story.Id" csrf="@csrf"></o-shelves>
 			}
 
 		</div>
@@ -234,9 +234,7 @@
 
 	@* <script src="~/js/dist/story.js" asp-append-version="true"></script> *@
 
-	<script src="~/js/dist/native-components/shelves-button.js"
-	        asp-append-version="true"
-	        type="module"></script>
 
+	@* TODO: Replace with `chapters-read.ts` webcomponent *@
 	<script src="~/js/dist/chapter-reads.js" asp-append-version="true"></script>
 }

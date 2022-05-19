@@ -1,4 +1,5 @@
 @page "/club/{id:long}/{slug}/folders"
+@using Ogma3.Data.Clubs
 @model IndexModel
 
 @{
@@ -7,6 +8,16 @@
 }
 
 <partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
+
+@if (Model.ClubBar.Role is EClubMemberRoles.Admin or EClubMemberRoles.Founder)
+{
+	<a asp-page="./Create" asp-route-clubId="@Model.ClubBar.Id" class="btn btn-block btn-outline-primary">
+		<icon icon="add"></icon>
+		Create New
+	</a>
+	
+	<br />
+}
 
 <ul class="folders-list">
 	@foreach (var folder in Model.Folders)

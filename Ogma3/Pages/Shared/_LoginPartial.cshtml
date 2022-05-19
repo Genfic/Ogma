@@ -1,5 +1,4 @@
 ﻿@using System.Security.Claims
-@using Ogma3.Services
 @using Ogma3.Data.Users
 @using Ogma3.Api.V1.Notifications
 @inject SignInManager<OgmaUser> SignInManager
@@ -19,12 +18,7 @@
 		</li>
 
 		<li class="nav-item">
-			<a data-notifications="@Url.RouteUrl(nameof(NotificationsController))"
-			   class="nav-link light notifications-btn"
-			   asp-page="/Notifications"
-			   title="Notifications">
-				<icon icon="notifications"></icon>
-			</a>
+			<o-notifications-button route="@Url.RouteUrl(nameof(NotificationsController))"></o-notifications-button>
 		</li>
 
 		<li class="nav-item">
@@ -51,5 +45,3 @@
 	}
 
 </ul>
-
-@Html.Resource(@<script defer src="~/js/dist/notifications-button.js" asp-append-version="true"></script>)

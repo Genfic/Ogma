@@ -2,6 +2,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
 import { http } from "../helpers/http";
+import { classMap } from "lit/directives/class-map.js";
 
 interface Folder {
 	id: number;
@@ -27,20 +28,25 @@ export class FolderTree extends LitElement {
 
 	@property() clubId: number;
 	@property() route: string;
-	@property() label: string;
 	@property() value: number | null = null;
 	@property() current: number | null = null;
 	@property() selected: number | null = this.value;
-	@property() description: string | null = null;
+	@property() inputSelector?: string | undefined = undefined;
 
 	@state() private folders: Folder[] = [];
 	@state() private tree: TreeItem[] = [];
 	@state() private name: string;
+	@state() private input?: HTMLInputElement;
 
 	async connectedCallback() {
 		log.info("tree connected");
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
+		
+		if (this.inputSelector !== undefined) {
+			this.input = document.querySelector<HTMLInputElement>(this.inputSelector);
+			this.input.value = null;
+		}
 
 		const response = await http.get<Folder[]>(
 			`${this.route}/${this.clubId}`
@@ -54,50 +60,44 @@ export class FolderTree extends LitElement {
 		this.#unflatten();
 	}
 
-	#bus = (id: any) => {
-		log.info(`Consuming bus with ID ${id} in the tree`);
+	#select = (id: any) => {
+		log.info(`Selecting folder with ID ${id} in the tree`);
 		this.selected = id;
+		this.input.value = id;
 	};
-	
-	#name = () => this.label?.replace(/\s+/g, "");
 
 	render() {
 		return html`
-			<div class="o-form-group">
-				${this.label ? html`<label for="${this.#name()}">
-					${this.label.replace(/([A-Z])/g, " $1")}
-				</label>` : ''}
-				
-				${this.description ? html`<p class="desc" >${this.description}</p>` : ''}
-				
-				<input
-					type="hidden"
-					value="${this.selected}"
-					name="${this.name}"
-				/>
-
-				<div class="folder-tree active-border">
-					${this.tree.length > 0
-						? html`
-								${this.tree.map(
-									(f) => html`
-										<o-folder-tree-item
-											.folder="${f}"
-											@bus="${(e) => this.#bus(e.detail.id)}"
-											selected="${this.selected}"
-											current="${this.current}"
-										>
-										</o-folder-tree-item>
-									`
-								)}
-						  `
-						: html`<span>No folder found</span>`}
-
-					<template v-else> No folders found</template>
-				</div>
+			<div class="folder-tree active-border">
+				${this.tree.length > 0
+					? html` ${this.tree.map(this.#item)} `
+					: html`<span>No folder found</span>`}
 			</div>
 		`;
 	}
+
+	#item = (folder: TreeItem) => {
+		const tabindex =
+			folder.id === this.current || !folder.canAdd ? "-1" : "0";
+
+		const classes = classMap({
+			disabled: folder.id === this.current,
+			locked: !folder.canAdd,
+		});
+
+		return html`
+			<div class="folder ${classes}">
+				<span
+					class="${this.selected === folder.id ? "active" : ""}"
+					tabindex="${tabindex}"
+					@click="${() => this.#select(folder.id)}"
+				>
+					${folder.name}
+				</span>
+				${folder.children?.map(this.#item) ?? ""}
+			</div>
+		`;
+	};
 
 	#unflatten = () => {
 		let hashTable = Object.create(null);

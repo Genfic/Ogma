@@ -41,7 +41,7 @@ public class FolderConfiguration : BaseConfiguration<Folder>
 			.HasMany(f => f.ChildFolders)
 			.WithOne(f => f.ParentFolder)
 			.HasForeignKey(f => f.ParentFolderId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetNull);
 
 		builder
 			.HasMany(f => f.Stories)

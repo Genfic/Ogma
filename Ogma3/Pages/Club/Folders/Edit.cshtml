@@ -4,8 +4,20 @@
 @model EditModel
 
 @{
-	ViewData["Title"] = "Create a new folder";
+	ViewData["Title"] = $"Edit the {Model.Input.Name} folder";
 }
+<h1>@ViewData["Title"]</h1>
+
+<div class="button-group">
+	<a title="Cancel" class="action-btn large" asp-page="./Index" asp-route-id="@Model.Input.ClubId" asp-route-slug="@Model.Slug">
+		<icon class="icon" icon="arrow_back"></icon>
+		<span class="name">Cancel</span>
+	</a>
+	<a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-clubId="@Model.Input.ClubId" asp-route-id="@Model.Input.Id">
+		<icon class="icon" icon="delete_forever"></icon>
+		<span class="name">Delete</span>
+	</a>
+</div>
 
 <form method="post" class="form" id="folder">
 
@@ -13,11 +25,18 @@
 		<span>Please correct the following errors</span>
 	</div>
 
-	<o-folder-tree id="folder-selector"
-	               clubId="@Model.Input.ClubId"
-	               label="Parent folder"
-	               route="@Url.RouteUrl(nameof(FoldersController))">
-	</o-folder-tree>
+	<div class="o-form-group">
+		<label>Parent folder</label>
+		<p class="desc">Select nothing to make it a root-level folder</p>
+		<o-folder-tree id="folder-selector"
+		               clubId="@Model.Input.ClubId"
+		               label="Parent folder"
+		               name="Input_ParentId"
+		               inputSelector="#Input_ParentId"
+		               route="@Url.RouteUrl(nameof(FoldersController))">
+		</o-folder-tree>
+	</div>
+	
 	<input type="hidden" asp-for="Input.ParentId">
 
 	<div class="o-form-group">
@@ -61,12 +80,4 @@
 
 @section Scripts {
 	<script src="~/js/dist/input-progressbars.js" asp-append-version="true"></script>
-		<script >
-    	const $ = (sel) => document.getElementById(sel);
-    		$('folder').addEventListener('submit', (e) => {
-    			e.preventDefault();	
-    			$('Input_ParentId').value = $('folder-selector').selected;
-    			e.target.submit();
-    		})
-    	</script>
 }

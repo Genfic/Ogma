@@ -3,10 +3,10 @@
 @model DeleteModel
 
 @{
-	ViewData["Title"] = "Delete folder";
+	ViewData["Title"] = $"Delete folder {Model.Folder.Name}";
 }
 
-<h2>@Model.Folder.Name</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div>
 	<h3>Are you sure you want to delete this folder?</h3>
@@ -37,27 +37,34 @@
 	</dl>
 
 	<form method="post" class="confirm" id="folder">
-		
-		<o-folder-tree id="folder-selector"
-						clubId="@Model.Folder.ClubId"
-		               label="Move stories to"
-		               value="@Model.Folder.Id"
-		               current="@Model.Folder.Id"
-		               route="@Url.RouteUrl(nameof(FoldersController))">
-		</o-folder-tree>
+
+		<div class="o-form-group">
+			<label>Target folder</label>
+			<p class="desc">Select folder to move all the stories to</p>
+			<o-folder-tree id="folder-selector"
+			               clubId="@Model.Folder.ClubId"
+			               label="Parent folder"
+			               name="Input_ParentId"
+			               inputSelector="#TargetFolder"
+			               route="@Url.RouteUrl(nameof(FoldersController))">
+			</o-folder-tree>
+		</div>
+
 
 		<input type="hidden" asp-for="Folder.Id"/>
 		<input type="hidden" asp-for="TargetFolder"/>
 
 		<hr>
 
-		<div class="buttons">
-			<input type="submit" value="Delete" class="button accept red"/>
-			<a asp-page="./Folder" 
-			   class="button cancel" 
-			   asp-route-id="@Model.Folder.Id" 
-			   asp-route-clubId="@Model.Folder.ClubId" 
-			   asp-route-slug="@Model.Folder.Slug">Cancel</a>
+		<div class="button-group">
+			<input type="submit" value="Delete" class="btn red"/>
+			<a asp-page="./Folder"
+			   class="btn"
+			   asp-route-id="@Model.Folder.Id"
+			   asp-route-clubId="@Model.Folder.ClubId"
+			   asp-route-slug="@Model.Folder.Slug">
+				Cancel
+			</a>
 		</div>
 	</form>
 

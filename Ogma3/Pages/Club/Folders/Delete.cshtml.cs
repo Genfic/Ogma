@@ -102,7 +102,13 @@ public class DeleteModel : PageModel
 
 		_context.Folders.Remove(folder);
 		await _context.SaveChangesAsync();
+		
+		// Get slug
+		var slug = await _context.Clubs
+			.Where(c => c.Id == clubId)
+			.Select(c => c.Slug)
+			.FirstOrDefaultAsync();
 
-		return RedirectToPage("./Folder", new { id = TargetFolder, slug = "" });
+		return RedirectToPage("./Index", new { id = clubId, slug });
 	}
 }

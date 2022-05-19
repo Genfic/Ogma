@@ -132,7 +132,7 @@ public static class CTConfig
 		public const int MinNameLength = 3;
 		public const int MaxNameLength = 20;
 
-		public const int MaxDescriptionLength = 100;
+		public const int MaxDescriptionLength = 500;
 
 		public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
 	}

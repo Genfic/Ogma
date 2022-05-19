@@ -288,6 +288,29 @@
 		<_ContentIncludedByDefault Remove="wwwroot\js\dist\notifications-button.js" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\dist\site.js" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\dist\themeswap.js" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\account.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\account.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\account.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\admin.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\admin.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\admin.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\dark.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\dark.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\dark.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\editors.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\editors.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\editors.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\light.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\light.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\light.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\login.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\login.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\login.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\style.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\style.css.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\style.min.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\js\src\native-components\shelves-button.js" />
+		<_ContentIncludedByDefault Remove="wwwroot\js\src\club\add-story.js" />
 	</ItemGroup>
 
 

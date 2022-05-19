@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"experimentalDecorators": true,
 		"module": "CommonJS",
-		"target": "ES2017",
+		"target": "ES6",
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true

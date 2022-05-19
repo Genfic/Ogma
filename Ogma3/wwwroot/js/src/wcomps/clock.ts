@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { add, format, parseISO } from "date-fns";
 
 @customElement("o-clock")
-export class FollowButton extends LitElement {
+export class Clock extends LitElement {
 	constructor() {
 		super();
 

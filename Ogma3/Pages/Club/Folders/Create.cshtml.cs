@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Folders;
@@ -22,6 +24,7 @@ public class CreateModel : PageModel
 	}
 
 	public long ClubId { get; private set; }
+	public string Slug { get; private set; }
 
 	public async Task<IActionResult> OnGet(long clubId)
 	{
@@ -33,6 +36,12 @@ public class CreateModel : PageModel
 		// Check if founder
 		var isFounder = await _clubRepo.CheckRoles(clubId, (long)uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
 		if (!isFounder) return Unauthorized();
+		
+		// Get slug
+		Slug = await _context.Clubs
+			.Where(c => c.Id == clubId)
+			.Select(c => c.Slug)
+			.FirstOrDefaultAsync();
 
 		return Page();
 	}
@@ -80,7 +89,13 @@ public class CreateModel : PageModel
 			AccessLevel = Input.Role
 		});
 		await _context.SaveChangesAsync();
+		
+		// Get slug
+		var slug = await _context.Clubs
+			.Where(c => c.Id == clubId)
+			.Select(c => c.Slug)
+			.FirstOrDefaultAsync();
 
-		return RedirectToPage("./Index", new { id = clubId });
+		return RedirectToPage("./Index", new { id = clubId, slug });
 	}
 }

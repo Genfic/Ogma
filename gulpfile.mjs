@@ -1,15 +1,11 @@
 "use strict";
 import { pipeline } from "stream";
-import { pipeline as asyncPipeline } from "stream/promises";
-
 import gulp from "gulp";
-import postcss from "gulp-postcss";
-import { sass } from "@mr-hope/gulp-sass";
-import rename from "gulp-rename";
 import sourcemaps from "gulp-sourcemaps";
-import cond from "gulp-if";
 
 // CSS processors
+import postcss from "gulp-postcss";
+import { sass } from "@mr-hope/gulp-sass";
 import autoprefixer from "autoprefixer";
 import mqpacker from "@hail2u/css-mqpacker";
 import csso from "postcss-csso";
@@ -23,7 +19,7 @@ import * as rollup from "rollup";
 import resolve from "@rollup/plugin-node-resolve";
 import multi from "@rollup/plugin-multi-entry";
 import esbuild from "rollup-plugin-esbuild";
-import minifyHTML from "rollup-plugin-html-literals"; //'rollup-plugin-minify-html-literals';
+import minifyHTML from "rollup-plugin-html-literals";
 
 // Dirs
 const root = "./Ogma3/wwwroot";
@@ -58,16 +54,12 @@ const watchGlobs = {
 export const css = () => pipeline(gulp.src(`${roots.css}/*.sass`),
 	sourcemaps.init(),                   // Init maps
 	sass(),                              // Compile SASS
-	gulp.dest(`${roots.css}/dist`),      // Output the raw CSS
 	postcss([                    // Postprocess it
 		autoprefixer,
 		mqpacker,
 		csso({ comments: false })
 	]),
 	sourcemaps.write("./"),     // Write maps
-	cond("**/*.css",           // If it's a css file and not a map file
-		rename({ suffix: ".min" })   // Add .min suffix
-	),
 	gulp.dest(`${roots.css}/dist`),      // Output minified CSS
 	errorHandler);
 
@@ -84,11 +76,12 @@ export const js = () => pipeline(gulp.src([`${roots.js}/src/**/*.js`]),
 export const watchJs = () => gulp.watch(watchGlobs.js, js);
 
 // TS tasks
-export const ts = () => pipeline(gulp.src([`${roots.js}/src/**/*.ts`]),
+export const ts = () => pipeline(gulp.src([`${roots.js}/src/**/*.ts`, `!${roots.js}/src/wcomps/**/*.ts`]),
 	gulpEsbuild({
 		outdir: ".",
 		minify: true,
-		sourcemap: true
+		sourcemap: true,
+		tsconfig: `${roots.js}/tsconfig.json`,
 	}),
 	gulp.dest(`${roots.js}/dist`),
 	errorHandler
@@ -112,8 +105,9 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/
 				resolve(),
 				minifyHTML(),
 				esbuild({
-					tsconfig: "./Ogma3/wwwroot/js/tsconfig.json",
+					tsconfig: `${roots.js}/tsconfig.json`,
 					minify: true,
+					legalComments: 'eof'
 				}),
 			]
 		});

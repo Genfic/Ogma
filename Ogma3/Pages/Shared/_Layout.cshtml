@@ -59,17 +59,17 @@
 
 	@if (theme == "system")
 	{
-		<link rel="stylesheet" href="~/css/dist/light.min.css" asp-append-version="true"/>
-		<link rel="stylesheet" href="~/css/dist/dark.min.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
+		<link rel="stylesheet" href="~/css/dist/light.css" asp-append-version="true"/>
+		<link rel="stylesheet" href="~/css/dist/dark.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
 	}
 	else
 	{
-		<link rel="stylesheet" href="@($"~/css/dist/{theme}.min.css")" asp-append-version="true"/>
+		<link rel="stylesheet" href="@($"~/css/dist/{theme}.css")" asp-append-version="true"/>
 	}
 
 	<link id="theme-ph">
 
-	<link rel="stylesheet" href="~/css/dist/style.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/dist/style.css" asp-append-version="true">
 
 	@await RenderSectionAsync("CSS", false)
 	@Html.RenderResources("css")

@@ -42,7 +42,10 @@
 			}
 		],
 		"no-unused-vars": "off",
-		"object-curly-spacing": ["error", "always"]
+		"object-curly-spacing": ["error", "always"],
+		"max-len": ["warn", {
+			"code": 120
+		}]
 	},
 	"globals": {
 		"axios": "readonly",

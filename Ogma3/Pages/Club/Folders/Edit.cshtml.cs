@@ -22,6 +22,8 @@ public class EditModel : PageModel
 		_clubRepo = clubRepo;
 	}
 
+	public string Slug { get; private set; }
+	
 	public async Task<IActionResult> OnGet(long clubId, long id)
 	{
 		var uid = User.GetNumericId();
@@ -46,6 +48,12 @@ public class EditModel : PageModel
 			.FirstOrDefaultAsync();
 
 		if (Input is null) return NotFound();
+		
+		// Get slug
+		Slug = await _context.Clubs
+			.Where(c => c.Id == clubId)
+			.Select(c => c.Slug)
+			.FirstOrDefaultAsync();
 
 		return Page();
 	}
