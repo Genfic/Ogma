@@ -2,6 +2,7 @@
 import { pipeline } from "stream";
 import gulp from "gulp";
 import sourcemaps from "gulp-sourcemaps";
+import run from "gulp-run";
 
 // CSS processors
 import postcss from "gulp-postcss";
@@ -46,7 +47,8 @@ const watchGlobs = {
 		`${roots.js}/src/**/*.js`
 	],
 	ts: [
-		`${roots.js}/src/**/*.ts`
+		`${roots.js}/src/**/*.ts`,
+		`!${roots.js}/src/wcomps/**/*.ts`
 	]
 };
 
@@ -76,12 +78,12 @@ export const js = () => pipeline(gulp.src([`${roots.js}/src/**/*.js`]),
 export const watchJs = () => gulp.watch(watchGlobs.js, js);
 
 // TS tasks
-export const ts = () => pipeline(gulp.src([`${roots.js}/src/**/*.ts`, `!${roots.js}/src/wcomps/**/*.ts`]),
+export const ts = () => pipeline(gulp.src([`${roots.js}/src/**/*.ts`]),
 	gulpEsbuild({
 		outdir: ".",
 		minify: true,
 		sourcemap: true,
-		tsconfig: `${roots.js}/tsconfig.json`,
+		tsconfig: `${roots.js}/tsconfig.json`
 	}),
 	gulp.dest(`${roots.js}/dist`),
 	errorHandler
@@ -107,10 +109,10 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/
 				esbuild({
 					tsconfig: `${roots.js}/tsconfig.json`,
 					minify: true,
-					legalComments: 'eof'
-				}),
+					legalComments: "eof"
+				})
 			]
-		});
+		});	
 		return await bundle.write({
 			file: out,
 			format: "umd",
@@ -119,7 +121,8 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/
 		});
 	},
 	errorHandler);
-export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, components);
+const webtypes = () => run('npm run t:webtypes').exec();
+export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, gulp.parallel(components, webtypes));
 
 
 // All tasks

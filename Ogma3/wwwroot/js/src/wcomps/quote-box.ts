@@ -15,8 +15,8 @@ export class QuoteBox extends LitElement {
 	}
 
 	@property() endpoint: string;
-	@state() private loading: boolean;
-	@state() private quote: Quote;
+	@state() private _loading: boolean;
+	@state() private _quote: Quote;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -32,27 +32,27 @@ export class QuoteBox extends LitElement {
 						refresh
 					</i>
 				</div>
-				${this.quote
+				${this._quote
 					? html`
-							<em class="body">${this.quote.body}</em>
-							<span class="author">${this.quote.author}</span>
+							<em class="body">${this._quote.body}</em>
+							<span class="author">${this._quote.author}</span>
 					  `
 					: html` <span>Loading the quote...</span> `}
 			</div>
 		`;
 	}
 
-	#spinnerClass = () => (this.loading ? "spin" : "");
+	#spinnerClass = () => this._loading ? "spin" : "";
 
 	async load() {
 		const res = await http.get<Quote>(this.endpoint);
 
-		if (res.isFailure) {
-			log.error(res.error);
-			this.quote = JSON.parse(window.localStorage.getItem("quote"));
+		if (res.isSuccess) {
+			this._quote = res.getValue();
+			window.localStorage.setItem("quote", JSON.stringify(this._quote));
 		} else {
-			this.quote = res.getValue();
-			window.localStorage.setItem("quote", JSON.stringify(this.quote));
+			log.error(res.error);
+			this._quote = JSON.parse(window.localStorage.getItem("quote"));
 		}
 	}
 

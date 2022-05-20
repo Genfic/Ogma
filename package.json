@@ -1,5 +1,6 @@
 {
 	"devDependencies": {
+		"@angius/web-component-analyzer": "^2.0.10",
 		"@hail2u/css-mqpacker": "github:hail2u/node-css-mqpacker#v8.0.1",
 		"@mr-hope/gulp-sass": "^3.0.2",
 		"@rollup/plugin-image": "^2.1.1",
@@ -18,10 +19,13 @@
 		"gulp-if": "^3.0.0",
 		"gulp-postcss": "^9.0.1",
 		"gulp-rename": "^2.0.0",
+		"gulp-run": "^1.7.1",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-terser": "^2.1.0",
 		"lighthouse": "^9.6.1",
 		"lit-element": "^3.2.0",
+		"lit-web-types": "^0.1.4",
+		"npm-commands": "^1.1.0",
 		"postcss": "^8.4.14",
 		"postcss-csso": "^6.0.0",
 		"prettier": "^2.6.2",
@@ -38,6 +42,7 @@
 		"dev": "gulp watchAll",
 		"score": "lighthouse https://localhost:5001 --view",
 		"serve": "test-serve.bat",
+		"t:webtypes": "wca-webtypes analyze ./Ogma3/wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
 		"t:cssdemo": "deno run --allow-read --allow-net ./Tools/css-demo.ts",
 		"t:preloads": "deno run --allow-read ./Tools/generate-preloads.ts",
 		"t:imports": "deno run --allow-read ./Tools/generate-imports.ts",
@@ -49,5 +54,16 @@
 		"dayjs": "^1.11.2",
 		"lit": "^2.2.4",
 		"lit-shared-state": "^0.1.3"
+	},
+	"web-types": [
+		"./web-types.json"
+	],
+	"wca-config": {
+		"webtypesConfig": {
+			"name": "Ogma Components",
+			"version": "1.0.0",
+			"framework": "lit",
+			"description-markup": "markdown"
+		}
 	}
 }

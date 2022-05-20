@@ -1,0 +1,945 @@
+{
+    "$schema": "http://json.schemastore.org/web-types",
+    "name": "Ogma Components",
+    "version": "1.0.0",
+    "framework": "lit",
+    "description-markup": "markdown",
+    "contributions": {
+        "html": {
+            "elements": [
+                {
+                    "name": "o-read",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/chapter-read.ts",
+                        "symbol": "ChapterRead"
+                    },
+                    "attributes": [
+                        {
+                            "name": "route",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "chapterId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "route",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "chapterId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-clock",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/clock.ts",
+                        "symbol": "Clock"
+                    },
+                    "attributes": [
+                        {
+                            "name": "date",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "Date",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "date",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "Date",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "styles",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "CSSResult",
+                                    "required": true,
+                                    "default": "\"css`\\r\\n\\t\\ttime {\\r\\n\\t\\t\\tfont-family: \\\"Courier New\\\", Courier, monospace;\\r\\n\\t\\t\\tletter-spacing: -2px;\\r\\n\\t\\t\\tmargin: auto 0;\\r\\n\\t\\t}\\r\\n\\t`\""
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-club-folder-selector",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/club-folder-selector.ts",
+                        "symbol": "ClubFolderSelector"
+                    },
+                    "attributes": [
+                        {
+                            "name": "clubsRoute",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "foldersRoute",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "storyId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "clubsRoute",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "foldersRoute",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "storyId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "clubs",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "Club[]",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "folders",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "{}[]",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "selectedClub",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": [
+                                        "Club",
+                                        "null"
+                                    ],
+                                    "required": true,
+                                    "default": "null"
+                                }
+                            },
+                            {
+                                "name": "status",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "{ message: string; success: boolean; }",
+                                    "required": true,
+                                    "default": "{\"message\":\"\",\"success\":false}"
+                                }
+                            },
+                            {
+                                "name": "visible",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true,
+                                    "default": "false"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-featured-in-clubs",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/featured-in-clubs.ts",
+                        "symbol": "FeaturedInClubs"
+                    },
+                    "attributes": [
+                        {
+                            "name": "endpoint",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "storyId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "endpoint",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "storyId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "visible",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "clubs",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "Club[]",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-folder-tree",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/folder-tree.ts",
+                        "symbol": "FolderTree"
+                    },
+                    "attributes": [
+                        {
+                            "name": "clubId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "route",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "value",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "required": true,
+                                "default": "null"
+                            }
+                        },
+                        {
+                            "name": "current",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "required": true,
+                                "default": "null"
+                            }
+                        },
+                        {
+                            "name": "selected",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "required": true,
+                                "default": "\"value\""
+                            }
+                        },
+                        {
+                            "name": "inputSelector",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": [
+                                    "string",
+                                    "undefined"
+                                ],
+                                "required": true,
+                                "default": "\"undefined\""
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "clubId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "route",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "value",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": [
+                                        "number",
+                                        "null"
+                                    ],
+                                    "required": true,
+                                    "default": "null"
+                                }
+                            },
+                            {
+                                "name": "current",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": [
+                                        "number",
+                                        "null"
+                                    ],
+                                    "required": true,
+                                    "default": "null"
+                                }
+                            },
+                            {
+                                "name": "selected",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": [
+                                        "number",
+                                        "null"
+                                    ],
+                                    "required": true,
+                                    "default": "\"value\""
+                                }
+                            },
+                            {
+                                "name": "inputSelector",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": [
+                                        "string",
+                                        "undefined"
+                                    ],
+                                    "required": true,
+                                    "default": "\"undefined\""
+                                }
+                            },
+                            {
+                                "name": "folders",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "Folder[]",
+                                    "required": true,
+                                    "default": "[]"
+                                }
+                            },
+                            {
+                                "name": "tree",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "TreeItem[]",
+                                    "required": true,
+                                    "default": "[]"
+                                }
+                            },
+                            {
+                                "name": "name",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "input",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": [
+                                        "HTMLInputElement",
+                                        "undefined"
+                                    ],
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-follow",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/follow-button.ts",
+                        "symbol": "FollowButton"
+                    },
+                    "attributes": [
+                        {
+                            "name": "endpoint",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "userName",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "isFollowed",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "boolean",
+                                "required": false
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "endpoint",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "userName",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "isFollowed",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-notifications-button",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/notifications-button.ts",
+                        "symbol": "NotificationsButton"
+                    },
+                    "attributes": [
+                        {
+                            "name": "route",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "route",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "notifications",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "quote-box",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/quote-box.ts",
+                        "symbol": "QuoteBox"
+                    },
+                    "attributes": [
+                        {
+                            "name": "endpoint",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "endpoint",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "_loading",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "_quote",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "Quote",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-shelves",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/shelves-button.ts",
+                        "symbol": "ShelvesButton"
+                    },
+                    "attributes": [
+                        {
+                            "name": "endpoint",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "storyId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "endpoint",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "storyId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "quickShelves",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "Shelf[]",
+                                    "required": true,
+                                    "default": "[]"
+                                }
+                            },
+                            {
+                                "name": "shelves",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "Shelf[]",
+                                    "required": true,
+                                    "default": "[]"
+                                }
+                            },
+                            {
+                                "name": "more",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true,
+                                    "default": "false"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true,
+                                    "default": "1"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-subscribe",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/subscribe-thread-button.ts",
+                        "symbol": "SubscribeThreadButton"
+                    },
+                    "attributes": [
+                        {
+                            "name": "endpoint",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "threadId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "endpoint",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "threadId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "subscribed",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "o-vote",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/vote-button.ts",
+                        "symbol": "VoteButton"
+                    },
+                    "attributes": [
+                        {
+                            "name": "endpoint",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "storyId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "endpoint",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "storyId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "voted",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "score",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "css": {
+            "properties": []
+        }
+    }
+}
