@@ -4,6 +4,10 @@ import { log } from "../helpers/logger";
 import { http } from "../helpers/http";
 import { createRef, ref } from "lit/directives/ref.js";
 import { FolderTree } from "./folder-tree";
+import {
+	Clubs_GetUserClubs as getUserClubs,
+	Folders_AddStory as addStoryToFolder,
+} from "../generated/paths-public";
 
 interface Club {
 	id: number;
@@ -16,9 +20,7 @@ export class ClubFolderSelector extends LitElement {
 	constructor() {
 		super();
 	}
-
-	@property() clubsRoute: string;
-	@property() foldersRoute: string;
+	
 	@property() storyId: number;
 	@property() csrf: string;
 
@@ -35,7 +37,7 @@ export class ClubFolderSelector extends LitElement {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 
-		const response = await http.get<Club[]>(`${this.clubsRoute}/user`);
+		const response = await http.get<Club[]>(getUserClubs());
 		if (response.isSuccess) {
 			this.clubs = response.getValue();
 		} else {
@@ -61,7 +63,6 @@ export class ClubFolderSelector extends LitElement {
 		<o-folder-tree
 			${ref(this.#treeRef)}
 			clubId="${this.selectedClub.id}"
-			route="${this.foldersRoute}"
 		>
 		</o-folder-tree>
 
@@ -107,10 +108,9 @@ export class ClubFolderSelector extends LitElement {
 				? html`
 						<div
 							class="club-folder-selector my-modal"
-							v-if="visible"
-							@click="${this.#hide}"
+							@click="${() => this.visible = false}"
 						>
-							<div class="content">
+							<div class="content" @click="${e => e.stopPropagation()}">
 								${this.selectedClub !== null
 									? this.#selectedClubView()
 									: this.#allClubsView()}
@@ -121,16 +121,10 @@ export class ClubFolderSelector extends LitElement {
 		`;
 	}
 
-	#hide = (e: MouseEvent) => {
-		if (e.target !== e.currentTarget) return;
-		this.visible = false;
-	};
-
-	#treeRef = createRef();
+	#treeRef = createRef<FolderTree>();
 
 	#add = async () => {
-		const folderId: number | null = (this.#treeRef.value as FolderTree)
-			.selected;
+		const folderId: number | null = this.#treeRef.value.selected;
 
 		if (folderId === null) {
 			this.status = {
@@ -141,7 +135,7 @@ export class ClubFolderSelector extends LitElement {
 		}
 
 		const response = await http.post(
-			`${this.foldersRoute}/add-story`,
+			addStoryToFolder(),
 			{
 				folderId: folderId,
 				storyId: this.storyId,

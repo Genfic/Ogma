@@ -1,6 +1,7 @@
 (async () => {
 	const route = document.querySelector("[data-reads]") as HTMLElement;
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
+	
 	const buttons = [
 		...document.querySelectorAll("button.read-status"),
 	] as HTMLButtonElement[];
@@ -10,17 +11,6 @@
 		) as HTMLInputElement
 	).value;
 
-	const headers = {
-		RequestVerificationToken: csrf,
-		"Content-Type": "application/json",
-	};
-
-	const _body = (id: number) =>
-		JSON.stringify({
-			story: Number(story.dataset.storyId),
-			chapter: id,
-		});
-
 	route.remove();
 	story.remove();
 
@@ -28,33 +18,26 @@
 
 	await _getStatus();
 
-	const _readOrUnread = (id: number) =>
-		reads.includes(id) ? _markUnread(id) : _markRead(id);
 	for (const b of buttons) {
-		b.addEventListener("click", () => _readOrUnread(Number(b.dataset.id)));
+		b.addEventListener("click", () => _changeState(Number(b.dataset.id)));
 	}
-
-	async function _markRead(id: number) {
+	
+	const _changeState = async (id: number) => {
+		const method = reads.includes(id) ? "delete" : "post";
 		const res = await fetch(route.dataset.reads, {
-			method: "post",
-			headers: headers,
-			body: _body(id),
+			method: method,
+			headers: {
+				RequestVerificationToken: csrf,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				story: Number(story.dataset.storyId),
+				chapter: id,
+			})
 		});
-		const data = await res.json();
-		reads = data.read;
+		reads = await res.json();
 		_update();
-	}
-
-	async function _markUnread(id: number) {
-		const res = await fetch(route.dataset.reads, {
-			method: "delete",
-			headers: headers,
-			body: _body(id),
-		});
-		const data = await res.json();
-		reads = data.read;
-		_update();
-	}
+	};
 
 	function _update() {
 		for (const btn of buttons) {

@@ -14,9 +14,9 @@ namespace Ogma3.Api.V1.ChaptersReads.Queries;
 
 public static class GetReadChapters
 {
-	public sealed record Query(long Id) : IRequest<ActionResult<ICollection<long>>>;
+	public sealed record Query(long Id) : IRequest<ActionResult<HashSet<long>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<ICollection<long>>>
+	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<HashSet<long>>>
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly long? _uid;
@@ -27,7 +27,7 @@ public static class GetReadChapters
 			_uid = userService?.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<ICollection<long>>> Handle(Query request, CancellationToken cancellationToken)
+		public async Task<ActionResult<HashSet<long>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var chaptersRead = await _context.ChaptersRead
 				.Where(cr => cr.StoryId == request.Id)

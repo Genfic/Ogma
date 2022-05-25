@@ -1,7 +1,8 @@
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
 import { http } from "../helpers/http";
+import { Notifications_CountUserNotifications as countNotifications } from "../generated/paths-public";
 
 @customElement("o-notifications-button")
 export class NotificationsButton extends LitElement {
@@ -9,14 +10,13 @@ export class NotificationsButton extends LitElement {
 		super();
 	}
 
-	@property() route: string;
 	@state() notifications: number;
 
 	async connectedCallback() {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 
-		const res = await http.get<number>(`${this.route}/count`);
+		const res = await http.get<number>(countNotifications());
 		if (res.isSuccess) {
 			this.notifications = res.getValue();
 		} else {

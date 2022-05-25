@@ -2,6 +2,10 @@ import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
 import { http } from "../helpers/http";
+import {
+	Votes_GetVotes as getVotes,
+	Votes_PostVote as postVote,
+} from "../generated/paths-public";
 
 interface VoteResponse {
 	didVote: boolean;
@@ -14,7 +18,6 @@ export class VoteButton extends LitElement {
 		super();
 	}
 
-	@property() endpoint: string;
 	@property() storyId: number;
 	@property() csrf: string;
 	@state() private voted: boolean;
@@ -24,9 +27,7 @@ export class VoteButton extends LitElement {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 
-		const result = await http.get<VoteResponse>(
-			`${this.endpoint}/${this.storyId}`
-		);
+		const result = await http.get<VoteResponse>(getVotes(this.storyId));
 		if (result.isSuccess) {
 			const data = result.getValue();
 			this.score = data.count;
@@ -52,15 +53,14 @@ export class VoteButton extends LitElement {
 	}
 
 	private async vote() {
-		const body = { storyId: this.storyId };
-
-		const result = this.voted
-			? await http.delete<VoteResponse>(this.endpoint, body, {
+		const send = this.voted ? http.delete : http.post;
+		const result = await send<VoteResponse>(
+			postVote(),
+			{ storyId: this.storyId },
+			{
 				RequestVerificationToken: this.csrf,
-			  })
-			: await http.post<VoteResponse>(this.endpoint, body, {
-				RequestVerificationToken: this.csrf,
-			  });
+			}
+		);
 
 		if (result.isSuccess) {
 			const data = result.getValue();

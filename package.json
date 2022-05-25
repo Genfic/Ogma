@@ -46,7 +46,8 @@
 		"t:cssdemo": "deno run --allow-read --allow-net ./Tools/css-demo.ts",
 		"t:preloads": "deno run --allow-read ./Tools/generate-preloads.ts",
 		"t:imports": "deno run --allow-read ./Tools/generate-imports.ts",
-		"t:bundlesize": "deno run --allow-read --unstable ./Tools/bundlesize.ts"
+		"t:bundlesize": "deno run --allow-read --unstable ./Tools/bundlesize.ts",
+		"t:paths": "deno run --allow-net --unsafely-ignore-certificate-errors=localhost --allow-read --allow-write ./Tools/generate-paths.ts ./Ogma3/wwwroot/js/src/generated"
 	},
 	"name": "ogma-3",
 	"dependencies": {

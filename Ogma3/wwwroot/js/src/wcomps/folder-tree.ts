@@ -3,6 +3,7 @@ import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
 import { http } from "../helpers/http";
 import { classMap } from "lit/directives/class-map.js";
+import { Folders_GetFoldersOfClub as getClubFolders } from "../generated/paths-public";
 
 interface Folder {
 	id: number;
@@ -27,7 +28,6 @@ export class FolderTree extends LitElement {
 	}
 
 	@property() clubId: number;
-	@property() route: string;
 	@property() value: number | null = null;
 	@property() current: number | null = null;
 	@property() selected: number | null = this.value;
@@ -48,9 +48,7 @@ export class FolderTree extends LitElement {
 			this.input.value = null;
 		}
 
-		const response = await http.get<Folder[]>(
-			`${this.route}/${this.clubId}`
-		);
+		const response = await http.get<Folder[]>(getClubFolders(this.clubId));
 		if (response.isSuccess) {
 			this.folders = response.getValue();
 		} else {

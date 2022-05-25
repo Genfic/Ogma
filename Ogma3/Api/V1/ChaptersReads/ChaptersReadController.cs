@@ -18,15 +18,15 @@ public class ChaptersReadController : ControllerBase
 
 	// GET api/chaptersread/5
 	[HttpGet("{story:long}")]
-	public async Task<ActionResult<ICollection<long>>> GetChaptersRead(long story)
+	public async Task<ActionResult<HashSet<long>>> GetChaptersRead(long story)
 		=> await _mediator.Send(new GetReadChapters.Query(story));
 
 	// POST api/chaptersread
 	[HttpPost]
-	public async Task<ActionResult<MarkChapterAsRead.Response>> PostChaptersRead(MarkChapterAsRead.Command post)
+	public async Task<ActionResult<HashSet<long>>> PostChaptersRead(MarkChapterAsRead.Command post)
 		=> await _mediator.Send(post);
 
 	[HttpDelete]
-	public async Task<ActionResult<MarkChapterAsUnread.Response>> DeleteChaptersRead(MarkChapterAsUnread.Command post)
+	public async Task<ActionResult<HashSet<long>>> DeleteChaptersRead(MarkChapterAsUnread.Command post)
 		=> await _mediator.Send(post);
 }

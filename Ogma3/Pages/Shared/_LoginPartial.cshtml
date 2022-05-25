@@ -1,6 +1,5 @@
 ﻿@using System.Security.Claims
 @using Ogma3.Data.Users
-@using Ogma3.Api.V1.Notifications
 @inject SignInManager<OgmaUser> SignInManager
 
 <ul class="navbar-nav right">
@@ -18,7 +17,7 @@
 		</li>
 
 		<li class="nav-item">
-			<o-notifications-button route="@Url.RouteUrl(nameof(NotificationsController))"></o-notifications-button>
+			<o-notifications-button></o-notifications-button>
 		</li>
 
 		<li class="nav-item">

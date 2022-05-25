@@ -2,6 +2,7 @@ import { customElement, property } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
 import { http } from "../helpers/http";
+import { Users_FollowUser as followUser } from "../generated/paths-public";
 
 @customElement("o-follow")
 export class FollowButton extends LitElement {
@@ -9,7 +10,6 @@ export class FollowButton extends LitElement {
 		super();
 	}
 
-	@property() endpoint: string;
 	@property() userName: string;
 	@property() csrf: string;
 	@property() isFollowed: boolean;
@@ -34,7 +34,7 @@ export class FollowButton extends LitElement {
 	async #follow() {
 		const send = this.isFollowed ? http.delete : http.post;
 
-		const res = await send<boolean>(`${this.endpoint}/follow`, {
+		const res = await send<boolean>(followUser(), {
 			name: this.userName,
 		});
 		if (res.isSuccess) {

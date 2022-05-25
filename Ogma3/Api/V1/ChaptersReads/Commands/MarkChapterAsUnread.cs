@@ -16,9 +16,9 @@ namespace Ogma3.Api.V1.ChaptersReads.Commands;
 
 public static class MarkChapterAsUnread
 {
-	public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<Response>>;
+	public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<HashSet<long>>>;
 
-	public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<HashSet<long>>>
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly long? _uid;
@@ -29,7 +29,7 @@ public static class MarkChapterAsUnread
 			_uid = userService?.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
+		public async Task<ActionResult<HashSet<long>>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 
@@ -54,7 +54,7 @@ public static class MarkChapterAsUnread
 			try
 			{
 				await _context.SaveChangesAsync(cancellationToken);
-				return Ok(new Response(chaptersReadObj.Chapters));
+				return Ok(chaptersReadObj.Chapters);
 			}
 			catch (Exception e)
 			{
@@ -64,6 +64,4 @@ public static class MarkChapterAsUnread
 			}
 		}
 	}
-
-	public sealed record Response(HashSet<long> Read);
 }

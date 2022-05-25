@@ -2,9 +2,7 @@
 @using Humanizer
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
-@using Utils.Extensions
 @using Ogma3.Infrastructure.Constants
-@using Ogma3.Api.V1.Users
 @using Ogma3.Data.Reports
 @using Ogma3.Api.V1.Reports
 @model ProfileBar
@@ -57,11 +55,7 @@
 	<div class="buttons">
 		@if (!User.IsUserSameAsLoggedIn(Model.Id) && (User.Identity?.IsAuthenticated ?? false))
 		{
-			<button class="button max join"
-			        :title="isFollowed ? 'Unfollow' : 'Follow'"
-			        v-on:click="follow">
-				{{ isFollowed ? 'Following' : 'Follow' }}
-			</button>
+			<o-follow userName="@Model.UserName" isFollowed="@Model.IsFollowedBy"></o-follow>
 
 			<div class="o-dropdown left" x-data="{open: false}">
 
@@ -71,12 +65,14 @@
 
 				<ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
 
+					@* TODO: Webcomponent migration *@
 					<li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
 						{{ isBlocked ? 'Unblock' : 'Block' }}
 					</li>
 
 					@if (User.Identity?.IsAuthenticated ?? false)
 					{
+						@* TODO: Webcomponent migration *@
 						<li title="Report" class="item active red" v-on:click="report">
 							Report
 						</li>
@@ -111,12 +107,10 @@
 		</a>
 	</nav>
 
-	<div v-if="!route" id="data-route" data-route="@Url.RouteUrl(nameof(UsersController))" style="display: none"></div>
-	<div v-if="!name" id="data-name" data-name="@Model.UserName.Friendlify()" style="display: none"></div>
 	<div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy" style="display: none"></div>
-	<div v-if="!done" id="data-followed" data-followed="@Model.IsFollowedBy" style="display: none"></div>
 	@Html.AntiForgeryToken()
 
+	@* TODO: Webcomponent migration *@
 	<report-modal
 		ref="reportModal"
 		:item-id="@Model.Id"
@@ -128,4 +122,5 @@
 @Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>)
 @Html.Resource(@<script src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>)
 
-@Html.Resource(@<script src="~/js/dist/profile-bar.js" asp-append-version="true"></script>)
+@* TODO: Webcomponent migration *@
+@* @Html.Resource(@<script src="~/js/dist/profile-bar.js" asp-append-version="true"></script>) *@

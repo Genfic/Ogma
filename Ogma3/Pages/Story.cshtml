@@ -2,14 +2,10 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Infrastructure.TagHelpers
-@using Ogma3.Api.V1.Votes
 @using Ogma3.Infrastructure.Constants
-@using Ogma3.Api.V1.ShelfStories
 @using System.Globalization
-@using Ogma3.Api.V1.Clubs
-@using Ogma3.Api.V1.Folders
-@using Ogma3.Api.V1.Reports
 @using Ogma3.Data.Reports
+@using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.ChaptersReads
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model StoryModel
@@ -43,7 +39,7 @@
 
 		<div class="actions">
 
-			<o-vote v-pre endpoint="@Url.RouteUrl(nameof(VotesController))" storyId="@Model.Story.Id" csrf="@csrf"></o-vote>
+			<o-vote storyId="@Model.Story.Id" csrf="@csrf"></o-vote>
 
 			<noscript>
 				<span class="votes action-btn large" title="Score">
@@ -96,7 +92,7 @@
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
 				<div class="spacer"></div>
-				<o-shelves v-pre endpoint="@Url.RouteUrl(nameof(ShelfStoriesController))" storyId="@Model.Story.Id" csrf="@csrf"></o-shelves>
+				<o-shelves storyId="@Model.Story.Id" csrf="@csrf"></o-shelves>
 			}
 
 		</div>
@@ -142,15 +138,11 @@
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
 					<o-club-folder-selector storyId="@Model.Story.Id"
-            		                        clubsRoute="@Url.RouteUrl(nameof(ClubsController))"
-            		                        foldersRoute="@Url.RouteUrl(nameof(FoldersController))"
             		                        csrf="@csrf">
             		</o-club-folder-selector>
 		}
 		
-		<o-featured-in-clubs endpoint="@Url.RouteUrl(nameof(ClubsController))"
-		                     storyId="@Model.Story.Id">
-		</o-featured-in-clubs>
+		<o-featured-in-clubs storyId="@Model.Story.Id"></o-featured-in-clubs>
 		
 		<a asp-controller="Rss" asp-action="GetChapters" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
 			<icon icon="rss_feed"></icon>

@@ -95,11 +95,9 @@
 			}
 
 		</div>
-
-		<div class="read-progress">
-			<div class="bar" :style="{width: (progress * 100) + '%'}"></div>
-		</div>
-
+		
+		<o-read-progress v-pre></o-read-progress>
+		
 		<report-modal
 			ref="reportModal"
 			:item-id="@Model.Chapter.Id"

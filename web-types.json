@@ -105,24 +105,6 @@
                     },
                     "attributes": [
                         {
-                            "name": "clubsRoute",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "foldersRoute",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "storyId",
                             "required": false,
                             "priority": "normal",
@@ -143,24 +125,6 @@
                     ],
                     "js": {
                         "properties": [
-                            {
-                                "name": "clubsRoute",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
-                            {
-                                "name": "foldersRoute",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
                             {
                                 "name": "storyId",
                                 "required": false,
@@ -241,15 +205,6 @@
                     },
                     "attributes": [
                         {
-                            "name": "endpoint",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "storyId",
                             "required": false,
                             "priority": "normal",
@@ -261,15 +216,6 @@
                     ],
                     "js": {
                         "properties": [
-                            {
-                                "name": "endpoint",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
                             {
                                 "name": "storyId",
                                 "required": false,
@@ -313,15 +259,6 @@
                             "priority": "normal",
                             "value": {
                                 "type": "number",
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "route",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
                                 "required": true
                             }
                         },
@@ -386,15 +323,6 @@
                                 "priority": "normal",
                                 "value": {
                                     "type": "number",
-                                    "required": true
-                                }
-                            },
-                            {
-                                "name": "route",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
                                     "required": true
                                 }
                             },
@@ -502,15 +430,6 @@
                     },
                     "attributes": [
                         {
-                            "name": "endpoint",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "userName",
                             "required": false,
                             "priority": "normal",
@@ -540,15 +459,6 @@
                     ],
                     "js": {
                         "properties": [
-                            {
-                                "name": "endpoint",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
                             {
                                 "name": "userName",
                                 "required": false,
@@ -580,33 +490,43 @@
                     }
                 },
                 {
+                    "name": "o-modal",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/modal.ts",
+                        "symbol": "Modal"
+                    },
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "visible",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "style",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "CSSResult",
+                                    "required": true,
+                                    "default": "\"css`\\r\\n\\t\\t.my-modal {\\r\\n\\t\\t\\tposition: fixed;\\r\\n\\t\\t\\tdisplay: flex;\\r\\n\\t\\t\\talign-items: center;\\r\\n\\t\\t\\tjustify-content: center;\\r\\n\\t\\t\\tinset: 0;\\r\\n\\t\\t\\twidth: 100%;\\r\\n\\t\\t\\theight: 100%;\\r\\n\\t\\t\\tz-index: 999;\\r\\n\\t\\t\\tbackground: var(--foreground-50);\\r\\n\\t\\t}\\r\\n\\r\\n\\t\\t.content {\\r\\n\\t\\t\\tmin-width: 20rem;\\r\\n\\t\\t\\twidth: min(40rem, 100vw);\\r\\n\\t\\t\\tmax-height: 30rem;\\r\\n\\t\\t\\tbackground: var(--background);\\r\\n\\t\\t\\tpadding: 1rem;\\r\\n\\t\\t\\theight: 100%;\\r\\n\\t\\t\\toverflow-y: auto;\\r\\n\\t\\t\\tborder: 5px solid var(--background);\\r\\n\\t\\t}\\r\\n\\t`\""
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "name": "o-notifications-button",
                     "source": {
                         "module": "./Ogma3/wwwroot/js/src/wcomps/notifications-button.ts",
                         "symbol": "NotificationsButton"
                     },
-                    "attributes": [
-                        {
-                            "name": "route",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        }
-                    ],
                     "js": {
                         "properties": [
-                            {
-                                "name": "route",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
                             {
                                 "name": "notifications",
                                 "required": false,
@@ -625,28 +545,8 @@
                         "module": "./Ogma3/wwwroot/js/src/wcomps/quote-box.ts",
                         "symbol": "QuoteBox"
                     },
-                    "attributes": [
-                        {
-                            "name": "endpoint",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        }
-                    ],
                     "js": {
                         "properties": [
-                            {
-                                "name": "endpoint",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
                             {
                                 "name": "_loading",
                                 "required": false,
@@ -669,21 +569,71 @@
                     }
                 },
                 {
+                    "name": "o-read-progress",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/read-progress.ts",
+                        "symbol": "ReadProgress"
+                    },
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "progress",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "number",
+                                    "required": true,
+                                    "default": "0"
+                                }
+                            },
+                            {
+                                "name": "windowHeight",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "containerHeight",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "ticking",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true,
+                                    "default": "false"
+                                }
+                            },
+                            {
+                                "name": "styles",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "CSSResult",
+                                    "required": true,
+                                    "default": "\"css`\\r\\n\\t\\t:host {\\r\\n\\t\\t\\tposition: fixed;\\r\\n\\t\\t\\tposition: sticky;\\r\\n\\t\\t\\tbottom: 0;\\r\\n\\t\\t\\tleft: 0;\\r\\n\\t\\t\\tpadding: 0;\\r\\n\\t\\t\\tmargin: 0;\\r\\n\\t\\t\\twidth: 100%;\\r\\n\\t\\t}\\r\\n\\r\\n\\t\\t.bar {\\r\\n\\t\\t\\tposition: relative;\\r\\n\\t\\t\\theight: 3px;\\r\\n\\t\\t\\tmargin-top: auto;\\r\\n\\t\\t\\tbackground-color: var(--accent);\\r\\n\\t\\t\\ttransition: width 50ms ease-out;\\r\\n\\t\\t}\\r\\n\\t`\""
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "name": "o-shelves",
                     "source": {
                         "module": "./Ogma3/wwwroot/js/src/wcomps/shelves-button.ts",
                         "symbol": "ShelvesButton"
                     },
                     "attributes": [
-                        {
-                            "name": "endpoint",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        },
                         {
                             "name": "storyId",
                             "required": false,
@@ -706,15 +656,6 @@
                     "js": {
                         "properties": [
                             {
-                                "name": "endpoint",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
-                            {
                                 "name": "storyId",
                                 "required": false,
                                 "priority": "normal",
@@ -735,7 +676,7 @@
                             {
                                 "name": "quickShelves",
                                 "required": false,
-                                "priority": "normal",
+                                "priority": "lowest",
                                 "value": {
                                     "type": "Shelf[]",
                                     "required": true,
@@ -745,7 +686,7 @@
                             {
                                 "name": "shelves",
                                 "required": false,
-                                "priority": "normal",
+                                "priority": "lowest",
                                 "value": {
                                     "type": "Shelf[]",
                                     "required": true,
@@ -755,7 +696,7 @@
                             {
                                 "name": "more",
                                 "required": false,
-                                "priority": "normal",
+                                "priority": "lowest",
                                 "value": {
                                     "type": "boolean",
                                     "required": true,
@@ -765,7 +706,7 @@
                             {
                                 "name": "page",
                                 "required": false,
-                                "priority": "normal",
+                                "priority": "lowest",
                                 "value": {
                                     "type": "number",
                                     "required": true,
@@ -859,15 +800,6 @@
                     },
                     "attributes": [
                         {
-                            "name": "endpoint",
-                            "required": false,
-                            "priority": "normal",
-                            "value": {
-                                "type": "string",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "storyId",
                             "required": false,
                             "priority": "normal",
@@ -888,15 +820,6 @@
                     ],
                     "js": {
                         "properties": [
-                            {
-                                "name": "endpoint",
-                                "required": false,
-                                "priority": "normal",
-                                "value": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
                             {
                                 "name": "storyId",
                                 "required": false,

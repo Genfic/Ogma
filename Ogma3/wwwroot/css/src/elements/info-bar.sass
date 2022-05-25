@@ -100,8 +100,11 @@ $margin: .5rem
 		grid-column: 3
 		display: flex
 		justify-content: flex-end
+		
+		> *
+			height: 100%
 
-		> a
+		a
 			display: flex
 			align-items: center
 			justify-content: center
@@ -109,9 +112,10 @@ $margin: .5rem
 			color: v.$foreground-75
 			text-decoration: none
 
-		> .button
+		.button
 			background-color: v.$accent-10
 			margin-left: .25rem
+			height: 100%
 			+ab.active-border
 			+f.focus
 
