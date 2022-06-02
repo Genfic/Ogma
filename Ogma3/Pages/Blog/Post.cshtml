@@ -4,9 +4,8 @@
 @using System.Globalization
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
-@using Ogma3.Api.V1.Reports
 @model DetailsModel
-
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
 	var desc = Model.Blogpost!.Body.Length > 150
 		? Model.Blogpost.Body[..150]
@@ -15,6 +14,8 @@
 	ViewData["Title"] = Model.Blogpost.Title;
 	ViewData["Description"] = desc;
 	ViewData["Tab"] = "Blog";
+
+	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 @section OgMeta {
@@ -61,7 +62,7 @@
 		}
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
-			<button title="Report" class="action-btn red" v-on:click="report">
+			<button title="Report" class="action-btn red" id="open-modal-button">
 				<icon class="icon" icon="flag"></icon>
 			</button>
 		}
@@ -107,22 +108,13 @@
 	</div>
 
 	<o-read-progress v-pre></o-read-progress>
-
+	
 	<report-modal
-		ref="reportModal"
-		:item-id="@Model.Blogpost.Id"
-		item-type="@EReportableContentTypes.Blogpost"
-		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+		itemId="@Model.Blogpost.Id"
+		itemType="@EReportableContentTypes.Blogpost"
+		csrf="@csrf"
+		openSelector="#open-modal-button">
 	</report-modal>
-
-	@Html.AntiForgeryToken()
 </article>
 
 <partial name="_Comments" model="@Model.Blogpost.CommentsThread"/>
-
-@section Scripts
-{
-	<script src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>
-	<script src="~/js/dist/blogpost.js" asp-append-version="true"></script>
-}

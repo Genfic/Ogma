@@ -1,14 +1,18 @@
 @using System.Globalization
 @using Humanizer
+@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.AspNetCore.Http
 @using Ogma3.Infrastructure.Extensions
-@using Ogma3.Services
+@using Ogma3.Infrastructure.TagHelpers
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
-@using Ogma3.Api.V1.Reports
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ProfileBar
-
+@inject IAntiforgery Antiforgery
+@inject IHttpContextAccessor Accessor;
 @{
 	var tab = (string)ViewData["Tab"];
+	var csrf =  Accessor is { HttpContext: {} } ? Antiforgery.GetAndStoreTokens(Accessor.HttpContext).RequestToken : "";
 }
 
 <div class="info-bar profile-bar" id="profile-bar">
@@ -63,19 +67,19 @@
 					<icon icon="more_vert"></icon>
 				</button>
 
-				<ul class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
-
-					@* TODO: Webcomponent migration *@
-					<li class="item active" v-on:click="block" v-on:keyup.space="block" tabindex="0">
-						{{ isBlocked ? 'Unblock' : 'Block' }}
-					</li>
+				<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
+					
+					<o-block class="item active red" 
+					         userName="@Model.UserName" 
+					         isBlocked="@Model.IsBlockedBy" 
+					         tabindex="0"
+					         csrf="@csrf"></o-block>
 
 					@if (User.Identity?.IsAuthenticated ?? false)
 					{
-						@* TODO: Webcomponent migration *@
-						<li title="Report" class="item active red" v-on:click="report">
+						<button title="Report" class="item active red" id="open-modal-button-profilebar" >
 							Report
-						</li>
+						</button>
 					}
 
 					@if (User.IsInRole(RoleNames.Admin))
@@ -87,7 +91,7 @@
 							Manage
 						</a>
 					}
-				</ul>
+				</nav>
 			</div>
 		}
 	</div>
@@ -109,18 +113,11 @@
 
 	<div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy" style="display: none"></div>
 	@Html.AntiForgeryToken()
-
-	@* TODO: Webcomponent migration *@
-	<report-modal
-		ref="reportModal"
-		:item-id="@Model.Id"
-		item-type="@EReportableContentTypes.User"
-		reports-route="@Url.RouteUrl(nameof(ReportsController))">
-	</report-modal>
+	
+		<report-modal v-pre
+        	itemId="@Model.Id"
+        	itemType="@EReportableContentTypes.User"
+        	csrf="@csrf"
+        	openSelector="#open-modal-button-profilebar">
+        </report-modal>
 </div>
-
-@Html.Resource(@<script src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>)
-@Html.Resource(@<script src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>)
-
-@* TODO: Webcomponent migration *@
-@* @Html.Resource(@<script src="~/js/dist/profile-bar.js" asp-append-version="true"></script>) *@

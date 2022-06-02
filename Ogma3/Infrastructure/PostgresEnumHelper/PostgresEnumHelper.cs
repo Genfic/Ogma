@@ -1,7 +1,7 @@
 #nullable enable
 
-
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +13,21 @@ namespace Ogma3.Infrastructure.PostgresEnumHelper;
 
 public static class PostgresEnumHelper
 {
-	private static Type[] _enums = Array.Empty<Type>();
+	private static ImmutableList<Type>? _enums;
+	private static MethodInfo? _mapMethod;
+	private static MethodInfo? _registerMethod;
 
 	public static INpgsqlTypeMapper MapPostgresEnums(this INpgsqlTypeMapper mapper, Assembly assembly,
 		INpgsqlNameTranslator? translator = null)
 	{
 		var enums = GetEnums(assembly);
-		if (enums is { Length: <= 0 }) return mapper;
+		if (enums is { Count: <= 0 }) return mapper;
 
 		Log.Information("Mapping Postgres Enums:");
 
-		var methodType = mapper.GetType().GetMethod(nameof(mapper.MapEnum));
+		_mapMethod ??= mapper.GetType().GetMethod(nameof(mapper.MapEnum));
 
-		if (methodType is null)
+		if (_mapMethod is null)
 		{
 			Log.Warning("No {Method Name} method found", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
 			return mapper;
@@ -37,12 +39,9 @@ public static class PostgresEnumHelper
 
 			var name = type.GetCustomAttribute<PostgresEnumAttribute>()?.Name;
 
-			var method = methodType?.MakeGenericMethod(type);
-
-			if (method is { } m)
-			{
-				m.Invoke(mapper, new object?[] { name, translator });
-			}
+			_mapMethod
+				?.MakeGenericMethod(type)
+				.Invoke(mapper, new object?[] { name, translator });
 		}
 
 		return mapper;
@@ -52,16 +51,16 @@ public static class PostgresEnumHelper
 		INpgsqlNameTranslator? translator = null)
 	{
 		var enums = GetEnums(assembly);
-		if (enums is { Length: <= 0 }) return;
+		if (enums is { Count: <= 0 }) return;
 
 		Log.Information("Registering Postgres Enums:");
 
-		var methodType = typeof(NpgsqlModelBuilderExtensions)
+		_registerMethod ??= typeof(NpgsqlModelBuilderExtensions)
 			.GetMethods()
 			.Where(mi => mi.Name == nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum))
 			.SingleOrDefault(mi => mi.IsGenericMethod);
 
-		if (methodType is null)
+		if (_registerMethod is null)
 		{
 			Log.Warning("   No {Method Name} method found", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
 			return;
@@ -73,26 +72,23 @@ public static class PostgresEnumHelper
 
 			var name = type.GetCustomAttribute<PostgresEnumAttribute>()?.Name;
 
-			var method = methodType.MakeGenericMethod(type);
+			_registerMethod
+				?.MakeGenericMethod(type)
+				.Invoke(null, new object?[] { builder, schema, name, translator });
 
-			if (method is { } m)
-			{
-				m.Invoke(null, new object?[] { builder, schema, name, translator });
-			}
 		}
 	}
 
-	private static Type[] GetEnums(Assembly assembly)
+	private static ImmutableList<Type> GetEnums(Assembly assembly)
 	{
-		if (_enums.Length > 0) return _enums;
+		if (_enums is { Count: > 0 }) return _enums;
 
 		Log.Warning($"{nameof(PostgresEnumHelper)} cache miss");
 		_enums = assembly.GetTypes()
 			.Where(t => t.IsEnum)
-			.Where(t => t.GetCustomAttributes(typeof(PostgresEnumAttribute), false) is { Length: > 0 })
-			.GroupBy(t => t.FullName)
-			.Select(tt => tt.First())
-			.ToArray();
+			.Where(t => t.IsDefined(typeof(PostgresEnumAttribute), false))
+			.DistinctBy(t => t.FullName)
+			.ToImmutableList();
 
 		return _enums;
 	}

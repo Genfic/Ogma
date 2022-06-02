@@ -8,6 +8,73 @@
         "html": {
             "elements": [
                 {
+                    "name": "o-block",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/block-user.ts",
+                        "symbol": "BlockUser"
+                    },
+                    "attributes": [
+                        {
+                            "name": "userName",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "isBlocked",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "boolean",
+                                "required": false
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "userName",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "isBlocked",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "name": "o-read",
                     "source": {
                         "module": "./Ogma3/wwwroot/js/src/wcomps/chapter-read.ts",
@@ -490,6 +557,85 @@
                     }
                 },
                 {
+                    "name": "o-join",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/join-club-button.ts",
+                        "symbol": "JoinClubButton"
+                    },
+                    "attributes": [
+                        {
+                            "name": "clubId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "isMember",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "boolean",
+                                "required": false,
+                                "default": "false"
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "clubId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "isMember",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true,
+                                    "default": "false"
+                                }
+                            },
+                            {
+                                "name": "join",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "() => Promise<void>",
+                                    "required": true,
+                                    "default": "\"async() => {\\r\\n\\t\\tconst send = this.isMember ? http.delete : http.post;\\r\\n\\r\\n\\t\\tconst res = await send<boolean>(joinClub(), {\\r\\n\\t\\t\\tclubId: this.clubId,\\r\\n\\t\\t},{\\r\\n\\t\\t\\tRequestVerificationToken: this.csrf,\\r\\n\\t\\t});\\r\\n\\t\\tif (res.isSuccess) {\\r\\n\\t\\t\\tthis.isMember = res.getValue();\\r\\n\\t\\t} else {\\r\\n\\t\\t\\tlog.warn(res.error);\\r\\n\\t\\t}\\r\\n\\t}\""
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "name": "o-modal",
                     "source": {
                         "module": "./Ogma3/wwwroot/js/src/wcomps/modal.ts",
@@ -622,6 +768,204 @@
                                     "type": "CSSResult",
                                     "required": true,
                                     "default": "\"css`\\r\\n\\t\\t:host {\\r\\n\\t\\t\\tposition: fixed;\\r\\n\\t\\t\\tposition: sticky;\\r\\n\\t\\t\\tbottom: 0;\\r\\n\\t\\t\\tleft: 0;\\r\\n\\t\\t\\tpadding: 0;\\r\\n\\t\\t\\tmargin: 0;\\r\\n\\t\\t\\twidth: 100%;\\r\\n\\t\\t}\\r\\n\\r\\n\\t\\t.bar {\\r\\n\\t\\t\\tposition: relative;\\r\\n\\t\\t\\theight: 3px;\\r\\n\\t\\t\\tmargin-top: auto;\\r\\n\\t\\t\\tbackground-color: var(--accent);\\r\\n\\t\\t\\ttransition: width 50ms ease-out;\\r\\n\\t\\t}\\r\\n\\t`\""
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "report-modal",
+                    "source": {
+                        "module": "./Ogma3/wwwroot/js/src/wcomps/report-modal.ts",
+                        "symbol": "ReportModal"
+                    },
+                    "attributes": [
+                        {
+                            "name": "openSelector",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": [
+                                    "string",
+                                    "undefined"
+                                ],
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "csrf",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "itemId",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "number",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "itemType",
+                            "required": false,
+                            "priority": "normal",
+                            "value": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    ],
+                    "js": {
+                        "properties": [
+                            {
+                                "name": "rules",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "{ min: number; max: number; }",
+                                    "required": true,
+                                    "default": "{\"min\":50,\"max\":500}"
+                                }
+                            },
+                            {
+                                "name": "openSelector",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": [
+                                        "string",
+                                        "undefined"
+                                    ],
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "csrf",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "itemId",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "number",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "itemType",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "visible",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "boolean",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "chars",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "number",
+                                    "required": true,
+                                    "default": "0"
+                                }
+                            },
+                            {
+                                "name": "reason",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
+                            {
+                                "name": "success",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": [
+                                        "boolean",
+                                        "null"
+                                    ],
+                                    "required": true,
+                                    "default": "null"
+                                }
+                            },
+                            {
+                                "name": "show",
+                                "required": false,
+                                "priority": "normal",
+                                "value": {
+                                    "type": "() => boolean",
+                                    "required": true,
+                                    "default": "\"() => this.visible = true\""
+                                }
+                            },
+                            {
+                                "name": "validate",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": [
+                                        "() => boolean",
+                                        "\"\""
+                                    ],
+                                    "required": true,
+                                    "default": "\"() => this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max\""
+                                }
+                            },
+                            {
+                                "name": "message",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": [
+                                        "() => { msg: string; cls: string; }",
+                                        "{ msg: string; cls: null; }"
+                                    ],
+                                    "required": true,
+                                    "default": "\"() => {\\r\\n\\t\\tswitch (this.success) {\\r\\n\\t\\t\\tcase true:\\r\\n\\t\\t\\t\\treturn { msg: \\\"Report delivered!\\\", cls: 'green' };\\r\\n\\t\\t\\tcase false:\\r\\n\\t\\t\\t\\treturn { msg: \\\"An error has occurred. Retry?\\\", cls: 'red' };\\r\\n\\t\\t\\tdefault:\\r\\n\\t\\t\\t\\treturn { msg: \\\"Send report\\\", cls: null };\\r\\n\\t\\t}\\r\\n\\t}\""
+                                }
+                            },
+                            {
+                                "name": "submit",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "(e: SubmitEvent) => Promise<void>",
+                                    "required": true,
+                                    "default": "\"async (e: SubmitEvent) => {\\r\\n\\t\\te.preventDefault();\\r\\n\\t\\tconst res = await http.post(\\r\\n\\t\\t\\tpostReport(),\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\titemId: this.itemId,\\r\\n\\t\\t\\t\\treason: this.reason,\\r\\n\\t\\t\\t\\titemType: this.itemType,\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\tRequestVerificationToken: this.csrf,\\r\\n\\t\\t\\t}\\r\\n\\t\\t);\\r\\n\\t\\tthis.success = res.isSuccess;\\r\\n\\t}\""
+                                }
+                            },
+                            {
+                                "name": "updateText",
+                                "required": false,
+                                "priority": "lowest",
+                                "value": {
+                                    "type": "(e: InputEvent) => void",
+                                    "required": true,
+                                    "default": "\"(e: InputEvent) => {\\r\\n\\t\\tthis.reason = (e.currentTarget as HTMLTextAreaElement).value;\\r\\n\\t\\tthis.chars = this.reason.length;\\r\\n\\t}\""
                                 }
                             }
                         ]

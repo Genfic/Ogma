@@ -23,7 +23,8 @@
 					"FunctionExpression > .params[decorators.length > 0]",
 					"FunctionExpression > .params > :matches(Decorator, :not(:first-child))",
 					"ClassBody.body > PropertyDefinition[decorators.length > 0] > .key"
-				]
+				],
+				"SwitchCase": 1
 			}
 		],
 		"semi-style": [
@@ -44,8 +45,8 @@
 		"no-unused-vars": "off",
 		"object-curly-spacing": ["error", "always"],
 		"max-len": ["warn", {
-			"code": 120
-		}]
+			"code": 140
+		}]		
 	},
 	"globals": {
 		"axios": "readonly",

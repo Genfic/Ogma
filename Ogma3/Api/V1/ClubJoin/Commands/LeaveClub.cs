@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
@@ -29,6 +30,14 @@ public static class LeaveClub
 		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
+
+			var isFounder = await _context.ClubMembers
+				.Where(cm => cm.MemberId == _uid)
+				.Where(cm => cm.ClubId == request.ClubId)
+				.Where(cm => cm.Role == EClubMemberRoles.Founder)
+				.AnyAsync(cancellationToken);
+
+			if (isFounder) return Unauthorized("Founder cannot leave their club. Delete it instead.");
 
 			var member = await _context.ClubMembers
 				.Where(cm => cm.MemberId == _uid)

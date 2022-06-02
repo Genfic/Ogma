@@ -1,4 +1,4 @@
-Vue.component("report-modal", {
+Vue.component("vue-report-modal", {
 	props: {
 		reportsRoute: {
 			type: String,

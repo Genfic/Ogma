@@ -1,7 +1,7 @@
+#nullable enable
+
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
@@ -12,23 +12,22 @@ namespace Ogma3.Data.Clubs;
 public class ClubRepository
 {
 	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
 	private readonly long? _uid;
 
-	public ClubRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
+	public ClubRepository(ApplicationDbContext context, IUserService userService)
 	{
 		_context = context;
-		_mapper = mapper;
 		_uid = userService.User?.GetNumericId();
 	}
 
-	public async Task<ClubBar> GetClubBar(long clubId)
+	public async Task<ClubBar?> GetClubBar(long clubId)
 	{
-		return await _context.Clubs
+		if (_uid is not { } uid) return null;
+		var club = await _context.Clubs
 			.Where(c => c.Id == clubId)
-			.ProjectTo<ClubBar>(_mapper.ConfigurationProvider, new { currentUser = _uid })
-			.AsNoTracking()
+			.Select(ClubMappings.ToClubBar(uid))
 			.FirstOrDefaultAsync();
+		return club;
 	}
 
 	public async Task<bool> CheckRoles(long clubId, long? userId, params EClubMemberRoles[] roles)

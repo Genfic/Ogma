@@ -5,10 +5,13 @@
 		"target": "ES6",
 		"sourceMap": true,
 		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"lib": [
+			"DOM"
+		]
 	},
 	"exclude": [
 		"node_modules",
 		"tools"
-	]
+	],
 }

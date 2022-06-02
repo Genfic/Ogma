@@ -22,7 +22,7 @@ export class FollowButton extends LitElement {
 	render() {
 		return html`
 			<button
-				class="button max join"
+				class="button max ${this.isFollowed ? 'leave' : 'join'}"
 				title="${this.isFollowed ? "Unfollow" : "Follow"}"
 				@click="${this.#follow}"
 			>
@@ -36,6 +36,8 @@ export class FollowButton extends LitElement {
 
 		const res = await send<boolean>(followUser(), {
 			name: this.userName,
+		},{
+			RequestVerificationToken: this.csrf,
 		});
 		if (res.isSuccess) {
 			this.isFollowed = res.getValue();

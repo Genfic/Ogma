@@ -7,19 +7,19 @@
 
 	&:hover
 		> .o-progress-bar
-			background-color: v.$accent-25
+			background-color: v.$accent-50
 
 		&.invalid
 			> .o-progress-bar
-				background-color: v.$red-25
+				background-color: v.$red-50
 
 	> .o-progress-bar
 		position: absolute
-		background-color: v.$accent-10
+		background-color: v.$accent-25
 		top: 0
 		bottom: 0
 		height: 100%
-		transition: width .05s ease, background-color .1s ease-in-out
+		transition: width 150ms ease, background-color 250ms ease-in-out
 
 	& span
 		margin: .05rem .2rem
@@ -35,4 +35,4 @@
 		color: red
 
 		> .o-progress-bar
-			background-color: v.$red-10
+			background-color: v.$red-25

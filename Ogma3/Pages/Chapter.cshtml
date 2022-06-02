@@ -3,15 +3,16 @@
 @using System.Globalization
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
-@using Ogma3.Api.V1.Reports
 @model ChapterModel
-
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
 	var desc = $"{Model.Chapter!.StoryTitle} – chapter {Model.Chapter.Order}";
 
 	ViewData["Title"] = Model.Chapter.Title;
 	ViewData["Description"] = desc;
 	ViewData["Rating"] = Model.Chapter.StoryRatingName;
+
+	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 @section OgMeta {
@@ -63,7 +64,7 @@
 						<icon class="icon" icon="shield"></icon>
 					</a>
 				}
-				<button title="Report" class="action-btn red" v-on:click="report">
+				<button title="Report" class="action-btn red" id="open-modal-button">
 					<icon class="icon" icon="flag"></icon>
 				</button>
 			</div>
@@ -95,17 +96,8 @@
 			}
 
 		</div>
-		
-		<o-read-progress v-pre></o-read-progress>
-		
-		<report-modal
-			ref="reportModal"
-			:item-id="@Model.Chapter.Id"
-			item-type="@EReportableContentTypes.Chapter"
-			reports-route="@Url.RouteUrl(nameof(ReportsController))">
-		</report-modal>
 
-		@Html.AntiForgeryToken()
+		<o-read-progress v-pre></o-read-progress>
 	</article>
 
 	<div class="navigation">
@@ -134,9 +126,9 @@
 	<partial name="_Comments" model="@Model.Chapter.CommentsThread"/>
 </div>
 
-@section Scripts
-{
-	<script src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>
-	<script src="~/js/dist/chapter.js" asp-append-version="true"></script>
-}
+<report-modal
+	itemId="@Model.Chapter.Id"
+	itemType="@EReportableContentTypes.Chapter"
+	csrf="@csrf"
+	openSelector="#open-modal-button">
+</report-modal>

@@ -23,7 +23,6 @@ interface TreeItem {
 @customElement("o-folder-tree")
 export class FolderTree extends LitElement {
 	constructor() {
-		log.info("Tree constructed");
 		super();
 	}
 

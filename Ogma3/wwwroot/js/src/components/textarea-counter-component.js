@@ -1,74 +1,73 @@
-Vue.component('textarea-counter', {
-    props: {
-        max: {
-            type: Number,
-            required: true
-        },
-        min: {
-            type: Number,
-            default: 0
-        },
-        label: {
-            type: String,
-            required: true
-        },
-        value: {
-            type: String,
-            default: ''
-        },
-        rows: {
-            type: Number,
-            default: 5
-        },
-        desc: {
-            type: String,
-            default: null
-        },
-        validateMsg: {
-            type: String,
-            default: null
-        },
-        wordcount: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data: function () {
-        return {
-            text: this.value,
-            name: this.label.replace(/\s+/g, '')
-        };
-    },
-    computed: {
-        countChars: function () {
-            return this.text.length.toLocaleString();
-        },
-        countWords: function () {
-            return this.text
-                .replace(/[\W_]+/, ' ')
-                .split(/\s+/)
-                .length
-                .toLocaleString();
-        },
-        validate: function () {
-            return this.text.length >= this.min && this.text.length <= this.max;
-        },
-        validationString: function () {
-            return this.validateMsg
-                .replace('{0}', this.label)
-                .replace('{1}', `${this.max}`)
-                .replace('{2}', `${this.min}`);
-        }
-    },
-    methods: {
-        updateValue: function () {
-            this.$emit('input', this.text);
-        },
-        clear: function () {
-            this.text = '';
-        }
-    },
-    template: `
+Vue.component("textarea-counter", {
+	props: {
+		max: {
+			type: Number,
+			required: true,
+		},
+		min: {
+			type: Number,
+			default: 0,
+		},
+		label: {
+			type: String,
+			required: true,
+		},
+		value: {
+			type: String,
+			default: "",
+		},
+		rows: {
+			type: Number,
+			default: 5,
+		},
+		desc: {
+			type: String,
+			default: null,
+		},
+		validateMsg: {
+			type: String,
+			default: null,
+		},
+		wordcount: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data: function () {
+		return {
+			text: this.value,
+			name: this.label.replace(/\s+/g, ""),
+		};
+	},
+	computed: {
+		countChars: function () {
+			return this.text.length.toLocaleString();
+		},
+		countWords: function () {
+			return this.text
+				.replace(/[\W_]+/, " ")
+				.split(/\s+/)
+				.length.toLocaleString();
+		},
+		validate: function () {
+			return this.text.length >= this.min && this.text.length <= this.max;
+		},
+		validationString: function () {
+			return this.validateMsg
+				.replace("{0}", this.label)
+				.replace("{1}", `${this.max}`)
+				.replace("{2}", `${this.min}`);
+		},
+	},
+	methods: {
+		updateValue: function () {
+			this.$emit("input", this.text);
+		},
+		clear: function () {
+			this.text = "";
+		},
+	},
+	template: `
         <div class="o-form-group">
         <label :for="name">{{ label.replace(/([A-Z])/g, " $1") }}</label>
 
@@ -90,5 +89,5 @@ Vue.component('textarea-counter', {
 
         <span v-if="!validate && validateMsg">{{ validationString }}</span>
         </div>
-    `
+    `,
 });

@@ -387,10 +387,6 @@
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 			<DependentUpon>edit-story.js</DependentUpon>
 		</Content>
-		<Content Update="wwwroot\js\src\story.js">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
 		<Content Update="wwwroot\js\src\story.min.js">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

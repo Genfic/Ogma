@@ -141,12 +141,13 @@ const ssrData = {
 		<button class="next button" v-on:click="nextPage">Next</button>
 	</div>
 
-	<report-modal
+	@* Figure out how to use the webcomponent version *@
+	<vue-report-modal
 		ref="reportModal"
 		:item-id="0"
 		item-type="@EReportableContentTypes.Comment"
 		reports-route="@Url.RouteUrl(nameof(ReportsController))">
-	</report-modal>
+	</vue-report-modal>
 
 </div>
 

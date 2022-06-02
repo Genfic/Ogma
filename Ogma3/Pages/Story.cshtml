@@ -5,7 +5,6 @@
 @using Ogma3.Infrastructure.Constants
 @using System.Globalization
 @using Ogma3.Data.Reports
-@using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.ChaptersReads
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model StoryModel
@@ -84,7 +83,7 @@
 			}
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
-				<button title="Report" class="action-btn large red" v-on:click="report">
+				<button title="Report" class="action-btn large red" id="open-modal-button">
 					<icon class="icon" icon="flag"></icon>
 				</button>
 			}
@@ -137,9 +136,9 @@
 
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
-					<o-club-folder-selector storyId="@Model.Story.Id"
-            		                        csrf="@csrf">
-            		</o-club-folder-selector>
+			<o-club-folder-selector storyId="@Model.Story.Id"
+                                    csrf="@csrf">
+            </o-club-folder-selector>
 		}
 		
 		<o-featured-in-clubs storyId="@Model.Story.Id"></o-featured-in-clubs>
@@ -207,12 +206,12 @@
 	</ol>
 
 	<report-modal
-		ref="reportModal"
-		:item-id="@Model.Story.Id"
-		item-type="@EReportableContentTypes.Story"
-		reports-route="@Url.RouteUrl(nameof(ReportsController))">
+		itemId="@Model.Story.Id"
+		itemType="@EReportableContentTypes.Story"
+		csrf="@csrf"
+		openSelector="#open-modal-button">
 	</report-modal>
-
+	
 	<div id="reads-route" data-reads="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
 	<div id="story-id" data-story-id="@Model.Story.Id"></div>
 	@Html.AntiForgeryToken()
@@ -220,14 +219,5 @@
 
 @section Scripts
 {
-	@* <script src="~/js/dist/components/folder-tree-component.js" asp-append-version="true"></script> *@
-	@* <script src="~/js/dist/components/club-folder-selector-component.js" asp-append-version="true"></script> *@
-	<script src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>
-	<script src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>
-
-	@* <script src="~/js/dist/story.js" asp-append-version="true"></script> *@
-
-
-	@* TODO: Replace with `chapters-read.ts` webcomponent *@
 	<script src="~/js/dist/chapter-reads.js" asp-append-version="true"></script>
 }

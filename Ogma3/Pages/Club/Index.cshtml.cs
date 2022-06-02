@@ -30,8 +30,9 @@ public class IndexModel : PageModel
 
 	public async Task<IActionResult> OnGetAsync(long id, string? slug)
 	{
-		ClubBar = await _clubRepo.GetClubBar(id);
-		if (ClubBar is null) return NotFound();
+		var cb = await _clubRepo.GetClubBar(id);
+		if (cb is null) return NotFound();
+		ClubBar = cb;
 
 		ThreadCards = await _context.ClubThreads
 			.Where(ct => ct.ClubId == id)

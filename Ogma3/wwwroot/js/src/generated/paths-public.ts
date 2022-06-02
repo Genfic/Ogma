@@ -1,6 +1,3 @@
-/* eslint-disable */
-// noinspection JSUnusedGlobalSymbols,SpellCheckingInspection
-
 export const Error_OnGet = (code: number) => `/api/error?code=${code}`;
 export const Votes_GetVotes = (storyid: number) => `/api/votes/${storyid}`;
 export const Votes_PostVote = () => `/api/votes`;
