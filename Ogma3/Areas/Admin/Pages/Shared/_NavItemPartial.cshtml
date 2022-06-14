@@ -1,0 +1,10 @@
+@model Ogma3.Areas.Admin.Pages.Shared.NavItemPartial
+
+<li class="nav-item">
+	<a class="nav-link @NavPages.PageNavClass(ViewContext, Model.Page)" 
+	   id="@Model.Page.ToLower()"
+	   asp-page="/@Model.Page" 
+	   asp-area="Admin">
+		@Model.Text
+	</a>
+</li>

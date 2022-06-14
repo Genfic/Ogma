@@ -5,7 +5,7 @@
 	ViewData["Title"] = Model.Type is null
 		? "Block content"
 		: $"Block {Model.Type}";
-	ViewData["ActivePage"] = ManageNavPages.ContentBlock;
+	ViewData["ActivePage"] = NavPages.ContentBlock;
 }
 
 @if (Model.Item is null)

@@ -3,20 +3,18 @@
 	ViewData["is-admin"] = true;
 }
 
-<div class="container" id="site-content-wide">
-	<main role="main" class="pb-3" id="app">
-		<h1 class="head">Admin panel - @ViewData["Title"]</h1>
+<main role="main" class="pb-3" id="app">
+	<h1 class="head">Admin panel - @ViewData["Title"]</h1>
 
-		<div class="side-nav">
-			<partial name="_ManageNav"></partial>
-		</div>
+	<div class="side-nav">
+		<partial name="_ManageNav"></partial>
+	</div>
 
-		<div class="admin-body">
-			@RenderBody()
-		</div>
+	<div class="admin-body">
+		@RenderBody()
+	</div>
 
-	</main>
-</div>
+</main>
 
 @section Scripts {
 	@await RenderSectionAsync("Scripts", false)

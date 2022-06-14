@@ -1,0 +1,23 @@
+@use "../vars" as v;
+@use "../mixins/active-border" as ab;
+
+.autoform {
+	details {
+		margin-top: 1rem;
+		padding: .5rem;
+		background-color: v.$foreground-10;
+		@include ab.active-border;
+
+		summary {
+			font-size: 1.1rem;
+			padding: 0;
+		}
+		
+		&[open] {
+			summary {
+				padding-bottom: .5rem;
+			}
+		}
+	}
+
+}

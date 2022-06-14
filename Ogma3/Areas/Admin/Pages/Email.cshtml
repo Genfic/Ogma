@@ -1,0 +1,29 @@
+@page
+@model Ogma3.Areas.Admin.Pages.Email
+
+@{
+	ViewData["Title"] = "Email";
+	ViewData["ActivePage"] = NavPages.Faq;
+}
+
+<div id="email">
+	<form class="auto" method="post" asp-antiforgery="true">
+		<div asp-validation-summary="All">
+			<span>Please correct the following errors</span>
+		</div>
+
+		<label asp-for="Mail.To"></label>
+		<input asp-for="Mail.To">
+
+		<label asp-for="Mail.Subject"></label>
+		<input asp-for="Mail.Subject">
+
+		<label asp-for="Mail.Body"></label>
+		<textarea asp-for="Mail.Body" cols="30" rows="10"></textarea>
+
+		<label asp-for="Mail.Markdown"></label>
+		<input asp-for="Mail.Markdown">
+		
+		<input type="submit">
+	</form>
+</div>

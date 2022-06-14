@@ -1,142 +1,142 @@
 Vue.component("tag-search-select", {
-    props: {
-        min: {
-            type: Number,
-            default: 0
-        },
-        label: {
-            type: String,
-            required: true
-        },
-        desc: {
-            type: String,
-            required: false,
-            default: null
-        },
-        validateMsg: {
-            type: String,
-            default: null
-        },
-        tagsApi: {
-            type: String,
-            required: true
-        },
-        storyId: {
-            type: Number,
-            default: null
-        },
-        preselected: {
-            type: Array,
-            default: null
-        },
-        inline: {
-            type: Boolean,
-            default: false
-        },
-        disableWhenEmpty: {
-            type: Boolean,
-            default: false
-        },
-        hideLabels: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data: function () {
-        return {
-            name: this.label.replace(/\s+/g, "").toLowerCase(),
-            loading: true,
+	props: {
+		min: {
+			type: Number,
+			default: 0
+		},
+		label: {
+			type: String,
+			required: true
+		},
+		desc: {
+			type: String,
+			required: false,
+			default: null
+		},
+		validateMsg: {
+			type: String,
+			default: null
+		},
+		tagsApi: {
+			type: String,
+			required: true
+		},
+		storyId: {
+			type: Number,
+			default: null
+		},
+		preselected: {
+			type: Array,
+			default: null
+		},
+		inline: {
+			type: Boolean,
+			default: false
+		},
+		disableWhenEmpty: {
+			type: Boolean,
+			default: false
+		},
+		hideLabels: {
+			type: Boolean,
+			default: false
+		}
+	},
+	data: function () {
+		return {
+			name: this.label.replace(/\s+/g, "").toLowerCase(),
+			loading: true,
 
-            // Tag search
-            options: [],
-            selected: [],
-            search: "",
-            highlighted: null,
-            focused: false,
+			// Tag search
+			options: [],
+			selected: [],
+			search: "",
+			highlighted: null,
+			focused: false,
 
-            disable: false
-        };
-    },
-    computed: {
-        validate: function () {
-            return this.selected.length >= this.min;
-        },
-        validationString: function () {
-            return this.validateMsg
-                .replace("{0}", `${this.min}`);
-        },
-        filtered() {
-            return this.options.filter(x => {
-                let inName = x.name.toLowerCase().includes(this.search.toLowerCase());
-                let inNamespace = x.namespace && x.namespace.toLowerCase().includes(this.search.toLowerCase());
+			disable: false
+		};
+	},
+	computed: {
+		validate: function () {
+			return this.selected.length >= this.min;
+		},
+		validationString: function () {
+			return this.validateMsg
+				.replace("{0}", `${this.min}`);
+		},
+		filtered() {
+			return this.options.filter(x => {
+				let inName = x.name.toLowerCase().includes(this.search.toLowerCase());
+				let inNamespace = x.namespace && x.namespace.toLowerCase().includes(this.search.toLowerCase());
 
-                return (inName || inNamespace)
+				return (inName || inNamespace)
                     && !this.selected.some(i => i.id === x.id)
                     && this.search.length > 0;
-            });
-        }
-    },
-    methods: {
-        handleInputKeys: function (e) {
-            switch (e.key) {
-            case "Backspace":
-                if (this.search.length <= 0) {
-                    this.selected.pop();
-                }
-                break;
-            case "ArrowUp":
-                if (this.highlighted !== null) e.preventDefault();
-                if (this.highlighted > 0) {
-                    this.highlighted--;
-                } else {
-                    this.highlighted = null;
-                }
-                break;
-            case "ArrowDown":
-                if (this.highlighted !== null) e.preventDefault();
-                if (this.highlighted === null) {
-                    this.highlighted = 0;
-                } else if (this.highlighted < this.filtered.length - 1) {
-                    this.highlighted++;
-                }
-                break;
-            case " ":
-            case "Enter":
-                if (this.highlighted !== null) {
-                    e.preventDefault();
-                    this.highlighted = 0;
-                    this.selected.pushUnique(JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
-                }
-                break;
-            default:
-                break;
-            }
-        },
-        checkDisabled: function () {
-            this.disable = this.selected.length <= 0;
-            return this.disable;
-        },
-        onClose: function () {
-            this.focused = false;
-        }
-    },
-    async created() {
-        const {data} = await axios.get(`${this.tagsApi}/all`);
-        this.options = data;
-        this.loading = false;
+			});
+		}
+	},
+	methods: {
+		handleInputKeys: function (e) {
+			switch (e.key) {
+				case "Backspace":
+					if (this.search.length <= 0) {
+						this.selected.pop();
+					}
+					break;
+				case "ArrowUp":
+					if (this.highlighted !== null) e.preventDefault();
+					if (this.highlighted > 0) {
+						this.highlighted--;
+					} else {
+						this.highlighted = null;
+					}
+					break;
+				case "ArrowDown":
+					if (this.highlighted !== null) e.preventDefault();
+					if (this.highlighted === null) {
+						this.highlighted = 0;
+					} else if (this.highlighted < this.filtered.length - 1) {
+						this.highlighted++;
+					}
+					break;
+				case " ":
+				case "Enter":
+					if (this.highlighted !== null) {
+						e.preventDefault();
+						this.highlighted = 0;
+						this.selected.pushUnique(JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
+					}
+					break;
+				default:
+					break;
+			}
+		},
+		checkDisabled: function () {
+			this.disable = this.selected.length <= 0;
+			return this.disable;
+		},
+		onClose: function () {
+			this.focused = false;
+		}
+	},
+	async created() {
+		const { data } = await axios.get(`${this.tagsApi}/all`);
+		this.options = data;
+		this.loading = false;
 
-        if (this.storyId) {
-            const {data} = await axios.get(`${this.tagsApi}/story/${this.storyId}`);
-            this.selected = data;
-            this.selected.forEach(x => this.options.find(e => e.id === x.id).hidden = true);
-        }
+		if (this.storyId) {
+			const { data } = await axios.get(`${this.tagsApi}/story/${this.storyId}`);
+			this.selected = data;
+			this.selected.forEach(x => this.options.find(e => e.id === x.id).hidden = true);
+		}
 
-        if (this.preselected) {
-            this.selected = this.options.filter(o => this.preselected.indexOf(o.id) !== -1);
-        }
+		if (this.preselected) {
+			this.selected = this.options.filter(o => this.preselected.indexOf(o.id) !== -1);
+		}
 
-    },
-    template: `
+	},
+	template: `
         <div class="tag-search-select"
              v-on:focusin="focused = true">
         <select class="output"

@@ -150,8 +150,8 @@ public class Startup
 
 		// Email
 		services
-			.AddTransient<IEmailSender, MailGunMailer>()
-			.Configure<MailGunOptions>(Configuration);
+			.AddTransient<IEmailSender, PostmarkMailer>()
+			.Configure<PostmarkOptions>(Configuration);
 
 		// Backblaze
 		var b2Options = Configuration.GetSection("B2").Get<B2Options>();
