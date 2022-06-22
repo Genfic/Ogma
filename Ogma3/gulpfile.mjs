@@ -23,7 +23,7 @@ import esbuild from "rollup-plugin-esbuild";
 import minifyHTML from "rollup-plugin-html-literals";
 
 // Dirs
-const root = "./Ogma3/wwwroot";
+const root = "./wwwroot";
 const roots = {
 	css: `${root}/css`,
 	js: `${root}/js`
@@ -54,14 +54,14 @@ const watchGlobs = {
 
 // CSS tasks
 export const css = () => pipeline(gulp.src(`${roots.css}/*.sass`),
-	sourcemaps.init(),                   // Init maps
+	sourcemaps.init({}),                   // Init maps
 	sass(),                              // Compile SASS
 	postcss([                    // Postprocess it
 		autoprefixer,
 		mqpacker,
 		csso({ comments: false })
 	]),
-	sourcemaps.write("./"),     // Write maps
+	sourcemaps.write("./", {}),     // Write maps
 	gulp.dest(`${roots.css}/dist`),      // Output minified CSS
 	errorHandler);
 
@@ -69,9 +69,9 @@ export const watchCss = () => gulp.watch(watchGlobs.sass, css);
 
 // JS tasks
 export const js = () => pipeline(gulp.src([`${roots.js}/src/**/*.js`]),
-	sourcemaps.init(),
+	sourcemaps.init({}),
 	terser(),
-	sourcemaps.write("./"),
+	sourcemaps.write("./", {}),
 	gulp.dest(`${roots.js}/dist`),
 	errorHandler);
 
@@ -121,7 +121,7 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/
 		});
 	},
 	errorHandler);
-const webtypes = () => run('npm run t:webtypes').exec();
+const webtypes = () => run('npm run t:webtypes', {}).exec(null, x => console.log(x));
 export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, gulp.parallel(components, webtypes));
 
 

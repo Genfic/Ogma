@@ -10,7 +10,7 @@
                 {
                     "name": "o-block",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/block-user.ts",
+                        "module": "./wwwroot/js/src/wcomps/block-user.ts",
                         "symbol": "BlockUser"
                     },
                     "attributes": [
@@ -77,7 +77,7 @@
                 {
                     "name": "o-read",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/chapter-read.ts",
+                        "module": "./wwwroot/js/src/wcomps/chapter-read.ts",
                         "symbol": "ChapterRead"
                     },
                     "attributes": [
@@ -126,7 +126,7 @@
                 {
                     "name": "o-clock",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/clock.ts",
+                        "module": "./wwwroot/js/src/wcomps/clock.ts",
                         "symbol": "Clock"
                     },
                     "attributes": [
@@ -167,7 +167,7 @@
                 {
                     "name": "o-club-folder-selector",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/club-folder-selector.ts",
+                        "module": "./wwwroot/js/src/wcomps/club-folder-selector.ts",
                         "symbol": "ClubFolderSelector"
                     },
                     "attributes": [
@@ -267,7 +267,7 @@
                 {
                     "name": "o-featured-in-clubs",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/featured-in-clubs.ts",
+                        "module": "./wwwroot/js/src/wcomps/featured-in-clubs.ts",
                         "symbol": "FeaturedInClubs"
                     },
                     "attributes": [
@@ -316,7 +316,7 @@
                 {
                     "name": "o-folder-tree",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/folder-tree.ts",
+                        "module": "./wwwroot/js/src/wcomps/folder-tree.ts",
                         "symbol": "FolderTree"
                     },
                     "attributes": [
@@ -492,7 +492,7 @@
                 {
                     "name": "o-follow",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/follow-button.ts",
+                        "module": "./wwwroot/js/src/wcomps/follow-button.ts",
                         "symbol": "FollowButton"
                     },
                     "attributes": [
@@ -559,7 +559,7 @@
                 {
                     "name": "o-join",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/join-club-button.ts",
+                        "module": "./wwwroot/js/src/wcomps/join-club-button.ts",
                         "symbol": "JoinClubButton"
                     },
                     "attributes": [
@@ -638,7 +638,7 @@
                 {
                     "name": "o-modal",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/modal.ts",
+                        "module": "./wwwroot/js/src/wcomps/modal.ts",
                         "symbol": "Modal"
                     },
                     "js": {
@@ -668,7 +668,7 @@
                 {
                     "name": "o-notifications-button",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/notifications-button.ts",
+                        "module": "./wwwroot/js/src/wcomps/notifications-button.ts",
                         "symbol": "NotificationsButton"
                     },
                     "js": {
@@ -688,7 +688,7 @@
                 {
                     "name": "quote-box",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/quote-box.ts",
+                        "module": "./wwwroot/js/src/wcomps/quote-box.ts",
                         "symbol": "QuoteBox"
                     },
                     "js": {
@@ -717,7 +717,7 @@
                 {
                     "name": "o-read-progress",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/read-progress.ts",
+                        "module": "./wwwroot/js/src/wcomps/read-progress.ts",
                         "symbol": "ReadProgress"
                     },
                     "js": {
@@ -776,7 +776,7 @@
                 {
                     "name": "report-modal",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/report-modal.ts",
+                        "module": "./wwwroot/js/src/wcomps/report-modal.ts",
                         "symbol": "ReportModal"
                     },
                     "attributes": [
@@ -974,7 +974,7 @@
                 {
                     "name": "o-shelves",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/shelves-button.ts",
+                        "module": "./wwwroot/js/src/wcomps/shelves-button.ts",
                         "symbol": "ShelvesButton"
                     },
                     "attributes": [
@@ -1063,7 +1063,7 @@
                 {
                     "name": "o-subscribe",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/subscribe-thread-button.ts",
+                        "module": "./wwwroot/js/src/wcomps/subscribe-thread-button.ts",
                         "symbol": "SubscribeThreadButton"
                     },
                     "attributes": [
@@ -1139,7 +1139,7 @@
                 {
                     "name": "o-vote",
                     "source": {
-                        "module": "./Ogma3/wwwroot/js/src/wcomps/vote-button.ts",
+                        "module": "./wwwroot/js/src/wcomps/vote-button.ts",
                         "symbol": "VoteButton"
                     },
                     "attributes": [

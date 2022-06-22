@@ -41,7 +41,7 @@
 		"dev": "gulp watchAll",
 		"score": "lighthouse https://localhost:5001 --view",
 		"serve": "test-serve.bat",
-		"t:webtypes": "wca-webtypes analyze ./Ogma3/wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
+		"t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
 		"t:cssdemo": "deno run --allow-read --allow-net ./Tools/css-demo.ts",
 		"t:preloads": "deno run --allow-read ./Tools/generate-preloads.ts",
 		"t:imports": "deno run --allow-read ./Tools/generate-imports.ts",
