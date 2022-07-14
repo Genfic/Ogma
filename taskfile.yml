@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+    paths:
+        cmds: 
+            - > 
+                deno run 
+                --allow-net --unsafely-ignore-certificate-errors=localhost --allow-read --allow-write 
+                ./Tools/generate-paths.ts ./Ogma3/wwwroot/js/src/generated

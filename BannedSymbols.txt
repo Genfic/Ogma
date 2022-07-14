@@ -1,0 +1,6 @@
+P:System.Threading.Tasks.Task.Result;await it
+M:System.Threading.Tasks.Task.Wait;await it
+M:System.Threading.Tasks.Task.GetAwaiter;await it
+M:System.Runtime.CompilerServices.TaskAwaiter.GetResult;await it
+M:System.Threading.Tasks.Task.WaitAll`1;await it
+M:System.Threading.Tasks.Task.WhenAll`1;await it

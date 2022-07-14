@@ -133,7 +133,6 @@ public class ApplicationDbContext : IdentityDbContext
 	{
 		base.OnConfiguring(optionsBuilder);
 		optionsBuilder
-			.UseLoggerFactory(_myLoggerFactory)
-			.UseBatchEF_Npgsql();
+			.UseLoggerFactory(_myLoggerFactory);
 	}
 }

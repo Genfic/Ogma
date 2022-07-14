@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -15,6 +17,8 @@ public class Program
 {
 	public static async Task Main(string[] args)
 	{
+		Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
+		
 		// TODO: Reverts to old datetime behaviour, tracked by #50
 		AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

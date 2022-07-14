@@ -3,7 +3,6 @@
 @model Reports
 
 @{
-	#nullable enable
 	ViewData["Title"] = "Reports";
 	ViewData["ActivePage"] = NavPages.Reports;
 }
@@ -18,6 +17,7 @@
 	</tr>
 	@foreach (var report in Model.ReportsList)
 	{
+#nullable enable
 		Func<ReportDto, object>? link;
 		if (Enum.TryParse<EReportableContentTypes>(report.ContentType, out var t))
 		{
