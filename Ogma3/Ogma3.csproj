@@ -321,6 +321,8 @@
 		<_ContentIncludedByDefault Remove="wwwroot\css\dist\style.min.css" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\src\native-components\shelves-button.js" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\src\club\add-story.js" />
+		<_ContentIncludedByDefault Remove="wwwroot\js\src\generated\paths-internal.ts" />
+		<_ContentIncludedByDefault Remove="wwwroot\js\src\generated\paths-public.ts" />
 	</ItemGroup>
 
 

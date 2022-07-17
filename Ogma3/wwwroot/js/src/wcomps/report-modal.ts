@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { http } from "../helpers/http";
-import { Reports_PostReports as postReport } from "../generated/paths-public";
+import { Reports_PostReports as postReport } from "../../generated/paths-public";
+import { EReportableContentTypes } from "../../generated/types-public";
 
 @customElement("report-modal")
 export class ReportModal extends LitElement {
@@ -50,18 +50,17 @@ export class ReportModal extends LitElement {
 	// eslint-disable-next-line no-undef
 	private submit = async (e: SubmitEvent) => {
 		e.preventDefault();
-		const res = await http.post(
-			postReport(),
+		const res = await postReport(
 			{
 				itemId: this.itemId,
 				reason: this.reason,
-				itemType: this.itemType,
+				itemType: this.itemType as EReportableContentTypes,
 			},
 			{
 				RequestVerificationToken: this.csrf,
 			}
 		);
-		this.success = res.isSuccess;
+		this.success = res.ok;
 	};
 
 	private updateText = (e: InputEvent) => {

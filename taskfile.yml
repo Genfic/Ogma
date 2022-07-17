@@ -2,8 +2,11 @@ version: '3'
 
 tasks:
     paths:
-        cmds: 
-            - > 
-                deno run 
-                --allow-net --unsafely-ignore-certificate-errors=localhost --allow-read --allow-write 
-                ./Tools/generate-paths.ts ./Ogma3/wwwroot/js/src/generated
+        env:
+            DENO_TLS_CA_STORE: system
+        vars:
+            DEST: ./Ogma3/wwwroot/js/generated/
+            URL: https://localhost:5001/swagger/
+        cmds:
+            - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public/swagger.json" --path.internal="{{.URL}}internal/swagger.json"
+        

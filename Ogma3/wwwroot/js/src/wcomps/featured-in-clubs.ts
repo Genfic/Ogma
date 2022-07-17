@@ -1,8 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { http } from "../helpers/http";
 import { log } from "../helpers/logger";
-import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../generated/paths-public";
+import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../../generated/paths-public";
 
 interface Club {
 	id: number;
@@ -27,11 +26,11 @@ export class FeaturedInClubs extends LitElement {
 	}
 
 	private async fetch() {
-		const response = await http.get<Club[]>(getFeaturingClubs(this.storyId));
-		if (response.isSuccess) {
-			this.clubs = response.getValue();
+		const response = await getFeaturingClubs(this.storyId);
+		if (response.ok) {
+			this.clubs = await response.json();
 		} else {
-			log.error(`Error fetching data: ${response.error}`);
+			log.error(`Error fetching data: ${response.statusText}`);
 		}
 	}
 

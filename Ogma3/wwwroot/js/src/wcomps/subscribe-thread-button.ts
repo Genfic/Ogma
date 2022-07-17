@@ -1,7 +1,11 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { http } from "../helpers/http";
 import { log } from "../helpers/logger";
+import {
+	Subscriptions_IsSubscribedToThread as isSubscribed,
+	Subscriptions_SubscribeThread as subscribe,
+	Subscriptions_UnsubscribeThread as unsubscribe,
+} from "../../generated/paths-public";
 
 @customElement("o-subscribe")
 export class SubscribeThreadButton extends LitElement {
@@ -18,12 +22,12 @@ export class SubscribeThreadButton extends LitElement {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 
-		const res = await http.get<boolean>(
-			`${this.endpoint}/thread?threadId=${this.threadId}`
-		);
-		this.subscribed = res.isSuccess && res.getValue();
-
-		res.isFailure && log.error(res.error);
+		const res = await isSubscribed(this.threadId);
+		if (res.ok) {
+			this.subscribed = await res.json();
+		} else {
+			log.error(res.statusText);
+		}
 	}
 
 	render() {
@@ -33,24 +37,23 @@ export class SubscribeThreadButton extends LitElement {
 				@click="${this.#vote}"
 				title="${this.subscribed ? "Unsubscribe" : "Subscribe"}"
 			>
-				<i class="material-icons-outlined"
-					>${this.subscribed
-						? "notifications_active"
-						: "notifications"}</i
-				>&nbsp; ${this.subscribed ? "Subscribed!" : "Subscribe"}
+				<i class="material-icons-outlined">${this.subscribed ? "notifications_active" : "notifications"}</i>&nbsp;
+				${this.subscribed ? "Subscribed!" : "Subscribe"}
 			</button>
 		`;
 	}
 
 	async #vote() {
-		const send = this.subscribed ? http.delete : http.post;
+		const send = this.subscribed ? unsubscribe : subscribe;
 
-		const res = await send<boolean>(`${this.endpoint}/thread`, {
+		const res = await send( {
 			threadId: this.threadId,
 		});
-		this.subscribed = res.isSuccess && res.getValue();
-
-		res.isFailure && log.error(res.error);
+		if (res.ok) {
+			this.subscribed = await res.json();
+		} else {
+			log.error(res.statusText);
+		}
 	}
 
 	createRenderRoot() {

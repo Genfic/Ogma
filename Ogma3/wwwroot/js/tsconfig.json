@@ -7,7 +7,7 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"lib": [
-			"DOM"
+			"DOM", "ES6", "ES2017"
 		]
 	},
 	"exclude": [

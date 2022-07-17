@@ -1,8 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { log } from "../helpers/logger";
-import { http } from "../helpers/http";
-import { Quotes_GetRandomQuote as getQuote } from "../generated/paths-public";
+import { Quotes_GetRandomQuote as getQuote } from "../../generated/paths-public";
 
 interface Quote {
 	body: string;
@@ -45,15 +44,14 @@ export class QuoteBox extends LitElement {
 	#spinnerClass = () => this._loading ? "spin" : "";
 
 	async load() {
-		const res = await http.get<Quote>(getQuote());
-
-		if (res.isSuccess) {
-			this._quote = res.getValue();
+		const response = await getQuote();
+		if (response.ok) {
+			this._quote = await response.json();
 			window.localStorage.setItem("quote", JSON.stringify(this._quote));
 		} else {
-			log.error(res.error);
+			log.error(response.statusText);
 			this._quote = JSON.parse(window.localStorage.getItem("quote"));
-		}
+		}		
 	}
 
 	createRenderRoot() {

@@ -1,12 +1,12 @@
 import { html, LitElement } from "lit";
-import { http } from "../helpers/http";
 import { log } from "../helpers/logger";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	ShelfStories_AddToShelf as addToShelf,
 	ShelfStories_GetUserQuickShelves as getQuickShelves,
 	ShelfStories_GetUserShelvesPaginated as getShelves,
-} from "../generated/paths-public";
+	ShelfStories_RemoveFromShelf as removeFromShelf,
+} from "../../generated/paths-public";
 import { clickOutside } from "../helpers/click-outside";
 
 interface Shelf {
@@ -102,22 +102,20 @@ export class ShelvesButton extends LitElement {
 	}
 
 	async #getQuickShelves() {
-		const res = await http.get<Shelf[]>(getQuickShelves(this.storyId));
-		if (res.isSuccess) {
-			this.quickShelves = res.getValue();
+		const res = await getQuickShelves(this.storyId);
+		if (res.ok) {
+			this.quickShelves = await res.json();
 		} else {
-			log.error(res.error);
+			log.error(res.statusText);
 		}
 	}
 
 	async #getShelves() {
-		const res = await http.get<Shelf[]>(
-			getShelves(this.storyId, this.page)
-		);
-		if (res.isSuccess) {
-			this.shelves = res.getValue();
+		const res = await getShelves(this.storyId, this.page);
+		if (res.ok) {
+			this.shelves = await res.json();
 		} else {
-			log.error(res.error);
+			log.error(res.statusText);
 		}
 	}
 
@@ -125,16 +123,16 @@ export class ShelvesButton extends LitElement {
 		const exists = [...this.shelves, ...this.quickShelves].some(
 			(s) => s.doesContainBook && s.id === id
 		);
-		const send = exists ? http.delete : http.post;
+		const send = exists ? removeFromShelf : addToShelf;
 
-		const res = await send(addToShelf(id, this.storyId), null, {
+		const res = await send(id, this.storyId,{
 			RequestVerificationToken: this.csrf,
 		});
-		if (res.isSuccess) {
+		if (res.ok) {
 			await this.#getQuickShelves();
 			await this.#getShelves();
 		} else {
-			log.error(res.error);
+			log.error(res.statusText);
 		}
 	}
 

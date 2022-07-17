@@ -1,9 +1,8 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
-import { http } from "../helpers/http";
 import { classMap } from "lit/directives/class-map.js";
-import { Folders_GetFoldersOfClub as getClubFolders } from "../generated/paths-public";
+import { Folders_GetFoldersOfClub as getClubFolders } from "../../generated/paths-public";
 
 interface Folder {
 	id: number;
@@ -47,11 +46,11 @@ export class FolderTree extends LitElement {
 			this.input.value = null;
 		}
 
-		const response = await http.get<Folder[]>(getClubFolders(this.clubId));
-		if (response.isSuccess) {
-			this.folders = response.getValue();
+		const response = await getClubFolders(this.clubId);
+		if (response.ok) {
+			this.folders = await response.json();
 		} else {
-			log.error(`Error fetching data: ${response.error}`);
+			log.error(`Error fetching data: ${response.statusText}`);
 		}
 
 		this.#unflatten();

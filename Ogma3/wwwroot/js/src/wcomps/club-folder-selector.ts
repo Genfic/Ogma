@@ -1,13 +1,9 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
-import { http } from "../helpers/http";
 import { createRef, ref } from "lit/directives/ref.js";
 import { FolderTree } from "./folder-tree";
-import {
-	Clubs_GetUserClubs as getUserClubs,
-	Folders_AddStory as addStoryToFolder,
-} from "../generated/paths-public";
+import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../../generated/paths-public";
 
 interface Club {
 	id: number;
@@ -37,11 +33,11 @@ export class ClubFolderSelector extends LitElement {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 
-		const response = await http.get<Club[]>(getUserClubs());
-		if (response.isSuccess) {
-			this.clubs = response.getValue();
+		const response = await getUserClubs();
+		if (response.ok) {
+			this.clubs = await response.json();
 		} else {
-			log.error(`Error fetching data: ${response.error}`);
+			log.error(`Error fetching data: ${response.statusText}`);
 		}
 	}
 
@@ -133,26 +129,22 @@ export class ClubFolderSelector extends LitElement {
 			};
 			return;
 		}
+		
+		const response = await addStoryToFolder({
+			folderId: folderId,
+			storyId: this.storyId,
+		},{
+			RequestVerificationToken: this.csrf,
+		});
 
-		const response = await http.post(
-			addStoryToFolder(),
-			{
-				folderId: folderId,
-				storyId: this.storyId,
-			},
-			{
-				RequestVerificationToken: this.csrf,
-			}
-		);
-
-		if (response.isSuccess) {
+		if (response.ok) {
 			this.status = {
 				message: "Successfully added",
 				success: true,
 			};
 		} else {
 			this.status = {
-				message: response.error,
+				message: response.statusText,
 				success: false,
 			};
 		}
