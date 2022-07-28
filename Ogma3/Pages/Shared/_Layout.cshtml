@@ -4,9 +4,14 @@
 @using Microsoft.AspNetCore.Hosting
 @using Ogma3.Api.V1.UserActivity
 @inject IWebHostEnvironment Env
+@inject OgmaConfig Config
+
 @{
-	Context.Request.Cookies.TryGetValue("theme", out var value);
-	var theme = value ?? "light";
+	Context.Request.Cookies.TryGetValue("theme", out var theme);
+	theme ??= "light";
+
+	Context.Request.Cookies.TryGetValue("cookie-consent", out var consent);
+	var cookieConsent = consent is "true";
 
 	var isAdmin = ViewData["is-admin"];
 
@@ -106,6 +111,17 @@
 	@RenderBody()
 
 </div>
+
+@if (!cookieConsent)
+{
+	<div id="cookie-consent">
+		<icon icon="cookie"></icon>
+		<span>To nobody's surprise, we're using cookies. You can read more about them&nbsp;<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">here</a>.</span>
+		<button class="btn green" id="cookie-consent-button">Noted!</button>
+	</div>
+	
+	<script src="~/js/dist/cookie-consent.js" async></script>
+}
 
 <partial name="_Footer"/>
 

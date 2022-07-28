@@ -138,12 +138,14 @@ function getCookieValue(name: string): string {
  * @param {Date|null} expires Expiration date
  * @param {boolean} secure Whether the cookie is secure
  * @param {string|null} sameSite SameSite setting
+ * @param {string|null} path Path for the cookie
  */
-function setCookie(name: string, value: string, expires: Date | null = null, secure: boolean = false, sameSite: string | null = null) {
+function setCookie(name: string, value: string, expires: Date | null = null, secure: boolean = false, sameSite: string | null = null, path?: string | null) {
 	let cookie = `${name}=${value}`;
 	if (expires) cookie += `; expires=${expires.toUTCString()}`;
 	if (secure) cookie += `; secure=${String(secure)}`;
 	if (sameSite) cookie += `; samesite=${sameSite}`;
+	if (path) cookie += `; path=${path}`;
 	document.cookie = cookie;
 }
 

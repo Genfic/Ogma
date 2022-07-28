@@ -1,0 +1,36 @@
+@use "../vars" as v;
+
+#cookie-consent {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: v.$ele-1;
+	padding: .2rem;
+	border-top: 1px solid v.$foreground-50;
+	text-align: center;
+	z-index: 999;
+
+	@media screen and (max-width: v.$mq-mobile) {
+		top: 0;
+		bottom: unset;
+		border-bottom: 1px solid v.$foreground-50;
+
+		button#cookie-consent-button {
+			min-height: 48px;
+			min-width: 48px;
+		}
+	}
+	
+	span {
+		margin: 0 .5rem;
+	}
+	
+	button#cookie-consent-button {
+		padding: .1rem .5rem;
+		display: inline-block;
+	}
+}

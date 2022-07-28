@@ -34,6 +34,7 @@ msbuild.err
 msbuild.wrn
 Ogma3/wwwroot/css/dist/
 Ogma3/wwwroot/js/dist/
+Ogma3/wwwroot/js/bundle/
 
 
 # Visual Studio 2015

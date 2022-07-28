@@ -36,15 +36,15 @@
 		<div class="col">
 			<span class="header">Links</span>
 
-			<a asp-area="" asp-page="/Docs" asp-route-slug="@Config.AboutDoc" class="item">About</a>
+			<a asp-page="/Docs" asp-route-slug="@Config.AboutDoc" class="item">About</a>
 
-			<a asp-area="" asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">Privacy</a>
+			<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">Privacy</a>
 
-			<a asp-area="" asp-page="/Staff" class="item">Staff</a>
+			<a asp-page="/Staff" class="item">Staff</a>
+ 
+			<a asp-page="/Markdown" class="item">Markdown reference</a>
 
-			<a asp-area="" asp-page="/Markdown" class="item">Markdown reference</a>
-
-			<a asp-area="" asp-page="/Settings" class="item">Local settings</a>
+			<a asp-page="/Settings" class="item">Local settings</a>
 
 			<a asp-controller="Rss" asp-action="GetStories" class="item"><icon icon="rss_feed" class="rss"></icon>Stories RSS</a>
 
