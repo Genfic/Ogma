@@ -5,31 +5,18 @@
 		Regular,
 	}
 
-	// This monstrosity grabs all `input` and `textarea` tags and puts them inside a single array
-	// so that it's easier to use. Because of course `querySelectorAll()` returns some weird shit instead
-	// of a proper array. Thank fuck for the spread operator.
+	const properSplit = (value: string, separator: string | RegExp) => (!value || value.length <= 0 ? [] : value.split(separator));
+	
 	const inputs: (HTMLInputElement | HTMLTextAreaElement)[] = [
-		...[
-			...document.querySelectorAll(
-				"input.o-form-control:not([disabled]):not([nobar])"
-			),
-		],
-		...[
-			...document.querySelectorAll(
-				"textarea.o-form-control:not([disabled]):not([nobar])"
-			),
-		],
+		...document.querySelectorAll("input.o-form-control:not([disabled]):not([nobar])"),
+		...document.querySelectorAll("textarea.o-form-control:not([disabled]):not([nobar])"),
 	] as (HTMLInputElement | HTMLTextAreaElement)[];
 
 	for (const input of inputs) {
-		log.log(`Attaching ${input.type}`);
+		console.log(`Attaching ${input.type}`);
 
 		let type: InputType;
-		if (
-			input.dataset.maxCount ||
-			input.dataset.valLengthMax ||
-			input.dataset.valMaxlengthMax
-		) {
+		if (input.dataset.maxCount || input.dataset.valLengthMax || input.dataset.valMaxlengthMax) {
 			// One of the validation parameters is set so it's a validated input
 			type = InputType.Validated;
 		} else if (input.dataset.valFilesizeMax && input.type === "file") {
@@ -42,11 +29,7 @@
 
 		// If there's no count specified, get max length. If that's not there, just use 0.
 		const max: number = {
-			[InputType.Validated]: Number(
-				input.dataset.maxCount ??
-					input.dataset.valLengthMax ??
-					input.dataset.valMaxlengthMax
-			),
+			[InputType.Validated]: Number(input.dataset.maxCount ?? input.dataset.valLengthMax ?? input.dataset.valMaxlengthMax),
 			[InputType.File]: Number(input.dataset.valFilesizeMax),
 			[InputType.Regular]: input.maxLength ?? 0,
 		}[type];
@@ -67,21 +50,20 @@
 				return input.value.length;
 			}
 		};
+		
+		const dom = (template: string) => new DOMParser()
+			.parseFromString(template, "text/html")
+			.body
+			.childNodes[0] as HTMLElement;
 
 		// Create the main container
-		const counter: HTMLElement = document.createElement("div");
-		counter.classList.add("counter");
+		const counter: HTMLElement = dom('<div class="counter"></div>');
 
 		// Create the progress bar proper
-		const progress: HTMLElement = document.createElement("div");
-		progress.classList.add("o-progress-bar");
+		const progress: HTMLElement = dom('<div class="o-progress-bar"></div>');
 
 		// Create the character counter
-		const count: HTMLElement = document.createElement("span");
-		const length = currentSize();
-		count.innerText = `${length}/${max}${
-			type === InputType.File ? " bytes" : ""
-		}`;
+		const count: HTMLElement = dom(`<span>${currentSize()}/${max}${type === InputType.File ? " bytes" : ""}</span>`);
 
 		// Append the progress bar to the container
 		counter.appendChild(progress);
@@ -89,9 +71,7 @@
 		// If the `data-wordcount` property is there, create a wordcount element and append it
 		let wordcount: HTMLElement;
 		if (input.dataset.wordcount) {
-			wordcount = document.createElement("span");
-			wordcount.innerText =
-				input.value.properSplit(/\s+/).length.toString() + " words";
+			wordcount = dom(`<span>${properSplit(input.value, /\s+/).length.toString()} words</span>`);
 			counter.appendChild(wordcount);
 		}
 
@@ -102,22 +82,18 @@
 		input.after(counter);
 
 		// Listen to input
-		log.log(`Listening to ${input.type}`);
+		console.log(`Listening to ${input.type}`);
 		input.addEventListener("input", () => {
 			const length = currentSize();
 			// Update character counter
-			count.innerText = `${length}/${max}${
-				type === InputType.File ? " bytes" : ""
-			}`;
+			count.innerText = `${length}/${max}${type === InputType.File ? " bytes" : ""}`;
 
 			// Update progress bar progress
 			progress.style.width = `${Math.min(100, 100 * (length / max))}%`;
 
 			// If `data-wordcount` has been specified, update that as well
 			if (input.dataset.wordcount) {
-				wordcount.innerText =
-					(input.value.properSplit(/\s+/) ?? []).length.toString() +
-					" words";
+				wordcount.innerText = (properSplit(input.value, /\s+/) ?? []).length.toString() + " words";
 			}
 
 			// Check if the input is valid

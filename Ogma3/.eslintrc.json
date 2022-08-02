@@ -46,7 +46,14 @@
 		"object-curly-spacing": ["error", "always"],
 		"max-len": ["warn", {
 			"code": 140
-		}]		
+		}],
+		"no-redeclare": "off",
+		"@typescript-eslint/no-redeclare": [
+			"error",
+			{
+				"ignoreDeclarationMerge": true
+			}
+		]
 	},
 	"globals": {
 		"axios": "readonly",
@@ -54,7 +61,8 @@
 		"require": "readonly",
 		"exports": "readonly",
 		"getCookieValue": "readonly",
-		"setCookie": "readonly"
+		"setCookie": "readonly",
+		"global": "readonly"
 //		"dayjs": "readonly"
 	},
 	"overrides": [

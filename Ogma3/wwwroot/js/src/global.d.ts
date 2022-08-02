@@ -4,4 +4,4 @@ declare const log: {
     warn: (any) => void,
     error: (any) => void,
     debug: (any) => void,
-}
+};

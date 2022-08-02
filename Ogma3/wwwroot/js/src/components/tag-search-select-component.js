@@ -77,6 +77,11 @@ Vue.component("tag-search-select", {
 		}
 	},
 	methods: {
+		pushUnique: function(arr, el) {
+			if (arr.includes(el)) return;
+			arr.push(el);
+		},
+		
 		handleInputKeys: function (e) {
 			switch (e.key) {
 				case "Backspace":
@@ -105,7 +110,7 @@ Vue.component("tag-search-select", {
 					if (this.highlighted !== null) {
 						e.preventDefault();
 						this.highlighted = 0;
-						this.selected.pushUnique(JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
+						this.pushUnique(this.selected, JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
 					}
 					break;
 				default:
