@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.ClubThreads;
-using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 
@@ -73,7 +73,7 @@ public class DeleteModel : PageModel
 				ct.AuthorId,
 				ct.ClubId,
 				ct.Club.Slug,
-				ct.Club.Name
+				ct.Title
 			})
 			.FirstOrDefaultAsync();
 
@@ -85,10 +85,11 @@ public class DeleteModel : PageModel
 		
 		if (isModerator)
 		{
-			_context.ModeratorActions.Add(new ModeratorAction
+			_context.ClubModeratorActions.Add(new ClubModeratorAction
 			{
-				StaffMemberId = uid,
-				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Name, th.ClubId, th.Id, User.GetUsername())
+				ModeratorId = uid,
+				ClubId = th.ClubId,
+				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Title, th.Id, User.GetUsername())
 			});
 		}
 
