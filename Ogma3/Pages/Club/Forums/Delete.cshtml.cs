@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.ClubThreads;
+using Ogma3.Data.ModeratorActions;
+using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums;
@@ -50,13 +52,19 @@ public class DeleteModel : PageModel
 			.FirstOrDefaultAsync();
 
 		if (ClubThread is null) return NotFound();
-		if (!await CanDelete(ClubThread.AuthorId, ClubThread.ClubId)) return Unauthorized();
+
+		var (allowed, _) = await CanDelete(ClubThread.AuthorId, ClubThread.ClubId);
+		
+		if (!allowed) return Unauthorized();
 
 		return Page();
 	}
 
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
+		var userId = User.GetNumericId();
+		if (userId is not {} uid) return Unauthorized();
+		
 		var th = await _context.ClubThreads
 			.Where(ct => ct.Id == id)
 			.Select(ct => new
@@ -64,12 +72,25 @@ public class DeleteModel : PageModel
 				ct.Id,
 				ct.AuthorId,
 				ct.ClubId,
-				ct.Club.Slug
+				ct.Club.Slug,
+				ct.Club.Name
 			})
 			.FirstOrDefaultAsync();
 
 		if (th is null) return NotFound();
-		if (!await CanDelete(th.AuthorId, th.ClubId)) return Unauthorized();
+		
+		var (allowed, isModerator) = await CanDelete(ClubThread.AuthorId, ClubThread.ClubId);
+		
+		if (!allowed) return Unauthorized();
+		
+		if (isModerator)
+		{
+			_context.ModeratorActions.Add(new ModeratorAction
+			{
+				StaffMemberId = uid,
+				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Name, th.ClubId, th.Id, User.GetUsername())
+			});
+		}
 
 		var thread = _context.ClubThreads.Attach(new ClubThread
 		{
@@ -82,14 +103,14 @@ public class DeleteModel : PageModel
 		return RedirectToPage("Index", new { id = th.ClubId, slug = th.Slug });
 	}
 
-	private async Task<bool> CanDelete(long? authorId, long clubId)
+	private async Task<(bool allowed, bool isModerator)> CanDelete(long? authorId, long clubId)
 	{
 		var uid = User.GetNumericId();
-		if (uid is null) return false;
+		if (uid is null) return (false, false);
 
-		if (authorId == uid) return true;
+		if (authorId == uid) return (true, false);
 
-		return await _context.ClubMembers
+		var isModerator = await _context.ClubMembers
 			.Where(cm => cm.ClubId == clubId)
 			.Where(cm => cm.MemberId == uid)
 			.Where(cm => new[]
@@ -99,5 +120,7 @@ public class DeleteModel : PageModel
 				EClubMemberRoles.Moderator
 			}.Contains(cm.Role))
 			.AnyAsync();
+
+		return (isModerator, true);
 	}
 }
