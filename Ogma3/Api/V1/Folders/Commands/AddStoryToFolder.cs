@@ -29,6 +29,8 @@ public static class AddStoryToFolder
 
 		public async Task<ActionResult<FolderStory>> Handle(Command request, CancellationToken cancellationToken)
 		{
+			if (_uid is not {} uid) return Unauthorized();
+			
 			var (folderId, storyId) = request;
 
 			var folder = await _context.Folders
@@ -49,6 +51,7 @@ public static class AddStoryToFolder
 			{
 				FolderId = folderId,
 				StoryId = storyId,
+				AddedById = uid
 			});
 			folder.StoriesCount++;
 

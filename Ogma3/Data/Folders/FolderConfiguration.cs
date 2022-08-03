@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Clubs;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Folders;
 
@@ -54,7 +55,15 @@ public class FolderConfiguration : BaseConfiguration<Folder>
 				fs => fs.HasOne(f => f.Folder)
 					.WithMany()
 					.HasForeignKey(f => f.FolderId)
-					.IsRequired()
+					.IsRequired(),
+				fs =>
+				{
+					fs.HasOne(f => f.AddedBy)
+						.WithMany()
+						.HasForeignKey(f => f.AddedById);
+					fs.Property(f => f.Added)
+						.HasDefaultValueSql(PgConstants.CurrentTimestamp);
+				}
 			);
 	}
 }
