@@ -40,8 +40,8 @@ public static class ModeratorActionTemplates
 		=> $"Comment thread for **{type}** (id: {id}) with the ID **{threadId}** was unlocked by **{modName}**";
 
 	// Forum thread delete templates
-	public static string ForumThreadDeleted(string clubName, long id, long threadId, string modName)
-		=> $"Forum thread in club **{clubName}** (id: {id}) with the ID **{threadId}** was deleted by **{modName}**";
+	public static string ForumThreadDeleted(string title, long threadId, string modName)
+		=> $"Forum thread in club **{title}** with the ID **{threadId}** was deleted by **{modName}**";
 
 	// Ban templates
 	public static string UserBan(string bannedName, string modName, string reason)
