@@ -17,9 +17,11 @@ public static class PostgresEnumHelper
 	private static MethodInfo? _mapMethod;
 	private static MethodInfo? _registerMethod;
 
-	public static INpgsqlTypeMapper MapPostgresEnums(this INpgsqlTypeMapper mapper, Assembly assembly,
-		INpgsqlNameTranslator? translator = null)
-	{
+	public static INpgsqlTypeMapper MapPostgresEnums(
+		this INpgsqlTypeMapper mapper, 
+		Assembly assembly,
+		INpgsqlNameTranslator? translator = null
+	) {
 		var enums = GetEnums(assembly);
 		if (enums is { Count: <= 0 }) return mapper;
 
@@ -29,7 +31,7 @@ public static class PostgresEnumHelper
 
 		if (_mapMethod is null)
 		{
-			Log.Warning("No {Method Name} method found", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
+			Log.Warning("No {Method Name} method found", nameof(mapper.MapEnum));
 			return mapper;
 		}
 
@@ -47,8 +49,12 @@ public static class PostgresEnumHelper
 		return mapper;
 	}
 
-	public static void RegisterPostgresEnums(this ModelBuilder builder, Assembly assembly, string? schema = null,
-		INpgsqlNameTranslator? translator = null)
+	public static void RegisterPostgresEnums(
+		this ModelBuilder builder,
+		Assembly assembly,
+		string? schema = null,
+		INpgsqlNameTranslator? translator = null
+	)
 	{
 		var enums = GetEnums(assembly);
 		if (enums is { Count: <= 0 }) return;
@@ -75,7 +81,6 @@ public static class PostgresEnumHelper
 			_registerMethod
 				?.MakeGenericMethod(type)
 				.Invoke(null, new object?[] { builder, schema, name, translator });
-
 		}
 	}
 
@@ -84,6 +89,7 @@ public static class PostgresEnumHelper
 		if (_enums is { Count: > 0 }) return _enums;
 
 		Log.Warning($"{nameof(PostgresEnumHelper)} cache miss");
+		
 		_enums = assembly.GetTypes()
 			.Where(t => t.IsEnum)
 			.Where(t => t.IsDefined(typeof(PostgresEnumAttribute), false))

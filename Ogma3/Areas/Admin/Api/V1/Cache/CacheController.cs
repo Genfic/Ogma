@@ -22,7 +22,7 @@ public class CacheController : ControllerBase
 	}
 
 	[HttpGet]
-	public IActionResult GetCache()
+	public ActionResult<int> GetCache()
 	{
 		if (_cache is MemoryCache mc)
 		{
@@ -34,7 +34,7 @@ public class CacheController : ControllerBase
 
 	[HttpDelete]
 	[IgnoreAntiforgeryToken]
-	public IActionResult DeleteCache()
+	public ActionResult<string> DeleteCache()
 	{
 		_logger.LogWarning("Purging all caches...");
 

@@ -30,14 +30,14 @@ public static class GetInfractionDetails
 				.Select(i => new Result
 				{
 					Id = i.Id,
-					UserName = i.User.UserName,
+					UserName = i.User.UserName ?? "",
 					UserId = i.UserId,
 					IssueDate = i.IssueDate,
 					ActiveUntil = i.ActiveUntil,
 					RemovedAt = i.RemovedAt,
 					Reason = i.Reason,
 					Type = i.Type,
-					IssuedByName = i.IssuedBy.UserName,
+					IssuedByName = i.IssuedBy.UserName ?? "",
 					RemovedByName = i.RemovedBy == null ? null : i.RemovedBy.UserName
 				})
 				.FirstOrDefaultAsync(cancellationToken);

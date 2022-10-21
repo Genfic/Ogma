@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -65,16 +66,7 @@ public class DbSeedInitializer : IAsyncInitializer
 			new OgmaRole { Name = RoleNames.Supporter, IsStaff = false, Color = "#ffdd11", Order = byte.MaxValue - 20 }.Normalize(),
 		};
 
-		await _context.Roles.UpsertRange(roles)
-			.On(r => r.NormalizedName)
-			.WhenMatched((o, n) => new OgmaRole
-			{
-				Name = n.Name,
-				IsStaff = n.IsStaff,
-				Color = n.Color,
-				Order = n.Order
-			})
-			.RunAsync();
+		await BulkUpsert(_context.Roles, roles, r => r.NormalizedName);
 	}
 
 	private async Task SeedUserRoles()
@@ -91,18 +83,14 @@ public class DbSeedInitializer : IAsyncInitializer
 
 	private async Task SeedRatings()
 	{
-		await _context.Ratings.UpsertRange(Data.Ratings)
-			.On(i => i.Name)
-			.NoUpdate()
-			.RunAsync();
+		await BulkUpsert(_context.Ratings, Data.Ratings, r => r.Name);
 	}
 
 	private async Task SeedIcons()
 	{
-		await _context.Icons.UpsertRange(Data.Icons.Select(s => new Icon { Name = s }))
-			.On(i => i.Name)
-			.NoUpdate()
-			.RunAsync();
+		var icons = Data.Icons.Select(s => new Icon { Name = s });
+
+		await BulkUpsert(_context.Icons, icons, i => i.Name);
 	}
 
 	private async Task SeedQuotes()
@@ -121,6 +109,19 @@ public class DbSeedInitializer : IAsyncInitializer
 		if (quotes is null) return;
 
 		_context.Quotes.AddRange(quotes);
+
+		await _context.SaveChangesAsync();
+	}
+
+	private async Task BulkUpsert<TEntity, TKey>(DbSet<TEntity> source, IEnumerable<TEntity> entries, Func<TEntity, TKey> extractor) where TEntity : class
+	{
+		var existing = await source
+			.Select(x => extractor(x))
+			.ToListAsync();
+
+		var toAdd = entries.ExceptBy(existing, extractor);
+		
+		source.AddRange(toAdd);
 
 		await _context.SaveChangesAsync();
 	}

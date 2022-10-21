@@ -3,3 +3,42 @@ M:System.Threading.Tasks.Task.Wait;await it
 M:System.Threading.Tasks.Task.GetAwaiter;await it
 M:System.Runtime.CompilerServices.TaskAwaiter.GetResult;await it
 M:System.Threading.Tasks.Task.WaitAll`1;use await Task.WhenAll()
+
+M:Microsoft.EntityFrameworkCore.DbContext.FindAsync``1(System.Object[],System.Threading.CancellationToken)
+M:Microsoft.EntityFrameworkCore.DbContext.Set``1
+M:Microsoft.EntityFrameworkCore.DbContext.Set``1(System.String)
+M:Microsoft.EntityFrameworkCore.DbContext.SaveChanges
+M:Microsoft.EntityFrameworkCore.DbContext.SaveChanges(System.Boolean)
+M:Microsoft.EntityFrameworkCore.DbContext.add_SavingChanges(System.EventHandler{Microsoft.EntityFrameworkCore.SavingChangesEventArgs})
+M:Microsoft.EntityFrameworkCore.DbContext.remove_SavingChanges(System.EventHandler{Microsoft.EntityFrameworkCore.SavingChangesEventArgs})
+M:Microsoft.EntityFrameworkCore.DbContext.add_SavedChanges(System.EventHandler{Microsoft.EntityFrameworkCore.SavedChangesEventArgs})
+M:Microsoft.EntityFrameworkCore.DbContext.remove_SavedChanges(System.EventHandler{Microsoft.EntityFrameworkCore.SavedChangesEventArgs})
+M:Microsoft.EntityFrameworkCore.DbContext.add_SaveChangesFailed(System.EventHandler{Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs})
+M:Microsoft.EntityFrameworkCore.DbContext.remove_SaveChangesFailed(System.EventHandler{Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs})
+M:Microsoft.EntityFrameworkCore.DbContext.Entry``1(``0)
+M:Microsoft.EntityFrameworkCore.DbContext.Entry(System.Object)
+M:Microsoft.EntityFrameworkCore.DbContext.Add``1(``0)
+M:Microsoft.EntityFrameworkCore.DbContext.AddAsync``1(``0,System.Threading.CancellationToken)
+M:Microsoft.EntityFrameworkCore.DbContext.Attach``1(``0)
+M:Microsoft.EntityFrameworkCore.DbContext.Update``1(``0)
+M:Microsoft.EntityFrameworkCore.DbContext.Add(System.Object)
+M:Microsoft.EntityFrameworkCore.DbContext.AddAsync(System.Object,System.Threading.CancellationToken)
+M:Microsoft.EntityFrameworkCore.DbContext.Attach(System.Object)
+M:Microsoft.EntityFrameworkCore.DbContext.Update(System.Object)
+M:Microsoft.EntityFrameworkCore.DbContext.AddRange(System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.AddRangeAsync(System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.AttachRange(System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.UpdateRange(System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.RemoveRange(System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.AddRange(System.Collections.Generic.IEnumerable{System.Object})
+M:Microsoft.EntityFrameworkCore.DbContext.AddRangeAsync(System.Collections.Generic.IEnumerable{System.Object},System.Threading.CancellationToken)
+M:Microsoft.EntityFrameworkCore.DbContext.AttachRange(System.Collections.Generic.IEnumerable{System.Object})
+M:Microsoft.EntityFrameworkCore.DbContext.UpdateRange(System.Collections.Generic.IEnumerable{System.Object})
+M:Microsoft.EntityFrameworkCore.DbContext.RemoveRange(System.Collections.Generic.IEnumerable{System.Object})
+M:Microsoft.EntityFrameworkCore.DbContext.Find(System.Type,System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.FindAsync(System.Type,System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.FindAsync(System.Type,System.Object[],System.Threading.CancellationToken)
+M:Microsoft.EntityFrameworkCore.DbContext.Find``1(System.Object[])
+M:Microsoft.EntityFrameworkCore.DbContext.FindAsync``1(System.Object[])
+
+T:System.Convert;Don't use Convert.

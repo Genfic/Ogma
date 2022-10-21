@@ -32,7 +32,7 @@ public class OgmaRole : IdentityRole<long>
 
 	public OgmaRole Normalize()
 	{
-		NormalizedName = Name.ToUpperInvariant().Normalize();
+		NormalizedName = Name?.ToUpperInvariant().Normalize();
 		return this;
 	}
 }

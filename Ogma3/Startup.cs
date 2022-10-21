@@ -215,19 +215,20 @@ public class Startup
 				options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 				options.Filters.Add<ValidationExceptionFilter>();
 			})
-			.AddFluentValidation(options =>
-			{
-				options.RegisterValidatorsFromAssemblyContaining<Startup>();
-				options.ConfigureClientsideValidation(clientside =>
-				{
-					clientside.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
-						new FileSizeClientValidator(rule, component);
-				});
-			})
 			.AddJsonOptions(options =>
 			{
 				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+			});
+
+		// Fluent Validation
+		services
+			.AddFluentValidationAutoValidation()
+			.AddValidatorsFromAssemblyContaining<Startup>()
+			.AddFluentValidationClientsideAdapters(cfg =>
+			{
+				cfg.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
+					new FileSizeClientValidator(rule, component);
 			});
 
 		// MediatR

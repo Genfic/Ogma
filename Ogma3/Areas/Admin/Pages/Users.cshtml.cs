@@ -35,12 +35,12 @@ public class Users : PageModel
 		OgmaUser = await query.Select(u => new UserDetailsDto
 			{
 				Id = u.Id,
-				Name = u.UserName,
-				Email = u.Email,
+				Name = u.UserName ?? "",
+				Email = u.Email ?? "",
 				Title = u.Title,
 				Avatar = u.Avatar,
 				Bio = u.Bio,
-				RoleNames = u.Roles.Select(r => r.Name),
+				RoleNames = u.Roles.Select(r => r.Name ?? ""),
 				RegistrationDate = u.RegistrationDate,
 				LastActive = u.LastActive,
 				StoriesCount = u.Stories.Count,
@@ -55,7 +55,7 @@ public class Users : PageModel
 						Type = i.Type,
 						ActiveUntil = i.ActiveUntil,
 						IssueDate = i.IssueDate,
-						IssuedBy = i.IssuedBy.UserName,
+						IssuedBy = i.IssuedBy.UserName ?? "",
 						RemovedAt = i.RemovedAt,
 						RemovedBy = i.RemovedBy != null ? i.RemovedBy.UserName : null
 					})
