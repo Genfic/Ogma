@@ -1,20 +1,19 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.MediatR.Bases;
-using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands;
 
 public static class UpdateQuote
 {
-	public sealed record Command(long Id, string Body, string Author) : IRequest<ActionResult<Quote>>;
+	public sealed record Command(long Id, string Body, string Author) : IRequest<ActionResult<bool>>;
 
-	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
+	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
 		private readonly ApplicationDbContext _context;
 
@@ -23,27 +22,18 @@ public static class UpdateQuote
 			_context = context;
 		}
 
-		public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
+		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (id, body, author) = request;
-			var quote = new Quote
-			{
-				Id = id,
-				Body = body,
-				Author = author
-			};
-			_context.Entry(quote).State = EntityState.Modified;
-			try
-			{
-				await _context.SaveChangesAsync(cancellationToken);
-			}
-			catch (DbUpdateException ex)
-			{
-				Log.Error("Update error in {Src}: {Msg}", ex.Source, ex.Message);
-				return ServerError("Database Update Error");
-			}
 
-			return Ok(quote);
+			var count = await _context.Quotes
+				.Where(q => q.Id == id)
+				.ExecuteUpdateAsync(q => q
+					.SetProperty(x => x.Body, body)
+					.SetProperty(x => x.Author, author), 
+				cancellationToken: cancellationToken);
+
+			return Ok(count > 0);
 		}
 	}
 }

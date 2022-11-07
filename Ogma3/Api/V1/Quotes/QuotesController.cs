@@ -47,7 +47,7 @@ public class QuotesController : ControllerBase
 	[HttpPut]
 	[Authorize(Roles = RoleNames.Admin)]
 	[IgnoreAntiforgeryToken]
-	public async Task<ActionResult<Quote>> PutQuote(UpdateQuote.Command q)
+	public async Task<ActionResult<bool>> PutQuote(UpdateQuote.Command q)
 		=> await _mediator.Send(q);
 
 	// POST: api/Quotes/json

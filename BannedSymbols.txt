@@ -41,4 +41,6 @@ M:Microsoft.EntityFrameworkCore.DbContext.FindAsync(System.Type,System.Object[],
 M:Microsoft.EntityFrameworkCore.DbContext.Find``1(System.Object[])
 M:Microsoft.EntityFrameworkCore.DbContext.FindAsync``1(System.Object[])
 
-T:System.Convert;Don't use Convert.
+M:System.Convert.ToInt16;Use short.TryParse()
+M:System.Convert.ToInt32;Use int.TryParse()
+M:System.Convert.ToInt64;Use long.TryParse()

@@ -65,7 +65,7 @@ public static class CreateShelf
 				OwnerId = (long)_uid,
 			};
 
-			_context.Add(shelf);
+			_context.Shelves.Add(shelf);
 			await _context.SaveChangesAsync(cancellationToken);
 
 			return CreatedAtAction(

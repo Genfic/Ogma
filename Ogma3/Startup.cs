@@ -57,7 +57,7 @@ public class Startup
 			.AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
 			.AddEnvironmentVariables()
 			// WARN: It probably should not be used in prod, switch to DI instead
-			.AddUserSecrets(Assembly.GetAssembly(GetType()))
+			.AddUserSecrets(Assembly.GetAssembly(GetType()) ?? throw new NullReferenceException("The assembly was, somehow, null"))
 			.Build();
 		// Configuration = configuration;
 	}
