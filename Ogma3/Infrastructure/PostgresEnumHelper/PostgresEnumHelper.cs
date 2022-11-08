@@ -31,7 +31,7 @@ public static class PostgresEnumHelper
 
 		if (_mapMethod is null)
 		{
-			Log.Warning("No {Method Name} method found", nameof(mapper.MapEnum));
+			Log.Warning("No {MethodName} method found", nameof(mapper.MapEnum));
 			return mapper;
 		}
 
@@ -68,7 +68,7 @@ public static class PostgresEnumHelper
 
 		if (_registerMethod is null)
 		{
-			Log.Warning("   No {Method Name} method found", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
+			Log.Warning("   No {MethodName} method found", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
 			return;
 		}
 

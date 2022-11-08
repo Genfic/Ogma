@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<UserSecretsId>aspnet-Ogma3-F6D42650-6752-41E8-81E2-FCAB6D0941CB</UserSecretsId>
-		<LangVersion>preview</LangVersion>
+		<LangVersion>11</LangVersion>
 		<PackageId>Ogma3</PackageId>
 		<Authors>Ogma3</Authors>
 		<Company>Ogma3</Company>
