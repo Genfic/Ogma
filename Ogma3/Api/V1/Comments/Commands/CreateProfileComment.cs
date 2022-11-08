@@ -12,7 +12,6 @@ using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.MediatR.Bases;
-using Ogma3.Services;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 
@@ -36,16 +35,17 @@ public static class CreateProfileComment
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper _mapper;
-		private readonly CommentRedirector _redirector;
 		private readonly NotificationsRepository _notificationsRepo;
 		private readonly long? _uid;
 
-		public Handler(ApplicationDbContext context, IMapper mapper, CommentRedirector redirector,
-			NotificationsRepository notificationsRepo, IUserService userService)
-		{
+		public Handler(
+			ApplicationDbContext context,
+			IMapper mapper,
+			NotificationsRepository notificationsRepo,
+			IUserService userService
+		) {
 			_context = context;
 			_mapper = mapper;
-			_redirector = redirector;
 			_notificationsRepo = notificationsRepo;
 			_uid = userService?.User?.GetNumericId();
 		}
@@ -90,25 +90,7 @@ public static class CreateProfileComment
 
 			if (thread.UserId != _uid)
 			{
-				// Create notification
-				var subscribers = await _context.CommentsThreadSubscribers
-					.Where(cts => cts.CommentsThreadId == thread.Id)
-					.Select(cts => cts.OgmaUserId)
-					.ToListAsync(cancellationToken);
-
-				var redirection = await _redirector.RedirectToComment(comment.Id);
-				if (redirection is not null)
-				{
-					await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
-						subscribers,
-						redirection.Url,
-						redirection.Params,
-						redirection.Fragment,
-						comment.Body.Truncate(50)
-					);
-				}
-
-				await _context.SaveChangesAsync(cancellationToken);
+				await _notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken);
 			}
 
 			return CreatedAtAction(

@@ -35,33 +35,33 @@ public static class UnbanUser
 
 			var (userId, clubId) = request;
 
-			// Find users
-			var users = await _context.ClubMembers
+			var issuer = await _context.ClubMembers
 				.Where(c => c.ClubId == clubId)
-				.Where(c => c.MemberId == _uid || c.MemberId == userId)
-				.Select(cm => new
-				{
-					cm.Member.Id,
-					cm.Member.UserName,
-					cm.Role
-				})
-				.ToListAsync(cancellationToken);
+				.Where(cm => cm.MemberId == _uid)
+				.Select(cm => new Issuer(cm.Role, cm.Member.UserName))
+				.FirstOrDefaultAsync(cancellationToken);
 
-			var issuer = users.FirstOrDefault(u => u.Id == _uid);
 			if (issuer is null) return Unauthorized();
 
-			var user = users.FirstOrDefault(u => u.Id == userId);
+			// Find users
+			var user = await _context.ClubMembers
+				.Where(c => c.ClubId == clubId)
+				.Where(c => c.MemberId == userId)
+				.Select(c => new BannedUser(c.Member.UserName, c.Role))
+				.FirstOrDefaultAsync(cancellationToken);
+
 			if (user is null) return NotFound();
 
 			// Check privileges
 			if (issuer.Role == EClubMemberRoles.User) return Unauthorized("Insufficient privileges");
-			if (issuer.Role > user.Role) return Unauthorized("Can't unban someone with a higher role");
+			if (issuer.Role > user.Role) return Unauthorized("Can't ban someone with a higher role");
 
-			// Everything is fine, time to ban
-			var result = await _context
-				.DeleteRangeAsync<ClubBan>(cb => cb.ClubId == clubId && cb.UserId == userId, cancellationToken: cancellationToken);
+			// Everything is fine, time to unban
+			var result = await _context.ClubBans
+				.Where(cb => cb.ClubId == clubId && cb.UserId == userId)
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (result <= 0) return ServerError("Something went wrong with the ban");
+			if (result <= 0) return ServerError("Something went wrong with the unban");
 
 			// Log it
 			_context.ClubModeratorActions.Add(new ClubModeratorAction
@@ -74,5 +74,9 @@ public static class UnbanUser
 
 			return Ok(true);
 		}
+
+		private record BannedUser(string UserName, EClubMemberRoles Role);
+
+		private record Issuer(EClubMemberRoles Role, string UserName);
 	}
 }

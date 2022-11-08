@@ -4,10 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Services;
 
 namespace Ogma3.Data.Notifications;
 
@@ -15,14 +18,20 @@ public class NotificationsRepository
 {
 	private readonly ApplicationDbContext _context;
 	private readonly IUrlHelper _urlHelper;
+	private readonly CommentRedirector _redirector;
 
-	public NotificationsRepository(ApplicationDbContext context, IUrlHelperFactory urlHelperFactory,
-		IActionContextAccessor actionContextAccessor)
-	{
-		if (actionContextAccessor is not { ActionContext: { } } aca)
+	public NotificationsRepository(
+		ApplicationDbContext context, 
+		IUrlHelperFactory urlHelperFactory,
+		IActionContextAccessor actionContextAccessor, 
+		CommentRedirector redirector
+	) {
+		if (actionContextAccessor is not { ActionContext: { } })
 			throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
+		
 		_context = context;
-		_urlHelper = urlHelperFactory.GetUrlHelper(aca.ActionContext);
+		_redirector = redirector;
+		_urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
 	}
 
 	public async Task Create(ENotificationEvent @event, IEnumerable<long> recipientIds, string page, object routeData,
@@ -42,5 +51,27 @@ public class NotificationsRepository
 		_context.NotificationRecipients.AddRange(notificationRecipients);
 
 		await _context.SaveChangesAsync();
+	}
+
+	public async Task NotifyUsers(long threadId, long commentId, string body, CancellationToken cancellationToken)
+	{
+		var subscribers = await _context.CommentsThreadSubscribers
+			.Where(cts => cts.CommentsThreadId == threadId)
+			.Select(cts => cts.OgmaUserId)
+			.ToListAsync(cancellationToken);
+
+		var redirection = await _redirector.RedirectToComment(commentId);
+		if (redirection is not null)
+		{
+			await Create(ENotificationEvent.WatchedThreadNewComment,
+				subscribers,
+				redirection.Url,
+				redirection.Params,
+				redirection.Fragment,
+				body
+			);
+		}
+
+		await _context.SaveChangesAsync(cancellationToken);
 	}
 }

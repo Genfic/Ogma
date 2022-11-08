@@ -41,22 +41,21 @@ public static class BanUser
 
 			var (userId, clubId, reason) = request;
 
-			// Find users
-			var users = await _context.ClubMembers
+			var issuer = await _context.ClubMembers
 				.Where(c => c.ClubId == clubId)
-				.Where(c => c.MemberId == _uid || c.MemberId == userId)
-				.Select(cm => new
-				{
-					cm.Member.Id,
-					cm.Member.UserName,
-					cm.Role
-				})
-				.ToListAsync(cancellationToken);
+				.Where(cm => cm.MemberId == _uid)
+				.Select(cm => new Issuer(cm.Role, cm.Member.UserName))
+				.FirstOrDefaultAsync(cancellationToken);
 
-			var issuer = users.FirstOrDefault(u => u.Id == _uid);
 			if (issuer is null) return Unauthorized();
 
-			var user = users.FirstOrDefault(u => u.Id == userId);
+			// Find users
+			var user = await _context.ClubMembers
+				.Where(c => c.ClubId == clubId)
+				.Where(c => c.MemberId == userId)
+				.Select(c => new BannedUser(c.Member.UserName, c.Role))
+				.FirstOrDefaultAsync(cancellationToken);
+
 			if (user is null) return NotFound();
 
 			// Check privileges
@@ -76,8 +75,9 @@ public static class BanUser
 			if (result <= 0) return ServerError("Something went wrong with the ban");
 
 			// Remove the user from club
-			await _context.DeleteRangeAsync<ClubMember>(cm => cm.ClubId == clubId && cm.MemberId == userId,
-				cancellationToken: cancellationToken);
+			await _context.ClubMembers
+				.Where(cm => cm.ClubId == clubId && cm.MemberId == userId)
+				.ExecuteDeleteAsync(cancellationToken);
 
 			// Log it
 			_context.ClubModeratorActions.Add(new ClubModeratorAction
@@ -90,5 +90,9 @@ public static class BanUser
 
 			return Ok(true);
 		}
+
+		private record BannedUser(string UserName, EClubMemberRoles Role);
+
+		private record Issuer(EClubMemberRoles Role, string UserName);
 	}
 }

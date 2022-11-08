@@ -50,10 +50,10 @@ public static class UpdateComment
 
 			var comm = await _context.Comments
 				.Where(c => c.Id == commentId)
+				.Where(c => c.AuthorId == _uid)
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (comm is null) return NotFound();
-			if (_uid != comm.AuthorId) return Unauthorized();
 
 			// Create revision
 			_context.CommentRevisions.Add(new CommentRevision

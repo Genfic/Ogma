@@ -37,9 +37,7 @@ public static class GetComment
 				.AsNoTracking()
 				.FirstOrDefaultAsync(cancellationToken);
 
-			comment.Body = comment.Body is null
-				? string.Empty
-				: Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
+			comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
 
 			return comment;
 		}

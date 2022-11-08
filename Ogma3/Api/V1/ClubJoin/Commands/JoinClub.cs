@@ -31,17 +31,15 @@ public static class JoinClub
 		{
 			if (_uid is not { } uid) return Unauthorized();
 
-			var isMember = await _context.ClubMembers
-				.Where(cm => cm.MemberId == uid)
-				.Where(cm => cm.ClubId == request.ClubId)
-				.AnyAsync(cancellationToken);
-
+			var (isMember, isBanned) = await _context.Clubs
+				.Where(c => c.Id == request.ClubId)
+				.Select(c => new MemberOrBanned(
+					c.ClubMembers.Any(cm => cm.MemberId == uid),
+					c.BannedUsers.Any(u => u.Id == uid)
+				))
+				.FirstOrDefaultAsync(cancellationToken);
+			
 			if (isMember) return Ok(true);
-
-			var isBanned = await _context.ClubBans
-				.Where(cb => cb.ClubId == request.ClubId)
-				.Where(cb => cb.UserId == uid)
-				.AnyAsync(cancellationToken);
 
 			if (isBanned) return Unauthorized("You're banned from this club");
 
@@ -56,5 +54,7 @@ public static class JoinClub
 
 			return Ok(true);
 		}
+
+		private record MemberOrBanned(bool IsMember, bool IsBanned);
 	}
 }

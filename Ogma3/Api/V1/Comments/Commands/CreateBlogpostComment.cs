@@ -83,25 +83,7 @@ public static class CreateBlogpostComment
 
 			if (thread.UserId != _uid)
 			{
-				// Create notification
-				var subscribers = await _context.CommentsThreadSubscribers
-					.Where(cts => cts.CommentsThreadId == thread.Id)
-					.Select(cts => cts.OgmaUserId)
-					.ToListAsync(cancellationToken);
-
-				var redirection = await _redirector.RedirectToComment(comment.Id);
-				if (redirection is not null)
-				{
-					await _notificationsRepo.Create(ENotificationEvent.WatchedThreadNewComment,
-						subscribers,
-						redirection.Url,
-						redirection.Params,
-						redirection.Fragment,
-						comment.Body.Truncate(50)
-					);
-				}
-
-				await _context.SaveChangesAsync(cancellationToken);
+				await _notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken);
 			}
 
 			return CreatedAtAction(
