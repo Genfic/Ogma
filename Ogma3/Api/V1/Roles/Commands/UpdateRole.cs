@@ -29,6 +29,8 @@ public static class UpdateRole
 
 			var role = await _roleManager.FindByIdAsync(id.ToString());
 
+			if (role is null) return NotFound();
+
 			role.Name = name;
 			role.IsStaff = isStaff;
 			role.Color = color;

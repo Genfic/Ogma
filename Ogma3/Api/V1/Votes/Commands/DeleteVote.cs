@@ -30,15 +30,12 @@ public static class DeleteVote
 		{
 			if (_uid is null) return Unauthorized();
 
-			var vote = await _context.Votes
+			var res = await _context.Votes
 				.Where(v => v.StoryId == request.StoryId)
 				.Where(v => v.UserId == _uid)
-				.FirstOrDefaultAsync(cancellationToken);
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (vote is null) return Ok(new Result(false));
-
-			_context.Votes.Remove(vote);
-			await _context.SaveChangesAsync(cancellationToken);
+			if (res <= 0) return NotFound();
 
 			var count = await _context.Votes
 				.Where(v => v.StoryId == request.StoryId)

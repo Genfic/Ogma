@@ -27,22 +27,22 @@ public static class DeleteRating
 
 		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var r = await _context.Ratings
+			var rating = await _context.Ratings
 				.Where(r => r.Id == request.RatingId)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			if (r is null) return NotFound();
+			if (rating is null) return NotFound();
 
-			_context.Ratings.Remove(r);
+			_context.Ratings.Remove(rating);
 
-			if (r.Icon is not null && r.IconId is not null)
+			if (rating is { Icon: {}, IconId: {} })
 			{
-				await _uploader.Delete(r.Icon, r.IconId, cancellationToken);
+				await _uploader.Delete(rating.Icon, rating.IconId, cancellationToken);
 			}
 
 			await _context.SaveChangesAsync(cancellationToken);
 
-			return Ok(r.Id);
+			return Ok(rating.Id);
 		}
 	}
 }

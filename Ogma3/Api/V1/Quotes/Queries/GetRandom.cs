@@ -1,7 +1,6 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,33 +17,34 @@ public static class GetRandom
 	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<QuoteDto>>
 	{
 		private readonly ApplicationDbContext _context;
-		private readonly IMapper _mapper;
 
-		public Handler(ApplicationDbContext context, IMapper mapper)
+		public Handler(ApplicationDbContext context)
 		{
 			_context = context;
-			_mapper = mapper;
 		}
 
+		// TODO: Dapper..?
 		public async Task<ActionResult<QuoteDto>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var quote = await _context.Quotes
-				.FromSqlRaw(@"
-                        SELECT *
-                        FROM ""Quotes""
-                        OFFSET floor(random() * (
-                            SELECT count(*)
-                            FROM ""Quotes""
-                        ))
-                        LIMIT 1
-                    ")
+				.FromSqlRaw("""
+						SELECT *
+						FROM "Quotes"
+						OFFSET floor(random() * (
+						    SELECT count(*)
+						    FROM "Quotes"
+						))
+						LIMIT 1
+					""")
 				.AsNoTracking()
-				.ProjectTo<QuoteDto>(_mapper.ConfigurationProvider)
+				.Select(q => new QuoteDto
+				{
+					Author = q.Author,
+					Body = q.Body
+				})
 				.FirstOrDefaultAsync(cancellationToken);
 
-			return quote is null
-				? NotFound()
-				: Ok(quote);
+			return quote is null ? NotFound() : Ok(quote);
 		}
 	}
 }

@@ -34,19 +34,19 @@ public static class UpdateFaq
 		{
 			var (id, question, answer) = request;
 
-			var faq = await _context.Faqs
+			var rendered = Markdown.ToHtml(answer, MarkdownPipelines.All);
+
+			var res = await _context.Faqs
 				.Where(f => f.Id == id)
-				.FirstOrDefaultAsync(cancellationToken);
-
-			if (faq is null) return NotFound();
-
-			faq.Question = question;
-			faq.Answer = answer;
-			faq.AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All);
+				.ExecuteUpdateAsync(f => f
+						.SetProperty(x => x.Question, question)
+						.SetProperty(x => x.Answer, answer)
+						.SetProperty(x => x.AnswerRendered, rendered),
+					cancellationToken);
 
 			await _context.SaveChangesAsync(cancellationToken);
 
-			return Ok();
+			return res > 0 ? Ok() : NotFound();
 		}
 	}
 }

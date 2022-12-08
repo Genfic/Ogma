@@ -20,16 +20,11 @@ public static class DeleteInviteCode
 
 		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var code = await _context.InviteCodes
+			var res = await _context.InviteCodes
 				.Where(ic => ic.Id == request.CodeId)
-				.FirstOrDefaultAsync(cancellationToken);
-
-			if (code is null) return NotFound();
-
-			_context.InviteCodes.Remove(code);
-
-			await _context.SaveChangesAsync(cancellationToken);
-			return Ok(code.Id);
+				.ExecuteDeleteAsync(cancellationToken);
+			
+			return res > 0 ? Ok(request.CodeId) : NotFound();
 		}
 	}
 }

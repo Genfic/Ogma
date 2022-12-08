@@ -26,14 +26,15 @@ public static class UpdateQuote
 		{
 			var (id, body, author) = request;
 
-			var count = await _context.Quotes
+			var res = await _context.Quotes
 				.Where(q => q.Id == id)
 				.ExecuteUpdateAsync(q => q
 					.SetProperty(x => x.Body, body)
 					.SetProperty(x => x.Author, author), 
-				cancellationToken: cancellationToken);
+				cancellationToken);
 
-			return Ok(count > 0);
+			return res > 0 ? Ok() : NotFound();
 		}
+		
 	}
 }

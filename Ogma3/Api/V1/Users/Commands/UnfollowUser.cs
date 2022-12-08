@@ -35,16 +35,12 @@ public static class UnfollowUser
 				.Select(u => u.Id)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			var follow = await _context.FollowedUsers
-				.Where(bu => bu.FollowingUserId == _uid && bu.FollowedUserId == targetUserId)
-				.FirstOrDefaultAsync(cancellationToken);
+			var res = await _context.FollowedUsers
+				.Where(bu => bu.FollowingUserId == _uid)
+				.Where(bu => bu.FollowedUserId == targetUserId)
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (follow is null) return Ok(false);
-
-			_context.FollowedUsers.Remove(follow);
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return Ok(false);
+			return res > 0 ? Ok(false) : NotFound();
 		}
 	}
 }

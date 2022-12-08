@@ -17,7 +17,7 @@ public class UserActivityController : ControllerBase
 	// POST
 	[HttpHead]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<OkResult> UpdateLastActiveAsync()
+	public async Task<ActionResult<int>> UpdateLastActiveAsync()
 		=> await _mediator.Send(new UpdateLastActive.Command());
 
 	// Don't delete or this whole controller will break

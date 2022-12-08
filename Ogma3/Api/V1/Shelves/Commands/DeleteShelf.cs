@@ -30,18 +30,13 @@ public static class DeleteShelf
 		{
 			if (_uid is null) return Unauthorized();
 
-			var shelf = await _context.Shelves
+			var res = await _context.Shelves
 				.Where(s => s.Id == request.ShelfId)
 				.Where(s => s.OwnerId == _uid)
-				.FirstOrDefaultAsync(cancellationToken);
+				.Where(s => s.OwnerId == _uid)
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (shelf is null) return NotFound();
-			if (shelf.OwnerId != _uid) return Unauthorized();
-
-			_context.Shelves.Remove(shelf);
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return Ok(shelf.Id);
+			return res > 0 ? Ok(request.ShelfId) : NotFound();
 		}
 	}
 }

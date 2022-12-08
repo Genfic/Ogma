@@ -30,18 +30,12 @@ public static class DeleteNotification
 		{
 			if (_uid is null) return Unauthorized();
 
-			var notificationRecipient = await _context.NotificationRecipients
+			var res = await _context.NotificationRecipients
 				.Where(nr => nr.RecipientId == (long)_uid)
 				.Where(nr => nr.NotificationId == request.NotificationId)
-				.FirstOrDefaultAsync(cancellationToken);
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (notificationRecipient is null) return NotFound();
-
-			_context.NotificationRecipients.Remove(notificationRecipient);
-
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return Ok();
+			return res > 0 ? Ok() : NotFound();
 		}
 	}
 }

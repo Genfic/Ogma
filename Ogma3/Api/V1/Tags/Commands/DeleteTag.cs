@@ -21,16 +21,11 @@ public static class DeleteTag
 
 		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var tag = await _context.Tags
+			var res = await _context.Tags
 				.Where(t => t.Id == request.Id)
-				.FirstOrDefaultAsync(cancellationToken);
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (tag is null) return NotFound();
-
-			_context.Tags.Remove(tag);
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return Ok(tag.Id);
+			return res > 0 ? Ok(request.Id) : NotFound();
 		}
 	}
 }

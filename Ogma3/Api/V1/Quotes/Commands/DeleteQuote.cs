@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -6,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.MediatR.Bases;
-using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands;
 
@@ -25,23 +25,11 @@ public static class DeleteQuote
 
 		public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var quote = await _context.Quotes
-				.FirstOrDefaultAsync(q => q.Id == request.Id, cancellationToken);
+			var res = await _context.Quotes
+				.Where(q => q.Id == request.Id)
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (quote is null) return NotFound();
-
-			_context.Remove(quote);
-			try
-			{
-				await _context.SaveChangesAsync(cancellationToken);
-			}
-			catch (DbUpdateException ex)
-			{
-				Log.Error("Delete error in {Src}: {Msg}", ex.Source, ex.Message);
-				return ServerError("Database Delete Error");
-			}
-
-			return Ok(quote);
+			return res > 0 ? Ok(request.Id) : NotFound();
 		}
 	}
 }

@@ -35,16 +35,12 @@ public static class UnblockUser
 				.Select(u => u.Id)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			var block = await _context.BlacklistedUsers
-				.Where(bu => bu.BlockingUserId == _uid && bu.BlockedUserId == targetUserId)
-				.FirstOrDefaultAsync(cancellationToken);
+			var res = await _context.BlacklistedUsers
+				.Where(bu => bu.BlockingUserId == _uid)
+				.Where(bu => bu.BlockedUserId == targetUserId)
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (block is null) return Ok(false);
-
-			_context.BlacklistedUsers.Remove(block);
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return Ok(false);
+			return res > 0 ? Ok(false) : NotFound();
 		}
 	}
 }

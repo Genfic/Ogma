@@ -32,17 +32,13 @@ public static class RemoveBookFromShelf
 
 			var (shelfId, storyId) = request;
 
-			var shelfStory = await _context.ShelfStories
+			var res = await _context.ShelfStories
 				.Where(ss => ss.ShelfId == shelfId)
 				.Where(ss => ss.StoryId == storyId)
-				.FirstOrDefaultAsync(cancellationToken);
-
-			if (shelfStory is null) return NotFound();
-
-			_context.ShelfStories.Remove(shelfStory);
+				.ExecuteDeleteAsync(cancellationToken);
 
 			await _context.SaveChangesAsync(cancellationToken);
-			return Ok(new Result(shelfId, storyId));
+			return res > 0 ? Ok(new Result(shelfId, storyId)) : NotFound();
 		}
 	}
 

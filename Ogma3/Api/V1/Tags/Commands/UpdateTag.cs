@@ -47,19 +47,17 @@ public static class UpdateTag
 
 			if (duplicateExists) return Conflict($"Tag {name} already exists in the {ns} namespace.");
 
-			var tag = await _context.Tags
+			var res = await _context.Tags
 				.Where(t => t.Id == id)
-				.FirstOrDefaultAsync(cancellationToken);
-
-			if (tag is null) return NotFound();
-
-			tag.Name = name ?? tag.Name;
-			tag.Description = description;
-			tag.Namespace = ns;
+				.ExecuteUpdateAsync(tag => tag
+						.SetProperty(t => t.Name, t => name ?? t.Name)
+						.SetProperty(t => t.Description, description)
+						.SetProperty(t => t.Namespace, ns),
+					cancellationToken);
 
 			await _context.SaveChangesAsync(cancellationToken);
 
-			return Ok(tag);
+			return res > 0 ? Ok() : NotFound();
 		}
 	}
 }

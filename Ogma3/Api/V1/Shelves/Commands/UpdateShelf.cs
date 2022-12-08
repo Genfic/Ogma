@@ -75,6 +75,7 @@ public static class UpdateShelf
 
 			await _context.SaveChangesAsync(cancellationToken);
 
+			// TODO: Do we need this? Without it, we could just use .ExecuteUpdateAsync() instead of multiple db calls
 			return CreatedAtAction(
 				nameof(ShelvesController.GetShelf),
 				nameof(ShelvesController)[..^10],

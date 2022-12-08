@@ -20,17 +20,11 @@ public static class DeleteFaq
 
 		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var faq = await _context.Faqs
+			var res = await _context.Faqs
 				.Where(f => f.Id == request.Id)
-				.FirstOrDefaultAsync(cancellationToken);
+				.ExecuteDeleteAsync(cancellationToken);
 
-			if (faq is null) return NotFound();
-
-			_context.Remove(faq);
-
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return Ok(faq.Id);
+			return res > 0 ? Ok(request.Id) : NotFound();
 		}
 	}
 }
