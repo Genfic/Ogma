@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,7 +10,6 @@ using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
-using Serilog;
 
 namespace Ogma3.Api.V1.ChaptersReads.Commands;
 
@@ -54,20 +52,10 @@ public static class MarkChapterAsRead
 			else
 			{
 				chaptersReadObj.Chapters.Add(chapter);
-				_context.Entry(chaptersReadObj).State = EntityState.Modified;
 			}
 
-			// Save
-			try
-			{
-				await _context.SaveChangesAsync(cancellationToken);
-				return Ok(chaptersReadObj.Chapters);
-			}
-			catch (Exception e)
-			{
-				Log.Error(e, "Exception occurred when marking chapter {Chapter} as read by {User}", chapter, _uid);
-				return ServerError("Database insert error");
-			}
+			await _context.SaveChangesAsync(cancellationToken);
+			return Ok(chaptersReadObj.Chapters);
 		}
 	}
 }

@@ -12,7 +12,6 @@ using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.MediatR.Bases;
-using Ogma3.Services;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 
@@ -36,16 +35,13 @@ public static class CreateChapterComment
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper _mapper;
-		private readonly CommentRedirector _redirector;
 		private readonly NotificationsRepository _notificationsRepo;
 		private readonly long? _uid;
 
-		public Handler(ApplicationDbContext context, IMapper mapper, CommentRedirector redirector,
-			NotificationsRepository notificationsRepo, IUserService userService)
+		public Handler(ApplicationDbContext context, IMapper mapper, NotificationsRepository notificationsRepo, IUserService userService)
 		{
 			_context = context;
 			_mapper = mapper;
-			_redirector = redirector;
 			_notificationsRepo = notificationsRepo;
 			_uid = userService?.User?.GetNumericId();
 		}

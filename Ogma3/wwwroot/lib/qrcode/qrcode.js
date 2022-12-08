@@ -550,7 +550,7 @@ var QRCode;
 		
 		// Overwrites options
 		if (vOption) {
-			for (var i in vOption) {
+			for (let i; in vOption) {
 				this._htOption[i] = vOption[i];
 			}
 		}

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,7 +9,6 @@ using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.UserService;
-using Serilog;
 
 namespace Ogma3.Api.V1.ChaptersReads.Commands;
 
@@ -43,25 +41,14 @@ public static class MarkChapterAsUnread
 			if (chaptersReadObj is null) return Ok();
 
 			chaptersReadObj.Chapters.Remove(chapter);
-			_context.Entry(chaptersReadObj).State = EntityState.Modified;
 
 			if (chaptersReadObj.Chapters.Count < 1)
 			{
 				_context.ChaptersRead.Remove(chaptersReadObj);
 			}
 
-			// Save
-			try
-			{
-				await _context.SaveChangesAsync(cancellationToken);
-				return Ok(chaptersReadObj.Chapters);
-			}
-			catch (Exception e)
-			{
-				Log.Error(e, "Exception occurred when marking chapter {Chapter} as unread by {User}", chapter,
-					_uid);
-				return ServerError("Database remove error");
-			}
+			await _context.SaveChangesAsync(cancellationToken);
+			return Ok(chaptersReadObj.Chapters);
 		}
 	}
 }

@@ -35,19 +35,17 @@ public static class BlockContent
 
 			if (_uid is null) return Unauthorized();
 
-			var item = await _context.Set<T>()
-				.Where(i => i.Id == itemId)
-				.FirstOrDefaultAsync(cancellationToken);
-			if (item is null) return NotFound();
-
-			item.ContentBlock = new ContentBlock
+			var cb = new ContentBlock
 			{
 				Reason = reason,
 				IssuerId = (long)_uid
 			};
-			await _context.SaveChangesAsync(cancellationToken);
 
-			return Ok();
+			var res = await _context.Set<T>()
+				.Where(i => i.Id == itemId)
+				.ExecuteUpdateAsync(i => i.SetProperty(p => p.ContentBlock, cb), cancellationToken);
+
+			return res > 0 ? Ok() : NotFound();
 		}
 	}
 }

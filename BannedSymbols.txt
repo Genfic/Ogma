@@ -5,7 +5,7 @@ M:System.Runtime.CompilerServices.TaskAwaiter.GetResult;await it
 M:System.Threading.Tasks.Task.WaitAll`1;use await Task.WhenAll()
 
 M:Microsoft.EntityFrameworkCore.DbContext.FindAsync``1(System.Object[],System.Threading.CancellationToken)
-M:Microsoft.EntityFrameworkCore.DbContext.Set``1
+// M:Microsoft.EntityFrameworkCore.DbContext.Set``1
 M:Microsoft.EntityFrameworkCore.DbContext.Set``1(System.String)
 M:Microsoft.EntityFrameworkCore.DbContext.SaveChanges
 M:Microsoft.EntityFrameworkCore.DbContext.SaveChanges(System.Boolean)
