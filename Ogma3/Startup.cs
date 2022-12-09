@@ -71,10 +71,13 @@ public class Startup
 		services.AddMiniProfiler().AddEntityFramework();
 
 		// Database
+		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
+		// var npgSourceBuilder = new NpgsqlDataSourceBuilder(conn);
+		// var source = npgSourceBuilder
+		// 	.MapPostgresEnums(typeof(Program).Assembly)
+		// 	.Build();
 		services
-			.AddDbContext<ApplicationDbContext>(options => options
-				.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection"))
-			)
+			.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(conn))
 			.AddDatabaseDeveloperPageExceptionFilter();
 
 		// Repositories
@@ -258,7 +261,7 @@ public class Startup
 
 
 	// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-	public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OgmaUserManager userManager, RoleManager<OgmaRole> roleManager)
+	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 	{
 		// Profiler
 		app.UseMiniProfiler();

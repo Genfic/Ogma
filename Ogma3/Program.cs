@@ -1,76 +1,58 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ogma3;
 using Ogma3.Infrastructure.Logging;
 using Serilog;
 using Serilog.Events;
 
-namespace Ogma3;
+Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
+// TODO: Reverts to old datetime behaviour, tracked by #50
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-public class Program
-{
-	public static async Task Main(string[] args)
+
+var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
+var (telegramToken, telegramId) = await Telegram.GetCredentials();
+Log.Logger = new LoggerConfiguration()
+	.Enrich.FromLogContext()
+	.WriteTo.Telegram(telegramToken, telegramId, restrictedToMinimumLevel: LogEventLevel.Error)
+	.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
+	.WriteTo.Console(LogEventLevel.Information)
+	.MinimumLevel.Debug()
+	.CreateLogger();
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging
+	.ClearProviders()
+	.AddConsole();
+
+builder.Configuration
+	.AddEnvironmentVariables("ogma_");
+
+builder.Host.UseSerilog();
+
+builder.WebHost.UseUrls("https://+:5001", "https://+:8001", "https://+:80");
+builder.WebHost.ConfigureKestrel(options =>
 	{
-		Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
-		
-		// TODO: Reverts to old datetime behaviour, tracked by #50
-		AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+		options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
+		options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
+		options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2; });
+	});
 
-		var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
+var startup = new Startup(builder.Configuration, builder.Environment);
+startup.ConfigureServices(builder.Services);
 
-		var (telegramToken, telegramId) = await Telegram.GetCredentials();
-		Log.Logger = new LoggerConfiguration()
-			.Enrich.FromLogContext()
-			.WriteTo.Telegram(telegramToken, telegramId, restrictedToMinimumLevel: LogEventLevel.Error)
-			.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
-			.WriteTo.Console(LogEventLevel.Information)
-			.MinimumLevel.Debug()
-			.CreateLogger();
+var app = builder.Build();
+await app.InitAsync();
 
-		try
-		{
-			var host = CreateHostBuilder(args).Build();
-			await host.InitAsync();
-			Log.Warning("Genfic has started!");
-			await host.RunAsync();
-		}
-		catch (Exception e)
-		{
-			Log.Fatal(e, "Unexpected shutdown on startup");
-		}
-		finally
-		{
-			await Log.CloseAndFlushAsync();
-		}
-	}
+startup.Configure(app, app.Environment);
 
-	private static IHostBuilder CreateHostBuilder(string[] args)
-	{
-		return Host
-			.CreateDefaultBuilder(args)
-			.ConfigureLogging(logging =>
-			{
-				logging.ClearProviders();
-				logging.AddConsole();
-			})
-			.ConfigureAppConfiguration((_, config) => { config.AddEnvironmentVariables("ogma_"); })
-			.UseSerilog()
-			.ConfigureWebHostDefaults(webBuilder =>
-			{
-				webBuilder.UseUrls("https://+:5001", "https://+:8001", "https://+:80");
-				webBuilder.ConfigureKestrel(options =>
-					{
-						options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
-						options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
-						options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2; });
-					})
-					.UseStartup<Startup>();
-			});
-	}
-}
+await app.RunAsync();

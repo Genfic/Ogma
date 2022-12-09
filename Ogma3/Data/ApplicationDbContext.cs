@@ -112,6 +112,7 @@ public class ApplicationDbContext : IdentityDbContext
 		_myLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
 
 		// Map all enums with `[PostgresEnum]` attribute
+		// TODO: #78
 		NpgsqlConnection.GlobalTypeMapper.MapPostgresEnums(typeof(Startup).Assembly);
 	}
 

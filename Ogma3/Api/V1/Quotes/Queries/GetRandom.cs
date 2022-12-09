@@ -28,8 +28,8 @@ public static class GetRandom
 		{
 			var quote = await _context.Quotes
 				.FromSqlRaw("""
-						SELECT *
-						FROM "Quotes"
+						SELECT q."Author", q."Body"
+						FROM "Quotes" q
 						OFFSET floor(random() * (
 						    SELECT count(*)
 						    FROM "Quotes"
