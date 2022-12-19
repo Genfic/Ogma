@@ -55,19 +55,15 @@ public static class QueryableExtensions
 			? query
 				.Where(s => !ctx.BlacklistedRatings
 					.Where(br => br.UserId == userId)
-					.Select(br => br.Rating)
-					.Contains(s.Rating)
+					.Any(br => br.RatingId == s.RatingId)
 				)
 				.Where(s => !ctx.BlacklistedTags
 					.Where(bt => bt.UserId == userId)
-					.Select(bt => bt.TagId)
-					.Intersect(s.Tags.Select(st => st.Id))
-					.Any()
+					.Any(bt => s.Tags.Any(t => t.Id == bt.TagId))
 				)
 				.Where(s => !ctx.BlacklistedUsers
 					.Where(bu => bu.BlockingUserId == userId)
-					.Select(bu => bu.BlockedUserId)
-					.Contains(s.AuthorId)
+					.Any(bu => bu.BlockedUserId == s.AuthorId)
 				)
 			: query
 				.Where(s => !s.Rating.BlacklistedByDefault);

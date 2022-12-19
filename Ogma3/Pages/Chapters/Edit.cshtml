@@ -9,7 +9,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="button-group">
-	<a title="Cancel" class="action-btn large" asp-page="../Chapter" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
+	<a title="Cancel" class="action-btn large" asp-page="../Chapter" asp-route-sid="@Model.Input.StoryId" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
 		<icon class="icon" icon="arrow_back"></icon>
 		<span class="name">Cancel</span>
 	</a>

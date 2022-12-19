@@ -41,16 +41,16 @@ public class StoryModel : PageModel
 		public string Hook { get; init; } = null!;
 		public string? Cover { get; init; }
 		public DateTime ReleaseDate { get; init; }
-		public DateTime CreationDate { get; set; }
+		// public DateTime CreationDate { get; set; }
 		public bool IsPublished { get; init; }
 		public ICollection<ChapterBasicDto> Chapters { get; init; } = null!;
 		public ICollection<TagDto> Tags { get; init; } = null!;
 		public Rating Rating { get; init; } = null!;
 		public EStoryStatus Status { get; init; }
 		public int WordCount { get; init; }
-		public int FullWordCount { get; init; }
+		// public int FullWordCount { get; init; }
 		public int ChaptersCount { get; init; }
-		public int FullChaptersCount { get; init; }
+		// public int FullChaptersCount { get; init; }
 		public int CommentsCount { get; init; }
 		public int Score { get; init; }
 		public ContentBlockCard? ContentBlock { get; init; }
@@ -102,13 +102,13 @@ public class StoryModel : PageModel
 		Status = s.Status,
 		AuthorId = s.AuthorId,
 		WordCount = s.WordCount,
-		FullWordCount = s.AuthorId == uid ? s.Chapters.Sum(c => c.WordCount) : 0,
+		// FullWordCount = s.AuthorId == uid ? s.Chapters.Sum(c => c.WordCount) : 0,
 		ChaptersCount = s.ChapterCount,
-		FullChaptersCount = s.AuthorId == uid ? s.Chapters.Count : 0,
+		// FullChaptersCount = s.AuthorId == uid ? s.Chapters.Count : 0,
 		CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
 		IsPublished = s.PublicationDate != null,
 		ReleaseDate = s.PublicationDate ?? s.CreationDate,
-		CreationDate = s.CreationDate,
+		// CreationDate = s.CreationDate,
 		ContentBlock = s.ContentBlock == null
 			? null
 			: new ContentBlockCard

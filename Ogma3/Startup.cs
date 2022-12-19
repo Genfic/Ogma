@@ -208,7 +208,10 @@ public class Startup
 		// Razor
 		services
 			.AddRazorPages()
-			.AddRazorPagesOptions(options => { options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole"); })
+			.AddRazorPagesOptions(options =>
+			{
+				options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
+			})
 			.AddRazorRuntimeCompilation();
 
 		// MVC

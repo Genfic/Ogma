@@ -47,6 +47,21 @@ $title-height: 2rem
 				color: v.$foreground
 				font-weight: 500
 				font-size: 1rem
+				
+			> a.start
+				background-color: v.$accent-75
+				color: v.$background
+				font-weight: 650
+				letter-spacing: .17rem
+				float: right
+				padding: .5rem 1rem
+				border-radius: 2px
+				display: block
+				transform: translateY(0)
+				transition: background-color 200ms ease-in-out, transform 200ms ease-in-out
+				&:hover
+					background-color: v.$accent
+					transform: translateY(-2px)
 
 		> .actions
 			display: flex

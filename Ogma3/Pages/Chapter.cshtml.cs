@@ -69,10 +69,10 @@ public class ChapterModel : PageModel
 		}
 	}
 
-	public async Task<IActionResult> OnGetAsync(long id, string? slug)
+	public async Task<IActionResult> OnGetAsync(long sid, long id, string? slug)
 	{
 		var uid = User.GetNumericId();
-
+		
 		Chapter = await _context.Chapters
 			.Where(c => c.Id == id)
 			.Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)

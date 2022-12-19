@@ -2,7 +2,7 @@
 @using System.Globalization
 @model ChapterMinimal
 
-<a asp-page="/Chapter" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
+<a asp-page="/Chapter" asp-route-sid="@Model.StoryId" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
 	<span class="title">@Model.Title</span>
 
 	<div class="info">

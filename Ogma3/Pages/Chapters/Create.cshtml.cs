@@ -147,6 +147,6 @@ public class CreateModel : PageModel
 			"/Chapter",
 			new { chapter.Id, chapter.Slug });
 
-		return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
+		return RedirectToPage("../Chapter", new { sid = story.Id, id = chapter.Id, slug = chapter.Slug });
 	}
 }

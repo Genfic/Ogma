@@ -119,6 +119,8 @@
 			<div class="description" itemprop="abstract">
 				<markdown preset="Basic">@Model.Story.Description</markdown>
 			</div>
+			
+			<a class="start active-border" asp-controller="Chapter" asp-action="FirstChapter" asp-route-sid="@Model.Story.Id">Start reading</a>
 
 		</div>
 		@* </cache> *@
@@ -147,18 +149,18 @@
 			<icon icon="rss_feed"></icon>
 		</a>
 	</div>
-
-	@if (Model.Story.AuthorId == uid)
-	{
-		<div class="author-info info">
-			<span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span>
-			<span class="chapter-count">@Model.Story.FullChaptersCount chapters</span>
-			<span class="comment-count">@Model.Story.CommentsCount comments</span>
-			<time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-				created @Model.Story.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-			</time>
-		</div>
-	}
+	@* *@
+	@* @if (Model.Story.AuthorId == uid) *@
+	@* { *@
+	@* 	<div class="author-info info"> *@
+	@* 		<span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span> *@
+	@* 		<span class="chapter-count">@Model.Story.FullChaptersCount chapters</span> *@
+	@* 		<span class="comment-count">@Model.Story.CommentsCount comments</span> *@
+	@* 		<time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"> *@
+	@* 			created @Model.Story.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture) *@
+	@* 		</time> *@
+	@* 	</div> *@
+	@* } *@
 
 	<ol class="chapters">
 		@if (Model.Story.Chapters.Count <= 0)
@@ -188,7 +190,7 @@
 							<icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
 						}
 
-						<a class="title" asp-page="/Chapter" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
+						<a class="title" asp-page="/Chapter" asp-route-sid="@Model.Story.Id" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
 							@c.Title
 						</a>
 

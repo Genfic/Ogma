@@ -55,6 +55,7 @@ public class EditModel : PageModel
 		[Display(Name = "End notes")] public string EndNotes { get; init; }
 		public DateTime? PublicationDate { get; set; }
 		public bool IsPublished { get; set; }
+		public long? StoryId { get; set; }
 	}
 
 	public class MappingProfile : Profile
@@ -117,6 +118,6 @@ public class EditModel : PageModel
 
 		await _context.SaveChangesAsync();
 
-		return RedirectToPage("../Chapter", new { id = chapter.Id, slug = chapter.Slug });
+		return RedirectToPage("../Chapter", new { sid = chapter.Story.Id, id = chapter.Id, slug = chapter.Slug });
 	}
 }
