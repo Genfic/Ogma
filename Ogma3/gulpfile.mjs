@@ -121,8 +121,8 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/
 		});
 	},
 	errorHandler);
-const webtypes = () => run('npm run t:webtypes', {}).exec(null, console.log);
-export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, gulp.parallel(components, webtypes));
+const webtypes = () => run('npm run t:webtypes', {}).exec();
+export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, gulp.series(components, webtypes));
 
 
 // All tasks

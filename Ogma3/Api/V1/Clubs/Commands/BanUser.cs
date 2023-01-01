@@ -75,9 +75,9 @@ public static class BanUser
 			if (result <= 0) return ServerError("Something went wrong with the ban");
 
 			// Remove the user from club
-			await _context.ClubMembers
-				.Where(cm => cm.ClubId == clubId && cm.MemberId == userId)
-				.ExecuteDeleteAsync(cancellationToken);
+			// await _context.ClubMembers
+			// 	.Where(cm => cm.ClubId == clubId && cm.MemberId == userId)
+			// 	.ExecuteDeleteAsync(cancellationToken);
 
 			// Log it
 			_context.ClubModeratorActions.Add(new ClubModeratorAction

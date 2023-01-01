@@ -1,9 +1,11 @@
 @page "/club/{id:long}/edit/manage-members"
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @model ManageUsers
 
 @{
 	ViewData["Title"] = $"{Model.Club.Name} — Manage Members";
 	ViewData["Tab"] = "Members";
+	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -43,6 +45,10 @@
 				<div class="role-tag">
 					<span class="name">@user.Role</span>
 				</div>
+			</div>
+			
+			<div class="buttons">
+				<o-club-ban clubId="@Model.Club.Id" userId="@user.Id" csrf="@csrf" banned="@user.IsBanned"></o-club-ban>
 			</div>
 
 		</div>

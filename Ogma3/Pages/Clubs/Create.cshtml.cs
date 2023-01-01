@@ -80,6 +80,7 @@ public class CreateModel : PageModel
 			Hook = Input.Hook,
 			Description = Input.Description,
 			Icon = "/img/placeholders/ph-250.png",
+			IconId = "null",
 			ClubMembers = new List<ClubMember>
 			{
 				new()

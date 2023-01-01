@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Linq;
 using AutoMapper;
@@ -7,19 +9,19 @@ namespace Ogma3.Pages.Shared.Bars;
 
 public class ClubBar
 {
-	public long Id { get; set; }
-	public string Name { get; set; }
-	public string Slug { get; set; }
-	public string Hook { get; set; }
-	public string Description { get; set; }
-	public string Icon { get; set; }
-	public DateTime CreationDate { get; set; }
-	public int ClubMembersCount { get; set; }
-	public int ThreadsCount { get; set; }
-	public int StoriesCount { get; set; }
+	public required long Id { get; set; }
+	public required string Name { get; set; }
+	public required string Slug { get; set; }
+	public required string Hook { get; set; }
+	public required string Description { get; set; }
+	public required string Icon { get; set; }
+	public required DateTime CreationDate { get; set; }
+	public required int ClubMembersCount { get; set; }
+	public required int ThreadsCount { get; set; }
+	public required int StoriesCount { get; set; }
 	public bool IsMember => Role is not null;
-	public long FounderId { get; set; }
-	public EClubMemberRoles? Role { get; set; }
+	public required long FounderId { get; set; }
+	public required EClubMemberRoles? Role { get; set; }
 
 	public class MappingProfile : Profile
 	{

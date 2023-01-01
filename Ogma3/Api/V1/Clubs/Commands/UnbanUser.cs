@@ -72,7 +72,7 @@ public static class UnbanUser
 			});
 			await _context.SaveChangesAsync(cancellationToken);
 
-			return Ok(true);
+			return Ok(false);
 		}
 
 		private record BannedUser(string UserName, EClubMemberRoles Role);

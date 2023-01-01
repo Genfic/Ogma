@@ -1,6 +1,7 @@
 import { customElement, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 import { log } from "../helpers/logger";
+import "../helpers/extensions/Number";
 import { Notifications_CountUserNotifications as countNotifications } from "../../generated/paths-public";
 
 @customElement("o-notifications-button")
@@ -41,9 +42,9 @@ export class NotificationsButton extends LitElement {
 				title="${this.#title()}"
 			>
 				<i class="material-icons-outlined">notifications</i>
-				${this.notifications > 0
+				${(this.notifications ?? -1) > 0
 					? html`<span>${this.#count()}</span>`
-					: null}
+					: null} 
 			</a>
 		`;
 	}

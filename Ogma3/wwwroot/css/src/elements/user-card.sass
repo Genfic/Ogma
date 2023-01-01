@@ -7,7 +7,7 @@ $avatar-size: 5rem
 	contain: content
 	display: grid
 	grid-template-rows: repeat(3, auto)
-	grid-template-columns: auto 1fr
+	grid-template-columns: auto 1fr auto 
 	gap: .25rem
 	height: calc(#{$avatar-size} + 2px)
 	// adjust for border
@@ -36,3 +36,8 @@ $avatar-size: 5rem
 		grid-row: 3
 		grid-column: 2
 		font-size: .9rem
+		
+	> .buttons
+		grid-row: 1 / 4
+		grid-column: 3
+		padding: 2px

@@ -22,10 +22,27 @@ public class ClubRepository
 
 	public async Task<ClubBar?> GetClubBar(long clubId)
 	{
-		if (_uid is not { } uid) return null;
+		if (_uid is null) return null;
 		var club = await _context.Clubs
+			.TagWithCallSite()
 			.Where(c => c.Id == clubId)
-			.Select(ClubMappings.ToClubBar(uid))
+			.Select(c => new ClubBar
+			{
+				Id = c.Id,
+				Name = c.Name,
+				Slug = c.Slug,
+				Hook = c.Hook,
+				Description = c.Description,
+				Icon = c.Icon,
+				CreationDate = c.CreationDate,
+				ThreadsCount = c.Threads.Count,
+				ClubMembersCount = c.ClubMembers.Count,
+				StoriesCount = c.Folders.Sum(f => f.StoriesCount),
+				FounderId = c.ClubMembers.First(cm => cm.Role == EClubMemberRoles.Founder).MemberId,
+				Role = c.ClubMembers.Any(cm => cm.MemberId == _uid)
+					? c.ClubMembers.First(cm => cm.MemberId == _uid).Role
+					: null
+			})
 			.FirstOrDefaultAsync();
 		return club;
 	}

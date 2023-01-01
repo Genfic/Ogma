@@ -40,6 +40,7 @@ public class ManageUsers : PageModel
 			.Where(cm => cm.ClubId == id)
 			.Where(cm => cm.Member.ClubsBannedFrom.All(c => c.Id != id) || isPrivileged)
 			.Select(cm => new UserDto(
+				cm.MemberId,
 				cm.Member.UserName,
 				cm.MemberSince,
 				cm.Member.Avatar,
@@ -53,6 +54,7 @@ public class ManageUsers : PageModel
 
 
 	public sealed record UserDto(
+		long Id,
 		string Name,
 		DateTime JoinDate,
 		string Avatar,
