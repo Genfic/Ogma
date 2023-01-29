@@ -10,6 +10,8 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<br>
+
 <div class="button-group">
 	<a title="Cancel" class="action-btn large" asp-page="/Club/Index" asp-route-id="@Model.Club.Id" asp-route-slug="@Model.Club.Slug">
 		<icon class="icon" icon="arrow_back"></icon>
@@ -17,7 +19,7 @@
 	</a>
 	<a title="Delete" class="action-btn large" asp-page="/Clubs/Edit" asp-route-id="@Model.Club.Id">
 		<icon class="icon" icon="edit"></icon>
-		<span class="name">Back to editing</span>
+		<span class="name">Back to managing</span>
 	</a>
 </div>
 

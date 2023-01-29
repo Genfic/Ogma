@@ -17,6 +17,7 @@ body {
 	padding-left: calc(100vw - 100%);
 	background-color: v.$background;
 	color: v.$foreground;
+	overflow-x: hidden;
 
 	> header {
 		width: 100%;

@@ -2,10 +2,12 @@
 @model EditModel
 
 @{
-	ViewData["Title"] = $"Edit {Model.Input.Name}";
+	ViewData["Title"] = $"Manage {Model.Input.Name}";
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<br>
 
 <div class="button-group">
 	<a title="Cancel" class="action-btn large" asp-page="/Club/Index" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Slug">

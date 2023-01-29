@@ -67,14 +67,14 @@ public class StoryModel : PageModel
 		public int WordCount { get; init; }
 	}
 
-	public StoryDetails? Story { get; private set; }
+	public StoryDetails Story { get; private set; } = null!;
 	public ProfileBar ProfileBar { get; private set; } = null!;
 
 	public async Task<IActionResult> OnGetAsync(long id, string? slug)
 	{
 		var uid = User.GetNumericId();
 
-		Story = await _context.Stories
+		var story = await _context.Stories
 			.TagWith($"Fetching story {id} — {slug}")
 			.Where(s => s.Id == id)
 			.Where(s => s.PublicationDate != null || s.AuthorId == uid)
@@ -82,7 +82,9 @@ public class StoryModel : PageModel
 			.Select(MapStoryDetails(uid))
 			.FirstOrDefaultAsync();
 
-		if (Story is null) return NotFound();
+		if (story is null) return NotFound();
+
+		Story = story;
 
 		ProfileBar = await _userRepo.GetProfileBar(Story.AuthorId);
 

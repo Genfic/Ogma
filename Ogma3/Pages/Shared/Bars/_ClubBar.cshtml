@@ -44,8 +44,8 @@
 				   title="Edit club"
 				   asp-page="/Clubs/Edit"
 				   asp-route-id="@Model.Id">
-					<icon icon="edit"></icon>
-					Edit
+					<icon icon="admin_panel_settings"></icon>
+					Manage
 				</a>
 
 				@if (User.Identity?.IsAuthenticated ?? false)
@@ -60,7 +60,7 @@
 				   title="Moderation log"
 				   asp-page="/Club/Modlog"
 				   asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
-					<icon icon="security"></icon>
+					<icon icon="receipt_long"></icon>
 					Modlog
 				</a>
 			</nav>

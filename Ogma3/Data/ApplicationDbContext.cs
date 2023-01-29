@@ -113,7 +113,9 @@ public class ApplicationDbContext : IdentityDbContext
 
 		// Map all enums with `[PostgresEnum]` attribute
 		// TODO: #78
+#pragma warning disable CS0618
 		NpgsqlConnection.GlobalTypeMapper.MapPostgresEnums(typeof(Startup).Assembly);
+#pragma warning restore CS0618
 	}
 
 	protected override void OnModelCreating(ModelBuilder builder)
