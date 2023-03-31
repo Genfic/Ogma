@@ -1,6 +1,8 @@
 version: '3'
+silent: true
 
 tasks:
+    # Generate JS API clients based on Swagger
     paths:
         env:
             DENO_TLS_CA_STORE: system
@@ -10,3 +12,31 @@ tasks:
         cmds:
             - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public/swagger.json" --path.internal="{{.URL}}internal/swagger.json"
         
+    # Generate preload code for fonts
+    preloads:
+        vars:
+            SRC: ./Ogma3/wwwroot/fonts
+            DEST: fonts
+        cmds:
+            - ogma-tool generate-preloads {{.SRC}} {{.DEST}}
+    
+    # Generate CSS import conde for fonts
+    imports:
+        vars:
+            SRC: ./Ogma3/wwwroot/fonts
+            DEST: fonts
+        cmds:
+            - ogma-tool generate-imports {{.SRC}} {{.DEST}}
+    
+    # Check the size of the bundle
+    bundlesize:
+        vars:
+            SRC: ./Ogma3/wwwroot/js/{dist,bundle}/*.js
+        cmds:
+            - ogma-tool bundlesize {{.SRC}}
+    
+    # Serve via Ngrok
+    serve: ngrok http https://localhost:5001 -host-header="localhost:5001"
+    
+    # Get Lighthouse CLI score
+    score: lighthouse https://localhost:5001 --view

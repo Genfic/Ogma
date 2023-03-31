@@ -12,7 +12,7 @@ contain something when the code itself is ready for prime time.
 .NET 6, PostgreSQL
 
 To run some helper scripts contained in the [taskfile](./taskfile.yml), the companion tool,
-[Genfic/Tool](https://github.com/Genfic/Tool) needs to be installed.
+[Genfic/Tool](https://github.com/Genfic/Tool) needs to be installed. Tasks can be run with [Taskfile](https://taskfile.dev/)
 
 ## License
 

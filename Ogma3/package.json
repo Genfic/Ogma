@@ -39,14 +39,7 @@
     "scripts": {
         "build": "gulp all",
         "dev": "gulp watchAll",
-        "score": "lighthouse https://localhost:5001 --view",
-        "serve": "test-serve.bat",
-        "t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
-        "t:cssdemo": "deno run --allow-read --allow-net ./Tools/css-demo.ts",
-        "t:preloads": "deno run --allow-read ./Tools/generate-preloads.ts",
-        "t:imports": "deno run --allow-read ./Tools/generate-imports.ts",
-        "t:bundlesize": "deno run --allow-read --unstable ./Tools/bundlesize.ts",
-        "t:paths": "deno run --allow-net --unsafely-ignore-certificate-errors=localhost --allow-read --allow-write ./Tools/generate-paths.ts ./Ogma3/wwwroot/js/src/generated"
+        "t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json"
     },
     "name": "ogma-3",
     "dependencies": {
