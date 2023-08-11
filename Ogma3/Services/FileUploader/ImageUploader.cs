@@ -10,9 +10,6 @@ using Ogma3.Data;
 using Serilog;
 using SerilogTimings;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Gif;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 
@@ -54,21 +51,12 @@ public class ImageUploader : IFileUploader
 		if (width is not null || height is not null)
 		{
 			using var op = Operation.Time("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
-			// Create the appropriate decoder
-			IImageDecoder decoder = ext.ToUpper() switch
-			{
-				"JPG" => new JpegDecoder(),
-				"JPEG" => new JpegDecoder(),
-				"PNG" => new PngDecoder(),
-				"GIF" => new GifDecoder(),
-				_ => throw new ArgumentException("Unknown file format")
-			};
 
 			// Reset memory stream position
 			ms.Seek(0, SeekOrigin.Begin);
-
+			
 			// Load and resize the image
-			using var img = await Image.LoadAsync(ms, decoder);
+			using var img = await Image.LoadAsync(ms);
 			img.Mutate(i => i.Resize(new ResizeOptions
 			{
 				Size = new Size((int)(width ?? height)!, (int)(height ?? width)!),

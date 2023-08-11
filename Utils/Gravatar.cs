@@ -1,13 +1,7 @@
-#nullable enable
-
-#region
-
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Flurl;
-
-#endregion
 
 namespace Utils;
 
@@ -16,9 +10,7 @@ public static class Gravatar
 	public static string Generate(string email, Options? options = null)
 	{
 		const string url = "https://www.gravatar.com/avatar";
-
-		using var md5 = MD5.Create();
-		var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
+		var hash = MD5.HashData(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
 		var emailHash = string.Join("", hash.Select(x => x.ToString("x2")));
 
 		var avatar = new Url(url).AppendPathSegment(emailHash);

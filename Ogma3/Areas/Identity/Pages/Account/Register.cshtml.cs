@@ -137,7 +137,7 @@ public class RegisterModel : PageModel
 		}
 
 		// Generate Gravatar
-		var avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{Input.Name}.png").ToString();
+		var avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{Input.Name}.png").ToString()!;
 		// var avatar = Gravatar.Generate(Input.Email, new Gravatar.Options
 		// {
 		//     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{Input.Name}.png").ToString(), 

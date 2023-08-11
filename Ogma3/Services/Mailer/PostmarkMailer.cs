@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
@@ -21,7 +22,7 @@ public class PostmarkMailer : IEmailSender
 			TrackOpens = true,
 			TrackLinks = LinkTrackingOptions.HtmlAndText,
 			Subject = subject,
-			HtmlBody = htmlMessage
+			HtmlBody = htmlMessage, Attachments = new List<PostmarkMessageAttachment>()
 		};
 
 		var client = new PostmarkClient(_options.PostmarkKey);

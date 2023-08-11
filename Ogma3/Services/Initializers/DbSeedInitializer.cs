@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Extensions.Hosting.AsyncInitialization;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +46,7 @@ public class DbSeedInitializer : IAsyncInitializer
 	private sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
 
 
-	public async Task InitializeAsync()
+	public async Task InitializeAsync(CancellationToken ct)
 	{
 		await SeedRoles();
 		await SeedUserRoles();

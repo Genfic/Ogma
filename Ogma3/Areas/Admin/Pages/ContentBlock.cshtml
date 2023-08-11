@@ -27,15 +27,17 @@
 }
 else
 {
+	var handler = Model.Item.Blocked ? "Unblock" : "Block";
+	
 	<h3>
-		<span class="text-faded">@(Model.Item?.Type):</span> @Model.Item.Title
+		<span class="text-faded">@(Model.Item.Type):</span> @Model.Item.Title
 	</h3>
 	if (Model.Item.Subtitle is not null)
 	{
 		<h4>@Model.Item.Subtitle</h4>
 	}
 
-	<form method="POST" class="auto" asp-page-handler="@(Model.Item.Blocked ? "Unblock" : "Block")">
+	<form method="POST" class="auto" asp-page-handler="@handler">
 		@if (TempData["error"] is not null)
 		{
 			<div class="validation-summary-errors">@TempData["error"]</div>
