@@ -12,6 +12,7 @@ public class LineCountValidator<T> : PropertyValidator<T, string>
 
 	public override bool IsValid(ValidationContext<T> context, string value)
 	{
+		// TODO: Optimize this
 		if (value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None).Length <= _max)
 		{
 			return true;

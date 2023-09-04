@@ -19,7 +19,7 @@ public class OgmaRoleComparer : IEqualityComparer<OgmaRole>
 	public int GetHashCode(OgmaRole obj)
 	{
 		var hashId = obj.Id.GetHashCode();
-		var hashName = obj.Name.GetHashCode();
+		var hashName = obj.Name?.GetHashCode() ?? 0;
 
 		return hashId ^ hashName;
 	}

@@ -11,7 +11,9 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public class AutoformTagHelper : TagHelper
 {
-	[HtmlAttributeNotBound] [ViewContext] public ViewContext ViewContext { get; set; }
+	[HtmlAttributeNotBound]
+	[ViewContext]
+	public ViewContext ViewContext { get; set; }
 
 	private IHtmlGenerator Generator { get; }
 

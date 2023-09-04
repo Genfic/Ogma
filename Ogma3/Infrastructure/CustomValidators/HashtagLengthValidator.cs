@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -15,10 +15,43 @@ public class HashtagLengthValidator<T> : IPropertyValidator<T, string>
 
 	public bool IsValid(ValidationContext<T> context, string value)
 	{
-		if (!value.Split(',').Any(t => t.Length > _max)) return true;
+		var valid = Validate(value);
 
+		if (valid) return true;
+			
 		context.MessageFormatter.AppendArgument("MaxLength", _max);
 		return false;
+	}
+
+	public bool IsValid(string value) => Validate(value);
+
+	private bool Validate(string value)
+	{
+		var span = value.Trim(',').AsSpan();
+
+		if (span.Length == 0) return true;
+		
+		var count = 0;
+		var wasComma = false;
+		foreach(var ch in span)
+		{
+			if (wasComma && char.IsWhiteSpace(ch)) continue;
+			
+			if (ch == ',')
+			{
+				wasComma = true;
+				count = 0;
+			}
+			else
+			{
+				wasComma = false;
+				count++;
+			}
+
+			if (count > _max) return false;
+		}
+		
+		return true;
 	}
 
 	public string Name => "HashtagLengthValidator";

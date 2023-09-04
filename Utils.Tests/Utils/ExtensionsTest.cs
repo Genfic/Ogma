@@ -1,12 +1,8 @@
-#region
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Utils.Extensions;
 using Xunit;
-
-#endregion
 
 namespace Utils.Tests.Utils;
 

@@ -37,18 +37,18 @@ public class RssOutputFormatter : TextOutputFormatter
 		var domain = $"https://{_config.GetValue<string>("Domain")}";
 
 		var data = (RssResult)context.Object;
-		if (data is not {} d) throw new ArgumentException("Passed object was not of type RssResult");
+		if (data is null) throw new ArgumentException("Passed object was not of type RssResult");
 
 		var feed = new SyndicationFeed(
-			d.Title,
-			d.Description,
+			data.Title,
+			data.Description,
 			new Uri(domain),
 			"RssUrl",
 			now
 		)
 		{
 			Copyright = new TextSyndicationContent($"2019 — {now.Year}"),
-			Items = d.Items
+			Items = data.Items
 		};
 
 		using var stream = new MemoryStream();
