@@ -25,7 +25,7 @@
         "lighthouse": "9.6.7",
         "lit-web-types": "0.1.5",
         "npm-commands": "1.1.0",
-        "postcss": "8.4.18",
+        "postcss": "8.4.31",
         "postcss-csso": "6.0.1",
         "prettier": "2.7.1",
 		"rollup": "2.78.0",
