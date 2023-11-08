@@ -5,7 +5,7 @@ import { createRef, ref } from "lit/directives/ref.js";
 import { FolderTree } from "./folder-tree";
 import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../../generated/paths-public";
 
-interface Club {
+type Club = {
 	id: number;
 	name: string;
 	icon: string;

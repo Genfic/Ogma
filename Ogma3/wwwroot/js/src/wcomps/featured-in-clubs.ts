@@ -45,7 +45,7 @@ export class FeaturedInClubs extends LitElement {
 
             ${this.visible ? html`
                 <div class="club-folder-selector my-modal" @click="${() => this.visible = false}">
-                    <div class="content" @click="${e => e.stopPropagation()}">
+                    <div class="content" @click="${(e: Event) => e.stopPropagation()}">
 
                         <div class="header">
                             <span>Featured in</span>

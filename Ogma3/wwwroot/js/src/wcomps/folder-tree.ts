@@ -4,7 +4,7 @@ import { log } from "../helpers/logger";
 import { classMap } from "lit/directives/class-map.js";
 import { Folders_GetFoldersOfClub as getClubFolders } from "../../generated/paths-public";
 
-interface Folder {
+type Folder = {
 	id: number;
 	parentFolderId: number | null;
 	name: string;
@@ -12,7 +12,7 @@ interface Folder {
 	canAdd: boolean;
 }
 
-interface TreeItem {
+type TreeItem = {
 	id: number;
 	name: string;
 	canAdd: boolean;
