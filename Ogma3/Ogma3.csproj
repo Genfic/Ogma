@@ -4124,6 +4124,11 @@
 		</Compile>
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\js\src-common\" />
+	</ItemGroup>
+
 	<!--  Automatic migrations on production -->
 	<!--  <Target Name="PrePublishTarget" AfterTargets="Publish">-->
 	<!--    <Exec Command="dotnet-ef database update" />-->

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 using Ogma3.Areas.Admin.Models;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
@@ -110,12 +109,6 @@ public class ApplicationDbContext : IdentityDbContext
 	public ApplicationDbContext(DbContextOptions options) : base(options)
 	{
 		_myLoggerFactory = LoggerFactory.Create(builder => builder.AddSerilog());
-
-		// Map all enums with `[PostgresEnum]` attribute
-		// TODO: #78
-#pragma warning disable CS0618
-		NpgsqlConnection.GlobalTypeMapper.MapPostgresEnums(typeof(Startup).Assembly);
-#pragma warning restore CS0618
 	}
 
 	protected override void OnModelCreating(ModelBuilder builder)

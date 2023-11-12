@@ -1,5 +1,0 @@
-js:
-    - in: 
-        - 'wwwroot/js/src/**/*.(js|ts)'
-        - '!wwwroot/js/src/wcomps'
-      out: 'wwwroot/js/dist'

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Npgsql.TypeMapping;
 using Serilog;
 
 namespace Ogma3.Infrastructure.PostgresEnumHelper;
@@ -17,22 +16,30 @@ public static class PostgresEnumHelper
 	private static MethodInfo? _mapMethod;
 	private static MethodInfo? _registerMethod;
 
-	public static INpgsqlTypeMapper MapPostgresEnums(
-		this INpgsqlTypeMapper mapper, 
+	/// <summary>
+	/// Maps found enums marked with <see cref="PostgresEnumAttribute"/> enum and maps database enum types to them.
+	/// See https://www.npgsql.org/efcore/mapping/enum.html#mapping-your-enum
+	/// </summary>
+	/// <param name="builder">Data source builder.</param>
+	/// <param name="assembly">Assembly containing the enums.</param>
+	/// <param name="translator">Optional translator between database enum types and CLR enum types.</param>
+	/// <returns>The configured builder.</returns>
+	public static NpgsqlDataSourceBuilder MapPostgresEnums(
+		this NpgsqlDataSourceBuilder builder, 
 		Assembly assembly,
 		INpgsqlNameTranslator? translator = null
 	) {
 		var enums = GetEnums(assembly);
-		if (enums is { Count: <= 0 }) return mapper;
+		if (enums is { Count: <= 0 }) return builder;
 
 		Log.Information("Mapping Postgres Enums:");
 
-		_mapMethod ??= mapper.GetType().GetMethod(nameof(mapper.MapEnum));
+		_mapMethod ??= builder.GetType().GetMethod(nameof(builder.MapEnum));
 
 		if (_mapMethod is null)
 		{
-			Log.Warning("No {MethodName} method found", nameof(mapper.MapEnum));
-			return mapper;
+			Log.Warning("No {MethodName} method found", nameof(builder.MapEnum));
+			return builder;
 		}
 
 		foreach (var type in enums)
@@ -43,12 +50,20 @@ public static class PostgresEnumHelper
 
 			_mapMethod
 				?.MakeGenericMethod(type)
-				.Invoke(mapper, new object?[] { name, translator });
+				.Invoke(builder, new object?[] { name, translator });
 		}
 
-		return mapper;
+		return builder;
 	}
 
+	/// <summary>
+	/// Registers enums marked with <see cref="PostgresEnumAttribute"/> enum with EF Core.
+	/// See https://www.npgsql.org/efcore/mapping/enum.html#creating-your-database-enum
+	/// </summary>
+	/// <param name="builder">Data source builder.</param>
+	/// <param name="assembly">Assembly containing the enums.</param>
+	/// <param name="schema">The schema in which to create the enum types.</param>
+	/// <param name="translator">Optional translator between database enum types and CLR enum types.</param>
 	public static void RegisterPostgresEnums(
 		this ModelBuilder builder,
 		Assembly assembly,

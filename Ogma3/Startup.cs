@@ -23,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
+using Npgsql;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Notifications;
@@ -35,6 +36,7 @@ using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.NSwag.OperationProcessors;
+using Ogma3.Infrastructure.PostgresEnumHelper;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
@@ -72,12 +74,12 @@ public class Startup
 
 		// Database
 		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
-		// var npgSourceBuilder = new NpgsqlDataSourceBuilder(conn);
-		// var source = npgSourceBuilder
-		// 	.MapPostgresEnums(typeof(Program).Assembly)
-		// 	.Build();
+		var npgSourceBuilder = new NpgsqlDataSourceBuilder(conn);
+		var source = npgSourceBuilder
+			.MapPostgresEnums(typeof(Program).Assembly)
+			.Build();
 		services
-			.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(conn))
+			.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(source))
 			.AddDatabaseDeveloperPageExceptionFilter();
 
 		// Repositories
