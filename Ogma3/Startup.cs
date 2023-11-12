@@ -241,7 +241,7 @@ public class Startup
 
 		// MediatR
 		services
-			.AddMediatR(typeof(Startup))
+			.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly))
 			.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 		// Custom formatters
