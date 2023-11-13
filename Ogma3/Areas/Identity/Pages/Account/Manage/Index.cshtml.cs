@@ -1,10 +1,11 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
-using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -39,19 +41,20 @@ public class IndexModel : PageModel
 		_context = context;
 	}
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public string StatusMessage { get; set; } = "";
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		public string Username { get; init; }
-		[DataType(DataType.Upload)] public IFormFile Avatar { get; init; }
+		public string Username { get; init; } = "";
+		[DataType(DataType.Upload)]
+		public IFormFile? Avatar { get; init; }
 
 		public bool DeleteAvatar { get; set; }
-		public string Title { get; init; }
-		public string Bio { get; init; }
-		public string Links { get; set; }
+		public string Title { get; init; } = "";
+		public string Bio { get; init; } = "";
+		public string Links { get; set; } = "";
 	}
 
 	public class InputModelValidation : AbstractValidator<InputModel>
@@ -76,12 +79,12 @@ public class IndexModel : PageModel
 			.Where(u => u.Id == uid)
 			.Select(u => new InputModel
 			{
-				Username = u.UserName,
-				Title = u.Title,
-				Bio = u.Bio,
+				Username = u.UserName ?? "",
+				Title = u.Title ?? "",
+				Bio = u.Bio ?? "",
 				Links = string.Join('\n', u.Links)
 			})
-			.FirstOrDefaultAsync();
+			.FirstOrDefaultAsync() ?? new InputModel();
 	}
 
 	public async Task<IActionResult> OnGetAsync()
@@ -138,7 +141,7 @@ public class IndexModel : PageModel
 			}
 
 			user.AvatarId = null;
-			user.Avatar = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString();
+			user.Avatar = new Uri(_config.AvatarServiceUrl).AppendSegments($"{user.UserName}.png").ToString();
 			// user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
 			// {
 			//     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString(), 

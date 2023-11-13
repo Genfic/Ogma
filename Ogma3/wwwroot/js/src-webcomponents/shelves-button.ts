@@ -1,13 +1,13 @@
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
+import { log } from "../src-helpers/logger";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	ShelfStories_AddToShelf as addToShelf,
 	ShelfStories_GetUserQuickShelves as getQuickShelves,
 	ShelfStories_GetUserShelvesPaginated as getShelves,
 	ShelfStories_RemoveFromShelf as removeFromShelf,
-} from "../../generated/paths-public";
-import { clickOutside } from "../helpers/click-outside";
+} from "../generated/paths-public";
+import { clickOutside } from "../src-helpers/click-outside";
 
 interface Shelf {
 	id: number;
@@ -119,7 +119,7 @@ export class ShelvesButton extends LitElement {
 		}
 	}
 
-	async #addOrRemove(id) {
+	async #addOrRemove(id: number) {
 		const exists = [...this.shelves, ...this.quickShelves].some(
 			(s) => s.doesContainBook && s.id === id
 		);

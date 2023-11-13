@@ -1,118 +1,118 @@
 Vue.component('comment', {
-    props: {
-        comment: {
-            type: Object,
-            required: true
-        },
-        idx: {
-            type: Number,
-            required: true
-        },
-        route: {
-            type: String,
-            required: true
-        },
-        csrf: {
-            type: String,
-            required: true
-        },
-        highlight: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        isAuthenticated: {
-            type: Boolean,
-            default: false
-        }
-    },
+	props: {
+		comment: {
+			type: Object,
+			required: true
+		},
+		idx: {
+			type: Number,
+			required: true
+		},
+		route: {
+			type: String,
+			required: true
+		},
+		csrf: {
+			type: String,
+			required: true
+		},
+		highlight: {
+			type: Boolean,
+			required: false,
+			default: false
+		},
+		isAuthenticated: {
+			type: Boolean,
+			default: false
+		}
+	},
 
-    data: function () {
-        return {
-            editData: null,
-            mutComment: this.comment,
-            revisions: [],
-            revisionsCache: null,
-            hide: this.comment.isBlocked
-        };
-    },
+	data: function () {
+		return {
+			editData: null,
+			mutComment: this.comment,
+			revisions: [],
+			revisionsCache: null,
+			hide: this.comment.isBlocked
+		};
+	},
 
-    methods: {
-        del: async function () {
-            if (confirm("Are you sure you want to delete?")) {
-                await axios.delete(`${this.route}/${this.comment.id}`, {
-                    headers: {"RequestVerificationToken": this.csrf}
-                });
-                this.mutComment = {...this.mutComment, deletedBy: 'User'};
-            }
-        },
+	methods: {
+		del: async function () {
+			if (confirm("Are you sure you want to delete?")) {
+				await axios.delete(`${this.route}/${this.comment.id}`, {
+					headers: { "RequestVerificationToken": this.csrf }
+				});
+				this.mutComment = { ...this.mutComment, deletedBy: 'User' };
+			}
+		},
 
-        edit: async function () {
-            if (this.editData && this.editData.id === this.comment.id) return;
+		edit: async function () {
+			if (this.editData && this.editData.id === this.comment.id) return;
 
-            this.editData = null;
-            const {data} = await axios.get(`${this.route}/md`, {
-                params: {
-                    id: this.comment.id
-                }
-            });
+			this.editData = null;
+			const { data } = await axios.get(`${this.route}/md`, {
+				params: {
+					id: this.comment.id
+				}
+			});
 
-            this.editData = {
-                id: this.comment.id,
-                body: data
-            };
-        },
+			this.editData = {
+				id: this.comment.id,
+				body: data
+			};
+		},
 
-        update: async function (e) {
-            e.preventDefault();
+		update: async function (e) {
+			e.preventDefault();
 
-            const {data} = await axios.patch(this.route, {
-                body: this.editData.body,
-                id: Number(this.editData.id)
-            }, {
-                headers: {"RequestVerificationToken": this.csrf}
-            });
+			const { data } = await axios.patch(this.route, {
+				body: this.editData.body,
+				id: Number(this.editData.id)
+			}, {
+				headers: { "RequestVerificationToken": this.csrf }
+			});
 
-            Object.assign(this.mutComment, data);
-            this.editData = null;
-        },
+			Object.assign(this.mutComment, data);
+			this.editData = null;
+		},
 
-        report: function () {
-            this.$emit('report', this.comment.id);
-        },
+		report: function () {
+			this.$emit('report', this.comment.id);
+		},
 
-        // Handle Enter key input
-        enter: async function (e) {
-            if (e.ctrlKey) await this.update(e);
-        },
+		// Handle Enter key input
+		enter: async function (e) {
+			if (e.ctrlKey) await this.update(e);
+		},
 
-        history: async function () {
-            if (this.revisions.length > 0) {
-                this.revisions = [];
-            } else if (this.revisionsCache !== null) {
-                this.revisions = this.revisionsCache;
-            } else {
-                this.revisionsCache = this.revisions = (await axios.get(`${this.route}/revisions/${this.comment.id}`)).data;
-            }
-        },
+		history: async function () {
+			if (this.revisions.length > 0) {
+				this.revisions = [];
+			} else if (this.revisionsCache !== null) {
+				this.revisions = this.revisionsCache;
+			} else {
+				this.revisionsCache = this.revisions = (await axios.get(`${this.route}/revisions/${this.comment.id}`)).data;
+			}
+		},
 
-        // Highlights the selected comment and scrolls it into view
-        changeHighlight: function (e) {
-            e.preventDefault();
-            this.$emit('change-hl', (this.idx + 1));
-        },
+		// Highlights the selected comment and scrolls it into view
+		changeHighlight: function (e) {
+			e.preventDefault();
+			this.$emit('change-hl', (this.idx + 1));
+		},
 
-        toggleShow: function () {
-            if (this.comment.isBlocked) {
-                this.hide = !this.hide;
-            }
-        },
+		toggleShow: function () {
+			if (this.comment.isBlocked) {
+				this.hide = !this.hide;
+			}
+		},
 
-        date: function (dt) {
-            return dayjs(dt).format('DD MMM YYYY, HH:mm');
-        },
-    },
-    template: `
+		date: function (dt) {
+			return dayjs(dt).format('DD MMM YYYY, HH:mm');
+		},
+	},
+	template: `
         <div :id="'comment-' + (idx + 1)"
              class="comment" :class="highlight ? 'marked' : ''">
 

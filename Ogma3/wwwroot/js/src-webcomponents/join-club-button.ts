@@ -1,7 +1,7 @@
 import { customElement, property } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
-import { ClubJoin_JoinClub as joinClub, ClubJoin_LeaveClub as leaveClub } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import { ClubJoin_JoinClub as joinClub, ClubJoin_LeaveClub as leaveClub } from "../generated/paths-public";
 
 @customElement("o-join")
 export class JoinClubButton extends LitElement {

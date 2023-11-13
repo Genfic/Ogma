@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { log } from "../helpers/logger";
-import { Quotes_GetRandomQuote as getQuote } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import { Quotes_GetRandomQuote as getQuote } from "../generated/paths-public";
 
 interface Quote {
 	body: string;

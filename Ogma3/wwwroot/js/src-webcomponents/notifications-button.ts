@@ -1,8 +1,8 @@
 import { customElement, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
-import "../helpers/extensions/Number";
-import { Notifications_CountUserNotifications as countNotifications } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import "../src-helpers/extensions/Number";
+import { Notifications_CountUserNotifications as countNotifications } from "../generated/paths-public";
 
 @customElement("o-notifications-button")
 export class NotificationsButton extends LitElement {

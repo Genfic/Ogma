@@ -1,7 +1,7 @@
 import { customElement, property } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
-import { Users_BlockUser as blockUser, Users_UnblockUser as unblockUser } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import { Users_BlockUser as blockUser, Users_UnblockUser as unblockUser } from "../generated/paths-public";
 
 @customElement("o-block")
 export class BlockUser extends LitElement {

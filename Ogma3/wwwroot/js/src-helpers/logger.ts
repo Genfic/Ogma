@@ -18,9 +18,9 @@ function _deepCopy(o: object): object {
  * Logger object to create better logging experience
  */
 export const log = {
-	log: o => console.log(isObject(o) ? _deepCopy(o) : o),
-	info: o => console.info(isObject(o) ? _deepCopy(o) : o),
-	warn: o => console.warn(isObject(o) ? _deepCopy(o) : o),
-	error: o => console.error(isObject(o) ? _deepCopy(o) : o),
-	debug: o => console.debug(isObject(o) ? _deepCopy(o) : o)
+	log: (o: any) => console.log(isObject(o) ? _deepCopy(o) : o),
+	info: (o: any) => console.info(isObject(o) ? _deepCopy(o) : o),
+	warn: (o: any) => console.warn(isObject(o) ? _deepCopy(o) : o),
+	error: (o: any) => console.error(isObject(o) ? _deepCopy(o) : o),
+	debug: (o: any) => console.debug(isObject(o) ? _deepCopy(o) : o)
 };

@@ -1,9 +1,9 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
+import { log } from "../src-helpers/logger";
 import { createRef, ref } from "lit/directives/ref.js";
 import { FolderTree } from "./folder-tree";
-import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../../generated/paths-public";
+import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../generated/paths-public";
 
 type Club = {
 	id: number;

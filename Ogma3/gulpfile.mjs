@@ -11,10 +11,6 @@ import autoprefixer from "autoprefixer";
 import mqpacker from "@hail2u/css-mqpacker";
 import csso from "postcss-csso";
 
-// JS processors
-import terser from "gulp-terser";
-import gulpEsbuild from "gulp-esbuild";
-
 // Rollup
 import * as rollup from "rollup";
 import resolve from "@rollup/plugin-node-resolve";
@@ -67,36 +63,13 @@ export const css = () => pipeline(gulp.src(`${roots.css}/*.sass`),
 
 export const watchCss = () => gulp.watch(watchGlobs.sass, css);
 
-// JS tasks
-export const js = () => pipeline(gulp.src([`${roots.js}/src/**/*.js`]),
-	sourcemaps.init({}),
-	terser(),
-	sourcemaps.write("./", {}),
-	gulp.dest(`${roots.js}/dist`),
-	errorHandler);
-
-export const watchJs = () => gulp.watch(watchGlobs.js, js);
-
-// TS tasks
-export const ts = () => pipeline(gulp.src([`${roots.js}/src/**/*.ts`]),
-	gulpEsbuild({
-		outdir: ".",
-		minify: true,
-		sourcemap: true,
-		tsconfig: `${roots.js}/tsconfig.json`
-	}),
-	gulp.dest(`${roots.js}/dist`),
-	errorHandler
-);
-
-export const watchTs = () => gulp.watch(watchGlobs.ts, ts);
 
 // Component bundle
-export const components = async () => pipeline(gulp.src(`${roots.js}/src/wcomps/**/*.ts`),
+export const components = async () => pipeline(gulp.src(`${roots.js}/src-webcomponents/**/*.ts`),
 	async () => {
 		const out = `${roots.js}/bundle/components.js`;
 		const bundle = await rollup.rollup({
-			input: `${roots.js}/src/wcomps/**/*.ts`,
+			input: `${roots.js}/src-webcomponents/**/*.ts`,
 			output: {
 				file: out,
 				format: "es",
@@ -126,8 +99,8 @@ export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`
 
 
 // All tasks
-export const all = gulp.parallel(css, js, ts, components);
-export const watchAll = gulp.parallel(watchCss, watchJs, watchTs, watchComponents, all);
+export const all = gulp.parallel(css, components);
+export const watchAll = gulp.parallel(watchCss, watchComponents, all);
 
 
 // Error handler

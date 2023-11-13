@@ -1,7 +1,7 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
-import { Clubs_BanUser as banUser, Clubs_UnbanUser as unbanUser } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import { Clubs_BanUser as banUser, Clubs_UnbanUser as unbanUser } from "../generated/paths-public";
 
 @customElement("o-club-ban")
 export class ClubBanButton extends LitElement {

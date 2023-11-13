@@ -1,29 +1,29 @@
 Vue.component('status-select', {
-    props: {
-        label: {
-            type: String,
-            required: true
-        },
-        value: {
-            type: Number,
-        },
-        desc: {
-            type: String,
-        },
-        statusesStr: {
-            type: String,
-            required: true
-        }
-    },
-    data: function () {
-        return {
-            statuses: JSON.parse(this.statusesStr),
-            name: this.label.replace(/\s+/g, ''),
-            selected: this.value ?? 0,
-        };
-    },
-    methods: {},
-    template: `
+	props: {
+		label: {
+			type: String,
+			required: true
+		},
+		value: {
+			type: Number,
+		},
+		desc: {
+			type: String,
+		},
+		statusesStr: {
+			type: String,
+			required: true
+		}
+	},
+	data: function () {
+		return {
+			statuses: JSON.parse(this.statusesStr),
+			name: this.label.replace(/\s+/g, ''),
+			selected: this.value ?? 0,
+		};
+	},
+	methods: {},
+	template: `
         <div class="o-form-group status-select">
         <label>{{ label.replace(/([A-Z])/g, " $1") }}</label>
         <p class="desc" v-if="desc">{{ desc }}</p>

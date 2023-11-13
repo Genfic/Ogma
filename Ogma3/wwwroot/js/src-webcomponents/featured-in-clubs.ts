@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { log } from "../helpers/logger";
-import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../generated/paths-public";
 
 interface Club {
 	id: number;

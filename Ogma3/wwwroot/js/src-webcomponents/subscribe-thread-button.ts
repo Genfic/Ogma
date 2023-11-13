@@ -1,11 +1,11 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { log } from "../helpers/logger";
+import { log } from "../src-helpers/logger";
 import {
 	Subscriptions_IsSubscribedToThread as isSubscribed,
 	Subscriptions_SubscribeThread as subscribe,
 	Subscriptions_UnsubscribeThread as unsubscribe,
-} from "../../generated/paths-public";
+} from "../generated/paths-public";
 
 @customElement("o-subscribe")
 export class SubscribeThreadButton extends LitElement {
@@ -34,7 +34,7 @@ export class SubscribeThreadButton extends LitElement {
 		return html`
 			<button
 				class="action-btn ${this.subscribed ? "active" : ""}"
-				@click="${this.#vote}"
+				@click="${this.#subscribe}"
 				title="${this.subscribed ? "Unsubscribe" : "Subscribe"}"
 			>
 				<i class="material-icons-outlined">${this.subscribed ? "notifications_active" : "notifications"}</i>&nbsp;
@@ -43,7 +43,7 @@ export class SubscribeThreadButton extends LitElement {
 		`;
 	}
 
-	async #vote() {
+	async #subscribe() {
 		const send = this.subscribed ? unsubscribe : subscribe;
 
 		const res = await send( {

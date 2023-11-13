@@ -9,4 +9,4 @@
 		setCookie('cookie-consent', 'true', expiry, true, 'strict', '/');
 		banner.style.display = 'none';
 	});
-})(); 
+})();

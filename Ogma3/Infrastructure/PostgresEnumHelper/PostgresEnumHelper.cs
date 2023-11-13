@@ -18,6 +18,7 @@ public static class PostgresEnumHelper
 
 	/// <summary>
 	/// Maps found enums marked with <see cref="PostgresEnumAttribute"/> enum and maps database enum types to them.
+	/// This is done only once, on startup.
 	/// See https://www.npgsql.org/efcore/mapping/enum.html#mapping-your-enum
 	/// </summary>
 	/// <param name="builder">Data source builder.</param>
@@ -58,6 +59,7 @@ public static class PostgresEnumHelper
 
 	/// <summary>
 	/// Registers enums marked with <see cref="PostgresEnumAttribute"/> enum with EF Core.
+	/// This is done multiple times during runtime, every time a new context gets instantiated.
 	/// See https://www.npgsql.org/efcore/mapping/enum.html#creating-your-database-enum
 	/// </summary>
 	/// <param name="builder">Data source builder.</param>

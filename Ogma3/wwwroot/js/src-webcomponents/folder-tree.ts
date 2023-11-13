@@ -1,8 +1,8 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
+import { log } from "../src-helpers/logger";
 import { classMap } from "lit/directives/class-map.js";
-import { Folders_GetFoldersOfClub as getClubFolders } from "../../generated/paths-public";
+import { Folders_GetFoldersOfClub as getClubFolders } from "../generated/paths-public";
 
 type Folder = {
 	id: number;

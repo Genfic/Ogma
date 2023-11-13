@@ -10,6 +10,7 @@
         "@typescript-eslint/eslint-plugin": "6.10.0",
         "@typescript-eslint/parser": "6.10.0",
         "autoprefixer": "10.4.16",
+        "concurrently": "^8.2.2",
         "esbuild": "0.19.5",
         "eslint": "8.53.0",
         "eslint-config-prettier": "9.0.0",
@@ -36,8 +37,10 @@
         "vue": "2.6.14"
     },
     "scripts": {
-        "build": "gulp all",
-        "dev": "gulp watchAll",
+        "build": "concurrently \"gulp all\" \"npm:js:build\"",
+        "dev": "concurrently \"gulp watchAll\" \"npm:js:watch\"",
+        "js:watch": "node esbuild.mjs --watch",
+        "js:build": "node esbuild.mjs",
         "t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json"
     },
     "name": "ogma-3",

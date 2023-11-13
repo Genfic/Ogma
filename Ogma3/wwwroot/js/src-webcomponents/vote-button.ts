@@ -1,7 +1,7 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
-import { log } from "../helpers/logger";
-import { Votes_DeleteVote as deleteVote, Votes_GetVotes as getVotes, Votes_PostVote as postVote } from "../../generated/paths-public";
+import { log } from "../src-helpers/logger";
+import { Votes_DeleteVote as deleteVote, Votes_GetVotes as getVotes, Votes_PostVote as postVote } from "../generated/paths-public";
 
 interface VoteResponse {
 	didVote: boolean;
