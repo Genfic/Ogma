@@ -7,11 +7,11 @@
 }
 
 <div class="counters">
-	@foreach (var (k, v) in Model.Counts)
+	@foreach (var item in Model.Counts)
 	{
 		<div class="counter">
-			<span class="name">@k</span>
-			<span class="value">@v</span>
+			<span class="name">@item.Name</span>
+			<span class="value">@item.Count</span>
 		</div>
 	}
 </div>

@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Areas.Admin.Api.V1.Telemetry.Queries;
-using Ogma3.Areas.Admin.Models;
 
 namespace Ogma3.Areas.Admin.Api.V1.Telemetry;
 
@@ -17,7 +16,7 @@ public class TelemetryController : ControllerBase
 	public TelemetryController(IMediator mediator) => _mediator = mediator;
 
 	[HttpGet(nameof(GetTableInfo))]
-	public async Task<ActionResult<List<TableInfo>>> GetTableInfo()
+	public async Task<ActionResult<List<GetTableInfo.Response>>> GetTableInfo()
 		=> await _mediator.Send(new GetTableInfo.Query());
 
 	[HttpGet(nameof(GetImportantItemCounts))]

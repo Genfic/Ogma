@@ -253,14 +253,14 @@ public class Startup
 			settings.DocumentName = "public";
 			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
 			settings.OperationProcessors.Insert(1, new ExcludeInternalApisProcessor());
-			settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 		services.AddOpenApiDocument(settings =>
 		{
 			settings.DocumentName = "internal";
 			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
 			settings.OperationProcessors.Insert(1, new IncludeInternalApisProcessor());
-			settings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 	}
 

@@ -10,7 +10,7 @@ public class NSwagNestedNameGenerator : ISchemaNameGenerator
 {
 	public string Generate(Type type)
 	{
-		var typeAttribute = type.ToCachedType().GetInheritedAttribute<JsonSchemaAttribute>();
+		var typeAttribute = type.ToCachedType().GetAttribute<JsonSchemaAttribute>(true);
 
 		if (!string.IsNullOrEmpty(typeAttribute?.Name))
 			return typeAttribute.Name;
@@ -26,12 +26,12 @@ public class NSwagNestedNameGenerator : ISchemaNameGenerator
 
 	private static string GetName(CachedType cType)
 	{
-		return cType.TypeName switch
+		return cType.Name switch
 		{
 			"Int16" => GetNullableDisplayName(cType, "Short"),
 			"Int32" => GetNullableDisplayName(cType, "Integer"),
 			"Int64" => GetNullableDisplayName(cType, "Long"),
-			_ when cType.Type.IsConstructedGenericType => GetNullableDisplayName(cType, cType.TypeName),
+			_ when cType.Type.IsConstructedGenericType => GetNullableDisplayName(cType, cType.Name),
 			_ => GetNullableDisplayName(cType, GetNameWithNamespace(cType)),
 		};
 	}

@@ -6,23 +6,22 @@ using Ogma3.Data;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Index : PageModel
+public class Index(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	public Index(ApplicationDbContext context) => _context = context;
+	public record CountItem(int Count, string Name);
 
-	public Dictionary<string, int> Counts { get; private set; }
+	public List<CountItem> Counts { get; private set; }
 
 	public async Task OnGet()
 	{
-		Counts = new Dictionary<string, int>
-		{
-			["Stories"] = await _context.Stories.CountAsync(),
-			["Chapters"] = await _context.Chapters.CountAsync(),
-			["Blogposts"] = await _context.Blogposts.CountAsync(),
-			["Users"] = await _context.Users.CountAsync(),
-			["Comments"] = await _context.Comments.CountAsync(),
-			["Reports"] = await _context.Reports.CountAsync(),
-		};
+		Counts = await context.Database.SqlQueryRaw<CountItem>("""
+		     	SELECT 'Stories' as name, count(1) as count FROM "Stories" UNION
+		     	SELECT 'Chapters' as name, count(1) as count FROM "Chapters" UNION
+		     	SELECT 'Blogposts' as name, count(1) as count FROM "Blogposts" UNION
+		     	SELECT 'Users' as name, count(1) as count FROM "AspNetUsers" u WHERE u."EmailConfirmed" UNION
+		     	SELECT 'Comments' as name, count(1) as count FROM "Comments" c WHERE c."DeletedBy" is null UNION
+		     	SELECT 'Reports' as name, count(1) as count FROM "Reports";
+		     """)
+			.ToListAsync();
 	}
 }

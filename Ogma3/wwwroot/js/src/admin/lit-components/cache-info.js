@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "https://cdn.skypack.dev/pin/lit@v2.0.2-YGLcP9t1W6IGdpcZ606E/mode=imports,min/optimized/lit.js";
+import { css, html, LitElement } from "lit";
 
 export class CacheInfo extends LitElement {
 	constructor() {
