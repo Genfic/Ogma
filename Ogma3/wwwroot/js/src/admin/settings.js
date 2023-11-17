@@ -1,3 +1,5 @@
+import { log } from "../../src-helpers/logger";
+
 (() => {
 	let inputs = document.querySelectorAll('input.o-form-control');
 

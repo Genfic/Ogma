@@ -32,7 +32,7 @@ public class IndexModel : PageModel
 	public class ProfileDetails
 	{
 		public string Bio { get; init; }
-		public IEnumerable<string> Links { get; set; }
+		public List<string> Links { get; init; }
 		public CommentsThreadDto CommentsThread { get; init; }
 	}
 

@@ -1,3 +1,6 @@
+import { log } from "../../src-helpers/logger";
+
+
 new Vue({
 	el: "#faqs",
 	data: {

@@ -1,17 +1,19 @@
+import { log } from "../../../src-helpers/logger";
+
 Vue.component("manage-infraction", {
 	props: {
 		route: {
 			type: String,
-			required: true
+			required: true,
 		},
 		userId: {
 			type: Number,
-			required: true
+			required: true,
 		},
 		types: {
 			type: Array,
-			required: true
-		}
+			required: true,
+		},
 	},
 	data: function () {
 		return {
@@ -20,29 +22,31 @@ Vue.component("manage-infraction", {
 			reason: null,
 
 			csrf: null,
-			visible: false
+			visible: false,
 		};
 	},
 	methods: {
-
 		hide: function () {
 			this.type = this.date = this.reason = null;
 			this.visible = false;
 		},
 
 		create: async function () {
-			log.log('submit');
-			await axios.post(this.route, {
-				userId: this.userId,
-				reason: this.reason,
-				endDate: this.date,
-				type: this.type
-			}, {
-				headers: { "RequestVerificationToken": this.csrf }
-			});
+			log.log("submit");
+			await axios.post(
+				this.route,
+				{
+					userId: this.userId,
+					reason: this.reason,
+					endDate: this.date,
+					type: this.type,
+				},
+				{
+					headers: { RequestVerificationToken: this.csrf },
+				},
+			);
 			location.reload();
 		},
-
 	},
 	template: `
 		<div class="my-modal" v-if="visible" @click.self="hide">
@@ -82,5 +86,5 @@ Vue.component("manage-infraction", {
 	`,
 	mounted() {
 		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-	}
+	},
 });

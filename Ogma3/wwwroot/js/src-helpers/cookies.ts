@@ -16,11 +16,20 @@ export const getCookieValue = (name: string): string => {
  * @param {Date|null} expires Expiration date
  * @param {boolean} secure Whether the cookie is secure
  * @param {string|null} sameSite SameSite setting
+ * @param {string|null} path Path for which the cookie is valid
  */
-export function setCookie(name: string, value: string, expires: Date | null = null, secure: boolean = false, sameSite: string | null = null) {
+export function setCookie(
+	name: string, 
+	value: string, 
+	expires: Date | null = null, 
+	secure: boolean = false, 
+	sameSite: string | null = null,
+	path: string | null = null,
+): void {
 	let cookie = `${name}=${value}`;
 	if (expires) cookie += `; expires=${expires.toUTCString()}`;
 	if (secure) cookie += `; secure=${String(secure)}`;
 	if (sameSite) cookie += `; samesite=${sameSite}`;
+	if (path) cookie += `; path=${path}`;
 	document.cookie = cookie;
 }

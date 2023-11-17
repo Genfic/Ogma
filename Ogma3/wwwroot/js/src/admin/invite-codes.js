@@ -1,3 +1,6 @@
+import { log } from "../../src-helpers/logger";
+import dayjs from "dayjs";
+
 new Vue({
 	el: "#app",
 	data: {

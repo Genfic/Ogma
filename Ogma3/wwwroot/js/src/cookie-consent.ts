@@ -1,3 +1,5 @@
+import { setCookie } from "../src-helpers/cookies";
+
 ((_) => {
 	const banner = document.getElementById("cookie-consent");
 	const button = banner.querySelector("button#cookie-consent-button");

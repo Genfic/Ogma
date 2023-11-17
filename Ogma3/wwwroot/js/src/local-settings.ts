@@ -1,3 +1,6 @@
+import { getCookieValue, setCookie } from "../src-helpers/cookies";
+
+// @ts-ignore
 const settings_vue = new Vue({
 	el: "#local-settings",
 	data: {

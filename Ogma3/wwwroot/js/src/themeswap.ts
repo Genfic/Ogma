@@ -1,3 +1,5 @@
+import { getCookieValue, setCookie } from "../src-helpers/cookies";
+
 (function () {
 	let themeLink = document.querySelector('link#theme-ph') as HTMLLinkElement;
 	let themeBtn = document.getElementById('theme-swap') as HTMLButtonElement;

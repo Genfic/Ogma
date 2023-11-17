@@ -60,8 +60,6 @@
 		"Vue": "readonly",
 		"require": "readonly",
 		"exports": "readonly",
-		"getCookieValue": "readonly",
-		"setCookie": "readonly",
 		"global": "readonly"
 //		"dayjs": "readonly"
 	},

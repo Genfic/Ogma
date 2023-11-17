@@ -1,3 +1,7 @@
+import { log } from "../../src-helpers/logger";
+import dayjs from "dayjs";
+
+// @ts-ignore
 new Vue({
 	el: "#app",
 	data: {
@@ -8,16 +12,21 @@ new Vue({
 	methods: {
 
 		createCode: async function () {
-			const { data } = await axios.post(this.route, null,
-				{ headers: { RequestVerificationToken: this.xcsrf } }
-			).catch(e => alert(e.response.data));
-			this.codes.push(data);
+			const res = await fetch(this.route, { 
+				method: 'POST', 
+				headers: { RequestVerificationToken: this.xcsrf } 
+			}).catch(e => alert(e.response.data));
+			
+			if (res)
+				this.codes.push(await res.json());
 		},
 
 		// Gets all existing namespaces
 		getCodes: async function () {
-			const { data } = await axios.get(this.route);
-			this.codes = data;
+			const res = await fetch(this.route);
+			
+			if (res)
+				this.codes = await res.json();
 		},
 
 		copyCode: function (t) {
@@ -40,7 +49,7 @@ new Vue({
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = (document.querySelector("[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		// Grab the initial set of namespaces
 		await this.getCodes();
 	}

@@ -1,3 +1,6 @@
+import { log } from "../src-helpers/logger";
+
+
 let comments_vue = new Vue({
 	el: "#comments-container",
 	data: {

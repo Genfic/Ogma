@@ -1,3 +1,6 @@
+import { log } from "../../src-helpers/logger";
+
+
 Vue.component("vue-report-modal", {
 	props: {
 		reportsRoute: {
