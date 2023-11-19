@@ -6,7 +6,7 @@
 
 @{
 	var genTime = DateTime.UtcNow - (DateTime)(Context.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
-	var renderTime = DateTime.Now - (DateTime)(ViewData["render_start"] ?? DateTime.UtcNow);
+	var renderTime = DateTime.UtcNow - (DateTime)(ViewData["render_start"] ?? DateTime.UtcNow);
 }
 
 <footer class="footer">
@@ -115,7 +115,7 @@
 	</div>
 
 	<div class="bottom">
-		<span class="copy-text">&copy;2019-@DateTime.Now.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
+		<span class="copy-text">&copy;2019-@DateTime.UtcNow.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
 	</div>
 
 </footer>

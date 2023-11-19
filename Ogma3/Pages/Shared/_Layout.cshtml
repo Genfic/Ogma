@@ -15,7 +15,7 @@
 
 	var isAdmin = ViewData["is-admin"];
 
-	ViewData["render_start"] = DateTime.Now;
+	ViewData["render_start"] = DateTime.UtcNow;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -43,12 +43,12 @@
 	@* Control the behavior of search engine crawling and indexing *@
 	@if (isAdmin is null)
 	{
-		<meta name="robots" content="index,follow"> @* All Search Engines *@
+		<meta name="robots" content="index,follow,noai,noimageai"> @* All Search Engines *@
 		<meta name="googlebot" content="index,follow"> @* Google Specific *@
 	}
 	else
 	{
-		<meta name="robots" content="noindex,nofollow"> @* All Search Engines *@
+		<meta name="robots" content="noindex,nofollow,noai,noimageai"> @* All Search Engines *@
 		<meta name="googlebot" content="noindex,nofollow"> @* Google Specific *@
 	}
 
@@ -131,11 +131,6 @@
         crossorigin="anonymous"
         asp-fallback-src="~/lib/axios.min.js"
         asp-fallback-test="window.axios"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.4/dayjs.min.js"
-        crossorigin="anonymous"
-        asp-fallback-src="~/lib/dayjs.min.js"
-        asp-fallback-test="window.dayjs"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
         crossorigin="anonymous"></script>

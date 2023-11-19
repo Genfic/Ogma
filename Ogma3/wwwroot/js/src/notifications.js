@@ -1,9 +1,11 @@
+import dayjs from "dayjs";
+
 new Vue({
 	el: "#notifications",
 	data: {
 		notifications: [],
 		route: null,
-		csrf: null
+		csrf: null,
 	},
 	methods: {
 		fetch: async function () {
@@ -12,20 +14,19 @@ new Vue({
 		},
 
 		deleteNotif: async function (id) {
-			await axios.delete(`${this.route}/${id}`,
-				{
-					headers: { "RequestVerificationToken": this.csrf }
-				});
+			await axios.delete(`${this.route}/${id}`, {
+				headers: { RequestVerificationToken: this.csrf },
+			});
 			await this.fetch();
 		},
 
 		parseTime: function (time) {
 			return dayjs(time).format("DD MMMM YYYY, HH:mm");
-		}
+		},
 	},
 	async mounted() {
 		this.route = document.querySelector("[data-route]").dataset.route;
 		await this.fetch();
 		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-	}
+	},
 }); 

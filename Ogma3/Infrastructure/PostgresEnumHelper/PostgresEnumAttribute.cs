@@ -6,10 +6,11 @@ using System;
 namespace Ogma3.Infrastructure.PostgresEnumHelper;
 
 [AttributeUsage(AttributeTargets.Enum)]
-public class PostgresEnumAttribute : Attribute
+public class PostgresEnumAttribute(string? name = null) : Attribute
 {
-	public string? Name { get; }
+	public string? Name { get; } = name;
 
-	public PostgresEnumAttribute(string? name = null) => Name = name;
-	public PostgresEnumAttribute() => Name = null;
+	public PostgresEnumAttribute() : this(null)
+	{
+	}
 }

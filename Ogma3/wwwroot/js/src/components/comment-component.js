@@ -1,30 +1,32 @@
-Vue.component('comment', {
+import dayjs from "dayjs";
+
+Vue.component("comment", {
 	props: {
 		comment: {
 			type: Object,
-			required: true
+			required: true,
 		},
 		idx: {
 			type: Number,
-			required: true
+			required: true,
 		},
 		route: {
 			type: String,
-			required: true
+			required: true,
 		},
 		csrf: {
 			type: String,
-			required: true
+			required: true,
 		},
 		highlight: {
 			type: Boolean,
 			required: false,
-			default: false
+			default: false,
 		},
 		isAuthenticated: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 
 	data: function () {
@@ -33,7 +35,7 @@ Vue.component('comment', {
 			mutComment: this.comment,
 			revisions: [],
 			revisionsCache: null,
-			hide: this.comment.isBlocked
+			hide: this.comment.isBlocked,
 		};
 	},
 
@@ -41,9 +43,9 @@ Vue.component('comment', {
 		del: async function () {
 			if (confirm("Are you sure you want to delete?")) {
 				await axios.delete(`${this.route}/${this.comment.id}`, {
-					headers: { "RequestVerificationToken": this.csrf }
+					headers: { RequestVerificationToken: this.csrf },
 				});
-				this.mutComment = { ...this.mutComment, deletedBy: 'User' };
+				this.mutComment = { ...this.mutComment, deletedBy: "User" };
 			}
 		},
 
@@ -53,32 +55,36 @@ Vue.component('comment', {
 			this.editData = null;
 			const { data } = await axios.get(`${this.route}/md`, {
 				params: {
-					id: this.comment.id
-				}
+					id: this.comment.id,
+				},
 			});
 
 			this.editData = {
 				id: this.comment.id,
-				body: data
+				body: data,
 			};
 		},
 
 		update: async function (e) {
 			e.preventDefault();
 
-			const { data } = await axios.patch(this.route, {
-				body: this.editData.body,
-				id: Number(this.editData.id)
-			}, {
-				headers: { "RequestVerificationToken": this.csrf }
-			});
+			const { data } = await axios.patch(
+				this.route,
+				{
+					body: this.editData.body,
+					id: Number(this.editData.id),
+				},
+				{
+					headers: { RequestVerificationToken: this.csrf },
+				},
+			);
 
 			Object.assign(this.mutComment, data);
 			this.editData = null;
 		},
 
 		report: function () {
-			this.$emit('report', this.comment.id);
+			this.$emit("report", this.comment.id);
 		},
 
 		// Handle Enter key input
@@ -99,7 +105,7 @@ Vue.component('comment', {
 		// Highlights the selected comment and scrolls it into view
 		changeHighlight: function (e) {
 			e.preventDefault();
-			this.$emit('change-hl', (this.idx + 1));
+			this.$emit("change-hl", this.idx + 1);
 		},
 
 		toggleShow: function () {
@@ -109,7 +115,7 @@ Vue.component('comment', {
 		},
 
 		date: function (dt) {
-			return dayjs(dt).format('DD MMM YYYY, HH:mm');
+			return dayjs(dt).format("DD MMM YYYY, HH:mm");
 		},
 	},
 	template: `
@@ -231,5 +237,5 @@ Vue.component('comment', {
             </div>
         </template>
         </div>
-    `
+    `,
 });
