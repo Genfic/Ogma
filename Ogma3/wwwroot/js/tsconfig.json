@@ -1,17 +1,19 @@
 {
 	"compilerOptions": {
 		"experimentalDecorators": true,
-		"module": "CommonJS",
-		"target": "ES6",
+		"module": "ESNext",
+		"target": "ES2020",
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "Bundler",
 		"lib": [
 			"DOM", "ES6", "ES2017", "DOM.Iterable"
 		]
 	},
 	"exclude": [
 		"node_modules",
-		"tools"
+		"tools",
+		"src/sw"
 	],
 }

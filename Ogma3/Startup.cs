@@ -37,6 +37,7 @@ using Ogma3.Infrastructure.MediatR.Behaviours;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.NSwag.OperationProcessors;
 using Ogma3.Infrastructure.PostgresEnumHelper;
+using Ogma3.Infrastructure.StartupGenerators;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
@@ -44,6 +45,7 @@ using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.UserService;
 using reCAPTCHA.AspNetCore;
+using Serilog;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
@@ -314,6 +316,11 @@ public class Startup
 					Public = true,
 					MaxAge = TimeSpan.FromDays(365)
 				};
+				if (context.File.Name.Contains("service-worker"))
+				{
+					Log.Information("Serving a service worker");
+					context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
+				}
 			},
 			ContentTypeProvider = extensionsProvider
 		});
@@ -339,5 +346,8 @@ public class Startup
 
 		// Compression
 		app.UseResponseCompression();
+
+		// Generate JS manifest
+		new JavascriptFilesManifestGenerator(env).Generate("js/dist", "js/bundle");
 	}
 }

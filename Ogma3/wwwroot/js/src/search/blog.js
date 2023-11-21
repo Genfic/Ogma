@@ -8,8 +8,6 @@ function sendForm() {
 	}
 }
 
-(function () {
-	document
-		.getElementById('search')
-		.addEventListener('submit', sendForm);
-})();
+document
+	.getElementById('search')
+	.addEventListener('submit', sendForm);

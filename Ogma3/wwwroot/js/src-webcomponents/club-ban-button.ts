@@ -34,29 +34,27 @@ export class ClubBanButton extends LitElement {
 	}
 
 	private async banOrUnban() {
-		const send = this.isBanned ? unbanUser : banUser;
 		
 		const data = {
 			clubId: this.clubId,
 			userId: this.userId
 		};
 		
+		const headers = {
+			RequestVerificationToken: this.csrf,
+		};
+		
 		log.log(`Cid: ${this.clubId} Uid: ${this.userId}`);
 		log.log({
 			clubId: this.clubId,
 			userId: this.userId,
-			foo: 420
+			foo: 420,
 		});
-				
-		const result = await send(
-			{ 
-				...data,
-				...(this.isBanned ? {} : { reason: prompt("What's the reason?") })
-			},{
-				RequestVerificationToken: this.csrf,
-			}
-		); 
 
+		let result = this.isBanned
+			? await unbanUser(data, headers)
+			: await banUser({ ...data, ...{ reason: prompt("What's the reason?") } }, headers);
+		
 		if (result.ok) {
 			this.isBanned = await result.json();
 		} else {

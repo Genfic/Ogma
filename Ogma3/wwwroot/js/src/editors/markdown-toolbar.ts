@@ -1,18 +1,17 @@
-(() => {
-	enum Action {
-		bold = "bold",
-		italic = "italic",
-		underline = "underline",
-		spoiler = "spoiler",
-		link = "link",
-	}
+enum Action {
+	bold = "bold",
+	italic = "italic",
+	underline = "underline",
+	spoiler = "spoiler",
+	link = "link",
+}
 
-	interface PrefixSuffix {
-		prefix: string;
-		suffix: string;
-	}
+interface PrefixSuffix {
+	prefix: string;
+	suffix: string;
+}
 
-	const tpl = `
+const tpl = `
 		<nav class="button-group toolbar">
 		  <button type="button" class="btn" data-action="${Action.bold}" title="${Action.bold}">
 		    <span class="material-icons-outlined">format_bold</span>
@@ -31,43 +30,43 @@
 		  </button>
 		</nav>`;
 
-	const areas = [...document.querySelectorAll("[data-md=true]")] as (
+const areas = [...document.querySelectorAll("[data-md=true]")] as (
 		| HTMLTextAreaElement
 		| HTMLInputElement
 	)[];
-	for (let area of areas) {
-		const vDom = new DOMParser().parseFromString(tpl, "text/html").body
-			.childNodes[0] as HTMLElement;
 
-		for (let btn of [
-			...vDom.querySelectorAll("button.btn[data-action]"),
-		] as HTMLElement[]) {
-			btn.addEventListener("click", (_) => {
-				const action: Action = Action[btn.dataset["action"]];
-				const map: Record<Action, PrefixSuffix> = {
-					bold: { prefix: "**", suffix: "**" },
-					italic: { prefix: "*", suffix: "*" },
-					underline: { prefix: "_", suffix: "_" },
-					spoiler: { prefix: "||", suffix: "||" },
-					link: { prefix: "[", suffix: "]()" },
-				};
-				const { prefix, suffix } = map[action];
-				const start = area.selectionStart;
-				const end = area.selectionEnd;
+for (let area of areas) {
+	const vDom = new DOMParser().parseFromString(tpl, "text/html").body
+		.childNodes[0] as HTMLElement;
 
-				const text = area.value.substring(start, end);
+	for (let btn of [
+		...vDom.querySelectorAll("button.btn[data-action]"),
+	] as HTMLElement[]) {
+		btn.addEventListener("click", (_) => {
+			const action: Action = Action[btn.dataset["action"]];
+			const map: Record<Action, PrefixSuffix> = {
+				bold: { prefix: "**", suffix: "**" },
+				italic: { prefix: "*", suffix: "*" },
+				underline: { prefix: "_", suffix: "_" },
+				spoiler: { prefix: "||", suffix: "||" },
+				link: { prefix: "[", suffix: "]()" },
+			};
+			const { prefix, suffix } = map[action];
+			const start = area.selectionStart;
+			const end = area.selectionEnd;
 
-				area.setRangeText(
+			const text = area.value.substring(start, end);
+
+			area.setRangeText(
 					`${prefix}${text}${suffix}`,
 					start,
 					end,
 					"preserve"
-				);
-				area.selectionStart = area.selectionEnd = end + prefix.length;
-				area.focus();
-			});
-		}
-
-		area.before(vDom);
+			);
+			area.selectionStart = area.selectionEnd = end + prefix.length;
+			area.focus();
+		});
 	}
-})();
+
+	area.before(vDom);
+}

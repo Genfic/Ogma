@@ -1,7 +1,7 @@
 (async () => {
 	const route = document.querySelector("[data-reads]") as HTMLElement;
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
-	
+
 	const buttons = [
 		...document.querySelectorAll("button.read-status"),
 	] as HTMLButtonElement[];
@@ -21,7 +21,7 @@
 	for (const b of buttons) {
 		b.addEventListener("click", () => _changeState(Number(b.dataset.id)));
 	}
-	
+
 	const _changeState = async (id: number) => {
 		const method = reads.includes(id) ? "delete" : "post";
 		const res = await fetch(route.dataset.reads, {
@@ -58,4 +58,4 @@
 		reads = await res.json();
 		_update();
 	}
-})();
+})()
