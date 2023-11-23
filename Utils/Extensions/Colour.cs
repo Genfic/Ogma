@@ -1,11 +1,7 @@
-#region
-
 using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-
-#endregion
 
 namespace Utils.Extensions;
 

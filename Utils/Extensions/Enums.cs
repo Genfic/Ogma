@@ -1,10 +1,6 @@
-#region
-
 using System;
 using System.Linq;
 using System.Reflection;
-
-#endregion
 
 namespace Utils.Extensions;
 

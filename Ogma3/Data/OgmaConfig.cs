@@ -17,8 +17,6 @@ public class OgmaConfig
 
 	[JsonIgnore] private string PersistentFileLocation { get; set; }
 
-	#region Methods
-
 	/// <summary>
 	/// Persist `this` in a file
 	/// </summary>
@@ -52,10 +50,6 @@ public class OgmaConfig
 		return config;
 	}
 
-	#endregion
-
-	#region Data proper
-
 	public string Cdn { get; set; }
 
 	public string AvatarServiceUrl { get; set; }
@@ -83,6 +77,4 @@ public class OgmaConfig
 	[AutoformCategory("Image sizes")] public int AvatarHeight { get; set; } = 250;
 
 	[AutoformCategory("Moderation")] public int MinReportLength { get; set; } = 30;
-
-	#endregion
 }

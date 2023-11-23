@@ -1,15 +1,11 @@
-#region
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-#endregion
-
 namespace Utils.Extensions;
 
-public static class String
+public static partial class String
 {
 	/// <summary>
 	/// Replace non-alphanumeric characters with underscores, and double underscores with single ones.
@@ -18,7 +14,7 @@ public static class String
 	/// <returns>Friendlified string</returns>
 	public static string Friendlify(this string input)
 	{
-		return new Regex("[^a-zA-Z0-9]+")
+		return MyRegex()
 			.Replace(input, "-")
 			.ToLower()
 			.Trim('-');
@@ -136,8 +132,7 @@ public static class String
 
 			var latest = headers
 				.Where(h => h.Body == head.Body)
-				.OrderByDescending(h => h.Occurrence)
-				.FirstOrDefault();
+				.MaxBy(h => h.Occurrence);
 
 			if (latest != null)
 			{
@@ -156,4 +151,7 @@ public static class String
 		public byte Occurrence { get; set; }
 		public string Body { get; set; } = null!;
 	}
+
+	[GeneratedRegex("[^a-zA-Z0-9]+")]
+	private static partial Regex MyRegex();
 }

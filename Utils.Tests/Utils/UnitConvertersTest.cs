@@ -1,8 +1,4 @@
-#region
-
 using Xunit;
-
-#endregion
 
 namespace Utils.Tests.Utils;
 

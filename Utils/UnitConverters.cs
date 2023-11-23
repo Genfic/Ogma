@@ -1,8 +1,4 @@
-#region
-
 using System;
-
-#endregion
 
 namespace Utils;
 
@@ -12,10 +8,7 @@ public static class UnitConverters
 
 	public static string SizeSuffix(long value, int decimalPlaces = 1)
 	{
-		if (decimalPlaces < 0)
-		{
-			throw new ArgumentOutOfRangeException(nameof(decimalPlaces));
-		}
+		ArgumentOutOfRangeException.ThrowIfNegative(decimalPlaces);
 
 		switch (value)
 		{
