@@ -4,21 +4,17 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class LineCountValidator<T> : PropertyValidator<T, string>
+public class LineCountValidator<T>(uint max) : PropertyValidator<T, string>
 {
-	private readonly uint _max;
-
-	public LineCountValidator(uint max) => _max = max;
-
 	public override bool IsValid(ValidationContext<T> context, string value)
 	{
 		// TODO: Optimize this
-		if (value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None).Length <= _max)
+		if (value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None).Length <= max)
 		{
 			return true;
 		}
 
-		context.MessageFormatter.AppendArgument("MaxLines", _max);
+		context.MessageFormatter.AppendArgument("MaxLines", max);
 		return false;
 	}
 

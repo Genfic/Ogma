@@ -19,7 +19,7 @@ public class MaxFileSizeAttribute : ValidationAttribute, IClientModelValidator
 
 	protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 	{
-		if (value == null)
+		if (value is null)
 			return ValidationResult.Success;
 
 		if (value is not IFormFile file)

@@ -7,23 +7,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class FileExtensionValidator<T> : PropertyValidator<T, IFormFile>
+public class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile>
 {
-	private readonly string[] _allowedExtensions;
-
-	public FileExtensionValidator(string[] allowedExtensions)
-	{
-		_allowedExtensions = allowedExtensions;
-	}
-
 	public override bool IsValid(ValidationContext<T> context, IFormFile value)
 	{
 		if (value is null) return true;
 
 		var extension = Path.GetExtension(value.FileName);
-		if (_allowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase)) return true;
+		if (allowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase)) return true;
 
-		context.MessageFormatter.AppendArgument("AllowedExtensions", string.Join(", ", _allowedExtensions));
+		context.MessageFormatter.AppendArgument("AllowedExtensions", string.Join(", ", allowedExtensions));
 		context.MessageFormatter.AppendArgument("ActualExtension", extension);
 		return false;
 	}

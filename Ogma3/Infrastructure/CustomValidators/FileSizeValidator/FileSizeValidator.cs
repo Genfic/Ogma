@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 
-public class FileSizeValidator<T> : PropertyValidator<T, IFormFile>, IFileSizeValidator
+public class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile>, IFileSizeValidator
 {
-	public uint Max { get; }
-	public FileSizeValidator(uint max) => Max = max;
+	public uint Max { get; } = max;
 
 	public override bool IsValid(ValidationContext<T> context, IFormFile value)
 	{

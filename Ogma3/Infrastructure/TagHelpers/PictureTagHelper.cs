@@ -12,22 +12,17 @@ namespace Ogma3.Infrastructure.TagHelpers;
 [HtmlTargetElement(
 	"picture",
 	Attributes = AppendVersionAttributeName + "," + SrcAttributeName)]
-public class PictureTagHelper : UrlResolutionTagHelper
+[method: ActivatorUtilitiesConstructor]
+public class PictureTagHelper(
+	IUrlHelperFactory urlHelperFactory,
+	HtmlEncoder htmlEncoder,
+	IFileVersionProvider fileVersionProvider
+) : UrlResolutionTagHelper(urlHelperFactory, htmlEncoder)
 {
 	private const string AppendVersionAttributeName = "asp-append-version";
 	private const string SrcAttributeName = "src";
 
-	internal IFileVersionProvider FileVersionProvider { get; private set; }
-
-	[ActivatorUtilitiesConstructor]
-	public PictureTagHelper(
-		IUrlHelperFactory urlHelperFactory,
-		HtmlEncoder htmlEncoder,
-		IFileVersionProvider fileVersionProvider
-	) : base(urlHelperFactory, htmlEncoder)
-	{
-		FileVersionProvider = fileVersionProvider;
-	}
+	internal IFileVersionProvider FileVersionProvider { get; private set; } = fileVersionProvider;
 
 	[HtmlAttributeName(SrcAttributeName)] public string Src { get; set; }
 
@@ -42,8 +37,8 @@ public class PictureTagHelper : UrlResolutionTagHelper
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
-		if (context == null) throw new ArgumentNullException(nameof(context));
-		if (output == null) throw new ArgumentNullException(nameof(output));
+		ArgumentNullException.ThrowIfNull(context);
+		ArgumentNullException.ThrowIfNull(output);
 
 		output.CopyHtmlAttribute(SrcAttributeName, context);
 		ProcessUrlAttribute(SrcAttributeName, output);
@@ -61,7 +56,7 @@ public class PictureTagHelper : UrlResolutionTagHelper
 			var finalUrl = AppendVersion
 				? FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, formatUrl)
 				: formatUrl;
-			output.Content.AppendHtml($@"<source type=""image/{format}"" srcset=""{finalUrl}"" />");
+			output.Content.AppendHtml($"""<source type="image/{format}" srcset="{finalUrl}" />""");
 		}
 
 		var url = AppendVersion
@@ -69,8 +64,8 @@ public class PictureTagHelper : UrlResolutionTagHelper
 			: Src;
 
 		output.Content.AppendHtml(!Eager
-			? $@"<img src=""{url}"" alt=""{Alt}"" width=""{Width}"" height=""{Height}"">"
-			: $@"<img src=""{url}"" alt=""{Alt}"" width=""{Width}"" height=""{Height}"" loading=""lazy"">");
+			? $"""<img src="{url}" alt="{Alt}" width="{Width}" height="{Height}">"""
+			: $"""<img src="{url}" alt="{Alt}" width="{Width}" height="{Height}" loading="lazy">""");
 
 		output.Attributes.Clear();
 	}

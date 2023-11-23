@@ -11,16 +11,9 @@ using Serilog;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class RedirectMiddleware
+public class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options)
 {
-	private readonly RequestDelegate _next;
-	private readonly RedirectMiddlewareOptions _options;
-
-	public RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options)
-	{
-		_next = next;
-		_options = options.Value;
-	}
+	private readonly RedirectMiddlewareOptions _options = options.Value;
 
 	public async Task InvokeAsync(HttpContext context)
 	{
@@ -31,7 +24,7 @@ public class RedirectMiddleware
 			return;
 		}
 
-		await _next(context);
+		await next(context);
 	}
 }
 

@@ -9,15 +9,13 @@ using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class AutoformTagHelper : TagHelper
+public class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 {
 	[HtmlAttributeNotBound]
 	[ViewContext]
 	public ViewContext ViewContext { get; set; }
 
-	private IHtmlGenerator Generator { get; }
-
-	public AutoformTagHelper(IHtmlGenerator generator) => Generator = generator;
+	private IHtmlGenerator Generator { get; } = generator;
 
 	public ModelExpression For { get; set; }
 

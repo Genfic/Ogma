@@ -13,32 +13,23 @@ using Serilog;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class UserBanMiddleware : IMiddleware
+public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext context) : IMiddleware
 {
-	private readonly IMemoryCache _cache;
-	private readonly ApplicationDbContext _context;
-
-	public UserBanMiddleware(IMemoryCache cache, ApplicationDbContext context)
-	{
-		_cache = cache;
-		_context = context;
-	}
-
 	public static string CacheKey(long id) => $"u{id}_Ban";
 
-	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+	public async Task InvokeAsync(HttpContext context1, RequestDelegate next)
 	{
-		var uid = context.User.GetNumericId();
+		var uid = context1.User.GetNumericId();
 		if (uid is null)
 		{
-			await next(context);
+			await next(context1);
 			return;
 		}
 
-		var banDate = await _cache.GetOrCreateAsync(CacheKey((long)uid), async entry =>
+		var banDate = await cache.GetOrCreateAsync(CacheKey((long)uid), async entry =>
 		{
 			entry.SlidingExpiration = TimeSpan.FromMinutes(30);
-			return await _context.Infractions
+			return await context.Infractions
 				.Where(i => i.UserId == uid)
 				.Where(i => i.Type == InfractionType.Ban)
 				.Where(i => i.RemovedAt == null)
@@ -49,31 +40,31 @@ public class UserBanMiddleware : IMiddleware
 
 		if (banDate == default)
 		{
-			await next(context);
+			await next(context1);
 			return;
 		}
 
 		if (banDate > DateTime.Now)
 		{
 			Log.Information("Banned user {UserId} tried accessing the site", uid);
-			if (context.Request.Path.StartsWithSegments("/api"))
+			if (context1.Request.Path.StartsWithSegments("/api"))
 			{
-				context.Response.Clear();
-				context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-				await context.Response.WriteAsync($"Account banned until {banDate:o}");
+				context1.Response.Clear();
+				context1.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+				await context1.Response.WriteAsync($"Account banned until {banDate:o}");
 			}
-			else if (context.Request.Path.StartsWithSegments("/Ban"))
+			else if (context1.Request.Path.StartsWithSegments("/Ban"))
 			{
-				await next(context);
+				await next(context1);
 			}
 			else
 			{
-				context.Response.Redirect("/Ban");
+				context1.Response.Redirect("/Ban");
 			}
 		}
 		else
 		{
-			await next(context);
+			await next(context1);
 		}
 	}
 }

@@ -4,22 +4,15 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class HashtagLengthValidator<T> : IPropertyValidator<T, string>
+public class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string>
 {
-	private readonly uint _max;
-
-	public HashtagLengthValidator(uint max)
-	{
-		_max = max;
-	}
-
 	public bool IsValid(ValidationContext<T> context, string value)
 	{
 		var valid = Validate(value);
 
 		if (valid) return true;
 			
-		context.MessageFormatter.AppendArgument("MaxLength", _max);
+		context.MessageFormatter.AppendArgument("MaxLength", max);
 		return false;
 	}
 
@@ -48,7 +41,7 @@ public class HashtagLengthValidator<T> : IPropertyValidator<T, string>
 				count++;
 			}
 
-			if (count > _max) return false;
+			if (count > max) return false;
 		}
 		
 		return true;

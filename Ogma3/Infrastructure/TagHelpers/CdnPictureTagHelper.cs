@@ -6,11 +6,8 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class CdnPictureTagHelper : TagHelper
+public class CdnPictureTagHelper(OgmaConfig config) : TagHelper
 {
-	private readonly OgmaConfig _config;
-	public CdnPictureTagHelper(OgmaConfig config) => _config = config;
-
 	public string Src { get; set; } = null!;
 	public int Width { get; set; }
 	public int Height { get; set; }
@@ -21,7 +18,7 @@ public class CdnPictureTagHelper : TagHelper
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
-		var url = _config.Cdn + Src.Trim('/');
+		var url = config.Cdn + Src.Trim('/');
 		var bareUrl = url[..url.LastIndexOf('.')];
 
 		if (!string.IsNullOrEmpty(Buster)) url += $"?v={Buster}";

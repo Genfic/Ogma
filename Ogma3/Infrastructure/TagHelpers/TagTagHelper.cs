@@ -19,9 +19,9 @@ public class TagTagHelper : TagHelper
 
 	public TagTagHelper(IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
 	{
-		if (actionContextAccessor is not { ActionContext: { } } aca)
-			throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
-		_urlHelper = urlHelperFactory.GetUrlHelper(aca.ActionContext);
+		if (actionContextAccessor is not { ActionContext: not null })
+			throw new NullReferenceException(nameof(actionContextAccessor.ActionContext));
+		_urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
 		Tag = new TagDto();
 	}
 
@@ -43,7 +43,7 @@ public class TagTagHelper : TagHelper
 
 		output.Content.AppendHtml(Tag.NamespaceColor == null
 			? "<div class='bg'></div>"
-			: $@"<div class='bg' style='background-color: #{Tag.NamespaceColor.Trim('#')}'></div>");
+			: $"<div class='bg' style='background-color: #{Tag.NamespaceColor.Trim('#')}'></div>");
 
 		output.Content.AppendHtml($@"<span class='name'>{Tag.Name}</span>");
 	}

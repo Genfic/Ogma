@@ -20,7 +20,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
 			.Where(f => f is not null)
 			.ToList();
 
-		if (failures.Any())
+		if (failures.Count != 0)
 		{
 			throw new ValidationException(failures);
 		}

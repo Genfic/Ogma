@@ -19,9 +19,13 @@ public static class HtmlExtensions
 	public static HtmlString Resource(this IHtmlHelper htmlHelper, Func<object, HelperResult> template, string type = "js")
 	{
 		if (htmlHelper.ViewContext.HttpContext.Items[type] is not null)
+		{
 			((List<Func<object, HelperResult>>)htmlHelper.ViewContext.HttpContext.Items[type]).Add(template);
+		}
 		else
+		{
 			htmlHelper.ViewContext.HttpContext.Items[type] = new List<Func<object, HelperResult>> { template };
+		}
 
 		return new HtmlString(string.Empty);
 	}

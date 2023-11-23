@@ -8,15 +8,11 @@ using Ogma3.Data;
 
 namespace Ogma3.Services;
 
-public class CommentRedirector
+public class CommentRedirector(ApplicationDbContext context)
 {
-	private readonly ApplicationDbContext _context;
-
-	public CommentRedirector(ApplicationDbContext context) => _context = context;
-
 	public async Task<CommentRedirectionResult?> RedirectToComment(long commentId)
 	{
-		var comment = await _context.Comments
+		var comment = await context.Comments
 			.Where(c => c.Id == commentId)
 			.Select(c => new CommentMeta
 			{

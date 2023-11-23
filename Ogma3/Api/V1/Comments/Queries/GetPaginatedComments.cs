@@ -54,7 +54,7 @@ public static class GetPaginatedComments
 				: (int)Math.Ceiling((double)(total - (highlight - 1)) / _ogmaConfig.CommentsPerPage);
 
 			// Send auth data
-			_httpContextAccessor.HttpContext?.Response.Headers.Add("X-Authenticated",
+			_httpContextAccessor.HttpContext?.Response.Headers.Append("X-Authenticated",
 				(_userService.User?.Identity?.IsAuthenticated ?? false).ToString());
 
 			var comments = await _context.Comments

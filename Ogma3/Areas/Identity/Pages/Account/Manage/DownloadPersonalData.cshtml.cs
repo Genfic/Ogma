@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Json;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -40,15 +41,11 @@ public class DownloadPersonalDataModel : PageModel
 			.Where(prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
 
 		var personalData = personalDataProps
-			.Where(p => !p.Name.ToLower().Contains("phone"))
+			.Where(p => !p.Name.Contains("phone", StringComparison.CurrentCultureIgnoreCase))
 			.ToDictionary(p => p.Name, p => p.GetValue(user)?.ToString() ?? "null");
 
-		var jsonOptions = new JsonSerializerOptions
-		{
-			WriteIndented = true
-		};
 
-		Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.json");
-		return new FileContentResult(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(personalData, jsonOptions)), "text/json");
+		Response.Headers.ContentDisposition = "attachment; filename=PersonalData.json";
+		return new FileContentResult(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(personalData, SerializerOptions.Indented)), "text/json");
 	}
 }

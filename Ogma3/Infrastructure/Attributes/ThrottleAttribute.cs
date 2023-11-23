@@ -1,4 +1,7 @@
+#nullable enable
+
 using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -23,7 +26,7 @@ public class ThrottleAttribute : ActionFilterAttribute
 
 	public override void OnActionExecuting(ActionExecutingContext filterContext)
 	{
-		var cache = filterContext.HttpContext.RequestServices.GetService<IMemoryCache>();
+		var cache = filterContext.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
 		var seconds = (int)TimeUnit;
 
 		var controllerActionDescriptor = (ControllerActionDescriptor)filterContext.ActionDescriptor;
@@ -38,9 +41,9 @@ public class ThrottleAttribute : ActionFilterAttribute
 
 		// increment the cache value
 		var cnt = 1;
-		if (cache.Get(key) is not null)
+		if (cache.TryGetValue<int>(key, out var val))
 		{
-			cnt = (int)cache.Get(key) + 1;
+			cnt = val + 1;
 		}
 
 		cache.Set(key, cnt, new MemoryCacheEntryOptions
@@ -56,6 +59,6 @@ public class ThrottleAttribute : ActionFilterAttribute
 			Content = $"You are allowed to make only {Count} requests per {TimeUnit.ToString().ToLower()}"
 		};
 		filterContext.HttpContext.Response.StatusCode = 429;
-		filterContext.HttpContext.Response.Headers.Add("Retry-After", (seconds / Count).ToString());
+		filterContext.HttpContext.Response.Headers.Append("Retry-After", (seconds / Count).ToString());
 	}
 }

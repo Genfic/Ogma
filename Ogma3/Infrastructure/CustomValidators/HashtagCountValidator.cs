@@ -4,20 +4,13 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class HashtagCountValidator<T> : IPropertyValidator<T, string>
+public class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, string>
 {
-	private readonly uint _max;
-
-	public HashtagCountValidator(uint max)
-	{
-		_max = max;
-	}
-
 	public bool IsValid(ValidationContext<T> context, string value)
 	{
 		if (Validate(value)) return true;
 
-		context.MessageFormatter.AppendArgument("MaxElements", _max);
+		context.MessageFormatter.AppendArgument("MaxElements", max);
 		return false;
 	}
 
@@ -46,7 +39,7 @@ public class HashtagCountValidator<T> : IPropertyValidator<T, string>
 			}
 			
 
-			if (count > _max) return false;
+			if (count > max) return false;
 		}
 
 		return true;

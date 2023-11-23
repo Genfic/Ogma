@@ -8,12 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 
-public class FileSizeClientValidator : ClientValidatorBase
+public class FileSizeClientValidator(IValidationRule rule, IRuleComponent component) : ClientValidatorBase(rule, component)
 {
-	public FileSizeClientValidator(IValidationRule rule, IRuleComponent component) : base(rule, component)
-	{
-	}
-
 	public override void AddValidation(ClientModelValidationContext context)
 	{
 		var validator = (IFileSizeValidator)Validator;

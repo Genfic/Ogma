@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Ogma3.Infrastructure.Json;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
@@ -9,13 +10,8 @@ public class DebugTagHelper : TagHelper
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
-		var options = new JsonSerializerOptions
-		{
-			WriteIndented = true
-		};
-
 		output.TagName = "pre";
 		output.Attributes.SetAttribute("class", "debug");
-		output.Content.SetContent(JsonSerializer.Serialize(Object, options));
+		output.Content.SetContent(JsonSerializer.Serialize(Object, SerializerOptions.Indented));
 	}
 }

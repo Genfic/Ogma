@@ -8,37 +8,28 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class StoryCountTagHelper : TagHelper
+public class StoryCountTagHelper(ApplicationDbContext context, IMemoryCache cache) : TagHelper
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMemoryCache _cache;
-
-	public StoryCountTagHelper(ApplicationDbContext context, IMemoryCache cache)
-	{
-		_context = context;
-		_cache = cache;
-	}
-
 	/// <summary>
 	/// How often should the cache refresh in minutes
 	/// </summary>
 	public int CacheTime { get; set; } = 60;
 
-	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+	public override async Task ProcessAsync(TagHelperContext context1, TagHelperOutput output)
 	{
 		const string name = nameof(StoryCountTagHelper) + "_cache";
 
 		int count;
-		if (_cache.TryGetValue(name, out int c))
+		if (cache.TryGetValue(name, out int c))
 		{
 			count = c;
 		}
 		else
 		{
-			count = await _context.Stories
+			count = await context.Stories
 				.Where(s => s.PublicationDate != null)
 				.CountAsync();
-			_cache.Set(name, count, TimeSpan.FromMinutes(CacheTime));
+			cache.Set(name, count, TimeSpan.FromMinutes(CacheTime));
 		}
 
 		output.TagName = "span";
