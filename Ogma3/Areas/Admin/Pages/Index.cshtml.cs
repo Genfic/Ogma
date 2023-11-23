@@ -10,7 +10,7 @@ public class Index(ApplicationDbContext context) : PageModel
 {
 	public record CountItem(int Count, string Name);
 
-	public List<CountItem> Counts { get; private set; }
+	public required List<CountItem> Counts { get; set; }
 
 	public async Task OnGet()
 	{

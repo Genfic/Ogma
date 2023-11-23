@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;

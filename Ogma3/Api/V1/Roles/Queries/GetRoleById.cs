@@ -25,7 +25,7 @@ public static class GetRoleById
 				.Where(r => r.Id == request.RoleId)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			return Ok(role);
+			return role is null ? NotFound() : Ok(role);
 		}
 	}
 }

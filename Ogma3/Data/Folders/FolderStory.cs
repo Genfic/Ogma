@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;

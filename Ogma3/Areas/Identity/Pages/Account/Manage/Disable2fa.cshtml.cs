@@ -21,7 +21,7 @@ public class Disable2FaModel : PageModel
 		_logger = logger;
 	}
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
 	public async Task<IActionResult> OnGet()
 	{
@@ -43,7 +43,7 @@ public class Disable2FaModel : PageModel
 	public async Task<IActionResult> OnPostAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}

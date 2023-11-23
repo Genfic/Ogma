@@ -24,27 +24,27 @@ public class LoginModel : PageModel
 		_logger = logger;
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
-	public IList<AuthenticationScheme> ExternalLogins { get; set; }
+	public required IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-	public string ReturnUrl { get; set; }
+	public required string ReturnUrl { get; set; }
 
-	[TempData] public string ErrorMessage { get; set; }
+	[TempData] public required string ErrorMessage { get; set; }
 
 	public class InputModel
 	{
-		[Required] public string Name { get; init; }
+		[Required] public required string Name { get; init; }
 
 		[Required]
 		[DataType(DataType.Password)]
-		public string Password { get; init; }
+		public required string Password { get; init; }
 
-		[Display(Name = "Remember me?")] public bool RememberMe { get; init; }
+		[Display(Name = "Remember me?")] public required bool RememberMe { get; init; }
 	}
 
 
-	public async Task OnGetAsync(string returnUrl = null)
+	public async Task OnGetAsync(string? returnUrl = null)
 	{
 		if (!string.IsNullOrEmpty(ErrorMessage))
 		{
@@ -62,7 +62,7 @@ public class LoginModel : PageModel
 	}
 
 
-	public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
 

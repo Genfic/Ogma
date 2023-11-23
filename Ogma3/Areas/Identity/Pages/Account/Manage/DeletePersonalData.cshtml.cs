@@ -34,16 +34,16 @@ public class DeletePersonalDataModel : PageModel
 		_context = context;
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
 		[Required]
 		[DataType(DataType.Password)]
-		public string Password { get; set; }
+		public required string Password { get; set; }
 	}
 
-	public bool RequirePassword { get; set; }
+	public required bool RequirePassword { get; set; }
 
 	public async Task<IActionResult> OnGet()
 	{

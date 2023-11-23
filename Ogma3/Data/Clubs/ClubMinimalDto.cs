@@ -2,7 +2,7 @@ namespace Ogma3.Data.Clubs;
 
 public class ClubMinimalDto
 {
-	public string Name { get; init; }
-	public long Id { get; init; }
-	public string Icon { get; init; }
+	public required string Name { get; init; }
+	public required long Id { get; init; }
+	public required string Icon { get; init; }
 }

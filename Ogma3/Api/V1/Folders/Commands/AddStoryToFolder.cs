@@ -24,7 +24,7 @@ public static class AddStoryToFolder
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<FolderStory>> Handle(Command request, CancellationToken cancellationToken)
@@ -35,8 +35,9 @@ public static class AddStoryToFolder
 
 			var folder = await _context.Folders
 				.Where(f => f.Id == folderId)
-				.Where(f => f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == _uid).Role <= f.AccessLevel)
+				.Where(f => f.Club.ClubMembers.First(c => c.MemberId == _uid).Role <= f.AccessLevel)
 				.FirstOrDefaultAsync(cancellationToken);
+			
 			if (folder is null) return NotFound("Folder not found or insufficient permissions");
 
 			var storyExists = await _context.Stories

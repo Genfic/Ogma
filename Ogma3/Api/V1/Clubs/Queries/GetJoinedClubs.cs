@@ -24,7 +24,7 @@ public static class GetJoinedClubs
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<List<Response>>> Handle(Query request, CancellationToken cancellationToken)

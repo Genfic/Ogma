@@ -42,7 +42,7 @@ public static class GetPaginatedUserShelves
 					s.Id,
 					s.Name,
 					s.Color,
-					s.Icon.Name,
+					s.Icon != null ? s.Icon.Name : null,
 					s.Stories.Any(x => x.Id == storyId)
 				))
 				.ToListAsync(cancellationToken);
@@ -51,5 +51,5 @@ public static class GetPaginatedUserShelves
 		}
 	}
 
-	public sealed record Result(long Id, string Name, string Color, string IconName, bool DoesContainBook);
+	public sealed record Result(long Id, string Name, string? Color, string? IconName, bool DoesContainBook);
 }

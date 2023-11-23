@@ -1,5 +1,3 @@
-#nullable enable
-
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -69,7 +67,7 @@ public static class LockThread
 					? ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, _user.GetUsername())
 					: ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, _user.GetUsername());
 				
-				if (permission.IsSiteModerator && !permission.IsClubModerator)
+				if (permission is { IsSiteModerator: true, IsClubModerator: false })
 				{
 					_context.ModeratorActions.Add(new ModeratorAction
 					{

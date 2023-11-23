@@ -35,8 +35,7 @@ public static class UpdateRating
 				.MaximumLength(CTConfig.CRating.MaxDescriptionLength);
 			RuleFor(r => r.Icon)
 				.FileHasExtension(".svg")
-				.FileSmallerThan(100 * 1024)
-				.When(r => r.Icon is not null);
+				.FileSmallerThan(100 * 1024);
 		}
 	}
 

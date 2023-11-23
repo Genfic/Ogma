@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using System;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Users;

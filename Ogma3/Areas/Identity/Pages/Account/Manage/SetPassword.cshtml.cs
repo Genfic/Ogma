@@ -21,9 +21,9 @@ public class SetPasswordModel : PageModel
 		_signInManager = signInManager;
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
 	public class InputModel
 	{
@@ -35,18 +35,18 @@ public class SetPasswordModel : PageModel
 		)]
 		[DataType(DataType.Password)]
 		[Display(Name = "New password")]
-		public string NewPassword { get; set; }
+		public required string NewPassword { get; set; }
 
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm new password")]
 		[Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
-		public string ConfirmPassword { get; set; }
+		public required string ConfirmPassword { get; set; }
 	}
 
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
@@ -69,7 +69,7 @@ public class SetPasswordModel : PageModel
 		}
 
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}

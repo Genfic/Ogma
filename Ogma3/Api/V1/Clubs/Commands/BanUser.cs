@@ -44,7 +44,7 @@ public static class BanUser
 			var issuer = await _context.ClubMembers
 				.Where(c => c.ClubId == clubId)
 				.Where(cm => cm.MemberId == _uid)
-				.Select(cm => new Issuer(cm.Role, cm.Member.UserName))
+				.Select(cm => new Issuer(cm.Role, cm.Member.UserName!))
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (issuer is null) return Unauthorized();
@@ -53,7 +53,7 @@ public static class BanUser
 			var user = await _context.ClubMembers
 				.Where(c => c.ClubId == clubId)
 				.Where(c => c.MemberId == userId)
-				.Select(c => new BannedUser(c.Member.UserName, c.Role))
+				.Select(c => new BannedUser(c.Member.UserName!, c.Role))
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (user is null) return NotFound();

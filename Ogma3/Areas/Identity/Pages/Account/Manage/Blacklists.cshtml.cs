@@ -25,8 +25,8 @@ public class Blacklists : PageModel
 		_mapper = mapper;
 	}
 
-	public IEnumerable<Rating> Ratings { get; set; }
-	public IEnumerable<UserCard> BlockedUsers { get; set; }
+	public required IEnumerable<Rating> Ratings { get; set; }
+	public required IEnumerable<UserCard> BlockedUsers { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
@@ -52,8 +52,8 @@ public class Blacklists : PageModel
 		return Page();
 	}
 
-	[BindProperty] public IEnumerable<long> BlacklistedRatings { get; set; }
-	[BindProperty] public IEnumerable<long> BlacklistedTags { get; set; }
+	[BindProperty] public required IEnumerable<long> BlacklistedRatings { get; set; }
+	[BindProperty] public required IEnumerable<long> BlacklistedTags { get; set; }
 
 	public async Task<IActionResult> OnPostAsync()
 	{

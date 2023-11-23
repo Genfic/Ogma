@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data;
 

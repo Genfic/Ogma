@@ -24,7 +24,7 @@ public static class GetFolder
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ public static class GetFolder
 					f.Name,
 					f.Slug,
 					f.ParentFolderId,
-					f.Club.ClubMembers.FirstOrDefault(c => c.MemberId == (long)_uid).Role <= f.AccessLevel
+					f.Club.ClubMembers.First(c => c.MemberId == (long)_uid).Role <= f.AccessLevel
 				))
 				.ToListAsync(cancellationToken);
 

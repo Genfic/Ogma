@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -34,17 +35,17 @@ public class ExternalLoginModel : PageModel
 		_emailSender = emailSender;
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
-	public string LoginProvider { get; set; }
+	public required string LoginProvider { get; set; }
 
-	public string ReturnUrl { get; set; }
+	public required string ReturnUrl { get; set; }
 
-	[TempData] public string ErrorMessage { get; set; }
+	[TempData] public required string ErrorMessage { get; set; }
 
 	public class InputModel
 	{
-		[Required] [EmailAddress] public string Email { get; set; }
+		[Required] [EmailAddress] public required string Email { get; set; }
 	}
 
 	public IActionResult OnGetAsync()
@@ -52,7 +53,7 @@ public class ExternalLoginModel : PageModel
 		return RedirectToPage("./Login");
 	}
 
-	public IActionResult OnPost(string provider, string returnUrl = null)
+	public IActionResult OnPost(string provider, string? returnUrl = null)
 	{
 		// Request a redirect to the external login provider.
 		var redirectUrl = Url.Page("./ExternalLogin", "Callback", new { returnUrl });
@@ -60,7 +61,7 @@ public class ExternalLoginModel : PageModel
 		return new ChallengeResult(provider, properties);
 	}
 
-	public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
+	public async Task<IActionResult> OnGetCallbackAsync(string? returnUrl = null, string? remoteError = null)
 	{
 		returnUrl ??= Url.Content("~/");
 		if (remoteError != null)
@@ -70,7 +71,7 @@ public class ExternalLoginModel : PageModel
 		}
 
 		var info = await _signInManager.GetExternalLoginInfoAsync();
-		if (info == null)
+		if (info is null)
 		{
 			ErrorMessage = "Error loading external login information.";
 			return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -92,23 +93,23 @@ public class ExternalLoginModel : PageModel
 		// If the user does not have an account, then ask the user to create an account.
 		ReturnUrl = returnUrl;
 		LoginProvider = info.LoginProvider;
-		if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+		if (info.Principal.TryGetClaim(ClaimTypes.Email, out var email))
 		{
 			Input = new InputModel
 			{
-				Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+				Email = email
 			};
 		}
 
 		return Page();
 	}
 
-	public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
+	public async Task<IActionResult> OnPostConfirmationAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
 		// Get the information about the user from the external login provider
 		var info = await _signInManager.GetExternalLoginInfoAsync();
-		if (info == null)
+		if (info is null)
 		{
 			ErrorMessage = "Error loading external login information during confirmation.";
 			return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -136,7 +137,7 @@ public class ExternalLoginModel : PageModel
 						Request.Scheme);
 
 					await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
 					return LocalRedirect(returnUrl);
 				}

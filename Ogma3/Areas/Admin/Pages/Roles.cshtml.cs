@@ -6,7 +6,7 @@ namespace Ogma3.Areas.Admin.Pages;
 
 public class Roles : PageModel
 {
-	[BindProperty] public OgmaRole Input { get; set; }
+	[BindProperty] public required OgmaRole Input { get; set; }
 
 	public void OnGet()
 	{

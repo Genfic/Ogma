@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +40,7 @@ public static class UpdateRoles
 
 			// Check if user is logged in
 			if (_uid is null) return Unauthorized();
+			if (_username is null) return Unauthorized();
 
 			var user = await _context.Users
 				.Where(u => u.Id == userId)
@@ -65,7 +63,7 @@ public static class UpdateRoles
 			_context.ModeratorActions.AddRange(removedRoles.Select(r => new ModeratorAction
 			{
 				StaffMemberId = (long)_uid,
-				Description = ModeratorActionTemplates.UserRoleRemoved(user, _username, r.Name)
+				Description = ModeratorActionTemplates.UserRoleRemoved(user, _username, r.Name ?? "[null]")
 			}));
 
 			// Handle role adding
@@ -78,7 +76,7 @@ public static class UpdateRoles
 			_context.ModeratorActions.AddRange(addedRoles.Select(r => new ModeratorAction
 			{
 				StaffMemberId = (long)_uid,
-				Description = ModeratorActionTemplates.UserRoleAdded(user, _username, r.Name)
+				Description = ModeratorActionTemplates.UserRoleAdded(user, _username, r.Name ?? "[null]")
 			}));
 
 			try

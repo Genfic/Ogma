@@ -1,3 +1,5 @@
+#nullable disable
+
 using AutoMapper;
 
 namespace Ogma3.Data.Quotes;

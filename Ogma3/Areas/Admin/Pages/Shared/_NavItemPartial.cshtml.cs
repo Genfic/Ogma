@@ -1,5 +1,3 @@
-#nullable enable
-
 using Humanizer;
 
 namespace Ogma3.Areas.Admin.Pages.Shared;

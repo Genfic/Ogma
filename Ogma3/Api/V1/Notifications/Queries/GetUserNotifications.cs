@@ -26,7 +26,7 @@ public static class GetUserNotifications
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)

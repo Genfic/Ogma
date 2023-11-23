@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -61,9 +59,10 @@ public class IndexModel : PageModel
 	{
 		public InputModelValidation()
 		{
-			RuleFor(x => x.Avatar)
+			RuleFor(x => x.Avatar!)
 				.FileSmallerThan(CTConfig.CFiles.AvatarMaxWeight)
-				.FileHasExtension(".jpg", ".jpeg", ".png");
+				.FileHasExtension(".jpg", ".jpeg", ".png")
+				.When(x => x.Avatar is not null);
 			RuleFor(x => x.Title)
 				.MaximumLength(CTConfig.CUser.MaxTitleLength);
 			RuleFor(x => x.Bio)

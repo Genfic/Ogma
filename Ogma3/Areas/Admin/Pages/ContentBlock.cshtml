@@ -2,9 +2,7 @@
 @model ContentBlock
 
 @{
-	ViewData["Title"] = Model.Type is null
-		? "Block content"
-		: $"Block {Model.Type}";
+	ViewData["Title"] = $"Block {Model.Type}";
 	ViewData["ActivePage"] = NavPages.ContentBlock;
 }
 

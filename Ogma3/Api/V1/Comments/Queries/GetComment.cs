@@ -26,7 +26,7 @@ public static class GetComment
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<CommentDto>> Handle(Query request, CancellationToken cancellationToken)
@@ -37,9 +37,11 @@ public static class GetComment
 				.AsNoTracking()
 				.FirstOrDefaultAsync(cancellationToken);
 
+			if (comment is null) return NotFound();
+			
 			comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
 
-			return comment;
+			return Ok(comment);
 		}
 	}
 }

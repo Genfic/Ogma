@@ -23,7 +23,7 @@ public static class GetClubMembershipStatus
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)

@@ -39,7 +39,7 @@ public static class GetCurrentUserQuickShelves
 					s.Id,
 					s.Name,
 					s.Color,
-					s.Icon.Name,
+					s.Icon != null ? s.Icon!.Name : null,
 					s.Stories.Any(x => x.Id == request.StoryId)
 				))
 				.ToListAsync(cancellationToken);
@@ -48,5 +48,5 @@ public static class GetCurrentUserQuickShelves
 		}
 	}
 
-	public sealed record Result(long Id, string Name, string Color, string IconName, bool DoesContainBook);
+	public sealed record Result(long Id, string Name, string? Color, string? IconName, bool DoesContainBook);
 }

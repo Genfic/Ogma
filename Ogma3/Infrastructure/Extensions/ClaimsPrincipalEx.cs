@@ -1,6 +1,4 @@
-#nullable enable
-
-
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Ogma3.Data;
 
@@ -34,8 +32,8 @@ public static class ClaimsPrincipalEx
 	/// </summary>
 	/// <param name="principal">ClaimsPrincipal of the logged-in user</param>
 	/// <returns>The username of currently logged-in user or `null` if user isn't logged in</returns>
-	public static string? GetUsername(this ClaimsPrincipal principal)
-		=> principal.FindFirstValue(ClaimTypes.Name);
+	public static string GetUsername(this ClaimsPrincipal principal)
+		=> principal.FindFirstValue(ClaimTypes.Name)!;
 
 	/// <summary>
 	/// Check if the user is a staff member based on their roles
@@ -46,5 +44,24 @@ public static class ClaimsPrincipalEx
 	{
 		var str = principal.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.IsStaff);
 		return bool.TryParse(str, out var isStaff) && isStaff;
+	}
+
+	public static bool TryGetClaim(this ClaimsPrincipal principal, string claimType, [NotNullWhen(true)]out string? val)
+	{
+		if (principal.HasClaim(c => c.Type == claimType))
+		{
+			var claim = principal.FindFirstValue(claimType);
+			if (claim is null)
+			{
+				val = null;
+				return false;
+			}
+
+			val = claim;
+			return true;
+		}
+
+		val = null;
+		return false;
 	}
 }

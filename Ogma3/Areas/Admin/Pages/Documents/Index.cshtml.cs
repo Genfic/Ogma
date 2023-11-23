@@ -17,7 +17,7 @@ public class IndexModel : PageModel
 		_context = context;
 	}
 
-	public List<Document> Docs { get; set; }
+	public required List<Document> Docs { get; set; }
 
 	public async Task OnGetAsync()
 	{

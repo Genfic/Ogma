@@ -1,3 +1,5 @@
+#nullable disable
+
 using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Ratings;

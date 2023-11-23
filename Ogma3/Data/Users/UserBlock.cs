@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Ogma3.Data.Users;
 
 public class UserBlock

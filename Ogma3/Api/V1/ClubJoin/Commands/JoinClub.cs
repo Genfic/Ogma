@@ -24,24 +24,26 @@ public static class JoinClub
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is not { } uid) return Unauthorized();
 
-			var (isMember, isBanned) = await _context.Clubs
+			var memberOrBanned = await _context.Clubs
 				.Where(c => c.Id == request.ClubId)
 				.Select(c => new MemberOrBanned(
 					c.ClubMembers.Any(cm => cm.MemberId == uid),
 					c.BannedUsers.Any(u => u.Id == uid)
 				))
 				.FirstOrDefaultAsync(cancellationToken);
-			
-			if (isMember) return Ok(true);
 
-			if (isBanned) return Unauthorized("You're banned from this club");
+			if (memberOrBanned is null) return NotFound();
+			
+			if (memberOrBanned.IsMember) return Ok(true);
+
+			if (memberOrBanned.IsBanned) return Unauthorized("You're banned from this club");
 
 			_context.ClubMembers.Add(new ClubMember
 			{

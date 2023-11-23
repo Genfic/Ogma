@@ -16,7 +16,7 @@ public class Infractions : PageModel
 	private readonly ApplicationDbContext _context;
 	public Infractions(ApplicationDbContext context) => _context = context;
 
-	public List<InfractionDto> AllInfractions { get; private set; }
+	public required List<InfractionDto> AllInfractions { get; set; }
 
 	public async Task<IActionResult> OnGet()
 	{
@@ -47,6 +47,6 @@ public sealed record InfractionDto
 	public DateTime IssueDate { get; init; }
 	public DateTime ActiveUntil { get; init; }
 	public DateTime? RemovedAt { get; init; }
-	public string Reason { get; init; }
-	public InfractionType Type { get; init; }
+	public required string Reason { get; init; }
+	public required InfractionType Type { get; init; }
 }

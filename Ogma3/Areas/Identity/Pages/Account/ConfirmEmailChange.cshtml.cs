@@ -21,15 +21,10 @@ public class ConfirmEmailChangeModel : PageModel
 		_signInManager = signInManager;
 	}
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(string userId, string email, string code)
 	{
-		if (userId == null || email == null || code == null)
-		{
-			return RedirectToPage("/Index");
-		}
-
 		var user = await _userManager.FindByIdAsync(userId);
 		if (user == null)
 		{

@@ -27,11 +27,11 @@ public class ConfirmEmailModel : PageModel
 	}
 
 	// ReSharper disable once MemberCanBePrivate.Global
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
-	[BindProperty] [Required] public string UserName { get; set; }
+	[BindProperty] [Required] public required string UserName { get; set; }
 
-	[BindProperty] [Required] public string Code { get; set; }
+	[BindProperty] [Required] public required string Code { get; set; }
 
 	public IActionResult OnGet(string userName, string code)
 	{

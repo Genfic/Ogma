@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using System;
 
 namespace Ogma3.Infrastructure.PostgresEnumHelper;

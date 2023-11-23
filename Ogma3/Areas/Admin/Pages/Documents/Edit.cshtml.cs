@@ -22,35 +22,36 @@ public class EditModel : PageModel
 		_context = context;
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		[Required] public string Slug { get; set; }
+		[Required] public required string Slug { get; set; }
 
-		[Required] public string Title { get; set; }
+		[Required] public required string Title { get; set; }
 
-		[Required] public string Body { get; set; }
+		[Required] public required string Body { get; set; }
+		public uint Version { get; set; }
 	}
-
-	public Document Doc { get; set; }
-
+	
 	public async Task<IActionResult> OnGetAsync(string slug)
 	{
-		Doc = await _context.Documents
+		var doc = await _context.Documents
 			.Where(d => d.Slug == slug)
 			.Where(d => d.RevisionDate == null)
-			.AsNoTracking()
+			.Select(d => new InputModel
+			{
+				Slug = d.Slug,
+				Title = d.Title,
+				Body = d.Body,
+				Version = d.Version
+			})
 			.FirstOrDefaultAsync();
 
-		if (Doc == null) return NotFound();
+		if (doc is null) return NotFound();
 
-		Input = new InputModel
-		{
-			Slug = Doc.Slug,
-			Title = Doc.Title,
-			Body = Doc.Body
-		};
+		Input = doc;
+		
 		return Page();
 	}
 

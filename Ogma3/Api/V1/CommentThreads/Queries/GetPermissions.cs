@@ -1,5 +1,3 @@
-#nullable enable
-
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;

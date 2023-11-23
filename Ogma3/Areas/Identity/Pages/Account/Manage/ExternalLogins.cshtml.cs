@@ -23,13 +23,13 @@ public class ExternalLoginsModel : PageModel
 		_signInManager = signInManager;
 	}
 
-	public IList<UserLoginInfo> CurrentLogins { get; set; }
+	public required IList<UserLoginInfo> CurrentLogins { get; set; }
 
-	public IList<AuthenticationScheme> OtherLogins { get; set; }
+	public required IList<AuthenticationScheme> OtherLogins { get; set; }
 
-	public bool ShowRemoveButton { get; set; }
+	public required bool ShowRemoveButton { get; set; }
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
@@ -50,7 +50,7 @@ public class ExternalLoginsModel : PageModel
 	public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
@@ -81,13 +81,13 @@ public class ExternalLoginsModel : PageModel
 	public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
 
 		var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
-		if (info == null)
+		if (info is null)
 		{
 			throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
 		}

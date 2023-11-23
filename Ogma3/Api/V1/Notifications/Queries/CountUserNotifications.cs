@@ -23,7 +23,7 @@ public static class CountUserNotifications
 		public Handler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<int>> Handle(Query request, CancellationToken cancellationToken)

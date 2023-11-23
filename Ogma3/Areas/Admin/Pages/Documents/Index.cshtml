@@ -11,11 +11,7 @@
 	Create New
 </a>
 
-@if (Model.Docs == null)
-{
-	<h1>The docs are null again, call the admin</h1>
-}
-else if (Model.Docs.Count > 0)
+@if (Model.Docs.Count > 0)
 {
 	<ul class="items-list">
 		@foreach (var doc in Model.Docs)
@@ -29,6 +25,7 @@ else if (Model.Docs.Count > 0)
 					</a>
 				</div>
 				<div class="actions">
+					@* TODO: Implement document deletion *@
 					<a class="action">
 						<icon icon="delete_forever"></icon>
 					</a>

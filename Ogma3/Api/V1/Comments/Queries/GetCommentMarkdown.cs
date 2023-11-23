@@ -19,9 +19,13 @@ public static class GetCommentMarkdown
 		public Handler(ApplicationDbContext context) => _context = context;
 
 		public async Task<ActionResult<string>> Handle(Query request, CancellationToken cancellationToken)
-			=> await _context.Comments
+		{
+			var markdown = await _context.Comments
 				.Where(c => c.Id == request.Id)
 				.Select(c => c.Body)
 				.FirstOrDefaultAsync(cancellationToken);
+			
+			return markdown is null ? NotFound() : Ok(markdown);
+		}
 	}
 }

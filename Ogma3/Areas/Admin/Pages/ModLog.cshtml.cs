@@ -20,8 +20,8 @@ public class ModLog : PageModel
 		_context = context;
 	}
 
-	public ICollection<ModeratorAction> Actions { get; private set; }
-	public Pagination Pagination { get; private set; }
+	public required ICollection<ModeratorAction> Actions { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task OnGet([FromQuery] int page = 1)
 	{

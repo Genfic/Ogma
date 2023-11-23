@@ -1,3 +1,5 @@
+#nullable disable
+
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 

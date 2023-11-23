@@ -21,13 +21,13 @@ public class LogoutModel : PageModel
 	}
 
 
-	public async Task<IActionResult> OnGetAsync(string returnUrl = null)
+	public async Task<IActionResult> OnGetAsync(string? returnUrl = null)
 	{
 		await _signInManager.SignOutAsync();
 		_logger.LogInformation("User logged out");
 
-		return returnUrl != null
-			? RedirectToPage(returnUrl)
-			: RedirectToPage("/Index", new { Area = "" });
+		return returnUrl is null
+			? RedirectToPage("/Index", new { Area = "" })
+			: RedirectToPage(returnUrl);
 	}
 }

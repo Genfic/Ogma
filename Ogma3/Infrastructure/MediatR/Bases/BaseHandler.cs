@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Infrastructure.ActionResults;
 

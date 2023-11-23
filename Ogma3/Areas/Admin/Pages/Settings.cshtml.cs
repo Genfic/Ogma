@@ -18,7 +18,7 @@ public class Settings : PageModel
 		_config = config;
 	}
 
-	[BindProperty] public OgmaConfig Config { get; set; }
+	[BindProperty] public required OgmaConfig Config { get; set; }
 
 	public void OnGet()
 	{

@@ -25,7 +25,7 @@ public static class GetSingleFaq
 				.Where(f => f.Id == request.FaqId)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			return Ok(faq);
+			return faq is null ? NotFound() : Ok(faq);
 		}
 	}
 }

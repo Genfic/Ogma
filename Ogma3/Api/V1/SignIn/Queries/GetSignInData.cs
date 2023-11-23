@@ -32,5 +32,5 @@ public static class GetSignInData
 		}
 	}
 
-	public sealed record Result(string Avatar, string Title);
+	public sealed record Result(string Avatar, string? Title);
 }

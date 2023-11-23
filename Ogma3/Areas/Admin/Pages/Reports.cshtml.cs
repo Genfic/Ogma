@@ -27,8 +27,8 @@ public class Reports : PageModel
 		_mapper = mapper;
 	}
 
-	public List<ReportDto> ReportsList { get; set; }
-	public Pagination Pagination { get; set; }
+	public required List<ReportDto> ReportsList { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task OnGetAsync([FromQuery] int page = 1)
 	{

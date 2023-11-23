@@ -63,6 +63,7 @@ public static class UpdateShelf
 				.Where(s => s.Id == id)
 				.FirstOrDefaultAsync(cancellationToken);
 
+			if (shelf is null) return NotFound();
 			if (shelf.OwnerId != _uid) return Unauthorized();
 
 			shelf.Name = name;

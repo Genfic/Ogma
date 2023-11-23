@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using AutoMapper;
 
 namespace Ogma3.Data.Shelves;

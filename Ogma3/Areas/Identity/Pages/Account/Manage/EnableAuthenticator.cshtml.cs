@@ -29,15 +29,15 @@ public class EnableAuthenticatorModel : PageModel
 		_urlEncoder = urlEncoder;
 	}
 
-	public string SharedKey { get; set; }
+	public required string SharedKey { get; set; }
 
-	public string AuthenticatorUri { get; set; }
+	public required string AuthenticatorUri { get; set; }
 
-	[TempData] public string[] RecoveryCodes { get; set; }
+	[TempData] public string[]? RecoveryCodes { get; set; }
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
@@ -45,13 +45,13 @@ public class EnableAuthenticatorModel : PageModel
 		[StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
 		[DataType(DataType.Text)]
 		[Display(Name = "Verification Code")]
-		public string Code { get; set; }
+		public required string Code { get; set; }
 	}
 
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
@@ -64,7 +64,7 @@ public class EnableAuthenticatorModel : PageModel
 	public async Task<IActionResult> OnPostAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
@@ -97,7 +97,7 @@ public class EnableAuthenticatorModel : PageModel
 		if (await _userManager.CountRecoveryCodesAsync(user) != 0) return RedirectToPage("./TwoFactorAuthentication");
 
 		var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-		RecoveryCodes = recoveryCodes.ToArray();
+		RecoveryCodes = recoveryCodes?.ToArray();
 
 		return RedirectToPage("./ShowRecoveryCodes");
 	}
@@ -112,10 +112,10 @@ public class EnableAuthenticatorModel : PageModel
 			unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
 		}
 
-		SharedKey = FormatKey(unformattedKey);
+		SharedKey = FormatKey(unformattedKey!);
 
 		var email = await _userManager.GetEmailAsync(user);
-		AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
+		AuthenticatorUri = GenerateQrCodeUri(email!, unformattedKey!);
 	}
 
 	private string FormatKey(string unformattedKey)

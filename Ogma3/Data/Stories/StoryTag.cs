@@ -1,3 +1,5 @@
+#nullable disable
+
 using Ogma3.Data.Tags;
 
 namespace Ogma3.Data.Stories;

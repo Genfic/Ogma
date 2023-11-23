@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -24,21 +21,16 @@ public class ContentBlock : PageModel
 	private readonly ApplicationDbContext _context;
 	public ContentBlock(ApplicationDbContext context) => _context = context;
 
-	[BindProperty] public ItemType? Type { get; set; }
+	[BindProperty] public ItemType Type { get; set; }
 
 	[BindProperty] public long Id { get; set; }
 
 	public ItemData? Item { get; private set; }
 
-	public async Task<ActionResult> OnGet(ItemType? type, long? id)
+	public async Task<ActionResult> OnGet(ItemType type, long id)
 	{
-		if (type is null || id is null)
-		{
-			return Page();
-		}
-
 		Type = type;
-		Id = (long)id;
+		Id = id;
 
 		Item = type switch
 		{

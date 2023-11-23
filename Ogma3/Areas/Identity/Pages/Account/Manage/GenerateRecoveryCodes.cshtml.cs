@@ -22,14 +22,14 @@ public class GenerateRecoveryCodesModel : PageModel
 		_logger = logger;
 	}
 
-	[TempData] public string[] RecoveryCodes { get; set; }
+	[TempData] public string[]? RecoveryCodes { get; set; }
 
-	[TempData] public string StatusMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
@@ -46,7 +46,7 @@ public class GenerateRecoveryCodesModel : PageModel
 	public async Task<IActionResult> OnPostAsync()
 	{
 		var user = await _userManager.GetUserAsync(User);
-		if (user == null)
+		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 		}
@@ -60,7 +60,7 @@ public class GenerateRecoveryCodesModel : PageModel
 		}
 
 		var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-		RecoveryCodes = recoveryCodes.ToArray();
+		RecoveryCodes = recoveryCodes?.ToArray();
 
 		_logger.LogInformation("User with ID '{UserId}' has generated new 2FA recovery codes", userId);
 		StatusMessage = "You have generated new recovery codes.";

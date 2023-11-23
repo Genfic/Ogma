@@ -49,9 +49,9 @@ public static class GetPaginatedComments
 			// If a highlight has been requested, get the page on which the highlighted comment would be.
 			// If not, simply return the requested page or the first page if requested page is null.
 			// `highlight - 1` offsets the fact, that the requested IDs start from 1, not 0
-			var p = highlight is null
+			var p = highlight is not {} h
 				? Math.Max(1, page ?? 1)
-				: (int)Math.Ceiling((double)(total - (highlight - 1)) / _ogmaConfig.CommentsPerPage);
+				: (int)Math.Ceiling((double)(total - (h - 1)) / _ogmaConfig.CommentsPerPage);
 
 			// Send auth data
 			_httpContextAccessor.HttpContext?.Response.Headers.Append("X-Authenticated",

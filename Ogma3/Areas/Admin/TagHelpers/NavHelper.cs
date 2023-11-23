@@ -11,9 +11,9 @@ public class NavHelper : TagHelper
 
 	[HtmlAttributeNotBound]
 	[ViewContext]
-	public ViewContext ViewContext { get; set; }
+	public required ViewContext ViewContext { get; set; }
 
-	public string Page { get; set; }
+	public required string Page { get; set; }
 	
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{

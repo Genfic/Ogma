@@ -25,7 +25,7 @@ public static class MarkChapterAsRead
 		public MarkChapterAsReadHandler(ApplicationDbContext context, IUserService userService)
 		{
 			_context = context;
-			_uid = userService?.User?.GetNumericId();
+			_uid = userService.User?.GetNumericId();
 		}
 
 		public async Task<ActionResult<HashSet<long>>> Handle(Command request, CancellationToken cancellationToken)

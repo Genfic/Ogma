@@ -1,6 +1,3 @@
-#nullable enable
-
-
 using System.Security.Claims;
 
 namespace Ogma3.Services.UserService;

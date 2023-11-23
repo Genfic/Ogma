@@ -18,15 +18,15 @@ public class CreateModel : PageModel
 		_context = context;
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		public long Id { get; set; }
+		public required long Id { get; set; }
 
-		[Required] public string Title { get; set; }
+		[Required] public required string Title { get; set; }
 
-		[Required] public string Body { get; set; }
+		[Required] public required string Body { get; set; }
 	}
 
 	public void OnGetAsync()
