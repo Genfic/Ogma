@@ -35,7 +35,7 @@ public static class GetReadChapters
 				.Select(cr => cr.Chapters)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			return Ok(chaptersRead ?? new HashSet<long>());
+			return Ok(chaptersRead ?? []);
 		}
 	}
 }

@@ -4250,8 +4250,6 @@
 
 		<Content Include="node_modules\.package-lock.json" />
 
-		<Content Remove="Migrations\**" />
-
 	</ItemGroup>
 
 
@@ -4259,17 +4257,6 @@
 		<Compile Update="Pages\Tag.cshtml.cs">
 			<DependentUpon>Tag.cshtml</DependentUpon>
 		</Compile>
-		<Compile Remove="Migrations\**" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <EmbeddedResource Remove="Migrations\**" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <None Remove="Migrations\**" />
 	</ItemGroup>
 
 	<!--  Automatic migrations on production -->

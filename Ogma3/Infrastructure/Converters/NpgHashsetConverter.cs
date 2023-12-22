@@ -10,8 +10,7 @@ public class NpgHashsetConverter<T> : ValueConverter<HashSet<T>, List<T>>, INpgs
 		hs => new List<T>(hs),
 		ls => new HashSet<T>(ls)
 	)
-	{
-	}
+	{ }
 
 	public ValueConverter ElementConverter => new ValueConverter<T, T>(x => x, x => x);
 }

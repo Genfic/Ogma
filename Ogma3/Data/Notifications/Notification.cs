@@ -7,7 +7,7 @@ namespace Ogma3.Data.Notifications;
 
 public class Notification : BaseModel
 {
-	public string Body { get; init; } = null!;
+	public string? Body { get; init; }
 	public string Url { get; init; } = null!;
 	public DateTime DateTime { get; init; }
 	public ENotificationEvent Event { get; init; }

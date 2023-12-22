@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,8 @@ using Serilog;
 using Serilog.Events;
 
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
+Console.OutputEncoding = Encoding.UTF8;
+
 // TODO: Reverts to old datetime behaviour, tracked by #50
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

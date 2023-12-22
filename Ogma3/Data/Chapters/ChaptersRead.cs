@@ -29,7 +29,7 @@ public class ChaptersRead
 
 			builder
 				.Property(cr => cr.Chapters)
-				.HasConversion(new NpgHashsetConverter<long>())
+				.HasConversion(new NpgHashsetConverter<long>()) // BUG: This bitch broken
 				.Metadata.SetValueComparer(new ValueComparer<HashSet<long>>(
 					(a, b) => a.SetEquals(b),
 					l => l.Aggregate(0, (i, l1) => HashCode.Combine(i, l1.GetHashCode())),

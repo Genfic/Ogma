@@ -45,7 +45,7 @@ public static class MarkChapterAsRead
 				{
 					StoryId = story,
 					UserId = (long)_uid,
-					Chapters = new HashSet<long> { chapter }
+					Chapters = [chapter]
 				});
 				chaptersReadObj = result.Entity;
 			}
