@@ -28,15 +28,15 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="B2Net" Version="0.7.5" />
 		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.0" />
-		<PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="7.0.0" />
-		<PackageReference Include="FluentValidation" Version="11.8.0" />
+		<PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="8.0.0" />
+		<PackageReference Include="FluentValidation" Version="11.9.0" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 		<PackageReference Include="HaemmerElectronics.SeppPenner.Serilog.Sinks.Telegram" Version="1.0.16" />
 		<PackageReference Include="Hashids.net" Version="1.7.0" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
-		<PackageReference Include="Markdig" Version="0.33.0" />
-		<PackageReference Include="MediatR" Version="12.1.1" />
-		<PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="5.0.0" />
+		<PackageReference Include="Markdig" Version="0.34.0" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="5.1.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
@@ -66,7 +66,7 @@
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.8" />
 		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8" />
 		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" Version="7.0.1" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-rc.2" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
 		<PackageReference Include="NSwag.AspNetCore" Version="14.0.0-preview009" />
 		<PackageReference Include="Postmark" Version="4.7.10" />
 		<PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
@@ -74,10 +74,10 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
 		<PackageReference Include="SerilogTimings" Version="3.0.2-dev-00041" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.1" />
 		<PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
 		<PackageReference Include="System.Text.Json" Version="8.0.0" />
-		<PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.3" />
+		<PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.8" />
 	</ItemGroup>
 
 

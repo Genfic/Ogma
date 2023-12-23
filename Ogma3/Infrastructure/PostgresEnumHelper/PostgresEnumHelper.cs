@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Serilog;
+using SerilogTimings;
 
 namespace Ogma3.Infrastructure.PostgresEnumHelper;
 
@@ -14,7 +15,8 @@ public static class PostgresEnumHelper
 	private static ImmutableList<Type>? _enums;
 	private static MethodInfo? _mapMethod;
 
-	private static HasPostgresEnumDelegate? _registerDelegate;
+	private delegate ModelBuilder HasPostgresEnumDelegate(ModelBuilder builder, string? schema, string? name, string[] labels);
+	private static HasPostgresEnumDelegate? _registerEnumDelegate;
 
 	/// <summary>
 	/// Maps found enums marked with <see cref="PostgresEnumAttribute"/> enum and maps database enum types to them.
@@ -60,8 +62,6 @@ public static class PostgresEnumHelper
 		return builder;
 	}
 
-	private delegate ModelBuilder HasPostgresEnumDelegate(ModelBuilder builder, string? schema, string? name, string[] labels);
-
 	/// <summary>
 	/// Registers enums marked with <see cref="PostgresEnumAttribute"/> enum with EF Core.
 	/// This is done multiple times during runtime, every time a new context gets instantiated.
@@ -77,15 +77,16 @@ public static class PostgresEnumHelper
 	)
 	{
 		var logger = Log.ForContext(typeof(PostgresEnumHelper));
+		using var op = Operation.Time("\u2570 Registering Postgres enums");
 		
 		var enums = GetEnums(assembly);
 		if (enums is { Count: <= 0 }) return;
 
-		logger.Information("Registering Postgres Enums:");
+		logger.Information("\u256d Registering Postgres enums:");
 
-		if (_registerDelegate is null)
+		if (_registerEnumDelegate is null)
 		{
-			logger.Information("   Register delegate not found in cache");
+			logger.Information("\u251c\u2500 Register delegate not found in cache");
 			
 			var mi = typeof(NpgsqlModelBuilderExtensions)
 				.GetMethods()
@@ -95,7 +96,7 @@ public static class PostgresEnumHelper
 
 			if (mi is null)
 			{
-				logger.Error("    ⚠ No {MethodName} method found when mapping Postgres enums", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
+				logger.Error("\u251c\u2500 ⚠ No {MethodName} method found when registering Postgres enums", nameof(NpgsqlModelBuilderExtensions.HasPostgresEnum));
 				return;
 			}
 
@@ -103,18 +104,18 @@ public static class PostgresEnumHelper
 			var call = Expression.Call(mi, parameters);
 			var del = Expression.Lambda<HasPostgresEnumDelegate>(call, parameters).Compile();
 
-			_registerDelegate = del;
+			_registerEnumDelegate = del;
 		}
 
 
 		foreach (var type in enums)
 		{
-			logger.Information("   Registering {FullName}", type.FullName);
+			logger.Information("\u251c\u2500 Registering {FullName}", type.FullName);
 
 			var name = type.GetCustomAttribute<PostgresEnumAttribute>()?.Name ?? type.Name;
 			var labels = Enum.GetNames(type);
 
-			_registerDelegate.Invoke(builder, schema, name, labels);
+			_registerEnumDelegate.Invoke(builder, schema, name, labels);
 		}
 	}
 
