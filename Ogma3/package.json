@@ -41,7 +41,7 @@
         "dev": "concurrently \"gulp watchAll\" \"npm:js:watch\"",
         "js:watch": "node esbuild.mjs --watch",
         "js:build": "node esbuild.mjs",
-		"js:typecheck": "tsc --noEmit -p ./wwwroot/js/tsconfig.json",
+        "js:typecheck": "tsc --noEmit -p ./wwwroot/js/tsconfig.json",
         "t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json"
     },
     "name": "ogma-3",

@@ -1,0 +1,10 @@
+.recovery-codes {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: .25rem;
+	
+	code.recovery-code {
+		background-color: var(--foreground-10);
+		padding: .25rem .5rem;
+	}
+}

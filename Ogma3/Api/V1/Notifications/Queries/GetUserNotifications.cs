@@ -42,7 +42,7 @@ public static class GetUserNotifications
 		}
 	}
 
-	public record Result(long Id, string Body, string Url, DateTime DateTime, ENotificationEvent Event)
+	public record Result(long Id, string? Body, string Url, DateTime DateTime, ENotificationEvent Event)
 	{
 		public string Message => Event switch
 		{

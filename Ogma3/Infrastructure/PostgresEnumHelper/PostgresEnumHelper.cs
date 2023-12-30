@@ -40,7 +40,10 @@ public static class PostgresEnumHelper
 
 		logger.Information("Mapping Postgres Enums:");
 
-		_mapMethod ??= builder.GetType().GetMethod(nameof(builder.MapEnum));
+		_mapMethod ??= builder.GetType()
+			.GetMethods()
+			.Where(mi => mi.Name == nameof(builder.MapEnum))
+			.SingleOrDefault(mi => mi.IsGenericMethod);
 
 		if (_mapMethod is null)
 		{

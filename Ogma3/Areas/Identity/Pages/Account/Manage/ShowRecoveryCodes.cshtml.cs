@@ -11,7 +11,7 @@ public class ShowRecoveryCodesModel : PageModel
 
 	public IActionResult OnGet()
 	{
-		if (RecoveryCodes is null || RecoveryCodes.Length == 0)
+		if (RecoveryCodes is not { Length: > 0 })
 		{
 			return RedirectToPage("./TwoFactorAuthentication");
 		}
