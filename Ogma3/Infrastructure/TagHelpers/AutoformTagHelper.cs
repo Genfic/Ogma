@@ -13,11 +13,11 @@ public class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 {
 	[HtmlAttributeNotBound]
 	[ViewContext]
-	public ViewContext ViewContext { get; set; }
+	public required ViewContext ViewContext { get; set; }
 
 	private IHtmlGenerator Generator { get; } = generator;
 
-	public ModelExpression For { get; set; }
+	public required ModelExpression For { get; set; }
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{

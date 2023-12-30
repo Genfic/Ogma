@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿#nullable disable
+
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

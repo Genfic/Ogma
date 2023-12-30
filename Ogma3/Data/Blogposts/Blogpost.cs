@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using Ogma3.Data.Bases;
@@ -23,13 +21,13 @@ public class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDatea
 	public string Body { get; set; } = null!;
 	public CommentsThread CommentsThread { get; set; } = null!;
 	public int WordCount { get; set; }
-	public string[] Hashtags { get; set; } = null!;
+	public string[] Hashtags { get; set; } = [];
 
 	// Attachments
-	public Story? AttachedStory { get; set; } = null!;
+	public Story? AttachedStory { get; set; }
 	public long? AttachedStoryId { get; set; }
 
-	public Chapter? AttachedChapter { get; set; } = null!;
+	public Chapter? AttachedChapter { get; set; }
 	public long? AttachedChapterId { get; set; }
 
 	public ContentBlock? ContentBlock { get; set; }

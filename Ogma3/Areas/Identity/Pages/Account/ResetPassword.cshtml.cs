@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+#nullable disable
+
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +41,7 @@ public class ResetPasswordModel : PageModel
 		public string Code { get; set; }
 	}
 
-	public IActionResult OnGet(string? code = null)
+	public IActionResult OnGet(string code = null)
 	{
 		if (code is null)
 		{

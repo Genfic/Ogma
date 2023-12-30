@@ -9,7 +9,7 @@ public class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile>, I
 {
 	public uint Max { get; } = max;
 
-	public override bool IsValid(ValidationContext<T> context, IFormFile value)
+	public override bool IsValid(ValidationContext<T> context, IFormFile? value)
 	{
 		if (value is null) return true;
 		if (value.Length <= Max) return true;

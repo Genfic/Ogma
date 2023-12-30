@@ -6,7 +6,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public class DebugTagHelper : TagHelper
 {
-	public object Object { get; set; }
+	public required object Object { get; set; }
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{

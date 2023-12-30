@@ -8,7 +8,7 @@ public class ProfileBar
 {
 	public long Id { get; init; }
 	public string UserName { get; init; }
-	public string Title { get; init; }
+	public string? Title { get; init; }
 	public string Avatar { get; init; }
 	public string Email { get; init; }
 	public DateTime RegistrationDate { get; init; }

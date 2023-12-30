@@ -17,7 +17,7 @@ public class Ban : PageModel
 	public Ban(ApplicationDbContext context) => _context = context;
 
 	public DateTime BannedUntil { get; private set; }
-	public List<InfractionDto> Infractions { get; private set; }
+	public List<InfractionDto> Infractions { get; private set; } = [];
 
 	public async Task<IActionResult> OnGetAsync()
 	{
@@ -56,10 +56,10 @@ public class Ban : PageModel
 
 	public sealed record InfractionDto
 	{
-		public DateTime IssueDate { get; init; }
-		public DateTime ActiveUntil { get; init; }
-		public DateTime? RemovedAt { get; init; }
-		public string Reason { get; init; }
-		public InfractionType Type { get; init; }
+		public required DateTime IssueDate { get; init; }
+		public required DateTime ActiveUntil { get; init; }
+		public required DateTime? RemovedAt { get; init; }
+		public required string Reason { get; init; }
+		public required InfractionType Type { get; init; }
 	}
 }

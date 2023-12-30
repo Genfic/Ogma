@@ -24,6 +24,8 @@ public class ChapterController : ControllerBase
 			.OrderBy(ch => ch.Order)
 			.Select(ch => new { ch.Id, ch.Slug })
 			.FirstOrDefaultAsync();
+        
+        if (chapterData is null) return NotFound();
 
 		return RedirectToPage("/Chapter", new{ sid, chapterData.Id, chapterData.Slug });
 	}
@@ -39,6 +41,8 @@ public class ChapterController : ControllerBase
 			.OrderByDescending(ch => ch.Order)
 			.Select(ch => new { ch.Id, ch.Slug })
 			.FirstOrDefaultAsync();
+        
+        if (chapterData is null) return NotFound();
 
 		return RedirectToPage("/Chapter", new{ sid, chapterData.Id, chapterData.Slug });
 	}

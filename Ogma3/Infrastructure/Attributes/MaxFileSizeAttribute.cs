@@ -17,7 +17,7 @@ public class MaxFileSizeAttribute : ValidationAttribute, IClientModelValidator
 		_message = $"Maximum allowed file size is {_maxFileSize.Bytes().Humanize("##.##", CultureInfo.InvariantCulture)}";
 	}
 
-	protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+	protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
 	{
 		if (value is null)
 			return ValidationResult.Success;

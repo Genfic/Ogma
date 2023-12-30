@@ -22,9 +22,10 @@ public class PictureTagHelper(
 	private const string AppendVersionAttributeName = "asp-append-version";
 	private const string SrcAttributeName = "src";
 
-	internal IFileVersionProvider FileVersionProvider { get; private set; } = fileVersionProvider;
+	internal IFileVersionProvider? FileVersionProvider { get; private set; } = fileVersionProvider;
 
-	[HtmlAttributeName(SrcAttributeName)] public string Src { get; set; }
+	[HtmlAttributeName(SrcAttributeName)]
+	public required string Src { get; set; }
 
 	[HtmlAttributeName(AppendVersionAttributeName)]
 	public bool AppendVersion { get; set; }
@@ -32,8 +33,8 @@ public class PictureTagHelper(
 	public int Width { get; set; }
 	public int Height { get; set; }
 	public bool Eager { get; set; } = false;
-	public string[] SourceFormats { get; set; } = Array.Empty<string>();
-	public string Alt { get; set; }
+	public string[] SourceFormats { get; set; } = [];
+	public string Alt { get; set; } = "";
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
@@ -45,22 +46,23 @@ public class PictureTagHelper(
 
 		var bareUrl = Src[..Src.LastIndexOf('.')];
 
+		IFileVersionProvider? fvp = null;
 		if (AppendVersion)
 		{
-			EnsureFileVersionProvider();
+			fvp = FileVersionProvider ?? ViewContext.HttpContext.RequestServices.GetRequiredService<IFileVersionProvider>();
 		}
 
 		foreach (var format in SourceFormats)
 		{
 			var formatUrl = $"{bareUrl}.{format}";
-			var finalUrl = AppendVersion
-				? FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, formatUrl)
+			var finalUrl = fvp is not null
+				? fvp.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, formatUrl)
 				: formatUrl;
 			output.Content.AppendHtml($"""<source type="image/{format}" srcset="{finalUrl}" />""");
 		}
 
-		var url = AppendVersion
-			? FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src)
+		var url = fvp is not null
+			? fvp.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src)
 			: Src;
 
 		output.Content.AppendHtml(!Eager

@@ -8,7 +8,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public class AutotableTagHelper : TagHelper
 {
-	public ModelExpression For { get; set; }
+	public required ModelExpression For { get; set; }
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{

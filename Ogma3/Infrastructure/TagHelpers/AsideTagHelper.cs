@@ -9,7 +9,8 @@ public class AsideTagHelper : TagHelper
 {
 	private const string ForAttributeName = "asp-for";
 
-	[HtmlAttributeName(ForAttributeName)] public ModelExpression For { get; set; }
+	[HtmlAttributeName(ForAttributeName)]
+	public ModelExpression? For { get; set; }
 
 	/// <inheritdoc />
 	/// <remarks>Does nothing if <see cref="For"/> is <c>null</c>.</remarks>
@@ -18,7 +19,9 @@ public class AsideTagHelper : TagHelper
 		var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);
 
 		output.TagName = "aside";
-		output.Attributes.Add("data-for", For.Name.Replace('.', '_'));
+		if (For is {} f) {
+			output.Attributes.Add("data-for", f.Name.Replace('.', '_'));
+		}
 		output.Content.SetHtmlContent(childContent);
 	}
 }

@@ -17,7 +17,7 @@ public class AllowedExtensionsAttribute : ValidationAttribute, IClientModelValid
 		_message = $"The only allowed extensions are: {string.Join(", ", _extensions)}";
 	}
 
-	protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+	protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
 	{
 		switch (value)
 		{

@@ -9,7 +9,7 @@ namespace Ogma3.Infrastructure.CustomValidators;
 
 public class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile>
 {
-	public override bool IsValid(ValidationContext<T> context, IFormFile value)
+	public override bool IsValid(ValidationContext<T> context, IFormFile? value)
 	{
 		if (value is null) return true;
 

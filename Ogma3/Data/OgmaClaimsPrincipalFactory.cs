@@ -28,9 +28,9 @@ public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, O
 			.Where(r => r.Users.Any(u => u.Id == user.Id))
 			.AnyAsync();
 
-		((ClaimsIdentity)principal.Identity)?.AddClaims(new Claim[]
+		((ClaimsIdentity?)principal.Identity)?.AddClaims(new Claim[]
 		{
-			new(ClaimTypes.Avatar, user.Avatar ?? string.Empty),
+			new(ClaimTypes.Avatar, user.Avatar),
 			new(ClaimTypes.Title, user.Title ?? string.Empty),
 			new(ClaimTypes.IsStaff, isStaff.ToString())
 		});

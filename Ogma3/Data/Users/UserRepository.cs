@@ -18,7 +18,7 @@ public class UserRepository
 		_uid = userService.User?.GetNumericId();
 	}
 
-	public async Task<ProfileBar> GetProfileBar(string name)
+	public async Task<ProfileBar?> GetProfileBar(string name)
 	{
 		return await _context.Users
 			.TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
@@ -27,7 +27,7 @@ public class UserRepository
 			.FirstOrDefaultAsync();
 	}
 
-	public async Task<ProfileBar> GetProfileBar(long id)
+	public async Task<ProfileBar?> GetProfileBar(long id)
 	{
 		return await _context.Users
 			.TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {id}")

@@ -25,7 +25,8 @@ public class DeleteModel : PageModel
 		_mapper = mapper;
 	}
 
-	[BindProperty] public GetData Blogpost { get; set; }
+	[BindProperty]
+	public GetData Blogpost { get; set; }
 
 	public class GetData
 	{

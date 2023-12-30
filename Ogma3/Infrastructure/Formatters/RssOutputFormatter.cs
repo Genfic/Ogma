@@ -24,7 +24,7 @@ public class RssOutputFormatter : TextOutputFormatter
 		SupportedEncodings.AddMany(Encoding.UTF8, Encoding.UTF32);
 	}
 
-	protected override bool CanWriteType(Type type)
+	protected override bool CanWriteType(Type? type)
 	{
 		return typeof(RssResult).IsAssignableFrom(type) ||
 		       typeof(IEnumerable<RssResult>).IsAssignableFrom(type);
@@ -36,7 +36,7 @@ public class RssOutputFormatter : TextOutputFormatter
 		
 		var domain = $"https://{_config.GetValue<string>("Domain")}";
 
-		var data = (RssResult)context.Object;
+		var data = (RssResult?)context.Object;
 		if (data is null) throw new ArgumentException("Passed object was not of type RssResult");
 
 		var feed = new SyndicationFeed(
@@ -73,7 +73,7 @@ public class RssOutputFormatter : TextOutputFormatter
 
 public record RssResult
 {
-	public string Title { get; init; }
-	public string Description { get; init; }
-	public IEnumerable<SyndicationItem> Items { get; init; }
+	public required string Title { get; init; }
+	public required string Description { get; init; }
+	public required IEnumerable<SyndicationItem> Items { get; init; }
 }

@@ -11,25 +11,25 @@ public class PaginationResult<T>
 	/// <summary>
 	/// List of the fetched elements
 	/// </summary>
-	public IEnumerable<T> Elements { get; init; }
+	public required IEnumerable<T> Elements { get; init; }
 
 	/// <summary>
 	/// Total number of those elements, not just the number of them on the page
 	/// </summary>
-	public int Total { get; init; }
+	public required int Total { get; init; }
 
 	/// <summary>
 	/// Number of elements per page
 	/// </summary>
-	public int PerPage { get; init; }
+	public required int PerPage { get; init; }
 
 	/// <summary>
 	/// Number of pages the total number of elements can be divided into
 	/// </summary>
-	public int Pages { get; init; }
+	public required int Pages { get; init; }
 
 	/// <summary>
 	/// Number of the requested page
 	/// </summary>
-	public int Page { get; init; }
+	public required int Page { get; init; }
 }

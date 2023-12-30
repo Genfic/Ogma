@@ -107,7 +107,7 @@ public class CreateModel : PageModel
 		var uname = User.GetUsername();
 
 		// Return if not logged in
-		if (uid is null || uname is null) return Unauthorized();
+		if (uid is null) return Unauthorized();
 
 		// Create blogpost
 		var post = new Blogpost

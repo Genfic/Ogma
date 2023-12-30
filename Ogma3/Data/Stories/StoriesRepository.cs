@@ -20,7 +20,7 @@ public class StoriesRepository
 	{
 		_context = context;
 		_mapper = mapper;
-		_uid = contextAccessor?.HttpContext?.User.GetNumericId();
+		_uid = contextAccessor.HttpContext?.User.GetNumericId();
 	}
 
 	/// <summary>

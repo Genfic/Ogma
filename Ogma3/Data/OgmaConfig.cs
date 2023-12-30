@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -8,14 +10,13 @@ namespace Ogma3.Data;
 
 public class OgmaConfig
 {
-	private readonly JsonSerializerOptions _serializerOptions;
-
-	public OgmaConfig() => _serializerOptions = new JsonSerializerOptions
+	private readonly JsonSerializerOptions _serializerOptions = new()
 	{
 		WriteIndented = true
 	};
 
-	[JsonIgnore] private string PersistentFileLocation { get; set; }
+	[JsonIgnore]
+	private string PersistentFileLocation { get; set; }
 
 	/// <summary>
 	/// Persist `this` in a file

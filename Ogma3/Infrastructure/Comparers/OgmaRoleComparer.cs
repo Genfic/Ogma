@@ -5,7 +5,7 @@ namespace Ogma3.Infrastructure.Comparers;
 
 public class OgmaRoleComparer : IEqualityComparer<OgmaRole>
 {
-	public bool Equals(OgmaRole x, OgmaRole y)
+	public bool Equals(OgmaRole? x, OgmaRole? y)
 	{
 		if (ReferenceEquals(x, y))
 			return true;
