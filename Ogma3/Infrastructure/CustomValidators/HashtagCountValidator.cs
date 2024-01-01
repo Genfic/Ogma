@@ -4,9 +4,9 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, string>
+public class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, string?>
 {
-	public bool IsValid(ValidationContext<T> context, string value)
+	public bool IsValid(ValidationContext<T> context, string? value)
 	{
 		if (Validate(value)) return true;
 
@@ -14,10 +14,12 @@ public class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, string>
 		return false;
 	}
 
-	public bool IsValid(string value) => Validate(value);
+	public bool IsValid(string? value) => Validate(value);
 
-	private bool Validate(string value)
+	private bool Validate(string? value)
 	{
+		if (value is null) return true;
+		
 		var span = value.Trim(',').AsSpan();
 
 		if (span.Length == 0) return true;
@@ -53,6 +55,6 @@ public class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, string>
 
 public static class HashtagCountValidatorExtension
 {
-	public static IRuleBuilderOptions<T, string> HashtagsFewerThan<T>(this IRuleBuilder<T, string> ruleBuilder, uint max)
+	public static IRuleBuilderOptions<T, string?> HashtagsFewerThan<T>(this IRuleBuilder<T, string?> ruleBuilder, uint max)
 		=> ruleBuilder.SetValidator(new HashtagCountValidator<T>(max));
 }

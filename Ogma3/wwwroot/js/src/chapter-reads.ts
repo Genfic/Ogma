@@ -58,4 +58,4 @@
 		reads = await res.json();
 		_update();
 	}
-})()
+})();

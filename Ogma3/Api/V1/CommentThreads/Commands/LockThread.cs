@@ -38,6 +38,8 @@ public static class LockThread
 		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_user is null) return Unauthorized();
+			if (_user.GetUsername() is not { } uname) return Unauthorized();
+			if (_user.GetNumericId() is not { } uid) return Unauthorized();
 			
 			var permission = await _mediator.Send(new GetPermissions.Query(request.Id), cancellationToken);
 			if (!permission.IsAllowed) return Unauthorized();
@@ -52,8 +54,6 @@ public static class LockThread
 
 			if (_user.IsInRole(RoleNames.Admin) || _user.IsInRole(RoleNames.Moderator))
 			{
-				if (_user.GetNumericId() is not {} uid) return Unauthorized();
-
 				string type;
 				if (thread.BlogpostId is not null) type = "blogpost";
 				else if (thread.ChapterId is not null) type = "chapter";
@@ -64,8 +64,8 @@ public static class LockThread
 				var typeId = thread.BlogpostId ?? thread.ChapterId ?? thread.ClubThreadId ?? thread.UserId ?? 0;
 
 				var message = thread.LockDate is null
-					? ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, _user.GetUsername())
-					: ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, _user.GetUsername());
+					? ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, uname)
+					: ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, uname);
 				
 				if (permission is { IsSiteModerator: true, IsClubModerator: false })
 				{

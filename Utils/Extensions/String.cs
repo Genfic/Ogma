@@ -98,8 +98,10 @@ public static partial class String
 	/// </summary>
 	/// <param name="input">String to parse into tags</param>
 	/// <returns>An array of strings representing the tags</returns>
-	public static string[] ParseHashtags(this string input)
+	public static string[] ParseHashtags(this string? input)
 	{
+		if (string.IsNullOrWhiteSpace(input)) return [];
+		
 		return input.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
 			.Select(t => t.Trim('#').Friendlify())
 			.Distinct()

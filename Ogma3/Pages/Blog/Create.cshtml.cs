@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -71,7 +70,7 @@ public class CreateModel : PageModel
 	{
 		public string Title { get; init; } = null!;
 		public string Body { get; init; } = null!;
-		public string? Tags { get; init; }
+		public string Tags { get; init; } = "";
 		public ChapterMinimal? ChapterMinimal { get; set; }
 		public long? ChapterMinimalId { get; set; }
 		public StoryMinimal? StoryMinimal { get; set; }
@@ -117,7 +116,7 @@ public class CreateModel : PageModel
 			Body = Input.Body.Trim(),
 			AuthorId = (long)uid,
 			WordCount = Input.Body.Words(),
-			Hashtags = Input.Tags?.ParseHashtags() ?? Array.Empty<string>(),
+			Hashtags = Input.Tags.ParseHashtags(),
 			AttachedStoryId = Input.StoryMinimalId,
 			AttachedChapterId = Input.ChapterMinimalId,
 			CommentsThread = new CommentsThread(),

@@ -128,7 +128,7 @@ public class ChapterModel : PageModel
 			{
 				Reason = c.ContentBlock.Reason,
 				DateTime = c.ContentBlock.DateTime,
-				IssuerUserName = c.ContentBlock.Issuer.UserName
+				IssuerUserName = c.ContentBlock.Issuer.UserName!
 			}
 	};
 }

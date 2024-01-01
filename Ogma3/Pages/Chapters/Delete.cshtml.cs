@@ -1,59 +1,54 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public class DeleteModel : PageModel
+public class DeleteModel(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public DeleteModel(ApplicationDbContext context, IMapper mapper)
-	{
-		_context = context;
-		_mapper = mapper;
-	}
-
-	[BindProperty] public GetData Chapter { get; set; }
+	[BindProperty]
+	public required GetData Chapter { get; set; }
 
 	public class GetData
 	{
-		public long Id { get; init; }
-		public long StoryAuthorId { get; init; }
-		public DateTime PublishDate { get; init; }
-		public bool IsPublished { get; init; }
-		public string Title { get; init; }
-		public string Slug { get; init; }
-		public int WordCount { get; init; }
-		public int CommentsThreadCommentsCount { get; init; }
-		public string StoryTitle { get; init; }
-	}
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Chapter, GetData>();
+		public required long Id { get; init; }
+		public required DateTime? PublishDate { get; init; }
+		public required string Title { get; init; }
+		public required string Slug { get; init; }
+		public required int WordCount { get; init; }
+		public required int CommentsThreadCommentsCount { get; init; }
+		public required string StoryTitle { get; init; }
+		public required long StoryId { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		Chapter = await _context.Chapters
+		var chapter = await context.Chapters
 			.Where(c => c.Id == id)
-			.ProjectTo<GetData>(_mapper.ConfigurationProvider)
+			.Where(c => c.Story.AuthorId == User.GetNumericId())
+			.Select(c => new GetData
+			{
+				Id = c.Id,
+				Title = c.Title,
+				Slug = c.Slug,
+				StoryId = c.StoryId,
+				StoryTitle = c.Story.Title,
+				WordCount = c.WordCount,
+				PublishDate = c.PublicationDate,
+				CommentsThreadCommentsCount = c.CommentsThread.CommentsCount
+			})
 			.FirstOrDefaultAsync();
 
-		if (Chapter is null) return NotFound();
-		if (Chapter.StoryAuthorId != User.GetNumericId()) return Unauthorized();
+		if (chapter is null) return NotFound();
+		
+		Chapter = chapter;
 
 		return Page();
 	}
@@ -61,21 +56,21 @@ public class DeleteModel : PageModel
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
 		// Get chapter
-		var chapter = await _context.Chapters
+		var chapter = await context.Chapters
 			.Where(c => c.Id == id)
+			.Where(c => c.Story.AuthorId == User.GetNumericId())
 			.Include(c => c.Story)
 			.FirstOrDefaultAsync();
 
 		if (chapter is null) return NotFound();
-		if (chapter.Story.AuthorId != User.GetNumericId()) return Unauthorized();
 
 		// Recalculate words and chapters in the story
 		chapter.Story.WordCount -= chapter.WordCount;
 		chapter.Story.ChapterCount -= 1;
 
-		_context.Chapters.Remove(chapter);
+		context.Chapters.Remove(chapter);
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		return RedirectToPage("../Story", new { id = chapter.StoryId });
 	}

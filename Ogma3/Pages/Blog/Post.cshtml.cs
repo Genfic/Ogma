@@ -16,33 +16,22 @@ using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Blog;
 
-public class DetailsModel : PageModel
+public class DetailsModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly UserRepository _userRepo;
-
-	public DetailsModel(UserRepository userRepo, ApplicationDbContext context)
-	{
-		_userRepo = userRepo;
-		_context = context;
-	}
-
-	public Details? Blogpost { get; private set; }
-	public ProfileBar ProfileBar { get; private set; } = null!;
-
-	public bool IsUnavailable { get; private set; }
+	public required Details Blogpost { get; set; }
+	public required ProfileBar ProfileBar { get; set; }
+	public required bool IsUnavailable { get; set; }
 
 	public class Details
 	{
-		public long Id { get; init; }
-		public long AuthorId { get; init; }
-		public string Title { get; init; } = null!;
-		public string Slug { get; init; } = null!;
+		public required long Id { get; init; }
+		public required long AuthorId { get; init; }
+		public required string Title { get; init; }
+		public required string Slug { get; init; }
 		public DateTime? PublicationDate { get; init; }
-		public string Body { get; init; } = null!;
-		public IEnumerable<string> Hashtags { get; init; } = null!;
-		public CommentsThreadDto CommentsThread { get; init; } = null!;
-		public int CommentsCount { get; init; }
+		public required string Body { get; init; }
+		public required IEnumerable<string> Hashtags { get; init; }
+		public required CommentsThreadDto CommentsThread { get; init; }
 		public ChapterMinimal? AttachedChapter { get; init; }
 		public StoryMinimal? AttachedStory { get; init; }
 		public ContentBlockCard? ContentBlock { get; init; }
@@ -52,7 +41,7 @@ public class DetailsModel : PageModel
 	{
 		var uid = User.GetNumericId();
 
-		Blogpost = await _context.Blogposts
+		var blogpost = await context.Blogposts
 			.TagWith($"Get blogpost -> {id}")
 			.Where(b => b.Id == id)
 			.Where(b => b.PublicationDate != null || b.AuthorId == uid)
@@ -60,8 +49,10 @@ public class DetailsModel : PageModel
 			.Select(MapDetails)
 			.FirstOrDefaultAsync();
 
-		if (Blogpost is null) return NotFound();
+		if (blogpost is null) return NotFound();
 
+		Blogpost = blogpost;
+		
 		if (Blogpost.AttachedChapter is not null && Blogpost.AttachedChapter.PublicationDate is null)
 		{
 			IsUnavailable = true;
@@ -73,8 +64,12 @@ public class DetailsModel : PageModel
 
 		Blogpost.CommentsThread.Type = nameof(Data.Blogposts.Blogpost);
 
-		ProfileBar = await _userRepo.GetProfileBar(Blogpost.AuthorId);
+		var profileBar = await userRepo.GetProfileBar(Blogpost.AuthorId);
 
+		if (profileBar is null) return NotFound();
+
+		ProfileBar = profileBar;
+		
 		return Page();
 	}
 
@@ -87,7 +82,6 @@ public class DetailsModel : PageModel
 		Body = b.Body,
 		Hashtags = b.Hashtags,
 		PublicationDate = b.PublicationDate,
-		CommentsCount = b.CommentsThread.CommentsCount,
 		CommentsThread = new CommentsThreadDto
 		{
 			Id = b.CommentsThread.Id,
@@ -100,7 +94,7 @@ public class DetailsModel : PageModel
 			{
 				Reason = b.ContentBlock.Reason,
 				DateTime = b.ContentBlock.DateTime,
-				IssuerUserName = b.ContentBlock.Issuer.UserName
+				IssuerUserName = b.ContentBlock.Issuer.UserName!
 			},
 		AttachedChapter = b.AttachedChapter == null
 			? null
@@ -111,7 +105,7 @@ public class DetailsModel : PageModel
 				Slug = b.AttachedChapter.Slug,
 				PublicationDate = b.AttachedChapter.PublicationDate,
 				StoryTitle = b.AttachedChapter.Story.Title,
-				StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName
+				StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName!
 			},
 		AttachedStory = b.AttachedStory == null
 			? null
@@ -121,7 +115,7 @@ public class DetailsModel : PageModel
 				Title = b.AttachedStory.Title,
 				Slug = b.AttachedStory.Slug,
 				PublicationDate = b.AttachedStory.PublicationDate,
-				AuthorUserName = b.AttachedStory.Author.UserName
+				AuthorUserName = b.AttachedStory.Author.UserName!
 			}
 	};
 }

@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,63 +10,52 @@ using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
-using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public class CreateModel : PageModel
+public class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
+	: PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly NotificationsRepository _notificationsRepo;
-	private readonly IMapper _mapper;
-
-	public CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo, IMapper mapper)
-	{
-		_context = context;
-		_notificationsRepo = notificationsRepo;
-		_mapper = mapper;
-	}
-
+	[BindProperty]
+	public required PostData Input { get; set; } = new();
+	public required GetData Story { get; set; }
+	
 	public class GetData
 	{
-		public long Id { get; set; }
-		public long? AuthorId { get; init; }
-		public string Slug { get; init; }
-		public string Title { get; init; }
-	}
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Story, GetData>();
+		public required long Id { get; init; }
+		public required string Slug { get; init; }
+		public required string Title { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		Input = new PostData();
-
-		Story = await _context.Stories
+		var story = await context.Stories
 			.Where(s => s.Id == id)
-			.ProjectTo<GetData>(_mapper.ConfigurationProvider)
+			.Where(s => s.AuthorId == User.GetNumericId())
+			.Select(s => new GetData
+			{
+				Id = s.Id,
+				Title = s.Title,
+				Slug = s.Slug
+			})
 			.FirstOrDefaultAsync();
 
-		if (Story is null) return NotFound();
-		if (Story.AuthorId != User.GetNumericId()) return RedirectToPage("../Story", new { id, slug = Story.Slug });
+		if (story is null) return NotFound();
+
+		Story = story;
 
 		return Page();
 	}
 
-	[BindProperty] public PostData Input { get; set; }
-	public GetData Story { get; set; }
-
 	public class PostData
 	{
-		public string Title { get; init; }
-		public string Body { get; init; }
-		[Display(Name = "Start notes")] public string StartNotes { get; init; }
-		[Display(Name = "End notes")] public string EndNotes { get; init; }
+		public string Title { get; init; } = "";
+		public string Body { get; init; } = "";
+		[Display(Name = "Start notes")] public string? StartNotes { get; init; }
+		[Display(Name = "End notes")] public string? EndNotes { get; init; }
 	}
 
 	public class PostDataValidation : AbstractValidator<PostData>
@@ -96,7 +83,7 @@ public class CreateModel : PageModel
 		if (uid is null) return Unauthorized();
 
 		// Get the story to insert a chapter into. Include user in the search to check ownership.
-		var story = await _context.Stories
+		var story = await context.Stories
 			.Where(s => s.Id == id)
 			.Where(s => s.AuthorId == uid)
 			.Include(s => s.Chapters)
@@ -104,7 +91,7 @@ public class CreateModel : PageModel
 			.FirstOrDefaultAsync();
 
 		// Back to index if the story is null or author isn't the logged in user
-		if (story == null) return Page();
+		if (story is null) return Page();
 
 		// Get the order number of the latest chapter
 		var latestChapter = story.Chapters
@@ -133,16 +120,16 @@ public class CreateModel : PageModel
 		story.Chapters.Add(chapter);
 
 		// Subscribe author to the comment thread
-		_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
 		{
 			CommentsThread = chapter.CommentsThread,
 			OgmaUserId = (long)uid
 		});
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		// Notify
-		await _notificationsRepo.Create(ENotificationEvent.WatchedStoryUpdated,
+		await notificationsRepo.Create(ENotificationEvent.WatchedStoryUpdated,
 			story.Shelves.Select(s => s.OwnerId),
 			"/Chapter",
 			new { chapter.Id, chapter.Slug });

@@ -51,7 +51,9 @@ public static class MarkChapterAsRead
 			}
 			else
 			{
-				chaptersReadObj.Chapters.Add(chapter);
+				// NOTE: Workaround until hashsets in #83 are fixed
+				HashSet<long> chapters = [..chaptersReadObj.Chapters, chapter];
+				chaptersReadObj.Chapters = chapters.ToList();
 			}
 
 			await _context.SaveChangesAsync(cancellationToken);

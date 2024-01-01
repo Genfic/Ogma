@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.FileProviders;
@@ -15,8 +16,9 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 	private const string Root = "./wwwroot";
 	
 	private readonly IFileProvider _fileProvider = environment.WebRootFileProvider;
+	private readonly string _manifestPath = Path.Join(Root, "manifest.js.json");
 
-	private sealed record Manifest(DateTime GeneratedAt, Dictionary<string, string> Files);
+	private sealed record Manifest([UsedImplicitly]DateTime GeneratedAt, [UsedImplicitly]Dictionary<string, string> Files);
 
 	public void Generate(params string[] directories)
 	{
@@ -54,7 +56,7 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 		}
 
 		var manifest = JsonSerializer.Serialize(new Manifest(DateTime.UtcNow, filesAndHashes));
-		File.WriteAllText(Path.Join(Root, "manifest.js.json"), manifest);
+		File.WriteAllText(_manifestPath, manifest);
 		
 		Log.Information("Manifest ready. {FilesFound} files out of {AllFiles} were found.", filesAndHashes.Count, files.Count);
 	}

@@ -1,82 +1,70 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Blogposts;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public class DeleteModel : PageModel
+public class DeleteModel(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public DeleteModel(ApplicationDbContext context, IMapper mapper)
-	{
-		_context = context;
-		_mapper = mapper;
-	}
-
 	[BindProperty]
-	public GetData Blogpost { get; set; }
+	public required GetData Blogpost { get; set; }
 
 	public class GetData
 	{
-		public long Id { get; init; }
-		public long AuthorId { get; set; }
-		public string Title { get; init; }
-		public string Slug { get; init; }
-		public DateTime PublishDate { get; init; }
-		public bool IsPublished { get; init; }
-		public int CommentsThreadCommentsCount { get; init; }
-	}
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Blogpost, GetData>();
+		public required long Id { get; init; }
+		public required long AuthorId { get; init; }
+		public required string Title { get; init; }
+		public required string Slug { get; init; }
+		public DateTime? PublishDate { get; init; }
+		public required int CommentsCount { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(int? id)
 	{
-		if (id == null) return NotFound();
+		if (id is null) return NotFound();
 
-		Blogpost = await _context.Blogposts
+		var blogpost = await context.Blogposts
 			.Where(m => m.Id == id)
-			.ProjectTo<GetData>(_mapper.ConfigurationProvider)
-			.FirstOrDefaultAsync();
-
-		if (Blogpost is null) return NotFound();
-		if (Blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
-
-		return Page();
-	}
-
-	public async Task<IActionResult> OnPostAsync(int? id)
-	{
-		if (id == null) return NotFound();
-
-		// Get logged in user
-		var uname = User.GetUsername();
-		if (uname is null) return Unauthorized();
-
-		var blogpost = await _context.Blogposts
-			.Where(b => b.Id == id)
+			.Select(b => new GetData
+			{
+				Id = b.Id,
+				AuthorId = b.AuthorId,
+				Title = b.Title,
+				Slug = b.Slug,
+				PublishDate = b.PublicationDate,
+				CommentsCount = b.CommentsThread.CommentsCount
+			})
 			.FirstOrDefaultAsync();
 
 		if (blogpost is null) return NotFound();
 		if (blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
 
-		_context.Blogposts.Remove(blogpost);
+		Blogpost = blogpost;
+		
+		return Page();
+	}
 
-		await _context.SaveChangesAsync();
+	public async Task<IActionResult> OnPostAsync(int? id)
+	{
+		if (id is null) return NotFound();
+
+		// Get logged in user
+		var uname = User.GetUsername();
+		if (uname is null) return Unauthorized();
+
+		var rows = await context.Blogposts
+			.Where(b => b.Id == id)
+			.Where(b => b.AuthorId == User.GetNumericId())
+			.ExecuteDeleteAsync();
+
+		if (rows <= 0) return NotFound();
 
 		return RedirectToPage("/User/Blog", new { name = uname });
 	}

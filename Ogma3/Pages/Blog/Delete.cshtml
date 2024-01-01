@@ -15,19 +15,13 @@
 			Published on:
 		</dt>
 		<dd>
-			@Model.Blogpost.PublishDate
-		</dd>
-		<dt>
-			Published status:
-		</dt>
-		<dd>
-			@(Model.Blogpost.IsPublished ? "Published" : "Not published")
+			@(Model.Blogpost.PublishDate is not null ? @Model.Blogpost.PublishDate : "Not published")
 		</dd>
 		<dt>
 			Comments:
 		</dt>
 		<dd>
-			@Model.Blogpost.CommentsThreadCommentsCount
+			@Model.Blogpost.CommentsCount
 		</dd>
 	</dl>
 

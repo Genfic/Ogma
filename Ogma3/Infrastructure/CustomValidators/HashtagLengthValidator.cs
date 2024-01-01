@@ -4,9 +4,9 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string>
+public class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string?>
 {
-	public bool IsValid(ValidationContext<T> context, string value)
+	public bool IsValid(ValidationContext<T> context, string? value)
 	{
 		var valid = Validate(value);
 
@@ -16,10 +16,12 @@ public class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string>
 		return false;
 	}
 
-	public bool IsValid(string value) => Validate(value);
+	public bool IsValid(string? value) => Validate(value);
 
-	private bool Validate(string value)
+	private bool Validate(string? value)
 	{
+		if (value is null) return true;
+		
 		var span = value.Trim(',').AsSpan();
 
 		if (span.Length == 0) return true;
@@ -55,6 +57,6 @@ public class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string>
 
 public static class HashtagLengthValidator
 {
-	public static IRuleBuilderOptions<T, string> HashtagsShorterThan<T>(this IRuleBuilder<T, string> ruleBuilder, uint max)
+	public static IRuleBuilderOptions<T, string?> HashtagsShorterThan<T>(this IRuleBuilder<T, string?> ruleBuilder, uint max)
 		=> ruleBuilder.SetValidator(new HashtagLengthValidator<T>(max));
 }

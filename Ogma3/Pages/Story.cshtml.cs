@@ -102,7 +102,7 @@ public class StoryModel : PageModel
 		AuthorId = s.AuthorId,
 		WordCount = s.WordCount,
 		// FullWordCount = s.AuthorId == uid ? s.Chapters.Sum(c => c.WordCount) : 0,
-		ChaptersCount = s.ChapterCount,
+		ChaptersCount = s.Chapters.Count,
 		// FullChaptersCount = s.AuthorId == uid ? s.Chapters.Count : 0,
 		CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
 		IsPublished = s.PublicationDate != null,

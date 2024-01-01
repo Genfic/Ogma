@@ -7,7 +7,7 @@
 @model DetailsModel
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-	var desc = Model.Blogpost!.Body.Length > 150
+	var desc = Model.Blogpost.Body.Length > 150
 		? Model.Blogpost.Body[..150]
 		: Model.Blogpost.Body;
 

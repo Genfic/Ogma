@@ -32,8 +32,8 @@ public static class ClaimsPrincipalEx
 	/// </summary>
 	/// <param name="principal">ClaimsPrincipal of the logged-in user</param>
 	/// <returns>The username of currently logged-in user or `null` if user isn't logged in</returns>
-	public static string GetUsername(this ClaimsPrincipal principal)
-		=> principal.FindFirstValue(ClaimTypes.Name)!;
+	public static string? GetUsername(this ClaimsPrincipal principal)
+		=> principal.FindFirstValue(ClaimTypes.Name);
 
 	/// <summary>
 	/// Check if the user is a staff member based on their roles

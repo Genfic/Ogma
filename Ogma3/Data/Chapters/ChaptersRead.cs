@@ -15,7 +15,7 @@ public class ChaptersRead
 	public OgmaUser User { get; init; }
 	public long UserId { get; init; }
 	// TODO: Should be a HashSet<long>, but #82 blocks that
-	public List<long> Chapters { get; init; }
+	public List<long> Chapters { get; set; }
 
 	public class Configuration : IEntityTypeConfiguration<ChaptersRead>
 	{

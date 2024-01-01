@@ -2,65 +2,59 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Chapters;
 using Ogma3.Infrastructure.Extensions;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public class EditModel : PageModel
+public class EditModel(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public EditModel(ApplicationDbContext context, IMapper mapper)
-	{
-		_context = context;
-		_mapper = mapper;
-	}
-
-	[BindProperty] public PostData Input { get; set; }
+	[BindProperty]
+	public required PostData Input { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
 		// Get chapter
-		Input = await _context.Chapters
+		var chapter = await context.Chapters
 			.Where(c => c.Id == id)
 			.Where(c => c.Story.AuthorId == User.GetNumericId())
-			.ProjectTo<PostData>(_mapper.ConfigurationProvider)
+			.Select(c => new PostData
+			{
+				Id = c.Id,
+				Title = c.Title,
+				Body = c.Body,
+				StartNotes = c.StartNotes,
+				EndNotes = c.EndNotes,
+				IsPublished = c.PublicationDate != null,
+				StoryId = c.StoryId
+			})
 			.FirstOrDefaultAsync();
 
-		if (Input is null) return NotFound();
+		if (chapter is null) return NotFound();
 
-		Input.IsPublished = Input.PublicationDate is not null;
+		Input = chapter;
 
 		return Page();
 	}
 
 	public class PostData
 	{
-		public long Id { get; init; }
-		public string Title { get; init; }
-		public string Body { get; init; }
-		[Display(Name = "Start notes")] public string StartNotes { get; init; }
-		[Display(Name = "End notes")] public string EndNotes { get; init; }
-		public DateTime? PublicationDate { get; set; }
-		public bool IsPublished { get; set; }
-		public long? StoryId { get; set; }
-	}
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Chapter, PostData>();
+		public required long Id { get; init; }
+		public required string Title { get; init; }
+		public required string Body { get; init; }
+		[Display(Name = "Start notes")]
+		public required string? StartNotes { get; init; }
+		[Display(Name = "End notes")]
+		public required string? EndNotes { get; init; }
+		public required bool IsPublished { get; init; }
+		public required long? StoryId { get; init; }
 	}
 
 	public class PostDataValidation : AbstractValidator<PostData>
@@ -89,35 +83,49 @@ public class EditModel : PageModel
 
 		if (!ModelState.IsValid) return Page();
 
-		var chapter = await _context.Chapters
+		var chapterEditRows = await context.Chapters
 			.Where(c => c.Id == id)
 			.Where(c => c.Story.AuthorId == uid)
-			.Include(c => c.Story)
+			.ExecuteUpdateAsync(spc => spc
+				.SetProperty(c => c.Title, Input.Title.Trim())
+				.SetProperty(c => c.Slug, Input.Title.Trim().Friendlify())
+				.SetProperty(c => c.Body, Input.Body.Trim())
+				.SetProperty(c => c.StartNotes, Input.StartNotes == null ? null : Input.StartNotes.Trim())
+				.SetProperty(c => c.EndNotes, Input.EndNotes == null ? null : Input.EndNotes.Trim())
+				.SetProperty(c => c.WordCount, Input.Body.Words())
+				.SetProperty(c => c.PublicationDate, Input.IsPublished ? DateTime.Now : null)
+			);
+
+		if (chapterEditRows <= 0) return NotFound("Chapter not found");
+
+		var storyEditRows = await context.Stories
+			.Where(s => s.AuthorId == uid)
+			.Where(s => s.Chapters.Any(c => c.Id == id))
+			.Select(s => new
+			{
+				Story = s, 
+				ChapterCount = s.Chapters.Count(c => c.PublicationDate != null),
+				WordCount = s.Chapters.Where(c => c.PublicationDate != null).Sum(c => c.WordCount)
+			})
+			.ExecuteUpdateAsync(spc => spc
+				.SetProperty(s => s.Story.WordCount, s => s.WordCount)
+				.SetProperty(s => s.Story.ChapterCount, s => s.ChapterCount)
+			);
+
+		if (storyEditRows <= 0) return NotFound("Story not found");
+
+		var data = await context.Chapters
+			.Where(c => c.Id == id)
+			.Select(c => new
+			{
+				c.Id,
+				c.Slug,
+				c.StoryId
+			})
 			.FirstOrDefaultAsync();
 
-		if (chapter is null) return NotFound();
+		if (data is null) return NotFound();
 
-		// Update the chapter
-		chapter.Title = Input.Title.Trim();
-		chapter.Body = Input.Body.Trim();
-		chapter.StartNotes = Input.StartNotes?.Trim();
-		chapter.EndNotes = Input.EndNotes?.Trim();
-		chapter.Slug = Input.Title.Trim().Friendlify();
-		chapter.WordCount = Input.Body.Words();
-		chapter.PublicationDate = Input.IsPublished ? DateTime.Now : null;
-		await _context.SaveChangesAsync();
-
-		chapter.Story.WordCount = await _context.Chapters
-			.Where(c => c.StoryId == chapter.StoryId)
-			.Where(c => c.PublicationDate != null)
-			.SumAsync(c => c.WordCount);
-
-		chapter.Story.ChapterCount = await _context.Chapters
-			.Where(c => c.StoryId == chapter.StoryId)
-			.CountAsync(c => c.PublicationDate != null);
-
-		await _context.SaveChangesAsync();
-
-		return RedirectToPage("../Chapter", new { sid = chapter.Story.Id, id = chapter.Id, slug = chapter.Slug });
+		return RedirectToPage("../Chapter", new { sid = data.StoryId, id = data.Id, slug = data.Slug });
 	}
 }

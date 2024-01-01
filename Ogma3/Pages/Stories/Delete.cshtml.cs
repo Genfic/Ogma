@@ -61,7 +61,7 @@ public class DeleteModel : PageModel
 				IsPublished = s.PublicationDate != null,
 				Status = s.Status,
 				VotesCount = s.Votes.Count,
-				ChaptersCount = s.ChapterCount,
+				ChaptersCount = s.Chapters.Count,
 				CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount)
 			})
 			.AsNoTracking()

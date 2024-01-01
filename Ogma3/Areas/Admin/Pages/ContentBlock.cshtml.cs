@@ -91,6 +91,7 @@ public class ContentBlock : PageModel
 	private async Task<bool> TryBlockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
 	{
 		if (User.GetNumericId() is not { } staffId) return false;
+		if (User.GetUsername() is not { } uname) return false;
 
 		var item = await _context.Set<T>()
 			.Where(i => i.Id == itemId)
@@ -119,7 +120,7 @@ public class ContentBlock : PageModel
 		_context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, User.GetUsername())
+			Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, uname)
 		});
 
 		await _context.SaveChangesAsync();
@@ -142,6 +143,7 @@ public class ContentBlock : PageModel
 	private async Task<bool> TryUnblockContent<T>(long itemId) where T : BaseModel, IBlockableContent
 	{
 		if (User.GetNumericId() is not { } staffId) return false;
+		if (User.GetUsername() is not { } uname) return false;
 
 		var item = await _context.Set<T>()
 			.Where(i => i.Id == itemId)
@@ -165,7 +167,7 @@ public class ContentBlock : PageModel
 		_context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, User.GetUsername())
+			Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, uname)
 		});
 
 		await _context.SaveChangesAsync();
@@ -183,10 +185,10 @@ public class ContentBlock : PageModel
 
 	public sealed class ItemData
 	{
-		public bool Blocked { get; init; }
-		public string? Reason { get; init; }
-		public string Title { get; init; } = "";
+		public required bool Blocked { get; init; }
+		public required string? Reason { get; init; }
+		public required string Title { get; init; }
 		public string? Subtitle { get; init; }
-		public string Type { get; init; } = null!;
+		public required string Type { get; init; }
 	}
 }

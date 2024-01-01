@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -14,30 +12,19 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Blog;
 
-public class IndexModel : PageModel
+public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-	private readonly OgmaConfig _config;
-
-	public IndexModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config)
-	{
-		_context = context;
-		_mapper = mapper;
-		_config = config;
-	}
-
-	public IList<BlogpostCard> Posts { get; private set; }
-	public string SearchBy { get; private set; }
-	public EBlogpostSortingOptions SortBy { get; private set; }
-	public Pagination Pagination { get; private set; }
+	public required IList<BlogpostCard> Posts { get; set; }
+	public required string SearchBy { get; set; }
+	public required EBlogpostSortingOptions SortBy { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
 	{
 		SearchBy = q;
 		SortBy = sort;
 
-		var query = _context.Blogposts.AsQueryable();
+		var query = context.Blogposts.AsQueryable();
 
 		if (!string.IsNullOrEmpty(q))
 		{
@@ -84,19 +71,26 @@ public class IndexModel : PageModel
 
 		// Finalize query
 		Posts = await query
-			.Include(b => b.Author)
 			.Where(b => b.PublicationDate != null)
 			.Where(b => b.ContentBlockId == null)
-			.Paginate(page, _config.BlogpostsPerPage)
-			.Take(_config.BlogpostsPerPage)
-			.ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
-			.AsNoTracking()
+			.Paginate(page, config.BlogpostsPerPage)
+			.Select(b => new BlogpostCard
+			{
+				Id = b.Id,
+				Title = b.Title,
+				Slug = b.Slug,
+				Body = b.Body,
+				WordCount = b.WordCount,
+				PublicationDate = b.PublicationDate,
+				AuthorUserName = b.Author.UserName!,
+				Hashtags = b.Hashtags
+			})
 			.ToListAsync();
 
 		// Prepare pagination model
 		Pagination = new Pagination
 		{
-			PerPage = _config.BlogpostsPerPage,
+			PerPage = config.BlogpostsPerPage,
 			ItemCount = postsCount,
 			CurrentPage = page
 		};

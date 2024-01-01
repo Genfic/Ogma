@@ -26,9 +26,8 @@
 
 		<a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId" asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
 		<h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
-		@if (Model.Chapter.PublicationDate is not null)
+		@if (Model.Chapter.PublicationDate is {} date)
 		{
-			var date = (DateTime)Model.Chapter.PublicationDate;
 			<time class="date" itemprop="datePublished" datetime="@date.ToString(CultureInfo.InvariantCulture)">
 				@date.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
 			</time>
@@ -97,7 +96,7 @@
 
 		</div>
 
-		<o-read-progress v-pre></o-read-progress>
+		<o-read-progress data-csrf="@csrf" data-chapter="@Model.Chapter.Id" data-story="@Model.Chapter.StoryId" id="chapter-progress" v-pre></o-read-progress>
 	</article>
 
 	<div class="navigation">
@@ -132,3 +131,8 @@
 	csrf="@csrf"
 	openSelector="#open-modal-button">
 </report-modal>
+
+@section Scripts
+{
+	<script src="~/js/dist/watch-chapter.read.js" async asp-append-version="true"></script>
+}
