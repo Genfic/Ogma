@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -18,8 +17,7 @@ public class AutotableTagHelper : TagHelper
 
 		var props = obj
 			.GetType()
-			.GetProperties()
-			.ToList();
+			.GetProperties();
 
 		foreach (var p in props)
 		{
