@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using Ogma3.Infrastructure.PostgresEnumHelper;
+using NpgSqlGenerators;
 
 namespace Ogma3.Data.Stories;
 

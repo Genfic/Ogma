@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NpgSqlGenerators;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -27,7 +28,6 @@ using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Data.Votes;
-using Ogma3.Infrastructure.PostgresEnumHelper;
 using Serilog;
 
 namespace Ogma3.Data;
@@ -114,7 +114,7 @@ public class ApplicationDbContext : IdentityDbContext
 		builder.HasPostgresExtension("uuid-ossp");
 
 		// Register all enums with `[PostgresEnum]` attribute
-		builder.RegisterPostgresEnums(typeof(Startup).Assembly);
+		builder.RegisterPostgresEnums();
 
 		// Load model configurations
 		builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);

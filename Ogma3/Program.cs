@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NpgSqlGenerators;
 using Ogma3;
 using Ogma3.Infrastructure.Logging;
 using Serilog;
@@ -18,7 +19,6 @@ Console.OutputEncoding = Encoding.UTF8;
 
 // TODO: Reverts to old datetime behaviour, tracked by #50
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 
 var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
 var (telegramToken, telegramId) = await Telegram.GetCredentials();
