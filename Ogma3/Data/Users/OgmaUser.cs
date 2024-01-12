@@ -15,6 +15,28 @@ namespace Ogma3.Data.Users;
 
 public class OgmaUser : IdentityUser<long>, IReportableContent
 {
+	// IdentityUser overrides
+	public new string UserName {
+		get => base.UserName ?? "";
+		set => base.UserName = value;
+	}
+	public new string NormalizedUserName
+	{
+		get => base.NormalizedUserName ?? "";
+		set => base.NormalizedUserName = value;
+	}
+	public new string Email
+	{
+		get => base.Email ?? "";
+		set => base.Email = value;
+	}
+	public new string NormalizedEmail
+	{
+		get => base.NormalizedEmail ?? "";
+		set => base.NormalizedEmail = value;
+	}
+
+	// New properties
 	[PersonalData] public string? Title { get; set; }
 
 	[PersonalData] public string? Bio { get; set; }
