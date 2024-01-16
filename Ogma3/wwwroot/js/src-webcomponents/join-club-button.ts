@@ -13,7 +13,7 @@ export class JoinClubButton extends LitElement {
 	@property() csrf: string;
 	@property() isMember: boolean = false;
 
-	async connectedCallback() {
+	connectedCallback() {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 	}

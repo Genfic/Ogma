@@ -12,9 +12,7 @@ export class ReportModal extends LitElement {
 	connectedCallback() {
 		super.connectedCallback();
 		if (this.openSelector) {
-			document
-				.querySelector(this.openSelector)
-				.addEventListener("click", this.show);
+			document.querySelector(this.openSelector).addEventListener("click", this.show);
 		}
 	}
 
@@ -37,9 +35,7 @@ export class ReportModal extends LitElement {
 	public show = () => (this.visible = true);
 
 	private validate = () =>
-		this.reason &&
-		this.reason.length >= this.rules.min &&
-		this.reason.length <= this.rules.max;
+		this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
 
 	private message = () => {
 		switch (this.success) {

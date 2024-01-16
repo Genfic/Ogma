@@ -24,10 +24,7 @@ new Vue({
 
 			// Validation
 			this.err = [];
-			if (
-				this.form.name.length > this.lens.maxNameLength ||
-				this.form.name.length < this.lens.minNameLength
-			)
+			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
 				this.err.push(
 					`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`,
 				);

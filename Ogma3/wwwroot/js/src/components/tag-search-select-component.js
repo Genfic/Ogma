@@ -67,15 +67,9 @@ Vue.component("tag-search-select", {
 		filtered() {
 			return this.options.filter((x) => {
 				const inName = x.name.toLowerCase().includes(this.search.toLowerCase());
-				const inNamespace =
-					x.namespace?.toLowerCase().includes(this.search.toLowerCase()) ??
-					false;
+				const inNamespace = x.namespace?.toLowerCase().includes(this.search.toLowerCase()) ?? false;
 
-				return (
-					(inName || inNamespace) &&
-					!this.selected.some((i) => i.id === x.id) &&
-					this.search.length > 0
-				);
+				return (inName || inNamespace) && !this.selected.some((i) => i.id === x.id) && this.search.length > 0;
 			});
 		},
 	},
@@ -113,10 +107,7 @@ Vue.component("tag-search-select", {
 					if (this.highlighted !== null) {
 						e.preventDefault();
 						this.highlighted = 0;
-						this.pushUnique(
-							this.selected,
-							JSON.parse(JSON.stringify(this.filtered[this.highlighted])),
-						);
+						this.pushUnique(this.selected, JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
 					}
 					break;
 				default:
@@ -145,9 +136,7 @@ Vue.component("tag-search-select", {
 		}
 
 		if (this.preselected) {
-			this.selected = this.options.filter(
-				(o) => this.preselected.indexOf(o.id) !== -1,
-			);
+			this.selected = this.options.filter((o) => this.preselected.indexOf(o.id) !== -1);
 		}
 	},
 	template: `

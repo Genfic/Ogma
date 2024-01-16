@@ -72,12 +72,7 @@ const roles_vue = new Vue({
 
 		// Clears the editor
 		cancelEdit: function () {
-			this.form.name =
-				this.form.color =
-				this.form.id =
-				this.form.isStaff =
-				this.form.order =
-					null;
+			this.form.name = this.form.color = this.form.id = this.form.isStaff = this.form.order = null;
 		},
 	},
 
@@ -85,9 +80,7 @@ const roles_vue = new Vue({
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector(
-			"[name=__RequestVerificationToken]",
-		).value;
+		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of roles
 		await this.getRoles();
 	},

@@ -13,7 +13,7 @@ export class FollowButton extends LitElement {
 	@property() csrf: string;
 	@property() isFollowed: boolean;
 
-	async connectedCallback() {
+	connectedCallback() {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 	}

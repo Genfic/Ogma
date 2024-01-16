@@ -15,7 +15,7 @@ export class ClubBanButton extends LitElement {
 	@property() banned: boolean;
 	@state() isBanned: boolean;
 
-	async connectedCallback() {
+	connectedCallback() {
 		super.connectedCallback();
 		this.isBanned = this.banned;
 		this.classList.add("wc-loaded");
@@ -28,7 +28,6 @@ export class ClubBanButton extends LitElement {
 				@click="${this.banOrUnban}"
 			>
 				${this.isBanned ? "Unban" : "Ban"}
-				
 			</button>
 		`;
 	}

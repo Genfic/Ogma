@@ -46,25 +46,13 @@ export class TableInfo extends LitElement {
 			<table class="o-table">
 				<tr>
 					<th @click="${() => this._sort("name")}">
-						Table ${
-							this.sortBy !== "name"
-								? "⯁"
-								: this.sortOrder === "asc"
-								  ? "⯆"
-								  : "⯅"
-						}
+						Table ${this.sortBy !== "name" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
 					</th>
 					<th
 						colspan="2"
 						@click="${() => this._sort("size")}"
 					>
-						Size ${
-							this.sortBy !== "size"
-								? "⯁"
-								: this.sortOrder === "asc"
-								  ? "⯆"
-								  : "⯅"
-						}
+						Size ${this.sortBy !== "size" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
 					</th>
 				</tr>
 				${
@@ -95,14 +83,10 @@ export class TableInfo extends LitElement {
 		this.sortBy = by;
 		this.sortOrder = this.sortOrder === "desc" ? "asc" : "desc";
 		if (by === "size") {
-			this.tableInfo.sort((a, b) =>
-				this.sortOrder === "desc" ? a.size - b.size : b.size - a.size,
-			);
+			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.size - b.size : b.size - a.size));
 		} else {
 			this.tableInfo.sort((a, b) =>
-				this.sortOrder === "desc"
-					? a.name.localeCompare(b.name)
-					: b.name.localeCompare(a.name),
+				this.sortOrder === "desc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
 			);
 		}
 	}

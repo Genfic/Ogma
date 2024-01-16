@@ -1,10 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
-import {
-	Clubs_GetUserClubs as getUserClubs,
-	Folders_AddStory as addStoryToFolder,
-} from "../generated/paths-public";
+import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 import { FolderTree } from "./folder-tree";
 
@@ -115,11 +112,7 @@ export class ClubFolderSelector extends LitElement {
 							@click="${() => (this.visible = false)}"
 						>
 							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
-								${
-									this.selectedClub !== null
-										? this.#selectedClubView()
-										: this.#allClubsView()
-								}
+								${this.selectedClub !== null ? this.#selectedClubView() : this.#allClubsView()}
 							</div>
 						</div>
 				  `

@@ -44,9 +44,7 @@ export class ShelvesButton extends LitElement {
 			class="shelf action-btn"
 			title="Add to ${shelf.name}"
 			@click="${() => this.#addOrRemove(shelf.id)}"
-			style="box-shadow: ${
-				shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null
-			}"
+			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
 			<i class="material-icons-outlined" style="color: ${shelf.color}">
 				${shelf.iconName ?? "bookmark_border"}
@@ -60,9 +58,7 @@ export class ShelvesButton extends LitElement {
 				class="action-btn"
 				title="Add to ${shelf.name}"
 				@click="${() => this.#addOrRemove(shelf.id)}"
-				style="box-shadow: ${
-					shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null
-				}"
+				style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 			>
 				<i
 					class="material-icons-outlined"
@@ -122,9 +118,7 @@ export class ShelvesButton extends LitElement {
 	}
 
 	async #addOrRemove(id: number) {
-		const exists = [...this.shelves, ...this.quickShelves].some(
-			(s) => s.doesContainBook && s.id === id,
-		);
+		const exists = [...this.shelves, ...this.quickShelves].some((s) => s.doesContainBook && s.id === id);
 		const send = exists ? removeFromShelf : addToShelf;
 
 		const res = await send(id, this.storyId, {

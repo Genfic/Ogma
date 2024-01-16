@@ -7,14 +7,10 @@ export class Result<T> {
 
 	private constructor(isSuccess: boolean, error?: string, value?: T) {
 		if (isSuccess && error) {
-			throw new Error(
-				"InvalidOperation: A result cannot be successful and contain an error",
-			);
+			throw new Error("InvalidOperation: A result cannot be successful and contain an error");
 		}
 		if (!isSuccess && !error) {
-			throw new Error(
-				"InvalidOperation: A failing result needs to contain an error message",
-			);
+			throw new Error("InvalidOperation: A failing result needs to contain an error message");
 		}
 
 		this.isSuccess = isSuccess;

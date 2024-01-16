@@ -37,7 +37,7 @@ for (const area of areas) {
 
 	for (const btn of [...vDom.querySelectorAll("button.btn[data-action]")] as HTMLElement[]) {
 		btn.addEventListener("click", (_) => {
-			const action: Action = Action[btn.dataset["action"]];
+			const action: Action = Action[btn.dataset.action];
 			const map: Record<Action, PrefixSuffix> = {
 				bold: { prefix: "**", suffix: "**" },
 				italic: { prefix: "*", suffix: "*" },

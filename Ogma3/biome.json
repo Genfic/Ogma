@@ -16,7 +16,7 @@
 			},
 			"suspicious": {
 				"noRedundantUseStrict": "off",
-				"noAssignInExpressions": "warn"
+				"noAssignInExpressions": "off"
 			}
 		}
 	},
@@ -26,7 +26,7 @@
 	"formatter": {
 		"indentStyle": "tab",
 		"indentWidth": 4,
-		"lineWidth": 140,
+		"lineWidth": 120,
 		"lineEnding": "crlf"
 	},
 	"vcs": {

@@ -1,24 +1,13 @@
 import { Result } from "./result";
 
-export const get = <T>(
-	url: string,
-	headers: object = {},
-	config: object = {},
-) => request<T>(url, "GET", null, headers, config);
+export const get = <T>(url: string, headers: object = {}, config: object = {}) =>
+	request<T>(url, "GET", null, headers, config);
 
-export const post = <T>(
-	url: string,
-	payload: object,
-	headers: object = {},
-	config: object = {},
-) => request<T>(url, "POST", payload, headers, config);
+export const post = <T>(url: string, payload: object, headers: object = {}, config: object = {}) =>
+	request<T>(url, "POST", payload, headers, config);
 
-export const httpDelete = <T>(
-	url: string,
-	payload: object,
-	headers: object = {},
-	config: object = {},
-) => request<T>(url, "DELETE", payload, headers, config);
+export const httpDelete = <T>(url: string, payload: object, headers: object = {}, config: object = {}) =>
+	request<T>(url, "DELETE", payload, headers, config);
 
 export const request = async <TResponse>(
 	url: string,

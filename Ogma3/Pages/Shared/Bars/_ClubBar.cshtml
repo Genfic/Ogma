@@ -6,13 +6,13 @@
 @inject IAntiforgery Antiforgery
 @inject IHttpContextAccessor Accessor;
 @{
-	var tab = (string)ViewData["Tab"];
-	var csrf =  Accessor is { HttpContext: {} } ? Antiforgery.GetAndStoreTokens(Accessor.HttpContext).RequestToken : "";
+	var tab = (string)(ViewData["Tab"] ?? "");
+	var csrf = Accessor is { HttpContext: { } } ? Antiforgery.GetAndStoreTokens(Accessor.HttpContext).RequestToken : "";
 }
 
 <div class="info-bar club-bar" id="club-bar">
 
-	<cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130"/>
+	<cdn-img class="img" src="@Model.Icon" alt="@Model.Name" loading="lazy" height="130" width="130" />
 
 	<h1 class="name">@Model.Name</h1>
 
@@ -27,7 +27,7 @@
 	</div>
 
 	<div class="buttons">
-		
+
 		<o-join clubId="@Model.Id" isMember="@Model.IsMember" csrf="@csrf"></o-join>
 
 		<div class="o-dropdown left" x-data="{open: false}">
@@ -38,10 +38,7 @@
 
 			<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
 
-				<a class="item active"
-				   title="Edit club"
-				   asp-page="/Clubs/Edit"
-				   asp-route-id="@Model.Id">
+				<a class="item active" title="Edit club" asp-page="/Clubs/Edit" asp-route-id="@Model.Id">
 					<icon icon="admin_panel_settings"></icon>
 					Manage
 				</a>
@@ -54,10 +51,8 @@
 					</button>
 				}
 
-				<a class="item active"
-				   title="Moderation log"
-				   asp-page="/Club/Modlog"
-				   asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+				<a class="item active" title="Moderation log" asp-page="/Club/Modlog" asp-route-id="@Model.Id"
+					asp-route-slug="@Model.Slug">
 					<icon icon="receipt_long"></icon>
 					Modlog
 				</a>
@@ -66,36 +61,25 @@
 	</div>
 
 	<nav class="nav">
-		<a class="nav-item @(tab == "Home" ? "active" : null)"
-		   asp-page="/Club/Index"
-		   asp-route-id="@Model.Id"
-		   asp-route-slug="@Model.Slug">
+		<a class="nav-item @(tab == "Home" ? "active" : null)" asp-page="/Club/Index" asp-route-id="@Model.Id"
+			asp-route-slug="@Model.Slug">
 			Home
 		</a>
-		<a class="nav-item @(tab == "Members" ? "active" : null)"
-		   asp-page="/Club/Members"
-		   asp-route-id="@Model.Id"
-		   asp-route-slug="@Model.Slug">
+		<a class="nav-item @(tab == "Members" ? "active" : null)" asp-page="/Club/Members" asp-route-id="@Model.Id"
+			asp-route-slug="@Model.Slug">
 			Members
 		</a>
-		<a class="nav-item @(tab == "Forums" ? "active" : null)"
-		   asp-page="/Club/Forums/Index"
-		   asp-route-id="@Model.Id"
-		   asp-route-slug="@Model.Slug">
+		<a class="nav-item @(tab == "Forums" ? "active" : null)" asp-page="/Club/Forums/Index" asp-route-id="@Model.Id"
+			asp-route-slug="@Model.Slug">
 			Forums
 		</a>
-		<a class="nav-item @(tab == "Stories" ? "active" : null)"
-		   asp-page="/Club/Folders/Index"
-		   asp-route-id="@Model.Id"
-		   asp-route-slug="@Model.Slug">
+		<a class="nav-item @(tab == "Stories" ? "active" : null)" asp-page="/Club/Folders/Index"
+			asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
 			Stories
 		</a>
 	</nav>
-	
-	<report-modal v-pre
-    	itemId="@Model.Id"
-    	itemType="@EReportableContentTypes.Story"
-    	csrf="@csrf"
-    	openSelector="#open-modal-button-clubbar">
-    </report-modal>
+
+	<report-modal v-pre itemId="@Model.Id" itemType="@EReportableContentTypes.Story" csrf="@csrf"
+		openSelector="#open-modal-button-clubbar">
+	</report-modal>
 </div>

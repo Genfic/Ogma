@@ -2,14 +2,8 @@
 	const route = document.querySelector("[data-reads]") as HTMLElement;
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
 
-	const buttons = [
-		...document.querySelectorAll("button.read-status"),
-	] as HTMLButtonElement[];
-	const csrf = (
-		document.querySelector(
-			"input[name=__RequestVerificationToken]",
-		) as HTMLInputElement
-	).value;
+	const buttons = [...document.querySelectorAll("button.read-status")] as HTMLButtonElement[];
+	const csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
 
 	route.remove();
 	story.remove();

@@ -25,7 +25,9 @@ new Vue({
 		},
 
 		saveRoles: async function () {
-			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e) => Number(e.value));
+			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e) =>
+				Number(e.value),
+			);
 			await axios.post(
 				`${this.rolesRoute}/roles`,
 				{
@@ -43,7 +45,9 @@ new Vue({
 			if (this.input.length < 3) {
 				this.names = [];
 			} else {
-				const { data } = await axios.get(`${this.rolesRoute}/names`, { params: { name: this.input } });
+				const { data } = await axios.get(`${this.rolesRoute}/names`, {
+					params: { name: this.input },
+				});
 				this.names = data;
 			}
 		},

@@ -5,8 +5,7 @@ const settings_vue = new Vue({
 	el: "#local-settings",
 	data: {
 		// Comment collapse
-		collapseDeleted:
-			JSON.parse(window.localStorage.getItem("collapse-deleted")) ?? false,
+		collapseDeleted: JSON.parse(window.localStorage.getItem("collapse-deleted")) ?? false,
 
 		// Theme
 		theme: ((x) => (x?.length > 0 ? x : "light"))(getCookieValue("theme")),

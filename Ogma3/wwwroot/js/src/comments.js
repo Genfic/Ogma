@@ -75,15 +75,11 @@ const comments_vue = new Vue({
 
 			this.total = res.data.total;
 			this.page = res.data.page ?? this.page;
-			this.isAuthenticated =
-				res.headers["x-authenticated"].toLowerCase() === "true";
+			this.isAuthenticated = res.headers["x-authenticated"].toLowerCase() === "true";
 
 			this.comments = res.data.elements.map((val, key) => ({
 				val,
-				key:
-					res.data.total -
-					this.page * this.perPage +
-					(this.perPage - (key + 1)),
+				key: res.data.total - this.page * this.perPage + (this.perPage - (key + 1)),
 			}));
 
 			if (this.highlight) {
@@ -110,9 +106,7 @@ const comments_vue = new Vue({
 
 		// Navigate to the next page
 		nextPage: async function () {
-			await this.changePage(
-				Math.min(this.page + 1, Math.ceil(this.total / this.perPage)),
-			);
+			await this.changePage(Math.min(this.page + 1, Math.ceil(this.total / this.perPage)));
 		},
 
 		// Navigate to the selected page
@@ -136,10 +130,7 @@ const comments_vue = new Vue({
 
 		// Navigates to `this.page` page
 		navigateToPage: function () {
-			const fragment =
-				this.page > 1
-					? `#page-${this.page}`
-					: window.location.href.split("#")[0];
+			const fragment = this.page > 1 ? `#page-${this.page}` : window.location.href.split("#")[0];
 
 			history.replaceState(null, null, fragment);
 
@@ -234,29 +225,21 @@ const comments_vue = new Vue({
 		}
 
 		// Subscription status
-		this.isSubscribed = (
-			await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)
-		).data;
+		this.isSubscribed = (await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)).data;
 
 		// Lock permissions
-		this.canLock = (
-			await axios.get(`${this.threadRoute}/permissions/${this.thread}`)
-		).data.isAllowed;
+		this.canLock = (await axios.get(`${this.threadRoute}/permissions/${this.thread}`)).data.isAllowed;
 
 		// Lock status
-		this.isLocked = (
-			await axios.get(`${this.threadRoute}/lock/status/${this.thread}`)
-		).data;
+		this.isLocked = (await axios.get(`${this.threadRoute}/lock/status/${this.thread}`)).data;
 
 		await this.load();
 	},
 });
 
 (() => {
-	document
-		.getElementById("lock-thread")
-		?.addEventListener("click", async (e) => {
-			const status = await comments_vue.lock();
-			e.target.innerText = status === true ? "Unlock" : "Lock";
-		});
+	document.getElementById("lock-thread")?.addEventListener("click", async (e) => {
+		const status = await comments_vue.lock();
+		e.target.innerText = status === true ? "Unlock" : "Lock";
+	});
 })();

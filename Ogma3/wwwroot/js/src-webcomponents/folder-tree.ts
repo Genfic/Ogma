@@ -65,11 +65,7 @@ export class FolderTree extends LitElement {
 	render() {
 		return html`
 			<div class="folder-tree active-border">
-				${
-					this.tree.length > 0
-						? html` ${this.tree.map(this.#item)} `
-						: html`<span>No folder found</span>`
-				}
+				${this.tree.length > 0 ? html` ${this.tree.map(this.#item)} ` : html`<span>No folder found</span>`}
 			</div>
 		`;
 	}

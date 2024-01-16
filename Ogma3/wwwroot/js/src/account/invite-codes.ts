@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
-import { log } from "../../src-helpers/logger";
 import {
 	InviteCodes_GetInviteCodes as getCodes,
 	InviteCodes_PostInviteCode as createCode,
 } from "../../generated/paths-public";
 import { type InviteCodeDto } from "../../generated/types-public";
+import { log } from "../../src-helpers/logger";
 
 // @ts-ignore
 new Vue({
@@ -50,11 +50,7 @@ new Vue({
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = (
-			document.querySelector(
-				"[name=__RequestVerificationToken]",
-			) as HTMLInputElement
-		).value;
+		this.xcsrf = (document.querySelector("[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		// Grab the initial set of namespaces
 		await this.getCodes();
 	},

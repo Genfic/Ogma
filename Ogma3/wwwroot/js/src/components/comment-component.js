@@ -98,7 +98,9 @@ Vue.component("comment", {
 			} else if (this.revisionsCache !== null) {
 				this.revisions = this.revisionsCache;
 			} else {
-				this.revisionsCache = this.revisions = (await axios.get(`${this.route}/revisions/${this.comment.id}`)).data;
+				this.revisionsCache = this.revisions = (
+					await axios.get(`${this.route}/revisions/${this.comment.id}`)
+				).data;
 			}
 		},
 

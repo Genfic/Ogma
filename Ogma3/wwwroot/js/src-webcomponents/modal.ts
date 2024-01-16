@@ -9,7 +9,7 @@ export class Modal extends LitElement {
 
 	@property({ attribute: false }) visible: boolean;
 
-	async connectedCallback() {
+	connectedCallback() {
 		super.connectedCallback();
 	}
 

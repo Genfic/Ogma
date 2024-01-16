@@ -37,9 +37,7 @@ Vue.component("input-file", {
 			return true;
 		},
 		validationString: function () {
-			return this.validateMsg
-				.replace("{0}", this.label)
-				.replace("{1}", `${this.max}`);
+			return this.validateMsg.replace("{0}", this.label).replace("{1}", `${this.max}`);
 		},
 	},
 	template: `

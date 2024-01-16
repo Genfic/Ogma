@@ -24,17 +24,11 @@ new Vue({
 
 			// Validation
 			this.err = [];
-			if (
-				this.form.name.length > this.lens.maxNameLength ||
-				this.form.name.length < this.lens.minNameLength
-			)
+			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
 				this.err.push(
 					`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`,
 				);
-			if (
-				this.form.desc.length > this.lens.maxDescLength ||
-				this.form.desc.length < this.lens.minDescLength
-			)
+			if (this.form.desc.length > this.lens.maxDescLength || this.form.desc.length < this.lens.minDescLength)
 				this.err.push(
 					`Description has to be between ${this.lens.minDescLength} and ${this.lens.maxDescLength} characters long.`,
 				);

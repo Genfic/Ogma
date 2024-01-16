@@ -81,9 +81,7 @@ new Vue({
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector(
-			"[name=__RequestVerificationToken]",
-		).value;
+		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of namespaces
 		await this.getCodes();
 	},

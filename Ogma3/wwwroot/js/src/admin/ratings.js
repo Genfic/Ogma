@@ -29,13 +29,9 @@ const ratings_vue = new Vue({
 
 				data.append("name", this.form.name);
 				data.append("description", this.form.desc);
-				data.append(
-					"blacklistedByDefault",
-					(this.form.blacklist ?? false).toString(),
-				);
+				data.append("blacklistedByDefault", (this.form.blacklist ?? false).toString());
 				data.append("order", this.form.order);
-				if (this.form.icon)
-					data.append("icon", this.form.icon, this.form.icon.name);
+				if (this.form.icon) data.append("icon", this.form.icon, this.form.icon.name);
 
 				const options = {
 					headers: { RequestVerificationToken: this.xcsrf },
@@ -97,9 +93,7 @@ const ratings_vue = new Vue({
 	async mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
-		this.xcsrf = document.querySelector(
-			"[name=__RequestVerificationToken]",
-		).value;
+		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of namespaces
 		await this.getRatings();
 	},

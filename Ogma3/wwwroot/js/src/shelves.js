@@ -63,9 +63,7 @@ new Vue({
 		},
 		// Gets all existing shelves
 		getShelves: async function () {
-			const { data, status } = await axios.get(
-				`${this.route}/${this.owner}?page=1`,
-			);
+			const { data, status } = await axios.get(`${this.route}/${this.owner}?page=1`);
 			this.shelves = status === 200 ? data : null;
 		},
 
@@ -105,9 +103,7 @@ new Vue({
 
 	async mounted() {
 		// CSRF token
-		this.csrf = document.querySelector(
-			"input[name=__RequestVerificationToken]",
-		).value;
+		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Get owner
