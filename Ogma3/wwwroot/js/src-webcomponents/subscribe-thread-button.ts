@@ -1,11 +1,11 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { log } from "../src-helpers/logger";
 import {
 	Subscriptions_IsSubscribedToThread as isSubscribed,
 	Subscriptions_SubscribeThread as subscribe,
 	Subscriptions_UnsubscribeThread as unsubscribe,
 } from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 
 @customElement("o-subscribe")
 export class SubscribeThreadButton extends LitElement {
@@ -46,7 +46,7 @@ export class SubscribeThreadButton extends LitElement {
 	async #subscribe() {
 		const send = this.subscribed ? unsubscribe : subscribe;
 
-		const res = await send( {
+		const res = await send({
 			threadId: this.threadId,
 		});
 		if (res.ok) {

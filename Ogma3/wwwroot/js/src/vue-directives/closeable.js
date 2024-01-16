@@ -1,14 +1,14 @@
-Vue.directive('closable', {
+Vue.directive("closable", {
 	bind(el, binding, vnode) {
 		// Here's the click/touchstart handler
 		// (it is registered below)
-		let handleOutsideClick = (e) => {
+		const handleOutsideClick = (e) => {
 			e.stopPropagation();
 			// Get the handler method name and the exclude array
 			// from the object used in v-closable
-			const { handler, exclude } = binding.value;      // This variable indicates if the clicked element is excluded
+			const { handler, exclude } = binding.value; // This variable indicates if the clicked element is excluded
 			let clickedOnExcludedEl = false;
-			exclude.forEach(refName => {
+			for (const refName of exclude) {
 				// We only run this code if we haven't detected
 				// any excluded element yet
 				if (!clickedOnExcludedEl) {
@@ -18,7 +18,7 @@ Vue.directive('closable', {
 					// is the same element the user just clicked on
 					clickedOnExcludedEl = excludedEl.contains(e.target);
 				}
-			});      // We check to see if the clicked element is not
+			} // We check to see if the clicked element is not
 			// the dialog element and not excluded
 			if (!el.contains(e.target) && !clickedOnExcludedEl) {
 				// If the clicked element is outside the dialog
@@ -28,14 +28,15 @@ Vue.directive('closable', {
 			}
 		};
 		// Register click/touchstart event listeners on the whole page
-		document.addEventListener('click', handleOutsideClick);
-		document.addEventListener('touchstart', handleOutsideClick);
-	}, unbind() {
+		document.addEventListener("click", handleOutsideClick);
+		document.addEventListener("touchstart", handleOutsideClick);
+	},
+	unbind() {
 		// If the element that has v-closable is removed, then
 		// unbind click/touchstart listeners from the whole page
 		// eslint-disable-next-line no-undef
-		document.removeEventListener('click', handleOutsideClick);
+		document.removeEventListener("click", handleOutsideClick);
 		// eslint-disable-next-line no-undef
-		document.removeEventListener('touchstart', handleOutsideClick);
-	}
+		document.removeEventListener("touchstart", handleOutsideClick);
+	},
 });

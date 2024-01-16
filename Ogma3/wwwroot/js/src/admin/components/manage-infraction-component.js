@@ -15,16 +15,14 @@ Vue.component("manage-infraction", {
 			required: true,
 		},
 	},
-	data: function () {
-		return {
-			type: null,
-			date: null,
-			reason: null,
+	data: () => ({
+		type: null,
+		date: null,
+		reason: null,
 
-			csrf: null,
-			visible: false,
-		};
-	},
+		csrf: null,
+		visible: false,
+	}),
 	methods: {
 		hide: function () {
 			this.type = this.date = this.reason = null;

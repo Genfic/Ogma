@@ -1,5 +1,5 @@
-`use strict`;
-(function () {
+"use strict";
+(() => {
 	const button = document.getElementById("tts-btn");
 	const stopBtn = document.getElementById("tts-stop");
 	const icon = document.getElementById("tts-btn-ico");
@@ -13,7 +13,7 @@
 
 	const synth = window.speechSynthesis;
 
-	button.addEventListener("click", function () {
+	button.addEventListener("click", () => {
 		if (!("speechSynthesis" in window)) {
 			alert("Your browser doesn't support text-to-speech!");
 			return;
@@ -31,7 +31,7 @@
 		}
 	});
 
-	stopBtn.addEventListener("click", function () {
+	stopBtn.addEventListener("click", () => {
 		if (synth.speaking) {
 			synth.cancel();
 			icon.innerText = icons.play;

@@ -1,40 +1,40 @@
-Vue.component('input-counter', {
+Vue.component("input-counter", {
 	props: {
 		max: {
 			type: Number,
-			required: true
+			required: true,
 		},
 		min: {
 			type: Number,
-			default: 0
+			default: 0,
 		},
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		value: {
 			type: String,
-			default: ''
+			default: "",
 		},
 		desc: {
 			type: String,
-			default: null
+			default: null,
 		},
 		validateMsg: {
 			type: String,
-			default: null
-		}
+			default: null,
+		},
 	},
 	data: function () {
 		return {
-			text: this.value ?? '',
-			name: this.label.replace(/\s+/g, '')
+			text: this.value ?? "",
+			name: this.label.replace(/\s+/g, ""),
 		};
 	},
 	watch: {
 		value() {
 			this.text = this.value;
-		}
+		},
 	},
 	computed: {
 		countChars: function () {
@@ -44,16 +44,13 @@ Vue.component('input-counter', {
 			return this.text.length >= this.min && this.text.length <= this.max;
 		},
 		validationString: function () {
-			return this.validateMsg
-				.replace('{0}', this.label)
-				.replace('{1}', `${this.max}`)
-				.replace('{2}', `${this.min}`);
-		}
+			return this.validateMsg.replace("{0}", this.label).replace("{1}", `${this.max}`).replace("{2}", `${this.min}`);
+		},
 	},
 	methods: {
 		update: function (value) {
-			this.$emit('input', value);
-		}
+			this.$emit("input", value);
+		},
 	},
 	template: `
         <div class="o-form-group">
@@ -71,5 +68,5 @@ Vue.component('input-counter', {
         </div>
         <span v-if="!validate && validateMsg">{{ validationString }}</span>
         </div>
-    `
+    `,
 });

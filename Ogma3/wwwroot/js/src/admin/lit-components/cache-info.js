@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 
 export class CacheInfo extends LitElement {
 	constructor() {
@@ -66,4 +66,4 @@ export class CacheInfo extends LitElement {
 	}
 }
 
-window.customElements.define('cache-info', CacheInfo);
+window.customElements.define("cache-info", CacheInfo);

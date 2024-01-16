@@ -1,10 +1,10 @@
-export{};
+export {};
 
 declare global {
 	export interface Number {
-		normalize(min: number, max: number): number,
+		normalize(min: number, max: number): number;
 
-		clamp(min?: number, max?: number): number,
+		clamp(min?: number, max?: number): number;
 	}
 }
 
@@ -15,7 +15,7 @@ declare global {
  * @returns {number} The given number normalized into [0, 1] range
  */
 Number.prototype.normalize = function (min: number, max: number): number {
-	if (max < min) throw 'Max cannot be less than min';
+	if (max < min) throw "Max cannot be less than min";
 	return (this - min) / (max - min);
 };
 
@@ -26,7 +26,7 @@ Number.prototype.normalize = function (min: number, max: number): number {
  * @returns {number}
  */
 Number.prototype.clamp = function (min: number = 0, max: number = 1): number {
-	if (max < min) throw 'Max cannot be less than min';
+	if (max < min) throw "Max cannot be less than min";
 	if (this < min) return min;
 	if (this > max) return max;
 	return this;

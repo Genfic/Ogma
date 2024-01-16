@@ -5,8 +5,8 @@
  */
 // eslint-disable-next-line no-redeclare
 export const getCookieValue = (name: string): string => {
-	let b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-	return b ? b.pop() : '';
+	const b = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+	return b ? b.pop() : "";
 };
 
 /**
@@ -19,10 +19,10 @@ export const getCookieValue = (name: string): string => {
  * @param {string|null} path Path for which the cookie is valid
  */
 export function setCookie(
-	name: string, 
-	value: string, 
-	expires: Date | null = null, 
-	secure: boolean = false, 
+	name: string,
+	value: string,
+	expires: Date | null = null,
+	secure: boolean = false,
 	sameSite: string | null = null,
 	path: string | null = null,
 ): void {

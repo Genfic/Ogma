@@ -1,49 +1,46 @@
 import { log } from "../../src-helpers/logger";
 
-
-Vue.component('input-blog-tags', {
+Vue.component("input-blog-tags", {
 	props: {
 		max: {
 			type: Number,
-			required: true
+			required: true,
 		},
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		value: {
 			type: String,
-			default: ''
+			default: "",
 		},
 		desc: {
 			type: String,
 			required: false,
-			default: null
+			default: null,
 		},
 		validateMsg: {
 			type: String,
-			default: null
-		}
+			default: null,
+		},
 	},
 	data: function () {
 		log.log(this.value);
 		return {
 			text: this.value,
-			name: this.label.replace(/\s+/g, '')
+			name: this.label.replace(/\s+/g, ""),
 		};
 	},
 	computed: {
 		countTags: function () {
-			return this.text ? this.text.split(',').length : 0;
+			return this.text ? this.text.split(",").length : 0;
 		},
 		validate: function () {
-			return this.text.split(',').length <= this.max;
+			return this.text.split(",").length <= this.max;
 		},
 		validationString: function () {
-			return this.validateMsg
-				.replace('{0}', this.label)
-				.replace('{1}', `${this.max}`);
-		}
+			return this.validateMsg.replace("{0}", this.label).replace("{1}", `${this.max}`);
+		},
 	},
 	template: `
         <div class="o-form-group">
@@ -60,5 +57,5 @@ Vue.component('input-blog-tags', {
         </div>
         <span v-if="!validate && validateMsg">{{ validationString }}</span>
         </div>
-    `
+    `,
 });

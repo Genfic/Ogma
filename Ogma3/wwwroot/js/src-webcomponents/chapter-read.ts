@@ -1,12 +1,12 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement('o-read')
+@customElement("o-read")
 class ChapterRead extends LitElement {
 	constructor() {
 		super();
 	}
-	
+
 	@property() route: string;
 	@property() chapterId: number;
 

@@ -23,7 +23,8 @@
 		<div class="deco" v-bind:style="{background: n.userName ? 'green' : 'gray'}"></div>
 		<div class="main">
 			<h3 class="name"><span class="monospace">{{ n.code }}</span> : {{ date(n.issueDate) }}</h3>
-			<span class="desc" v-if="n.userName">Redeemed by <strong>{{n.userName}}</strong> on <strong>{{date(n.usedDate)}}</strong></span>
+			<span class="desc" v-if="n.userName">Redeemed by <strong>{{n.userName}}</strong> on
+				<strong>{{date(n.usedDate)}}</strong></span>
 		</div>
 		<div class="actions">
 			<button class="action" v-on:click="copyCode(n)">
@@ -34,7 +35,8 @@
 </ul>
 
 @Html.AntiForgeryToken()
-<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))" v-if="!route"></div>
+<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))"
+	v-if="!route"></div>
 
 @section Scripts
 {

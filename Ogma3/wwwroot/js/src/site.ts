@@ -1,7 +1,7 @@
 ﻿(async () => {
 	// Set Vue error handling
-// @ts-ignore
-	Vue.config.errorHandler = function(err: Error) {
+	// @ts-ignore
+	Vue.config.errorHandler = (err: Error) => {
 		console.info(err.message); // "Oops"
 	};
 	// @ts-ignore
@@ -24,10 +24,9 @@
 				console.error(`Registration failed with ${error}`);
 			}
 		} else {
-			console.warn('Service workers are not supported');
+			console.warn("Service workers are not supported");
 		}
 	};
 
 	await registerServiceWorker();
-
 })();

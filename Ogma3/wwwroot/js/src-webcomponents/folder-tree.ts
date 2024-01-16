@@ -1,8 +1,8 @@
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { html, LitElement } from "lit";
-import { log } from "../src-helpers/logger";
 import { classMap } from "lit/directives/class-map.js";
 import { Folders_GetFoldersOfClub as getClubFolders } from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 
 type Folder = {
 	id: number;
@@ -10,14 +10,14 @@ type Folder = {
 	name: string;
 	slug: string;
 	canAdd: boolean;
-}
+};
 
 type TreeItem = {
 	id: number;
 	name: string;
 	canAdd: boolean;
 	children: TreeItem[];
-}
+};
 
 @customElement("o-folder-tree")
 export class FolderTree extends LitElement {
@@ -40,7 +40,7 @@ export class FolderTree extends LitElement {
 		log.info("tree connected");
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
-		
+
 		if (this.inputSelector !== undefined) {
 			this.input = document.querySelector<HTMLInputElement>(this.inputSelector);
 			this.input.value = null;
@@ -56,25 +56,26 @@ export class FolderTree extends LitElement {
 		this.#unflatten();
 	}
 
-	#select = (id: any) => {
+	#select = (id: number) => {
 		log.info(`Selecting folder with ID ${id} in the tree`);
 		this.selected = id;
-		this.input.value = id;
+		this.input.value = `${id}`;
 	};
 
 	render() {
 		return html`
 			<div class="folder-tree active-border">
-				${this.tree.length > 0
-					? html` ${this.tree.map(this.#item)} `
-					: html`<span>No folder found</span>`}
+				${
+					this.tree.length > 0
+						? html` ${this.tree.map(this.#item)} `
+						: html`<span>No folder found</span>`
+				}
 			</div>
 		`;
 	}
 
 	#item = (folder: TreeItem) => {
-		const tabindex =
-			folder.id === this.current || !folder.canAdd ? "-1" : "0";
+		const tabindex = folder.id === this.current || !folder.canAdd ? "-1" : "0";
 
 		const classes = classMap({
 			disabled: folder.id === this.current,
@@ -96,19 +97,19 @@ export class FolderTree extends LitElement {
 	};
 
 	#unflatten = () => {
-		let hashTable = Object.create(null);
-		this.folders.forEach(
-			(aData) => (hashTable[aData.id] = { ...aData, children: [] })
-		);
-		this.folders.forEach((aData) => {
+		const hashTable = Object.create(null);
+
+		for (const aData of this.folders) {
+			hashTable[aData.id] = { ...aData, children: [] };
+		}
+
+		for (const aData of this.folders) {
 			if (aData.parentFolderId) {
-				hashTable[aData.parentFolderId].children.push(
-					hashTable[aData.id]
-				);
+				hashTable[aData.parentFolderId].children.push(hashTable[aData.id]);
 			} else {
 				this.tree.push(hashTable[aData.id]);
 			}
-		});
+		}
 	};
 
 	createRenderRoot() {

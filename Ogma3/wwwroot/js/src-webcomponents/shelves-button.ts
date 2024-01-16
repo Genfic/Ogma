@@ -1,5 +1,4 @@
-import { html, LitElement } from "lit";
-import { log } from "../src-helpers/logger";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	ShelfStories_AddToShelf as addToShelf,
@@ -8,6 +7,7 @@ import {
 	ShelfStories_RemoveFromShelf as removeFromShelf,
 } from "../generated/paths-public";
 import { clickOutside } from "../src-helpers/click-outside";
+import { log } from "../src-helpers/logger";
 
 interface Shelf {
 	id: number;
@@ -35,8 +35,8 @@ export class ShelvesButton extends LitElement {
 
 		await this.#getQuickShelves();
 		this.classList.add("wc-loaded");
-		
-		clickOutside(this, () => this.more = false);
+
+		clickOutside(this, () => (this.more = false));
 	}
 
 	#quickShelf = (shelf: Shelf) => html`
@@ -44,9 +44,9 @@ export class ShelvesButton extends LitElement {
 			class="shelf action-btn"
 			title="Add to ${shelf.name}"
 			@click="${() => this.#addOrRemove(shelf.id)}"
-			style="box-shadow: ${shelf.doesContainBook
-				? shelf.color + " inset 0 0 0 3px"
-				: null}"
+			style="box-shadow: ${
+				shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null
+			}"
 		>
 			<i class="material-icons-outlined" style="color: ${shelf.color}">
 				${shelf.iconName ?? "bookmark_border"}
@@ -60,9 +60,9 @@ export class ShelvesButton extends LitElement {
 				class="action-btn"
 				title="Add to ${shelf.name}"
 				@click="${() => this.#addOrRemove(shelf.id)}"
-				style="box-shadow: ${shelf.doesContainBook
-					? shelf.color + " inset 0 0 0 3px"
-					: null}"
+				style="box-shadow: ${
+					shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null
+				}"
 			>
 				<i
 					class="material-icons-outlined"
@@ -86,13 +86,15 @@ export class ShelvesButton extends LitElement {
 				<i class="material-icons-outlined">more_horiz</i>
 			</button>
 
-			${this.more
-				? html`
+			${
+				this.more
+					? html`
 						<div class="more-shelves">
 							${this.shelves?.map(this.#shelf)}
 						</div>
 				  `
-				: null}
+					: null
+			}
 		`;
 	}
 
@@ -121,11 +123,11 @@ export class ShelvesButton extends LitElement {
 
 	async #addOrRemove(id: number) {
 		const exists = [...this.shelves, ...this.quickShelves].some(
-			(s) => s.doesContainBook && s.id === id
+			(s) => s.doesContainBook && s.id === id,
 		);
 		const send = exists ? removeFromShelf : addToShelf;
 
-		const res = await send(id, this.storyId,{
+		const res = await send(id, this.storyId, {
 			RequestVerificationToken: this.csrf,
 		});
 		if (res.ok) {

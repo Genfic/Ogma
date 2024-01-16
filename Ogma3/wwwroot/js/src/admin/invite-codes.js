@@ -1,5 +1,5 @@
-import { log } from "../../src-helpers/logger";
 import dayjs from "dayjs";
+import { log } from "../../src-helpers/logger";
 
 new Vue({
 	el: "#app",
@@ -11,17 +11,18 @@ new Vue({
 		perPage: 5,
 		loading: true,
 		completed: false,
-		newCode: null
+		newCode: null,
 	},
 	methods: {
-
 		createCode: async function () {
 			const { data } = await axios.post(`${this.route}/no-limit`, null, {
-				headers: { RequestVerificationToken: this.xcsrf }
+				headers: { RequestVerificationToken: this.xcsrf },
 			});
 
 			this.newCode = data.id;
-			setTimeout(() => this.newCode = null, 5000);
+			setTimeout(() => {
+				this.newCode = null;
+			}, 5000);
 
 			this.codes.unshift(data);
 		},
@@ -34,8 +35,8 @@ new Vue({
 			const { data } = await axios.get(`${this.route}/paginated`, {
 				params: {
 					page: this.page,
-					perPage: this.perPage
-				}
+					perPage: this.perPage,
+				},
 			});
 
 			if (data.length <= 0) {
@@ -56,34 +57,34 @@ new Vue({
 		deleteCode: async function (t) {
 			if (confirm("Delete permanently?")) {
 				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { RequestVerificationToken: this.xcsrf }
+					headers: { RequestVerificationToken: this.xcsrf },
 				});
-				this.codes = this.codes.filter(i => i.id !== t.id);
+				this.codes = this.codes.filter((i) => i.id !== t.id);
 			}
 		},
 
-		copyCode: function (t) {
+		copyCode: (t) => {
 			navigator.clipboard.writeText(t.code).then(
 				() => alert("Copied"),
 				(e) => {
 					alert("Could not copy");
 					log.error(e);
-				}
+				},
 			);
 		},
 
 		// Parse date
-		date: function (dt) {
-			return dayjs(dt).format("DD MMM YYYY, HH:mm");
-		}
+		date: (dt) => dayjs(dt).format("DD MMM YYYY, HH:mm"),
 	},
 
 	async mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = document.querySelector(
+			"[name=__RequestVerificationToken]",
+		).value;
 		// Grab the initial set of namespaces
 		await this.getCodes();
-	}
+	},
 });

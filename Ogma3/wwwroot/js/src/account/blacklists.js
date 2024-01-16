@@ -1,7 +1,7 @@
 new Vue({
-	el: '#blacklists-form',
+	el: "#blacklists-form",
 	data: {
-		tags: []
+		tags: [],
 	},
-	methods: {}
+	methods: {},
 });

@@ -20,13 +20,11 @@ new Vue({
 			await this.fetch();
 		},
 
-		parseTime: function (time) {
-			return dayjs(time).format("DD MMMM YYYY, HH:mm");
-		},
+		parseTime: (time) => dayjs(time).format("DD MMMM YYYY, HH:mm"),
 	},
 	async mounted() {
 		this.route = document.querySelector("[data-route]").dataset.route;
 		await this.fetch();
 		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
 	},
-}); 
+});

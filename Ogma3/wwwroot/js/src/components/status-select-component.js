@@ -1,8 +1,8 @@
-Vue.component('status-select', {
+Vue.component("status-select", {
 	props: {
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		value: {
 			type: Number,
@@ -12,13 +12,13 @@ Vue.component('status-select', {
 		},
 		statusesStr: {
 			type: String,
-			required: true
-		}
+			required: true,
+		},
 	},
 	data: function () {
 		return {
 			statuses: JSON.parse(this.statusesStr),
-			name: this.label.replace(/\s+/g, ''),
+			name: this.label.replace(/\s+/g, ""),
 			selected: this.value ?? 0,
 		};
 	},
@@ -39,5 +39,5 @@ Vue.component('status-select', {
             </template>
         </div>
         </div>
-    `
+    `,
 });

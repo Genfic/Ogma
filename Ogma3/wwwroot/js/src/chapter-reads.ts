@@ -7,7 +7,7 @@
 	] as HTMLButtonElement[];
 	const csrf = (
 		document.querySelector(
-			"input[name=__RequestVerificationToken]"
+			"input[name=__RequestVerificationToken]",
 		) as HTMLInputElement
 	).value;
 
@@ -33,7 +33,7 @@
 			body: JSON.stringify({
 				story: Number(story.dataset.storyId),
 				chapter: id,
-			})
+			}),
 		});
 		reads = await res.json();
 		_update();
@@ -44,16 +44,12 @@
 			const read = reads?.includes(Number(btn.dataset.id)) ?? false;
 
 			btn.classList.toggle("active", read);
-			btn.querySelector("i").innerText = read
-				? "visibility"
-				: "visibility_off";
+			btn.querySelector("i").innerText = read ? "visibility" : "visibility_off";
 		}
 	}
 
 	async function _getStatus() {
-		const res = await fetch(
-			`${route.dataset.reads}/${story.dataset.storyId}`
-		);
+		const res = await fetch(`${route.dataset.reads}/${story.dataset.storyId}`);
 
 		reads = await res.json();
 		_update();

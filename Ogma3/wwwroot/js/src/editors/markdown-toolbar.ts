@@ -30,18 +30,12 @@ const tpl = `
 		  </button>
 		</nav>`;
 
-const areas = [...document.querySelectorAll("[data-md=true]")] as (
-		| HTMLTextAreaElement
-		| HTMLInputElement
-	)[];
+const areas = [...document.querySelectorAll("[data-md=true]")] as (HTMLTextAreaElement | HTMLInputElement)[];
 
-for (let area of areas) {
-	const vDom = new DOMParser().parseFromString(tpl, "text/html").body
-		.childNodes[0] as HTMLElement;
+for (const area of areas) {
+	const vDom = new DOMParser().parseFromString(tpl, "text/html").body.childNodes[0] as HTMLElement;
 
-	for (let btn of [
-		...vDom.querySelectorAll("button.btn[data-action]"),
-	] as HTMLElement[]) {
+	for (const btn of [...vDom.querySelectorAll("button.btn[data-action]")] as HTMLElement[]) {
 		btn.addEventListener("click", (_) => {
 			const action: Action = Action[btn.dataset["action"]];
 			const map: Record<Action, PrefixSuffix> = {
@@ -57,12 +51,7 @@ for (let area of areas) {
 
 			const text = area.value.substring(start, end);
 
-			area.setRangeText(
-					`${prefix}${text}${suffix}`,
-					start,
-					end,
-					"preserve"
-			);
+			area.setRangeText(`${prefix}${text}${suffix}`, start, end, "preserve");
 			area.selectionStart = area.selectionEnd = end + prefix.length;
 			area.focus();
 		});

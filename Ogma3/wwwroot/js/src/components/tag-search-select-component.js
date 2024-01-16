@@ -2,45 +2,45 @@ Vue.component("tag-search-select", {
 	props: {
 		min: {
 			type: Number,
-			default: 0
+			default: 0,
 		},
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		desc: {
 			type: String,
 			required: false,
-			default: null
+			default: null,
 		},
 		validateMsg: {
 			type: String,
-			default: null
+			default: null,
 		},
 		tagsApi: {
 			type: String,
-			required: true
+			required: true,
 		},
 		storyId: {
 			type: Number,
-			default: null
+			default: null,
 		},
 		preselected: {
 			type: Array,
-			default: null
+			default: null,
 		},
 		inline: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		disableWhenEmpty: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		hideLabels: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	data: function () {
 		return {
@@ -54,7 +54,7 @@ Vue.component("tag-search-select", {
 			highlighted: null,
 			focused: false,
 
-			disable: false
+			disable: false,
 		};
 	},
 	computed: {
@@ -62,26 +62,29 @@ Vue.component("tag-search-select", {
 			return this.selected.length >= this.min;
 		},
 		validationString: function () {
-			return this.validateMsg
-				.replace("{0}", `${this.min}`);
+			return this.validateMsg.replace("{0}", `${this.min}`);
 		},
 		filtered() {
-			return this.options.filter(x => {
-				let inName = x.name.toLowerCase().includes(this.search.toLowerCase());
-				let inNamespace = x.namespace && x.namespace.toLowerCase().includes(this.search.toLowerCase());
+			return this.options.filter((x) => {
+				const inName = x.name.toLowerCase().includes(this.search.toLowerCase());
+				const inNamespace =
+					x.namespace?.toLowerCase().includes(this.search.toLowerCase()) ??
+					false;
 
-				return (inName || inNamespace)
-                    && !this.selected.some(i => i.id === x.id)
-                    && this.search.length > 0;
+				return (
+					(inName || inNamespace) &&
+					!this.selected.some((i) => i.id === x.id) &&
+					this.search.length > 0
+				);
 			});
-		}
+		},
 	},
 	methods: {
-		pushUnique: function(arr, el) {
+		pushUnique: (arr, el) => {
 			if (arr.includes(el)) return;
 			arr.push(el);
 		},
-		
+
 		handleInputKeys: function (e) {
 			switch (e.key) {
 				case "Backspace":
@@ -110,7 +113,10 @@ Vue.component("tag-search-select", {
 					if (this.highlighted !== null) {
 						e.preventDefault();
 						this.highlighted = 0;
-						this.pushUnique(this.selected, JSON.parse(JSON.stringify(this.filtered[this.highlighted])));
+						this.pushUnique(
+							this.selected,
+							JSON.parse(JSON.stringify(this.filtered[this.highlighted])),
+						);
 					}
 					break;
 				default:
@@ -123,7 +129,7 @@ Vue.component("tag-search-select", {
 		},
 		onClose: function () {
 			this.focused = false;
-		}
+		},
 	},
 	async created() {
 		const { data } = await axios.get(`${this.tagsApi}/all`);
@@ -133,13 +139,16 @@ Vue.component("tag-search-select", {
 		if (this.storyId) {
 			const { data } = await axios.get(`${this.tagsApi}/story/${this.storyId}`);
 			this.selected = data;
-			this.selected.forEach(x => this.options.find(e => e.id === x.id).hidden = true);
+			for (const sel in this.selected) {
+				this.options.find((e) => e.id === sel.id).hidden = true;
+			}
 		}
 
 		if (this.preselected) {
-			this.selected = this.options.filter(o => this.preselected.indexOf(o.id) !== -1);
+			this.selected = this.options.filter(
+				(o) => this.preselected.indexOf(o.id) !== -1,
+			);
 		}
-
 	},
 	template: `
         <div class="tag-search-select"
@@ -196,5 +205,5 @@ Vue.component("tag-search-select", {
 
         <span v-if="!validate && validateMsg">{{ validationString }}</span>
         </div>
-    `
+    `,
 });

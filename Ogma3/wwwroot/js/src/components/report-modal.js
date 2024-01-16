@@ -1,6 +1,5 @@
 import { log } from "../../src-helpers/logger";
 
-
 Vue.component("vue-report-modal", {
 	props: {
 		reportsRoute: {
@@ -45,7 +44,7 @@ Vue.component("vue-report-modal", {
 					},
 					{
 						headers: { RequestVerificationToken: this.csrf },
-					}
+					},
 				);
 				this.message = "Report delivered!";
 				this.btnClass = "green";
@@ -57,9 +56,7 @@ Vue.component("vue-report-modal", {
 		},
 	},
 	mounted() {
-		this.csrf = document.querySelector(
-			"input[name=__RequestVerificationToken]"
-		).value;
+		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
 	},
 	template: `
 		<div class="report-modal my-modal" v-if="visible" @click.self="hide" v-cloak>

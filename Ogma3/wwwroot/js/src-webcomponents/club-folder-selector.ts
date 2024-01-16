@@ -1,27 +1,30 @@
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { html, LitElement } from "lit";
-import { log } from "../src-helpers/logger";
 import { createRef, ref } from "lit/directives/ref.js";
+import {
+	Clubs_GetUserClubs as getUserClubs,
+	Folders_AddStory as addStoryToFolder,
+} from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 import { FolderTree } from "./folder-tree";
-import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../generated/paths-public";
 
 type Club = {
 	id: number;
 	name: string;
 	icon: string;
-}
+};
 
 @customElement("o-club-folder-selector")
 export class ClubFolderSelector extends LitElement {
 	constructor() {
 		super();
 	}
-	
+
 	@property() storyId: number;
 	@property() csrf: string;
 
 	@state() private clubs: Club[];
-	@state() private folders: {}[];
+	// @state() private folders: {}[];
 	@state() private selectedClub: Club | null = null;
 	@state() private status: { message: string; success: boolean } = {
 		message: "",
@@ -79,7 +82,9 @@ export class ClubFolderSelector extends LitElement {
 		</div>
 
 		<div class="clubs">
-			${this.clubs?.map((c) => html`
+			${
+				this.clubs?.map(
+					(c) => html`
 					<div
 						class="club"
 						tabindex="0"
@@ -93,27 +98,33 @@ export class ClubFolderSelector extends LitElement {
 						/>
 						<span>${c.name}</span>
 					</div>
-				`) ?? "loading..."}
+				`,
+				) ?? "loading..."
+			}
 		</div>
 	`;
 
 	render() {
 		return html`
 			<a @click="${() => (this.visible = true)}">Add to folder</a>
-			${this.visible
-				? html`
+			${
+				this.visible
+					? html`
 						<div
 							class="club-folder-selector my-modal"
-							@click="${() => this.visible = false}"
+							@click="${() => (this.visible = false)}"
 						>
-							<div class="content" @click="${e => e.stopPropagation()}">
-								${this.selectedClub !== null
-									? this.#selectedClubView()
-									: this.#allClubsView()}
+							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
+								${
+									this.selectedClub !== null
+										? this.#selectedClubView()
+										: this.#allClubsView()
+								}
 							</div>
 						</div>
 				  `
-				: ""}
+					: ""
+			}
 		`;
 	}
 
@@ -129,13 +140,16 @@ export class ClubFolderSelector extends LitElement {
 			};
 			return;
 		}
-		
-		const response = await addStoryToFolder({
-			folderId: folderId,
-			storyId: this.storyId,
-		},{
-			RequestVerificationToken: this.csrf,
-		});
+
+		const response = await addStoryToFolder(
+			{
+				folderId: folderId,
+				storyId: this.storyId,
+			},
+			{
+				RequestVerificationToken: this.csrf,
+			},
+		);
 
 		if (response.ok) {
 			this.status = {

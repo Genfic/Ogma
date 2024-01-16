@@ -1,4 +1,4 @@
-let roles_vue = new Vue({
+const roles_vue = new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -6,29 +6,27 @@ let roles_vue = new Vue({
 			color: null,
 			order: null,
 			isStaff: null,
-			id: null
+			id: null,
 		},
 		roles: [],
 		route: null,
-		xcsrf: null
+		xcsrf: null,
 	},
 	methods: {
-
 		// Contrary to its name, it also modifies a role if needed.
 		// It was simply easier to slap both functionalities into a single function.
 		createRole: async function (e) {
 			e.preventDefault();
 			if (this.form.name) {
-
 				const data = {
 					name: this.form.name,
 					color: this.form.color,
 					isStaff: this.form.isStaff,
-					order: Number(this.form.order)
+					order: Number(this.form.order),
 				};
 
 				const options = {
-					headers: { RequestVerificationToken: this.xcsrf }
+					headers: { RequestVerificationToken: this.xcsrf },
 				};
 
 				// If no ID has been set, that means it's a new role.
@@ -44,7 +42,6 @@ let roles_vue = new Vue({
 					await this.getRoles();
 					this.cancelEdit();
 				}
-
 			}
 		},
 
@@ -57,7 +54,9 @@ let roles_vue = new Vue({
 		// Deletes a selected role
 		deleteRole: async function (t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(this.route + "/" + t.id, { headers: { RequestVerificationToken: this.xcsrf } });
+				await axios.delete(`${this.route}/${t.id}`, {
+					headers: { RequestVerificationToken: this.xcsrf },
+				});
 				await this.getRoles();
 			}
 		},
@@ -74,19 +73,22 @@ let roles_vue = new Vue({
 		// Clears the editor
 		cancelEdit: function () {
 			this.form.name =
-                this.form.color =
-                    this.form.id =
-                        this.form.isStaff =
-                            this.form.order = null;
-		}
+				this.form.color =
+				this.form.id =
+				this.form.isStaff =
+				this.form.order =
+					null;
+		},
 	},
 
 	async mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = document.querySelector(
+			"[name=__RequestVerificationToken]",
+		).value;
 		// Grab the initial set of roles
 		await this.getRoles();
-	}
+	},
 });

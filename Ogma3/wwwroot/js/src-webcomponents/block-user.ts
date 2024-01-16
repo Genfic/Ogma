@@ -1,7 +1,7 @@
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { html, LitElement } from "lit";
-import { log } from "../src-helpers/logger";
 import { Users_BlockUser as blockUser, Users_UnblockUser as unblockUser } from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 
 @customElement("o-block")
 export class BlockUser extends LitElement {
@@ -32,12 +32,15 @@ export class BlockUser extends LitElement {
 	async #block() {
 		const send = this.isBlocked ? unblockUser : blockUser;
 
-		const res = await send({
-			name: this.userName,
-		},{
-			RequestVerificationToken: this.csrf,
-		});
-		
+		const res = await send(
+			{
+				name: this.userName,
+			},
+			{
+				RequestVerificationToken: this.csrf,
+			},
+		);
+
 		if (res.ok) {
 			this.isBlocked = await res.json();
 		} else {

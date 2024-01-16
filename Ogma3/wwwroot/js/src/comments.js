@@ -1,7 +1,6 @@
 import { log } from "../src-helpers/logger";
 
-
-let comments_vue = new Vue({
+const comments_vue = new Vue({
 	el: "#comments-container",
 	data: {
 		body: "",
@@ -55,7 +54,7 @@ let comments_vue = new Vue({
 				},
 				{
 					headers: { RequestVerificationToken: this.csrf },
-				}
+				},
 			);
 
 			this.highlight = this.total + 1;
@@ -112,7 +111,7 @@ let comments_vue = new Vue({
 		// Navigate to the next page
 		nextPage: async function () {
 			await this.changePage(
-				Math.min(this.page + 1, Math.ceil(this.total / this.perPage))
+				Math.min(this.page + 1, Math.ceil(this.total / this.perPage)),
 			);
 		},
 
@@ -127,18 +126,12 @@ let comments_vue = new Vue({
 		changeHighlight: function (idx = null, e = null) {
 			if (e) e.preventDefault();
 			this.highlight = idx ?? this.highlight;
-			document
-				.getElementById(`comment-${this.highlight}`)
-				.scrollIntoView({
-					behavior: "smooth",
-					block: "center",
-					inline: "nearest",
-				});
-			history.replaceState(
-				undefined,
-				undefined,
-				`#comment-${this.highlight}`
-			);
+			document.getElementById(`comment-${this.highlight}`).scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+				inline: "nearest",
+			});
+			history.replaceState(undefined, undefined, `#comment-${this.highlight}`);
 		},
 
 		// Navigates to `this.page` page
@@ -167,7 +160,9 @@ let comments_vue = new Vue({
 						data: { threadId: this.thread },
 						headers: { RequestVerificationToken: this.csrf },
 					})
-					.then((res) => (this.isSubscribed = res.data))
+					.then((res) => {
+						this.isSubscribed = res.data;
+					})
 					.catch(log.error);
 			} else {
 				axios
@@ -176,9 +171,11 @@ let comments_vue = new Vue({
 						{ threadId: this.thread },
 						{
 							headers: { RequestVerificationToken: this.csrf },
-						}
+						},
 					)
-					.then((res) => (this.isSubscribed = res.data))
+					.then((res) => {
+						this.isSubscribed = res.data;
+					})
 					.catch(log.error);
 			}
 		},
@@ -201,13 +198,14 @@ let comments_vue = new Vue({
 			if (this.collapse !== true) return this.comments;
 
 			// If `collapse-deleted` is true, collapse the deleted comments
-			let o = [];
+			const o = [];
 			let concat = 0;
 
 			for (const c of this.comments) {
 				if (!c.val.deletedBy) {
-					if (concat !== 0)
+					if (concat !== 0) {
 						o.push({ snip: `Removed ${concat} comments.` });
+					}
 					concat = 0;
 					o.push(c);
 				} else {
@@ -223,7 +221,7 @@ let comments_vue = new Vue({
 		// get initial data from SSR
 		Object.assign(this.$data, ssrData);
 
-		let hash = window.location.hash.split("-");
+		const hash = window.location.hash.split("-");
 
 		if (hash[0] === "#page" && hash[1]) {
 			this.page = Math.max(1, Number(hash[1] ?? 1));
@@ -237,9 +235,7 @@ let comments_vue = new Vue({
 
 		// Subscription status
 		this.isSubscribed = (
-			await axios.get(
-				`${this.subscribeRoute}/thread?threadId=${this.thread}`
-			)
+			await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)
 		).data;
 
 		// Lock permissions
@@ -260,7 +256,7 @@ let comments_vue = new Vue({
 	document
 		.getElementById("lock-thread")
 		?.addEventListener("click", async (e) => {
-			let status = await comments_vue.lock();
+			const status = await comments_vue.lock();
 			e.target.innerText = status === true ? "Unlock" : "Lock";
 		});
 })();

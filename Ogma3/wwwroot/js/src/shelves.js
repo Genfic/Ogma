@@ -11,24 +11,22 @@ new Vue({
 
 			color: null,
 			icon: null,
-			id: null
+			id: null,
 		},
 		showForm: false,
 		csrf: null,
 		err: null,
 		shelves: [],
 		route: null,
-		owner: null
+		owner: null,
 	},
 	methods: {
-
 		// Contrary to its name, it also modifies a shelf if needed.
 		// It was simply easier to slap both functionalities into a single function.
 		createShelf: async function (e) {
 			e.preventDefault();
 
 			if (this.form.name) {
-
 				const shelf = {
 					name: this.form.name,
 					description: this.form.desc,
@@ -36,11 +34,11 @@ new Vue({
 					isQuickAdd: this.form.quick,
 					trackUpdates: this.form.track,
 					color: this.form.color,
-					icon: Number(this.form.icon)
+					icon: Number(this.form.icon),
 				};
 
 				const options = {
-					headers: { "RequestVerificationToken": this.csrf }
+					headers: { RequestVerificationToken: this.csrf },
 				};
 
 				// If no ID has been set, that means it's a new shelf.
@@ -61,24 +59,22 @@ new Vue({
 					this.cancelEdit();
 					this.showForm = false;
 				}
-
 			}
 		},
 		// Gets all existing shelves
 		getShelves: async function () {
-			const { data, status } = await axios.get(`${this.route}/${this.owner}?page=1`);
-			this.shelves = status === 200
-				? data
-				: null;
-
+			const { data, status } = await axios.get(
+				`${this.route}/${this.owner}?page=1`,
+			);
+			this.shelves = status === 200 ? data : null;
 		},
 
 		// Deletes a selected shelf
 		deleteShelf: async function (t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`,
-					{ headers: { "RequestVerificationToken": this.csrf } }
-				);
+				await axios.delete(`${this.route}/${t.id}`, {
+					headers: { RequestVerificationToken: this.csrf },
+				});
 
 				await this.getShelves();
 			}
@@ -99,15 +95,19 @@ new Vue({
 
 		// Clears the editor
 		cancelEdit: function () {
-			Object.keys(this.form).forEach((i) => this.form[i] = null);
+			for (const key of Object.keys(this.form)) {
+				this.form[key] = null;
+			}
 			this.form.isQuickAdd = this.form.isPublic = false;
 			this.showForm = false;
-		}
+		},
 	},
 
 	async mounted() {
 		// CSRF token
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
+		this.csrf = document.querySelector(
+			"input[name=__RequestVerificationToken]",
+		).value;
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
 		// Get owner
@@ -115,5 +115,5 @@ new Vue({
 
 		// Grab the initial set of shelves
 		await this.getShelves();
-	}
+	},
 });

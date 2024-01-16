@@ -1,7 +1,7 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { log } from "../src-helpers/logger";
 import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 
 interface Club {
 	id: number;
@@ -9,19 +9,19 @@ interface Club {
 	icon: string;
 }
 
-@customElement('o-featured-in-clubs')
+@customElement("o-featured-in-clubs")
 export class FeaturedInClubs extends LitElement {
 	constructor() {
 		super();
 	}
-	
+
 	@property() storyId: number;
 	@state() private visible: boolean;
 	@state() private clubs: Club[];
 
 	async connectedCallback() {
 		super.connectedCallback();
-		this.classList.add('wc-loaded');
+		this.classList.add("wc-loaded");
 		await this.fetch();
 	}
 
@@ -43,37 +43,47 @@ export class FeaturedInClubs extends LitElement {
 		return html`
             <a @click="${async () => await this.open()}">Featured in clubs</a>
 
-            ${this.visible ? html`
-                <div class="club-folder-selector my-modal" @click="${() => this.visible = false}">
+            ${
+				this.visible
+					? html`
+                <div class="club-folder-selector my-modal" @click="${() => (this.visible = false)}">
                     <div class="content" @click="${(e: Event) => e.stopPropagation()}">
 
                         <div class="header">
                             <span>Featured in</span>
                         </div>
 
-                        ${this.clubs.length > 0 ? html`
+                        ${
+							this.clubs.length > 0
+								? html`
                             <div class="clubs">
-                                ${this.clubs.map(c => html`
-                                    <a href="/club/${c.id}/${c.name.toLowerCase().replace(' ', '-')}"
+                                ${this.clubs.map(
+									(c) => html`
+                                    <a href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}"
                                        target="_blank"
                                        class="club"
                                        tabindex="0">
-                                        <img src="${c.icon ?? 'ph-250.png'}" 
+                                        <img src="${c.icon ?? "ph-250.png"}" 
                                              alt="${c.name}" 
                                              width="24"
                                              height="24">
                                         <span>${c.name}</span>
                                     </a>
-                                `)}
+                                `,
+								)}
                             </div>
-                        ` : html`
+                        `
+								: html`
                             <div>
                                 This story hasn't been added to any clubs yet.
                             </div>
-                        `}
+                        `
+						}
                     </div>
                 </div>
-            ` : null}
+            `
+					: null
+			}
         `;
 	}
 

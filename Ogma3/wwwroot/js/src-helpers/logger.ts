@@ -3,7 +3,7 @@
  * @param {any} obj Variable to check
  * @returns {boolean} True if the variable is an object, false if it's a primitive
  */
-function _isObject(obj: any): boolean {
+function _isObject(obj: unknown): boolean {
 	return obj === Object(obj);
 }
 
@@ -14,15 +14,15 @@ function _deepCopy(o: object): object {
 	return JSON.parse(JSON.stringify({ ...o, __isCopied__: true }));
 }
 
-const _getMessage = (o: any) => _isObject(o) ? _deepCopy(o) : o;
+const _getMessage = (o: unknown) => (_isObject(o) ? _deepCopy(o as object) : o);
 
 /**
  * Logger object to create better logging experience
  */
 export const log = {
-	log: (o: any) => console.log(_getMessage(o)),
-	info: (o: any) => console.info(_getMessage(o)),
-	warn: (o: any) => console.warn(_getMessage(o)),
-	error: (o: any) => console.error(_getMessage(o)),
-	debug: (o: any) => console.debug(_getMessage(o))
+	log: (o: unknown) => console.log(_getMessage(o)),
+	info: (o: unknown) => console.info(_getMessage(o)),
+	warn: (o: unknown) => console.warn(_getMessage(o)),
+	error: (o: unknown) => console.error(_getMessage(o)),
+	debug: (o: unknown) => console.debug(_getMessage(o)),
 };

@@ -1,20 +1,18 @@
 import { log } from "../../src-helpers/logger";
 
-
 new Vue({
 	el: "#faqs",
 	data: {
 		form: {
 			question: null,
 			answer: null,
-			id: null
+			id: null,
 		},
 		faqs: [],
 		route: null,
-		xcsrf: null
+		xcsrf: null,
 	},
 	methods: {
-
 		// Contrary to its name, it also modifies a namespace if needed.
 		// It was simply easier to slap both functionalities into a single function.
 		createFaq: async function (e) {
@@ -22,14 +20,13 @@ new Vue({
 			e.preventDefault();
 
 			if (this.form.question && this.form.answer) {
-
 				const data = {
 					question: this.form.question,
-					answer: this.form.answer
+					answer: this.form.answer,
 				};
 
 				const options = {
-					headers: { "RequestVerificationToken": this.xcsrf }
+					headers: { RequestVerificationToken: this.xcsrf },
 				};
 
 				// If no ID has been set, that means it's a new rating.
@@ -45,7 +42,6 @@ new Vue({
 					await this.getFaqs();
 					this.cancelEdit();
 				}
-
 			}
 		},
 
@@ -59,7 +55,7 @@ new Vue({
 		deleteFaq: async function (t) {
 			if (confirm("Delete permanently?")) {
 				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { "RequestVerificationToken": this.xcsrf }
+					headers: { RequestVerificationToken: this.xcsrf },
 				});
 				await this.getFaqs();
 			}
@@ -74,14 +70,12 @@ new Vue({
 
 		// Clears the editor
 		cancelEdit: function () {
-			this.form.question =
-                this.form.answer =
-                    this.form.id = null;
-		}
+			this.form.question = this.form.answer = this.form.id = null;
+		},
 	},
 	async mounted() {
 		this.route = document.getElementById("route").dataset.route;
 		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		await this.getFaqs();
-	}
+	},
 });

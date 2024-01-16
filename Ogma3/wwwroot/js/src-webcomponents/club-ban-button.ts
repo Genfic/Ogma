@@ -1,7 +1,7 @@
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { html, LitElement } from "lit";
-import { log } from "../src-helpers/logger";
 import { Clubs_BanUser as banUser, Clubs_UnbanUser as unbanUser } from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 
 @customElement("o-club-ban")
 export class ClubBanButton extends LitElement {
@@ -34,16 +34,15 @@ export class ClubBanButton extends LitElement {
 	}
 
 	private async banOrUnban() {
-		
 		const data = {
 			clubId: this.clubId,
-			userId: this.userId
+			userId: this.userId,
 		};
-		
+
 		const headers = {
 			RequestVerificationToken: this.csrf,
 		};
-		
+
 		log.log(`Cid: ${this.clubId} Uid: ${this.userId}`);
 		log.log({
 			clubId: this.clubId,
@@ -51,10 +50,10 @@ export class ClubBanButton extends LitElement {
 			foo: 420,
 		});
 
-		let result = this.isBanned
+		const result = this.isBanned
 			? await unbanUser(data, headers)
 			: await banUser({ ...data, ...{ reason: prompt("What's the reason?") } }, headers);
-		
+
 		if (result.ok) {
 			this.isBanned = await result.json();
 		} else {

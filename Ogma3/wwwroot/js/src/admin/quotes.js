@@ -4,7 +4,7 @@ new Vue({
 		form: {
 			id: null,
 			body: null,
-			author: null
+			author: null,
 		},
 		quotes: [],
 		route: null,
@@ -14,7 +14,6 @@ new Vue({
 		editorOpen: false,
 	},
 	methods: {
-
 		// Gets all existing namespaces
 		getQuotes: async function () {
 			const { data } = await axios.get(this.route);
@@ -24,7 +23,7 @@ new Vue({
 		deleteQuote: async function (q) {
 			if (confirm("Delete permanently?")) {
 				const { data } = await axios.delete(this.route, { data: { id: q.id } });
-				this.quotes = this.quotes.filter(i => i.id !== data.id);
+				this.quotes = this.quotes.filter((i) => i.id !== data.id);
 			}
 		},
 
@@ -34,7 +33,9 @@ new Vue({
 		},
 		closeEditor: function () {
 			this.editorOpen = false;
-			Object.keys(this.form).forEach((i) => this.form[i] = null);
+			for (const key in Object.keys(this.form)) {
+				this.form[key] = null;
+			}
 		},
 
 		saveQuote: async function () {
@@ -48,17 +49,18 @@ new Vue({
 		// Upload Json
 		fromJson: async function () {
 			await axios.post(`${this.route}/json`, JSON.parse(this.json));
-		}
+		},
 	},
 
 	watch: {
 		search() {
 			for (const q of this.quotes) {
 				q.show = this.search
-					? q.body.toLowerCase().includes(this.search.toLowerCase()) || q.author.toLowerCase().includes(this.search.toLowerCase())
+					? q.body.toLowerCase().includes(this.search.toLowerCase()) ||
+					  q.author.toLowerCase().includes(this.search.toLowerCase())
 					: true;
 			}
-		}
+		},
 	},
 
 	async mounted() {
@@ -66,5 +68,5 @@ new Vue({
 		this.route = document.getElementById("route").dataset.route;
 		// Grab the initial set of namespaces
 		await this.getQuotes();
-	}
+	},
 });

@@ -13,9 +13,7 @@ new Vue({
 			e.preventDefault();
 
 			if (this.name) {
-				const { data, status } = await axios.get(
-					`${this.route}?name=${this.name}`
-				);
+				const { data, status } = await axios.get(`${this.route}?name=${this.name}`);
 
 				if (status === 200) {
 					this.avatar = data.avatar;
@@ -36,4 +34,3 @@ new Vue({
 		this.route = document.getElementById("route").dataset.route;
 	},
 });
-

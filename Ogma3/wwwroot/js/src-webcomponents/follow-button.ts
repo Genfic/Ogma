@@ -1,7 +1,7 @@
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { html, LitElement } from "lit";
-import { log } from "../src-helpers/logger";
 import { Users_FollowUser as followUser, Users_UnfollowUser as unfollowUser } from "../generated/paths-public";
+import { log } from "../src-helpers/logger";
 
 @customElement("o-follow")
 export class FollowButton extends LitElement {
@@ -21,7 +21,7 @@ export class FollowButton extends LitElement {
 	render() {
 		return html`
 			<button
-				class="button max ${this.isFollowed ? 'leave' : 'join'}"
+				class="button max ${this.isFollowed ? "leave" : "join"}"
 				title="${this.isFollowed ? "Unfollow" : "Follow"}"
 				@click="${this.#follow}"
 			>
@@ -33,11 +33,14 @@ export class FollowButton extends LitElement {
 	async #follow() {
 		const send = this.isFollowed ? unfollowUser : followUser;
 
-		const res = await send({
-			name: this.userName,
-		},{
-			RequestVerificationToken: this.csrf,
-		});
+		const res = await send(
+			{
+				name: this.userName,
+			},
+			{
+				RequestVerificationToken: this.csrf,
+			},
+		);
 		if (res.ok) {
 			this.isFollowed = await res.json();
 		} else {

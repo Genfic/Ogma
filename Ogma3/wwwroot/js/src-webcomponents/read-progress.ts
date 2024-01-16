@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
 
@@ -7,7 +7,7 @@ export class ReadProgress extends LitElement {
 	constructor() {
 		super();
 	}
-	
+
 	@state() private progress: number = 0;
 	@state() private windowHeight: number;
 	@state() private containerHeight: number;
@@ -40,8 +40,7 @@ export class ReadProgress extends LitElement {
 		this.classList.add("wc-loaded");
 
 		this.windowHeight = window.innerHeight;
-		this.containerHeight =
-			this.parentElement.offsetTop + this.parentElement.offsetHeight;
+		this.containerHeight = this.parentElement.offsetTop + this.parentElement.offsetHeight;
 
 		document.addEventListener("scroll", () => {
 			if (!this.ticking) {
@@ -65,15 +64,15 @@ export class ReadProgress extends LitElement {
 
 	async #handleScroll() {
 		if (this.read) return;
-		
+
 		const elBottom = this.parentElement.getBoundingClientRect().bottom;
-		const percent = elBottom - this.windowHeight; 
+		const percent = elBottom - this.windowHeight;
 		const maxHeight = Math.max(this.containerHeight - this.windowHeight, 0);
 		this.progress = 1 - percent.normalize(0, maxHeight).clamp();
 		if (this.progress >= 1) {
 			this.read = true;
-			console.log('Chapter read!');
-			this.dispatchEvent(new CustomEvent('read')); 
+			console.log("Chapter read!");
+			this.dispatchEvent(new CustomEvent("read"));
 		}
 	}
 }

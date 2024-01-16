@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 
 export class TableInfo extends LitElement {
 	constructor() {
@@ -46,28 +46,42 @@ export class TableInfo extends LitElement {
 			<table class="o-table">
 				<tr>
 					<th @click="${() => this._sort("name")}">
-						Table ${this.sortBy !== "name" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
+						Table ${
+							this.sortBy !== "name"
+								? "⯁"
+								: this.sortOrder === "asc"
+								  ? "⯆"
+								  : "⯅"
+						}
 					</th>
 					<th
 						colspan="2"
 						@click="${() => this._sort("size")}"
 					>
-						Size ${this.sortBy !== "size" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
+						Size ${
+							this.sortBy !== "size"
+								? "⯁"
+								: this.sortOrder === "asc"
+								  ? "⯆"
+								  : "⯅"
+						}
 					</th>
 				</tr>
-				${this.tableInfo
-					? this.tableInfo.map(
-						(i) => html`
+				${
+					this.tableInfo
+						? this.tableInfo.map(
+								(i) => html`
 								<tr>
 									<td>${i.name}</td>
 									<td>${i.size} B</td>
 									<td>${this._formatBytes(i.size)}</td>
 								</tr>
 							`,
-					  )
-					: html` <tr>
+						  )
+						: html` <tr>
 							<td colspan="3">Loading...</td>
-					  </tr>`}
+					  </tr>`
+				}
 			</table>
 		`;
 	}
@@ -81,9 +95,15 @@ export class TableInfo extends LitElement {
 		this.sortBy = by;
 		this.sortOrder = this.sortOrder === "desc" ? "asc" : "desc";
 		if (by === "size") {
-			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.size - b.size : b.size - a.size));
+			this.tableInfo.sort((a, b) =>
+				this.sortOrder === "desc" ? a.size - b.size : b.size - a.size,
+			);
 		} else {
-			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
+			this.tableInfo.sort((a, b) =>
+				this.sortOrder === "desc"
+					? a.name.localeCompare(b.name)
+					: b.name.localeCompare(a.name),
+			);
 		}
 	}
 
@@ -95,9 +115,10 @@ export class TableInfo extends LitElement {
 		const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
 		const i = Math.floor(Math.log(bytes) / Math.log(k));
+		const value = parseFloat((bytes / k ** i).toFixed(dm));
 
-		return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+		return `${value} ${sizes[i]}`;
 	}
 }
 
-window.customElements.define('table-info', TableInfo);
+window.customElements.define("table-info", TableInfo);

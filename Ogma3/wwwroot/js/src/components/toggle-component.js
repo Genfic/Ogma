@@ -1,33 +1,33 @@
-Vue.component('input-toggle', {
+Vue.component("input-toggle", {
 	props: {
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		desc: {
 			type: String,
-			default: null
+			default: null,
 		},
 		value: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	data: function () {
 		return {
-			name: this.label.replace(/\s+/g, ''),
+			name: this.label.replace(/\s+/g, ""),
 			checked: this.value,
 		};
 	},
 	methods: {
 		update: function (value) {
-			this.$emit('input', value);
-		}
+			this.$emit("input", value);
+		},
 	},
 	watch: {
 		value() {
 			this.checked = this.value;
-		}
+		},
 	},
 	template: `
         <div class="o-form-group keep-size">
@@ -52,5 +52,5 @@ Vue.component('input-toggle', {
 
         </div>
         </div>
-    `
+    `,
 });

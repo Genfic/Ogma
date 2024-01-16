@@ -1,7 +1,5 @@
 const classname = "visible";
-const formInputs = [
-	...document.querySelectorAll("input[id]"),
-] as HTMLInputElement[];
+const formInputs = [...document.querySelectorAll("input[id]")] as HTMLInputElement[];
 
 for (const input of formInputs) {
 	const info = document.querySelector(`[data-for="${input.id}"]`);

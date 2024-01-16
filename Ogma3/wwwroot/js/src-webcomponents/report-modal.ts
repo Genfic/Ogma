@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Reports_PostReports as postReport } from "../generated/paths-public";
 import { EReportableContentTypes } from "../generated/types-public";
@@ -12,7 +12,9 @@ export class ReportModal extends LitElement {
 	connectedCallback() {
 		super.connectedCallback();
 		if (this.openSelector) {
-			document.querySelector(this.openSelector).addEventListener('click', this.show);
+			document
+				.querySelector(this.openSelector)
+				.addEventListener("click", this.show);
 		}
 	}
 
@@ -20,9 +22,9 @@ export class ReportModal extends LitElement {
 		min: 50,
 		max: 500,
 	};
-	
+
 	@property() public openSelector?: string | undefined;
-	
+
 	@property() public csrf: string;
 	@property() public itemId: number;
 	@property() public itemType: string;
@@ -31,17 +33,20 @@ export class ReportModal extends LitElement {
 	@state() private chars: number = 0;
 	@state() private reason: string;
 	@state() private success: boolean | null = null;
-	
-	public show = () => this.visible = true;
 
-	private validate = () => this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
+	public show = () => (this.visible = true);
+
+	private validate = () =>
+		this.reason &&
+		this.reason.length >= this.rules.min &&
+		this.reason.length <= this.rules.max;
 
 	private message = () => {
 		switch (this.success) {
 			case true:
-				return { msg: "Report delivered!", cls: 'green' };
+				return { msg: "Report delivered!", cls: "green" };
 			case false:
-				return { msg: "An error has occurred. Retry?", cls: 'red' };
+				return { msg: "An error has occurred. Retry?", cls: "red" };
 			default:
 				return { msg: "Send report", cls: null };
 		}
@@ -58,7 +63,7 @@ export class ReportModal extends LitElement {
 			},
 			{
 				RequestVerificationToken: this.csrf,
-			}
+			},
 		);
 		this.success = res.ok;
 	};
@@ -70,8 +75,9 @@ export class ReportModal extends LitElement {
 
 	protected render() {
 		return html`
-			${this.visible
-				? html`
+			${
+				this.visible
+					? html`
 						<div
 							class="club-folder-selector my-modal"
 							@click="${() => (this.visible = false)}"
@@ -102,16 +108,21 @@ export class ReportModal extends LitElement {
 										<div class="counter ${this.validate() || "invalid"}">
 											<div
 												class="o-progress-bar"
-												style="width: ${Math.min(100, 100 * (this.chars / this.rules.max)) + "%"}"
+												style="width: ${`${Math.min(
+													100,
+													100 * (this.chars / this.rules.max),
+												)}%`}"
 											></div>
 											<span>${this.chars}/${this.rules.max} chars</span>
 										</div>
 
-										${this.validate()
-											? null
-											: html`<span>
+										${
+											this.validate()
+												? null
+												: html`<span>
 													Reason must be between ${this.rules.min} and ${this.rules.max} characters long.
-											  </span>`}
+											  </span>`
+										}
 									</div>
 
 									<div class="o-form-group">
@@ -124,7 +135,8 @@ export class ReportModal extends LitElement {
 							</div>
 						</div>
 				  `
-				: null}
+					: null
+			}
 		`;
 	}
 

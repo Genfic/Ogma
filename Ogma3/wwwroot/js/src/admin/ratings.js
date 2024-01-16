@@ -1,4 +1,4 @@
-let ratings_vue = new Vue({
+const ratings_vue = new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -7,12 +7,12 @@ let ratings_vue = new Vue({
 			icon: null,
 			blacklist: null,
 			id: null,
-			order: null
+			order: null,
 		},
 		err: [],
 		ratings: [],
 		route: null,
-		xcsrf: null
+		xcsrf: null,
 	},
 	methods: {
 		iconChanged: function (e) {
@@ -25,18 +25,20 @@ let ratings_vue = new Vue({
 			e.preventDefault();
 
 			if (this.form.name) {
-
 				const data = new FormData();
 
 				data.append("name", this.form.name);
 				data.append("description", this.form.desc);
-				data.append("blacklistedByDefault", (this.form.blacklist ?? false).toString());
+				data.append(
+					"blacklistedByDefault",
+					(this.form.blacklist ?? false).toString(),
+				);
 				data.append("order", this.form.order);
 				if (this.form.icon)
 					data.append("icon", this.form.icon, this.form.icon.name);
 
 				const options = {
-					headers: { "RequestVerificationToken": this.xcsrf }
+					headers: { RequestVerificationToken: this.xcsrf },
 				};
 
 				// If no ID has been set, that means it's a new rating.
@@ -67,7 +69,7 @@ let ratings_vue = new Vue({
 		deleteRating: async function (t) {
 			if (confirm("Delete permanently?")) {
 				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { "RequestVerificationToken": this.xcsrf }
+					headers: { RequestVerificationToken: this.xcsrf },
 				});
 				await this.getRatings();
 			}
@@ -85,16 +87,20 @@ let ratings_vue = new Vue({
 
 		// Clears the editor
 		cancelEdit: function () {
-			Object.keys(this.form).forEach((i) => this.form[i] = null);
+			for (const key of Object.keys(this.form)) {
+				this.form[key] = null;
+			}
 			this.$refs.file.value = null;
-		}
+		},
 	},
 
 	async mounted() {
 		// Grab the route from route helper
 		this.route = document.getElementById("route").dataset.route;
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = document.querySelector(
+			"[name=__RequestVerificationToken]",
+		).value;
 		// Grab the initial set of namespaces
 		await this.getRatings();
-	}
+	},
 });

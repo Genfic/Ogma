@@ -1,23 +1,22 @@
-let atags_vue = new Vue({
+const atags_vue = new Vue({
 	el: "#app",
 	data: {
 		form: {
 			name: null,
 			desc: null,
 			namespace: null,
-			id: null
+			id: null,
 		},
 		lens: {
 			minNameLength: 5,
 			maxNameLength: 20,
-			maxDescLength: 100
+			maxDescLength: 100,
 		},
 		err: [],
 		route: null,
-		tags: []
+		tags: [],
 	},
 	methods: {
-
 		// Contrary to its name, it also modifies a tag if needed.
 		// It was simply easier to slap both functionalities into a single function.
 		createTag: async function (e) {
@@ -32,15 +31,14 @@ let atags_vue = new Vue({
 			if (this.err.length > 0) return;
 
 			if (this.form.name) {
-
 				const body = {
 					name: this.form.name,
 					namespace: Number(this.form.namespace),
-					description: this.form.desc
+					description: this.form.desc,
 				};
 
 				const options = {
-					headers: { "RequestVerificationToken": this.csrf }
+					headers: { RequestVerificationToken: this.csrf },
 				};
 
 				// If no ID has been set, that means it's a new tag.
@@ -55,12 +53,8 @@ let atags_vue = new Vue({
 					await axios.put(this.route, { id: this.form.id, ...body }, options);
 					await this.getTags();
 					// Clear the form too
-					this.form.name =
-                        this.form.desc =
-                            this.form.namespace =
-                                this.form.id = null;
+					this.form.name = this.form.desc = this.form.namespace = this.form.id = null;
 				}
-
 			}
 		},
 
@@ -88,21 +82,18 @@ let atags_vue = new Vue({
 
 		// Clears the editor
 		cancelEdit: function () {
-			this.form.name =
-                this.form.desc =
-                    this.form.namespace =
-                        this.form.id = null;
-		}
+			this.form.name = this.form.desc = this.form.namespace = this.form.id = null;
+		},
 	},
 
 	async mounted() {
 		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
 
-		const { Route, Validation } = JSON.parse(document.getElementById('static-data').innerText);
+		const { Route, Validation } = JSON.parse(document.getElementById("static-data").innerText);
 
 		this.route = Route;
 		this.lens = Validation;
 
 		await this.getTags();
-	}
+	},
 });
