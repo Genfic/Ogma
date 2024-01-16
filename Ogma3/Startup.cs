@@ -143,7 +143,7 @@ public class Startup
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
-		services.AddScoped(s => s.GetService<IHttpContextAccessor>()?.HttpContext?.User);
+		// services.AddScoped(s => s.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
 		// Argon2 hasher
 		services
@@ -177,7 +177,8 @@ public class Startup
 		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
 		// Auth
-		services.AddAuthorization(options => { options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin")); });
+		services.AddAuthorizationBuilder()
+			.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
 
 
 		// Cookies
