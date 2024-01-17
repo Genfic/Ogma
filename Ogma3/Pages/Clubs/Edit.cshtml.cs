@@ -20,29 +20,18 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public class EditModel : PageModel
+public class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ImageUploader _uploader;
-	private readonly OgmaConfig _ogmaConfig;
-
-	public EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
-	{
-		_context = context;
-		_uploader = uploader;
-		_ogmaConfig = ogmaConfig;
-	}
-
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		public long Id { get; init; }
-		public string Name { get; init; }
-		public string Slug { get; init; }
-		public string Hook { get; init; }
-		public string Description { get; init; }
-		[DataType(DataType.Upload)] public IFormFile Icon { get; init; }
+		public required long Id { get; init; }
+		public required string Name { get; init; }
+		public required string Slug { get; init; }
+		public required string Hook { get; init; }
+		public required string Description { get; init; }
+		[DataType(DataType.Upload)]public IFormFile? Icon { get; init; }
 	}
 
 	public class InputModelValidator : AbstractValidator<InputModel>
@@ -70,7 +59,7 @@ public class EditModel : PageModel
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
-		Input = await _context.Clubs
+		var input = await context.Clubs
 			.Where(c => c.Id == id)
 			.Where(c => c.ClubMembers
 				.Where(cm => cm.MemberId == uid)
@@ -86,7 +75,9 @@ public class EditModel : PageModel
 			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
-		if (Input is null) return NotFound();
+		if (input is null) return NotFound();
+
+		Input = input;
 
 		return Page();
 	}
@@ -95,20 +86,20 @@ public class EditModel : PageModel
 	{
 		if (!ModelState.IsValid) return Page();
 
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		Log.Information("User {UserId} attempted to edit club {ClubId}", uid, id);
 
-		var club = await _context.Clubs
+		var club = await context.Clubs
 			.Where(c => c.Id == id)
 			.Where(c => c.ClubMembers
 				.Where(cm => cm.MemberId == uid)
 				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
 			.FirstOrDefaultAsync();
+
 		if (club is null)
 		{
-			Log.Information("User {UserId} did not succeed in editing club {ClubId}", uid, id);
+			Log.Information("User {UserId} did not have the right role to update club {ClubId}, or club does not exist", uid, id);
 			return NotFound();
 		}
 
@@ -117,23 +108,20 @@ public class EditModel : PageModel
 		club.Hook = Input.Hook;
 		club.Description = Input.Description;
 
+		if (Input.Icon is { Length: > 0 })
+		{
+			var file = await uploader.Upload(
+				Input.Icon,
+				"club-icons",
+				ogmaConfig.ClubIconWidth,
+				ogmaConfig.ClubIconHeight
+			);
+			club.IconId = file.FileId;
+			club.Icon = Path.Join(ogmaConfig.Cdn, file.Path);
+		}
+
 		Log.Information("User {UserId} succeeded in editing club {ClubId}", uid, id);
-		await _context.SaveChangesAsync();
-
-		if (Input.Icon is not { Length: > 0 }) return RedirectToPage("/Club/Index", new { club.Id, club.Slug });
-
-		var file = await _uploader.Upload(
-			Input.Icon,
-			"club-icons",
-			club.Id.ToString(),
-			_ogmaConfig.ClubIconWidth,
-			_ogmaConfig.ClubIconHeight
-		);
-		club.IconId = file.FileId;
-		club.Icon = Path.Join(_ogmaConfig.Cdn, file.Path);
-
-		// Final save
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		return RedirectToPage("/Club/Index", new { club.Id, club.Slug });
 	}

@@ -12,48 +12,42 @@ using Utils.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class CreateModel : PageModel
+public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ClubRepository _clubRepo;
-
-	public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
-	{
-		_context = context;
-		_clubRepo = clubRepo;
-	}
-
-	public long ClubId { get; private set; }
-	public string Slug { get; private set; }
+	public required long ClubId { get; set; }
+	public required string Slug { get; set; }
 
 	public async Task<IActionResult> OnGet(long clubId)
 	{
 		ClubId = clubId;
 
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
-		// Check if founder
-		var isFounder = await _clubRepo.CheckRoles(clubId, (long)uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
-		if (!isFounder) return Unauthorized();
-		
+		// Check if admin
+		var isAuthorized = await clubRepo.CheckRoles(clubId, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
+		if (!isAuthorized) return Unauthorized();
+
 		// Get slug
-		Slug = await _context.Clubs
+		var slug = await context.Clubs
 			.Where(c => c.Id == clubId)
 			.Select(c => c.Slug)
 			.FirstOrDefaultAsync();
 
+		if (slug is null) return NotFound();
+
+		Slug = slug;
+
 		return Page();
 	}
 
-	[BindProperty] public PostData Input { get; init; }
+	[BindProperty] public required PostData Input { get; init; }
 
 	public class PostData
 	{
-		public string Name { get; init; }
-		public string Description { get; init; }
-		public long? ParentId { get; init; }
-		public EClubMemberRoles Role { get; init; }
+		public required string Name { get; init; }
+		public required string Description { get; init; }
+		public required long? ParentId { get; init; }
+		public required EClubMemberRoles Role { get; init; }
 	}
 
 	public class PostDataValidation : AbstractValidator<PostData>
@@ -72,14 +66,13 @@ public class CreateModel : PageModel
 	{
 		if (!ModelState.IsValid) return Page();
 
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		// Check if authorized
-		var isAuthorized = await _clubRepo.CheckRoles(clubId, (long)uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
+		var isAuthorized = await clubRepo.CheckRoles(clubId, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
 		if (!isAuthorized) return Unauthorized();
 
-		_context.Folders.Add(new Folder
+		context.Folders.Add(new Folder
 		{
 			Name = Input.Name,
 			Slug = Input.Name.Friendlify(),
@@ -88,10 +81,10 @@ public class CreateModel : PageModel
 			ParentFolderId = Input.ParentId,
 			AccessLevel = Input.Role
 		});
-		await _context.SaveChangesAsync();
-		
+		await context.SaveChangesAsync();
+
 		// Get slug
-		var slug = await _context.Clubs
+		var slug = await context.Clubs
 			.Where(c => c.Id == clubId)
 			.Select(c => c.Slug)
 			.FirstOrDefaultAsync();

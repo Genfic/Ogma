@@ -9,41 +9,30 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class DeleteModel : PageModel
+public class DeleteModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ClubRepository _clubRepo;
-
-	public DeleteModel(ApplicationDbContext context, ClubRepository clubRepo)
-	{
-		_context = context;
-		_clubRepo = clubRepo;
-	}
-
-
-	[BindProperty] public long TargetFolder { get; set; }
-	[BindProperty] public DeleteViewModel Folder { get; set; }
+	[BindProperty] public required long TargetFolder { get; set; }
+	[BindProperty] public required DeleteViewModel Folder { get; set; }
 
 	public class DeleteViewModel
 	{
-		public string Name { get; init; }
-		public string Slug { get; init; }
-		public string Description { get; init; }
-		public int StoriesCount { get; init; }
-		public long ClubId { get; init; }
-		public long Id { get; init; }
+		public required string Name { get; init; }
+		public required string Slug { get; init; }
+		public required string? Description { get; init; }
+		public required int StoriesCount { get; init; }
+		public required long ClubId { get; init; }
+		public required long Id { get; init; }
 	}
 
 	public async Task<IActionResult> OnGet(long clubId, long id)
 	{
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		// Check if authorized
-		var isAuthorized = await _clubRepo.CheckRoles(clubId, (long)uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
+		var isAuthorized = await clubRepo.CheckRoles(clubId, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
 		if (!isAuthorized) return Unauthorized();
 
-		Folder = await _context.Folders
+		var folder = await context.Folders
 			.Where(f => f.ClubId == clubId)
 			.Where(f => f.Id == id)
 			.Select(f => new DeleteViewModel
@@ -55,24 +44,24 @@ public class DeleteModel : PageModel
 				Description = f.Description,
 				StoriesCount = f.StoriesCount
 			})
-			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
-		if (Folder == null) return NotFound();
+		if (folder is null) return NotFound();
+
+		Folder = folder;
 
 		return Page();
 	}
 
 	public async Task<IActionResult> OnPostAsync(long clubId, long? id)
 	{
-		var uid = User.GetNumericId();
-		if (uid == null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		// Check if authorized
-		var isAuthorized = await _clubRepo.CheckRoles(clubId, (long)uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
+		var isAuthorized = await clubRepo.CheckRoles(clubId, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
 		if (!isAuthorized) return Unauthorized();
 
-		var folder = await _context.Folders
+		var folder = await context.Folders
 			.Where(f => f.ClubId == clubId)
 			.Where(f => f.Id == id)
 			.Include(f => f.ChildFolders)
@@ -87,7 +76,7 @@ public class DeleteModel : PageModel
 			return Page();
 		}
 
-		var relationships = await _context.FolderStories
+		var relationships = await context.FolderStories
 			.Where(fs => fs.FolderId == folder.Id)
 			.ToListAsync();
 
@@ -97,14 +86,14 @@ public class DeleteModel : PageModel
 			StoryId = r.StoryId
 		});
 
-		_context.FolderStories.RemoveRange(relationships);
-		_context.FolderStories.AddRange(newRelationships);
+		context.FolderStories.RemoveRange(relationships);
+		context.FolderStories.AddRange(newRelationships);
 
-		_context.Folders.Remove(folder);
-		await _context.SaveChangesAsync();
-		
+		context.Folders.Remove(folder);
+		await context.SaveChangesAsync();
+
 		// Get slug
-		var slug = await _context.Clubs
+		var slug = await context.Clubs
 			.Where(c => c.Id == clubId)
 			.Select(c => c.Slug)
 			.FirstOrDefaultAsync();

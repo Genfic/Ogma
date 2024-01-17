@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile>
+public class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile?>
 {
 	public override bool IsValid(ValidationContext<T> context, IFormFile? value)
 	{
@@ -29,7 +29,7 @@ public class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyVal
 
 public static class FileExtensionValidatorExtension
 {
-	public static IRuleBuilderOptions<T, IFormFile> FileHasExtension<T>(this IRuleBuilder<T, IFormFile> ruleBuilder,
+	public static IRuleBuilderOptions<T, IFormFile?> FileHasExtension<T>(this IRuleBuilder<T, IFormFile?> ruleBuilder,
 		params string[] allowedExtensions)
 		=> ruleBuilder.SetValidator(new FileExtensionValidator<T>(allowedExtensions));
 }

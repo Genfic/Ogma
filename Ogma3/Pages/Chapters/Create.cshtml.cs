@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -22,7 +22,7 @@ public class CreateModel(ApplicationDbContext context, NotificationsRepository n
 	[BindProperty]
 	public required PostData Input { get; set; } = new();
 	public required GetData Story { get; set; }
-	
+
 	public class GetData
 	{
 		public required long Id { get; init; }

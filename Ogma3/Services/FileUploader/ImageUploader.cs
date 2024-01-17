@@ -15,15 +15,21 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
 
-public class ImageUploader : IFileUploader
+public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUploader
 {
-	private readonly IB2Client _b2Client;
-	private readonly OgmaConfig _ogmaConfig;
-
-	public ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig)
+	/// <inheritdoc cref="IFileUploader"/>
+	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
+	/// <exception cref="Exception">Thrown when after `tries` amount of tries file could not be uploaded</exception>
+	public async Task<FileUploaderResult> Upload(
+		IFormFile file,
+		string folder,
+		int? width = null,
+		int? height = null,
+		int tries = 5
+	)
 	{
-		_b2Client = b2Client;
-		_ogmaConfig = ogmaConfig;
+		var name = Guid.NewGuid().ToString();
+		return await Upload(file, folder, name, width, height, tries);
 	}
 
 	/// <inheritdoc cref="IFileUploader"/>
@@ -54,7 +60,7 @@ public class ImageUploader : IFileUploader
 
 			// Reset memory stream position
 			ms.Seek(0, SeekOrigin.Begin);
-			
+
 			// Load and resize the image
 			using var img = await Image.LoadAsync(ms);
 			img.Mutate(i => i.Resize(new ResizeOptions
@@ -81,12 +87,8 @@ public class ImageUploader : IFileUploader
 
 			try
 			{
-				var result = await _b2Client.Files.Upload(ms.ToArray(), fileName);
-				return new FileUploaderResult
-				{
-					FileId = result.FileId,
-					Path = fileName
-				};
+				var result = await b2Client.Files.Upload(ms.ToArray(), fileName);
+				return new FileUploaderResult(result.FileId, fileName);
 			}
 			catch (B2Exception e)
 			{
@@ -99,5 +101,5 @@ public class ImageUploader : IFileUploader
 	}
 
 	public async Task Delete(string name, string id, CancellationToken cancellationToken = default)
-		=> _ = await _b2Client.Files.Delete(id, name.Replace(_ogmaConfig.Cdn, string.Empty).Trim('/'), cancellationToken);
+		=> _ = await b2Client.Files.Delete(id, name.Replace(ogmaConfig.Cdn, string.Empty).Trim('/'), cancellationToken);
 }

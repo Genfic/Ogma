@@ -17,46 +17,34 @@ using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class FolderModel : PageModel
+public class FolderModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config, ClubRepository clubRepo) : PageModel
 {
-	[NotNull] private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-	private readonly ClubRepository _clubRepo;
-	private readonly OgmaConfig _config;
-
-	public FolderModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config, ClubRepository clubRepo)
-	{
-		_context = context;
-		_mapper = mapper;
-		_config = config;
-		_clubRepo = clubRepo;
-	}
-
 	public class FolderDetails
 	{
-		public long Id { get; init; }
-		public string Name { get; init; }
-		public string Slug { get; init; }
-		public string Description { get; init; }
-		public IEnumerable<FolderMinimal> ChildFolders { get; init; }
-		public int StoriesCount { get; init; }
-		public EClubMemberRoles AccessLevel { get; init; }
+		public required long Id { get; init; }
+		public required string Name { get; init; }
+		public required string Slug { get; init; }
+		public required string? Description { get; init; }
+		public required IEnumerable<FolderMinimal> ChildFolders { get; init; }
+		public required int StoriesCount { get; init; }
+		public required EClubMemberRoles AccessLevel { get; init; }
 	}
 
-	public ClubBar ClubBar { get; private set; }
-	public FolderDetails Folder { get; private set; }
-	public bool EditPermitted { get; private set; }
-	public List<StoryCard> Stories { get; private set; }
-	public Pagination Pagination { get; private set; }
+	public required ClubBar ClubBar { get; set; }
+	public required FolderDetails Folder { get; set; }
+	public required bool EditPermitted { get; set; }
+	public required List<StoryCard> Stories { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long clubId, long id, [FromQuery] int page = 1)
 	{
 		var uid = User.GetNumericId();
 
-		ClubBar = await _clubRepo.GetClubBar(clubId);
-		if (ClubBar is null) return NotFound();
+		var clubBar = await clubRepo.GetClubBar(clubId);
+		if (clubBar is null) return NotFound();
+		ClubBar = clubBar;
 
-		Folder = await _context.Folders
+		var folder = await context.Folders
 			.Where(f => f.Id == id)
 			.Select(f => new FolderDetails
 			{
@@ -75,28 +63,28 @@ public class FolderModel : PageModel
 					StoriesCount = cf.StoriesCount
 				})
 			})
-			.AsNoTracking()
 			.FirstOrDefaultAsync();
-		if (Folder is null) return NotFound();
+		if (folder is null) return NotFound();
 
-		EditPermitted = await _clubRepo.CheckRoles(ClubBar.Id, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
+		Folder = folder;
 
-		Stories = await _context.FolderStories
+		EditPermitted = await clubRepo.CheckRoles(ClubBar.Id, uid, EClubMemberRoles.Founder, EClubMemberRoles.Admin);
+
+		Stories = await context.FolderStories
 			.Where(s => s.FolderId == id)
 			.Select(s => s.Story)
 			.Where(s => s.PublicationDate != null)
 			.Where(s => s.ContentBlockId == null)
-			.Blacklist(_context, uid)
+			.Blacklist(context, uid)
 			.OrderByDescending(s => s.PublicationDate)
-			.Paginate(page, _config.StoriesPerPage)
-			.ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
-			.AsNoTracking()
+			.Paginate(page, config.StoriesPerPage)
+			.ProjectTo<StoryCard>(mapper.ConfigurationProvider)
 			.ToListAsync();
 
 		// Prepare pagination
 		Pagination = new Pagination
 		{
-			PerPage = _config.StoriesPerPage,
+			PerPage = config.StoriesPerPage,
 			ItemCount = Folder.StoriesCount,
 			CurrentPage = page
 		};

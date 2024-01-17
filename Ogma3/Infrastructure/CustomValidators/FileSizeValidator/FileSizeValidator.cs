@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 
-public class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile>, IFileSizeValidator
+public class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile?>, IFileSizeValidator
 {
 	public uint Max { get; } = max;
 
@@ -28,9 +28,12 @@ public class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile>, I
 
 public static class FileSizeValidatorExtension
 {
+	/// <summary>
+	/// Add a validator validating that the IFormFile size is smaller than a given size.
+	/// </summary>
 	/// <param name="ruleBuilder"></param>
 	/// <param name="max">Maximum file size in bytes</param>
-	public static IRuleBuilderOptions<T, IFormFile> FileSmallerThan<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, uint max)
+	public static IRuleBuilderOptions<T, IFormFile?> FileSmallerThan<T>(this IRuleBuilder<T, IFormFile?> ruleBuilder, uint max)
 		=> ruleBuilder.SetValidator(new FileSizeValidator<T>(max));
 }
 
