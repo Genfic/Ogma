@@ -26,7 +26,7 @@ public static class CommentMappings
 			{
 				Avatar = c.Author.Avatar,
 				Title = c.Author.Title,
-				UserName = c.Author.UserName!,
+				UserName = c.Author.UserName,
 				Roles = c.Author.Roles.AsQueryable().Select(RoleMappings.ToRoleDto)
 			}
 	};

@@ -24,36 +24,27 @@ public static class BanUser
 		public CommandValidator() => RuleFor(c => c.Reason).NotEmpty();
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is not { } uid) return Unauthorized();
+			if (userService.User?.GetNumericId() is not { } uid) return Unauthorized();
 
 			var (userId, clubId, reason) = request;
 
-			var issuer = await _context.ClubMembers
+			var issuer = await context.ClubMembers
 				.Where(c => c.ClubId == clubId)
-				.Where(cm => cm.MemberId == _uid)
-				.Select(cm => new Issuer(cm.Role, cm.Member.UserName!))
+				.Where(cm => cm.MemberId == uid)
+				.Select(cm => new Issuer(cm.Role, cm.Member.UserName))
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (issuer is null) return Unauthorized();
 
 			// Find users
-			var user = await _context.ClubMembers
+			var user = await context.ClubMembers
 				.Where(c => c.ClubId == clubId)
 				.Where(c => c.MemberId == userId)
-				.Select(c => new BannedUser(c.Member.UserName!, c.Role))
+				.Select(c => new BannedUser(c.Member.UserName, c.Role))
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (user is null) return NotFound();
@@ -63,14 +54,14 @@ public static class BanUser
 			if (issuer.Role > user.Role) return Unauthorized("Can't ban someone with a higher role");
 
 			// Everything is fine, time to ban
-			_context.ClubBans.Add(new ClubBan
+			context.ClubBans.Add(new ClubBan
 			{
 				ClubId = clubId,
 				UserId = userId,
 				IssuerId = uid,
 				Reason = reason
 			});
-			var result = await _context.SaveChangesAsync(cancellationToken);
+			var result = await context.SaveChangesAsync(cancellationToken);
 
 			if (result <= 0) return ServerError("Something went wrong with the ban");
 
@@ -80,13 +71,13 @@ public static class BanUser
 			// 	.ExecuteDeleteAsync(cancellationToken);
 
 			// Log it
-			_context.ClubModeratorActions.Add(new ClubModeratorAction
+			context.ClubModeratorActions.Add(new ClubModeratorAction
 			{
 				ClubId = clubId,
 				ModeratorId = uid,
 				Description = ModeratorActionTemplates.UserBan(user.UserName, issuer.UserName, reason)
 			});
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			return Ok(true);
 		}

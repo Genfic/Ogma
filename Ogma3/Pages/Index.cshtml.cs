@@ -9,22 +9,12 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages;
 
-public class IndexModel : PageModel
+public class IndexModel(StoriesRepository storiesRepo, IMemoryCache cache, ILogger<IndexModel> logger)
+	: PageModel
 {
-	private readonly StoriesRepository _storiesRepo;
-	private readonly IMemoryCache _cache;
-	private readonly ILogger<IndexModel> _logger;
-
-	public IndexModel(StoriesRepository storiesRepo, IMemoryCache cache, ILogger<IndexModel> logger)
-	{
-		_storiesRepo = storiesRepo;
-		_cache = cache;
-		_logger = logger;
-	}
-
-	public List<StoryCard> RecentStories { get; private set; }
-	public List<StoryCard> TopStories { get; private set; }
-	public List<StoryCard> LastUpdatedStories { get; private set; }
+	public required List<StoryCard> RecentStories { get; set; }
+	public required List<StoryCard> TopStories { get; set; }
+	public required List<StoryCard> LastUpdatedStories { get; set; }
 
 	public async Task OnGetAsync()
 	{
@@ -32,27 +22,27 @@ public class IndexModel : PageModel
 		var longExpiry = TimeSpan.FromHours(1);
 
 		// Try getting recent stories from cache
-		RecentStories = await _cache.GetOrCreateAsync("IndexRecent", async entry =>
+		RecentStories = await cache.GetOrCreateAsync("IndexRecent", async entry =>
 		{
-			_logger.LogInformation("{Stories} cache miss!", nameof(RecentStories));
+			logger.LogInformation("{Stories} cache miss!", nameof(RecentStories));
 			entry.AbsoluteExpirationRelativeToNow = shortExpiry;
-			return await _storiesRepo.GetTopStoryCards(10);
-		});
+			return await storiesRepo.GetTopStoryCards(10);
+		}) ?? [];
 
 		// Try getting top stories from cache
-		TopStories = await _cache.GetOrCreateAsync("IndexTop", async entry =>
+		TopStories = await cache.GetOrCreateAsync("IndexTop", async entry =>
 		{
-			_logger.LogInformation("{Stories} cache miss!", nameof(TopStories));
+			logger.LogInformation("{Stories} cache miss!", nameof(TopStories));
 			entry.AbsoluteExpirationRelativeToNow = longExpiry;
-			return await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.ScoreDescending);
-		});
+			return await storiesRepo.GetTopStoryCards(10, EStorySortingOptions.ScoreDescending);
+		}) ?? [];
 
 		// Try getting recently updated stories from cache
-		LastUpdatedStories = await _cache.GetOrCreateAsync("IndexUpdated", async entry =>
+		LastUpdatedStories = await cache.GetOrCreateAsync("IndexUpdated", async entry =>
 		{
-			_logger.LogInformation("{Stories} cache miss!", nameof(LastUpdatedStories));
+			logger.LogInformation("{Stories} cache miss!", nameof(LastUpdatedStories));
 			entry.AbsoluteExpirationRelativeToNow = shortExpiry;
-			return await _storiesRepo.GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending);
-		});
+			return await storiesRepo.GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending);
+		}) ?? [];
 	}
 }

@@ -7,37 +7,38 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
-using Ogma3.Data.Roles;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Users : PageModel
+public class Users(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	public Users(ApplicationDbContext context) => _context = context;
-
-	public UserDetailsDto? OgmaUser { get; private set; }
-	public List<OgmaRole> Roles { get; private set; } = null!;
+	public required UserDetailsDto? OgmaUser { get; set; }
+	public required List<RoleDto> Roles { get; set; }
+	
 
 	public async Task<ActionResult> OnGet([FromQuery] string? name)
 	{
 		if (string.IsNullOrEmpty(name)) return Page();
 
-		var query = _context.Users.AsQueryable();
+		var query = context.Users.AsQueryable();
 
-		query = name.StartsWith("id:", StringComparison.InvariantCultureIgnoreCase)
-			? query.Where(u => u.Id == int.Parse(name.Replace("id:", "", StringComparison.InvariantCultureIgnoreCase)))
-			: query.Where(u => u.NormalizedUserName == name.ToUpper());
-
+		if (name.StartsWith("id:", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(name[3..], out var id))
+		{
+			query = query.Where(u => u.Id == id);
+		}
+		else
+		{
+			query = query.Where(u => u.NormalizedUserName == name.ToUpperInvariant());
+		}
+		
 		OgmaUser = await query.Select(u => new UserDetailsDto
 			{
 				Id = u.Id,
-				Name = u.UserName ?? "",
-				Email = u.Email ?? "",
+				Name = u.UserName,
+				Email = u.Email,
 				Title = u.Title,
 				Avatar = u.Avatar,
-				Bio = u.Bio,
-				RoleNames = u.Roles.Select(r => r.Name ?? ""),
+				RoleNames = u.Roles.Select(r => r.Name),
 				RegistrationDate = u.RegistrationDate,
 				LastActive = u.LastActive,
 				StoriesCount = u.Stories.Count,
@@ -52,45 +53,47 @@ public class Users : PageModel
 						Type = i.Type,
 						ActiveUntil = i.ActiveUntil,
 						IssueDate = i.IssueDate,
-						IssuedBy = i.IssuedBy.UserName ?? "",
 						RemovedAt = i.RemovedAt,
 						RemovedBy = i.RemovedBy != null ? i.RemovedBy.UserName : null
 					})
 					.ToList()
 			})
 			.FirstOrDefaultAsync();
+		
 		if (OgmaUser is null) return NotFound();
-
-		Roles = await _context.Roles.ToListAsync();
+		
+		Roles = await context.Roles
+			.Select(r => new RoleDto(r.Id, r.Name))
+			.ToListAsync();
 
 		return Page();
 	}
 
 	public sealed record UserDetailsDto
 	{
-		public long Id { get; init; }
-		public string Name { get; init; } = null!;
-		public string Email { get; init; } = null!;
-		public string? Title { get; init; }
-		public string? Bio { get; init; }
-		public string? Avatar { get; init; }
-		public DateTime RegistrationDate { get; init; }
-		public DateTime LastActive { get; init; }
-		public int StoriesCount { get; init; }
-		public int BlogpostsCount { get; init; }
-		public IEnumerable<string> RoleNames { get; init; } = null!;
-		public ICollection<InfractionDto> Infractions { get; init; } = null!;
+		public required long Id { get; init; }
+		public required string Name { get; init; } = null!;
+		public required string Email { get; init; } = null!;
+		public required string? Title { get; init; }
+		public required string? Avatar { get; init; }
+		public required DateTime RegistrationDate { get; init; }
+		public required DateTime LastActive { get; init; }
+		public required int StoriesCount { get; init; }
+		public required int BlogpostsCount { get; init; }
+		public required IEnumerable<string> RoleNames { get; init; } = null!;
+		public required ICollection<InfractionDto> Infractions { get; init; } = null!;
 	}
 
 	public sealed record InfractionDto
 	{
-		public long Id { get; init; }
-		public DateTime IssueDate { get; init; }
-		public DateTime ActiveUntil { get; init; }
-		public DateTime? RemovedAt { get; init; }
-		public string Reason { get; init; } = null!;
-		public InfractionType Type { get; init; }
-		public string IssuedBy { get; init; } = null!;
-		public string? RemovedBy { get; init; }
+		public required long Id { get; init; }
+		public required DateTime IssueDate { get; init; }
+		public required DateTime ActiveUntil { get; init; }
+		public required DateTime? RemovedAt { get; init; }
+		public required string Reason { get; init; }
+		public required InfractionType Type { get; init; }
+		public required string? RemovedBy { get; init; }
 	}
+
+	public sealed record RoleDto(long Id, string Name);
 }

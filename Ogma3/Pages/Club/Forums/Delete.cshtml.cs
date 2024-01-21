@@ -8,37 +8,30 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
-using Ogma3.Data.ClubThreads;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public class DeleteModel : PageModel
+public class DeleteModel(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-
-	public DeleteModel(ApplicationDbContext context)
-	{
-		_context = context;
-	}
-
-	[BindProperty] public GetData ClubThread { get; set; }
+	[BindProperty] public required GetData ClubThread { get; set; }
 
 	public class GetData
 	{
-		public long Id { get; init; }
-		public long ClubId { get; init; }
-		public long? AuthorId { get; init; }
-		public string Title { get; init; }
-		public DateTime CreationDate { get; init; }
-		public int Replies { get; init; }
+		public required long Id { get; init; }
+		public required long ClubId { get; init; }
+		public required long AuthorId { get; init; }
+		public required string Title { get; init; }
+		public required DateTime CreationDate { get; init; }
+		public required int Replies { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		ClubThread = await _context.ClubThreads
+		var clubThread = await context.ClubThreads
+			.TagWith($"Clubs — Delete — {nameof(OnGetAsync)}")
 			.Where(ct => ct.Id == id)
 			.Select(ct => new GetData
 			{
@@ -51,7 +44,8 @@ public class DeleteModel : PageModel
 			})
 			.FirstOrDefaultAsync();
 
-		if (ClubThread is null) return NotFound();
+		if (clubThread is null) return NotFound();
+		ClubThread = clubThread;
 
 		var (allowed, _) = await CanDelete(ClubThread.AuthorId, ClubThread.ClubId);
 		
@@ -62,10 +56,10 @@ public class DeleteModel : PageModel
 
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
-		var userId = User.GetNumericId();
-		if (userId is not {} uid) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 		
-		var th = await _context.ClubThreads
+		var th = await context.ClubThreads
+			.TagWith($"Clubs — Delete — {nameof(OnPostAsync)} — get threads")
 			.Where(ct => ct.Id == id)
 			.Select(ct => new
 			{
@@ -79,39 +73,38 @@ public class DeleteModel : PageModel
 
 		if (th is null) return NotFound();
 		
-		var (allowed, isModerator) = await CanDelete(ClubThread.AuthorId, ClubThread.ClubId);
+		var (allowed, isModerator) = await CanDelete(th.AuthorId, th.ClubId);
 		
 		if (!allowed) return Unauthorized();
 		
 		if (isModerator)
 		{
-			_context.ClubModeratorActions.Add(new ClubModeratorAction
+			context.ClubModeratorActions.Add(new ClubModeratorAction
 			{
 				ModeratorId = uid,
 				ClubId = th.ClubId,
-				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Title, th.Id, User.GetUsername())
+				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Title, th.Id, User.GetUsername() ?? "[unknown]")
 			});
 		}
 
-		var thread = _context.ClubThreads.Attach(new ClubThread
-		{
-			Id = th.Id
-		});
-		thread.Entity.DeletedAt = DateTime.Now;
-
-		await _context.SaveChangesAsync();
-
+		await context.ClubThreads
+			.TagWith($"Clubs — Delete — {nameof(OnPostAsync)} — update delete time")
+			.Where(ct => ct.Id == th.Id)
+			.ExecuteUpdateAsync(setters => setters.SetProperty(ct => ct.DeletedAt, DateTime.Now));
+		
 		return RedirectToPage("Index", new { id = th.ClubId, slug = th.Slug });
 	}
 
 	private async Task<(bool allowed, bool isModerator)> CanDelete(long? authorId, long clubId)
 	{
-		var uid = User.GetNumericId();
-		if (uid is null) return (false, false);
+		// User is not even logged in
+		if (User.GetNumericId() is not {} uid) return (false, false);
 
+		// User is logged in and is the thread's author
 		if (authorId == uid) return (true, false);
 
-		var isModerator = await _context.ClubMembers
+		var isModerator = await context.ClubMembers
+			.TagWith($"Clubs — Delete — {nameof(CanDelete)}")
 			.Where(cm => cm.ClubId == clubId)
 			.Where(cm => cm.MemberId == uid)
 			.Where(cm => new[]
@@ -122,6 +115,7 @@ public class DeleteModel : PageModel
 			}.Contains(cm.Role))
 			.AnyAsync();
 
-		return (isModerator, true);
+		// The user might or might not be a moderator
+		return (isModerator, isModerator);
 	}
 }

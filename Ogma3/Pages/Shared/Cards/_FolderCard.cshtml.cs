@@ -6,14 +6,14 @@ namespace Ogma3.Pages.Shared.Cards;
 
 public class FolderCard
 {
-	public long Id { get; set; }
-	public long ClubId { get; set; }
-	public string Name { get; set; }
-	public string Slug { get; set; }
-	public string Description { get; set; }
+	public required long Id { get; init; }
+	public required long ClubId { get; init; }
+	public required string Name { get; init; }
+	public required string Slug { get; init; }
+	public string? Description { get; init; }
 
-	public int StoriesCount { get; set; }
-	public IEnumerable<FolderMinimalDto> ChildFolders { get; set; }
+	public required int StoriesCount { get; init; }
+	public required IEnumerable<FolderMinimalDto> ChildFolders { get; init; }
 
 	public class MappingProfile : Profile
 	{

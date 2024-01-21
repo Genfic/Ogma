@@ -82,7 +82,7 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageM
 				Body = b.Body,
 				WordCount = b.WordCount,
 				PublicationDate = b.PublicationDate,
-				AuthorUserName = b.Author.UserName!,
+				AuthorUserName = b.Author.UserName,
 				Hashtags = b.Hashtags
 			})
 			.ToListAsync();

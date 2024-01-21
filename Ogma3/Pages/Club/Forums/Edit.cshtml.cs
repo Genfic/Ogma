@@ -11,21 +11,13 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public class EditModel : PageModel
+public class EditModel(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-
-	public EditModel(ApplicationDbContext context)
-	{
-		_context = context;
-	}
-
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
-		Input = await _context.ClubThreads
+		var input = await context.ClubThreads
 			.Where(ct => ct.Id == id)
 			.Where(ct => ct.AuthorId == uid)
 			.Select(ct => new InputModel
@@ -37,19 +29,20 @@ public class EditModel : PageModel
 			})
 			.FirstOrDefaultAsync();
 
-		if (Input is null) return NotFound();
-
+		if (input is null) return NotFound();
+		Input = input;
+		
 		return Page();
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		public long Id { get; init; }
-		public long ClubId { get; init; }
-		public string Title { get; init; }
-		public string Body { get; init; }
+		public required long Id { get; init; }
+		public required long ClubId { get; init; }
+		public required string Title { get; init; }
+		public required string Body { get; init; }
 	}
 
 	public class InputModelValidator : AbstractValidator<InputModel>
@@ -73,10 +66,9 @@ public class EditModel : PageModel
 	{
 		if (!ModelState.IsValid) return Page();
 
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
-		var clubThread = await _context.ClubThreads
+		var clubThread = await context.ClubThreads
 			.Where(ct => ct.Id == Input.Id)
 			.FirstOrDefaultAsync();
 
@@ -86,7 +78,7 @@ public class EditModel : PageModel
 		clubThread.Title = Input.Title;
 		clubThread.Body = Input.Body;
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		return RedirectToPage("./Details", new { clubId = clubThread.ClubId, threadId = clubThread.Id });
 	}

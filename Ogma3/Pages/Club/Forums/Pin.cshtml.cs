@@ -11,28 +11,21 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public class Pin : PageModel
+public class Pin(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-
-	public Pin(ApplicationDbContext context)
-	{
-		_context = context;
-	}
-
-	public GetData Data { get; set; }
+	public required GetData Data { get; set; }
 
 	public class GetData
 	{
-		public long Id { get; init; }
-		public string Title { get; init; }
-		public long ClubId { get; init; }
-		public bool IsPinned { get; init; }
+		public required long Id { get; init; }
+		public required string Title { get; init; }
+		public required long ClubId { get; init; }
+		public required bool IsPinned { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		Data = await _context.ClubThreads
+		var data = await context.ClubThreads
 			.Where(ct => ct.Id == id)
 			.Select(ct => new GetData
 			{
@@ -43,7 +36,8 @@ public class Pin : PageModel
 			})
 			.FirstOrDefaultAsync();
 
-		if (Data is null) return NotFound();
+		if (data is null) return NotFound();
+		Data = data;
 
 		return Page();
 	}
@@ -51,10 +45,9 @@ public class Pin : PageModel
 
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		var thread = await _context.ClubThreads
+		var thread = await context.ClubThreads
 			.Where(ct => ct.Id == id)
 			.Where(ct => ct.Club.ClubMembers
 				.Where(cm => cm.MemberId == uid)
@@ -69,7 +62,7 @@ public class Pin : PageModel
 		if (thread is null) return NotFound();
 
 		thread.IsPinned = !thread.IsPinned;
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		return RedirectToPage("./Details", new { clubId = thread.ClubId, threadId = thread.Id });
 	}

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NpgSqlGenerators;
 using Ogma3;
 using Ogma3.Infrastructure.Logging;
 using Serilog;

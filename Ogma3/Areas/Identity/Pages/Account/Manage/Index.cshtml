@@ -13,11 +13,6 @@
 	<div asp-validation-summary="All" class="text-danger"></div>
 
 	<div class="o-form-group">
-		<label asp-for="Input.Username"></label>
-		<input asp-for="Input.Username" class="o-form-control active-border" disabled/>
-	</div>
-
-	<div class="o-form-group">
 		<label asp-for="Input.Avatar"></label>
 		<input asp-for="Input.Avatar" accept=".png,.jpg,.jpeg" class="o-form-control active-border">
 		<span asp-validation-for="Input.Avatar" class="text-danger"></span>

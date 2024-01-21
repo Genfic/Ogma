@@ -12,26 +12,18 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class IndexModel : PageModel
+public class IndexModel(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ClubRepository _clubRepo;
-
-	public IndexModel(ClubRepository clubRepo, ApplicationDbContext context)
-	{
-		_clubRepo = clubRepo;
-		_context = context;
-	}
-
-	public ClubBar ClubBar { get; private set; }
-	public ICollection<FolderCard> Folders { get; private set; }
+	public required ClubBar ClubBar { get; set; }
+	public required ICollection<FolderCard> Folders { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		ClubBar = await _clubRepo.GetClubBar(id);
-		if (ClubBar == null) return NotFound();
-
-		Folders = await _context.Folders
+		var clubBar = await clubRepo.GetClubBar(id);
+		if (clubBar is null) return NotFound();
+		ClubBar = clubBar;
+		
+		Folders = await context.Folders
 			.Where(f => f.ClubId == id)
 			.Where(f => f.ParentFolderId == null)
 			.Select(f => new FolderCard
@@ -49,7 +41,6 @@ public class IndexModel : PageModel
 					Slug = cf.Slug
 				})
 			})
-			.AsNoTracking()
 			.ToListAsync();
 
 		return Page();

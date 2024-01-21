@@ -12,36 +12,27 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public class IndexModel : PageModel
+public class IndexModel(ApplicationDbContext context, ClubRepository clubRepo, OgmaConfig config)
+	: PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ClubRepository _clubRepo;
-	private readonly OgmaConfig _config;
-
-	public IndexModel(ApplicationDbContext context, ClubRepository clubRepo, OgmaConfig config)
-	{
-		_context = context;
-		_clubRepo = clubRepo;
-		_config = config;
-	}
-
-	public ClubBar ClubBar { get; private set; }
-	public IList<ThreadCard> ThreadCards { get; private set; }
-	public Pagination Pagination { get; private set; }
+	public required ClubBar ClubBar { get; set; }
+	public required IList<ThreadCard> ThreadCards { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
 	{
-		ClubBar = await _clubRepo.GetClubBar(id);
-		if (ClubBar is null) return NotFound();
-
-		var query = _context.ClubThreads
+		var clubBar = await clubRepo.GetClubBar(id);
+		if (clubBar is null) return NotFound();
+		ClubBar = clubBar;
+		
+		var query = context.ClubThreads
 			.Where(ct => ct.ClubId == id)
 			.Where(ct => ct.DeletedAt == null);
 
 		ThreadCards = await query
 			.OrderByDescending(ct => ct.IsPinned)
 			.ThenByDescending(ct => ct.CreationDate)
-			.Paginate(page, _config.ClubThreadsPerPage)
+			.Paginate(page, config.ClubThreadsPerPage)
 			.Select(ct => new ThreadCard
 			{
 				Id = ct.Id,
@@ -59,7 +50,7 @@ public class IndexModel : PageModel
 		{
 			ItemCount = await query.CountAsync(),
 			CurrentPage = page,
-			PerPage = _config.ClubThreadsPerPage
+			PerPage = config.ClubThreadsPerPage
 		};
 
 		return Page();

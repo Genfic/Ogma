@@ -1,17 +1,17 @@
 @inject OgmaConfig Config
 @inject IAntiforgery Xcsrf
-@using Ogma3.Services
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Api.V1.Comments
 @using Ogma3.Api.V1.CommentThreads
 @using Ogma3.Api.V1.Reports
 @using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
+@using Ogma3.Services
 @model CommentsThreadDto   
 
 <script>
 const ssrData = {
-    thread: @Model!.Id,
+    thread: @Model.Id,
     type: '@Model.Type',
     route: '@Url.RouteUrl(nameof(CommentsController))',
     threadRoute: '@Url.RouteUrl(nameof(CommentsThreadController))',

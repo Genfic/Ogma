@@ -5,13 +5,13 @@ namespace Ogma3.Data.InviteCodes;
 
 public class InviteCodeDto
 {
-	public long Id { get; init; }
-	public string Code { get; init; } = null!;
-	public string NormalizedCode { get; init; } = null!;
-	public string? UsedByUserName { get; init; }
-	public string IssuedByUserName { get; init; } = null!;
-	public DateTime IssueDate { get; init; }
-	public DateTime? UsedDate { get; init; }
+	public required long Id { get; init; }
+	public required string Code { get; init; } = null!;
+	public required string NormalizedCode { get; init; } = null!;
+	public required string? UsedByUserName { get; init; }
+	public required string IssuedByUserName { get; init; } = null!;
+	public required DateTime IssueDate { get; init; }
+	public required DateTime? UsedDate { get; init; }
 
 	public class MappingProfile : Profile
 	{

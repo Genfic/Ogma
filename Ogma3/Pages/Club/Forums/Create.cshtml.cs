@@ -11,27 +11,20 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public class CreateModel : PageModel
+public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ClubRepository _clubRepo;
-
-	public CreateModel(ApplicationDbContext context, ClubRepository clubRepo)
-	{
-		_context = context;
-		_clubRepo = clubRepo;
-	}
-
-	[BindProperty] public PostModel ClubThread { get; set; }
+	[BindProperty] public required PostModel ClubThread { get; set; }
 
 	public async Task<IActionResult> OnGet(long id)
 	{
 		var uid = User.GetNumericId();
 
-		if (!await _clubRepo.IsMember(uid, id)) return Unauthorized();
+		if (!await clubRepo.IsMember(uid, id)) return Unauthorized();
 
 		ClubThread = new PostModel
 		{
+			Title = "",
+			Body = "",
 			ClubId = id
 		};
 		return Page();
@@ -39,9 +32,9 @@ public class CreateModel : PageModel
 
 	public class PostModel
 	{
-		public string Title { get; init; }
-		public string Body { get; init; }
-		public long ClubId { get; init; }
+		public required string Title { get; init; }
+		public required string Body { get; init; }
+		public required long ClubId { get; init; }
 	}
 
 	public class PostModelValidator : AbstractValidator<PostModel>
@@ -63,15 +56,13 @@ public class CreateModel : PageModel
 	{
 		if (!ModelState.IsValid) return Page();
 
-		// Get logged in user
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		if (!await _clubRepo.IsMember(uid, ClubThread.ClubId)) return Unauthorized();
+		if (!await clubRepo.IsMember(uid, ClubThread.ClubId)) return Unauthorized();
 
 		var clubThread = new ClubThread
 		{
-			AuthorId = (long)uid,
+			AuthorId = uid,
 			Title = ClubThread.Title,
 			Body = ClubThread.Body,
 			ClubId = ClubThread.ClubId,
@@ -79,8 +70,8 @@ public class CreateModel : PageModel
 			CommentsThread = new CommentsThread()
 		};
 
-		_context.ClubThreads.Add(clubThread);
-		await _context.SaveChangesAsync();
+		context.ClubThreads.Add(clubThread);
+		await context.SaveChangesAsync();
 
 		return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
 	}

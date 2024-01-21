@@ -19,40 +19,22 @@ using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class IndexModel : PageModel
+public class IndexModel(
+	ApplicationDbContext context,
+	SignInManager<OgmaUser> signInManager,
+	ImageUploader uploader,
+	OgmaConfig config) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly SignInManager<OgmaUser> _signInManager;
-	private readonly ImageUploader _uploader;
-	private readonly OgmaConfig _config;
-
-	public IndexModel(
-		ApplicationDbContext context,
-		SignInManager<OgmaUser> signInManager,
-		ImageUploader uploader,
-		OgmaConfig config
-	)
-	{
-		_signInManager = signInManager;
-		_uploader = uploader;
-		_config = config;
-		_context = context;
-	}
-
 	[TempData] public string StatusMessage { get; set; } = "";
-
 	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		public string Username { get; init; } = "";
-		[DataType(DataType.Upload)]
-		public IFormFile? Avatar { get; init; }
-
-		public bool DeleteAvatar { get; set; }
-		public string Title { get; init; } = "";
-		public string Bio { get; init; } = "";
-		public string Links { get; set; } = "";
+		[DataType(DataType.Upload)] public IFormFile? Avatar { get; init; }
+		public bool DeleteAvatar { get; init; }
+		public string? Title { get; init; }
+		public string? Bio { get; init; }
+		public string? Links { get; init; }
 	}
 
 	public class InputModelValidation : AbstractValidator<InputModel>
@@ -72,35 +54,35 @@ public class IndexModel : PageModel
 		}
 	}
 
-	private async Task LoadAsync(long? uid)
+	private async Task<InputModel?> LoadAsync(long? uid)
 	{
-		Input = await _context.Users
+		return await context.Users
 			.Where(u => u.Id == uid)
 			.Select(u => new InputModel
 			{
-				Username = u.UserName ?? "",
-				Title = u.Title ?? "",
-				Bio = u.Bio ?? "",
+				Title = u.Title,
+				Bio = u.Bio,
 				Links = string.Join('\n', u.Links)
 			})
-			.FirstOrDefaultAsync() ?? new InputModel();
+			.FirstOrDefaultAsync();
 	}
 
 	public async Task<IActionResult> OnGetAsync()
 	{
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		await LoadAsync(uid);
+		var model = await LoadAsync(uid);
+		if (model is null) return NotFound();
+		Input = model;
+		
 		return Page();
 	}
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		var user = await _context.Users
+		var user = await context.Users
 			.Where(u => u.Id == uid)
 			.FirstOrDefaultAsync();
 
@@ -108,7 +90,9 @@ public class IndexModel : PageModel
 
 		if (!ModelState.IsValid)
 		{
-			await LoadAsync(uid);
+			var model = await LoadAsync(uid);
+			if (model is null) return NotFound();
+			Input = model;
 			return Page();
 		}
 
@@ -118,34 +102,28 @@ public class IndexModel : PageModel
 			// Delete the old avatar if exists
 			if (user.AvatarId is not null)
 			{
-				await _uploader.Delete(user.Avatar, user.AvatarId);
+				await uploader.Delete(user.Avatar, user.AvatarId);
 			}
 
 			// Upload the new one
-			var file = await _uploader.Upload(
+			var file = await uploader.Upload(
 				Input.Avatar,
 				"avatars",
-				$"U-{user.NormalizedUserName}",
-				_config.AvatarWidth,
-				_config.AvatarHeight
+				config.AvatarWidth,
+				config.AvatarHeight
 			);
 			user.AvatarId = file.FileId;
-			user.Avatar = Path.Join(_config.Cdn, file.Path);
+			user.Avatar = Path.Join(config.Cdn, file.Path);
 		}
 		else if (Input.DeleteAvatar)
 		{
 			if (user.AvatarId is not null)
 			{
-				await _uploader.Delete(user.Avatar, user.AvatarId);
+				await uploader.Delete(user.Avatar, user.AvatarId);
 			}
 
 			user.AvatarId = null;
-			user.Avatar = new Uri(_config.AvatarServiceUrl).AppendSegments($"{user.UserName}.png").ToString();
-			// user.Avatar = Gravatar.Generate(user.Email, new Gravatar.Options
-			// {
-			//     Default = new Url(_config.AvatarServiceUrl).AppendPathSegment($"{user.UserName}.png").ToString(), 
-			//     Rating = Gravatar.Ratings.G
-			// });
+			user.Avatar = new Uri(config.AvatarServiceUrl).AppendSegments($"{user.UserName}.png").ToString();
 		}
 
 		if (Input.Title != user.Title)
@@ -158,14 +136,14 @@ public class IndexModel : PageModel
 			user.Bio = Input.Bio;
 		}
 
-		user.Links = Input.Links
-			.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+		user.Links = Input.Links?
+			.Split(["\r\n", "\r", "\n"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
 			.Where(l => Uri.TryCreate(l, UriKind.RelativeOrAbsolute, out _))
-			.ToList();
+			.ToList() ?? [];
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
-		await _signInManager.RefreshSignInAsync(user);
+		await signInManager.RefreshSignInAsync(user);
 		StatusMessage = "Your profile has been updated";
 		return RedirectToPage();
 	}

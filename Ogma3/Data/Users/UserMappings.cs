@@ -11,9 +11,9 @@ public static class UserMappings
 	public static Expression<Func<OgmaUser, ProfileBar>> ToProfileBar(long? uid) => u => new ProfileBar
 	{
 		Id = u.Id,
-		UserName = u.UserName!,
+		UserName = u.UserName,
 		Avatar = u.Avatar,
-		Email = u.Email!,
+		Email = u.Email,
 		Title = u.Title,
 		LastActive = u.LastActive,
 		RegistrationDate = u.RegistrationDate,

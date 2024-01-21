@@ -1,9 +1,9 @@
 @page "/club/{clubId:long}/thread/{threadId:long}"
-@using Utils.Extensions
-@using Ogma3.Infrastructure.Extensions
+@using System.Globalization
 @using Ogma3.Data.Clubs
 @using Ogma3.Infrastructure.Constants
-@using System.Globalization
+@using Ogma3.Infrastructure.Extensions
+@using Utils.Extensions
 @model DetailsModel
 
 @{
@@ -43,7 +43,7 @@
 			@Model.ClubThread.AuthorName
 		</a>
 
-		@if (Model.ClubThread.AuthorRole != null)
+		@if (Model.ClubThread.AuthorRole is not null)
 		{
 			<div class="role-tag">
 				<span class="name">@Model.ClubThread.AuthorRole.Name</span>

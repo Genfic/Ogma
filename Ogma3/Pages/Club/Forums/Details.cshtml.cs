@@ -12,38 +12,29 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public class DetailsModel : PageModel
+public class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
 {
-	private readonly ClubRepository _clubRepo;
-	private readonly ApplicationDbContext _context;
-
-	public DetailsModel(ClubRepository clubRepo, ApplicationDbContext context)
-	{
-		_clubRepo = clubRepo;
-		_context = context;
-	}
-
 	public class ThreadDetails
 	{
-		public long Id { get; init; }
-		public long ClubId { get; init; }
-		public string Title { get; init; }
-		public string Body { get; init; }
-		public bool IsPinned { get; init; }
-		public DateTime CreationDate { get; init; }
-		public string AuthorName { get; init; }
-		public long AuthorId { get; init; }
-		public string AuthorAvatar { get; init; }
-		public OgmaRole AuthorRole { get; init; }
-		public CommentsThreadDto CommentsThread { get; init; }
+		public required long Id { get; init; }
+		public required long ClubId { get; init; }
+		public required string Title { get; init; }
+		public required string Body { get; init; }
+		public required bool IsPinned { get; init; }
+		public required DateTime CreationDate { get; init; }
+		public required string AuthorName { get; init; }
+		public required long AuthorId { get; init; }
+		public required string AuthorAvatar { get; init; }
+		public OgmaRole? AuthorRole { get; init; }
+		public required CommentsThreadDto CommentsThread { get; init; }
 	}
 
-	public ThreadDetails ClubThread { get; private set; }
-	public ClubBar ClubBar { get; private set; }
+	public required ThreadDetails ClubThread { get; set; }
+	public required ClubBar ClubBar { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long threadId)
 	{
-		ClubThread = await _context.ClubThreads
+		var clubThread = await context.ClubThreads
 			.Where(ct => ct.Id == threadId)
 			.Select(ct => new ThreadDetails
 			{
@@ -66,15 +57,16 @@ public class DetailsModel : PageModel
 					LockDate = ct.CommentsThread.LockDate
 				}
 			})
-			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
-		if (ClubThread is null) return NotFound();
+		if (clubThread is null) return NotFound();
+		ClubThread = clubThread;
 
 		ClubThread.CommentsThread.Type = nameof(Data.ClubThreads.ClubThread);
 
-		ClubBar = await _clubRepo.GetClubBar(ClubThread.ClubId);
-		if (ClubBar is null) return NotFound();
+		var clubBar = await clubRepo.GetClubBar(ClubThread.ClubId);
+		if (clubBar is null) return NotFound();
+		ClubBar = clubBar;
 
 		return Page();
 	}

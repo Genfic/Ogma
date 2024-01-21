@@ -15,26 +15,23 @@ public static class GetInfractionDetails
 {
 	public sealed record Query(long InfractionId) : IRequest<ActionResult<Result>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<Result>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<Result>>
 	{
-		private readonly ApplicationDbContext _context;
-		public Handler(ApplicationDbContext context) => _context = context;
-
 		public async Task<ActionResult<Result>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var infraction = await _context.Infractions
+			var infraction = await context.Infractions
 				.Where(i => i.Id == request.InfractionId)
 				.Select(i => new Result
 				{
 					Id = i.Id,
-					UserName = i.User.UserName ?? "",
+					UserName = i.User.UserName,
 					UserId = i.UserId,
 					IssueDate = i.IssueDate,
 					ActiveUntil = i.ActiveUntil,
 					RemovedAt = i.RemovedAt,
 					Reason = i.Reason,
 					Type = i.Type,
-					IssuedByName = i.IssuedBy.UserName ?? "",
+					IssuedByName = i.IssuedBy.UserName,
 					RemovedByName = i.RemovedBy == null ? null : i.RemovedBy.UserName
 				})
 				.FirstOrDefaultAsync(cancellationToken);
@@ -47,15 +44,15 @@ public static class GetInfractionDetails
 
 	public sealed record Result
 	{
-		public long Id { get; init; }
-		public string UserName { get; init; } = null!;
-		public long UserId { get; init; }
-		public DateTime IssueDate { get; init; }
-		public DateTime ActiveUntil { get; init; }
-		public DateTime? RemovedAt { get; init; }
-		public string Reason { get; init; } = null!;
-		public InfractionType Type { get; init; }
-		public string IssuedByName { get; init; } = null!;
-		public string? RemovedByName { get; init; }
+		public required long Id { get; init; }
+		public required string UserName { get; init; }
+		public required long UserId { get; init; }
+		public required DateTime IssueDate { get; init; }
+		public required DateTime ActiveUntil { get; init; }
+		public required DateTime? RemovedAt { get; init; }
+		public required string Reason { get; init; }
+		public required InfractionType Type { get; init; }
+		public required string IssuedByName { get; init; }
+		public required string? RemovedByName { get; init; }
 	}
 }

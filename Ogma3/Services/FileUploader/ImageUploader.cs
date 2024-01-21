@@ -35,6 +35,7 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
 	/// <exception cref="Exception">Thrown when after `tries` amount of tries file could not be uploaded</exception>
+	/// TODO: Remove in favour of the method that generates a GUID for name
 	public async Task<FileUploaderResult> Upload(
 		IFormFile file,
 		string folder,

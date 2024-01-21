@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,28 +15,28 @@ public static class GetPaginatedInviteCodes
 {
 	public sealed record Query(int Page, int PerPage) : IRequest<ActionResult<List<InviteCodeDto>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
+	public class Handler(ApplicationDbContext context)
+		: BaseHandler, IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IMapper _mapper;
-
-		public Handler(ApplicationDbContext context, IMapper mapper)
-		{
-			_context = context;
-			_mapper = mapper;
-		}
-
 		public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var (page, perPage) = request;
-
-			var codes = await _context.InviteCodes
+			var codes = await context.InviteCodes
 				.OrderByDescending(ic => ic.UsedDate)
 				.ThenByDescending(ic => ic.IssueDate)
 				.Paginate(page, perPage)
-				.ProjectTo<InviteCodeDto>(_mapper.ConfigurationProvider)
+				.Select(ic => new InviteCodeDto
+				{
+					Id = ic.Id,
+					Code = ic.Code,
+					NormalizedCode = ic.NormalizedCode,
+					IssueDate = ic.IssueDate,
+					UsedDate = ic.UsedDate,
+					IssuedByUserName = ic.IssuedBy.UserName,
+					UsedByUserName = ic.UsedBy == null ? null : ic.UsedBy.UserName
+				})
 				.ToListAsync(cancellationToken);
-
+			
 			return Ok(codes);
 		}
 	}
