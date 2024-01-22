@@ -31,27 +31,27 @@ public static class Colour
 		var hex = input.Trim('#');
 		var values = (hex.Length switch
 		{
-			3 => new[]
-			{
+			3 =>
+			[
 				"FF",
 				hex[0].ToString(),
 				hex[1].ToString(),
 				hex[2].ToString()
-			},
-			4 => new[]
-			{
+			],
+			4 =>
+			[
 				hex[0].ToString(),
 				hex[1].ToString(),
 				hex[2].ToString(),
 				hex[3].ToString()
-			},
-			6 => new[]
-			{
+			],
+			6 =>
+			[
 				"FF",
 				hex[..2],
 				hex[2..4],
 				hex[4..6]
-			},
+			],
 			8 => new[]
 			{
 				hex[..2],

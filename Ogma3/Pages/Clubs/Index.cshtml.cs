@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +15,11 @@ namespace Ogma3.Pages.Clubs;
 public class IndexModel : PageModel
 {
 	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
 	private readonly OgmaConfig _config;
 
 	public IndexModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config)
 	{
 		_context = context;
-		_mapper = mapper;
 		_config = config;
 	}
 
@@ -63,8 +60,17 @@ public class IndexModel : PageModel
 				_ => query.OrderByDescending(c => c.CreationDate)
 			})
 			.Paginate(page, _config.ClubsPerPage)
-			.ProjectTo<ClubCard>(_mapper.ConfigurationProvider)
-			.AsNoTracking()
+			.Select(c => new ClubCard
+			{
+				Id = c.Id,
+				Name = c.Name,
+				Slug = c.Slug,
+				Hook = c.Hook,
+				Icon = c.Icon,
+				StoriesCount = c.Folders.Sum(f => f.StoriesCount),
+				ThreadsCount = c.Threads.Count,
+				ClubMembersCount = c.ClubMembers.Count
+			})
 			.ToListAsync();
 
 		// Prepare pagination

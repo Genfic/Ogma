@@ -85,7 +85,7 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src-webcomp
 					legalComments: "eof"
 				})
 			]
-		});	
+		});
 		return await bundle.write({
 			file: out,
 			format: "umd",
@@ -94,7 +94,7 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src-webcomp
 		});
 	},
 	errorHandler);
-const webtypes = () => run('npm run t:webtypes', {}).exec();
+const webtypes = () => run("npm run t:webtypes", {}).exec();
 export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, gulp.series(components, webtypes));
 
 

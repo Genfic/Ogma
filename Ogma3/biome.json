@@ -21,7 +21,7 @@
 		}
 	},
 	"files": {
-		"include": ["wwwroot/js/src*/*.js", "wwwroot/js/src*/*.ts"]
+		"include": ["wwwroot/js/src*/*.js", "wwwroot/js/src*/*.ts", "*.mjs"]
 	},
 	"formatter": {
 		"indentStyle": "tab",

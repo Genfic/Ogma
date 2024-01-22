@@ -44,7 +44,7 @@ public static partial class String
 	public static string RemoveLeadingWhiteSpace(this string input)
 	{
 		var lines = input
-			.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+			.Split([Environment.NewLine], StringSplitOptions.None)
 			.Select(s => s.TrimStart(' ', '\t'));
 		return string.Join(Environment.NewLine, lines);
 	}
@@ -111,7 +111,7 @@ public static partial class String
 	public static IEnumerable<Header> GetMarkdownHeaders(this string input)
 	{
 		var headers = new List<Header>();
-
+		
 		var lines = input.Split(Environment.NewLine);
 		foreach (var line in lines)
 		{
@@ -147,7 +147,7 @@ public static partial class String
 		return headers;
 	}
 
-	public class Header
+	public record Header
 	{
 		public byte Level { get; set; }
 		public byte Occurrence { get; set; }

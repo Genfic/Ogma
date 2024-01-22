@@ -4,7 +4,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public class CdnImgTagHelper : TagHelper
 {
-	public string Src { get; set; } = null!;
+	public string? Src { get; set; }
 	public int? Width { get; set; }
 	public int? Height { get; set; }
 	public bool Eager { get; set; } = false;

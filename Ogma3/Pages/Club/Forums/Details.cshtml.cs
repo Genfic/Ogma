@@ -54,16 +54,15 @@ public class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context)
 				CommentsThread = new CommentsThreadDto
 				{
 					Id = ct.CommentsThread.Id,
-					LockDate = ct.CommentsThread.LockDate
+					LockDate = ct.CommentsThread.LockDate,
+					Type = nameof(Data.ClubThreads.ClubThread)
 				}
 			})
 			.FirstOrDefaultAsync();
 
 		if (clubThread is null) return NotFound();
 		ClubThread = clubThread;
-
-		ClubThread.CommentsThread.Type = nameof(Data.ClubThreads.ClubThread);
-
+		
 		var clubBar = await clubRepo.GetClubBar(ClubThread.ClubId);
 		if (clubBar is null) return NotFound();
 		ClubBar = clubBar;

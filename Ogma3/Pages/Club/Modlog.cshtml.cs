@@ -12,29 +12,21 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.Club;
 
-public class Modlog : PageModel
+public class Modlog(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ClubRepository _clubRepo;
-
 	private const int PerPage = 50;
 
-	public Modlog(ApplicationDbContext context, ClubRepository clubRepo)
-	{
-		_context = context;
-		_clubRepo = clubRepo;
-	}
-
-	public ICollection<ClubModeratorAction> Actions { get; private set; }
-	public ClubBar ClubBar { get; private set; }
-	public Pagination Pagination { get; private set; }
+	public required ICollection<ClubModeratorAction> Actions { get;  set; }
+	public required ClubBar ClubBar { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task<ActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
 	{
-		ClubBar = await _clubRepo.GetClubBar(id);
-		if (ClubBar is null) return NotFound();
+		var clubBar = await clubRepo.GetClubBar(id);
+		if (clubBar is null) return NotFound();
+		ClubBar = clubBar;
 
-		var query = _context.ClubModeratorActions
+		var query = context.ClubModeratorActions
 			.Where(cma => cma.ClubId == id);
 
 		Actions = await query

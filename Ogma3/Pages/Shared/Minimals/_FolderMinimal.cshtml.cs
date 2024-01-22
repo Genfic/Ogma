@@ -1,18 +1,10 @@
-using AutoMapper;
-using Ogma3.Data.Folders;
-
 namespace Ogma3.Pages.Shared.Minimals;
 
 public class FolderMinimal
 {
-	public long Id { get; set; }
-	public long ClubId { get; set; }
-	public string Name { get; set; }
-	public string Slug { get; set; }
-	public int StoriesCount { get; set; }
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Folder, FolderMinimal>();
-	}
+	public required long Id { get; init; }
+	public required long ClubId { get; init; }
+	public required string Name { get; init; }
+	public required string Slug { get; init; }
+	public required int StoriesCount { get; init; }
 }

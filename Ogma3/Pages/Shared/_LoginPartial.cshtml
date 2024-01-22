@@ -7,7 +7,7 @@
 	{
 		<li class="nav-item">
 			<a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
-				<cdn-img src="@User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar)"
+				<cdn-img src="@(User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar) ?? "")"
 				         width="30" height="30"
 				         eager="true"
 				         class="avatar"

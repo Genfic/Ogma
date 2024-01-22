@@ -6,10 +6,10 @@ namespace Ogma3.Pages;
 
 public class StatusCodeModel : PageModel
 {
-	public string OriginalUrl { get; private set; }
-	public int Code { get; private set; }
-	public string Name { get; private set; }
-	public string Text { get; private set; }
+	public required string OriginalUrl { get; set; }
+	public required int Code { get; set; }
+	public required string Name { get; set; }
+	public required string Text { get; set; }
 
 	public void OnGet(int? code)
 	{

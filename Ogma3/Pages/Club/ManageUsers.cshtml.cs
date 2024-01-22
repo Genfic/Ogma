@@ -11,32 +11,34 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club;
 
-public class ManageUsers : PageModel
+public class ManageUsers(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	public ManageUsers(ApplicationDbContext context) => _context = context;
-
-	public ClubData Club { get; set; }
-	public IEnumerable<UserDto> Users { get; set; }
+	public required ClubData Club { get; set; }
+	public required IEnumerable<UserDto> Users { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
-		Club = await _context.Clubs
+		var club = await context.Clubs
 			.Where(c => c.Id == id)
 			.Select(c => new ClubData(
 				c.Id,
 				c.Name,
 				c.Slug,
-				c.ClubMembers.FirstOrDefault(cm => cm.MemberId == uid).Role
+				c.ClubMembers
+					.Where(cm => cm.MemberId == uid)
+					.Select(cm => cm.Role)
+					.FirstOrDefault()
 			))
 			.FirstOrDefaultAsync();
-		if (Club is null) return NotFound();
+		
+		if (club is null) return NotFound();
+		Club = club;
 
 		var isPrivileged = Club.Role != null && Club.Role != EClubMemberRoles.User;
 
-		Users = await _context.ClubMembers
+		Users = await context.ClubMembers
 			.Where(cm => cm.ClubId == id)
 			.Where(cm => cm.Member.ClubsBannedFrom.All(c => c.Id != id) || isPrivileged)
 			.Select(cm => new UserDto(

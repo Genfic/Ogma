@@ -1,45 +1,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.Roles;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club;
 
-public class Members : PageModel
+public class Members(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
 {
-	private readonly ClubRepository _clubRepo;
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public Members(ClubRepository clubRepo, ApplicationDbContext context, IMapper mapper)
-	{
-		_clubRepo = clubRepo;
-		_context = context;
-		_mapper = mapper;
-	}
-
-	public ClubBar ClubBar { get; private set; }
-	public List<UserCard> ClubMembers { get; private set; }
+	public required ClubBar ClubBar { get;  set; }
+	public required List<UserCard> ClubMembers { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		ClubBar = await _clubRepo.GetClubBar(id);
-		if (ClubBar is null) return NotFound();
-
-		ClubMembers = await _context.ClubMembers
+		var clubBar = await clubRepo.GetClubBar(id);
+		if (clubBar is null) return NotFound();
+		ClubBar = clubBar;
+		
+		ClubMembers = await context.ClubMembers
 			.Where(cm => cm.ClubId == id)
 			.Select(cm => cm.Member)
-			.Where(cm => cm.ClubsBannedFrom.All(c => c.Id != id))
+			.Where(u => u.ClubsBannedFrom.All(c => c.Id != id))
 			.Paginate(1, 50)
-			.ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+			.Select(u => new UserCard
+			{
+				UserName = u.UserName,
+				Title = u.Title,
+				Avatar = u.Avatar,
+				Roles = u.Roles.Select(r => new RoleDto
+				{
+					Id = r.Id,
+					Name = r.Name,
+					Order = r.Order,
+					Color = r.Color,
+					IsStaff = r.IsStaff
+				})
+			})
 			.ToListAsync();
 
 		return Page();

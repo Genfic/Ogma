@@ -6,20 +6,17 @@ namespace Ogma3.Pages.Shared.Bars;
 
 public class ProfileBar
 {
-	public long Id { get; init; }
-	public string UserName { get; init; }
-	public string? Title { get; init; }
-	public string Avatar { get; init; }
-	public string Email { get; init; }
-	public DateTime RegistrationDate { get; init; }
-	public DateTime LastActive { get; init; }
-
-	public IEnumerable<RoleDto> Roles { get; init; }
-
-	public int StoriesCount { get; init; }
-	public int BlogpostsCount { get; init; }
-	public int FollowersCount { get; init; }
-
-	public bool IsBlockedBy { get; init; }
-	public bool IsFollowedBy { get; init; }
+	public required long Id { get; init; }
+	public required string UserName { get; init; }
+	public required string? Title { get; init; }
+	public required string Avatar { get; init; }
+	public required string Email { get; init; }
+	public required DateTime RegistrationDate { get; init; }
+	public required DateTime LastActive { get; init; }
+	public required IEnumerable<RoleDto> Roles { get; init; }
+	public required int StoriesCount { get; init; }
+	public required int BlogpostsCount { get; init; }
+	public required int FollowersCount { get; init; }
+	public required bool IsBlockedBy { get; init; }
+	public required bool IsFollowedBy { get; init; }
 }

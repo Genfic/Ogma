@@ -10,25 +10,16 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages;
 
-public class StaffModel : PageModel
+public class StaffModel(ApplicationDbContext context, IMapper mapper) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public StaffModel(ApplicationDbContext context, IMapper mapper)
-	{
-		_context = context;
-		_mapper = mapper;
-	}
-
-	public ICollection<UserCard> Staff { get; private set; }
+	public required ICollection<UserCard> Staff { get; set; }
 
 	public async Task OnGetAsync()
 	{
-		Staff = await _context.Users
+		Staff = await context.Users
 			.Where(u => u.Roles.Any(ur => ur.IsStaff))
 			.OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
-			.ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+			.ProjectTo<UserCard>(mapper.ConfigurationProvider)
 			.ToListAsync();
 	}
 }

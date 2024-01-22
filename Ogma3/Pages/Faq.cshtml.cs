@@ -6,20 +6,13 @@ using Ogma3.Data;
 
 namespace Ogma3.Pages;
 
-public class Faq : PageModel
+public class Faq(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-
-	public Faq(ApplicationDbContext context)
-	{
-		_context = context;
-	}
-
-	public List<Data.Faqs.Faq> Faqs { get; private set; }
+	public required List<Data.Faqs.Faq> Faqs { get;  set; }
 
 	public async Task OnGetAsync()
 	{
-		Faqs = await _context.Faqs
+		Faqs = await context.Faqs
 			.AsNoTracking()
 			.ToListAsync();
 	}

@@ -8,11 +8,12 @@ namespace Ogma3.Pages.Shared.Cards;
 
 public class UserCard
 {
-	public string UserName { get; set; }
-	public string Avatar { get; set; }
-	public string Title { get; set; }
-	public IEnumerable<RoleDto> Roles { get; set; }
+	public required string UserName { get; init; }
+	public required string Avatar { get; init; }
+	public required string? Title { get; init; }
+	public required IEnumerable<RoleDto> Roles { get; init; } = [];
 
+	// TODO: Get rid of Automapper
 	public class MappingProfile : Profile
 	{
 		public MappingProfile() =>

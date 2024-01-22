@@ -4,7 +4,7 @@ namespace Ogma3.Pages.Shared;
 
 public class Alert
 {
-	public EAlertType AlertType { get; init; }
-	public string Message { get; init; }
-	public bool IsDismissible { get; init; } = true;
+	public required EAlertType AlertType { get; init; }
+	public required string Message { get; init; }
+	public required bool IsDismissible { get; init; } = true;
 }
