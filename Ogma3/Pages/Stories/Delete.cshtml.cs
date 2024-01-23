@@ -13,41 +13,32 @@ using Ogma3.Services.FileUploader;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public class DeleteModel : PageModel
+public class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ImageUploader _uploader;
-
-	public DeleteModel(ApplicationDbContext context, ImageUploader uploader)
-	{
-		_context = context;
-		_uploader = uploader;
-	}
-
 	public class GetData
 	{
-		public long Id { get; init; }
-		public string Title { get; init; }
-		public string Slug { get; init; }
-		public DateTime? ReleaseDate { get; init; }
-		public DateTime CreationDate { get; set; }
-		public string Hook { get; init; }
-		public bool IsPublished { get; init; }
-		public EStoryStatus Status { get; init; }
-		public int VotesCount { get; init; }
-		public int ChaptersCount { get; init; }
-		public int CommentsCount { get; init; }
+		public required long Id { get; init; }
+		public required string Title { get; init; }
+		public required string Slug { get; init; }
+		public required DateTime? ReleaseDate { get; init; }
+		public required DateTime CreationDate { get; init; }
+		public required string Hook { get; init; }
+		public required bool IsPublished { get; init; }
+		public required EStoryStatus Status { get; init; }
+		public required int VotesCount { get; init; }
+		public required int ChaptersCount { get; init; }
+		public required int CommentsCount { get; init; }
 	}
 
-	[BindProperty] public GetData Story { get; set; }
+	[BindProperty] public required GetData Story { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(int? id)
 	{
 		if (id is null) return NotFound();
-		var uid = User.GetNumericId();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		// Get the story and make sure the logged-in user matches author
-		Story = await _context.Stories
+		var story = await context.Stories
 			.Where(s => s.Id == id)
 			.Where(s => s.AuthorId == uid)
 			.Select(s => new GetData
@@ -67,18 +58,19 @@ public class DeleteModel : PageModel
 			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
-		if (Story is null) return NotFound();
-
+		if (story is null) return NotFound();
+		Story = story;
+		
 		return Page();
 	}
 
 	public async Task<IActionResult> OnPostAsync(int? id)
 	{
 		if (id is null) return NotFound();
-		var uid = User.GetNumericId();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		// Get the story and make sure the logged-in user matches author
-		var story = await _context.Stories
+		var story = await context.Stories
 			.Where(s => s.Id == id)
 			.FirstOrDefaultAsync();
 
@@ -86,16 +78,16 @@ public class DeleteModel : PageModel
 		if (story.AuthorId != uid) return Unauthorized();
 
 		// Remove story
-		_context.Stories.Remove(story);
+		context.Stories.Remove(story);
 
 		// Delete cover
 		if (story.CoverId is not null && story.Cover is not null)
 		{
-			await _uploader.Delete(story.Cover, story.CoverId);
+			await uploader.Delete(story.Cover, story.CoverId);
 		}
 
 		// Save
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		return RedirectToPage("/User/Stories", new { Name = User.GetUsername() });
 	}

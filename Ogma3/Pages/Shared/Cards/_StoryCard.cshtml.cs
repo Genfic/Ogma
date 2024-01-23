@@ -10,20 +10,19 @@ namespace Ogma3.Pages.Shared.Cards;
 
 public class StoryCard
 {
-	public long Id { get; set; }
-	public string AuthorUserName { get; set; } = null!;
-	public string Title { get; set; } = null!;
-	public string Slug { get; set; } = null!;
-	public string Hook { get; set; } = null!;
-	public string? Cover { get; set; }
-
-	public string? CoverId { get; set; }
-	public DateTime? PublicationDate { get; set; }
-	public IList<TagDto> Tags { get; set; } = null!;
-	public Rating Rating { get; set; } = null!;
-	public EStoryStatus Status { get; set; }
-	public int WordCount { get; set; }
-	public int ChapterCount { get; set; }
+	public required long Id { get; init; }
+	public required string AuthorUserName { get; init; }
+	public required string Title { get; init; }
+	public required string Slug { get; init; }
+	public required string Hook { get; init; }
+	public required string Cover { get; init; }
+	public required string CoverId { get; init; }
+	public required DateTime? PublicationDate { get; init; }
+	public required IList<TagDto> Tags { get; init; }
+	public required Rating Rating { get; init; }
+	public required EStoryStatus Status { get; init; }
+	public required int WordCount { get; init; }
+	public required int ChapterCount { get; init; }
 
 	public class MappingProfile : Profile
 	{

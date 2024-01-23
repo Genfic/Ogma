@@ -25,40 +25,31 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public class CreateModel : PageModel
+public class CreateModel(
+	ApplicationDbContext context,
+	ImageUploader uploader,
+	OgmaConfig ogmaConfig,
+	NotificationsRepository notificationsRepo,
+	IMapper mapper)
+	: PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly ImageUploader _uploader;
-	private readonly OgmaConfig _ogmaConfig;
-	private readonly NotificationsRepository _notificationsRepo;
-	private readonly IMapper _mapper;
-
-	public CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig,
-		NotificationsRepository notificationsRepo, IMapper mapper)
-	{
-		_context = context;
-		_uploader = uploader;
-		_ogmaConfig = ogmaConfig;
-		_notificationsRepo = notificationsRepo;
-		_mapper = mapper;
-	}
-
-	public List<RatingDto> Ratings { get; private set; }
-	public List<TagDto> Genres { get; private set; }
-	public List<TagDto> ContentWarnings { get; private set; }
-	public List<TagDto> Franchises { get; private set; }
+	public required List<RatingDto> Ratings { get; set; }
+	public required List<TagDto> Genres { get; set; }
+	public required List<TagDto> ContentWarnings { get; set; }
+	public required List<TagDto> Franchises { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
-		Input ??= new InputModel();
-		Ratings = await _context.Ratings
+		Input = new InputModel();
+		
+		Ratings = await context.Ratings
 			.OrderBy(r => r.Order)
-			.ProjectTo<RatingDto>(_mapper.ConfigurationProvider)
+			.ProjectTo<RatingDto>(mapper.ConfigurationProvider)
 			.ToListAsync();
 
-		var tags = await _context.Tags
+		var tags = await context.Tags
 			.OrderBy(t => t.Name)
-			.ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+			.ProjectTo<TagDto>(mapper.ConfigurationProvider)
 			.ToListAsync();
 
 		Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();
@@ -68,16 +59,16 @@ public class CreateModel : PageModel
 		return Page();
 	}
 
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public required InputModel Input { get; set; }
 
 	public class InputModel
 	{
-		public string Title { get; init; }
-		public string Description { get; init; }
-		public string Hook { get; init; }
-		[DataType(DataType.Upload)] public IFormFile Cover { get; init; }
-		public long Rating { get; init; }
-		public List<long> Tags { get; set; }
+		public string Title { get; init; } = "";
+		public string Description { get; init; } = "";
+		public string Hook { get; init; } = "";
+		[DataType(DataType.Upload)] public IFormFile? Cover { get; init; }
+		public long Rating { get; init; } = -1;
+		public List<long> Tags { get; init; } = [];
 	}
 
 	public class InputModelValidation : AbstractValidator<InputModel>
@@ -105,18 +96,16 @@ public class CreateModel : PageModel
 	{
 		if (!ModelState.IsValid) return await OnGetAsync();
 
-		// Get logged in user
-		var uid = User.GetNumericId();
-		if (uid is null) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		var tags = await _context.Tags
+		var tags = await context.Tags
 			.Where(t => Input.Tags.Contains(t.Id))
 			.ToListAsync();
-
+		
 		// Add story
 		var story = new Story
 		{
-			AuthorId = (long)uid,
+			AuthorId = uid,
 			Title = Input.Title,
 			Slug = Input.Title.Friendlify(),
 			Description = Input.Description,
@@ -126,33 +115,30 @@ public class CreateModel : PageModel
 			Cover = "/img/placeholders/ph-250.png"
 		};
 
-		_context.Stories.Add(story);
-		await _context.SaveChangesAsync();
-
 		// Upload cover
 		if (Input.Cover is { Length: > 0 })
 		{
-			var file = await _uploader.Upload(
+			var file = await uploader.Upload(
 				Input.Cover,
 				"covers",
-				story.Id.ToString(),
-				_ogmaConfig.StoryCoverWidth,
-				_ogmaConfig.StoryCoverHeight
+				ogmaConfig.StoryCoverWidth,
+				ogmaConfig.StoryCoverHeight
 			);
 			story.CoverId = file.FileId;
-			story.Cover = Path.Join(_ogmaConfig.Cdn, file.Path);
-			// Final save
-			await _context.SaveChangesAsync();
+			story.Cover = Path.Join(ogmaConfig.Cdn, file.Path);
 		}
 
+		context.Stories.Add(story);
+		await context.SaveChangesAsync();
+
 		// Get a list of users that should receive notifications
-		var notificationRecipients = await _context.Users
+		var notificationRecipients = await context.Users
 			.Where(u => u.Following.Any(a => a.Id == uid))
 			.Select(u => u.Id)
 			.ToListAsync();
 
 		// Notify
-		await _notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewStory,
+		await notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewStory,
 			notificationRecipients,
 			"/Story",
 			new { story.Id, story.Slug });

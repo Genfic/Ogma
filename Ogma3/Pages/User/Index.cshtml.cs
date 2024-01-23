@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -13,48 +11,43 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User;
 
-public class IndexModel : PageModel
+public class IndexModel(ApplicationDbContext context, UserRepository userRepo)
+	: PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly UserRepository _userRepo;
-	private readonly IMapper _mapper;
-
-	public IndexModel(ApplicationDbContext context, UserRepository userRepo, IMapper mapper)
-	{
-		_context = context;
-		_userRepo = userRepo;
-		_mapper = mapper;
-	}
-
-	public ProfileBar ProfileBar { get; private set; }
-	public ProfileDetails Data { get; private set; }
+	public required ProfileBar ProfileBar { get; set; }
+	public required ProfileDetails Data { get; set; }
 
 	public class ProfileDetails
 	{
-		public string Bio { get; init; }
-		public List<string> Links { get; init; }
-		public CommentsThreadDto CommentsThread { get; init; }
-	}
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<OgmaUser, ProfileDetails>();
+		public required string? Bio { get; init; }
+		public required List<string> Links { get; init; }
+		public required CommentsThreadDto CommentsThread { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(string name)
 	{
-		Data = await _context.Users
+		var data = await context.Users
 			.Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
-			.ProjectTo<ProfileDetails>(_mapper.ConfigurationProvider)
+			.Select(u => new ProfileDetails
+			{
+				Bio = u.Bio,
+				Links = u.Links,
+				CommentsThread = new CommentsThreadDto
+				{
+					Id = u.CommentsThread.Id,
+					Type = nameof(OgmaUser),
+					LockDate = u.CommentsThread.LockDate
+				}
+			})
 			.FirstOrDefaultAsync();
 
-		if (Data is null) return NotFound();
+		if (data is null) return NotFound();
+		Data = data;
 
-		Data.CommentsThread.Type = nameof(OgmaUser);
-
-		ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
-		if (ProfileBar is null) return NotFound();
-
+		var bar = await userRepo.GetProfileBar(name.ToUpper());
+		if (bar is null) return NotFound();
+		ProfileBar = bar;
+		
 		return Page();
 	}
 }

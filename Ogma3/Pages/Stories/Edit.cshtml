@@ -1,6 +1,6 @@
 ﻿@page
-@using Utils.Extensions
 @using Ogma3.Data.Stories
+@using Utils.Extensions
 @model EditModel
 
 @{
@@ -10,7 +10,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="button-group">
-	<a title="Cancel" class="action-btn large" asp-page="../Story" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title?.Friendlify()">
+	<a title="Cancel" class="action-btn large" asp-page="../Story" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
 		<icon class="icon" icon="arrow_back"></icon>
 		<span class="name">Cancel</span>
 	</a>

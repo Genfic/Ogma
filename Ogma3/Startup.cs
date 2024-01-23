@@ -179,8 +179,7 @@ public class Startup
 		// Auth
 		services.AddAuthorizationBuilder()
 			.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-
-
+		
 		// Cookies
 		services.ConfigureApplicationCookie(options =>
 		{

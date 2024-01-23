@@ -105,6 +105,7 @@ public class DetailsModel(UserRepository userRepo, ApplicationDbContext context)
 				Slug = b.AttachedChapter.Slug,
 				PublicationDate = b.AttachedChapter.PublicationDate,
 				StoryTitle = b.AttachedChapter.Story.Title,
+				StoryId = b.AttachedChapter.StoryId,
 				StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName
 			},
 		AttachedStory = b.AttachedStory == null
