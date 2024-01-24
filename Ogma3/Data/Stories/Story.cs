@@ -21,7 +21,7 @@ public class Story : BaseModel, IBlockableContent, IReportableContent, IDateable
 	public string Slug { get; set; } = null!;
 	public string Description { get; set; } = null!;
 	public string Hook { get; set; } = null!;
-	public string? Cover { get; set; }
+	public string Cover { get; set; } = null!;
 	public string? CoverId { get; set; }
 	public DateTime CreationDate { get; set; }
 	public DateTime? PublicationDate { get; set; }

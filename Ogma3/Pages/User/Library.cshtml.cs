@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,49 +11,21 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User;
 
-public class LibraryModel : PageModel
+public class LibraryModel(ApplicationDbContext context, UserRepository userRepo) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly UserRepository _userRepo;
-
-	public LibraryModel(ApplicationDbContext context, UserRepository userRepo)
-	{
-		_context = context;
-		_userRepo = userRepo;
-	}
-
-	public bool IsCurrentUser { get; private set; }
-	public List<Icon> Icons { get; private set; }
-	public InputModel Input { get; init; }
-	public ProfileBar ProfileBar { get; private set; }
-
-	public class InputModel
-	{
-		[Required]
-		[MinLength(CTConfig.CShelf.MinNameLength)]
-		[MaxLength(CTConfig.CShelf.MaxNameLength)]
-		public string Name { get; set; }
-
-		[MaxLength(CTConfig.CShelf.MaxDescriptionLength)]
-		public string Description { get; set; }
-
-		[DisplayName("Public")] public bool IsPublic { get; set; }
-
-		[DisplayName("Quick access")] public bool QuickAccess { get; set; }
-
-		[MinLength(7)] [MaxLength(7)] public string Color { get; set; }
-
-		public int Icon { get; set; }
-	}
+	public required bool IsCurrentUser { get; set; }
+	public required List<Icon> Icons { get; set; }
+	public required ProfileBar ProfileBar { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(string name)
 	{
-		ProfileBar = await _userRepo.GetProfileBar(name.ToUpper());
-		if (ProfileBar is null) return NotFound();
+		var profileBar = await userRepo.GetProfileBar(name.ToUpper());
+		if (profileBar is null) return NotFound();
+		ProfileBar = profileBar;
 
-		IsCurrentUser = ProfileBar.Id == User.GetNumericId();
+		IsCurrentUser = name == User.GetUsername();
 
-		Icons = await _context.Icons
+		Icons = await context.Icons
 			.AsNoTracking()
 			.ToListAsync();
 

@@ -15,34 +15,25 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public class BlogModel : PageModel
+public class BlogModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+	: PageModel
 {
 	private const int PerPage = 25;
 
-	private readonly UserRepository _userRepo;
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public BlogModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
-	{
-		_userRepo = userRepo;
-		_context = context;
-		_mapper = mapper;
-	}
-
-	public ICollection<BlogpostCard> Posts { get; private set; }
-	public ProfileBar ProfileBar { get; private set; }
-	public Pagination Pagination { get; private set; }
+	public required ICollection<BlogpostCard> Posts { get; set; }
+	public required ProfileBar ProfileBar { get; set; }
+	public required Pagination Pagination { get; set; }
 
 	public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
 	{
 		var uid = User.GetNumericId();
 
-		ProfileBar = await _userRepo.GetProfileBar(name);
-		if (ProfileBar is null) return NotFound();
+		var profileBar = await userRepo.GetProfileBar(name);
+		if (profileBar is null) return NotFound();
+		ProfileBar = profileBar;
 
 		// Start building the query
-		var query = _context.Blogposts
+		var query = context.Blogposts
 			.Where(b => b.AuthorId == ProfileBar.Id);
 
 		if (uid != ProfileBar.Id)
@@ -57,7 +48,7 @@ public class BlogModel : PageModel
 		Posts = await query
 			.OrderByDescending(b => b.CreationDate)
 			.Paginate(page, PerPage)
-			.ProjectTo<BlogpostCard>(_mapper.ConfigurationProvider)
+			.ProjectTo<BlogpostCard>(mapper.ConfigurationProvider)
 			.AsNoTracking()
 			.ToListAsync();
 

@@ -81,7 +81,7 @@ public class DeleteModel(ApplicationDbContext context, ImageUploader uploader) :
 		context.Stories.Remove(story);
 
 		// Delete cover
-		if (story.CoverId is not null && story.Cover is not null)
+		if (story.CoverId is not null)
 		{
 			await uploader.Delete(story.Cover, story.CoverId);
 		}

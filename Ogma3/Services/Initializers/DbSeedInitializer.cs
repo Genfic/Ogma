@@ -18,14 +18,14 @@ using Serilog;
 
 namespace Ogma3.Services.Initializers;
 
-public class DbSeedInitializer : IAsyncInitializer
+public abstract class DbSeedInitializer : IAsyncInitializer
 {
 	private readonly ApplicationDbContext _context;
 	private readonly OgmaUserManager _userManager;
 
-	private JsonData Data { get; }
+	private readonly JsonData _data;
 
-	public DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager)
+	protected DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager)
 	{
 		_context = context;
 		_userManager = userManager;
@@ -35,11 +35,12 @@ public class DbSeedInitializer : IAsyncInitializer
 
 		if (data is not null)
 		{
-			Data = data;
+			_data = data;
 		}
 		else
 		{
 			Log.Fatal("Could not read seed.json file to seed the database");
+			throw new NullReferenceException("Json data was null");
 		}
 	}
 
@@ -84,12 +85,12 @@ public class DbSeedInitializer : IAsyncInitializer
 
 	private async Task SeedRatings()
 	{
-		await BulkUpsert(_context.Ratings, Data.Ratings, r => r.Name);
+		await BulkUpsert(_context.Ratings, _data.Ratings, r => r.Name);
 	}
 
 	private async Task SeedIcons()
 	{
-		var icons = Data.Icons.Select(s => new Icon { Name = s });
+		var icons = _data.Icons.Select(s => new Icon { Name = s });
 
 		await BulkUpsert(_context.Icons, icons, i => i.Name);
 	}
@@ -99,7 +100,7 @@ public class DbSeedInitializer : IAsyncInitializer
 		if (await _context.Quotes.AnyAsync()) return;
 
 		using var hc = new HttpClient();
-		var json = await hc.GetStringAsync(Data.QuotesUrl);
+		var json = await hc.GetStringAsync(_data.QuotesUrl);
 
 		if (string.IsNullOrEmpty(json)) return;
 

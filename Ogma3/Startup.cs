@@ -330,7 +330,7 @@ public class Startup
 
 		// OpenAPI
 		app.UseOpenApi();
-		app.UseSwaggerUi3(config =>
+		app.UseSwaggerUi(config =>
 		{
 			config.TransformToExternalPath = (s, _) => s;
 			config.CustomStylesheetPath = "https://cdn.genfic.net/file/Ogma-net/swagger-dark.css";

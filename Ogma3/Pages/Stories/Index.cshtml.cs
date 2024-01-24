@@ -25,6 +25,14 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 	public required long? Rating { get; set; }
 	public required Pagination Pagination { get; set; }
 
+	// TODO: See if this can be used?
+	private record QueryData(
+		long[] Tags,
+		string? Query = null,
+		EStorySortingOptions Sort = EStorySortingOptions.DateDescending,
+		long? Rating = null,
+		int Page = 1);
+	
 	public async Task OnGetAsync(
 		[FromQuery] IList<long> tags,
 		[FromQuery] string? q = null,

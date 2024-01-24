@@ -16,15 +16,15 @@ public static class HtmlExtensions
 	/// <param name="template"></param>
 	/// <param name="type"></param>
 	/// <returns></returns>
-	public static HtmlString Resource(this IHtmlHelper htmlHelper, Func<object, HelperResult> template, string type = "js")
+	public static HtmlString Resource(this IHtmlHelper htmlHelper, Func<object?, HelperResult> template, string type = "js")
 	{
-		if (htmlHelper.ViewContext.HttpContext.Items[type] is not null)
+		if (htmlHelper.ViewContext.HttpContext.Items[type] is {} item)
 		{
-			((List<Func<object, HelperResult>>)htmlHelper.ViewContext.HttpContext.Items[type]).Add(template);
+			((List<Func<object?, HelperResult>?>)item).Add(template);
 		}
 		else
 		{
-			htmlHelper.ViewContext.HttpContext.Items[type] = new List<Func<object, HelperResult>> { template };
+			htmlHelper.ViewContext.HttpContext.Items[type] = new List<Func<object?, HelperResult>> { template };
 		}
 
 		return new HtmlString(string.Empty);
@@ -38,12 +38,12 @@ public static class HtmlExtensions
 	/// <returns></returns>
 	public static HtmlString RenderResources(this IHtmlHelper htmlHelper, string type = "js")
 	{
-		if (htmlHelper.ViewContext.HttpContext.Items[type] == null) return new HtmlString(string.Empty);
+		if (htmlHelper.ViewContext.HttpContext.Items[type] is not {} item) return new HtmlString(string.Empty);
 
-		var resources = (List<Func<object, HelperResult>>)htmlHelper.ViewContext.HttpContext.Items[type];
+		var resources = (List<Func<object?, HelperResult>?>)item;
 		foreach (var resource in resources.Where(resource => resource is not null))
 		{
-			htmlHelper.ViewContext.Writer.Write(resource(null));
+			htmlHelper.ViewContext.Writer.Write(resource!(null)); // Null-forgiving because we filter out nulls with `.Where()`
 		}
 
 		return new HtmlString(string.Empty);

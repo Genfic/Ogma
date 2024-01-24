@@ -17,61 +17,49 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages;
 
-public class StoryModel : PageModel
+public class StoryModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
 {
-	private readonly UserRepository _userRepo;
-	private readonly ApplicationDbContext _context;
-
-	public StoryModel(UserRepository userRepo, ApplicationDbContext context)
-	{
-		_userRepo = userRepo;
-		_context = context;
-	}
-
 	public class StoryDetails
 	{
-		public long Id { get; init; }
-		public long AuthorId { get; init; }
-		public string Title { get; init; } = null!;
-		public string Slug { get; init; } = null!;
-		public string Description { get; init; } = null!;
-		public string Hook { get; init; } = null!;
-		public string? Cover { get; init; }
-		public DateTime ReleaseDate { get; init; }
-		// public DateTime CreationDate { get; set; }
-		public bool IsPublished { get; init; }
-		public ICollection<ChapterBasicDto> Chapters { get; init; } = null!;
-		public ICollection<TagDto> Tags { get; init; } = null!;
-		public Rating Rating { get; init; } = null!;
-		public EStoryStatus Status { get; init; }
-		public int WordCount { get; init; }
-		// public int FullWordCount { get; init; }
-		public int ChaptersCount { get; init; }
-		// public int FullChaptersCount { get; init; }
-		public int CommentsCount { get; init; }
-		public int Score { get; init; }
-		public ContentBlockCard? ContentBlock { get; init; }
+		public required long Id { get; init; }
+		public required long AuthorId { get; init; }
+		public required string Title { get; init; }
+		public required string Slug { get; init; }
+		public required string Description { get; init; }
+		public required string Hook { get; init; }
+		public required string Cover { get; init; }
+		public required DateTime ReleaseDate { get; init; }
+		public required bool IsPublished { get; init; }
+		public required ICollection<ChapterBasicDto> Chapters { get; init; }
+		public required ICollection<TagDto> Tags { get; init; }
+		public required Rating Rating { get; init; }
+		public required EStoryStatus Status { get; init; }
+		public required int WordCount { get; init; }
+		public required int ChaptersCount { get; init; }
+		public required int CommentsCount { get; init; }
+		public required int Score { get; init; }
+		public required ContentBlockCard? ContentBlock { get; init; }
 	}
 
 	public class ChapterBasicDto
 	{
-		public long Id { get; init; }
-		public string Slug { get; init; } = null!;
-		public string Title { get; init; } = null!;
-		public DateTime PublishDate { get; init; }
-		public bool IsPublished { get; init; }
-		public bool IsBlocked { get; init; }
-		public int WordCount { get; init; }
+		public required long Id { get; init; }
+		public required string Slug { get; init; }
+		public required string Title { get; init; }
+		public required DateTime PublishDate { get; init; }
+		public required bool IsPublished { get; init; }
+		public required bool IsBlocked { get; init; }
+		public required int WordCount { get; init; }
 	}
 
-	public StoryDetails Story { get; private set; } = null!;
-	public ProfileBar ProfileBar { get; private set; } = null!;
+	public required StoryDetails Story { get; set; }
+	public required ProfileBar ProfileBar { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id, string? slug)
 	{
 		var uid = User.GetNumericId();
 
-		var story = await _context.Stories
+		var story = await context.Stories
 			.TagWith($"Fetching story {id} — {slug}")
 			.Where(s => s.Id == id)
 			.Where(s => s.PublicationDate != null || s.AuthorId == uid)
@@ -83,8 +71,12 @@ public class StoryModel : PageModel
 
 		Story = story;
 
-		ProfileBar = await _userRepo.GetProfileBar(Story.AuthorId);
+		var profileBar = await userRepo.GetProfileBar(Story.AuthorId);
 
+		if (profileBar is null) return NotFound();
+
+		ProfileBar = profileBar;
+		
 		return Page();
 	}
 
@@ -101,13 +93,10 @@ public class StoryModel : PageModel
 		Status = s.Status,
 		AuthorId = s.AuthorId,
 		WordCount = s.WordCount,
-		// FullWordCount = s.AuthorId == uid ? s.Chapters.Sum(c => c.WordCount) : 0,
 		ChaptersCount = s.Chapters.Count,
-		// FullChaptersCount = s.AuthorId == uid ? s.Chapters.Count : 0,
 		CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
 		IsPublished = s.PublicationDate != null,
 		ReleaseDate = s.PublicationDate ?? s.CreationDate,
-		// CreationDate = s.CreationDate,
 		ContentBlock = s.ContentBlock == null
 			? null
 			: new ContentBlockCard

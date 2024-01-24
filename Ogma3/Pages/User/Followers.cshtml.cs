@@ -14,39 +14,30 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public class Followers : PageModel
+public class Followers(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+	: PageModel
 {
 	private const int PerPage = 25;
 
-	private readonly UserRepository _userRepo;
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-
-	public Followers(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
-	{
-		_userRepo = userRepo;
-		_context = context;
-		_mapper = mapper;
-	}
-
-	public ProfileBar ProfileBar { get; private set; }
-	public Pagination Pagination { get; private set; }
-	public List<UserCard> Users { get; private set; }
+	public required ProfileBar ProfileBar { get; set; }
+	public required Pagination Pagination { get; set; }
+	public required List<UserCard> Users { get; set; }
 
 	public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page = 1)
 	{
-		ProfileBar = await _userRepo.GetProfileBar(name);
-		if (ProfileBar is null) return NotFound();
+		var profileBar = await userRepo.GetProfileBar(name);
+		if (profileBar is null) return NotFound();
+		ProfileBar = profileBar;
 
-		Users = await _context.FollowedUsers
+		Users = await context.FollowedUsers
 			.Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
 			.Select(u => u.FollowedUser)
 			.Paginate(page, PerPage)
-			.ProjectTo<UserCard>(_mapper.ConfigurationProvider)
+			.ProjectTo<UserCard>(mapper.ConfigurationProvider)
 			.AsNoTracking()
 			.ToListAsync();
 
-		var count = await _context.Users
+		var count = await context.Users
 			.Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
 			.Select(u => u.Followers)
 			.CountAsync();
