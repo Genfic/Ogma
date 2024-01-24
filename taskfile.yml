@@ -37,6 +37,9 @@ tasks:
 
     # Serve via Ngrok
     serve: ngrok http https://localhost:5001 -host-header="localhost:5001"
+    
+    # Serve via Cloudflare Tunnel (see Documentation/Testing/public-access.md)
+    tunnel: cloudflared tunnel run genfic-beta
 
     # Get Lighthouse CLI score
     score: lighthouse https://localhost:5001 --view

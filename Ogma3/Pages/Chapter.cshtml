@@ -1,8 +1,8 @@
 ﻿@page "/story/{sid}/chapter/{id}/{slug?}"
-@using Ogma3.Infrastructure.Extensions
 @using System.Globalization
-@using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
+@using Ogma3.Infrastructure.Constants
+@using Ogma3.Infrastructure.Extensions
 @model ChapterModel
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
@@ -134,5 +134,5 @@
 
 @section Scripts
 {
-	<script src="~/js/dist/watch-chapter.read.js" async asp-append-version="true"></script>
+	<script src="~/js/dist/watch-chapter-read.js" async asp-append-version="true"></script>
 }

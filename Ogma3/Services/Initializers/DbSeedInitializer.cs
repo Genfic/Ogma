@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Extensions.Hosting.AsyncInitialization;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Icons;
@@ -18,14 +21,15 @@ using Serilog;
 
 namespace Ogma3.Services.Initializers;
 
-public abstract class DbSeedInitializer : IAsyncInitializer
+[UsedImplicitly]
+public class DbSeedInitializer : IAsyncInitializer
 {
 	private readonly ApplicationDbContext _context;
 	private readonly OgmaUserManager _userManager;
 
 	private readonly JsonData _data;
 
-	protected DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager)
+	public DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager)
 	{
 		_context = context;
 		_userManager = userManager;
@@ -100,13 +104,9 @@ public abstract class DbSeedInitializer : IAsyncInitializer
 		if (await _context.Quotes.AnyAsync()) return;
 
 		using var hc = new HttpClient();
-		var json = await hc.GetStringAsync(_data.QuotesUrl);
+		var json = await hc.GetFromJsonAsync<ICollection<JsonQuote>>(_data.QuotesUrl);
 
-		if (string.IsNullOrEmpty(json)) return;
-
-		var quotes = JsonSerializer
-			.Deserialize<ICollection<JsonQuote>>(json)
-			?.Select(q => new Quote { Body = q.Quote, Author = q.Author });
+		var quotes = json?.Select(q => new Quote { Body = q.Quote, Author = q.Author });
 
 		if (quotes is null) return;
 
@@ -115,13 +115,14 @@ public abstract class DbSeedInitializer : IAsyncInitializer
 		await _context.SaveChangesAsync();
 	}
 
-	private async Task BulkUpsert<TEntity, TKey>(DbSet<TEntity> source, IEnumerable<TEntity> entries, Func<TEntity, TKey> extractor) where TEntity : class
+	private async Task BulkUpsert<TEntity, TKey>(DbSet<TEntity> source, IEnumerable<TEntity> entries, Expression<Func<TEntity, TKey>> extractor) where TEntity : class
 	{
 		var existing = await source
-			.Select(x => extractor(x))
+			.Select(extractor)
 			.ToListAsync();
 
-		var toAdd = entries.ExceptBy(existing, extractor);
+		var exceptor = extractor.Compile();
+		var toAdd = entries.ExceptBy(existing, exceptor);
 		
 		source.AddRange(toAdd);
 
