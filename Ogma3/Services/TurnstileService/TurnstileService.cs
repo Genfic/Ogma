@@ -39,7 +39,7 @@ public class TurnstileService(
 			throw new ValidationException($"Turnstile response returned HTTP code {response.StatusCode}");
 		}
 
-		var data = JsonSerializer.Deserialize<TurnstileResult>(content);
+		var data = JsonSerializer.Deserialize(content, TurnstileResultContext.Default.TurnstileResult);
 
 		if (data is not null) return data;
 		

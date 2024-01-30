@@ -10,21 +10,15 @@ namespace Ogma3.Data;
 
 public class OgmaConfig
 {
-	private readonly JsonSerializerOptions _serializerOptions = new()
-	{
-		WriteIndented = true
-	};
-
-	[JsonIgnore]
-	private string PersistentFileLocation { get; set; }
+	[JsonIgnore] private string _persistentFileLocation = string.Empty;
 
 	/// <summary>
 	/// Persist `this` in a file
 	/// </summary>
 	public void Persist()
 	{
-		using var sw = new StreamWriter(PersistentFileLocation);
-		var json = JsonSerializer.Serialize(this, _serializerOptions);
+		using var sw = new StreamWriter(_persistentFileLocation);
+		var json = JsonSerializer.Serialize(this, OgmaConfigJsonContext.Default.OgmaConfig);
 		sw.Write(json);
 	}
 
@@ -33,8 +27,8 @@ public class OgmaConfig
 	/// </summary>
 	public async Task PersistAsync()
 	{
-		await using var sw = new StreamWriter(PersistentFileLocation);
-		var json = JsonSerializer.Serialize(this, _serializerOptions);
+		await using var sw = new StreamWriter(_persistentFileLocation);
+		var json = JsonSerializer.Serialize(this, OgmaConfigJsonContext.Default.OgmaConfig);
 		await sw.WriteAsync(json);
 	}
 
@@ -46,8 +40,8 @@ public class OgmaConfig
 	public static OgmaConfig Init(string persistentFileLocation)
 	{
 		using var sr = new StreamReader(persistentFileLocation);
-		var config = JsonSerializer.Deserialize<OgmaConfig>(sr.ReadToEnd()) ?? new OgmaConfig();
-		config.PersistentFileLocation = persistentFileLocation;
+		var config = JsonSerializer.Deserialize(sr.ReadToEnd(), OgmaConfigJsonContext.Default.OgmaConfig) ?? new OgmaConfig();
+		config._persistentFileLocation = persistentFileLocation;
 		return config;
 	}
 
@@ -79,3 +73,7 @@ public class OgmaConfig
 
 	[AutoformCategory("Moderation")] public int MinReportLength { get; set; } = 30;
 }
+
+[JsonSerializable(typeof(OgmaConfig))]
+[JsonSourceGenerationOptions(WriteIndented = true)]
+public partial class OgmaConfigJsonContext : JsonSerializerContext;

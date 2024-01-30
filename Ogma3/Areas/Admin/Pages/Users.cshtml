@@ -1,8 +1,6 @@
 @page
-@using System.Text.Json
 @using Ogma3.Api.V1.Infractions
 @using Ogma3.Api.V1.Users
-@using Ogma3.Data.Infractions
 @model Users
 
 @{
@@ -101,7 +99,7 @@
 	<manage-infraction
 		ref="manage"
 		route="@Url.RouteUrl(nameof(InfractionsController))"
-		:types="@(JsonSerializer.Serialize(Enum.GetNames<InfractionType>()))"
+		:types="@Model.InfractionNamesJson"
 		:user-id="@Model.OgmaUser.Id">
 	</manage-infraction>
 }

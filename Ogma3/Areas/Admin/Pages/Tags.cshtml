@@ -1,8 +1,5 @@
 ﻿@page
 @using Ogma3.Data.Tags
-@using System.Text.Json
-@using Ogma3.Api.V1.Tags
-@using Ogma3.Data
 @model Tags
 
 @{
@@ -62,18 +59,7 @@
 	</li>
 </ul>
 
-<div v-if="!route" id="static-data">
-	@JsonSerializer.Serialize(new
-	{
-		Route = Url.RouteUrl(nameof(TagsController)),
-		Validation = new
-		{
-			CTConfig.CTag.MinNameLength,
-			CTConfig.CTag.MaxNameLength,
-			CTConfig.CTag.MaxDescLength
-		}
-	})
-</div>
+<div v-if="!route" id="static-data">@Model.StaticDataJson</div>
 
 @section Scripts
 {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,7 +16,8 @@ public class Users(ApplicationDbContext context) : PageModel
 {
 	public required UserDetailsDto? OgmaUser { get; set; }
 	public required List<RoleDto> Roles { get; set; }
-	
+	public string InfractionNamesJson =>
+		JsonSerializer.Serialize(InfractionTypeExtensions.GetNames(), InfractionNamesJsonContext.Default.StringArray);
 
 	public async Task<ActionResult> OnGet([FromQuery] string? name)
 	{
@@ -30,7 +33,7 @@ public class Users(ApplicationDbContext context) : PageModel
 		{
 			query = query.Where(u => u.NormalizedUserName == name.ToUpperInvariant());
 		}
-		
+
 		OgmaUser = await query.Select(u => new UserDetailsDto
 			{
 				Id = u.Id,
@@ -59,9 +62,9 @@ public class Users(ApplicationDbContext context) : PageModel
 					.ToList()
 			})
 			.FirstOrDefaultAsync();
-		
+
 		if (OgmaUser is null) return NotFound();
-		
+
 		Roles = await context.Roles
 			.Select(r => new RoleDto(r.Id, r.Name))
 			.ToListAsync();
@@ -97,3 +100,6 @@ public class Users(ApplicationDbContext context) : PageModel
 
 	public sealed record RoleDto(long Id, string Name);
 }
+
+[JsonSerializable(typeof(string[]))]
+public partial class InfractionNamesJsonContext : JsonSerializerContext;

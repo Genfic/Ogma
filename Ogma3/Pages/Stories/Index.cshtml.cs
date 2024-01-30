@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -19,28 +21,25 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
-	public required IEnumerable<long> Tags { get; set; }
+	public required long[] Tags { get; set; }
 	public required EStorySortingOptions SortBy { get; set; }
 	public required string? SearchBy { get; set; }
 	public required long? Rating { get; set; }
 	public required Pagination Pagination { get; set; }
+	public string PreselectedTagsJson => JsonSerializer.Serialize(Tags, PreselectedTagsJsonContext.Default.Int64Array);
 
 	// TODO: See if this can be used?
-	private record QueryData(
+	public record QueryData(
 		long[] Tags,
 		string? Query = null,
 		EStorySortingOptions Sort = EStorySortingOptions.DateDescending,
 		long? Rating = null,
 		int Page = 1);
 	
-	public async Task OnGetAsync(
-		[FromQuery] IList<long> tags,
-		[FromQuery] string? q = null,
-		[FromQuery] EStorySortingOptions sort = EStorySortingOptions.DateDescending,
-		[FromQuery] long? rating = null,
-		[FromQuery] int page = 1
-	)
+	public async Task OnGetAsync([FromQuery] QueryData query)
 	{
+		var (tags, q, sort, rating, page) = query;
+		
 		var uid = User.GetNumericId();
 
 		SearchBy = q;
@@ -52,14 +51,14 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 		Ratings = await context.Ratings.ToListAsync();
 
 		// Load stories
-		var query = context.Stories
+		var storiesQuery = context.Stories
 			.AsQueryable()
 			.Search(tags, q, rating)
 			.Where(s => s.PublicationDate != null)
 			.Where(s => s.ContentBlockId == null)
 			.Blacklist(context, uid);
 
-		Stories = await query
+		Stories = await storiesQuery
 			.SortByEnum(sort)
 			.Paginate(page, config.StoriesPerPage)
 			.ProjectTo<StoryCard>(mapper.ConfigurationProvider)
@@ -70,8 +69,11 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 		Pagination = new Pagination
 		{
 			PerPage = config.StoriesPerPage,
-			ItemCount = await query.CountAsync(),
+			ItemCount = await storiesQuery.CountAsync(),
 			CurrentPage = page
 		};
 	}
 }
+
+[JsonSerializable(typeof(long[]))]
+public partial class PreselectedTagsJsonContext : JsonSerializerContext;

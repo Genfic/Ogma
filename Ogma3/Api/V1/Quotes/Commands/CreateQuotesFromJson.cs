@@ -1,15 +1,15 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.MediatR.Bases;
-using Serilog;
 
 namespace Ogma3.Api.V1.Quotes.Commands;
 
@@ -17,29 +17,23 @@ public static class CreateQuotesFromJson
 {
 	public sealed record Command(Stream Data) : IRequest<ActionResult<Response>>;
 
-	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	public class CreateQuoteHandler(ApplicationDbContext context, ILogger<CreateQuoteHandler> logger)
+		: BaseHandler, IRequestHandler<Command, ActionResult<Response>>
 	{
-		private readonly ApplicationDbContext _context;
-
-		public CreateQuoteHandler(ApplicationDbContext context)
-		{
-			_context = context;
-		}
-
 		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var data = await JsonSerializer.DeserializeAsync<IEnumerable<Quote>>(request.Data, cancellationToken: cancellationToken);
+			var data = await JsonSerializer.DeserializeAsync(request.Data, QuoteJsonContext.Default.QuoteArray, cancellationToken);
 			if (data is null) return BadRequest();
 
-			_context.Quotes.AddRange(data);
+			context.Quotes.AddRange(data);
 			try
 			{
-				var insertedRows = await _context.SaveChangesAsync(cancellationToken);
+				var insertedRows = await context.SaveChangesAsync(cancellationToken);
 				return Ok(new Response(insertedRows));
 			}
 			catch (DbUpdateException ex)
 			{
-				Log.Error("Bulk Insert error in {Src}: {Msg}", ex.Source, ex.Message);
+				logger.LogError("Bulk Insert error in {Src}: {Msg}", ex.Source, ex.Message);
 				return ServerError("Database Bulk Insert Error");
 			}
 		}
@@ -47,3 +41,7 @@ public static class CreateQuotesFromJson
 
 	public sealed record Response(int InsertedRows);
 }
+
+[JsonSerializable(typeof(Quote[]))]
+[JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
+public partial class QuoteJsonContext : JsonSerializerContext;

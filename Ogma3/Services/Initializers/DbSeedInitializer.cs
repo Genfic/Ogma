@@ -1,23 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Extensions.Hosting.AsyncInitialization;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Icons;
 using Ogma3.Data.Quotes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Roles;
 using Ogma3.Infrastructure.Constants;
-using Serilog;
 
 namespace Ogma3.Services.Initializers;
 
@@ -26,16 +28,20 @@ public class DbSeedInitializer : IAsyncInitializer
 {
 	private readonly ApplicationDbContext _context;
 	private readonly OgmaUserManager _userManager;
+	private readonly ILogger<DbSeedInitializer> _logger;
+	private readonly IHttpClientFactory _clientFactory;
 
 	private readonly JsonData _data;
 
-	public DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager)
+	public DbSeedInitializer(ApplicationDbContext context, OgmaUserManager userManager, ILogger<DbSeedInitializer> logger, IHttpClientFactory clientFactory)
 	{
 		_context = context;
 		_userManager = userManager;
+		_logger = logger;
+		_clientFactory = clientFactory;
 
 		using var sr = new StreamReader("seed.json");
-		var data = JsonSerializer.Deserialize<JsonData>(sr.ReadToEnd());
+		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
 
 		if (data is not null)
 		{
@@ -43,21 +49,25 @@ public class DbSeedInitializer : IAsyncInitializer
 		}
 		else
 		{
-			Log.Fatal("Could not read seed.json file to seed the database");
+			_logger.LogCritical("Could not read seed.json file to seed the database");
 			throw new NullReferenceException("Json data was null");
 		}
 	}
 
-	private sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
-
 
 	public async Task InitializeAsync(CancellationToken ct)
 	{
+		var timer = new Stopwatch();
+		timer.Start();
+		
 		await SeedRoles();
 		await SeedUserRoles();
 		await SeedRatings();
 		await SeedIcons();
 		await SeedQuotes();
+		
+		timer.Stop();
+		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);
 	}
 
 
@@ -103,8 +113,8 @@ public class DbSeedInitializer : IAsyncInitializer
 	{
 		if (await _context.Quotes.AnyAsync()) return;
 
-		using var hc = new HttpClient();
-		var json = await hc.GetFromJsonAsync<ICollection<JsonQuote>>(_data.QuotesUrl);
+		using var hc = _clientFactory.CreateClient();
+		var json = await hc.GetFromJsonAsync(_data.QuotesUrl, JsonQuoteContext.Default.JsonQuoteArray);
 
 		var quotes = json?.Select(q => new Quote { Body = q.Quote, Author = q.Author });
 
@@ -128,7 +138,14 @@ public class DbSeedInitializer : IAsyncInitializer
 
 		await _context.SaveChangesAsync();
 	}
-
-	// ReSharper disable once ClassNeverInstantiated.Local
-	private sealed record JsonQuote(string Quote, string Author);
 }
+
+public sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
+
+[JsonSerializable(typeof(JsonData))]
+public partial class JsonDataContext : JsonSerializerContext;
+
+public sealed record JsonQuote(string Quote, string Author);
+
+[JsonSerializable(typeof(JsonQuote[]))]
+public partial class JsonQuoteContext : JsonSerializerContext;

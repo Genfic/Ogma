@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
-using JetBrains.Annotations;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.FileProviders;
@@ -17,48 +22,52 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 	
 	private readonly IFileProvider _fileProvider = environment.WebRootFileProvider;
 	private readonly string _manifestPath = Path.Join(Root, "manifest.js.json");
-
-	private sealed record Manifest([UsedImplicitly]DateTime GeneratedAt, [UsedImplicitly]Dictionary<string, string> Files);
-
+	
 	public void Generate(params string[] directories)
 	{
+		var stopwatch = new Stopwatch();
+		stopwatch.Start();
+		
+		// We're using static logging here because the generator is not a part of the DI container and thus, we cannot inject it
 		Log.Information("Preparing JS manifest");
 		
-		Dictionary<string, string> filesAndHashes = new();
+		ConcurrentDictionary<string, string> filesAndHashes = new();
 
-		var files = new List<string>();
-
-		foreach (var directory in directories)
-		{
-			files.AddRange(Directory.GetFiles(Path.Join(Root, directory.Replace(Root, "")), "*.js", SearchOption.AllDirectories));
-		}
+		var files = directories
+			.SelectMany(directory => Directory.GetFiles(Path.Join(Root, directory.Replace(Root, "")), "*.js", SearchOption.AllDirectories))
+			.Select(file => file.Replace(Root, "").Replace('\\', '/'))
+			.ToImmutableList();
 		
 		if (files.Count <= 0)
 		{
 			Log.Information("\t📃 No files found");
 			return;
 		}
-		
-		foreach (var file in files)
+
+		_ = Parallel.ForEach(files, file =>
 		{
-			var subpath = file.Replace(Root, "").Replace('\\', '/');
-			var fileInfo = _fileProvider.GetFileInfo(subpath);
+			var fileInfo = _fileProvider.GetFileInfo(file);
 			if (fileInfo.Exists)
 			{
 				var hash = GetHashForFile(fileInfo);
-				filesAndHashes.Add(subpath, hash);
-				Log.Verbose("\t📃 File {FileName} was found with hash {Hash}", subpath, hash);
+				_ = filesAndHashes.TryAdd(file, hash);
+				Log.Verbose("\t📃 File {FileName} was found with hash {Hash}", file, hash);
 			}
 			else
 			{
-				Log.Verbose("\t📃 File {Filename} does not exist", file);
+				Log.Information("\t📃 File {Filename} does not exist", file);
 			}
-		}
+		});
 
-		var manifest = JsonSerializer.Serialize(new Manifest(DateTime.UtcNow, filesAndHashes));
+		var manifest = JsonSerializer.Serialize(new Manifest(DateTime.UtcNow, filesAndHashes.ToDictionary()), ManifestJsonContext.Default.Manifest);
 		File.WriteAllText(_manifestPath, manifest);
 		
-		Log.Information("Manifest ready. {FilesFound} files out of {AllFiles} were found.", filesAndHashes.Count, files.Count);
+		stopwatch.Stop();
+		Log.Information("Manifest ready ({Time} ms). {FilesFound} files out of {AllFiles} were found.", stopwatch.ElapsedMilliseconds, filesAndHashes.Count, files.Count);
+		if (files.Except(filesAndHashes.Keys).Any())
+		{
+			Log.Information("Files missing from the manifest: {Files}", files.Except(filesAndHashes.Keys));
+		}
 	}
 	
 	private static string GetHashForFile(IFileInfo fileInfo)
@@ -68,3 +77,8 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 		return WebEncoders.Base64UrlEncode(hash);
 	}
 }
+
+public sealed record Manifest(DateTime GeneratedAt, Dictionary<string, string> Files);
+
+[JsonSerializable(typeof(Manifest))]
+public partial class ManifestJsonContext : JsonSerializerContext;
