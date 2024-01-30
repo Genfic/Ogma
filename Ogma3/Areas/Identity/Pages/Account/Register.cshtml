@@ -1,9 +1,8 @@
 ﻿@page "/register"
-@inject IOptions<RecaptchaSettings> RecaptchaSettings
-@using reCAPTCHA.AspNetCore
-@using reCAPTCHA.AspNetCore.Templates
+@inject IOptions<TurnstileSettings> TurnstileSettings
 @using Microsoft.Extensions.Options
 @using Ogma3.Data
+@using Ogma3.Services.TurnstileService
 @model RegisterModel
 @{
 	ViewData["Title"] = "Register";
@@ -61,8 +60,8 @@
 				<span asp-validation-for="Input.InviteCode" class="text-danger"></span>
 				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our Discord!</aside>
 			</div>
-
-			@(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
+			
+			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register"></div>
 
 			<button type="submit" class="btn btn-primary">Register</button>
 		</form>
@@ -91,6 +90,7 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial"/>
 	<script src="~/js/dist/account/register.js" asp-append-version="true"></script>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 }
 
 @section CSS {

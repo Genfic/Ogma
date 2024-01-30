@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -43,8 +44,8 @@ using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
+using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
-using reCAPTCHA.AspNetCore;
 using Serilog;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -164,11 +165,11 @@ public class Startup
 
 		// File uploader
 		services.AddSingleton<ImageUploader>();
-
-		// ReCaptcha
+		
+		// Turnstile
 		services
-			.AddTransient<IRecaptchaService, RecaptchaService>()
-			.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
+			.AddTransient<ITurnstileService, TurnstileService>()
+			.Configure<TurnstileSettings>(Configuration.GetSection(TurnstileSettings.Section));
 
 		// Seeding
 		services.AddAsyncInitializer<DbSeedInitializer>();
@@ -286,6 +287,12 @@ public class Startup
 			app.UseHsts();
 		}
 
+		// Forward the IP
+		app.UseForwardedHeaders(new ForwardedHeadersOptions
+		{
+			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+		});
+		
 		// Handle errors
 		app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"),
 			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/api/error?code={0}"); });

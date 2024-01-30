@@ -1,8 +1,7 @@
 ﻿@page "/confirmation"
-@inject IOptions<RecaptchaSettings> RecaptchaSettings
-@using reCAPTCHA.AspNetCore
-@using reCAPTCHA.AspNetCore.Templates
+@inject IOptions<TurnstileSettings> TurnstileSettings
 @using Microsoft.Extensions.Options
+@using Ogma3.Services.TurnstileService
 @model RegisterConfirmationModel
 @{
 	ViewData["Title"] = "Register confirmation";
@@ -16,6 +15,12 @@
 
 <form method="post">
 	<input type="hidden" value="@Model.Email">
-	@(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
+			
+	
+	<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register confirmation"></div>
 	<button class="btn btn-primary">Resend email</button>
 </form>
+
+@section Scripts {
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+}
