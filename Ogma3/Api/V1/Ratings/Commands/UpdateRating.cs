@@ -14,7 +14,6 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.MediatR.Bases;
 using Ogma3.Services.FileUploader;
-using Utils.Extensions;
 
 namespace Ogma3.Api.V1.Ratings.Commands;
 
@@ -74,7 +73,7 @@ public static class UpdateRating
 					await _uploader.Delete(rating.Icon, rating.IconId, cancellationToken);
 				}
 
-				var fileData = await _uploader.Upload(formFile, "ratings", name.Friendlify().ToUpper());
+				var fileData = await _uploader.Upload(formFile, "ratings");
 				rating.Icon = Path.Join(_ogmaConfig.Cdn, fileData.Path);
 				rating.IconId = fileData.FileId;
 			}

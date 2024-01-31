@@ -28,7 +28,6 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 	public required Pagination Pagination { get; set; }
 	public string PreselectedTagsJson => JsonSerializer.Serialize(Tags, PreselectedTagsJsonContext.Default.Int64Array);
 
-	// TODO: See if this can be used?
 	public record QueryData(
 		long[] Tags,
 		string? Query = null,
