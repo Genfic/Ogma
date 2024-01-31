@@ -80,7 +80,9 @@ public class Startup
 		var npgSourceBuilder = new NpgsqlDataSourceBuilder(conn);
 		var source = npgSourceBuilder.MapPostgresEnums().Build();
 		services
-			.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(source))
+			.AddDbContext<ApplicationDbContext>(options => options
+				.UseNpgsql(source)
+				.UseModel(CompiledModels.ApplicationDbContextModel.Instance))
 			.AddDatabaseDeveloperPageExceptionFilter();
 
 		// Repositories
@@ -165,7 +167,7 @@ public class Startup
 
 		// File uploader
 		services.AddSingleton<ImageUploader>();
-		
+
 		// Turnstile
 		services
 			.AddTransient<ITurnstileService, TurnstileService>()
@@ -180,7 +182,7 @@ public class Startup
 		// Auth
 		services.AddAuthorizationBuilder()
 			.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-		
+
 		// Cookies
 		services.ConfigureApplicationCookie(options =>
 		{
@@ -211,10 +213,7 @@ public class Startup
 		// Razor
 		services
 			.AddRazorPages()
-			.AddRazorPagesOptions(options =>
-			{
-				options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole");
-			})
+			.AddRazorPagesOptions(options => { options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole"); })
 			.AddRazorRuntimeCompilation();
 
 		// MVC
@@ -292,7 +291,7 @@ public class Startup
 		{
 			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 		});
-		
+
 		// Handle errors
 		app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"),
 			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/api/error?code={0}"); });
