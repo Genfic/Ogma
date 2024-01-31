@@ -18,13 +18,10 @@ public static class GetRandom
 		public async Task<ActionResult<QuoteDto>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var quote = await context.Database.SqlQueryRaw<QuoteDto>("""
-			    	SELECT q."Author", q."Body"
-			    	FROM "Quotes" q
-			    	OFFSET floor(random() * (
-			    	    SELECT count(*)
-			    	    FROM "Quotes"
-			    	))
-			    	LIMIT 1
+			    SELECT q."Author", q."Body"
+			    FROM "Quotes" q
+			    TABLESAMPLE bernoulli(.5)
+			    LIMIT 1
 			    """)
 				.FirstOrDefaultAsync(cancellationToken);
 

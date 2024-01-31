@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,24 +16,19 @@ public static class UpdateLastActive
 {
 	public sealed record Command : IRequest<ActionResult<int>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<int>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<int>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async Task<ActionResult<int>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var res = await _context.Database.ExecuteSqlInterpolatedAsync(
-				$"""UPDATE "AspNetUsers" SET "LastActive" = {DateTime.Now.ToUniversalTime()} WHERE "Id" = {_uid}""",
+			if (userService.User?.GetNumericId() is not { } uid) return NotFound();
+			
+			var rows = await context.Users
+				.Where(u => u.Id == uid)
+				.ExecuteUpdateAsync(
+				setters => setters.SetProperty(u => u.LastActive, DateTime.Now.ToUniversalTime()),
 				cancellationToken
 			);
-			return Ok(res);
+			return Ok(rows);
 		}
 	}
 }

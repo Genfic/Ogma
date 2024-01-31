@@ -53,24 +53,22 @@ public class DbSeedInitializer : IAsyncInitializer
 			throw new NullReferenceException("Json data was null");
 		}
 	}
-
-
+	
 	public async Task InitializeAsync(CancellationToken ct)
 	{
 		var timer = new Stopwatch();
 		timer.Start();
 		
-		await SeedRoles();
-		await SeedUserRoles();
-		await SeedRatings();
-		await SeedIcons();
-		await SeedQuotes();
+		await Time(SeedRoles, nameof(SeedRoles));
+		await Time(SeedUserRoles, nameof(SeedUserRoles));
+		await Time(SeedRatings, nameof(SeedRatings));
+		await Time(SeedIcons, nameof(SeedIcons));
+		await Time(SeedQuotes, nameof(SeedQuotes));
 		
 		timer.Stop();
 		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);
 	}
-
-
+	
 	private async Task SeedRoles()
 	{
 		var roles = new[]
@@ -117,7 +115,6 @@ public class DbSeedInitializer : IAsyncInitializer
 		var json = await hc.GetFromJsonAsync(_data.QuotesUrl, JsonQuoteContext.Default.JsonQuoteArray);
 
 		var quotes = json?.Select(q => new Quote { Body = q.Quote, Author = q.Author });
-
 		if (quotes is null) return;
 
 		_context.Quotes.AddRange(quotes);
@@ -137,6 +134,17 @@ public class DbSeedInitializer : IAsyncInitializer
 		source.AddRange(toAdd);
 
 		await _context.SaveChangesAsync();
+	}
+
+	private async Task Time(Func<Task> func, string name)
+	{
+		var stopwatch = new Stopwatch();
+		stopwatch.Start();
+
+		await func();
+		
+		stopwatch.Stop();
+		_logger.LogInformation("{Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
 	}
 }
 

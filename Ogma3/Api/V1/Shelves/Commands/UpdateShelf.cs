@@ -42,29 +42,21 @@ public static class UpdateShelf
 		}
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<ShelfDto>>
+	public class Handler(ApplicationDbContext context, IUserService userService)
+		: BaseHandler, IRequestHandler<Command, ActionResult<ShelfDto>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async Task<ActionResult<ShelfDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 
 			var (id, name, description, isQuickAdd, isPublic, trackUpdates, color, icon) = request;
 
-			var shelf = await _context.Shelves
+			var shelf = await context.Shelves
 				.Where(s => s.Id == id)
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (shelf is null) return NotFound();
-			if (shelf.OwnerId != _uid) return Unauthorized();
+			if (shelf.OwnerId != uid) return Unauthorized();
 
 			shelf.Name = name;
 			shelf.Description = description;
@@ -74,7 +66,7 @@ public static class UpdateShelf
 			shelf.Color = color;
 			shelf.IconId = icon;
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			// TODO: Do we need this? Without it, we could just use .ExecuteUpdateAsync() instead of multiple db calls
 			return CreatedAtAction(

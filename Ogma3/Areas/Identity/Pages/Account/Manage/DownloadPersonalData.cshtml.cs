@@ -1,53 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Ogma3.Data;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public class DownloadPersonalDataModel(
-	UserManager<OgmaUser> userManager,
+	ApplicationDbContext context,
 	ILogger<DownloadPersonalDataModel> logger)
 	: PageModel
 {
-	private static IEnumerable<PropertyInfo>? _personalProperties;
-	
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var user = await userManager.GetUserAsync(User);
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
+		
+		var user = await context.Users
+			.Where(u => u.Id == uid)
+			.ProjectToDto()
+			.FirstOrDefaultAsync();
+		
 		if (user is null)
 		{
-			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			return NotFound($"Unable to load user with ID {uid}.");
 		}
 
-		logger.LogInformation("User with ID '{UserId}' asked for their personal data", userManager.GetUserId(User));
+		logger.LogInformation("User with ID {UserId} asked for their personal data", uid);
 
-		// Only include personal data for download
-		// TODO: Write a source generator to handle this
-		_personalProperties ??= typeof(OgmaUser)
-			.GetProperties()
-			.Where(prop => !prop.Name.Contains("phone", StringComparison.CurrentCultureIgnoreCase))
-			.Where(prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
-
-		var personalData = _personalProperties
-			.ToDictionary(p => p.Name, p => p.GetValue(user)?.ToString() ?? "null");
-
-		var json = JsonSerializer.Serialize(personalData, PersonalDataDictionaryJsonContext.Default.DictionaryStringString);
+		var json = JsonSerializer.Serialize(user, UserPersonalDataJsonContext.Default.UserPersonalData);
 		
 		Response.Headers.ContentDisposition = "attachment; filename=PersonalData.json";
 		return new FileContentResult(Encoding.UTF8.GetBytes(json), "text/json");
 	}
 }
 
-[JsonSerializable(typeof(Dictionary<string, string>))]
+[JsonSerializable(typeof(UserPersonalData))]
 [JsonSourceGenerationOptions(WriteIndented = true)]
-public partial class PersonalDataDictionaryJsonContext : JsonSerializerContext;
+public partial class UserPersonalDataJsonContext : JsonSerializerContext;

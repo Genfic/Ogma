@@ -15,23 +15,14 @@ public static class CountUserNotifications
 {
 	public sealed record Query : IRequest<ActionResult<int>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<int>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Query, ActionResult<int>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async Task<ActionResult<int>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return NotFound();
 
-			var count = await _context.NotificationRecipients
-				.Where(nr => nr.RecipientId == (long)_uid)
+			var count = await context.NotificationRecipients
+				.Where(nr => nr.RecipientId == uid)
 				.CountAsync(cancellationToken);
 
 			return Ok(count);
