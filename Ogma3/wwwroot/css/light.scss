@@ -1,0 +1,31 @@
+@use "./src/mixins/generators" as a;
+
+// Variables
+$foreground: #131313;
+$background: #efefef;
+$accent: #0890ff;
+
+$gold: #d5900e;
+$red: #ff4848;
+$green: #38ff38;
+$blue: #4283ff;
+$yellow: #ffff3e;
+
+:root {
+	@include a.alphas('foreground', $foreground, 1, .75, .50, .25, .10);
+	@include a.alphas('background', $background, 1, .75, .50, .25);
+	@include a.alphas('accent', $accent, 1, .75, .50, .25, .10, .05);
+	
+	@include a.alphas('red', $red, 1, .75, .50, .25, .10);
+	@include a.alphas('green', $green, 1, .75, .50, .25, .10);
+	@include a.alphas('blue', $blue, 1, .75, .50, .25, .10);
+	@include a.alphas('yellow', $yellow, 1, .75, .50, .25, .10);
+	
+	@include a.blends('red', $background, $red, 100, 75, 50, 25, 10);
+	@include a.blends('green', $background, $green, 100, 75, 50, 25, 10);
+	@include a.blends('blue', $background, $blue, 100, 75, 50, 25, 10);
+	@include a.blends('yellow', $background, $yellow, 100, 75, 50, 25, 10);
+	
+	--gold: #{$gold};
+	--ele-1: #{lighten($background, 2)};
+}

@@ -484,11 +484,11 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\bundle\components.js.map" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="wwwroot\css\style.sass">
+    <Content Update="wwwroot\css\style.scss">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="wwwroot\css\dark.sass">
+    <Content Update="wwwroot\css\dark.scss">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -630,7 +630,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="wwwroot\css\src\vars.sass">
+    <Content Update="wwwroot\css\src\vars.scss">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -642,7 +642,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="wwwroot\css\src\mixins\active-border.sass">
+    <Content Update="wwwroot\css\src\mixins\active-border.scss">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

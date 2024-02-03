@@ -1,0 +1,142 @@
+@use '../vars' as v;
+@use "../mixins/focus" as f;
+@use "../mixins/active-border" as ab;
+
+$notes-padding-x: .5rem;
+$notes-padding-y: .25rem;
+
+.chapter-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow-anchor: auto;
+
+	.navigation {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto;
+		gap: .5rem;
+		width: 100%;
+		margin-top: 1rem;
+
+		a {
+			display: flex;
+			flex-direction: column;
+			padding: .5rem;
+			@include f.focus;
+
+			.action {
+				font-weight: bold;
+			}
+
+			.title {
+				font-style: italic;
+				color: v.$foreground;
+
+				&:before, &:after {
+					color: v.$foreground-50;
+				}
+
+				&:before {
+					content: '❝';
+					margin-right: .2rem;
+				}
+
+				&:after {
+					content: '❞';
+				}
+
+				@media screen and (max-width: v.$mq-mobile-sm) {
+					display: none;
+				}
+			}
+
+			&.previous {
+				grid-column: 1;
+			}
+
+			&.next {
+				grid-column: 2;
+				text-align: right;
+			}
+		}
+	}
+}
+
+.chapter-details {
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+
+	> a.story {
+		margin: auto;
+		position: relative;
+		text-align: center;
+		font-style: italic;
+		color: v.$foreground-75;
+		text-decoration: underline;
+
+		&:hover:before {
+			content: '';
+			display: block;
+			position: absolute;
+			width: .5rem;
+			height: .5rem;
+			transform: rotate(135deg);
+			border: solid black;
+			border-width: 0 1px 1px 0;
+			bottom: .4rem;
+			left: -.5rem;
+		}
+	}
+
+	> h1.title {
+		text-align: center;
+		margin: .5rem;
+	}
+
+	> .date {
+		text-align: center;
+		margin: 0;
+
+		&.not-published {
+			color: v.$red;
+		}
+	}
+
+	& .actions {
+		display: flex;
+		justify-content: center;
+
+		.not-published {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: v.$red-75;
+			font-size: 1rem;
+		}
+	}
+
+	> .body-container {
+		margin-bottom: .5rem;
+
+		> .notes {
+			text-align: justify;
+			font-style: italic;
+			padding: $notes-padding-y $notes-padding-x;
+			margin: .5rem 0;
+			color: v.$foreground-75;
+			border: 1px solid v.$foreground-25;
+			@include ab.active-border;
+
+			> .an {
+				font-weight: lighter;
+			}
+		}
+
+		> .body {
+			text-align: justify;
+			line-height: 1.75;
+		}
+	}
+}
