@@ -30,8 +30,12 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 		
 		// We're using static logging here because the generator is not a part of the DI container and thus, we cannot inject it
 		Log.Information("Preparing JS manifest");
+
+		var existingManifest = File.Exists(_manifestPath)
+			? JsonSerializer.Deserialize(File.ReadAllText(_manifestPath), ManifestJsonContext.Default.Manifest)
+			: null;
 		
-		ConcurrentDictionary<string, string> filesAndHashes = new();
+		ConcurrentDictionary<string, string> filesAndHashesConcurrent = new();
 
 		var files = directories
 			.SelectMany(directory => Directory.GetFiles(Path.Join(Root, directory.Replace(Root, "")), "*.js", SearchOption.AllDirectories))
@@ -50,7 +54,7 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 			if (fileInfo.Exists)
 			{
 				var hash = GetHashForFile(fileInfo);
-				_ = filesAndHashes.TryAdd(file, hash);
+				_ = filesAndHashesConcurrent.TryAdd(file, hash);
 				Log.Verbose("\t📃 File {FileName} was found with hash {Hash}", file, hash);
 			}
 			else
@@ -59,14 +63,23 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 			}
 		});
 
-		var manifest = JsonSerializer.Serialize(new Manifest(DateTime.UtcNow, filesAndHashes.ToDictionary()), ManifestJsonContext.Default.Manifest);
+		var filesAndHashes = filesAndHashesConcurrent.ToImmutableSortedDictionary(new AlphaComparer());
+
+		if (existingManifest is not null && filesAndHashes.SequenceEqual(existingManifest.Files))
+		{
+			stopwatch.Stop();
+			Log.Information("Files are unchanged, stopping manifest generation after {Time}ms", stopwatch.ElapsedMilliseconds);
+			return;
+		}
+		
+		var manifest = JsonSerializer.Serialize(new Manifest(DateTime.UtcNow, filesAndHashes), ManifestJsonContext.Default.Manifest);
 		File.WriteAllText(_manifestPath, manifest);
 		
 		stopwatch.Stop();
-		Log.Information("Manifest ready ({Time} ms). {FilesFound} files out of {AllFiles} were found.", stopwatch.ElapsedMilliseconds, filesAndHashes.Count, files.Count);
-		if (files.Except(filesAndHashes.Keys).Any())
+		Log.Information("Manifest ready ({Time} ms). {FilesFound} files out of {AllFiles} were found.", stopwatch.ElapsedMilliseconds, filesAndHashesConcurrent.Count, files.Count);
+		if (files.Except(filesAndHashesConcurrent.Keys).Any())
 		{
-			Log.Information("Files missing from the manifest: {Files}", files.Except(filesAndHashes.Keys));
+			Log.Information("Files missing from the manifest: {Files}", files.Except(filesAndHashesConcurrent.Keys));
 		}
 	}
 	
@@ -76,9 +89,17 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 		var hash = SHA256.HashData(readStream);
 		return WebEncoders.Base64UrlEncode(hash);
 	}
+
+	private class AlphaComparer : IComparer<string>
+	{
+		public int Compare(string? x, string? y)
+		{
+			return string.CompareOrdinal(x, y);
+		}
+	}
 }
 
-public sealed record Manifest(DateTime GeneratedAt, Dictionary<string, string> Files);
+public sealed record Manifest(DateTime GeneratedAt, ImmutableSortedDictionary<string, string> Files);
 
 [JsonSerializable(typeof(Manifest))]
 public partial class ManifestJsonContext : JsonSerializerContext;
