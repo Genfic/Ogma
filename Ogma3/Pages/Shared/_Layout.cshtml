@@ -1,8 +1,8 @@
-﻿@using Ogma3.Services
-@using Microsoft.Extensions.Hosting
-@using System.Globalization
+﻿@using System.Globalization
 @using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
 @using Ogma3.Api.V1.UserActivity
+@using Ogma3.Services
 @inject IWebHostEnvironment Env
 @inject OgmaConfig Config
 
@@ -116,16 +116,16 @@
 {
 	<div id="cookie-consent">
 		<icon icon="cookie"></icon>
-		<span>To nobody's surprise, we're using cookies. You can read more about them&nbsp;<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">here</a>.</span>
+		<span>To nobody's surprise, we're using cookies. You can read more about them in the&nbsp;<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">privacy policy</a>.</span>
 		<button class="btn green" id="cookie-consent-button">Noted!</button>
 	</div>
 	
-	<script src="~/js/dist/cookie-consent.js" async></script>
+	<script async src="~/js/dist/cookie-consent.js" ></script>
 }
 
 <partial name="_Footer"/>
 
-<script src="~/js/bundle/components.js" asp-append-version="true"></script>
+<script async defers src="~/js/bundle/components.js" asp-append-version="true"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
         crossorigin="anonymous"

@@ -10,7 +10,7 @@ using Ogma3.Data;
 using Serilog;
 using SerilogTimings;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
@@ -67,13 +67,13 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 			{
 				Size = new Size((int)(width ?? height)!, (int)(height ?? width)!),
 				Mode = ResizeMode.Crop,
-				Position = AnchorPositionMode.Center
+				Position = AnchorPositionMode.Center,
 			}));
 
 			// Save it as PNG
 			ms.Seek(0, SeekOrigin.Begin);
-			await img.SaveAsync(ms, new PngEncoder());
-			ext = "png";
+			await img.SaveAsync(ms, new WebpEncoder());
+			ext = "webp";
 		}
 
 		// Assemble the final path

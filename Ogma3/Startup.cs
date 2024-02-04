@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -74,6 +75,14 @@ public class Startup
 	{
 		// Profiler
 		services.AddMiniProfiler().AddEntityFramework();
+
+		// Compression
+		services.AddResponseCompression(options =>
+		{
+			options.EnableForHttps = true;
+			options.Providers.Add<BrotliCompressionProvider>();
+			options.Providers.Add<GzipCompressionProvider>();
+		});
 
 		// Database
 		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
@@ -196,9 +205,6 @@ public class Startup
 			options.Events.OnRedirectToAccessDenied = HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.OnRedirectToLogin);
 		});
 
-		// Compression
-		services.AddResponseCompression();
-
 		// Cache
 		services.AddMemoryCache();
 
@@ -269,10 +275,16 @@ public class Startup
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 	{
 		// Profiler
-		app.UseMiniProfiler();
+		if (env.IsDevelopment())
+		{
+			app.UseMiniProfiler();
+		}
 
 		// Request timestamp
 		app.UseRequestTimestamp();
+
+		// Compression
+		app.UseResponseCompression();
 
 		if (env.IsDevelopment())
 		{
@@ -347,9 +359,6 @@ public class Startup
 			endpoints.MapRazorPages();
 			endpoints.MapControllers();
 		});
-
-		// Compression
-		app.UseResponseCompression();
 
 		// Generate JS manifest
 		new JavascriptFilesManifestGenerator(env).Generate("js/dist", "js/bundle");

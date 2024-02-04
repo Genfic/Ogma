@@ -37,19 +37,29 @@ tasks:
 
     # Serve via Ngrok
     serve: ngrok http https://localhost:5001 -host-header="localhost:5001"
-    
+
     # Serve via Cloudflare Tunnel (see Documentation/Testing/public-access.md)
     tunnel: cloudflared tunnel run genfic-beta
+
+    tunnel-prod:
+        cmds:
+            - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
+            - task: tunnel
 
     # Get Lighthouse CLI score
     score: lighthouse https://localhost:5001 --view
 
-    # EF helpers
-    db-migrate: dotnet ef migrations add -p ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
-    db-up: dotnet ef database update -p ./Ogma3/Ogma3.csproj
-    db-compile: 
+    score-prod:
         cmds:
-            - dotnet ef dbcontext optimize -p ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels
+            - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
+            - task: score
+
+    # EF helpers
+    db-migrate: dotnet ef migrations add --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
+    db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj
+    db-compile:
+        cmds:
+            - dotnet ef dbcontext optimize --project ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels
             - echo "⚠ Until Npgsql.EF 8.0.1 comes out you will need a workaround https://github.com/npgsql/efcore.pg/issues/2972#issuecomment-1836460056"
     db-all:
         cmds:
