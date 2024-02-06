@@ -1,0 +1,26 @@
+//noinspection CssUnknownTarget
+@font-face {
+	font-family: 'Material Icons Outlined';
+	font-style: normal;
+	font-weight: 100 700;
+	font-display: swap;
+	src: url('/fonts/MaterialIconsRounded-VF.woff2') format('woff2'), 
+		 url('/fonts/MaterialIconsRounded-VF.ttf') format('ttf');
+}
+
+.material-icons-outlined {
+	font-family: 'Material Icons Outlined', sans-serif;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	line-height: 1;
+	letter-spacing: normal;
+	text-transform: none;
+	display: inline-block;
+	white-space: nowrap;
+	word-wrap: normal;
+	direction: ltr;
+	user-select: none;
+	-moz-font-feature-settings: 'liga';
+	-moz-osx-font-smoothing: grayscale;
+}

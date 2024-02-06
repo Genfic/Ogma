@@ -1,0 +1,53 @@
+@use "../vars" as v;
+@use "../mixins/active-border" as ab;
+
+.o-dropdown {
+	position: relative;
+
+	button {
+		height: 100%;
+	}
+
+	.menu {
+		position: absolute;
+		z-index: 25;
+		background-color: v.$background;
+		border: 1px solid v.$foreground-50;
+		padding: .5rem;
+		gap: .25rem;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+
+		.item {
+			color: v.$foreground;
+			display: inline;
+			border: none;
+			background-color: transparent;
+			text-align: start;
+			padding: 0;
+		}
+
+		.item {
+			white-space: nowrap;
+
+			i {
+				font-size: 1rem;
+			}
+
+			&.active {
+				cursor: pointer;
+
+				&:hover {
+					color: v.$accent-75;
+				}
+			}
+		}
+	}
+
+	&.left {
+		.menu {
+			right: 0;
+		}
+	}
+}
