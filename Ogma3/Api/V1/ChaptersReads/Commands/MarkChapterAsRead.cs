@@ -17,34 +17,26 @@ public static class MarkChapterAsRead
 {
 	public sealed record Command(long Chapter, long Story) : IRequest<ActionResult<HashSet<long>>>;
 
-	public class MarkChapterAsReadHandler : BaseHandler, IRequestHandler<Command, ActionResult<HashSet<long>>>
+	public class MarkChapterAsReadHandler(ApplicationDbContext context, IUserService userService)
+		: BaseHandler, IRequestHandler<Command, ActionResult<HashSet<long>>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public MarkChapterAsReadHandler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async Task<ActionResult<HashSet<long>>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 
 			var (chapter, story) = request;
 
-			var chaptersReadObj = await _context.ChaptersRead
+			var chaptersReadObj = await context.ChaptersRead
 				.Where(cr => cr.StoryId == story)
-				.Where(cr => cr.UserId == _uid)
+				.Where(cr => cr.UserId == uid)
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (chaptersReadObj is null)
 			{
-				var result = _context.ChaptersRead.Add(new ChaptersRead
+				var result = context.ChaptersRead.Add(new ChaptersRead
 				{
 					StoryId = story,
-					UserId = (long)_uid,
+					UserId = uid,
 					Chapters = [chapter]
 				});
 				chaptersReadObj = result.Entity;
@@ -56,7 +48,7 @@ public static class MarkChapterAsRead
 				chaptersReadObj.Chapters = chapters.ToList();
 			}
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 			return Ok(chaptersReadObj.Chapters);
 		}
 	}

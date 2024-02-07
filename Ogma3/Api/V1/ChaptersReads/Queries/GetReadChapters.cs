@@ -16,22 +16,16 @@ public static class GetReadChapters
 {
 	public sealed record Query(long Id) : IRequest<ActionResult<HashSet<long>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<HashSet<long>>>
+	public class Handler(ApplicationDbContext context, IUserService userService)
+		: BaseHandler, IRequestHandler<Query, ActionResult<HashSet<long>>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async Task<ActionResult<HashSet<long>>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var chaptersRead = await _context.ChaptersRead
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
+			
+			var chaptersRead = await context.ChaptersRead
 				.Where(cr => cr.StoryId == request.Id)
-				.Where(cr => cr.UserId == _uid)
+				.Where(cr => cr.UserId == uid)
 				.Select(cr => cr.Chapters)
 				.FirstOrDefaultAsync(cancellationToken);
 
