@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -25,7 +25,7 @@ public static class DeleteRating
 			_uploader = uploader;
 		}
 
-		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var rating = await _context.Ratings
 				.Where(r => r.Id == request.RatingId)

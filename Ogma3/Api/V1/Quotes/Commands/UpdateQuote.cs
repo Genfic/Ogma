@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -22,7 +22,7 @@ public static class UpdateQuote
 			_context = context;
 		}
 
-		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (id, body, author) = request;
 

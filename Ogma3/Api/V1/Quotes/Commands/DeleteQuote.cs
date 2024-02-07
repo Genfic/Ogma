@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -23,7 +23,7 @@ public static class DeleteQuote
 			_context = context;
 		}
 
-		public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var res = await _context.Quotes
 				.Where(q => q.Id == request.Id)

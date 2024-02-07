@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -19,7 +19,7 @@ public static class GetAllFaqs
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async Task<ActionResult<List<Faq>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<Faq>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var faqs = await _context.Faqs
 				.AsNoTracking()

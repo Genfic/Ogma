@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Markdig;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -22,7 +22,7 @@ public static class GetRevision
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async Task<ActionResult<IEnumerable<Result>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<IEnumerable<Result>>> Handle(Query request, CancellationToken cancellationToken)
 			=> await _context.CommentRevisions
 				.Where(r => r.ParentId == request.Id)
 				.Select(r => new Result(

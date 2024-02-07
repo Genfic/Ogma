@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -28,7 +28,7 @@ public static class GetPaginatedTags
 			_mapper = mapper;
 		}
 
-		public async Task<ActionResult<List<TagDto>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<TagDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var (page, perPage) = request;
 

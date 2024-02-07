@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -27,7 +27,7 @@ public static class GetRatingById
 			_mapper = mapper;
 		}
 
-		public async Task<ActionResult<RatingApiDto>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<RatingApiDto>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var ratings = await _context.Ratings
 				.Where(r => r.Id == request.Id)

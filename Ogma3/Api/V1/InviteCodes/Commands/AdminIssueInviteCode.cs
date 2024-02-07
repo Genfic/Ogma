@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
@@ -31,7 +31,7 @@ public static class AdminIssueInviteCode
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<InviteCodeDto>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<InviteCodeDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 

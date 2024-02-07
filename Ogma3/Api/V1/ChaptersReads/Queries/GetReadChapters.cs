@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -19,7 +19,7 @@ public static class GetReadChapters
 	public class Handler(ApplicationDbContext context, IUserService userService)
 		: BaseHandler, IRequestHandler<Query, ActionResult<HashSet<long>>>
 	{
-		public async Task<ActionResult<HashSet<long>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<HashSet<long>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 			

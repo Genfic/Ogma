@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using Markdig;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Faqs;
@@ -29,7 +29,7 @@ public static class CreateFaq
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async Task<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (question, answer) = request;
 

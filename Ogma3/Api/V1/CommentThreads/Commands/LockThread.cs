@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Api.V1.CommentThreads.Queries;
@@ -35,7 +35,7 @@ public static class LockThread
 			_user = userService.User;
 		}
 
-		public async Task<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_user is null) return Unauthorized();
 			if (_user.GetUsername() is not { } uname) return Unauthorized();

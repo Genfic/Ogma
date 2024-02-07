@@ -3,7 +3,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -31,7 +31,7 @@ public static class GetBlogposts
 			_contextAccessor = contextAccessor;
 		}
 		
-		public async Task<ActionResult<RssResult>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<RssResult>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			if (_contextAccessor.HttpContext is not { } httpContext) return ServerError();
 			

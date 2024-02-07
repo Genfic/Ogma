@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -17,7 +17,7 @@ public static class GetLockStatus
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async Task<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken) 
+		public async ValueTask<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken) 
 			=> await _context.CommentThreads
 				.Where(ct => ct.Id == request.Id)
 				.Select(ct => ct.LockDate != null)

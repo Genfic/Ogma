@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -24,7 +24,7 @@ public static class GetAll
 			_context = context;
 		}
 
-		public async Task<ActionResult<List<Quote>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<Quote>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var quotes = await _context.Quotes
 				.OrderBy(q => q.Id)

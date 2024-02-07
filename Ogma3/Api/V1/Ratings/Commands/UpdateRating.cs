@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +51,7 @@ public static class UpdateRating
 			_ogmaConfig = ogmaConfig;
 		}
 
-		public async Task<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (id, name, description, blacklistedByDefault, order, formFile) = request;
 

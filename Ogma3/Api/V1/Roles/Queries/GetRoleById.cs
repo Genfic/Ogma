@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -19,7 +19,7 @@ public static class GetRoleById
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async Task<ActionResult<RoleDto>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<RoleDto>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var role = await _context.Roles
 				.Where(r => r.Id == request.RoleId)

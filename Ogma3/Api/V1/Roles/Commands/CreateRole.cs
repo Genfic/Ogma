@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data.Roles;
@@ -23,7 +23,7 @@ public static class CreateRole
 		private readonly RoleManager<OgmaRole> _roleManager;
 		public Handler(RoleManager<OgmaRole> roleManager) => _roleManager = roleManager;
 
-		public async Task<ActionResult<RoleDto>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<RoleDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (name, isStaff, color, order) = request;
 			if (await _roleManager.RoleExistsAsync(name)) return Conflict($"Role {name} already exists");

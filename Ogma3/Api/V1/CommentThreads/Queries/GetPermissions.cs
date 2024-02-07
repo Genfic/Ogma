@@ -2,7 +2,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
@@ -28,7 +28,7 @@ public static class GetPermissions
 			_uid = _user?.GetNumericId();
 		}
 
-		public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<Result> Handle(Query request, CancellationToken cancellationToken)
 		{
 			if (_user is null) return new Result(false, false);
 			if (_uid is null) return new Result(false, false);

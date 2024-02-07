@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -17,7 +17,7 @@ public static class GetInfractionDetails
 
 	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<Result>>
 	{
-		public async Task<ActionResult<Result>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Result>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var infraction = await context.Infractions
 				.Where(i => i.Id == request.InfractionId)

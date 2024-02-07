@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data.Roles;
@@ -17,7 +17,7 @@ public static class DeleteRole
 		private readonly RoleManager<OgmaRole> _roleManager;
 		public Handler(RoleManager<OgmaRole> roleManager) => _roleManager = roleManager;
 
-		public async Task<ActionResult> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var role = await _roleManager.FindByIdAsync(request.Id.ToString());
 

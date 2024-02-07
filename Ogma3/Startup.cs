@@ -5,7 +5,7 @@ using B2Net;
 using B2Net.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -244,10 +244,13 @@ public class Startup
 				cfg.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
 					new FileSizeClientValidator(rule, component);
 			});
-
-		// MediatR
+		
+		// Mediator
 		services
-			.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly))
+			.AddMediator(options =>
+			{
+				options.ServiceLifetime = ServiceLifetime.Scoped;
+			})
 			.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 		// Custom formatters

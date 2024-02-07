@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -23,7 +23,7 @@ public static class GetClubsWithStory
 			_context = context;
 		}
 
-		public async Task<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var clubs = await _context.Clubs
 				.Where(c => c.Folders

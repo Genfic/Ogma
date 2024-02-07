@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
@@ -42,7 +42,7 @@ public static class CreateInfraction
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 

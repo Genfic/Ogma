@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -27,7 +27,7 @@ public static class CreateQuote
 	public class CreateQuoteHandler(ApplicationDbContext context, ILogger<CreateQuotesFromJson.CreateQuoteHandler> logger)
 		: BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
 	{
-		public async Task<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (body, author) = request;
 			var quote = new Quote

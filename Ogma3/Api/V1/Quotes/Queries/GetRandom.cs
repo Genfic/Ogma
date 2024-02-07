@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -13,9 +13,10 @@ public static class GetRandom
 {
 	public sealed record Query : IRequest<ActionResult<QuoteDto>>;
 
-	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<QuoteDto>>
+	// ReSharper disable once SuggestBaseTypeForParameterInConstructor | DI errors out if base type is used, since only the derived one is registered
+	public sealed class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<QuoteDto>>
 	{
-		public async Task<ActionResult<QuoteDto>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<QuoteDto>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var quote = await context.Database.SqlQueryRaw<QuoteDto>("""
 			    SELECT q."Author", q."Body"

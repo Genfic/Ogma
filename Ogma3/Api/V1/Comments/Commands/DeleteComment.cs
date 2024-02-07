@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -27,7 +27,7 @@ public static class DeleteComment
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 

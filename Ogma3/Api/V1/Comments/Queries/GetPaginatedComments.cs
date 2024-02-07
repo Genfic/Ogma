@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Markdig;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ public static class GetPaginatedComments
 			_httpContextAccessor = httpContextAccessor;
 		}
 
-		public async Task<ActionResult<PaginationResult<CommentDto>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<PaginationResult<CommentDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var (thread, page, highlight) = request;
 

@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -26,7 +26,7 @@ public static class GetSubscriptionStatus
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var isSubscribed = await _context.CommentsThreadSubscribers
 				.Where(cts => cts.OgmaUserId == _uid)

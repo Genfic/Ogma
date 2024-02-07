@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -32,7 +32,7 @@ public static class GetIssuedInviteCodes
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var codes = await _context.InviteCodes
 				.Where(ic => ic.IssuedById == _uid)

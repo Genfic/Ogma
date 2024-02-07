@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Api.Rss.Queries;
 using Ogma3.Infrastructure.Formatters;

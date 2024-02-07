@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -18,7 +18,7 @@ public static class GetPaginatedInviteCodes
 	public class Handler(ApplicationDbContext context)
 		: BaseHandler, IRequestHandler<Query, ActionResult<List<InviteCodeDto>>>
 	{
-		public async Task<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<InviteCodeDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var (page, perPage) = request;
 			var codes = await context.InviteCodes

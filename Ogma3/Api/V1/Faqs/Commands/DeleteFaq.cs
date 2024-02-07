@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -18,7 +18,7 @@ public static class DeleteFaq
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var res = await _context.Faqs
 				.Where(f => f.Id == request.Id)

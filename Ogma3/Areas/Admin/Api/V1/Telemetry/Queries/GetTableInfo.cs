@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -16,7 +16,7 @@ public static class GetTableInfo
 
 	public class Handler(ApplicationDbContext context) : IRequestHandler<Query, ActionResult<List<Response>>>
 	{
-		public async Task<ActionResult<List<Response>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<Response>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var info = await context.Database.SqlQueryRaw<Response>("""
 				SELECT

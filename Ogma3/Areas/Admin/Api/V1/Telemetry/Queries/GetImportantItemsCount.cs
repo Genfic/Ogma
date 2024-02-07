@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -16,7 +16,7 @@ public static class GetImportantItemCounts
 
 	public class Handler(ApplicationDbContext context) : IRequestHandler<Query, ActionResult<Dictionary<string, int>>>
 	{
-		public async Task<ActionResult<Dictionary<string, int>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Dictionary<string, int>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var counts = await context.Database.SqlQueryRaw<Response>("""
 			    	SELECT 'Stories' as name, count(1) as count FROM "Stories" UNION

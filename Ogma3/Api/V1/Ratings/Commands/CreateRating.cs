@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
@@ -48,7 +48,7 @@ public static class CreateRating
 			_ogmaConfig = ogmaConfig;
 		}
 
-		public async Task<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<RatingApiDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (name, description, blacklistedByDefault, order, formFile) = request;
 

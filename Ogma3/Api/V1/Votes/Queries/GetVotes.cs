@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -26,7 +26,7 @@ public static class GetVotes
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<Result>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Result>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var count = await _context.Votes
 				.Where(v => v.StoryId == request.StoryId)

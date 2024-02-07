@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Reports;
@@ -31,7 +31,7 @@ public static class ReportContent
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 

@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -20,7 +20,7 @@ public static class CreateQuotesFromJson
 	public class CreateQuoteHandler(ApplicationDbContext context, ILogger<CreateQuoteHandler> logger)
 		: BaseHandler, IRequestHandler<Command, ActionResult<Response>>
 	{
-		public async Task<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var data = await JsonSerializer.DeserializeAsync(request.Data, QuoteJsonContext.Default.QuoteArray, cancellationToken);
 			if (data is null) return BadRequest();

@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -36,7 +36,7 @@ public static class IssueInviteCode
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<InviteCodeDto>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<InviteCodeDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 

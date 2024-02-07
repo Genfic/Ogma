@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -23,7 +23,7 @@ public static class UpdateRoles
 
 	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, IActionResult>
 	{
-		public async Task<IActionResult> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<IActionResult> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (userId, roles) = request;
 

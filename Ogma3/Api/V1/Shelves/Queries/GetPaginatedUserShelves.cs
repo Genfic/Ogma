@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -34,7 +34,7 @@ public static class GetPaginatedUserShelves
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<List<ShelfDto>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<ShelfDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 

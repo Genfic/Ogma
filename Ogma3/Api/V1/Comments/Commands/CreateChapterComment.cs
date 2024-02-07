@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -46,7 +46,7 @@ public static class CreateChapterComment
 			_uid = userService.User?.GetNumericId();
 		}
 
-		public async Task<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 
