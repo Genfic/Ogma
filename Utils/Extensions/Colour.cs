@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 
 namespace Utils.Extensions;
 
@@ -10,15 +9,12 @@ public static class Colour
 	/// <summary>
 	/// Convert `System.Drawing.Color` to `#RRGGBB` notation string.
 	/// </summary>
-	/// <param name="input">Color object to convert</param>
+	/// <param name="color">Color object to convert</param>
 	/// <returns>Resulting string</returns>
-	public static string ToHexCss(this Color input)
+	public static string ToHexCss(this Color color)
 	{
-		var r = input.R.ToString("X2");
-		var g = input.G.ToString("X2");
-		var b = input.B.ToString("X2");
-
-		return $"#{r}{g}{b}";
+		var hex = (color.R << 16) + (color.G << 8) + color.B;
+		return $"#{hex:X6}";
 	}
 
 	/// <summary>
@@ -29,39 +25,19 @@ public static class Colour
 	public static Color ParseHexColor(this string input)
 	{
 		var hex = input.Trim('#');
-		var values = (hex.Length switch
+		if (!int.TryParse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var num))
 		{
-			3 =>
-			[
-				"FF",
-				hex[0].ToString(),
-				hex[1].ToString(),
-				hex[2].ToString()
-			],
-			4 =>
-			[
-				hex[0].ToString(),
-				hex[1].ToString(),
-				hex[2].ToString(),
-				hex[3].ToString()
-			],
-			6 =>
-			[
-				"FF",
-				hex[..2],
-				hex[2..4],
-				hex[4..6]
-			],
-			8 => new[]
-			{
-				hex[..2],
-				hex[2..4],
-				hex[4..6],
-				hex[6..8]
-			},
-			_ => throw new ArgumentException("Incorrect format")
-		}).Select(s => int.Parse(s, NumberStyles.HexNumber)).ToArray();
-		return Color.FromArgb(values[0], values[1], values[2], values[3]);
+			throw new ArgumentException("Not a valid hexadecimal number", nameof(input));
+		}
+		
+		return hex.Length switch
+		{
+			3 => Color.FromArgb(((num >> 8) & 0xF) * 0xFF / 0xF, ((num >> 4) & 0xF) * 0xFF / 0xF, (num & 0xF) * 0xFF / 0xF),
+			4 => Color.FromArgb(((num >> 12) & 0xF) * 0xFF / 0xF,((num >> 8) & 0xF) * 0xFF / 0xF, ((num >> 4) & 0xF) * 0xFF / 0xF, (num & 0xF) * 0xFF / 0xF),
+			6 => Color.FromArgb((num >> 16) & 0xFF, (num >> 8) & 0xFF, num & 0xFF),
+			8 => Color.FromArgb((num >> 24) & 0xFF, (num >> 16) & 0xFF, (num >> 8) & 0xFF, num & 0xFF),
+			_ => throw new ArgumentException("Unknown format", nameof(input))
+		};
 	}
 
 	/// <summary>

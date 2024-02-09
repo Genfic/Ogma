@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using NetEscapades.EnumGenerators;
 using NpgSqlGenerators;
 
 namespace Ogma3.Data.Tags;
 
 [PostgresEnum]
+[EnumExtensions]
 public enum ETagNamespace
 {
 	[Display(Name = "Content Warning")] ContentWarning = 1,
@@ -11,7 +13,7 @@ public enum ETagNamespace
 	Franchise = 3,
 }
 
-public static class ETagNamespaceExtensions
+public static partial class ETagNamespaceExtensions
 {
 	public static string GetColor(this ETagNamespace? ns) => ns switch
 	{

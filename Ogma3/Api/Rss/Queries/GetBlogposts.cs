@@ -18,24 +18,14 @@ public static class GetBlogposts
 {
 	public sealed record Query : IRequest<ActionResult<RssResult>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
+	public class Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
+		: BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly LinkGenerator _generator;
-		private readonly IHttpContextAccessor _contextAccessor;
-
-		public Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
-		{
-			_context = context;
-			_generator = generator;
-			_contextAccessor = contextAccessor;
-		}
-		
 		public async ValueTask<ActionResult<RssResult>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			if (_contextAccessor.HttpContext is not { } httpContext) return ServerError();
+			if (contextAccessor.HttpContext is not { } httpContext) return ServerError();
 			
-			var blogposts = await _context.Blogposts
+			var blogposts = await context.Blogposts
 				.Select(b => new {
 					b.Id,
 					b.Title,
@@ -48,7 +38,7 @@ public static class GetBlogposts
 			var items = blogposts.Select(b => new SyndicationItem(
 				b.Title,
 				b.Body,
-				new Uri(_generator.GetUriByPage(httpContext, "/Blog/Post", values: new { b.Id, b.Slug }) ?? ""),
+				new Uri(generator.GetUriByPage(httpContext, "/Blog/Post", values: new { b.Id, b.Slug }) ?? ""),
 				b.Slug,
 				b.Date
 			));

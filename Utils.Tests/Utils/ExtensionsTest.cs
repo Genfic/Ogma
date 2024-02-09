@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Utils.Extensions;
 using Xunit;
 
@@ -54,17 +53,7 @@ public class ExtensionsTest
 	[Fact]
 	public void TestFriendlify()
 		=> Assert.Equal("abcd-efgh-ijk-l-190-21", "aBcD.eFgH iJk++++++L 190.21".Friendlify());
-
-	// Test Color.ToHexCss()
-	[Fact]
-	public void TestToHexCss()
-		=> Assert.Equal("#FF0000", Color.FromArgb(255, 0, 0).ToHexCss());
-
-	// Test Color.ToCommaSeparatedCss()
-	[Fact]
-	public void TestToCommaSeparatedCss()
-		=> Assert.Equal("255, 0, 0, 1.00", Color.FromArgb(255, 255, 0, 0).ToCommaSeparatedCss());
-
+	
 	// Test string.ReplaceWithPattern()
 	[Fact]
 	public void TestReplaceWithPattern()

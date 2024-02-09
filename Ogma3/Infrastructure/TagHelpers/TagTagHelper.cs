@@ -1,12 +1,10 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data.Tags;
-using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
@@ -33,9 +31,9 @@ public class TagTagHelper : TagHelper
 
 		output.Attributes.Add("href", href);
 
-		if (Tag.Namespace is not null)
+		if (Tag.Namespace is {} ns)
 		{
-			output.Attributes.Add("title", Tag.Namespace.GetAttribute<DisplayAttribute>()?.Name ?? Tag.Namespace.ToString());
+			output.Attributes.Add("title", ns.ToStringFast());
 		}
 
 		output.Content.AppendHtml(Tag.NamespaceColor == null
