@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 
 namespace Ogma3.Api.V1.Quotes.Commands;
 

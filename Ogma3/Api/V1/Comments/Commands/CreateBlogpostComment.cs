@@ -11,7 +11,7 @@ using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.UserService;
 using Utils.Extensions;
 

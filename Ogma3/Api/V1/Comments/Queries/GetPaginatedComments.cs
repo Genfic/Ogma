@@ -12,7 +12,7 @@ using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments.Queries;

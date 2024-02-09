@@ -9,7 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Api.V1.Ratings.Commands;

@@ -33,7 +33,7 @@ public class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCache cac
 
 			var minutesAgo = DateTime.UtcNow.AddMinutes(-Tolerance);
 			return await context.Users
-				.TagWith("Getting currently-active users")
+				.TagWith("Getting currently active users")
 				.Where(u => u.LastActive >= minutesAgo)
 				.CountAsync();
 		});

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Serilog;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options)
+public class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options, ILogger<RedirectMiddleware> logger)
 {
 	private readonly RedirectMiddlewareOptions _options = options.Value;
 
@@ -16,7 +16,7 @@ public class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewar
 	{
 		if (_options.Redirects.TryGetValue(context.Request.Path, out var redirect))
 		{
-			Log.Information("Redirecting from {Source} to {Target}", context.Request.Path, redirect);
+			logger.LogInformation("Redirecting from {Source} to {Target}", context.Request.Path, redirect);
 			context.Response.Redirect(redirect);
 			return;
 		}

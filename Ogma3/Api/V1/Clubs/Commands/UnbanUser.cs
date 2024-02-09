@@ -9,7 +9,7 @@ using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Clubs.Commands;

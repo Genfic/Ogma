@@ -8,7 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Services.UserService;
 

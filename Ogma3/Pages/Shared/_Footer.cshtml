@@ -5,8 +5,13 @@
 @inject OgmaConfig Config
 
 @{
-	var genTime = DateTime.UtcNow - (DateTime)(Context.Items[RequestTimestampMiddleware.Name] ?? DateTime.UtcNow);
-	var renderTime = DateTime.UtcNow - (DateTime)(ViewData["render_start"] ?? DateTime.UtcNow);
+	var genTimeData = GetData((DateTime?)Context.Items[RequestTimestampMiddleware.Name]);
+	var renderTimeData = GetData((DateTime?)ViewData["render_start"]);
+	
+	(string ms, string str) GetData(DateTime? dateTime) =>
+		dateTime is { } dt
+			? (ms: (DateTime.UtcNow - dt).TotalMilliseconds.ToString("F3"), str: (DateTime.UtcNow - dt).TotalSeconds.ToString("F3"))
+			: (ms: "🤷‍♂️", str: "unknown");
 }
 
 <footer class="footer">
@@ -17,11 +22,11 @@
 			<span class="header">Stats</span>
 
 			<span class="item">
-				Request time <span class="hl" title="@(genTime.TotalMilliseconds) ms">@(genTime.TotalSeconds.ToString("F3"))</span> seconds
+				Request time <span class="hl" title="@(genTimeData.ms) ms">@(genTimeData.str)</span> seconds
 			</span>
 
 			<span class="item">
-				Render time <span class="hl" title="@(renderTime.TotalMilliseconds) ms">@(renderTime.TotalSeconds.ToString("F3"))</span> seconds
+				Render time <span class="hl" title="@(renderTimeData.ms) ms">@(renderTimeData.str)</span> seconds
 			</span>
 
 			<span class="item">

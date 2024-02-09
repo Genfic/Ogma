@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Formatters;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 
 namespace Ogma3.Api.Rss.Queries;
 

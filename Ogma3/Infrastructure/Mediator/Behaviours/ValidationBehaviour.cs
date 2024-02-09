@@ -5,7 +5,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Mediator;
 
-namespace Ogma3.Infrastructure.MediatR.Behaviours;
+namespace Ogma3.Infrastructure.Mediator.Behaviours;
 
 public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
 	where TRequest : IRequest<TResponse>

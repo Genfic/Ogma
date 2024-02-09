@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.UserService;
 

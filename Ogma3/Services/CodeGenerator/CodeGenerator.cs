@@ -1,10 +1,10 @@
 using System;
 using System.Security.Cryptography;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Ogma3.Services.CodeGenerator;
 
-public class CodeGenerator : ICodeGenerator
+public class CodeGenerator(ILogger<CodeGenerator> logger) : ICodeGenerator
 {
 	public string GetInviteCode(bool isBase64 = false)
 	{
@@ -20,7 +20,7 @@ public class CodeGenerator : ICodeGenerator
 			? Convert.ToBase64String(Convert.FromHexString(unixStr + hexStr))
 			: unixStr + hexStr;
 
-		Log.Information("Generated invite code: {Code} from {Unix} and {Hex}", resultCode, unixStr, hexStr);
+		logger.LogInformation("Generated invite code: {Code} from {Unix} and {Hex}", resultCode, unixStr, hexStr);
 
 		return resultCode;
 	}

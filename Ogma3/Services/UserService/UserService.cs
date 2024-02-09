@@ -3,11 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Services.UserService;
 
-public class UserService : IUserService
+public class UserService(IHttpContextAccessor? accessor) : IUserService
 {
-	private readonly IHttpContextAccessor? _accessor;
-
-	public UserService(IHttpContextAccessor? accessor) => _accessor = accessor;
-
-	public ClaimsPrincipal? User => _accessor?.HttpContext?.User;
+	public ClaimsPrincipal? User => accessor?.HttpContext?.User;
 }

@@ -5,7 +5,7 @@ using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data.Roles;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 
 namespace Ogma3.Api.V1.Roles.Commands;
 

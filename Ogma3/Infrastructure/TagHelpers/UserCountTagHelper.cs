@@ -7,27 +7,22 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class UserCountTagHelper(ApplicationDbContext context, IMemoryCache cache) : TagHelper
+public class UserCountTagHelper(ApplicationDbContext dbContext, IMemoryCache cache) : TagHelper
 {
 	/// <summary>
 	/// How often should the cache refresh in minutes
 	/// </summary>
 	public int CacheTime { get; set; } = 60;
 
-	public override async Task ProcessAsync(TagHelperContext context1, TagHelperOutput output)
+	public override async Task ProcessAsync(TagHelperContext httpContext, TagHelperOutput output)
 	{
 		const string name = nameof(UserCountTagHelper) + "_cache";
 
-		int count;
-		if (cache.TryGetValue(name, out int c))
+		var count = await cache.GetOrCreateAsync(name, async entry =>
 		{
-			count = c;
-		}
-		else
-		{
-			count = await context.Users.CountAsync();
-			cache.Set(name, count, TimeSpan.FromMinutes(CacheTime));
-		}
+			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
+			return await dbContext.Users.TagWith("Getting current user count").CountAsync();
+		});
 
 		output.TagName = "span";
 		output.Content.SetContent(count.ToString());

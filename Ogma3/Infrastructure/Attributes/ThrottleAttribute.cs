@@ -16,6 +16,7 @@ public enum TimeUnit
 	Day = 86400
 }
 
+// TODO: consider using built-in rate limiting instead
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class ThrottleAttribute : ActionFilterAttribute
 {

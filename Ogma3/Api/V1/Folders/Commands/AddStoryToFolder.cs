@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Folders.Commands;

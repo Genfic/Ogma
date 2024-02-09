@@ -12,7 +12,7 @@ using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.MediatR.Bases;
+using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Services.UserService;
 using Serilog;
 
