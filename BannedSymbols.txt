@@ -1,9 +1,26 @@
-P:System.Threading.Tasks.Task.Result;await it
-M:System.Threading.Tasks.Task.Wait;await it
-M:System.Threading.Tasks.Task.GetAwaiter;await it
-M:System.Runtime.CompilerServices.TaskAwaiter.GetResult;await it
-M:System.Threading.Tasks.Task.WaitAll`1;use await Task.WhenAll()
+// Newtonsoft
+N:Newtonsoft.Json
 
+// Non-generic collections
+T:System.Collections.ArrayList;Use List<T>
+T:System.Collections.Hashtable;Use Dictionary<TKey, TValue>
+
+// Blocking Task operations
+P:System.Threading.Tasks.Task.Result;Await it
+M:System.Threading.Tasks.Task.Wait;Await it
+M:System.Threading.Tasks.Task.GetAwaiter;Await it
+M:System.Runtime.CompilerServices.TaskAwaiter.GetResult;Await it
+M:System.Threading.Tasks.Task.WaitAll`1;Use await Task.WhenAll()
+
+// Unsafe numeric conversion
+M:System.Convert.TuByte;Use byte.TryParse()
+M:System.Convert.ToInt16;Use short.TryParse()
+M:System.Convert.ToInt32;Use int.TryParse()
+M:System.Convert.ToInt64;Use long.TryParse()
+M:System.Convert.ToSingle;Use float.TryParse()
+M:System.Convert.ToDouble;Use double.TryParse()
+
+// EF Core stuff
 M:Microsoft.EntityFrameworkCore.DbContext.FindAsync``1(System.Object[],System.Threading.CancellationToken)
 // M:Microsoft.EntityFrameworkCore.DbContext.Set``1
 M:Microsoft.EntityFrameworkCore.DbContext.Set``1(System.String)
@@ -41,6 +58,7 @@ M:Microsoft.EntityFrameworkCore.DbContext.FindAsync(System.Type,System.Object[],
 M:Microsoft.EntityFrameworkCore.DbContext.Find``1(System.Object[])
 M:Microsoft.EntityFrameworkCore.DbContext.FindAsync``1(System.Object[])
 
-M:System.Convert.ToInt16;Use short.TryParse()
-M:System.Convert.ToInt32;Use int.TryParse()
-M:System.Convert.ToInt64;Use long.TryParse()
+// More EF Core
+// TODO: figure out how to actually reference a method of a generic class 'cause this shit doesn't work
+M:Microsoft.EntityFrameworkCore.DbSet`1.AddAsync(``0);Use .Add()
+M:Microsoft.EntityFrameworkCore.DbSet`1.AddAsync`1(``0,System.Threading.CancellationToken);Use .Add()
