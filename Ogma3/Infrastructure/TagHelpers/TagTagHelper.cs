@@ -40,6 +40,6 @@ public class TagTagHelper : TagHelper
 			? "<div class='bg'></div>"
 			: $"<div class='bg' style='background-color: #{Tag.NamespaceColor.Trim('#')}'></div>");
 
-		output.Content.AppendHtml($@"<span class='name'>{Tag.Name}</span>");
+		output.Content.AppendHtml($"<span class='name'>{Tag.Name}</span>");
 	}
 }

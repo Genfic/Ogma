@@ -15,31 +15,28 @@ namespace Ogma3.Api.V1.ContentBlocks;
 [Route("api/[controller]", Name = nameof(ContentBlockController))]
 [ApiController]
 [Authorize(Roles = $"{RoleNames.Admin},{RoleNames.Moderator}")]
-public class ContentBlockController : ControllerBase
+public class ContentBlockController(IMediator mediator) : ControllerBase
 {
-	private readonly IMediator _mediator;
-	public ContentBlockController(IMediator mediator) => _mediator = mediator;
-
 	[HttpPost("story")]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<ActionResult> BlockStory(BlockContent.Command<Story> data)
-		=> await _mediator.Send(data);
+		=> await mediator.Send(data);
 
 	[HttpPost("chapter")]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<ActionResult> BlockChapter(BlockContent.Command<Chapter> data)
-		=> await _mediator.Send(data);
+		=> await mediator.Send(data);
 
 	[HttpPost("blogpost")]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<ActionResult> BlockBlogpost(BlockContent.Command<Blogpost> data)
-		=> await _mediator.Send(data);
+		=> await mediator.Send(data);
 
 	// Don't delete or this whole controller will break
 	[HttpGet, OpenApiIgnore]

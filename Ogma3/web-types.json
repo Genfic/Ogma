@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json.schemastore.org/web-types",
+    "$schema": "https://json.schemastore.org/web-types",
     "name": "Ogma Components",
     "version": "1.0.0",
     "framework": "lit",

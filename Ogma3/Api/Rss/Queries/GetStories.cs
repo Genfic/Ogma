@@ -18,25 +18,14 @@ public static class GetStories
 {
 	public sealed record Query : IRequest<ActionResult<RssResult>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
+	public class Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
+		: BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly LinkGenerator _generator;
-		private readonly IHttpContextAccessor _contextAccessor;
-
-		public Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
-		{
-			_context = context;
-			_generator = generator;
-			_contextAccessor = contextAccessor;
-		}
-
-
 		public async ValueTask<ActionResult<RssResult>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			if (_contextAccessor.HttpContext is not { } httpContext) return ServerError();
+			if (contextAccessor.HttpContext is not { } httpContext) return ServerError();
 
-			var stories = await _context.Stories
+			var stories = await context.Stories
 				.Where(s => !s.Rating.BlacklistedByDefault)
 				.Where(s => s.PublicationDate != null)
 				.Take(50)
@@ -53,7 +42,7 @@ public static class GetStories
 			var items = stories.Select(s => new SyndicationItem(
 				s.Title,
 				s.Hook,
-				new Uri(_generator.GetUriByPage(httpContext, "/Story", values: new { s.Id, s.Slug }) ?? ""),
+				new Uri(generator.GetUriByPage(httpContext, "/Story", values: new { s.Id, s.Slug }) ?? ""),
 				s.Slug,
 				s.Date
 			));

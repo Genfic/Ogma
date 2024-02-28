@@ -11,7 +11,7 @@ public static class ClaimsPrincipalEx
 	/// </summary>
 	/// <param name="principal">ClaimsPrincipal of the logged-in user</param>
 	/// <param name="userId">ID to check against</param>
-	/// <returns>Whether the ID matches the logged in user ID</returns>
+	/// <returns>Whether the ID matches the logged-in user ID</returns>
 	public static bool IsUserSameAsLoggedIn(this ClaimsPrincipal principal, long userId)
 		=> principal.GetNumericId() == userId;
 

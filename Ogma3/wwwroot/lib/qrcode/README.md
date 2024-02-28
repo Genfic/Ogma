@@ -9,7 +9,7 @@ QRCode.js has no dependencies.
 ```
 <div id="qrcode"></div>
 <script type="text/javascript">
-new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+new QRCode(document.getElementById("qrcode"), "https://jindo.dev.naver.com/collie");
 </script>
 ```
 
@@ -19,7 +19,7 @@ or with some options
 <div id="qrcode"></div>
 <script type="text/javascript">
 var qrcode = new QRCode(document.getElementById("qrcode"), {
-	text: "http://jindo.dev.naver.com/collie",
+	text: "https://jindo.dev.naver.com/collie",
 	width: 128,
 	height: 128,
 	colorDark : "#000000",
@@ -33,7 +33,7 @@ and you can use some methods
 
 ```
 qrcode.clear(); // clear the code.
-qrcode.makeCode("http://naver.com"); // make another code.
+qrcode.makeCode("https://naver.com"); // make another code.
 ```
 
 ## Browser Compatibility

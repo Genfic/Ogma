@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -271,6 +272,13 @@ public class Startup
 			settings.OperationProcessors.Insert(1, new IncludeInternalApisProcessor());
 			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
+		
+		// Rate limiting profiles
+		// TODO: Move it somewhere else?
+		services.AddRateLimiter(x => x.AddFixedWindowLimiter(policyName: "rss", options =>
+		{
+			options.Window = TimeSpan.FromHours(1);
+		}));
 	}
 
 
