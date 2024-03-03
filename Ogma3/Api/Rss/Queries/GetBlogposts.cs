@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,20 +19,22 @@ public static class GetBlogposts
 {
 	public sealed record Query : IRequest<ActionResult<RssResult>>;
 
+	[UsedImplicitly]
 	public class Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
 		: BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
 	{
 		public async ValueTask<ActionResult<RssResult>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			if (contextAccessor.HttpContext is not { } httpContext) return ServerError();
-			
+
 			var blogposts = await context.Blogposts
 				.Select(b => new {
 					b.Id,
 					b.Title,
 					Body = b.Body.Substring(0, 250),
 					b.Slug,
-					Date = b.PublicationDate ?? b.CreationDate
+					Date = b.PublicationDate ?? b.CreationDate,
+					a ="a"
 				})
 				.ToArrayAsync(cancellationToken);
 

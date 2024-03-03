@@ -11,7 +11,7 @@ namespace Ogma3.Api.Rss;
 public class RssController(IMediator mediator) : ControllerBase
 {
 	private const int Cache = 2400;
-	
+
 	[ResponseCache(Duration = Cache)]
 	[HttpGet]
 	[EnableRateLimiting("rss")]

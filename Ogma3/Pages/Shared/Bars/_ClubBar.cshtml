@@ -7,7 +7,7 @@
 @inject IHttpContextAccessor Accessor;
 @{
 	var tab = (string)(ViewData["Tab"] ?? "");
-	var csrf = Accessor is { HttpContext: { } } ? Antiforgery.GetAndStoreTokens(Accessor.HttpContext).RequestToken : "";
+	var csrf = Accessor is { HttpContext: { } context } ? Antiforgery.GetAndStoreTokens(context).RequestToken : "";
 }
 
 <div class="info-bar club-bar" id="club-bar">

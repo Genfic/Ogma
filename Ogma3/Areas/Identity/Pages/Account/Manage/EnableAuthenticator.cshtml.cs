@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -118,13 +119,13 @@ public class EnableAuthenticatorModel : PageModel
 		AuthenticatorUri = GenerateQrCodeUri(email!, unformattedKey!);
 	}
 
-	private string FormatKey(string unformattedKey)
+	private static string FormatKey(string unformattedKey)
 	{
 		var result = new StringBuilder();
 		var currentPosition = 0;
 		while (currentPosition + 4 < unformattedKey.Length)
 		{
-			result.Append(unformattedKey.Substring(currentPosition, 4)).Append(' ');
+			result.Append(unformattedKey.AsSpan(currentPosition, 4)).Append(' ');
 			currentPosition += 4;
 		}
 

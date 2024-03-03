@@ -18,7 +18,7 @@ public static class BlockContent
 	// ReSharper disable once UnusedTypeParameter
 	public sealed record Command<T>(long ObjectId, string Reason) : IRequest<ActionResult> where T : BaseModel, IBlockableContent;
 
-	// TODO: Apparently, Mediator doesn't like generic handlers, so... figure something else out
+	// TODO: Apparently, Mediator doesn't like generic handlers. Tracked by https://github.com/martinothamar/Mediator/issues/141
 	public class Handler<T>(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command<T>, ActionResult>
 		where T : BaseModel, IBlockableContent
 	{

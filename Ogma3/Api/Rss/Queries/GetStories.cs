@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ public static class GetStories
 {
 	public sealed record Query : IRequest<ActionResult<RssResult>>;
 
+	[UsedImplicitly]
 	public class Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
 		: BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
 	{

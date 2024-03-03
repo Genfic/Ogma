@@ -25,12 +25,12 @@ public class CdnPictureTagHelper(OgmaConfig config) : TagHelper
 		foreach (var format in SourceFormats)
 		{
 			var fullUrl = $"{bareUrl}.{format}";
-			output.Content.AppendHtml($@"<source type=""image/{format}"" srcset=""{fullUrl}"" />");
+			output.Content.AppendHtml($"""<source type="image/{format}" srcset="{fullUrl}" />""");
 		}
 
 
 		output.Content.AppendHtml(!Eager
-			? $@"<img src=""{url}"" alt=""{Alt}"" width=""{Width}"" height=""{Height}"">"
-			: $@"<img src=""{url}"" alt=""{Alt}"" width=""{Width}"" height=""{Height}"" loading=""lazy"">");
+			? $"""<img src="{url}" alt="{Alt}" width="{Width}" height="{Height}">"""
+			: $"""<img src="{url}" alt="{Alt}" width="{Width}" height="{Height}" loading="lazy">""");
 	}
 }

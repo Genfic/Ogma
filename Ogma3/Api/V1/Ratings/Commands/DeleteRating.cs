@@ -35,7 +35,7 @@ public static class DeleteRating
 
 			_context.Ratings.Remove(rating);
 
-			if (rating is { Icon: {}, IconId: {} })
+			if (rating is { Icon: not null, IconId: not null })
 			{
 				await _uploader.Delete(rating.Icon, rating.IconId, cancellationToken);
 			}

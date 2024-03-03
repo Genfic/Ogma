@@ -24,9 +24,11 @@ dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 
+
 # ReSharper properties
 resharper_autodetect_indent_settings = true
 resharper_csharp_max_line_length = 140
+resharper_csharp_trailing_comma_in_multiline_lists = true
 resharper_use_indent_from_vs = false
 
 # ReSharper inspection severities
@@ -47,3 +49,8 @@ resharper_web_config_wrong_module_highlighting = warning
 
 [*.{appxmanifest,asax,ascx,aspx,axaml,build,cg,cginc,compute,cs,cshtml,dtd,fs,fsi,fsscript,fsx,hlsl,hlsli,hlslinc,master,ml,mli,nuspec,paml,razor,resw,resx,skin,usf,ush,vb,xaml,xamlx,xoml,xsd}]
 tab_width = 4
+
+[*.{cs,cshtml}]
+# Roslynator.Analyzers rules
+dotnet_diagnostic.rcs1260.severity = warning
+roslynator_trailing_comma_style = omit_when_single_line

@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ public static class GetChapters
 {
 	public sealed record Query(long StoryId) : IRequest<ActionResult<RssResult>>;
 
+	[UsedImplicitly]
 	public class Handler(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor)
 		: BaseHandler, IRequestHandler<Query, ActionResult<RssResult>>
 	{
@@ -43,13 +45,13 @@ public static class GetChapters
 							s.Hook,
 							c.Slug,
 							c.PublicationDate,
-						})
+						}),
 				})
 				.FirstOrDefaultAsync(cancellationToken);
 
-			if (storyResult is not { } story) return NotFound();
+			if (storyResult is null) return NotFound();
 
-			var items = story.Chapters.Select(s => new SyndicationItem(
+			var items = storyResult.Chapters.Select(s => new SyndicationItem(
 				s.Title,
 				s.Hook,
 				new Uri(generator.GetUriByPage(httpContext, "/Chapter", values: new { s.Id, s.Slug }) ?? ""),
@@ -59,8 +61,8 @@ public static class GetChapters
 
 			return Ok(new RssResult
 			{
-				Title = $"{story.Title} — chapters",
-				Description = $"All {story.ChapterCount} chapters of story {story.Title}",
+				Title = $"{storyResult.Title} — chapters",
+				Description = $"All {storyResult.ChapterCount} chapters of story {storyResult.Title}",
 				Items = items,
 			});
 		}

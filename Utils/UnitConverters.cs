@@ -4,7 +4,7 @@ namespace Utils;
 
 public static class UnitConverters
 {
-	private static readonly string[] SizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+	private static readonly string[] SizeSuffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
 	public static string SizeSuffix(long value, int decimalPlaces = 1)
 	{

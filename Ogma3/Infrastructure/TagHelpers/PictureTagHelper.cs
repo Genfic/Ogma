@@ -21,8 +21,8 @@ public class PictureTagHelper(
 {
 	private const string AppendVersionAttributeName = "asp-append-version";
 	private const string SrcAttributeName = "src";
-
-	internal IFileVersionProvider? FileVersionProvider { get; private set; } = fileVersionProvider;
+	
+	private IFileVersionProvider? FileVersionProvider { get; set; } = fileVersionProvider;
 
 	[HtmlAttributeName(SrcAttributeName)]
 	public required string Src { get; set; }
@@ -70,10 +70,5 @@ public class PictureTagHelper(
 			: $"""<img src="{url}" alt="{Alt}" width="{Width}" height="{Height}" loading="lazy">""");
 
 		output.Attributes.Clear();
-	}
-
-	private void EnsureFileVersionProvider()
-	{
-		FileVersionProvider ??= ViewContext.HttpContext.RequestServices.GetRequiredService<IFileVersionProvider>();
 	}
 }

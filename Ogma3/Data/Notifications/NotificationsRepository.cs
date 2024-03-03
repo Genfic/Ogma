@@ -23,8 +23,8 @@ public class NotificationsRepository
 		IActionContextAccessor actionContextAccessor, 
 		CommentRedirector redirector
 	) {
-		if (actionContextAccessor is not { ActionContext: { } })
-			throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
+		if (actionContextAccessor is not { ActionContext: not null })
+			throw new NullReferenceException(nameof(actionContextAccessor.ActionContext));
 		
 		_context = context;
 		_redirector = redirector;

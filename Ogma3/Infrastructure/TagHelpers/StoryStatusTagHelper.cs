@@ -1,8 +1,8 @@
-using System;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data.Stories;
+using Ogma3.Infrastructure.Exceptions;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
@@ -18,7 +18,7 @@ public class StoryStatusTagHelper : TagHelper
 			EStoryStatus.Completed => ("done", "Completed"),
 			EStoryStatus.OnHiatus => ("pause", "On hiatus"),
 			EStoryStatus.Cancelled => ("block", "Cancelled"),
-			_ => throw new ArgumentOutOfRangeException(nameof(Status), "The enum is somehow out of range")
+			_ => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status))
 		};
 
 		output.TagName = "div";

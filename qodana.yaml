@@ -19,8 +19,19 @@ profile:
 exclude:
     - name: All
       paths:
-        - Ogma3\wwwroot\lib\wellidate\wellidate.js
         - Ogma3\wwwroot\lib
+        - Ogma3\Migrations
+        - Utils.Tests\Utils
+    -   name: UnusedAutoPropertyAccessor.Global
+    -   name: CollectionNeverUpdated.Global
+    -   name: NotAccessedPositionalProperty.Global
+    -   name: UnusedMethodReturnValue.Global
+    -   name: UnusedType.Global
+    -   name: UnusedMember.Global
+    -   name: UnusedMemberInSuper.Global
+    -   name: ClassNeverInstantiated.Global
+    -   name: AutoPropertyCanBeMadeGetOnly.Global
+    -   name: MemberCanBePrivate.Global
 
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh

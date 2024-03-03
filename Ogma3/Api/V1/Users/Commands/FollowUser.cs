@@ -16,38 +16,29 @@ public static class FollowUser
 {
 	public sealed record Command(string Name) : IRequest<ActionResult<bool>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
-	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	{		
 		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 
-			var targetUserId = await _context.Users
+			var targetUserId = await context.Users
 				.Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
 				.Select(u => u.Id)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			var exists = await _context.FollowedUsers
-				.Where(bu => bu.FollowingUserId == _uid && bu.FollowedUserId == targetUserId)
+			var exists = await context.FollowedUsers
+				.Where(bu => bu.FollowingUserId == uid && bu.FollowedUserId == targetUserId)
 				.AnyAsync(cancellationToken);
 
 			if (exists) return Ok(true);
 
-			_context.FollowedUsers.Add(new UserFollow()
+			context.FollowedUsers.Add(new UserFollow
 			{
-				FollowingUserId = (long)_uid,
+				FollowingUserId = uid,
 				FollowedUserId = targetUserId
 			});
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			return Ok(true);
 		}
