@@ -13,6 +13,7 @@
 		"autoprefixer": "10.4.16",
 		"concurrently": "^8.2.2",
 		"esbuild": "0.19.5",
+		"esbuild-minify-templates": "^0.11.0",
 		"eslint": "8.53.0",
 		"eslint-config-prettier": "9.0.0",
 		"gulp": "4.0.2",
@@ -53,7 +54,9 @@
 		"dayjs": "1.11.10",
 		"lit": "3.0.2"
 	},
-	"web-types": ["./web-types.json"],
+	"web-types": [
+		"./web-types.json"
+	],
 	"wca-config": {
 		"webtypesConfig": {
 			"name": "Ogma Components",
