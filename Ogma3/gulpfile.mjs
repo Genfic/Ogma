@@ -1,8 +1,7 @@
 "use strict";
 import { pipeline } from "stream";
-import gulp from "gulp";
+import { dest, lastRun, parallel, src, watch } from "gulp";
 import sourcemaps from "gulp-sourcemaps";
-import run from "gulp-run";
 
 // CSS processors
 import postcss from "gulp-postcss";
@@ -10,6 +9,9 @@ import { sass } from "@mr-hope/gulp-sass";
 import autoprefixer from "autoprefixer";
 import mqpacker from "@hail2u/css-mqpacker";
 import csso from "postcss-csso";
+
+// JS processors
+import gulpEsbuild from "gulp-esbuild";
 
 // Rollup
 import * as rollup from "rollup";
@@ -24,32 +26,23 @@ const roots = {
 	css: `${root}/css`,
 	js: `${root}/js`
 };
-
-// Watch globs
-const watchGlobs = {
-	sass: [ // Avoid `**` because gulp-sass shits itself otherwise and compilation takes >5s on any change
-		`${roots.css}/*.{sass,scss}`,
-		`${roots.css}/src/*.{sass,scss}`,
-		`${roots.css}/src/elements/*.{sass,scss}`,
-		`${roots.css}/src/admin-elements/*.{sass,scss}`,
-		`${roots.css}/src/mixins/*.{sass,scss}`,
-		`${roots.css}/src/base/*.{sass,scss}`,
-		`${roots.css}/src/pages/*.{sass,scss}`
-
-		// `${roots.css}/**/*.sass`,
-		// `${roots.css}/**/*.scss`,
-	],
-	js: [
-		`${roots.js}/src/**/*.js`
-	],
-	ts: [
-		`${roots.js}/src/**/*.ts`,
-		`!${roots.js}/src/wcomps/**/*.ts`
-	]
+const paths = {
+	styles: {
+		src: [`${roots.css}/*.{sass,scss}`, `${roots.css}/src/**/*.{sass,scss}`],
+		dest: `${roots.css}/dist`
+	},
+	js: {
+		src: `${roots.js}/src/**/*.{js,ts}`,
+		dest: `${roots.js}/dist`
+	},
+	wc: {
+		src: `${roots.js}/src-webcomponents/**/*.ts`,
+		dest: `${roots.js}/bundle`
+	}
 };
 
 // CSS tasks
-export const css = () => pipeline(gulp.src(`${roots.css}/*.sass`),
+export const css = () => pipeline(src(paths.styles.src, { since: lastRun(css) }),
 	sourcemaps.init({}),                   // Init maps
 	sass(),                              // Compile SASS
 	postcss([                    // Postprocess it
@@ -58,18 +51,30 @@ export const css = () => pipeline(gulp.src(`${roots.css}/*.sass`),
 		csso({ comments: false })
 	]),
 	sourcemaps.write("./", {}),     // Write maps
-	gulp.dest(`${roots.css}/dist`),      // Output minified CSS
+	dest(paths.styles.dest),      // Output minified CSS
 	errorHandler);
 
-export const watchCss = () => gulp.watch(watchGlobs.sass, css);
+export const watchCss = () => watch(paths.styles.src, css);
 
+// JS tasks
+export const js = () => pipeline(src(paths.js.src, { since: lastRun(js) }),
+	gulpEsbuild({
+		outdir: '.',
+		minify: true,
+		sourcemap: true,
+		tsconfig: `${roots.js}/tsconfig.json`
+	}),
+	dest(paths.js.dest),
+	errorHandler);
+
+export const watchJs = () => watch(paths.js.src, js);
 
 // Component bundle
-export const components = async () => pipeline(gulp.src(`${roots.js}/src-webcomponents/**/*.ts`),
+export const components = async () => pipeline(src(paths.wc.src, { since: lastRun(components) }),
 	async () => {
-		const out = `${roots.js}/bundle/components.js`;
+		const out = `${paths.wc.dest}/components.js`;
 		const bundle = await rollup.rollup({
-			input: `${roots.js}/src-webcomponents/**/*.ts`,
+			input: paths.wc.src,
 			output: {
 				file: out,
 				format: "es",
@@ -94,13 +99,12 @@ export const components = async () => pipeline(gulp.src(`${roots.js}/src-webcomp
 		});
 	},
 	errorHandler);
-const webtypes = () => run("npm run t:webtypes", {}).exec();
-export const watchComponents = () => gulp.watch(`${roots.js}/src/wcomps/**/*.ts`, gulp.series(components, webtypes));
+export const watchComponents = () => watch(paths.wc.src, components);
 
 
 // All tasks
-export const all = gulp.parallel(css, components);
-export const watchAll = gulp.parallel(watchCss, watchComponents, all);
+export const all = parallel(css, js, components);
+export const watchAll = parallel(watchCss, watchJs, watchComponents);
 
 
 // Error handler

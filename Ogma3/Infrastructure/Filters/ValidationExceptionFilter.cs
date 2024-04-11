@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentValidation;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -7,6 +8,7 @@ using Ogma3.Infrastructure.ActionResults;
 
 namespace Ogma3.Infrastructure.Filters;
 
+[UsedImplicitly]
 public class ValidationExceptionFilter : IExceptionFilter
 {
 	public void OnException(ExceptionContext context)
@@ -19,7 +21,7 @@ public class ValidationExceptionFilter : IExceptionFilter
 				e => e.First().PropertyName,
 				e => e.Select(v => v.ErrorMessage).ToHashSet().ToArray()
 			);
-
+		
 		context.Result = new ProblemResult(new ValidationProblemDetails(errors)
 		{
 			Status = StatusCodes.Status422UnprocessableEntity,
