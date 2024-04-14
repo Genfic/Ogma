@@ -1,0 +1,19 @@
+@use "../vars" as v;
+
+.validation-summary {
+
+	&-valid {
+		display: none;
+	}
+
+	&-errors {
+		margin-top: 1rem;
+		border: 1px solid v.$red-50;
+		padding: .5rem;
+		background-color: v.$red-10;
+
+		&:hover {
+			border-color: v.$red-75;
+		}
+	}
+}

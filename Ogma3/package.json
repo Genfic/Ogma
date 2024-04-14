@@ -1,15 +1,12 @@
 {
+	"name": "ogma-3",
 	"scripts": {
-		"build": "concurrently \"gulp all\" \"npm:js:build\"",
-		"dev": "concurrently \"gulp watchAll\" \"npm:js:watch\"",
-		"js:watch": "bun bundle.ts --watch",
-		"js:build": "bun bundle.ts",
-		"wc:watch": "bun bundle.ts --wc --watch",
-		"wc:build": "bun bundle.ts --wc",
+		"build": "gulp all",
+		"dev": "gulp watchAll",
 		"js:typecheck": "tsc --noEmit -p ./wwwroot/js/tsconfig.json",
 		"t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
-		"biome": "npx @biomejs/biome check .",
-		"biome:report": "npx @biomejs/biome check . --max-diagnostics 500 *> biome.diag"
+		"biome": "bunx @biomejs/biome check .",
+		"biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag"
 	},
 	"devDependencies": {
 		"@angius/web-component-analyzer": "2.0.10",
@@ -52,7 +49,6 @@
 		"typescript": "5.4.5",
 		"vue": "2.6.14"
 	},
-	"name": "ogma-3",
 	"dependencies": {
 		"date-fns": "3.6.0",
 		"dayjs": "1.11.10",
