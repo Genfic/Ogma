@@ -81,7 +81,7 @@
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
     <PackageReference Include="SerilogTimings" Version="3.0.2-dev-00041" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.1" />
     <PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.8" />
