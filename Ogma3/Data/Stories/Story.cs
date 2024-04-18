@@ -13,7 +13,7 @@ using Ogma3.Data.Votes;
 
 namespace Ogma3.Data.Stories;
 
-public class Story : BaseBlockableModel, IBlockableContent, IReportableContent, IDateableContent
+public class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
@@ -43,8 +43,8 @@ public class Story : BaseBlockableModel, IBlockableContent, IReportableContent, 
 	// Just for relationship purposes
 	public ICollection<Folder> Folders { get; set; } = null!;
 
-	public override ContentBlock? ContentBlock { get; set; }
-	public override long? ContentBlockId { get; set; }
+	public ContentBlock? ContentBlock { get; set; }
+	public long? ContentBlockId { get; set; }
 
 	public ICollection<Report> Reports { get; set; } = null!;
 	public ICollection<Shelf> Shelves { get; set; } = null!;

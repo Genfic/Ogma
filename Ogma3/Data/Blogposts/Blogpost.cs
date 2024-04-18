@@ -10,7 +10,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Blogposts;
 
-public class Blogpost : BaseBlockableModel, IBlockableContent, IReportableContent, IDateableContent
+public class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;
@@ -30,8 +30,8 @@ public class Blogpost : BaseBlockableModel, IBlockableContent, IReportableConten
 	public Chapter? AttachedChapter { get; set; }
 	public long? AttachedChapterId { get; set; }
 
-	public override ContentBlock? ContentBlock { get; set; }
-	public override long? ContentBlockId { get; set; }
+	public ContentBlock? ContentBlock { get; set; }
+	public long? ContentBlockId { get; set; }
 
 	public ICollection<Report> Reports { get; set; } = null!;
 }
