@@ -60,6 +60,7 @@ export interface TagDto {
     name: string | null;
     slug: string | null;
     description: string | null;
+    namespace: ETagNamespace | null;
     namespaceColor: string | null;
     namespaceId: number | null;
 }
@@ -70,11 +71,13 @@ export interface UpdateTagCommand {
     id: number;
     name: string | null;
     description: string | null;
+    namespace: ETagNamespace | null;
 }
 
 export interface CreateTagCommand {
     name: string;
     description: string | null;
+    namespace: ETagNamespace | null;
 }
 
 export interface SubscribeCommentsThreadCommand {
@@ -169,6 +172,7 @@ export interface CreateRoleCommand {
 export interface ReportContentCommand {
     itemId: number;
     reason: string;
+    itemType: EReportableContentTypes;
 }
 
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
@@ -215,6 +219,7 @@ export interface GetUserNotificationsResult {
     body: string | null;
     url: string;
     dateTime: string;
+    event: ENotificationEvent;
     message: string;
 }
 
@@ -245,6 +250,7 @@ export interface GetInfractionDetailsResult {
     activeUntil: string;
     removedAt: string | null;
     reason: string;
+    type: InfractionType;
     issuedByName: string;
     removedByName: string | null;
 }
@@ -261,6 +267,7 @@ export interface CreateInfractionCommand {
     userId: number;
     reason: string;
     endDate: string;
+    type: InfractionType;
 }
 
 export interface DeactivateInfractionResponse {
@@ -277,64 +284,12 @@ export interface GetFolderResult {
     canAdd: boolean;
 }
 
-export interface FolderStory {
+export interface AddStoryToFolderResponse {
     folderId: number;
     storyId: number;
     added: string;
     addedById: number;
 }
-
-export interface ClubMember {
-    memberId: number;
-    clubId: number;
-    memberSince: string;
-}
-
-export type EDeletedBy = "User" | "Staff";
-
-export type EStoryStatus = "InProgress" | "Completed" | "OnHiatus" | "Cancelled";
-
-export interface IdentityRoleOfLong {
-    id: number;
-    name: string | null;
-    normalizedName: string | null;
-    concurrencyStamp: string | null;
-}
-
-export interface IdentityUserRoleOfLong {
-    userId: number;
-    roleId: number;
-}
-
-export interface BlacklistedRating {
-    userId: number;
-    ratingId: number;
-}
-
-export interface BlacklistedTag {
-    userId: number;
-    tagId: number;
-}
-
-export interface IdentityUserOfLong {
-    id: number;
-    userName: string | null;
-    normalizedUserName: string | null;
-    email: string | null;
-    normalizedEmail: string | null;
-    emailConfirmed: boolean;
-    passwordHash: string | null;
-    securityStamp: string | null;
-    concurrencyStamp: string | null;
-    phoneNumber: string | null;
-    phoneNumberConfirmed: boolean;
-    twoFactorEnabled: boolean;
-    lockoutEnd: string | null;
-    lockoutEnabled: boolean;
-    accessFailedCount: number;
-}
-
-export type EClubMemberRoles = "Founder" | "Admin" | "Moderator" | "User";
 
 export interface AddStoryToFolderCommand {
     folderId: number;
@@ -351,13 +306,6 @@ export interface CreateFaqCommand {
     question: string;
     answer: string;
 }
-
-export interface BlockContentCommand {
-    objectId: number;
-    reason: string;
-}
-
-export type BlockContentBlockableContentType = "Story" | "Chapter" | "Blogpost";
 
 export interface GetPermissionsResult {
     isSiteModerator: boolean;
@@ -379,11 +327,13 @@ export interface PaginationResultOfCommentDto {
 
 export interface CommentDto {
     id: number;
+    author: UserSimpleDto | null;
     dateTime: string;
     lastEdit: string | null;
     editCount: number;
     owned: boolean;
     body: string;
+    deletedBy: EDeletedBy | null;
     isBlocked: boolean;
 }
 
@@ -393,6 +343,8 @@ export interface UserSimpleDto {
     title: string | null;
     roles: object;
 }
+
+export type EDeletedBy = "User" | "Staff";
 
 export interface GetRevisionResult {
     editTime: string;

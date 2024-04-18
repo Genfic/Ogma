@@ -1,7 +1,6 @@
-import {
+import type {
 	AddStoryToFolderCommand,
 	BanUserCommand,
-	BlockContentCommand,
 	BlockUserCommand,
 	CommentsControllerPostData,
 	CreateFaqCommand,
@@ -71,7 +70,7 @@ export const Votes_GetVotes = async (storyid: number, headers?: HeadersInit, opt
     ...options 
   });
 
-export const Votes_PostVote = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/votes`, { 
+export const Votes_PostVote = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/votes", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -81,7 +80,7 @@ export const Votes_PostVote = async (body: CreateVoteCommand, headers?: HeadersI
     ...options 
   });
 
-export const Votes_DeleteVote = async (body: DeleteVoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/votes`, { 
+export const Votes_DeleteVote = async (body: DeleteVoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/votes", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -91,7 +90,7 @@ export const Votes_DeleteVote = async (body: DeleteVoteCommand, headers?: Header
     ...options 
   });
 
-export const Users_BlockUser = async (body: BlockUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/users/block`, { 
+export const Users_BlockUser = async (body: BlockUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/users/block", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -101,7 +100,7 @@ export const Users_BlockUser = async (body: BlockUserCommand, headers?: HeadersI
     ...options 
   });
 
-export const Users_UnblockUser = async (body: UnblockUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/users/block`, { 
+export const Users_UnblockUser = async (body: UnblockUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/users/block", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -111,7 +110,7 @@ export const Users_UnblockUser = async (body: UnblockUserCommand, headers?: Head
     ...options 
   });
 
-export const Users_FollowUser = async (body: FollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/users/follow`, { 
+export const Users_FollowUser = async (body: FollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/users/follow", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -121,7 +120,7 @@ export const Users_FollowUser = async (body: FollowUserCommand, headers?: Header
     ...options 
   });
 
-export const Users_UnfollowUser = async (body: UnfollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/users/follow`, { 
+export const Users_UnfollowUser = async (body: UnfollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/users/follow", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -131,7 +130,7 @@ export const Users_UnfollowUser = async (body: UnfollowUserCommand, headers?: He
     ...options 
   });
 
-export const Users_ManageRoles = async (body: UpdateRolesCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/users/roles`, { 
+export const Users_ManageRoles = async (body: UpdateRolesCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/users/roles", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -150,7 +149,7 @@ export const Users_FindNames = async (name: string, headers?: HeadersInit, optio
     ...options 
   });
 
-export const UserActivity_UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/useractivity`, { 
+export const UserActivity_UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/useractivity", { 
     method: 'HEAD', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -159,7 +158,7 @@ export const UserActivity_UpdateLastActive = async (headers?: HeadersInit, optio
     ...options 
   });
 
-export const Tags_GetAll = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/tags/all`, { 
+export const Tags_GetAll = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/tags/all", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -186,7 +185,7 @@ export const Tags_GetTags = async (page: number, perpage: number, headers?: Head
     ...options 
   });
 
-export const Tags_PutTag = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/tags`, { 
+export const Tags_PutTag = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/tags", { 
     method: 'PUT', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -196,7 +195,7 @@ export const Tags_PutTag = async (body: UpdateTagCommand, headers?: HeadersInit,
     ...options 
   });
 
-export const Tags_PostTag = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/tags`, { 
+export const Tags_PostTag = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/tags", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -242,7 +241,7 @@ export const Subscriptions_IsSubscribedToThread = async (threadid: number, heade
     ...options 
   });
 
-export const Subscriptions_SubscribeThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/subscriptions/thread`, { 
+export const Subscriptions_SubscribeThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/subscriptions/thread", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -252,7 +251,7 @@ export const Subscriptions_SubscribeThread = async (body: SubscribeCommentsThrea
     ...options 
   });
 
-export const Subscriptions_UnsubscribeThread = async (body: UnsubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/subscriptions/thread`, { 
+export const Subscriptions_UnsubscribeThread = async (body: UnsubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/subscriptions/thread", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -298,7 +297,7 @@ export const Shelves_GetUserShelves = async (name: string, page: number, headers
     ...options 
   });
 
-export const Shelves_PostShelf = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/shelves`, { 
+export const Shelves_PostShelf = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/shelves", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -308,7 +307,7 @@ export const Shelves_PostShelf = async (body: CreateShelfCommand, headers?: Head
     ...options 
   });
 
-export const Shelves_PutShelf = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/shelves`, { 
+export const Shelves_PutShelf = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/shelves", { 
     method: 'PUT', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -354,7 +353,7 @@ export const ShelfStories_RemoveFromShelf = async (shelfid: number, storyid: num
     ...options 
   });
 
-export const Roles_GetRoles = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/roles`, { 
+export const Roles_GetRoles = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/roles", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -363,7 +362,7 @@ export const Roles_GetRoles = async (headers?: HeadersInit, options?: RequestIni
     ...options 
   });
 
-export const Roles_PutRole = async (body: UpdateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/roles`, { 
+export const Roles_PutRole = async (body: UpdateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/roles", { 
     method: 'PUT', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -373,7 +372,7 @@ export const Roles_PutRole = async (body: UpdateRoleCommand, headers?: HeadersIn
     ...options 
   });
 
-export const Roles_PostRole = async (body: CreateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/roles`, { 
+export const Roles_PostRole = async (body: CreateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/roles", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -401,7 +400,7 @@ export const Roles_DeleteRole = async (id: number, headers?: HeadersInit, option
     ...options 
   });
 
-export const Reports_PostReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/reports`, { 
+export const Reports_PostReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/reports", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -411,7 +410,7 @@ export const Reports_PostReports = async (body: ReportContentCommand, headers?: 
     ...options 
   });
 
-export const Ratings_GetRatings = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/ratings`, { 
+export const Ratings_GetRatings = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/ratings", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -420,7 +419,7 @@ export const Ratings_GetRatings = async (headers?: HeadersInit, options?: Reques
     ...options 
   });
 
-export const Ratings_PostRating = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/ratings`, { 
+export const Ratings_PostRating = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/ratings", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -429,7 +428,7 @@ export const Ratings_PostRating = async (headers?: HeadersInit, options?: Reques
     ...options 
   });
 
-export const Ratings_PutRating = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/ratings`, { 
+export const Ratings_PutRating = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/ratings", { 
     method: 'PUT', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -456,7 +455,7 @@ export const Ratings_DeleteRating = async (id: number, headers?: HeadersInit, op
     ...options 
   });
 
-export const Quotes_GetQuotes = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/quotes`, { 
+export const Quotes_GetQuotes = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/quotes", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -465,7 +464,7 @@ export const Quotes_GetQuotes = async (headers?: HeadersInit, options?: RequestI
     ...options 
   });
 
-export const Quotes_PostQuote = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/quotes`, { 
+export const Quotes_PostQuote = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/quotes", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -475,7 +474,7 @@ export const Quotes_PostQuote = async (body: CreateQuoteCommand, headers?: Heade
     ...options 
   });
 
-export const Quotes_PutQuote = async (body: UpdateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/quotes`, { 
+export const Quotes_PutQuote = async (body: UpdateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/quotes", { 
     method: 'PUT', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -485,7 +484,7 @@ export const Quotes_PutQuote = async (body: UpdateQuoteCommand, headers?: Header
     ...options 
   });
 
-export const Quotes_DeleteQuote = async (body: DeleteQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/quotes`, { 
+export const Quotes_DeleteQuote = async (body: DeleteQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/quotes", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -504,7 +503,7 @@ export const Quotes_GetQuote = async (id: number, headers?: HeadersInit, options
     ...options 
   });
 
-export const Quotes_GetRandomQuote = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/quotes/random`, { 
+export const Quotes_GetRandomQuote = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/quotes/random", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -513,7 +512,7 @@ export const Quotes_GetRandomQuote = async (headers?: HeadersInit, options?: Req
     ...options 
   });
 
-export const Quotes_PostJson = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/quotes/json`, { 
+export const Quotes_PostJson = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/quotes/json", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -522,7 +521,7 @@ export const Quotes_PostJson = async (headers?: HeadersInit, options?: RequestIn
     ...options 
   });
 
-export const Notifications_GetUserNotifications = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/notifications`, { 
+export const Notifications_GetUserNotifications = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/notifications", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -531,7 +530,7 @@ export const Notifications_GetUserNotifications = async (headers?: HeadersInit, 
     ...options 
   });
 
-export const Notifications_CountUserNotifications = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/notifications/count`, { 
+export const Notifications_CountUserNotifications = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/notifications/count", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -549,7 +548,7 @@ export const Notifications_DeleteNotification = async (id: number, headers?: Hea
     ...options 
   });
 
-export const InviteCodes_GetInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/invitecodes`, { 
+export const InviteCodes_GetInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/invitecodes", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -558,7 +557,7 @@ export const InviteCodes_GetInviteCodes = async (headers?: HeadersInit, options?
     ...options 
   });
 
-export const InviteCodes_PostInviteCode = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/invitecodes`, { 
+export const InviteCodes_PostInviteCode = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/invitecodes", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -576,7 +575,7 @@ export const InviteCodes_GetPaginatedInviteCodes = async (page: number, perpage:
     ...options 
   });
 
-export const InviteCodes_PostInviteCodeNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/invitecodes/no-limit`, { 
+export const InviteCodes_PostInviteCodeNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/invitecodes/no-limit", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -603,7 +602,7 @@ export const Infractions_GetInfractions = async (id: number, headers?: HeadersIn
     ...options 
   });
 
-export const Infractions_AddInfraction = async (body: CreateInfractionCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/infractions`, { 
+export const Infractions_AddInfraction = async (body: CreateInfractionCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/infractions", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -640,7 +639,7 @@ export const Folders_GetFoldersOfClub = async (id: number, headers?: HeadersInit
     ...options 
   });
 
-export const Folders_AddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/folders/add-story`, { 
+export const Folders_AddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/folders/add-story", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -650,7 +649,7 @@ export const Folders_AddStory = async (body: AddStoryToFolderCommand, headers?: 
     ...options 
   });
 
-export const Faqs_GetFaqs = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/faqs`, { 
+export const Faqs_GetFaqs = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/faqs", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -659,7 +658,7 @@ export const Faqs_GetFaqs = async (headers?: HeadersInit, options?: RequestInit)
     ...options 
   });
 
-export const Faqs_PutFaq = async (body: UpdateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/faqs`, { 
+export const Faqs_PutFaq = async (body: UpdateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/faqs", { 
     method: 'PUT', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -669,7 +668,7 @@ export const Faqs_PutFaq = async (body: UpdateFaqCommand, headers?: HeadersInit,
     ...options 
   });
 
-export const Faqs_PostFaq = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/faqs`, { 
+export const Faqs_PostFaq = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/faqs", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -697,16 +696,6 @@ export const Faqs_DeleteFaq = async (id: number, headers?: HeadersInit, options?
     ...options 
   });
 
-export const ContentBlock_Block = async (body: BlockContentCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/contentblock`, { 
-    method: 'POST', 
-    headers: { 
-      'Content-Type': 'application/json', 
-      ...headers 
-    },
-    body: JSON.stringify(body),
-    ...options 
-  });
-
 export const CommentsThread_GetPermissions = async (id: number, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/commentsthread/permissions/${id}`, { 
     method: 'GET', 
     headers: { 
@@ -725,7 +714,7 @@ export const CommentsThread_GetLockStatus = async (id: number, headers?: Headers
     ...options 
   });
 
-export const CommentsThread_LockThread = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/commentsthread/lock`, { 
+export const CommentsThread_LockThread = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/commentsthread/lock", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -744,7 +733,7 @@ export const Comments_GetComments = async (thread: number, page: number, highlig
     ...options 
   });
 
-export const Comments_PostComments = async (body: CommentsControllerPostData, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/comments`, { 
+export const Comments_PostComments = async (body: CommentsControllerPostData, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/comments", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -754,7 +743,7 @@ export const Comments_PostComments = async (body: CommentsControllerPostData, he
     ...options 
   });
 
-export const Comments_PutComment = async (body: UpdateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/comments`, { 
+export const Comments_PutComment = async (body: UpdateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/comments", { 
     method: 'PATCH', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -800,7 +789,7 @@ export const Comments_GetMarkdown = async (id: number, headers?: HeadersInit, op
     ...options 
   });
 
-export const Clubs_GetUserClubs = async (headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/clubs/user`, { 
+export const Clubs_GetUserClubs = async (headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/clubs/user", { 
     method: 'GET', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -818,7 +807,7 @@ export const Clubs_GetClubsWithStory = async (id: number, headers?: HeadersInit,
     ...options 
   });
 
-export const Clubs_BanUser = async (body: BanUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/clubs/user/ban`, { 
+export const Clubs_BanUser = async (body: BanUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/clubs/user/ban", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -828,7 +817,7 @@ export const Clubs_BanUser = async (body: BanUserCommand, headers?: HeadersInit,
     ...options 
   });
 
-export const Clubs_UnbanUser = async (body: UnbanUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/clubs/user/ban`, { 
+export const Clubs_UnbanUser = async (body: UnbanUserCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/clubs/user/ban", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -847,7 +836,7 @@ export const ClubJoin_CheckMembershipStatus = async (club: number, headers?: Hea
     ...options 
   });
 
-export const ClubJoin_JoinClub = async (body: JoinClubCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/clubjoin`, { 
+export const ClubJoin_JoinClub = async (body: JoinClubCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/clubjoin", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -857,7 +846,7 @@ export const ClubJoin_JoinClub = async (body: JoinClubCommand, headers?: Headers
     ...options 
   });
 
-export const ClubJoin_LeaveClub = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/clubjoin`, { 
+export const ClubJoin_LeaveClub = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/clubjoin", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -876,7 +865,7 @@ export const ChaptersRead_GetChaptersRead = async (story: number, headers?: Head
     ...options 
   });
 
-export const ChaptersRead_PostChaptersRead = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/chaptersread`, { 
+export const ChaptersRead_PostChaptersRead = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/chaptersread", { 
     method: 'POST', 
     headers: { 
       'Content-Type': 'application/json', 
@@ -886,7 +875,7 @@ export const ChaptersRead_PostChaptersRead = async (body: MarkChapterAsReadComma
     ...options 
   });
 
-export const ChaptersRead_DeleteChaptersRead = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch (`/api/chaptersread`, { 
+export const ChaptersRead_DeleteChaptersRead = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await fetch ("/api/chaptersread", { 
     method: 'DELETE', 
     headers: { 
       'Content-Type': 'application/json', 

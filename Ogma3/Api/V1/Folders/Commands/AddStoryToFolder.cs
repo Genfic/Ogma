@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,50 +15,49 @@ namespace Ogma3.Api.V1.Folders.Commands;
 
 public static class AddStoryToFolder
 {
-	public sealed record Command(long FolderId, long StoryId) : IRequest<ActionResult<FolderStory>>;
-
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<FolderStory>>
+	public sealed record Command(long FolderId, long StoryId) : IRequest<ActionResult<Response>>;
+	
+	public sealed record Response(long FolderId, long StoryId, DateTime Added, long AddedById)
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
+		public static Response FromFolderStory(FolderStory fs) => new Response(fs.FolderId, fs.StoryId, fs.Added, fs.AddedById);
+	}
 
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
-		public async ValueTask<ActionResult<FolderStory>> Handle(Command request, CancellationToken cancellationToken)
+	public class Handler(ApplicationDbContext context, IUserService userService)
+		: BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	{
+		private readonly long? _uid = userService.User?.GetNumericId();
+		
+		public async ValueTask<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is not {} uid) return Unauthorized();
 			
 			var (folderId, storyId) = request;
 
-			var folder = await _context.Folders
+			var folder = await context.Folders
 				.Where(f => f.Id == folderId)
 				.Where(f => f.Club.ClubMembers.First(c => c.MemberId == _uid).Role <= f.AccessLevel)
 				.FirstOrDefaultAsync(cancellationToken);
 			
 			if (folder is null) return NotFound("Folder not found or insufficient permissions");
 
-			var storyExists = await _context.Stories
+			var storyExists = await context.Stories
 				.AnyAsync(s => s.Id == storyId, cancellationToken);
 			if (!storyExists) return NotFound("Story not found");
 
-			var exists = await _context.FolderStories
+			var exists = await context.FolderStories
 				.AnyAsync(fs => fs.FolderId == folderId && fs.StoryId == storyId, cancellationToken);
 			if (exists) return Conflict("Already exists");
 
-			var entity = _context.FolderStories.Add(new FolderStory
+			var entity = context.FolderStories.Add(new FolderStory
 			{
 				FolderId = folderId,
 				StoryId = storyId,
 				AddedById = uid
 			});
 			folder.StoriesCount++;
-
-			await _context.SaveChangesAsync(cancellationToken);
-			return Ok(entity.Entity);
+			
+			await context.SaveChangesAsync(cancellationToken);
+			return Ok(Response.FromFolderStory(entity.Entity));
 		}
 	}
 }
