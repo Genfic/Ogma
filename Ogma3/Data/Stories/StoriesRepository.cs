@@ -3,26 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
+using Ogma3.Services.UserService;
 
 namespace Ogma3.Data.Stories;
 
-public class StoriesRepository
+public class StoriesRepository(ApplicationDbContext context, IMapper mapper, IUserService userService)
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IMapper _mapper;
-	private readonly long? _uid;
-
-	public StoriesRepository(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor contextAccessor)
-	{
-		_context = context;
-		_mapper = mapper;
-		_uid = contextAccessor.HttpContext?.User.GetNumericId();
-	}
-
 	/// <summary>
 	/// Get `StoryCard` objects, sorted according to `EStorySortingOptions` and paginated
 	/// </summary>
@@ -31,14 +20,14 @@ public class StoriesRepository
 	/// <returns>Sorted and paginated list of `StoryCard` objects</returns>
 	public async Task<List<StoryCard>> GetTopStoryCards(int count, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
 	{
-		return await _context.Stories
+		return await context.Stories
 			.TagWith($"{nameof(StoriesRepository)}.{nameof(GetTopStoryCards)} -> {count}, {sort}")
 			.Where(b => b.PublicationDate != null)
 			.Where(b => b.ContentBlockId == null)
-			.Blacklist(_context, _uid)
+			.Blacklist(context, userService.User?.GetNumericId())
 			.SortByEnum(sort)
 			.Take(count)
-			.ProjectTo<StoryCard>(_mapper.ConfigurationProvider)
+			.ProjectTo<StoryCard>(mapper.ConfigurationProvider)
 			.AsNoTracking()
 			.ToListAsync();
 	}

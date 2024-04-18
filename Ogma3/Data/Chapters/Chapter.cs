@@ -8,7 +8,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Data.Chapters;
 
-public class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public class Chapter : BaseBlockableModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public uint Order { get; set; }
 	public DateTime CreationDate { get; set; }
@@ -22,7 +22,7 @@ public class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateab
 	public CommentsThread CommentsThread { get; set; } = null!;
 	public Story Story { get; set; } = null!;
 	public long StoryId { get; set; }
-	public ContentBlock? ContentBlock { get; set; }
-	public long? ContentBlockId { get; set; }
+	public override ContentBlock? ContentBlock { get; set; }
+	public override long? ContentBlockId { get; set; }
 	public ICollection<Report> Reports { get; set; } = null!;
 }

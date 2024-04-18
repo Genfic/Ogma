@@ -19,14 +19,13 @@ public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContex
 
 	public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
 	{
-		var uid = httpContext.User.GetNumericId();
-		if (uid is null)
+		if (httpContext.User.GetNumericId() is not {} uid)
 		{
 			await next(httpContext);
 			return;
 		}
 
-		var banDate = await cache.GetOrCreateAsync(CacheKey((long)uid), async entry =>
+		var banDate = await cache.GetOrCreateAsync(CacheKey(uid), async entry =>
 		{
 			entry.SlidingExpiration = TimeSpan.FromMinutes(30);
 			return await dbContext.Infractions

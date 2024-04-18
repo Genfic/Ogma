@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -112,7 +113,7 @@ public class Startup
 		ValidatorOptions.Global.LanguageManager.Enabled = false;
 
 		// Custom persistent config
-		services.AddSingleton(OgmaConfig.Init("config.json"));
+		services.AddSingleton(OgmaConfig.Init("config.jsonc"));
 
 		// Comment redirector
 		services.AddScoped<CommentRedirector>();
@@ -273,6 +274,13 @@ public class Startup
 			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 		
+		// HSTS
+		services.AddHsts(options => {
+			options.Preload = true;
+			options.IncludeSubDomains = true;
+			options.MaxAge = TimeSpan.FromHours(12); // TimeSpan.FromYears(1) when HTTPS config is down pat
+		});
+		
 		// Rate limiting profiles
 		// TODO: Move it somewhere else?
 		services.AddRateLimiter(x => x.AddFixedWindowLimiter(policyName: "rss", options =>
@@ -323,10 +331,10 @@ public class Startup
 
 		// Redirects
 		app.UseHttpsRedirection();
-		app.UseRedirectMiddleware(options =>
-		{
-			options.Redirects.Add("/.well-known/change-password", "/identity/account/manage/changepassword");
-		});
+		app.UseRewriter(new RewriteOptions()
+			.AddRedirect("^\\.well-known/change-password$", "identity/account/manage/changepassword")
+		);
+		
 
 		// Map file extensions
 		var extensionsProvider = new FileExtensionContentTypeProvider();

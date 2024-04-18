@@ -62,7 +62,8 @@ export const js = () => pipeline(src(paths.js.src, { since: lastRun(js) }),
 		outdir: '.',
 		minify: true,
 		sourcemap: true,
-		tsconfig: `${roots.js}/tsconfig.json`
+		tsconfig: `${roots.js}/tsconfig.json`,
+		bundle: true,
 	}),
 	dest(paths.js.dest),
 	errorHandler);
@@ -87,7 +88,7 @@ export const components = async () => pipeline(src(paths.wc.src, { since: lastRu
 				esbuild({
 					tsconfig: `${roots.js}/tsconfig.json`,
 					minify: true,
-					legalComments: "eof"
+					legalComments: "eof",
 				})
 			]
 		});

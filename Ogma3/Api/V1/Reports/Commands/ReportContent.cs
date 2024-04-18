@@ -20,27 +20,19 @@ public static class ReportContent
 		public CommandValidator() => RuleFor(r => r.Reason).MinimumLength(30).MaximumLength(500);
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<long>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
+		
 		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 
 			var (itemId, reason, itemType) = request;
 
 			var report = new Report
 			{
 				Reason = reason,
-				ReporterId = (long)_uid,
+				ReporterId = uid,
 				ContentType = itemType.ToString()
 			};
 
@@ -68,8 +60,8 @@ public static class ReportContent
 					return BadRequest();
 			}
 
-			_context.Reports.Add(report);
-			await _context.SaveChangesAsync(cancellationToken);
+			context.Reports.Add(report);
+			await context.SaveChangesAsync(cancellationToken);
 
 			return Ok(report.Id);
 		}

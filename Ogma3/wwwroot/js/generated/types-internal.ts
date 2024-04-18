@@ -1,4 +1,4 @@
-export interface TableInfo {
-    name: string | null;
+export interface GetTableInfoResponse {
+    name: string;
     size: number;
 }

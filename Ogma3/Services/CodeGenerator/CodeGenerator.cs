@@ -20,7 +20,7 @@ public class CodeGenerator(ILogger<CodeGenerator> logger) : ICodeGenerator
 			? Convert.ToBase64String(Convert.FromHexString(unixStr + hexStr))
 			: unixStr + hexStr;
 
-		logger.LogInformation("Generated invite code: {Code} from {Unix} and {Hex}", resultCode, unixStr, hexStr);
+		logger.LogInformation("Generated invite code: {Code} from {Unix} timestamp and {Hex} random string", resultCode, unixStr, hexStr);
 
 		return resultCode;
 	}

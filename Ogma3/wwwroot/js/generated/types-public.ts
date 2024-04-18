@@ -1,6 +1,6 @@
 export interface ErrorControllerResult {
     code: number | null;
-    reason: string | null;
+    reason: string;
 }
 
 export interface GetVotesResult {
@@ -35,24 +35,24 @@ export interface ProblemDetails {
 }
 
 export interface BlockUserCommand {
-    name: string | null;
+    name: string;
 }
 
 export interface UnblockUserCommand {
-    name: string | null;
+    name: string;
 }
 
 export interface FollowUserCommand {
-    name: string | null;
+    name: string;
 }
 
 export interface UnfollowUserCommand {
-    name: string | null;
+    name: string;
 }
 
 export interface UpdateRolesCommand {
     userId: number;
-    roles: object[];
+    roles: number;
 }
 
 export interface TagDto {
@@ -86,7 +86,7 @@ export interface UnsubscribeCommentsThreadCommand {
 }
 
 export interface GetSignInDataResult {
-    avatar: string | null;
+    avatar: string;
     title: string | null;
 }
 
@@ -105,29 +105,29 @@ export interface ShelfDto {
 }
 
 export interface CreateShelfCommand {
-    name: string | null;
-    description: string | null;
+    name: string;
+    description: string;
     isQuickAdd: boolean;
     isPublic: boolean;
     trackUpdates: boolean;
-    color: string | null;
+    color: string;
     icon: number;
 }
 
 export interface UpdateShelfCommand {
     id: number;
-    name: string | null;
-    description: string | null;
+    name: string;
+    description: string;
     isQuickAdd: boolean;
     isPublic: boolean;
     trackUpdates: boolean;
-    color: string | null;
+    color: string;
     icon: number;
 }
 
 export interface GetPaginatedUserShelvesResult {
     id: number;
-    name: string | null;
+    name: string;
     color: string | null;
     iconName: string | null;
     doesContainBook: boolean;
@@ -148,28 +148,27 @@ export interface RoleDto {
     name: string;
     color: string | null;
     isStaff: boolean;
-    order: number;
+    order: number | null;
 }
 
 export interface UpdateRoleCommand {
     id: number;
-    name: string | null;
+    name: string;
     isStaff: boolean;
-    color: string | null;
+    color: string;
     order: number | null;
 }
 
 export interface CreateRoleCommand {
-    name: string | null;
+    name: string;
     isStaff: boolean;
-    color: string | null;
+    color: string;
     order: number | null;
 }
 
 export interface ReportContentCommand {
     itemId: number;
-    reason: string | null;
-    itemType: EReportableContentTypes;
+    reason: string;
 }
 
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
@@ -193,14 +192,14 @@ export interface QuoteDto {
 }
 
 export interface CreateQuoteCommand {
-    body: string | null;
-    author: string | null;
+    body: string;
+    author: string;
 }
 
 export interface UpdateQuoteCommand {
     id: number;
-    body: string | null;
-    author: string | null;
+    body: string;
+    author: string;
 }
 
 export interface CreateQuotesFromJsonResponse {
@@ -214,10 +213,9 @@ export interface DeleteQuoteCommand {
 export interface GetUserNotificationsResult {
     id: number;
     body: string | null;
-    url: string | null;
+    url: string;
     dateTime: string;
-    event: ENotificationEvent;
-    message: string | null;
+    message: string;
 }
 
 export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
@@ -236,7 +234,7 @@ export interface GetUserInfractionsResult {
     id: number;
     activeUntil: string;
     removed: boolean;
-    reason: string | null;
+    reason: string;
 }
 
 export interface GetInfractionDetailsResult {
@@ -247,7 +245,6 @@ export interface GetInfractionDetailsResult {
     activeUntil: string;
     removedAt: string | null;
     reason: string;
-    type: InfractionType;
     issuedByName: string;
     removedByName: string | null;
 }
@@ -262,9 +259,8 @@ export interface CreateInfractionResponse {
 
 export interface CreateInfractionCommand {
     userId: number;
-    reason: string | null;
+    reason: string;
     endDate: string;
-    type: InfractionType;
 }
 
 export interface DeactivateInfractionResponse {
@@ -275,8 +271,8 @@ export interface DeactivateInfractionResponse {
 
 export interface GetFolderResult {
     id: number;
-    name: string | null;
-    slug: string | null;
+    name: string;
+    slug: string;
     parentFolderId: number | null;
     canAdd: boolean;
 }
@@ -284,12 +280,13 @@ export interface GetFolderResult {
 export interface FolderStory {
     folderId: number;
     storyId: number;
+    added: string;
+    addedById: number;
 }
 
 export interface ClubMember {
     memberId: number;
     clubId: number;
-    role: EClubMemberRoles;
     memberSince: string;
 }
 
@@ -346,42 +343,34 @@ export interface AddStoryToFolderCommand {
 
 export interface UpdateFaqCommand {
     id: number;
-    question: string | null;
-    answer: string | null;
+    question: string;
+    answer: string;
 }
 
 export interface CreateFaqCommand {
-    question: string | null;
-    answer: string | null;
+    question: string;
+    answer: string;
 }
 
-export interface CommandOfStory {
+export interface BlockContentCommand {
     objectId: number;
-    reason: string | null;
+    reason: string;
 }
 
-export interface CommandOfChapter {
-    objectId: number;
-    reason: string | null;
-}
+export type BlockContentBlockableContentType = "Story" | "Chapter" | "Blogpost";
 
-export interface CommandOfBlogpost {
-    objectId: number;
-    reason: string | null;
-}
-
-export interface CommentsThreadControllerPermissionsResult {
+export interface GetPermissionsResult {
     isSiteModerator: boolean;
     isClubModerator: boolean;
     isAllowed: boolean;
 }
 
-export interface CommentsThreadControllerPostData {
+export interface LockThreadCommand {
     id: number;
 }
 
 export interface PaginationResultOfCommentDto {
-    elements: object[] | null;
+    elements: object;
     total: number;
     perPage: number;
     pages: number;
@@ -390,7 +379,6 @@ export interface PaginationResultOfCommentDto {
 
 export interface CommentDto {
     id: number;
-    author: UserSimpleDto;
     dateTime: string;
     lastEdit: string | null;
     editCount: number;
@@ -400,44 +388,44 @@ export interface CommentDto {
 }
 
 export interface UserSimpleDto {
-    userName: string | null;
-    avatar: string | null;
+    userName: string;
+    avatar: string;
     title: string | null;
-    roles: object[] | null;
+    roles: object;
 }
 
 export interface GetRevisionResult {
     editTime: string;
-    body: string | null;
+    body: string;
 }
 
 export interface CommentsControllerPostData {
-    body: string | null;
+    body: string;
     thread: number;
-    type: string | null;
+    type: string;
 }
 
 export interface UpdateCommentCommand {
-    body: string | null;
+    body: string;
     id: number;
 }
 
 export interface GetJoinedClubsResponse {
     id: number;
-    name: string | null;
-    icon: string | null;
+    name: string;
+    icon: string;
 }
 
 export interface GetClubsWithStoryResult {
     id: number;
-    name: string | null;
-    icon: string | null;
+    name: string;
+    icon: string;
 }
 
 export interface BanUserCommand {
     userId: number;
     clubId: number;
-    reason: string | null;
+    reason: string;
 }
 
 export interface UnbanUserCommand {
