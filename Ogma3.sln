@@ -5,11 +5,11 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogma3", "Ogma3\Ogma3.csproj", "{82836CC4-2B02-485E-9E98-E49F178652ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{9EC165CA-0939-4CBA-8DFA-6F7DA8DEC51E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{9EC165CA-0939-4CBA-8DFA-6F7DA8DEC51E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests", "Utils.Tests\Utils.Tests.csproj", "{45A4BB8B-BA00-401C-B888-6016A51E9DE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Tests", "Utils.Tests\Utils.Tests.csproj", "{45A4BB8B-BA00-401C-B888-6016A51E9DE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ogma3.Tests", "Ogma3.Tests\Ogma3.Tests.csproj", "{3B4D50E6-4FFD-4262-8CF7-CAD4BB3EC715}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogma3.Tests", "Ogma3.Tests\Ogma3.Tests.csproj", "{3B4D50E6-4FFD-4262-8CF7-CAD4BB3EC715}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

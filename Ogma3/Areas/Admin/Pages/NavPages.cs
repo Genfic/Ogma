@@ -20,6 +20,7 @@ public static class NavPages
 	public static string ModLog => "ModLog";
 	public static string Reports => "Reports";
 	public static string Faq => "FAQ";
+	public static string Infractions => "Infractions";
 
 	public static string PageNavClass(ViewContext viewContext, string page)
 	{

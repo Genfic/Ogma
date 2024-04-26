@@ -51,7 +51,7 @@ using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Serilog;
 using static Ogma3.Services.RoutingHelpers;
-using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
+using SameSiteMode=Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace Ogma3;
 
@@ -69,23 +69,22 @@ public class Startup
 			.Build();
 		// Configuration = configuration;
 	}
-
+	
 	private IConfiguration Configuration { get; }
-
+	
 	// This method gets called by the runtime. Use this method to add services to the container.
 	public void ConfigureServices(IServiceCollection services)
 	{
 		// Profiler
 		services.AddMiniProfiler().AddEntityFramework();
-
+		
 		// Compression
-		services.AddResponseCompression(options =>
-		{
+		services.AddResponseCompression(options => {
 			options.EnableForHttps = true;
 			options.Providers.Add<BrotliCompressionProvider>();
 			options.Providers.Add<GzipCompressionProvider>();
 		});
-
+		
 		// Database
 		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
 		var npgSourceBuilder = new NpgsqlDataSourceBuilder(conn);
@@ -95,42 +94,41 @@ public class Startup
 				.UseNpgsql(source)
 				.UseModel(CompiledModels.ApplicationDbContextModel.Instance))
 			.AddDatabaseDeveloperPageExceptionFilter();
-
+		
 		// Repositories
 		services
 			.AddScoped<UserRepository>()
 			.AddScoped<ClubRepository>()
 			.AddScoped<StoriesRepository>()
 			.AddScoped<NotificationsRepository>();
-
+		
 		// Middleware
 		services
 			.AddTransient<RequestTimestampMiddleware>()
 			.AddTransient<UserBanMiddleware>();
-
+		
 		// Validators
 		services.AddValidatorsFromAssemblyContaining<Startup>();
 		ValidatorOptions.Global.LanguageManager.Enabled = false;
-
+		
 		// Custom persistent config
 		services.AddSingleton(OgmaConfig.Init("config.jsonc"));
-
+		
 		// Comment redirector
 		services.AddScoped<CommentRedirector>();
-
+		
 		// Routing
 		services.AddRouting(options => options.LowercaseUrls = true);
-
+		
 		// HttpContextAccessor
 		services.AddHttpContextAccessor();
-
+		
 		// ActionContextAccessor
 		services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 		services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
-
+		
 		// Identity
-		services.AddIdentity<OgmaUser, OgmaRole>(config =>
-			{
+		services.AddIdentity<OgmaUser, OgmaRole>(config => {
 				config.SignIn.RequireConfirmedEmail = true;
 				config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ";
 				config.User.RequireUniqueEmail = true;
@@ -149,125 +147,118 @@ public class Startup
 				IdentityUserToken<long>,
 				IdentityRoleClaim<long>>>()
 			.AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
-
+		
 		// Add services
 		services
 			.AddScoped<IUserService, UserService>()
 			.AddSingleton<ICodeGenerator, CodeGenerator>();
-
+		
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
 		// services.AddScoped(s => s.GetService<IHttpContextAccessor>()?.HttpContext?.User);
-
+		
 		// Argon2 hasher
 		services
 			.UpgradePasswordSecurity()
 			.UseArgon2<OgmaUser>();
-
+		
 		// HttpClient factory
 		services.AddHttpClient();
-
+		
 		// Email
 		services
 			.AddTransient<IEmailSender, PostmarkMailer>()
 			.Configure<PostmarkOptions>(Configuration);
-
+		
 		// Backblaze
 		var b2Options = Configuration.GetSection("B2").Get<B2Options>();
 		services.AddSingleton<IB2Client>(new B2Client(b2Options));
-
+		
 		// File uploader
 		services.AddSingleton<ImageUploader>();
-
+		
 		// Turnstile
 		services
 			.AddTransient<ITurnstileService, TurnstileService>()
 			.Configure<TurnstileSettings>(Configuration.GetSection(TurnstileSettings.Section));
-
+		
 		// Seeding
 		services.AddAsyncInitializer<DbSeedInitializer>();
-
+		
 		// Auth
 		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
-
+		
 		// Auth
 		services.AddAuthorizationBuilder()
 			.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-
+		
 		// Cookies
-		services.ConfigureApplicationCookie(options =>
-		{
+		services.ConfigureApplicationCookie(options => {
 			options.LoginPath = new PathString("/login");
 			options.LogoutPath = new PathString("/logout");
 			options.AccessDeniedPath = new PathString("/login");
 			options.Cookie.SameSite = SameSiteMode.Lax;
 			options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-
+			
 			options.Events.OnRedirectToLogin = HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.OnRedirectToLogin);
 			options.Events.OnRedirectToAccessDenied = HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.OnRedirectToLogin);
 		});
-
+		
 		// Cache
 		services.AddMemoryCache();
-
+		
 		// Automapper
 		services.AddAutoMapper(typeof(Startup));
-
+		
 		// Runtime compilation
 		services
 			.AddControllersWithViews()
 			.AddRazorRuntimeCompilation();
-
+		
 		// Razor
 		services
 			.AddRazorPages()
 			.AddRazorPagesOptions(options => { options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole"); })
 			.AddRazorRuntimeCompilation();
-
+		
 		// MVC
 		services
-			.AddMvc(options =>
-			{
+			.AddMvc(options => {
 				options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 				options.Filters.Add<ValidationExceptionFilter>();
 			})
-			.AddJsonOptions(options =>
-			{
+			.AddJsonOptions(options => {
 				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			});
-
+		
 		// Fluent Validation
 		services
 			.AddFluentValidationAutoValidation()
 			.AddValidatorsFromAssemblyContaining<Startup>()
-			.AddFluentValidationClientsideAdapters(cfg =>
-			{
+			.AddFluentValidationClientsideAdapters(cfg => {
 				cfg.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
 					new FileSizeClientValidator(rule, component);
 			});
 		
 		// Mediator
 		services
-			.AddMediator(options =>
-			{
+			.AddMediator(options => {
 				options.ServiceLifetime = ServiceLifetime.Scoped;
 			})
 			.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-
+		
 		// Custom formatters
 		services.AddControllers(options => { options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration)); });
-
+		
 		// OpenAPI
-		services.AddOpenApiDocument(settings =>
-		{
+		services.AddOpenApiDocument(settings => {
 			settings.DocumentName = "public";
 			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
 			settings.OperationProcessors.Insert(1, new ExcludeInternalApisProcessor());
 			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
-		services.AddOpenApiDocument(settings =>
-		{
+		services.AddOpenApiDocument(settings => {
 			settings.DocumentName = "internal";
 			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
 			settings.OperationProcessors.Insert(1, new IncludeInternalApisProcessor());
@@ -278,81 +269,75 @@ public class Startup
 		services.AddHsts(options => {
 			options.Preload = true;
 			options.IncludeSubDomains = true;
-			options.MaxAge = TimeSpan.FromHours(12); // TimeSpan.FromYears(1) when HTTPS config is down pat
+			options.MaxAge = TimeSpan.FromHours(12);// TimeSpan.FromYears(1) when HTTPS config is down pat
 		});
 		
 		// Rate limiting profiles
 		// TODO: Move it somewhere else?
-		services.AddRateLimiter(x => x.AddFixedWindowLimiter(policyName: "rss", options =>
-		{
+		services.AddRateLimiter(x => x.AddFixedWindowLimiter(policyName: "rss", options => {
 			options.Window = TimeSpan.FromHours(1);
 		}));
 	}
-
-
+	
+	
 	// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 	{
 		// Profiler
-		if (env.IsDevelopment())
-		{
+		if (env.IsDevelopment()){
 			app.UseMiniProfiler();
 		}
-
+		
 		// Request timestamp
 		app.UseRequestTimestamp();
-
+		
 		// Compression
 		app.UseResponseCompression();
-
-		if (env.IsDevelopment())
-		{
+		
+		if (env.IsDevelopment()){
 			app.UseDeveloperExceptionPage();
 			app.UseMigrationsEndPoint();
 		}
-		else
-		{
+		else{
 			app.UseExceptionHandler("/Error");
 			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 			app.UseHsts();
 		}
-
+		
 		// Forward the IP
 		app.UseForwardedHeaders(new ForwardedHeadersOptions
 		{
 			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 		});
-
+		
 		// Handle errors
 		app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"),
-			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/api/error?code={0}"); });
+		appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/api/error?code={0}"); });
 		app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
-			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"); });
-
+		appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"); });
+		
 		// Redirects
 		app.UseHttpsRedirection();
 		app.UseRewriter(new RewriteOptions()
 			.AddRedirect("^\\.well-known/change-password$", "identity/account/manage/changepassword")
 		);
 		
-
+		
 		// Map file extensions
 		var extensionsProvider = new FileExtensionContentTypeProvider();
 		extensionsProvider.Mappings.Add(".avif", "image/avif");
-
+		
 		// Serve static files with cache headers and compression
 		app.UseStaticFiles(new StaticFileOptions
 		{
 			HttpsCompression = HttpsCompressionMode.Compress,
-			OnPrepareResponse = context =>
-			{
+			OnPrepareResponse = context => {
 				context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
 				{
 					Public = true,
 					MaxAge = TimeSpan.FromDays(365)
 				};
-				if (context.File.Name.Contains("service-worker"))
-				{
+				if (context.File.Name.Contains("service-worker")){
 					Log.Information("Serving a service worker");
 					context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
 				}
@@ -360,25 +345,23 @@ public class Startup
 			ContentTypeProvider = extensionsProvider
 		});
 		app.UseRouting();
-
+		
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
-
+		
 		// OpenAPI
 		app.UseOpenApi();
-		app.UseSwaggerUi(config =>
-		{
+		app.UseSwaggerUi(config => {
 			config.TransformToExternalPath = (s, _) => s;
 			config.CustomStylesheetPath = "https://cdn.genfic.net/file/Ogma-net/swagger-dark.css";
 		});
-
-		app.UseEndpoints(endpoints =>
-		{
+		
+		app.UseEndpoints(endpoints => {
 			endpoints.MapRazorPages();
 			endpoints.MapControllers();
 		});
-
+		
 		// Generate JS manifest
 		new JavascriptFilesManifestGenerator(env).Generate("js/dist", "js/bundle");
 	}

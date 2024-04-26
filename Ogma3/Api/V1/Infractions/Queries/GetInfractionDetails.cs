@@ -32,7 +32,7 @@ public static class GetInfractionDetails
 					Reason = i.Reason,
 					Type = i.Type,
 					IssuedByName = i.IssuedBy.UserName,
-					RemovedByName = i.RemovedBy == null ? null : i.RemovedBy.UserName
+					RemovedByName = i.RemovedBy == null ? null : i.RemovedBy.UserName,
 				})
 				.FirstOrDefaultAsync(cancellationToken);
 

@@ -1,0 +1,50 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Areas.Identity.Pages.Account.Manage;
+using Ogma3.Data;
+using Ogma3.Data.Infractions;
+using Riok.Mapperly.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Utils.Extensions;
+
+namespace Ogma3.Areas.Admin.Pages;
+
+public class InfractionsModel(ApplicationDbContext context) : PageModel
+{
+	public required List<InfractionDto> Infractions { get; set; }
+
+	public async Task<IActionResult> OnGetAsync()
+	{
+		Infractions = await context.Infractions
+			.OrderBy(i => i.IssueDate)
+			.ToInfractionDtos()
+			.ToListAsync();
+
+		return Page();
+	}
+}
+
+[Mapper(PreferParameterlessConstructors = false)]
+public static partial class InfractionMapper
+{
+	public static partial IQueryable<InfractionDto> ToInfractionDtos(this IQueryable<Infraction> infraction);
+}
+
+public record InfractionDto(
+		string UserUserName,
+		long UserId,
+		DateTime IssueDate,
+		DateTime ActiveUntil,
+		DateTime? RemovedAt,
+		string Reason,
+		InfractionType Type,
+		string IssuedByUserName,
+		long IssuedById,
+		string RemovedByUserName,
+		long RemovedById
+	);

@@ -29,41 +29,31 @@ public static class CreateInfraction
 		}
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	public class Handler(ApplicationDbContext context, IUserService userService, IMemoryCache cache) : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-		private readonly IMemoryCache _cache;
-
-		public Handler(ApplicationDbContext context, IUserService userService, IMemoryCache cache)
-		{
-			_context = context;
-			_cache = cache;
-			_uid = userService.User?.GetNumericId();
-		}
 
 		public async ValueTask<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not { } uid) return Unauthorized();
 
 			var (userId, reason, dateTime, type) = request;
 			var infraction = new Infraction
 			{
-				IssuedById = (long)_uid,
+				IssuedById = uid,
 				UserId = userId,
 				Reason = reason,
 				ActiveUntil = dateTime,
-				Type = type
+				Type = type,
 			};
-			_context.Infractions.Add(infraction);
-			await _context.SaveChangesAsync(cancellationToken);
+			context.Infractions.Add(infraction);
+			await context.SaveChangesAsync(cancellationToken);
 
 			if (infraction.Type == InfractionType.Ban)
 			{
-				_cache.Set(UserBanMiddleware.CacheKey(infraction.UserId), infraction.ActiveUntil);
+				cache.Set(UserBanMiddleware.CacheKey(infraction.UserId), infraction.ActiveUntil);
 			}
 
-			return Ok(new Response(infraction.Id, (long)_uid, userId));
+			return Ok(new Response(infraction.Id, uid, userId));
 		}
 	}
 

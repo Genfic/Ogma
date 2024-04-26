@@ -16,33 +16,24 @@ public static class DeactivateInfraction
 {
 	public sealed record Command(long InfractionId) : IRequest<ActionResult<Response>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<Response>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
-
 		public async ValueTask<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not { } _uid) return Unauthorized();
 
-			var infraction = await _context.Infractions
+			var infraction = await context.Infractions
 				.Where(i => i.Id == request.InfractionId)
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (infraction is null) return NotFound();
 
 			infraction.RemovedAt = DateTime.Now;
-			infraction.RemovedById = (long)_uid;
+			infraction.RemovedById = _uid;
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
-			return Ok(new Response(infraction.Id, (long)_uid, infraction.UserId));
+			return Ok(new Response(infraction.Id, _uid, infraction.UserId));
 		}
 	}
 

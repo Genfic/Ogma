@@ -1,0 +1,31 @@
+@page
+@using Ogma3.Data.Infractions
+@model Ogma3.Areas.Admin.Pages.InfractionsModel
+@{
+    ViewData["Title"] = "Infractions";
+    ViewData["ActivePage"] = NavPages.Infractions;
+}
+
+<table class="o-table">
+    <tr>
+        <th>Username</th>
+        <th>Type</th>
+        <th>Reason</th>
+        <th>Duration</th>
+        <th>Issuer</th>
+        <th>Lifted</th>
+        <th>Lifter</th>
+    </tr>
+    @foreach (var infraction in Model.Infractions)
+    {
+        <tr>
+            <td>@infraction.UserUserName</td>
+            <td>@infraction.Type.ToStringFast()</td>
+            <td>@infraction.Reason</td>
+            <td>@infraction.ActiveUntil</td>
+            <td>@infraction.IssuedByUserName</td>
+            <td>@infraction.RemovedAt</td>
+            <td>@infraction.RemovedByUserName</td>
+        </tr>
+    }
+</table>

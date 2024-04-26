@@ -30,8 +30,7 @@
     <PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="8.0.0" />
     <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageReference Include="HaemmerElectronics.SeppPenner.Serilog.Sinks.Telegram"
-      Version="1.0.16" />
+    <PackageReference Include="HaemmerElectronics.SeppPenner.Serilog.Sinks.Telegram" Version="1.0.16" />
     <PackageReference Include="Hashids.net" Version="1.7.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
@@ -45,8 +44,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
-      Version="3.11.0-beta1.23525.2">
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.11.0-beta1.23525.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -62,8 +60,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-      Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
@@ -76,7 +73,7 @@
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.2" />
     <PackageReference Include="Postmark" Version="4.7.10" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
-    <PackageReference Include="Riok.Mapperly" Version="3.3.0" />
+    <PackageReference Include="Riok.Mapperly" Version="3.5.1" />
     <PackageReference Include="SendGrid" Version="9.29.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
@@ -128,8 +125,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\categories.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\categories.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-ban-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\admin\components\manage-ban-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-ban-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\faqs.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\faqs.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\invite-codes.min.js" />
@@ -166,26 +162,20 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\club\add-story.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\comments.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\comments.min.js.map" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\club-folder-selector-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\club-folder-selector-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\club-folder-selector-component.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\club-folder-selector-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\club-role-slider-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\club-role-slider-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\club-role-slider-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\clubs-with-story-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\clubs-with-story-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\clubs-with-story-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\comment-component.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\comment-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\folder-tree-component.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\folder-tree-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\input-blog-tags-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\input-blog-tags-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\input-blog-tags-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\input-counter-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\input-counter-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\input-counter-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\input-file-component.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\input-file-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\rating-component.min.js" />
@@ -193,15 +183,11 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\report-modal.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\report-modal.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\status-select-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\status-select-component.min.js.map" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\tag-search-select-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\tag-search-select-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\status-select-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\tag-search-select-component.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\tag-search-select-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\textarea-counter-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\textarea-counter-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\textarea-counter-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\toggle-component.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\toggle-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\blogpost.min.js" />
@@ -225,22 +211,17 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\login.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\login.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\featured-in-clubs.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\native-components\featured-in-clubs.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\featured-in-clubs.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\follow-button.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\follow-button.min.js.map" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\native-components\notifications-button.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\native-components\notifications-button.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\notifications-button.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\notifications-button.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\quote-box.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\quote-box.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\shelves-button.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\shelves-button.min.js.map" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\native-components\subscribe-thread-button.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\native-components\subscribe-thread-button.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\subscribe-thread-button.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\subscribe-thread-button.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\vote-button.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\vote-button.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\navbar.js" />
@@ -299,22 +280,17 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\markdown-toolbar.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\editors\markdown-toolbar.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\native-components\markdown-toolbar.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.js" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
     <_ContentIncludedByDefault Remove="Areas\Admin\Components\DbSizes.razor" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\admin\components\manage-infraction-component.min.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\admin\components\manage-infraction-component.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-infraction-component.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-infraction-component.min.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lib\client.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lib\client.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\lib\client.min.js.map" />
@@ -359,10 +335,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\account\register.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\categories.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\categories.js.map" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\admin\components\manage-infraction-component.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\admin\components\manage-infraction-component.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-infraction-component.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\components\manage-infraction-component.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\faqs.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\faqs.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\admin\invite-codes.js" />
@@ -405,8 +379,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\status-select-component.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\status-select-component.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\tag-search-select-component.js" />
-    <_ContentIncludedByDefault
-      Remove="wwwroot\js\dist\components\tag-search-select-component.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\tag-search-select-component.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\textarea-counter-component.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\textarea-counter-component.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\components\toggle-component.js" />
@@ -870,49 +843,32 @@
     <Content Include="node_modules\.bin\web-component-analyzer-webtypes.ps1" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\bin\mqpacker.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\index.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\at-rule.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\comment.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\container.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\css-syntax-error.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\declaration.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\at-rule.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\comment.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\container.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\css-syntax-error.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\declaration.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\input.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\lazy-result.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\lazy-result.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\list.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\map-generator.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\map-generator.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\node.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\parse.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\parser.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\postcss.d.ts" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\postcss.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\previous-map.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\processor.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\postcss.d.ts" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\postcss.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\previous-map.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\processor.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\result.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\root.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\rule.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\stringifier.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\stringify.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\terminal-highlight.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\tokenize.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\stringifier.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\stringify.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\terminal-highlight.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\tokenize.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\vendor.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\warn-once.js" />
-    <Content
-      Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\warning.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\warn-once.js" />
+    <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\lib\warning.js" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\LICENSE" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\package.json" />
     <Content Include="node_modules\.ignored\@hail2u\css-mqpacker\node_modules\postcss\README.md" />
@@ -1005,10 +961,8 @@
     <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\mapping-list.js" />
     <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\mappings.wasm" />
     <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\read-wasm.js" />
-    <Content
-      Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\source-map-consumer.js" />
-    <Content
-      Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\source-map-generator.js" />
+    <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\source-map-consumer.js" />
+    <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\source-map-generator.js" />
     <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\source-node.js" />
     <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\util.js" />
     <Content Include="node_modules\.ignored\@swc\cli\node_modules\source-map\lib\wasm.js" />
@@ -1027,8 +981,7 @@
     <Content Include="node_modules\.ignored\@swc\core\CHANGELOG.md" />
     <Content Include="node_modules\.ignored\@swc\core\clippy.toml" />
     <Content Include="node_modules\.ignored\@swc\core\docs\adr\00000-whats-the-big-idea.md" />
-    <Content
-      Include="node_modules\.ignored\@swc\core\docs\adr\00001-support-transformation-plugin-native.md" />
+    <Content Include="node_modules\.ignored\@swc\core\docs\adr\00001-support-transformation-plugin-native.md" />
     <Content Include="node_modules\.ignored\@swc\core\docs\adr\README.md" />
     <Content Include="node_modules\.ignored\@swc\core\docs\adr\template.md" />
     <Content Include="node_modules\.ignored\@swc\core\index.d.ts" />
@@ -1045,840 +998,433 @@
     <Content Include="node_modules\.ignored\@swc\core\Visitor.d.ts" />
     <Content Include="node_modules\.ignored\@swc\core\Visitor.js" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\all.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\all.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\all.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\base.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\base.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\eslint-recommended.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\eslint-recommended.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended-requiring-type-checking.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended-requiring-type-checking.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\base.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\eslint-recommended.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\eslint-recommended.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended-requiring-type-checking.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended-requiring-type-checking.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\configs\recommended.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\index.js" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\index.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\adjacent-overload-signatures.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\adjacent-overload-signatures.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\array-type.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\array-type.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\await-thenable.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\await-thenable.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-ts-comment.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-ts-comment.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-tslint-comment.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-tslint-comment.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-types.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-types.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\brace-style.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\brace-style.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\class-literal-property-style.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\class-literal-property-style.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-dangle.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-dangle.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-spacing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-spacing.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-indexed-object-style.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-indexed-object-style.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-assertions.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-assertions.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-definitions.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-definitions.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-exports.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-exports.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-imports.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-imports.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\default-param-last.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\default-param-last.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\dot-notation.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\dot-notation.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-function-return-type.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-function-return-type.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-member-accessibility.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-member-accessibility.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-module-boundary-types.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-module-boundary-types.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\func-call-spacing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\func-call-spacing.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\BinarySearchTree.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\BinarySearchTree.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\index.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\index.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\OffsetStorage.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\OffsetStorage.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\TokenInfo.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\TokenInfo.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\adjacent-overload-signatures.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\adjacent-overload-signatures.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\array-type.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\array-type.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\await-thenable.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\await-thenable.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-ts-comment.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-ts-comment.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-tslint-comment.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-tslint-comment.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-types.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\ban-types.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\brace-style.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\brace-style.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\class-literal-property-style.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\class-literal-property-style.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-dangle.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-dangle.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-spacing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\comma-spacing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-indexed-object-style.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-indexed-object-style.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-assertions.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-assertions.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-definitions.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-definitions.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-exports.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-exports.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-imports.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\consistent-type-imports.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\default-param-last.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\default-param-last.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\dot-notation.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\dot-notation.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-function-return-type.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-function-return-type.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-member-accessibility.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-member-accessibility.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-module-boundary-types.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\explicit-module-boundary-types.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\func-call-spacing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\func-call-spacing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\BinarySearchTree.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\BinarySearchTree.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\index.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\index.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\OffsetStorage.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\OffsetStorage.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\TokenInfo.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent-new-do-not-use\TokenInfo.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\indent.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\index.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\index.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\init-declarations.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\init-declarations.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\keyword-spacing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\keyword-spacing.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\lines-between-class-members.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\lines-between-class-members.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-delimiter-style.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-delimiter-style.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-ordering.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-ordering.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\method-signature-style.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\method-signature-style.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\enums.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\enums.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\format.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\format.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\index.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\index.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\parse-options.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\parse-options.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\schema.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\schema.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\shared.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\shared.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\types.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\types.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\validator.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\validator.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-array-constructor.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-array-constructor.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-base-to-string.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-base-to-string.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-non-null-assertion.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-non-null-assertion.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-void-expression.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-void-expression.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dupe-class-members.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dupe-class-members.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-duplicate-imports.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-duplicate-imports.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dynamic-delete.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dynamic-delete.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-function.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-function.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-interface.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-interface.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-explicit-any.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-explicit-any.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-non-null-assertion.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-non-null-assertion.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-parens.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-parens.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-semi.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-semi.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extraneous-class.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extraneous-class.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-floating-promises.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-floating-promises.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-for-in-array.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-for-in-array.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implicit-any-catch.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implicit-any-catch.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implied-eval.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implied-eval.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-inferrable-types.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-inferrable-types.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-this.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-this.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-void-type.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-void-type.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loop-func.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loop-func.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loss-of-precision.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loss-of-precision.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-magic-numbers.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-magic-numbers.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-meaningless-void-operator.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-meaningless-void-operator.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-new.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-new.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-promises.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-promises.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-namespace.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-namespace.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-nullish-coalescing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-nullish-coalescing.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-optional-chain.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-optional-chain.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-assertion.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-assertion.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-parameter-properties.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-parameter-properties.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-redeclare.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-redeclare.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-require-imports.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-require-imports.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-restricted-imports.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-restricted-imports.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-shadow.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-shadow.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-this-alias.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-this-alias.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-throw-literal.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-throw-literal.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-type-alias.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-type-alias.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-boolean-literal-compare.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-boolean-literal-compare.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-condition.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-condition.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-qualifier.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-qualifier.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-arguments.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-arguments.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-assertion.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-assertion.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-constraint.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-constraint.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-argument.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-argument.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-assignment.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-assignment.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-call.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-call.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-member-access.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-member-access.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-return.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-return.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-expressions.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-expressions.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-vars.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-vars.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-use-before-define.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-use-before-define.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-useless-constructor.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-useless-constructor.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-var-requires.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-var-requires.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\non-nullable-type-assertion-style.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\non-nullable-type-assertion-style.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\object-curly-spacing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\object-curly-spacing.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\padding-line-between-statements.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\padding-line-between-statements.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-as-const.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-as-const.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-enum-initializers.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-enum-initializers.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-for-of.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-for-of.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-function-type.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-function-type.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-includes.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-includes.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-literal-enum-member.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-literal-enum-member.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-namespace-keyword.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-namespace-keyword.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-nullish-coalescing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-nullish-coalescing.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-optional-chain.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-optional-chain.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly-parameter-types.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly-parameter-types.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-reduce-type-parameter.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-reduce-type-parameter.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-regexp-exec.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-regexp-exec.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-return-this-type.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-return-this-type.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-string-starts-ends-with.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-string-starts-ends-with.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-ts-expect-error.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-ts-expect-error.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\promise-function-async.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\promise-function-async.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\index.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\init-declarations.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\init-declarations.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\keyword-spacing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\keyword-spacing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\lines-between-class-members.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\lines-between-class-members.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-delimiter-style.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-delimiter-style.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-ordering.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\member-ordering.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\method-signature-style.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\method-signature-style.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\enums.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\enums.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\format.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\format.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\index.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\index.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\parse-options.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\parse-options.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\schema.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\schema.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\shared.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\shared.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\types.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\types.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\validator.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention-utils\validator.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\naming-convention.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-array-constructor.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-array-constructor.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-base-to-string.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-base-to-string.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-non-null-assertion.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-non-null-assertion.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-void-expression.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-confusing-void-expression.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dupe-class-members.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dupe-class-members.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-duplicate-imports.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-duplicate-imports.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dynamic-delete.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-dynamic-delete.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-function.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-function.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-interface.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-empty-interface.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-explicit-any.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-explicit-any.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-non-null-assertion.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-non-null-assertion.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-parens.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-parens.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-semi.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extra-semi.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extraneous-class.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-extraneous-class.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-floating-promises.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-floating-promises.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-for-in-array.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-for-in-array.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implicit-any-catch.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implicit-any-catch.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implied-eval.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-implied-eval.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-inferrable-types.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-inferrable-types.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-this.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-this.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-void-type.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-invalid-void-type.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loop-func.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loop-func.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loss-of-precision.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-loss-of-precision.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-magic-numbers.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-magic-numbers.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-meaningless-void-operator.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-meaningless-void-operator.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-new.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-new.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-promises.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-misused-promises.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-namespace.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-namespace.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-nullish-coalescing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-nullish-coalescing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-optional-chain.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-asserted-optional-chain.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-assertion.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-non-null-assertion.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-parameter-properties.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-parameter-properties.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-redeclare.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-redeclare.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-require-imports.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-require-imports.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-restricted-imports.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-restricted-imports.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-shadow.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-shadow.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-this-alias.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-this-alias.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-throw-literal.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-throw-literal.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-type-alias.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-type-alias.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-boolean-literal-compare.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-boolean-literal-compare.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-condition.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-condition.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-qualifier.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-qualifier.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-arguments.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-arguments.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-assertion.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-assertion.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-constraint.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unnecessary-type-constraint.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-argument.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-argument.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-assignment.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-assignment.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-call.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-call.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-member-access.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-member-access.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-return.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unsafe-return.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-expressions.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-expressions.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-vars.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-unused-vars.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-use-before-define.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-use-before-define.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-useless-constructor.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-useless-constructor.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-var-requires.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\no-var-requires.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\non-nullable-type-assertion-style.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\non-nullable-type-assertion-style.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\object-curly-spacing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\object-curly-spacing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\padding-line-between-statements.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\padding-line-between-statements.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-as-const.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-as-const.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-enum-initializers.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-enum-initializers.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-for-of.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-for-of.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-function-type.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-function-type.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-includes.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-includes.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-literal-enum-member.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-literal-enum-member.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-namespace-keyword.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-namespace-keyword.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-nullish-coalescing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-nullish-coalescing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-optional-chain.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-optional-chain.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly-parameter-types.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly-parameter-types.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-readonly.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-reduce-type-parameter.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-reduce-type-parameter.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-regexp-exec.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-regexp-exec.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-return-this-type.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-return-this-type.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-string-starts-ends-with.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-string-starts-ends-with.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-ts-expect-error.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\prefer-ts-expect-error.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\promise-function-async.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\promise-function-async.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\quotes.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\quotes.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-array-sort-compare.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-array-sort-compare.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-await.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-await.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-plus-operands.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-plus-operands.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-template-expressions.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-template-expressions.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\return-await.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\return-await.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\quotes.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-array-sort-compare.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-array-sort-compare.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-await.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\require-await.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-plus-operands.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-plus-operands.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-template-expressions.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\restrict-template-expressions.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\return-await.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\return-await.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\semi.js" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\semi.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\sort-type-union-intersection-members.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\sort-type-union-intersection-members.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-before-function-paren.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-before-function-paren.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-infix-ops.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-infix-ops.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\strict-boolean-expressions.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\strict-boolean-expressions.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\switch-exhaustiveness-check.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\switch-exhaustiveness-check.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\triple-slash-reference.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\triple-slash-reference.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\type-annotation-spacing.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\type-annotation-spacing.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\sort-type-union-intersection-members.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\sort-type-union-intersection-members.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-before-function-paren.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-before-function-paren.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-infix-ops.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\space-infix-ops.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\strict-boolean-expressions.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\strict-boolean-expressions.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\switch-exhaustiveness-check.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\switch-exhaustiveness-check.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\triple-slash-reference.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\triple-slash-reference.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\type-annotation-spacing.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\type-annotation-spacing.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\typedef.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\typedef.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unbound-method.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unbound-method.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unified-signatures.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unified-signatures.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\typedef.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unbound-method.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unbound-method.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unified-signatures.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\rules\unified-signatures.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\astUtils.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\astUtils.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\collectUnusedVariables.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\collectUnusedVariables.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\createRule.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\createRule.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\escapeRegExp.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\escapeRegExp.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\explicitReturnTypeUtils.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\explicitReturnTypeUtils.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getESLintCoreRule.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getESLintCoreRule.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getFunctionHeadLoc.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getFunctionHeadLoc.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getThisExpression.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getThisExpression.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getWrappingFixer.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getWrappingFixer.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\astUtils.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\collectUnusedVariables.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\collectUnusedVariables.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\createRule.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\createRule.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\escapeRegExp.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\escapeRegExp.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\explicitReturnTypeUtils.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\explicitReturnTypeUtils.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getESLintCoreRule.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getESLintCoreRule.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getFunctionHeadLoc.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getFunctionHeadLoc.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getThisExpression.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getThisExpression.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getWrappingFixer.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\getWrappingFixer.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\index.js" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\index.js.map" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\misc.js" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\misc.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\objectIterators.js" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\objectIterators.js.map" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\adjacent-overload-signatures.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\array-type.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\await-thenable.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\ban-ts-comment.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\ban-tslint-comment.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\ban-types.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\brace-style.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\camelcase.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\class-literal-property-style.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\comma-dangle.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\comma-spacing.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-indexed-object-style.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-assertions.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-definitions.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-exports.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-imports.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\default-param-last.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\dot-notation.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\explicit-function-return-type.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\explicit-member-accessibility.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\explicit-module-boundary-types.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\func-call-spacing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\objectIterators.js" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\dist\util\objectIterators.js.map" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\adjacent-overload-signatures.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\array-type.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\await-thenable.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\ban-ts-comment.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\ban-tslint-comment.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\ban-types.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\brace-style.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\camelcase.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\class-literal-property-style.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\comma-dangle.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\comma-spacing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-indexed-object-style.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-assertions.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-definitions.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-exports.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\consistent-type-imports.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\default-param-last.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\dot-notation.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\explicit-function-return-type.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\explicit-member-accessibility.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\explicit-module-boundary-types.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\func-call-spacing.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\indent.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\init-declarations.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\keyword-spacing.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\lines-between-class-members.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\member-delimiter-style.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\member-ordering.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\method-signature-style.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\naming-convention.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-array-constructor.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-base-to-string.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-confusing-non-null-assertion.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-confusing-void-expression.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-dupe-class-members.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-duplicate-imports.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-dynamic-delete.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-empty-function.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-empty-interface.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-explicit-any.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extra-non-null-assertion.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extra-parens.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extra-semi.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extraneous-class.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-floating-promises.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-for-in-array.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-implicit-any-catch.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-implied-eval.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-inferrable-types.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-invalid-this.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-invalid-void-type.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-loop-func.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-loss-of-precision.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-magic-numbers.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-meaningless-void-operator.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-misused-new.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-misused-promises.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-namespace.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-non-null-asserted-nullish-coalescing.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-non-null-asserted-optional-chain.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-non-null-assertion.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-parameter-properties.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-redeclare.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-require-imports.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-restricted-imports.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-shadow.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-this-alias.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-throw-literal.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-type-alias.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-boolean-literal-compare.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-condition.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-qualifier.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-type-arguments.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-type-assertion.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-type-constraint.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-argument.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-assignment.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-call.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-member-access.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-return.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unused-expressions.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unused-vars.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-use-before-define.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-useless-constructor.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-var-requires.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\non-nullable-type-assertion-style.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\object-curly-spacing.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\padding-line-between-statements.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-as-const.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-enum-initializers.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-for-of.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-function-type.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-includes.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-literal-enum-member.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-namespace-keyword.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-nullish-coalescing.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-optional-chain.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-readonly-parameter-types.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-readonly.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-reduce-type-parameter.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-regexp-exec.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-return-this-type.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-string-starts-ends-with.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-ts-expect-error.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\promise-function-async.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\init-declarations.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\keyword-spacing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\lines-between-class-members.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\member-delimiter-style.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\member-ordering.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\method-signature-style.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\naming-convention.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-array-constructor.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-base-to-string.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-confusing-non-null-assertion.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-confusing-void-expression.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-dupe-class-members.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-duplicate-imports.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-dynamic-delete.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-empty-function.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-empty-interface.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-explicit-any.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extra-non-null-assertion.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extra-parens.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extra-semi.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-extraneous-class.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-floating-promises.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-for-in-array.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-implicit-any-catch.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-implied-eval.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-inferrable-types.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-invalid-this.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-invalid-void-type.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-loop-func.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-loss-of-precision.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-magic-numbers.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-meaningless-void-operator.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-misused-new.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-misused-promises.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-namespace.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-non-null-asserted-nullish-coalescing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-non-null-asserted-optional-chain.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-non-null-assertion.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-parameter-properties.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-redeclare.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-require-imports.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-restricted-imports.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-shadow.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-this-alias.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-throw-literal.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-type-alias.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-boolean-literal-compare.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-condition.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-qualifier.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-type-arguments.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-type-assertion.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unnecessary-type-constraint.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-argument.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-assignment.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-call.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-member-access.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unsafe-return.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unused-expressions.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-unused-vars.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-use-before-define.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-useless-constructor.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\no-var-requires.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\non-nullable-type-assertion-style.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\object-curly-spacing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\padding-line-between-statements.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-as-const.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-enum-initializers.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-for-of.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-function-type.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-includes.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-literal-enum-member.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-namespace-keyword.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-nullish-coalescing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-optional-chain.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-readonly-parameter-types.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-readonly.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-reduce-type-parameter.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-regexp-exec.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-return-this-type.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-string-starts-ends-with.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\prefer-ts-expect-error.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\promise-function-async.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\quotes.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\README.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\require-array-sort-compare.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\require-await.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\restrict-plus-operands.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\restrict-template-expressions.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\return-await.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\require-array-sort-compare.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\require-await.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\restrict-plus-operands.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\restrict-template-expressions.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\return-await.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\semi.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\sort-type-union-intersection-members.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\space-before-function-paren.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\space-infix-ops.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\strict-boolean-expressions.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\switch-exhaustiveness-check.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\sort-type-union-intersection-members.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\space-before-function-paren.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\space-infix-ops.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\strict-boolean-expressions.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\switch-exhaustiveness-check.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\TEMPLATE.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\triple-slash-reference.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\type-annotation-spacing.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\triple-slash-reference.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\type-annotation-spacing.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\typedef.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\unbound-method.md" />
-    <Content
-      Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\unified-signatures.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\unbound-method.md" />
+    <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\docs\rules\unified-signatures.md" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\index.d.ts" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\LICENSE" />
     <Content Include="node_modules\.ignored\@typescript-eslint\eslint-plugin\package.json" />
@@ -1977,8 +1523,7 @@
     <Content Include="node_modules\.ignored\autoprefixer\LICENSE" />
     <Content Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\LICENSE" />
     <Content Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\package.json" />
-    <Content
-      Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\picocolors.browser.js" />
+    <Content Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\picocolors.browser.js" />
     <Content Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\picocolors.d.ts" />
     <Content Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\picocolors.js" />
     <Content Include="node_modules\.ignored\autoprefixer\node_modules\picocolors\README.md" />
@@ -2341,13 +1886,10 @@
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeeks\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeeks\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeeks\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarISOWeekYears\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarMonths\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarMonths\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\differenceInCalendarMonths\index.js.flow" />
@@ -2596,14 +2138,10 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\add\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\add\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\add\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\index.d.ts" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\index.js" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlappingWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlapping\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlapping\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\areIntervalsOverlapping\index.js.flow" />
@@ -2642,37 +2180,24 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarDays\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeeks\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeeks\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeeks\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeeks\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\index.d.ts" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeeks\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeeks\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\index.js" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarISOWeekYears\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarMonths\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarMonths\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarMonths\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarMonths\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarMonths\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarQuarters\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarQuarters\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarQuarters\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarQuarters\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\index.d.ts" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarQuarters\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarQuarters\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\index.js" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeksWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeks\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeks\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInCalendarWeeks\index.js.flow" />
@@ -2687,10 +2212,8 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInDays\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHoursWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHoursWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInHoursWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInHoursWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHoursWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHoursWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHours\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHours\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInHours\index.js.flow" />
@@ -2703,13 +2226,10 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMilliseconds\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMilliseconds\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMilliseconds\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutesWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutes\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutes\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMinutes\index.js.flow" />
@@ -2718,35 +2238,26 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMonths\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMonths\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInMonths\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\index.d.ts" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\index.js" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuartersWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuarters\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuarters\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuarters\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInQuarters\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSecondsWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSeconds\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSeconds\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSeconds\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInSeconds\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeksWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeksWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeksWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeksWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeksWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeksWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeks\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeks\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInWeeks\index.js.flow" />
@@ -2757,33 +2268,24 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\differenceInYears\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfIntervalWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfIntervalWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfIntervalWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfIntervalWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfIntervalWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfIntervalWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfInterval\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfInterval\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfInterval\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachDayOfInterval\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfIntervalWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfInterval\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfInterval\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfInterval\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachHourOfInterval\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\index.d.ts" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\index.js" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfIntervalWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfInterval\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfInterval\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachMinuteOfInterval\index.js.flow" />
@@ -2808,13 +2310,10 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekendOfYear\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekendOfYear\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekendOfYear\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfIntervalWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfInterval\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfInterval\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\eachWeekOfInterval\index.js.flow" />
@@ -2875,14 +2374,10 @@
     <Content Include="node_modules\.ignored\date-fns\esm\fp\endOfYear\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\endOfYear\index.js.flow" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\endOfYear\package.json" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\index.d.ts" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\index.js" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\index.js.flow" />
-    <Content
-      Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\package.json" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\index.d.ts" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\index.js" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\index.js.flow" />
+    <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrictWithOptions\package.json" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrict\index.d.ts" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrict\index.js" />
     <Content Include="node_modules\.ignored\date-fns\esm\fp\formatDistanceStrict\index.js.flow" />
