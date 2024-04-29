@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Humanizer;
 using Humanizer.Localisation;
+using Ogma3.Data.Infractions;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Infrastructure.Constants;
@@ -49,4 +50,14 @@ public static class ModeratorActionTemplates
 
 	public static string UserUnban(string bannedName, string modName)
 		=> $"User **{bannedName}** was unbanned by **{modName}**";
+
+	public static class Infractions
+	{
+		public static string Create(long userId, string modName, long infractionId, string reason, InfractionType type)
+			=> $"User **{userId}** was given a **{type.ToStringFast()}** infraction ({infractionId}) by **{modName}** for the following reason:\n*{reason}*";
+
+		public static string Lift(long userId, string modName, long infractionId, InfractionType type)
+			=> $"User **{userId}** had their **{type.ToStringFast()}** infraction ({infractionId}) lifted by **{modName}**.";
+
+	}
 }

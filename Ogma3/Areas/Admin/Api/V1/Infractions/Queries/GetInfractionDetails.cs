@@ -9,7 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Mediator.Bases;
 
-namespace Ogma3.Api.V1.Infractions.Queries;
+namespace Ogma3.Areas.Admin.Api.V1.Infractions.Queries;
 
 public static class GetInfractionDetails
 {

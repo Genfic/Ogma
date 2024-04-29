@@ -7,7 +7,7 @@ namespace Ogma3.Infrastructure.Logging;
 
 public static class Telegram
 {
-	public static async Task<(string Token, string Id)> GetCredentials()
+	public static async Task<TelegramToken> GetCredentials()
 	{
 		var telegramToken = Environment.GetEnvironmentVariable("TELEGRAM_TOKEN");
 
@@ -27,9 +27,11 @@ public static class Telegram
 
 		var split = telegramToken.Split('|');
 
-		if (split.Length >= 2) return (Token: split[0], Id: split[1]);
+		if (split is [string token, string id]) return new(token, id);
 
 		Log.Fatal("Expected two elements of the token, {Count} found", split.Length);
 		throw new ArgumentException($"Expected two elements of the Telegram token, {split.Length} found");
 	}
+
+	public record TelegramToken(string Token, string Id);
 }

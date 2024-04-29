@@ -10,21 +10,12 @@ namespace Ogma3.Areas.Admin.Api.V1.Cache;
 [Route("admin/api/[controller]", Name = nameof(CacheController))]
 [ApiController]
 [Authorize(Roles = RoleNames.Admin)]
-public class CacheController : ControllerBase
+public class CacheController(IMemoryCache cache, ILogger<CacheController> logger) : ControllerBase
 {
-	private readonly IMemoryCache _cache;
-	private readonly ILogger<CacheController> _logger;
-
-	public CacheController(IMemoryCache cache, ILogger<CacheController> logger)
-	{
-		_cache = cache;
-		_logger = logger;
-	}
-
 	[HttpGet]
 	public ActionResult<int> GetCache()
 	{
-		if (_cache is MemoryCache mc)
+		if (cache is MemoryCache mc)
 		{
 			return Ok(mc.Count);
 		}
@@ -36,16 +27,16 @@ public class CacheController : ControllerBase
 	[IgnoreAntiforgeryToken]
 	public ActionResult<string> DeleteCache()
 	{
-		_logger.LogWarning("Purging all caches...");
+		logger.LogWarning("Purging all caches...");
 
-		if (_cache is MemoryCache mc)
+		if (cache is MemoryCache mc)
 		{
 			mc.Compact(1.0);
-			_logger.LogWarning("Cache purged!");
+			logger.LogWarning("Cache purged!");
 			return Ok("Cache purged!");
 		}
 
-		_logger.LogWarning("Could not purge cache!");
+		logger.LogWarning("Could not purge cache!");
 		return new ServerErrorObjectResult("Could not purge cache!");
 	}
 }

@@ -19,7 +19,7 @@
     @foreach (var infraction in Model.Infractions)
     {
         <tr>
-            <td>@infraction.UserUserName</td>
+            <td>@infraction.UserUserName [@infraction.UserId]</td>
             <td>@infraction.Type.ToStringFast()</td>
             <td>@infraction.Reason</td>
             <td>@infraction.ActiveUntil</td>

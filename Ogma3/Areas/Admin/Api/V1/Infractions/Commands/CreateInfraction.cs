@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
+using Ogma3.Data.ModeratorActions;
+using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Mediator.Bases;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Services.UserService;
 
-namespace Ogma3.Api.V1.Infractions.Commands;
+namespace Ogma3.Areas.Admin.Api.V1.Infractions.Commands;
 
 public static class CreateInfraction
 {
@@ -35,6 +37,7 @@ public static class CreateInfraction
 		public async ValueTask<ActionResult<Response>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (userService.User?.GetNumericId() is not { } uid) return Unauthorized();
+			if (userService.User?.GetUsername() is not { } modName) return Unauthorized();
 
 			var (userId, reason, dateTime, type) = request;
 			var infraction = new Infraction
@@ -46,6 +49,14 @@ public static class CreateInfraction
 				Type = type,
 			};
 			context.Infractions.Add(infraction);
+
+			var action = new ModeratorAction
+			{
+				StaffMemberId = uid,
+				Description = ModeratorActionTemplates.Infractions.Create(uid, modName, infraction.Id, reason, type),
+			};
+			context.ModeratorActions.Add(action);
+
 			await context.SaveChangesAsync(cancellationToken);
 
 			if (infraction.Type == InfractionType.Ban)
