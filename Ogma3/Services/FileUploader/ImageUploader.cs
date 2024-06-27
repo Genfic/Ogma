@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Ogma3.Data;
-using Serilog;
-using SerilogTimings;
+using Ogma3.Infrastructure.Exceptions;
+using Ogma3.Infrastructure.Logging.OperationTiming;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
 
-public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUploader
+public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILogger<ImageUploader> logger) : IFileUploader
 {
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
@@ -34,7 +35,7 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
-	/// <exception cref="Exception">Thrown when after `tries` amount of tries file could not be uploaded</exception>
+	/// <exception cref="FileUploadException">Thrown when after `tries` amount of tries file could not be uploaded</exception>
 	public async Task<FileUploaderResult> Upload(
 		IFormFile file,
 		string folder,
@@ -54,9 +55,9 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 		await using var ms = new MemoryStream();
 		await file.CopyToAsync(ms);
 
-		if (width is not null || height is not null)
+		if ((width ?? height) is {} w && (height ?? width) is {} h)
 		{
-			using var op = Operation.Time("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
+			using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
 			// Reset memory stream position
 			ms.Seek(0, SeekOrigin.Begin);
@@ -65,7 +66,7 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 			using var img = await Image.LoadAsync(ms);
 			img.Mutate(i => i.Resize(new ResizeOptions
 			{
-				Size = new Size((int)(width ?? height)!, (int)(height ?? width)!),
+				Size = new Size(w, h),
 				Mode = ResizeMode.Crop,
 				Position = AnchorPositionMode.Center,
 			}));
@@ -83,7 +84,7 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 		var counter = tries;
 		while (counter >= 0)
 		{
-			using var op = Operation.Time("Uploading image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
+			using var op = logger.TimeOperation("Uploading image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
 			try
 			{
@@ -92,12 +93,12 @@ public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig) : IFileUpl
 			}
 			catch (B2Exception e)
 			{
-				Log.Error("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
+				logger.LogError("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
 			}
 		}
 
-		Log.Error("Couldn't upload file {Name} ({Size} bytes)", file.Name, file.Length);
-		throw new Exception("Could not upload file. Check server logs.");
+		logger.LogError("Couldn't upload file {Name} ({Size} bytes)", file.Name, file.Length);
+		throw new FileUploadException("Could not upload file. Check server logs.", file.Name, file.Length);
 	}
 
 	public async Task Delete(string name, string id, CancellationToken cancellationToken = default)

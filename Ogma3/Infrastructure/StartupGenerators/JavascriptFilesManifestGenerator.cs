@@ -64,8 +64,8 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 		});
 
 		var filesAndHashes = filesAndHashesConcurrent.ToImmutableSortedDictionary(new AlphaComparer());
-
-		if (existingManifest is not null && filesAndHashes.SequenceEqual(existingManifest.Files))
+		
+		if (existingManifest is not null && filesAndHashes.SequenceEqual(existingManifest.Files, new KvpComparer()))
 		{
 			stopwatch.Stop();
 			Log.Information("Files are unchanged, stopping manifest generation after {Time}ms", stopwatch.ElapsedMilliseconds);
@@ -103,3 +103,12 @@ public sealed record Manifest(DateTime GeneratedAt, ImmutableSortedDictionary<st
 
 [JsonSerializable(typeof(Manifest))]
 public partial class ManifestJsonContext : JsonSerializerContext;
+
+file class KvpComparer : IEqualityComparer<KeyValuePair<string, string>>
+{
+	public bool Equals(KeyValuePair<string, string> x, KeyValuePair<string, string> y)
+		=> x.Key == y.Key && x.Value == y.Value;
+	
+	public int GetHashCode(KeyValuePair<string, string> obj)
+		=> HashCode.Combine(obj.Key, obj.Value);
+}

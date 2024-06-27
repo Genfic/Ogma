@@ -27,7 +27,7 @@ public static class Telegram
 
 		var split = telegramToken.Split('|');
 
-		if (split is [string token, string id]) return new(token, id);
+		if (split is [{} token, {} id]) return new TelegramToken(token, id);
 
 		Log.Fatal("Expected two elements of the token, {Count} found", split.Length);
 		throw new ArgumentException($"Expected two elements of the Telegram token, {split.Length} found");
