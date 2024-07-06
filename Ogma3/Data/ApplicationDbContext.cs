@@ -111,7 +111,9 @@ public class ApplicationDbContext : IdentityDbContext
 		base.OnModelCreating(builder);
 
 		// Extensions
-		builder.HasPostgresExtension("uuid-ossp");
+		builder
+			.HasPostgresExtension("uuid-ossp")
+			.HasPostgresExtension("tsm_system_rows");
 
 		// Register all enums with `[PostgresEnum]` attribute
 		builder.RegisterPostgresEnums();

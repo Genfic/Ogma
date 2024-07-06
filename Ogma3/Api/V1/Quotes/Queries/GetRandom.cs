@@ -21,7 +21,7 @@ public static class GetRandom
 			var quote = await context.Database.SqlQueryRaw<QuoteDto>("""
 			    SELECT q."Author", q."Body"
 			    FROM "Quotes" q
-			    TABLESAMPLE bernoulli(.5)
+			    TABLESAMPLE SYSTEM_ROWS(1)
 			    LIMIT 1
 			    """)
 				.FirstOrDefaultAsync(cancellationToken);
