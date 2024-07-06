@@ -312,7 +312,7 @@ var status = runtimeEntityType.AddProperty(
     propertyInfo: typeof(Story).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
     fieldInfo: typeof(Story).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
     valueGenerated: ValueGenerated.OnAdd,
-    sentinel: (EStoryStatus)0);
+    sentinel: EStoryStatus.Unspecified);
 status.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
     comparer: new ValueComparer<EStoryStatus>(
         (EStoryStatus v1, EStoryStatus v2) => object.Equals((object)v1, (object)v2),

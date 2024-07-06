@@ -199,7 +199,7 @@ namespace CompiledModels
             VoteEntityType.CreateAnnotations(vote);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "8.0.1");
+            AddAnnotation("ProductVersion", "8.0.6");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
             AddRuntimeAnnotation("Relational:RelationalModel", CreateRelationalModel());
         }

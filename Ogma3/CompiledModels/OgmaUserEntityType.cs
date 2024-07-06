@@ -343,7 +343,7 @@ namespace CompiledModels
             (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
             (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
         clrType: typeof(DateTimeOffset),
-        jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping(typeof(DateTimeOffset)).JsonValueReaderWriter);
+        jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
     lockoutEnd.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
     var normalizedEmail = runtimeEntityType.AddProperty(

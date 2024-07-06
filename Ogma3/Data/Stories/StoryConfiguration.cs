@@ -44,7 +44,8 @@ public class StoryConfiguration : BaseConfiguration<Story>
 		builder
 			.Property(s => s.Status)
 			.IsRequired()
-			.HasDefaultValue(EStoryStatus.InProgress);
+			.HasDefaultValue(EStoryStatus.InProgress)
+			.HasSentinel(EStoryStatus.Unspecified);
 
 		builder
 			.Property(s => s.WordCount)
