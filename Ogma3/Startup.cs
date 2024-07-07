@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
+using CompiledModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Mediator;
@@ -33,7 +34,6 @@ using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
-using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
@@ -92,14 +92,13 @@ public class Startup
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
 				.UseNpgsql(source)
-				.UseModel(CompiledModels.ApplicationDbContextModel.Instance))
+				.UseModel(ApplicationDbContextModel.Instance))
 			.AddDatabaseDeveloperPageExceptionFilter();
 		
 		// Repositories
 		services
 			.AddScoped<UserRepository>()
 			.AddScoped<ClubRepository>()
-			.AddScoped<StoriesRepository>()
 			.AddScoped<NotificationsRepository>();
 		
 		// Middleware

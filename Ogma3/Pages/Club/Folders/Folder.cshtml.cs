@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
@@ -16,7 +15,7 @@ using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class FolderModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config, ClubRepository clubRepo) : PageModel
+public class FolderModel(ApplicationDbContext context, OgmaConfig config, ClubRepository clubRepo) : PageModel
 {
 	public class FolderDetails
 	{
@@ -77,7 +76,7 @@ public class FolderModel(ApplicationDbContext context, IMapper mapper, OgmaConfi
 			.Blacklist(context, uid)
 			.OrderByDescending(s => s.PublicationDate)
 			.Paginate(page, config.StoriesPerPage)
-			.ProjectTo<StoryCard>(mapper.ConfigurationProvider)
+			.ProjectToCard()
 			.ToListAsync();
 
 		// Prepare pagination

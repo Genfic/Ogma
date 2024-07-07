@@ -1,12 +1,13 @@
 ﻿@page "/story/{sid}/chapter/{id}/{slug?}"
 @using System.Globalization
+@using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
 @model ChapterModel
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject IAntiforgery Antiforgery
 @{
-	var desc = $"{Model.Chapter!.StoryTitle} – chapter {Model.Chapter.Order}";
+	var desc = $"{Model.Chapter.StoryTitle} – chapter {Model.Chapter.Order}";
 
 	ViewData["Title"] = Model.Chapter.Title;
 	ViewData["Description"] = desc;

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +14,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public class StoriesModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+public class StoriesModel(UserRepository userRepo, ApplicationDbContext context)
 	: PageModel
 {
 	private const int PerPage = 25;
@@ -50,7 +48,7 @@ public class StoriesModel(UserRepository userRepo, ApplicationDbContext context,
 		Stories = await query
 			.SortByEnum(EStorySortingOptions.DateDescending)
 			.Paginate(page, PerPage)
-			.ProjectTo<StoryCard>(mapper.ConfigurationProvider)
+			.ProjectToCard()
 			.AsNoTracking()
 			.ToListAsync();
 

@@ -1,10 +1,11 @@
 ﻿@page "{id}/{slug?}"
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
-@using Ogma3.Infrastructure.Extensions
-@using Ogma3.Infrastructure.Constants
+@inject IAntiforgery Antiforgery
 @using System.Globalization
-@using Ogma3.Data.Reports
+@using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Api.V1.ChaptersReads
+@using Ogma3.Data.Reports
+@using Ogma3.Infrastructure.Constants
+@using Ogma3.Infrastructure.Extensions
 @model StoryModel
 
 @{
@@ -41,7 +42,7 @@
 			<noscript>
 				<span class="votes action-btn large" title="Score">
 					<i class="material-icons-outlined">star_border</i>
-					<span class="count">@Model.Story.Score</span>
+					<span class="count">@Model.Story.VotesCount</span>
 				</span>
 			</noscript>
 
@@ -148,21 +149,9 @@
 			<icon icon="rss_feed"></icon>
 		</a>
 	</div>
-	@* *@
-	@* @if (Model.Story.AuthorId == uid) *@
-	@* { *@
-	@* 	<div class="author-info info"> *@
-	@* 		<span class="word-count">@Model.Story.FullWordCount.ToString("N0") words</span> *@
-	@* 		<span class="chapter-count">@Model.Story.FullChaptersCount chapters</span> *@
-	@* 		<span class="comment-count">@Model.Story.CommentsCount comments</span> *@
-	@* 		<time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"> *@
-	@* 			created @Model.Story.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture) *@
-	@* 		</time> *@
-	@* 	</div> *@
-	@* } *@
 
 	<ol class="chapters">
-		@if (Model.Story.Chapters.Count <= 0)
+		@if (Model.Chapters.Length <= 0)
 		{
 			<li class="chapter">
 				<div class="title">No chapters found</div>
@@ -171,7 +160,7 @@
 		else
 		{
 			var order = 1;
-			foreach (var c in Model.Story.Chapters)
+			foreach (var c in Model.Chapters)
 			{
 				<li class="chapter @(c.IsPublished ? "" : "unpublished")">
 					<div class="left">
@@ -188,7 +177,7 @@
 						{
 							<icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
 						}
-
+						
 						<a class="title" asp-page="/Chapter" asp-route-sid="@Model.Story.Id" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
 							@c.Title
 						</a>

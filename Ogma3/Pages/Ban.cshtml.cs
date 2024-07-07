@@ -11,11 +11,8 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages;
 
-public class Ban : PageModel
+public class Ban(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	public Ban(ApplicationDbContext context) => _context = context;
-
 	public DateTime BannedUntil { get; private set; }
 	public List<InfractionDto> Infractions { get; private set; } = [];
 
@@ -24,7 +21,7 @@ public class Ban : PageModel
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
-		Infractions = await _context.Infractions
+		Infractions = await context.Infractions
 			.Where(i => i.UserId == uid)
 			.Where(i => i.Type != InfractionType.Note)
 			.OrderByDescending(i => i.Type)

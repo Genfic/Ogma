@@ -17,10 +17,9 @@ public class TagTagHelper : TagHelper
 		if (actionContextAccessor is not { ActionContext: not null })
 			throw new NullReferenceException(nameof(actionContextAccessor.ActionContext));
 		_urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
-		Tag = new TagDto();
 	}
 
-	public TagDto Tag { get; set; }
+	public required TagDto Tag { get; set; }
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{

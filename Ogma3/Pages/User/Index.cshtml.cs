@@ -32,12 +32,7 @@ public class IndexModel(ApplicationDbContext context, UserRepository userRepo)
 			{
 				Bio = u.Bio,
 				Links = u.Links,
-				CommentsThread = new CommentsThreadDto
-				{
-					Id = u.CommentsThread.Id,
-					Type = nameof(OgmaUser),
-					LockDate = u.CommentsThread.LockDate
-				}
+				CommentsThread = new CommentsThreadDto(u.CommentsThread.Id, nameof(OgmaUser), u.CommentsThread.LockDate),
 			})
 			.FirstOrDefaultAsync();
 

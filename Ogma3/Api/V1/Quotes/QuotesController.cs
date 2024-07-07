@@ -16,7 +16,6 @@ namespace Ogma3.Api.V1.Quotes;
 [ApiController]
 public class QuotesController(IMediator mediator) : ControllerBase
 {
-	
 	[HttpGet]
 	public async Task<ActionResult<List<Quote>>> GetQuotes()
 		=> await mediator.Send(new GetAll.Query());

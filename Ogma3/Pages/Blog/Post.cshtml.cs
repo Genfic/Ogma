@@ -62,8 +62,6 @@ public class DetailsModel(UserRepository userRepo, ApplicationDbContext context)
 			IsUnavailable = true;
 		}
 
-		Blogpost.CommentsThread.Type = nameof(Data.Blogposts.Blogpost);
-
 		var profileBar = await userRepo.GetProfileBar(Blogpost.AuthorId);
 
 		if (profileBar is null) return NotFound();
@@ -82,20 +80,10 @@ public class DetailsModel(UserRepository userRepo, ApplicationDbContext context)
 		Body = b.Body,
 		Hashtags = b.Hashtags,
 		PublicationDate = b.PublicationDate,
-		CommentsThread = new CommentsThreadDto
-		{
-			Id = b.CommentsThread.Id,
-			Type = nameof(Data.Blogposts.Blogpost),
-			LockDate = b.CommentsThread.LockDate
-		},
+		CommentsThread = new CommentsThreadDto(b.CommentsThread.Id, nameof(Data.Blogposts.Blogpost), b.CommentsThread.LockDate),
 		ContentBlock = b.ContentBlock == null
 			? null
-			: new ContentBlockCard
-			{
-				Reason = b.ContentBlock.Reason,
-				DateTime = b.ContentBlock.DateTime,
-				IssuerUserName = b.ContentBlock.Issuer.UserName
-			},
+			: new ContentBlockCard(b.ContentBlock.Reason, b.ContentBlock.DateTime, b.ContentBlock.Issuer.UserName),
 		AttachedChapter = b.AttachedChapter == null
 			? null
 			: new ChapterMinimal

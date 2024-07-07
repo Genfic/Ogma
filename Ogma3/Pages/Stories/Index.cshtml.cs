@@ -3,8 +3,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +15,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Stories;
 
-public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper mapper) : PageModel
+public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
@@ -60,8 +58,7 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 		Stories = await storiesQuery
 			.SortByEnum(sort)
 			.Paginate(page, config.StoriesPerPage)
-			.ProjectTo<StoryCard>(mapper.ConfigurationProvider)
-			.AsNoTracking()
+			.ProjectToCard()
 			.ToListAsync();
 
 		// Prepare pagination
@@ -69,7 +66,7 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config, IMapper
 		{
 			PerPage = config.StoriesPerPage,
 			ItemCount = await storiesQuery.CountAsync(),
-			CurrentPage = page
+			CurrentPage = page,
 		};
 	}
 }

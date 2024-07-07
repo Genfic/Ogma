@@ -16,7 +16,7 @@ public class StoryCard
 	public required string Slug { get; init; }
 	public required string Hook { get; init; }
 	public required string Cover { get; init; }
-	public required string CoverId { get; init; }
+	public required string? CoverId { get; init; }
 	public required DateTime? PublicationDate { get; init; }
 	public required IList<TagDto> Tags { get; init; }
 	public required Rating Rating { get; init; }

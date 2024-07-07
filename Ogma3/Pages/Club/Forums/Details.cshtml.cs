@@ -51,12 +51,7 @@ public class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context)
 					.OrderBy(ur => ur.Order)
 					.First(),
 				Body = ct.Body,
-				CommentsThread = new CommentsThreadDto
-				{
-					Id = ct.CommentsThread.Id,
-					LockDate = ct.CommentsThread.LockDate,
-					Type = nameof(Data.ClubThreads.ClubThread)
-				}
+				CommentsThread = new CommentsThreadDto(ct.CommentsThread.Id, nameof(Data.ClubThreads.ClubThread), ct.CommentsThread.LockDate),
 			})
 			.FirstOrDefaultAsync();
 
