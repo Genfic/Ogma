@@ -13,20 +13,13 @@ public static class UpdateQuote
 {
 	public sealed record Command(long Id, string Body, string Author) : IRequest<ActionResult<bool>>;
 
-	public class CreateQuoteHandler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	public class CreateQuoteHandler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
-		private readonly ApplicationDbContext _context;
-
-		public CreateQuoteHandler(ApplicationDbContext context)
-		{
-			_context = context;
-		}
-
 		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (id, body, author) = request;
 
-			var res = await _context.Quotes
+			var res = await context.Quotes
 				.Where(q => q.Id == id)
 				.ExecuteUpdateAsync(q => q
 					.SetProperty(x => x.Body, body)

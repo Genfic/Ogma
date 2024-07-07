@@ -25,18 +25,15 @@ public static class UpdateFaq
 		}
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Command, ActionResult>
 	{
-		private readonly ApplicationDbContext _context;
-		public Handler(ApplicationDbContext context) => _context = context;
-
 		public async ValueTask<ActionResult> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (id, question, answer) = request;
 
 			var rendered = Markdown.ToHtml(answer, MarkdownPipelines.All);
 
-			var res = await _context.Faqs
+			var res = await context.Faqs
 				.Where(f => f.Id == id)
 				.ExecuteUpdateAsync(f => f
 						.SetProperty(x => x.Question, question)
@@ -44,7 +41,7 @@ public static class UpdateFaq
 						.SetProperty(x => x.AnswerRendered, rendered),
 					cancellationToken);
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			return res > 0 ? Ok() : NotFound();
 		}

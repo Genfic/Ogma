@@ -17,7 +17,7 @@ namespace Ogma3.Api.V1.Quotes;
 public class QuotesController(IMediator mediator) : ControllerBase
 {
 	[HttpGet]
-	public async Task<ActionResult<List<Quote>>> GetQuotes()
+	public async Task<ActionResult<List<QuoteDto>>> GetQuotes()
 		=> await mediator.Send(new GetAll.Query());
 
 	// GET: api/Quotes/5
@@ -37,7 +37,7 @@ public class QuotesController(IMediator mediator) : ControllerBase
 	[HttpPost]
 	[Authorize(Roles = RoleNames.Admin)]
 	[IgnoreAntiforgeryToken]
-	public async Task<ActionResult<Quote>> PostQuote(CreateQuote.Command q)
+	public async Task<ActionResult<QuoteDto>> PostQuote(CreateQuote.Command q)
 		=> await mediator.Send(q);
 
 	// PUT: api/Quotes/5
@@ -59,6 +59,6 @@ public class QuotesController(IMediator mediator) : ControllerBase
 	[HttpDelete]
 	[Authorize(Roles = RoleNames.Admin)]
 	[IgnoreAntiforgeryToken]
-	public async Task<ActionResult<Quote>> DeleteQuote(DeleteQuote.Command q)
+	public async Task<ActionResult<long>> DeleteQuote(DeleteQuote.Command q)
 		=> await mediator.Send(q);
 }

@@ -1,14 +1,14 @@
-#nullable disable
-
+using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Quotes;
 
 public class Quote : BaseModel
 {
-	public string Body { get; init; }
-	public string Author { get; init; }
+	public required string Body { get; init; }
+	public required string Author { get; init; }
 
 	public class QuoteConfiguration : BaseConfiguration<Quote>
 	{
@@ -19,4 +19,11 @@ public class Quote : BaseModel
 			builder.Property(q => q.Author).IsRequired();
 		}
 	}
+}
+
+
+[Mapper]
+public static partial class QuoteMapper
+{
+	public static partial IQueryable<QuoteDto> ProjectToDto(this IQueryable<Quote> q);
 }

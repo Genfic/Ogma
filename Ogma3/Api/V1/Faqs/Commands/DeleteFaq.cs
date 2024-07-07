@@ -13,14 +13,11 @@ public static class DeleteFaq
 {
 	public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Command, ActionResult<long>>
 	{
-		private readonly ApplicationDbContext _context;
-		public Handler(ApplicationDbContext context) => _context = context;
-
 		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			var res = await _context.Faqs
+			var res = await context.Faqs
 				.Where(f => f.Id == request.Id)
 				.ExecuteDeleteAsync(cancellationToken);
 

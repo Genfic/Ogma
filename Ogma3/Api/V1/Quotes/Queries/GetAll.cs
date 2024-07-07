@@ -13,21 +13,15 @@ namespace Ogma3.Api.V1.Quotes.Queries;
 
 public static class GetAll
 {
-	public sealed record Query : IRequest<ActionResult<List<Quote>>>;
+	public sealed record Query : IRequest<ActionResult<List<QuoteDto>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Quote>>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<List<QuoteDto>>>
 	{
-		private readonly ApplicationDbContext _context;
-
-		public Handler(ApplicationDbContext context)
+		public async ValueTask<ActionResult<List<QuoteDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			_context = context;
-		}
-
-		public async ValueTask<ActionResult<List<Quote>>> Handle(Query request, CancellationToken cancellationToken)
-		{
-			var quotes = await _context.Quotes
+			var quotes = await context.Quotes
 				.OrderBy(q => q.Id)
+				.ProjectToDto()
 				.ToListAsync(cancellationToken);
 
 			return Ok(quotes);

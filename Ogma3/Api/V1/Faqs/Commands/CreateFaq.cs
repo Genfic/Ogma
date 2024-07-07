@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Faqs.Commands;
 
 public static class CreateFaq
 {
-	public sealed record Command(string Question, string Answer) : IRequest<ActionResult<Faq>>;
+	public sealed record Command(string Question, string Answer) : IRequest<ActionResult<FaqDto>>;
 
 	public class CommandValidator : AbstractValidator<Command>
 	{
@@ -24,12 +24,12 @@ public static class CreateFaq
 		}
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<Faq>>
+	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<FaqDto>>
 	{
 		private readonly ApplicationDbContext _context;
 		public Handler(ApplicationDbContext context) => _context = context;
 
-		public async ValueTask<ActionResult<Faq>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<FaqDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (question, answer) = request;
 
@@ -47,7 +47,7 @@ public static class CreateFaq
 				nameof(FaqsController.GetFaq),
 				nameof(FaqsController)[..^10],
 				new { faq.Id },
-				faq
+				new FaqDto(faq.Question, faq.Answer, faq.AnswerRendered)
 			);
 		}
 	}

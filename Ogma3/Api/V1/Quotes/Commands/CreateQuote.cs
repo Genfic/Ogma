@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Quotes.Commands;
 
 public static class CreateQuote
 {
-	public sealed record Command(string Body, string Author) : IRequest<ActionResult<Quote>>;
+	public sealed record Command(string Body, string Author) : IRequest<ActionResult<QuoteDto>>;
 
 	public class CommandValidator : AbstractValidator<Command>
 	{
@@ -25,15 +25,15 @@ public static class CreateQuote
 	}
 
 	public class CreateQuoteHandler(ApplicationDbContext context, ILogger<CreateQuotesFromJson.CreateQuoteHandler> logger)
-		: BaseHandler, IRequestHandler<Command, ActionResult<Quote>>
+		: BaseHandler, IRequestHandler<Command, ActionResult<QuoteDto>>
 	{
-		public async ValueTask<ActionResult<Quote>> Handle(Command request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<QuoteDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			var (body, author) = request;
 			var quote = new Quote
 			{
 				Body = body,
-				Author = author
+				Author = author,
 			};
 			context.Quotes.Add(quote);
 
@@ -53,7 +53,7 @@ public static class CreateQuote
 				nameof(QuotesController.GetQuote),
 				nameof(QuotesController)[..^10],
 				new { id = quote.Id },
-				new QuoteDto { Author = quote.Author, Body = quote.Body }
+				new QuoteDto(quote.Author, quote.Body)
 			);
 		}
 	}

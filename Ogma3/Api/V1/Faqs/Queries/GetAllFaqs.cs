@@ -12,17 +12,14 @@ namespace Ogma3.Api.V1.Faqs.Queries;
 
 public static class GetAllFaqs
 {
-	public sealed record Query : IRequest<ActionResult<List<Faq>>>;
+	public sealed record Query : IRequest<ActionResult<List<FaqDto>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Faq>>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<List<FaqDto>>>
 	{
-		private readonly ApplicationDbContext _context;
-		public Handler(ApplicationDbContext context) => _context = context;
-
-		public async ValueTask<ActionResult<List<Faq>>> Handle(Query request, CancellationToken cancellationToken)
+		public async ValueTask<ActionResult<List<FaqDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var faqs = await _context.Faqs
-				.AsNoTracking()
+			var faqs = await context.Faqs
+				.ProjectToDto()
 				.ToListAsync(cancellationToken);
 
 			return Ok(faqs);
