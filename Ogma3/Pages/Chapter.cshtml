@@ -101,29 +101,29 @@
 	</article>
 
 	<div class="navigation">
-		@if (Model.Chapter.Previous is not null)
+		@if (Model.Previous is not null)
 		{
 			<a asp-page="/Chapter"
-			   asp-route-id="@Model.Chapter.Previous.Id"
-			   asp-route-slug="@Model.Chapter.Previous.Slug"
+			   asp-route-id="@Model.Previous.Id"
+			   asp-route-slug="@Model.Previous.Slug"
 			   class="previous active-border">
 				<span class="action">Previous</span>
-				<span class="title">@Model.Chapter.Previous.Title</span>
+				<span class="title">@Model.Previous.Title</span>
 			</a>
 		}
-		@if (Model.Chapter.Next is not null)
+		@if (Model.Next is not null)
 		{
 			<a asp-page="/Chapter"
-			   asp-route-id="@Model.Chapter.Next.Id"
-			   asp-route-slug="@Model.Chapter.Next.Slug"
+			   asp-route-id="@Model.Next.Id"
+			   asp-route-slug="@Model.Next.Slug"
 			   class="next active-border">
 				<span class="action">Next</span>
-				<span class="title">@Model.Chapter.Next.Title</span>
+				<span class="title">@Model.Next.Title</span>
 			</a>
 		}
 	</div>
 
-	<partial name="_Comments" model="@Model.Chapter.CommentsThread"/>
+	<partial name="_Comments" model="@Model.CommentsThread"/>
 </div>
 
 <report-modal

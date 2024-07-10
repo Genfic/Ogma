@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.Stories;
-using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages;
@@ -31,7 +27,7 @@ public class StoryModel(UserRepository userRepo, ApplicationDbContext context) :
 			.Where(s => s.Id == id)
 			.WhereIf(s => s.PublicationDate != null || s.AuthorId == uid, uid is not null)
 			.WhereIf(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff(), uid is not null)
-			.Select(_mapStoryDetails)
+			.ProjectToStoryDetails()
 			.FirstOrDefaultAsync();
 
 		if (story is null) return NotFound();
@@ -48,52 +44,9 @@ public class StoryModel(UserRepository userRepo, ApplicationDbContext context) :
 			.WhereIf(c => c.PublicationDate != null || c.Story.AuthorId == uid, uid is not null)
 			.WhereIf(c => c.ContentBlockId == null || c.Story.AuthorId == uid, uid is not null)
 			.OrderBy(c => c.Order)
-			.Select(c => new ChapterBasic
-			{
-				Id = c.Id,
-				Title = c.Title,
-				Slug = c.Slug,
-				PublishDate = c.PublicationDate ?? c.CreationDate,
-				IsPublished = c.PublicationDate != null,
-				IsBlocked = c.ContentBlockId != null,
-				WordCount = c.WordCount,
-			})
+			.ProjectToBasic()
 			.ToArrayAsync();
 		
 		return Page();
 	}
-
-	private static Expression<Func<Story, StoryDetails>> _mapStoryDetails = s => new StoryDetails
-	{
-		Id = s.Id,
-		Title = s.Title,
-		Slug = s.Slug,
-		Hook = s.Hook,
-		Description = s.Description,
-		Cover = s.Cover,
-		Rating = s.Rating,
-		VotesCount = s.Votes.Count,
-		Status = s.Status,
-		AuthorId = s.AuthorId,
-		WordCount = s.WordCount,
-		ChaptersCount = s.Chapters.Count,
-		CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
-		IsPublished = s.PublicationDate != null,
-		ReleaseDate = s.PublicationDate ?? s.CreationDate,
-		ContentBlock = s.ContentBlock == null
-			? null
-			: new ContentBlockCard(s.ContentBlock.Reason, s.ContentBlock.DateTime, s.ContentBlock.Issuer.UserName),
-		Tags = s.Tags
-			.OrderByDescending(t => t.Namespace.HasValue)
-			.ThenByDescending(t => t.Namespace)
-			.Select(t => new TagDto
-			{
-				Id = t.Id,
-				Name = t.Name,
-				Slug = t.Slug,
-				Namespace = t.Namespace,
-				Description = t.Description,
-			})
-			.ToList(),
-	};
 }
