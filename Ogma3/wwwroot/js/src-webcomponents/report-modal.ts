@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Reports_PostReports as postReport } from "../generated/paths-public";
 import { EReportableContentTypes } from "../generated/types-public";
@@ -21,21 +21,20 @@ export class ReportModal extends LitElement {
 		max: 500,
 	};
 
-	@property() public openSelector?: string | undefined;
+	@property() public accessor openSelector: string | undefined;
 
-	@property() public csrf: string;
-	@property() public itemId: number;
-	@property() public itemType: string;
+	@property() public accessor csrf: string;
+	@property() public accessor itemId: number;
+	@property() public accessor itemType: string;
 
-	@state() private visible: boolean;
-	@state() private chars: number = 0;
-	@state() private reason: string;
-	@state() private success: boolean | null = null;
+	@state() private accessor visible: boolean;
+	@state() private accessor chars: number = 0;
+	@state() private accessor reason: string;
+	@state() private accessor success: boolean | null = null;
 
 	public show = () => (this.visible = true);
 
-	private validate = () =>
-		this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
+	private validate = () => this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
 
 	private message = () => {
 		switch (this.success) {
@@ -71,9 +70,8 @@ export class ReportModal extends LitElement {
 
 	protected render() {
 		return html`
-			${
-				this.visible
-					? html`
+			${this.visible
+				? html`
 						<div
 							class="club-folder-selector my-modal"
 							@click="${() => (this.visible = false)}"
@@ -104,35 +102,31 @@ export class ReportModal extends LitElement {
 										<div class="counter ${this.validate() || "invalid"}">
 											<div
 												class="o-progress-bar"
-												style="width: ${`${Math.min(
-													100,
-													100 * (this.chars / this.rules.max),
-												)}%`}"
+												style="width: ${`${Math.min(100, 100 * (this.chars / this.rules.max))}%`}"
 											></div>
 											<span>${this.chars}/${this.rules.max} chars</span>
 										</div>
 
-										${
-											this.validate()
-												? null
-												: html`<span>
+										${this.validate()
+											? null
+											: html`<span>
 													Reason must be between ${this.rules.min} and ${this.rules.max} characters long.
-											  </span>`
-										}
+												</span>`}
 									</div>
 
 									<div class="o-form-group">
 										<button
 											type="submit"
 											class="btn ${this.message().cls}"
-										>${this.message().msg}</button>
+										>
+											${this.message().msg}
+										</button>
 									</div>
 								</form>
 							</div>
 						</div>
-				  `
-					: null
-			}
+					`
+				: null}
 		`;
 	}
 

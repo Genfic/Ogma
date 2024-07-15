@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Clubs_BanUser as banUser, Clubs_UnbanUser as unbanUser } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
@@ -9,11 +9,11 @@ export class ClubBanButton extends LitElement {
 		super();
 	}
 
-	@property() clubId: number;
-	@property() userId: number;
-	@property() csrf: string;
-	@property() banned: boolean;
-	@state() isBanned: boolean;
+	@property() accessor clubId: number;
+	@property() accessor userId: number;
+	@property() accessor csrf: string;
+	@property() accessor banned: boolean;
+	@state() accessor isBanned: boolean;
 
 	connectedCallback() {
 		super.connectedCallback();

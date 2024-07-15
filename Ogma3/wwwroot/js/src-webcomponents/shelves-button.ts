@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	ShelfStories_AddToShelf as addToShelf,
@@ -23,12 +23,12 @@ export class ShelvesButton extends LitElement {
 		super();
 	}
 
-	@property() storyId: number;
-	@property() csrf: string;
-	@state() private quickShelves: Shelf[] = [];
-	@state() private shelves: Shelf[] = [];
-	@state() private more: boolean = false;
-	@state() private page: number = 1;
+	@property() accessor storyId: number;
+	@property() accessor csrf: string;
+	@state() private accessor quickShelves: Shelf[] = [];
+	@state() private accessor shelves: Shelf[] = [];
+	@state() private accessor more: boolean = false;
+	@state() private accessor page: number = 1;
 
 	async connectedCallback() {
 		super.connectedCallback();

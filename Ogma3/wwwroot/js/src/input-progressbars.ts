@@ -1,8 +1,4 @@
-enum InputType {
-	Validated,
-	File,
-	Regular,
-}
+type InputType = "validated" | "file" | "regular";
 
 const properSplit = (value: string, separator: string | RegExp) =>
 	!value || value.length <= 0 ? [] : value.split(separator);
@@ -18,22 +14,22 @@ for (const input of inputs) {
 	let type: InputType;
 	if (input.dataset.maxCount || input.dataset.valLengthMax || input.dataset.valMaxlengthMax) {
 		// One of the validation parameters is set so it's a validated input
-		type = InputType.Validated;
+		type = "validated";
 	} else if (input.dataset.valFilesizeMax && input.type === "file") {
 		// File size validation parameter is set and the input type is file, so it's a file
-		type = InputType.File;
+		type = "file";
 	} else {
 		// It's something else entirely
-		type = InputType.Regular;
+		type = "regular";
 	}
 
 	// If there's no count specified, get max length. If that's not there, just use 0.
 	const max: number = {
-		[InputType.Validated]: Number(
+		["validated"]: Number(
 			input.dataset.maxCount ?? input.dataset.valLengthMax ?? input.dataset.valMaxlengthMax,
 		),
-		[InputType.File]: Number(input.dataset.valFilesizeMax),
-		[InputType.Regular]: input.maxLength ?? 0,
+		["file"]: Number(input.dataset.valFilesizeMax),
+		["regular"]: input.maxLength ?? 0,
 	}[type];
 
 	// Sometimes we have the minimum value as well, if not let's just ensure it's not 0 or less
@@ -64,7 +60,7 @@ for (const input of inputs) {
 	const progress: HTMLElement = dom('<div class="o-progress-bar"></div>');
 
 	// Create the character counter
-	const count: HTMLElement = dom(`<span>${currentSize()}/${max}${type === InputType.File ? " bytes" : ""}</span>`);
+	const count: HTMLElement = dom(`<span>${currentSize()}/${max}${type === "file" ? " bytes" : ""}</span>`);
 
 	// Append the progress bar to the container
 	counter.appendChild(progress);
@@ -86,7 +82,7 @@ for (const input of inputs) {
 	console.log(`Listening to ${input.type}`);
 	input.addEventListener("input", () => {
 		const length = currentSize();
-		const suffix = type === InputType.File ? " bytes" : "";
+		const suffix = type === "file" ? " bytes" : "";
 		// Update character counter
 		count.innerText = `${length}/${max}${suffix}`;
 

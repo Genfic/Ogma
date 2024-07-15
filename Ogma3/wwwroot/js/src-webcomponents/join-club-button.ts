@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ClubJoin_JoinClub as joinClub, ClubJoin_LeaveClub as leaveClub } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
@@ -9,9 +9,9 @@ export class JoinClubButton extends LitElement {
 		super();
 	}
 
-	@property() clubId: number;
-	@property() csrf: string;
-	@property() isMember: boolean = false;
+	@property() accessor clubId: number;
+	@property() accessor csrf: string;
+	@property() accessor isMember: boolean = false;
 
 	connectedCallback() {
 		super.connectedCallback();

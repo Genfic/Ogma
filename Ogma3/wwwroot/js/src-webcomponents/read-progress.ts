@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
 
@@ -8,11 +8,11 @@ export class ReadProgress extends LitElement {
 		super();
 	}
 
-	@state() private progress: number = 0;
-	@state() private windowHeight: number;
-	@state() private containerHeight: number;
-	@state() private ticking: boolean = false;
-	@state() private read: boolean = false;
+	@state() private accessor progress: number = 0;
+	@state() private accessor windowHeight: number;
+	@state() private accessor containerHeight: number;
+	@state() private accessor ticking: boolean = false;
+	@state() private accessor read: boolean = false;
 
 	// language=CSS
 	static styles = css`

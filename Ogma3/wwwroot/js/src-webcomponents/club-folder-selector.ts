@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
 import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../generated/paths-public";
@@ -17,17 +17,17 @@ export class ClubFolderSelector extends LitElement {
 		super();
 	}
 
-	@property() storyId: number;
-	@property() csrf: string;
+	@property() accessor storyId: number;
+	@property() accessor csrf: string;
 
-	@state() private clubs: Club[];
-	// @state() private folders: {}[];
-	@state() private selectedClub: Club | null = null;
-	@state() private status: { message: string; success: boolean } = {
+	@state() private accessor clubs: Club[];
+	// @state() private accessor folders: {}[];
+	@state() private accessor selectedClub: Club | null = null;
+	@state() private accessor status: { message: string; success: boolean } = {
 		message: "",
 		success: false,
 	};
-	@state() private visible: boolean = false;
+	@state() private accessor visible: boolean = false;
 
 	async connectedCallback() {
 		super.connectedCallback();

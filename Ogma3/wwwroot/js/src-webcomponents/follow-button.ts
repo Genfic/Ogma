@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Users_FollowUser as followUser, Users_UnfollowUser as unfollowUser } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
@@ -9,9 +9,9 @@ export class FollowButton extends LitElement {
 		super();
 	}
 
-	@property() userName: string;
-	@property() csrf: string;
-	@property() isFollowed: boolean;
+	@property() accessor userName: string;
+	@property() accessor csrf: string;
+	@property() accessor isFollowed: boolean;
 
 	connectedCallback() {
 		super.connectedCallback();

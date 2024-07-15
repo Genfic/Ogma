@@ -476,6 +476,14 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\vue-directives\closeable.js.LEGAL.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\sw\cache-service-worker.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dist\sw\cache-service-worker.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\.gitignore" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\.swagger-codegen-ignore" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\api.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\api_test.spec.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\configuration.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\custom.d.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\git_push.sh" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\openapi\index.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\css\style.scss">

@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Users_BlockUser as blockUser, Users_UnblockUser as unblockUser } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
@@ -9,9 +9,9 @@ export class BlockUser extends LitElement {
 		super();
 	}
 
-	@property() userName: string;
-	@property() csrf: string;
-	@property() isBlocked: boolean;
+	@property() accessor userName: string;
+	@property() accessor csrf: string;
+	@property() accessor isBlocked: boolean;
 
 	async connectedCallback() {
 		super.connectedCallback();

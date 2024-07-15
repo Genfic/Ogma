@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { Notifications_CountUserNotifications as countNotifications } from "../generated/paths-public";
 import "../src-helpers/extensions/Number";
@@ -10,7 +10,7 @@ export class NotificationsButton extends LitElement {
 		super();
 	}
 
-	@state() notifications: number;
+	@state() accessor notifications: number;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -36,7 +36,7 @@ export class NotificationsButton extends LitElement {
 				title="${this.#title()}"
 			>
 				<i class="material-icons-outlined">notifications</i>
-				${(this.notifications ?? -1) > 0 ? html`<span>${this.#count()}</span>` : null} 
+				${(this.notifications ?? -1) > 0 ? html`<span>${this.#count()}</span>` : null}
 			</a>
 		`;
 	}

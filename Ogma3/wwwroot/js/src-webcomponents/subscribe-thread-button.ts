@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	Subscriptions_IsSubscribedToThread as isSubscribed,
@@ -13,10 +13,10 @@ export class SubscribeThreadButton extends LitElement {
 		super();
 	}
 
-	@property() endpoint: string;
-	@property() threadId: number;
-	@property() csrf: string;
-	@state() subscribed: boolean;
+	@property() accessor endpoint: string;
+	@property() accessor threadId: number;
+	@property() accessor csrf: string;
+	@state() accessor subscribed: boolean;
 
 	async connectedCallback() {
 		super.connectedCallback();

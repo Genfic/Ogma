@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { Folders_GetFoldersOfClub as getClubFolders } from "../generated/paths-public";
@@ -25,16 +25,16 @@ export class FolderTree extends LitElement {
 		super();
 	}
 
-	@property() clubId: number;
-	@property() value: number | null = null;
-	@property() current: number | null = null;
-	@property() selected: number | null = this.value;
-	@property() inputSelector?: string | undefined = undefined;
+	@property() accessor clubId: number;
+	@property() accessor value: number | null = null;
+	@property() accessor current: number | null = null;
+	@property() accessor selected: number | null = this.value;
+	@property() accessor inputSelector: string | undefined = undefined;
 
-	@state() private folders: Folder[] = [];
-	@state() private tree: TreeItem[] = [];
-	@state() private name: string;
-	@state() private input?: HTMLInputElement;
+	@state() private accessor folders: Folder[] = [];
+	@state() private accessor tree: TreeItem[] = [];
+	@state() private accessor name: string;
+	@state() private accessor input: HTMLInputElement;
 
 	async connectedCallback() {
 		log.info("tree connected");

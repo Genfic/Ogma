@@ -1,4 +1,4 @@
-/// <reference lib="WebWorker" />
+/// <reference lib="webworker" />
 (function (this: ServiceWorkerGlobalScope) {
 	const clearCache = async (key: string) => {
 		const keys = await caches.keys();

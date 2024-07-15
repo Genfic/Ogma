@@ -1,10 +1,6 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import {
-	Votes_DeleteVote as deleteVote,
-	Votes_GetVotes as getVotes,
-	Votes_PostVote as postVote,
-} from "../generated/paths-public";
+import { Votes_DeleteVote as deleteVote, Votes_GetVotes as getVotes, Votes_PostVote as postVote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 interface VoteResponse {
@@ -18,10 +14,10 @@ export class VoteButton extends LitElement {
 		super();
 	}
 
-	@property() storyId: number;
-	@property() csrf: string;
-	@state() private voted: boolean;
-	@state() private score: number;
+	@property() accessor storyId: number;
+	@property() accessor csrf: string;
+	@state() private accessor voted: boolean;
+	@state() private accessor score: number;
 
 	async connectedCallback() {
 		super.connectedCallback();

@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { Quotes_GetRandomQuote as getQuote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
@@ -14,8 +14,8 @@ export class QuoteBox extends LitElement {
 		super();
 	}
 
-	@state() private _loading: boolean;
-	@state() private _quote: Quote;
+	@state() private accessor _loading: boolean;
+	@state() private accessor _quote: Quote;
 
 	async connectedCallback() {
 		super.connectedCallback();

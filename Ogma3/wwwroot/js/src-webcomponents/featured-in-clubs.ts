@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
@@ -15,9 +15,9 @@ export class FeaturedInClubs extends LitElement {
 		super();
 	}
 
-	@property() storyId: number;
-	@state() private visible: boolean;
-	@state() private clubs: Club[];
+	@property() accessor storyId: number;
+	@state() private accessor visible: boolean;
+	@state() private accessor clubs: Club[];
 
 	async connectedCallback() {
 		super.connectedCallback();
