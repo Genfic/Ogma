@@ -1,24 +1,21 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Ratings;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class Blacklists(ApplicationDbContext context, IMapper mapper) : PageModel
+public class Blacklists(ApplicationDbContext context) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<UserCard> BlockedUsers { get; set; }
@@ -39,7 +36,7 @@ public class Blacklists(ApplicationDbContext context, IMapper mapper) : PageMode
 		BlockedUsers = await context.BlacklistedUsers
 			.Where(bu => bu.BlockingUserId == uid)
 			.Select(bu => bu.BlockedUser)
-			.ProjectTo<UserCard>(mapper.ConfigurationProvider)
+			.ProjectToCard()
 			.ToListAsync();
 
 		Ratings = await context.Ratings.ToListAsync();
@@ -72,7 +69,7 @@ public class Blacklists(ApplicationDbContext context, IMapper mapper) : PageMode
 			.Select(rating => new BlacklistedRating
 			{
 				RatingId = rating,
-				UserId = uid
+				UserId = uid,
 			})
 			.ToList();
 		// And tags
@@ -80,7 +77,7 @@ public class Blacklists(ApplicationDbContext context, IMapper mapper) : PageMode
 			.Select(tag => new BlacklistedTag
 			{
 				TagId = tag,
-				UserId = uid
+				UserId = uid,
 			})
 			.ToList();
 

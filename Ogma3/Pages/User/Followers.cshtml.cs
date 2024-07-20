@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +12,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public class Followers(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+public class Followers(UserRepository userRepo, ApplicationDbContext context)
 	: PageModel
 {
 	private const int PerPage = 25;
@@ -33,7 +31,7 @@ public class Followers(UserRepository userRepo, ApplicationDbContext context, IM
 			.Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
 			.Select(u => u.FollowedUser)
 			.Paginate(page, PerPage)
-			.ProjectTo<UserCard>(mapper.ConfigurationProvider)
+			.ProjectToCard()
 			.AsNoTracking()
 			.ToListAsync();
 
@@ -47,7 +45,7 @@ public class Followers(UserRepository userRepo, ApplicationDbContext context, IM
 		{
 			PerPage = PerPage,
 			ItemCount = count,
-			CurrentPage = page
+			CurrentPage = page,
 		};
 
 		return Page();
