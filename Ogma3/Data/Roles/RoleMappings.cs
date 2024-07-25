@@ -11,6 +11,6 @@ public static class RoleMappings
 		Name = r.Name,
 		Order = r.Order ?? 0,
 		IsStaff = r.IsStaff,
-		Color = r.Color
+		Color = r.Color,
 	};
 }

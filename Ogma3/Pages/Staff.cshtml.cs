@@ -11,7 +11,7 @@ namespace Ogma3.Pages;
 
 public class StaffModel(ApplicationDbContext context) : PageModel
 {
-	public required ICollection<UserCard> Staff { get; set; }
+	public required IEnumerable<UserCard> Staff { get; set; }
 
 	public async Task OnGetAsync()
 	{
@@ -19,6 +19,6 @@ public class StaffModel(ApplicationDbContext context) : PageModel
 			.Where(u => u.Roles.Any(ur => ur.IsStaff))
 			.OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
 			.ProjectToCard()
-			.ToListAsync();
+			.ToArrayAsync();
 	}
 }

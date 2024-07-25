@@ -45,7 +45,6 @@ public class TagModel(ApplicationDbContext context) : PageModel
 			.OrderByDescending(s => s.PublicationDate)
 			.Paginate(page, PerPage)
 			.ProjectToCard()
-			.AsNoTracking()
 			.ToListAsync();
 
 		// Prepare pagination
@@ -53,7 +52,7 @@ public class TagModel(ApplicationDbContext context) : PageModel
 		{
 			CurrentPage = page,
 			ItemCount = await query.CountAsync(),
-			PerPage = PerPage
+			PerPage = PerPage,
 		};
 
 		return Page();
