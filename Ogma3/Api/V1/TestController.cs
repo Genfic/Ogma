@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Ogma3.Infrastructure.Logging.OperationTiming;
+using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Api.V1;
 
 [Route("api/[controller]", Name = nameof(TestController))]
 [ApiController]
-[Authorize("RequireAdminRole")]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public class TestController(ILogger<TestController> logger) : ControllerBase
 {
 

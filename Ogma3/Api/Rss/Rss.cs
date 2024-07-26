@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Ogma3.Api.Rss.Queries;
 using Ogma3.Infrastructure.Formatters;
+using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Api.Rss;
 
@@ -14,25 +15,25 @@ public class RssController(IMediator mediator) : ControllerBase
 
 	[ResponseCache(Duration = Cache)]
 	[HttpGet]
-	[EnableRateLimiting("rss")]
+	[EnableRateLimiting(RateLimiting.Rss)]
 	public async Task<ActionResult<RssResult>> Stories()
 		=> await mediator.Send(new GetStories.Query());
 
 	[ResponseCache(Duration = Cache)]
 	[HttpGet("stories")]
-	[EnableRateLimiting("rss")]
+	[EnableRateLimiting(RateLimiting.Rss)]
 	public async Task<ActionResult<RssResult>> GetStoriesAsync()
 		=> await mediator.Send(new GetStories.Query());
 
 	[ResponseCache(Duration = Cache)]
 	[HttpGet("story/{storyId:long}/chapters")]
-	[EnableRateLimiting("rss")]
+	[EnableRateLimiting(RateLimiting.Rss)]
 	public async Task<ActionResult<RssResult>> GetChapters(long storyId)
 		=> await mediator.Send(new GetChapters.Query(storyId));
 
 	[ResponseCache(Duration = Cache)]
 	[HttpGet("blogposts")]
-	[EnableRateLimiting("rss")]
+	[EnableRateLimiting(RateLimiting.Rss)]
 	public async Task<ActionResult<RssResult>> GetBlogpostsAsync()
 		=> await mediator.Send(new GetBlogposts.Query());
 }

@@ -41,6 +41,7 @@ using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.Mediator.Behaviours;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.NSwag.OperationProcessors;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Infrastructure.StartupGenerators;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
@@ -188,8 +189,7 @@ public class Startup
 		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 		
 		// Auth
-		services.AddAuthorizationBuilder()
-			.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+		services.AddAuthorizationPolicies();
 		
 		// Cookies
 		services.ConfigureApplicationCookie(options => {
@@ -217,7 +217,7 @@ public class Startup
 		// Razor
 		services
 			.AddRazorPages()
-			.AddRazorPagesOptions(options => { options.Conventions.AuthorizeAreaFolder("Admin", "/", "RequireAdminRole"); })
+			.AddRazorPagesOptions(options => { options.Conventions.AuthorizeAreaFolder("Admin", "/", AuthorizationPolicies.RequireAdminRole); })
 			.AddRazorRuntimeCompilation();
 		
 		// MVC
@@ -247,20 +247,27 @@ public class Startup
 			})
 			.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 		
+		// Immediate
+		services.AddHandlers();
+		services.AddBehaviors();
+		
 		// Custom formatters
 		services.AddControllers(options => { options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration)); });
 		
 		// OpenAPI
+		services.AddEndpointsApiExplorer();
 		services.AddOpenApiDocument(settings => {
 			settings.DocumentName = "public";
-			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
-			settings.OperationProcessors.Insert(1, new ExcludeInternalApisProcessor());
+			settings.OperationProcessors.Insert(0, new MinimalApiTagProcessor());
+			settings.OperationProcessors.Insert(1, new ExcludeRssProcessor());
+			settings.OperationProcessors.Insert(2, new ExcludeInternalApisProcessor());
 			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 		services.AddOpenApiDocument(settings => {
 			settings.DocumentName = "internal";
-			settings.OperationProcessors.Insert(0, new ExcludeRssProcessor());
-			settings.OperationProcessors.Insert(1, new IncludeInternalApisProcessor());
+			settings.OperationProcessors.Insert(0, new MinimalApiTagProcessor());
+			settings.OperationProcessors.Insert(1, new ExcludeRssProcessor());
+			settings.OperationProcessors.Insert(2, new IncludeInternalApisProcessor());
 			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
 		});
 		
@@ -272,10 +279,7 @@ public class Startup
 		});
 		
 		// Rate limiting profiles
-		// TODO: Move it somewhere else?
-		services.AddRateLimiter(x => x.AddFixedWindowLimiter(policyName: "rss", options => {
-			options.Window = TimeSpan.FromHours(1);
-		}));
+		services.AddRateLimiting();
 	}
 	
 	
@@ -359,6 +363,7 @@ public class Startup
 		app.UseEndpoints(endpoints => {
 			endpoints.MapRazorPages();
 			endpoints.MapControllers();
+			endpoints.MapOgma3Endpoints();
 		});
 		
 		// Generate JS manifest

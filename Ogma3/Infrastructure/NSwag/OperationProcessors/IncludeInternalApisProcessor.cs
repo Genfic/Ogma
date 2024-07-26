@@ -6,5 +6,7 @@ namespace Ogma3.Infrastructure.NSwag.OperationProcessors;
 public class IncludeInternalApisProcessor : IOperationProcessor
 {
 	public bool Process(OperationProcessorContext context)
-		=> context.ControllerType.FullName?.Contains("ADMIN", System.StringComparison.CurrentCultureIgnoreCase) ?? false;
+	{
+		return context.ControllerType?.FullName?.Contains("ADMIN", StringComparison.CurrentCultureIgnoreCase) ?? false;
+	}
 }

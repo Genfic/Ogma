@@ -14,8 +14,8 @@ export class QuoteBox extends LitElement {
 		super();
 	}
 
-	@state() private accessor _loading: boolean;
-	@state() private accessor _quote: Quote;
+	@state() private _loading: boolean;
+	@state() private _quote: Quote;
 
 	async connectedCallback() {
 		super.connectedCallback();
