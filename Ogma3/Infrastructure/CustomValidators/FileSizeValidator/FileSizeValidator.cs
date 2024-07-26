@@ -1,7 +1,6 @@
 using FluentValidation;
 using FluentValidation.Validators;
 using Humanizer;
-using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 

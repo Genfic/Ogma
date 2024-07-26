@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Humanizer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Ogma3.Infrastructure.Attributes;

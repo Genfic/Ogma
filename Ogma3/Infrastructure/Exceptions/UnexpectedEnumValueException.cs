@@ -1,5 +1,3 @@
-using System;
-
 namespace Ogma3.Infrastructure.Exceptions;
 
 public class UnexpectedEnumValueException<TEnum> : Exception where TEnum : Enum

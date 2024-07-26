@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using Mediator;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 using Ogma3.Api.V1.UserActivity.Commands;

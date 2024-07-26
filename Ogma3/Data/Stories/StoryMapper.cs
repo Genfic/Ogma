@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Ogma3.Pages.Shared.Cards;
 using Riok.Mapperly.Abstractions;
 

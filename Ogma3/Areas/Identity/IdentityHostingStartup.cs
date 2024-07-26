@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Ogma3.Areas.Identity;
+﻿using Ogma3.Areas.Identity;
 
 [assembly: HostingStartup(typeof(IdentityHostingStartup))]
 

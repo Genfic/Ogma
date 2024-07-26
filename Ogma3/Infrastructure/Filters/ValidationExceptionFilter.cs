@@ -1,7 +1,5 @@
-using System.Linq;
 using FluentValidation;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Ogma3.Infrastructure.ActionResults;

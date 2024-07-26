@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;

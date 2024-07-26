@@ -1,6 +1,5 @@
 #nullable disable
 
-using System;
 using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Documents;

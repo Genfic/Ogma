@@ -1,7 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-
 namespace Ogma3.Services.FileUploader;
 
 public interface IFileUploader

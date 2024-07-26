@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Tags;
 using Ogma3.Pages.Shared;

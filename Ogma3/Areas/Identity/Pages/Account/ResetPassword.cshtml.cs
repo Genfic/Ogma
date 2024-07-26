@@ -2,13 +2,11 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
 

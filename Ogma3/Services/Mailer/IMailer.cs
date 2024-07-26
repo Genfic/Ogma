@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Ogma3.Services.Mailer;

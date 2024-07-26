@@ -1,7 +1,5 @@
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 
 namespace Ogma3.Infrastructure.Logging.OperationTiming;
 

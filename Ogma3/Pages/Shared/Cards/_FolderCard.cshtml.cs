@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AutoMapper;
 using Ogma3.Data.Folders;
 

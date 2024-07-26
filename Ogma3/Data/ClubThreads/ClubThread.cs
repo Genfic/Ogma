@@ -1,6 +1,5 @@
 #nullable disable
 
-using System;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.CommentsThreads;

@@ -1,6 +1,4 @@
-using System;
 using System.Security.Cryptography;
-using Microsoft.Extensions.Logging;
 
 namespace Ogma3.Services.CodeGenerator;
 

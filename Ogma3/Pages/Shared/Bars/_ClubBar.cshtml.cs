@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using AutoMapper;
 using Ogma3.Data.Clubs;
 

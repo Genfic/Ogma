@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Ogma3.Services.TurnstileService;
 
 public interface ITurnstileService

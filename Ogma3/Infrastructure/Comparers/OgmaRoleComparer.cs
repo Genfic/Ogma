@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Ogma3.Data.Roles;
 
 namespace Ogma3.Infrastructure.Comparers;

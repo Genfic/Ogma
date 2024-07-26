@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.ServiceModel.Syndication;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using Utils.Extensions;
 

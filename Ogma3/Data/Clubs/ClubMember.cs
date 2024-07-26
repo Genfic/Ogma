@@ -1,4 +1,3 @@
-using System;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Clubs;

@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
 
 namespace Ogma3.Infrastructure.Logging.OperationTiming;
 

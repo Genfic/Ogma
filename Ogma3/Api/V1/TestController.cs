@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Ogma3.Infrastructure.Logging.OperationTiming;
 using Ogma3.Infrastructure.ServiceRegistrations;
 

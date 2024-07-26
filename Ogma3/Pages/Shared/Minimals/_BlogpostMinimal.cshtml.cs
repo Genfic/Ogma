@@ -1,5 +1,3 @@
-using System;
-
 namespace Ogma3.Pages.Shared.Minimals;
 
 public class BlogpostMinimal

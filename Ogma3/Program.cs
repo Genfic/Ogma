@@ -1,13 +1,6 @@
-using System;
 using System.Globalization;
 using System.Text;
-using System.Threading;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Ogma3;
 using Ogma3.Infrastructure.Logging;
 using Serilog;

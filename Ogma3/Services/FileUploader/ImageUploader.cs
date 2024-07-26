@@ -1,12 +1,5 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using B2Net;
 using B2Net.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Logging.OperationTiming;

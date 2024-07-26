@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Stories;

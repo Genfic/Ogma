@@ -1,14 +1,10 @@
 ﻿#nullable disable
 
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using HashidsNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.CommentsThreads;

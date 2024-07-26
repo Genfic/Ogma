@@ -1,9 +1,5 @@
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentValidation;
 using Mediator;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;

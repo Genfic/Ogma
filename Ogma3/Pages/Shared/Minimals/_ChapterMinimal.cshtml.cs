@@ -1,4 +1,3 @@
-using System;
 using AutoMapper;
 using Ogma3.Data.Chapters;
 

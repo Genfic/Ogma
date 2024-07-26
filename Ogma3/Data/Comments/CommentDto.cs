@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using AutoMapper;
 using Markdig;
 using Ogma3.Data.Users;

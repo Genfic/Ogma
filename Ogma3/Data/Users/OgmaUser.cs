@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;

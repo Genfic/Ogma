@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Ogma3.Areas.Admin.Pages;

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Namotion.Reflection;
 using NJsonSchema.Annotations;
 using NJsonSchema.Generation;

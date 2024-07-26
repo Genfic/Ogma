@@ -1,7 +1,4 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Ogma3.Infrastructure.Attributes;

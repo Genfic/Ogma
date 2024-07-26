@@ -1,10 +1,8 @@
-using System;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using FluentValidation.Internal;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 

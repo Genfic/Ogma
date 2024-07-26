@@ -1,9 +1,5 @@
-using System;
-using System.IO;
-using System.Linq;
 using FluentValidation;
 using FluentValidation.Validators;
-using Microsoft.AspNetCore.Http;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 

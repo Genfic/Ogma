@@ -1,5 +1,3 @@
-using System;
-
 namespace Ogma3.Data.Alerts;
 
 public enum EAlertType

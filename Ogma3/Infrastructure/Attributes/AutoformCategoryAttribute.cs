@@ -1,5 +1,3 @@
-using System;
-
 namespace Ogma3.Infrastructure.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]

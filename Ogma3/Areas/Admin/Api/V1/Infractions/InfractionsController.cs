@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Areas.Admin.Api.V1.Infractions.Commands;
 using Ogma3.Areas.Admin.Api.V1.Infractions.Queries;

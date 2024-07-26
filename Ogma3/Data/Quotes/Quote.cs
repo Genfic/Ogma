@@ -1,4 +1,3 @@
-using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Riok.Mapperly.Abstractions;

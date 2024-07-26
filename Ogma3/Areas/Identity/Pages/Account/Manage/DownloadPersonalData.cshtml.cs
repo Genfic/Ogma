@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;

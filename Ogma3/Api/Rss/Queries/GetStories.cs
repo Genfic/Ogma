@@ -1,13 +1,7 @@
-using System;
-using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Mediator;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Formatters;

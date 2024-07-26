@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ogma3.Infrastructure.Converters;
