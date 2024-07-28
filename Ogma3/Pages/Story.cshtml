@@ -2,7 +2,6 @@
 @inject IAntiforgery Antiforgery
 @using System.Globalization
 @using Microsoft.AspNetCore.Antiforgery
-@using Ogma3.Api.V1.ChaptersReads
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
@@ -202,9 +201,8 @@
 		openSelector="#open-modal-button">
 	</report-modal>
 
-	<div id="reads-route" data-reads="@Url.RouteUrl(nameof(ChaptersReadController))"></div>
 	<div id="story-id" data-story-id="@Model.Story.Id"></div>
-	@Html.AntiForgeryToken()
+	<div id="x-csrf" data-x-csrf="@csrf"></div>
 
 	<div class="backdrop">
 		<cdn-img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" itemprop="thumbnailUrl"/>

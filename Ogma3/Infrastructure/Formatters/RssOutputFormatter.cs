@@ -42,7 +42,7 @@ public class RssOutputFormatter : TextOutputFormatter
 		)
 		{
 			Copyright = new TextSyndicationContent($"2019 — {now.Year}"),
-			Items = data.Items
+			Items = data.Items,
 		};
 
 		using var stream = new MemoryStream();
@@ -52,7 +52,7 @@ public class RssOutputFormatter : TextOutputFormatter
 			NewLineHandling = NewLineHandling.Entitize,
 			NewLineOnAttributes = true,
 			Indent = true,
-			Async = true
+			Async = true,
 		});
 		new Rss20FeedFormatter(feed, false).WriteTo(writer);
 		await writer.FlushAsync();

@@ -28,7 +28,6 @@ public static class GetBlogposts
 					Body = b.Body.Substring(0, 250),
 					b.Slug,
 					Date = b.PublicationDate ?? b.CreationDate,
-					a ="a"
 				})
 				.ToArrayAsync(cancellationToken);
 

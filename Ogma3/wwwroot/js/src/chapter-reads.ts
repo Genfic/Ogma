@@ -1,12 +1,17 @@
+import {
+	ChaptersRead_DeleteChaptersRead as markUnread,
+	ChaptersRead_GetChaptersRead as getRead,
+	ChaptersRead_PostChaptersRead as markRead,
+} from "../generated/paths-public";
+
 (async () => {
-	const route = document.querySelector("[data-reads]") as HTMLElement;
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
+	const csrf = (document.querySelector("[data-x-csrf]") as HTMLElement);
 
 	const buttons = [...document.querySelectorAll("button.read-status")] as HTMLButtonElement[];
-	const csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
 
-	route.remove();
 	story.remove();
+	csrf.remove();
 
 	let reads: Array<number> = [];
 
@@ -17,18 +22,14 @@
 	}
 
 	const _changeState = async (id: number) => {
-		const method = reads.includes(id) ? "delete" : "post";
-		const res = await fetch(route.dataset.reads, {
-			method: method,
-			headers: {
-				RequestVerificationToken: csrf,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				story: Number(story.dataset.storyId),
-				chapter: id,
-			}),
+		const client = reads.includes(id) ? markUnread : markRead;
+		const res = await client({
+			story: Number(story.dataset.storyId),
+			chapter: id,
+		}, {
+			RequestVerificationToken: csrf.dataset['x-csrf']
 		});
+
 		reads = await res.json();
 		_update();
 	};
@@ -43,7 +44,7 @@
 	}
 
 	async function _getStatus() {
-		const res = await fetch(`${route.dataset.reads}/${story.dataset.storyId}`);
+		const res = await getRead(Number(story.dataset.storyId));
 
 		reads = await res.json();
 		_update();

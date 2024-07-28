@@ -8,14 +8,14 @@ using Ogma3.Data.Quotes;
 
 namespace Ogma3.Api.V1.Quotes;
 
-using ReturnType=Results<NotFound, Ok<QuoteDto>>;
+using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 
 [Handler]
 [MapGet("api/quotes/{id:long}")]
 public static partial class GetSingleQuote
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithName(nameof(GetSingleQuote));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint.WithName(nameof(GetSingleQuote));
 
 	[UsedImplicitly]
 	public sealed record Query(long Id);

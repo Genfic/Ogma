@@ -8,6 +8,7 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.UserActivity.Commands;
 
+// TODO: blocked by https://github.com/ImmediatePlatform/Immediate.Apis/issues/67
 public static class UpdateLastActive
 {
 	public sealed record Command : IRequest<ActionResult<int>>;
