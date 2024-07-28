@@ -7,6 +7,7 @@
 		"allowSyntheticDefaultImports": true,
 		"moduleResolution": "Bundler",
 		"experimentalDecorators": true,
+		"useDefineForClassFields": false,
 		"lib": [
 			"DOM", "ES6", "ES2017", "DOM.Iterable"
 		]

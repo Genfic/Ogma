@@ -1,3 +1,35 @@
+export type None = undefined;
+
+export interface MarkChapterAsReadCommand {
+    chapter: number;
+    story: number;
+}
+
+export interface MarkChapterAsUnreadCommand {
+    chapter: number;
+    story: number;
+}
+
+export interface QuoteDto {
+    body: string;
+    author: string;
+}
+
+export interface CreateQuoteCommand {
+    body: string;
+    author: string;
+}
+
+export interface CreateQuotesFromJsonCommand {
+    data: Stream;
+}
+
+export interface UpdateQuoteCommand {
+    id: number;
+    body: string;
+    author: string;
+}
+
 export interface ErrorControllerResult {
     code: number | null;
     reason: string;
@@ -186,34 +218,6 @@ export interface RatingApiDto {
     blacklistedByDefault: boolean;
 }
 
-export interface BaseModel {
-    id: number;
-}
-
-export interface QuoteDto {
-    body: string | null;
-    author: string | null;
-}
-
-export interface CreateQuoteCommand {
-    body: string;
-    author: string;
-}
-
-export interface UpdateQuoteCommand {
-    id: number;
-    body: string;
-    author: string;
-}
-
-export interface CreateQuotesFromJsonResponse {
-    insertedRows: number;
-}
-
-export interface DeleteQuoteCommand {
-    id: number;
-}
-
 export interface GetUserNotificationsResult {
     id: number;
     body: string | null;
@@ -235,47 +239,6 @@ export interface InviteCodeDto {
     usedDate: string | null;
 }
 
-export interface GetUserInfractionsResult {
-    id: number;
-    activeUntil: string;
-    removed: boolean;
-    reason: string;
-}
-
-export interface GetInfractionDetailsResult {
-    id: number;
-    userName: string;
-    userId: number;
-    issueDate: string;
-    activeUntil: string;
-    removedAt: string | null;
-    reason: string;
-    type: InfractionType;
-    issuedByName: string;
-    removedByName: string | null;
-}
-
-export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
-
-export interface CreateInfractionResponse {
-    id: number;
-    issuedBy: number;
-    issuedAgainst: number;
-}
-
-export interface CreateInfractionCommand {
-    userId: number;
-    reason: string;
-    endDate: string;
-    type: InfractionType;
-}
-
-export interface DeactivateInfractionResponse {
-    id: number;
-    issuedBy: number;
-    issuedAgainst: number;
-}
-
 export interface GetFolderResult {
     id: number;
     name: string;
@@ -294,6 +257,12 @@ export interface AddStoryToFolderResponse {
 export interface AddStoryToFolderCommand {
     folderId: number;
     storyId: number;
+}
+
+export interface FaqDto {
+    question: string;
+    answer: string;
+    answerRendered: string;
 }
 
 export interface UpdateFaqCommand {
@@ -391,14 +360,4 @@ export interface JoinClubCommand {
 
 export interface LeaveClubCommand {
     clubId: number;
-}
-
-export interface MarkChapterAsReadCommand {
-    chapter: number;
-    story: number;
-}
-
-export interface MarkChapterAsUnreadCommand {
-    chapter: number;
-    story: number;
 }

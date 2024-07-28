@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { Quotes_GetRandomQuote as getQuote } from "../generated/paths-public";
+import { GetApiQuotesRandom as getQuote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 interface Quote {
@@ -14,12 +14,12 @@ export class QuoteBox extends LitElement {
 		super();
 	}
 
-	@state() private _loading: boolean;
-	@state() private _quote: Quote;
+	@state() accessor _loading: boolean;
+	@state() accessor _quote: Quote;
 
 	async connectedCallback() {
 		super.connectedCallback();
-		this.classList.add("wc-loaded");
+		this.classList.add("wc-loaded"); 
 		await this.load();
 	}
 
