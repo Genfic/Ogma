@@ -52,7 +52,8 @@
   "dependencies": {
     "date-fns": "3.6.0",
     "dayjs": "^1.11.11",
-    "lit": "^3.1.4"
+    "lit": "^3.1.4",
+    "zod": "^3.23.8"
   },
   "web-types": [
     "./web-types.json"

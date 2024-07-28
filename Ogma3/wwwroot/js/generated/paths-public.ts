@@ -8,7 +8,6 @@ import type {
 	CommentsControllerPostData,
 	CreateFaqCommand,
 	CreateQuoteCommand,
-	CreateQuotesFromJsonCommand,
 	CreateRoleCommand,
 	CreateShelfCommand,
 	CreateTagCommand,
@@ -75,6 +74,27 @@ export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, he
     options,
   );
 
+export const GetApiNotificationsCount = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/notifications/count", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const DeleteApiNotifications = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>(`/api/notifications/${id}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiNotifications = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetUserNotificationsResult[]>("/api/notifications", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const PostApiQuotes = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuoteDto>("/api/quotes", 
     'POST', 
     body,
@@ -96,7 +116,7 @@ export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersIn
     options,
   );
 
-export const PostApiQuotesJson = async (body: CreateQuotesFromJsonCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/quotes/json", 
+export const PostApiQuotesJson = async (body: QuoteDto[], headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/quotes/json", 
     'POST', 
     body,
     headers,
@@ -440,27 +460,6 @@ export const Ratings_GetRating = async (id: number, headers?: HeadersInit, optio
   );
 
 export const Ratings_DeleteRating = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/ratings/${id}`, 
-    'DELETE', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Notifications_GetUserNotifications = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetUserNotificationsResult[]>("/api/notifications", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Notifications_CountUserNotifications = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/notifications/count", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Notifications_DeleteNotification = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>(`/api/notifications/${id}`, 
     'DELETE', 
     undefined,
     headers,

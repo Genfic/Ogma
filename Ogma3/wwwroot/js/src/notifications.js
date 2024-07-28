@@ -1,30 +1,30 @@
+import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "../generated/paths-public";
 import dayjs from "dayjs";
 
 new Vue({
 	el: "#notifications",
 	data: {
 		notifications: [],
-		route: null,
 		csrf: null,
 	},
 	methods: {
-		fetch: async function () {
-			const { data } = await axios.get(this.route);
-			this.notifications = data;
+		load: async function () {
+			const data = await getNotifications();
+			this.notifications = await data.json();
 		},
 
 		deleteNotif: async function (id) {
-			await axios.delete(`${this.route}/${id}`, {
-				headers: { RequestVerificationToken: this.csrf },
+			await deleteNotification(id, {
+				RequestVerificationToken: this.csrf,
 			});
-			await this.fetch();
+			await this.load();
 		},
 
 		parseTime: (time) => dayjs(time).format("DD MMMM YYYY, HH:mm"),
 	},
+
 	async mounted() {
-		this.route = document.querySelector("[data-route]").dataset.route;
-		await this.fetch();
+		await this.load();
 		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
 	},
 });

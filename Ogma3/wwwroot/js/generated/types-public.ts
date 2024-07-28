@@ -10,6 +10,17 @@ export interface MarkChapterAsUnreadCommand {
     story: number;
 }
 
+export interface GetUserNotificationsResult {
+    id: number;
+    body: string | null;
+    url: string;
+    dateTime: string;
+    event: ENotificationEvent;
+    message: string;
+}
+
+export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
+
 export interface QuoteDto {
     body: string;
     author: string;
@@ -18,10 +29,6 @@ export interface QuoteDto {
 export interface CreateQuoteCommand {
     body: string;
     author: string;
-}
-
-export interface CreateQuotesFromJsonCommand {
-    data: Stream;
 }
 
 export interface UpdateQuoteCommand {
@@ -217,17 +224,6 @@ export interface RatingApiDto {
     icon: string | null;
     blacklistedByDefault: boolean;
 }
-
-export interface GetUserNotificationsResult {
-    id: number;
-    body: string | null;
-    url: string;
-    dateTime: string;
-    event: ENotificationEvent;
-    message: string;
-}
-
-export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
 
 export interface InviteCodeDto {
     id: number;

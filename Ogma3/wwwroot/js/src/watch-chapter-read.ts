@@ -1,4 +1,4 @@
-import { ChaptersRead_PostChaptersRead as markChapter } from "../generated/paths-public";
+import { PostApiChaptersread as markChapter } from "../generated/paths-public";
 
 const progress = document.getElementById("chapter-progress");
 progress.addEventListener("read", async () => {

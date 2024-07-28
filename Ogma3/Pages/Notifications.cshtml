@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api.V1.Notifications
 @model Notifications
 
 @{
@@ -27,7 +26,6 @@
 </div>
 
 @Html.AntiForgeryToken()
-<div v-if="!route" data-route="@Url.RouteUrl(nameof(NotificationsController))"></div>
 
 @section Scripts
 {
