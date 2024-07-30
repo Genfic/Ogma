@@ -37,17 +37,7 @@ export interface UpdateQuoteCommand {
     author: string;
 }
 
-export interface ErrorControllerResult {
-    code: number | null;
-    reason: string;
-}
-
-export interface GetVotesResult {
-    count: number;
-    didVote: boolean;
-}
-
-export interface CreateVoteResult {
+export interface VoteResult {
     didVote: boolean;
     count: number | null;
 }
@@ -56,13 +46,13 @@ export interface CreateVoteCommand {
     storyId: number;
 }
 
-export interface DeleteVoteResult {
-    didVote: boolean;
-    count: number | null;
-}
-
 export interface DeleteVoteCommand {
     storyId: number;
+}
+
+export interface ErrorControllerResult {
+    code: number | null;
+    reason: string;
 }
 
 export interface ProblemDetails {

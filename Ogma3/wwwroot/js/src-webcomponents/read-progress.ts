@@ -62,7 +62,7 @@ export class ReadProgress extends LitElement {
 		`;
 	}
 
-	async #handleScroll() {
+	#handleScroll() {
 		if (this.read) return;
 
 		const elBottom = this.parentElement.getBoundingClientRect().bottom;

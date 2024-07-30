@@ -52,6 +52,7 @@
   "dependencies": {
     "date-fns": "3.6.0",
     "dayjs": "^1.11.11",
+    "es-toolkit": "^1.13.1",
     "lit": "^3.1.4",
     "zod": "^3.23.8"
   },

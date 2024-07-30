@@ -27,6 +27,7 @@ public static class GetChapters
 				.Where(s => s.Id == request.StoryId)
 				.Select(s => new
 				{
+					Sid = s.Id,
 					s.Title,
 					s.ChapterCount,
 					Chapters = s.Chapters
@@ -48,7 +49,7 @@ public static class GetChapters
 			var items = storyResult.Chapters.Select(s => new SyndicationItem(
 				s.Title,
 				s.Hook,
-				new Uri(generator.GetUriByPage(httpContext, "/Chapter", values: new { s.Id, s.Slug }) ?? ""),
+				new Uri(generator.GetUriByPage(httpContext, "/Chapter", values: new { storyResult.Sid, s.Id, s.Slug }) ?? ""),
 				s.Slug,
 				s.PublicationDate ?? default
 			));

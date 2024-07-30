@@ -5,12 +5,16 @@ import type {
 	GetInfractionDetailsResult,
 	GetTableInfoResponse,
 	GetUserInfractionsResult,
-	ProblemDetails,
+	ProblemDetails
 } from "./types-internal";
 import { typedFetch } from "./typed-fetch";
 
-export const Telemetry_GetTableInfo = async (headers?: HeadersInit, options?: RequestInit) =>
-	await typedFetch<GetTableInfoResponse[]>("/admin/api/telemetry/gettableinfo", "GET", undefined, headers, options);
+export const Telemetry_GetTableInfo = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetTableInfoResponse[]>("/admin/api/telemetry/gettableinfo", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
 
 export const Telemetry_GetImportantItemCounts = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<object>("/admin/api/telemetry/getimportantitemcounts", 
     'GET', 

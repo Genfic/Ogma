@@ -12,9 +12,7 @@ import type {
 	CreateShelfCommand,
 	CreateTagCommand,
 	CreateVoteCommand,
-	CreateVoteResult,
 	DeleteVoteCommand,
-	DeleteVoteResult,
 	ErrorControllerResult,
 	FaqDto,
 	FollowUserCommand,
@@ -26,7 +24,6 @@ import type {
 	GetRevisionResult,
 	GetSignInDataResult,
 	GetUserNotificationsResult,
-	GetVotesResult,
 	InviteCodeDto,
 	JoinClubCommand,
 	LeaveClubCommand,
@@ -54,11 +51,16 @@ import type {
 	UpdateRolesCommand,
 	UpdateShelfCommand,
 	UpdateTagCommand,
+	VoteResult
 } from "./types-public";
 import { typedFetch } from "./typed-fetch";
 
-export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) =>
-	await typedFetch<number[]>(`/api/chaptersread/${id}`, "GET", undefined, headers, options);
+export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>(`/api/chaptersread/${id}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
 
 export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread", 
     'POST', 
@@ -144,6 +146,34 @@ export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: Reques
     options,
   );
 
+export const UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/useractivity", 
+    'HEAD', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PostApiVotes = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult>("/api/votes", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiVotes = async (body: DeleteVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult>("/api/votes", 
+    'DELETE', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetApiVotes = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult>(`/api/votes/${storyid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const Chapter_FirstChapter = async (sid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/story/${sid}/chapter/first`, 
     'GET', 
     undefined,
@@ -168,27 +198,6 @@ export const Error_OnGet = async (code: number, headers?: HeadersInit, options?:
 export const Test_GetTest = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/test", 
     'GET', 
     undefined,
-    headers,
-    options,
-  );
-
-export const Votes_GetVotes = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetVotesResult>(`/api/votes/${storyid}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Votes_PostVote = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CreateVoteResult>("/api/votes", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Votes_DeleteVote = async (body: DeleteVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<DeleteVoteResult>("/api/votes", 
-    'DELETE', 
-    body,
     headers,
     options,
   );
@@ -230,13 +239,6 @@ export const Users_ManageRoles = async (body: UpdateRolesCommand, headers?: Head
 
 export const Users_FindNames = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string[]|ProblemDetails>(`/api/users/names?name=${name}`, 
     'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const UserActivity_UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/useractivity", 
-    'HEAD', 
     undefined,
     headers,
     options,

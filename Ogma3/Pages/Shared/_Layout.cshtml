@@ -1,6 +1,4 @@
 @using System.Globalization
-@using Microsoft.AspNetCore.Hosting
-@using Microsoft.Extensions.Hosting
 @using Ogma3.Api.V1.UserActivity
 @using Ogma3.Services
 @inject IWebHostEnvironment Env
@@ -157,7 +155,7 @@ else
 @if (isAdmin is null)
 {
 	<script>
-    (_=>{fetch('@Url.RouteUrl(nameof(UserActivityController))', {method: 'HEAD'});})()
+    (_=>{fetch('@Url.RouteUrl(nameof(UpdateLastActive))', {method: 'HEAD'});})()
     </script>
 }
 

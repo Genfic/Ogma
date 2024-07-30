@@ -1,0 +1,46 @@
+using Immediate.Apis.Shared;
+using Immediate.Handlers.Shared;
+using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
+using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.UserService;
+
+namespace Ogma3.Api.V1.Votes;
+
+using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>, NotFound>;
+
+[Handler]
+[MapDelete("api/votes")]
+[Authorize]
+public static partial class DeleteVote
+{
+	[UsedImplicitly]
+	public sealed record Command(long StoryId);
+	
+	private static async ValueTask<ReturnType> HandleAsync(
+		[FromBody] Command request,
+		ApplicationDbContext context,
+		IUserService userService,
+		CancellationToken cancellationToken
+	)
+	{
+		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+
+		var res = await context.Votes
+			.Where(v => v.StoryId == request.StoryId)
+			.Where(v => v.UserId == uid)
+			.ExecuteDeleteAsync(cancellationToken);
+
+		if (res <= 0) return TypedResults.NotFound();
+
+		var count = await context.Votes
+			.Where(v => v.StoryId == request.StoryId)
+			.CountAsync(cancellationToken);
+
+		return TypedResults.Ok(new VoteResult(false, count));
+	}
+}

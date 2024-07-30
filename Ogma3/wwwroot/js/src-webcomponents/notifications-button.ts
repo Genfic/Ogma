@@ -1,6 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { Notifications_CountUserNotifications as countNotifications } from "../generated/paths-public";
+import { clamp } from "es-toolkit";
+import { GetApiNotificationsCount as countNotifications } from "../generated/paths-public";
 import "../src-helpers/extensions/Number";
 import { log } from "../src-helpers/logger";
 
@@ -24,7 +25,7 @@ export class NotificationsButton extends LitElement {
 		}
 	}
 
-	#count = () => (this.notifications <= 99 ? this.notifications.clamp(0, 99).toString() : "99+");
+	#count = () => (this.notifications <= 99 ? clamp(this.notifications, 99).toString() : "99+");
 
 	#title = () => (this.notifications > 0 ? `${this.notifications} notifications` : "Notifications");
 
