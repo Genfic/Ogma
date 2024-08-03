@@ -1,5 +1,3 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,22 +11,13 @@ public static class GetSingleTag
 {
 	public sealed record Query(long TagId) : IRequest<ActionResult<TagDto>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<TagDto>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<TagDto>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IMapper _mapper;
-
-		public Handler(ApplicationDbContext context, IMapper mapper)
-		{
-			_context = context;
-			_mapper = mapper;
-		}
-
 		public async ValueTask<ActionResult<TagDto>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var tag = await _context.Tags
+			var tag = await context.Tags
 				.Where(t => t.Id == request.TagId)
-				.ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+				.ProjectToDto()
 				.FirstOrDefaultAsync(cancellationToken);
 
 			return tag is null

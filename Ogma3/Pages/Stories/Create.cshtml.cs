@@ -44,7 +44,7 @@ public class CreateModel(
 
 		var tags = await context.Tags
 			.OrderBy(t => t.Name)
-			.ProjectTo<TagDto>(mapper.ConfigurationProvider)
+			.ProjectToDto()
 			.ToListAsync();
 
 		Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();

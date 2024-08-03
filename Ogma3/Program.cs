@@ -3,8 +3,11 @@ using System.Text;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Ogma3;
 using Ogma3.Infrastructure.Logging;
+using Riok.Mapperly.Abstractions;
 using Serilog;
 using Serilog.Events;
+
+[assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
 Console.OutputEncoding = Encoding.UTF8;

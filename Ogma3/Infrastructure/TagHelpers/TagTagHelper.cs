@@ -34,9 +34,9 @@ public class TagTagHelper : TagHelper
 			output.Attributes.Add("title", ns.ToStringFast());
 		}
 
-		output.Content.AppendHtml(Tag.NamespaceColor == null
+		output.Content.AppendHtml(Tag.NamespaceColor is not {} color
 			? "<div class='bg'></div>"
-			: $"<div class='bg' style='background-color: #{Tag.NamespaceColor.Trim('#')}'></div>");
+			: $"<div class='bg' style='background-color: #{color.Trim('#')}'></div>");
 
 		output.Content.AppendHtml($"<span class='name'>{Tag.Name}</span>");
 	}

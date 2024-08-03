@@ -4,6 +4,7 @@ namespace Ogma3.Data.Users;
 
 public class UserPersonalData
 {
+	[MapperIgnore]
 	public DateTimeOffset GenerationTime => DateTimeOffset.Now;
 	public required long Id { get; init; }
 	public required string UserName { get; init; }

@@ -1,5 +1,3 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,22 +11,13 @@ public static class GetAllTags
 {
 	public sealed record Query : IRequest<ActionResult<List<TagDto>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<TagDto>>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<List<TagDto>>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IMapper _mapper;
-
-		public Handler(ApplicationDbContext context, IMapper mapper)
-		{
-			_context = context;
-			_mapper = mapper;
-		}
-
 		public async ValueTask<ActionResult<List<TagDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var tags = await _context.Tags
+			var tags = await context.Tags
 				.OrderBy(t => t.Id)
-				.ProjectTo<TagDto>(_mapper.ConfigurationProvider)
+				.ProjectToDto()
 				.ToListAsync(cancellationToken);
 
 			return Ok(tags);

@@ -1,6 +1,4 @@
-#nullable disable
-
-using AutoMapper;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Tags;
 
@@ -10,12 +8,18 @@ public class TagDto
 	public required string Name { get; init; }
 	public required string Slug { get; init; }
 	public required string Description { get; init; }
-	public required ETagNamespace? Namespace { get; init; }
-	public string NamespaceColor => Namespace.GetColor();
+	public ETagNamespace? Namespace { get; init; }
+	
+	[MapperIgnore]
+	public string? NamespaceColor => Namespace is null ? null : Namespace.GetColor();
+	
+	[MapperIgnore]
 	public uint? NamespaceId => (uint?)Namespace;
+}
 
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Tag, TagDto>();
-	}
+[Mapper]
+public static partial class TagMapper
+{
+	public static partial TagDto MapTag(Tag tag);
+	public static partial IQueryable<TagDto> ProjectToDto(this IQueryable<Tag> q);
 }
