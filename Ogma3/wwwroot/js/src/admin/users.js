@@ -1,3 +1,5 @@
+import { GetApiUsersNames as getNames } from "../../generated/paths-public";
+
 new Vue({
 	el: "#app",
 	data: {
@@ -25,9 +27,7 @@ new Vue({
 		},
 
 		saveRoles: async function () {
-			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e) =>
-				Number(e.value),
-			);
+			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e) => Number(e.value));
 			await axios.post(
 				`${this.rolesRoute}/roles`,
 				{
@@ -45,10 +45,15 @@ new Vue({
 			if (this.input.length < 3) {
 				this.names = [];
 			} else {
-				const { data } = await axios.get(`${this.rolesRoute}/names`, {
-					params: { name: this.input },
-				});
-				this.names = data;
+				const res = await getNames(this.input);
+				if (res.ok) {
+					const data = await res.json();
+					if (Array.isArray(data)) {
+						this.names = data;
+					} else {
+						console.warn(data);
+					}
+				}
 			}
 		},
 

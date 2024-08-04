@@ -180,6 +180,48 @@ export const UpdateLastActive = async (headers?: HeadersInit, options?: RequestI
     options,
   );
 
+export const PostApiUsersBlock = async (body: BlockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/users/block", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiUsersBlock = async (body: UnblockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/users/block", 
+    'DELETE', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetApiUsersNames = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string[]|string>(`/api/users/names?name=${name}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PostApiUsersFollow = async (body: FollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/users/follow", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiUsersFollow = async (body: UnfollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/users/follow", 
+    'DELETE', 
+    body,
+    headers,
+    options,
+  );
+
+export const PostApiUsersRoles = async (body: UpdateRolesCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/users/roles", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
 export const PostApiVotes = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult>("/api/votes", 
     'POST', 
     body,
@@ -223,48 +265,6 @@ export const Error_OnGet = async (code: number, headers?: HeadersInit, options?:
   );
 
 export const Test_GetTest = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/test", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Users_BlockUser = async (body: BlockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|ProblemDetails>("/api/users/block", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Users_UnblockUser = async (body: UnblockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|ProblemDetails>("/api/users/block", 
-    'DELETE', 
-    body,
-    headers,
-    options,
-  );
-
-export const Users_FollowUser = async (body: FollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|ProblemDetails>("/api/users/follow", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Users_UnfollowUser = async (body: UnfollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|ProblemDetails>("/api/users/follow", 
-    'DELETE', 
-    body,
-    headers,
-    options,
-  );
-
-export const Users_ManageRoles = async (body: UpdateRolesCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>("/api/users/roles", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Users_FindNames = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string[]|ProblemDetails>(`/api/users/names?name=${name}`, 
     'GET', 
     undefined,
     headers,

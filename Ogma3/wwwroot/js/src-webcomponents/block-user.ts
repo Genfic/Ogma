@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { Users_BlockUser as blockUser, Users_UnblockUser as unblockUser } from "../generated/paths-public";
+import { DeleteApiUsersBlock as unblockUser, PostApiUsersBlock as blockUser } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 @customElement("o-block")

@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { Users_FollowUser as followUser, Users_UnfollowUser as unfollowUser } from "../generated/paths-public";
+import { DeleteApiUsersFollow as unfollowUser, PostApiUsersFollow as followUser } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 @customElement("o-follow")

@@ -73,6 +73,27 @@ export interface RemoveBookFromShelfCommand {
     storyId: number;
 }
 
+export interface BlockUserCommand {
+    name: string;
+}
+
+export interface FollowUserCommand {
+    name: string;
+}
+
+export interface UnblockUserCommand {
+    name: string;
+}
+
+export interface UnfollowUserCommand {
+    name: string;
+}
+
+export interface UpdateRolesCommand {
+    userId: number;
+    roles: number;
+}
+
 export interface VoteResult {
     didVote: boolean;
     count: number | null;
@@ -91,35 +112,6 @@ export interface ErrorControllerResult {
     reason: string;
 }
 
-export interface ProblemDetails {
-    type: string | null;
-    title: string | null;
-    status: number | null;
-    detail: string | null;
-    instance: string | null;
-}
-
-export interface BlockUserCommand {
-    name: string;
-}
-
-export interface UnblockUserCommand {
-    name: string;
-}
-
-export interface FollowUserCommand {
-    name: string;
-}
-
-export interface UnfollowUserCommand {
-    name: string;
-}
-
-export interface UpdateRolesCommand {
-    userId: number;
-    roles: number;
-}
-
 export interface TagDto {
     id: number;
     name: string;
@@ -131,6 +123,14 @@ export interface TagDto {
 }
 
 export type ETagNamespace = "ContentWarning" | "Genre" | "Franchise";
+
+export interface ProblemDetails {
+    type: string | null;
+    title: string | null;
+    status: number | null;
+    detail: string | null;
+    instance: string | null;
+}
 
 export interface UpdateTagCommand {
     id: number;
