@@ -1,5 +1,5 @@
 import type {
-	AddBookToShelfResult,
+	AddBookToShelfCommand,
 	AddStoryToFolderCommand,
 	AddStoryToFolderResponse,
 	BanUserCommand,
@@ -19,7 +19,6 @@ import type {
 	GetClubsWithStoryResult,
 	GetFolderResult,
 	GetJoinedClubsResponse,
-	GetPaginatedUserShelvesResult,
 	GetPermissionsResult,
 	GetRevisionResult,
 	GetSignInDataResult,
@@ -32,12 +31,16 @@ import type {
 	MarkChapterAsUnreadCommand,
 	PaginationResultOfCommentDto,
 	ProblemDetails,
+	QuickShelvesResult,
 	QuoteDto,
 	RatingApiDto,
+	RemoveBookFromShelfCommand,
 	RemoveBookFromShelfResult,
 	ReportContentCommand,
 	RoleDto,
+	ShelfAddResult,
 	ShelfDto,
+	ShelfResult,
 	SubscribeCommentsThreadCommand,
 	TagDto,
 	UnbanUserCommand,
@@ -51,16 +54,12 @@ import type {
 	UpdateRolesCommand,
 	UpdateShelfCommand,
 	UpdateTagCommand,
-	VoteResult
+	VoteResult,
 } from "./types-public";
 import { typedFetch } from "./typed-fetch";
 
-export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>(`/api/chaptersread/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
+export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) =>
+	await typedFetch<number[]>(`/api/chaptersread/${id}`, "GET", undefined, headers, options);
 
 export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread", 
     'POST', 
@@ -140,6 +139,34 @@ export const GetSingleQuote = async (id: number, headers?: HeadersInit, options?
   );
 
 export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuoteDto>("/api/quotes/random", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfAddResult>("/api/shelfstories", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiShelfStories = async (body: RemoveBookFromShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RemoveBookFromShelfResult>("/api/shelfstories", 
+    'DELETE', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetApiShelfStoriesQuick = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuickShelvesResult[]>(`/api/shelfstories/${storyid}/quick`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiShelfStories = async (storyid: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfResult[]>(`/api/shelfstories/${storyid}?page=${page}`, 
     'GET', 
     undefined,
     headers,
@@ -359,34 +386,6 @@ export const Shelves_PostShelf = async (body: CreateShelfCommand, headers?: Head
 export const Shelves_PutShelf = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>("/api/shelves", 
     'PUT', 
     body,
-    headers,
-    options,
-  );
-
-export const ShelfStories_GetUserQuickShelves = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelfstories/${storyid}/quick`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const ShelfStories_GetUserShelvesPaginated = async (storyid: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetPaginatedUserShelvesResult[]>(`/api/shelfstories/${storyid}?page=${page}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const ShelfStories_AddToShelf = async (shelfid: number, storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<AddBookToShelfResult>(`/api/shelfstories/${shelfid}/${storyid}`, 
-    'POST', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const ShelfStories_RemoveFromShelf = async (shelfid: number, storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RemoveBookFromShelfResult>(`/api/shelfstories/${shelfid}/${storyid}`, 
-    'DELETE', 
-    undefined,
     headers,
     options,
   );

@@ -1,10 +1,10 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
-	ShelfStories_AddToShelf as addToShelf,
-	ShelfStories_GetUserQuickShelves as getQuickShelves,
-	ShelfStories_GetUserShelvesPaginated as getShelves,
-	ShelfStories_RemoveFromShelf as removeFromShelf,
+	DeleteApiShelfStories as removeFromShelf,
+	GetApiShelfStories as getShelves,
+	GetApiShelfStoriesQuick as getQuickShelves,
+	PostApiShelfStories as addToShelf,
 } from "../generated/paths-public";
 import { clickOutside } from "../src-helpers/click-outside";
 import { log } from "../src-helpers/logger";
@@ -29,6 +29,7 @@ export class ShelvesButton extends LitElement {
 	@state() private accessor shelves: Shelf[] = [];
 	@state() private accessor more: boolean = false;
 	@state() private accessor page: number = 1;
+	@state() private accessor moreShelvesLoaded = false;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -96,7 +97,7 @@ export class ShelvesButton extends LitElement {
 
 	async #showMore() {
 		this.more = !this.more;
-		if (this.more) await this.#getShelves();
+		if (this.more && !this.moreShelvesLoaded) await this.#getShelves();
 	}
 
 	async #getQuickShelves() {
@@ -112,6 +113,7 @@ export class ShelvesButton extends LitElement {
 		const res = await getShelves(this.storyId, this.page);
 		if (res.ok) {
 			this.shelves = await res.json();
+			this.moreShelvesLoaded = true;
 		} else {
 			log.error(res.statusText);
 		}
@@ -121,12 +123,19 @@ export class ShelvesButton extends LitElement {
 		const exists = [...this.shelves, ...this.quickShelves].some((s) => s.doesContainBook && s.id === id);
 		const send = exists ? removeFromShelf : addToShelf;
 
-		const res = await send(id, this.storyId, {
+		const res = await send({
+			storyId: this.storyId,
+			shelfId: id
+		}, {
 			RequestVerificationToken: this.csrf,
 		});
 		if (res.ok) {
-			await this.#getQuickShelves();
-			await this.#getShelves();
+			const data = await res.json();
+			const shelf = [...this.shelves, ...this.quickShelves].find((s) => s.id === data.shelfId);
+			shelf.doesContainBook = !exists;
+			this.requestUpdate(); 
+			// await this.#getQuickShelves();
+			// await this.#getShelves();
 		} else {
 			log.error(res.statusText);
 		}

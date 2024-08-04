@@ -37,6 +37,42 @@ export interface UpdateQuoteCommand {
     author: string;
 }
 
+export interface ShelfAddResult {
+    shelfId: number;
+    storyId: number;
+}
+
+export interface AddBookToShelfCommand {
+    shelfId: number;
+    storyId: number;
+}
+
+export interface QuickShelvesResult {
+    id: number;
+    name: string;
+    color: string | null;
+    iconName: string | null;
+    doesContainBook: boolean;
+}
+
+export interface ShelfResult {
+    id: number;
+    name: string;
+    color: string | null;
+    iconName: string | null;
+    doesContainBook: boolean;
+}
+
+export interface RemoveBookFromShelfResult {
+    shelfId: number;
+    storyId: number;
+}
+
+export interface RemoveBookFromShelfCommand {
+    shelfId: number;
+    storyId: number;
+}
+
 export interface VoteResult {
     didVote: boolean;
     count: number | null;
@@ -86,9 +122,9 @@ export interface UpdateRolesCommand {
 
 export interface TagDto {
     id: number;
-    name: string | null;
-    slug: string | null;
-    description: string | null;
+    name: string;
+    slug: string;
+    description: string;
     namespace: ETagNamespace | null;
     namespaceColor: string | null;
     namespaceId: number | null;
@@ -155,24 +191,6 @@ export interface UpdateShelfCommand {
     trackUpdates: boolean;
     color: string;
     icon: number;
-}
-
-export interface GetPaginatedUserShelvesResult {
-    id: number;
-    name: string;
-    color: string | null;
-    iconName: string | null;
-    doesContainBook: boolean;
-}
-
-export interface AddBookToShelfResult {
-    shelfId: number;
-    storyId: number;
-}
-
-export interface RemoveBookFromShelfResult {
-    shelfId: number;
-    storyId: number;
 }
 
 export interface RoleDto {
