@@ -5,16 +5,16 @@ namespace Ogma3.Data.Infractions;
 
 public class Infraction : BaseModel
 {
-	public OgmaUser User { get; set; } = null!;
-	public long UserId { get; set; }
-	public DateTime IssueDate { get; set; }
-	public DateTime ActiveUntil { get; set; }
+	public OgmaUser User { get; init; } = null!;
+	public required long UserId { get; init; }
+	public DateTime IssueDate { get; init; }
+	public required DateTime ActiveUntil { get; init; }
 	public DateTime? RemovedAt { get; set; }
-	public string Reason { get; set; } = null!;
-	public InfractionType Type { get; set; }
+	public required string Reason { get; init; }
+	public required InfractionType Type { get; init; }
 
-	public OgmaUser IssuedBy { get; set; } = null!;
-	public long IssuedById { get; set; }
-	public OgmaUser? RemovedBy { get; set; }
+	public OgmaUser IssuedBy { get; init; } = null!;
+	public required long IssuedById { get; init; }
+	public OgmaUser? RemovedBy { get; init; }
 	public long? RemovedById { get; set; }
 }

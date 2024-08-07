@@ -24,6 +24,7 @@ public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContex
 		{
 			entry.SlidingExpiration = TimeSpan.FromMinutes(30);
 			return await dbContext.Infractions
+				.TagWith($"{nameof(UserBanMiddleware)} querying for ban status")
 				.Where(i => i.UserId == uid)
 				.Where(i => i.Type == InfractionType.Ban)
 				.Where(i => i.RemovedAt == null)

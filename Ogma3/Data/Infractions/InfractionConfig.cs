@@ -11,6 +11,12 @@ public class InfractionConfig : BaseConfiguration<Infraction>
 	{
 		base.Configure(builder);
 
+		builder.HasIndex(i => i.UserId);
+		builder.HasIndex(i => i.Type);
+		builder
+			.HasIndex(i => i.RemovedAt)
+			.HasFilter($"\"{nameof(Infraction.RemovedAt)}\" IS NOT NULL");
+
 		// Constraints
 		builder
 			.Property(i => i.IssueDate)
@@ -27,6 +33,7 @@ public class InfractionConfig : BaseConfiguration<Infraction>
 
 		builder
 			.Property(i => i.Reason)
+			.HasMaxLength(1000)
 			.IsRequired();
 
 		builder

@@ -118,8 +118,9 @@ namespace CompiledModels
                 "Reason",
                 typeof(string),
                 propertyInfo: typeof(Infraction).GetProperty("Reason", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<Reason>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            reason.TypeMapping = StringTypeMapping.Default.Clone(
+                fieldInfo: typeof(Infraction).GetField("<Reason>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 1000);
+            reason.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
                 comparer: new ValueComparer<string>(
                     (string v1, string v2) => v1 == v2,
                     (string v) => v.GetHashCode(),
@@ -133,184 +134,192 @@ namespace CompiledModels
                     (string v) => v.GetHashCode(),
                     (string v) => v),
                 mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
-            reason.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                    storeTypeName: "character varying(1000)",
+                    size: 1000));
+            reason.TypeMapping = ((NpgsqlStringTypeMapping)reason.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+        reason.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var removedAt = runtimeEntityType.AddProperty(
-                "RemovedAt",
-                typeof(DateTime?),
-                propertyInfo: typeof(Infraction).GetProperty("RemovedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<RemovedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
-            removedAt.TypeMapping = NpgsqlTimestampTypeMapping.Default.Clone(
-                comparer: new ValueComparer<DateTime?>(
-                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
-                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
-                keyComparer: new ValueComparer<DateTime?>(
-                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
-                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
-                providerValueComparer: new ValueComparer<DateTime?>(
-                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
-                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)));
-            removedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        var removedAt = runtimeEntityType.AddProperty(
+            "RemovedAt",
+            typeof(DateTime?),
+            propertyInfo: typeof(Infraction).GetProperty("RemovedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<RemovedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        removedAt.TypeMapping = NpgsqlTimestampTypeMapping.Default.Clone(
+            comparer: new ValueComparer<DateTime?>(
+                (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
+                (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
+                (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
+            keyComparer: new ValueComparer<DateTime?>(
+                (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
+                (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
+                (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
+            providerValueComparer: new ValueComparer<DateTime?>(
+                (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
+                (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
+                (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)));
+        removedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var removedById = runtimeEntityType.AddProperty(
-                "RemovedById",
-                typeof(long?),
-                propertyInfo: typeof(Infraction).GetProperty("RemovedById", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<RemovedById>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
-            removedById.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
-            removedById.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        var removedById = runtimeEntityType.AddProperty(
+            "RemovedById",
+            typeof(long?),
+            propertyInfo: typeof(Infraction).GetProperty("RemovedById", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<RemovedById>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        removedById.TypeMapping = LongTypeMapping.Default.Clone(
+            comparer: new ValueComparer<long?>(
+                (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
+                (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
+                (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
+            keyComparer: new ValueComparer<long?>(
+                (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
+                (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
+                (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
+            providerValueComparer: new ValueComparer<long?>(
+                (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
+                (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
+                (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
+        removedById.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var type = runtimeEntityType.AddProperty(
-                "Type",
-                typeof(InfractionType),
-                propertyInfo: typeof(Infraction).GetProperty("Type", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<Type>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                sentinel: InfractionType.Note);
-            type.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
-                comparer: new ValueComparer<InfractionType>(
-                    (InfractionType v1, InfractionType v2) => object.Equals((object)v1, (object)v2),
-                    (InfractionType v) => v.GetHashCode(),
-                    (InfractionType v) => v),
-                keyComparer: new ValueComparer<InfractionType>(
-                    (InfractionType v1, InfractionType v2) => object.Equals((object)v1, (object)v2),
-                    (InfractionType v) => v.GetHashCode(),
-                    (InfractionType v) => v),
-                providerValueComparer: new ValueComparer<InfractionType>(
-                    (InfractionType v1, InfractionType v2) => object.Equals((object)v1, (object)v2),
-                    (InfractionType v) => v.GetHashCode(),
-                    (InfractionType v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "infraction_type"),
-                clrType: typeof(InfractionType),
-                jsonValueReaderWriter: new NpgsqlEnumTypeMapping.JsonPgEnumReaderWriter<InfractionType>());
-            type.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        var type = runtimeEntityType.AddProperty(
+            "Type",
+            typeof(InfractionType),
+            propertyInfo: typeof(Infraction).GetProperty("Type", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<Type>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            sentinel: InfractionType.Note);
+        type.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
+            comparer: new ValueComparer<InfractionType>(
+                (InfractionType v1, InfractionType v2) => object.Equals((object)v1, (object)v2),
+                (InfractionType v) => v.GetHashCode(),
+                (InfractionType v) => v),
+            keyComparer: new ValueComparer<InfractionType>(
+                (InfractionType v1, InfractionType v2) => object.Equals((object)v1, (object)v2),
+                (InfractionType v) => v.GetHashCode(),
+                (InfractionType v) => v),
+            providerValueComparer: new ValueComparer<InfractionType>(
+                (InfractionType v1, InfractionType v2) => object.Equals((object)v1, (object)v2),
+                (InfractionType v) => v.GetHashCode(),
+                (InfractionType v) => v),
+            mappingInfo: new RelationalTypeMappingInfo(
+                storeTypeName: "infraction_type"),
+            clrType: typeof(InfractionType),
+            jsonValueReaderWriter: new NpgsqlEnumTypeMapping.JsonPgEnumReaderWriter<InfractionType>());
+        type.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var userId = runtimeEntityType.AddProperty(
-                "UserId",
-                typeof(long),
-                propertyInfo: typeof(Infraction).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                sentinel: 0L);
-            userId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
-            userId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        var userId = runtimeEntityType.AddProperty(
+            "UserId",
+            typeof(long),
+            propertyInfo: typeof(Infraction).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            sentinel: 0L);
+        userId.TypeMapping = LongTypeMapping.Default.Clone(
+            comparer: new ValueComparer<long>(
+                (long v1, long v2) => v1 == v2,
+                (long v) => v.GetHashCode(),
+                (long v) => v),
+            keyComparer: new ValueComparer<long>(
+                (long v1, long v2) => v1 == v2,
+                (long v) => v.GetHashCode(),
+                (long v) => v),
+            providerValueComparer: new ValueComparer<long>(
+                (long v1, long v2) => v1 == v2,
+                (long v) => v.GetHashCode(),
+                (long v) => v));
+        userId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var key = runtimeEntityType.AddKey(
-                new[] { id });
-            runtimeEntityType.SetPrimaryKey(key);
+        var key = runtimeEntityType.AddKey(
+            new[] { id });
+        runtimeEntityType.SetPrimaryKey(key);
 
-            var index = runtimeEntityType.AddIndex(
-                new[] { issuedById });
+        var index = runtimeEntityType.AddIndex(
+            new[] { issuedById });
 
-            var index0 = runtimeEntityType.AddIndex(
-                new[] { removedById });
+        var index0 = runtimeEntityType.AddIndex(
+            new[] { removedAt });
 
-            var index1 = runtimeEntityType.AddIndex(
-                new[] { userId });
+        var index1 = runtimeEntityType.AddIndex(
+            new[] { removedById });
 
-            return runtimeEntityType;
-        }
+        var index2 = runtimeEntityType.AddIndex(
+            new[] { type });
 
-        public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-        {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IssuedById") },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType,
-                deleteBehavior: DeleteBehavior.Cascade,
-                required: true);
+        var index3 = runtimeEntityType.AddIndex(
+            new[] { userId });
 
-            var issuedBy = declaringEntityType.AddNavigation("IssuedBy",
-                runtimeForeignKey,
-                onDependent: true,
-                typeof(OgmaUser),
-                propertyInfo: typeof(Infraction).GetProperty("IssuedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<IssuedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            return runtimeForeignKey;
-        }
-
-        public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-        {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RemovedById") },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType);
-
-            var removedBy = declaringEntityType.AddNavigation("RemovedBy",
-                runtimeForeignKey,
-                onDependent: true,
-                typeof(OgmaUser),
-                propertyInfo: typeof(Infraction).GetProperty("RemovedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<RemovedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            return runtimeForeignKey;
-        }
-
-        public static RuntimeForeignKey CreateForeignKey3(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-        {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId") },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType,
-                deleteBehavior: DeleteBehavior.Cascade,
-                required: true);
-
-            var user = declaringEntityType.AddNavigation("User",
-                runtimeForeignKey,
-                onDependent: true,
-                typeof(OgmaUser),
-                propertyInfo: typeof(Infraction).GetProperty("User", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Infraction).GetField("<User>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            var infractions = principalEntityType.AddNavigation("Infractions",
-                runtimeForeignKey,
-                onDependent: false,
-                typeof(ICollection<Infraction>),
-                propertyInfo: typeof(OgmaUser).GetProperty("Infractions", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(OgmaUser).GetField("<Infractions>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            return runtimeForeignKey;
-        }
-
-        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-        {
-            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-            runtimeEntityType.AddAnnotation("Relational:Schema", null);
-            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-            runtimeEntityType.AddAnnotation("Relational:TableName", "Infractions");
-            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-            Customize(runtimeEntityType);
-        }
-
-        static partial void Customize(RuntimeEntityType runtimeEntityType);
+        return runtimeEntityType;
     }
+
+    public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+    {
+        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IssuedById") },
+            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+            principalEntityType,
+            deleteBehavior: DeleteBehavior.Cascade,
+            required: true);
+
+        var issuedBy = declaringEntityType.AddNavigation("IssuedBy",
+            runtimeForeignKey,
+            onDependent: true,
+            typeof(OgmaUser),
+            propertyInfo: typeof(Infraction).GetProperty("IssuedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<IssuedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        return runtimeForeignKey;
+    }
+
+    public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+    {
+        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RemovedById") },
+            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+            principalEntityType);
+
+        var removedBy = declaringEntityType.AddNavigation("RemovedBy",
+            runtimeForeignKey,
+            onDependent: true,
+            typeof(OgmaUser),
+            propertyInfo: typeof(Infraction).GetProperty("RemovedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<RemovedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        return runtimeForeignKey;
+    }
+
+    public static RuntimeForeignKey CreateForeignKey3(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+    {
+        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId") },
+            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+            principalEntityType,
+            deleteBehavior: DeleteBehavior.Cascade,
+            required: true);
+
+        var user = declaringEntityType.AddNavigation("User",
+            runtimeForeignKey,
+            onDependent: true,
+            typeof(OgmaUser),
+            propertyInfo: typeof(Infraction).GetProperty("User", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Infraction).GetField("<User>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        var infractions = principalEntityType.AddNavigation("Infractions",
+            runtimeForeignKey,
+            onDependent: false,
+            typeof(ICollection<Infraction>),
+            propertyInfo: typeof(OgmaUser).GetProperty("Infractions", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<Infractions>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        return runtimeForeignKey;
+    }
+
+    public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+    {
+        runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+        runtimeEntityType.AddAnnotation("Relational:Schema", null);
+        runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+        runtimeEntityType.AddAnnotation("Relational:TableName", "Infractions");
+        runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+        runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+        Customize(runtimeEntityType);
+    }
+
+    static partial void Customize(RuntimeEntityType runtimeEntityType);
+}
 }

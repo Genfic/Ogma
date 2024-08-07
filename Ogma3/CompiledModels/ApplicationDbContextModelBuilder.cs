@@ -199,7 +199,7 @@ namespace CompiledModels
             VoteEntityType.CreateAnnotations(vote);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "8.0.6");
+            AddAnnotation("ProductVersion", "8.0.7");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
             AddRuntimeAnnotation("Relational:RelationalModel", CreateRelationalModel());
         }
@@ -2094,7 +2094,7 @@ namespace CompiledModels
             ogma3DataInfractionsInfractionTableBase.Columns.Add("IssueDate", issueDateColumnBase);
             var issuedByIdColumnBase = new ColumnBase<ColumnMappingBase>("IssuedById", "bigint", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("IssuedById", issuedByIdColumnBase);
-            var reasonColumnBase1 = new ColumnBase<ColumnMappingBase>("Reason", "text", ogma3DataInfractionsInfractionTableBase);
+            var reasonColumnBase1 = new ColumnBase<ColumnMappingBase>("Reason", "character varying(1000)", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("Reason", reasonColumnBase1);
             var removedAtColumnBase = new ColumnBase<ColumnMappingBase>("RemovedAt", "timestamp without time zone", ogma3DataInfractionsInfractionTableBase)
             {
@@ -2136,7 +2136,7 @@ namespace CompiledModels
             infractionsTable.Columns.Add("IssueDate", issueDateColumn);
             var issuedByIdColumn = new Column("IssuedById", "bigint", infractionsTable);
             infractionsTable.Columns.Add("IssuedById", issuedByIdColumn);
-            var reasonColumn1 = new Column("Reason", "text", infractionsTable);
+            var reasonColumn1 = new Column("Reason", "character varying(1000)", infractionsTable);
             infractionsTable.Columns.Add("Reason", reasonColumn1);
             var removedAtColumn = new Column("RemovedAt", "timestamp without time zone", infractionsTable)
             {
@@ -2168,6 +2168,14 @@ namespace CompiledModels
             iX_Infractions_IssuedById.MappedIndexes.Add(iX_Infractions_IssuedByIdIx);
             RelationalModel.GetOrCreateTableIndexes(iX_Infractions_IssuedByIdIx).Add(iX_Infractions_IssuedById);
             infractionsTable.Indexes.Add("IX_Infractions_IssuedById", iX_Infractions_IssuedById);
+            var iX_Infractions_RemovedAt = new TableIndex(
+            "IX_Infractions_RemovedAt", infractionsTable, new[] { removedAtColumn }, false);
+            var iX_Infractions_RemovedAtIx = RelationalModel.GetIndex(this,
+                "Ogma3.Data.Infractions.Infraction",
+                new[] { "RemovedAt" });
+            iX_Infractions_RemovedAt.MappedIndexes.Add(iX_Infractions_RemovedAtIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_Infractions_RemovedAtIx).Add(iX_Infractions_RemovedAt);
+            infractionsTable.Indexes.Add("IX_Infractions_RemovedAt", iX_Infractions_RemovedAt);
             var iX_Infractions_RemovedById = new TableIndex(
             "IX_Infractions_RemovedById", infractionsTable, new[] { removedByIdColumn }, false);
             var iX_Infractions_RemovedByIdIx = RelationalModel.GetIndex(this,
@@ -2176,6 +2184,14 @@ namespace CompiledModels
             iX_Infractions_RemovedById.MappedIndexes.Add(iX_Infractions_RemovedByIdIx);
             RelationalModel.GetOrCreateTableIndexes(iX_Infractions_RemovedByIdIx).Add(iX_Infractions_RemovedById);
             infractionsTable.Indexes.Add("IX_Infractions_RemovedById", iX_Infractions_RemovedById);
+            var iX_Infractions_Type = new TableIndex(
+            "IX_Infractions_Type", infractionsTable, new[] { typeColumn0 }, false);
+            var iX_Infractions_TypeIx = RelationalModel.GetIndex(this,
+                "Ogma3.Data.Infractions.Infraction",
+                new[] { "Type" });
+            iX_Infractions_Type.MappedIndexes.Add(iX_Infractions_TypeIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_Infractions_TypeIx).Add(iX_Infractions_Type);
+            infractionsTable.Indexes.Add("IX_Infractions_Type", iX_Infractions_Type);
             var iX_Infractions_UserId = new TableIndex(
             "IX_Infractions_UserId", infractionsTable, new[] { userIdColumn7 }, false);
             var iX_Infractions_UserIdIx = RelationalModel.GetIndex(this,
