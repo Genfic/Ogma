@@ -98,7 +98,7 @@ namespace CompiledModels
                 propertyInfo: typeof(ClubMember).GetProperty("Role", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ClubMember).GetField("<Role>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
-                sentinel: (EClubMemberRoles)0);
+                sentinel: EClubMemberRoles.Invalid);
             role.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
                 comparer: new ValueComparer<EClubMemberRoles>(
                     (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),

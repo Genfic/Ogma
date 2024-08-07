@@ -5,6 +5,12 @@ namespace Ogma3.Data;
 // ReSharper disable once InconsistentNaming
 public static class CTConfig
 {
+	/// <summary>
+	/// Technically, maximum length is 256 according to <see href="https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690">RFC 3696 Errata</see>
+	/// However, two characters of a valid path are angle brackets, which leaves us with 254
+	/// </summary>
+	public const int MaxEmailAddressLength = 254;
+	
 	public static class CFiles
 	{
 		public const int AvatarMaxWeight = 1 * 1024 * 1024;

@@ -12,7 +12,8 @@ public class ClubMemberConfiguration : IEntityTypeConfiguration<ClubMember>
 		builder
 			.Property(cm => cm.Role)
 			.IsRequired()
-			.HasDefaultValue(EClubMemberRoles.User);
+			.HasDefaultValue(EClubMemberRoles.User)
+			.HasSentinel(EClubMemberRoles.Invalid);
 
 		builder
 			.Property(cm => cm.MemberSince)

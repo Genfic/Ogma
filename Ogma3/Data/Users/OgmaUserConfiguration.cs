@@ -9,7 +9,31 @@ public class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 {
 	public void Configure(EntityTypeBuilder<OgmaUser> builder)
 	{
+		builder
+			.HasIndex(u => u.LastActive)
+			.IsDescending();
+
+		builder
+			.HasIndex(u => u.NormalizedUserName)
+			.IsUnique();
+		
 		// CONSTRAINTS
+		builder
+			.Property(u => u.UserName)
+			.HasMaxLength(CTConfig.CUser.MaxNameLength);
+		
+		builder
+			.Property(u => u.NormalizedUserName)
+			.HasMaxLength(CTConfig.CUser.MaxNameLength);
+		
+		builder
+			.Property(u => u.Email)
+			.HasMaxLength(CTConfig.MaxEmailAddressLength);
+		
+		builder
+			.Property(u => u.NormalizedEmail)
+			.HasMaxLength(CTConfig.MaxEmailAddressLength);
+		
 		builder
 			.Property(u => u.Title)
 			.HasMaxLength(CTConfig.CUser.MaxTitleLength);
@@ -23,7 +47,7 @@ public class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.IsRequired()
 			.HasMaxLength(CTConfig.CUser.MaxLinksAmount)
 			.HasDefaultValueSql(PgConstants.EmptyArray);
-
+		
 		builder
 			.Property(u => u.RegistrationDate)
 			.IsRequired()

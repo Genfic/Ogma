@@ -35,7 +35,8 @@ public class FolderConfiguration : BaseConfiguration<Folder>
 		builder
 			.Property(f => f.AccessLevel)
 			.IsRequired()
-			.HasDefaultValue(EClubMemberRoles.User);
+			.HasDefaultValue(EClubMemberRoles.User)
+			.HasSentinel(EClubMemberRoles.Invalid);
 
 		// NAVIGATION
 		builder

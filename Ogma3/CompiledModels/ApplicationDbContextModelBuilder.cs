@@ -3373,7 +3373,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataUsersOgmaUserTableBase.Columns.Add("DeletedAt", deletedAtColumnBase0);
-            var emailColumnBase = new ColumnBase<ColumnMappingBase>("Email", "character varying(256)", ogma3DataUsersOgmaUserTableBase);
+            var emailColumnBase = new ColumnBase<ColumnMappingBase>("Email", "character varying(254)", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("Email", emailColumnBase);
             var emailConfirmedColumnBase = new ColumnBase<ColumnMappingBase>("EmailConfirmed", "boolean", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("EmailConfirmed", emailConfirmedColumnBase);
@@ -3390,9 +3390,9 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataUsersOgmaUserTableBase.Columns.Add("LockoutEnd", lockoutEndColumnBase);
-            var normalizedEmailColumnBase = new ColumnBase<ColumnMappingBase>("NormalizedEmail", "character varying(256)", ogma3DataUsersOgmaUserTableBase);
+            var normalizedEmailColumnBase = new ColumnBase<ColumnMappingBase>("NormalizedEmail", "character varying(254)", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("NormalizedEmail", normalizedEmailColumnBase);
-            var normalizedUserNameColumnBase = new ColumnBase<ColumnMappingBase>("NormalizedUserName", "character varying(256)", ogma3DataUsersOgmaUserTableBase);
+            var normalizedUserNameColumnBase = new ColumnBase<ColumnMappingBase>("NormalizedUserName", "character varying(20)", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("NormalizedUserName", normalizedUserNameColumnBase);
             var passwordHashColumnBase = new ColumnBase<ColumnMappingBase>("PasswordHash", "text", ogma3DataUsersOgmaUserTableBase)
             {
@@ -3413,7 +3413,7 @@ namespace CompiledModels
             ogma3DataUsersOgmaUserTableBase.Columns.Add("Title", titleColumnBase4);
             var twoFactorEnabledColumnBase = new ColumnBase<ColumnMappingBase>("TwoFactorEnabled", "boolean", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("TwoFactorEnabled", twoFactorEnabledColumnBase);
-            var userNameColumnBase = new ColumnBase<ColumnMappingBase>("UserName", "character varying(256)", ogma3DataUsersOgmaUserTableBase);
+            var userNameColumnBase = new ColumnBase<ColumnMappingBase>("UserName", "character varying(20)", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("UserName", userNameColumnBase);
             relationalModel.DefaultTables.Add("Ogma3.Data.Users.OgmaUser", ogma3DataUsersOgmaUserTableBase);
             var ogma3DataUsersOgmaUserMappingBase = new TableMappingBase<ColumnMappingBase>(ogmaUser, ogma3DataUsersOgmaUserTableBase, true);
@@ -3471,7 +3471,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             aspNetUsersTable.Columns.Add("DeletedAt", deletedAtColumn0);
-            var emailColumn = new Column("Email", "character varying(256)", aspNetUsersTable);
+            var emailColumn = new Column("Email", "character varying(254)", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("Email", emailColumn);
             var emailConfirmedColumn = new Column("EmailConfirmed", "boolean", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("EmailConfirmed", emailConfirmedColumn);
@@ -3486,9 +3486,9 @@ namespace CompiledModels
                 IsNullable = true
             };
             aspNetUsersTable.Columns.Add("LockoutEnd", lockoutEndColumn);
-            var normalizedEmailColumn = new Column("NormalizedEmail", "character varying(256)", aspNetUsersTable);
+            var normalizedEmailColumn = new Column("NormalizedEmail", "character varying(254)", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("NormalizedEmail", normalizedEmailColumn);
-            var normalizedUserNameColumn = new Column("NormalizedUserName", "character varying(256)", aspNetUsersTable);
+            var normalizedUserNameColumn = new Column("NormalizedUserName", "character varying(20)", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("NormalizedUserName", normalizedUserNameColumn);
             var passwordHashColumn = new Column("PasswordHash", "text", aspNetUsersTable)
             {
@@ -3509,7 +3509,7 @@ namespace CompiledModels
             aspNetUsersTable.Columns.Add("Title", titleColumn4);
             var twoFactorEnabledColumn = new Column("TwoFactorEnabled", "boolean", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("TwoFactorEnabled", twoFactorEnabledColumn);
-            var userNameColumn = new Column("UserName", "character varying(256)", aspNetUsersTable);
+            var userNameColumn = new Column("UserName", "character varying(20)", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("UserName", userNameColumn);
             var pK_AspNetUsers = new UniqueConstraint("PK_AspNetUsers", aspNetUsersTable, new[] { idColumn25 });
             aspNetUsersTable.PrimaryKey = pK_AspNetUsers;
@@ -3527,6 +3527,14 @@ namespace CompiledModels
             emailIndex.MappedIndexes.Add(emailIndexIx);
             RelationalModel.GetOrCreateTableIndexes(emailIndexIx).Add(emailIndex);
             aspNetUsersTable.Indexes.Add("EmailIndex", emailIndex);
+            var iX_AspNetUsers_LastActive = new TableIndex(
+            "IX_AspNetUsers_LastActive", aspNetUsersTable, new[] { lastActiveColumn }, false);
+            var iX_AspNetUsers_LastActiveIx = RelationalModel.GetIndex(this,
+                "Ogma3.Data.Users.OgmaUser",
+                new[] { "LastActive" });
+            iX_AspNetUsers_LastActive.MappedIndexes.Add(iX_AspNetUsers_LastActiveIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_AspNetUsers_LastActiveIx).Add(iX_AspNetUsers_LastActive);
+            aspNetUsersTable.Indexes.Add("IX_AspNetUsers_LastActive", iX_AspNetUsers_LastActive);
             var userNameIndex = new TableIndex(
             "UserNameIndex", aspNetUsersTable, new[] { normalizedUserNameColumn }, true);
             var userNameIndexIx = RelationalModel.GetIndex(this,

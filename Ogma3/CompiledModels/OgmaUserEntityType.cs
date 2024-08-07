@@ -196,7 +196,7 @@ namespace CompiledModels
             typeof(string),
             propertyInfo: typeof(OgmaUser).GetProperty("Email", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(IdentityUser<long>).GetField("<Email>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            maxLength: 256);
+            maxLength: 254);
         email.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
             comparer: new ValueComparer<string>(
                 (string v1, string v2) => v1 == v2,
@@ -211,8 +211,8 @@ namespace CompiledModels
                 (string v) => v.GetHashCode(),
                 (string v) => v),
             mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "character varying(256)",
-                size: 256));
+                storeTypeName: "character varying(254)",
+                size: 254));
         email.TypeMapping = ((NpgsqlStringTypeMapping)email.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
     email.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
@@ -351,7 +351,7 @@ namespace CompiledModels
         typeof(string),
         propertyInfo: typeof(OgmaUser).GetProperty("NormalizedEmail", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
         fieldInfo: typeof(IdentityUser<long>).GetField("<NormalizedEmail>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        maxLength: 256);
+        maxLength: 254);
     normalizedEmail.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
         comparer: new ValueComparer<string>(
             (string v1, string v2) => v1 == v2,
@@ -366,8 +366,8 @@ namespace CompiledModels
             (string v) => v.GetHashCode(),
             (string v) => v),
         mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "character varying(256)",
-            size: 256));
+            storeTypeName: "character varying(254)",
+            size: 254));
     normalizedEmail.TypeMapping = ((NpgsqlStringTypeMapping)normalizedEmail.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
 normalizedEmail.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
@@ -376,7 +376,7 @@ var normalizedUserName = runtimeEntityType.AddProperty(
     typeof(string),
     propertyInfo: typeof(OgmaUser).GetProperty("NormalizedUserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
     fieldInfo: typeof(IdentityUser<long>).GetField("<NormalizedUserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    maxLength: 256);
+    maxLength: 20);
 normalizedUserName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
     comparer: new ValueComparer<string>(
         (string v1, string v2) => v1 == v2,
@@ -391,8 +391,8 @@ normalizedUserName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
         (string v) => v.GetHashCode(),
         (string v) => v),
     mappingInfo: new RelationalTypeMappingInfo(
-        storeTypeName: "character varying(256)",
-        size: 256));
+        storeTypeName: "character varying(20)",
+        size: 20));
 normalizedUserName.TypeMapping = ((NpgsqlStringTypeMapping)normalizedUserName.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
 normalizedUserName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
@@ -517,7 +517,7 @@ var userName = runtimeEntityType.AddProperty(
     typeof(string),
     propertyInfo: typeof(OgmaUser).GetProperty("UserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
     fieldInfo: typeof(IdentityUser<long>).GetField("<UserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    maxLength: 256);
+    maxLength: 20);
 userName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
     comparer: new ValueComparer<string>(
         (string v1, string v2) => v1 == v2,
@@ -532,8 +532,8 @@ userName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
         (string v) => v.GetHashCode(),
         (string v) => v),
     mappingInfo: new RelationalTypeMappingInfo(
-        storeTypeName: "character varying(256)",
-        size: 256));
+        storeTypeName: "character varying(20)",
+        size: 20));
 userName.TypeMapping = ((NpgsqlStringTypeMapping)userName.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
 userName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
@@ -542,13 +542,16 @@ var key = runtimeEntityType.AddKey(
 runtimeEntityType.SetPrimaryKey(key);
 
 var index = runtimeEntityType.AddIndex(
-    new[] { normalizedEmail });
-index.AddAnnotation("Relational:Name", "EmailIndex");
+    new[] { lastActive });
 
 var index0 = runtimeEntityType.AddIndex(
+    new[] { normalizedEmail });
+index0.AddAnnotation("Relational:Name", "EmailIndex");
+
+var index1 = runtimeEntityType.AddIndex(
     new[] { normalizedUserName },
     unique: true);
-index0.AddAnnotation("Relational:Name", "UserNameIndex");
+index1.AddAnnotation("Relational:Name", "UserNameIndex");
 
 return runtimeEntityType;
 }
