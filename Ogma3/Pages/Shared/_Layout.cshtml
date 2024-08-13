@@ -123,30 +123,30 @@
 
 <partial name="_Footer"/>
 
-<script async defers src="~/js/bundle/components.js" asp-append-version="true"></script>
+<script async defer src="~/js/bundle/components.js" asp-append-version="true"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+<script defer src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
         crossorigin="anonymous"
         asp-fallback-src="~/lib/axios.min.js"
         asp-fallback-test="window.axios"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
         crossorigin="anonymous"></script>
 
 @if (Env.IsDevelopment())
 {
-	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"
+	<script defer src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"
 	        asp-fallback-src="~/lib/vue/vue.js"
 	        asp-fallback-test="window.Vue"></script>
 }
 else
 {
-	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+	<script defer src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
 	        asp-fallback-src="~/lib/vue/vue.min.js"
 	        asp-fallback-test="window.Vue"></script>
 }
 
-<script src="~/js/dist/site.js" asp-append-version="true"></script>
+<script defer src="~/js/dist/site.js" asp-append-version="true"></script>
 <script defer src="~/js/dist/navbar.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", false)

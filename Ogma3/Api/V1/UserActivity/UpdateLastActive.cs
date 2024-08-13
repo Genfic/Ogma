@@ -10,7 +10,7 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.UserActivity;
 
-using ReturnType = Results<Ok, NotFound>;
+using ReturnType = Results<Ok<int>, NoContent>;
 
 [Handler]
 [MapMethod("api/useractivity", "HEAD")]
@@ -31,7 +31,7 @@ public static partial class UpdateLastActive
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.NotFound();
+		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.NoContent();
 
 		var rows = await context.Users
 			.Where(u => u.Id == uid)
@@ -40,6 +40,6 @@ public static partial class UpdateLastActive
 				cancellationToken
 			);
 
-		return rows > 0 ? TypedResults.Ok() : TypedResults.NotFound();
+		return TypedResults.Ok(rows);
 	}
 }

@@ -5,21 +5,23 @@ import {
 	GetApiInviteCodesPaginated as getPaginatedCodes,
 	PostApiInviteCodesNoLimit as createUnlimitedCodes,
 } from "../../generated/paths-public";
+import type { InviteCodeDto } from "../../generated/types-public";
 
+// @ts-ignore
 new Vue({
 	el: "#app",
 	data: {
-		codes: [],
-		xcsrf: null,
+		codes: [] as InviteCodeDto[],
+		xcsrf: null as (string | null),
 		page: 1,
 		perPage: 50,
 		loading: true,
 		completed: false,
-		newCode: null,
+		newCode: null as (number | null),
 	},
 	methods: {
 		createCode: async function () {
-			const res = await createUnlimitedCodes( { RequestVerificationToken: this.xcsrf });
+			const res = await createUnlimitedCodes({ RequestVerificationToken: this.xcsrf });
 			const data = await res.json();
 
 			this.newCode = data.id;
@@ -35,7 +37,7 @@ new Vue({
 			if (this.completed) return;
 
 			this.loading = true;
-			
+
 			const res = await getPaginatedCodes(this.page, this.perPage);
 			const data = await res.json();
 
@@ -54,17 +56,17 @@ new Vue({
 		},
 
 		// Deletes a selected namespace
-		deleteCode: async function (t) {
+		deleteCode: async function (t: InviteCodeDto) {
 			if (confirm("Delete permanently?")) {
 				const res = await deleteCode(t.id, { RequestVerificationToken: this.xcsrf });
-				
+
 				if (!res.ok) return;
-				
-				this.codes = this.codes.filter((i) => i.id !== t.id);
+
+				this.codes = this.codes.filter((i: InviteCodeDto) => i.id !== t.id);
 			}
 		},
 
-		copyCode: (t) => {
+		copyCode: (t: InviteCodeDto) => {
 			navigator.clipboard.writeText(t.code).then(
 				() => alert("Copied"),
 				(e) => {
@@ -75,12 +77,12 @@ new Vue({
 		},
 
 		// Parse date
-		date: (dt) => dayjs(dt).format("DD MMM YYYY, HH:mm"),
+		date: (dt: string) => dayjs(dt).format("DD MMM YYYY, HH:mm"),
 	},
 
 	async mounted() {
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = (document.querySelector("[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		// Grab the initial set of namespaces
 		await this.getCodes();
 	},
