@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api.V1.InviteCodes
 @model InviteCodes
 
 @{
@@ -51,7 +50,6 @@
 <button v-if="!completed" class="btn" v-on:click="loadMore">{{ loading ? 'Loading...' : 'Load More' }}</button>
 
 @Html.AntiForgeryToken()
-<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))" v-if="!route"></div>
 
 @section Scripts
 {

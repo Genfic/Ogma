@@ -25,7 +25,7 @@ export interface GetInfractionDetailsResult {
     removedByName: string | null;
 }
 
-export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
+export interface InfractionType {}
 
 export interface CreateInfractionResponse {
     id: number;

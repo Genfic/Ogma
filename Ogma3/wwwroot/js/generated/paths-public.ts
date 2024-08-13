@@ -75,6 +75,41 @@ export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, he
     options,
   );
 
+export const PostApiInviteCodesNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto>("/api/invitecodes/no-limit", 
+    'POST', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const DeleteApiInviteCodes = async (codeid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/invitecodes/${codeid}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>("/api/invitecodes", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PostApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto|string>("/api/invitecodes", 
+    'POST', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiInviteCodesPaginated = async (page: number, perpage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>(`/api/invitecodes/paginated?page=${page}&perpage=${perpage}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const GetApiNotificationsCount = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/notifications/count", 
     'GET', 
     undefined,
@@ -117,9 +152,9 @@ export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersIn
     options,
   );
 
-export const PostApiQuotesJson = async (body: QuoteDto[], headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/quotes/json", 
+export const PostApiQuotesJson = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/quotes/json", 
     'POST', 
-    body,
+    undefined,
     headers,
     options,
   );
@@ -461,41 +496,6 @@ export const Ratings_GetRating = async (id: number, headers?: HeadersInit, optio
   );
 
 export const Ratings_DeleteRating = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/ratings/${id}`, 
-    'DELETE', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const InviteCodes_GetInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>("/api/invitecodes", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const InviteCodes_PostInviteCode = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto>("/api/invitecodes", 
-    'POST', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const InviteCodes_GetPaginatedInviteCodes = async (page: number, perpage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>(`/api/invitecodes/paginated?page=${page}&perpage=${perpage}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const InviteCodes_PostInviteCodeNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto>("/api/invitecodes/no-limit", 
-    'POST', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const InviteCodes_DeleteInviteCode = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/invitecodes/${id}`, 
     'DELETE', 
     undefined,
     headers,

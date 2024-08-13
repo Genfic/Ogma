@@ -1,23 +1,26 @@
 import dayjs from "dayjs";
 import { log } from "../../src-helpers/logger";
+import {
+	DeleteApiInviteCodes as deleteCode,
+	GetApiInviteCodesPaginated as getPaginatedCodes,
+	PostApiInviteCodesNoLimit as createUnlimitedCodes,
+} from "../../generated/paths-public";
 
 new Vue({
 	el: "#app",
 	data: {
 		codes: [],
-		route: null,
 		xcsrf: null,
 		page: 1,
-		perPage: 5,
+		perPage: 50,
 		loading: true,
 		completed: false,
 		newCode: null,
 	},
 	methods: {
 		createCode: async function () {
-			const { data } = await axios.post(`${this.route}/no-limit`, null, {
-				headers: { RequestVerificationToken: this.xcsrf },
-			});
+			const res = await createUnlimitedCodes( { RequestVerificationToken: this.xcsrf });
+			const data = await res.json();
 
 			this.newCode = data.id;
 			setTimeout(() => {
@@ -32,12 +35,9 @@ new Vue({
 			if (this.completed) return;
 
 			this.loading = true;
-			const { data } = await axios.get(`${this.route}/paginated`, {
-				params: {
-					page: this.page,
-					perPage: this.perPage,
-				},
-			});
+			
+			const res = await getPaginatedCodes(this.page, this.perPage);
+			const data = await res.json();
 
 			if (data.length <= 0) {
 				this.completed = true;
@@ -56,9 +56,10 @@ new Vue({
 		// Deletes a selected namespace
 		deleteCode: async function (t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { RequestVerificationToken: this.xcsrf },
-				});
+				const res = await deleteCode(t.id, { RequestVerificationToken: this.xcsrf });
+				
+				if (!res.ok) return;
+				
 				this.codes = this.codes.filter((i) => i.id !== t.id);
 			}
 		},
@@ -78,8 +79,6 @@ new Vue({
 	},
 
 	async mounted() {
-		// Grab the route from route helper
-		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
 		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
 		// Grab the initial set of namespaces

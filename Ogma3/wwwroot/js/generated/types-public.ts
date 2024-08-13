@@ -10,6 +10,20 @@ export interface MarkChapterAsUnreadCommand {
     story: number;
 }
 
+export interface InviteCodeDto {
+    id: number;
+    code: string;
+    normalizedCode: string;
+    usedByUserName: string | null;
+    issuedByUserName: string;
+    issueDate: string;
+    usedDate: string | null;
+}
+
+export interface AdminIssueInviteCodeCommand {}
+
+export interface IssueInviteCodeCommand {}
+
 export interface GetUserNotificationsResult {
     id: number;
     body: string | null;
@@ -19,7 +33,7 @@ export interface GetUserNotificationsResult {
     message: string;
 }
 
-export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
+export interface ENotificationEvent {}
 
 export interface QuoteDto {
     body: string;
@@ -122,7 +136,7 @@ export interface TagDto {
     namespaceId: number | null;
 }
 
-export type ETagNamespace = "ContentWarning" | "Genre" | "Franchise";
+export interface ETagNamespace {}
 
 export interface ProblemDetails {
     type: string | null;
@@ -222,7 +236,7 @@ export interface ReportContentCommand {
     itemType: EReportableContentTypes;
 }
 
-export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
+export interface EReportableContentTypes {}
 
 export interface RatingApiDto {
     id: number;
@@ -231,16 +245,6 @@ export interface RatingApiDto {
     order: number;
     icon: string | null;
     blacklistedByDefault: boolean;
-}
-
-export interface InviteCodeDto {
-    id: number;
-    code: string;
-    normalizedCode: string;
-    usedByUserName: string | null;
-    issuedByUserName: string;
-    issueDate: string;
-    usedDate: string | null;
 }
 
 export interface GetFolderResult {
@@ -317,7 +321,7 @@ export interface UserSimpleDto {
     roles: object;
 }
 
-export type EDeletedBy = "User" | "Staff";
+export interface EDeletedBy {}
 
 export interface GetRevisionResult {
     editTime: string;

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.InviteCodes;
 
@@ -16,4 +17,12 @@ public class InviteCodeDto
 	{
 		public MappingProfile() => CreateMap<InviteCode, InviteCodeDto>();
 	}
+}
+
+[Mapper]
+public static partial class InviteCodeMapper
+{
+	public static partial IQueryable<InviteCodeDto> ProjectToDto(this IQueryable<InviteCode> invites);
+
+	public static partial InviteCodeDto ToDto(InviteCode ic);
 }

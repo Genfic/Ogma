@@ -1,7 +1,6 @@
 @page
 @inject OgmaConfig Config
 @using Ogma3.Data
-@using Ogma3.Api.V1.InviteCodes
 @model InviteCodes
 
 @{
@@ -28,15 +27,13 @@
 		</div>
 		<div class="actions">
 			<button class="action" v-on:click="copyCode(n)">
-				<icon icon="copy"></icon>
+				<icon icon="content_copy"></icon>
 			</button>
 		</div>
 	</li>
 </ul>
 
 @Html.AntiForgeryToken()
-<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(InviteCodesController))"
-	v-if="!route"></div>
 
 @section Scripts
 {
