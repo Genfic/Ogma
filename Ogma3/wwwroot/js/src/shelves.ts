@@ -1,3 +1,12 @@
+import {
+	DeleteApiShelves as deleteShelf,
+	GetApiShelvesAll as getShelves,
+	PostApiShelves as createShelf,
+	PutApiShelves as updateShelf,
+} from "../generated/paths-public";
+import type { ShelfDto } from "../generated/types-public";
+
+// @ts-ignore
 new Vue({
 	el: "#shelves",
 	data: {
@@ -16,14 +25,14 @@ new Vue({
 		showForm: false,
 		csrf: null,
 		err: null,
-		shelves: [],
+		shelves: [] as ShelfDto[],
 		route: null,
 		owner: null,
 	},
 	methods: {
 		// Contrary to its name, it also modifies a shelf if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createShelf: async function (e) {
+		createShelf: async function (e: Event) {
 			e.preventDefault();
 
 			if (this.form.name) {
@@ -37,49 +46,48 @@ new Vue({
 					icon: Number(this.form.icon),
 				};
 
-				const options = {
-					headers: { RequestVerificationToken: this.csrf },
-				};
+				const headers = { RequestVerificationToken: this.csrf };
 
-				// If no ID has been set, that means it's a new shelf.
-				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route, shelf, options);
-
-					await this.getShelves();
-					this.cancelEdit();
-
+					// If no ID has been set, that means it's a new shelf.
+					// Thus, we POST it.
+					const res = await createShelf(shelf, headers);
+					if (res.ok) {
+						await this.getShelves();
+						this.cancelEdit();
+					}
+				} else {
 					// If the ID has been set, that means it's an existing shelf.
 					// Thus, we PUT it.
-				} else {
-					shelf.id = this.form.id;
-					await axios.put(this.route, { id: this.form.id, ...shelf }, options);
-
-					await this.getShelves();
-					this.cancelEdit();
-					this.showForm = false;
+					const res = await updateShelf({ id: this.form.id, ...shelf }, headers);
+					if (res.ok) {
+						await this.getShelves();
+						this.cancelEdit();
+						this.showForm = false;
+					}
 				}
 			}
 		},
 		// Gets all existing shelves
 		getShelves: async function () {
-			const { data, status } = await axios.get(`${this.route}/${this.owner}?page=1`);
-			this.shelves = status === 200 ? data : null;
+			const res = await getShelves(this.owner, 1);
+			if (res.ok) {
+				this.shelves = await res.json();
+			}
 		},
 
 		// Deletes a selected shelf
-		deleteShelf: async function (t) {
+		deleteShelf: async function (t: ShelfDto) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { RequestVerificationToken: this.csrf },
-				});
-
-				await this.getShelves();
+				const res = await deleteShelf(t.id, { RequestVerificationToken: this.csrf });
+				if (res.ok) {
+					await this.getShelves();
+				}
 			}
 		},
 
 		// Throws a shelf from the list into the editor
-		editShelf: function (t) {
+		editShelf: function (t: ShelfDto) {
 			this.form.name = t.name;
 			this.form.desc = t.description;
 			this.form.id = t.id;
@@ -103,9 +111,8 @@ new Vue({
 
 	async mounted() {
 		// CSRF token
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-		// Grab the route from route helper
-		this.route = document.getElementById("route").dataset.route;
+		this.csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
+
 		// Get owner
 		this.owner = document.getElementById("owner").dataset.owner;
 

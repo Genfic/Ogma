@@ -69,7 +69,7 @@ ul.items-list {
 				min-width: 3ch;
 				font-weight: bold;
 				color: v.$background;
-				text-shadow: 1px 1px 0 v.$foreground-75;
+				text-shadow: 1px 1px 0 v.$foreground-75, -1px 1px 0 v.$foreground-75, 1px -1px 0 v.$foreground-75, -1px -1px 0 v.$foreground-75;
 			}
 
 			> i {

@@ -11,6 +11,7 @@ export interface MarkChapterAsUnreadCommand {
 }
 
 export interface FaqDto {
+    id: number;
     question: string;
     answer: string;
     answerRendered: string;
@@ -104,6 +105,41 @@ export interface RemoveBookFromShelfCommand {
     storyId: number;
 }
 
+export interface ShelfDto {
+    id: number;
+    name: string;
+    description: string;
+    isDefault: boolean;
+    isPublic: boolean;
+    isQuickAdd: boolean;
+    trackUpdates: boolean;
+    color: string | null;
+    storiesCount: number;
+    iconName: string | null;
+    iconId: number | null;
+}
+
+export interface CreateShelfCommand {
+    name: string;
+    description: string;
+    isQuickAdd: boolean;
+    isPublic: boolean;
+    trackUpdates: boolean;
+    color: string;
+    icon: number;
+}
+
+export interface UpdateShelfCommand {
+    id: number;
+    name: string;
+    description: string;
+    isQuickAdd: boolean;
+    isPublic: boolean;
+    trackUpdates: boolean;
+    color: string;
+    icon: number;
+}
+
 export interface BlockUserCommand {
     name: string;
 }
@@ -187,41 +223,6 @@ export interface UnsubscribeCommentsThreadCommand {
 export interface GetSignInDataResult {
     avatar: string;
     title: string | null;
-}
-
-export interface ShelfDto {
-    id: number;
-    name: string;
-    description: string;
-    isDefault: boolean;
-    isPublic: boolean;
-    isQuickAdd: boolean;
-    trackUpdates: boolean;
-    color: string;
-    storiesCount: number;
-    iconName: string | null;
-    iconId: number | null;
-}
-
-export interface CreateShelfCommand {
-    name: string;
-    description: string;
-    isQuickAdd: boolean;
-    isPublic: boolean;
-    trackUpdates: boolean;
-    color: string;
-    icon: number;
-}
-
-export interface UpdateShelfCommand {
-    id: number;
-    name: string;
-    description: string;
-    isQuickAdd: boolean;
-    isPublic: boolean;
-    trackUpdates: boolean;
-    color: string;
-    icon: number;
 }
 
 export interface RoleDto {

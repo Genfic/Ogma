@@ -243,6 +243,41 @@ export const GetApiShelfStories = async (storyid: number, page: number, headers?
     options,
   );
 
+export const PostApiShelves = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>("/api/shelves", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const PutApiShelves = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/shelves", 
+    'PUT', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiShelves = async (shelfid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/shelves/${shelfid}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiShelves = async (shelfid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>(`/api/shelves/${shelfid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiShelvesAll = async (username: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${username}?page=${page}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/useractivity", 
     'HEAD', 
     undefined,
@@ -421,41 +456,6 @@ export const Subscriptions_UnsubscribeThread = async (body: UnsubscribeCommentsT
 export const SignIn_GetSignIn = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetSignInDataResult>(`/api/signin?name=${name}`, 
     'GET', 
     undefined,
-    headers,
-    options,
-  );
-
-export const Shelves_GetShelf = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>(`/api/shelves/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Shelves_DeleteShelf = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/shelves/${id}`, 
-    'DELETE', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Shelves_GetUserShelves = async (name: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${name}?page=${page}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Shelves_PostShelf = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>("/api/shelves", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Shelves_PutShelf = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>("/api/shelves", 
-    'PUT', 
-    body,
     headers,
     options,
   );

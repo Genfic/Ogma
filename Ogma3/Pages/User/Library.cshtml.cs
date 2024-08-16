@@ -21,7 +21,7 @@ public class LibraryModel(ApplicationDbContext context, UserRepository userRepo)
 		if (profileBar is null) return NotFound();
 		ProfileBar = profileBar;
 
-		IsCurrentUser = name == User.GetUsername();
+		IsCurrentUser = string.Equals(name, User.GetUsername(), StringComparison.OrdinalIgnoreCase);
 
 		Icons = await context.Icons
 			.AsNoTracking()

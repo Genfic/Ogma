@@ -7,8 +7,6 @@ import {
 } from "../../generated/paths-public";
 import type { FaqDto } from "../../generated/types-public";
 
-type Faq = FaqDto & { id: number };
-
 // @ts-ignore
 new Vue({
 	el: "#faqs",
@@ -66,7 +64,7 @@ new Vue({
 		},
 
 		// Deletes a selected namespace
-		deleteFaq: async function (t: Faq) {
+		deleteFaq: async function (t: FaqDto) {
 			if (confirm("Delete permanently?")) {
 				const res = await deleteFaq(t.id, { RequestVerificationToken: this.xcsrf });
 				if (res.ok) {
@@ -76,7 +74,7 @@ new Vue({
 		},
 
 		// Throws a faq from the list into the editor
-		editFaq: function (t: Faq) {
+		editFaq: function (t: FaqDto) {
 			this.form.question = t.question;
 			this.form.answer = t.answer;
 			this.form.id = t.id;
