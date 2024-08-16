@@ -1,5 +1,15 @@
 import { log } from "../../src-helpers/logger";
+import {
+	DeleteApiFaqs as deleteFaq,
+	GetApiFaqs as getAllFaqs,
+	PostApiFaqs as createFaq,
+	PutApiFaqs as updateFaq,
+} from "../../generated/paths-public";
+import type { FaqDto } from "../../generated/types-public";
 
+type Faq = FaqDto & { id: number };
+
+// @ts-ignore
 new Vue({
 	el: "#faqs",
 	data: {
@@ -8,7 +18,7 @@ new Vue({
 			answer: null,
 			id: null,
 		},
-		faqs: [],
+		faqs: [] as FaqDto[],
 		route: null,
 		xcsrf: null,
 	},
@@ -25,44 +35,48 @@ new Vue({
 					answer: this.form.answer,
 				};
 
-				const options = {
-					headers: { RequestVerificationToken: this.xcsrf },
-				};
+				const headers = { RequestVerificationToken: this.xcsrf };
 
-				// If no ID has been set, that means it's a new rating.
-				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route, data, options);
-					await this.getFaqs();
+					// If no ID has been set, that means it's a new rating.
+					// Thus, we POST it.
+					const res = await createFaq(data, headers);
+					if (res.ok) {
+						await this.getFaqs();
+					}
 
+				} else {
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.
-				} else {
-					await axios.put(this.route, { id: this.form.id, ...data }, options);
-					await this.getFaqs();
-					this.cancelEdit();
+					const res = await updateFaq({ id: this.form.id, ...data }, headers);
+					if (res.ok) {
+						await this.getFaqs();
+						this.cancelEdit();
+					}
 				}
 			}
 		},
 
 		// Gets all existing namespaces
 		getFaqs: async function () {
-			const { data } = await axios.get(this.route);
-			this.faqs = data;
+			const res = await getAllFaqs();
+			if (res.ok) {
+				this.faqs = await res.json();
+			}
 		},
 
 		// Deletes a selected namespace
-		deleteFaq: async function (t) {
+		deleteFaq: async function (t: Faq) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { RequestVerificationToken: this.xcsrf },
-				});
-				await this.getFaqs();
+				const res = await deleteFaq(t.id, { RequestVerificationToken: this.xcsrf });
+				if (res.ok) {
+					await this.getFaqs();
+				}
 			}
 		},
 
 		// Throws a faq from the list into the editor
-		editFaq: function (t) {
+		editFaq: function (t: Faq) {
 			this.form.question = t.question;
 			this.form.answer = t.answer;
 			this.form.id = t.id;
@@ -74,8 +88,7 @@ new Vue({
 		},
 	},
 	async mounted() {
-		this.route = document.getElementById("route").dataset.route;
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = (document.querySelector("[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		await this.getFaqs();
 	},
 });

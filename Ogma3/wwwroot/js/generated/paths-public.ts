@@ -75,6 +75,41 @@ export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, he
     options,
   );
 
+export const PostApiFaqs = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto>("/api/faqs", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiFaqs = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/faqs?id=${id}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiFaqs = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto[]>("/api/faqs", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PutApiFaqs = async (body: UpdateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/faqs", 
+    'PUT', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetSingleFaq = async (faqid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto>(`/api/faqs/${faqid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const PostApiInviteCodesNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto>("/api/invitecodes/no-limit", 
     'POST', 
     undefined,
@@ -208,7 +243,7 @@ export const GetApiShelfStories = async (storyid: number, page: number, headers?
     options,
   );
 
-export const UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/useractivity", 
+export const UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/useractivity", 
     'HEAD', 
     undefined,
     headers,
@@ -512,41 +547,6 @@ export const Folders_GetFoldersOfClub = async (id: number, headers?: HeadersInit
 export const Folders_AddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<AddStoryToFolderResponse>("/api/folders/add-story", 
     'POST', 
     body,
-    headers,
-    options,
-  );
-
-export const Faqs_GetFaqs = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto[]>("/api/faqs", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Faqs_PutFaq = async (body: UpdateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>("/api/faqs", 
-    'PUT', 
-    body,
-    headers,
-    options,
-  );
-
-export const Faqs_PostFaq = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto>("/api/faqs", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Faqs_GetFaq = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto>(`/api/faqs/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Faqs_DeleteFaq = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number|ProblemDetails>(`/api/faqs/${id}`, 
-    'DELETE', 
-    undefined,
     headers,
     options,
   );

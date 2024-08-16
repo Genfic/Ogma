@@ -10,6 +10,23 @@ export interface MarkChapterAsUnreadCommand {
     story: number;
 }
 
+export interface FaqDto {
+    question: string;
+    answer: string;
+    answerRendered: string;
+}
+
+export interface CreateFaqCommand {
+    question: string;
+    answer: string;
+}
+
+export interface UpdateFaqCommand {
+    id: number;
+    question: string;
+    answer: string;
+}
+
 export interface InviteCodeDto {
     id: number;
     code: string;
@@ -265,23 +282,6 @@ export interface AddStoryToFolderResponse {
 export interface AddStoryToFolderCommand {
     folderId: number;
     storyId: number;
-}
-
-export interface FaqDto {
-    question: string;
-    answer: string;
-    answerRendered: string;
-}
-
-export interface UpdateFaqCommand {
-    id: number;
-    question: string;
-    answer: string;
-}
-
-export interface CreateFaqCommand {
-    question: string;
-    answer: string;
 }
 
 export interface GetPermissionsResult {

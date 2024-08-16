@@ -11,14 +11,17 @@ public class FaqConfiguration : BaseConfiguration<Faq>
 
 		builder
 			.Property(f => f.Question)
+			.HasMaxLength(5000)
 			.IsRequired();
 
 		builder
 			.Property(f => f.Answer)
+			.HasMaxLength(10_000)
 			.IsRequired();
 
 		builder
 			.Property(f => f.AnswerRendered)
+			.HasMaxLength(20_000)
 			.IsRequired();
 	}
 }

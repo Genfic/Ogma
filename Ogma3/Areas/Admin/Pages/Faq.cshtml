@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api.V1.Faqs
 @model Faq
 
 @{
@@ -43,11 +42,10 @@
 		<div v-html="f.answerRendered"></div>
 	</details>
 
-	<div v-if="!route" id="route" data-route="@Url.RouteUrl(nameof(FaqsController))"></div>
 	@Html.AntiForgeryToken()
 </div>
 
 @section Scripts
 {
-	<script src="~/js/dist/admin/faqs.js" asp-append-version="true"></script>
+	<script defer src="~/js/dist/admin/faqs.js" asp-append-version="true"></script>
 }
