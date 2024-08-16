@@ -35,20 +35,16 @@ public static partial class CreateFaq
 		CancellationToken cancellationToken
 	)
 	{
-		var (question, answer) = request;
-
 		var faq = new Faq
 		{
-			Question = question,
-			Answer = answer,
-			AnswerRendered = Markdown.ToHtml(answer, MarkdownPipelines.All),
+			Question = request.Question,
+			Answer = request.Answer,
+			AnswerRendered = Markdown.ToHtml(request.Answer, MarkdownPipelines.All),
 		};
 		context.Faqs.Add(faq);
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		var dto = new FaqDto(faq.Question, faq.Answer, faq.AnswerRendered);
-
-		return TypedResults.CreatedAtRoute(dto, nameof(GetSingleFaq), new { faq.Id });
+		return TypedResults.CreatedAtRoute(faq.ToDto(), nameof(GetSingleFaq), new GetSingleFaq.Query(faq.Id));
 	}
 }
