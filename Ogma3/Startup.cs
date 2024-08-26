@@ -29,7 +29,6 @@ using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
-using Ogma3.Infrastructure.Formatters;
 using Ogma3.Infrastructure.Mediator.Behaviours;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.NSwag.OperationProcessors;
@@ -243,9 +242,6 @@ public class Startup
 		services.AddHandlers();
 		services.AddBehaviors();
 
-		// Custom formatters
-		services.AddControllers(options => { options.OutputFormatters.Insert(0, new RssOutputFormatter(Configuration)); });
-
 		// OpenAPI
 		services.AddEndpointsApiExplorer();
 		services.AddOpenApiDocument(settings => {
@@ -272,6 +268,8 @@ public class Startup
 
 		// Rate limiting profiles
 		services.AddRateLimiting();
+		// Cache policies
+		services.AddCachePolicies();
 	}
 
 

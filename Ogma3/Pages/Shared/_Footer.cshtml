@@ -1,3 +1,4 @@
+@using Ogma3.Api.Rss
 @using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Middleware
@@ -51,9 +52,9 @@
 
 			<a asp-page="/Settings" class="item">Local settings</a>
 
-			<a asp-controller="Rss" asp-action="GetStories" class="item"><icon icon="rss_feed" class="rss"></icon>Stories RSS</a>
+			<a asp-route="@(nameof(GetStoriesRssFeed))" class="item"><icon icon="rss_feed" class="rss"></icon>Stories RSS</a>
 
-			<a asp-controller="Rss" asp-action="GetBlogposts" class="item"><icon icon="rss_feed" class="rss"></icon>Blogpost RSS</a>
+			<a asp-route="@(nameof(GetBlogpostsRssFeed))" class="item"><icon icon="rss_feed" class="rss"></icon>Blogpost RSS</a>
 
 			@if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
 			{

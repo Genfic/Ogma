@@ -2,6 +2,7 @@
 @inject IAntiforgery Antiforgery
 @using System.Globalization
 @using Microsoft.AspNetCore.Antiforgery
+@using Ogma3.Api.Rss
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
@@ -144,7 +145,7 @@
 		
 		<o-featured-in-clubs storyId="@Model.Story.Id"></o-featured-in-clubs>
 		
-		<a asp-controller="Rss" asp-action="GetChapters" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
+		<a asp-route="@(nameof(GetChaptersRssFeed))" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
 			<icon icon="rss_feed"></icon>
 		</a>
 	</div>
