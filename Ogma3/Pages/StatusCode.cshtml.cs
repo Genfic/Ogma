@@ -41,7 +41,7 @@ public class StatusCodeModel : PageModel
 			>= 400 and < 500 =>
 				"That's on your end! You're trying to access something that doesn't exist, or something you're not authorized to access.",
 			>= 500 and < 600 => "That's our bad! Something went wrong on the server. Hopefully nothing too hard to fix...",
-			_ => "I have no clue what this error is, nor how you managed to get it."
+			_ => "I have no clue what this error is, nor how you managed to get it.",
 		};
 	}
 }

@@ -54,7 +54,7 @@ public class IndexModel : PageModel
 				EClubSortingOptions.ThreadsDescending => query.OrderByDescending(c => c.Threads.Count),
 				EClubSortingOptions.CreationDateAscending => query.OrderBy(c => c.CreationDate),
 				EClubSortingOptions.CreationDateDescending => query.OrderByDescending(c => c.CreationDate),
-				_ => query.OrderByDescending(c => c.CreationDate)
+				_ => query.OrderByDescending(c => c.CreationDate),
 			})
 			.Paginate(page, _config.ClubsPerPage)
 			.Select(c => new ClubCard
@@ -66,7 +66,7 @@ public class IndexModel : PageModel
 				Icon = c.Icon,
 				StoriesCount = c.Folders.Sum(f => f.StoriesCount),
 				ThreadsCount = c.Threads.Count,
-				ClubMembersCount = c.ClubMembers.Count
+				ClubMembersCount = c.ClubMembers.Count,
 			})
 			.ToListAsync();
 
@@ -75,7 +75,7 @@ public class IndexModel : PageModel
 		{
 			PerPage = _config.ClubsPerPage,
 			ItemCount = await query.CountAsync(),
-			CurrentPage = page
+			CurrentPage = page,
 		};
 	}
 }

@@ -33,7 +33,7 @@ public class NotificationsRepository
 		{
 			Body = body,
 			Event = @event,
-			Url = _urlHelper.Page(page, routeData) + (fragment is null ? string.Empty : $"#{fragment}")
+			Url = _urlHelper.Page(page, routeData) + (fragment is null ? string.Empty : $"#{fragment}"),
 		};
 		_context.Notifications.Add(notification);
 

@@ -66,7 +66,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 				Name = c.Name,
 				Slug = c.Slug,
 				Hook = c.Hook,
-				Description = c.Description
+				Description = c.Description,
 			})
 			.AsNoTracking()
 			.FirstOrDefaultAsync();

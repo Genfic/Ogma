@@ -10,5 +10,5 @@ public enum EDeletedBy
 	User = 1,
 
 	[Description("Comment deleted by a member of the staff.")]
-	Staff = 2
+	Staff = 2,
 }

@@ -28,7 +28,7 @@ public class Ban(ApplicationDbContext context) : PageModel
 				ActiveUntil = i.ActiveUntil,
 				RemovedAt = i.RemovedAt,
 				Reason = i.Reason,
-				Type = i.Type
+				Type = i.Type,
 			})
 			.ToListAsync();
 

@@ -77,7 +77,7 @@ public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) 
 			Description = Input.Description,
 			ClubId = clubId,
 			ParentFolderId = Input.ParentId,
-			AccessLevel = Input.Role
+			AccessLevel = Input.Role,
 		});
 		await context.SaveChangesAsync();
 

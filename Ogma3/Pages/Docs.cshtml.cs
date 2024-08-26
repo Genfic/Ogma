@@ -28,7 +28,7 @@ public class Docs(ApplicationDbContext context) : PageModel
 				Title = d.Title,
 				Slug = d.Slug,
 				Body = d.Body,
-				Version = d.Version
+				Version = d.Version,
 			})
 			.FirstOrDefaultAsync();
 
@@ -42,7 +42,7 @@ public class Docs(ApplicationDbContext context) : PageModel
 			{
 				Slug = d.Slug,
 				Version = d.Version,
-				CreationTime = d.CreationTime
+				CreationTime = d.CreationTime,
 			})
 			.ToListAsync();
 

@@ -35,7 +35,7 @@ public class Modlog(ApplicationDbContext context, ClubRepository clubRepo) : Pag
 		{
 			PerPage = PerPage,
 			CurrentPage = page,
-			ItemCount = await query.CountAsync()
+			ItemCount = await query.CountAsync(),
 		};
 
 		return Page();

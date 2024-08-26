@@ -68,7 +68,7 @@ public static class LockThread
 					_context.ModeratorActions.Add(new ModeratorAction
 					{
 						StaffMemberId = uid,
-						Description = message
+						Description = message,
 					});
 				}
 				else if (permission.IsClubModerator && thread.ClubThreadId is not null)
@@ -81,7 +81,7 @@ public static class LockThread
 					{
 						ModeratorId = uid,
 						ClubId = clubId,
-						Description = message
+						Description = message,
 					});
 				}
 				else

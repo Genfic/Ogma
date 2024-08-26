@@ -62,7 +62,7 @@ public class ExtensionsTest
 		var pattern = new Dictionary<string, string>
 		{
 			{ "{{name}}", "Bob" },
-			{ "{{time}}", "night" }
+			{ "{{time}}", "night" },
 		};
 		const string outString = "Hello, Bob! Goodbye, Bob! Have a nice night.";
 

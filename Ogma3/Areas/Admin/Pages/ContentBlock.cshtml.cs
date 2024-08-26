@@ -38,7 +38,7 @@ public class ContentBlock : PageModel
 					Blocked = s.ContentBlockId != null,
 					Reason = s.ContentBlock == null ? null : s.ContentBlock.Reason,
 					Title = s.Title,
-					Type = nameof(Story)
+					Type = nameof(Story),
 				})
 				.FirstOrDefaultAsync(),
 			ItemType.Chapter => await _context.Chapters.Where(c => c.Id == id)
@@ -48,7 +48,7 @@ public class ContentBlock : PageModel
 					Reason = c.ContentBlock == null ? null : c.ContentBlock.Reason,
 					Title = c.Title,
 					Subtitle = c.Story.Title,
-					Type = nameof(Chapter)
+					Type = nameof(Chapter),
 				})
 				.FirstOrDefaultAsync(),
 			ItemType.Blogpost => await _context.Blogposts.Where(b => b.Id == id)
@@ -57,10 +57,10 @@ public class ContentBlock : PageModel
 					Blocked = b.ContentBlockId != null,
 					Reason = b.ContentBlock == null ? null : b.ContentBlock.Reason,
 					Title = b.Title,
-					Type = nameof(Blogpost)
+					Type = nameof(Blogpost),
 				})
 				.FirstOrDefaultAsync(),
-			_ => null
+			_ => null,
 		};
 
 		return Page();
@@ -80,7 +80,7 @@ public class ContentBlock : PageModel
 			ItemType.Story => await TryBlockContent<Story>(Id, data.Reason, staffId),
 			ItemType.Chapter => await TryBlockContent<Chapter>(Id, data.Reason, staffId),
 			ItemType.Blogpost => await TryBlockContent<Blogpost>(Id, data.Reason, staffId),
-			_ => false
+			_ => false,
 		};
 
 		return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
@@ -102,7 +102,7 @@ public class ContentBlock : PageModel
 			Story s => s.Title,
 			Chapter c => c.Title,
 			Blogpost b => b.Title,
-			_ => ""
+			_ => "",
 		};
 
 		if (item.ContentBlock is not null) return true;
@@ -111,14 +111,14 @@ public class ContentBlock : PageModel
 		{
 			Reason = reason,
 			IssuerId = uid,
-			Type = typeof(T).Name
+			Type = typeof(T).Name,
 		};
 
 		// Log the action
 		_context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, uname)
+			Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, uname),
 		});
 
 		await _context.SaveChangesAsync();
@@ -132,7 +132,7 @@ public class ContentBlock : PageModel
 			ItemType.Story => await TryUnblockContent<Story>(Id),
 			ItemType.Chapter => await TryUnblockContent<Chapter>(Id),
 			ItemType.Blogpost => await TryUnblockContent<Blogpost>(Id),
-			_ => false
+			_ => false,
 		};
 
 		return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
@@ -154,7 +154,7 @@ public class ContentBlock : PageModel
 			Story s => s.Title,
 			Chapter c => c.Title,
 			Blogpost b => b.Title,
-			_ => ""
+			_ => "",
 		};
 
 		if (item.ContentBlock is null) return true;
@@ -165,7 +165,7 @@ public class ContentBlock : PageModel
 		_context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, uname)
+			Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, uname),
 		});
 
 		await _context.SaveChangesAsync();
@@ -176,7 +176,7 @@ public class ContentBlock : PageModel
 	{
 		Blogpost,
 		Story,
-		Chapter
+		Chapter,
 	}
 
 	public sealed record PostData(string Reason = "");

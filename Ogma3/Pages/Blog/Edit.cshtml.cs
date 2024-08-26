@@ -43,7 +43,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 					PublicationDate = b.AttachedChapter.PublicationDate,
 					StoryId = b.AttachedChapter.StoryId,
 					StoryTitle = b.AttachedChapter.Story.Title,
-					StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName
+					StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName,
 				},
 				AttachedStory = b.AttachedStory == null ? null : new StoryMinimal
 				{
@@ -51,8 +51,8 @@ public class EditModel(ApplicationDbContext context) : PageModel
 					Title = b.AttachedStory.Title,
 					Slug = b.AttachedStory.Slug,
 					PublicationDate = b.AttachedStory.PublicationDate,
-					AuthorUserName = b.AttachedStory.Author.UserName
-				}
+					AuthorUserName = b.AttachedStory.Author.UserName,
+				},
 			})
 			.FirstOrDefaultAsync();
 

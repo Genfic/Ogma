@@ -54,7 +54,7 @@ public static partial class UpdateRoles
 		context.ModeratorActions.AddRange(removedRoles.Select(r => new ModeratorAction
 		{
 			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.UserRoleRemoved(user, username, r.Name)
+			Description = ModeratorActionTemplates.UserRoleRemoved(user, username, r.Name),
 		}));
 
 		// Handle role adding

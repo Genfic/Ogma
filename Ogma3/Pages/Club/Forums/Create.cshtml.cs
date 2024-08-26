@@ -23,7 +23,7 @@ public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) 
 		{
 			Title = "",
 			Body = "",
-			ClubId = id
+			ClubId = id,
 		};
 		return Page();
 	}
@@ -65,7 +65,7 @@ public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) 
 			Body = ClubThread.Body,
 			ClubId = ClubThread.ClubId,
 			CreationDate = DateTime.Now,
-			CommentsThread = new CommentsThread()
+			CommentsThread = new CommentsThread(),
 		};
 
 		context.ClubThreads.Add(clubThread);

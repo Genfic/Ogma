@@ -41,7 +41,7 @@ public class EditModel : PageModel
 				Slug = d.Slug,
 				Title = d.Title,
 				Body = d.Body,
-				Version = d.Version
+				Version = d.Version,
 			})
 			.FirstOrDefaultAsync();
 
@@ -70,7 +70,7 @@ public class EditModel : PageModel
 			Body = string.IsNullOrEmpty(Input.Body) ? oldVersion.Body : Input.Body,
 			Version = oldVersion.Version + 1,
 			CreationTime = now,
-			RevisionDate = null
+			RevisionDate = null,
 		});
 
 		oldVersion.RevisionDate = now;

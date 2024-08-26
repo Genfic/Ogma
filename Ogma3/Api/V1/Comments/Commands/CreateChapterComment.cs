@@ -66,7 +66,7 @@ public static class CreateChapterComment
 			{
 				AuthorId = (long)_uid,
 				Body = body,
-				CommentsThreadId = threadId
+				CommentsThreadId = threadId,
 			};
 
 			_context.Comments.Add(comment);

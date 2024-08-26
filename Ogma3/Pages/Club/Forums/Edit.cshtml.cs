@@ -23,7 +23,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 				Id = ct.Id,
 				ClubId = ct.ClubId,
 				Title = ct.Title,
-				Body = ct.Body
+				Body = ct.Body,
 			})
 			.FirstOrDefaultAsync();
 

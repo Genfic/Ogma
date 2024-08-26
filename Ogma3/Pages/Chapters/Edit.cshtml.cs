@@ -30,7 +30,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 				StartNotes = c.StartNotes,
 				EndNotes = c.EndNotes,
 				IsPublished = c.PublicationDate != null,
-				StoryId = c.StoryId
+				StoryId = c.StoryId,
 			})
 			.FirstOrDefaultAsync();
 
@@ -102,7 +102,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 			{
 				Story = s, 
 				ChapterCount = s.Chapters.Count(c => c.PublicationDate != null),
-				WordCount = s.Chapters.Where(c => c.PublicationDate != null).Sum(c => c.WordCount)
+				WordCount = s.Chapters.Where(c => c.PublicationDate != null).Sum(c => c.WordCount),
 			})
 			.ExecuteUpdateAsync(spc => spc
 				.SetProperty(s => s.Story.WordCount, s => s.WordCount)
@@ -117,7 +117,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 			{
 				c.Id,
 				c.Slug,
-				c.StoryId
+				c.StoryId,
 			})
 			.FirstOrDefaultAsync();
 

@@ -56,7 +56,7 @@ public static class UnbanUser
 			{
 				ClubId = clubId,
 				ModeratorId = uid,
-				Description = ModeratorActionTemplates.UserUnban(user.UserName, issuer.UserName)
+				Description = ModeratorActionTemplates.UserUnban(user.UserName, issuer.UserName),
 			});
 			await context.SaveChangesAsync(cancellationToken);
 

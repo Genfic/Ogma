@@ -24,7 +24,7 @@ public class ValidationExceptionFilter : IExceptionFilter
 		{
 			Status = StatusCodes.Status422UnprocessableEntity,
 			Title = "Validation error",
-			Detail = "Data sent did not pass the validation process"
+			Detail = "Data sent did not pass the validation process",
 		});
 	}
 }

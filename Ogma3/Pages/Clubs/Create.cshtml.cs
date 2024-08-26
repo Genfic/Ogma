@@ -83,9 +83,9 @@ public class CreateModel(ApplicationDbContext context, ImageUploader uploader, O
 				new()
 				{
 					MemberId = uid,
-					Role = EClubMemberRoles.Founder
-				}
-			}
+					Role = EClubMemberRoles.Founder,
+				},
+			},
 		};
 
 		context.Clubs.Add(club);

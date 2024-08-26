@@ -40,7 +40,7 @@ public class Reports : PageModel
 		{
 			CurrentPage = page,
 			ItemCount = count,
-			PerPage = PerPage
+			PerPage = PerPage,
 		};
 	}
 

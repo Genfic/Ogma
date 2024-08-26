@@ -70,7 +70,7 @@ public static class CreateClubThreadComment
 			{
 				AuthorId = (long)_uid,
 				Body = body,
-				CommentsThreadId = threadId
+				CommentsThreadId = threadId,
 			};
 
 			_context.Comments.Add(comment);

@@ -54,7 +54,7 @@ public class StoriesModel(UserRepository userRepo, ApplicationDbContext context)
 		{
 			CurrentPage = page,
 			ItemCount = await query.CountAsync(),
-			PerPage = PerPage
+			PerPage = PerPage,
 		};
 
 		return Page();

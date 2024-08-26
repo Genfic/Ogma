@@ -7,5 +7,5 @@ public enum EReportableContentTypes
 	Story,
 	Chapter,
 	Blogpost,
-	Club
+	Club,
 }

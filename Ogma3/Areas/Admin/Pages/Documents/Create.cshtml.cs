@@ -42,7 +42,7 @@ public class CreateModel : PageModel
 			Body = Input.Body,
 			Version = 1,
 			CreationTime = now,
-			RevisionDate = null
+			RevisionDate = null,
 		});
 
 		await _context.SaveChangesAsync();

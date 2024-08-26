@@ -45,7 +45,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 				Rating = story.Rating.Id,
 				Tags = story.Tags.Select(st => st.Id).ToList(),
 				Status = story.Status,
-				Published = story.PublicationDate != null
+				Published = story.PublicationDate != null,
 			})
 			.AsNoTracking()
 			.FirstOrDefaultAsync();

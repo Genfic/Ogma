@@ -56,7 +56,7 @@ public static class BanUser
 				ClubId = clubId,
 				UserId = userId,
 				IssuerId = uid,
-				Reason = reason
+				Reason = reason,
 			});
 			var result = await context.SaveChangesAsync(cancellationToken);
 
@@ -72,7 +72,7 @@ public static class BanUser
 			{
 				ClubId = clubId,
 				ModeratorId = uid,
-				Description = ModeratorActionTemplates.UserBan(user.UserName, issuer.UserName, reason)
+				Description = ModeratorActionTemplates.UserBan(user.UserName, issuer.UserName, reason),
 			});
 			await context.SaveChangesAsync(cancellationToken);
 

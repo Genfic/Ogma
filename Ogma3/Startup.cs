@@ -303,7 +303,7 @@ public class Startup
 		// Forward the IP
 		app.UseForwardedHeaders(new ForwardedHeadersOptions
 		{
-			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
 		});
 
 		// Handle errors
@@ -315,7 +315,7 @@ public class Startup
 		// Redirects
 		app.UseHttpsRedirection();
 		app.UseRewriter(new RewriteOptions()
-			.AddRedirect("^\\.well-known/change-password$", "identity/account/manage/changepassword")
+			.AddRedirect(@"^\.well-known/change-password$", "identity/account/manage/changepassword")
 		);
 
 
@@ -331,7 +331,7 @@ public class Startup
 				context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
 				{
 					Public = true,
-					MaxAge = TimeSpan.FromDays(365)
+					MaxAge = TimeSpan.FromDays(365),
 				};
 				if (context.File.Name.Contains("service-worker"))
 				{
@@ -339,7 +339,7 @@ public class Startup
 					context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
 				}
 			},
-			ContentTypeProvider = extensionsProvider
+			ContentTypeProvider = extensionsProvider,
 		});
 		app.UseRouting();
 

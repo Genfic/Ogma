@@ -36,8 +36,8 @@ public class Members(ClubRepository clubRepo, ApplicationDbContext context) : Pa
 					Name = r.Name,
 					Order = r.Order,
 					Color = r.Color,
-					IsStaff = r.IsStaff
-				})
+					IsStaff = r.IsStaff,
+				}),
 			})
 			.ToListAsync();
 

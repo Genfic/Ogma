@@ -15,7 +15,7 @@ public class ErrorController : ControllerBase
 			: "Unknown Error";
 		return new JsonResult(new Result(code, text))
 		{
-			StatusCode = code ?? 0
+			StatusCode = code ?? 0,
 		};
 	}
 

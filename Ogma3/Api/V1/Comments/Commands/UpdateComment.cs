@@ -55,7 +55,7 @@ public static class UpdateComment
 			_context.CommentRevisions.Add(new CommentRevision
 			{
 				Body = comm.Body,
-				ParentId = comm.Id
+				ParentId = comm.Id,
 			});
 
 			// Edit the comment

@@ -77,7 +77,7 @@ public static class CreateProfileComment
 			{
 				AuthorId = (long)_uid,
 				Body = body,
-				CommentsThreadId = threadId
+				CommentsThreadId = threadId,
 			};
 
 			_context.Comments.Add(comment);

@@ -25,7 +25,7 @@ public class SendGridMailer : IEmailSender
 			From = new EmailAddress(_config.AdminEmail, _options.SendGridUser),
 			Subject = subject,
 			PlainTextContent = message,
-			HtmlContent = message
+			HtmlContent = message,
 		};
 		msg.AddTo(new EmailAddress(email));
 

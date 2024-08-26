@@ -21,7 +21,7 @@ public class CommentRedirector(ApplicationDbContext context)
 				Which = c.CommentsThread.UserId != null ? ThreadType.User :
 					c.CommentsThread.BlogpostId != null ? ThreadType.Blogpost :
 					c.CommentsThread.ChapterId != null ? ThreadType.Chapter :
-					c.CommentsThread.ClubThreadId != null ? ThreadType.Club : null
+					c.CommentsThread.ClubThreadId != null ? ThreadType.Club : null,
 			})
 			.FirstOrDefaultAsync();
 
@@ -37,7 +37,7 @@ public class CommentRedirector(ApplicationDbContext context)
 			ThreadType.Chapter => new CommentRedirectionResult("/Chapter", new { comment.Id }, $"comment-{order}"),
 			ThreadType.Club => new CommentRedirectionResult("/Club/Forums/Details", new { comment.ClubId, ThreadId = comment.Id },
 				$"comment-{order}"),
-			_ => null
+			_ => null,
 		};
 	}
 
@@ -48,7 +48,7 @@ public class CommentRedirector(ApplicationDbContext context)
 		User,
 		Blogpost,
 		Chapter,
-		Club
+		Club,
 	}
 
 	private record CommentMeta

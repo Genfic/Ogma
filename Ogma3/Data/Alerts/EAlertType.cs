@@ -16,6 +16,6 @@ public static class EAlertTypeExtensions
 		EAlertType.Info => "info",
 		EAlertType.Warning => "report_problem",
 		EAlertType.Danger => "dangerous",
-		_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+		_ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
 	};
 }

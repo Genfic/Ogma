@@ -57,7 +57,7 @@ public class IndexModel(
 			{
 				Title = u.Title,
 				Bio = u.Bio,
-				Links = string.Join('\n', u.Links)
+				Links = string.Join('\n', u.Links),
 			})
 			.FirstOrDefaultAsync();
 	}

@@ -20,6 +20,6 @@ public static partial class ETagNamespaceExtensions
 		ETagNamespace.ContentWarning => "#d91919",
 		ETagNamespace.Genre => "#8c37f4",
 		ETagNamespace.Franchise => "#18f900",
-		_ => "transparent"
+		_ => "transparent",
 	};
 }

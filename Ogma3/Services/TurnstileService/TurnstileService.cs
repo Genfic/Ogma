@@ -22,7 +22,7 @@ public class TurnstileService(
 		{
 			["secret"] = options.Value.Secret,
 			["response"] = token,
-			["remoteip"] = ip
+			["remoteip"] = ip,
 		});
 
 		var response = await client.PostAsync(Url, formData);

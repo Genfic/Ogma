@@ -54,7 +54,7 @@ public class BlogModel(UserRepository userRepo, ApplicationDbContext context, IM
 		{
 			PerPage = PerPage,
 			ItemCount = await query.CountAsync(),
-			CurrentPage = page
+			CurrentPage = page,
 		};
 
 		return Page();

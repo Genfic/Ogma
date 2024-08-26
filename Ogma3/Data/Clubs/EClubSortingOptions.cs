@@ -19,5 +19,5 @@ public enum EClubSortingOptions
 	[Display(Name = "Threads ↓")] ThreadsDescending,
 
 	[Display(Name = "Creation Date ↑")] CreationDateAscending,
-	[Display(Name = "Creation Date ↓")] CreationDateDescending
+	[Display(Name = "Creation Date ↓")] CreationDateDescending,
 }

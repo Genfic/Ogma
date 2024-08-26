@@ -10,7 +10,7 @@ public enum TimeUnit
 	Second = 1,
 	Minute = 60,
 	Hour = 3600,
-	Day = 86400
+	Day = 86400,
 }
 
 // TODO: consider using built-in rate limiting instead
@@ -52,7 +52,7 @@ public class ThrottleAttribute : ActionFilterAttribute
 
 		filterContext.Result = new ContentResult
 		{
-			Content = $"You are allowed to make only {Count} requests per {TimeUnit.ToString().ToLower()}"
+			Content = $"You are allowed to make only {Count} requests per {TimeUnit.ToString().ToLower()}",
 		};
 		filterContext.HttpContext.Response.StatusCode = 429;
 		filterContext.HttpContext.Response.Headers.Append("Retry-After", (seconds / Count).ToString());

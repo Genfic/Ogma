@@ -53,7 +53,7 @@ public static class CreateRating
 				Name = name,
 				Description = description,
 				BlacklistedByDefault = blacklistedByDefault,
-				Order = order
+				Order = order,
 			};
 
 			if (formFile is { Length: > 0 })

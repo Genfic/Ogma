@@ -32,7 +32,7 @@ public class ModLog : PageModel
 		{
 			PerPage = PerPage,
 			CurrentPage = page,
-			ItemCount = count
+			ItemCount = count,
 		};
 	}
 }

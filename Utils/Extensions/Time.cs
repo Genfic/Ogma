@@ -12,7 +12,7 @@ public static class Time
 			1 => "st",
 			2 => "nd",
 			3 => "rd",
-			_ => "th"
+			_ => "th",
 		};
 		return string.Format(dateTime.ToString("d{0} MMMM yyyy", CultureInfo.InvariantCulture), suffix);
 	}

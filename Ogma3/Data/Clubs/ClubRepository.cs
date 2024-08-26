@@ -28,7 +28,7 @@ public class ClubRepository(ApplicationDbContext context, IUserService userServi
 				FounderId = c.ClubMembers.First(cm => cm.Role == EClubMemberRoles.Founder).MemberId,
 				Role = c.ClubMembers.Any(cm => cm.MemberId == uid)
 					? c.ClubMembers.First(cm => cm.MemberId == uid).Role
-					: null
+					: null,
 			})
 			.FirstOrDefaultAsync();
 	}

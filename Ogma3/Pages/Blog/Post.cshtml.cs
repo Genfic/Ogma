@@ -90,7 +90,7 @@ public class DetailsModel(UserRepository userRepo, ApplicationDbContext context)
 				PublicationDate = b.AttachedChapter.PublicationDate,
 				StoryTitle = b.AttachedChapter.Story.Title,
 				StoryId = b.AttachedChapter.StoryId,
-				StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName
+				StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName,
 			},
 		AttachedStory = b.AttachedStory == null
 			? null
@@ -100,7 +100,7 @@ public class DetailsModel(UserRepository userRepo, ApplicationDbContext context)
 				Title = b.AttachedStory.Title,
 				Slug = b.AttachedStory.Slug,
 				PublicationDate = b.AttachedStory.PublicationDate,
-				AuthorUserName = b.AttachedStory.Author.UserName
-			}
+				AuthorUserName = b.AttachedStory.Author.UserName,
+			},
 	};
 }

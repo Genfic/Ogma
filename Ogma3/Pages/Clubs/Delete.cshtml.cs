@@ -42,7 +42,7 @@ public class DeleteModel(ApplicationDbContext context, ImageUploader uploader) :
 				Name = c.Name,
 				Slug = c.Slug,
 				Hook = c.Hook,
-				CreationDate = c.CreationDate
+				CreationDate = c.CreationDate,
 			})
 			.AsNoTracking()
 			.FirstOrDefaultAsync();

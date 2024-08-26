@@ -30,7 +30,7 @@ public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, O
 		{
 			new(ClaimTypes.Avatar, user.Avatar),
 			new(ClaimTypes.Title, user.Title ?? string.Empty),
-			new(ClaimTypes.IsStaff, isStaff.ToString())
+			new(ClaimTypes.IsStaff, isStaff.ToString()),
 		});
 
 		return principal;

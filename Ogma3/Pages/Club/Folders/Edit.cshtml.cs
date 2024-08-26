@@ -31,7 +31,7 @@ public class EditModel(ApplicationDbContext context, ClubRepository clubRepo) : 
 				Name = f.Name,
 				Description = f.Description,
 				ParentId = f.ParentFolderId,
-				Role = f.AccessLevel
+				Role = f.AccessLevel,
 			})
 			.FirstOrDefaultAsync();
 

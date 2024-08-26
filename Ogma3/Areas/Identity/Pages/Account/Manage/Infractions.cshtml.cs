@@ -32,7 +32,7 @@ public class Infractions : PageModel
 				ActiveUntil = i.ActiveUntil,
 				RemovedAt = i.RemovedAt,
 				Reason = i.Reason,
-				Type = i.Type
+				Type = i.Type,
 			})
 			.ToListAsync();
 

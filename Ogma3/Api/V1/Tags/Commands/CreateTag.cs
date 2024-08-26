@@ -43,7 +43,7 @@ public static class CreateTag
 			{
 				Name = name,
 				Description = description,
-				Namespace = ns
+				Namespace = ns,
 			});
 			await _context.SaveChangesAsync(cancellationToken);
 

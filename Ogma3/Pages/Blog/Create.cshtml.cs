@@ -125,7 +125,7 @@ public class CreateModel : PageModel
 		_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
 		{
 			CommentsThread = post.CommentsThread,
-			OgmaUserId = (long)uid
+			OgmaUserId = (long)uid,
 		});
 
 		await _context.SaveChangesAsync();

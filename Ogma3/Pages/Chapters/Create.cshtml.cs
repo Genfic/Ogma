@@ -37,7 +37,7 @@ public class CreateModel(ApplicationDbContext context, NotificationsRepository n
 			{
 				Id = s.Id,
 				Title = s.Title,
-				Slug = s.Slug
+				Slug = s.Slug,
 			})
 			.FirstOrDefaultAsync();
 
@@ -107,7 +107,7 @@ public class CreateModel(ApplicationDbContext context, NotificationsRepository n
 			EndNotes = Input.EndNotes?.Trim(),
 			Order = latestChapter + 1,
 			CommentsThread = new CommentsThread(),
-			WordCount = Input.Body.Words()
+			WordCount = Input.Body.Words(),
 		};
 
 		// Recalculate words and chapters in the story
@@ -121,7 +121,7 @@ public class CreateModel(ApplicationDbContext context, NotificationsRepository n
 		context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
 		{
 			CommentsThread = chapter.CommentsThread,
-			OgmaUserId = (long)uid
+			OgmaUserId = (long)uid,
 		});
 
 		await context.SaveChangesAsync();

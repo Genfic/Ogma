@@ -18,7 +18,7 @@ public class StoryStatusTagHelper : TagHelper
 			EStoryStatus.Completed => ("done", "Completed"),
 			EStoryStatus.OnHiatus => ("pause", "On hiatus"),
 			EStoryStatus.Cancelled => ("block", "Cancelled"),
-			_ => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status))
+			_ => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status)),
 		};
 
 		output.TagName = "div";

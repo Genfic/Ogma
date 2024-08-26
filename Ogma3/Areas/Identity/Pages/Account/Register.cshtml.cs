@@ -120,7 +120,7 @@ public class RegisterModel(
 		{
 			UserName = Input.Name,
 			Email = Input.Email,
-			Avatar = avatar
+			Avatar = avatar,
 		};
 		var result = await userManager.CreateAsync(user, Input.Password);
 

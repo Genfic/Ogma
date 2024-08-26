@@ -17,7 +17,7 @@ public class MarkdownTagHelper : TagHelper
 		Basic, // Default
 		Comment,
 		All,
-		Blogpost
+		Blogpost,
 	}
 
 	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -29,7 +29,7 @@ public class MarkdownTagHelper : TagHelper
 			Presets.Comment => MarkdownPipelines.Comment,
 			Presets.All => MarkdownPipelines.All,
 			Presets.Blogpost => MarkdownPipelines.Blogpost,
-			_ => throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum...")
+			_ => throw new InvalidEnumArgumentException("Somehow the value passed to the enum param was not that enum..."),
 		};
 
 		var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);

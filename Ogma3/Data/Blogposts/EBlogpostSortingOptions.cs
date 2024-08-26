@@ -13,5 +13,5 @@ public enum EBlogpostSortingOptions
 	[Display(Name = "Date ↓")] DateDescending,
 
 	[Display(Name = "Words ↑")] WordsAscending,
-	[Display(Name = "Words ↓")] WordsDescending
+	[Display(Name = "Words ↓")] WordsDescending,
 }

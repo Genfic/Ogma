@@ -55,8 +55,8 @@ public class FolderModel(ApplicationDbContext context, OgmaConfig config, ClubRe
 					ClubId = cf.ClubId,
 					Name = cf.Name,
 					Slug = cf.Slug,
-					StoriesCount = cf.StoriesCount
-				})
+					StoriesCount = cf.StoriesCount,
+				}),
 			})
 			.FirstOrDefaultAsync();
 		if (folder is null) return NotFound();
@@ -81,7 +81,7 @@ public class FolderModel(ApplicationDbContext context, OgmaConfig config, ClubRe
 		{
 			PerPage = config.StoriesPerPage,
 			ItemCount = Folder.StoriesCount,
-			CurrentPage = page
+			CurrentPage = page,
 		};
 
 		return Page();

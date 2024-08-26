@@ -20,7 +20,7 @@ public class PostmarkMailer : IEmailSender
 			TrackOpens = true,
 			TrackLinks = LinkTrackingOptions.HtmlAndText,
 			Subject = subject,
-			HtmlBody = htmlMessage, Attachments = new List<PostmarkMessageAttachment>()
+			HtmlBody = htmlMessage, Attachments = new List<PostmarkMessageAttachment>(),
 		};
 
 		var client = new PostmarkClient(_options.PostmarkKey);

@@ -54,5 +54,5 @@ public enum IpsumLength
 	Short,
 	Medium,
 	Long,
-	Verylong
+	Verylong,
 }

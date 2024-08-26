@@ -31,7 +31,7 @@ public static class ReportContent
 			{
 				Reason = reason,
 				ReporterId = uid,
-				ContentType = itemType.ToString()
+				ContentType = itemType.ToString(),
 			};
 
 			switch (itemType)

@@ -10,5 +10,5 @@ public enum InfractionType
 	Note,
 	Warning,
 	Mute,
-	Ban
+	Ban,
 }

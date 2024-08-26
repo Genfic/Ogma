@@ -50,7 +50,7 @@ public class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurnstileSer
 
 		Input = new InputModel
 		{
-			Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+			Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)),
 		};
 		return Page();
 	}

@@ -25,7 +25,7 @@ public class AutotableTagHelper : TagHelper
 			var val = value switch
 			{
 				IEnumerable and not string => JsonSerializer.Serialize(value),
-				_ => value
+				_ => value,
 			};
 
 			output.Content.AppendHtml("<tr>");

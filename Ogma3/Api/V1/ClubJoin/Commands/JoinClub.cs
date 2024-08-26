@@ -46,7 +46,7 @@ public static class JoinClub
 			{
 				ClubId = request.ClubId,
 				MemberId = uid,
-				Role = EClubMemberRoles.User
+				Role = EClubMemberRoles.User,
 			});
 
 			await _context.SaveChangesAsync(cancellationToken);

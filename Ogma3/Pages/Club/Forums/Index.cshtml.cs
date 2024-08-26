@@ -39,7 +39,7 @@ public class IndexModel(ApplicationDbContext context, ClubRepository clubRepo, O
 				CreationDate = ct.CreationDate,
 				AuthorName = ct.Author.UserName,
 				AuthorAvatar = ct.Author.Avatar,
-				CommentsCount = ct.CommentsThread.Comments.Count
+				CommentsCount = ct.CommentsThread.Comments.Count,
 			})
 			.ToListAsync();
 
@@ -47,7 +47,7 @@ public class IndexModel(ApplicationDbContext context, ClubRepository clubRepo, O
 		{
 			ItemCount = await query.CountAsync(),
 			CurrentPage = page,
-			PerPage = config.ClubThreadsPerPage
+			PerPage = config.ClubThreadsPerPage,
 		};
 
 		return Page();

@@ -53,9 +53,9 @@ public class Users(ApplicationDbContext context) : PageModel
 						ActiveUntil = i.ActiveUntil,
 						IssueDate = i.IssueDate,
 						RemovedAt = i.RemovedAt,
-						RemovedBy = i.RemovedBy != null ? i.RemovedBy.UserName : null
+						RemovedBy = i.RemovedBy != null ? i.RemovedBy.UserName : null,
 					})
-					.ToList()
+					.ToList(),
 			})
 			.FirstOrDefaultAsync();
 

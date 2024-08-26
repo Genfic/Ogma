@@ -36,7 +36,7 @@ public static class Gravatar
 		G,
 		PG,
 		R,
-		X
+		X,
 	}
 
 	public static class AvatarGenMethods

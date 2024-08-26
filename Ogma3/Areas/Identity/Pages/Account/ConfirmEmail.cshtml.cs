@@ -63,7 +63,7 @@ public class ConfirmEmailModel : PageModel
 		var blockedRatings = defaultBlockedRatings.Select(dbr => new BlacklistedRating
 		{
 			User = user,
-			RatingId = dbr
+			RatingId = dbr,
 		});
 		_context.BlacklistedRatings.AddRange(blockedRatings);
 
@@ -75,7 +75,7 @@ public class ConfirmEmailModel : PageModel
 		_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
 		{
 			CommentsThread = thread,
-			OgmaUser = user
+			OgmaUser = user,
 		});
 
 		// Setup default bookshelves
@@ -91,7 +91,7 @@ public class ConfirmEmailModel : PageModel
 				TrackUpdates = true,
 				IsQuickAdd = true,
 				OwnerId = user.Id,
-				IconId = 12
+				IconId = 12,
 			},
 			new()
 			{
@@ -103,7 +103,7 @@ public class ConfirmEmailModel : PageModel
 				TrackUpdates = true,
 				IsQuickAdd = true,
 				OwnerId = user.Id,
-				IconId = 22
+				IconId = 22,
 			},
 		};
 		_context.Shelves.AddRange(shelves);

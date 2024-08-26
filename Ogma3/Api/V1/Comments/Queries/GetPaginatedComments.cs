@@ -68,7 +68,7 @@ public static class GetPaginatedComments
 				Total = total,
 				Page = p,
 				Pages = (int)Math.Ceiling((double)total / _ogmaConfig.CommentsPerPage),
-				PerPage = _ogmaConfig.CommentsPerPage
+				PerPage = _ogmaConfig.CommentsPerPage,
 			};
 		}
 	}

@@ -38,7 +38,7 @@ public static class SubscribeCommentsThread
 			_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
 			{
 				OgmaUserId = (long)_uid,
-				CommentsThreadId = request.ThreadId
+				CommentsThreadId = request.ThreadId,
 			});
 
 			await _context.SaveChangesAsync(cancellationToken);

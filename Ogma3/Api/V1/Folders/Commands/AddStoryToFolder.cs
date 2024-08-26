@@ -48,7 +48,7 @@ public static class AddStoryToFolder
 			{
 				FolderId = folderId,
 				StoryId = storyId,
-				AddedById = uid
+				AddedById = uid,
 			});
 			folder.StoriesCount++;
 			

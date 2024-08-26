@@ -31,7 +31,7 @@ public static class CreateRole
 				Name = name,
 				IsStaff = isStaff,
 				Color = color,
-				Order = order
+				Order = order,
 			};
 
 			await _roleManager.CreateAsync(role);

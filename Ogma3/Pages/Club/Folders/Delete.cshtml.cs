@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
@@ -40,7 +41,7 @@ public class DeleteModel(ApplicationDbContext context, ClubRepository clubRepo) 
 				Name = f.Name,
 				Slug = f.Slug,
 				Description = f.Description,
-				StoriesCount = f.StoriesCount
+				StoriesCount = f.StoriesCount,
 			})
 			.FirstOrDefaultAsync();
 
@@ -78,10 +79,10 @@ public class DeleteModel(ApplicationDbContext context, ClubRepository clubRepo) 
 			.Where(fs => fs.FolderId == folder.Id)
 			.ToListAsync();
 
-		var newRelationships = relationships.Select(r => new Data.Folders.FolderStory
+		var newRelationships = relationships.Select(r => new FolderStory
 		{
 			FolderId = TargetFolder,
-			StoryId = r.StoryId
+			StoryId = r.StoryId,
 		});
 
 		context.FolderStories.RemoveRange(relationships);

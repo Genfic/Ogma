@@ -37,7 +37,7 @@ public class DeleteModel(ApplicationDbContext context) : PageModel
 				AuthorId = ct.AuthorId,
 				Title = ct.Title,
 				CreationDate = ct.CreationDate,
-				Replies = ct.CommentsThread.CommentsCount
+				Replies = ct.CommentsThread.CommentsCount,
 			})
 			.FirstOrDefaultAsync();
 
@@ -64,7 +64,7 @@ public class DeleteModel(ApplicationDbContext context) : PageModel
 				ct.AuthorId,
 				ct.ClubId,
 				ct.Club.Slug,
-				ct.Title
+				ct.Title,
 			})
 			.FirstOrDefaultAsync();
 
@@ -80,7 +80,7 @@ public class DeleteModel(ApplicationDbContext context) : PageModel
 			{
 				ModeratorId = uid,
 				ClubId = th.ClubId,
-				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Title, th.Id, User.GetUsername() ?? "[unknown]")
+				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Title, th.Id, User.GetUsername() ?? "[unknown]"),
 			});
 		}
 
@@ -108,7 +108,7 @@ public class DeleteModel(ApplicationDbContext context) : PageModel
 			{
 				EClubMemberRoles.Founder,
 				EClubMemberRoles.Admin,
-				EClubMemberRoles.Moderator
+				EClubMemberRoles.Moderator,
 			}.Contains(cm.Role))
 			.AnyAsync();
 

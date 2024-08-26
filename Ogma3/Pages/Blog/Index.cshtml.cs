@@ -62,7 +62,7 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageM
 			EBlogpostSortingOptions.DateDescending => query.OrderByDescending(s => s.PublicationDate),
 			EBlogpostSortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
 			EBlogpostSortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
-			_ => query.OrderByDescending(s => s.WordCount)
+			_ => query.OrderByDescending(s => s.WordCount),
 		};
 
 		// Finalize query
@@ -79,7 +79,7 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageM
 				WordCount = b.WordCount,
 				PublicationDate = b.PublicationDate,
 				AuthorUserName = b.Author.UserName,
-				Hashtags = b.Hashtags
+				Hashtags = b.Hashtags,
 			})
 			.ToListAsync();
 
@@ -88,7 +88,7 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageM
 		{
 			PerPage = config.BlogpostsPerPage,
 			ItemCount = postsCount,
-			CurrentPage = page
+			CurrentPage = page,
 		};
 
 		return Page();

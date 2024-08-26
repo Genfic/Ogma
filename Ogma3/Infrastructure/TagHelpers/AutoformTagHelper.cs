@@ -53,7 +53,7 @@ public class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 					TypeCode.Decimal => "number",
 					TypeCode.Boolean => "checkbox",
 					TypeCode.DateTime => "date",
-					_ => "text"
+					_ => "text",
 				};
 				var label = prop.Name;
 				var value = prop.GetValue(obj);

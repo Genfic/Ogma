@@ -35,8 +35,8 @@ public class IndexModel(ClubRepository clubRepo, ApplicationDbContext context) :
 				{
 					Id = cf.Id,
 					Name = cf.Name,
-					Slug = cf.Slug
-				})
+					Slug = cf.Slug,
+				}),
 			})
 			.ToListAsync();
 

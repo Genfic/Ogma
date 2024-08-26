@@ -36,7 +36,7 @@ public static class Colour
 			4 => Color.FromArgb(((num >> 12) & 0xF) * 0xFF / 0xF,((num >> 8) & 0xF) * 0xFF / 0xF, ((num >> 4) & 0xF) * 0xFF / 0xF, (num & 0xF) * 0xFF / 0xF),
 			6 => Color.FromArgb((num >> 16) & 0xFF, (num >> 8) & 0xFF, num & 0xFF),
 			8 => Color.FromArgb((num >> 24) & 0xFF, (num >> 16) & 0xFF, (num >> 8) & 0xFF, num & 0xFF),
-			_ => throw new ArgumentException("Unknown format", nameof(input))
+			_ => throw new ArgumentException("Unknown format", nameof(input)),
 		};
 	}
 

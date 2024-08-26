@@ -95,7 +95,7 @@ public class ExternalLoginModel : PageModel
 		{
 			Input = new InputModel
 			{
-				Email = email
+				Email = email,
 			};
 		}
 

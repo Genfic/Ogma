@@ -30,7 +30,7 @@ public class Pin(ApplicationDbContext context) : PageModel
 				Id = ct.Id,
 				ClubId = ct.ClubId,
 				Title = ct.Title,
-				IsPinned = ct.IsPinned
+				IsPinned = ct.IsPinned,
 			})
 			.FirstOrDefaultAsync();
 
@@ -53,7 +53,7 @@ public class Pin(ApplicationDbContext context) : PageModel
 				{
 					EClubMemberRoles.Founder,
 					EClubMemberRoles.Admin,
-					EClubMemberRoles.Moderator
+					EClubMemberRoles.Moderator,
 				}.Contains(cm.Role)))
 			.FirstOrDefaultAsync();
 

@@ -45,7 +45,7 @@ public class CommentsController : ControllerBase
 		nameof(OgmaUser) => await PostProfileComment(data),
 		nameof(Blogpost) => await PostBlogpostComment(data),
 		nameof(ClubThread) => await PostClubThreadComment(data),
-		_ => throw new ArgumentOutOfRangeException(nameof(data), $"Was {data.Type}")
+		_ => throw new ArgumentOutOfRangeException(nameof(data), $"Was {data.Type}"),
 	};
 
 	private async Task<ActionResult<CommentDto>> PostChapterComment(PostData data)

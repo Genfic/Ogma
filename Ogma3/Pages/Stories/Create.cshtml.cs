@@ -107,7 +107,7 @@ public class CreateModel(
 			Hook = Input.Hook,
 			RatingId = Input.Rating,
 			Tags = tags,
-			Cover = "/img/placeholders/ph-250.png"
+			Cover = "/img/placeholders/ph-250.png",
 		};
 
 		// Upload cover

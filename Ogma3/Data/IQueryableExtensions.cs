@@ -40,7 +40,7 @@ public static class QueryableExtensions
 			EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.Chapters.OrderBy(c => c.PublicationDate).First().PublicationDate),
 			EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s =>
 				s.Chapters.OrderBy(c => c.PublicationDate).First().PublicationDate),
-			_ => query.OrderByDescending(s => s.CreationDate)
+			_ => query.OrderByDescending(s => s.CreationDate),
 		};
 	}
 
