@@ -58,8 +58,29 @@ import type {
 } from "./types-public";
 import { typedFetch } from "./typed-fetch";
 
-export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) =>
-	await typedFetch<number[]>(`/api/chaptersread/${id}`, "GET", undefined, headers, options);
+export const GetBlogpostsRssFeed = async (headers?: HeadersInit, options?: RequestInit) =>
+	await typedFetch<void>("/rss/blogposts", "GET", undefined, headers, options);
+
+export const GetChaptersRssFeed = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>(`/rss/story/${storyid}/chapters`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetStoriesRssFeed = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/rss/stories", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>(`/api/chaptersread/${id}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
 
 export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread", 
     'POST', 
@@ -69,6 +90,27 @@ export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, header
   );
 
 export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread", 
+    'DELETE', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetApiClubjoin = async (clubid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/clubjoin/${clubid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/clubjoin", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|string>("/api/clubjoin", 
     'DELETE', 
     body,
     headers,
@@ -264,14 +306,14 @@ export const DeleteApiShelves = async (shelfid: number, headers?: HeadersInit, o
     options,
   );
 
-export const GetApiShelves = async (shelfid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>(`/api/shelves/${shelfid}`, 
+export const GetShelf = async (shelfid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>(`/api/shelves/${shelfid}`, 
     'GET', 
     undefined,
     headers,
     options,
   );
 
-export const GetApiShelvesAll = async (username: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${username}?page=${page}`, 
+export const GetApiShelves = async (username: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${username}?page=${page}`, 
     'GET', 
     undefined,
     headers,
@@ -643,27 +685,6 @@ export const Clubs_BanUser = async (body: BanUserCommand, headers?: HeadersInit,
   );
 
 export const Clubs_UnbanUser = async (body: UnbanUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/clubs/user/ban", 
-    'DELETE', 
-    body,
-    headers,
-    options,
-  );
-
-export const ClubJoin_CheckMembershipStatus = async (club: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/clubjoin/${club}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const ClubJoin_JoinClub = async (body: JoinClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/clubjoin", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const ClubJoin_LeaveClub = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/clubjoin", 
     'DELETE', 
     body,
     headers,

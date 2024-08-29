@@ -4,11 +4,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
-using Serilog;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext) : IMiddleware
+public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
 	public static string CacheKey(long id) => $"u{id}_Ban";
 
@@ -41,7 +40,7 @@ public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContex
 
 		if (banDate > DateTime.Now)
 		{
-			Log.Information("Banned user {UserId} tried accessing the site", uid);
+			logger.LogInformation("Banned user {UserId} tried accessing the site", uid);
 			if (httpContext.Request.Path.StartsWithSegments("/api"))
 			{
 				httpContext.Response.Clear();

@@ -10,6 +10,14 @@ export interface MarkChapterAsUnreadCommand {
     story: number;
 }
 
+export interface JoinClubCommand {
+    clubId: number;
+}
+
+export interface LeaveClubCommand {
+    clubId: number;
+}
+
 export interface FaqDto {
     id: number;
     question: string;
@@ -360,13 +368,5 @@ export interface BanUserCommand {
 
 export interface UnbanUserCommand {
     userId: number;
-    clubId: number;
-}
-
-export interface JoinClubCommand {
-    clubId: number;
-}
-
-export interface LeaveClubCommand {
     clubId: number;
 }

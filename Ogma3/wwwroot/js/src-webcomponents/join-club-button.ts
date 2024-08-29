@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { ClubJoin_JoinClub as joinClub, ClubJoin_LeaveClub as leaveClub } from "../generated/paths-public";
+import { DeleteApiClubjoin as leaveClub, PostApiClubjoin as joinClub } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 @customElement("o-join")
@@ -42,7 +42,8 @@ export class JoinClubButton extends LitElement {
 			},
 		);
 		if (res.ok) {
-			this.isMember = await res.json();
+			const data = await res.json();
+			this.isMember = data === true;
 		} else {
 			log.warn(res.statusText);
 		}
