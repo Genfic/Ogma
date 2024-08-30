@@ -12,20 +12,13 @@ public static class GetSubscriptionStatus
 {
 	public sealed record Query(long ThreadId) : IRequest<ActionResult<bool>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<bool>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Query, ActionResult<bool>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
+		private readonly long? _uid = userService.User?.GetNumericId();
 
 		public async ValueTask<ActionResult<bool>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var isSubscribed = await _context.CommentsThreadSubscribers
+			var isSubscribed = await context.CommentsThreadSubscribers
 				.Where(cts => cts.OgmaUserId == _uid)
 				.Where(cts => cts.CommentsThreadId == request.ThreadId)
 				.AnyAsync(cancellationToken);

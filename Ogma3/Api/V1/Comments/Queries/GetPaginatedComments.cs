@@ -16,27 +16,20 @@ public static class GetPaginatedComments
 {
 	public sealed record Query(long Thread, int? Page, long? Highlight) : IRequest<ActionResult<PaginationResult<CommentDto>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<PaginationResult<CommentDto>>>
+	public class Handler
+	(
+		ApplicationDbContext context,
+		IUserService userService,
+		OgmaConfig ogmaConfig,
+		IHttpContextAccessor httpContextAccessor)
+		: BaseHandler, IRequestHandler<Query, ActionResult<PaginationResult<CommentDto>>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IUserService _userService;
-		private readonly OgmaConfig _ogmaConfig;
-		private readonly IHttpContextAccessor _httpContextAccessor;
-
-		public Handler(ApplicationDbContext context, IUserService userService, OgmaConfig ogmaConfig,
-			IHttpContextAccessor httpContextAccessor)
-		{
-			_context = context;
-			_userService = userService;
-			_ogmaConfig = ogmaConfig;
-			_httpContextAccessor = httpContextAccessor;
-		}
 
 		public async ValueTask<ActionResult<PaginationResult<CommentDto>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			var (thread, page, highlight) = request;
 
-			var total = await _context.CommentThreads
+			var total = await context.CommentThreads
 				.Where(ct => ct.Id == thread)
 				.Select(ct => ct.CommentsCount)
 				.FirstOrDefaultAsync(cancellationToken);
@@ -46,18 +39,18 @@ public static class GetPaginatedComments
 			// `highlight - 1` offsets the fact, that the requested IDs start from 1, not 0
 			var p = highlight is not {} h
 				? Math.Max(1, page ?? 1)
-				: (int)Math.Ceiling((double)(total - (h - 1)) / _ogmaConfig.CommentsPerPage);
+				: (int)Math.Ceiling((double)(total - (h - 1)) / ogmaConfig.CommentsPerPage);
 
 			// Send auth data
-			_httpContextAccessor.HttpContext?.Response.Headers.Append("X-Authenticated",
-				(_userService.User?.Identity?.IsAuthenticated ?? false).ToString());
+			httpContextAccessor.HttpContext?.Response.Headers.Append("X-Authenticated",
+				(userService.User?.Identity?.IsAuthenticated ?? false).ToString());
 
-			var comments = await _context.Comments
+			var comments = await context.Comments
 				.Where(c => c.CommentsThreadId == thread)
 				.OrderByDescending(c => c.DateTime)
-				.Select(CommentMappings.ToCommentDto(_userService.User?.GetNumericId()))
+				.Select(CommentMappings.ToCommentDto(userService.User?.GetNumericId()))
 				.AsNoTracking()
-				.Paginate(p, _ogmaConfig.CommentsPerPage)
+				.Paginate(p, ogmaConfig.CommentsPerPage)
 				.ToListAsync(cancellationToken);
 
 			comments.ForEach(c => c.Body = Markdown.ToHtml(c.Body, MarkdownPipelines.Comment));
@@ -67,8 +60,8 @@ public static class GetPaginatedComments
 				Elements = comments,
 				Total = total,
 				Page = p,
-				Pages = (int)Math.Ceiling((double)total / _ogmaConfig.CommentsPerPage),
-				PerPage = _ogmaConfig.CommentsPerPage,
+				Pages = (int)Math.Ceiling((double)total / ogmaConfig.CommentsPerPage),
+				PerPage = ogmaConfig.CommentsPerPage,
 			};
 		}
 	}

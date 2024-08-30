@@ -12,31 +12,24 @@ public static class UnsubscribeCommentsThread
 {
 	public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
+		private readonly long? _uid = userService.User?.GetNumericId();
 
 		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 
-			var subscriber = await _context.CommentsThreadSubscribers
+			var subscriber = await context.CommentsThreadSubscribers
 				.Where(cts => cts.OgmaUserId == _uid)
 				.Where(cts => cts.CommentsThreadId == request.ThreadId)
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (subscriber is null) return Ok(false);
 
-			_context.CommentsThreadSubscribers.Remove(subscriber);
+			context.CommentsThreadSubscribers.Remove(subscriber);
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			return Ok(false);
 		}

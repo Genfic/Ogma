@@ -14,27 +14,25 @@ namespace Ogma3.Api.V1.Comments;
 
 [Route("api/[controller]", Name = nameof(CommentsController))]
 [ApiController]
-public class CommentsController : ControllerBase
+public class CommentsController(IMediator mediator) : ControllerBase
 {
-	private readonly IMediator _mediator;
-	public CommentsController(IMediator mediator) => _mediator = mediator;
 
 	// GET
 	[HttpGet]
 	public async Task<ActionResult<PaginationResult<CommentDto>>> GetCommentsAsync([FromQuery] GetPaginatedComments.Query query)
-		=> await _mediator.Send(query);
+		=> await mediator.Send(query);
 
 	[HttpGet("{id:long}")]
 	public async Task<ActionResult<CommentDto>> GetComment(long id)
-		=> await _mediator.Send(new GetComment.Query(id));
+		=> await mediator.Send(new GetComment.Query(id));
 
 	[HttpGet("revisions/{id:long}")]
 	public async Task<ActionResult<IEnumerable<GetRevision.Result>>> GetRevisions(long id)
-		=> await _mediator.Send(new GetRevision.Query(id));
+		=> await mediator.Send(new GetRevision.Query(id));
 
 	[HttpGet("md")]
 	public async Task<ActionResult<string>> GetMarkdown([FromQuery] GetCommentMarkdown.Query query)
-		=> await _mediator.Send(query);
+		=> await mediator.Send(query);
 
 	// POST
 	[HttpPost]
@@ -49,16 +47,16 @@ public class CommentsController : ControllerBase
 	};
 
 	private async Task<ActionResult<CommentDto>> PostChapterComment(PostData data)
-		=> await _mediator.Send(new CreateChapterComment.Command(data.Body, data.Thread));
+		=> await mediator.Send(new CreateChapterComment.Command(data.Body, data.Thread));
 
 	private async Task<ActionResult<CommentDto>> PostProfileComment(PostData data)
-		=> await _mediator.Send(new CreateProfileComment.Command(data.Body, data.Thread));
+		=> await mediator.Send(new CreateProfileComment.Command(data.Body, data.Thread));
 
 	private async Task<ActionResult<CommentDto>> PostBlogpostComment(PostData data)
-		=> await _mediator.Send(new CreateBlogpostComment.Command(data.Body, data.Thread));
+		=> await mediator.Send(new CreateBlogpostComment.Command(data.Body, data.Thread));
 
 	private async Task<ActionResult<CommentDto>> PostClubThreadComment(PostData data)
-		=> await _mediator.Send(new CreateClubThreadComment.Command(data.Body, data.Thread));
+		=> await mediator.Send(new CreateClubThreadComment.Command(data.Body, data.Thread));
 
 	public sealed record PostData(string Body, long Thread, string Type);
 
@@ -66,11 +64,11 @@ public class CommentsController : ControllerBase
 	[HttpPatch]
 	[Authorize, ValidateAntiForgeryToken]
 	public async Task<ActionResult<CommentDto>> PutComment(UpdateComment.Command command)
-		=> await _mediator.Send(command);
+		=> await mediator.Send(command);
 
 	// Delete
 	[HttpDelete("{id:long}")]
 	[Authorize, ValidateAntiForgeryToken]
 	public async Task<ActionResult<long>> DeleteComment(long id)
-		=> await _mediator.Send(new DeleteComment.Command(id));
+		=> await mediator.Send(new DeleteComment.Command(id));
 }

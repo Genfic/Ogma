@@ -28,38 +28,29 @@ public static class CreateProfileComment
 		}
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
+	public class Handler
+	(
+		ApplicationDbContext context,
+		IMapper mapper,
+		NotificationsRepository notificationsRepo,
+		IUserService userService)
+		: BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IMapper _mapper;
-		private readonly NotificationsRepository _notificationsRepo;
-		private readonly long? _uid;
-
-		public Handler(
-			ApplicationDbContext context,
-			IMapper mapper,
-			NotificationsRepository notificationsRepo,
-			IUserService userService
-		) {
-			_context = context;
-			_mapper = mapper;
-			_notificationsRepo = notificationsRepo;
-			_uid = userService.User?.GetNumericId();
-		}
+		private readonly long? _uid = userService.User?.GetNumericId();
 
 		public async ValueTask<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 
 			// Check if user is muted
-			var isMuted = await _context.Infractions
+			var isMuted = await context.Infractions
 				.Where(i => i.UserId == _uid && i.Type == InfractionType.Mute)
 				.AnyAsync(cancellationToken);
 			if (isMuted) return Unauthorized();
 
 			var (body, threadId) = request;
 
-			var thread = await _context.CommentThreads
+			var thread = await context.CommentThreads
 				.Where(ct => ct.Id == threadId)
 				.FirstOrDefaultAsync(cancellationToken);
 
@@ -67,7 +58,7 @@ public static class CreateProfileComment
 			if (thread.LockDate is not null) return Unauthorized();
 
 			// Check if comment author is blocked by the profile owner
-			var isBlocked = await _context.BlacklistedUsers
+			var isBlocked = await context.BlacklistedUsers
 				.Where(b => b.BlockingUserId == thread.UserId && b.BlockedUserId == _uid)
 				.AnyAsync(cancellationToken);
 
@@ -80,21 +71,21 @@ public static class CreateProfileComment
 				CommentsThreadId = threadId,
 			};
 
-			_context.Comments.Add(comment);
+			context.Comments.Add(comment);
 			thread.CommentsCount++;
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			if (thread.UserId != _uid)
 			{
-				await _notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken);
+				await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken);
 			}
 
 			return CreatedAtAction(
 				nameof(CommentsController.GetComment),
 				nameof(CommentsController)[..^10],
 				new { comment.Id },
-				_mapper.Map<Comment, CommentDto>(comment)
+				mapper.Map<Comment, CommentDto>(comment)
 			);
 		}
 	}

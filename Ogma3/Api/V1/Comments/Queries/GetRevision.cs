@@ -12,13 +12,11 @@ public static class GetRevision
 {
 	public sealed record Query(long Id) : IRequest<ActionResult<IEnumerable<Result>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<IEnumerable<Result>>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<IEnumerable<Result>>>
 	{
-		private readonly ApplicationDbContext _context;
-		public Handler(ApplicationDbContext context) => _context = context;
 
 		public async ValueTask<ActionResult<IEnumerable<Result>>> Handle(Query request, CancellationToken cancellationToken)
-			=> await _context.CommentRevisions
+			=> await context.CommentRevisions
 				.Where(r => r.ParentId == request.Id)
 				.Select(r => new Result(
 					r.EditTime,

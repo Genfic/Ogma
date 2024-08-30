@@ -257,6 +257,41 @@ export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: Reques
     options,
   );
 
+export const PostApiRatings = async (parameters: any, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings?parameters=${parameters}`, 
+    'POST', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PutApiRatings = async (parameters: any, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings?parameters=${parameters}`, 
+    'PUT', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const DeleteApiRatings = async (ratingid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/ratings/${ratingid}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto[]>("/ratings", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetRatingById = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings/${id}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const PostApiReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/reports", 
     'POST', 
     body,
@@ -538,41 +573,6 @@ export const Roles_GetRole = async (id: number, headers?: HeadersInit, options?:
   );
 
 export const Roles_DeleteRole = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>(`/api/roles/${id}`, 
-    'DELETE', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Ratings_GetRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto[]>("/api/ratings", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Ratings_PostRating = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>("/api/ratings", 
-    'POST', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Ratings_PutRating = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto|ProblemDetails>("/api/ratings", 
-    'PUT', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Ratings_GetRating = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Ratings_DeleteRating = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/ratings/${id}`, 
     'DELETE', 
     undefined,
     headers,

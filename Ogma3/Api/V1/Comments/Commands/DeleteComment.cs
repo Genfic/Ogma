@@ -13,22 +13,15 @@ public static class DeleteComment
 {
 	public sealed record Command(long Id) : IRequest<ActionResult<long>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<long>>
+	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<long>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
+		private readonly long? _uid = userService.User?.GetNumericId();
 
 		public async ValueTask<ActionResult<long>> Handle(Command request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 
-			var comment = await _context.Comments
+			var comment = await context.Comments
 				.Where(c => c.Id == request.Id)
 				.Include(c => c.Revisions)
 				.FirstOrDefaultAsync(cancellationToken);
@@ -46,7 +39,7 @@ public static class DeleteComment
 			// Wipe revisions
 			comment.Revisions.Clear();
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
 			return Ok(comment.Id);
 		}

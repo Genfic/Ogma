@@ -25,18 +25,10 @@ public static class UpdateComment
 		}
 	}
 
-	public class Handler : BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
+	public class Handler(ApplicationDbContext context, IUserService userService, IMapper mapper)
+		: BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-		private readonly IMapper _mapper;
-
-		public Handler(ApplicationDbContext context, IUserService userService, IMapper mapper)
-		{
-			_context = context;
-			_mapper = mapper;
-			_uid = userService.User?.GetNumericId();
-		}
+		private readonly long? _uid = userService.User?.GetNumericId();
 
 		public async ValueTask<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
@@ -44,7 +36,7 @@ public static class UpdateComment
 
 			var (body, commentId) = request;
 
-			var comm = await _context.Comments
+			var comm = await context.Comments
 				.Where(c => c.Id == commentId)
 				.Where(c => c.AuthorId == _uid)
 				.FirstOrDefaultAsync(cancellationToken);
@@ -52,7 +44,7 @@ public static class UpdateComment
 			if (comm is null) return NotFound();
 
 			// Create revision
-			_context.CommentRevisions.Add(new CommentRevision
+			context.CommentRevisions.Add(new CommentRevision
 			{
 				Body = comm.Body,
 				ParentId = comm.Id,
@@ -63,9 +55,9 @@ public static class UpdateComment
 			comm.LastEdit = DateTime.Now;
 			comm.EditCount += 1;
 
-			await _context.SaveChangesAsync(cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
 
-			var dto = _mapper.Map<Comment, CommentDto>(comm);
+			var dto = mapper.Map<Comment, CommentDto>(comm);
 			dto.Owned = _uid == comm.AuthorId;
 
 			return dto;

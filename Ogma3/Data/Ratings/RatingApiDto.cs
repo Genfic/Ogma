@@ -1,20 +1,20 @@
-#nullable disable
-
-using AutoMapper;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Ratings;
 
-public class RatingApiDto
+public sealed class RatingApiDto
 {
-	public long Id { get; set; }
-	public string Name { get; set; }
-	public string Description { get; set; }
-	public byte Order { get; set; }
-	public string Icon { get; set; }
-	public bool BlacklistedByDefault { get; set; }
+	public required long Id { get; init; }
+	public required string Name { get; init; }
+	public required string Description { get; init; }
+	public required byte Order { get; init; }
+	public required string Icon { get; init; }
+	public required bool BlacklistedByDefault { get; init; }
+}
 
-	public class RatingApiDtoMapping : Profile
-	{
-		public RatingApiDtoMapping() => CreateMap<Rating, RatingApiDto>();
-	}
+[Mapper]
+public static partial class RatingMapper
+{
+	public static partial RatingApiDto MapToApiDto(this Rating rating);
+	public static partial IQueryable<RatingApiDto> ProjectToApiDto(this IQueryable<Rating> query);
 }

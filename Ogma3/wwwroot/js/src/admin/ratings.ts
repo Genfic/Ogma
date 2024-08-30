@@ -1,4 +1,7 @@
-const ratings_vue = new Vue({
+import { DeleteApiRatings as deleteRating, GetRatings as getRatings } from "../../generated/paths-public";
+
+// @ts-ignore
+new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -40,6 +43,7 @@ const ratings_vue = new Vue({
 				// If no ID has been set, that means it's a new rating.
 				// Thus, we POST it.
 				if (this.form.id === null) {
+					// TODO: Shit's blocked by https://github.com/RicoSuter/NSwag/issues/4626
 					await axios.post(this.route, data, options);
 					await this.getRatings();
 
@@ -47,6 +51,7 @@ const ratings_vue = new Vue({
 					// Thus, we PUT it.
 				} else {
 					data.append("id", this.form.id);
+					// TODO: Shit's blocked by https://github.com/RicoSuter/NSwag/issues/4626
 					await axios.put(this.route, data, options);
 					await this.getRatings();
 				}
@@ -57,17 +62,17 @@ const ratings_vue = new Vue({
 
 		// Gets all existing namespaces
 		getRatings: async function () {
-			const { data } = await axios.get(this.route);
-			this.ratings = data;
+			const res = await getRatings();
+			this.ratings = await res.json();
 		},
 
 		// Deletes a selected namespace
 		deleteRating: async function (t) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { RequestVerificationToken: this.xcsrf },
-				});
-				await this.getRatings();
+				const res = await deleteRating(t.id, { RequestVerificationToken: this.xcsrf });
+				if (res.ok) {
+					await this.getRatings();
+				}
 			}
 		},
 
@@ -91,10 +96,7 @@ const ratings_vue = new Vue({
 	},
 
 	async mounted() {
-		// Grab the route from route helper
-		this.route = document.getElementById("route").dataset.route;
 		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
-		// Grab the initial set of namespaces
 		await this.getRatings();
 	},
 });

@@ -10,14 +10,12 @@ public static class GetCommentMarkdown
 {
 	public sealed record Query(long Id) : IRequest<ActionResult<string>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<string>>
+	public class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<string>>
 	{
-		private readonly ApplicationDbContext _context;
-		public Handler(ApplicationDbContext context) => _context = context;
 
 		public async ValueTask<ActionResult<string>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var markdown = await _context.Comments
+			var markdown = await context.Comments
 				.Where(c => c.Id == request.Id)
 				.Select(c => c.Body)
 				.FirstOrDefaultAsync(cancellationToken);

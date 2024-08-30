@@ -77,6 +77,32 @@ export interface UpdateQuoteCommand {
     author: string;
 }
 
+export interface RatingApiDto {
+    id: number;
+    name: string;
+    description: string;
+    order: number;
+    icon: string;
+    blacklistedByDefault: boolean;
+}
+
+export interface CreateRatingCommand {
+    name: string;
+    description: string;
+    blacklistedByDefault: boolean;
+    order: number;
+    icon: string;
+}
+
+export interface UpdateRatingCommand {
+    id: number;
+    name: string;
+    description: string;
+    blacklistedByDefault: boolean;
+    order: number;
+    icon: string;
+}
+
 export interface ReportContentCommand {
     itemId: number;
     reason: string;
@@ -262,15 +288,6 @@ export interface CreateRoleCommand {
     isStaff: boolean;
     color: string;
     order: number | null;
-}
-
-export interface RatingApiDto {
-    id: number;
-    name: string | null;
-    description: string | null;
-    order: number;
-    icon: string | null;
-    blacklistedByDefault: boolean;
 }
 
 export interface GetFolderResult {
