@@ -1,5 +1,4 @@
 ﻿@page "/login"
-@using Ogma3.Api.V1.SignIn
 @model LoginModel
 
 @{
@@ -91,8 +90,6 @@
 	@*     </section> *@
 	@* </div> *@
 </div>
-
-<div id="route" style="background:indianred;padding:5rem" data-route="@Url.RouteUrl(nameof(SignInController))" v-if="!route"></div>
 
 @section Scripts {
 	<script src="~/js/dist/login.js" asp-append-version="true"></script>

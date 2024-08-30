@@ -77,6 +77,14 @@ export interface UpdateQuoteCommand {
     author: string;
 }
 
+export interface ReportContentCommand {
+    itemId: number;
+    reason: string;
+    itemType: EReportableContentTypes;
+}
+
+export interface EReportableContentTypes {}
+
 export interface ShelfAddResult {
     shelfId: number;
     storyId: number;
@@ -146,6 +154,11 @@ export interface UpdateShelfCommand {
     trackUpdates: boolean;
     color: string;
     icon: number;
+}
+
+export interface GetSignInDataResult {
+    avatar: string;
+    title: string | null;
 }
 
 export interface BlockUserCommand {
@@ -228,11 +241,6 @@ export interface UnsubscribeCommentsThreadCommand {
     threadId: number;
 }
 
-export interface GetSignInDataResult {
-    avatar: string;
-    title: string | null;
-}
-
 export interface RoleDto {
     id: number;
     name: string;
@@ -255,14 +263,6 @@ export interface CreateRoleCommand {
     color: string;
     order: number | null;
 }
-
-export interface ReportContentCommand {
-    itemId: number;
-    reason: string;
-    itemType: EReportableContentTypes;
-}
-
-export interface EReportableContentTypes {}
 
 export interface RatingApiDto {
     id: number;

@@ -257,6 +257,13 @@ export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: Reques
     options,
   );
 
+export const PostApiReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/reports", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
 export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfAddResult>("/api/shelfstories", 
     'POST', 
     body,
@@ -314,6 +321,13 @@ export const GetShelf = async (shelfid: number, headers?: HeadersInit, options?:
   );
 
 export const GetApiShelves = async (username: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${username}?page=${page}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiSignin = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetSignInDataResult>(`/api/signin?name=${name}`, 
     'GET', 
     undefined,
     headers,
@@ -495,13 +509,6 @@ export const Subscriptions_UnsubscribeThread = async (body: UnsubscribeCommentsT
     options,
   );
 
-export const SignIn_GetSignIn = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetSignInDataResult>(`/api/signin?name=${name}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
 export const Roles_GetRoles = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto[]>("/api/roles", 
     'GET', 
     undefined,
@@ -533,13 +540,6 @@ export const Roles_GetRole = async (id: number, headers?: HeadersInit, options?:
 export const Roles_DeleteRole = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>(`/api/roles/${id}`, 
     'DELETE', 
     undefined,
-    headers,
-    options,
-  );
-
-export const Reports_PostReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number|ProblemDetails>("/api/reports", 
-    'POST', 
-    body,
     headers,
     options,
   );

@@ -1,21 +1,23 @@
+import { GetApiSignin as getSignInData } from "../generated/paths-public";
+
+// @ts-ignore
 new Vue({
 	el: "#app",
 	data: {
-		name: null,
+		name: null as string | null,
 		avatar: "https://picsum.photos/200",
-		title: null,
+		title: null as string | null,
 		checked: false,
-
-		route: null,
 	},
 	methods: {
-		checkDetails: async function (e) {
+		checkDetails: async function (e: Event) {
 			e.preventDefault();
 
 			if (this.name) {
-				const { data, status } = await axios.get(`${this.route}?name=${this.name}`);
+				const res = await getSignInData(this.name)
 
-				if (status === 200) {
+				if (res.ok) {
+					const data = await res.json();
 					this.avatar = data.avatar;
 					this.title = data.title;
 					this.checked = true;
@@ -27,10 +29,5 @@ new Vue({
 			this.title = null;
 			this.checked = false;
 		},
-	},
-
-	mounted() {
-		// Grab the route from route helper
-		this.route = document.getElementById("route").dataset.route;
 	},
 });

@@ -6,6 +6,7 @@ public static class RateLimiting
 {
 	public const string Rss = nameof(Rss);
 	public const string Quotes = nameof(Quotes);
+	public const string Reports = nameof(Reports);
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
@@ -15,6 +16,10 @@ public static class RateLimiting
 			})
 			.AddFixedWindowLimiter(policyName: Quotes, options => {
 				options.Window = TimeSpan.FromSeconds(10);
+			})
+			.AddFixedWindowLimiter(policyName: Reports, options => {
+				options.Window = TimeSpan.FromHours(1);
+				options.PermitLimit = 3;
 			})
 		);
 	}

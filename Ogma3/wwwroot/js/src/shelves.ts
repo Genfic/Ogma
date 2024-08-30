@@ -1,6 +1,6 @@
 import {
 	DeleteApiShelves as deleteShelf,
-	GetApiShelvesAll as getShelves,
+	GetApiShelves as getShelves,
 	PostApiShelves as createShelf,
 	PutApiShelves as updateShelf,
 } from "../generated/paths-public";

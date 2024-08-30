@@ -221,6 +221,11 @@ public class Startup
 				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			});
+		
+		// Json options
+		services.ConfigureHttpJsonOptions(options => {
+			options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+		});
 
 		// Fluent Validation
 		services

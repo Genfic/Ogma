@@ -1,8 +1,8 @@
-import { log } from "../../src-helpers/logger";
+import { PostApiReports as report } from "../../generated/paths-public";
 
 Vue.component("vue-report-modal", {
 	props: {
-		reportsRoute: {
+		csrf: {
 			type: String,
 			required: true,
 		},
@@ -19,7 +19,6 @@ Vue.component("vue-report-modal", {
 		return {
 			visible: false,
 			reason: "",
-			csrf: null,
 			message: null,
 			btnClass: "",
 			mutId: this.itemId,
@@ -34,30 +33,25 @@ Vue.component("vue-report-modal", {
 		send: async function () {
 			if (!this.$refs.text.validate) return;
 
-			try {
-				await axios.post(
-					`${this.reportsRoute}`,
-					{
-						itemId: this.mutId,
-						reason: this.reason,
-						itemType: this.itemType,
-					},
-					{
-						headers: { RequestVerificationToken: this.csrf },
-					},
-				);
+			const res = await report(
+				{
+					itemId: this.mutId,
+					reason: this.reason,
+					itemType: this.itemType,
+				},
+				{ RequestVerificationToken: this.csrf },
+			);
+
+			if (res.ok) {
 				this.message = "Report delivered!";
 				this.btnClass = "green";
-			} catch (e) {
+			} else {
 				this.message = "An error has occurred.";
 				this.btnClass = "red";
-				log.error(e);
 			}
 		},
 	},
-	mounted() {
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-	},
+
 	template: `
 		<div class="report-modal my-modal" v-if="visible" @click.self="hide" v-cloak>
 		<div class="content">
