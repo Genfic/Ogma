@@ -71,6 +71,10 @@ export interface CreateQuoteCommand {
     author: string;
 }
 
+export interface CreateQuotesFromJsonQuery {
+    quotes: object;
+}
+
 export interface UpdateQuoteCommand {
     id: number;
     body: string;

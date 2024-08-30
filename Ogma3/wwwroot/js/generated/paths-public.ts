@@ -8,6 +8,7 @@ import type {
 	CommentsControllerPostData,
 	CreateFaqCommand,
 	CreateQuoteCommand,
+	CreateQuotesFromJsonQuery,
 	CreateRoleCommand,
 	CreateShelfCommand,
 	CreateTagCommand,
@@ -229,9 +230,9 @@ export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersIn
     options,
   );
 
-export const PostApiQuotesJson = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/quotes/json", 
+export const PostApiQuotesJson = async (body: CreateQuotesFromJsonQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/quotes/json", 
     'POST', 
-    undefined,
+    body,
     headers,
     options,
   );

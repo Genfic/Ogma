@@ -58,7 +58,7 @@ new Vue({
 
 		// Upload Json
 		fromJson: async function() {
-			const res = await createQuotesFromJson(this.json);
+			const res = await createQuotesFromJson({quotes: this.json});
 			alert(`Created ${await res.json()} quotes`);
 		}
 	},

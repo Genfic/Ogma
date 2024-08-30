@@ -19,13 +19,15 @@ public static partial class CreateQuotesFromJson
 		=> endpoint
 			.DisableAntiforgery();
 
+	public sealed record Query(QuoteDto[] Quotes);
+
 	private static async ValueTask<ResponseType> HandleAsync(
-		QuoteDto[] request,
+		Query request,
 		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
-		var quotes = request.Select(q => new Quote
+		var quotes = request.Quotes.Select(q => new Quote
 		{
 			Body = q.Body,
 			Author = q.Author,
