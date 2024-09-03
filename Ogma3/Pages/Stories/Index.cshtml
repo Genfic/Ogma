@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api.V1.Tags
 @using Ogma3.Data.Stories
 @model IndexModel
 
@@ -55,8 +54,7 @@
 		                   ref="tags"
 		                   inline
 		                   disable-when-empty
-		                   :preselected="@Model.PreselectedTagsJson"
-		                   tags-api="@Url.RouteUrl(nameof(TagsController))">
+		                   :preselected="@Model.PreselectedTagsJson">
 		</tag-search-select>
 	</div>
 

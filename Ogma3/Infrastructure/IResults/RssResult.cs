@@ -6,7 +6,7 @@ using Serilog;
 
 namespace Ogma3.Infrastructure.IResults;
 
-public class RssResult(string title, string description, IEnumerable<SyndicationItem> items, string domain) : IResult
+public sealed class RssResult(string title, string description, IEnumerable<SyndicationItem> items, string domain) : IResult
 {
 	private static readonly RecyclableMemoryStreamManager Manager = new();
 

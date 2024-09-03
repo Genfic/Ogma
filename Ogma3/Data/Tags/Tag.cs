@@ -6,12 +6,12 @@ namespace Ogma3.Data.Tags;
 
 public class Tag : BaseModel
 {
-	private string _name = null!;
+	private readonly string _name = null!;
 
 	public string Name
 	{
 		get => _name;
-		set
+		init
 		{
 			_name = value;
 			Slug = value.Friendlify();
@@ -19,7 +19,7 @@ public class Tag : BaseModel
 	}
 
 	public string Slug { get; private set; } = null!;
-	public string? Description { get; set; }
-	public ETagNamespace? Namespace { get; set; }
-	public IEnumerable<Story> Stories { get; set; } = null!;
+	public string? Description { get; init; }
+	public ETagNamespace? Namespace { get; init; }
+	public IEnumerable<Story> Stories { get; init; } = null!;
 }

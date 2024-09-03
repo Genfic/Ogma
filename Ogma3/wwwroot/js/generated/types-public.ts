@@ -191,6 +191,31 @@ export interface GetSignInDataResult {
     title: string | null;
 }
 
+export interface TagDto {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    namespace: ETagNamespace | null;
+    namespaceColor: string | null;
+    namespaceId: number | null;
+}
+
+export interface ETagNamespace {}
+
+export interface CreateTagCommand {
+    name: string;
+    description: string | null;
+    namespace: ETagNamespace | null;
+}
+
+export interface UpdateTagCommand {
+    id: number;
+    name: string | null;
+    description: string | null;
+    namespace: ETagNamespace | null;
+}
+
 export interface BlockUserCommand {
     name: string;
 }
@@ -230,39 +255,6 @@ export interface ErrorControllerResult {
     reason: string;
 }
 
-export interface TagDto {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    namespace: ETagNamespace | null;
-    namespaceColor: string | null;
-    namespaceId: number | null;
-}
-
-export interface ETagNamespace {}
-
-export interface ProblemDetails {
-    type: string | null;
-    title: string | null;
-    status: number | null;
-    detail: string | null;
-    instance: string | null;
-}
-
-export interface UpdateTagCommand {
-    id: number;
-    name: string | null;
-    description: string | null;
-    namespace: ETagNamespace | null;
-}
-
-export interface CreateTagCommand {
-    name: string;
-    description: string | null;
-    namespace: ETagNamespace | null;
-}
-
 export interface SubscribeCommentsThreadCommand {
     threadId: number;
 }
@@ -292,6 +284,14 @@ export interface CreateRoleCommand {
     isStaff: boolean;
     color: string;
     order: number | null;
+}
+
+export interface ProblemDetails {
+    type: string | null;
+    title: string | null;
+    status: number | null;
+    detail: string | null;
+    instance: string | null;
 }
 
 export interface GetFolderResult {

@@ -370,6 +370,69 @@ export const GetApiSignin = async (name: string, headers?: HeadersInit, options?
     options,
   );
 
+export const PostApiTags = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto|string>("/api/tags", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiTags = async (tagid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/tags?tagid=${tagid}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiTags = async (page: number, perpage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags?page=${page}&perpage=${perpage}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PutApiTags = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>("/api/tags", 
+    'PUT', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetApiTagsAll = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>("/api/tags/all", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetSingleTag = async (tagid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto>(`/api/tags/${tagid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiTagsStory = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/story/${storyid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiTagsSearch = async (searchstring: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/search?searchstring=${searchstring}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiTest = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/test", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const UpdateLastActive = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/api/useractivity", 
     'HEAD', 
     undefined,
@@ -455,69 +518,6 @@ export const Chapter_LastChapter = async (sid: number, headers?: HeadersInit, op
   );
 
 export const Error_OnGet = async (code: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ErrorControllerResult>(`/api/error?code=${code}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Test_GetTest = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/test", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Tags_GetAll = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>("/api/tags/all", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Tags_Search = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/search?name=${name}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Tags_GetTags = async (page: number, perpage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags?page=${page}&perpage=${perpage}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Tags_PutTag = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>("/api/tags", 
-    'PUT', 
-    body,
-    headers,
-    options,
-  );
-
-export const Tags_PostTag = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>("/api/tags", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Tags_GetTag = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto>(`/api/tags/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Tags_DeleteTag = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/tags/${id}`, 
-    'DELETE', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Tags_GetStoryTags = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/story/${id}`, 
     'GET', 
     undefined,
     headers,

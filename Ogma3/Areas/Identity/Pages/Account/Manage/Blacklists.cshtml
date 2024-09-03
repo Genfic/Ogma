@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api.V1.Tags
 @model Blacklists
 
 @{
@@ -51,8 +50,7 @@
 		<tag-search-select label="BlacklistedTags"
 		                   ref="tags"
 		                   hide-labels
-		                   :preselected="@Model.Preselected"
-		                   tags-api="@Url.RouteUrl(nameof(TagsController))">
+		                   :preselected="@Model.Preselected">
 		</tag-search-select>
 		
 	</div>

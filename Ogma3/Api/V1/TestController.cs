@@ -1,27 +1,19 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Ogma3.Infrastructure.Logging.OperationTiming;
-using Ogma3.Infrastructure.ServiceRegistrations;
+using Immediate.Apis.Shared;
+using Immediate.Handlers.Shared;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Ogma3.Infrastructure.IResults;
 
 namespace Ogma3.Api.V1;
 
-[Route("api/[controller]", Name = nameof(TestController))]
-[ApiController]
-[Authorize(AuthorizationPolicies.RequireAdminRole)]
-public class TestController(ILogger<TestController> logger) : ControllerBase
+[Handler]
+[MapGet("api/test")]
+public static partial class TestController
 {
-
-	// GET
-	[HttpGet]
-	public async Task GetTestAsync()
+	public sealed record Query;
+	
+	private static async ValueTask<Results<ServerError, Ok>> HandleAsync(Query _, CancellationToken ct)
 	{
-		const string who = "mom";
-		logger.LogInformation("Test action start");
-		using (logger.TimeOperation("Doing your {Who}", who))
-		{
-			await Task.Delay(500);
-		}
-		logger.LogInformation("Test action end");
+		await Task.Delay(100, ct);
+		return Random.Shared.Next() > int.MaxValue / 2 ? ServerError.Instance() :TypedResults.Ok();
 	}
-
 }

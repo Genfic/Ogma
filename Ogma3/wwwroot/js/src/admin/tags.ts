@@ -1,25 +1,31 @@
-const atags_vue = new Vue({
+// @ts-ignore
+import { TagDto } from "../../generated/types-public";
+import { DeleteApiTags, GetApiTagsAll, PostApiTags, PutApiTags } from "../../generated/paths-public";
+
+interface Validation {
+	minNameLength: number;
+	maxNameLength: number;
+	maxDescLength: number;
+}
+
+// @ts-ignore
+new Vue({
 	el: "#app",
 	data: {
 		form: {
-			name: null,
-			desc: null,
-			namespace: null,
-			id: null,
+			name: null as string,
+			desc: null as string,
+			namespace: null as string,
+			id: null as number,
 		},
-		lens: {
-			minNameLength: 5,
-			maxNameLength: 20,
-			maxDescLength: 100,
-		},
+		lens: null as Validation|null,
 		err: [],
-		route: null,
-		tags: [],
+		tags: [] as TagDto[],
 	},
 	methods: {
 		// Contrary to its name, it also modifies a tag if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createTag: async function (e) {
+		createTag: async function (e: Event) {
 			e.preventDefault();
 
 			// Validation
@@ -39,43 +45,46 @@ const atags_vue = new Vue({
 					description: this.form.desc,
 				};
 
-				const options = {
-					headers: { RequestVerificationToken: this.csrf },
-				};
+				const headers = { RequestVerificationToken: this.csrf };
 
-				// If no ID has been set, that means it's a new tag.
-				// Thus, we POST it.
 				if (this.form.id === null) {
-					await axios.post(this.route, body, options);
-					await this.getTags();
-
+					// If no ID has been set, that means it's a new tag.
+					// Thus, we POST it.
+					const res = await PostApiTags(body, headers);
+					if (res.ok) {
+						await this.getTags();
+					}
+				} else {
 					// If the ID is set, that means it's an existing tag.
 					// Thus, we PUT it.
-				} else {
-					await axios.put(this.route, { id: this.form.id, ...body }, options);
-					await this.getTags();
-					// Clear the form too
-					this.form.name = this.form.desc = this.form.namespace = this.form.id = null;
+					const res = await PutApiTags({ id: this.form.id, ...body }, headers);
+					if (res.ok) {
+						await this.getTags();
+						// Clear the form too
+						this.form.name = this.form.desc = this.form.namespace = this.form.id = null;
+					}
 				}
 			}
 		},
 
 		// Gets all existing tags
 		getTags: async function () {
-			const { data } = await axios.get(`${this.route}/all`);
-			this.tags = data;
+			const res = await GetApiTagsAll();
+			this.tags = await res.json();
 		},
 
 		// Deletes a selected tag
-		deleteTag: async function (t) {
+		deleteTag: async function (t: TagDto) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`);
-				await this.getTags();
+				const res = await DeleteApiTags(t.id);
+				if (res.ok) {
+					await this.getTags();
+				}
 			}
 		},
 
 		// Throws a tag from the list into the editor
-		editTag: function (t) {
+		editTag: function (t: TagDto) {
 			this.form.name = t.name;
 			this.form.desc = t.description;
 			this.form.namespace = t.namespaceId;
@@ -89,11 +98,9 @@ const atags_vue = new Vue({
 	},
 
 	async mounted() {
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
+		this.csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
 
-		const { Route, Validation } = JSON.parse(document.getElementById("static-data").innerText);
-
-		this.route = Route;
+		const { Validation } = JSON.parse(document.getElementById("static-data").innerText);
 		this.lens = Validation;
 
 		await this.getTags();

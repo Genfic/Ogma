@@ -20,6 +20,6 @@ public class TagDto
 [Mapper]
 public static partial class TagMapper
 {
-	public static partial TagDto MapTag(Tag tag);
+	public static partial TagDto ToDto(this Tag tag);
 	public static partial IQueryable<TagDto> ProjectToDto(this IQueryable<Tag> q);
 }

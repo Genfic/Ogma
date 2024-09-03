@@ -1,3 +1,7 @@
+import { GetApiTagsAll, GetApiTagsStory } from "../../generated/paths-public";
+import { TagDto } from "../../generated/types-public";
+
+// @ts-ignore
 Vue.component("tag-search-select", {
 	props: {
 		min: {
@@ -16,10 +20,6 @@ Vue.component("tag-search-select", {
 		validateMsg: {
 			type: String,
 			default: null,
-		},
-		tagsApi: {
-			type: String,
-			required: true,
 		},
 		storyId: {
 			type: Number,
@@ -48,8 +48,8 @@ Vue.component("tag-search-select", {
 			loading: true,
 
 			// Tag search
-			options: [],
-			selected: [],
+			options: [] as TagDto[],
+			selected: [] as TagDto[],
 			search: "",
 			highlighted: null,
 			focused: false,
@@ -74,12 +74,12 @@ Vue.component("tag-search-select", {
 		},
 	},
 	methods: {
-		pushUnique: (arr, el) => {
+		pushUnique: <T>(arr: T[], el: T) => {
 			if (arr.includes(el)) return;
 			arr.push(el);
 		},
 
-		handleInputKeys: function (e) {
+		handleInputKeys: function (e: KeyboardEvent) {
 			switch (e.key) {
 				case "Backspace":
 					if (this.search.length <= 0) {
@@ -123,14 +123,14 @@ Vue.component("tag-search-select", {
 		},
 	},
 	async created() {
-		const { data } = await axios.get(`${this.tagsApi}/all`);
-		this.options = data;
+		const res = await GetApiTagsAll();
+		this.options = await res.json();
 		this.loading = false;
 
 		if (this.storyId) {
-			const { data } = await axios.get(`${this.tagsApi}/story/${this.storyId}`);
-			this.selected = data;
-			for (const sel in this.selected) {
+			const res = await GetApiTagsStory(this.storyId);
+			this.selected = await res.json();
+			for (const sel of this.selected) {
 				this.options.find((e) => e.id === sel.id).hidden = true;
 			}
 		}

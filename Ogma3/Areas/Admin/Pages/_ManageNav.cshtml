@@ -42,5 +42,11 @@
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.ModLog))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Reports))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Faq))"/>
+	<li class="nav-item">
+		@* ReSharper disable once Html.PathError *@
+		<a class="nav-link" href="/swagger" target="_blank">
+			Swagger <icon class="icon" icon="open_in_new"></icon>
+		</a>
+	</li>
 	
 </ul>

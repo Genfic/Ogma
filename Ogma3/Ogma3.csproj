@@ -621,7 +621,7 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="wwwroot\js\src\components\tag-search-select-component.js">
+		<Content Update="wwwroot\js\src\components\tag-search-select-component.ts">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>

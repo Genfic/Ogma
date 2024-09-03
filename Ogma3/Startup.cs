@@ -312,10 +312,10 @@ public class Startup
 		});
 
 		// Handle errors
-		app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"),
-			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/api/error?code={0}"); });
+		// TODO: handle it better somehow, using a magic string to discern API endpoints feels iffy at best
 		app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
 			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"); });
+		// app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
 		// Redirects
 		app.UseHttpsRedirection();
