@@ -25,12 +25,14 @@ public static class GetComment
 			var comment = await context.Comments
 				.Where(c => c.Id == request.Id)
 				.Select(CommentMappings.ToCommentDto(_uid))
-				.AsNoTracking()
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (comment is null) return NotFound();
 			
-			comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
+			if (comment.Body is not null)
+			{
+				comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
+			}
 
 			return Ok(comment);
 		}

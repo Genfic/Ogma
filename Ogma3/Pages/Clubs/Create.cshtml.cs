@@ -57,7 +57,7 @@ public class CreateModel(ApplicationDbContext context, ImageUploader uploader, O
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
 		var icon = "/img/placeholders/ph-250.png";
-		var iconId = "null";
+		string? iconId = null;
 		if (Input.Icon is { Length: > 0})
 		{
 			var file = await uploader.Upload(

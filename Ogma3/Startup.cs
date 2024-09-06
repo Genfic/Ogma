@@ -197,9 +197,6 @@ public class Startup
 		// Cache
 		services.AddMemoryCache();
 
-		// Automapper
-		services.AddAutoMapper(typeof(Startup));
-
 		// Runtime compilation
 		services
 			.AddControllersWithViews();

@@ -79,7 +79,7 @@ public class DeleteModel(ApplicationDbContext context, ImageUploader uploader) :
 		Log.Information("User {UserId} succeeded in deleting club {ClubId}", uid, id);
 		context.Clubs.Remove(club);
 
-		if (club.Icon is not null && club.IconId is not null)
+		if (club.IconId is not null)
 		{
 			await uploader.Delete(club.Icon, club.IconId);
 		}

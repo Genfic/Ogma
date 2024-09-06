@@ -1,7 +1,6 @@
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
-using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Cards;
 
@@ -20,11 +19,4 @@ public class StoryCard
 	public required EStoryStatus Status { get; init; }
 	public required int WordCount { get; init; }
 	public required int ChapterCount { get; init; }
-}
-
-[Mapper]
-public static partial class StoryMapper
-{
-	private static IEnumerable<TagDto> MapOrderedTags(IEnumerable<Tag> tags)
-		=> tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace).Select(t => t.ToDto()).ToArray();
 }

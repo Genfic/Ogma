@@ -24,7 +24,6 @@
 		<PackageReference Include="AspNetCore.RouteAnalyzer" Version="0.5.3" />
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.0.1" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.0.2" />
-		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="B2Net" Version="0.7.5" />
 		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" />
 		<PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="8.0.0" />

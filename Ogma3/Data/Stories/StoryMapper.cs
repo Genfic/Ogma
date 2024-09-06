@@ -7,9 +7,10 @@ namespace Ogma3.Data.Stories;
 [Mapper]
 public static partial class StoryMapper
 {
+	public static partial IQueryable<StoryCard> ProjectToCard(this IQueryable<Story> q);
+	
 	[MapProperty(nameof(Story.Tags), nameof(StoryCard.Tags), Use = nameof(MapOrderedTags))]
 	public static partial StoryCard ProjectToCard(this Story story);
-	public static partial IQueryable<StoryCard> ProjectToCard(this IQueryable<Story> q);
 	
 	private static TagDto[] MapOrderedTags(IEnumerable<Tag> tags)
 		=> tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace).Select(t => t.ToDto()).ToArray();

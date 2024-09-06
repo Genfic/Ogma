@@ -76,7 +76,6 @@ namespace CompiledModels
                 typeof(string),
                 propertyInfo: typeof(Club).GetProperty("Description", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Club).GetField("<Description>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true,
                 maxLength: 25000);
             description.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
                 comparer: new ValueComparer<string>(
@@ -126,8 +125,7 @@ namespace CompiledModels
         "Icon",
         typeof(string),
         propertyInfo: typeof(Club).GetProperty("Icon", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Club).GetField("<Icon>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        nullable: true);
+        fieldInfo: typeof(Club).GetField("<Icon>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
     icon.TypeMapping = StringTypeMapping.Default.Clone(
         comparer: new ValueComparer<string>(
             (string v1, string v2) => v1 == v2,

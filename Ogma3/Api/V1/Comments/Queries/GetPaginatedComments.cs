@@ -49,11 +49,14 @@ public static class GetPaginatedComments
 				.Where(c => c.CommentsThreadId == thread)
 				.OrderByDescending(c => c.DateTime)
 				.Select(CommentMappings.ToCommentDto(userService.User?.GetNumericId()))
-				.AsNoTracking()
 				.Paginate(p, ogmaConfig.CommentsPerPage)
 				.ToListAsync(cancellationToken);
 
-			comments.ForEach(c => c.Body = Markdown.ToHtml(c.Body, MarkdownPipelines.Comment));
+			foreach (var comment in comments)
+			{
+				if (comment.Body is null) continue;
+				comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
+			}
 
 			return new PaginationResult<CommentDto>
 			{

@@ -1148,17 +1148,11 @@ namespace CompiledModels
             var ogma3DataClubsClubTableBase = new TableBase("Ogma3.Data.Clubs.Club", null, relationalModel);
             var creationDateColumnBase3 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataClubsClubTableBase);
             ogma3DataClubsClubTableBase.Columns.Add("CreationDate", creationDateColumnBase3);
-            var descriptionColumnBase0 = new ColumnBase<ColumnMappingBase>("Description", "character varying(25000)", ogma3DataClubsClubTableBase)
-            {
-                IsNullable = true
-            };
+            var descriptionColumnBase0 = new ColumnBase<ColumnMappingBase>("Description", "character varying(25000)", ogma3DataClubsClubTableBase);
             ogma3DataClubsClubTableBase.Columns.Add("Description", descriptionColumnBase0);
             var hookColumnBase = new ColumnBase<ColumnMappingBase>("Hook", "character varying(100)", ogma3DataClubsClubTableBase);
             ogma3DataClubsClubTableBase.Columns.Add("Hook", hookColumnBase);
-            var iconColumnBase = new ColumnBase<ColumnMappingBase>("Icon", "text", ogma3DataClubsClubTableBase)
-            {
-                IsNullable = true
-            };
+            var iconColumnBase = new ColumnBase<ColumnMappingBase>("Icon", "text", ogma3DataClubsClubTableBase);
             ogma3DataClubsClubTableBase.Columns.Add("Icon", iconColumnBase);
             var iconIdColumnBase = new ColumnBase<ColumnMappingBase>("IconId", "text", ogma3DataClubsClubTableBase)
             {
@@ -1192,17 +1186,11 @@ namespace CompiledModels
             idColumn6.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             var creationDateColumn3 = new Column("CreationDate", "timestamp without time zone", clubsTable);
             clubsTable.Columns.Add("CreationDate", creationDateColumn3);
-            var descriptionColumn0 = new Column("Description", "character varying(25000)", clubsTable)
-            {
-                IsNullable = true
-            };
+            var descriptionColumn0 = new Column("Description", "character varying(25000)", clubsTable);
             clubsTable.Columns.Add("Description", descriptionColumn0);
             var hookColumn = new Column("Hook", "character varying(100)", clubsTable);
             clubsTable.Columns.Add("Hook", hookColumn);
-            var iconColumn = new Column("Icon", "text", clubsTable)
-            {
-                IsNullable = true
-            };
+            var iconColumn = new Column("Icon", "text", clubsTable);
             clubsTable.Columns.Add("Icon", iconColumn);
             var iconIdColumn = new Column("IconId", "text", clubsTable)
             {

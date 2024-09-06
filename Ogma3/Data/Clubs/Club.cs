@@ -13,7 +13,7 @@ public class Club : BaseModel, IReportableContent
 	public required string Hook { get; set; }
 	public required string Description { get; set; }
 	public required string Icon { get; set; }
-	public required string IconId { get; set; }
+	public required string? IconId { get; set; }
 	public DateTime CreationDate { get; set; }
 	public ICollection<ClubMember> ClubMembers { get; set; } = [];
 	public ICollection<OgmaUser> BannedUsers { get; set; } = [];
