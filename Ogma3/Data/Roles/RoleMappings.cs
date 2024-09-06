@@ -8,7 +8,7 @@ public static class RoleMappings
 	{
 		Id = r.Id,
 		Name = r.Name,
-		Order = r.Order ?? 0,
+		Order = r.Order,
 		IsStaff = r.IsStaff,
 		Color = r.Color,
 	};

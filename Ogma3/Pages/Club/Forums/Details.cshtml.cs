@@ -44,7 +44,7 @@ public class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context)
 				AuthorId = ct.Author.Id,
 				AuthorAvatar = ct.Author.Avatar,
 				AuthorRole = ct.Author.Roles
-					.Where(ur => ur.Order.HasValue)
+					.Where(ur => ur.Order > 0)
 					.OrderBy(ur => ur.Order)
 					.First(),
 				Body = ct.Body,

@@ -1,5 +1,6 @@
-import { GetApiUsersNames as getNames } from "../../generated/paths-public";
+import { GetApiUsersNames as getNames, PostApiUsersRoles } from "../../generated/paths-public";
 
+// @ts-ignore
 new Vue({
 	el: "#app",
 	data: {
@@ -20,6 +21,8 @@ new Vue({
 		},
 
 		removeInfraction: async function (id) {
+			// TODO: This needs migrating to IA. Areas/Admin/Api/Infractions
+			// @ts-ignore
 			const res = await axios.delete(`${this.infractionsRoute}/${id}`, {
 				headers: { RequestVerificationToken: this.csrf },
 			});
@@ -27,18 +30,18 @@ new Vue({
 		},
 
 		saveRoles: async function () {
-			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e) => Number(e.value));
-			await axios.post(
-				`${this.rolesRoute}/roles`,
+			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e: HTMLInputElement) => Number.parseInt(e.value));
+			const res = await PostApiUsersRoles(
 				{
-					UserId: this.userId,
-					Roles: this.roles,
+					userId: this.userId,
+					roles: this.roles,
 				},
-				{
-					headers: { RequestVerificationToken: this.csrf },
-				},
+				{ RequestVerificationToken: this.csrf },
 			);
-			location.reload();
+
+			if (res.ok) {
+				location.reload();
+			}
 		},
 
 		getNames: async function () {
@@ -80,7 +83,7 @@ new Vue({
 		},
 	},
 	mounted() {
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
+		this.csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		this.rolesRoute = document.getElementById("rolesRoute").dataset.route;
 		this.infractionsRoute = document.getElementById("infractionsRoute").dataset.route;
 		this.userId = Number(document.getElementById("id").innerText);

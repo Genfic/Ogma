@@ -300,6 +300,41 @@ export const PostApiReports = async (body: ReportContentCommand, headers?: Heade
     options,
   );
 
+export const PostApiRoles = async (body: CreateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto|string>("/api/roles", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiRoles = async (roleid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/roles?roleid=${roleid}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiRoles = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto[]>("/api/roles", 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PutApiRoles = async (body: UpdateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/roles", 
+    'PUT', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetRoleById = async (roleid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto>(`/api/roles/${roleid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
 export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfAddResult>("/api/shelfstories", 
     'POST', 
     body,
@@ -541,41 +576,6 @@ export const Subscriptions_SubscribeThread = async (body: SubscribeCommentsThrea
 export const Subscriptions_UnsubscribeThread = async (body: UnsubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/subscriptions/thread", 
     'DELETE', 
     body,
-    headers,
-    options,
-  );
-
-export const Roles_GetRoles = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto[]>("/api/roles", 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Roles_PutRole = async (body: UpdateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto>("/api/roles", 
-    'PUT', 
-    body,
-    headers,
-    options,
-  );
-
-export const Roles_PostRole = async (body: CreateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto>("/api/roles", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Roles_GetRole = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto>(`/api/roles/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Roles_DeleteRole = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ProblemDetails>(`/api/roles/${id}`, 
-    'DELETE', 
-    undefined,
     headers,
     options,
   );

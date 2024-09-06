@@ -115,6 +115,29 @@ export interface ReportContentCommand {
 
 export interface EReportableContentTypes {}
 
+export interface RoleDto {
+    id: number;
+    name: string;
+    color: string | null;
+    isStaff: boolean;
+    order: number;
+}
+
+export interface CreateRoleCommand {
+    name: string;
+    isStaff: boolean;
+    color: string;
+    order: number;
+}
+
+export interface UpdateRoleCommand {
+    id: number;
+    name: string;
+    isStaff: boolean;
+    color: string;
+    order: number;
+}
+
 export interface ShelfAddResult {
     shelfId: number;
     storyId: number;
@@ -263,37 +286,6 @@ export interface UnsubscribeCommentsThreadCommand {
     threadId: number;
 }
 
-export interface RoleDto {
-    id: number;
-    name: string;
-    color: string | null;
-    isStaff: boolean;
-    order: number | null;
-}
-
-export interface UpdateRoleCommand {
-    id: number;
-    name: string;
-    isStaff: boolean;
-    color: string;
-    order: number | null;
-}
-
-export interface CreateRoleCommand {
-    name: string;
-    isStaff: boolean;
-    color: string;
-    order: number | null;
-}
-
-export interface ProblemDetails {
-    type: string | null;
-    title: string | null;
-    status: number | null;
-    detail: string | null;
-    instance: string | null;
-}
-
 export interface GetFolderResult {
     id: number;
     name: string;
@@ -318,6 +310,14 @@ export interface GetPermissionsResult {
     isSiteModerator: boolean;
     isClubModerator: boolean;
     isAllowed: boolean;
+}
+
+export interface ProblemDetails {
+    type: string | null;
+    title: string | null;
+    status: number | null;
+    detail: string | null;
+    instance: string | null;
 }
 
 export interface LockThreadCommand {

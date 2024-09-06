@@ -1819,13 +1819,13 @@ namespace CompiledModels
             var defaultTableMappings19 = new List<TableMappingBase<ColumnMappingBase>>();
             faq.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings19);
             var ogma3DataFaqsFaqTableBase = new TableBase("Ogma3.Data.Faqs.Faq", null, relationalModel);
-            var answerColumnBase = new ColumnBase<ColumnMappingBase>("Answer", "text", ogma3DataFaqsFaqTableBase);
+            var answerColumnBase = new ColumnBase<ColumnMappingBase>("Answer", "character varying(10000)", ogma3DataFaqsFaqTableBase);
             ogma3DataFaqsFaqTableBase.Columns.Add("Answer", answerColumnBase);
-            var answerRenderedColumnBase = new ColumnBase<ColumnMappingBase>("AnswerRendered", "text", ogma3DataFaqsFaqTableBase);
+            var answerRenderedColumnBase = new ColumnBase<ColumnMappingBase>("AnswerRendered", "character varying(20000)", ogma3DataFaqsFaqTableBase);
             ogma3DataFaqsFaqTableBase.Columns.Add("AnswerRendered", answerRenderedColumnBase);
             var idColumnBase11 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataFaqsFaqTableBase);
             ogma3DataFaqsFaqTableBase.Columns.Add("Id", idColumnBase11);
-            var questionColumnBase = new ColumnBase<ColumnMappingBase>("Question", "text", ogma3DataFaqsFaqTableBase);
+            var questionColumnBase = new ColumnBase<ColumnMappingBase>("Question", "character varying(5000)", ogma3DataFaqsFaqTableBase);
             ogma3DataFaqsFaqTableBase.Columns.Add("Question", questionColumnBase);
             relationalModel.DefaultTables.Add("Ogma3.Data.Faqs.Faq", ogma3DataFaqsFaqTableBase);
             var ogma3DataFaqsFaqMappingBase = new TableMappingBase<ColumnMappingBase>(faq, ogma3DataFaqsFaqTableBase, true);
@@ -1842,11 +1842,11 @@ namespace CompiledModels
             var idColumn11 = new Column("Id", "bigint", faqsTable);
             faqsTable.Columns.Add("Id", idColumn11);
             idColumn11.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            var answerColumn = new Column("Answer", "text", faqsTable);
+            var answerColumn = new Column("Answer", "character varying(10000)", faqsTable);
             faqsTable.Columns.Add("Answer", answerColumn);
-            var answerRenderedColumn = new Column("AnswerRendered", "text", faqsTable);
+            var answerRenderedColumn = new Column("AnswerRendered", "character varying(20000)", faqsTable);
             faqsTable.Columns.Add("AnswerRendered", answerRenderedColumn);
-            var questionColumn = new Column("Question", "text", faqsTable);
+            var questionColumn = new Column("Question", "character varying(5000)", faqsTable);
             faqsTable.Columns.Add("Question", questionColumn);
             var pK_Faqs = new UniqueConstraint("PK_Faqs", faqsTable, new[] { idColumn11 });
             faqsTable.PrimaryKey = pK_Faqs;
@@ -2803,7 +2803,7 @@ namespace CompiledModels
             var defaultTableMappings31 = new List<TableMappingBase<ColumnMappingBase>>();
             ogmaRole.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings31);
             var ogma3DataRolesOgmaRoleTableBase = new TableBase("Ogma3.Data.Roles.OgmaRole", null, relationalModel);
-            var colorColumnBase = new ColumnBase<ColumnMappingBase>("Color", "text", ogma3DataRolesOgmaRoleTableBase)
+            var colorColumnBase = new ColumnBase<ColumnMappingBase>("Color", "character varying(7)", ogma3DataRolesOgmaRoleTableBase)
             {
                 IsNullable = true
             };
@@ -2821,10 +2821,7 @@ namespace CompiledModels
             ogma3DataRolesOgmaRoleTableBase.Columns.Add("Name", nameColumnBase4);
             var normalizedNameColumnBase = new ColumnBase<ColumnMappingBase>("NormalizedName", "character varying(256)", ogma3DataRolesOgmaRoleTableBase);
             ogma3DataRolesOgmaRoleTableBase.Columns.Add("NormalizedName", normalizedNameColumnBase);
-            var orderColumnBase1 = new ColumnBase<ColumnMappingBase>("Order", "smallint", ogma3DataRolesOgmaRoleTableBase)
-            {
-                IsNullable = true
-            };
+            var orderColumnBase1 = new ColumnBase<ColumnMappingBase>("Order", "smallint", ogma3DataRolesOgmaRoleTableBase);
             ogma3DataRolesOgmaRoleTableBase.Columns.Add("Order", orderColumnBase1);
             relationalModel.DefaultTables.Add("Ogma3.Data.Roles.OgmaRole", ogma3DataRolesOgmaRoleTableBase);
             var ogma3DataRolesOgmaRoleMappingBase = new TableMappingBase<ColumnMappingBase>(ogmaRole, ogma3DataRolesOgmaRoleTableBase, true);
@@ -2844,7 +2841,7 @@ namespace CompiledModels
             var idColumn21 = new Column("Id", "bigint", aspNetRolesTable);
             aspNetRolesTable.Columns.Add("Id", idColumn21);
             idColumn21.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            var colorColumn = new Column("Color", "text", aspNetRolesTable)
+            var colorColumn = new Column("Color", "character varying(7)", aspNetRolesTable)
             {
                 IsNullable = true
             };
@@ -2860,10 +2857,7 @@ namespace CompiledModels
             aspNetRolesTable.Columns.Add("Name", nameColumn4);
             var normalizedNameColumn = new Column("NormalizedName", "character varying(256)", aspNetRolesTable);
             aspNetRolesTable.Columns.Add("NormalizedName", normalizedNameColumn);
-            var orderColumn1 = new Column("Order", "smallint", aspNetRolesTable)
-            {
-                IsNullable = true
-            };
+            var orderColumn1 = new Column("Order", "smallint", aspNetRolesTable);
             aspNetRolesTable.Columns.Add("Order", orderColumn1);
             var pK_AspNetRoles = new UniqueConstraint("PK_AspNetRoles", aspNetRolesTable, new[] { idColumn21 });
             aspNetRolesTable.PrimaryKey = pK_AspNetRoles;

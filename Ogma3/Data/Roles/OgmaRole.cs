@@ -19,8 +19,8 @@ public class OgmaRole : IdentityRole<long>
 	}
 	public bool IsStaff { get; set; }
 	public string? Color { get; set; }
-	public byte? Order { get; set; }
-	public IEnumerable<OgmaUser> Users { get; set; } = [];
+	public byte Order { get; set; }
+	public IEnumerable<OgmaUser> Users { get; init; } = [];
 
 	public class OgmaRoleConfig : IEntityTypeConfiguration<OgmaRole>
 	{
@@ -30,9 +30,10 @@ public class OgmaRole : IdentityRole<long>
 				.IsRequired()
 				.HasDefaultValue(false);
 			builder.Property(r => r.Color)
+				.HasMaxLength(7)
 				.HasDefaultValue(null);
 			builder.Property(r => r.Order)
-				.HasDefaultValue(null);
+				.HasDefaultValue(0);
 		}
 	}
 

@@ -53,32 +53,9 @@ namespace CompiledModels
                 typeof(string),
                 propertyInfo: typeof(OgmaRole).GetProperty("Color", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OgmaRole).GetField("<Color>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
-            color.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
-            color.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-
-            var concurrencyStamp = runtimeEntityType.AddProperty(
-                "ConcurrencyStamp",
-                typeof(string),
-                propertyInfo: typeof(IdentityRole<long>).GetProperty("ConcurrencyStamp", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityRole<long>).GetField("<ConcurrencyStamp>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                concurrencyToken: true);
-            concurrencyStamp.TypeMapping = StringTypeMapping.Default.Clone(
+                maxLength: 7);
+            color.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
                 comparer: new ValueComparer<string>(
                     (string v1, string v2) => v1 == v2,
                     (string v) => v.GetHashCode(),
@@ -92,64 +69,65 @@ namespace CompiledModels
                     (string v) => v.GetHashCode(),
                     (string v) => v),
                 mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
-            concurrencyStamp.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                    storeTypeName: "character varying(7)",
+                    size: 7));
+            color.TypeMapping = ((NpgsqlStringTypeMapping)color.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+        color.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var isStaff = runtimeEntityType.AddProperty(
-                "IsStaff",
-                typeof(bool),
-                propertyInfo: typeof(OgmaRole).GetProperty("IsStaff", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(OgmaRole).GetField("<IsStaff>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                valueGenerated: ValueGenerated.OnAdd,
-                sentinel: false);
-            isStaff.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-                comparer: new ValueComparer<bool>(
-                    (bool v1, bool v2) => v1 == v2,
-                    (bool v) => v.GetHashCode(),
-                    (bool v) => v),
-                keyComparer: new ValueComparer<bool>(
-                    (bool v1, bool v2) => v1 == v2,
-                    (bool v) => v.GetHashCode(),
-                    (bool v) => v),
-                providerValueComparer: new ValueComparer<bool>(
-                    (bool v1, bool v2) => v1 == v2,
-                    (bool v) => v.GetHashCode(),
-                    (bool v) => v));
-            isStaff.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-            isStaff.AddAnnotation("Relational:DefaultValue", false);
-
-            var name = runtimeEntityType.AddProperty(
-                "Name",
-                typeof(string),
-                propertyInfo: typeof(OgmaRole).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityRole<long>).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                maxLength: 256);
-            name.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(256)",
-                    size: 256));
-            name.TypeMapping = ((NpgsqlStringTypeMapping)name.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-
-        var normalizedName = runtimeEntityType.AddProperty(
-            "NormalizedName",
+        var concurrencyStamp = runtimeEntityType.AddProperty(
+            "ConcurrencyStamp",
             typeof(string),
-            propertyInfo: typeof(OgmaRole).GetProperty("NormalizedName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(IdentityRole<long>).GetField("<NormalizedName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            propertyInfo: typeof(IdentityRole<long>).GetProperty("ConcurrencyStamp", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(IdentityRole<long>).GetField("<ConcurrencyStamp>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true,
+            concurrencyToken: true);
+        concurrencyStamp.TypeMapping = StringTypeMapping.Default.Clone(
+            comparer: new ValueComparer<string>(
+                (string v1, string v2) => v1 == v2,
+                (string v) => v.GetHashCode(),
+                (string v) => v),
+            keyComparer: new ValueComparer<string>(
+                (string v1, string v2) => v1 == v2,
+                (string v) => v.GetHashCode(),
+                (string v) => v),
+            providerValueComparer: new ValueComparer<string>(
+                (string v1, string v2) => v1 == v2,
+                (string v) => v.GetHashCode(),
+                (string v) => v),
+            mappingInfo: new RelationalTypeMappingInfo(
+                dbType: System.Data.DbType.String));
+        concurrencyStamp.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var isStaff = runtimeEntityType.AddProperty(
+            "IsStaff",
+            typeof(bool),
+            propertyInfo: typeof(OgmaRole).GetProperty("IsStaff", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaRole).GetField("<IsStaff>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: false);
+        isStaff.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
+            comparer: new ValueComparer<bool>(
+                (bool v1, bool v2) => v1 == v2,
+                (bool v) => v.GetHashCode(),
+                (bool v) => v),
+            keyComparer: new ValueComparer<bool>(
+                (bool v1, bool v2) => v1 == v2,
+                (bool v) => v.GetHashCode(),
+                (bool v) => v),
+            providerValueComparer: new ValueComparer<bool>(
+                (bool v1, bool v2) => v1 == v2,
+                (bool v) => v.GetHashCode(),
+                (bool v) => v));
+        isStaff.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        isStaff.AddAnnotation("Relational:DefaultValue", false);
+
+        var name = runtimeEntityType.AddProperty(
+            "Name",
+            typeof(string),
+            propertyInfo: typeof(OgmaRole).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(IdentityRole<long>).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             maxLength: 256);
-        normalizedName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
+        name.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
             comparer: new ValueComparer<string>(
                 (string v1, string v2) => v1 == v2,
                 (string v) => v.GetHashCode(),
@@ -165,42 +143,69 @@ namespace CompiledModels
             mappingInfo: new RelationalTypeMappingInfo(
                 storeTypeName: "character varying(256)",
                 size: 256));
-        normalizedName.TypeMapping = ((NpgsqlStringTypeMapping)normalizedName.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-    normalizedName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        name.TypeMapping = ((NpgsqlStringTypeMapping)name.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+    name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var order = runtimeEntityType.AddProperty(
-        "Order",
-        typeof(byte?),
-        propertyInfo: typeof(OgmaRole).GetProperty("Order", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaRole).GetField("<Order>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        nullable: true);
-    order.TypeMapping = ByteTypeMapping.Default.Clone(
-        comparer: new ValueComparer<byte?>(
-            (Nullable<byte> v1, Nullable<byte> v2) => v1.HasValue && v2.HasValue && (byte)v1 == (byte)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<byte> v) => v.HasValue ? (int)(byte)v : 0,
-            (Nullable<byte> v) => v.HasValue ? (Nullable<byte>)(byte)v : default(Nullable<byte>)),
-        keyComparer: new ValueComparer<byte?>(
-            (Nullable<byte> v1, Nullable<byte> v2) => v1.HasValue && v2.HasValue && (byte)v1 == (byte)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<byte> v) => v.HasValue ? (int)(byte)v : 0,
-            (Nullable<byte> v) => v.HasValue ? (Nullable<byte>)(byte)v : default(Nullable<byte>)),
-        providerValueComparer: new ValueComparer<byte?>(
-            (Nullable<byte> v1, Nullable<byte> v2) => v1.HasValue && v2.HasValue && (byte)v1 == (byte)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<byte> v) => v.HasValue ? (int)(byte)v : 0,
-            (Nullable<byte> v) => v.HasValue ? (Nullable<byte>)(byte)v : default(Nullable<byte>)),
+    var normalizedName = runtimeEntityType.AddProperty(
+        "NormalizedName",
+        typeof(string),
+        propertyInfo: typeof(OgmaRole).GetProperty("NormalizedName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+        fieldInfo: typeof(IdentityRole<long>).GetField("<NormalizedName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+        maxLength: 256);
+    normalizedName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
+        comparer: new ValueComparer<string>(
+            (string v1, string v2) => v1 == v2,
+            (string v) => v.GetHashCode(),
+            (string v) => v),
+        keyComparer: new ValueComparer<string>(
+            (string v1, string v2) => v1 == v2,
+            (string v) => v.GetHashCode(),
+            (string v) => v),
+        providerValueComparer: new ValueComparer<string>(
+            (string v1, string v2) => v1 == v2,
+            (string v) => v.GetHashCode(),
+            (string v) => v),
         mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "smallint"));
-    order.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            storeTypeName: "character varying(256)",
+            size: 256));
+    normalizedName.TypeMapping = ((NpgsqlStringTypeMapping)normalizedName.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+normalizedName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var key = runtimeEntityType.AddKey(
-        new[] { id });
-    runtimeEntityType.SetPrimaryKey(key);
+var order = runtimeEntityType.AddProperty(
+    "Order",
+    typeof(byte),
+    propertyInfo: typeof(OgmaRole).GetProperty("Order", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+    fieldInfo: typeof(OgmaRole).GetField("<Order>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+    valueGenerated: ValueGenerated.OnAdd,
+    sentinel: (byte)0);
+order.TypeMapping = ByteTypeMapping.Default.Clone(
+    comparer: new ValueComparer<byte>(
+        (byte v1, byte v2) => v1 == v2,
+        (byte v) => (int)v,
+        (byte v) => v),
+    keyComparer: new ValueComparer<byte>(
+        (byte v1, byte v2) => v1 == v2,
+        (byte v) => (int)v,
+        (byte v) => v),
+    providerValueComparer: new ValueComparer<byte>(
+        (byte v1, byte v2) => v1 == v2,
+        (byte v) => (int)v,
+        (byte v) => v),
+    mappingInfo: new RelationalTypeMappingInfo(
+        storeTypeName: "smallint"));
+order.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+order.AddAnnotation("Relational:DefaultValue", (byte)0);
 
-    var index = runtimeEntityType.AddIndex(
-        new[] { normalizedName },
-        unique: true);
-    index.AddAnnotation("Relational:Name", "RoleNameIndex");
+var key = runtimeEntityType.AddKey(
+    new[] { id });
+runtimeEntityType.SetPrimaryKey(key);
 
-    return runtimeEntityType;
+var index = runtimeEntityType.AddIndex(
+    new[] { normalizedName },
+    unique: true);
+index.AddAnnotation("Relational:Name", "RoleNameIndex");
+
+return runtimeEntityType;
 }
 
 public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)

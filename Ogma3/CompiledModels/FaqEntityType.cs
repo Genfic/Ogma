@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Faqs;
 
@@ -49,8 +50,9 @@ namespace CompiledModels
                 "Answer",
                 typeof(string),
                 propertyInfo: typeof(Faq).GetProperty("Answer", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Faq).GetField("<Answer>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            answer.TypeMapping = StringTypeMapping.Default.Clone(
+                fieldInfo: typeof(Faq).GetField("<Answer>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 10000);
+            answer.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
                 comparer: new ValueComparer<string>(
                     (string v1, string v2) => v1 == v2,
                     (string v) => v.GetHashCode(),
@@ -64,72 +66,80 @@ namespace CompiledModels
                     (string v) => v.GetHashCode(),
                     (string v) => v),
                 mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
-            answer.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                    storeTypeName: "character varying(10000)",
+                    size: 10000));
+            answer.TypeMapping = ((NpgsqlStringTypeMapping)answer.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+        answer.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var answerRendered = runtimeEntityType.AddProperty(
-                "AnswerRendered",
-                typeof(string),
-                propertyInfo: typeof(Faq).GetProperty("AnswerRendered", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Faq).GetField("<AnswerRendered>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            answerRendered.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
-            answerRendered.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        var answerRendered = runtimeEntityType.AddProperty(
+            "AnswerRendered",
+            typeof(string),
+            propertyInfo: typeof(Faq).GetProperty("AnswerRendered", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Faq).GetField("<AnswerRendered>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            maxLength: 20000);
+        answerRendered.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
+            comparer: new ValueComparer<string>(
+                (string v1, string v2) => v1 == v2,
+                (string v) => v.GetHashCode(),
+                (string v) => v),
+            keyComparer: new ValueComparer<string>(
+                (string v1, string v2) => v1 == v2,
+                (string v) => v.GetHashCode(),
+                (string v) => v),
+            providerValueComparer: new ValueComparer<string>(
+                (string v1, string v2) => v1 == v2,
+                (string v) => v.GetHashCode(),
+                (string v) => v),
+            mappingInfo: new RelationalTypeMappingInfo(
+                storeTypeName: "character varying(20000)",
+                size: 20000));
+        answerRendered.TypeMapping = ((NpgsqlStringTypeMapping)answerRendered.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+    answerRendered.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var question = runtimeEntityType.AddProperty(
-                "Question",
-                typeof(string),
-                propertyInfo: typeof(Faq).GetProperty("Question", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Faq).GetField("<Question>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            question.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
-            question.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+    var question = runtimeEntityType.AddProperty(
+        "Question",
+        typeof(string),
+        propertyInfo: typeof(Faq).GetProperty("Question", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+        fieldInfo: typeof(Faq).GetField("<Question>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+        maxLength: 5000);
+    question.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
+        comparer: new ValueComparer<string>(
+            (string v1, string v2) => v1 == v2,
+            (string v) => v.GetHashCode(),
+            (string v) => v),
+        keyComparer: new ValueComparer<string>(
+            (string v1, string v2) => v1 == v2,
+            (string v) => v.GetHashCode(),
+            (string v) => v),
+        providerValueComparer: new ValueComparer<string>(
+            (string v1, string v2) => v1 == v2,
+            (string v) => v.GetHashCode(),
+            (string v) => v),
+        mappingInfo: new RelationalTypeMappingInfo(
+            storeTypeName: "character varying(5000)",
+            size: 5000));
+    question.TypeMapping = ((NpgsqlStringTypeMapping)question.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
+question.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var key = runtimeEntityType.AddKey(
-                new[] { id });
-            runtimeEntityType.SetPrimaryKey(key);
+var key = runtimeEntityType.AddKey(
+    new[] { id });
+runtimeEntityType.SetPrimaryKey(key);
 
-            return runtimeEntityType;
-        }
+return runtimeEntityType;
+}
 
-        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-        {
-            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-            runtimeEntityType.AddAnnotation("Relational:Schema", null);
-            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-            runtimeEntityType.AddAnnotation("Relational:TableName", "Faqs");
-            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+{
+    runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+    runtimeEntityType.AddAnnotation("Relational:Schema", null);
+    runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+    runtimeEntityType.AddAnnotation("Relational:TableName", "Faqs");
+    runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+    runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
 
-            Customize(runtimeEntityType);
-        }
+    Customize(runtimeEntityType);
+}
 
-        static partial void Customize(RuntimeEntityType runtimeEntityType);
-    }
+static partial void Customize(RuntimeEntityType runtimeEntityType);
+}
 }

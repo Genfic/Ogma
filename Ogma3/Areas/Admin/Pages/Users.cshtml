@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Api.V1.Roles
 @using Ogma3.Areas.Admin.Api.V1.Infractions
 @model Users
 
@@ -130,7 +129,6 @@ else
 }
 
 @Html.AntiForgeryToken()
-<div id="rolesRoute" v-if="!rolesRoute" data-route="@Url.RouteUrl(nameof(RolesController))"></div>
 <div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div>
 
 @section Scripts {

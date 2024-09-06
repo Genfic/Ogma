@@ -1,4 +1,9 @@
-const roles_vue = new Vue({
+// @ts-ignore
+import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "../../generated/paths-public";
+import { RoleDto } from "../../generated/types-public";
+
+// @ts-ignore
+new Vue({
 	el: "#app",
 	data: {
 		form: {
@@ -7,15 +12,14 @@ const roles_vue = new Vue({
 			order: null,
 			isStaff: null,
 			id: null,
-		},
-		roles: [],
-		route: null,
+		} as RoleDto,
+		roles: [] as RoleDto[],
 		xcsrf: null,
 	},
 	methods: {
 		// Contrary to its name, it also modifies a role if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createRole: async function (e) {
+		createRole: async function (e: Event) {
 			e.preventDefault();
 			if (this.form.name) {
 				const data = {
@@ -25,44 +29,48 @@ const roles_vue = new Vue({
 					order: Number(this.form.order),
 				};
 
-				const options = {
-					headers: { RequestVerificationToken: this.xcsrf },
-				};
+				const headers = { RequestVerificationToken: this.xcsrf };
 
-				// If no ID has been set, that means it's a new role.
-				// Thus, we POST it.
+				
 				if (this.form.id === null) {
-					await axios.post(this.route, data, options);
-					await this.getRoles();
-
+					// If no ID has been set, that means it's a new role.
+					// Thus, we POST it.
+					const res = await PostApiRoles(data, headers);
+					if (res.ok) {
+						await this.getRoles();
+					}
+				} else {
 					// If the ID is set, that means it's an existing role.
 					// Thus, we PUT it.
-				} else {
-					await axios.put(this.route, { id: this.form.id, ...data }, options);
-					await this.getRoles();
-					this.cancelEdit();
+					const res = await PutApiRoles({ id: this.form.id, ...data }, headers);
+					if (res.ok) {
+						await this.getRoles();
+						this.cancelEdit();
+					}
 				}
 			}
 		},
 
 		// Gets all existing roles
 		getRoles: async function () {
-			const { data } = await axios.get(this.route);
-			this.roles = data;
+			const res = await GetApiRoles();
+			if (res.ok) {
+				this.roles = await res.json();
+			}
 		},
 
 		// Deletes a selected role
-		deleteRole: async function (t) {
+		deleteRole: async function (t: RoleDto) {
 			if (confirm("Delete permanently?")) {
-				await axios.delete(`${this.route}/${t.id}`, {
-					headers: { RequestVerificationToken: this.xcsrf },
-				});
-				await this.getRoles();
+				const res = await DeleteApiRoles(t.id, { RequestVerificationToken: this.xcsrf });
+				if (res.ok) {
+					await this.getRoles();
+				}
 			}
 		},
 
 		// Throws a role from the list into the editor
-		editRole: function (t) {
+		editRole: function (t: RoleDto) {
 			this.form.name = t.name;
 			this.form.color = t.color;
 			this.form.id = t.id;
@@ -77,10 +85,8 @@ const roles_vue = new Vue({
 	},
 
 	async mounted() {
-		// Grab the route from route helper
-		this.route = document.getElementById("route").dataset.route;
 		// Grab the XCSRF token
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = (document.querySelector("[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		// Grab the initial set of roles
 		await this.getRoles();
 	},
