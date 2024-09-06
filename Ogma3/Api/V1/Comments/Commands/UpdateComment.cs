@@ -1,4 +1,3 @@
-using AutoMapper;
 using FluentValidation;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,7 @@ public static class UpdateComment
 {
 	public sealed record Command(string Body, long Id) : IRequest<ActionResult<CommentDto>>;
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{
@@ -25,40 +24,38 @@ public static class UpdateComment
 		}
 	}
 
-	public class Handler(ApplicationDbContext context, IUserService userService, IMapper mapper)
+	public class Handler(ApplicationDbContext context, IUserService userService)
 		: BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
 	{
-		private readonly long? _uid = userService.User?.GetNumericId();
-
 		public async ValueTask<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 
 			var (body, commentId) = request;
 
-			var comm = await context.Comments
+			var comment = await context.Comments
 				.Where(c => c.Id == commentId)
-				.Where(c => c.AuthorId == _uid)
+				.Where(c => c.AuthorId == uid)
 				.FirstOrDefaultAsync(cancellationToken);
 
-			if (comm is null) return NotFound();
+			if (comment is null) return NotFound();
 
 			// Create revision
 			context.CommentRevisions.Add(new CommentRevision
 			{
-				Body = comm.Body,
-				ParentId = comm.Id,
+				Body = comment.Body,
+				ParentId = comment.Id,
 			});
 
 			// Edit the comment
-			comm.Body = body;
-			comm.LastEdit = DateTime.Now;
-			comm.EditCount += 1;
+			comment.Body = body;
+			comment.LastEdit = DateTime.Now;
+			comment.EditCount += 1;
 
 			await context.SaveChangesAsync(cancellationToken);
 
-			var dto = mapper.Map<Comment, CommentDto>(comm);
-			dto.Owned = _uid == comm.AuthorId;
+			var dto = CommentDto.FromComment(comment, uid);
+			dto.Owned = uid == comment.AuthorId;
 
 			return dto;
 		}

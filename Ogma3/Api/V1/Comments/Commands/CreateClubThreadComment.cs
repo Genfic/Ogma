@@ -1,4 +1,3 @@
-using AutoMapper;
 using FluentValidation;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ public static class CreateClubThreadComment
 {
 	public sealed record Command(string Body, long ThreadId) : IRequest<ActionResult<CommentDto>>;
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{
@@ -31,20 +30,17 @@ public static class CreateClubThreadComment
 	public class Handler
 	(
 		ApplicationDbContext context,
-		IMapper mapper,
 		NotificationsRepository notificationsRepo,
 		IUserService userService)
 		: BaseHandler, IRequestHandler<Command, ActionResult<CommentDto>>
 	{
-		private readonly long? _uid = userService.User?.GetNumericId();
-
 		public async ValueTask<ActionResult<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_uid is null) return Unauthorized();
+			if (userService.User?.GetNumericId() is not {} uid) return Unauthorized();
 
 			// Check if user is muted
 			var isMuted = await context.Infractions
-				.Where(i => i.UserId == _uid && i.Type == InfractionType.Mute)
+				.Where(i => i.UserId == uid && i.Type == InfractionType.Mute)
 				.AnyAsync(cancellationToken);
 			if (isMuted) return Unauthorized();
 
@@ -59,7 +55,7 @@ public static class CreateClubThreadComment
 
 			var comment = new Comment
 			{
-				AuthorId = (long)_uid,
+				AuthorId = uid,
 				Body = body,
 				CommentsThreadId = threadId,
 			};
@@ -69,7 +65,7 @@ public static class CreateClubThreadComment
 
 			await context.SaveChangesAsync(cancellationToken);
 
-			if (thread.UserId != _uid)
+			if (thread.UserId != uid)
 			{
 				await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken);
 			}
@@ -78,7 +74,7 @@ public static class CreateClubThreadComment
 				nameof(CommentsController.GetComment),
 				nameof(CommentsController)[..^10],
 				new { comment.Id },
-				mapper.Map<Comment, CommentDto>(comment)
+				CommentDto.FromComment(comment, uid)
 			);
 		}
 	}

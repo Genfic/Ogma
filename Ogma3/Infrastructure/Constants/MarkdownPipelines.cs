@@ -13,6 +13,7 @@ public static class MarkdownPipelines
 	public static MarkdownPipeline Basic => new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.UseAutoIdentifiers()
+		.UseEmphasisExtras()
 		.UseSpoilers()
 		.Build();
 
@@ -20,13 +21,14 @@ public static class MarkdownPipelines
 		.DisableHtml()
 		.UseMentions(MentionOptions)
 		.UseAutoLinks()
-		.UseAutoIdentifiers()
+		.UseEmphasisExtras()
 		.UseSpoilers()
 		.Build();
 
 	public static MarkdownPipeline All => new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.UsePipeTables()
+		.UseEmphasisExtras()
 		.UseMentions(MentionOptions)
 		.UseAdvancedExtensions()
 		.UseAutoIdentifiers()
@@ -36,6 +38,7 @@ public static class MarkdownPipelines
 	public static MarkdownPipeline Blogpost => new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.UseAdvancedExtensions()
+		.UseEmphasisExtras()
 		.UseMentions(MentionOptions)
 		.UseHashtags(HashtagOptions)
 		.UseAutoIdentifiers()

@@ -1,5 +1,5 @@
-using AutoMapper;
 using Ogma3.Data.Blogposts;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Cards;
 
@@ -13,10 +13,11 @@ public class BlogpostCard
 	public required string Body { get; init; }
 	public required int WordCount { get; init; }
 	public required string[] Hashtags { get; init; }
-	
-	// TODO: Get rid of Automapper
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Blogpost, BlogpostCard>();
-	}
+}
+
+[Mapper]
+public static partial class BlogpostMapper
+{
+	public static partial IQueryable<BlogpostCard> ProjectToCard(this IQueryable<Blogpost> blogposts);
+	public static partial BlogpostCard ToCard(this Blogpost blogpostCard);
 }

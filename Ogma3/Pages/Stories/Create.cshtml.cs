@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +22,7 @@ public class CreateModel(
 	ApplicationDbContext context,
 	ImageUploader uploader,
 	OgmaConfig ogmaConfig,
-	NotificationsRepository notificationsRepo,
-	IMapper mapper)
+	NotificationsRepository notificationsRepo)
 	: PageModel
 {
 	public required List<RatingDto> Ratings { get; set; }
@@ -39,7 +36,7 @@ public class CreateModel(
 		
 		Ratings = await context.Ratings
 			.OrderBy(r => r.Order)
-			.ProjectTo<RatingDto>(mapper.ConfigurationProvider)
+			.ProjectToDto()
 			.ToListAsync();
 
 		var tags = await context.Tags
@@ -56,7 +53,7 @@ public class CreateModel(
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public string Title { get; init; } = "";
 		public string Description { get; init; } = "";

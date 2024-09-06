@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +17,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig, IMapper mapper)
+public class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
 	: PageModel
 {
 	public required List<RatingDto> Ratings { get; set; }
@@ -32,7 +30,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 		// Get logged in user
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		// Get story to edit and make sure author matches logged in user
+		// Get story to edit and make sure author matches logged-in user
 		var input = await context.Stories
 			.Where(s => s.Id == id)
 			.Where(s => s.AuthorId == uid)
@@ -60,7 +58,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required long Id { get; init; }
 		public required string Title { get; init; }
@@ -169,7 +167,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 	{
 		Ratings = await context.Ratings
 			.OrderBy(r => r.Order)
-			.ProjectTo<RatingDto>(mapper.ConfigurationProvider)
+			.ProjectToDto()
 			.ToListAsync();
 
 		var tags = await context.Tags

@@ -1,3 +1,4 @@
+using Ogma3.Data.Tags;
 using Ogma3.Pages.Shared.Cards;
 using Riok.Mapperly.Abstractions;
 
@@ -6,11 +7,17 @@ namespace Ogma3.Data.Stories;
 [Mapper]
 public static partial class StoryMapper
 {
+	[MapProperty(nameof(Story.Tags), nameof(StoryCard.Tags), Use = nameof(MapOrderedTags))]
+	public static partial StoryCard ProjectToCard(this Story story);
 	public static partial IQueryable<StoryCard> ProjectToCard(this IQueryable<Story> q);
+	
+	private static TagDto[] MapOrderedTags(IEnumerable<Tag> tags)
+		=> tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace).Select(t => t.ToDto()).ToArray();
 	
 	public static partial IQueryable<StoryDetails> ProjectToStoryDetails(this IQueryable<Story> q);
 	
 	[MapProperty(nameof(Story.PublicationDate), nameof(StoryDetails.IsPublished), Use = nameof(MapIsPublished))]
+	[MapProperty(nameof(Story.Tags), nameof(StoryDetails.Tags), Use = nameof(MapOrderedTags))]
 	[MapPropertyFromSource(nameof(StoryDetails.ReleaseDate), Use=nameof(MapReleaseDate))]
 	[MapPropertyFromSource(nameof(StoryDetails.CommentsCount), Use=nameof(MapCommentsCount))]
 	public static partial StoryDetails ProjectToStoryDetails(this Story s);

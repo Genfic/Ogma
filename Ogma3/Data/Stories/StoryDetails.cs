@@ -15,7 +15,7 @@ public class StoryDetails
 	public required string Cover { get; init; }
 	public required DateTime ReleaseDate { get; init; }
 	public required bool IsPublished { get; init; }
-	public required ICollection<TagDto> Tags { get; init; }
+	public required IEnumerable<TagDto> Tags { get; init; }
 	public required Rating Rating { get; init; }
 	public required EStoryStatus Status { get; init; }
 	public required int WordCount { get; init; }

@@ -1,5 +1,3 @@
-#nullable disable
-
 using Ogma3.Data.Bases;
 using Ogma3.Data.ClubThreads;
 using Ogma3.Data.Folders;
@@ -17,9 +15,9 @@ public class Club : BaseModel, IReportableContent
 	public required string Icon { get; set; }
 	public required string IconId { get; set; }
 	public DateTime CreationDate { get; set; }
-	public ICollection<ClubMember> ClubMembers { get; set; } = new List<ClubMember>();
-	public ICollection<OgmaUser> BannedUsers { get; set; } = new List<OgmaUser>();
-	public ICollection<ClubThread> Threads { get; set; } = new List<ClubThread>();
-	public ICollection<Folder> Folders { get; set; } = new List<Folder>();
-	public ICollection<Report> Reports { get; set; } = new List<Report>();
+	public ICollection<ClubMember> ClubMembers { get; set; } = [];
+	public ICollection<OgmaUser> BannedUsers { get; set; } = [];
+	public ICollection<ClubThread> Threads { get; set; } = [];
+	public ICollection<Folder> Folders { get; set; } = [];
+	public ICollection<Report> Reports { get; set; } = [];
 }

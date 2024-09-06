@@ -1,18 +1,15 @@
-#nullable disable
-
-using AutoMapper;
-
 namespace Ogma3.Data.Ratings;
 
 public class RatingDto
 {
-	public long Id { get; init; }
-	public string Name { get; init; }
-	public string Description { get; init; }
-	public string Icon { get; init; }
+	public required long Id { get; init; }
+	public required string Name { get; init; }
+	public required string Description { get; init; }
+	public required string Icon { get; init; }
+}
 
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Rating, RatingDto>();
-	}
+public static partial class RatingMapper
+{
+	public static partial IQueryable<RatingDto> ProjectToDto(this IQueryable<Rating> source);
+	public static partial RatingDto ToDto(this Rating source);
 }

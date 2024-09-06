@@ -1,5 +1,3 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,20 +15,10 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public class CreateModel : PageModel
+public class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
+	: PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly NotificationsRepository _notificationsRepo;
-	private readonly IMapper _mapper;
-
-	public CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo, IMapper mapper)
-	{
-		_context = context;
-		_notificationsRepo = notificationsRepo;
-		_mapper = mapper;
-	}
-
-	[BindProperty] public PostData Input { get; set; } = null!;
+	[BindProperty] public required PostData Input { get; set; }
 
 	public async Task<IActionResult> OnGet([FromQuery] long? story, [FromQuery] long? chapter)
 	{
@@ -38,24 +26,22 @@ public class CreateModel : PageModel
 
 		if (story is not null)
 		{
-			Input.StoryMinimal = await _context.Stories
+			Input.StoryMinimal = await context.Stories
 				.Where(s => s.Id == story)
 				.Where(s => s.PublicationDate != null)
 				.Where(b => b.ContentBlockId == null)
-				.ProjectTo<StoryMinimal>(_mapper.ConfigurationProvider)
-				.AsNoTracking()
+				.ProjectToMinimal()
 				.FirstOrDefaultAsync();
 			Input.StoryMinimalId = story;
 			Input.IsUnavailable = Input.StoryMinimal is null;
 		}
 		else if (chapter is not null)
 		{
-			Input.ChapterMinimal = await _context.Chapters
+			Input.ChapterMinimal = await context.Chapters
 				.Where(c => c.Id == chapter)
 				.Where(c => c.PublicationDate != null)
 				.Where(b => b.ContentBlockId == null)
-				.ProjectTo<ChapterMinimal>(_mapper.ConfigurationProvider)
-				.AsNoTracking()
+				.ProjectToMinimal()
 				.FirstOrDefaultAsync();
 			Input.ChapterMinimalId = chapter;
 			Input.IsUnavailable = Input.ChapterMinimal is null;
@@ -64,7 +50,7 @@ public class CreateModel : PageModel
 		return Page();
 	}
 
-	public class PostData
+	public sealed class PostData
 	{
 		public string Title { get; init; } = null!;
 		public string Body { get; init; } = null!;
@@ -76,7 +62,7 @@ public class CreateModel : PageModel
 		public bool IsUnavailable { get; set; }
 	}
 
-	public class PostDataValidation : AbstractValidator<PostData>
+	public sealed class PostDataValidation : AbstractValidator<PostData>
 	{
 		public PostDataValidation()
 		{
@@ -119,23 +105,23 @@ public class CreateModel : PageModel
 			AttachedChapterId = Input.ChapterMinimalId,
 			CommentsThread = new CommentsThread(),
 		};
-		_context.Blogposts.Add(post);
+		context.Blogposts.Add(post);
 
 		// Subscribe author to the comment thread
-		_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
 		{
 			CommentsThread = post.CommentsThread,
 			OgmaUserId = (long)uid,
 		});
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		// Notify followers
-		var notificationRecipients = await _context.Users
+		var notificationRecipients = await context.Users
 			.Where(u => u.Following.Any(a => a.Id == uid))
 			.Select(u => u.Id)
 			.ToListAsync();
-		await _notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewBlogpost,
+		await notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewBlogpost,
 			notificationRecipients,
 			"/Blog/Post",
 			new { post.Id, post.Slug });

@@ -1,5 +1,3 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +10,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public class BlogModel(UserRepository userRepo, ApplicationDbContext context, IMapper mapper)
+public class BlogModel(UserRepository userRepo, ApplicationDbContext context)
 	: PageModel
 {
 	private const int PerPage = 25;
@@ -45,7 +43,7 @@ public class BlogModel(UserRepository userRepo, ApplicationDbContext context, IM
 		Posts = await query
 			.OrderByDescending(b => b.CreationDate)
 			.Paginate(page, PerPage)
-			.ProjectTo<BlogpostCard>(mapper.ConfigurationProvider)
+			.ProjectToCard()
 			.AsNoTracking()
 			.ToListAsync();
 

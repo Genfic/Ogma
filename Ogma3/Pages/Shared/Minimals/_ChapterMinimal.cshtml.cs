@@ -1,5 +1,5 @@
-using AutoMapper;
 using Ogma3.Data.Chapters;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Minimals;
 
@@ -12,10 +12,10 @@ public class ChapterMinimal
 	public required string Title { get; init; }
 	public required string Slug { get; init; }
 	public required DateTime? PublicationDate { get; init; }
+}
 
-	// TODO: Get rid of Automapper
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Chapter, ChapterMinimal>();
-	}
+[Mapper]
+public static partial class ChapterMapper
+{
+	public static partial IQueryable<ChapterMinimal> ProjectToMinimal(this IQueryable<Chapter> queryable);
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
-using Ogma3.Data.Folders;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
 
@@ -23,21 +22,7 @@ public class IndexModel(ClubRepository clubRepo, ApplicationDbContext context) :
 		Folders = await context.Folders
 			.Where(f => f.ClubId == id)
 			.Where(f => f.ParentFolderId == null)
-			.Select(f => new FolderCard
-			{
-				Id = f.Id,
-				Name = f.Name,
-				Slug = f.Slug,
-				Description = f.Description,
-				ClubId = f.ClubId,
-				StoriesCount = f.StoriesCount,
-				ChildFolders = f.ChildFolders.Select(cf => new FolderMinimalDto
-				{
-					Id = cf.Id,
-					Name = cf.Name,
-					Slug = cf.Slug,
-				}),
-			})
+			.ProjectToCard()
 			.ToListAsync();
 
 		return Page();

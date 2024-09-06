@@ -1,4 +1,3 @@
-using AutoMapper;
 using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.InviteCodes;
@@ -12,11 +11,6 @@ public class InviteCodeDto
 	public required string IssuedByUserName { get; init; } = null!;
 	public required DateTime IssueDate { get; init; }
 	public required DateTime? UsedDate { get; init; }
-
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<InviteCode, InviteCodeDto>();
-	}
 }
 
 [Mapper]

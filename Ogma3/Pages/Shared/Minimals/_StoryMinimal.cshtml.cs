@@ -1,5 +1,5 @@
-using AutoMapper;
 using Ogma3.Data.Stories;
+using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Minimals;
 
@@ -10,10 +10,10 @@ public class StoryMinimal
 	public required string AuthorUserName { get; init; }
 	public required string Slug { get; init; }
 	public required DateTime? PublicationDate { get; init; }
+}
 
-	// TODO: Get rid of Automapper
-	public class MappingProfile : Profile
-	{
-		public MappingProfile() => CreateMap<Story, StoryMinimal>();
-	}
+[Mapper]
+public static partial class StoryMapper
+{
+	public static partial IQueryable<StoryMinimal> ProjectToMinimal(this IQueryable<Story> queryable);
 }

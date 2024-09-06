@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,18 +8,8 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Clubs;
 
-public class IndexModel : PageModel
+public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	private readonly OgmaConfig _config;
-
-	public IndexModel(ApplicationDbContext context, IMapper mapper, OgmaConfig config)
-	{
-		_context = context;
-		_config = config;
-	}
-
-
 	public IList<ClubCard> Clubs { get; private set; } = null!;
 	public string? Query { get; private set; }
 	public EClubSortingOptions SortBy { get; set; }
@@ -35,7 +24,7 @@ public class IndexModel : PageModel
 		Query = q;
 		SortBy = sort;
 
-		var query = _context.Clubs.AsQueryable();
+		var query = context.Clubs.AsQueryable();
 
 		if (!string.IsNullOrEmpty(q))
 		{
@@ -56,7 +45,7 @@ public class IndexModel : PageModel
 				EClubSortingOptions.CreationDateDescending => query.OrderByDescending(c => c.CreationDate),
 				_ => query.OrderByDescending(c => c.CreationDate),
 			})
-			.Paginate(page, _config.ClubsPerPage)
+			.Paginate(page, config.ClubsPerPage)
 			.Select(c => new ClubCard
 			{
 				Id = c.Id,
@@ -73,7 +62,7 @@ public class IndexModel : PageModel
 		// Prepare pagination
 		Pagination = new Pagination
 		{
-			PerPage = _config.ClubsPerPage,
+			PerPage = config.ClubsPerPage,
 			ItemCount = await query.CountAsync(),
 			CurrentPage = page,
 		};
