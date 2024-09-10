@@ -1375,15 +1375,8 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataCommentsCommentTableBase.Columns.Add("DeletedByUserId", deletedByUserIdColumnBase);
-            var editCountColumnBase = new ColumnBase<ColumnMappingBase>("EditCount", "integer", ogma3DataCommentsCommentTableBase);
-            ogma3DataCommentsCommentTableBase.Columns.Add("EditCount", editCountColumnBase);
             var idColumnBase7 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataCommentsCommentTableBase);
             ogma3DataCommentsCommentTableBase.Columns.Add("Id", idColumnBase7);
-            var lastEditColumnBase = new ColumnBase<ColumnMappingBase>("LastEdit", "timestamp without time zone", ogma3DataCommentsCommentTableBase)
-            {
-                IsNullable = true
-            };
-            ogma3DataCommentsCommentTableBase.Columns.Add("LastEdit", lastEditColumnBase);
             relationalModel.DefaultTables.Add("Ogma3.Data.Comments.Comment", ogma3DataCommentsCommentTableBase);
             var ogma3DataCommentsCommentMappingBase = new TableMappingBase<ColumnMappingBase>(comment, ogma3DataCommentsCommentTableBase, true);
             ogma3DataCommentsCommentTableBase.AddTypeMapping(ogma3DataCommentsCommentMappingBase, false);
@@ -1395,8 +1388,6 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateTimeColumnBase0, comment.FindProperty("DateTime")!, ogma3DataCommentsCommentMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletedByColumnBase, comment.FindProperty("DeletedBy")!, ogma3DataCommentsCommentMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletedByUserIdColumnBase, comment.FindProperty("DeletedByUserId")!, ogma3DataCommentsCommentMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)editCountColumnBase, comment.FindProperty("EditCount")!, ogma3DataCommentsCommentMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)lastEditColumnBase, comment.FindProperty("LastEdit")!, ogma3DataCommentsCommentMappingBase);
 
             var tableMappings14 = new List<TableMapping>();
             comment.SetRuntimeAnnotation("Relational:TableMappings", tableMappings14);
@@ -1422,13 +1413,6 @@ namespace CompiledModels
                 IsNullable = true
             };
             commentsTable.Columns.Add("DeletedByUserId", deletedByUserIdColumn);
-            var editCountColumn = new Column("EditCount", "integer", commentsTable);
-            commentsTable.Columns.Add("EditCount", editCountColumn);
-            var lastEditColumn = new Column("LastEdit", "timestamp without time zone", commentsTable)
-            {
-                IsNullable = true
-            };
-            commentsTable.Columns.Add("LastEdit", lastEditColumn);
             var pK_Comments = new UniqueConstraint("PK_Comments", commentsTable, new[] { idColumn7 });
             commentsTable.PrimaryKey = pK_Comments;
             var pK_CommentsUc = RelationalModel.GetKey(this,
@@ -1472,8 +1456,6 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping(dateTimeColumn0, comment.FindProperty("DateTime")!, commentsTableMapping);
             RelationalModel.CreateColumnMapping(deletedByColumn, comment.FindProperty("DeletedBy")!, commentsTableMapping);
             RelationalModel.CreateColumnMapping(deletedByUserIdColumn, comment.FindProperty("DeletedByUserId")!, commentsTableMapping);
-            RelationalModel.CreateColumnMapping(editCountColumn, comment.FindProperty("EditCount")!, commentsTableMapping);
-            RelationalModel.CreateColumnMapping(lastEditColumn, comment.FindProperty("LastEdit")!, commentsTableMapping);
 
             var commentRevision = FindEntityType("Ogma3.Data.Comments.CommentRevision")!;
 

@@ -6,7 +6,7 @@ using Ogma3.Services;
 
 namespace Ogma3.Data.Notifications;
 
-public class NotificationsRepository
+public sealed class NotificationsRepository
 {
 	private readonly ApplicationDbContext _context;
 	private readonly IUrlHelper _urlHelper;
@@ -45,7 +45,7 @@ public class NotificationsRepository
 		await _context.SaveChangesAsync();
 	}
 
-	public async Task NotifyUsers(long threadId, long commentId, string body, CancellationToken cancellationToken)
+	public async Task NotifyUsers(long threadId, long commentId, string body, CancellationToken cancellationToken, long[]? except = null)
 	{
 		var subscribers = await _context.CommentsThreadSubscribers
 			.Where(cts => cts.CommentsThreadId == threadId)
@@ -56,7 +56,7 @@ public class NotificationsRepository
 		if (redirection is not null)
 		{
 			await Create(ENotificationEvent.WatchedThreadNewComment,
-				subscribers,
+				subscribers.Except(except ?? []),
 				redirection.Url,
 				redirection.Params,
 				redirection.Fragment,

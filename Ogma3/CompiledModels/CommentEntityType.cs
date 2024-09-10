@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Json;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
@@ -187,60 +185,6 @@ namespace CompiledModels
                 (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
                 (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
         deletedByUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-
-        var editCount = runtimeEntityType.AddProperty(
-            "EditCount",
-            typeof(ushort),
-            propertyInfo: typeof(Comment).GetProperty("EditCount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<EditCount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            valueGenerated: ValueGenerated.OnAdd);
-        editCount.TypeMapping = IntTypeMapping.Default.Clone(
-            comparer: new ValueComparer<ushort>(
-                (ushort v1, ushort v2) => v1 == v2,
-                (ushort v) => (int)v,
-                (ushort v) => v),
-            keyComparer: new ValueComparer<ushort>(
-                (ushort v1, ushort v2) => v1 == v2,
-                (ushort v) => (int)v,
-                (ushort v) => v),
-            providerValueComparer: new ValueComparer<int>(
-                (int v1, int v2) => v1 == v2,
-                (int v) => v,
-                (int v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "integer"),
-            converter: new ValueConverter<ushort, int>(
-                (ushort v) => (int)v,
-                (int v) => (ushort)v),
-            jsonValueReaderWriter: new JsonConvertedValueReaderWriter<ushort, int>(
-                JsonInt32ReaderWriter.Instance,
-                new ValueConverter<ushort, int>(
-                    (ushort v) => (int)v,
-                    (int v) => (ushort)v)));
-        editCount.SetSentinelFromProviderValue(0);
-        editCount.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-        editCount.AddAnnotation("Relational:DefaultValue", (ushort)0);
-
-        var lastEdit = runtimeEntityType.AddProperty(
-            "LastEdit",
-            typeof(DateTime?),
-            propertyInfo: typeof(Comment).GetProperty("LastEdit", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<LastEdit>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            nullable: true);
-        lastEdit.TypeMapping = NpgsqlTimestampTypeMapping.Default.Clone(
-            comparer: new ValueComparer<DateTime?>(
-                (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
-                (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
-                (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
-            keyComparer: new ValueComparer<DateTime?>(
-                (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
-                (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
-                (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
-            providerValueComparer: new ValueComparer<DateTime?>(
-                (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
-                (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
-                (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)));
-        lastEdit.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var key = runtimeEntityType.AddKey(
             new[] { id });

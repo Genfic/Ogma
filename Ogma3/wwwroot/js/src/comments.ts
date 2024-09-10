@@ -1,11 +1,12 @@
 import { log } from "../src-helpers/logger";
+import { GetApiComments, PostApiComments } from "../generated/paths-public";
 
+// @ts-ignore
 const comments_vue = new Vue({
 	el: "#comments-container",
 	data: {
 		body: "",
 		thread: null,
-		route: null,
 		csrf: null,
 		threadRoute: null,
 		subscribeRoute: null,
@@ -40,22 +41,21 @@ const comments_vue = new Vue({
 	},
 	methods: {
 		// Submit the comment, load comments again, clean textarea
-		submit: async function (e) {
+		submit: async function (e: Event) {
 			e.preventDefault();
 
 			if (this.body.length >= this.maxLength) return;
 
-			await axios.post(
-				this.route,
+			const res = await PostApiComments(
 				{
 					body: this.body,
 					thread: Number(this.thread),
-					type: this.type,
+					source: this.type,
 				},
-				{
-					headers: { RequestVerificationToken: this.csrf },
-				},
+				{ RequestVerificationToken: this.csrf },
 			);
+
+			if (!res.ok) return;
 
 			this.highlight = this.total + 1;
 			this.page = 1;
@@ -65,25 +65,20 @@ const comments_vue = new Vue({
 
 		// Load comments for the thread
 		load: async function () {
-			const params = {
-				thread: this.thread,
-				page: this.page,
-				highlight: this.highlight,
-			};
+			const res = await GetApiComments(this.thread, this.page, this.highlight ?? -1);
+			const data = await res.json();
 
-			const res = await axios.get(this.route, { params: params });
-
-			this.total = res.data.total;
-			this.page = res.data.page ?? this.page;
-			this.isAuthenticated = res.headers["x-authenticated"].toLowerCase() === "true";
-
-			this.comments = res.data.elements.map((val, key) => ({
+			this.total = data.total;
+			this.page = data.page ?? this.page;
+			this.isAuthenticated = res.headers.get("x-authenticated").toLowerCase() === "true";
+			
+			this.comments = Object.entries(data.elements).map(([key, val]) => ({
 				val,
-				key: res.data.total - this.page * this.perPage + (this.perPage - (key + 1)),
+				key: data.total - this.page * this.perPage + (this.perPage - (Number.parseInt(key) + 1)),
 			}));
 
 			if (this.highlight) {
-				this.$nextTick(() => comments_vue.changeHighlight());
+				this.$nextTick(() => this.changeHighlight());
 			} else {
 				this.navigateToPage();
 			}
@@ -95,7 +90,7 @@ const comments_vue = new Vue({
 		},
 
 		// Handle Enter key input
-		enter: async function (e) {
+		enter: async function (e: KeyboardEvent) {
 			if (e.ctrlKey) await this.submit(e);
 		},
 
@@ -110,14 +105,14 @@ const comments_vue = new Vue({
 		},
 
 		// Navigate to the selected page
-		changePage: async function (idx) {
+		changePage: async function (idx: number) {
 			this.page = idx;
 			this.navigateToPage();
 			await this.load();
 		},
 
 		// Highlights the selected comment and scrolls it into view
-		changeHighlight: function (idx = null, e = null) {
+		changeHighlight: function (idx: number | null = null, e: Event | null = null) {
 			if (e) e.preventDefault();
 			this.highlight = idx ?? this.highlight;
 			document.getElementById(`comment-${this.highlight}`).scrollIntoView({
@@ -138,7 +133,7 @@ const comments_vue = new Vue({
 		},
 
 		// Open the report modal
-		report: function (id) {
+		report: function (id: number) {
 			this.$refs.reportModal.mutId = id;
 			this.$refs.reportModal.visible = true;
 		},
@@ -240,6 +235,6 @@ const comments_vue = new Vue({
 (() => {
 	document.getElementById("lock-thread")?.addEventListener("click", async (e) => {
 		const status = await comments_vue.lock();
-		e.target.innerText = status === true ? "Unlock" : "Lock";
+		(e.target as HTMLElement).innerText = status === true ? "Unlock" : "Lock";
 	});
 })();

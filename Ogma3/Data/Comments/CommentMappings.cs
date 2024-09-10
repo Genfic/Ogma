@@ -15,8 +15,7 @@ public static class CommentMappings
 		Owned = c.AuthorId == uid && c.DeletedBy == null,
 		DateTime = c.DateTime,
 		DeletedBy = c.DeletedBy,
-		EditCount = c.EditCount,
-		LastEdit = c.LastEdit,
+		IsEdited = c.Revisions.Any(),
 		IsBlocked = c.Author.Blockers.Any(bu => bu.Id == uid),
 		Author = c.DeletedBy != null
 			? null

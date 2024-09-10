@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
+using Ogma3.Data.Comments;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
@@ -76,7 +77,7 @@ public class DetailsModel(UserRepository userRepo, ApplicationDbContext context)
 		Body = b.Body,
 		Hashtags = b.Hashtags,
 		PublicationDate = b.PublicationDate,
-		CommentsThread = new CommentsThreadDto(b.CommentsThread.Id, nameof(Data.Blogposts.Blogpost), b.CommentsThread.LockDate),
+		CommentsThread = new CommentsThreadDto(b.CommentsThread.Id, CommentSource.Blogpost, b.CommentsThread.LockDate),
 		ContentBlock = b.ContentBlock == null
 			? null
 			: new ContentBlockCard(b.ContentBlock.Reason, b.ContentBlock.DateTime, b.ContentBlock.Issuer.UserName),

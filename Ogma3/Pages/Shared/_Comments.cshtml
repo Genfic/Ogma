@@ -1,7 +1,6 @@
 @inject OgmaConfig Config
 @inject IAntiforgery Xcsrf
 @using Microsoft.AspNetCore.Antiforgery
-@using Ogma3.Api.V1.Comments
 @using Ogma3.Api.V1.CommentThreads
 @using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
@@ -16,7 +15,6 @@
 const ssrData = {
     thread: @Model.Id,
     type: '@Model.Type',
-    route: '@Url.RouteUrl(nameof(CommentsController))',
     threadRoute: '@Url.RouteUrl(nameof(CommentsThreadController))',
     subscribeRoute: '@Url.RouteUrl(nameof(SubscriptionsController))',
     perPage: @Config.CommentsPerPage,
@@ -110,7 +108,6 @@ const ssrData = {
 				         :comment="c.val"
 				         :idx="c.key"
 				         :csrf="csrf"
-				         :route="route"
 				         :is-authenticated="isAuthenticated"
 				         :highlight="highlight === (c.key + 1)"
 				         v-on:report="report"

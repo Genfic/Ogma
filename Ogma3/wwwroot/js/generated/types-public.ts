@@ -18,6 +18,65 @@ export interface LeaveClubCommand {
     clubId: number;
 }
 
+export interface CreateCommentCommand {
+    body: string;
+    thread: number;
+    source: CommentSource;
+}
+
+export interface CommentSource {}
+
+export interface CommentDto {
+    id: number;
+    author: UserSimpleDto | null;
+    dateTime: string;
+    owned: boolean;
+    body: string | null;
+    deletedBy: EDeletedBy | null;
+    isBlocked: boolean;
+    isEdited: boolean;
+}
+
+export interface UserSimpleDto {
+    userName: string;
+    avatar: string;
+    title: string | null;
+    roles: object;
+}
+
+export interface RoleDto {
+    id: number;
+    name: string;
+    color: string | null;
+    isStaff: boolean;
+    order: number;
+}
+
+export interface EDeletedBy {}
+
+export interface PaginationResultOfCommentDto {
+    elements: object;
+    total: number;
+    perPage: number;
+    pages: number;
+    page: number;
+}
+
+export interface GetRevisionResult {
+    editTime: string;
+    body: string;
+}
+
+export interface UpdateCommentResponse {
+    body: string;
+    editTime: string;
+}
+
+export interface UpdateCommentCommand {
+    body: string;
+    commentId: number;
+}
+
 export interface FaqDto {
     id: number;
     question: string;
@@ -115,14 +174,6 @@ export interface ReportContentCommand {
 
 export interface EReportableContentTypes {}
 
-export interface RoleDto {
-    id: number;
-    name: string;
-    color: string | null;
-    isStaff: boolean;
-    order: number;
-}
-
 export interface CreateRoleCommand {
     name: string;
     isStaff: boolean;
@@ -218,7 +269,7 @@ export interface TagDto {
     id: number;
     name: string;
     slug: string;
-    description: string;
+    description: string | null;
     namespace: ETagNamespace | null;
     namespaceColor: string | null;
     namespaceId: number | null;
@@ -321,51 +372,6 @@ export interface ProblemDetails {
 }
 
 export interface LockThreadCommand {
-    id: number;
-}
-
-export interface PaginationResultOfCommentDto {
-    elements: object;
-    total: number;
-    perPage: number;
-    pages: number;
-    page: number;
-}
-
-export interface CommentDto {
-    id: number;
-    author: UserSimpleDto | null;
-    dateTime: string;
-    lastEdit: string | null;
-    editCount: number;
-    owned: boolean;
-    body: string;
-    deletedBy: EDeletedBy | null;
-    isBlocked: boolean;
-}
-
-export interface UserSimpleDto {
-    userName: string;
-    avatar: string;
-    title: string | null;
-    roles: object;
-}
-
-export interface EDeletedBy {}
-
-export interface GetRevisionResult {
-    editTime: string;
-    body: string;
-}
-
-export interface CommentsControllerPostData {
-    body: string;
-    thread: number;
-    type: string;
-}
-
-export interface UpdateCommentCommand {
-    body: string;
     id: number;
 }
 

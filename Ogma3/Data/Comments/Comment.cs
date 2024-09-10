@@ -12,18 +12,12 @@ public class Comment : BaseModel, IReportableContent
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
 	public DateTime DateTime { get; set; } = DateTime.Now;
-	public DateTime? LastEdit { get; set; }
 	public string Body { get; set; } = null!;
 
 	// Metadata about comment deletion
 	public EDeletedBy? DeletedBy { get; set; }
-
 	public OgmaUser? DeletedByUser { get; set; }
 	public long? DeletedByUserId { get; set; }
-
-	// Metadata about edits
 	public IList<CommentRevision> Revisions { get; set; } = null!;
-	public ushort EditCount { get; set; }
-
 	public ICollection<Report> Reports { get; set; } = null!;
 }

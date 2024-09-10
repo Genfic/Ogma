@@ -18,10 +18,6 @@ public class CommentConfiguration : BaseConfiguration<Comment>
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
 		builder
-			.Property(c => c.LastEdit)
-			.HasDefaultValue(null);
-
-		builder
 			.Property(c => c.Body)
 			.IsRequired()
 			.HasMaxLength(CTConfig.CComment.MaxBodyLength);
@@ -33,10 +29,6 @@ public class CommentConfiguration : BaseConfiguration<Comment>
 		builder
 			.Property(c => c.DeletedByUserId)
 			.HasDefaultValue(null);
-
-		builder
-			.Property(c => c.EditCount)
-			.HasDefaultValue(0);
 
 		// NAVIGATION
 		builder

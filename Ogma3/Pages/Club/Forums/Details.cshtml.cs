@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.Comments;
 using Ogma3.Data.Roles;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
@@ -48,7 +49,7 @@ public class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context)
 					.OrderBy(ur => ur.Order)
 					.First(),
 				Body = ct.Body,
-				CommentsThread = new CommentsThreadDto(ct.CommentsThread.Id, nameof(Data.ClubThreads.ClubThread), ct.CommentsThread.LockDate),
+				CommentsThread = new CommentsThreadDto(ct.CommentsThread.Id, CommentSource.ForumPost, ct.CommentsThread.LockDate),
 			})
 			.FirstOrDefaultAsync();
 

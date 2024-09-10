@@ -1,5 +1,8 @@
 import dayjs from "dayjs";
+import { DeleteApiComments, GetApiCommentsMd, GetApiCommentsRevisions, PatchApiComments } from "../../generated/paths-public";
+import { GetRevisionResult } from "../../generated/types-public";
 
+// @ts-ignore
 Vue.component("comment", {
 	props: {
 		comment: {
@@ -8,10 +11,6 @@ Vue.component("comment", {
 		},
 		idx: {
 			type: Number,
-			required: true,
-		},
-		route: {
-			type: String,
 			required: true,
 		},
 		csrf: {
@@ -33,8 +32,8 @@ Vue.component("comment", {
 		return {
 			editData: null,
 			mutComment: this.comment,
-			revisions: [],
-			revisionsCache: null,
+			revisions: [] as GetRevisionResult[],
+			revisionsCache: null as GetRevisionResult[] | null,
 			hide: this.comment.isBlocked,
 		};
 	},
@@ -42,9 +41,10 @@ Vue.component("comment", {
 	methods: {
 		del: async function () {
 			if (confirm("Are you sure you want to delete?")) {
-				await axios.delete(`${this.route}/${this.comment.id}`, {
-					headers: { RequestVerificationToken: this.csrf },
-				});
+				const res = await DeleteApiComments(this.comment.id, { RequestVerificationToken: this.csrf })
+				
+				if (!res.ok) return;
+				
 				this.mutComment = { ...this.mutComment, deletedBy: "User" };
 			}
 		},
@@ -53,32 +53,28 @@ Vue.component("comment", {
 			if (this.editData && this.editData.id === this.comment.id) return;
 
 			this.editData = null;
-			const { data } = await axios.get(`${this.route}/md`, {
-				params: {
-					id: this.comment.id,
-				},
-			});
+			
+			const res = await GetApiCommentsMd(this.comment.id);
+			
+			if (!res.ok) return;
 
 			this.editData = {
 				id: this.comment.id,
-				body: data,
+				body: await res.json(),
 			};
 		},
 
-		update: async function (e) {
+		update: async function (e: Event) {
 			e.preventDefault();
+			
+			const res = await PatchApiComments({
+				body: this.editData.body,
+				commentId: Number(this.editData.id),
+			}, { RequestVerificationToken: this.csrf });
 
-			const { data } = await axios.patch(
-				this.route,
-				{
-					body: this.editData.body,
-					id: Number(this.editData.id),
-				},
-				{
-					headers: { RequestVerificationToken: this.csrf },
-				},
-			);
-
+			if (!res.ok) return;
+			
+			const data = await res.json();
 			Object.assign(this.mutComment, data);
 			this.editData = null;
 		},
@@ -98,14 +94,14 @@ Vue.component("comment", {
 			} else if (this.revisionsCache !== null) {
 				this.revisions = this.revisionsCache;
 			} else {
-				this.revisionsCache = this.revisions = (
-					await axios.get(`${this.route}/revisions/${this.comment.id}`)
-				).data;
+				const res = await GetApiCommentsRevisions(this.comment.id);
+				if (!res.ok) return;
+				this.revisionsCache = this.revisions = await res.json();
 			}
 		},
 
 		// Highlights the selected comment and scrolls it into view
-		changeHighlight: function (e) {
+		changeHighlight: function (e: Event) {
 			e.preventDefault();
 			this.$emit("change-hl", this.idx + 1);
 		},
@@ -222,10 +218,7 @@ Vue.component("comment", {
                     </div>
                 </form>
 
-                <span v-if="mutComment.lastEdit" class="edit-data">
-            Edited <span class="link" v-on:click="history">{{ mutComment.editCount }} times</span>, last edit: <time
-                    :datetime="mutComment.lastEdit">{{ date(mutComment.lastEdit) }}</time>
-          </span>
+                <button v-if="mutComment.isEdited" v-on:click="history" class="edit-data">Edited</button>
 
                 <ol v-if="revisions.length > 0" class="history">
                     <li v-for="r in revisions">

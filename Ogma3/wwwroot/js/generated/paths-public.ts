@@ -5,7 +5,7 @@ import type {
 	BanUserCommand,
 	BlockUserCommand,
 	CommentDto,
-	CommentsControllerPostData,
+	CreateCommentCommand,
 	CreateFaqCommand,
 	CreateQuoteCommand,
 	CreateQuotesFromJsonQuery,
@@ -49,6 +49,7 @@ import type {
 	UnfollowUserCommand,
 	UnsubscribeCommentsThreadCommand,
 	UpdateCommentCommand,
+	UpdateCommentResponse,
 	UpdateFaqCommand,
 	UpdateQuoteCommand,
 	UpdateRoleCommand,
@@ -114,6 +115,55 @@ export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersIn
 export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|string>("/api/clubjoin", 
     'DELETE', 
     body,
+    headers,
+    options,
+  );
+
+export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/api/comments", 
+    'POST', 
+    body,
+    headers,
+    options,
+  );
+
+export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<PaginationResultOfCommentDto>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PatchApiComments = async (body: UpdateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<UpdateCommentResponse>("/api/comments", 
+    'PATCH', 
+    body,
+    headers,
+    options,
+  );
+
+export const DeleteApiComments = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/comments/${commentid}`, 
+    'DELETE', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetComment = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CommentDto>(`/api/comments/${commentid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiCommentsMd = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/api/comments/${commentid}/md`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const GetApiCommentsRevisions = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[]>(`/api/comments/${commentid}/revisions`, 
+    'GET', 
+    undefined,
     headers,
     options,
   );
@@ -611,55 +661,6 @@ export const CommentsThread_GetLockStatus = async (id: number, headers?: Headers
 export const CommentsThread_LockThread = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|ProblemDetails>("/api/commentsthread/lock", 
     'POST', 
     body,
-    headers,
-    options,
-  );
-
-export const Comments_GetComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<PaginationResultOfCommentDto>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Comments_PostComments = async (body: CommentsControllerPostData, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CommentDto>("/api/comments", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const Comments_PutComment = async (body: UpdateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CommentDto>("/api/comments", 
-    'PATCH', 
-    body,
-    headers,
-    options,
-  );
-
-export const Comments_GetComment = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CommentDto>(`/api/comments/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Comments_DeleteComment = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/comments/${id}`, 
-    'DELETE', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Comments_GetRevisions = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[]>(`/api/comments/revisions/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const Comments_GetMarkdown = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/api/comments/md?id=${id}`, 
-    'GET', 
-    undefined,
     headers,
     options,
   );

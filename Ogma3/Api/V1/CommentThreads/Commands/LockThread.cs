@@ -33,9 +33,8 @@ public static class LockThread
 
 		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
-			if (_user is null) return Unauthorized();
-			if (_user.GetUsername() is not { } uname) return Unauthorized();
-			if (_user.GetNumericId() is not { } uid) return Unauthorized();
+			if (_user?.GetUsername() is not { } uname) return Unauthorized();
+			if (_user?.GetNumericId() is not { } uid) return Unauthorized();
 			
 			var permission = await _mediator.Send(new GetPermissions.Query(request.Id), cancellationToken);
 			if (!permission.IsAllowed) return Unauthorized();

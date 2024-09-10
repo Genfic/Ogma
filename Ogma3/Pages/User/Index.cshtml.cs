@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Comments;
 using Ogma3.Data.Users;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
@@ -29,7 +30,7 @@ public class IndexModel(ApplicationDbContext context, UserRepository userRepo)
 			{
 				Bio = u.Bio,
 				Links = u.Links,
-				CommentsThread = new CommentsThreadDto(u.CommentsThread.Id, nameof(OgmaUser), u.CommentsThread.LockDate),
+				CommentsThread = new CommentsThreadDto(u.CommentsThread.Id, CommentSource.Profile, u.CommentsThread.LockDate),
 			})
 			.FirstOrDefaultAsync();
 

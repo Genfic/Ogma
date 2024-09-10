@@ -12,6 +12,7 @@ public static class MarkdownPipelines
 
 	public static MarkdownPipeline Basic => new MarkdownPipelineBuilder()
 		.DisableHtml()
+		.DisableHeadings()
 		.UseAutoIdentifiers()
 		.UseEmphasisExtras()
 		.UseSpoilers()
@@ -19,6 +20,7 @@ public static class MarkdownPipelines
 
 	public static MarkdownPipeline Comment => new MarkdownPipelineBuilder()
 		.DisableHtml()
+		.DisableHeadings()
 		.UseMentions(MentionOptions)
 		.UseAutoLinks()
 		.UseEmphasisExtras()

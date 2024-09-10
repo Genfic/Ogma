@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
+using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Riok.Mapperly.Abstractions;
@@ -31,7 +32,7 @@ public class ChapterModel(ApplicationDbContext context) : PageModel
 		Chapter = chapter;
 
 		CommentsThread =
-			new CommentsThreadDto(chapter.CommentsThreadId, nameof(Data.Chapters.Chapter), chapter.CommentsThreadLockDate);
+			new CommentsThreadDto(chapter.CommentsThreadId, CommentSource.Chapter, chapter.CommentsThreadLockDate);
 
 		Previous = await context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
