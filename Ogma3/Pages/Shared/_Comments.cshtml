@@ -1,8 +1,5 @@
-@inject OgmaConfig Config
 @inject IAntiforgery Xcsrf
 @using Microsoft.AspNetCore.Antiforgery
-@using Ogma3.Api.V1.CommentThreads
-@using Ogma3.Api.V1.Subscriptions
 @using Ogma3.Data.Reports
 @using Ogma3.Services
 @model CommentsThreadDto
@@ -11,21 +8,15 @@
 	var csrf = Xcsrf.GetAndStoreTokens(Context).RequestToken;
 }
 
-<script>
-const ssrData = {
-    thread: @Model.Id,
-    type: '@Model.Type',
-    threadRoute: '@Url.RouteUrl(nameof(CommentsThreadController))',
-    subscribeRoute: '@Url.RouteUrl(nameof(SubscriptionsController))',
-    perPage: @Config.CommentsPerPage,
-    maxLength: @CTConfig.CComment.MaxBodyLength,
-    csrf: '@csrf'
-}
-</script>
+<div class="comments-container"
+     ref="container"
+     data-csrf="@csrf"
+     data-id="@Model.Id"
+     :class="isReady ? 'ready' : null"
+     id="comments-container"
+     v-cloak>
 
-<div class="comments-container" :class="isReady ? 'ready' : null" id="comments-container" v-cloak>
-
-	@if (User.Identity is {IsAuthenticated: true })
+	@if (User.Identity is { IsAuthenticated: true })
 	{
 		<div class="info" v-if="isLocked">Thread is locked.</div>
 
@@ -65,7 +56,7 @@ const ssrData = {
 		</div>
 	}
 
-	@if (User.Identity is {IsAuthenticated: true })
+	@if (User.Identity is { IsAuthenticated: true })
 	{
 		<div class="buttons">
 			<button class="action-btn" :class="isSubscribed ? 'active' : null"

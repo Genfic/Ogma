@@ -14,7 +14,7 @@ import csso from "postcss-csso";
 import gulpEsbuild from "gulp-esbuild";
 
 // Rollup
-import * as rollup from "rollup";
+import { rollup } from "rollup";
 import resolve from "@rollup/plugin-node-resolve";
 import multi from "@rollup/plugin-multi-entry";
 import esbuild from "rollup-plugin-esbuild";
@@ -28,7 +28,7 @@ const roots = {
 };
 const paths = {
 	styles: {
-		src: [`${roots.css}/*.{sass,scss}`, `${roots.css}/src/**/*.{sass,scss}`],
+		src: `${roots.css}/*.{sass,scss}`,
 		dest: `${roots.css}/dist`
 	},
 	js: {
@@ -74,7 +74,7 @@ export const watchJs = () => watch(paths.js.src, js);
 export const components = async () => pipeline(src(paths.wc.src, { since: lastRun(components) }),
 	async () => {
 		const out = `${paths.wc.dest}/components.js`;
-		const bundle = await rollup.rollup({
+		const bundle = await rollup({
 			input: paths.wc.src,
 			output: {
 				file: out,

@@ -1540,6 +1540,8 @@ namespace CompiledModels
             ogma3DataCommentsThreadsCommentsThreadTableBase.Columns.Add("CommentsCount", commentsCountColumnBase);
             var idColumnBase9 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataCommentsThreadsCommentsThreadTableBase);
             ogma3DataCommentsThreadsCommentsThreadTableBase.Columns.Add("Id", idColumnBase9);
+            var isLockedColumnBase = new ColumnBase<ColumnMappingBase>("IsLocked", "boolean", ogma3DataCommentsThreadsCommentsThreadTableBase);
+            ogma3DataCommentsThreadsCommentsThreadTableBase.Columns.Add("IsLocked", isLockedColumnBase);
             var lockDateColumnBase = new ColumnBase<ColumnMappingBase>("LockDate", "timestamp without time zone", ogma3DataCommentsThreadsCommentsThreadTableBase)
             {
                 IsNullable = true
@@ -1559,6 +1561,7 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)chapterIdColumnBase, commentsThread.FindProperty("ChapterId")!, ogma3DataCommentsThreadsCommentsThreadMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)clubThreadIdColumnBase, commentsThread.FindProperty("ClubThreadId")!, ogma3DataCommentsThreadsCommentsThreadMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)commentsCountColumnBase, commentsThread.FindProperty("CommentsCount")!, ogma3DataCommentsThreadsCommentsThreadMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)isLockedColumnBase, commentsThread.FindProperty("IsLocked")!, ogma3DataCommentsThreadsCommentsThreadMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)lockDateColumnBase, commentsThread.FindProperty("LockDate")!, ogma3DataCommentsThreadsCommentsThreadMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase6, commentsThread.FindProperty("UserId")!, ogma3DataCommentsThreadsCommentsThreadMappingBase);
 
@@ -1585,6 +1588,8 @@ namespace CompiledModels
             commentThreadsTable.Columns.Add("ClubThreadId", clubThreadIdColumn);
             var commentsCountColumn = new Column("CommentsCount", "integer", commentThreadsTable);
             commentThreadsTable.Columns.Add("CommentsCount", commentsCountColumn);
+            var isLockedColumn = new Column("IsLocked", "boolean", commentThreadsTable);
+            commentThreadsTable.Columns.Add("IsLocked", isLockedColumn);
             var lockDateColumn = new Column("LockDate", "timestamp without time zone", commentThreadsTable)
             {
                 IsNullable = true
@@ -1644,6 +1649,7 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping(chapterIdColumn, commentsThread.FindProperty("ChapterId")!, commentThreadsTableMapping);
             RelationalModel.CreateColumnMapping(clubThreadIdColumn, commentsThread.FindProperty("ClubThreadId")!, commentThreadsTableMapping);
             RelationalModel.CreateColumnMapping(commentsCountColumn, commentsThread.FindProperty("CommentsCount")!, commentThreadsTableMapping);
+            RelationalModel.CreateColumnMapping(isLockedColumn, commentsThread.FindProperty("IsLocked")!, commentThreadsTableMapping);
             RelationalModel.CreateColumnMapping(lockDateColumn, commentsThread.FindProperty("LockDate")!, commentThreadsTableMapping);
             RelationalModel.CreateColumnMapping(userIdColumn6, commentsThread.FindProperty("UserId")!, commentThreadsTableMapping);
 

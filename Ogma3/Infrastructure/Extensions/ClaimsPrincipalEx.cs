@@ -45,6 +45,12 @@ public static class ClaimsPrincipalEx
 		var str = principal.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.IsStaff);
 		return bool.TryParse(str, out var isStaff) && isStaff;
 	}
+	
+	public static bool HasAnyRole(this ClaimsPrincipal principal, params string[] roles)
+		=> roles.Any(principal.IsInRole);
+	
+	public static bool HasAllRoles(this ClaimsPrincipal principal, params string[] roles)
+		=> roles.All(principal.IsInRole);
 
 	public static bool TryGetClaim(this ClaimsPrincipal principal, string claimType, [NotNullWhen(true)]out string? val)
 	{

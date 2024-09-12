@@ -1,7 +1,5 @@
 @page "/club/{clubId:long}/thread/{threadId:long}"
 @using System.Globalization
-@using Ogma3.Data.Clubs
-@using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
 @using Utils.Extensions
 @model DetailsModel
@@ -13,21 +11,6 @@
 
 <partial name="Shared/Bars/_ClubBar" model="@Model.ClubBar"/>
 
-@if (Model.ClubBar.Role is <= EClubMemberRoles.Moderator || User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
-{
-	<div class="modtools active-border">
-		<span>Modtools</span>
-		<div class="button-group">
-			<button id="lock-thread" class="action-btn">Lock</button>
-			<a asp-page="/Club/Forums/Delete" asp-route-id="@Model.ClubThread.Id" class="action-btn">
-				Delete
-			</a>
-			<a asp-page="/Club/Forums/Pin" asp-route-id="@Model.ClubThread.Id" class="action-btn">
-				@(Model.ClubThread.IsPinned ? "Unpin" : "Pin")
-			</a>
-		</div>
-	</div>
-}
 <h1>
 	@if (Model.ClubThread.IsPinned)
 	{

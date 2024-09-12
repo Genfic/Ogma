@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -13,6 +14,8 @@ public class CommentsThread : BaseModel
 
 	public int CommentsCount { get; set; }
 	public DateTime? LockDate { get; set; }
+
+	public bool IsLocked { get; [UsedImplicitly] private set; }
 
 	public OgmaUser? User { get; set; }
 	public long? UserId { get; set; }

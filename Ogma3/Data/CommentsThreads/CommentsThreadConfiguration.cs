@@ -16,6 +16,10 @@ public class CommentsThreadConfiguration : BaseConfiguration<CommentsThread>
 			.IsRequired()
 			.HasDefaultValue(0);
 
+		builder
+			.Property(ct => ct.IsLocked)
+			.HasComputedColumnSql($"\"{nameof(CommentsThread.LockDate)}\" IS NOT NULL", true);
+
 		// NAVIGATION
 		builder
 			.HasMany(ct => ct.Comments)

@@ -77,6 +77,18 @@ export interface UpdateCommentCommand {
     commentId: number;
 }
 
+export interface GetThreadDetailsResult {
+    perPage: number;
+    minCommentLength: number;
+    maxCommentLength: number;
+    source: CommentSource;
+    isLocked: boolean;
+}
+
+export interface LockThreadCommand {
+    threadId: number;
+}
+
 export interface FaqDto {
     id: number;
     question: string;
@@ -355,24 +367,6 @@ export interface AddStoryToFolderResponse {
 export interface AddStoryToFolderCommand {
     folderId: number;
     storyId: number;
-}
-
-export interface GetPermissionsResult {
-    isSiteModerator: boolean;
-    isClubModerator: boolean;
-    isAllowed: boolean;
-}
-
-export interface ProblemDetails {
-    type: string | null;
-    title: string | null;
-    status: number | null;
-    detail: string | null;
-    instance: string | null;
-}
-
-export interface LockThreadCommand {
-    id: number;
 }
 
 export interface GetJoinedClubsResponse {

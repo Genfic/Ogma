@@ -20,9 +20,9 @@ import type {
 	GetClubsWithStoryResult,
 	GetFolderResult,
 	GetJoinedClubsResponse,
-	GetPermissionsResult,
 	GetRevisionResult,
 	GetSignInDataResult,
+	GetThreadDetailsResult,
 	GetUserNotificationsResult,
 	InviteCodeDto,
 	JoinClubCommand,
@@ -31,7 +31,6 @@ import type {
 	MarkChapterAsReadCommand,
 	MarkChapterAsUnreadCommand,
 	PaginationResultOfCommentDto,
-	ProblemDetails,
 	QuickShelvesResult,
 	QuoteDto,
 	RatingApiDto,
@@ -164,6 +163,20 @@ export const GetApiCommentsMd = async (commentid: number, headers?: HeadersInit,
 export const GetApiCommentsRevisions = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[]>(`/api/comments/${commentid}/revisions`, 
     'GET', 
     undefined,
+    headers,
+    options,
+  );
+
+export const GetApiCommentsThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetThreadDetailsResult>(`/api/commentsthread/${threadid}`, 
+    'GET', 
+    undefined,
+    headers,
+    options,
+  );
+
+export const PostApiCommentsThreadLock = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/commentsthread/lock", 
+    'POST', 
+    body,
     headers,
     options,
   );
@@ -638,27 +651,6 @@ export const Folders_GetFoldersOfClub = async (id: number, headers?: HeadersInit
   );
 
 export const Folders_AddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<AddStoryToFolderResponse>("/api/folders/add-story", 
-    'POST', 
-    body,
-    headers,
-    options,
-  );
-
-export const CommentsThread_GetPermissions = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetPermissionsResult>(`/api/commentsthread/permissions/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const CommentsThread_GetLockStatus = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/commentsthread/lock/status/${id}`, 
-    'GET', 
-    undefined,
-    headers,
-    options,
-  );
-
-export const CommentsThread_LockThread = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean|ProblemDetails>("/api/commentsthread/lock", 
     'POST', 
     body,
     headers,

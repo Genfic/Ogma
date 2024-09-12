@@ -1,25 +1,30 @@
 import { log } from "../src-helpers/logger";
-import { GetApiComments, PostApiComments } from "../generated/paths-public";
+import {
+	GetApiComments,
+	GetApiCommentsThread,
+	PostApiComments,
+	PostApiCommentsThreadLock,
+	Subscriptions_IsSubscribedToThread,
+} from "../generated/paths-public";
 
 // @ts-ignore
-const comments_vue = new Vue({
+new Vue({
 	el: "#comments-container",
 	data: {
 		body: "",
 		thread: null,
 		csrf: null,
-		threadRoute: null,
-		subscribeRoute: null,
 		type: null,
 
-		maxLength: null,
+		minLength: 0,
+		maxLength: 0,
 
 		comments: [],
 		total: 0,
 
 		// Pagination
-		page: null,
-		perPage: null,
+		page: 1,
+		perPage: 10,
 
 		// Name of the OP
 		opName: null,
@@ -169,11 +174,8 @@ const comments_vue = new Vue({
 		// Lock or unlock the thread
 		lock: async function () {
 			if (!this.canLock) return false;
-			this.isLocked = (
-				await axios.post(`${this.threadRoute}/lock`, {
-					id: this.thread,
-				})
-			).data;
+			const res = await PostApiCommentsThreadLock({threadId: this.thread});
+			this.isLocked = res.ok && await res.json(); 
 			return this.isLocked;
 		},
 	},
@@ -204,11 +206,41 @@ const comments_vue = new Vue({
 	},
 
 	async mounted() {
-		// get initial data from SSR
-		Object.assign(this.$data, ssrData);
+		const containerRef = this.$refs.container;
+		this.csrf = containerRef.dataset.csrf; 
+		this.thread = containerRef.dataset.id;
+		
+		const fetchData = async () => {
+			const threadRes = await GetApiCommentsThread(this.thread);
+			if (threadRes.ok) {
+				this.canLock = threadRes.headers.get("X-IsStaff").toLowerCase() === "true";
 
+				const threadData = await threadRes.json();
+				this.isLocked = threadData.isLocked;
+				this.perPage = threadData.perPage;
+				this.minLength = threadData.minCommentLength;
+				this.maxLength = threadData.maxCommentLength;
+				this.type = threadData.source;
+			}
+		}
+		
+		const fetchSubscriptionStatus = async () => {
+			const subscriptionRes = await Subscriptions_IsSubscribedToThread(this.thread);
+			if (subscriptionRes.ok) {
+				this.isSubscribed = await subscriptionRes.json();
+			}
+		}
+		
+		const load = async () => {
+			await this.load();
+		}
+		
+		const results = await Promise.allSettled([fetchData(), fetchSubscriptionStatus(), load()]);
+		for (const result of results) {
+			console.log(result.status, result);
+		}
+		
 		const hash = window.location.hash.split("-");
-
 		if (hash[0] === "#page" && hash[1]) {
 			this.page = Math.max(1, Number(hash[1] ?? 1));
 		} else if (hash[0] === "#comment" && hash[1]) {
@@ -218,23 +250,5 @@ const comments_vue = new Vue({
 			this.page = 1;
 			history.replaceState(undefined, undefined, "");
 		}
-
-		// Subscription status
-		this.isSubscribed = (await axios.get(`${this.subscribeRoute}/thread?threadId=${this.thread}`)).data;
-
-		// Lock permissions
-		this.canLock = (await axios.get(`${this.threadRoute}/permissions/${this.thread}`)).data.isAllowed;
-
-		// Lock status
-		this.isLocked = (await axios.get(`${this.threadRoute}/lock/status/${this.thread}`)).data;
-
-		await this.load();
 	},
 });
-
-(() => {
-	document.getElementById("lock-thread")?.addEventListener("click", async (e) => {
-		const status = await comments_vue.lock();
-		(e.target as HTMLElement).innerText = status === true ? "Unlock" : "Lock";
-	});
-})();

@@ -140,6 +140,32 @@ namespace CompiledModels
             commentsCount.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
             commentsCount.AddAnnotation("Relational:DefaultValue", 0);
 
+            var isLocked = runtimeEntityType.AddProperty(
+                "IsLocked",
+                typeof(bool),
+                propertyInfo: typeof(CommentsThread).GetProperty("IsLocked", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentsThread).GetField("<IsLocked>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAddOrUpdate,
+                beforeSaveBehavior: PropertySaveBehavior.Ignore,
+                afterSaveBehavior: PropertySaveBehavior.Ignore,
+                sentinel: false);
+            isLocked.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
+                comparer: new ValueComparer<bool>(
+                    (bool v1, bool v2) => v1 == v2,
+                    (bool v) => v.GetHashCode(),
+                    (bool v) => v),
+                keyComparer: new ValueComparer<bool>(
+                    (bool v1, bool v2) => v1 == v2,
+                    (bool v) => v.GetHashCode(),
+                    (bool v) => v),
+                providerValueComparer: new ValueComparer<bool>(
+                    (bool v1, bool v2) => v1 == v2,
+                    (bool v) => v.GetHashCode(),
+                    (bool v) => v));
+            isLocked.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            isLocked.AddAnnotation("Relational:ComputedColumnSql", "\"LockDate\" IS NOT NULL");
+            isLocked.AddAnnotation("Relational:IsStored", true);
+
             var lockDate = runtimeEntityType.AddProperty(
                 "LockDate",
                 typeof(DateTime?),

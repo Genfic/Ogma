@@ -55,8 +55,8 @@ tasks:
 
     # EF helpers
     db-migrate: dotnet ef migrations add --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
-    db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj
-    db-compile: dotnet ef dbcontext optimize --project ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels
+    db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
+    db-compile: dotnet ef dbcontext optimize --project ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
     db-all:
         cmds:
             - task: db-migrate
