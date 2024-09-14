@@ -3,8 +3,10 @@ using NSwag.Generation.Processors.Contexts;
 
 namespace Ogma3.Infrastructure.NSwag.OperationProcessors;
 
-public class ExcludeInternalApisProcessor : IOperationProcessor
+public sealed class ExcludeInternalApisProcessor : IOperationProcessor
 {
 	public bool Process(OperationProcessorContext context)
-		=> !(context.ControllerType?.FullName?.Contains("ADMIN", StringComparison.CurrentCultureIgnoreCase) ?? false);
+	{
+		return !context.OperationDescription.Path.StartsWith("/ADMIN", StringComparison.CurrentCultureIgnoreCase);
+	}
 }

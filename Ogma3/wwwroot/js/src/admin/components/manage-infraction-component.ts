@@ -1,8 +1,11 @@
 import { log } from "../../../src-helpers/logger";
+import { PostAdminApiInfractions } from "../../../generated/paths-internal";
+import { InfractionType } from "../../../generated/types-internal";
 
+// @ts-ignore
 Vue.component("manage-infraction", {
 	props: {
-		route: {
+		csrf: {
 			type: String,
 			required: true,
 		},
@@ -16,11 +19,9 @@ Vue.component("manage-infraction", {
 		},
 	},
 	data: () => ({
-		type: null,
-		date: null,
-		reason: null,
-
-		csrf: null,
+		type: null as InfractionType,
+		date: null as Date,
+		reason: null as string,
 		visible: false,
 	}),
 	methods: {
@@ -31,18 +32,16 @@ Vue.component("manage-infraction", {
 
 		create: async function () {
 			log.log("submit");
-			await axios.post(
-				this.route,
-				{
-					userId: this.userId,
-					reason: this.reason,
-					endDate: this.date,
-					type: this.type,
-				},
-				{
-					headers: { RequestVerificationToken: this.csrf },
-				},
-			);
+			const res = await PostAdminApiInfractions({
+				userId: this.userId,
+				reason: this.reason,
+				endDate: this.date,
+				type: this.type,
+			}, { 
+				RequestVerificationToken: this.csrf 
+			});
+			if (!res.ok) return;
+			
 			location.reload();
 		},
 	},
@@ -82,7 +81,4 @@ Vue.component("manage-infraction", {
 			</div>
 		</div>
 	`,
-	mounted() {
-		this.csrf = document.querySelector("input[name=__RequestVerificationToken]").value;
-	},
 });

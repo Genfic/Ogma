@@ -3,7 +3,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Infractions;
 
-public class Infraction : BaseModel
+public sealed class Infraction : BaseModel
 {
 	public OgmaUser User { get; init; } = null!;
 	public required long UserId { get; init; }

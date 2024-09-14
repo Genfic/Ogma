@@ -41,6 +41,8 @@ var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 The above will generate *just* the code and store it in the `csrf` variable. Example usage would be
 
 ```html
+@inject IAntiforgery Antiforgery
+
 @{
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }

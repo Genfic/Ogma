@@ -47,7 +47,7 @@ using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace Ogma3;
 
-public class Startup
+public sealed class Startup
 {
 	// ReSharper disable once UnusedParameter.Local
 	public Startup(IConfiguration configuration, IWebHostEnvironment env)

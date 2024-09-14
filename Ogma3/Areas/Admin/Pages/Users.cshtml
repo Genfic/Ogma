@@ -1,10 +1,13 @@
 @page
-@using Ogma3.Areas.Admin.Api.V1.Infractions
+@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Users
+@inject IAntiforgery Antiforgery
 
 @{
 	ViewData["Title"] = "Users";
 	ViewData["ActivePage"] = NavPages.Users;
+	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 @if (Model.OgmaUser is not null)
@@ -97,7 +100,7 @@
 
 	<manage-infraction
 		ref="manage"
-		route="@Url.RouteUrl(nameof(InfractionsController))"
+		:csrf="@csrf"
 		:types="@Model.InfractionNamesJson"
 		:user-id="@Model.OgmaUser.Id">
 	</manage-infraction>
@@ -128,10 +131,9 @@ else
 	</form>
 }
 
-@Html.AntiForgeryToken()
-<div id="infractionsRoute" v-if="!infractionsRoute" data-route="@Url.RouteUrl(nameof(InfractionsController))"></div>
+<template data-csrf="@csrf" v-if="!csrf" ref="dataElement"></template>
 
 @section Scripts {
-	<script src="~/js/dist/admin/components/manage-infraction-component.js" asp-append-version="true"></script>
-	<script src="~/js/dist/admin/users.js" asp-append-version="true"></script>
+	<script defer src="~/js/dist/admin/components/manage-infraction-component.js" asp-append-version="true"></script>
+	<script defer src="~/js/dist/admin/users.js" asp-append-version="true"></script>
 }

@@ -1,55 +1,30 @@
-export type None = undefined;
-
-export interface GetTableInfoResponse {
-    name: string;
-    size: number;
+export interface CreateInfractionCommand {
+	userId: number;
+	reason: string;
+	endDate: string;
+	type: InfractionType;
 }
 
 export interface GetUserInfractionsResult {
-    id: number;
-    activeUntil: string;
-    removed: boolean;
-    reason: string;
+	id: number;
+	activeUntil: string;
+	removed: boolean;
+	reason: string;
 }
 
-export interface GetInfractionDetailsResult {
-    id: number;
-    userName: string;
-    userId: number;
-    issueDate: string;
-    activeUntil: string;
-    removedAt: string | null;
-    reason: string;
-    type: InfractionType;
-    issuedByName: string;
-    removedByName: string | null;
+export interface InfractionDto {
+	id: number;
+	userUserName: string;
+	userId: number;
+	issueDate: string;
+	activeUntil: string;
+	removedAt: string | null;
+	reason: string;
+	type: InfractionType;
+	issuedByUserName: string;
+	removedByUserName: string | null;
 }
 
-export interface InfractionType {}
+export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
 
-export interface CreateInfractionResponse {
-    id: number;
-    issuedBy: number;
-    issuedAgainst: number;
-}
-
-export interface CreateInfractionCommand {
-    userId: number;
-    reason: string;
-    endDate: string;
-    type: InfractionType;
-}
-
-export interface ProblemDetails {
-    type: string | null;
-    title: string | null;
-    status: number | null;
-    detail: string | null;
-    instance: string | null;
-}
-
-export interface DeactivateInfractionResponse {
-    id: number;
-    issuedBy: number;
-    issuedAgainst: number;
-}
+export type None = undefined;

@@ -1,4 +1,5 @@
 import { GetApiUsersNames as getNames, PostApiUsersRoles } from "../../generated/paths-public";
+import { DeleteAdminApiInfractions } from "../../generated/paths-internal";
 
 // @ts-ignore
 new Vue({
@@ -13,20 +14,16 @@ new Vue({
 		names: [],
 		input: "",
 
-		image: null,
+		image: null as HTMLImageElement,
 	},
 	methods: {
 		manageInfractions: function () {
 			this.$refs.manage.visible = true;
 		},
 
-		removeInfraction: async function (id) {
-			// TODO: This needs migrating to IA. Areas/Admin/Api/Infractions
-			// @ts-ignore
-			const res = await axios.delete(`${this.infractionsRoute}/${id}`, {
-				headers: { RequestVerificationToken: this.csrf },
-			});
-			if (res) location.reload();
+		removeInfraction: async function (id: number) {
+			const res = await DeleteAdminApiInfractions(id, { RequestVerificationToken: this.csrf })
+			if (res.ok) location.reload();
 		},
 
 		saveRoles: async function () {
@@ -60,10 +57,10 @@ new Vue({
 			}
 		},
 
-		showImage: function (e) {
+		showImage: function (e: MouseEvent) {
 			if (!this.image) {
 				this.image = document.createElement("img");
-				this.image.src = e.target.href;
+				this.image.src = (e.target as HTMLAnchorElement).href;
 				this.image.height = 200;
 				this.image.style.position = "absolute";
 				this.image.style.pointerEvents = "none";
@@ -73,7 +70,7 @@ new Vue({
 			this.image.style.display = "block";
 		},
 
-		updateImage: function (e) {
+		updateImage: function (e: MouseEvent) {
 			this.image.style.left = `${e.clientX}px`;
 			this.image.style.top = `${e.clientY}px`;
 		},
@@ -83,9 +80,9 @@ new Vue({
 		},
 	},
 	mounted() {
-		this.csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
-		this.rolesRoute = document.getElementById("rolesRoute").dataset.route;
-		this.infractionsRoute = document.getElementById("infractionsRoute").dataset.route;
+		const dataElement: HTMLElement = this.$refs.dataElement;
+		this.csrf = dataElement.dataset.csrf;
+		
 		this.userId = Number(document.getElementById("id").innerText);
 	},
 });
