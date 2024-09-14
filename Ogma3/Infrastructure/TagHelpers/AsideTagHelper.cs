@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Ogma3.Infrastructure.TagHelpers;
 
 [HtmlTargetElement("aside", Attributes = ForAttributeName)]
-public class AsideTagHelper : TagHelper
+public sealed class AsideTagHelper : TagHelper
 {
 	private const string ForAttributeName = "asp-for";
 

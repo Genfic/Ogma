@@ -4,7 +4,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Data.Folders;
 
-public class Folder : BaseModel
+public sealed class Folder : BaseModel
 {
 	public string Name { get; set; } = null!;
 	public string Slug { get; set; } = null!;

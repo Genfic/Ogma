@@ -3,7 +3,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Faqs;
 
-public class FaqConfiguration : BaseConfiguration<Faq>
+public sealed class FaqConfiguration : BaseConfiguration<Faq>
 {
 	public override void Configure(EntityTypeBuilder<Faq> builder)
 	{

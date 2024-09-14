@@ -6,7 +6,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Chapters;
 
-public class ChapterConfiguration : BaseConfiguration<Chapter>
+public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 {
 	public override void Configure(EntityTypeBuilder<Chapter> builder)
 	{

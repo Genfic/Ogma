@@ -2,7 +2,7 @@ using Ogma3.Data.Clubs;
 
 namespace Ogma3.Pages.Shared.Bars;
 
-public class ClubBar
+public sealed class ClubBar
 {
 	public required long Id { get; init; }
 	public required string Name { get; init; }

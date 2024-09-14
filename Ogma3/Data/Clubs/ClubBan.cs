@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Clubs;
 
-public class ClubBan
+public sealed class ClubBan
 {
 	public OgmaUser User { get; set; } = null!;
 	public long UserId { get; set; }
@@ -17,7 +17,7 @@ public class ClubBan
 	public DateTime BanDate { get; set; }
 	public string Reason { get; set; } = "";
 
-	public class ClubBanConfiguration : IEntityTypeConfiguration<ClubBan>
+	public sealed class ClubBanConfiguration : IEntityTypeConfiguration<ClubBan>
 	{
 		public void Configure(EntityTypeBuilder<ClubBan> builder)
 		{

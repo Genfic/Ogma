@@ -7,7 +7,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Chapters;
 
-public class ChaptersRead
+public sealed class ChaptersRead
 {
 	public Story Story { get; init; }
 	public long StoryId { get; init; }
@@ -16,7 +16,7 @@ public class ChaptersRead
 	// TODO: Should be a HashSet<long>, but #82 blocks that
 	public List<long> Chapters { get; set; }
 
-	public class Configuration : IEntityTypeConfiguration<ChaptersRead>
+	public sealed class Configuration : IEntityTypeConfiguration<ChaptersRead>
 	{
 		public void Configure(EntityTypeBuilder<ChaptersRead> builder)
 		{

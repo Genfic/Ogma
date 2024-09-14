@@ -11,7 +11,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public class EditModel(ApplicationDbContext context) : PageModel
+public sealed class EditModel(ApplicationDbContext context) : PageModel
 {
 	[BindProperty]
 	public required PostData Input { get; set; }
@@ -41,7 +41,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 		return Page();
 	}
 
-	public class PostData
+	public sealed class PostData
 	{
 		public required long Id { get; init; }
 		public required string Title { get; init; }
@@ -54,7 +54,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 		public required long? StoryId { get; init; }
 	}
 
-	public class PostDataValidation : AbstractValidator<PostData>
+	public sealed class PostDataValidation : AbstractValidator<PostData>
 	{
 		public PostDataValidation()
 		{

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Ogma3.Infrastructure.Attributes;
 
-public class AllowedExtensionsAttribute : ValidationAttribute, IClientModelValidator
+public sealed class AllowedExtensionsAttribute : ValidationAttribute, IClientModelValidator
 {
 	private readonly string[] _extensions;
 	private readonly string _message;

@@ -2,7 +2,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Reports;
 
-public class ReportDto
+public sealed class ReportDto
 {
 	public long Id { get; init; }
 	public string ReporterUserName { get; init; } = null!;

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Ogma3.Services.TurnstileService;
 
-public class TurnstileService(
+public sealed class TurnstileService(
 	IHttpClientFactory clientFactory,
 	IOptions<TurnstileSettings> options,
 	ILogger<TurnstileService> logger) : ITurnstileService

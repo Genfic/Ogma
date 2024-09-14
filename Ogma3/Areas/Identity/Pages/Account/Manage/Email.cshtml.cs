@@ -12,7 +12,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class EmailModel : PageModel
+public sealed class EmailModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly IEmailSender _emailSender;
@@ -33,7 +33,7 @@ public class EmailModel : PageModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required]
 		[EmailAddress]

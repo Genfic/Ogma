@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Ratings : PageModel
+public sealed class Ratings : PageModel
 {
 	[BindProperty]
 	public required InputModel Input { get; init; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required string Name { get; init; }
 		public required string Description { get; init; }

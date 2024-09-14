@@ -4,7 +4,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Pages;
 
-public class Faq(ApplicationDbContext context) : PageModel
+public sealed class Faq(ApplicationDbContext context) : PageModel
 {
 	public required List<Data.Faqs.Faq> Faqs { get;  set; }
 

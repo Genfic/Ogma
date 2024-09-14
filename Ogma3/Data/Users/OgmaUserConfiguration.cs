@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Users;
 
-public class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
+public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 {
 	public void Configure(EntityTypeBuilder<OgmaUser> builder)
 	{

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class CdnImgTagHelper : TagHelper
+public sealed class CdnImgTagHelper : TagHelper
 {
 	public string? Src { get; set; }
 	public int? Width { get; set; }

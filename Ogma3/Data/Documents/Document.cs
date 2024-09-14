@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Documents;
 
-public class Document : BaseModel
+public sealed class Document : BaseModel
 {
 	public string Title { get; init; }
 	public string Slug { get; init; }

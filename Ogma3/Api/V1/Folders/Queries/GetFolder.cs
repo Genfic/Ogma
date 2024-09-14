@@ -12,22 +12,16 @@ public static class GetFolder
 {
 	public sealed record Query(long Id) : IRequest<ActionResult<List<Result>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
+	public sealed class Handler
+		(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly long? _uid;
-
-		public Handler(ApplicationDbContext context, IUserService userService)
-		{
-			_context = context;
-			_uid = userService.User?.GetNumericId();
-		}
+		private readonly long? _uid = userService.User?.GetNumericId();
 
 		public async ValueTask<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
 		{
 			if (_uid is null) return Unauthorized();
 
-			var folder = await _context.Folders
+			var folder = await context.Folders
 				.Where(f => f.ClubId == request.Id)
 				.Select(f => new Result(
 					f.Id,

@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Notifications;
 
-public class NotificationConfiguration : BaseConfiguration<Notification>
+public sealed class NotificationConfiguration : BaseConfiguration<Notification>
 {
 	public override void Configure(EntityTypeBuilder<Notification> builder)
 	{

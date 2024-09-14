@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.ClubModeratorActions;
 
-public class ClubModeratorAction : BaseModel
+public sealed class ClubModeratorAction : BaseModel
 {
 	public OgmaUser Moderator { get; set; }
 	public long ModeratorId { get; set; }
@@ -18,7 +18,7 @@ public class ClubModeratorAction : BaseModel
 	public Club Club { get; set; }
 	public long ClubId { get; set; }
 
-	public class ModeratorActionConfiguration : BaseConfiguration<ClubModeratorAction>
+	public sealed class ModeratorActionConfiguration : BaseConfiguration<ClubModeratorAction>
 	{
 		public override void Configure(EntityTypeBuilder<ClubModeratorAction> builder)
 		{

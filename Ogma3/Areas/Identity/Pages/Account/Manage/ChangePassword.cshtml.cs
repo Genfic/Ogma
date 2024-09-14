@@ -8,7 +8,7 @@ using Ogma3.Data.Users;
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 [Authorize]
-public class ChangePasswordModel(
+public sealed class ChangePasswordModel(
 	UserManager<OgmaUser> userManager,
 	SignInManager<OgmaUser> signInManager,
 	ILogger<ChangePasswordModel> logger)
@@ -19,7 +19,7 @@ public class ChangePasswordModel(
 
 	[TempData] public required string StatusMessage { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required]
 		[DataType(DataType.Password)]

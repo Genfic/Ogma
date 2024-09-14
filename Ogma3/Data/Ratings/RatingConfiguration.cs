@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Ratings;
 
-public class RatingConfiguration : BaseConfiguration<Rating>
+public sealed class RatingConfiguration : BaseConfiguration<Rating>
 {
 	public override void Configure(EntityTypeBuilder<Rating> builder)
 	{

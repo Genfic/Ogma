@@ -10,9 +10,9 @@ using Ogma3.Services.FileUploader;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
 {
-	public class GetData
+	public sealed class GetData
 	{
 		public required long Id { get; init; }
 		public required string Title { get; init; }

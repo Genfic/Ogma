@@ -10,7 +10,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class DownloadPersonalDataModel(
+public sealed class DownloadPersonalDataModel(
 	ApplicationDbContext context,
 	ILogger<DownloadPersonalDataModel> logger)
 	: PageModel
@@ -40,4 +40,4 @@ public class DownloadPersonalDataModel(
 
 [JsonSerializable(typeof(UserPersonalData))]
 [JsonSourceGenerationOptions(WriteIndented = true)]
-public partial class UserPersonalDataJsonContext : JsonSerializerContext;
+public sealed partial class UserPersonalDataJsonContext : JsonSerializerContext;

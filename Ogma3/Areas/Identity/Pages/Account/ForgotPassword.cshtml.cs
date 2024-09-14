@@ -15,7 +15,7 @@ using Ogma3.Services.TurnstileService;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class ForgotPasswordModel(
+public sealed class ForgotPasswordModel(
 	UserManager<OgmaUser> userManager,
 	IEmailSender emailSender,
 	ITurnstileService turnstile,
@@ -27,7 +27,7 @@ public class ForgotPasswordModel(
 	[BindProperty(Name = "cf-turnstile-response")]
 	public string TurnstileResponse { get; set; } = null!;
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required,
 		 EmailAddress]

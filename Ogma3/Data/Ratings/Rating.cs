@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Ratings;
 
-public class Rating : BaseModel
+public sealed class Rating : BaseModel
 {
 	public string Name { get; set; }
 	public string Description { get; set; }

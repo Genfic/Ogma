@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.CommentsThreads;
 
-public class CommentsThreadConfiguration : BaseConfiguration<CommentsThread>
+public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentsThread>
 {
 	public override void Configure(EntityTypeBuilder<CommentsThread> builder)
 	{

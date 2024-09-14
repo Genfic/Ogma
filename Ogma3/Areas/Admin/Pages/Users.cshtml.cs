@@ -8,7 +8,7 @@ using Ogma3.Data.Infractions;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Users(ApplicationDbContext context) : PageModel
+public sealed class Users(ApplicationDbContext context) : PageModel
 {
 	public required UserDetailsDto? OgmaUser { get; set; }
 	public required List<RoleDto> Roles { get; set; }
@@ -98,4 +98,4 @@ public class Users(ApplicationDbContext context) : PageModel
 }
 
 [JsonSerializable(typeof(string[]))]
-public partial class InfractionNamesJsonContext : JsonSerializerContext;
+public sealed partial class InfractionNamesJsonContext : JsonSerializerContext;

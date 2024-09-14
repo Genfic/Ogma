@@ -5,7 +5,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Roles;
 
-public class OgmaRole : IdentityRole<long>
+public sealed class OgmaRole : IdentityRole<long>
 {
 	public new string Name
 	{
@@ -22,7 +22,7 @@ public class OgmaRole : IdentityRole<long>
 	public byte Order { get; set; }
 	public IEnumerable<OgmaUser> Users { get; init; } = [];
 
-	public class OgmaRoleConfig : IEntityTypeConfiguration<OgmaRole>
+	public sealed class OgmaRoleConfig : IEntityTypeConfiguration<OgmaRole>
 	{
 		public void Configure(EntityTypeBuilder<OgmaRole> builder)
 		{

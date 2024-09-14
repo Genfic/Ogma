@@ -11,7 +11,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public class StoriesModel(UserRepository userRepo, ApplicationDbContext context)
+public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext context)
 	: PageModel
 {
 	private const int PerPage = 25;

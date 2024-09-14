@@ -4,7 +4,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Data.Tags;
 
-public class Tag : BaseModel
+public sealed class Tag : BaseModel
 {
 	private readonly string _name = null!;
 

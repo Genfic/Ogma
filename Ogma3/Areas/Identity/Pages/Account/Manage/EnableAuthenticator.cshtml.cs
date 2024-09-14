@@ -8,7 +8,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class EnableAuthenticatorModel : PageModel
+public sealed class EnableAuthenticatorModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly ILogger<EnableAuthenticatorModel> _logger;
@@ -36,7 +36,7 @@ public class EnableAuthenticatorModel : PageModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required]
 		[StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]

@@ -10,7 +10,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages;
 
-public class ChapterModel(ApplicationDbContext context) : PageModel
+public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 {
 	public required ChapterDetails Chapter { get; set; }
 	public required ChapterMicroDto? Previous { get; set; }

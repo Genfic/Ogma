@@ -3,7 +3,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Cards;
 
-public class BlogpostCard
+public sealed class BlogpostCard
 {
 	public required long Id { get; init; }
 	public required string Title { get; init; }

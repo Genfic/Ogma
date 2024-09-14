@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class AutotableTagHelper : TagHelper
+public sealed class AutotableTagHelper : TagHelper
 {
 	public required ModelExpression For { get; set; }
 

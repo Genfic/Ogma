@@ -9,13 +9,13 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User;
 
-public class IndexModel(ApplicationDbContext context, UserRepository userRepo)
+public sealed class IndexModel(ApplicationDbContext context, UserRepository userRepo)
 	: PageModel
 {
 	public required ProfileBar ProfileBar { get; set; }
 	public required ProfileDetails Data { get; set; }
 
-	public class ProfileDetails
+	public sealed class ProfileDetails
 	{
 		public required string? Bio { get; init; }
 		public required List<string> Links { get; init; }

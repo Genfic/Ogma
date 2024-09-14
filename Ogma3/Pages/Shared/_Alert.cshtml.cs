@@ -2,7 +2,7 @@ using Ogma3.Data.Alerts;
 
 namespace Ogma3.Pages.Shared;
 
-public class Alert
+public sealed class Alert
 {
 	public required EAlertType AlertType { get; init; }
 	public required string Message { get; init; }

@@ -1,6 +1,6 @@
 namespace Ogma3.Infrastructure.Middleware;
 
-public class RequestTimestampMiddleware : IMiddleware
+public sealed class RequestTimestampMiddleware : IMiddleware
 {
 	public const string Name = "RequestStartedOn";
 

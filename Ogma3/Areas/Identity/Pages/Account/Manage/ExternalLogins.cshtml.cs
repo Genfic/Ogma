@@ -8,7 +8,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class ExternalLoginsModel : PageModel
+public sealed class ExternalLoginsModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly SignInManager<OgmaUser> _signInManager;

@@ -9,7 +9,7 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User;
 
-public class LibraryModel(ApplicationDbContext context, UserRepository userRepo) : PageModel
+public sealed class LibraryModel(ApplicationDbContext context, UserRepository userRepo) : PageModel
 {
 	public required bool IsCurrentUser { get; set; }
 	public required List<Icon> Icons { get; set; }

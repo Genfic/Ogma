@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Constants;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(Roles = RoleNames.Admin)]
-public class Settings : PageModel
+public sealed class Settings : PageModel
 {
 	private readonly OgmaConfig _config;
 

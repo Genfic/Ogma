@@ -1,6 +1,6 @@
 namespace Ogma3.Infrastructure.Exceptions;
 
-public class UnexpectedEnumValueException<TEnum> : Exception where TEnum : Enum
+public sealed class UnexpectedEnumValueException<TEnum> : Exception where TEnum : Enum
 {
 	public UnexpectedEnumValueException(TEnum value) : base($"Value {value} of enum {typeof(TEnum).Name} is not supported")
 	{ }

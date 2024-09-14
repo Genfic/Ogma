@@ -15,7 +15,7 @@ using Ogma3.Data.Shelves;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class ConfirmEmailModel : PageModel
+public sealed class ConfirmEmailModel : PageModel
 {
 	private readonly OgmaUserManager _userManager;
 	private readonly ApplicationDbContext _context;

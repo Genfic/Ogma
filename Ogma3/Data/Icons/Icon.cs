@@ -5,11 +5,11 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Icons;
 
-public class Icon : BaseModel
+public sealed class Icon : BaseModel
 {
 	public string Name { get; init; }
 
-	public class IconConfiguration : BaseConfiguration<Icon>
+	public sealed class IconConfiguration : BaseConfiguration<Icon>
 	{
 		public override void Configure(EntityTypeBuilder<Icon> builder)
 		{

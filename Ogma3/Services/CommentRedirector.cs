@@ -3,7 +3,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Services;
 
-public class CommentRedirector(ApplicationDbContext context)
+public sealed class CommentRedirector(ApplicationDbContext context)
 {
 	public async Task<CommentRedirectionResult?> RedirectToComment(long commentId)
 	{
@@ -51,7 +51,7 @@ public class CommentRedirector(ApplicationDbContext context)
 		Club,
 	}
 
-	private record CommentMeta
+	private sealed record CommentMeta
 	{
 		public int Ordinal { get; init; }
 		public ThreadType? Which { get; init; }

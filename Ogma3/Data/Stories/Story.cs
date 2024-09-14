@@ -11,7 +11,7 @@ using Ogma3.Data.Votes;
 
 namespace Ogma3.Data.Stories;
 
-public class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public sealed class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }

@@ -20,7 +20,7 @@ public static partial class CreateFaq
 {
 	public sealed record Command(string Question, string Answer);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

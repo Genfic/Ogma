@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ogma3.Infrastructure.ActionResults;
 
-public class ProblemResult : ObjectResult
+public sealed class ProblemResult : ObjectResult
 {
 	private const int DefaultStatusCode = StatusCodes.Status422UnprocessableEntity;
 

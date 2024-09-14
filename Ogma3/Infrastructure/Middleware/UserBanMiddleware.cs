@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
+public sealed class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
 	public static string CacheKey(long id) => $"u{id}_Ban";
 

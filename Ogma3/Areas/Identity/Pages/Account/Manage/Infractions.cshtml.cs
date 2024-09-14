@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class Infractions : PageModel
+public sealed class Infractions : PageModel
 {
 	private readonly ApplicationDbContext _context;
 	public Infractions(ApplicationDbContext context) => _context = context;

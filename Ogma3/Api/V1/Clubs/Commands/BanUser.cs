@@ -79,8 +79,8 @@ public static class BanUser
 			return Ok(true);
 		}
 
-		private record BannedUser(string UserName, EClubMemberRoles Role);
+		private sealed record BannedUser(string UserName, EClubMemberRoles Role);
 
-		private record Issuer(EClubMemberRoles Role, string UserName);
+		private sealed record Issuer(EClubMemberRoles Role, string UserName);
 	}
 }

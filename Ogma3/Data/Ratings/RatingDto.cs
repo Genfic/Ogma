@@ -1,6 +1,6 @@
 namespace Ogma3.Data.Ratings;
 
-public class RatingDto
+public sealed class RatingDto
 {
 	public required long Id { get; init; }
 	public required string Name { get; init; }

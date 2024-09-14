@@ -1,6 +1,6 @@
 namespace Ogma3.Infrastructure.Constants;
 
-public class RoleClaimNames
+public static class RoleClaimNames
 {
 	public const string GenerateUnlimitedInviteCodes = "GenerateUnlimitedInviteCodes";
 	public const string DeleteInviteCodes = "DeleteInviteCodes";

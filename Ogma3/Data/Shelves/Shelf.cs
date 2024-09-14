@@ -5,7 +5,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Shelves;
 
-public class Shelf : BaseModel
+public sealed class Shelf : BaseModel
 {
 	public string Name { get; set; } = null!;
 	public string Description { get; set; } = null!;

@@ -4,12 +4,12 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Quotes;
 
-public class Quote : BaseModel
+public sealed class Quote : BaseModel
 {
 	public required string Body { get; init; }
 	public required string Author { get; init; }
 
-	public class QuoteConfiguration : BaseConfiguration<Quote>
+	public sealed class QuoteConfiguration : BaseConfiguration<Quote>
 	{
 		public override void Configure(EntityTypeBuilder<Quote> builder)
 		{

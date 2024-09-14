@@ -15,7 +15,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
+public sealed class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
 	: PageModel
 {
 	[BindProperty] public required PostData Input { get; set; }

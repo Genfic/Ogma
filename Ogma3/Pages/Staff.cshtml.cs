@@ -6,7 +6,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages;
 
-public class StaffModel(ApplicationDbContext context) : PageModel
+public sealed class StaffModel(ApplicationDbContext context) : PageModel
 {
 	public required IEnumerable<UserCard> Staff { get; set; }
 

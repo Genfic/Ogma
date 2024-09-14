@@ -2,7 +2,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.InviteCodes;
 
-public class InviteCodeDto
+public sealed class InviteCodeDto
 {
 	public required long Id { get; init; }
 	public required string Code { get; init; } = null!;

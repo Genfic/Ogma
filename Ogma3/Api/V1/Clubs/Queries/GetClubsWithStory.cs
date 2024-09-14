@@ -10,18 +10,12 @@ public static class GetClubsWithStory
 {
 	public sealed record Query(long StoryId) : IRequest<ActionResult<List<Result>>>;
 
-	public class Handler : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
+	public sealed class Handler(ApplicationDbContext context) : BaseHandler, IRequestHandler<Query, ActionResult<List<Result>>>
 	{
-		private readonly ApplicationDbContext _context;
-
-		public Handler(ApplicationDbContext context)
-		{
-			_context = context;
-		}
 
 		public async ValueTask<ActionResult<List<Result>>> Handle(Query request, CancellationToken cancellationToken)
 		{
-			var clubs = await _context.Clubs
+			var clubs = await context.Clubs
 				.Where(c => c.Folders
 					.Any(f => f.Stories
 						.Any(s => s.Id == request.StoryId)))

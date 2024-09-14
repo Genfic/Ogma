@@ -2,7 +2,7 @@ using Ogma3.Data.Roles;
 
 namespace Ogma3.Pages.Shared.Bars;
 
-public class ProfileBar
+public sealed class ProfileBar
 {
 	public required long Id { get; init; }
 	public required string UserName { get; init; }

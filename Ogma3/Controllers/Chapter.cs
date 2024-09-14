@@ -5,17 +5,13 @@ using Ogma3.Data;
 namespace Ogma3.Controllers;
 
 [Route("[controller]")]
-public class ChapterController : ControllerBase
+public sealed class ChapterController(ApplicationDbContext context) : ControllerBase
 {
-	private readonly ApplicationDbContext _context;
-
-	public ChapterController(ApplicationDbContext context) => _context = context;
-
 	// GET
 	[HttpGet("/story/{sid:long}/chapter/first")]
 	public async Task<IActionResult> FirstChapter(long sid)
 	{
-		var chapterData = await _context.Chapters
+		var chapterData = await context.Chapters
 			.Where(ch => ch.StoryId == sid)
 			.Where(ch => ch.PublicationDate != null)
 			.Where(ch => ch.ContentBlockId == null)
@@ -32,7 +28,7 @@ public class ChapterController : ControllerBase
 	[HttpGet("/story/{sid:long}/chapter/last")]
 	public async Task<IActionResult> LastChapter(long sid)
 	{
-		var chapterData = await _context.Chapters
+		var chapterData = await context.Chapters
 			.Where(ch => ch.StoryId == sid)
 			.Where(ch => ch.PublicationDate != null)
 			.Where(ch => ch.ContentBlockId == null)

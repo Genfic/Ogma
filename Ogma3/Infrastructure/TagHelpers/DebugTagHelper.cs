@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class DebugTagHelper : TagHelper
+public sealed class DebugTagHelper : TagHelper
 {
 	public required object Object { get; set; }
 	

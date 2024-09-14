@@ -10,9 +10,9 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
+public sealed class DetailsModel(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
 {
-	public class ThreadDetails
+	public sealed class ThreadDetails
 	{
 		public required long Id { get; init; }
 		public required long ClubId { get; init; }

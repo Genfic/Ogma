@@ -13,7 +13,7 @@ using Ogma3.Services.TurnstileService;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class RegisterConfirmationModel(
+public sealed class RegisterConfirmationModel(
 	UserManager<OgmaUser> userManager, 
 	IEmailSender emailSender, 
 	ITurnstileService turnstile,

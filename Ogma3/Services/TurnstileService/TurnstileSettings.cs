@@ -1,6 +1,6 @@
 namespace Ogma3.Services.TurnstileService;
 
-public class TurnstileSettings
+public sealed class TurnstileSettings
 {
 	public const string Section = nameof(TurnstileSettings);
 	

@@ -6,20 +6,14 @@ using Serilog;
 
 namespace Ogma3.Services.Mailer;
 
-public class MailGunMailer : IEmailSender
+public sealed class MailGunMailer(IHttpClientFactory httpClientFactory, IOptions<MailGunOptions> options)
+	: IEmailSender
 {
-	private readonly IHttpClientFactory _httpClientFactory;
-	private readonly MailGunOptions _options;
-
-	public MailGunMailer(IHttpClientFactory httpClientFactory, IOptions<MailGunOptions> options)
-	{
-		_httpClientFactory = httpClientFactory;
-		_options = options.Value;
-	}
+	private readonly MailGunOptions _options = options.Value;
 
 	public async Task SendEmailAsync(string email, string subject, string htmlMessage)
 	{
-		var client = _httpClientFactory.CreateClient();
+		var client = httpClientFactory.CreateClient();
 		var auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"api:{_options.MailGunKey}"));
 		client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
 

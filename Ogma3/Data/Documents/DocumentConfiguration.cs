@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Documents;
 
-public class DocumentConfiguration : BaseConfiguration<Document>
+public sealed class DocumentConfiguration : BaseConfiguration<Document>
 {
 	public override void Configure(EntityTypeBuilder<Document> builder)
 	{

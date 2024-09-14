@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.InviteCodes;
 
-public class InviteCodeConfiguration : BaseConfiguration<InviteCode>
+public sealed class InviteCodeConfiguration : BaseConfiguration<InviteCode>
 {
 	public override void Configure(EntityTypeBuilder<InviteCode> builder)
 	{

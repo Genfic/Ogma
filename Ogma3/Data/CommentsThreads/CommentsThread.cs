@@ -8,7 +8,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.CommentsThreads;
 
-public class CommentsThread : BaseModel
+public sealed class CommentsThread : BaseModel
 {
 	public IList<Comment> Comments { get; set; } = [];
 

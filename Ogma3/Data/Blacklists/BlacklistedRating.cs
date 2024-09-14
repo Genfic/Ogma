@@ -5,7 +5,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Blacklists;
 
-public class BlacklistedRating
+public sealed class BlacklistedRating
 {
 	public OgmaUser User { get; init; }
 	public long UserId { get; init; }

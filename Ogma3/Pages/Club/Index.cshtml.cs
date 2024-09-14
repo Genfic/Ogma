@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club;
 
-public class IndexModel : PageModel
+public sealed class IndexModel : PageModel
 {
 	private readonly ApplicationDbContext _context;
 	private readonly ClubRepository _clubRepo;

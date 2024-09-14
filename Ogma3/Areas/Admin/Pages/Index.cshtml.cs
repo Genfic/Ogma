@@ -4,7 +4,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Index(ApplicationDbContext context) : PageModel
+public sealed class Index(ApplicationDbContext context) : PageModel
 {
 	public record CountItem(int Count, string Name);
 

@@ -2,7 +2,7 @@ using Humanizer;
 
 namespace Ogma3.Areas.Admin.Pages.Shared;
 
-public class NavItemPartial
+public sealed class NavItemPartial
 {
 	public NavItemPartial(string page) => Page = page;
 

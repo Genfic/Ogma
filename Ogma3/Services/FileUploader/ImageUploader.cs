@@ -9,7 +9,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
 
-public class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILogger<ImageUploader> logger) : IFileUploader
+public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILogger<ImageUploader> logger) : IFileUploader
 {
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>

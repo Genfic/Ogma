@@ -19,7 +19,7 @@ public static partial class UpdateTag
 {
 	public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

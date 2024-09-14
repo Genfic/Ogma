@@ -11,7 +11,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Reports;
 
-public class Report : BaseModel
+public sealed class Report : BaseModel
 {
 	public OgmaUser Reporter { get; set; } = null!;
 	public long ReporterId { get; set; }
@@ -39,7 +39,7 @@ public class Report : BaseModel
 	public Club? Club { get; set; }
 	public long? ClubId { get; set; }
 
-	public class ReportConfiguration : BaseConfiguration<Report>
+	public sealed class ReportConfiguration : BaseConfiguration<Report>
 	{
 		public override void Configure(EntityTypeBuilder<Report> builder)
 		{

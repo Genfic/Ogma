@@ -4,7 +4,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Pages.Shared.Cards;
 
-public class StoryCard
+public sealed class StoryCard
 {
 	public required long Id { get; init; }
 	public required string AuthorUserName { get; init; }

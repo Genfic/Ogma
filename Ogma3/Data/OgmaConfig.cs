@@ -6,7 +6,7 @@ using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Data;
 
-public class OgmaConfig
+public sealed class OgmaConfig
 {
 	[JsonIgnore] private string _persistentFileLocation = string.Empty;
 	
@@ -64,4 +64,4 @@ public class OgmaConfig
 
 [JsonSerializable(typeof(OgmaConfig))]
 [JsonSourceGenerationOptions(WriteIndented = true, ReadCommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true)]
-public partial class OgmaConfigJsonContext : JsonSerializerContext;
+public sealed partial class OgmaConfigJsonContext : JsonSerializerContext;

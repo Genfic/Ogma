@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Ogma3.Pages;
 
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-public class ErrorModel : PageModel
+public sealed class ErrorModel : PageModel
 {
 	public required string RequestId { get;  set; }
 	public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);

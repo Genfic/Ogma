@@ -8,9 +8,9 @@ using Serilog;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Email(IEmailSender emailSender) : PageModel
+public sealed class Email(IEmailSender emailSender) : PageModel
 {
-	public class EmailModel
+	public sealed class EmailModel
 	{
 		[EmailAddress]
 		public required string To { get; init; }

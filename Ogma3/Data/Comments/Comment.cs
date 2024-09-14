@@ -5,7 +5,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Comments;
 
-public class Comment : BaseModel, IReportableContent
+public sealed class Comment : BaseModel, IReportableContent
 {
 	public CommentsThread CommentsThread { get; set; } = null!;
 	public long CommentsThreadId { get; set; }

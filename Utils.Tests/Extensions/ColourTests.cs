@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Utils.Tests.Extensions;
 
-public class ColourTests
+public sealed class ColourTests
 {
 	// Test Color.ToHexCss()
 	[Fact]

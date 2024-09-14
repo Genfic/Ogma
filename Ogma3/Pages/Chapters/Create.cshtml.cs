@@ -14,14 +14,14 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
+public sealed class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
 	: PageModel
 {
 	[BindProperty]
 	public required PostData Input { get; set; } = new();
 	public required GetData Story { get; set; }
 
-	public class GetData
+	public sealed class GetData
 	{
 		public required long Id { get; init; }
 		public required string Slug { get; init; }
@@ -48,7 +48,7 @@ public class CreateModel(ApplicationDbContext context, NotificationsRepository n
 		return Page();
 	}
 
-	public class PostData
+	public sealed class PostData
 	{
 		public string Title { get; init; } = "";
 		public string Body { get; init; } = "";
@@ -56,7 +56,7 @@ public class CreateModel(ApplicationDbContext context, NotificationsRepository n
 		[Display(Name = "End notes")] public string? EndNotes { get; init; }
 	}
 
-	public class PostDataValidation : AbstractValidator<PostData>
+	public sealed class PostDataValidation : AbstractValidator<PostData>
 	{
 		public PostDataValidation()
 		{

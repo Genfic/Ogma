@@ -2,7 +2,7 @@
 
 namespace Ogma3.Data.Users;
 
-public class UserBlock
+public sealed class UserBlock
 {
 	public OgmaUser BlockingUser { get; set; }
 	public long BlockingUserId { get; set; }

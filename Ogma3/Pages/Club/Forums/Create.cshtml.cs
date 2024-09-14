@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
 	[BindProperty] public required PostModel ClubThread { get; set; }
 
@@ -28,14 +28,14 @@ public class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) 
 		return Page();
 	}
 
-	public class PostModel
+	public sealed class PostModel
 	{
 		public required string Title { get; init; }
 		public required string Body { get; init; }
 		public required long ClubId { get; init; }
 	}
 
-	public class PostModelValidator : AbstractValidator<PostModel>
+	public sealed class PostModelValidator : AbstractValidator<PostModel>
 	{
 		public PostModelValidator()
 		{

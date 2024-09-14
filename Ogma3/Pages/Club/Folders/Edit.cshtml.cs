@@ -9,7 +9,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class EditModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class EditModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
 	public required string Slug { get; set; }
 
@@ -54,7 +54,7 @@ public class EditModel(ApplicationDbContext context, ClubRepository clubRepo) : 
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required long Id { get; init; }
 		public required long ClubId { get; init; }
@@ -64,7 +64,7 @@ public class EditModel(ApplicationDbContext context, ClubRepository clubRepo) : 
 		public required EClubMemberRoles Role { get; init; }
 	}
 
-	public class PostDataValidation : AbstractValidator<InputModel>
+	public sealed class PostDataValidation : AbstractValidator<InputModel>
 	{
 		public PostDataValidation()
 		{

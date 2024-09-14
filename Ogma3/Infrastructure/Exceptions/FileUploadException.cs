@@ -1,10 +1,10 @@
 namespace Ogma3.Infrastructure.Exceptions;
 
-public class FileUploadException : Exception
+public sealed class FileUploadException : Exception
 {
 	public FileUploadException(string message, string fileName, long fileSize) : base(message)
 	{
-		base.Data.Add("file name", fileName);
-		base.Data.Add("file size", fileSize);
+		Data.Add("file name", fileName);
+		Data.Add("file size", fileSize);
 	}
 }

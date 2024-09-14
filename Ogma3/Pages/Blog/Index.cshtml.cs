@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Blog;
 
-public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
+public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	public required IList<BlogpostCard> Posts { get; set; }
 	public required string SearchBy { get; set; }

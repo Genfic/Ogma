@@ -40,4 +40,4 @@ public sealed record StaticData(ValidationData Validation);
 public sealed record ValidationData(int MinNameLength, int MaxNameLength, int MaxDescLength);
 
 [JsonSerializable(typeof(StaticData))]
-public partial class StaticDataJsonContext : JsonSerializerContext;
+public sealed partial class StaticDataJsonContext : JsonSerializerContext;

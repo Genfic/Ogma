@@ -12,7 +12,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Stories;
 
-public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
+public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
@@ -69,4 +69,4 @@ public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageM
 }
 
 [JsonSerializable(typeof(long[]))]
-public partial class PreselectedTagsJsonContext : JsonSerializerContext;
+public sealed partial class PreselectedTagsJsonContext : JsonSerializerContext;

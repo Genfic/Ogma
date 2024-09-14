@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Stories;
 
-public class StoryConfiguration : BaseConfiguration<Story>
+public sealed class StoryConfiguration : BaseConfiguration<Story>
 {
 	public override void Configure(EntityTypeBuilder<Story> builder)
 	{

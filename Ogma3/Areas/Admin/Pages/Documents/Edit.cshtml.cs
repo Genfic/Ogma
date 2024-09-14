@@ -10,7 +10,7 @@ using Ogma3.Infrastructure.Constants;
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
 [Authorize(Roles = RoleNames.Admin)]
-public class EditModel : PageModel
+public sealed class EditModel : PageModel
 {
 	private readonly ApplicationDbContext _context;
 
@@ -21,7 +21,7 @@ public class EditModel : PageModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required] public required string Slug { get; set; }
 

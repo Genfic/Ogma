@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string?>
+public sealed class HashtagLengthValidator<T>(uint max) : IPropertyValidator<T, string?>
 {
 	public bool IsValid(ValidationContext<T> context, string? value)
 	{

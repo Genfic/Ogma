@@ -1,6 +1,6 @@
 namespace Ogma3.Pages.Shared.Minimals;
 
-public class FolderMinimal
+public sealed class FolderMinimal
 {
 	public required long Id { get; init; }
 	public required long ClubId { get; init; }

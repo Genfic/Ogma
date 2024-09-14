@@ -12,7 +12,7 @@ public static class GetSubscriptionStatus
 {
 	public sealed record Query(long ThreadId) : IRequest<ActionResult<bool>>;
 
-	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Query, ActionResult<bool>>
+	public sealed class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Query, ActionResult<bool>>
 	{
 		private readonly long? _uid = userService.User?.GetNumericId();
 

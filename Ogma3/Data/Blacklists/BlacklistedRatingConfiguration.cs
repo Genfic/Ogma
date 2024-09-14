@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Ogma3.Data.Blacklists;
 
-public class BlacklistedRatingConfiguration : IEntityTypeConfiguration<BlacklistedRating>
+public sealed class BlacklistedRatingConfiguration : IEntityTypeConfiguration<BlacklistedRating>
 {
 	public void Configure(EntityTypeBuilder<BlacklistedRating> builder)
 	{

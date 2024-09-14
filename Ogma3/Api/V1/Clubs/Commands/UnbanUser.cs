@@ -15,7 +15,7 @@ public static class UnbanUser
 {
 	public sealed record Command(long UserId, long ClubId) : IRequest<ActionResult<bool>>;
 
-	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	public sealed class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
 		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{
@@ -63,8 +63,8 @@ public static class UnbanUser
 			return Ok(false);
 		}
 
-		private record BannedUser(string UserName, EClubMemberRoles Role);
+		private sealed record BannedUser(string UserName, EClubMemberRoles Role);
 
-		private record Issuer(EClubMemberRoles Role, string UserName);
+		private sealed record Issuer(EClubMemberRoles Role, string UserName);
 	}
 }

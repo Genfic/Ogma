@@ -22,7 +22,7 @@ public static partial class UpdateRating
 {
 	public sealed record Command(long Id, string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

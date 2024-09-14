@@ -9,11 +9,11 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public class Pin(ApplicationDbContext context) : PageModel
+public sealed class Pin(ApplicationDbContext context) : PageModel
 {
 	public required GetData Data { get; set; }
 
-	public class GetData
+	public sealed class GetData
 	{
 		public required long Id { get; init; }
 		public required string Title { get; init; }

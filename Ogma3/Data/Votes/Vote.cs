@@ -7,13 +7,13 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Votes;
 
-public class Vote : BaseModel
+public sealed class Vote : BaseModel
 {
 	public OgmaUser User { get; init; }
 	public long UserId { get; init; }
 	public long StoryId { get; init; }
 
-	public class VoteConfiguration : BaseConfiguration<Vote>
+	public sealed class VoteConfiguration : BaseConfiguration<Vote>
 	{
 		public override void Configure(EntityTypeBuilder<Vote> builder)
 		{

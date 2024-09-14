@@ -3,7 +3,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Faqs;
 
-public class Faq : BaseModel
+public sealed class Faq : BaseModel
 {
 	public required string Question { get; set; }
 	public required string Answer { get; set; }

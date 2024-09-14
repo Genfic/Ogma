@@ -3,7 +3,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Cards;
 
-public class FolderCard
+public sealed class FolderCard
 {
 	public required long Id { get; init; }
 	public required long ClubId { get; init; }

@@ -7,7 +7,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class PersonalDataModel : PageModel
+public sealed class PersonalDataModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 

@@ -19,6 +19,7 @@ public static partial class GetCache
 	[UsedImplicitly]
 	public sealed record Query;
 
+	// ReSharper disable once UnusedParameter.Local
 	private static async ValueTask<ReturnType> HandleAsync(Query _, IMemoryCache cache, CancellationToken __)
 	{
 		await Task.Yield();

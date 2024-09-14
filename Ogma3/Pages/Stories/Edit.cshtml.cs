@@ -17,7 +17,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
+public sealed class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
 	: PageModel
 {
 	public required List<RatingDto> Ratings { get; set; }
@@ -71,7 +71,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 		public required bool Published { get; init; }
 	}
 
-	public class InputModelValidation : AbstractValidator<InputModel>
+	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
 		public InputModelValidation()
 		{

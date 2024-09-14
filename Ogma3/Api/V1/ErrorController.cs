@@ -5,7 +5,7 @@ namespace Ogma3.Api.V1;
 
 [Route("api/[controller]", Name = nameof(ErrorController))]
 [ApiController]
-public class ErrorController : ControllerBase
+public sealed class ErrorController : ControllerBase
 {
 	[HttpGet]
 	public ActionResult<Result> OnGet([FromQuery] int? code)

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 
-public class FileSizeClientValidator(IValidationRule rule, IRuleComponent component) : ClientValidatorBase(rule, component)
+public sealed class FileSizeClientValidator(IValidationRule rule, IRuleComponent component) : ClientValidatorBase(rule, component)
 {
 	public override void AddValidation(ClientModelValidationContext context)
 	{

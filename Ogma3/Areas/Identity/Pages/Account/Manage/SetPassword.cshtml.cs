@@ -9,7 +9,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class SetPasswordModel : PageModel
+public sealed class SetPasswordModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly SignInManager<OgmaUser> _signInManager;
@@ -26,7 +26,7 @@ public class SetPasswordModel : PageModel
 
 	[TempData] public required string StatusMessage { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required]
 		[StringLength(

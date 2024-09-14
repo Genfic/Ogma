@@ -15,7 +15,7 @@ using Ogma3.Infrastructure.Constants;
 namespace Ogma3.Services.Initializers;
 
 [UsedImplicitly]
-public class DbSeedInitializer : IAsyncInitializer
+public sealed class DbSeedInitializer : IAsyncInitializer
 {
 	private readonly ApplicationDbContext _context;
 	private readonly OgmaUserManager _userManager;
@@ -142,9 +142,9 @@ public class DbSeedInitializer : IAsyncInitializer
 public sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
 
 [JsonSerializable(typeof(JsonData))]
-public partial class JsonDataContext : JsonSerializerContext;
+public sealed partial class JsonDataContext : JsonSerializerContext;
 
 public sealed record JsonQuote(string Quote, string Author);
 
 [JsonSerializable(typeof(JsonQuote[]))]
-public partial class JsonQuoteContext : JsonSerializerContext;
+public sealed partial class JsonQuoteContext : JsonSerializerContext;

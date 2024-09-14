@@ -3,7 +3,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class CdnPictureTagHelper(OgmaConfig config) : TagHelper
+public sealed class CdnPictureTagHelper(OgmaConfig config) : TagHelper
 {
 	public string Src { get; set; } = null!;
 	public int Width { get; set; }

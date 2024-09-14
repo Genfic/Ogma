@@ -4,7 +4,7 @@ using Humanizer;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 
-public class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile?>, IFileSizeValidator
+public sealed class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile?>, IFileSizeValidator
 {
 	public uint Max { get; } = max;
 

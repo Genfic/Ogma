@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Comments;
 
-public class CommentDto
+public sealed class CommentDto
 {
 	public required long Id { get; init; }
 	public required UserSimpleDto? Author { get; init; }

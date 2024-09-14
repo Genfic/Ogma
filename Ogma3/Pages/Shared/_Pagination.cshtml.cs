@@ -1,6 +1,6 @@
 namespace Ogma3.Pages.Shared;
 
-public class Pagination
+public sealed class Pagination
 {
 	public int ItemCount { get; init; }
 	public int CurrentPage { get; init; }

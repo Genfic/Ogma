@@ -14,7 +14,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public class CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
+public sealed class CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
 {
 	public IActionResult OnGet()
 	{
@@ -23,7 +23,7 @@ public class CreateModel(ApplicationDbContext context, ImageUploader uploader, O
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required string Name { get; init; }
 		public required string Hook { get; init; }
@@ -32,7 +32,7 @@ public class CreateModel(ApplicationDbContext context, ImageUploader uploader, O
 		[DataType(DataType.Upload)] public IFormFile? Icon { get; init; }
 	}
 
-	public class InputModelValidator : AbstractValidator<InputModel>
+	public sealed class InputModelValidator : AbstractValidator<InputModel>
 	{
 		public InputModelValidator()
 		{

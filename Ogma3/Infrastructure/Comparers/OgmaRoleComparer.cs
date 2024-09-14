@@ -2,7 +2,7 @@ using Ogma3.Data.Roles;
 
 namespace Ogma3.Infrastructure.Comparers;
 
-public class OgmaRoleComparer : IEqualityComparer<OgmaRole>
+public sealed class OgmaRoleComparer : IEqualityComparer<OgmaRole>
 {
 	public bool Equals(OgmaRole? x, OgmaRole? y)
 	{

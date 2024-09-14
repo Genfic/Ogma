@@ -4,7 +4,7 @@ using NSwag.Generation.Processors.Contexts;
 
 namespace Ogma3.Infrastructure.NSwag.OperationProcessors;
 
-public class MinimalApiTagProcessor : IOperationProcessor
+public sealed class MinimalApiTagProcessor : IOperationProcessor
 {
 	public bool Process(OperationProcessorContext context)
 	{

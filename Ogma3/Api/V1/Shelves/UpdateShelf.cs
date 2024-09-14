@@ -29,7 +29,7 @@ public static partial class UpdateShelf
 		long Icon
 	);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

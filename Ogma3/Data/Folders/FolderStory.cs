@@ -5,7 +5,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Folders;
 
-public class FolderStory
+public sealed class FolderStory
 {
 	public Folder Folder { get; set; }
 	public long FolderId { get; init; }

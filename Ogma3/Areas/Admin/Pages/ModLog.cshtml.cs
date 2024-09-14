@@ -7,7 +7,7 @@ using Ogma3.Pages.Shared;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class ModLog : PageModel
+public sealed class ModLog : PageModel
 {
 	private readonly ApplicationDbContext _context;
 	private const int PerPage = 50;

@@ -98,7 +98,7 @@ public sealed record Manifest(DateTime GeneratedAt, ImmutableSortedDictionary<st
 [JsonSerializable(typeof(Manifest))]
 public sealed partial class ManifestJsonContext : JsonSerializerContext;
 
-file class KvpComparer : IEqualityComparer<KeyValuePair<string, string>>
+internal sealed class KvpComparer : IEqualityComparer<KeyValuePair<string, string>>
 {
 	public bool Equals(KeyValuePair<string, string> x, KeyValuePair<string, string> y)
 		=> x.Key == y.Key && x.Value == y.Value;

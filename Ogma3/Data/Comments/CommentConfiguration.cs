@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Comments;
 
-public class CommentConfiguration : BaseConfiguration<Comment>
+public sealed class CommentConfiguration : BaseConfiguration<Comment>
 {
 	public override void Configure(EntityTypeBuilder<Comment> builder)
 	{

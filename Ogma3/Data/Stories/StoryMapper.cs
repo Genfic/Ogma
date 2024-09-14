@@ -12,8 +12,8 @@ public static partial class StoryMapper
 	[MapProperty(nameof(Story.Tags), nameof(StoryCard.Tags), Use = nameof(MapOrderedTags))]
 	public static partial StoryCard ProjectToCard(this Story story);
 	
-	private static TagDto[] MapOrderedTags(IEnumerable<Tag> tags)
-		=> tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace).Select(t => t.ToDto()).ToArray();
+	private static IEnumerable<TagDto> MapOrderedTags(IEnumerable<Tag> tags)
+		=> tags.OrderByDescending(t => t.Namespace.HasValue).ThenByDescending(t => t.Namespace).Select(t => t.ToDto());
 	
 	public static partial IQueryable<StoryDetails> ProjectToStoryDetails(this IQueryable<Story> q);
 	

@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class LineCountValidator<T>(uint max) : PropertyValidator<T, string?>
+public sealed class LineCountValidator<T>(uint max) : PropertyValidator<T, string?>
 {
 	public override bool IsValid(ValidationContext<T> context, string? value)
 	{

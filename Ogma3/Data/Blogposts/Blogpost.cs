@@ -8,7 +8,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Blogposts;
 
-public class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;

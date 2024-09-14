@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Ogma3.Pages;
 
-public class StatusCodeModel : PageModel
+public sealed class StatusCodeModel : PageModel
 {
 	public required string OriginalUrl { get; set; }
 	public required int Code { get; set; }

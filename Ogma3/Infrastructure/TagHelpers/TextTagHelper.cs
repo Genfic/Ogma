@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class TextTagHelper : TagHelper
+public sealed class TextTagHelper : TagHelper
 {
 	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 	{

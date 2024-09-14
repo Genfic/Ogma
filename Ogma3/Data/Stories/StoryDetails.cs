@@ -4,7 +4,7 @@ using Ogma3.Pages.Shared;
 
 namespace Ogma3.Data.Stories;
 
-public class StoryDetails
+public sealed class StoryDetails
 {
 	public required long Id { get; init; }
 	public required long AuthorId { get; init; }

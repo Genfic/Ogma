@@ -2,7 +2,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Users;
 
-public class UserPersonalData
+public sealed class UserPersonalData
 {
 	[MapperIgnore]
 	public DateTimeOffset GenerationTime => DateTimeOffset.Now;

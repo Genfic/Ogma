@@ -18,7 +18,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public class CreateModel(
+public sealed class CreateModel(
 	ApplicationDbContext context,
 	ImageUploader uploader,
 	OgmaConfig ogmaConfig,
@@ -63,7 +63,7 @@ public class CreateModel(
 		public List<long> Tags { get; init; } = [];
 	}
 
-	public class InputModelValidation : AbstractValidator<InputModel>
+	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
 		public InputModelValidation()
 		{

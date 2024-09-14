@@ -4,7 +4,7 @@ using Ogma3.Data.Roles;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Roles : PageModel
+public sealed class Roles : PageModel
 {
 	[BindProperty] public required OgmaRole Input { get; set; }
 

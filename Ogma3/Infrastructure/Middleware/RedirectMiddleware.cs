@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options, ILogger<RedirectMiddleware> logger)
+public sealed class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options, ILogger<RedirectMiddleware> logger)
 {
 	private readonly RedirectMiddlewareOptions _options = options.Value;
 
@@ -29,7 +29,7 @@ public static class RedirectMiddlewareExtensions
 	}
 }
 
-public class RedirectMiddlewareOptions
+public sealed class RedirectMiddlewareOptions
 {
 	public Dictionary<string, string> Redirects { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 }

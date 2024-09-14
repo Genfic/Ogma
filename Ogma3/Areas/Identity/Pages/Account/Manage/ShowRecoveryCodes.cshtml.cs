@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class ShowRecoveryCodesModel : PageModel
+public sealed class ShowRecoveryCodesModel : PageModel
 {
 	[TempData] public string[]? RecoveryCodes { get; set; }
 

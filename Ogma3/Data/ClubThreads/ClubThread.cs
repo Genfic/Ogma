@@ -7,7 +7,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.ClubThreads;
 
-public class ClubThread : BaseModel
+public sealed class ClubThread : BaseModel
 {
 	public string Title { get; set; }
 	public string Body { get; set; }

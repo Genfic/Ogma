@@ -10,7 +10,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages;
 
-public class TagModel(ApplicationDbContext context) : PageModel
+public sealed class TagModel(ApplicationDbContext context) : PageModel
 {
 	private const int PerPage = 25;
 

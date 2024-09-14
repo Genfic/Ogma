@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
-public class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile?>
+public sealed class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile?>
 {
 	public override bool IsValid(ValidationContext<T> context, IFormFile? value)
 	{

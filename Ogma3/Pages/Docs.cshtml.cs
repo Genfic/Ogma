@@ -7,7 +7,7 @@ using String = Utils.Extensions.String;
 
 namespace Ogma3.Pages;
 
-public class Docs(ApplicationDbContext context) : PageModel
+public sealed class Docs(ApplicationDbContext context) : PageModel
 {
 	public required DocumentDto Document { get;  set; }
 	public required List<DocumentVersionDto> Versions { get; set; }
@@ -51,7 +51,7 @@ public class Docs(ApplicationDbContext context) : PageModel
 		return Page();
 	}
 	
-	public class DocumentDto
+	public sealed class DocumentDto
 	{
 		public required string Title { get; init; }
 		public required string Slug { get; init; }
@@ -59,7 +59,7 @@ public class Docs(ApplicationDbContext context) : PageModel
 		public required uint Version { get; init; }
 	}
 
-	public class DocumentVersionDto
+	public sealed class DocumentVersionDto
 	{
 		public required string Slug { get; init; }
 		public required uint Version { get; init; }

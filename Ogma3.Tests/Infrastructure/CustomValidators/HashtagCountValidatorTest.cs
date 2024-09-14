@@ -2,7 +2,7 @@ using Ogma3.Infrastructure.CustomValidators;
 
 namespace Ogma3.Tests.Infrastructure.CustomValidators;
 
-public class HashtagCountValidatorTest
+public sealed class HashtagCountValidatorTest
 {
 	private readonly HashtagCountValidator<int> _validator = new(3);
 

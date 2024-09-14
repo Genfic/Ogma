@@ -7,7 +7,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class TagTagHelper : TagHelper
+public sealed class TagTagHelper : TagHelper
 {
 	private readonly IUrlHelper _urlHelper;
 

@@ -9,4 +9,4 @@ public record TurnstileResult(
 	[property: JsonPropertyName("hostname")] string Hostname);
 
 [JsonSerializable(typeof(TurnstileResult))]
-public partial class TurnstileResultContext : JsonSerializerContext;
+public sealed partial class TurnstileResultContext : JsonSerializerContext;

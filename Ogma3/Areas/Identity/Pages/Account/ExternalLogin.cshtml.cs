@@ -14,7 +14,7 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class ExternalLoginModel : PageModel
+public sealed class ExternalLoginModel : PageModel
 {
 	private readonly SignInManager<OgmaUser> _signInManager;
 	private readonly UserManager<OgmaUser> _userManager;
@@ -41,12 +41,12 @@ public class ExternalLoginModel : PageModel
 
 	[TempData] public required string ErrorMessage { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required] [EmailAddress] public required string Email { get; set; }
 	}
 
-	public IActionResult OnGetAsync()
+	public IActionResult OnGet()
 	{
 		return RedirectToPage("./Login");
 	}

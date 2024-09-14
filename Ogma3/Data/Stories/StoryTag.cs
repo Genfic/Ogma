@@ -4,7 +4,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Data.Stories;
 
-public class StoryTag
+public sealed class StoryTag
 {
 	public Story Story { get; set; }
 	public long StoryId { get; set; }

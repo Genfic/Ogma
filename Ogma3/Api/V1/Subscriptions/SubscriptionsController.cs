@@ -9,7 +9,7 @@ namespace Ogma3.Api.V1.Subscriptions;
 
 [Route("api/[controller]", Name = nameof(SubscriptionsController))]
 [ApiController]
-public class SubscriptionsController(IMediator mediator) : ControllerBase
+public sealed class SubscriptionsController(IMediator mediator) : ControllerBase
 {
 
 	[HttpGet("thread")]

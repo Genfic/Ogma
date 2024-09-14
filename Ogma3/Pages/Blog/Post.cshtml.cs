@@ -13,13 +13,13 @@ using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Blog;
 
-public class DetailsModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
+public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
 {
 	public required Details Blogpost { get; set; }
 	public required ProfileBar ProfileBar { get; set; }
 	public required bool IsUnavailable { get; set; }
 
-	public class Details
+	public sealed class Details
 	{
 		public required long Id { get; init; }
 		public required long AuthorId { get; init; }

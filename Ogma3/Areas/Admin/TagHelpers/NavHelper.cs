@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Areas.Admin.TagHelpers;
 
-public class NavHelper : TagHelper
+public sealed class NavHelper : TagHelper
 {
 
 	[HtmlAttributeNotBound]

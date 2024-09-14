@@ -6,7 +6,7 @@ using Ogma3.Infrastructure.Exceptions;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class StoryStatusTagHelper : TagHelper
+public sealed class StoryStatusTagHelper : TagHelper
 {
 	public EStoryStatus Status { get; set; }
 

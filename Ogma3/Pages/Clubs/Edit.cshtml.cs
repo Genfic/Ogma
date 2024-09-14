@@ -16,11 +16,11 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
+public sealed class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required long Id { get; init; }
 		public required string Name { get; init; }
@@ -30,7 +30,7 @@ public class EditModel(ApplicationDbContext context, ImageUploader uploader, Ogm
 		[DataType(DataType.Upload)]public IFormFile? Icon { get; init; }
 	}
 
-	public class InputModelValidator : AbstractValidator<InputModel>
+	public sealed class InputModelValidator : AbstractValidator<InputModel>
 	{
 		public InputModelValidator()
 		{

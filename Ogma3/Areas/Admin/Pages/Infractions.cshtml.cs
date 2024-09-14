@@ -7,7 +7,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class InfractionsModel(ApplicationDbContext context) : PageModel
+public sealed class InfractionsModel(ApplicationDbContext context) : PageModel
 {
 	public required List<InfractionDto> Infractions { get; set; }
 

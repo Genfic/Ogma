@@ -7,7 +7,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
-public class CreateModel : PageModel
+public sealed class CreateModel : PageModel
 {
 	private readonly ApplicationDbContext _context;
 
@@ -18,7 +18,7 @@ public class CreateModel : PageModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required long Id { get; set; }
 
@@ -27,7 +27,7 @@ public class CreateModel : PageModel
 		[Required] public required string Body { get; set; }
 	}
 
-	public void OnGetAsync()
+	public void OnGet()
 	{
 	}
 

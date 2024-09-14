@@ -3,7 +3,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.InviteCodes;
 
-public class InviteCode : BaseModel
+public sealed class InviteCode : BaseModel
 {
 	private readonly string _code = null!;
 

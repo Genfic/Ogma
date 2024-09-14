@@ -1,6 +1,6 @@
 namespace Ogma3.Data.Clubs;
 
-public class ClubMinimalDto
+public sealed class ClubMinimalDto
 {
 	public required string Name { get; init; }
 	public required long Id { get; init; }

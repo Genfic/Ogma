@@ -11,11 +11,11 @@ using Serilog;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
 {
 	[BindProperty] public required GetData Club { get; set; }
 
-	public class GetData
+	public sealed class GetData
 	{
 		public required long Id { get; init; }
 		public required string Name { get; init; }

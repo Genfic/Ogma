@@ -2,7 +2,7 @@ using Ogma3.Infrastructure.CustomValidators;
 
 namespace Ogma3.Tests.Infrastructure.CustomValidators;
 
-public class HashtagLengthValidatorTest
+public sealed class HashtagLengthValidatorTest
 {
 	private readonly HashtagLengthValidator<int> _validator = new(10);
 

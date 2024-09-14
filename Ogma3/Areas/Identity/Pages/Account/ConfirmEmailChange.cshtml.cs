@@ -11,7 +11,7 @@ using Ogma3.Data.Users;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class ConfirmEmailChangeModel : PageModel
+public sealed class ConfirmEmailChangeModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly SignInManager<OgmaUser> _signInManager;

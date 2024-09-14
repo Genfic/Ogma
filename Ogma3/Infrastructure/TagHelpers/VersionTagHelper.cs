@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class VersionTagHelper : TagHelper
+public sealed class VersionTagHelper : TagHelper
 {
 	public required string Text { get; set; }
 	public required string Color { get; set; }

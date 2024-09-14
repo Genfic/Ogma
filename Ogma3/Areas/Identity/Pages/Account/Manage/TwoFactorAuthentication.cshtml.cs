@@ -5,7 +5,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class TwoFactorAuthenticationModel : PageModel
+public sealed class TwoFactorAuthenticationModel : PageModel
 {
 	// private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
 

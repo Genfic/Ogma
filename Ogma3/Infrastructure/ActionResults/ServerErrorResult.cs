@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Ogma3.Infrastructure.ActionResults;
 
 [DefaultStatusCode(DefaultStatusCode)]
-public class ServerErrorResult : ObjectResult
+public sealed class ServerErrorResult : ObjectResult
 {
 	private const int DefaultStatusCode = StatusCodes.Status500InternalServerError;
 

@@ -28,7 +28,7 @@ public static partial class CreateShelf
 		long Icon
 	);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

@@ -2,7 +2,7 @@
 
 namespace Ogma3.Data.Users;
 
-public class UserFollow
+public sealed class UserFollow
 {
 	public OgmaUser FollowingUser { get; set; }
 	public long FollowingUserId { get; set; }

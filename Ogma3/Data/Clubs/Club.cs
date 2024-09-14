@@ -6,7 +6,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Clubs;
 
-public class Club : BaseModel, IReportableContent
+public sealed class Club : BaseModel, IReportableContent
 {
 	public required string Name { get; set; }
 	public required string Slug { get; set; }

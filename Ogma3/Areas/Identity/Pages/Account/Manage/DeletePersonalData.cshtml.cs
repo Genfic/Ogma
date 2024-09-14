@@ -13,7 +13,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class DeletePersonalDataModel : PageModel
+public sealed class DeletePersonalDataModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly SignInManager<OgmaUser> _signInManager;
@@ -34,7 +34,7 @@ public class DeletePersonalDataModel : PageModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required]
 		[DataType(DataType.Password)]

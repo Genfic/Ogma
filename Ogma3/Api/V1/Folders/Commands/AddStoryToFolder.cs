@@ -18,7 +18,7 @@ public static class AddStoryToFolder
 		public static Response FromFolderStory(FolderStory fs) => new Response(fs.FolderId, fs.StoryId, fs.Added, fs.AddedById);
 	}
 
-	public class Handler(ApplicationDbContext context, IUserService userService)
+	public sealed class Handler(ApplicationDbContext context, IUserService userService)
 		: BaseHandler, IRequestHandler<Command, ActionResult<Response>>
 	{
 		private readonly long? _uid = userService.User?.GetNumericId();

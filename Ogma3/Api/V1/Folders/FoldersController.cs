@@ -9,7 +9,7 @@ namespace Ogma3.Api.V1.Folders;
 
 [Route("api/[controller]", Name = nameof(FoldersController))]
 [ApiController]
-public class FoldersController(IMediator mediator) : ControllerBase
+public sealed class FoldersController(IMediator mediator) : ControllerBase
 {
 	// GET api/folders/5
 	[HttpGet("{id:long}")]

@@ -7,7 +7,7 @@ using Ogma3.Data.Users;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class LogoutModel : PageModel
+public sealed class LogoutModel : PageModel
 {
 	private readonly SignInManager<OgmaUser> _signInManager;
 	private readonly ILogger<LogoutModel> _logger;

@@ -2,7 +2,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Tags;
 
-public class TagDto
+public sealed class TagDto
 {
 	public required long Id { get; init; }
 	public required string Name { get; init; }

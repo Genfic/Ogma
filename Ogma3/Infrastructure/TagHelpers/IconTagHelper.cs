@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class IconTagHelper : TagHelper
+public sealed class IconTagHelper : TagHelper
 {
 	public string Icon { get; set; } = "bug_report";
 

@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Tags;
 
-public class TagConfiguration : BaseConfiguration<Tag>
+public sealed class TagConfiguration : BaseConfiguration<Tag>
 {
 	public override void Configure(EntityTypeBuilder<Tag> builder)
 	{

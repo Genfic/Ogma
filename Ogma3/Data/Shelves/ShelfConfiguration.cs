@@ -4,7 +4,7 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Shelves;
 
-public class ShelfConfiguration : BaseConfiguration<Shelf>
+public sealed class ShelfConfiguration : BaseConfiguration<Shelf>
 {
 	public override void Configure(EntityTypeBuilder<Shelf> builder)
 	{

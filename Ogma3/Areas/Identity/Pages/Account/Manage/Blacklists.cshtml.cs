@@ -12,7 +12,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class Blacklists(ApplicationDbContext context) : PageModel
+public sealed class Blacklists(ApplicationDbContext context) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<UserCard> BlockedUsers { get; set; }
@@ -85,4 +85,4 @@ public class Blacklists(ApplicationDbContext context) : PageModel
 }
 
 [JsonSerializable(typeof(List<long>))]
-public partial class PreselectedJsonContext : JsonSerializerContext;
+public sealed partial class PreselectedJsonContext : JsonSerializerContext;

@@ -8,7 +8,7 @@ using Ogma3.Infrastructure.Mediator.Behaviours;
 
 namespace Ogma3.Infrastructure.Mediator.Behaviours;
 
-public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
+public sealed class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
 	where TRequest : IRequest<TResponse>
 {
 	public ValueTask<TResponse> Handle(TRequest message, CancellationToken cancellationToken, MessageHandlerDelegate<TRequest, TResponse> next)
@@ -30,7 +30,7 @@ public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRe
 }
 
 
-public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : Behavior<TRequest, TResponse>
+public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : Behavior<TRequest, TResponse>
 	where TRequest : IRequest<TResponse>
 {
 	public override async ValueTask<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken)

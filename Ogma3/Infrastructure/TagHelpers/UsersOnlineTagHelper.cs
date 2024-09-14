@@ -8,7 +8,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 /// <summary>
 /// Get the cached amount of users online
 /// </summary>
-public class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCache cache) : TagHelper
+public sealed class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCache cache) : TagHelper
 {
 	/// <summary>
 	/// Tolerance in minutes

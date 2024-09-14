@@ -1,6 +1,6 @@
 namespace Ogma3.Pages.Shared.Minimals;
 
-public class BlogpostMinimal
+public sealed class BlogpostMinimal
 {
 	public required long Id { get; init; }
 	public required string AuthorUserName { get; init; }

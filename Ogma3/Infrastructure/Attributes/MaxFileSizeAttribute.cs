@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Ogma3.Infrastructure.Attributes;
 
-public class MaxFileSizeAttribute : ValidationAttribute, IClientModelValidator
+public sealed class MaxFileSizeAttribute : ValidationAttribute, IClientModelValidator
 {
 	private readonly int _maxFileSize;
 	private readonly string _message;

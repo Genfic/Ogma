@@ -6,23 +6,16 @@ using SendGrid.Helpers.Mail;
 
 namespace Ogma3.Services.Mailer;
 
-public class SendGridMailer : IEmailSender
+public sealed class SendGridMailer(IOptions<SendGridOptions> optionsAccessor, OgmaConfig config) : IEmailSender
 {
-	private readonly SendGridOptions _options;
-	private readonly OgmaConfig _config;
-
-	public SendGridMailer(IOptions<SendGridOptions> optionsAccessor, OgmaConfig config)
-	{
-		_config = config;
-		_options = optionsAccessor.Value;
-	}
+	private readonly SendGridOptions _options = optionsAccessor.Value;
 
 	public Task SendEmailAsync(string email, string subject, string message)
 	{
 		var client = new SendGridClient(_options.SendGridKey);
 		var msg = new SendGridMessage
 		{
-			From = new EmailAddress(_config.AdminEmail, _options.SendGridUser),
+			From = new EmailAddress(config.AdminEmail, _options.SendGridUser),
 			Subject = subject,
 			PlainTextContent = message,
 			HtmlContent = message,

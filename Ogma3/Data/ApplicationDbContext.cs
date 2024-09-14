@@ -31,7 +31,7 @@ using Serilog;
 
 namespace Ogma3.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public sealed class ApplicationDbContext : IdentityDbContext
 <
 	OgmaUser,
 	OgmaRole,

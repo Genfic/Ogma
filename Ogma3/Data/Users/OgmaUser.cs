@@ -11,7 +11,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Data.Users;
 
-public class OgmaUser : IdentityUser<long>, IReportableContent
+public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 {
 	// IdentityUser overrides
 	public new string UserName {

@@ -6,7 +6,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Blogposts;
 
-public class BlogpostConfiguration : BaseConfiguration<Blogpost>
+public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 {
 	public override void Configure(EntityTypeBuilder<Blogpost> builder)
 	{

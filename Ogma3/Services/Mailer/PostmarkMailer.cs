@@ -5,11 +5,9 @@ using Serilog;
 
 namespace Ogma3.Services.Mailer;
 
-public class PostmarkMailer : IEmailSender
+public sealed class PostmarkMailer(IOptions<PostmarkOptions> options) : IEmailSender
 {
-	private readonly PostmarkOptions _options;
-
-	public PostmarkMailer(IOptions<PostmarkOptions> options) => _options = options.Value;
+	private readonly PostmarkOptions _options = options.Value;
 
 	public async Task SendEmailAsync(string email, string subject, string htmlMessage)
 	{

@@ -6,7 +6,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class MarkdownTagHelper : TagHelper
+public sealed class MarkdownTagHelper : TagHelper
 {
 	public Presets Preset { get; set; } = Presets.Basic;
 

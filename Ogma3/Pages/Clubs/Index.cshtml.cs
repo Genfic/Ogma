@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Clubs;
 
-public class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
+public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	public IList<ClubCard> Clubs { get; private set; } = null!;
 	public string? Query { get; private set; }

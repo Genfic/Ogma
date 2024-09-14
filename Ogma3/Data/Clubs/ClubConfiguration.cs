@@ -5,7 +5,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Clubs;
 
-public class ClubConfiguration : BaseConfiguration<Club>
+public sealed class ClubConfiguration : BaseConfiguration<Club>
 {
 	public override void Configure(EntityTypeBuilder<Club> builder)
 	{

@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 namespace Ogma3.Services.CodeGenerator;
 
-public class CodeGenerator(ILogger<CodeGenerator> logger) : ICodeGenerator
+public sealed class CodeGenerator(ILogger<CodeGenerator> logger) : ICodeGenerator
 {
 	public string GetInviteCode(bool isBase64 = false)
 	{

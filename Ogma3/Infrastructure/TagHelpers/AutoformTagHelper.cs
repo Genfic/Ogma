@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Attributes;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
+public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 {
 	[HtmlAttributeNotBound]
 	[ViewContext]

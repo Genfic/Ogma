@@ -22,7 +22,7 @@ public static partial class UpdateFaq
 	public sealed record Command(long Id, string Question, string Answer);
 
 	[UsedImplicitly]
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

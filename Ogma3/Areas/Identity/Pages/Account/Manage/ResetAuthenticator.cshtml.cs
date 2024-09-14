@@ -7,7 +7,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class ResetAuthenticatorModel : PageModel
+public sealed class ResetAuthenticatorModel : PageModel
 {
 	private readonly UserManager<OgmaUser> _userManager;
 	private readonly SignInManager<OgmaUser> _signInManager;

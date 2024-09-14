@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Utils.Tests.Utils;
 
-public class ExtensionsTest
+public sealed class ExtensionsTest
 {
 	// Test IComparable.Between()
 	[Fact]

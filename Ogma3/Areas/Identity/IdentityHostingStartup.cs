@@ -4,7 +4,7 @@
 
 namespace Ogma3.Areas.Identity;
 
-public class IdentityHostingStartup : IHostingStartup
+public sealed class IdentityHostingStartup : IHostingStartup
 {
 	public void Configure(IWebHostBuilder builder)
 	{

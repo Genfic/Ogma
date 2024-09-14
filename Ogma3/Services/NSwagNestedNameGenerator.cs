@@ -4,7 +4,7 @@ using NJsonSchema.Generation;
 
 namespace Ogma3.Services;
 
-public class NSwagNestedNameGenerator : ISchemaNameGenerator
+public sealed class NSwagNestedNameGenerator : ISchemaNameGenerator
 {
 	public string Generate(Type type)
 	{

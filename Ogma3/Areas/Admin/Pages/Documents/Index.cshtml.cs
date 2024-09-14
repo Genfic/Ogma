@@ -5,7 +5,7 @@ using Ogma3.Data.Documents;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
-public class IndexModel : PageModel
+public sealed class IndexModel : PageModel
 {
 	private readonly ApplicationDbContext _context;
 

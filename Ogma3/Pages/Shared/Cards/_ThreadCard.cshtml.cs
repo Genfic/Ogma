@@ -1,6 +1,6 @@
 namespace Ogma3.Pages.Shared.Cards;
 
-public class ThreadCard
+public sealed class ThreadCard
 {
 	public required long Id { get; init; }
 	public required string Title { get; init; }

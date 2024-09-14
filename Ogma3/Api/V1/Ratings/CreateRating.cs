@@ -20,7 +20,7 @@ public static partial class CreateRating
 {
 	public sealed record Command(string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

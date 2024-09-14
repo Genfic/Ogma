@@ -18,7 +18,7 @@ public static partial class CreateRole
 {
 	public sealed record Command(string Name, bool IsStaff, string Color, byte Order);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator() => RuleFor(r => r.Name).NotEmpty();
 	}

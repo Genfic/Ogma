@@ -6,7 +6,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Data.Chapters;
 
-public class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public uint Order { get; set; }
 	public DateTime CreationDate { get; set; }

@@ -4,7 +4,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Clubs;
 
-public class ClubMemberConfiguration : IEntityTypeConfiguration<ClubMember>
+public sealed class ClubMemberConfiguration : IEntityTypeConfiguration<ClubMember>
 {
 	public void Configure(EntityTypeBuilder<ClubMember> builder)
 	{

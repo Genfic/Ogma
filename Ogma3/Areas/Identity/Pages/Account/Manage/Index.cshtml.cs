@@ -14,7 +14,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public class IndexModel(
+public sealed class IndexModel(
 	ApplicationDbContext context,
 	SignInManager<OgmaUser> signInManager,
 	ImageUploader uploader,
@@ -23,7 +23,7 @@ public class IndexModel(
 	[TempData] public string StatusMessage { get; set; } = "";
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[DataType(DataType.Upload)] public IFormFile? Avatar { get; init; }
 		public bool DeleteAvatar { get; init; }
@@ -32,7 +32,7 @@ public class IndexModel(
 		public string? Links { get; init; }
 	}
 
-	public class InputModelValidation : AbstractValidator<InputModel>
+	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
 		public InputModelValidation()
 		{

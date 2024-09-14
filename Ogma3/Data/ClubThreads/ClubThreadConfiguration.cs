@@ -6,7 +6,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.ClubThreads;
 
-public class ClubThreadConfiguration : BaseConfiguration<ClubThread>
+public sealed class ClubThreadConfiguration : BaseConfiguration<ClubThread>
 {
 	public override void Configure(EntityTypeBuilder<ClubThread> builder)
 	{

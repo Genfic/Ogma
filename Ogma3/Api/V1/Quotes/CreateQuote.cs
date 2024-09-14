@@ -21,7 +21,7 @@ public static partial class CreateQuote
 
 	public sealed record Command(string Body, string Author);
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator()
 		{

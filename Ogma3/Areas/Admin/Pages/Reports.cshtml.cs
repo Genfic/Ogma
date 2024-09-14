@@ -8,7 +8,7 @@ using Ogma3.Services;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public class Reports(ApplicationDbContext context, CommentRedirector redirector)
+public sealed class Reports(ApplicationDbContext context, CommentRedirector redirector)
 	: PageModel
 {
 	private const int PerPage = 50;

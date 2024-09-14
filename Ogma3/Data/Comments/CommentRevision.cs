@@ -7,14 +7,14 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Comments;
 
-public class CommentRevision : BaseModel
+public sealed class CommentRevision : BaseModel
 {
 	public DateTime EditTime { get; init; }
 	public string Body { get; init; }
 	public Comment Parent { get; init; }
 	public long ParentId { get; init; }
 
-	public class CommentRevisionConfiguration : BaseConfiguration<CommentRevision>
+	public sealed class CommentRevisionConfiguration : BaseConfiguration<CommentRevision>
 	{
 		public override void Configure(EntityTypeBuilder<CommentRevision> builder)
 		{

@@ -11,11 +11,11 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public class DeleteModel(ApplicationDbContext context) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 {
 	[BindProperty] public required GetData ClubThread { get; set; }
 
-	public class GetData
+	public sealed class GetData
 	{
 		public required long Id { get; init; }
 		public required long ClubId { get; init; }

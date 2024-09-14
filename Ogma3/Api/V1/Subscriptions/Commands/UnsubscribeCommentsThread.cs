@@ -12,7 +12,7 @@ public static class UnsubscribeCommentsThread
 {
 	public sealed record Command(long ThreadId) : IRequest<ActionResult<bool>>;
 
-	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	public sealed class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
 		private readonly long? _uid = userService.User?.GetNumericId();
 

@@ -3,7 +3,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Minimals;
 
-public class ChapterMinimal
+public sealed class ChapterMinimal
 {
 	public required long Id { get; init; }
 	public required string StoryTitle { get; init; }

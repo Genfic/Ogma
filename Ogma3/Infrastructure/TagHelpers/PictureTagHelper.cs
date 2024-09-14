@@ -11,7 +11,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 	"picture",
 	Attributes = AppendVersionAttributeName + "," + SrcAttributeName)]
 [method: ActivatorUtilitiesConstructor]
-public class PictureTagHelper(
+public sealed class PictureTagHelper(
 	IUrlHelperFactory urlHelperFactory,
 	HtmlEncoder htmlEncoder,
 	IFileVersionProvider fileVersionProvider

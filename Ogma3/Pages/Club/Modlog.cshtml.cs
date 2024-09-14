@@ -9,7 +9,7 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.Club;
 
-public class Modlog(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class Modlog(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
 	private const int PerPage = 50;
 

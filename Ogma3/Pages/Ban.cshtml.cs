@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages;
 
-public class Ban(ApplicationDbContext context) : PageModel
+public sealed class Ban(ApplicationDbContext context) : PageModel
 {
 	public DateTime BannedUntil { get; private set; }
 	public List<InfractionDto> Infractions { get; private set; } = [];

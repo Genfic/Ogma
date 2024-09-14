@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class IndexModel(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
+public sealed class IndexModel(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
 {
 	public required ClubBar ClubBar { get; set; }
 	public required ICollection<FolderCard> Folders { get; set; }

@@ -56,5 +56,5 @@ public static partial class JoinClub
 		return TypedResults.Ok(true);
 	}
 
-	private record MemberOrBanned(bool IsMember, bool IsBanned);
+	private sealed record MemberOrBanned(bool IsMember, bool IsBanned);
 }

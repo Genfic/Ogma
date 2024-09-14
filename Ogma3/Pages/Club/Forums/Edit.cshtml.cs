@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public class EditModel(ApplicationDbContext context) : PageModel
+public sealed class EditModel(ApplicationDbContext context) : PageModel
 {
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
@@ -35,7 +35,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public required long Id { get; init; }
 		public required long ClubId { get; init; }
@@ -43,7 +43,7 @@ public class EditModel(ApplicationDbContext context) : PageModel
 		public required string Body { get; init; }
 	}
 
-	public class InputModelValidator : AbstractValidator<InputModel>
+	public sealed class InputModelValidator : AbstractValidator<InputModel>
 	{
 		public InputModelValidator()
 		{

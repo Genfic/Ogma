@@ -2,7 +2,7 @@ using Xunit;
 
 namespace Utils.Tests.Utils;
 
-public class UnitConvertersTest
+public sealed class UnitConvertersTest
 {
 	[Fact]
 	public void TestBytes() =>

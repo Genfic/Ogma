@@ -13,7 +13,7 @@ using Ogma3.Services.TurnstileService;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurnstileService turnstile, ILogger<ResetPasswordModel> logger)
+public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurnstileService turnstile, ILogger<ResetPasswordModel> logger)
 	: PageModel
 {
 	[BindProperty] public InputModel Input { get; set; }
@@ -22,7 +22,7 @@ public class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurnstileSer
 	[BindProperty(Name = "cf-turnstile-response")]
 	public string TurnstileResponse { get; set; } = null!;
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		[Required,
 		 EmailAddress]

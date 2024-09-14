@@ -8,7 +8,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Blacklists;
 
-public class ContentBlock : BaseModel
+public sealed class ContentBlock : BaseModel
 {
 	public OgmaUser Issuer { get; init; }
 	public long IssuerId { get; init; }
@@ -16,7 +16,7 @@ public class ContentBlock : BaseModel
 	public DateTime DateTime { get; init; }
 	public string Type { get; init; }
 
-	public class ContentBlockConfiguration : BaseConfiguration<ContentBlock>
+	public sealed class ContentBlockConfiguration : BaseConfiguration<ContentBlock>
 	{
 		public override void Configure(EntityTypeBuilder<ContentBlock> builder)
 		{

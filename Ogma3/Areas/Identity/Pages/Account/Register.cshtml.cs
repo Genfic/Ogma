@@ -18,7 +18,7 @@ using Ogma3.Services.TurnstileService;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public class RegisterModel(
+public sealed class RegisterModel(
 	UserManager<OgmaUser> userManager,
 	SignInManager<OgmaUser> signInManager,
 	IEmailSender emailSender,
@@ -37,7 +37,7 @@ public class RegisterModel(
 
 	public IList<AuthenticationScheme> ExternalLogins { get; set; } = null!;
 
-	public class InputModel
+	public sealed class InputModel
 	{
 		public string Name { get; init; } = null!;
 		public string Email { get; init; } = null!;
@@ -51,7 +51,7 @@ public class RegisterModel(
 		[Display(Name = "Invite code")] public string? InviteCode { get; init; }
 	}
 
-	public class InputModelValidation : AbstractValidator<InputModel>
+	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
 		public InputModelValidation()
 		{

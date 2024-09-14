@@ -12,9 +12,9 @@ using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public class FolderModel(ApplicationDbContext context, OgmaConfig config, ClubRepository clubRepo) : PageModel
+public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config, ClubRepository clubRepo) : PageModel
 {
-	public class FolderDetails
+	public sealed class FolderDetails
 	{
 		public required long Id { get; init; }
 		public required string Name { get; init; }

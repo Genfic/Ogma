@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages;
 
-public class IndexModel(ApplicationDbContext context, IMemoryCache cache, ILogger<IndexModel> logger)
+public sealed class IndexModel(ApplicationDbContext context, IMemoryCache cache, ILogger<IndexModel> logger)
 	: PageModel
 {
 	public required List<StoryCard> RecentStories { get; set; }

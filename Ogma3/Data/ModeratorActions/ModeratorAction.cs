@@ -8,14 +8,14 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.ModeratorActions;
 
-public class ModeratorAction : BaseModel
+public sealed class ModeratorAction : BaseModel
 {
 	public OgmaUser StaffMember { get; init; }
 	public long StaffMemberId { get; init; }
 	public string Description { get; init; }
 	public DateTime DateTime { get; init; }
 
-	public class ModeratorActionConfiguration : BaseConfiguration<ModeratorAction>
+	public sealed class ModeratorActionConfiguration : BaseConfiguration<ModeratorAction>
 	{
 		public override void Configure(EntityTypeBuilder<ModeratorAction> builder)
 		{

@@ -3,7 +3,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Pages.Shared.Minimals;
 
-public class StoryMinimal
+public sealed class StoryMinimal
 {
 	public required long Id { get; init; }
 	public required string Title { get; init; }

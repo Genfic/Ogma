@@ -6,7 +6,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Folders;
 
-public class FolderConfiguration : BaseConfiguration<Folder>
+public sealed class FolderConfiguration : BaseConfiguration<Folder>
 {
 	public override void Configure(EntityTypeBuilder<Folder> builder)
 	{

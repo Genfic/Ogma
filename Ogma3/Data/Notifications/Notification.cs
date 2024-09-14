@@ -3,7 +3,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Notifications;
 
-public class Notification : BaseModel
+public sealed class Notification : BaseModel
 {
 	public string? Body { get; init; }
 	public string Url { get; init; } = null!;

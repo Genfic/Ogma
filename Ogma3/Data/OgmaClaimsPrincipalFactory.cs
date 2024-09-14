@@ -7,15 +7,13 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data;
 
-public class OgmaClaimsPrincipalFactory : UserClaimsPrincipalFactory<OgmaUser, OgmaRole>
+public sealed class OgmaClaimsPrincipalFactory
+(
+	UserManager<OgmaUser> userManager,
+	RoleManager<OgmaRole> roleManager,
+	IOptions<IdentityOptions> options)
+	: UserClaimsPrincipalFactory<OgmaUser, OgmaRole>(userManager, roleManager, options)
 {
-	public OgmaClaimsPrincipalFactory(
-		UserManager<OgmaUser> userManager,
-		RoleManager<OgmaRole> roleManager,
-		IOptions<IdentityOptions> options)
-		: base(userManager, roleManager, options)
-	{
-	}
 
 	public override async Task<ClaimsPrincipal> CreateAsync(OgmaUser user)
 	{

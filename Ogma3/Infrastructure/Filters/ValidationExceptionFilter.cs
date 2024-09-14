@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.ActionResults;
 namespace Ogma3.Infrastructure.Filters;
 
 [UsedImplicitly]
-public class ValidationExceptionFilter : IExceptionFilter
+public sealed class ValidationExceptionFilter : IExceptionFilter
 {
 	public void OnException(ExceptionContext context)
 	{
