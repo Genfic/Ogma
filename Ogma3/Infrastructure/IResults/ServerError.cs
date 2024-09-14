@@ -4,19 +4,27 @@ using Microsoft.AspNetCore.Http.Metadata;
 
 namespace Ogma3.Infrastructure.IResults;
 
-public partial class ServerError : IResult, IEndpointMetadataProvider, IStatusCodeHttpResult
+public sealed partial class ServerError : IResult, IEndpointMetadataProvider, IStatusCodeHttpResult
 {
 	internal ServerError()
 	{}
 	
+	internal ServerError(string message)
+	{
+		_message = message;
+	}
+	
+	private readonly string? _message;
+	
 	public static ServerError Instance() => new();
+	public static ServerError Instance(string message) => new(message);
 
 	[UsedImplicitly]
 	public int StatusCode => StatusCodes.Status500InternalServerError;
 	
 	int? IStatusCodeHttpResult.StatusCode => StatusCode;
 
-	public Task ExecuteAsync(HttpContext httpContext)
+	public async Task ExecuteAsync(HttpContext httpContext)
 	{
 		ArgumentNullException.ThrowIfNull(httpContext);
 
@@ -27,7 +35,10 @@ public partial class ServerError : IResult, IEndpointMetadataProvider, IStatusCo
 		WriteResultAsStatusCode(logger, StatusCode);
 		httpContext.Response.StatusCode = StatusCode;
 
-		return Task.CompletedTask;
+		if (_message is not null)
+		{
+			await httpContext.Response.WriteAsync(_message);
+		}
 	}
 
 	/// <inheritdoc/>

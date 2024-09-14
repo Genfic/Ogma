@@ -105,4 +105,32 @@ public class ExtensionsTest
 			"#aaa,  #bbb  , #  ccc".ParseHashtags()
 		);
 	}
+	
+	// Test find hashtags
+	[Fact]
+	public void TestFindHashtags_EmptyString()
+	{
+		Assert.Equal(
+			[],
+			string.Empty.FindHashtags()
+		);
+	}
+	
+	[Fact]
+	public void TestFindHashtags_MalformedHashtags()
+	{
+		Assert.Equal(
+			[],
+			"#one#two #buckle/my/shoe #three!@#$%^&*()_+-={}[]:\";'<>?,./~`".FindHashtags()
+		);
+	}
+	
+	[Fact]
+	public void TestFindHashtags_WellFormedHashtags()
+	{
+		Assert.Equal(
+			["#one", "#buckle-my", "#3_4", "#some", "#yeeeeah"],
+			"#one two #buckle-my shoe #3_4 buckle #some #m #or #e #yeeeeah".FindHashtags()
+		);
+	}
 }

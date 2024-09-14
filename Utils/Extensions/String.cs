@@ -14,7 +14,7 @@ public static partial class String
 	/// <returns>Friendlified string</returns>
 	public static string Friendlify(this string input)
 	{
-		return MyRegex()
+		return NonAlphanumericCharactersRegex()
 			.Replace(input, "-")
 			.ToLower()
 			.Trim('-');
@@ -108,6 +108,11 @@ public static partial class String
 			.ToArray();
 	}
 
+	public static IEnumerable<string> FindHashtags(this string input)
+	{
+		return HashtagRegex().Matches(input).Select(m => m.Groups["tag"].Value);
+	}
+
 	public static IEnumerable<Header> GetMarkdownHeaders(this string input)
 	{
 		var headers = new List<Header>();
@@ -155,5 +160,8 @@ public static partial class String
 	}
 
 	[GeneratedRegex("[^a-zA-Z0-9]+")]
-	private static partial Regex MyRegex();
+	private static partial Regex NonAlphanumericCharactersRegex();
+
+	[GeneratedRegex(@"(^|\s)(?'tag'#[\w-]{3,})($|\s)")]
+	private static partial Regex HashtagRegex();
 }

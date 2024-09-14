@@ -16,12 +16,12 @@ public static class BanUser
 {
 	public sealed record Command(long UserId, long ClubId, string Reason) : IRequest<ActionResult<bool>>;
 
-	public class CommandValidator : AbstractValidator<Command>
+	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator() => RuleFor(c => c.Reason).NotEmpty();
 	}
 
-	public class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
+	public sealed class Handler(ApplicationDbContext context, IUserService userService) : BaseHandler, IRequestHandler<Command, ActionResult<bool>>
 	{
 		public async ValueTask<ActionResult<bool>> Handle(Command request, CancellationToken cancellationToken)
 		{

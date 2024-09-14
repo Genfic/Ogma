@@ -62,8 +62,10 @@ tab_width = 4
 # Roslynator.Analyzers rules
 dotnet_diagnostic.rcs1260.severity = warning
 roslynator_trailing_comma_style = omit_when_single_line
-
+# Roslyn.Analyzers rules
+dotnet_diagnostic.ASYNC0004.severity = silent
 
 [*.cs]
 csharp_style_namespace_declarations = file_scoped:warning
 dotnet_diagnostic.IAPI0006.severity = silent
+dotnet_diagnostic.CA1852.severity = warning

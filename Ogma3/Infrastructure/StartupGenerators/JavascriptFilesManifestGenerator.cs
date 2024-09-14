@@ -10,7 +10,7 @@ using Serilog;
 
 namespace Ogma3.Infrastructure.StartupGenerators;
 
-public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
+public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 {
 	private const string Root = "./wwwroot";
 	
@@ -84,7 +84,7 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 		return WebEncoders.Base64UrlEncode(hash);
 	}
 
-	private class AlphaComparer : IComparer<string>
+	private sealed class AlphaComparer : IComparer<string>
 	{
 		public int Compare(string? x, string? y)
 		{
@@ -96,7 +96,7 @@ public class JavascriptFilesManifestGenerator(IWebHostEnvironment environment)
 public sealed record Manifest(DateTime GeneratedAt, ImmutableSortedDictionary<string, string> Files);
 
 [JsonSerializable(typeof(Manifest))]
-public partial class ManifestJsonContext : JsonSerializerContext;
+public sealed partial class ManifestJsonContext : JsonSerializerContext;
 
 file class KvpComparer : IEqualityComparer<KeyValuePair<string, string>>
 {
