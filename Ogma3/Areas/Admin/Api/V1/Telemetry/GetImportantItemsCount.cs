@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +33,12 @@ public static partial class GetImportantItemCounts
 			""";
 		
 		var counts = await context.Database
-			.SqlQueryRaw<(string Name, int Count)>(sql)
+			.SqlQueryRaw<TableInfo>(sql)
 			.ToDictionaryAsync(i => i.Name, i => i.Count, cancellationToken);
 
 		return TypedResults.Ok(counts);
 	}
+
+	[UsedImplicitly]
+	private sealed record TableInfo(string Name, int Count);
 }

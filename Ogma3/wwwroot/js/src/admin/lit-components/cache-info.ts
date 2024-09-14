@@ -1,11 +1,18 @@
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
+import { DeleteAdminApiCache, GetAdminApiCache } from "../../../generated/paths-internal";
+import { customElement, property, state } from "lit/decorators.js";
 
+@customElement("cache-info")
 export class CacheInfo extends LitElement {
 	constructor() {
 		super();
-		this.sortBy = "size";
-		this.sortOrder = "asc";
 	}
+	
+	@state()
+	private cacheCount: number;
+	
+	@property()
+	private csrf: string;
 
 	static get styles() {
 		return css`
@@ -23,12 +30,6 @@ export class CacheInfo extends LitElement {
 				color: var(--red);
 			}
 		`;
-	}
-
-	static get properties() {
-		return {
-			cacheCount: { type: Array, attribute: false },
-		};
 	}
 
 	async connectedCallback() {
@@ -51,19 +52,17 @@ export class CacheInfo extends LitElement {
 		`;
 	}
 
-	async _load() {
-		const res = await fetch("/admin/api/cache");
+	private async _load() {
+		const res = await GetAdminApiCache();
+		if (!res.ok) return;
 		this.cacheCount = await res.json();
 	}
 
-	async _purge() {
+	private async _purge() {
 		if (confirm("Are you sure?")) {
-			const res = await fetch("/admin/api/cache", {
-				method: "DELETE",
-			});
+			const res = await DeleteAdminApiCache({ RequestVerificationToken: this.csrf });
+			if (!res.ok) return;
 			await this._load();
 		}
 	}
 }
-
-window.customElements.define("cache-info", CacheInfo);

@@ -1,11 +1,16 @@
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
+import { GetAdminApiTelemetryGetTableInfo } from "../../../generated/paths-internal";
+import { customElement, state } from "lit/decorators.js";
 
+@customElement("table-info")
 export class TableInfo extends LitElement {
 	constructor() {
 		super();
-		this.sortBy = "size";
-		this.sortOrder = "asc";
 	}
+
+	@state() private sortBy: "size" | "name" = "size";
+	@state() private sortOrder: "asc" | "desc" = "asc";
+	@state() private tableInfo: { name: string; size: number }[] = [];
 
 	static get styles() {
 		return css`
@@ -25,14 +30,6 @@ export class TableInfo extends LitElement {
 				user-select: none;
 			}
 		`;
-	}
-
-	static get properties() {
-		return {
-			tableInfo: { type: Array, attribute: false },
-			sortOrder: { type: String, attribute: false },
-			sortBy: { type: String, attribute: false },
-		};
 	}
 
 	async connectedCallback() {
@@ -55,43 +52,41 @@ export class TableInfo extends LitElement {
 						Size ${this.sortBy !== "size" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
 					</th>
 				</tr>
-				${
-					this.tableInfo
-						? this.tableInfo.map(
-								(i) => html`
+				${this.tableInfo
+					? this.tableInfo.map(
+							(i) => html`
 								<tr>
 									<td>${i.name}</td>
 									<td>${i.size} B</td>
 									<td>${this._formatBytes(i.size)}</td>
 								</tr>
 							`,
-						  )
-						: html` <tr>
+						)
+					: html` <tr>
 							<td colspan="3">Loading...</td>
-					  </tr>`
-				}
+						</tr>`}
 			</table>
 		`;
 	}
 
-	async _load() {
-		const res = await fetch("/admin/api/telemetry/gettableinfo");
-		this.tableInfo = await res.json();
+	private async _load() {
+		const res = await GetAdminApiTelemetryGetTableInfo();
+		if (!res.ok) return;
+		const data = await res.json();
+		this.tableInfo = Object.entries(data).map(([k, v]) => ({ name: k, size: Number.parseInt(v) }));
 	}
 
-	_sort(by) {
+	private _sort(by: "size" | "name") {
 		this.sortBy = by;
 		this.sortOrder = this.sortOrder === "desc" ? "asc" : "desc";
 		if (by === "size") {
 			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.size - b.size : b.size - a.size));
 		} else {
-			this.tableInfo.sort((a, b) =>
-				this.sortOrder === "desc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
-			);
+			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
 		}
 	}
 
-	_formatBytes(bytes, decimals = 2) {
+	private _formatBytes(bytes: number, decimals = 2) {
 		if (bytes === 0) return "0 B";
 
 		const k = 1024;
@@ -104,5 +99,3 @@ export class TableInfo extends LitElement {
 		return `${value} ${sizes[i]}`;
 	}
 }
-
-window.customElements.define("table-info", TableInfo);

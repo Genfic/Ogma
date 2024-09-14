@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { Reports_PostReports as postReport } from "../generated/paths-public";
+import { PostApiReports as postReport } from "../generated/paths-public";
 import { EReportableContentTypes } from "../generated/types-public";
 
 @customElement("report-modal")

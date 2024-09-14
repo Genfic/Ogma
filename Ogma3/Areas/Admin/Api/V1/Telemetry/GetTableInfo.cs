@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -31,10 +32,12 @@ public static partial class GetTableInfo
 			ORDER BY size DESC
 			""";
 		var info = await context.Database
-			.SqlQueryRaw<(string Name, ulong Size)>(sql)
+			.SqlQueryRaw<TableInfo>(sql)
 			.ToDictionaryAsync(t => t.Name, t => t.Size, cancellationToken);
 
 		return TypedResults.Ok(info);
 	}
 
+	[UsedImplicitly]
+	private sealed record TableInfo(string Name, ulong Size);
 }

@@ -1,9 +1,13 @@
 @page
+@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Ogma3.Areas.Admin.Pages.Index
+@inject IAntiforgery Antiforgery
 
 @{
 	ViewData["Title"] = "Dashboard";
 	ViewData["ActivePage"] = NavPages.Index;
+	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 <div class="counters">
@@ -18,7 +22,7 @@
 
 <br>
 
-<cache-info></cache-info>
+<cache-info csrf="@csrf"></cache-info>
 
 <br>
 
