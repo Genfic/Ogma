@@ -61,7 +61,10 @@ public sealed class CreateModel(
 		[DataType(DataType.Upload)] public IFormFile? Cover { get; init; }
 		public long Rating { get; init; } = -1;
 		public List<long> Tags { get; init; } = [];
+		public List<NullableCredit> Credits { get; init; } = [];
 	}
+
+	public sealed record NullableCredit(string? Role, string? Name, string? Link);
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
@@ -81,6 +84,7 @@ public sealed class CreateModel(
 				.FileHasExtension(".jpg", ".jpeg", ".png");
 			RuleFor(i => i.Rating).NotEmpty();
 			RuleFor(i => i.Tags).NotEmpty();
+			RuleFor(i => i.Credits).Must(p => p.Count <= 10);
 		}
 	}
 
@@ -93,6 +97,12 @@ public sealed class CreateModel(
 		var tags = await context.Tags
 			.Where(t => Input.Tags.Contains(t.Id))
 			.ToListAsync();
+
+		var credits = Input.Credits
+			.Where(c => c.Role is not null)
+			.Where(c => c.Name is not null)
+			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
+			.ToList();
 		
 		// Add story
 		var story = new Story
@@ -105,6 +115,7 @@ public sealed class CreateModel(
 			RatingId = Input.Rating,
 			Tags = tags,
 			Cover = "/img/placeholders/ph-250.png",
+			Credits = credits,
 		};
 
 		// Upload cover

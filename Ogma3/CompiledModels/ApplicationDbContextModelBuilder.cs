@@ -52,6 +52,7 @@ namespace CompiledModels
             var ogmaRole = OgmaRoleEntityType.Create(this);
             var shelf = ShelfEntityType.Create(this);
             var shelfStory = ShelfStoryEntityType.Create(this);
+            var credit = CreditEntityType.Create(this);
             var story = StoryEntityType.Create(this);
             var storyTag = StoryTagEntityType.Create(this);
             var tag = TagEntityType.Create(this);
@@ -121,6 +122,7 @@ namespace CompiledModels
             ShelfEntityType.CreateForeignKey2(shelf, ogmaUser);
             ShelfStoryEntityType.CreateForeignKey1(shelfStory, shelf);
             ShelfStoryEntityType.CreateForeignKey2(shelfStory, story);
+            CreditEntityType.CreateForeignKey1(credit, story);
             StoryEntityType.CreateForeignKey1(story, ogmaUser);
             StoryEntityType.CreateForeignKey2(story, contentBlock);
             StoryEntityType.CreateForeignKey3(story, rating);
@@ -189,6 +191,7 @@ namespace CompiledModels
             OgmaRoleEntityType.CreateAnnotations(ogmaRole);
             ShelfEntityType.CreateAnnotations(shelf);
             ShelfStoryEntityType.CreateAnnotations(shelfStory);
+            CreditEntityType.CreateAnnotations(credit);
             StoryEntityType.CreateAnnotations(story);
             StoryTagEntityType.CreateAnnotations(storyTag);
             TagEntityType.CreateAnnotations(tag);
@@ -3024,72 +3027,23 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping(shelfIdColumn, shelfStory.FindProperty("ShelfId")!, shelfStoriesTableMapping);
             RelationalModel.CreateColumnMapping(storyIdColumn3, shelfStory.FindProperty("StoryId")!, shelfStoriesTableMapping);
 
-            var story = FindEntityType("Ogma3.Data.Stories.Story")!;
+            var credit = FindEntityType("Ogma3.Data.Stories.Credit")!;
 
             var defaultTableMappings34 = new List<TableMappingBase<ColumnMappingBase>>();
-            story.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings34);
-            var ogma3DataStoriesStoryTableBase = new TableBase("Ogma3.Data.Stories.Story", null, relationalModel);
-            var authorIdColumnBase2 = new ColumnBase<ColumnMappingBase>("AuthorId", "bigint", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("AuthorId", authorIdColumnBase2);
-            var chapterCountColumnBase = new ColumnBase<ColumnMappingBase>("ChapterCount", "integer", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("ChapterCount", chapterCountColumnBase);
-            var contentBlockIdColumnBase1 = new ColumnBase<ColumnMappingBase>("ContentBlockId", "bigint", ogma3DataStoriesStoryTableBase)
+            credit.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings34);
+            var ogma3DataStoriesCreditTableBase = new TableBase("Ogma3.Data.Stories.Credit", null, relationalModel);
+            var creditsColumnBase = new JsonColumnBase("Credits", "jsonb", ogma3DataStoriesCreditTableBase)
             {
                 IsNullable = true
             };
-            ogma3DataStoriesStoryTableBase.Columns.Add("ContentBlockId", contentBlockIdColumnBase1);
-            var coverColumnBase = new ColumnBase<ColumnMappingBase>("Cover", "text", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Cover", coverColumnBase);
-            var coverIdColumnBase = new ColumnBase<ColumnMappingBase>("CoverId", "text", ogma3DataStoriesStoryTableBase)
-            {
-                IsNullable = true
-            };
-            ogma3DataStoriesStoryTableBase.Columns.Add("CoverId", coverIdColumnBase);
-            var creationDateColumnBase4 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("CreationDate", creationDateColumnBase4);
-            var descriptionColumnBase5 = new ColumnBase<ColumnMappingBase>("Description", "character varying(3000)", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Description", descriptionColumnBase5);
-            var hookColumnBase0 = new ColumnBase<ColumnMappingBase>("Hook", "character varying(250)", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Hook", hookColumnBase0);
-            var idColumnBase23 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Id", idColumnBase23);
-            var publicationDateColumnBase1 = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp without time zone", ogma3DataStoriesStoryTableBase)
-            {
-                IsNullable = true
-            };
-            ogma3DataStoriesStoryTableBase.Columns.Add("PublicationDate", publicationDateColumnBase1);
-            var ratingIdColumnBase0 = new ColumnBase<ColumnMappingBase>("RatingId", "bigint", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("RatingId", ratingIdColumnBase0);
-            var slugColumnBase4 = new ColumnBase<ColumnMappingBase>("Slug", "character varying(100)", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Slug", slugColumnBase4);
-            var statusColumnBase = new ColumnBase<ColumnMappingBase>("Status", "e_story_status", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Status", statusColumnBase);
-            var titleColumnBase3 = new ColumnBase<ColumnMappingBase>("Title", "character varying(100)", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("Title", titleColumnBase3);
-            var wordCountColumnBase1 = new ColumnBase<ColumnMappingBase>("WordCount", "integer", ogma3DataStoriesStoryTableBase);
-            ogma3DataStoriesStoryTableBase.Columns.Add("WordCount", wordCountColumnBase1);
-            relationalModel.DefaultTables.Add("Ogma3.Data.Stories.Story", ogma3DataStoriesStoryTableBase);
-            var ogma3DataStoriesStoryMappingBase = new TableMappingBase<ColumnMappingBase>(story, ogma3DataStoriesStoryTableBase, true);
-            ogma3DataStoriesStoryTableBase.AddTypeMapping(ogma3DataStoriesStoryMappingBase, false);
-            defaultTableMappings34.Add(ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase23, story.FindProperty("Id")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)authorIdColumnBase2, story.FindProperty("AuthorId")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)chapterCountColumnBase, story.FindProperty("ChapterCount")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)contentBlockIdColumnBase1, story.FindProperty("ContentBlockId")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)coverColumnBase, story.FindProperty("Cover")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)coverIdColumnBase, story.FindProperty("CoverId")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)creationDateColumnBase4, story.FindProperty("CreationDate")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase5, story.FindProperty("Description")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)hookColumnBase0, story.FindProperty("Hook")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)publicationDateColumnBase1, story.FindProperty("PublicationDate")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)ratingIdColumnBase0, story.FindProperty("RatingId")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)slugColumnBase4, story.FindProperty("Slug")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase, story.FindProperty("Status")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)titleColumnBase3, story.FindProperty("Title")!, ogma3DataStoriesStoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)wordCountColumnBase1, story.FindProperty("WordCount")!, ogma3DataStoriesStoryMappingBase);
+            ogma3DataStoriesCreditTableBase.Columns.Add("Credits", creditsColumnBase);
+            relationalModel.DefaultTables.Add("Ogma3.Data.Stories.Credit", ogma3DataStoriesCreditTableBase);
+            var ogma3DataStoriesCreditMappingBase = new TableMappingBase<ColumnMappingBase>(credit, ogma3DataStoriesCreditTableBase, true);
+            ogma3DataStoriesCreditTableBase.AddTypeMapping(ogma3DataStoriesCreditMappingBase, false);
+            defaultTableMappings34.Add(ogma3DataStoriesCreditMappingBase);
 
             var tableMappings34 = new List<TableMapping>();
-            story.SetRuntimeAnnotation("Relational:TableMappings", tableMappings34);
+            credit.SetRuntimeAnnotation("Relational:TableMappings", tableMappings34);
             var storiesTable = new Table("Stories", null, relationalModel);
             var idColumn23 = new Column("Id", "bigint", storiesTable);
             storiesTable.Columns.Add("Id", idColumn23);
@@ -3112,6 +3066,11 @@ namespace CompiledModels
             storiesTable.Columns.Add("CoverId", coverIdColumn);
             var creationDateColumn4 = new Column("CreationDate", "timestamp without time zone", storiesTable);
             storiesTable.Columns.Add("CreationDate", creationDateColumn4);
+            var creditsColumn = new JsonColumn("Credits", "jsonb", storiesTable)
+            {
+                IsNullable = true
+            };
+            storiesTable.Columns.Add("Credits", creditsColumn);
             var descriptionColumn5 = new Column("Description", "character varying(3000)", storiesTable);
             storiesTable.Columns.Add("Description", descriptionColumn5);
             var hookColumn0 = new Column("Hook", "character varying(250)", storiesTable);
@@ -3164,29 +3123,110 @@ namespace CompiledModels
             RelationalModel.GetOrCreateTableIndexes(iX_Stories_RatingIdIx).Add(iX_Stories_RatingId);
             storiesTable.Indexes.Add("IX_Stories_RatingId", iX_Stories_RatingId);
             relationalModel.Tables.Add(("Stories", null), storiesTable);
-            var storiesTableMapping = new TableMapping(story, storiesTable, true);
-            storiesTable.AddTypeMapping(storiesTableMapping, false);
+            var storiesTableMapping = new TableMapping(credit, storiesTable, true)
+            {
+                IsSharedTablePrincipal = false,
+            };
+            storiesTable.AddTypeMapping(storiesTableMapping, true);
             tableMappings34.Add(storiesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn23, story.FindProperty("Id")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(authorIdColumn2, story.FindProperty("AuthorId")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(chapterCountColumn, story.FindProperty("ChapterCount")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(contentBlockIdColumn1, story.FindProperty("ContentBlockId")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(coverColumn, story.FindProperty("Cover")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(coverIdColumn, story.FindProperty("CoverId")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(creationDateColumn4, story.FindProperty("CreationDate")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(descriptionColumn5, story.FindProperty("Description")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(hookColumn0, story.FindProperty("Hook")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(publicationDateColumn1, story.FindProperty("PublicationDate")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(ratingIdColumn0, story.FindProperty("RatingId")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(slugColumn4, story.FindProperty("Slug")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(statusColumn, story.FindProperty("Status")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(titleColumn3, story.FindProperty("Title")!, storiesTableMapping);
-            RelationalModel.CreateColumnMapping(wordCountColumn1, story.FindProperty("WordCount")!, storiesTableMapping);
+            storiesTable.AddRowInternalForeignKey(credit, RelationalModel.GetForeignKey(this,
+                "Ogma3.Data.Stories.Credit",
+                new[] { "StoryId" },
+                "Ogma3.Data.Stories.Story",
+                new[] { "Id" }));
+
+            var story = FindEntityType("Ogma3.Data.Stories.Story")!;
+
+            var defaultTableMappings35 = new List<TableMappingBase<ColumnMappingBase>>();
+            story.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings35);
+            var ogma3DataStoriesStoryTableBase = new TableBase("Ogma3.Data.Stories.Story", null, relationalModel);
+            var authorIdColumnBase2 = new ColumnBase<ColumnMappingBase>("AuthorId", "bigint", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("AuthorId", authorIdColumnBase2);
+            var chapterCountColumnBase = new ColumnBase<ColumnMappingBase>("ChapterCount", "integer", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("ChapterCount", chapterCountColumnBase);
+            var contentBlockIdColumnBase1 = new ColumnBase<ColumnMappingBase>("ContentBlockId", "bigint", ogma3DataStoriesStoryTableBase)
+            {
+                IsNullable = true
+            };
+            ogma3DataStoriesStoryTableBase.Columns.Add("ContentBlockId", contentBlockIdColumnBase1);
+            var coverColumnBase = new ColumnBase<ColumnMappingBase>("Cover", "text", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Cover", coverColumnBase);
+            var coverIdColumnBase = new ColumnBase<ColumnMappingBase>("CoverId", "text", ogma3DataStoriesStoryTableBase)
+            {
+                IsNullable = true
+            };
+            ogma3DataStoriesStoryTableBase.Columns.Add("CoverId", coverIdColumnBase);
+            var creationDateColumnBase4 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("CreationDate", creationDateColumnBase4);
+            var descriptionColumnBase5 = new ColumnBase<ColumnMappingBase>("Description", "character varying(3000)", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Description", descriptionColumnBase5);
+            var hookColumnBase0 = new ColumnBase<ColumnMappingBase>("Hook", "character varying(250)", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Hook", hookColumnBase0);
+            var idColumnBase23 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Id", idColumnBase23);
+            var publicationDateColumnBase1 = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp without time zone", ogma3DataStoriesStoryTableBase)
+            {
+                IsNullable = true
+            };
+            ogma3DataStoriesStoryTableBase.Columns.Add("PublicationDate", publicationDateColumnBase1);
+            var ratingIdColumnBase0 = new ColumnBase<ColumnMappingBase>("RatingId", "bigint", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("RatingId", ratingIdColumnBase0);
+            var slugColumnBase4 = new ColumnBase<ColumnMappingBase>("Slug", "character varying(100)", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Slug", slugColumnBase4);
+            var statusColumnBase = new ColumnBase<ColumnMappingBase>("Status", "e_story_status", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Status", statusColumnBase);
+            var titleColumnBase3 = new ColumnBase<ColumnMappingBase>("Title", "character varying(100)", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("Title", titleColumnBase3);
+            var wordCountColumnBase1 = new ColumnBase<ColumnMappingBase>("WordCount", "integer", ogma3DataStoriesStoryTableBase);
+            ogma3DataStoriesStoryTableBase.Columns.Add("WordCount", wordCountColumnBase1);
+            relationalModel.DefaultTables.Add("Ogma3.Data.Stories.Story", ogma3DataStoriesStoryTableBase);
+            var ogma3DataStoriesStoryMappingBase = new TableMappingBase<ColumnMappingBase>(story, ogma3DataStoriesStoryTableBase, true);
+            ogma3DataStoriesStoryTableBase.AddTypeMapping(ogma3DataStoriesStoryMappingBase, false);
+            defaultTableMappings35.Add(ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase23, story.FindProperty("Id")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)authorIdColumnBase2, story.FindProperty("AuthorId")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)chapterCountColumnBase, story.FindProperty("ChapterCount")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)contentBlockIdColumnBase1, story.FindProperty("ContentBlockId")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)coverColumnBase, story.FindProperty("Cover")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)coverIdColumnBase, story.FindProperty("CoverId")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)creationDateColumnBase4, story.FindProperty("CreationDate")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase5, story.FindProperty("Description")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)hookColumnBase0, story.FindProperty("Hook")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)publicationDateColumnBase1, story.FindProperty("PublicationDate")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)ratingIdColumnBase0, story.FindProperty("RatingId")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)slugColumnBase4, story.FindProperty("Slug")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase, story.FindProperty("Status")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)titleColumnBase3, story.FindProperty("Title")!, ogma3DataStoriesStoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)wordCountColumnBase1, story.FindProperty("WordCount")!, ogma3DataStoriesStoryMappingBase);
+
+            var tableMappings35 = new List<TableMapping>();
+            story.SetRuntimeAnnotation("Relational:TableMappings", tableMappings35);
+            var storiesTableMapping0 = new TableMapping(story, storiesTable, true)
+            {
+                IsSharedTablePrincipal = true,
+            };
+            storiesTable.AddTypeMapping(storiesTableMapping0, false);
+            tableMappings35.Add(storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(idColumn23, story.FindProperty("Id")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(authorIdColumn2, story.FindProperty("AuthorId")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(chapterCountColumn, story.FindProperty("ChapterCount")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(contentBlockIdColumn1, story.FindProperty("ContentBlockId")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(coverColumn, story.FindProperty("Cover")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(coverIdColumn, story.FindProperty("CoverId")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(creationDateColumn4, story.FindProperty("CreationDate")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(descriptionColumn5, story.FindProperty("Description")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(hookColumn0, story.FindProperty("Hook")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(publicationDateColumn1, story.FindProperty("PublicationDate")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(ratingIdColumn0, story.FindProperty("RatingId")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(slugColumn4, story.FindProperty("Slug")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(statusColumn, story.FindProperty("Status")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(titleColumn3, story.FindProperty("Title")!, storiesTableMapping0);
+            RelationalModel.CreateColumnMapping(wordCountColumn1, story.FindProperty("WordCount")!, storiesTableMapping0);
 
             var storyTag = FindEntityType("Ogma3.Data.Stories.StoryTag")!;
 
-            var defaultTableMappings35 = new List<TableMappingBase<ColumnMappingBase>>();
-            storyTag.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings35);
+            var defaultTableMappings36 = new List<TableMappingBase<ColumnMappingBase>>();
+            storyTag.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings36);
             var ogma3DataStoriesStoryTagTableBase = new TableBase("Ogma3.Data.Stories.StoryTag", null, relationalModel);
             var storyIdColumnBase4 = new ColumnBase<ColumnMappingBase>("StoryId", "bigint", ogma3DataStoriesStoryTagTableBase);
             ogma3DataStoriesStoryTagTableBase.Columns.Add("StoryId", storyIdColumnBase4);
@@ -3195,12 +3235,12 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Stories.StoryTag", ogma3DataStoriesStoryTagTableBase);
             var ogma3DataStoriesStoryTagMappingBase = new TableMappingBase<ColumnMappingBase>(storyTag, ogma3DataStoriesStoryTagTableBase, true);
             ogma3DataStoriesStoryTagTableBase.AddTypeMapping(ogma3DataStoriesStoryTagMappingBase, false);
-            defaultTableMappings35.Add(ogma3DataStoriesStoryTagMappingBase);
+            defaultTableMappings36.Add(ogma3DataStoriesStoryTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)storyIdColumnBase4, storyTag.FindProperty("StoryId")!, ogma3DataStoriesStoryTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)tagIdColumnBase0, storyTag.FindProperty("TagId")!, ogma3DataStoriesStoryTagMappingBase);
 
-            var tableMappings35 = new List<TableMapping>();
-            storyTag.SetRuntimeAnnotation("Relational:TableMappings", tableMappings35);
+            var tableMappings36 = new List<TableMapping>();
+            storyTag.SetRuntimeAnnotation("Relational:TableMappings", tableMappings36);
             var storyTagsTable = new Table("StoryTags", null, relationalModel);
             var storyIdColumn4 = new Column("StoryId", "bigint", storyTagsTable);
             storyTagsTable.Columns.Add("StoryId", storyIdColumn4);
@@ -3225,14 +3265,14 @@ namespace CompiledModels
             relationalModel.Tables.Add(("StoryTags", null), storyTagsTable);
             var storyTagsTableMapping = new TableMapping(storyTag, storyTagsTable, true);
             storyTagsTable.AddTypeMapping(storyTagsTableMapping, false);
-            tableMappings35.Add(storyTagsTableMapping);
+            tableMappings36.Add(storyTagsTableMapping);
             RelationalModel.CreateColumnMapping(storyIdColumn4, storyTag.FindProperty("StoryId")!, storyTagsTableMapping);
             RelationalModel.CreateColumnMapping(tagIdColumn0, storyTag.FindProperty("TagId")!, storyTagsTableMapping);
 
             var tag = FindEntityType("Ogma3.Data.Tags.Tag")!;
 
-            var defaultTableMappings36 = new List<TableMappingBase<ColumnMappingBase>>();
-            tag.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings36);
+            var defaultTableMappings37 = new List<TableMappingBase<ColumnMappingBase>>();
+            tag.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings37);
             var ogma3DataTagsTagTableBase = new TableBase("Ogma3.Data.Tags.Tag", null, relationalModel);
             var descriptionColumnBase6 = new ColumnBase<ColumnMappingBase>("Description", "character varying(100)", ogma3DataTagsTagTableBase)
             {
@@ -3253,15 +3293,15 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Tags.Tag", ogma3DataTagsTagTableBase);
             var ogma3DataTagsTagMappingBase = new TableMappingBase<ColumnMappingBase>(tag, ogma3DataTagsTagTableBase, true);
             ogma3DataTagsTagTableBase.AddTypeMapping(ogma3DataTagsTagMappingBase, false);
-            defaultTableMappings36.Add(ogma3DataTagsTagMappingBase);
+            defaultTableMappings37.Add(ogma3DataTagsTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase24, tag.FindProperty("Id")!, ogma3DataTagsTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase6, tag.FindProperty("Description")!, ogma3DataTagsTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase6, tag.FindProperty("Name")!, ogma3DataTagsTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)namespaceColumnBase, tag.FindProperty("Namespace")!, ogma3DataTagsTagMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)slugColumnBase5, tag.FindProperty("Slug")!, ogma3DataTagsTagMappingBase);
 
-            var tableMappings36 = new List<TableMapping>();
-            tag.SetRuntimeAnnotation("Relational:TableMappings", tableMappings36);
+            var tableMappings37 = new List<TableMapping>();
+            tag.SetRuntimeAnnotation("Relational:TableMappings", tableMappings37);
             var tagsTable = new Table("Tags", null, relationalModel);
             var idColumn24 = new Column("Id", "bigint", tagsTable);
             tagsTable.Columns.Add("Id", idColumn24);
@@ -3307,7 +3347,7 @@ namespace CompiledModels
             relationalModel.Tables.Add(("Tags", null), tagsTable);
             var tagsTableMapping = new TableMapping(tag, tagsTable, true);
             tagsTable.AddTypeMapping(tagsTableMapping, false);
-            tableMappings36.Add(tagsTableMapping);
+            tableMappings37.Add(tagsTableMapping);
             RelationalModel.CreateColumnMapping(idColumn24, tag.FindProperty("Id")!, tagsTableMapping);
             RelationalModel.CreateColumnMapping(descriptionColumn6, tag.FindProperty("Description")!, tagsTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn6, tag.FindProperty("Name")!, tagsTableMapping);
@@ -3316,8 +3356,8 @@ namespace CompiledModels
 
             var ogmaUser = FindEntityType("Ogma3.Data.Users.OgmaUser")!;
 
-            var defaultTableMappings37 = new List<TableMappingBase<ColumnMappingBase>>();
-            ogmaUser.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings37);
+            var defaultTableMappings38 = new List<TableMappingBase<ColumnMappingBase>>();
+            ogmaUser.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings38);
             var ogma3DataUsersOgmaUserTableBase = new TableBase("Ogma3.Data.Users.OgmaUser", null, relationalModel);
             var accessFailedCountColumnBase = new ColumnBase<ColumnMappingBase>("AccessFailedCount", "integer", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("AccessFailedCount", accessFailedCountColumnBase);
@@ -3388,7 +3428,7 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Users.OgmaUser", ogma3DataUsersOgmaUserTableBase);
             var ogma3DataUsersOgmaUserMappingBase = new TableMappingBase<ColumnMappingBase>(ogmaUser, ogma3DataUsersOgmaUserTableBase, true);
             ogma3DataUsersOgmaUserTableBase.AddTypeMapping(ogma3DataUsersOgmaUserMappingBase, false);
-            defaultTableMappings37.Add(ogma3DataUsersOgmaUserMappingBase);
+            defaultTableMappings38.Add(ogma3DataUsersOgmaUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase25, ogmaUser.FindProperty("Id")!, ogma3DataUsersOgmaUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)accessFailedCountColumnBase, ogmaUser.FindProperty("AccessFailedCount")!, ogma3DataUsersOgmaUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)avatarColumnBase, ogmaUser.FindProperty("Avatar")!, ogma3DataUsersOgmaUserMappingBase);
@@ -3411,8 +3451,8 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)twoFactorEnabledColumnBase, ogmaUser.FindProperty("TwoFactorEnabled")!, ogma3DataUsersOgmaUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userNameColumnBase, ogmaUser.FindProperty("UserName")!, ogma3DataUsersOgmaUserMappingBase);
 
-            var tableMappings37 = new List<TableMapping>();
-            ogmaUser.SetRuntimeAnnotation("Relational:TableMappings", tableMappings37);
+            var tableMappings38 = new List<TableMapping>();
+            ogmaUser.SetRuntimeAnnotation("Relational:TableMappings", tableMappings38);
             var aspNetUsersTable = new Table("AspNetUsers", null, relationalModel);
             var idColumn25 = new Column("Id", "bigint", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("Id", idColumn25);
@@ -3516,7 +3556,7 @@ namespace CompiledModels
             relationalModel.Tables.Add(("AspNetUsers", null), aspNetUsersTable);
             var aspNetUsersTableMapping = new TableMapping(ogmaUser, aspNetUsersTable, true);
             aspNetUsersTable.AddTypeMapping(aspNetUsersTableMapping, false);
-            tableMappings37.Add(aspNetUsersTableMapping);
+            tableMappings38.Add(aspNetUsersTableMapping);
             RelationalModel.CreateColumnMapping(idColumn25, ogmaUser.FindProperty("Id")!, aspNetUsersTableMapping);
             RelationalModel.CreateColumnMapping(accessFailedCountColumn, ogmaUser.FindProperty("AccessFailedCount")!, aspNetUsersTableMapping);
             RelationalModel.CreateColumnMapping(avatarColumn, ogmaUser.FindProperty("Avatar")!, aspNetUsersTableMapping);
@@ -3541,8 +3581,8 @@ namespace CompiledModels
 
             var userBlock = FindEntityType("Ogma3.Data.Users.UserBlock")!;
 
-            var defaultTableMappings38 = new List<TableMappingBase<ColumnMappingBase>>();
-            userBlock.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings38);
+            var defaultTableMappings39 = new List<TableMappingBase<ColumnMappingBase>>();
+            userBlock.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings39);
             var ogma3DataUsersUserBlockTableBase = new TableBase("Ogma3.Data.Users.UserBlock", null, relationalModel);
             var blockedUserIdColumnBase = new ColumnBase<ColumnMappingBase>("BlockedUserId", "bigint", ogma3DataUsersUserBlockTableBase);
             ogma3DataUsersUserBlockTableBase.Columns.Add("BlockedUserId", blockedUserIdColumnBase);
@@ -3551,12 +3591,12 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Users.UserBlock", ogma3DataUsersUserBlockTableBase);
             var ogma3DataUsersUserBlockMappingBase = new TableMappingBase<ColumnMappingBase>(userBlock, ogma3DataUsersUserBlockTableBase, true);
             ogma3DataUsersUserBlockTableBase.AddTypeMapping(ogma3DataUsersUserBlockMappingBase, false);
-            defaultTableMappings38.Add(ogma3DataUsersUserBlockMappingBase);
+            defaultTableMappings39.Add(ogma3DataUsersUserBlockMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)blockedUserIdColumnBase, userBlock.FindProperty("BlockedUserId")!, ogma3DataUsersUserBlockMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)blockingUserIdColumnBase, userBlock.FindProperty("BlockingUserId")!, ogma3DataUsersUserBlockMappingBase);
 
-            var tableMappings38 = new List<TableMapping>();
-            userBlock.SetRuntimeAnnotation("Relational:TableMappings", tableMappings38);
+            var tableMappings39 = new List<TableMapping>();
+            userBlock.SetRuntimeAnnotation("Relational:TableMappings", tableMappings39);
             var blacklistedUsersTable = new Table("BlacklistedUsers", null, relationalModel);
             var blockingUserIdColumn = new Column("BlockingUserId", "bigint", blacklistedUsersTable);
             blacklistedUsersTable.Columns.Add("BlockingUserId", blockingUserIdColumn);
@@ -3581,14 +3621,14 @@ namespace CompiledModels
             relationalModel.Tables.Add(("BlacklistedUsers", null), blacklistedUsersTable);
             var blacklistedUsersTableMapping = new TableMapping(userBlock, blacklistedUsersTable, true);
             blacklistedUsersTable.AddTypeMapping(blacklistedUsersTableMapping, false);
-            tableMappings38.Add(blacklistedUsersTableMapping);
+            tableMappings39.Add(blacklistedUsersTableMapping);
             RelationalModel.CreateColumnMapping(blockedUserIdColumn, userBlock.FindProperty("BlockedUserId")!, blacklistedUsersTableMapping);
             RelationalModel.CreateColumnMapping(blockingUserIdColumn, userBlock.FindProperty("BlockingUserId")!, blacklistedUsersTableMapping);
 
             var userFollow = FindEntityType("Ogma3.Data.Users.UserFollow")!;
 
-            var defaultTableMappings39 = new List<TableMappingBase<ColumnMappingBase>>();
-            userFollow.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings39);
+            var defaultTableMappings40 = new List<TableMappingBase<ColumnMappingBase>>();
+            userFollow.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings40);
             var ogma3DataUsersUserFollowTableBase = new TableBase("Ogma3.Data.Users.UserFollow", null, relationalModel);
             var followedUserIdColumnBase = new ColumnBase<ColumnMappingBase>("FollowedUserId", "bigint", ogma3DataUsersUserFollowTableBase);
             ogma3DataUsersUserFollowTableBase.Columns.Add("FollowedUserId", followedUserIdColumnBase);
@@ -3597,12 +3637,12 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Users.UserFollow", ogma3DataUsersUserFollowTableBase);
             var ogma3DataUsersUserFollowMappingBase = new TableMappingBase<ColumnMappingBase>(userFollow, ogma3DataUsersUserFollowTableBase, true);
             ogma3DataUsersUserFollowTableBase.AddTypeMapping(ogma3DataUsersUserFollowMappingBase, false);
-            defaultTableMappings39.Add(ogma3DataUsersUserFollowMappingBase);
+            defaultTableMappings40.Add(ogma3DataUsersUserFollowMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)followedUserIdColumnBase, userFollow.FindProperty("FollowedUserId")!, ogma3DataUsersUserFollowMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)followingUserIdColumnBase, userFollow.FindProperty("FollowingUserId")!, ogma3DataUsersUserFollowMappingBase);
 
-            var tableMappings39 = new List<TableMapping>();
-            userFollow.SetRuntimeAnnotation("Relational:TableMappings", tableMappings39);
+            var tableMappings40 = new List<TableMapping>();
+            userFollow.SetRuntimeAnnotation("Relational:TableMappings", tableMappings40);
             var followedUsersTable = new Table("FollowedUsers", null, relationalModel);
             var followingUserIdColumn = new Column("FollowingUserId", "bigint", followedUsersTable);
             followedUsersTable.Columns.Add("FollowingUserId", followingUserIdColumn);
@@ -3627,14 +3667,14 @@ namespace CompiledModels
             relationalModel.Tables.Add(("FollowedUsers", null), followedUsersTable);
             var followedUsersTableMapping = new TableMapping(userFollow, followedUsersTable, true);
             followedUsersTable.AddTypeMapping(followedUsersTableMapping, false);
-            tableMappings39.Add(followedUsersTableMapping);
+            tableMappings40.Add(followedUsersTableMapping);
             RelationalModel.CreateColumnMapping(followedUserIdColumn, userFollow.FindProperty("FollowedUserId")!, followedUsersTableMapping);
             RelationalModel.CreateColumnMapping(followingUserIdColumn, userFollow.FindProperty("FollowingUserId")!, followedUsersTableMapping);
 
             var userRole = FindEntityType("Ogma3.Data.Users.UserRole")!;
 
-            var defaultTableMappings40 = new List<TableMappingBase<ColumnMappingBase>>();
-            userRole.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings40);
+            var defaultTableMappings41 = new List<TableMappingBase<ColumnMappingBase>>();
+            userRole.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings41);
             var ogma3DataUsersUserRoleTableBase = new TableBase("Ogma3.Data.Users.UserRole", null, relationalModel);
             var roleIdColumnBase0 = new ColumnBase<ColumnMappingBase>("RoleId", "bigint", ogma3DataUsersUserRoleTableBase);
             ogma3DataUsersUserRoleTableBase.Columns.Add("RoleId", roleIdColumnBase0);
@@ -3643,12 +3683,12 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Users.UserRole", ogma3DataUsersUserRoleTableBase);
             var ogma3DataUsersUserRoleMappingBase = new TableMappingBase<ColumnMappingBase>(userRole, ogma3DataUsersUserRoleTableBase, true);
             ogma3DataUsersUserRoleTableBase.AddTypeMapping(ogma3DataUsersUserRoleMappingBase, false);
-            defaultTableMappings40.Add(ogma3DataUsersUserRoleMappingBase);
+            defaultTableMappings41.Add(ogma3DataUsersUserRoleMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)roleIdColumnBase0, userRole.FindProperty("RoleId")!, ogma3DataUsersUserRoleMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase9, userRole.FindProperty("UserId")!, ogma3DataUsersUserRoleMappingBase);
 
-            var tableMappings40 = new List<TableMapping>();
-            userRole.SetRuntimeAnnotation("Relational:TableMappings", tableMappings40);
+            var tableMappings41 = new List<TableMapping>();
+            userRole.SetRuntimeAnnotation("Relational:TableMappings", tableMappings41);
             var aspNetUserRolesTable = new Table("AspNetUserRoles", null, relationalModel);
             var userIdColumn9 = new Column("UserId", "bigint", aspNetUserRolesTable);
             aspNetUserRolesTable.Columns.Add("UserId", userIdColumn9);
@@ -3673,14 +3713,14 @@ namespace CompiledModels
             relationalModel.Tables.Add(("AspNetUserRoles", null), aspNetUserRolesTable);
             var aspNetUserRolesTableMapping = new TableMapping(userRole, aspNetUserRolesTable, true);
             aspNetUserRolesTable.AddTypeMapping(aspNetUserRolesTableMapping, false);
-            tableMappings40.Add(aspNetUserRolesTableMapping);
+            tableMappings41.Add(aspNetUserRolesTableMapping);
             RelationalModel.CreateColumnMapping(roleIdColumn0, userRole.FindProperty("RoleId")!, aspNetUserRolesTableMapping);
             RelationalModel.CreateColumnMapping(userIdColumn9, userRole.FindProperty("UserId")!, aspNetUserRolesTableMapping);
 
             var vote = FindEntityType("Ogma3.Data.Votes.Vote")!;
 
-            var defaultTableMappings41 = new List<TableMappingBase<ColumnMappingBase>>();
-            vote.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings41);
+            var defaultTableMappings42 = new List<TableMappingBase<ColumnMappingBase>>();
+            vote.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings42);
             var ogma3DataVotesVoteTableBase = new TableBase("Ogma3.Data.Votes.Vote", null, relationalModel);
             var idColumnBase26 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataVotesVoteTableBase);
             ogma3DataVotesVoteTableBase.Columns.Add("Id", idColumnBase26);
@@ -3691,13 +3731,13 @@ namespace CompiledModels
             relationalModel.DefaultTables.Add("Ogma3.Data.Votes.Vote", ogma3DataVotesVoteTableBase);
             var ogma3DataVotesVoteMappingBase = new TableMappingBase<ColumnMappingBase>(vote, ogma3DataVotesVoteTableBase, true);
             ogma3DataVotesVoteTableBase.AddTypeMapping(ogma3DataVotesVoteMappingBase, false);
-            defaultTableMappings41.Add(ogma3DataVotesVoteMappingBase);
+            defaultTableMappings42.Add(ogma3DataVotesVoteMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase26, vote.FindProperty("Id")!, ogma3DataVotesVoteMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)storyIdColumnBase5, vote.FindProperty("StoryId")!, ogma3DataVotesVoteMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase10, vote.FindProperty("UserId")!, ogma3DataVotesVoteMappingBase);
 
-            var tableMappings41 = new List<TableMapping>();
-            vote.SetRuntimeAnnotation("Relational:TableMappings", tableMappings41);
+            var tableMappings42 = new List<TableMapping>();
+            vote.SetRuntimeAnnotation("Relational:TableMappings", tableMappings42);
             var votesTable = new Table("Votes", null, relationalModel);
             var idColumn26 = new Column("Id", "bigint", votesTable);
             votesTable.Columns.Add("Id", idColumn26);
@@ -3733,7 +3773,7 @@ namespace CompiledModels
             relationalModel.Tables.Add(("Votes", null), votesTable);
             var votesTableMapping = new TableMapping(vote, votesTable, true);
             votesTable.AddTypeMapping(votesTableMapping, false);
-            tableMappings41.Add(votesTableMapping);
+            tableMappings42.Add(votesTableMapping);
             RelationalModel.CreateColumnMapping(idColumn26, vote.FindProperty("Id")!, votesTableMapping);
             RelationalModel.CreateColumnMapping(storyIdColumn5, vote.FindProperty("StoryId")!, votesTableMapping);
             RelationalModel.CreateColumnMapping(userIdColumn10, vote.FindProperty("UserId")!, votesTableMapping);

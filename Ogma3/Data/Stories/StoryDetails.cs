@@ -23,4 +23,8 @@ public sealed class StoryDetails
 	public required int CommentsCount { get; init; }
 	public required int VotesCount { get; init; }
 	public required ContentBlockCard? ContentBlock { get; init; }
+
+	public required ICollection<CreditDto> Credits { get; init; }
 }
+
+public sealed record CreditDto(string Role, string Name, string? Link);

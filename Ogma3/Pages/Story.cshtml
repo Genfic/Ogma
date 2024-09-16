@@ -120,10 +120,38 @@
 			</div>
 
 		</div>
-			
+
 		@* </cache> *@
+		@if (Model.Story.Credits is { Count: > 0 })
+		{
+			<details class="credits">
+				<summary>Credits</summary>
+				<table>
+					<tr>
+						<th>Role</th>
+						<th>Name</th>
+					</tr>
+					@foreach (var credit in Model.Story.Credits)
+					{
+						<tr>
+							<td>@credit.Role</td>
+							<td>
+								@if (credit.Link is not null)
+								{
+									<a href="@credit.Link" target="_blank" noopener noreferrer>@credit.Name</a>
+								}
+								else
+								{
+									@credit.Name
+								}
+							</td>
+						</tr>
+					}
+				</table>
+			</details>
+		}
 	</div>
-			
+
 	<a class="start active-border" asp-controller="Chapter" asp-action="FirstChapter" asp-route-sid="@Model.Story.Id">Start reading</a>
 
 	<div class="info">
@@ -142,9 +170,9 @@
 			                        csrf="@csrf">
 			</o-club-folder-selector>
 		}
-		
+
 		<o-featured-in-clubs storyId="@Model.Story.Id"></o-featured-in-clubs>
-		
+
 		<a asp-route="@(nameof(GetChaptersRssFeed))" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
 			<icon icon="rss_feed"></icon>
 		</a>
@@ -177,7 +205,7 @@
 						{
 							<icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
 						}
-						
+
 						<a class="title" asp-page="/Chapter" asp-route-sid="@Model.Story.Id" asp-route-id="@c.Id" asp-route-slug="@c.Slug">
 							@c.Title
 						</a>

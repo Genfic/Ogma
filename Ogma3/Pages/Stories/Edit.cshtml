@@ -175,6 +175,38 @@
 
 
 	<div class="o-form-group">
+		<label>Credits</label>
+		<table>
+			<tr>
+				<th>Role</th>
+				<th>Name</th>
+				<th>Link (optional)</th>
+			</tr>
+			@for (var i = 0; i < Model.Input.Credits.Count; i++)
+			{
+				<tr>
+					<td>
+						<input list="credit-roles" asp-for="Input.Credits[i].Role">
+					</td>
+					<td>
+						<input asp-for="Input.Credits[i].Name">
+					</td>
+					<td>
+						<input asp-for="Input.Credits[i].Link">
+					</td>
+				</tr>
+			}
+		</table>
+		<datalist id="credit-roles">
+			<option value="editor"></option>
+			<option value="proofreader"></option>
+			<option value="beta reader"></option>
+			<option value="thumbnail"></option>
+			<option value="idea"></option>
+		</datalist>
+	</div>
+
+	<div class="o-form-group">
 		<button type="submit" class="btn btn-primary">Save changes</button>
 	</div>
 

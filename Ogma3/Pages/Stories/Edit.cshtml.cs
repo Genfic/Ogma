@@ -44,8 +44,8 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				Tags = story.Tags.Select(st => st.Id).ToList(),
 				Status = story.Status,
 				Published = story.PublicationDate != null,
+				Credits = story.Credits.Select(c => new NullableCredit(c.Role, c.Name, c.Link)).ToList(),
 			})
-			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
 		if (input is null) return NotFound();
@@ -69,7 +69,11 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		public required EStoryStatus Status { get; init; }
 		public required List<long> Tags { get; init; }
 		public required bool Published { get; init; }
+		public List<NullableCredit> Credits { get; init; } = [];
 	}
+
+	public sealed record NullableCredit(string? Role, string? Name, string? Link);
+	
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
@@ -134,6 +138,12 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 			return Page();
 		}
 
+		var credits = Input.Credits
+			.Where(c => c.Role is not null)
+			.Where(c => c.Name is not null)
+			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
+			.ToList();
+
 		// Update story
 		story.Title = Input.Title;
 		story.Slug = Input.Title.Friendlify();
@@ -143,6 +153,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		story.Tags = tags;
 		story.Status = Input.Status;
 		story.PublicationDate = Input.Published ? DateTime.Now : null;
+		story.Credits = credits;
 
 		// Handle cover upload
 		if (Input.Cover is { Length: > 0 })

@@ -57,6 +57,9 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 			.IsRequired()
 			.HasDefaultValue(0);
 
+		builder
+			.OwnsMany(s => s.Credits, c => c.ToJson());
+
 
 		// NAVIGATION
 		builder

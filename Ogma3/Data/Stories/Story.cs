@@ -23,6 +23,8 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public string? CoverId { get; set; }
 	public DateTime CreationDate { get; set; }
 	public DateTime? PublicationDate { get; set; }
+	
+	public ICollection<Credit> Credits { get; set; } = [];
 
 	public IList<Chapter> Chapters { get; set; } = null!;
 	public IEnumerable<Tag> Tags { get; set; } = null!;
@@ -39,7 +41,7 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public int ChapterCount { get; set; }
 
 	// Just for relationship purposes
-	public ICollection<Folder> Folders { get; set; } = null!;
+	public ICollection<Folder> Folders { get; set; } = [];
 
 	public ContentBlock? ContentBlock { get; set; }
 	public long? ContentBlockId { get; set; }
@@ -47,3 +49,5 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public ICollection<Report> Reports { get; set; } = null!;
 	public ICollection<Shelf> Shelves { get; set; } = null!;
 }
+
+public sealed record Credit(string Role, string Name, string? Link);

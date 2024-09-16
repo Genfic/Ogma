@@ -125,6 +125,38 @@
 	</div>
 
 	<div class="o-form-group">
+		<label>Credits</label>
+		<table>
+			<tr>
+				<th>Role</th>
+				<th>Name</th>
+				<th>Link (optional)</th>
+			</tr>
+			@for (var i = 0; i < 10; i++)
+			{
+				<tr>
+					<td>
+						<input list="credit-roles" type="text" name="Input.Credits[@i].Role">
+					</td>
+					<td>
+						<input type="text" name="Input.Credits[@i].Name">
+					</td>
+					<td>
+						<input type="text" name="Input.Credits[@i].Link">
+					</td>
+				</tr>
+			}
+		</table>
+		<datalist id="credit-roles">
+			<option value="editor"></option>
+			<option value="proofreader"></option>
+			<option value="beta reader"></option>
+			<option value="thumbnail"></option>
+			<option value="idea"></option>
+		</datalist>
+	</div>
+
+	<div class="o-form-group">
 		<button type="submit" class="btn btn-primary">Create</button>
 	</div>
 
