@@ -118,39 +118,39 @@
 			<div class="description" itemprop="abstract">
 				<markdown preset="Basic">@Model.Story.Description</markdown>
 			</div>
-
 		</div>
 
 		@* </cache> *@
-		@if (Model.Story.Credits is { Count: > 0 })
-		{
-			<details class="credits">
-				<summary>Credits</summary>
-				<table>
-					<tr>
-						<th>Role</th>
-						<th>Name</th>
-					</tr>
-					@foreach (var credit in Model.Story.Credits)
-					{
-						<tr>
-							<td>@credit.Role</td>
-							<td>
-								@if (credit.Link is not null)
-								{
-									<a href="@credit.Link" target="_blank" noopener noreferrer>@credit.Name</a>
-								}
-								else
-								{
-									@credit.Name
-								}
-							</td>
-						</tr>
-					}
-				</table>
-			</details>
-		}
 	</div>
+
+	@if (Model.Story.Credits is { Count: > 0 })
+	{
+	<details class="credits">
+		<summary>Credits</summary>
+		<table>
+			<tr>
+				<th>Role</th>
+				<th>Name</th>
+			</tr>
+			@foreach (var credit in Model.Story.Credits)
+			{
+			<tr>
+				<td>@credit.Role</td>
+				<td>
+					@if (credit.Link is not null)
+					{
+					<a href="@credit.Link" target="_blank" noopener noreferrer>@credit.Name</a>
+					}
+					else
+					{
+					@credit.Name
+					}
+				</td>
+			</tr>
+			}
+		</table>
+	</details>
+	}
 
 	<a class="start active-border" asp-controller="Chapter" asp-action="FirstChapter" asp-route-sid="@Model.Story.Id">Start reading</a>
 
@@ -158,8 +158,8 @@
 		<span class="word-count">@Model.Story.WordCount.ToString("N0") words</span>
 		<span class="chapter-count">@Model.Story.ChaptersCount chapters</span>
 		<span class="comment-count">@Model.Story.CommentsCount comments</span>
-		<time class="release-date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
-			published @Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+		<time class="release-date" title="Publication date" datetime="@Model.Story.ReleaseDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)" itemprop="datePublished">
+			@Model.Story.ReleaseDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
 		</time>
 
 		<div class="spacer"></div>

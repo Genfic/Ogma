@@ -1,3 +1,10 @@
+# Legacy tools
+
+All the tools and scripts that were used once, but now are mere clutter
+
+## Migrate SASS to SCSS
+
+```py
 import os
 import re
 
@@ -48,3 +55,21 @@ while True:
         print('Done!')
 
 print('Exiting')
+```
+
+## Silence nullability warnings in all files
+
+```py
+import glob
+
+files = glob.glob('Ogma3/Areas/Identity/**/*.cshtml.cs', recursive=True)
+
+for file in files:
+	print(file)
+	with open(file, 'r+', encoding='utf8') as f:
+		old = f.read()
+		f.seek(0)
+		f.write(f'#nullable disable\n\n{old}')
+	print('Nullability disabled')
+
+```

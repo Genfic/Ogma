@@ -26,6 +26,39 @@
 		<span>Please correct the following errors</span>
 	</div>
 
+	<div class="o-form-group status-select">
+		<label asp-for="Input.Status"></label>
+		<p class="desc">Choose the status of your story</p>
+
+		<div class="selector active-border">
+			@foreach (var s in Enum.GetValues<EStoryStatus>().Reverse())
+			{
+			<input type="radio"
+			       asp-for="Input.Status"
+			       id="sel_@s"
+			       value="@((int)s)"
+			       checked="@(Model.Input.Status == s)">
+			<label for="sel_@s" tabindex="0">@s</label>
+			}
+		</div>
+	</div>
+
+	<div class="o-form-group keep-size">
+		<label asp-for="Input.Published"></label>
+		<p class="desc">Control whether your story is visible or not</p>
+
+		<div class="toggle-input">
+			<input asp-for="Input.Published">
+
+			<label asp-for="Input.Published">
+				<span class="toggle"></span>
+				<span class="label-on">On</span>
+				<span class="label-off">Off</span>
+			</label>
+
+		</div>
+	</div>
+
 	<div class="o-form-group">
 		<label asp-for="Input.Title"></label>
 		<p class="desc">Try something catchy</p>
@@ -139,40 +172,6 @@
 			}
 		</div>
 	</div>
-
-	<div class="o-form-group status-select">
-		<label asp-for="Input.Status"></label>
-		<p class="desc">Choose the status of your story</p>
-
-		<div class="selector active-border">
-			@foreach (var s in Enum.GetValues<EStoryStatus>().Reverse())
-			{
-				<input type="radio"
-				       asp-for="Input.Status"
-				       id="sel_@s"
-				       value="@((int)s)"
-				       checked="@(Model.Input.Status == s)">
-				<label for="sel_@s" tabindex="0">@s</label>
-			}
-		</div>
-	</div>
-
-	<div class="o-form-group keep-size">
-		<label asp-for="Input.Published"></label>
-		<p class="desc">Control whether your story is visible or not</p>
-
-		<div class="toggle-input">
-			<input asp-for="Input.Published">
-
-			<label asp-for="Input.Published">
-				<span class="toggle"></span>
-				<span class="label-on">On</span>
-				<span class="label-off">Off</span>
-			</label>
-
-		</div>
-	</div>
-
 
 	<div class="o-form-group">
 		<label>Credits</label>

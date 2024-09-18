@@ -67,12 +67,32 @@ $title-height: 2rem;
 			}
 		}
 	}
-
+	
+	.credits { 
+		margin-bottom: .5rem;
+		
+		table {
+			border-collapse: collapse;
+			
+			tr {
+				th, td {
+					padding: 0 .5rem;
+				}
+				
+				td {
+					text-transform: capitalize;
+				}
+				
+				&:hover:not(:has(th)) {
+					background-color: v.$foreground-10;
+				}
+			}
+		}
+	}
+	
 	.chapters {
 		margin-top: 1rem;
-
-
-
+		
 		.chapter {
 			display: flex;
 			justify-content: space-between;

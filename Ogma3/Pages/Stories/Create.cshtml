@@ -136,13 +136,13 @@
 			{
 				<tr>
 					<td>
-						<input list="credit-roles" type="text" name="Input.Credits[@i].Role">
+						<input list="credit-roles" type="text" asp-for="@Model.Input.Credits[@i].Role">
 					</td>
 					<td>
-						<input type="text" name="Input.Credits[@i].Name">
+						<input type="text" asp-for="@Model.Input.Credits[@i].Name">
 					</td>
 					<td>
-						<input type="text" name="Input.Credits[@i].Link">
+						<input type="text" asp-for="@Model.Input.Credits[@i].Link">
 					</td>
 				</tr>
 			}

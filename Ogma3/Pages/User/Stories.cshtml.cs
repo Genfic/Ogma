@@ -32,7 +32,7 @@ public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext c
 		var query = context.Stories
 			.Where(b => b.AuthorId == ProfileBar.Id);
 
-		if (name != User.GetUsername())
+		if (!User.GetUsername()?.Equals(name, StringComparison.InvariantCultureIgnoreCase) ?? false)
 		{
 			// If the profile page doesn't belong to the current user, apply additional filters
 			query = query

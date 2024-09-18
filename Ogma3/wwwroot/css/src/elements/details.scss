@@ -1,7 +1,7 @@
 @use "../vars" as v;
 @use "../mixins/active-border" as ab;
 
-details {
+details.details {
 	position: relative;
 	margin: .2rem 0;
 	background-color: v.$ele-1;

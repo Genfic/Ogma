@@ -22,7 +22,7 @@
 {
 	var isDone = i.ActiveUntil < DateTime.Now || i.RemovedAt is not null;
 
-	<details class="infraction">
+	<details class="infraction details">
 		<summary class="@(isDone ? "passed" : null)">
 			<b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
 		</summary>

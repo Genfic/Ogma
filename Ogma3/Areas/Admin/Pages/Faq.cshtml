@@ -29,7 +29,7 @@
 
 	<br>
 
-	<details v-for="f in faqs">
+	<details class="details" v-for="f in faqs">
 		<summary>{{f.question}}</summary>
 		<div class="actions">
 			<button class="small inline action-btn" v-on:click="deleteFaq(f)">

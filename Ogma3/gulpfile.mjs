@@ -28,7 +28,7 @@ const roots = {
 };
 const paths = {
 	styles: {
-		src: `${roots.css}/*.{sass,scss}`,
+		src: `${roots.css}/**/*.{sass,scss}`,
 		dest: `${roots.css}/dist`
 	},
 	js: {

@@ -30,21 +30,22 @@ const tpl = `
 		  </button>
 		</nav>`;
 
+const map: Record<Action, PrefixSuffix> = {
+	bold: { prefix: "**", suffix: "**" },
+	italic: { prefix: "*", suffix: "*" },
+	underline: { prefix: "_", suffix: "_" },
+	spoiler: { prefix: "||", suffix: "||" },
+	link: { prefix: "[", suffix: "]()" },
+};
+
 const areas = [...document.querySelectorAll("[data-md=true]")] as (HTMLTextAreaElement | HTMLInputElement)[];
 
 for (const area of areas) {
 	const vDom = new DOMParser().parseFromString(tpl, "text/html").body.childNodes[0] as HTMLElement;
 
 	for (const btn of [...vDom.querySelectorAll("button.btn[data-action]")] as HTMLElement[]) {
+		const action: Action = Action[btn.dataset.action];
 		btn.addEventListener("click", (_) => {
-			const action: Action = Action[btn.dataset.action];
-			const map: Record<Action, PrefixSuffix> = {
-				bold: { prefix: "**", suffix: "**" },
-				italic: { prefix: "*", suffix: "*" },
-				underline: { prefix: "_", suffix: "_" },
-				spoiler: { prefix: "||", suffix: "||" },
-				link: { prefix: "[", suffix: "]()" },
-			};
 			const { prefix, suffix } = map[action];
 			const start = area.selectionStart;
 			const end = area.selectionEnd;

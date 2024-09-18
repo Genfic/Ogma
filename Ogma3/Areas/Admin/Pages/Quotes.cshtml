@@ -10,7 +10,7 @@
 <form class="form" v-on:submit.prevent="this.$event.preventDefault()">
 	@if (User.IsInRole("Admin"))
 	{
-		<details>
+		<details class="details">
 			<summary>Load from Json</summary>
 			<div class="o-form-group">
 				<textarea class="o-form-control active-border" rows="1" v-model="json" placeholder="Json"></textarea>
