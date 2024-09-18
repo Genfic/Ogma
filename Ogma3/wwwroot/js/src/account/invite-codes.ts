@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { GetApiInviteCodes as getCodes, PostApiInviteCodes as createCode } from "../../generated/paths-public";
-import { type InviteCodeDto } from "../../generated/types-public";
+import type { InviteCodeDto } from "../../generated/types-public";
 import { log } from "../../src-helpers/logger";
 
 // @ts-ignore

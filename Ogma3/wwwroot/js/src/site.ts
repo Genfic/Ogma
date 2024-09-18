@@ -29,4 +29,11 @@
 	};
 
 	await registerServiceWorker();
+	
+	// Worker communication channel
+	const broadcast = new BroadcastChannel('cache-worker');
+	broadcast.addEventListener("message", (event: MessageEvent<string>) => {
+		console.log(event.data);
+	})
+
 })();

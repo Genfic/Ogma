@@ -7,6 +7,7 @@ import { compile } from "sass";
 import { browserslistToTargets, transform } from "lightningcss";
 import browserslist from "browserslist";
 import * as path from "node:path";
+import { hasExtension } from "./helpers/path";
 
 const { values } = parseArgs({
 	args: Bun.argv,
@@ -91,7 +92,7 @@ if (values.watch) {
 			return;
 		}
 
-		if (events.find(({ type, path }) => type === "update" && path.endsWith("scss"))) {
+		if (events.find(({ type, path }) => type === "update" && hasExtension(path, "scss"))) {
 			console.log(c.blueBright("🔔 Files changed, recompiling!"));
 			await compileAll();
 		}
