@@ -1,7 +1,7 @@
 import { Glob } from "bun";
 import { parseArgs } from "util";
-import { watch } from "fs";
-import * as c from "ansi-colors";
+import watcher from "@parcel/watcher";
+import c from "ansi-colors";
 import convert from "convert";
 import { compile } from "sass";
 import { browserslistToTargets, transform } from "lightningcss";
@@ -12,15 +12,15 @@ const { values } = parseArgs({
 	args: Bun.argv,
 	options: {
 		watch: {
-			type: 'boolean'
+			type: "boolean",
 		},
 		verbose: {
-			type: 'boolean'
-		}
+			type: "boolean",
+		},
 	},
 	strict: true,
 	allowPositionals: true,
-})
+});
 
 const encoder = new TextEncoder();
 
@@ -33,7 +33,7 @@ const compileSass = async (file: string) => {
 	const { name: filename, base } = path.parse(file);
 
 	const { css, sourceMap } = compile(file, {
-		sourceMap: true
+		sourceMap: true,
 	});
 
 	const { code, map, warnings } = transform({
@@ -41,8 +41,8 @@ const compileSass = async (file: string) => {
 		inputSourceMap: JSON.stringify(sourceMap),
 		sourceMap: true,
 		filename: file,
-		targets: browserslistToTargets(browserslist('defaults')),
-		minify: true
+		targets: browserslistToTargets(browserslist("defaults")),
+		minify: true,
 	});
 
 	for (const warning of warnings) {
@@ -55,14 +55,14 @@ const compileSass = async (file: string) => {
 	}
 
 	const unit = convert(Bun.nanoseconds() - start, "ns").to("best");
-	console.log(`${c.dim('File')} ${c.bold(base)} ${c.dim('compiled in')} ${c.bold(unit.quantity.toFixed(2))} ${c.bold(unit.unit)}`);
-}
+	console.log(`${c.dim("File")} ${c.bold(base)} ${c.dim("compiled in")} ${c.bold(unit.quantity.toFixed(2))} ${c.bold(unit.unit)}`);
+};
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
 	const files = [...new Glob(`${base}/*.scss`).scanSync()];
 	console.log(c.green(`⚙ Compiling ${c.bold(files.length.toString())} files`));
-	
+
 	const tasks = [];
 	for (const file of files) {
 		tasks.push(compileSass(file));
@@ -71,28 +71,36 @@ const compileAll = async () => {
 
 	const unit = convert(Bun.nanoseconds() - start, "ns").to("best");
 	console.log(c.bold(`Total compilation took ${c.bold.green(unit.quantity.toFixed(2))} ${c.bold.green(unit.unit)}\n`));
-}
+};
 
 await compileAll();
 
 if (values.watch) {
-	console.log(c.blue('👀 Watching...'));
-	
-	const watcher = watch(base, { recursive: true }, async (event, filename) => {
-		values.verbose && console.log(c.bgYellow(`${event}: ${filename}`));
-		
-		if (!filename || filename.includes('dist')) return;
-		if (filename.endsWith('~')) return;
-		if (event !== "change") return;
-		
-		console.log(c.blueBright(`🔔 File ${c.bold(filename)} changed!`));
-		await compileAll();
-	})
+	console.log(c.blue("👀 Watching..."));
 
-	process.on("SIGINT", () => {
+	const subscription = await watcher.subscribe(base, async (err, events) => {
+		if (values.verbose) {
+			for (const { type, path } of events) {
+				console.info(c.bgYellow(`${type}: ${path}`));
+			}
+		}
+
+		if (err) {
+			console.error(c.bgRed(err.message));
+			values.verbose && console.error(err);
+			return;
+		}
+
+		if (events.find(({ type, path }) => type === "update" && path.endsWith("scss"))) {
+			console.log(c.blueBright("🔔 Files changed, recompiling!"));
+			await compileAll();
+		}
+	});
+
+	process.on("SIGINT", async () => {
 		// close watcher when Ctrl-C is pressed
 		console.log("🚪 Closing watcher...");
-		watcher.close();
+		await subscription.unsubscribe();
 		process.exit(0);
 	});
 }

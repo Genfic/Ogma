@@ -6,16 +6,19 @@
     "js:typecheck": "tsc --noEmit -p ./wwwroot/js/tsconfig.json",
     "t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
     "biome": "bunx @biomejs/biome check .",
-    "biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag"
+    "biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag",
+	  "css": "bun ./scripts/build-sass.mts",
+	  "watch:css": "bun ./scripts/build-sass.mts -- --watch"
   },
   "devDependencies": {
     "@angius/web-component-analyzer": "2.0.10",
     "@biomejs/biome": "1.8.3",
     "@hail2u/css-mqpacker": "git@github.com:hail2u/node-css-mqpacker.git#f615ec6",
     "@mr-hope/gulp-sass": "3.1.1",
-    "@rollup/plugin-image": "3.0.3",
+    "@parcel/watcher": "^2.4.1",
     "@rollup/plugin-multi-entry": "6.0.1",
     "@rollup/plugin-node-resolve": "15.2.3",
+    "@types/ansi-colors": "^3.2.2",
     "@types/bun": "^1.1.6",
     "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
@@ -26,17 +29,12 @@
     "concurrently": "^8.2.2",
     "convert": "^5.4.0",
     "esbuild": "^0.23.0",
-    "esbuild-minify-templates": "^0.11.0",
     "eslint": "^9.7.0",
     "eslint-config-prettier": "9.1.0",
     "gulp": "5.0.0",
     "gulp-esbuild": "^0.12.1",
-    "gulp-if": "3.0.0",
     "gulp-postcss": "10.0.0",
-    "gulp-rename": "2.0.0",
-    "gulp-run": "1.7.1",
     "gulp-sourcemaps": "3.0.0",
-    "gulp-terser": "2.1.0",
     "lighthouse": "^12.1.0",
     "lightningcss": "^1.27.0",
     "lit-web-types": "0.1.5",
@@ -48,8 +46,7 @@
     "rollup": "4.14.1",
     "rollup-plugin-esbuild": "6.1.1",
     "rollup-plugin-html-literals": "1.1.8",
-    "rollup-plugin-inline-svg": "3.0.3",
-    "tslib": "2.6.2",
+    "sass": "^1.79.1",
     "typescript": "5.4.5",
     "vue": "2.6.14"
   },
@@ -57,8 +54,7 @@
     "date-fns": "3.6.0",
     "dayjs": "^1.11.11",
     "es-toolkit": "^1.13.1",
-    "lit": "^3.1.4",
-    "zod": "^3.23.8"
+    "lit": "^3.1.4"
   },
   "web-types": [
     "./web-types.json"

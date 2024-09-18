@@ -1,4 +1,3 @@
-"use strict";
 import { pipeline } from "node:stream";
 import { dest, lastRun, parallel, src, watch } from "gulp";
 import sourcemaps from "gulp-sourcemaps";
