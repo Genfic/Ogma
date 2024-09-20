@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
 import { DeleteApiComments, GetApiCommentsMd, GetApiCommentsRevisions, PatchApiComments } from "../../generated/paths-public";
-import { GetRevisionResult } from "../../generated/types-public";
+import type { GetRevisionResult } from "../../generated/types-public";
+import { format } from "date-fns";
 
 // @ts-ignore
 Vue.component("comment", {
@@ -41,10 +41,12 @@ Vue.component("comment", {
 	methods: {
 		del: async function () {
 			if (confirm("Are you sure you want to delete?")) {
-				const res = await DeleteApiComments(this.comment.id, { RequestVerificationToken: this.csrf })
-				
+				const res = await DeleteApiComments(this.comment.id, {
+					RequestVerificationToken: this.csrf,
+				});
+
 				if (!res.ok) return;
-				
+
 				this.mutComment = { ...this.mutComment, deletedBy: "User" };
 			}
 		},
@@ -53,9 +55,9 @@ Vue.component("comment", {
 			if (this.editData && this.editData.id === this.comment.id) return;
 
 			this.editData = null;
-			
+
 			const res = await GetApiCommentsMd(this.comment.id);
-			
+
 			if (!res.ok) return;
 
 			this.editData = {
@@ -66,14 +68,17 @@ Vue.component("comment", {
 
 		update: async function (e: Event) {
 			e.preventDefault();
-			
-			const res = await PatchApiComments({
-				body: this.editData.body,
-				commentId: Number(this.editData.id),
-			}, { RequestVerificationToken: this.csrf });
+
+			const res = await PatchApiComments(
+				{
+					body: this.editData.body,
+					commentId: Number(this.editData.id),
+				},
+				{ RequestVerificationToken: this.csrf },
+			);
 
 			if (!res.ok) return;
-			
+
 			const data = await res.json();
 			Object.assign(this.mutComment, data);
 			this.editData = null;
@@ -112,7 +117,7 @@ Vue.component("comment", {
 			}
 		},
 
-		date: (dt) => dayjs(dt).format("DD MMM YYYY, HH:mm"),
+		date: (dt) => format(dt, "DD MMM yyyy, hh:mm"),
 	},
 	template: `
         <div :id="'comment-' + (idx + 1)"

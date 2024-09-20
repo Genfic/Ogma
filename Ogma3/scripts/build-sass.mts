@@ -1,7 +1,8 @@
 import { Glob } from "bun";
 import { parseArgs } from "util";
 import watcher from "@parcel/watcher";
-import c from "ansi-colors";
+import ct from "chalk-template";
+import c from "chalk";
 import convert from "convert";
 import { compile } from "sass";
 import { browserslistToTargets, transform } from "lightningcss";
@@ -47,7 +48,7 @@ const compileSass = async (file: string) => {
 	});
 
 	for (const warning of warnings) {
-		console.warn(c.yellow(`[${c.bold(filename)}] WRN: ${warning}`));
+		console.warn(ct`{yellow [{bold ${filename}}] WRN: ${warning}}`);
 	}
 
 	await Bun.write(path.join(dest, `${filename}.css`), code);
@@ -55,23 +56,26 @@ const compileSass = async (file: string) => {
 		await Bun.write(path.join(dest, `${filename}.map.css`), map);
 	}
 
-	const unit = convert(Bun.nanoseconds() - start, "ns").to("best");
-	console.log(`${c.dim("File")} ${c.bold(base)} ${c.dim("compiled in")} ${c.bold(unit.quantity.toFixed(2))} ${c.bold(unit.unit)}`);
+	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	console.log(ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
 };
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
 	const files = [...new Glob(`${base}/*.scss`).scanSync()];
-	console.log(c.green(`⚙ Compiling ${c.bold(files.length.toString())} files`));
+	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
 	const tasks = [];
 	for (const file of files) {
+		values.verbose && console.info(`Compiling ${file}`);
 		tasks.push(compileSass(file));
 	}
-	await Promise.allSettled(tasks);
+	const res = await Promise.allSettled(tasks);
 
-	const unit = convert(Bun.nanoseconds() - start, "ns").to("best");
-	console.log(c.bold(`Total compilation took ${c.bold.green(unit.quantity.toFixed(2))} ${c.bold.green(unit.unit)}\n`));
+	values.verbose && console.log(res);
+
+	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
 };
 
 await compileAll();

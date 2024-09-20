@@ -1,11 +1,12 @@
+@use "sass:math";
 @use "src/vars" as v;
 
 .login-form {
 	.left {
-		width: min(100%, 240px);
+		width: math.min(100%, 240px);
 
 		&.wide {
-			width: min(100%, 310px);
+			width: math.min(100%, 310px);
 		}
 
 		.form {

@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use "./src/mixins/generators" as a;
 
 // Variables
@@ -27,5 +28,5 @@ $yellow: #ffcc00;
 	@include a.blends('yellow', $background, $yellow, 100, 75, 50, 25, 10);
 	
 	--gold: #{$gold};
-	--ele-1: #{lighten($background, 2)};
+	--ele-1: #{color.adjust($background, $lightness: 2%)};
 }

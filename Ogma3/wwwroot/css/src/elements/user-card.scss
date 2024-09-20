@@ -12,7 +12,7 @@ $avatar-size: 5rem;
 		"avatar title buttons" auto
 		/ auto 1fr auto;
 	gap: .25rem;
-	height: calc(#{$avatar-size} + 2px);
+	height: calc($avatar-size + 2px);
 	// adjust for border
 	overflow-anchor: auto;
 	@include ab.active-border;

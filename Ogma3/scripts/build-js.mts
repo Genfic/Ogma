@@ -1,9 +1,10 @@
 import { Glob } from "bun";
 import { parseArgs } from "util";
 import watcher from "@parcel/watcher";
-import c from "ansi-colors";
 import convert from "convert";
 import { hasExtension } from "./helpers/path";
+import ct from "chalk-template";
+import c from "chalk";
 
 const { values } = parseArgs({
 	args: Bun.argv,
@@ -25,7 +26,7 @@ const dest = `${base}/dist`;
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
 	const files = [...new Glob(`${source}/**/*.{js,ts}`).scanSync()];
-	console.log(c.green(`⚙ Compiling ${c.bold(files.length.toString())} files`));
+	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
 	const result = await Bun.build({
 		entrypoints: files,
@@ -36,12 +37,12 @@ const compileAll = async () => {
 		splitting: false,
 	});
 
-	const unit = convert(Bun.nanoseconds() - start, "ns").to("best");
+	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	if (result.success) {
-		console.log(c.bold(`Total compilation took ${c.bold.green(unit.quantity.toFixed(2))} ${c.bold.green(unit.unit)}\n`));
+		console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
 	} else {
-		console.log(c.bold.red(`Compilation failed! (${c.dim(`${c.bold.green(unit.quantity.toFixed(2))} ${c.bold.green(unit.unit)}`)})`));
-		for (const log of result.logs.filter(l => ["error", "warning"].includes(l.level))) {
+		console.log(ct`{bold.red Compilation failed! ({underline ${quantity.toFixed(2)}} ${unit}})`);
+		for (const log of result.logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
 				console.log(color(`[${log.level}]: ${log.position.file} (${log.position.line}:${log.position.column}) ${log.message}`));

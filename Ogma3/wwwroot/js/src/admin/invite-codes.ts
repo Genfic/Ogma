@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { log } from "../../src-helpers/logger";
 import {
 	DeleteApiInviteCodes as deleteCode,
@@ -6,22 +5,25 @@ import {
 	PostApiInviteCodesNoLimit as createUnlimitedCodes,
 } from "../../generated/paths-public";
 import type { InviteCodeDto } from "../../generated/types-public";
+import { format } from "date-fns";
 
 // @ts-ignore
 new Vue({
 	el: "#app",
 	data: {
 		codes: [] as InviteCodeDto[],
-		xcsrf: null as (string | null),
+		xcsrf: null as string | null,
 		page: 1,
 		perPage: 50,
 		loading: true,
 		completed: false,
-		newCode: null as (number | null),
+		newCode: null as number | null,
 	},
 	methods: {
 		createCode: async function () {
-			const res = await createUnlimitedCodes({ RequestVerificationToken: this.xcsrf });
+			const res = await createUnlimitedCodes({
+				RequestVerificationToken: this.xcsrf,
+			});
 			const data = await res.json();
 
 			this.newCode = data.id;
@@ -58,7 +60,9 @@ new Vue({
 		// Deletes a selected namespace
 		deleteCode: async function (t: InviteCodeDto) {
 			if (confirm("Delete permanently?")) {
-				const res = await deleteCode(t.id, { RequestVerificationToken: this.xcsrf });
+				const res = await deleteCode(t.id, {
+					RequestVerificationToken: this.xcsrf,
+				});
 
 				if (!res.ok) return;
 
@@ -77,7 +81,7 @@ new Vue({
 		},
 
 		// Parse date
-		date: (dt: string) => dayjs(dt).format("DD MMM YYYY, HH:mm"),
+		date: (dt: string) => format(dt, "DD MMM yyyy, hh:mm"),
 	},
 
 	async mounted() {

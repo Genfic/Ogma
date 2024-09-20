@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { format } from "date-fns";
 import { GetApiInviteCodes as getCodes, PostApiInviteCodes as createCode } from "../../generated/paths-public";
 import type { InviteCodeDto } from "../../generated/types-public";
 import { log } from "../../src-helpers/logger";
@@ -39,7 +39,7 @@ new Vue({
 		},
 
 		// Parse date
-		date: (dt: string) => dayjs(dt).format("DD MMM YYYY, HH:mm"),
+		date: (dt: string) => format(dt, "DD MMM yyyy, hh:mm"),
 	},
 
 	async mounted() {
