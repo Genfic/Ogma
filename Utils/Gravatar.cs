@@ -2,6 +2,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Flurl;
+using JetBrains.Annotations;
 
 namespace Utils;
 
@@ -24,6 +25,7 @@ public static class Gravatar
 		return avatar;
 	}
 
+	[UsedImplicitly]
 	public sealed record Options(
 		string? Default = null,
 		bool ForceDefault = false,

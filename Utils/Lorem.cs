@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Utils;
 
@@ -14,20 +15,20 @@ public static class Lorem
 		sb.Append("https://loripsum.net/api/");
 		sb.Append(paragraphs);
 
-		if (options is not null)
+		if (options is {} o)
 		{
-			if (options.Length is not null) sb.Append($"/{options.Length}".ToLower());
-			if (options.Decorate) sb.Append("/decorate");
-			if (options.Link) sb.Append("/link");
-			if (options.Ulist) sb.Append("/ul");
-			if (options.Olist) sb.Append("/ol");
-			if (options.Dlist) sb.Append("/dl");
-			if (options.Blockquotes) sb.Append("/bq");
-			if (options.Codeblocks) sb.Append("/code");
-			if (options.Headers) sb.Append("/headers");
-			if (options.Allcaps) sb.Append("/allcaps");
-			if (options.Prude) sb.Append("/prude");
-			if (options.Plaintext) sb.Append("/plaintext");
+			if (o.Length is not null) sb.Append($"/{o.Length}".ToLower());
+			if (o.Decorate) sb.Append("/decorate");
+			if (o.Link) sb.Append("/link");
+			if (o.Ulist) sb.Append("/ul");
+			if (o.Olist) sb.Append("/ol");
+			if (o.Dlist) sb.Append("/dl");
+			if (o.Blockquotes) sb.Append("/bq");
+			if (o.Codeblocks) sb.Append("/code");
+			if (o.Headers) sb.Append("/headers");
+			if (o.Allcaps) sb.Append("/allcaps");
+			if (o.Prude) sb.Append("/prude");
+			if (o.Plaintext) sb.Append("/plaintext");
 		}
 
 		using var client = new HttpClient();
@@ -35,7 +36,8 @@ public static class Lorem
 	}
 }
 
-public record IpsumOptions(
+[UsedImplicitly]
+public readonly record struct IpsumOptions(
 	IpsumLength? Length,
 	bool Decorate,
 	bool Link,

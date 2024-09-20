@@ -152,7 +152,7 @@ public static partial class String
 		return headers;
 	}
 
-	public record Header
+	public sealed record Header
 	{
 		public byte Level { get; set; }
 		public byte Occurrence { get; set; }
