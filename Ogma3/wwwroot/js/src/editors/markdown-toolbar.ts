@@ -1,3 +1,5 @@
+import { parseDom } from "../../src-helpers/dom";
+
 enum Action {
 	bold = "bold",
 	italic = "italic",
@@ -30,20 +32,25 @@ const tpl = `
 		  </button>
 		</nav>`;
 
-const map: Record<Action, PrefixSuffix> = {
-	bold: { prefix: "**", suffix: "**" },
-	italic: { prefix: "*", suffix: "*" },
-	underline: { prefix: "_", suffix: "_" },
-	spoiler: { prefix: "||", suffix: "||" },
-	link: { prefix: "[", suffix: "]()" },
-};
+const map = new Map<Action, PrefixSuffix>([
+	[Action.bold, { prefix: "**", suffix: "**" }],
+	[Action.italic, { prefix: "*", suffix: "*" }],
+	[Action.underline, { prefix: "_", suffix: "_" }],
+	[Action.spoiler, { prefix: "||", suffix: "||" }],
+	[Action.link, { prefix: "[", suffix: "]()" }],
+]);
 
-const areas = [...document.querySelectorAll("[data-md=true]")] as (HTMLTextAreaElement | HTMLInputElement)[];
+const areas = [...document.querySelectorAll("[data-md=true]")] as (
+	| HTMLTextAreaElement
+	| HTMLInputElement
+)[];
 
 for (const area of areas) {
-	const vDom = new DOMParser().parseFromString(tpl, "text/html").body.childNodes[0] as HTMLElement;
+	const vDom = parseDom(tpl);
 
-	for (const btn of [...vDom.querySelectorAll("button.btn[data-action]")] as HTMLElement[]) {
+	for (const btn of [
+		...vDom.querySelectorAll("button.btn[data-action]"),
+	] as HTMLElement[]) {
 		const action: Action = Action[btn.dataset.action];
 		btn.addEventListener("click", (_) => {
 			const { prefix, suffix } = map[action];

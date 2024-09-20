@@ -3,7 +3,7 @@ import { setCookie } from "../src-helpers/cookies";
 const banner = document.getElementById("cookie-consent");
 const button = banner.querySelector("button#cookie-consent-button");
 
-button.addEventListener("click", (_) => {
+button.addEventListener("click", () => {
 	const expiry = new Date();
 	expiry.setDate(expiry.getDate() + 400);
 

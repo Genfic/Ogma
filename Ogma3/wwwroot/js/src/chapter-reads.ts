@@ -18,17 +18,19 @@ import {
 	await _getStatus();
 
 	for (const b of buttons) {
-		b.addEventListener("click", () => _changeState(Number(b.dataset.id)));
+		b.addEventListener("click", () => _changeState(Number.parseInt(b.dataset.id)));
 	}
 
 	const _changeState = async (id: number) => {
 		const client = reads.includes(id) ? markUnread : markRead;
 		const res = await client({
-			story: Number(story.dataset.storyId),
+			story: Number.parseInt(story.dataset.storyId),
 			chapter: id,
 		}, {
 			RequestVerificationToken: csrf.dataset['x-csrf']
 		});
+		
+		if (!res.ok) return;
 
 		reads = await res.json();
 		_update();
@@ -36,7 +38,7 @@ import {
 
 	function _update() {
 		for (const btn of buttons) {
-			const read = reads?.includes(Number(btn.dataset.id)) ?? false;
+			const read = reads?.includes(Number.parseInt(btn.dataset.id)) ?? false;
 
 			btn.classList.toggle("active", read);
 			btn.querySelector("i").innerText = read ? "visibility" : "visibility_off";
@@ -44,8 +46,10 @@ import {
 	}
 
 	async function _getStatus() {
-		const res = await getRead(Number(story.dataset.storyId));
+		const res = await getRead(Number.parseInt(story.dataset.storyId));
 
+		if (!res.ok) return;
+		
 		reads = await res.json();
 		_update();
 	}

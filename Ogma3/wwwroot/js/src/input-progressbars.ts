@@ -1,18 +1,28 @@
+import { parseDom } from "../src-helpers/dom";
+
 type InputType = "validated" | "file" | "regular";
 
 const properSplit = (value: string, separator: string | RegExp) =>
 	!value || value.length <= 0 ? [] : value.split(separator);
 
 const inputs: (HTMLInputElement | HTMLTextAreaElement)[] = [
-	...document.querySelectorAll("input.o-form-control:not([disabled]):not([nobar])"),
-	...document.querySelectorAll("textarea.o-form-control:not([disabled]):not([nobar])"),
+	...document.querySelectorAll(
+		"input.o-form-control:not([disabled]):not([nobar])",
+	),
+	...document.querySelectorAll(
+		"textarea.o-form-control:not([disabled]):not([nobar])",
+	),
 ] as (HTMLInputElement | HTMLTextAreaElement)[];
 
 for (const input of inputs) {
 	console.log(`Attaching ${input.type}`);
 
 	let type: InputType;
-	if (input.dataset.maxCount || input.dataset.valLengthMax || input.dataset.valMaxlengthMax) {
+	if (
+		input.dataset.maxCount ||
+		input.dataset.valLengthMax ||
+		input.dataset.valMaxlengthMax
+	) {
 		// One of the validation parameters is set so it's a validated input
 		type = "validated";
 	} else if (input.dataset.valFilesizeMax && input.type === "file") {
@@ -25,11 +35,13 @@ for (const input of inputs) {
 
 	// If there's no count specified, get max length. If that's not there, just use 0.
 	const max: number = {
-		["validated"]: Number(
-			input.dataset.maxCount ?? input.dataset.valLengthMax ?? input.dataset.valMaxlengthMax,
+		validated: Number(
+			input.dataset.maxCount ??
+				input.dataset.valLengthMax ??
+				input.dataset.valMaxlengthMax,
 		),
-		["file"]: Number(input.dataset.valFilesizeMax),
-		["regular"]: input.maxLength ?? 0,
+		file: Number(input.dataset.valFilesizeMax),
+		regular: input.maxLength ?? 0,
 	}[type];
 
 	// Sometimes we have the minimum value as well, if not let's just ensure it's not 0 or less
@@ -49,18 +61,16 @@ for (const input of inputs) {
 		return input.value.length;
 	};
 
-	// TODO: abstract it away to its own file
-	const dom = (template: string) =>
-		new DOMParser().parseFromString(template, "text/html").body.childNodes[0] as HTMLElement;
-
 	// Create the main container
-	const counter: HTMLElement = dom('<div class="counter"></div>');
+	const counter: HTMLElement = parseDom('<div class="counter"></div>');
 
 	// Create the progress bar proper
-	const progress: HTMLElement = dom('<div class="o-progress-bar"></div>');
+	const progress: HTMLElement = parseDom('<div class="o-progress-bar"></div>');
 
 	// Create the character counter
-	const count: HTMLElement = dom(`<span>${currentSize()}/${max}${type === "file" ? " bytes" : ""}</span>`);
+	const count: HTMLElement = parseDom(
+		`<span>${currentSize()}/${max}${type === "file" ? " bytes" : ""}</span>`,
+	);
 
 	// Append the progress bar to the container
 	counter.appendChild(progress);
@@ -68,7 +78,9 @@ for (const input of inputs) {
 	// If the `data-wordcount` property is there, create a wordcount element and append it
 	let wordcount: HTMLElement;
 	if (input.dataset.wordcount) {
-		wordcount = dom(`<span>${properSplit(input.value, /\s+/).length.toString()} words</span>`);
+		wordcount = parseDom(
+			`<span>${properSplit(input.value, /\s+/).length.toString()} words</span>`,
+		);
 		counter.appendChild(wordcount);
 	}
 

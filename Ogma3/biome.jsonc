@@ -9,7 +9,8 @@
 		"include": [
 			"wwwroot/js/src*/*.js",
 			"wwwroot/js/src*/*.ts",
-			"*.mjs"
+			"*.mjs",
+			"*.mts"
 		]
 	},
 	"formatter": {

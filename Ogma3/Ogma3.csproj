@@ -2771,4 +2771,8 @@
 	<ItemGroup>
 		<Folder Include="wwwroot\js\bundle\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <TypeScriptCompile Include="wwwroot\js\src-helpers\dom.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\src-helpers\generators.ts" />
+	</ItemGroup>
 </Project>

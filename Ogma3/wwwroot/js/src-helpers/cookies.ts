@@ -4,9 +4,9 @@
  * @returns {string} Returns the value of the cookie
  */
 // eslint-disable-next-line no-redeclare
-export const getCookieValue = (name: string): string => {
+export const getCookieValue = (name: string): string | undefined => {
 	const b = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
-	return b ? b.pop() : "";
+	return b ? b.pop() : undefined;
 };
 
 /**
@@ -22,7 +22,7 @@ export function setCookie(
 	name: string,
 	value: string,
 	expires: Date | null = null,
-	secure: boolean = false,
+	secure = false,
 	sameSite: string | null = null,
 	path: string | null = null,
 ): void {
