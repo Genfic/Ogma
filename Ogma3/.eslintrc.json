@@ -57,12 +57,10 @@
 		]
 	},
 	"globals": {
-		"axios": "readonly",
 		"Vue": "readonly",
 		"require": "readonly",
 		"exports": "readonly",
 		"global": "readonly"
-//		"dayjs": "readonly"
 	},
 	"overrides": [
 		{

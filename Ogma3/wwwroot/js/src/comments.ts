@@ -1,10 +1,11 @@
-import { log } from "../src-helpers/logger";
 import {
 	GetApiComments,
 	GetApiCommentsThread,
 	PostApiComments,
 	PostApiCommentsThreadLock,
 	Subscriptions_IsSubscribedToThread,
+	Subscriptions_SubscribeThread,
+	Subscriptions_UnsubscribeThread,
 } from "../generated/paths-public";
 
 // @ts-ignore
@@ -144,30 +145,20 @@ new Vue({
 		},
 
 		// Subscribe or unsubscribe from the thread
-		subscribe: function () {
+		subscribe: async function () {
+			const data = { threadId: this.thread };
+			const headers = { RequestVerificationToken: this.csrf };
+			
 			if (this.isSubscribed) {
-				axios
-					.delete(`${this.subscribeRoute}/thread`, {
-						data: { threadId: this.thread },
-						headers: { RequestVerificationToken: this.csrf },
-					})
-					.then((res) => {
-						this.isSubscribed = res.data;
-					})
-					.catch(log.error);
+				const res = await Subscriptions_UnsubscribeThread(data, headers);
+				if (!res.ok) return;
+				
+				this.isSubscribed = await res.json();
 			} else {
-				axios
-					.post(
-						`${this.subscribeRoute}/thread`,
-						{ threadId: this.thread },
-						{
-							headers: { RequestVerificationToken: this.csrf },
-						},
-					)
-					.then((res) => {
-						this.isSubscribed = res.data;
-					})
-					.catch(log.error);
+				const res = await Subscriptions_SubscribeThread(data, headers);
+				if (!res.ok) return;
+
+				this.isSubscribed = await res.json();
 			}
 		},
 

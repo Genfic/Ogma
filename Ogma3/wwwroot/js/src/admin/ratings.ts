@@ -1,4 +1,5 @@
 import { DeleteApiRatings as deleteRating, GetRatings as getRatings } from "../../generated/paths-public";
+import type { RatingApiDto } from "../../generated/types-public";
 
 // @ts-ignore
 new Vue({
@@ -13,18 +14,18 @@ new Vue({
 			order: null,
 		},
 		err: [],
-		ratings: [],
+		ratings: [] as (RatingApiDto & { color: string })[],
 		route: null,
 		xcsrf: null,
 	},
 	methods: {
-		iconChanged: function (e) {
-			this.form.icon = e.target.files[0];
+		iconChanged: function (e: Event) {
+			this.form.icon = (e.target as HTMLFormElement).files[0];
 		},
 
 		// Contrary to its name, it also modifies a namespace if needed.
 		// It was simply easier to slap both functionalities into a single function.
-		createRating: async function (e) {
+		createRating: async function (e: Event) {
 			e.preventDefault();
 
 			if (this.form.name) {
@@ -36,23 +37,30 @@ new Vue({
 				data.append("order", this.form.order);
 				if (this.form.icon) data.append("icon", this.form.icon, this.form.icon.name);
 
-				const options = {
-					headers: { RequestVerificationToken: this.xcsrf },
-				};
+				const headers = { RequestVerificationToken: this.xcsrf };
 
-				// If no ID has been set, that means it's a new rating.
-				// Thus, we POST it.
 				if (this.form.id === null) {
+					// If no ID has been set, that means it's a new rating.
+					// Thus, we POST it.
 					// TODO: Shit's blocked by https://github.com/RicoSuter/NSwag/issues/4626
-					await axios.post(this.route, data, options);
+					const res = await fetch(this.route, {
+						method: "POST",
+						body: data,
+						headers: headers,
+					});
+					if (!res.ok) return;
 					await this.getRatings();
-
+				} else {
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.
-				} else {
 					data.append("id", this.form.id);
 					// TODO: Shit's blocked by https://github.com/RicoSuter/NSwag/issues/4626
-					await axios.put(this.route, data, options);
+					const res = await fetch(this.route, {
+						method: "PUT",
+						body: data,
+						headers: headers,
+					});
+					if (!res.ok) return;
 					await this.getRatings();
 				}
 
@@ -67,9 +75,11 @@ new Vue({
 		},
 
 		// Deletes a selected namespace
-		deleteRating: async function (t) {
+		deleteRating: async function (t: RatingApiDto) {
 			if (confirm("Delete permanently?")) {
-				const res = await deleteRating(t.id, { RequestVerificationToken: this.xcsrf });
+				const res = await deleteRating(t.id, {
+					RequestVerificationToken: this.xcsrf,
+				});
 				if (res.ok) {
 					await this.getRatings();
 				}
@@ -77,7 +87,7 @@ new Vue({
 		},
 
 		// Throws a namespace from the list into the editor
-		editRating: function (t) {
+		editRating: function (t: RatingApiDto & { color: string }) {
 			this.form.name = t.name;
 			this.form.color = t.color;
 			this.form.id = t.id;
@@ -96,7 +106,7 @@ new Vue({
 	},
 
 	async mounted() {
-		this.xcsrf = document.querySelector("[name=__RequestVerificationToken]").value;
+		this.xcsrf = (document.querySelector("[name=__RequestVerificationToken]") as HTMLInputElement).value;
 		await this.getRatings();
 	},
 });
