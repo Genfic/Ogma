@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using B2Net;
@@ -27,6 +28,7 @@ using Ogma3.Data.Clubs;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Mediator.Behaviours;
@@ -73,9 +75,11 @@ public sealed class Startup
 		// Compression
 		services.AddResponseCompression(options => {
 			options.EnableForHttps = true;
+			options.Providers.Add<ZstdCompressionProvider>();
 			options.Providers.Add<BrotliCompressionProvider>();
 			options.Providers.Add<GzipCompressionProvider>();
-		});
+		})
+		.Configure<ZstdCompressionProvider.Options>(o => o.CompressionLevel = CompressionLevel.Optimal);
 
 		// Database
 		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");

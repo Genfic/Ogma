@@ -86,6 +86,7 @@
 		<PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
 		<PackageReference Include="System.Text.Json" Version="8.0.4" />
 		<PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.9" />
+		<PackageReference Include="ZstdSharp.Port" Version="0.8.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Utils\Utils.csproj" />
