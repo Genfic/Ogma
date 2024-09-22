@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
@@ -59,7 +60,7 @@ public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environ
 
 		var filesAndHashes = filesAndHashesConcurrent.ToImmutableSortedDictionary(new AlphaComparer());
 		
-		if (existingManifest is not null && filesAndHashes.SequenceEqual(existingManifest.Files, new KvpComparer()))
+		if (existingManifest is {} em && filesAndHashes.SequenceEqual(em.Files.ToImmutableSortedDictionary(new AlphaComparer()), new KvpComparer()))
 		{
 			stopwatch.Stop();
 			Log.Information("Files are unchanged, stopping manifest generation after {Time}ms", stopwatch.ElapsedMilliseconds);
@@ -83,22 +84,25 @@ public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environ
 		var hash = SHA256.HashData(readStream);
 		return WebEncoders.Base64UrlEncode(hash);
 	}
-
-	private sealed class AlphaComparer : IComparer<string>
-	{
-		public int Compare(string? x, string? y)
-		{
-			return string.CompareOrdinal(x, y);
-		}
-	}
 }
 
-public sealed record Manifest(DateTimeOffset GeneratedAt, ImmutableSortedDictionary<string, string> Files);
+[UsedImplicitly]
+internal sealed record Manifest(DateTimeOffset GeneratedAt, ImmutableSortedDictionary<string, string> Files);
+
 
 [JsonSerializable(typeof(Manifest))]
-public sealed partial class ManifestJsonContext : JsonSerializerContext;
+[JsonSourceGenerationOptions(WriteIndented = true)]
+internal sealed partial class ManifestJsonContext : JsonSerializerContext;
 
-internal sealed class KvpComparer : IEqualityComparer<KeyValuePair<string, string>>
+
+sealed file class AlphaComparer : IComparer<string>
+{
+	public int Compare(string? x, string? y) 
+		=> string.CompareOrdinal(x, y);
+}
+
+
+sealed file class KvpComparer : IEqualityComparer<KeyValuePair<string, string>>
 {
 	public bool Equals(KeyValuePair<string, string> x, KeyValuePair<string, string> y)
 		=> x.Key == y.Key && x.Value == y.Value;

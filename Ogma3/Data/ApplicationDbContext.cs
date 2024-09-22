@@ -43,59 +43,59 @@ public sealed class ApplicationDbContext : IdentityDbContext
 	IdentityUserToken<long>
 >
 {
-	public required DbSet<Tag> Tags { get; set; }
-	public required DbSet<StoryTag> StoryTags { get; set; }
-	public required DbSet<Story> Stories { get; set; }
-	public required DbSet<Rating> Ratings { get; set; }
-	public required DbSet<Chapter> Chapters { get; set; }
-	public required DbSet<ChaptersRead> ChaptersRead { get; set; }
-	public required DbSet<CommentsThread> CommentThreads { get; set; }
-	public required DbSet<Comment> Comments { get; set; }
-	public required DbSet<CommentRevision> CommentRevisions { get; set; }
-	public required DbSet<Vote> Votes { get; set; }
-	public required DbSet<Shelf> Shelves { get; set; }
-	public required DbSet<ShelfStory> ShelfStories { get; set; }
-	public required DbSet<Blogpost> Blogposts { get; set; }
-	public required DbSet<UserRole> OgmaUserRoles { get; set; }
-	public required DbSet<OgmaRole> OgmaRoles { get; set; }
-	public required DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; set; }
+	public required DbSet<Tag> Tags { get; init; }
+	public required DbSet<StoryTag> StoryTags { get; init; }
+	public required DbSet<Story> Stories { get; init; }
+	public required DbSet<Rating> Ratings { get; init; }
+	public required DbSet<Chapter> Chapters { get; init; }
+	public required DbSet<ChaptersRead> ChaptersRead { get; init; }
+	public required DbSet<CommentsThread> CommentThreads { get; init; }
+	public required DbSet<Comment> Comments { get; init; }
+	public required DbSet<CommentRevision> CommentRevisions { get; init; }
+	public required DbSet<Vote> Votes { get; init; }
+	public required DbSet<Shelf> Shelves { get; init; }
+	public required DbSet<ShelfStory> ShelfStories { get; init; }
+	public required DbSet<Blogpost> Blogposts { get; init; }
+	public required DbSet<UserRole> OgmaUserRoles { get; init; }
+	public required DbSet<OgmaRole> OgmaRoles { get; init; }
+	public required DbSet<CommentsThreadSubscriber> CommentsThreadSubscribers { get; init; }
 
 	// Clubs
-	public required DbSet<Club> Clubs { get; set; }
-	public required DbSet<ClubMember> ClubMembers { get; set; }
-	public required DbSet<ClubThread> ClubThreads { get; set; }
-	public required DbSet<Folder> Folders { get; set; }
-	public required DbSet<FolderStory> FolderStories { get; set; }
-	public required DbSet<ClubBan> ClubBans { get; set; }
+	public required DbSet<Club> Clubs { get; init; }
+	public required DbSet<ClubMember> ClubMembers { get; init; }
+	public required DbSet<ClubThread> ClubThreads { get; init; }
+	public required DbSet<Folder> Folders { get; init; }
+	public required DbSet<FolderStory> FolderStories { get; init; }
+	public required DbSet<ClubBan> ClubBans { get; init; }
 
 
 	// Secondary
-	public required DbSet<Document> Documents { get; set; }
-	public required DbSet<Icon> Icons { get; set; }
-	public required DbSet<Quote> Quotes { get; set; }
-	public required DbSet<Faq> Faqs { get; set; }
+	public required DbSet<Document> Documents { get; init; }
+	public required DbSet<Icon> Icons { get; init; }
+	public required DbSet<Quote> Quotes { get; init; }
+	public required DbSet<Faq> Faqs { get; init; }
 
 	// Moderation
-	public required DbSet<ModeratorAction> ModeratorActions { get; set; }
-	public required DbSet<ClubModeratorAction> ClubModeratorActions { get; set; }
-	public required DbSet<ContentBlock> ContentBlocks { get; set; }
-	public required DbSet<Report> Reports { get; set; }
-	public required DbSet<Infraction> Infractions { get; set; }
+	public required DbSet<ModeratorAction> ModeratorActions { get; init; }
+	public required DbSet<ClubModeratorAction> ClubModeratorActions { get; init; }
+	public required DbSet<ContentBlock> ContentBlocks { get; init; }
+	public required DbSet<Report> Reports { get; init; }
+	public required DbSet<Infraction> Infractions { get; init; }
 
 	// Blacklists
-	public required DbSet<BlacklistedRating> BlacklistedRatings { get; set; }
-	public required DbSet<BlacklistedTag> BlacklistedTags { get; set; }
-	public required DbSet<UserBlock> BlacklistedUsers { get; set; }
+	public required DbSet<BlacklistedRating> BlacklistedRatings { get; init; }
+	public required DbSet<BlacklistedTag> BlacklistedTags { get; init; }
+	public required DbSet<UserBlock> BlacklistedUsers { get; init; }
 
 	// Follows
-	public required DbSet<UserFollow> FollowedUsers { get; set; }
+	public required DbSet<UserFollow> FollowedUsers { get; init; }
 
 	// Notifications
-	public required DbSet<Notification> Notifications { get; set; }
-	public required DbSet<NotificationRecipients> NotificationRecipients { get; set; }
+	public required DbSet<Notification> Notifications { get; init; }
+	public required DbSet<NotificationRecipients> NotificationRecipients { get; init; }
 
 	// Invite codes
-	public required DbSet<InviteCode> InviteCodes { get; set; }
+	public required DbSet<InviteCode> InviteCodes { get; init; }
 
 
 	private readonly ILoggerFactory _myLoggerFactory;
