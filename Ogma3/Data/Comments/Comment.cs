@@ -11,7 +11,7 @@ public sealed class Comment : BaseModel, IReportableContent
 	public long CommentsThreadId { get; set; }
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
-	public DateTime DateTime { get; set; } = DateTime.Now;
+	public DateTimeOffset DateTime { get; set; } = DateTimeOffset.UtcNow;
 	public string Body { get; set; } = null!;
 
 	// Metadata about comment deletion

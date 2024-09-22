@@ -9,7 +9,7 @@ public sealed class CommentDto
 {
 	public required long Id { get; init; }
 	public required UserSimpleDto? Author { get; init; }
-	public required DateTime DateTime { get; init; }
+	public required DateTimeOffset DateTime { get; init; }
 	public required bool Owned { get; set; }
 	public required string? Body { get; set; }
 	public required EDeletedBy? DeletedBy { get; init; }

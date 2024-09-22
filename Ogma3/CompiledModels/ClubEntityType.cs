@@ -50,24 +50,26 @@ namespace CompiledModels
 
             var creationDate = runtimeEntityType.AddProperty(
                 "CreationDate",
-                typeof(DateTime),
+                typeof(DateTimeOffset),
                 propertyInfo: typeof(Club).GetProperty("CreationDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Club).GetField("<CreationDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
-                sentinel: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-            creationDate.TypeMapping = NpgsqlTimestampTypeMapping.Default.Clone(
-                comparer: new ValueComparer<DateTime>(
-                    (DateTime v1, DateTime v2) => v1.Equals(v2),
-                    (DateTime v) => v.GetHashCode(),
-                    (DateTime v) => v),
-                keyComparer: new ValueComparer<DateTime>(
-                    (DateTime v1, DateTime v2) => v1.Equals(v2),
-                    (DateTime v) => v.GetHashCode(),
-                    (DateTime v) => v),
-                providerValueComparer: new ValueComparer<DateTime>(
-                    (DateTime v1, DateTime v2) => v1.Equals(v2),
-                    (DateTime v) => v.GetHashCode(),
-                    (DateTime v) => v));
+                sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+            creationDate.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTimeOffset>(
+                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
+                    (DateTimeOffset v) => v.GetHashCode(),
+                    (DateTimeOffset v) => v),
+                keyComparer: new ValueComparer<DateTimeOffset>(
+                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
+                    (DateTimeOffset v) => v.GetHashCode(),
+                    (DateTimeOffset v) => v),
+                providerValueComparer: new ValueComparer<DateTimeOffset>(
+                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
+                    (DateTimeOffset v) => v.GetHashCode(),
+                    (DateTimeOffset v) => v),
+                clrType: typeof(DateTimeOffset),
+                jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
             creationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
             creationDate.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 

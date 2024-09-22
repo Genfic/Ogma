@@ -20,7 +20,7 @@
 
 @foreach (var i in Model.Infractions)
 {
-	var isDone = i.ActiveUntil < DateTime.Now || i.RemovedAt is not null;
+	var isDone = i.ActiveUntil < DateTimeOffset.UtcNow || i.RemovedAt is not null;
 
 	<details class="infraction details">
 		<summary class="@(isDone ? "passed" : null)">

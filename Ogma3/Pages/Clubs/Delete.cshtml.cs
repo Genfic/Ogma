@@ -21,7 +21,7 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		public required string Name { get; init; }
 		public required string Slug { get; init; }
 		public required string Hook { get; init; }
-		public required DateTime CreationDate { get; init; }
+		public required DateTimeOffset CreationDate { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync(long? id)

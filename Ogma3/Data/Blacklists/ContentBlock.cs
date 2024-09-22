@@ -13,7 +13,7 @@ public sealed class ContentBlock : BaseModel
 	public OgmaUser Issuer { get; init; }
 	public long IssuerId { get; init; }
 	public string Reason { get; init; }
-	public DateTime DateTime { get; init; }
+	public DateTimeOffset DateTime { get; init; }
 	public string Type { get; init; }
 
 	public sealed class ContentBlockConfiguration : BaseConfiguration<ContentBlock>

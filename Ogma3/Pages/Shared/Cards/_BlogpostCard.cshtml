@@ -1,5 +1,5 @@
-@using Utils.Extensions
 @using System.Globalization
+@using Utils.Extensions
 @model BlogpostCard
 
 <div class="blogpost-card">
@@ -32,9 +32,8 @@
 	<div class="info">
 		<span class="word-count">@Model.WordCount.ToString("N0") words</span>
 
-		@if (Model.PublicationDate is not null)
+		@if (Model.PublicationDate is {} date)
 		{
-			var date = (DateTime)Model.PublicationDate;
 			<time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
 				published @date.FormatDateWithDaySuffix()
 			</time>

@@ -19,7 +19,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 		public required long AuthorId { get; init; }
 		public required string Title { get; init; }
 		public required string Slug { get; init; }
-		public DateTime? PublishDate { get; init; }
+		public DateTimeOffset? PublishDate { get; init; }
 		public required int CommentsCount { get; init; }
 	}
 

@@ -37,7 +37,7 @@ public static partial class DeactivateInfraction
 
 		if (infraction is null) return TypedResults.NotFound();
 
-		infraction.RemovedAt = DateTime.Now;
+		infraction.RemovedAt = DateTimeOffset.UtcNow;
 		infraction.RemovedById = uid;
 
 		var action = new ModeratorAction

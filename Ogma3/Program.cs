@@ -12,8 +12,6 @@ using Serilog.Events;
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
 Console.OutputEncoding = Encoding.UTF8;
 
-// TODO: Reverts to old datetime behaviour, tracked by #50
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
 var (telegramToken, telegramId) = await Telegram.GetCredentials();
@@ -23,7 +21,7 @@ Log.Logger = new LoggerConfiguration()
 	.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
 	.WriteTo.Console(LogEventLevel.Information)
 	.MinimumLevel.Debug()
-	.CreateLogger();
+	.CreateLogger(); 
 
 
 var builder = WebApplication.CreateBuilder(args);

@@ -28,7 +28,7 @@ public sealed class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCa
 		{
 			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
 
-			var minutesAgo = DateTime.UtcNow.AddMinutes(-Tolerance);
+			var minutesAgo = DateTimeOffset.UtcNow.AddMinutes(-Tolerance);
 			return await context.Users
 				.TagWith("Getting currently active users")
 				.Where(u => u.LastActive >= minutesAgo)

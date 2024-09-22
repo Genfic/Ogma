@@ -44,11 +44,11 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 	[PersonalData] public string Avatar { get; set; } = null!;
 	public string? AvatarId { get; set; }
 
-	[PersonalData] public DateTime RegistrationDate { get; set; }
+	[PersonalData] public DateTimeOffset RegistrationDate { get; set; }
 
-	[PersonalData] public DateTime LastActive { get; set; }
+	[PersonalData] public DateTimeOffset LastActive { get; set; }
 
-	public DateTime? DeletedAt { get; set; }
+	public DateTimeOffset? DeletedAt { get; set; }
 
 	public CommentsThread CommentsThread { get; set; } = new();
 

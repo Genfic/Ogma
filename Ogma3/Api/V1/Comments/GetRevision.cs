@@ -26,5 +26,5 @@ public static partial class GetRevision
 		return TypedResults.Ok(revisions);
 	}
 	
-	public sealed record Result(DateTime EditTime, string Body);
+	public sealed record Result(DateTimeOffset EditTime, string Body);
 }

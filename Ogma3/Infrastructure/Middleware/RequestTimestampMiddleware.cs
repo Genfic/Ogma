@@ -6,7 +6,7 @@ public sealed class RequestTimestampMiddleware : IMiddleware
 
 	public Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
-		context.Items.Add(Name, DateTime.UtcNow);
+		context.Items.Add(Name, DateTimeOffset.UtcNow);
 		return next(context);
 	}
 }

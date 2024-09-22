@@ -12,7 +12,7 @@ public sealed class RssResult(string title, string description, IEnumerable<Synd
 
 	public async Task ExecuteAsync(HttpContext httpContext)
 	{
-		var now = DateTime.Now;
+		var now = DateTimeOffset.UtcNow;
 		
 		Log.Information("Req is {R}",httpContext.Request);
 		

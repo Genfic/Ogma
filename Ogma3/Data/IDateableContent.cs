@@ -2,6 +2,6 @@ namespace Ogma3.Data;
 
 public interface IDateableContent
 {
-	public DateTime? PublicationDate { get; set; }
-	public DateTime CreationDate { get; set; }
+	public DateTimeOffset? PublicationDate { get; set; }
+	public DateTimeOffset CreationDate { get; set; }
 }

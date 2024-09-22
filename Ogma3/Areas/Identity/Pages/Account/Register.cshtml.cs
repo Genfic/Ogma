@@ -131,7 +131,7 @@ public sealed class RegisterModel(
 
 			// Modify invite code
 			inviteCode.UsedBy = user;
-			inviteCode.UsedDate = DateTime.Now;
+			inviteCode.UsedDate = DateTimeOffset.UtcNow;
 			await context.SaveChangesAsync();
 
 			// Send confirmation code

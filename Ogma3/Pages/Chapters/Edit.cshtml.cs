@@ -90,7 +90,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(c => c.StartNotes, Input.StartNotes == null ? null : Input.StartNotes.Trim())
 				.SetProperty(c => c.EndNotes, Input.EndNotes == null ? null : Input.EndNotes.Trim())
 				.SetProperty(c => c.WordCount, Input.Body.Words())
-				.SetProperty(c => c.PublicationDate, Input.IsPublished ? DateTime.Now : null)
+				.SetProperty(c => c.PublicationDate, Input.IsPublished ? DateTimeOffset.UtcNow : null)
 			);
 
 		if (chapterEditRows <= 0) return NotFound("Chapter not found");

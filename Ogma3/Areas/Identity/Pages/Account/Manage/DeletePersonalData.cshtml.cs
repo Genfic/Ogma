@@ -82,9 +82,9 @@ public sealed class DeletePersonalDataModel : PageModel
 		user.NormalizedEmail = string.Empty;
 		user.Bio = null;
 		user.Title = null;
-		user.DeletedAt = DateTime.Now;
-		user.LastActive = DateTime.Now;
-		user.RegistrationDate = DateTime.Now;
+		user.DeletedAt = DateTimeOffset.UtcNow;
+		user.LastActive = DateTimeOffset.UtcNow;
+		user.RegistrationDate = DateTimeOffset.UtcNow;
 
 		// Delete related data
 		await _context.DeleteRangeAsync<UserBlock>(ub => ub.BlockedUserId == user.Id || ub.BlockingUserId == user.Id);

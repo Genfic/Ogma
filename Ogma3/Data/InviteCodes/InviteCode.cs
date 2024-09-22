@@ -23,6 +23,6 @@ public sealed class InviteCode : BaseModel
 	public long? UsedById { get; set; }
 	public OgmaUser IssuedBy { get; set; } = null!;
 	public long IssuedById { get; set; }
-	public DateTime? UsedDate { get; set; }
-	public DateTime IssueDate { get; set; }
+	public DateTimeOffset? UsedDate { get; set; }
+	public DateTimeOffset IssueDate { get; set; }
 }

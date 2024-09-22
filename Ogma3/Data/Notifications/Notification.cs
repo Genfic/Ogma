@@ -7,7 +7,7 @@ public sealed class Notification : BaseModel
 {
 	public string? Body { get; init; }
 	public string Url { get; init; } = null!;
-	public DateTime DateTime { get; init; }
+	public DateTimeOffset DateTime { get; init; }
 	public ENotificationEvent Event { get; init; }
 	public ICollection<OgmaUser> Recipients { get; init; } = null!;
 }

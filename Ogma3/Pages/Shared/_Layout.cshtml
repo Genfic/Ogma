@@ -13,7 +13,7 @@
 
 	var isAdmin = ViewData["is-admin"];
 
-	ViewData["render_start"] = DateTime.UtcNow;
+	ViewData["render_start"] = DateTimeOffset.UtcNow;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +91,7 @@
 
 		@if (isAdmin is not null)
 		{
-			<o-clock date="@DateTime.Now.ToString("o", CultureInfo.InvariantCulture)"></o-clock>
+			<o-clock date="@DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture)"></o-clock>
 		}
 
 		<partial name="_LoginPartial"/>

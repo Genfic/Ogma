@@ -36,7 +36,7 @@ public static partial class UpdateLastActive
 		var rows = await context.Users
 			.Where(u => u.Id == uid)
 			.ExecuteUpdateAsync(
-				setters => setters.SetProperty(u => u.LastActive, DateTime.Now.ToUniversalTime()),
+				setters => setters.SetProperty(u => u.LastActive, DateTimeOffset.UtcNow),
 				cancellationToken
 			);
 

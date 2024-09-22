@@ -12,8 +12,8 @@ public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent,
 {
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;
-	public DateTime? PublicationDate { get; set; }
-	public DateTime CreationDate { get; set; }
+	public DateTimeOffset? PublicationDate { get; set; }
+	public DateTimeOffset CreationDate { get; set; }
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
 	public string Body { get; set; } = null!;

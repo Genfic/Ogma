@@ -33,15 +33,13 @@ public sealed class CreateModel : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var now = DateTime.Now;
-
 		_context.Documents.Add(new Document
 		{
 			Title = Input.Title,
 			Slug = Input.Title.Friendlify(),
 			Body = Input.Body,
 			Version = 1,
-			CreationTime = now,
+			CreationTime = DateTimeOffset.UtcNow,
 			RevisionDate = null,
 		});
 

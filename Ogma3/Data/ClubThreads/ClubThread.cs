@@ -13,10 +13,10 @@ public sealed class ClubThread : BaseModel
 	public string Body { get; set; }
 	public OgmaUser Author { get; init; }
 	public long AuthorId { get; init; }
-	public DateTime CreationDate { get; init; }
+	public DateTimeOffset CreationDate { get; init; }
 	public CommentsThread CommentsThread { get; init; }
 	public Club Club { get; init; }
 	public long ClubId { get; init; }
-	public DateTime? DeletedAt { get; init; }
+	public DateTimeOffset? DeletedAt { get; init; }
 	public bool IsPinned { get; set; }
 }

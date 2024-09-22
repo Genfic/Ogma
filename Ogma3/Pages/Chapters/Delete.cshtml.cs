@@ -16,7 +16,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 	public sealed class GetData
 	{
 		public required long Id { get; init; }
-		public required DateTime? PublishDate { get; init; }
+		public required DateTimeOffset? PublishDate { get; init; }
 		public required string Title { get; init; }
 		public required string Slug { get; init; }
 		public required int WordCount { get; init; }

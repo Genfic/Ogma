@@ -10,7 +10,7 @@ public sealed class ClubBar
 	public required string Hook { get; init; }
 	public required string Description { get; init; }
 	public required string Icon { get; init; }
-	public required DateTime CreationDate { get; init; }
+	public required DateTimeOffset CreationDate { get; init; }
 	public required int ClubMembersCount { get; init; }
 	public required int ThreadsCount { get; init; }
 	public required int StoriesCount { get; init; }

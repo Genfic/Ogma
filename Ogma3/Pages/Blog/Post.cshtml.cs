@@ -25,7 +25,7 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 		public required long AuthorId { get; init; }
 		public required string Title { get; init; }
 		public required string Slug { get; init; }
-		public DateTime? PublicationDate { get; init; }
+		public DateTimeOffset? PublicationDate { get; init; }
 		public required string Body { get; init; }
 		public required IEnumerable<string> Hashtags { get; init; }
 		public required CommentsThreadDto CommentsThread { get; init; }

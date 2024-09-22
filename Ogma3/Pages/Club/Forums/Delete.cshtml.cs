@@ -21,7 +21,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 		public required long ClubId { get; init; }
 		public required long AuthorId { get; init; }
 		public required string Title { get; init; }
-		public required DateTime CreationDate { get; init; }
+		public required DateTimeOffset CreationDate { get; init; }
 		public required int Replies { get; init; }
 	}
 
@@ -87,7 +87,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 		await context.ClubThreads
 			.TagWith($"Clubs — Delete — {nameof(OnPostAsync)} — update delete time")
 			.Where(ct => ct.Id == th.Id)
-			.ExecuteUpdateAsync(setters => setters.SetProperty(ct => ct.DeletedAt, DateTime.Now));
+			.ExecuteUpdateAsync(setters => setters.SetProperty(ct => ct.DeletedAt, DateTimeOffset.UtcNow));
 		
 		return RedirectToPage("Index", new { id = th.ClubId, slug = th.Slug });
 	}

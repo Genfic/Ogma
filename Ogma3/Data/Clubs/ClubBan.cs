@@ -14,7 +14,7 @@ public sealed class ClubBan
 
 	public OgmaUser Issuer { get; set; } = null!;
 	public long IssuerId { get; set; }
-	public DateTime BanDate { get; set; }
+	public DateTimeOffset BanDate { get; set; }
 	public string Reason { get; set; } = "";
 
 	public sealed class ClubBanConfiguration : IEntityTypeConfiguration<ClubBan>

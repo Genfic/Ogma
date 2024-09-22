@@ -7,9 +7,9 @@ public sealed class InfractionDto
 	public required long Id { get; init; }
 	public required string UserUserName { get; init; }
 	public required long UserId { get; init; }
-	public required DateTime IssueDate { get; init; }
-	public required DateTime ActiveUntil { get; init; }
-	public required DateTime? RemovedAt { get; init; }
+	public required DateTimeOffset IssueDate { get; init; }
+	public required DateTimeOffset ActiveUntil { get; init; }
+	public required DateTimeOffset? RemovedAt { get; init; }
 	public required string Reason { get; init; }
 	public required InfractionType Type { get; init; }
 	public required string IssuedByUserName { get; init; }

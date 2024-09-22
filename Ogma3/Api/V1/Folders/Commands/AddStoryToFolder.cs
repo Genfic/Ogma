@@ -13,7 +13,7 @@ public static class AddStoryToFolder
 {
 	public sealed record Command(long FolderId, long StoryId) : IRequest<ActionResult<Response>>;
 	
-	public sealed record Response(long FolderId, long StoryId, DateTime Added, long AddedById)
+	public sealed record Response(long FolderId, long StoryId, DateTimeOffset Added, long AddedById)
 	{
 		public static Response FromFolderStory(FolderStory fs) => new Response(fs.FolderId, fs.StoryId, fs.Added, fs.AddedById);
 	}

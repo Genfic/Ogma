@@ -42,9 +42,9 @@ public sealed class Infractions : PageModel
 
 public sealed record InfractionDto
 {
-	public DateTime IssueDate { get; init; }
-	public DateTime ActiveUntil { get; init; }
-	public DateTime? RemovedAt { get; init; }
+	public DateTimeOffset IssueDate { get; init; }
+	public DateTimeOffset ActiveUntil { get; init; }
+	public DateTimeOffset? RemovedAt { get; init; }
 	public required string Reason { get; init; }
 	public required InfractionType Type { get; init; }
 }

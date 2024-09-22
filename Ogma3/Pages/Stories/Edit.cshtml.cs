@@ -152,7 +152,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		story.Rating = rating;
 		story.Tags = tags;
 		story.Status = Input.Status;
-		story.PublicationDate = Input.Published ? DateTime.Now : null;
+		story.PublicationDate = Input.Published ? DateTimeOffset.UtcNow : null;
 		story.Credits = credits;
 
 		// Handle cover upload

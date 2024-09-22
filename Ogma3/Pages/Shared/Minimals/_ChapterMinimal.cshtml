@@ -1,5 +1,5 @@
-@using Utils.Extensions
 @using System.Globalization
+@using Utils.Extensions
 @model ChapterMinimal
 
 <a asp-page="/Chapter" asp-route-sid="@Model.StoryId" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
@@ -10,9 +10,8 @@
 
 		<i class="dot"></i>
 
-		@if (Model.PublicationDate is not null)
+		@if (Model.PublicationDate is { } date)
 		{
-			var date = (DateTime)Model.PublicationDate;
 			<time class="date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
 				@date.FormatDateWithDaySuffix()
 			</time>

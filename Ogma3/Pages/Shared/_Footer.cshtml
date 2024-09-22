@@ -6,12 +6,12 @@
 @inject OgmaConfig Config
 
 @{
-	var genTimeData = GetData((DateTime?)Context.Items[RequestTimestampMiddleware.Name]);
-	var renderTimeData = GetData((DateTime?)ViewData["render_start"]);
+	var genTimeData = GetData((DateTimeOffset?)Context.Items[RequestTimestampMiddleware.Name]);
+	var renderTimeData = GetData((DateTimeOffset?)ViewData["render_start"]);
 	
-	(string ms, string str) GetData(DateTime? dateTime) =>
+	(string ms, string str) GetData(DateTimeOffset? dateTime) =>
 		dateTime is { } dt
-			? (ms: (DateTime.UtcNow - dt).TotalMilliseconds.ToString("F3"), str: (DateTime.UtcNow - dt).TotalSeconds.ToString("F3"))
+			? (ms: (DateTimeOffset.UtcNow - dt).TotalMilliseconds.ToString("F3"), str: (DateTimeOffset.UtcNow - dt).TotalSeconds.ToString("F3"))
 			: (ms: "🤷‍♂️", str: "unknown");
 }
 
@@ -121,7 +121,7 @@
 	</div>
 
 	<div class="bottom">
-		<span class="copy-text">&copy;2019-@DateTime.UtcNow.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
+		<span class="copy-text">&copy;2019-@DateTimeOffset.UtcNow.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
 	</div>
 
 </footer>

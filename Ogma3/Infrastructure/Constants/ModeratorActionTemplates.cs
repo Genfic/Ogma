@@ -12,11 +12,11 @@ public static class ModeratorActionTemplates
 		=> ts.Humanize(3, minUnit: TimeUnit.Minute, culture: CultureInfo.InvariantCulture);
 
 	// Mute templates
-	public static string UserMute(OgmaUser user, string modName, DateTime until)
+	public static string UserMute(OgmaUser user, string modName, DateTimeOffset until)
 		=> $"User **{user.UserName}** (id: {user.Id}) has been muted until {until} by **{modName}**.";
 
-	public static string UserUnmute(OgmaUser user, string modName, DateTime until)
-		=> $"User **{user.UserName}** (id: {user.Id}) has been unmuted {(until - DateTime.Now).HumanizeTimespan()} early by **{modName}**.";
+	public static string UserUnmute(OgmaUser user, string modName, DateTimeOffset until)
+		=> $"User **{user.UserName}** (id: {user.Id}) has been unmuted {(until - DateTimeOffset.UtcNow).HumanizeTimespan()} early by **{modName}**.";
 
 	// Role templates
 	public static string UserRoleRemoved(OgmaUser user, string modName, string roleName)

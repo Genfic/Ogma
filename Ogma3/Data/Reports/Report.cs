@@ -15,7 +15,7 @@ public sealed class Report : BaseModel
 {
 	public OgmaUser Reporter { get; set; } = null!;
 	public long ReporterId { get; set; }
-	public DateTime ReportDate { get; set; }
+	public DateTimeOffset ReportDate { get; set; }
 	public string Reason { get; set; } = null!;
 
 	// Blockable content

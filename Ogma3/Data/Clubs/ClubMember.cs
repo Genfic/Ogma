@@ -9,5 +9,5 @@ public sealed class ClubMember
 	public Club Club { get; init; } = null!;
 	public long ClubId { get; init; }
 	public EClubMemberRoles Role { get; init; }
-	public DateTime MemberSince { get; init; }
+	public DateTimeOffset MemberSince { get; init; }
 }

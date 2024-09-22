@@ -6,5 +6,5 @@ public sealed class BlogpostMinimal
 	public required string AuthorUserName { get; init; }
 	public required string Title { get; init; }
 	public required string Slug { get; init; }
-	public required DateTime PublishDate { get; init; }
+	public required DateTimeOffset PublishDate { get; init; }
 }

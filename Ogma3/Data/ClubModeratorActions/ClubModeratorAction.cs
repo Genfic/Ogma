@@ -14,7 +14,7 @@ public sealed class ClubModeratorAction : BaseModel
 	public OgmaUser Moderator { get; set; }
 	public long ModeratorId { get; set; }
 	public string Description { get; set; }
-	public DateTime CreationDate { get; set; }
+	public DateTimeOffset CreationDate { get; set; }
 	public Club Club { get; set; }
 	public long ClubId { get; set; }
 

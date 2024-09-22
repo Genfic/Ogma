@@ -19,7 +19,7 @@ public sealed class DetailsModel(ClubRepository clubRepo, ApplicationDbContext c
 		public required string Title { get; init; }
 		public required string Body { get; init; }
 		public required bool IsPinned { get; init; }
-		public required DateTime CreationDate { get; init; }
+		public required DateTimeOffset CreationDate { get; init; }
 		public required string AuthorName { get; init; }
 		public required long AuthorId { get; init; }
 		public required string AuthorAvatar { get; init; }

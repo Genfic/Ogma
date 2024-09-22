@@ -66,7 +66,7 @@ public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environ
 			return;
 		}
 		
-		var manifest = JsonSerializer.Serialize(new Manifest(DateTime.UtcNow, filesAndHashes), ManifestJsonContext.Default.Manifest);
+		var manifest = JsonSerializer.Serialize(new Manifest(DateTimeOffset.UtcNow, filesAndHashes), ManifestJsonContext.Default.Manifest);
 		File.WriteAllText(_manifestPath, manifest);
 		
 		stopwatch.Stop();
@@ -93,7 +93,7 @@ public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environ
 	}
 }
 
-public sealed record Manifest(DateTime GeneratedAt, ImmutableSortedDictionary<string, string> Files);
+public sealed record Manifest(DateTimeOffset GeneratedAt, ImmutableSortedDictionary<string, string> Files);
 
 [JsonSerializable(typeof(Manifest))]
 public sealed partial class ManifestJsonContext : JsonSerializerContext;

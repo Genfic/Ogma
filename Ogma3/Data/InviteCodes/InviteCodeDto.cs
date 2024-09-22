@@ -9,8 +9,8 @@ public sealed class InviteCodeDto
 	public required string NormalizedCode { get; init; } = null!;
 	public required string? UsedByUserName { get; init; }
 	public required string IssuedByUserName { get; init; } = null!;
-	public required DateTime IssueDate { get; init; }
-	public required DateTime? UsedDate { get; init; }
+	public required DateTimeOffset IssueDate { get; init; }
+	public required DateTimeOffset? UsedDate { get; init; }
 }
 
 [Mapper]

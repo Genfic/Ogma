@@ -65,13 +65,13 @@ public record ChapterDetails
 	string? StartNotes,
 	string? EndNotes,
 	string StoryRatingName,
-	DateTime? PublicationDate,
+	DateTimeOffset? PublicationDate,
 	long StoryId,
 	string StoryTitle,
 	string StorySlug,
 	long StoryAuthorId,
 	long CommentsThreadId,
-	DateTime CommentsThreadLockDate,
+	DateTimeOffset CommentsThreadLockDate,
 	ContentBlockCard? ContentBlock);
 
 public record ChapterMicroDto(long Id, string Title, string Slug);

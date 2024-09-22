@@ -7,9 +7,9 @@ public sealed class Infraction : BaseModel
 {
 	public OgmaUser User { get; init; } = null!;
 	public required long UserId { get; init; }
-	public DateTime IssueDate { get; init; }
-	public required DateTime ActiveUntil { get; init; }
-	public DateTime? RemovedAt { get; set; }
+	public DateTimeOffset IssueDate { get; init; }
+	public required DateTimeOffset ActiveUntil { get; init; }
+	public DateTimeOffset? RemovedAt { get; set; }
 	public required string Reason { get; init; }
 	public required InfractionType Type { get; init; }
 

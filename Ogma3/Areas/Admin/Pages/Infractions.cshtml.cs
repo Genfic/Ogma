@@ -31,9 +31,9 @@ public static partial class InfractionMapper
 public record InfractionDto(
 		string UserUserName,
 		long UserId,
-		DateTime IssueDate,
-		DateTime ActiveUntil,
-		DateTime? RemovedAt,
+		DateTimeOffset IssueDate,
+		DateTimeOffset ActiveUntil,
+		DateTimeOffset? RemovedAt,
 		string Reason,
 		InfractionType Type,
 		string IssuedByUserName,

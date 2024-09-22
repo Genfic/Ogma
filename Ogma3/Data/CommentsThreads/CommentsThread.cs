@@ -13,7 +13,7 @@ public sealed class CommentsThread : BaseModel
 	public IList<Comment> Comments { get; set; } = [];
 
 	public int CommentsCount { get; set; }
-	public DateTime? LockDate { get; set; }
+	public DateTimeOffset? LockDate { get; set; }
 
 	public bool IsLocked { get; [UsedImplicitly] private set; }
 

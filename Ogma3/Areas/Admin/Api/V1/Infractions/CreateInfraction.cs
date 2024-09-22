@@ -22,7 +22,7 @@ using ReturnType = Results<UnauthorizedHttpResult, CreatedAtRoute<InfractionDto>
 [Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class CreateInfraction
 {
-	public sealed record Command(long UserId, string Reason, DateTime EndDate, InfractionType Type);
+	public sealed record Command(long UserId, string Reason, DateTimeOffset EndDate, InfractionType Type);
 
 	public sealed class CommandValidator : AbstractValidator<Command>
 	{
@@ -30,7 +30,7 @@ public static partial class CreateInfraction
 		{
 			RuleFor(c => c.UserId).NotNull();
 			RuleFor(c => c.Reason).NotEmpty();
-			RuleFor(c => c.EndDate).NotNull().GreaterThan(DateTime.Now);
+			RuleFor(c => c.EndDate).NotNull().GreaterThan(DateTimeOffset.UtcNow);
 			RuleFor(c => c.Type).NotNull();
 		}
 	}

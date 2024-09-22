@@ -24,10 +24,10 @@ public static partial class StoryMapper
 	public static partial StoryDetails ProjectToStoryDetails(this Story s);
 	
 	[UserMapping(Default = false)]
-	private static DateTime MapReleaseDate(Story s) => s.PublicationDate ?? s.CreationDate;
+	private static DateTimeOffset MapReleaseDate(Story s) => s.PublicationDate ?? s.CreationDate;
 	
 	[UserMapping(Default = false)]
-	private static bool MapIsPublished(DateTime? s) => s != null;
+	private static bool MapIsPublished(DateTimeOffset? s) => s != null;
 
 	[UserMapping(Default = false)]
 	private static int MapCommentsCount(Story s) => s.Chapters.Sum(c => c.CommentsThread.CommentsCount);

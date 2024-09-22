@@ -13,7 +13,7 @@ public sealed class StoryDetails
 	public required string Description { get; init; }
 	public required string Hook { get; init; }
 	public required string Cover { get; init; }
-	public required DateTime ReleaseDate { get; init; }
+	public required DateTimeOffset ReleaseDate { get; init; }
 	public required bool IsPublished { get; init; }
 	public required IEnumerable<TagDto> Tags { get; init; }
 	public required Rating Rating { get; init; }

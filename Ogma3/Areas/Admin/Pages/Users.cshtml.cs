@@ -75,8 +75,8 @@ public sealed class Users(ApplicationDbContext context) : PageModel
 		public required string Email { get; init; } = null!;
 		public required string? Title { get; init; }
 		public required string? Avatar { get; init; }
-		public required DateTime RegistrationDate { get; init; }
-		public required DateTime LastActive { get; init; }
+		public required DateTimeOffset RegistrationDate { get; init; }
+		public required DateTimeOffset LastActive { get; init; }
 		public required int StoriesCount { get; init; }
 		public required int BlogpostsCount { get; init; }
 		public required IEnumerable<string> RoleNames { get; init; } = null!;
@@ -86,9 +86,9 @@ public sealed class Users(ApplicationDbContext context) : PageModel
 	public sealed record InfractionDto
 	{
 		public required long Id { get; init; }
-		public required DateTime IssueDate { get; init; }
-		public required DateTime ActiveUntil { get; init; }
-		public required DateTime? RemovedAt { get; init; }
+		public required DateTimeOffset IssueDate { get; init; }
+		public required DateTimeOffset ActiveUntil { get; init; }
+		public required DateTimeOffset? RemovedAt { get; init; }
 		public required string Reason { get; init; }
 		public required InfractionType Type { get; init; }
 		public required string? RemovedBy { get; init; }

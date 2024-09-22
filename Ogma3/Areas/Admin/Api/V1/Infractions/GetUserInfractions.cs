@@ -29,5 +29,5 @@ public static partial class GetUserInfractions
 		return TypedResults.Ok(infractions);
 	}
 	
-	public sealed record Result(long Id, DateTime ActiveUntil, bool Removed, string Reason);
+	public sealed record Result(long Id, DateTimeOffset ActiveUntil, bool Removed, string Reason);
 }

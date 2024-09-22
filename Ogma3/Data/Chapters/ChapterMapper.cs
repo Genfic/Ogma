@@ -13,10 +13,10 @@ public static partial class ChapterMapper
 	public static partial ChapterBasic ProjectToChapterBasic(this Chapter s);
 	
 	[UserMapping(Default = false)]
-	private static DateTime MapPublishDate(Chapter c) => c.PublicationDate ?? c.CreationDate;
+	private static DateTimeOffset MapPublishDate(Chapter c) => c.PublicationDate ?? c.CreationDate;
 	
 	[UserMapping(Default = false)]
-	private static bool MapIsPublished(DateTime? s) => s != null;
+	private static bool MapIsPublished(DateTimeOffset? s) => s != null;
 	
 	[UserMapping(Default = false)]
 	private static bool MapIsBlocked(long? s) => s != null;

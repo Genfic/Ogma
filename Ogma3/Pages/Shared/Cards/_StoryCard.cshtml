@@ -43,9 +43,8 @@
 
 		<span class="chapter-count">@Model.ChapterCount @(Model.ChapterCount == 1 ? "chapter" : "chapters")</span>
 
-		@if (Model.PublicationDate is not null)
+		@if (Model.PublicationDate is {} date)
 		{
-			var date = (DateTime)Model.PublicationDate;
 			<time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
 				published @date.FormatDateWithDaySuffix()
 			</time>

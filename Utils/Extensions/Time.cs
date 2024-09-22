@@ -14,6 +14,20 @@ public static class Time
 			3 => "rd",
 			_ => "th",
 		};
+		
+		return string.Format(dateTime.ToString("d{0} MMMM yyyy", CultureInfo.InvariantCulture), suffix);
+	}
+	
+	public static string FormatDateWithDaySuffix(this DateTimeOffset dateTime)
+	{
+		var suffix = (dateTime.Day % 10) switch
+		{
+			1 => "st",
+			2 => "nd",
+			3 => "rd",
+			_ => "th",
+		};
+		
 		return string.Format(dateTime.ToString("d{0} MMMM yyyy", CultureInfo.InvariantCulture), suffix);
 	}
 }

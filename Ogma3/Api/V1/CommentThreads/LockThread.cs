@@ -41,7 +41,7 @@ public static partial class LockThread
 
 		if (thread is null) return TypedResults.NotFound();
 
-		thread.LockDate = thread.LockDate is null ? DateTime.Now : null;
+		thread.LockDate = thread.LockDate is null ? DateTimeOffset.UtcNow : null;
 
 		string type;
 		if (thread.BlogpostId is not null) type = "blogpost";

@@ -54,7 +54,7 @@ public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 	public sealed record UserDto(
 		long Id,
 		string Name,
-		DateTime JoinDate,
+		DateTimeOffset JoinDate,
 		string Avatar,
 		EClubMemberRoles Role,
 		bool IsBanned

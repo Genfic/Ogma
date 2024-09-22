@@ -74,7 +74,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		public required ChapterMinimal? AttachedChapter { get; init; }
 		public required StoryMinimal? AttachedStory { get; init; }
 		public required bool Published { get; set; }
-		public required DateTime? PublicationDate { get; init; }
+		public required DateTimeOffset? PublicationDate { get; init; }
 	}
 
 	public sealed class PostDataValidation : AbstractValidator<PostData>
@@ -111,7 +111,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(p => p.Body, Input.Body.Trim())
 				.SetProperty(p => p.WordCount, Input.Body.Words())
 				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags())
-				.SetProperty(b => b.PublicationDate, Input.Published ? DateTime.Now : null)
+				.SetProperty(b => b.PublicationDate, Input.Published ? DateTimeOffset.UtcNow : null)
 			);
 
 		if (rows <= 0) return NotFound();

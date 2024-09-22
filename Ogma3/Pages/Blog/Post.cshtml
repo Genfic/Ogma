@@ -1,11 +1,12 @@
 @page "{id}/{slug?}"
-@using Utils.Extensions
-@using Ogma3.Infrastructure.Extensions
 @using System.Globalization
-@using Ogma3.Infrastructure.Constants
+@using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Data.Reports
+@using Ogma3.Infrastructure.Constants
+@using Ogma3.Infrastructure.Extensions
+@using Utils.Extensions
 @model DetailsModel
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject IAntiforgery Antiforgery
 @{
 	var desc = Model.Blogpost.Body.Length > 150
 		? Model.Blogpost.Body[..150]
@@ -30,9 +31,8 @@
 <article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
 	<h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>
 
-	@if (Model.Blogpost.PublicationDate is not null)
+	@if (Model.Blogpost.PublicationDate is {} date)
 	{
-		var date = (DateTime)Model.Blogpost.PublicationDate;
 		<time class="date" itemprop="datePublished" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
 			@date.FormatDateWithDaySuffix()
 		</time>

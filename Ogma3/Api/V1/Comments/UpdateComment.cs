@@ -60,8 +60,8 @@ public static partial class UpdateComment
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		return TypedResults.Ok(new Response(comment.Body, DateTime.Now));
+		return TypedResults.Ok(new Response(comment.Body, DateTimeOffset.UtcNow));
 	}
 
-	public sealed record Response(string Body, DateTime EditTime);
+	public sealed record Response(string Body, DateTimeOffset EditTime);
 }

@@ -11,7 +11,7 @@ public sealed class FolderStory
 	public long FolderId { get; init; }
 	public Story Story { get; set; }
 	public long StoryId { get; init; }
-	public DateTime Added { get; init; }
+	public DateTimeOffset Added { get; init; }
 	public OgmaUser AddedBy { get; set; }
 	public long AddedById { get; init; }
 }

@@ -17,8 +17,8 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		public required long Id { get; init; }
 		public required string Title { get; init; }
 		public required string Slug { get; init; }
-		public required DateTime? ReleaseDate { get; init; }
-		public required DateTime CreationDate { get; init; }
+		public required DateTimeOffset? ReleaseDate { get; init; }
+		public required DateTimeOffset CreationDate { get; init; }
 		public required string Hook { get; init; }
 		public required bool IsPublished { get; init; }
 		public required EStoryStatus Status { get; init; }

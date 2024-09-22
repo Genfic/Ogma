@@ -9,7 +9,7 @@ namespace Ogma3.Pages;
 
 public sealed class Ban(ApplicationDbContext context) : PageModel
 {
-	public DateTime BannedUntil { get; private set; }
+	public DateTimeOffset BannedUntil { get; private set; }
 	public List<InfractionDto> Infractions { get; private set; } = [];
 
 	public async Task<IActionResult> OnGetAsync()
@@ -34,7 +34,7 @@ public sealed class Ban(ApplicationDbContext context) : PageModel
 
 		BannedUntil = Infractions
 			.Where(i => i.RemovedAt == null)
-			.Where(i => i.ActiveUntil > DateTime.Now)
+			.Where(i => i.ActiveUntil > DateTimeOffset.UtcNow)
 			.OrderByDescending(i => i.ActiveUntil)
 			.Select(i => i.ActiveUntil)
 			.FirstOrDefault();
@@ -49,9 +49,9 @@ public sealed class Ban(ApplicationDbContext context) : PageModel
 
 	public sealed record InfractionDto
 	{
-		public required DateTime IssueDate { get; init; }
-		public required DateTime ActiveUntil { get; init; }
-		public required DateTime? RemovedAt { get; init; }
+		public required DateTimeOffset IssueDate { get; init; }
+		public required DateTimeOffset ActiveUntil { get; init; }
+		public required DateTimeOffset? RemovedAt { get; init; }
 		public required string Reason { get; init; }
 		public required InfractionType Type { get; init; }
 	}

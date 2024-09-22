@@ -63,6 +63,6 @@ public sealed class Docs(ApplicationDbContext context) : PageModel
 	{
 		public required string Slug { get; init; }
 		public required uint Version { get; init; }
-		public required DateTime CreationTime { get; init; }
+		public required DateTimeOffset CreationTime { get; init; }
 	}
 }

@@ -5,7 +5,7 @@ namespace Ogma3.Data.Users;
 public sealed class UserPersonalData
 {
 	[MapperIgnore]
-	public DateTimeOffset GenerationTime => DateTimeOffset.Now;
+	public DateTimeOffset GenerationTime => DateTimeOffset.UtcNow;
 	public required long Id { get; init; }
 	public required string UserName { get; init; }
 	public required string Email { get; init; }
@@ -15,8 +15,8 @@ public sealed class UserPersonalData
 	public required string? Bio { get; init; }
 	public required string[] Links { get; init; } = [];
 	public required string Avatar { get; init; }
-	public required DateTime RegistrationDate { get; init; }
-	public required DateTime LastActive { get; init; }
+	public required DateTimeOffset RegistrationDate { get; init; }
+	public required DateTimeOffset LastActive { get; init; }
 }
 
 [Mapper]

@@ -7,7 +7,7 @@ public sealed class ReportDto
 	public long Id { get; init; }
 	public string ReporterUserName { get; init; } = null!;
 	public long ReporterId { get; init; }
-	public DateTime ReportDate { get; init; }
+	public DateTimeOffset ReportDate { get; init; }
 
 	public string Reason { get; init; } = null!;
 

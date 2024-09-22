@@ -202,7 +202,7 @@ namespace CompiledModels
             VoteEntityType.CreateAnnotations(vote);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "8.0.7");
+            AddAnnotation("ProductVersion", "8.0.8");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
             AddRuntimeAnnotation("Relational:RelationalModel", CreateRelationalModel());
         }
@@ -570,7 +570,7 @@ namespace CompiledModels
             var defaultTableMappings5 = new List<TableMappingBase<ColumnMappingBase>>();
             contentBlock.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings5);
             var ogma3DataBlacklistsContentBlockTableBase = new TableBase("Ogma3.Data.Blacklists.ContentBlock", null, relationalModel);
-            var dateTimeColumnBase = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp without time zone", ogma3DataBlacklistsContentBlockTableBase);
+            var dateTimeColumnBase = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp with time zone", ogma3DataBlacklistsContentBlockTableBase);
             ogma3DataBlacklistsContentBlockTableBase.Columns.Add("DateTime", dateTimeColumnBase);
             var idColumnBase1 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataBlacklistsContentBlockTableBase);
             ogma3DataBlacklistsContentBlockTableBase.Columns.Add("Id", idColumnBase1);
@@ -596,7 +596,7 @@ namespace CompiledModels
             var idColumn1 = new Column("Id", "bigint", contentBlocksTable);
             contentBlocksTable.Columns.Add("Id", idColumn1);
             idColumn1.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            var dateTimeColumn = new Column("DateTime", "timestamp without time zone", contentBlocksTable);
+            var dateTimeColumn = new Column("DateTime", "timestamp with time zone", contentBlocksTable);
             contentBlocksTable.Columns.Add("DateTime", dateTimeColumn);
             var issuerIdColumn = new Column("IssuerId", "bigint", contentBlocksTable);
             contentBlocksTable.Columns.Add("IssuerId", issuerIdColumn);
@@ -654,13 +654,13 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataBlogpostsBlogpostTableBase.Columns.Add("ContentBlockId", contentBlockIdColumnBase);
-            var creationDateColumnBase = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataBlogpostsBlogpostTableBase);
+            var creationDateColumnBase = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp with time zone", ogma3DataBlogpostsBlogpostTableBase);
             ogma3DataBlogpostsBlogpostTableBase.Columns.Add("CreationDate", creationDateColumnBase);
             var hashtagsColumnBase = new ColumnBase<ColumnMappingBase>("Hashtags", "text[]", ogma3DataBlogpostsBlogpostTableBase);
             ogma3DataBlogpostsBlogpostTableBase.Columns.Add("Hashtags", hashtagsColumnBase);
             var idColumnBase2 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataBlogpostsBlogpostTableBase);
             ogma3DataBlogpostsBlogpostTableBase.Columns.Add("Id", idColumnBase2);
-            var publicationDateColumnBase = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp without time zone", ogma3DataBlogpostsBlogpostTableBase)
+            var publicationDateColumnBase = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp with time zone", ogma3DataBlogpostsBlogpostTableBase)
             {
                 IsNullable = true
             };
@@ -713,11 +713,11 @@ namespace CompiledModels
                 IsNullable = true
             };
             blogpostsTable.Columns.Add("ContentBlockId", contentBlockIdColumn);
-            var creationDateColumn = new Column("CreationDate", "timestamp without time zone", blogpostsTable);
+            var creationDateColumn = new Column("CreationDate", "timestamp with time zone", blogpostsTable);
             blogpostsTable.Columns.Add("CreationDate", creationDateColumn);
             var hashtagsColumn = new Column("Hashtags", "text[]", blogpostsTable);
             blogpostsTable.Columns.Add("Hashtags", hashtagsColumn);
-            var publicationDateColumn = new Column("PublicationDate", "timestamp without time zone", blogpostsTable)
+            var publicationDateColumn = new Column("PublicationDate", "timestamp with time zone", blogpostsTable)
             {
                 IsNullable = true
             };
@@ -797,7 +797,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataChaptersChapterTableBase.Columns.Add("ContentBlockId", contentBlockIdColumnBase0);
-            var creationDateColumnBase0 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataChaptersChapterTableBase);
+            var creationDateColumnBase0 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp with time zone", ogma3DataChaptersChapterTableBase);
             ogma3DataChaptersChapterTableBase.Columns.Add("CreationDate", creationDateColumnBase0);
             var endNotesColumnBase = new ColumnBase<ColumnMappingBase>("EndNotes", "character varying(500)", ogma3DataChaptersChapterTableBase)
             {
@@ -808,7 +808,7 @@ namespace CompiledModels
             ogma3DataChaptersChapterTableBase.Columns.Add("Id", idColumnBase3);
             var orderColumnBase = new ColumnBase<ColumnMappingBase>("Order", "bigint", ogma3DataChaptersChapterTableBase);
             ogma3DataChaptersChapterTableBase.Columns.Add("Order", orderColumnBase);
-            var publicationDateColumnBase0 = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp without time zone", ogma3DataChaptersChapterTableBase)
+            var publicationDateColumnBase0 = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp with time zone", ogma3DataChaptersChapterTableBase)
             {
                 IsNullable = true
             };
@@ -856,7 +856,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             chaptersTable.Columns.Add("ContentBlockId", contentBlockIdColumn0);
-            var creationDateColumn0 = new Column("CreationDate", "timestamp without time zone", chaptersTable);
+            var creationDateColumn0 = new Column("CreationDate", "timestamp with time zone", chaptersTable);
             chaptersTable.Columns.Add("CreationDate", creationDateColumn0);
             var endNotesColumn = new Column("EndNotes", "character varying(500)", chaptersTable)
             {
@@ -865,7 +865,7 @@ namespace CompiledModels
             chaptersTable.Columns.Add("EndNotes", endNotesColumn);
             var orderColumn = new Column("Order", "bigint", chaptersTable);
             chaptersTable.Columns.Add("Order", orderColumn);
-            var publicationDateColumn0 = new Column("PublicationDate", "timestamp without time zone", chaptersTable)
+            var publicationDateColumn0 = new Column("PublicationDate", "timestamp with time zone", chaptersTable)
             {
                 IsNullable = true
             };
@@ -989,7 +989,7 @@ namespace CompiledModels
             var ogma3DataClubModeratorActionsClubModeratorActionTableBase = new TableBase("Ogma3.Data.ClubModeratorActions.ClubModeratorAction", null, relationalModel);
             var clubIdColumnBase = new ColumnBase<ColumnMappingBase>("ClubId", "bigint", ogma3DataClubModeratorActionsClubModeratorActionTableBase);
             ogma3DataClubModeratorActionsClubModeratorActionTableBase.Columns.Add("ClubId", clubIdColumnBase);
-            var creationDateColumnBase1 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataClubModeratorActionsClubModeratorActionTableBase);
+            var creationDateColumnBase1 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp with time zone", ogma3DataClubModeratorActionsClubModeratorActionTableBase);
             ogma3DataClubModeratorActionsClubModeratorActionTableBase.Columns.Add("CreationDate", creationDateColumnBase1);
             var descriptionColumnBase = new ColumnBase<ColumnMappingBase>("Description", "text", ogma3DataClubModeratorActionsClubModeratorActionTableBase);
             ogma3DataClubModeratorActionsClubModeratorActionTableBase.Columns.Add("Description", descriptionColumnBase);
@@ -1015,7 +1015,7 @@ namespace CompiledModels
             idColumn4.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             var clubIdColumn = new Column("ClubId", "bigint", clubModeratorActionsTable);
             clubModeratorActionsTable.Columns.Add("ClubId", clubIdColumn);
-            var creationDateColumn1 = new Column("CreationDate", "timestamp without time zone", clubModeratorActionsTable);
+            var creationDateColumn1 = new Column("CreationDate", "timestamp with time zone", clubModeratorActionsTable);
             clubModeratorActionsTable.Columns.Add("CreationDate", creationDateColumn1);
             var descriptionColumn = new Column("Description", "text", clubModeratorActionsTable);
             clubModeratorActionsTable.Columns.Add("Description", descriptionColumn);
@@ -1058,9 +1058,9 @@ namespace CompiledModels
             ogma3DataClubThreadsClubThreadTableBase.Columns.Add("Body", bodyColumnBase1);
             var clubIdColumnBase0 = new ColumnBase<ColumnMappingBase>("ClubId", "bigint", ogma3DataClubThreadsClubThreadTableBase);
             ogma3DataClubThreadsClubThreadTableBase.Columns.Add("ClubId", clubIdColumnBase0);
-            var creationDateColumnBase2 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataClubThreadsClubThreadTableBase);
+            var creationDateColumnBase2 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp with time zone", ogma3DataClubThreadsClubThreadTableBase);
             ogma3DataClubThreadsClubThreadTableBase.Columns.Add("CreationDate", creationDateColumnBase2);
-            var deletedAtColumnBase = new ColumnBase<ColumnMappingBase>("DeletedAt", "timestamp without time zone", ogma3DataClubThreadsClubThreadTableBase)
+            var deletedAtColumnBase = new ColumnBase<ColumnMappingBase>("DeletedAt", "timestamp with time zone", ogma3DataClubThreadsClubThreadTableBase)
             {
                 IsNullable = true
             };
@@ -1096,9 +1096,9 @@ namespace CompiledModels
             clubThreadsTable.Columns.Add("Body", bodyColumn1);
             var clubIdColumn0 = new Column("ClubId", "bigint", clubThreadsTable);
             clubThreadsTable.Columns.Add("ClubId", clubIdColumn0);
-            var creationDateColumn2 = new Column("CreationDate", "timestamp without time zone", clubThreadsTable);
+            var creationDateColumn2 = new Column("CreationDate", "timestamp with time zone", clubThreadsTable);
             clubThreadsTable.Columns.Add("CreationDate", creationDateColumn2);
-            var deletedAtColumn = new Column("DeletedAt", "timestamp without time zone", clubThreadsTable)
+            var deletedAtColumn = new Column("DeletedAt", "timestamp with time zone", clubThreadsTable)
             {
                 IsNullable = true
             };
@@ -1149,7 +1149,7 @@ namespace CompiledModels
             var defaultTableMappings11 = new List<TableMappingBase<ColumnMappingBase>>();
             club.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings11);
             var ogma3DataClubsClubTableBase = new TableBase("Ogma3.Data.Clubs.Club", null, relationalModel);
-            var creationDateColumnBase3 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataClubsClubTableBase);
+            var creationDateColumnBase3 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp with time zone", ogma3DataClubsClubTableBase);
             ogma3DataClubsClubTableBase.Columns.Add("CreationDate", creationDateColumnBase3);
             var descriptionColumnBase0 = new ColumnBase<ColumnMappingBase>("Description", "character varying(25000)", ogma3DataClubsClubTableBase);
             ogma3DataClubsClubTableBase.Columns.Add("Description", descriptionColumnBase0);
@@ -1187,7 +1187,7 @@ namespace CompiledModels
             var idColumn6 = new Column("Id", "bigint", clubsTable);
             clubsTable.Columns.Add("Id", idColumn6);
             idColumn6.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            var creationDateColumn3 = new Column("CreationDate", "timestamp without time zone", clubsTable);
+            var creationDateColumn3 = new Column("CreationDate", "timestamp with time zone", clubsTable);
             clubsTable.Columns.Add("CreationDate", creationDateColumn3);
             var descriptionColumn0 = new Column("Description", "character varying(25000)", clubsTable);
             clubsTable.Columns.Add("Description", descriptionColumn0);
@@ -1230,7 +1230,7 @@ namespace CompiledModels
             var defaultTableMappings12 = new List<TableMappingBase<ColumnMappingBase>>();
             clubBan.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings12);
             var ogma3DataClubsClubBanTableBase = new TableBase("Ogma3.Data.Clubs.ClubBan", null, relationalModel);
-            var banDateColumnBase = new ColumnBase<ColumnMappingBase>("BanDate", "timestamp without time zone", ogma3DataClubsClubBanTableBase);
+            var banDateColumnBase = new ColumnBase<ColumnMappingBase>("BanDate", "timestamp with time zone", ogma3DataClubsClubBanTableBase);
             ogma3DataClubsClubBanTableBase.Columns.Add("BanDate", banDateColumnBase);
             var clubIdColumnBase1 = new ColumnBase<ColumnMappingBase>("ClubId", "bigint", ogma3DataClubsClubBanTableBase);
             ogma3DataClubsClubBanTableBase.Columns.Add("ClubId", clubIdColumnBase1);
@@ -1257,7 +1257,7 @@ namespace CompiledModels
             clubBansTable.Columns.Add("ClubId", clubIdColumn1);
             var userIdColumn5 = new Column("UserId", "bigint", clubBansTable);
             clubBansTable.Columns.Add("UserId", userIdColumn5);
-            var banDateColumn = new Column("BanDate", "timestamp without time zone", clubBansTable);
+            var banDateColumn = new Column("BanDate", "timestamp with time zone", clubBansTable);
             clubBansTable.Columns.Add("BanDate", banDateColumn);
             var issuerIdColumn0 = new Column("IssuerId", "bigint", clubBansTable);
             clubBansTable.Columns.Add("IssuerId", issuerIdColumn0);
@@ -1306,7 +1306,7 @@ namespace CompiledModels
             ogma3DataClubsClubMemberTableBase.Columns.Add("ClubId", clubIdColumnBase2);
             var memberIdColumnBase = new ColumnBase<ColumnMappingBase>("MemberId", "bigint", ogma3DataClubsClubMemberTableBase);
             ogma3DataClubsClubMemberTableBase.Columns.Add("MemberId", memberIdColumnBase);
-            var memberSinceColumnBase = new ColumnBase<ColumnMappingBase>("MemberSince", "timestamp without time zone", ogma3DataClubsClubMemberTableBase);
+            var memberSinceColumnBase = new ColumnBase<ColumnMappingBase>("MemberSince", "timestamp with time zone", ogma3DataClubsClubMemberTableBase);
             ogma3DataClubsClubMemberTableBase.Columns.Add("MemberSince", memberSinceColumnBase);
             var roleColumnBase = new ColumnBase<ColumnMappingBase>("Role", "e_club_member_roles", ogma3DataClubsClubMemberTableBase);
             ogma3DataClubsClubMemberTableBase.Columns.Add("Role", roleColumnBase);
@@ -1326,7 +1326,7 @@ namespace CompiledModels
             clubMembersTable.Columns.Add("ClubId", clubIdColumn2);
             var memberIdColumn = new Column("MemberId", "bigint", clubMembersTable);
             clubMembersTable.Columns.Add("MemberId", memberIdColumn);
-            var memberSinceColumn = new Column("MemberSince", "timestamp without time zone", clubMembersTable);
+            var memberSinceColumn = new Column("MemberSince", "timestamp with time zone", clubMembersTable);
             clubMembersTable.Columns.Add("MemberSince", memberSinceColumn);
             var roleColumn = new Column("Role", "e_club_member_roles", clubMembersTable);
             clubMembersTable.Columns.Add("Role", roleColumn);
@@ -1366,7 +1366,7 @@ namespace CompiledModels
             ogma3DataCommentsCommentTableBase.Columns.Add("Body", bodyColumnBase2);
             var commentsThreadIdColumnBase = new ColumnBase<ColumnMappingBase>("CommentsThreadId", "bigint", ogma3DataCommentsCommentTableBase);
             ogma3DataCommentsCommentTableBase.Columns.Add("CommentsThreadId", commentsThreadIdColumnBase);
-            var dateTimeColumnBase0 = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp without time zone", ogma3DataCommentsCommentTableBase);
+            var dateTimeColumnBase0 = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp with time zone", ogma3DataCommentsCommentTableBase);
             ogma3DataCommentsCommentTableBase.Columns.Add("DateTime", dateTimeColumnBase0);
             var deletedByColumnBase = new ColumnBase<ColumnMappingBase>("DeletedBy", "e_deleted_by", ogma3DataCommentsCommentTableBase)
             {
@@ -1404,7 +1404,7 @@ namespace CompiledModels
             commentsTable.Columns.Add("Body", bodyColumn2);
             var commentsThreadIdColumn = new Column("CommentsThreadId", "bigint", commentsTable);
             commentsTable.Columns.Add("CommentsThreadId", commentsThreadIdColumn);
-            var dateTimeColumn0 = new Column("DateTime", "timestamp without time zone", commentsTable);
+            var dateTimeColumn0 = new Column("DateTime", "timestamp with time zone", commentsTable);
             commentsTable.Columns.Add("DateTime", dateTimeColumn0);
             var deletedByColumn = new Column("DeletedBy", "e_deleted_by", commentsTable)
             {
@@ -1467,7 +1467,7 @@ namespace CompiledModels
             var ogma3DataCommentsCommentRevisionTableBase = new TableBase("Ogma3.Data.Comments.CommentRevision", null, relationalModel);
             var bodyColumnBase3 = new ColumnBase<ColumnMappingBase>("Body", "character varying(5000)", ogma3DataCommentsCommentRevisionTableBase);
             ogma3DataCommentsCommentRevisionTableBase.Columns.Add("Body", bodyColumnBase3);
-            var editTimeColumnBase = new ColumnBase<ColumnMappingBase>("EditTime", "timestamp without time zone", ogma3DataCommentsCommentRevisionTableBase);
+            var editTimeColumnBase = new ColumnBase<ColumnMappingBase>("EditTime", "timestamp with time zone", ogma3DataCommentsCommentRevisionTableBase);
             ogma3DataCommentsCommentRevisionTableBase.Columns.Add("EditTime", editTimeColumnBase);
             var idColumnBase8 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataCommentsCommentRevisionTableBase);
             ogma3DataCommentsCommentRevisionTableBase.Columns.Add("Id", idColumnBase8);
@@ -1490,7 +1490,7 @@ namespace CompiledModels
             idColumn8.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             var bodyColumn3 = new Column("Body", "character varying(5000)", commentRevisionsTable);
             commentRevisionsTable.Columns.Add("Body", bodyColumn3);
-            var editTimeColumn = new Column("EditTime", "timestamp without time zone", commentRevisionsTable);
+            var editTimeColumn = new Column("EditTime", "timestamp with time zone", commentRevisionsTable);
             commentRevisionsTable.Columns.Add("EditTime", editTimeColumn);
             var parentIdColumn = new Column("ParentId", "bigint", commentRevisionsTable);
             commentRevisionsTable.Columns.Add("ParentId", parentIdColumn);
@@ -1545,7 +1545,7 @@ namespace CompiledModels
             ogma3DataCommentsThreadsCommentsThreadTableBase.Columns.Add("Id", idColumnBase9);
             var isLockedColumnBase = new ColumnBase<ColumnMappingBase>("IsLocked", "boolean", ogma3DataCommentsThreadsCommentsThreadTableBase);
             ogma3DataCommentsThreadsCommentsThreadTableBase.Columns.Add("IsLocked", isLockedColumnBase);
-            var lockDateColumnBase = new ColumnBase<ColumnMappingBase>("LockDate", "timestamp without time zone", ogma3DataCommentsThreadsCommentsThreadTableBase)
+            var lockDateColumnBase = new ColumnBase<ColumnMappingBase>("LockDate", "timestamp with time zone", ogma3DataCommentsThreadsCommentsThreadTableBase)
             {
                 IsNullable = true
             };
@@ -1593,7 +1593,7 @@ namespace CompiledModels
             commentThreadsTable.Columns.Add("CommentsCount", commentsCountColumn);
             var isLockedColumn = new Column("IsLocked", "boolean", commentThreadsTable);
             commentThreadsTable.Columns.Add("IsLocked", isLockedColumn);
-            var lockDateColumn = new Column("LockDate", "timestamp without time zone", commentThreadsTable)
+            var lockDateColumn = new Column("LockDate", "timestamp with time zone", commentThreadsTable)
             {
                 IsNullable = true
             };
@@ -1709,11 +1709,11 @@ namespace CompiledModels
             var ogma3DataDocumentsDocumentTableBase = new TableBase("Ogma3.Data.Documents.Document", null, relationalModel);
             var bodyColumnBase4 = new ColumnBase<ColumnMappingBase>("Body", "text", ogma3DataDocumentsDocumentTableBase);
             ogma3DataDocumentsDocumentTableBase.Columns.Add("Body", bodyColumnBase4);
-            var creationTimeColumnBase = new ColumnBase<ColumnMappingBase>("CreationTime", "timestamp without time zone", ogma3DataDocumentsDocumentTableBase);
+            var creationTimeColumnBase = new ColumnBase<ColumnMappingBase>("CreationTime", "timestamp with time zone", ogma3DataDocumentsDocumentTableBase);
             ogma3DataDocumentsDocumentTableBase.Columns.Add("CreationTime", creationTimeColumnBase);
             var idColumnBase10 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataDocumentsDocumentTableBase);
             ogma3DataDocumentsDocumentTableBase.Columns.Add("Id", idColumnBase10);
-            var revisionDateColumnBase = new ColumnBase<ColumnMappingBase>("RevisionDate", "timestamp without time zone", ogma3DataDocumentsDocumentTableBase)
+            var revisionDateColumnBase = new ColumnBase<ColumnMappingBase>("RevisionDate", "timestamp with time zone", ogma3DataDocumentsDocumentTableBase)
             {
                 IsNullable = true
             };
@@ -1744,9 +1744,9 @@ namespace CompiledModels
             idColumn10.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             var bodyColumn4 = new Column("Body", "text", documentsTable);
             documentsTable.Columns.Add("Body", bodyColumn4);
-            var creationTimeColumn = new Column("CreationTime", "timestamp without time zone", documentsTable);
+            var creationTimeColumn = new Column("CreationTime", "timestamp with time zone", documentsTable);
             documentsTable.Columns.Add("CreationTime", creationTimeColumn);
-            var revisionDateColumn = new Column("RevisionDate", "timestamp without time zone", documentsTable)
+            var revisionDateColumn = new Column("RevisionDate", "timestamp with time zone", documentsTable)
             {
                 IsNullable = true
             };
@@ -1952,7 +1952,7 @@ namespace CompiledModels
             var defaultTableMappings21 = new List<TableMappingBase<ColumnMappingBase>>();
             folderStory.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings21);
             var ogma3DataFoldersFolderStoryTableBase = new TableBase("Ogma3.Data.Folders.FolderStory", null, relationalModel);
-            var addedColumnBase = new ColumnBase<ColumnMappingBase>("Added", "timestamp without time zone", ogma3DataFoldersFolderStoryTableBase);
+            var addedColumnBase = new ColumnBase<ColumnMappingBase>("Added", "timestamp with time zone", ogma3DataFoldersFolderStoryTableBase);
             ogma3DataFoldersFolderStoryTableBase.Columns.Add("Added", addedColumnBase);
             var addedByIdColumnBase = new ColumnBase<ColumnMappingBase>("AddedById", "bigint", ogma3DataFoldersFolderStoryTableBase);
             ogma3DataFoldersFolderStoryTableBase.Columns.Add("AddedById", addedByIdColumnBase);
@@ -1976,7 +1976,7 @@ namespace CompiledModels
             folderStoriesTable.Columns.Add("FolderId", folderIdColumn);
             var storyIdColumn1 = new Column("StoryId", "bigint", folderStoriesTable);
             folderStoriesTable.Columns.Add("StoryId", storyIdColumn1);
-            var addedColumn = new Column("Added", "timestamp without time zone", folderStoriesTable);
+            var addedColumn = new Column("Added", "timestamp with time zone", folderStoriesTable);
             folderStoriesTable.Columns.Add("Added", addedColumn);
             var addedByIdColumn = new Column("AddedById", "bigint", folderStoriesTable);
             folderStoriesTable.Columns.Add("AddedById", addedByIdColumn);
@@ -2065,17 +2065,17 @@ namespace CompiledModels
             var defaultTableMappings23 = new List<TableMappingBase<ColumnMappingBase>>();
             infraction.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings23);
             var ogma3DataInfractionsInfractionTableBase = new TableBase("Ogma3.Data.Infractions.Infraction", null, relationalModel);
-            var activeUntilColumnBase = new ColumnBase<ColumnMappingBase>("ActiveUntil", "timestamp without time zone", ogma3DataInfractionsInfractionTableBase);
+            var activeUntilColumnBase = new ColumnBase<ColumnMappingBase>("ActiveUntil", "timestamp with time zone", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("ActiveUntil", activeUntilColumnBase);
             var idColumnBase14 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("Id", idColumnBase14);
-            var issueDateColumnBase = new ColumnBase<ColumnMappingBase>("IssueDate", "timestamp without time zone", ogma3DataInfractionsInfractionTableBase);
+            var issueDateColumnBase = new ColumnBase<ColumnMappingBase>("IssueDate", "timestamp with time zone", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("IssueDate", issueDateColumnBase);
             var issuedByIdColumnBase = new ColumnBase<ColumnMappingBase>("IssuedById", "bigint", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("IssuedById", issuedByIdColumnBase);
             var reasonColumnBase1 = new ColumnBase<ColumnMappingBase>("Reason", "character varying(1000)", ogma3DataInfractionsInfractionTableBase);
             ogma3DataInfractionsInfractionTableBase.Columns.Add("Reason", reasonColumnBase1);
-            var removedAtColumnBase = new ColumnBase<ColumnMappingBase>("RemovedAt", "timestamp without time zone", ogma3DataInfractionsInfractionTableBase)
+            var removedAtColumnBase = new ColumnBase<ColumnMappingBase>("RemovedAt", "timestamp with time zone", ogma3DataInfractionsInfractionTableBase)
             {
                 IsNullable = true
             };
@@ -2109,15 +2109,15 @@ namespace CompiledModels
             var idColumn14 = new Column("Id", "bigint", infractionsTable);
             infractionsTable.Columns.Add("Id", idColumn14);
             idColumn14.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            var activeUntilColumn = new Column("ActiveUntil", "timestamp without time zone", infractionsTable);
+            var activeUntilColumn = new Column("ActiveUntil", "timestamp with time zone", infractionsTable);
             infractionsTable.Columns.Add("ActiveUntil", activeUntilColumn);
-            var issueDateColumn = new Column("IssueDate", "timestamp without time zone", infractionsTable);
+            var issueDateColumn = new Column("IssueDate", "timestamp with time zone", infractionsTable);
             infractionsTable.Columns.Add("IssueDate", issueDateColumn);
             var issuedByIdColumn = new Column("IssuedById", "bigint", infractionsTable);
             infractionsTable.Columns.Add("IssuedById", issuedByIdColumn);
             var reasonColumn1 = new Column("Reason", "character varying(1000)", infractionsTable);
             infractionsTable.Columns.Add("Reason", reasonColumn1);
-            var removedAtColumn = new Column("RemovedAt", "timestamp without time zone", infractionsTable)
+            var removedAtColumn = new Column("RemovedAt", "timestamp with time zone", infractionsTable)
             {
                 IsNullable = true
             };
@@ -2202,7 +2202,7 @@ namespace CompiledModels
             ogma3DataInviteCodesInviteCodeTableBase.Columns.Add("Code", codeColumnBase);
             var idColumnBase15 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataInviteCodesInviteCodeTableBase);
             ogma3DataInviteCodesInviteCodeTableBase.Columns.Add("Id", idColumnBase15);
-            var issueDateColumnBase0 = new ColumnBase<ColumnMappingBase>("IssueDate", "timestamp without time zone", ogma3DataInviteCodesInviteCodeTableBase);
+            var issueDateColumnBase0 = new ColumnBase<ColumnMappingBase>("IssueDate", "timestamp with time zone", ogma3DataInviteCodesInviteCodeTableBase);
             ogma3DataInviteCodesInviteCodeTableBase.Columns.Add("IssueDate", issueDateColumnBase0);
             var issuedByIdColumnBase0 = new ColumnBase<ColumnMappingBase>("IssuedById", "bigint", ogma3DataInviteCodesInviteCodeTableBase);
             ogma3DataInviteCodesInviteCodeTableBase.Columns.Add("IssuedById", issuedByIdColumnBase0);
@@ -2213,7 +2213,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataInviteCodesInviteCodeTableBase.Columns.Add("UsedById", usedByIdColumnBase);
-            var usedDateColumnBase = new ColumnBase<ColumnMappingBase>("UsedDate", "timestamp without time zone", ogma3DataInviteCodesInviteCodeTableBase)
+            var usedDateColumnBase = new ColumnBase<ColumnMappingBase>("UsedDate", "timestamp with time zone", ogma3DataInviteCodesInviteCodeTableBase)
             {
                 IsNullable = true
             };
@@ -2238,7 +2238,7 @@ namespace CompiledModels
             idColumn15.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             var codeColumn = new Column("Code", "text", inviteCodesTable);
             inviteCodesTable.Columns.Add("Code", codeColumn);
-            var issueDateColumn0 = new Column("IssueDate", "timestamp without time zone", inviteCodesTable);
+            var issueDateColumn0 = new Column("IssueDate", "timestamp with time zone", inviteCodesTable);
             inviteCodesTable.Columns.Add("IssueDate", issueDateColumn0);
             var issuedByIdColumn0 = new Column("IssuedById", "bigint", inviteCodesTable);
             inviteCodesTable.Columns.Add("IssuedById", issuedByIdColumn0);
@@ -2249,7 +2249,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             inviteCodesTable.Columns.Add("UsedById", usedByIdColumn);
-            var usedDateColumn = new Column("UsedDate", "timestamp without time zone", inviteCodesTable)
+            var usedDateColumn = new Column("UsedDate", "timestamp with time zone", inviteCodesTable)
             {
                 IsNullable = true
             };
@@ -2295,7 +2295,7 @@ namespace CompiledModels
             var defaultTableMappings25 = new List<TableMappingBase<ColumnMappingBase>>();
             moderatorAction.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings25);
             var ogma3DataModeratorActionsModeratorActionTableBase = new TableBase("Ogma3.Data.ModeratorActions.ModeratorAction", null, relationalModel);
-            var dateTimeColumnBase1 = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp without time zone", ogma3DataModeratorActionsModeratorActionTableBase);
+            var dateTimeColumnBase1 = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp with time zone", ogma3DataModeratorActionsModeratorActionTableBase);
             ogma3DataModeratorActionsModeratorActionTableBase.Columns.Add("DateTime", dateTimeColumnBase1);
             var descriptionColumnBase2 = new ColumnBase<ColumnMappingBase>("Description", "text", ogma3DataModeratorActionsModeratorActionTableBase);
             ogma3DataModeratorActionsModeratorActionTableBase.Columns.Add("Description", descriptionColumnBase2);
@@ -2318,7 +2318,7 @@ namespace CompiledModels
             var idColumn16 = new Column("Id", "bigint", moderatorActionsTable);
             moderatorActionsTable.Columns.Add("Id", idColumn16);
             idColumn16.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            var dateTimeColumn1 = new Column("DateTime", "timestamp without time zone", moderatorActionsTable);
+            var dateTimeColumn1 = new Column("DateTime", "timestamp with time zone", moderatorActionsTable);
             moderatorActionsTable.Columns.Add("DateTime", dateTimeColumn1);
             var descriptionColumn2 = new Column("Description", "text", moderatorActionsTable);
             moderatorActionsTable.Columns.Add("Description", descriptionColumn2);
@@ -2359,7 +2359,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataNotificationsNotificationTableBase.Columns.Add("Body", bodyColumnBase5);
-            var dateTimeColumnBase2 = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp without time zone", ogma3DataNotificationsNotificationTableBase);
+            var dateTimeColumnBase2 = new ColumnBase<ColumnMappingBase>("DateTime", "timestamp with time zone", ogma3DataNotificationsNotificationTableBase);
             ogma3DataNotificationsNotificationTableBase.Columns.Add("DateTime", dateTimeColumnBase2);
             var eventColumnBase = new ColumnBase<ColumnMappingBase>("Event", "e_notification_event", ogma3DataNotificationsNotificationTableBase);
             ogma3DataNotificationsNotificationTableBase.Columns.Add("Event", eventColumnBase);
@@ -2388,7 +2388,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             notificationsTable.Columns.Add("Body", bodyColumn5);
-            var dateTimeColumn2 = new Column("DateTime", "timestamp without time zone", notificationsTable);
+            var dateTimeColumn2 = new Column("DateTime", "timestamp with time zone", notificationsTable);
             notificationsTable.Columns.Add("DateTime", dateTimeColumn2);
             var eventColumn = new Column("Event", "e_notification_event", notificationsTable);
             notificationsTable.Columns.Add("Event", eventColumn);
@@ -2623,7 +2623,7 @@ namespace CompiledModels
             ogma3DataReportsReportTableBase.Columns.Add("Id", idColumnBase20);
             var reasonColumnBase2 = new ColumnBase<ColumnMappingBase>("Reason", "text", ogma3DataReportsReportTableBase);
             ogma3DataReportsReportTableBase.Columns.Add("Reason", reasonColumnBase2);
-            var reportDateColumnBase = new ColumnBase<ColumnMappingBase>("ReportDate", "timestamp without time zone", ogma3DataReportsReportTableBase);
+            var reportDateColumnBase = new ColumnBase<ColumnMappingBase>("ReportDate", "timestamp with time zone", ogma3DataReportsReportTableBase);
             ogma3DataReportsReportTableBase.Columns.Add("ReportDate", reportDateColumnBase);
             var reporterIdColumnBase = new ColumnBase<ColumnMappingBase>("ReporterId", "bigint", ogma3DataReportsReportTableBase);
             ogma3DataReportsReportTableBase.Columns.Add("ReporterId", reporterIdColumnBase);
@@ -2683,7 +2683,7 @@ namespace CompiledModels
             reportsTable.Columns.Add("ContentType", contentTypeColumn);
             var reasonColumn2 = new Column("Reason", "text", reportsTable);
             reportsTable.Columns.Add("Reason", reasonColumn2);
-            var reportDateColumn = new Column("ReportDate", "timestamp without time zone", reportsTable);
+            var reportDateColumn = new Column("ReportDate", "timestamp with time zone", reportsTable);
             reportsTable.Columns.Add("ReportDate", reportDateColumn);
             var reporterIdColumn = new Column("ReporterId", "bigint", reportsTable);
             reportsTable.Columns.Add("ReporterId", reporterIdColumn);
@@ -3064,7 +3064,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             storiesTable.Columns.Add("CoverId", coverIdColumn);
-            var creationDateColumn4 = new Column("CreationDate", "timestamp without time zone", storiesTable);
+            var creationDateColumn4 = new Column("CreationDate", "timestamp with time zone", storiesTable);
             storiesTable.Columns.Add("CreationDate", creationDateColumn4);
             var creditsColumn = new JsonColumn("Credits", "jsonb", storiesTable)
             {
@@ -3075,7 +3075,7 @@ namespace CompiledModels
             storiesTable.Columns.Add("Description", descriptionColumn5);
             var hookColumn0 = new Column("Hook", "character varying(250)", storiesTable);
             storiesTable.Columns.Add("Hook", hookColumn0);
-            var publicationDateColumn1 = new Column("PublicationDate", "timestamp without time zone", storiesTable)
+            var publicationDateColumn1 = new Column("PublicationDate", "timestamp with time zone", storiesTable)
             {
                 IsNullable = true
             };
@@ -3156,7 +3156,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataStoriesStoryTableBase.Columns.Add("CoverId", coverIdColumnBase);
-            var creationDateColumnBase4 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp without time zone", ogma3DataStoriesStoryTableBase);
+            var creationDateColumnBase4 = new ColumnBase<ColumnMappingBase>("CreationDate", "timestamp with time zone", ogma3DataStoriesStoryTableBase);
             ogma3DataStoriesStoryTableBase.Columns.Add("CreationDate", creationDateColumnBase4);
             var descriptionColumnBase5 = new ColumnBase<ColumnMappingBase>("Description", "character varying(3000)", ogma3DataStoriesStoryTableBase);
             ogma3DataStoriesStoryTableBase.Columns.Add("Description", descriptionColumnBase5);
@@ -3164,7 +3164,7 @@ namespace CompiledModels
             ogma3DataStoriesStoryTableBase.Columns.Add("Hook", hookColumnBase0);
             var idColumnBase23 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataStoriesStoryTableBase);
             ogma3DataStoriesStoryTableBase.Columns.Add("Id", idColumnBase23);
-            var publicationDateColumnBase1 = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp without time zone", ogma3DataStoriesStoryTableBase)
+            var publicationDateColumnBase1 = new ColumnBase<ColumnMappingBase>("PublicationDate", "timestamp with time zone", ogma3DataStoriesStoryTableBase)
             {
                 IsNullable = true
             };
@@ -3378,7 +3378,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataUsersOgmaUserTableBase.Columns.Add("ConcurrencyStamp", concurrencyStampColumnBase0);
-            var deletedAtColumnBase0 = new ColumnBase<ColumnMappingBase>("DeletedAt", "timestamp without time zone", ogma3DataUsersOgmaUserTableBase)
+            var deletedAtColumnBase0 = new ColumnBase<ColumnMappingBase>("DeletedAt", "timestamp with time zone", ogma3DataUsersOgmaUserTableBase)
             {
                 IsNullable = true
             };
@@ -3389,7 +3389,7 @@ namespace CompiledModels
             ogma3DataUsersOgmaUserTableBase.Columns.Add("EmailConfirmed", emailConfirmedColumnBase);
             var idColumnBase25 = new ColumnBase<ColumnMappingBase>("Id", "bigint", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("Id", idColumnBase25);
-            var lastActiveColumnBase = new ColumnBase<ColumnMappingBase>("LastActive", "timestamp without time zone", ogma3DataUsersOgmaUserTableBase);
+            var lastActiveColumnBase = new ColumnBase<ColumnMappingBase>("LastActive", "timestamp with time zone", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("LastActive", lastActiveColumnBase);
             var linksColumnBase = new ColumnBase<ColumnMappingBase>("Links", "text[]", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("Links", linksColumnBase);
@@ -3409,7 +3409,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             ogma3DataUsersOgmaUserTableBase.Columns.Add("PasswordHash", passwordHashColumnBase);
-            var registrationDateColumnBase = new ColumnBase<ColumnMappingBase>("RegistrationDate", "timestamp without time zone", ogma3DataUsersOgmaUserTableBase);
+            var registrationDateColumnBase = new ColumnBase<ColumnMappingBase>("RegistrationDate", "timestamp with time zone", ogma3DataUsersOgmaUserTableBase);
             ogma3DataUsersOgmaUserTableBase.Columns.Add("RegistrationDate", registrationDateColumnBase);
             var securityStampColumnBase = new ColumnBase<ColumnMappingBase>("SecurityStamp", "text", ogma3DataUsersOgmaUserTableBase)
             {
@@ -3476,7 +3476,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             aspNetUsersTable.Columns.Add("ConcurrencyStamp", concurrencyStampColumn0);
-            var deletedAtColumn0 = new Column("DeletedAt", "timestamp without time zone", aspNetUsersTable)
+            var deletedAtColumn0 = new Column("DeletedAt", "timestamp with time zone", aspNetUsersTable)
             {
                 IsNullable = true
             };
@@ -3485,7 +3485,7 @@ namespace CompiledModels
             aspNetUsersTable.Columns.Add("Email", emailColumn);
             var emailConfirmedColumn = new Column("EmailConfirmed", "boolean", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("EmailConfirmed", emailConfirmedColumn);
-            var lastActiveColumn = new Column("LastActive", "timestamp without time zone", aspNetUsersTable);
+            var lastActiveColumn = new Column("LastActive", "timestamp with time zone", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("LastActive", lastActiveColumn);
             var linksColumn = new Column("Links", "text[]", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("Links", linksColumn);
@@ -3505,7 +3505,7 @@ namespace CompiledModels
                 IsNullable = true
             };
             aspNetUsersTable.Columns.Add("PasswordHash", passwordHashColumn);
-            var registrationDateColumn = new Column("RegistrationDate", "timestamp without time zone", aspNetUsersTable);
+            var registrationDateColumn = new Column("RegistrationDate", "timestamp with time zone", aspNetUsersTable);
             aspNetUsersTable.Columns.Add("RegistrationDate", registrationDateColumn);
             var securityStampColumn = new Column("SecurityStamp", "text", aspNetUsersTable)
             {

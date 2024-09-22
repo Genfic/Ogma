@@ -13,7 +13,7 @@ public sealed class ModeratorAction : BaseModel
 	public OgmaUser StaffMember { get; init; }
 	public long StaffMemberId { get; init; }
 	public string Description { get; init; }
-	public DateTime DateTime { get; init; }
+	public DateTimeOffset DateTime { get; init; }
 
 	public sealed class ModeratorActionConfiguration : BaseConfiguration<ModeratorAction>
 	{

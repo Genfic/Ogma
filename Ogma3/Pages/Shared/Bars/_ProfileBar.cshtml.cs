@@ -9,8 +9,8 @@ public sealed class ProfileBar
 	public required string? Title { get; init; }
 	public required string Avatar { get; init; }
 	public required string Email { get; init; }
-	public required DateTime RegistrationDate { get; init; }
-	public required DateTime LastActive { get; init; }
+	public required DateTimeOffset RegistrationDate { get; init; }
+	public required DateTimeOffset LastActive { get; init; }
 	public required IEnumerable<RoleDto> Roles { get; init; }
 	public required int StoriesCount { get; init; }
 	public required int BlogpostsCount { get; init; }

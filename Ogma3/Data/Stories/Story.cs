@@ -21,8 +21,8 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public string Hook { get; set; } = null!;
 	public string Cover { get; set; } = null!;
 	public string? CoverId { get; set; }
-	public DateTime CreationDate { get; set; }
-	public DateTime? PublicationDate { get; set; }
+	public DateTimeOffset CreationDate { get; set; }
+	public DateTimeOffset? PublicationDate { get; set; }
 	
 	public ICollection<Credit> Credits { get; set; } = [];
 

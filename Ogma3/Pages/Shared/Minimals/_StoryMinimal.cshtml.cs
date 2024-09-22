@@ -9,7 +9,7 @@ public sealed class StoryMinimal
 	public required string Title { get; init; }
 	public required string AuthorUserName { get; init; }
 	public required string Slug { get; init; }
-	public required DateTime? PublicationDate { get; init; }
+	public required DateTimeOffset? PublicationDate { get; init; }
 }
 
 [Mapper]

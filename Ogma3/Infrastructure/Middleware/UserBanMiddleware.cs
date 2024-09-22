@@ -38,7 +38,7 @@ public sealed class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext d
 			return;
 		}
 
-		if (banDate > DateTime.Now)
+		if (banDate > DateTimeOffset.UtcNow)
 		{
 			logger.LogInformation("Banned user {UserId} tried accessing the site", uid);
 			if (httpContext.Request.Path.StartsWithSegments("/api"))

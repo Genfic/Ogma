@@ -61,7 +61,7 @@ public sealed class EditModel : PageModel
 
 		if (oldVersion is null) return Page();
 
-		var now = DateTime.Now;
+		var now = DateTimeOffset.UtcNow;
 
 		_context.Documents.Add(new Document
 		{

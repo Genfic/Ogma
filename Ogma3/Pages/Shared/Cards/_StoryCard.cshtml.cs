@@ -13,7 +13,7 @@ public sealed class StoryCard
 	public required string Hook { get; init; }
 	public required string Cover { get; init; }
 	public required string? CoverId { get; init; }
-	public required DateTime? PublicationDate { get; init; }
+	public required DateTimeOffset? PublicationDate { get; init; }
 	public required IEnumerable<TagDto> Tags { get; init; }
 	public required Rating Rating { get; init; }
 	public required EStoryStatus Status { get; init; }
