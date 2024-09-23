@@ -1,18 +1,19 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { PostApiReports as postReport } from "../generated/paths-public";
-import { EReportableContentTypes } from "../generated/types-public";
+import type { EReportableContentTypes } from "../generated/types-public";
 
 @customElement("report-modal")
 export class ReportModal extends LitElement {
-	constructor() {
-		super();
-	}
-
 	connectedCallback() {
 		super.connectedCallback();
 		if (this.openSelector) {
-			document.querySelector(this.openSelector).addEventListener("click", this.show);
+			const element = document.querySelector(this.openSelector);
+			if (element) {
+				element.addEventListener("click", this.show);
+			} else {
+				console.log(`Element is ${element} for selector ${this.openSelector}`);
+			}
 		}
 	}
 
@@ -28,11 +29,13 @@ export class ReportModal extends LitElement {
 	@property() public accessor itemType: string;
 
 	@state() private accessor visible: boolean;
-	@state() private accessor chars: number = 0;
+	@state() private accessor chars = 0;
 	@state() private accessor reason: string;
 	@state() private accessor success: boolean | null = null;
 
-	public show = () => (this.visible = true);
+	public show = () => {
+		this.visible = true;
+	};
 
 	private validate = () => this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
 
@@ -74,11 +77,13 @@ export class ReportModal extends LitElement {
 				? html`
 						<div
 							class="club-folder-selector my-modal"
-							@click="${() => (this.visible = false)}"
+							@click="${() => {
+								this.visible = false;
+							}}"
 						>
 							<div
 								class="content"
-								@click="${(e) => e.stopPropagation()}"
+								@click="${(e: Event) => e.stopPropagation()}"
 							>
 								<div class="header">
 									<span>Report</span>

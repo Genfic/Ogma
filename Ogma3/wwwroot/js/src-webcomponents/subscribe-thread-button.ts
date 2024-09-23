@@ -9,10 +9,6 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-subscribe")
 export class SubscribeThreadButton extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor endpoint: string;
 	@property() accessor threadId: number;
 	@property() accessor csrf: string;

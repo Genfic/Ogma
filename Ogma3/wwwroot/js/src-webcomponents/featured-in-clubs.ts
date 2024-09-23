@@ -11,10 +11,6 @@ interface Club {
 
 @customElement("o-featured-in-clubs")
 export class FeaturedInClubs extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor storyId: number;
 	@state() private accessor visible: boolean;
 	@state() private accessor clubs: Club[];
@@ -41,50 +37,51 @@ export class FeaturedInClubs extends LitElement {
 
 	render() {
 		return html`
-            <a @click="${async () => await this.open()}">Featured in clubs</a>
+			<a @click="${async () => await this.open()}">Featured in clubs</a>
 
-            ${
-				this.visible
-					? html`
-                <div class="club-folder-selector my-modal" @click="${() => (this.visible = false)}">
-                    <div class="content" @click="${(e: Event) => e.stopPropagation()}">
+			${this.visible
+				? html`
+						<div
+							class="club-folder-selector my-modal"
+							@click="${() => (this.visible = false)}"
+						>
+							<div
+								class="content"
+								@click="${(e: Event) => e.stopPropagation()}"
+							>
+								<div class="header">
+									<span>Featured in</span>
+								</div>
 
-                        <div class="header">
-                            <span>Featured in</span>
-                        </div>
-
-                        ${
-							this.clubs.length > 0
-								? html`
-                            <div class="clubs">
-                                ${this.clubs.map(
-									(c) => html`
-                                    <a href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}"
-                                       target="_blank"
-                                       class="club"
-                                       tabindex="0">
-                                        <img src="${c.icon ?? "ph-250.png"}" 
-                                             alt="${c.name}" 
-                                             width="24"
-                                             height="24">
-                                        <span>${c.name}</span>
-                                    </a>
-                                `,
-								)}
-                            </div>
-                        `
-								: html`
-                            <div>
-                                This story hasn't been added to any clubs yet.
-                            </div>
-                        `
-						}
-                    </div>
-                </div>
-            `
-					: null
-			}
-        `;
+								${this.clubs.length > 0
+									? html`
+											<div class="clubs">
+												${this.clubs.map(
+													(c) => html`
+														<a
+															href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}"
+															target="_blank"
+															class="club"
+															tabindex="0"
+														>
+															<img
+																src="${c.icon ?? "ph-250.png"}"
+																alt="${c.name}"
+																width="24"
+																height="24"
+															/>
+															<span>${c.name}</span>
+														</a>
+													`,
+												)}
+											</div>
+										`
+									: html` <div>This story hasn't been added to any clubs yet.</div> `}
+							</div>
+						</div>
+					`
+				: null}
+		`;
 	}
 
 	createRenderRoot() {

@@ -117,7 +117,7 @@ Vue.component("comment", {
 			}
 		},
 
-		date: (dt) => format(dt, "DD MMM yyyy, hh:mm"),
+		date: (dt) => format(dt, "dd MMM yyyy, hh:mm"),
 	},
 	template: `
         <div :id="'comment-' + (idx + 1)"

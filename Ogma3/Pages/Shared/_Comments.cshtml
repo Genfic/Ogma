@@ -21,12 +21,12 @@
 		<div class="info" v-if="isLocked">Thread is locked.</div>
 
 		<form v-else asp-antiforgery="true">
-			<textarea class="comment-box active-border" 
-                      v-model="body" 
-                      v-on:keydown.enter="enter" 
-                      name="body" id="body" 
-                      rows="3" 
-                      aria-label="Comment">
+			<textarea class="comment-box active-border"
+			          v-model="body"
+			          v-on:keydown.enter="enter"
+			          name="body" id="body"
+			          rows="3"
+			          aria-label="Comment">
             </textarea>
 
 			<div class="counter" :class="body.length < maxLength ? '' : 'invalid'">
@@ -102,7 +102,7 @@
 				         :is-authenticated="isAuthenticated"
 				         :highlight="highlight === (c.key + 1)"
 				         v-on:report="report"
-				         v-on:change-hl="changeHighlight"/>
+				         v-on:change-hl="changeHighlight" />
 			</template>
 			<template v-else>
 				<div class="snip">{{c.snip}}</div>
@@ -140,8 +140,8 @@
 
 </div>
 
-@Html.Resource(@<script type="module" src="~/js/dist/components/comment-component.js" asp-append-version="true"></script>)
-@Html.Resource(@<script async src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>)
-@Html.Resource(@<script async src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" defer src="~/js/dist/components/comment-component.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" defer src="~/js/dist/components/textarea-counter-component.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" defer src="~/js/dist/components/report-modal.js" asp-append-version="true"></script>)
 
-@Html.Resource(@<script defer src="~/js/dist/comments.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" defer src="~/js/dist/comments.js" asp-append-version="true"></script>)

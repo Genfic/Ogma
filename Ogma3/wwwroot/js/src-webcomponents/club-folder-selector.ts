@@ -13,10 +13,6 @@ type Club = {
 
 @customElement("o-club-folder-selector")
 export class ClubFolderSelector extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor storyId: number;
 	@property() accessor csrf: string;
 
@@ -52,9 +48,7 @@ export class ClubFolderSelector extends LitElement {
 			<span>${this.selectedClub.name}</span>
 		</div>
 
-		<div class="msg ${this.status.success ? "success" : "error"}">
-			${this.status.message}
-		</div>
+		<div class="msg ${this.status.success ? "success" : "error"}">${this.status.message}</div>
 
 		<o-folder-tree
 			${ref(this.#treeRef)}
@@ -63,7 +57,12 @@ export class ClubFolderSelector extends LitElement {
 		</o-folder-tree>
 
 		<div class="buttons">
-			<button class="active-border add" @click="${this.#add}">Add</button>
+			<button
+				class="active-border add"
+				@click="${this.#add}"
+			>
+				Add
+			</button>
 			<button
 				class="active-border cancel"
 				@click="${() => (this.selectedClub = null)}"
@@ -79,9 +78,8 @@ export class ClubFolderSelector extends LitElement {
 		</div>
 
 		<div class="clubs">
-			${
-				this.clubs?.map(
-					(c) => html`
+			${this.clubs?.map(
+				(c) => html`
 					<div
 						class="club"
 						tabindex="0"
@@ -96,28 +94,28 @@ export class ClubFolderSelector extends LitElement {
 						<span>${c.name}</span>
 					</div>
 				`,
-				) ?? "loading..."
-			}
+			) ?? "loading..."}
 		</div>
 	`;
 
 	render() {
 		return html`
 			<a @click="${() => (this.visible = true)}">Add to folder</a>
-			${
-				this.visible
-					? html`
+			${this.visible
+				? html`
 						<div
 							class="club-folder-selector my-modal"
 							@click="${() => (this.visible = false)}"
 						>
-							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
+							<div
+								class="content"
+								@click="${(e: Event) => e.stopPropagation()}"
+							>
 								${this.selectedClub !== null ? this.#selectedClubView() : this.#allClubsView()}
 							</div>
 						</div>
-				  `
-					: ""
-			}
+					`
+				: ""}
 		`;
 	}
 

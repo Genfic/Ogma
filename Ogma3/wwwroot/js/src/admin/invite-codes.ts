@@ -81,7 +81,7 @@ new Vue({
 		},
 
 		// Parse date
-		date: (dt: string) => format(dt, "DD MMM yyyy, hh:mm"),
+		date: (dt: string) => format(dt, "dd MMM yyyy, hh:mm"),
 	},
 
 	async mounted() {

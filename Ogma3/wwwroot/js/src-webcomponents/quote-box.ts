@@ -10,35 +10,33 @@ interface Quote {
 
 @customElement("quote-box")
 export class QuoteBox extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@state() accessor _loading: boolean;
 	@state() accessor _quote: Quote;
 
 	async connectedCallback() {
 		super.connectedCallback();
-		this.classList.add("wc-loaded"); 
+		this.classList.add("wc-loaded");
 		await this.load();
 	}
 
 	render() {
 		return html`
-			<div id="quote" class="quote active-border">
-				<div class="refresh" @click="${this.load}">
-					<i class="material-icons-outlined ${this.#spinnerClass()}">
-						refresh
-					</i>
+			<div
+				id="quote"
+				class="quote active-border"
+			>
+				<div
+					class="refresh"
+					@click="${this.load}"
+				>
+					<i class="material-icons-outlined ${this.#spinnerClass()}"> refresh </i>
 				</div>
-				${
-					this._quote
-						? html`
+				${this._quote
+					? html`
 							<em class="body">${this._quote.body}</em>
 							<span class="author">${this._quote.author}</span>
-					  `
-						: html` <span>Loading the quote...</span> `
-				}
+						`
+					: html` <span>Loading the quote...</span> `}
 			</div>
 		`;
 	}

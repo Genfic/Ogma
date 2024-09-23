@@ -25,7 +25,7 @@ Number.prototype.normalize = function (min: number, max: number): number {
  * @param {number} max The upper edge to clamp to, by default 1
  * @returns {number}
  */
-Number.prototype.clamp = function (min: number = 0, max: number = 1): number {
+Number.prototype.clamp = function (min = 0, max = 1): number {
 	if (max < min) throw "Max cannot be less than min";
 	if (this < min) return min;
 	if (this > max) return max;

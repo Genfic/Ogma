@@ -28,7 +28,7 @@ new Vue({
 			await this.load();
 		},
 
-		parseTime: (dt: string) => format(dt, "DD MMMM yyyy, hh:mm"),
+		parseTime: (dt: string) => format(dt, "dd MMMM yyyy, hh:mm"),
 	},
 
 	async mounted() {

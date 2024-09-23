@@ -4,15 +4,11 @@ import { styleMap } from "lit/directives/style-map.js";
 
 @customElement("o-read-progress")
 export class ReadProgress extends LitElement {
-	constructor() {
-		super();
-	}
-
-	@state() private accessor progress: number = 0;
+	@state() private accessor progress = 0;
 	@state() private accessor windowHeight: number;
 	@state() private accessor containerHeight: number;
-	@state() private accessor ticking: boolean = false;
-	@state() private accessor read: boolean = false;
+	@state() private accessor ticking = false;
+	@state() private accessor read = false;
 
 	// language=CSS
 	static styles = css`

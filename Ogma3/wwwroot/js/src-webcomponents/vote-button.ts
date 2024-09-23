@@ -5,10 +5,6 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-vote")
 export class VoteButton extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor storyId: number;
 	@property() accessor csrf: string;
 

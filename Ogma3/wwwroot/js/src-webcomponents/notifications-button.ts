@@ -7,10 +7,6 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-notifications-button")
 export class NotificationsButton extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@state() accessor notifications: number;
 
 	async connectedCallback() {

@@ -5,10 +5,6 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-block")
 export class BlockUser extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor userName: string;
 	@property() accessor csrf: string;
 	@property() accessor isBlocked: boolean;

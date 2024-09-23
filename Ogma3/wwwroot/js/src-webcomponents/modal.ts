@@ -1,12 +1,8 @@
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement("o-modal")
 export class Modal extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property({ attribute: false }) visible: boolean;
 
 	connectedCallback() {
@@ -34,12 +30,12 @@ export class Modal extends LitElement {
 					>
 						<div
 							class="content"
-							@click="${(e) => e.stopPropagation()}"
+							@click="${(e: Event) => e.stopPropagation()}"
 						>
 							<slot></slot>
 						</div>
 					</div>
-			  `
+				`
 			: null;
 	}
 

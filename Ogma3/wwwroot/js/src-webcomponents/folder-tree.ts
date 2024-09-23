@@ -21,10 +21,6 @@ type TreeItem = {
 
 @customElement("o-folder-tree")
 export class FolderTree extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor clubId: number;
 	@property() accessor value: number | null = null;
 	@property() accessor current: number | null = null;

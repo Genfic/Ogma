@@ -3,10 +3,6 @@ import { customElement, property } from "lit/decorators.js";
 
 @customElement("o-read")
 class ChapterRead extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor route: string;
 	@property() accessor chapterId: number;
 

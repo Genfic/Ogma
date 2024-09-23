@@ -5,10 +5,6 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-club-ban")
 export class ClubBanButton extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@property() accessor clubId: number;
 	@property() accessor userId: number;
 	@property() accessor csrf: string;
