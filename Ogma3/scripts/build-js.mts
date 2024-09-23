@@ -5,6 +5,7 @@ import convert from "convert";
 import { hasExtension } from "./helpers/path";
 import ct from "chalk-template";
 import c from "chalk";
+import path from "node:path";
 
 const { values } = parseArgs({
 	args: Bun.argv,
@@ -23,13 +24,12 @@ const base = "./wwwroot/js";
 const source = `${base}/src`;
 const dest = `${base}/dist`;
 
-const compileAll = async () => {
+const compileFile = async (file: string) => {
 	const start = Bun.nanoseconds();
-	const files = [...new Glob(`${source}/**/*.{js,ts}`).scanSync()];
-	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
+	const { base } = path.parse(file);
 
-	const result = await Bun.build({
-		entrypoints: files,
+	const { success, logs } = await Bun.build({
+		entrypoints: [file],
 		outdir: dest,
 		root: source,
 		minify: true,
@@ -38,11 +38,11 @@ const compileAll = async () => {
 	});
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
-	if (result.success) {
-		console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
+	if (success) {
+		console.log(ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
 	} else {
-		console.log(ct`{bold.red Compilation failed! ({underline ${quantity.toFixed(2)}} ${unit}})`);
-		for (const log of result.logs.filter((l) => ["error", "warning"].includes(l.level))) {
+		console.error(ct`{red Build of {reset.bold ${base}} failed after {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
+		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
 				console.log(color(`[${log.level}]: ${log.position.file} (${log.position.line}:${log.position.column}) ${log.message}`));
@@ -51,6 +51,24 @@ const compileAll = async () => {
 			}
 		}
 	}
+};
+
+const compileAll = async () => {
+	const start = Bun.nanoseconds();
+	const files = [...new Glob(`${source}/**/*.{js,ts}`).scanSync()];
+	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
+
+	const tasks = [];
+	for (const file of files) {
+		values.verbose && console.info(`Compiling ${file}`);
+		tasks.push(compileFile(file));
+	}
+	const res = await Promise.allSettled(tasks);
+
+	values.verbose && console.log(res);
+
+	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
 };
 
 await compileAll();
