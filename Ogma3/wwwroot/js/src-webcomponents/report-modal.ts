@@ -81,18 +81,12 @@ export class ReportModal extends LitElement {
 								this.visible = false;
 							}}"
 						>
-							<div
-								class="content"
-								@click="${(e: Event) => e.stopPropagation()}"
-							>
+							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
 								<div class="header">
 									<span>Report</span>
 								</div>
 
-								<form
-									class="form"
-									@submit="${this.submit}"
-								>
+								<form class="form" @submit="${this.submit}">
 									<div class="o-form-group">
 										<label for="reason">Reason</label>
 
@@ -120,12 +114,7 @@ export class ReportModal extends LitElement {
 									</div>
 
 									<div class="o-form-group">
-										<button
-											type="submit"
-											class="btn ${this.message().cls}"
-										>
-											${this.message().msg}
-										</button>
+										<button type="submit" class="btn ${this.message().cls}">${this.message().msg}</button>
 									</div>
 								</form>
 							</div>

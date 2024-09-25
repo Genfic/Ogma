@@ -77,7 +77,7 @@ new Vue({
 			this.total = data.total;
 			this.page = data.page ?? this.page;
 			this.isAuthenticated = res.headers.get("x-authenticated").toLowerCase() === "true";
-			
+
 			this.comments = Object.entries(data.elements).map(([key, val]) => ({
 				val,
 				key: data.total - this.page * this.perPage + (this.perPage - (Number.parseInt(key) + 1)),
@@ -148,11 +148,11 @@ new Vue({
 		subscribe: async function () {
 			const data = { threadId: this.thread };
 			const headers = { RequestVerificationToken: this.csrf };
-			
+
 			if (this.isSubscribed) {
 				const res = await Subscriptions_UnsubscribeThread(data, headers);
 				if (!res.ok) return;
-				
+
 				this.isSubscribed = await res.json();
 			} else {
 				const res = await Subscriptions_SubscribeThread(data, headers);
@@ -165,8 +165,8 @@ new Vue({
 		// Lock or unlock the thread
 		lock: async function () {
 			if (!this.canLock) return false;
-			const res = await PostApiCommentsThreadLock({threadId: this.thread});
-			this.isLocked = res.ok && await res.json(); 
+			const res = await PostApiCommentsThreadLock({ threadId: this.thread });
+			this.isLocked = res.ok && (await res.json());
 			return this.isLocked;
 		},
 	},
@@ -198,9 +198,9 @@ new Vue({
 
 	async mounted() {
 		const containerRef = this.$refs.container;
-		this.csrf = containerRef.dataset.csrf; 
+		this.csrf = containerRef.dataset.csrf;
 		this.thread = containerRef.dataset.id;
-		
+
 		const fetchData = async () => {
 			const threadRes = await GetApiCommentsThread(this.thread);
 			if (threadRes.ok) {
@@ -213,24 +213,24 @@ new Vue({
 				this.maxLength = threadData.maxCommentLength;
 				this.type = threadData.source;
 			}
-		}
-		
+		};
+
 		const fetchSubscriptionStatus = async () => {
 			const subscriptionRes = await Subscriptions_IsSubscribedToThread(this.thread);
 			if (subscriptionRes.ok) {
 				this.isSubscribed = await subscriptionRes.json();
 			}
-		}
-		
+		};
+
 		const load = async () => {
 			await this.load();
-		}
-		
+		};
+
 		const results = await Promise.allSettled([fetchData(), fetchSubscriptionStatus(), load()]);
 		for (const result of results) {
 			console.log(result.status, result);
 		}
-		
+
 		const hash = window.location.hash.split("-");
 		if (hash[0] === "#page" && hash[1]) {
 			this.page = Math.max(1, Number(hash[1] ?? 1));

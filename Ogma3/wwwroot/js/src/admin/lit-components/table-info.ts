@@ -45,10 +45,7 @@ export class TableInfo extends LitElement {
 					<th @click="${() => this._sort("name")}">
 						Table ${this.sortBy !== "name" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
 					</th>
-					<th
-						colspan="2"
-						@click="${() => this._sort("size")}"
-					>
+					<th colspan="2" @click="${() => this._sort("size")}">
 						Size ${this.sortBy !== "size" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
 					</th>
 				</tr>

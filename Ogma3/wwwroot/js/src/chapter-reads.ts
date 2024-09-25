@@ -6,7 +6,7 @@ import {
 
 (async () => {
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
-	const csrf = (document.querySelector("[data-x-csrf]") as HTMLElement);
+	const csrf = document.querySelector("[data-x-csrf]") as HTMLElement;
 
 	const buttons = [...document.querySelectorAll("button.read-status")] as HTMLButtonElement[];
 
@@ -23,13 +23,16 @@ import {
 
 	const _changeState = async (id: number) => {
 		const client = reads.includes(id) ? markUnread : markRead;
-		const res = await client({
-			story: Number.parseInt(story.dataset.storyId),
-			chapter: id,
-		}, {
-			RequestVerificationToken: csrf.dataset['x-csrf']
-		});
-		
+		const res = await client(
+			{
+				story: Number.parseInt(story.dataset.storyId),
+				chapter: id,
+			},
+			{
+				RequestVerificationToken: csrf.dataset["x-csrf"],
+			},
+		);
+
 		if (!res.ok) return;
 
 		reads = await res.json();
@@ -49,7 +52,7 @@ import {
 		const res = await getRead(Number.parseInt(story.dataset.storyId));
 
 		if (!res.ok) return;
-		
+
 		reads = await res.json();
 		_update();
 	}

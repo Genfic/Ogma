@@ -1,5 +1,5 @@
 import { add, format, parseISO } from "date-fns";
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement("o-clock")
@@ -31,11 +31,7 @@ export class Clock extends LitElement {
 
 	render() {
 		return html`
-			<time
-				class="timer"
-				datetime="${format(this.date, "yyyy-MM-dd HH:mm")}"
-				title="Server time"
-			>
+			<time class="timer" datetime="${format(this.date, "yyyy-MM-dd HH:mm")}" title="Server time">
 				${format(this.date, "dd.MM.yyyy HH:mm:ss")}
 			</time>
 		`;

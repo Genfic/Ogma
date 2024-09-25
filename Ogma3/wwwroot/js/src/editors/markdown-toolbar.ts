@@ -40,17 +40,12 @@ const map = new Map<Action, PrefixSuffix>([
 	[Action.link, { prefix: "[", suffix: "]()" }],
 ]);
 
-const areas = [...document.querySelectorAll("[data-md=true]")] as (
-	| HTMLTextAreaElement
-	| HTMLInputElement
-)[];
+const areas = [...document.querySelectorAll("[data-md=true]")] as (HTMLTextAreaElement | HTMLInputElement)[];
 
 for (const area of areas) {
 	const vDom = parseDom(tpl);
 
-	for (const btn of [
-		...vDom.querySelectorAll("button.btn[data-action]"),
-	] as HTMLElement[]) {
+	for (const btn of [...vDom.querySelectorAll("button.btn[data-action]")] as HTMLElement[]) {
 		const action: Action = Action[btn.dataset.action];
 		btn.addEventListener("click", (_) => {
 			const { prefix, suffix } = map[action];

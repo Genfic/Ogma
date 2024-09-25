@@ -19,10 +19,7 @@ export class ClubBanButton extends LitElement {
 
 	render() {
 		return html`
-			<button
-				class="votes action-btn large ${this.isBanned ? "active" : ""}"
-				@click="${this.banOrUnban}"
-			>
+			<button class="votes action-btn large ${this.isBanned ? "active" : ""}" @click="${this.banOrUnban}">
 				${this.isBanned ? "Unban" : "Ban"}
 			</button>
 		`;

@@ -24,14 +24,8 @@ export class Modal extends LitElement {
 	render() {
 		return this.visible
 			? html`
-					<div
-						class="my-modal"
-						@click="${this.hide}"
-					>
-						<div
-							class="content"
-							@click="${(e: Event) => e.stopPropagation()}"
-						>
+					<div class="my-modal" @click="${this.hide}">
+						<div class="content" @click="${(e: Event) => e.stopPropagation()}">
 							<slot></slot>
 						</div>
 					</div>

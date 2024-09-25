@@ -8,7 +8,7 @@ import { log } from "../../src-helpers/logger";
 
 		i.addEventListener("input", (e: Event) => {
 			const element = e.target as HTMLInputElement;
-			
+
 			log.log(element.value !== element.dataset.init);
 
 			if (element.value !== element.dataset.init) {

@@ -32,16 +32,19 @@ Vue.component("manage-infraction", {
 
 		create: async function () {
 			log.log("submit");
-			const res = await PostAdminApiInfractions({
-				userId: this.userId,
-				reason: this.reason,
-				endDate: this.date,
-				type: this.type,
-			}, { 
-				RequestVerificationToken: this.csrf 
-			});
+			const res = await PostAdminApiInfractions(
+				{
+					userId: this.userId,
+					reason: this.reason,
+					endDate: this.date,
+					type: this.type,
+				},
+				{
+					RequestVerificationToken: this.csrf,
+				},
+			);
 			if (!res.ok) return;
-			
+
 			location.reload();
 		},
 	},

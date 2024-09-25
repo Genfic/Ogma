@@ -14,7 +14,7 @@ new Vue({
 			e.preventDefault();
 
 			if (this.name) {
-				const res = await getSignInData(this.name)
+				const res = await getSignInData(this.name);
 
 				if (res.ok) {
 					const data = await res.json();

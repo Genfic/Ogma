@@ -31,7 +31,6 @@ new Vue({
 
 				const headers = { RequestVerificationToken: this.xcsrf };
 
-				
 				if (this.form.id === null) {
 					// If no ID has been set, that means it's a new role.
 					// Thus, we POST it.

@@ -13,11 +13,7 @@ class ChapterRead extends LitElement {
 
 	render() {
 		return html`
-			<button
-				class="read-status"
-				aria-label="Chapter read status"
-				data-id="@c.Id"
-			>
+			<button class="read-status" aria-label="Chapter read status" data-id="@c.Id">
 				<i class="material-icons-outlined">visibility_off</i>
 			</button>
 		`;

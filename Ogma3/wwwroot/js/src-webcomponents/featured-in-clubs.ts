@@ -41,14 +41,8 @@ export class FeaturedInClubs extends LitElement {
 
 			${this.visible
 				? html`
-						<div
-							class="club-folder-selector my-modal"
-							@click="${() => (this.visible = false)}"
-						>
-							<div
-								class="content"
-								@click="${(e: Event) => e.stopPropagation()}"
-							>
+						<div class="club-folder-selector my-modal" @click="${() => (this.visible = false)}">
+							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
 								<div class="header">
 									<span>Featured in</span>
 								</div>
@@ -64,12 +58,7 @@ export class FeaturedInClubs extends LitElement {
 															class="club"
 															tabindex="0"
 														>
-															<img
-																src="${c.icon ?? "ph-250.png"}"
-																alt="${c.name}"
-																width="24"
-																height="24"
-															/>
+															<img src="${c.icon ?? "ph-250.png"}" alt="${c.name}" width="24" height="24" />
 															<span>${c.name}</span>
 														</a>
 													`,

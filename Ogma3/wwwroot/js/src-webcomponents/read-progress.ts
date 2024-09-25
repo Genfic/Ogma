@@ -50,12 +50,7 @@ export class ReadProgress extends LitElement {
 	}
 
 	render() {
-		return html`
-			<div
-				class="bar"
-				style=${styleMap({ width: `${this.progress * 100}%` })}
-			></div>
-		`;
+		return html` <div class="bar" style=${styleMap({ width: `${this.progress * 100}%` })}></div> `;
 	}
 
 	#handleScroll() {

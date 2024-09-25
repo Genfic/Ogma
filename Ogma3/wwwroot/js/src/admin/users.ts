@@ -22,12 +22,14 @@ new Vue({
 		},
 
 		removeInfraction: async function (id: number) {
-			const res = await DeleteAdminApiInfractions(id, { RequestVerificationToken: this.csrf })
+			const res = await DeleteAdminApiInfractions(id, { RequestVerificationToken: this.csrf });
 			if (res.ok) location.reload();
 		},
 
 		saveRoles: async function () {
-			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e: HTMLInputElement) => Number.parseInt(e.value));
+			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e: HTMLInputElement) =>
+				Number.parseInt(e.value),
+			);
 			const res = await PostApiUsersRoles(
 				{
 					userId: this.userId,
@@ -82,7 +84,7 @@ new Vue({
 	mounted() {
 		const dataElement: HTMLElement = this.$refs.dataElement;
 		this.csrf = dataElement.dataset.csrf;
-		
+
 		this.userId = Number(document.getElementById("id").innerText);
 	},
 });

@@ -42,7 +42,6 @@ new Vue({
 					if (res.ok) {
 						await this.getFaqs();
 					}
-
 				} else {
 					// If the ID is set, that means it's an existing namespace.
 					// Thus, we PUT it.

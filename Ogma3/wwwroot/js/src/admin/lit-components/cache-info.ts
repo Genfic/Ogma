@@ -7,10 +7,10 @@ export class CacheInfo extends LitElement {
 	constructor() {
 		super();
 	}
-	
+
 	@state()
 	private cacheCount: number;
-	
+
 	@property()
 	private csrf: string;
 
@@ -42,12 +42,7 @@ export class CacheInfo extends LitElement {
 		return html`
 			<div class="cache">
 				<span class="count"><strong>${this.cacheCount}</strong> elements in the cache</span>
-				<button
-					class="purge"
-					@click="${() => this._purge()}"
-				>
-					Purge
-				</button>
+				<button class="purge" @click="${() => this._purge()}">Purge</button>
 			</div>
 		`;
 	}

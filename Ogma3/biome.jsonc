@@ -6,19 +6,14 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"include": [
-			"wwwroot/js/src*/*.js",
-			"wwwroot/js/src*/*.ts",
-			"*.mjs",
-			"*.mts"
-		]
+		"include": ["wwwroot/js/src*/*.js", "wwwroot/js/src*/*.ts", "*.mjs", "*.mts"]
 	},
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
 		"indentStyle": "tab",
 		"indentWidth": 4,
-		"lineEnding": "lf",
+		"lineEnding": "crlf",
 		"lineWidth": 140
 	},
 	"organizeImports": {

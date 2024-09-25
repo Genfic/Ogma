@@ -1,5 +1,5 @@
 // @ts-ignore
-import { TagDto } from "../../generated/types-public";
+import type { TagDto } from "../../generated/types-public";
 import { DeleteApiTags, GetApiTagsAll, PostApiTags, PutApiTags } from "../../generated/paths-public";
 
 interface Validation {
@@ -18,7 +18,7 @@ new Vue({
 			namespace: null as string,
 			id: null as number,
 		},
-		lens: null as Validation|null,
+		lens: null as Validation | null,
 		err: [],
 		tags: [] as TagDto[],
 	},
@@ -31,9 +31,7 @@ new Vue({
 			// Validation
 			this.err = [];
 			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
-				this.err.push(
-					`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`,
-				);
+				this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
 			if (this.form.desc && this.form.desc.length > this.lens.maxDescLength)
 				this.err.push(`Description has to be at most ${this.lens.maxDescLength} characters long.`);
 			if (this.err.length > 0) return;
@@ -41,7 +39,7 @@ new Vue({
 			if (this.form.name) {
 				const body = {
 					name: this.form.name,
-					namespace: Number(this.form.namespace),
+					namespace: this.form.namespace,
 					description: this.form.desc,
 				};
 

@@ -21,14 +21,8 @@ export class QuoteBox extends LitElement {
 
 	render() {
 		return html`
-			<div
-				id="quote"
-				class="quote active-border"
-			>
-				<div
-					class="refresh"
-					@click="${this.load}"
-				>
+			<div id="quote" class="quote active-border">
+				<div class="refresh" @click="${this.load}">
 					<i class="material-icons-outlined ${this.#spinnerClass()}"> refresh </i>
 				</div>
 				${this._quote

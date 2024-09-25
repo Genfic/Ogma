@@ -23,89 +23,97 @@ import minifyHTML from "rollup-plugin-html-literals";
 const root = "./wwwroot";
 const roots = {
 	css: `${root}/css`,
-	js: `${root}/js`
+	js: `${root}/js`,
 };
 const paths = {
 	styles: {
 		src: `${roots.css}/**/*.{sass,scss}`,
-		dest: `${roots.css}/dist`
+		dest: `${roots.css}/dist`,
 	},
 	js: {
 		src: `${roots.js}/src/**/*.{js,ts}`,
-		dest: `${roots.js}/dist`
+		dest: `${roots.js}/dist`,
 	},
 	wc: {
 		src: `${roots.js}/src-webcomponents/**/*.ts`,
-		dest: `${roots.js}/bundle`
-	}
+		dest: `${roots.js}/bundle`,
+	},
 };
 
 // CSS tasks
-export const css = () => pipeline(src(paths.styles.src, { since: lastRun(css) }),
-	sourcemaps.init({}),                   // Init maps
-	sass(),                              // Compile SASS
-	postcss([                    // Postprocess it
-		autoprefixer,
-		mqpacker,
-		csso({ comments: false })
-	]),
-	sourcemaps.write("./", {}),     // Write maps
-	dest(paths.styles.dest),      // Output minified CSS
-	errorHandler);
+export const css = () =>
+	pipeline(
+		src(paths.styles.src, { since: lastRun(css) }),
+		sourcemaps.init({}), // Init maps
+		sass(), // Compile SASS
+		postcss([
+			// Postprocess it
+			autoprefixer,
+			mqpacker,
+			csso({ comments: false }),
+		]),
+		sourcemaps.write("./", {}), // Write maps
+		dest(paths.styles.dest), // Output minified CSS
+		errorHandler,
+	);
 
 export const watchCss = () => watch(paths.styles.src, css);
 
 // JS tasks
-export const js = () => pipeline(src(paths.js.src, { since: lastRun(js) }),
-	gulpEsbuild({
-		outdir: '.',
-		minify: true,
-		sourcemap: true,
-		tsconfig: `${roots.js}/tsconfig.json`,
-		bundle: true,
-	}),
-	dest(paths.js.dest),
-	errorHandler);
+export const js = () =>
+	pipeline(
+		src(paths.js.src, { since: lastRun(js) }),
+		gulpEsbuild({
+			outdir: ".",
+			minify: true,
+			sourcemap: true,
+			tsconfig: `${roots.js}/tsconfig.json`,
+			bundle: true,
+		}),
+		dest(paths.js.dest),
+		errorHandler,
+	);
 
 export const watchJs = () => watch(paths.js.src, js);
 
 // Component bundle
-export const components = async () => pipeline(src(paths.wc.src, { since: lastRun(components) }),
-	async () => {
-		const out = `${paths.wc.dest}/components.js`;
-		const bundle = await rollup({
-			input: paths.wc.src,
-			output: {
+export const components = async () =>
+	pipeline(
+		src(paths.wc.src, { since: lastRun(components) }),
+		async () => {
+			const out = `${paths.wc.dest}/components.js`;
+			const bundle = await rollup({
+				input: paths.wc.src,
+				output: {
+					file: out,
+					format: "es",
+					sourcemap: true,
+				},
+				plugins: [
+					multi(),
+					resolve(),
+					minifyHTML(),
+					esbuild({
+						tsconfig: `${roots.js}/tsconfig.json`,
+						minify: true,
+						legalComments: "eof",
+					}),
+				],
+			});
+			return await bundle.write({
 				file: out,
-				format: "es",
-				sourcemap: true
-			},
-			plugins: [
-				multi(),
-				resolve(),
-				minifyHTML(),
-				esbuild({
-					tsconfig: `${roots.js}/tsconfig.json`,
-					minify: true,
-					legalComments: "eof",
-				})
-			]
-		});
-		return await bundle.write({
-			file: out,
-			format: "umd",
-			name: "components",
-			sourcemap: true
-		});
-	},
-	errorHandler);
+				format: "umd",
+				name: "components",
+				sourcemap: true,
+			});
+		},
+		errorHandler,
+	);
 export const watchComponents = () => watch(paths.wc.src, components);
-
 
 // All tasks
 export const all = parallel(css, js, components);
 export const watchAll = parallel(watchCss, watchJs, watchComponents);
-
 
 // Error handler
 function errorHandler(err) {
