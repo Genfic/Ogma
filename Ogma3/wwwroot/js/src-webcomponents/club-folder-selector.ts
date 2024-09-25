@@ -1,4 +1,6 @@
 import { html, LitElement } from "lit";
+import { map } from "lit/directives/map.js";
+import { when } from "lit/directives/when.js";
 import { customElement, property, state } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
 import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../generated/paths-public";
@@ -16,14 +18,13 @@ export class ClubFolderSelector extends LitElement {
 	@property() accessor storyId: number;
 	@property() accessor csrf: string;
 
-	@state() private accessor clubs: Club[];
-	// @state() private accessor folders: {}[];
+	@state() private accessor clubs: Club[] = [];
 	@state() private accessor selectedClub: Club | null = null;
 	@state() private accessor status: { message: string; success: boolean } = {
 		message: "",
 		success: false,
 	};
-	@state() private accessor visible: boolean = false;
+	@state() private accessor visible = false;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -49,7 +50,7 @@ export class ClubFolderSelector extends LitElement {
 
 		<div class="buttons">
 			<button class="active-border add" @click="${this.#add}">Add</button>
-			<button class="active-border cancel" @click="${() => (this.selectedClub = null)}">Go back</button>
+			<button class="active-border cancel" @click="${() => this.#setClub(null)}">Go back</button>
 		</div>
 	`;
 
@@ -59,31 +60,41 @@ export class ClubFolderSelector extends LitElement {
 		</div>
 
 		<div class="clubs">
-			${this.clubs?.map(
+			${map(
+				this.clubs,
 				(c) => html`
-					<div class="club" tabindex="0" @click="${() => (this.selectedClub = c)}">
+					<div class="club" tabindex="0" @click="${() => this.#setClub(c)}">
 						<img src="${c.icon ?? "ph-250.png"}" alt="${c.name}" width="24" height="24" />
 						<span>${c.name}</span>
 					</div>
 				`,
-			) ?? "loading..."}
+			)}
 		</div>
 	`;
 
 	render() {
 		return html`
-			<a @click="${() => (this.visible = true)}">Add to folder</a>
-			${this.visible
-				? html`
-						<div class="club-folder-selector my-modal" @click="${() => (this.visible = false)}">
-							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
-								${this.selectedClub !== null ? this.#selectedClubView() : this.#allClubsView()}
-							</div>
+			<a @click="${() => this.#setVisibility(true)}">Add to folder</a>
+			${when(
+				this.visible,
+				() => html`
+					<div class="club-folder-selector my-modal" @click="${() => this.#setVisibility(false)}">
+						<div class="content" @click="${(e: Event) => e.stopPropagation()}">
+							${this.selectedClub !== null ? this.#selectedClubView() : this.#allClubsView()}
 						</div>
-					`
-				: ""}
+					</div>
+				`,
+			)}
 		`;
 	}
+
+	#setClub = (club: Club | null) => {
+		this.selectedClub = club;
+	};
+
+	#setVisibility = (visibility: boolean) => {
+		this.visible = visibility;
+	};
 
 	#treeRef = createRef<FolderTree>();
 

@@ -2,6 +2,7 @@ import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { GetApiQuotesRandom as getQuote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
+import { when } from "lit/directives/when.js";
 
 interface Quote {
 	body: string;
@@ -25,12 +26,14 @@ export class QuoteBox extends LitElement {
 				<div class="refresh" @click="${this.load}">
 					<i class="material-icons-outlined ${this.#spinnerClass()}"> refresh </i>
 				</div>
-				${this._quote
-					? html`
-							<em class="body">${this._quote.body}</em>
-							<span class="author">${this._quote.author}</span>
-						`
-					: html` <span>Loading the quote...</span> `}
+				${when(
+					this._quote,
+					() => html`
+						<em class="body">${this._quote.body}</em>
+						<span class="author">${this._quote.author}</span>
+					`,
+					() => html` <span>Loading the quote...</span> `,
+				)}
 			</div>
 		`;
 	}

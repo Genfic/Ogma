@@ -2,6 +2,7 @@ import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { PostApiReports as postReport } from "../generated/paths-public";
 import type { EReportableContentTypes } from "../generated/types-public";
+import { when } from "lit/directives/when.js";
 
 @customElement("report-modal")
 export class ReportModal extends LitElement {
@@ -72,56 +73,57 @@ export class ReportModal extends LitElement {
 	};
 
 	protected render() {
-		return html`
-			${this.visible
-				? html`
-						<div
-							class="club-folder-selector my-modal"
-							@click="${() => {
-								this.visible = false;
-							}}"
-						>
-							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
-								<div class="header">
-									<span>Report</span>
+		return when(
+			this.visible,
+			() => html`
+				<div
+					class="club-folder-selector my-modal"
+					@click="${() => {
+						this.visible = false;
+					}}"
+				>
+					<div class="content" @click="${(e: Event) => e.stopPropagation()}">
+						<div class="header">
+							<span>Report</span>
+						</div>
+
+						<form class="form" @submit="${this.submit}">
+							<div class="o-form-group">
+								<label for="reason">Reason</label>
+
+								<textarea
+									name="reason"
+									id="reason"
+									class="o-form-control active-border"
+									rows="5"
+									@input="${this.updateText}"
+								></textarea>
+
+								<div class="counter ${this.validate() || "invalid"}">
+									<div
+										class="o-progress-bar"
+										style="width: ${`${Math.min(100, 100 * (this.chars / this.rules.max))}%`}"
+									></div>
+									<span>${this.chars}/${this.rules.max} chars</span>
 								</div>
 
-								<form class="form" @submit="${this.submit}">
-									<div class="o-form-group">
-										<label for="reason">Reason</label>
-
-										<textarea
-											name="reason"
-											id="reason"
-											class="o-form-control active-border"
-											rows="5"
-											@input="${this.updateText}"
-										></textarea>
-
-										<div class="counter ${this.validate() || "invalid"}">
-											<div
-												class="o-progress-bar"
-												style="width: ${`${Math.min(100, 100 * (this.chars / this.rules.max))}%`}"
-											></div>
-											<span>${this.chars}/${this.rules.max} chars</span>
-										</div>
-
-										${this.validate()
-											? null
-											: html`<span>
-													Reason must be between ${this.rules.min} and ${this.rules.max} characters long.
-												</span>`}
-									</div>
-
-									<div class="o-form-group">
-										<button type="submit" class="btn ${this.message().cls}">${this.message().msg}</button>
-									</div>
-								</form>
+								${when(
+									!this.validate(),
+									() =>
+										html`<span>
+											Reason must be between ${this.rules.min} and ${this.rules.max} characters long.
+										</span>`,
+								)}
 							</div>
-						</div>
-					`
-				: null}
-		`;
+
+							<div class="o-form-group">
+								<button type="submit" class="btn ${this.message().cls}">${this.message().msg}</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			`,
+		);
 	}
 
 	createRenderRoot() {

@@ -1,13 +1,11 @@
 import { css, html, LitElement } from "lit";
 import { GetAdminApiTelemetryGetTableInfo } from "../../../generated/paths-internal";
 import { customElement, state } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
+import { map } from "lit/directives/map.js";
 
 @customElement("table-info")
 export class TableInfo extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@state() private sortBy: "size" | "name" = "size";
 	@state() private sortOrder: "asc" | "desc" = "asc";
 	@state() private tableInfo: { name: string; size: number }[] = [];
@@ -49,8 +47,11 @@ export class TableInfo extends LitElement {
 						Size ${this.sortBy !== "size" ? "⯁" : this.sortOrder === "asc" ? "⯆" : "⯅"}
 					</th>
 				</tr>
-				${this.tableInfo
-					? this.tableInfo.map(
+				${when(
+					this.tableInfo,
+					() =>
+						map(
+							this.tableInfo,
 							(i) => html`
 								<tr>
 									<td>${i.name}</td>
@@ -58,20 +59,25 @@ export class TableInfo extends LitElement {
 									<td>${this._formatBytes(i.size)}</td>
 								</tr>
 							`,
-						)
-					: html` <tr>
+						),
+					() =>
+						html`<tr>
 							<td colspan="3">Loading...</td>
-						</tr>`}
+						</tr>`,
+				)}
 			</table>
 		`;
 	}
 
-	private async _load() {
+	private _load = async () => {
 		const res = await GetAdminApiTelemetryGetTableInfo();
 		if (!res.ok) return;
 		const data = await res.json();
-		this.tableInfo = Object.entries(data).map(([k, v]) => ({ name: k, size: Number.parseInt(v) }));
-	}
+		this.tableInfo = Object.entries(data).map(([k, v]) => ({
+			name: k,
+			size: Number.parseInt(v),
+		}));
+	};
 
 	private _sort(by: "size" | "name") {
 		this.sortBy = by;
@@ -91,7 +97,7 @@ export class TableInfo extends LitElement {
 		const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
 		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		const value = parseFloat((bytes / k ** i).toFixed(dm));
+		const value = Number.parseFloat((bytes / k ** i).toFixed(dm));
 
 		return `${value} ${sizes[i]}`;
 	}

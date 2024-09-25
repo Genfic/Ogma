@@ -2,6 +2,8 @@ import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
+import { map } from "lit/directives/map.js";
+import { when } from "lit/directives/when.js";
 
 interface Club {
 	id: number;
@@ -35,41 +37,47 @@ export class FeaturedInClubs extends LitElement {
 		await this.fetch();
 	}
 
+	#clubsView = () =>
+		when(
+			this.clubs.length > 0,
+			() =>
+				html` <div class="clubs">
+					${map(
+						this.clubs,
+						(c) => html`
+							<a href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}" target="_blank" class="club" tabindex="0">
+								<img src="${c.icon ?? "ph-250.png"}" alt="${c.name}" width="24" height="24" />
+								<span>${c.name}</span>
+							</a>
+						`,
+					)}
+				</div>`,
+			() => html`<div>This story hasn't been added to any clubs yet.</div>`,
+		);
+
 	render() {
 		return html`
 			<a @click="${async () => await this.open()}">Featured in clubs</a>
 
-			${this.visible
-				? html`
-						<div class="club-folder-selector my-modal" @click="${() => (this.visible = false)}">
-							<div class="content" @click="${(e: Event) => e.stopPropagation()}">
-								<div class="header">
-									<span>Featured in</span>
-								</div>
-
-								${this.clubs.length > 0
-									? html`
-											<div class="clubs">
-												${this.clubs.map(
-													(c) => html`
-														<a
-															href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}"
-															target="_blank"
-															class="club"
-															tabindex="0"
-														>
-															<img src="${c.icon ?? "ph-250.png"}" alt="${c.name}" width="24" height="24" />
-															<span>${c.name}</span>
-														</a>
-													`,
-												)}
-											</div>
-										`
-									: html` <div>This story hasn't been added to any clubs yet.</div> `}
+			${when(
+				this.visible,
+				() => html`
+					<div
+						class="club-folder-selector my-modal"
+						@click="${() => {
+							this.visible = false;
+						}}"
+					>
+						<div class="content" @click="${(e: Event) => e.stopPropagation()}">
+							<div class="header">
+								<span>Featured in</span>
 							</div>
+
+							${this.#clubsView()}
 						</div>
-					`
-				: null}
+					</div>
+				`,
+			)}
 		`;
 	}
 
