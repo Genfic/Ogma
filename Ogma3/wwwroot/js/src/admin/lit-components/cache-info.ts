@@ -4,10 +4,6 @@ import { DeleteAdminApiCache, GetAdminApiCache } from "../../../generated/paths-
 
 @customElement("cache-info")
 export class CacheInfo extends LitElement {
-	constructor() {
-		super();
-	}
-
 	@state()
 	private cacheCount: number;
 

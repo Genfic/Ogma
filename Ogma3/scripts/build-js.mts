@@ -1,5 +1,5 @@
 import path from "node:path";
-import { parseArgs } from "util";
+import { parseArgs } from "node:util";
 import watcher from "@parcel/watcher";
 import { Glob } from "bun";
 import c from "chalk";

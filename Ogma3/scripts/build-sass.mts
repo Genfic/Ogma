@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { parseArgs } from "util";
+import { parseArgs } from "node:util";
 import watcher from "@parcel/watcher";
 import browserslist from "browserslist";
 import { Glob } from "bun";
