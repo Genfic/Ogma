@@ -10,7 +10,7 @@ namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 
 [Handler]
 [MapGet("admin/api/infractions/user/{userId:long}")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class GetUserInfractions
 {
 	public sealed record Query(long UserId);

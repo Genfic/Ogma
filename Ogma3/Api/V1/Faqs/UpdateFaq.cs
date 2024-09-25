@@ -16,7 +16,7 @@ using ReturnType = Results<NotFound, Ok>;
 
 [Handler]
 [MapPut("api/faqs")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateFaq
 {
 	public sealed record Command(long Id, string Question, string Answer);

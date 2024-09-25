@@ -14,7 +14,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 
 [Handler]
 [MapPost("api/tags")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateTag
 {
 	public sealed record Command(string Name, string? Description, ETagNamespace? Namespace);

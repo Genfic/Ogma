@@ -13,7 +13,7 @@ using ReturnType = Ok<InviteCodeDto[]>;
 
 [Handler]
 [MapGet("api/InviteCodes/paginated")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class GetPaginatedInviteCodes
 {
 	public sealed record Query(int Page, int PerPage);

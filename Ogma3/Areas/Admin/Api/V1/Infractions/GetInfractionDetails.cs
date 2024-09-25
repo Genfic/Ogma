@@ -14,7 +14,7 @@ using ReturnType = Results<Ok<InfractionDto>, NotFound>;
 
 [Handler]
 [MapGet("admin/api/infractions/{infractionId:long}")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class GetInfractionDetails
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetInfractionDetails));

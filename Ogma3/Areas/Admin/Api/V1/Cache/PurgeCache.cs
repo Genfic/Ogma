@@ -12,7 +12,7 @@ using ReturnType = Results<Ok, ServerError>;
 
 [Handler]
 [MapDelete("admin/api/cache")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class PurgeCache
 {
 	public sealed record Query;

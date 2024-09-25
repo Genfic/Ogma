@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 
 [Handler]
 [MapPost("api/InviteCodes/no-limit")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class AdminIssueInviteCode
 {
 	public sealed record Command;

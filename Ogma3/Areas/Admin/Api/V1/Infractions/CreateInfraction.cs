@@ -19,7 +19,7 @@ using ReturnType = Results<UnauthorizedHttpResult, CreatedAtRoute<InfractionDto>
 
 [Handler]
 [MapPost("admin/api/infractions")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class CreateInfraction
 {
 	public sealed record Command(long UserId, string Reason, DateTimeOffset EndDate, InfractionType Type);

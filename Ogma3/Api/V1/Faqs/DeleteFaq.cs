@@ -12,7 +12,7 @@ using ReturnType = Results<NotFound, Ok<long>>;
 
 [Handler]
 [MapDelete("api/faqs")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteFaq
 {
 	public sealed record Command(long Id);

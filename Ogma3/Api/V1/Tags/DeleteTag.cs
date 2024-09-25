@@ -12,7 +12,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
 [MapDelete("api/tags")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteTag
 {
 	public sealed record Command(long TagId);

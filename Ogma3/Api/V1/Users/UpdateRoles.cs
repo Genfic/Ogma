@@ -18,7 +18,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 
 [Handler]
 [MapPost("api/users/roles")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateRoles
 {
 	public sealed record Command(long UserId, IEnumerable<long> Roles);

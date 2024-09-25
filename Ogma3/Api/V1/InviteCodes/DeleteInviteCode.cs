@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
 [MapDelete("api/InviteCodes/{CodeId:long}")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteInviteCode
 {
 	[UsedImplicitly]

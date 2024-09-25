@@ -11,7 +11,7 @@ namespace Ogma3.Api.V1.Tags;
 
 [Handler]
 [MapGet("api/tags/all")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class GetAllTags
 {
 	public sealed record Query;

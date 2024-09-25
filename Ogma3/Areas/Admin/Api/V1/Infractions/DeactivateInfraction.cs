@@ -16,7 +16,7 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 
 [Handler]
 [MapDelete("admin/api/infractions/{infractionId:long}")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class DeactivateInfraction
 {
 	public sealed record Command(long InfractionId);

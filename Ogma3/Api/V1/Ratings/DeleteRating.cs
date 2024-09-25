@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
 [MapDelete("api/ratings/{ratingId:long}")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteRating
 {
 	public sealed record Command(long RatingId);

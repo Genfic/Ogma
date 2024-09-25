@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<int>, ServerError>;
 
 [Handler]
 [MapGet("admin/api/cache")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class GetCache
 {
 	[UsedImplicitly]

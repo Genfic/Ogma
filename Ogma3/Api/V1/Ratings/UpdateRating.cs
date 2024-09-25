@@ -17,7 +17,7 @@ using ReturnType = Results<NotFound, CreatedAtRoute<RatingApiDto>>;
 
 [Handler]
 [MapPut("api/ratings")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateRating
 {
 	public sealed record Command(long Id, string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon);

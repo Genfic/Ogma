@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<string[]>, UnprocessableEntity<string>>;
 
 [Handler]
 [MapGet("api/users/names")]
-[Authorize(Policy = AuthorizationPolicies.RequireStaffRole)]
+[Authorize(AuthorizationPolicies.RequireStaffRole)]
 public static partial class FindName
 {
 	[UsedImplicitly]

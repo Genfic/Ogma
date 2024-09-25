@@ -12,7 +12,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
 [MapDelete("api/roles")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteRole
 {
 	public sealed record Command(long RoleId);

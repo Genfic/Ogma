@@ -15,7 +15,7 @@ using ReturnType = CreatedAtRoute<FaqDto>;
 
 [Handler]
 [MapPost("api/faqs")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateFaq
 {
 	public sealed record Command(string Question, string Answer);

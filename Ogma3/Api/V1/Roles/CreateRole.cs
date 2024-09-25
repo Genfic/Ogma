@@ -13,7 +13,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<RoleDto>>;
 
 [Handler]
 [MapPost("api/roles")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateRole
 {
 	public sealed record Command(string Name, bool IsStaff, string Color, byte Order);

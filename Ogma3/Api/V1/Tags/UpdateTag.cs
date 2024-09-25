@@ -14,7 +14,7 @@ using ReturnType = Results<Ok, NotFound, Conflict<string>>;
 
 [Handler]
 [MapPut("api/tags")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateTag
 {
 	public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace);

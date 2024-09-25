@@ -13,7 +13,7 @@ using ReturnType = Results<Ok, NotFound>;
 
 [Handler]
 [MapPut("api/roles")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateRole
 {
 	public sealed record Command(long Id, string Name, bool IsStaff, string Color, byte Order);

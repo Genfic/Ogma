@@ -65,7 +65,7 @@ const compileAll = async () => {
 	}
 	const res = await Promise.allSettled(tasks);
 
-	values.verbose && console.log(res);
+	values.verbose && console.log(res.map((r) => r.status));
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
@@ -79,7 +79,7 @@ if (values.watch) {
 	const subscription = await watcher.subscribe(source, async (err, events) => {
 		if (values.verbose) {
 			for (const { type, path } of events) {
-				console.info(c.bgYellow(`${type}: ${path}`));
+				console.info(c.yellow(`${type}: ${path}`));
 			}
 		}
 
@@ -89,9 +89,20 @@ if (values.watch) {
 			return;
 		}
 
-		if (events.find(({ type, path }) => type === "update" && hasExtension(path, "ts", "js"))) {
-			console.log(c.blueBright("🔔 Files changed, recompiling!"));
-			await compileAll();
+		const triggerPaths = events
+			.filter((e) => e.type === "update")
+			.filter((e) => hasExtension(e.path, "ts", "js"))
+			.filter((e) => !e.path.endsWith("~"))
+			.map((e) => e.path);
+
+		if (triggerPaths.length > 0) {
+			values.verbose && console.info(c.yellow(`Changed files: ${triggerPaths.join(", ")}`));
+
+			for (const p of triggerPaths) {
+				const { base } = path.parse(p);
+				console.log(ct`{blueBright 🔔 File {bold ${base}} changed, recompiling...}`);
+				await compileFile(p);
+			}
 		}
 	});
 

@@ -15,7 +15,7 @@ namespace Ogma3.Api.V1.Ratings;
 
 [Handler]
 [MapPost("api/ratings")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminRole)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateRating
 {
 	public sealed record Command(string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon);

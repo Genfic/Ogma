@@ -17,7 +17,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 
 [Handler]
 [MapPost("api/CommentsThread/lock")]
-[Authorize(Policy = AuthorizationPolicies.RequireAdminOrModeratorRole)]
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class LockThread
 {
 	[UsedImplicitly]
