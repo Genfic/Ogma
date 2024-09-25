@@ -1,8 +1,8 @@
-import { css, html, LitElement } from "lit";
-import { GetAdminApiTelemetryGetTableInfo } from "../../../generated/paths-internal";
+import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { when } from "lit/directives/when.js";
 import { map } from "lit/directives/map.js";
+import { when } from "lit/directives/when.js";
+import { GetAdminApiTelemetryGetTableInfo } from "../../../generated/paths-internal";
 
 @customElement("table-info")
 export class TableInfo extends LitElement {

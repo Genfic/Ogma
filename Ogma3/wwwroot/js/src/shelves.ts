@@ -1,7 +1,7 @@
 import {
+	PostApiShelves as createShelf,
 	DeleteApiShelves as deleteShelf,
 	GetApiShelves as getShelves,
-	PostApiShelves as createShelf,
 	PutApiShelves as updateShelf,
 } from "../generated/paths-public";
 import type { ShelfDto } from "../generated/types-public";

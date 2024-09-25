@@ -1,6 +1,6 @@
-import { log } from "../../../src-helpers/logger";
 import { PostAdminApiInfractions } from "../../../generated/paths-internal";
-import { InfractionType } from "../../../generated/types-internal";
+import type { InfractionType } from "../../../generated/types-internal";
+import { log } from "../../../src-helpers/logger";
 
 // @ts-ignore
 Vue.component("manage-infraction", {

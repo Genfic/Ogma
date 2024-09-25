@@ -1,5 +1,5 @@
-import { setCookie } from "../src-helpers/cookies";
 import { addYears } from "date-fns";
+import { setCookie } from "../src-helpers/cookies";
 
 const banner = document.getElementById("cookie-consent");
 const button = banner.querySelector("button#cookie-consent-button");

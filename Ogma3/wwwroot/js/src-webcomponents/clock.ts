@@ -1,5 +1,5 @@
 import { add, format, parseISO } from "date-fns";
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement("o-clock")

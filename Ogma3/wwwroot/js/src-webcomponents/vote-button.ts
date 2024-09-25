@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as postVote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";

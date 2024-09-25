@@ -1,6 +1,6 @@
+import { format } from "date-fns";
 import { DeleteApiComments, GetApiCommentsMd, GetApiCommentsRevisions, PatchApiComments } from "../../generated/paths-public";
 import type { GetRevisionResult } from "../../generated/types-public";
-import { format } from "date-fns";
 
 // @ts-ignore
 Vue.component("comment", {

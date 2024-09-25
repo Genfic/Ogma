@@ -1,8 +1,8 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
 import { GetApiQuotesRandom as getQuote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
-import { when } from "lit/directives/when.js";
 
 interface Quote {
 	body: string;

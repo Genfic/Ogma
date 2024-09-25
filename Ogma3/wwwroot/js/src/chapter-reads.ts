@@ -1,7 +1,7 @@
 import {
-	DeleteApiChaptersread as markUnread,
 	GetApiChaptersread as getRead,
 	PostApiChaptersread as markRead,
+	DeleteApiChaptersread as markUnread,
 } from "../generated/paths-public";
 
 (async () => {

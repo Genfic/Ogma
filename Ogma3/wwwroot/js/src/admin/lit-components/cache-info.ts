@@ -1,6 +1,6 @@
-import { css, html, LitElement } from "lit";
-import { DeleteAdminApiCache, GetAdminApiCache } from "../../../generated/paths-internal";
+import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { DeleteAdminApiCache, GetAdminApiCache } from "../../../generated/paths-internal";
 
 @customElement("cache-info")
 export class CacheInfo extends LitElement {

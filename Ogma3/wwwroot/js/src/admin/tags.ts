@@ -1,6 +1,6 @@
+import { DeleteApiTags, GetApiTagsAll, PostApiTags, PutApiTags } from "../../generated/paths-public";
 // @ts-ignore
 import type { TagDto } from "../../generated/types-public";
-import { DeleteApiTags, GetApiTagsAll, PostApiTags, PutApiTags } from "../../generated/paths-public";
 
 interface Validation {
 	minNameLength: number;

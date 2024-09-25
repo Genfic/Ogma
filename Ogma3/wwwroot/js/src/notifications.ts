@@ -1,5 +1,5 @@
-import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "../generated/paths-public";
 import { format } from "date-fns";
+import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "../generated/paths-public";
 import type { GetUserNotificationsResult } from "../generated/types-public";
 
 // @ts-ignore

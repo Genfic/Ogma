@@ -1,4 +1,3 @@
-"use strict";
 (() => {
 	const button = document.getElementById("tts-btn");
 	const stopBtn = document.getElementById("tts-stop");

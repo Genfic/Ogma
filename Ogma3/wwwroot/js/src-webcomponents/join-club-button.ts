@@ -1,6 +1,6 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { DeleteApiClubjoin as leaveClub, PostApiClubjoin as joinClub } from "../generated/paths-public";
+import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 @customElement("o-join")

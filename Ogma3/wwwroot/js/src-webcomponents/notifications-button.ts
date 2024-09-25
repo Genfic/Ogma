@@ -1,6 +1,6 @@
-import { html, LitElement } from "lit";
-import { customElement, state } from "lit/decorators.js";
 import { clamp } from "es-toolkit";
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
 import { GetApiNotificationsCount as countNotifications } from "../generated/paths-public";
 import "../src-helpers/extensions/Number";
 import { log } from "../src-helpers/logger";

@@ -1,10 +1,10 @@
-import { html, LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
-	DeleteApiShelfStories as removeFromShelf,
-	GetApiShelfStories as getShelves,
-	GetApiShelfStoriesQuick as getQuickShelves,
 	PostApiShelfStories as addToShelf,
+	GetApiShelfStoriesQuick as getQuickShelves,
+	GetApiShelfStories as getShelves,
+	DeleteApiShelfStories as removeFromShelf,
 } from "../generated/paths-public";
 import { clickOutside } from "../src-helpers/click-outside";
 import { log } from "../src-helpers/logger";

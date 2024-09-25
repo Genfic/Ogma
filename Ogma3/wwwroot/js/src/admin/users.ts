@@ -1,5 +1,5 @@
-import { GetApiUsersNames as getNames, PostApiUsersRoles } from "../../generated/paths-public";
 import { DeleteAdminApiInfractions } from "../../generated/paths-internal";
+import { PostApiUsersRoles, GetApiUsersNames as getNames } from "../../generated/paths-public";
 
 // @ts-ignore
 new Vue({

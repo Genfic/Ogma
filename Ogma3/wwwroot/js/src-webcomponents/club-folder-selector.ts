@@ -1,9 +1,9 @@
-import { html, LitElement } from "lit";
-import { map } from "lit/directives/map.js";
-import { when } from "lit/directives/when.js";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import { createRef, ref } from "lit/directives/ref.js";
-import { Clubs_GetUserClubs as getUserClubs, Folders_AddStory as addStoryToFolder } from "../generated/paths-public";
+import { when } from "lit/directives/when.js";
+import { Folders_AddStory as addStoryToFolder, Clubs_GetUserClubs as getUserClubs } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 import type { FolderTree } from "./folder-tree";
 

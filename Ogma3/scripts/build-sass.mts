@@ -1,13 +1,13 @@
-import { Glob } from "bun";
+import * as path from "node:path";
 import { parseArgs } from "util";
 import watcher from "@parcel/watcher";
-import ct from "chalk-template";
-import c from "chalk";
-import convert from "convert";
-import { compile } from "sass";
-import { browserslistToTargets, transform } from "lightningcss";
 import browserslist from "browserslist";
-import * as path from "node:path";
+import { Glob } from "bun";
+import c from "chalk";
+import ct from "chalk-template";
+import convert from "convert";
+import { browserslistToTargets, transform } from "lightningcss";
+import { compile } from "sass";
 import { hasExtension } from "./helpers/path";
 
 const { values } = parseArgs({

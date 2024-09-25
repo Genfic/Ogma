@@ -1,11 +1,11 @@
-import { log } from "../../src-helpers/logger";
 import {
+	PostApiFaqs as createFaq,
 	DeleteApiFaqs as deleteFaq,
 	GetApiFaqs as getAllFaqs,
-	PostApiFaqs as createFaq,
 	PutApiFaqs as updateFaq,
 } from "../../generated/paths-public";
 import type { FaqDto } from "../../generated/types-public";
+import { log } from "../../src-helpers/logger";
 
 // @ts-ignore
 new Vue({

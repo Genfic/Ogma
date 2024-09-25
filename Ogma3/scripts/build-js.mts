@@ -1,11 +1,11 @@
-import { Glob } from "bun";
+import path from "node:path";
 import { parseArgs } from "util";
 import watcher from "@parcel/watcher";
+import { Glob } from "bun";
+import c from "chalk";
+import ct from "chalk-template";
 import convert from "convert";
 import { hasExtension } from "./helpers/path";
-import ct from "chalk-template";
-import c from "chalk";
-import path from "node:path";
 
 const { values } = parseArgs({
 	args: Bun.argv,

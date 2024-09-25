@@ -1,8 +1,8 @@
 import {
-	DeleteApiQuotes as deleteQuote,
-	GetAllQuotes as getAllQuotes,
 	PostApiQuotes as createQuote,
 	PostApiQuotesJson as createQuotesFromJson,
+	DeleteApiQuotes as deleteQuote,
+	GetAllQuotes as getAllQuotes,
 	PutApiQuotes as updateQuote,
 } from "../../generated/paths-public";
 import type { QuoteDto } from "../../generated/types-public";

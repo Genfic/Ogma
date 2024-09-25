@@ -1,11 +1,11 @@
-import { log } from "../../src-helpers/logger";
+import { format } from "date-fns";
 import {
+	PostApiInviteCodesNoLimit as createUnlimitedCodes,
 	DeleteApiInviteCodes as deleteCode,
 	GetApiInviteCodesPaginated as getPaginatedCodes,
-	PostApiInviteCodesNoLimit as createUnlimitedCodes,
 } from "../../generated/paths-public";
 import type { InviteCodeDto } from "../../generated/types-public";
-import { format } from "date-fns";
+import { log } from "../../src-helpers/logger";
 
 // @ts-ignore
 new Vue({
