@@ -348,7 +348,7 @@ public sealed class Startup
 			ContentTypeProvider = extensionsProvider,
 		});
 		app.UseRouting();
-
+		
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
@@ -359,7 +359,10 @@ public sealed class Startup
 			config.TransformToExternalPath = (s, _) => s;
 			config.CustomStylesheetPath = "https://cdn.genfic.net/file/Ogma-net/swagger-dark.css";
 		});
-
+		
+		// Rate limit
+		app.UseRateLimiter();
+		
 		app.UseEndpoints(endpoints => {
 			endpoints.MapRazorPages();
 			endpoints.MapControllers();

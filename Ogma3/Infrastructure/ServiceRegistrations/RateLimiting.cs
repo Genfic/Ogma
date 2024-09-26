@@ -1,3 +1,4 @@
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ogma3.Infrastructure.ServiceRegistrations;
@@ -10,17 +11,22 @@ public static class RateLimiting
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
-		return services.AddRateLimiter(x => x
-			.AddFixedWindowLimiter(policyName: Rss, options => {
-				options.Window = TimeSpan.FromHours(1);
-			})
-			.AddFixedWindowLimiter(policyName: Quotes, options => {
-				options.Window = TimeSpan.FromSeconds(10);
-			})
-			.AddFixedWindowLimiter(policyName: Reports, options => {
-				options.Window = TimeSpan.FromHours(1);
-				options.PermitLimit = 3;
-			})
-		);
+		services.AddRateLimiter(x => {
+			x.AddFixedWindowLimiter(policyName: Rss, options => {
+					options.Window = TimeSpan.FromHours(1);
+					options.PermitLimit = 1;
+				})
+				.AddFixedWindowLimiter(policyName: Quotes, options => {
+					options.Window = TimeSpan.FromSeconds(10);
+					options.PermitLimit = 1;
+				})
+				.AddFixedWindowLimiter(policyName: Reports, options => {
+					options.Window = TimeSpan.FromHours(1);
+					options.PermitLimit = 3;
+				});
+
+			x.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+		});
+		return services;
 	}
 }

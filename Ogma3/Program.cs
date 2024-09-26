@@ -50,4 +50,9 @@ var app = builder.Build();
 
 startup.Configure(app, app.Environment);
 
-await app.InitAndRunAsync();
+if (args.Any(a => a == "--seed"))
+{
+	await app.InitAsync();
+}
+
+app.Run();
