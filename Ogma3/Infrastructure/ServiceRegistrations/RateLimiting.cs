@@ -1,4 +1,3 @@
-using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ogma3.Infrastructure.ServiceRegistrations;

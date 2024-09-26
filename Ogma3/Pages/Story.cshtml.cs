@@ -23,8 +23,9 @@ public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext con
 		var story = await context.Stories
 			.TagWith($"Fetching story {id} — {slug}")
 			.Where(s => s.Id == id)
-			.WhereIf(s => s.PublicationDate != null || s.AuthorId == uid, uid is not null)
-			.WhereIf(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff(), uid is not null)
+			.Where(s => s.PublicationDate != null || s.AuthorId == uid)
+			.Where(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff())
+			.AsSplitQuery()
 			.ProjectToStoryDetails()
 			.FirstOrDefaultAsync();
 
@@ -39,8 +40,8 @@ public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext con
 		Chapters = await context.Chapters
 			.TagWith($"Fetching chapters for story {id} — {slug}")
 			.Where(c => c.StoryId == id)
-			.WhereIf(c => c.PublicationDate != null || c.Story.AuthorId == uid, uid is not null)
-			.WhereIf(c => c.ContentBlockId == null || c.Story.AuthorId == uid, uid is not null)
+			.Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
+			.Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid)
 			.OrderBy(c => c.Order)
 			.ProjectToBasic()
 			.ToArrayAsync();
