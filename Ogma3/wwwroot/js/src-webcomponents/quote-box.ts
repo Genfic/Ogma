@@ -13,6 +13,7 @@ interface Quote {
 export class QuoteBox extends LitElement {
 	@state() accessor _loading: boolean;
 	@state() accessor _quote: Quote;
+	@state() accessor _canReload = true;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -24,7 +25,7 @@ export class QuoteBox extends LitElement {
 		return html`
 			<div id="quote" class="quote active-border">
 				<div class="refresh" @click="${this.load}">
-					<i class="material-icons-outlined ${this.#spinnerClass()}"> refresh </i>
+					<i class="material-icons-outlined ${this.#spinnerClass()}">${this.#spinnerIcon()}</i>
 				</div>
 				${when(
 					this._quote,
@@ -39,8 +40,11 @@ export class QuoteBox extends LitElement {
 	}
 
 	#spinnerClass = () => (this._loading ? "spin" : "");
+	#spinnerIcon = () => (this._canReload ? "refresh" : "schedule");
 
 	async load() {
+		if (!this._canReload) return;
+
 		const response = await getQuote();
 		if (response.ok) {
 			this._quote = await response.json();
@@ -49,6 +53,14 @@ export class QuoteBox extends LitElement {
 			log.error(response.statusText);
 			this._quote = JSON.parse(window.localStorage.getItem("quote"));
 		}
+
+		this._canReload = false;
+		setTimeout(
+			() => {
+				this._canReload = true;
+			},
+			Number.parseInt(response.headers.get("retry-after")) * 1000,
+		);
 	}
 
 	createRenderRoot() {

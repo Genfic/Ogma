@@ -1,3 +1,4 @@
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ogma3.Infrastructure.ServiceRegistrations;
@@ -10,13 +11,13 @@ public static class RateLimiting
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
-		services.AddRateLimiter(x => {
-			x.AddFixedWindowLimiter(policyName: Rss, options => {
+		services.AddRateLimiter(limiterOptions => {
+			limiterOptions.AddFixedWindowLimiter(policyName: Rss, options => {
 					options.Window = TimeSpan.FromHours(1);
 					options.PermitLimit = 1;
 				})
 				.AddFixedWindowLimiter(policyName: Quotes, options => {
-					options.Window = TimeSpan.FromSeconds(10);
+					options.Window = TimeSpan.FromSeconds(5);
 					options.PermitLimit = 1;
 				})
 				.AddFixedWindowLimiter(policyName: Reports, options => {
@@ -24,8 +25,18 @@ public static class RateLimiting
 					options.PermitLimit = 3;
 				});
 
-			x.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+			limiterOptions.OnRejected = (context, _) => {
+				if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+				{
+					context.HttpContext.Response.Headers.RetryAfter = retryAfter.TotalSeconds.ToString("#");
+				}
+
+				context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+
+				return new ValueTask();
+			};
 		});
+		
 		return services;
 	}
 }
