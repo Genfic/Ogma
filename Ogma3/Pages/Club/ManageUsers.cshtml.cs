@@ -36,14 +36,13 @@ public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 
 		Users = await context.ClubMembers
 			.Where(cm => cm.ClubId == id)
-			.Where(cm => cm.Member.ClubsBannedFrom.All(c => c.Id != id) || isPrivileged)
+			.Where(cm => isPrivileged)
 			.Select(cm => new UserDto(
 				cm.MemberId,
 				cm.Member.UserName,
 				cm.MemberSince,
 				cm.Member.Avatar,
-				cm.Role,
-				cm.Member.ClubsBannedFrom.Any(c => c.Id == id)
+				cm.Role
 			))
 			.ToListAsync();
 
@@ -56,8 +55,7 @@ public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 		string Name,
 		DateTimeOffset JoinDate,
 		string Avatar,
-		EClubMemberRoles Role,
-		bool IsBanned
+		EClubMemberRoles Role
 	);
 
 	public sealed record ClubData(

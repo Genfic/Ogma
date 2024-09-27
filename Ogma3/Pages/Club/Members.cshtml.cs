@@ -23,7 +23,6 @@ public sealed class Members(ClubRepository clubRepo, ApplicationDbContext contex
 		ClubMembers = await context.ClubMembers
 			.Where(cm => cm.ClubId == id)
 			.Select(cm => cm.Member)
-			.Where(u => u.ClubsBannedFrom.All(c => c.Id != id))
 			.Paginate(1, 50)
 			.Select(u => new UserCard
 			{

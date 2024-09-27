@@ -1,11 +1,9 @@
 @page "/club/{id:long}/edit/manage-members"
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @model ManageUsers
 
 @{
 	ViewData["Title"] = $"{Model.Club.Name} — Manage Members";
 	ViewData["Tab"] = "Members";
-	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -33,14 +31,7 @@
 			<cdn-img src="@user.Avatar" class="avatar"/>
 
 			<a asp-page="/User/Index" asp-route-name="@user.Name.ToUpper()" class="name">
-				@if (user.IsBanned)
-				{
-					<span class='text-red'>@user.Name (banned)</span>
-				}
-				else
-				{
-					<span>@user.Name</span>
-				}
+				@user.Name
 			</a>
 
 			<div class="roles">
@@ -48,11 +39,6 @@
 					<span class="name">@user.Role</span>
 				</div>
 			</div>
-			
-			<div class="buttons">
-				<o-club-ban clubId="@Model.Club.Id" userId="@user.Id" csrf="@csrf" banned="@user.IsBanned"></o-club-ban>
-			</div>
-
 		</div>
 	}
 </ul>

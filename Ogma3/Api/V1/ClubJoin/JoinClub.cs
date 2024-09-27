@@ -30,19 +30,13 @@ public static partial class JoinClub
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
-		var memberOrBanned = await context.Clubs
-			.Where(c => c.Id == request.ClubId)
-			.Select(c => new MemberOrBanned(
-				c.ClubMembers.Any(cm => cm.MemberId == uid),
-				c.BannedUsers.Any(u => u.Id == uid)
-			))
-			.FirstOrDefaultAsync(cancellationToken);
+		var isMember = await context.ClubMembers
+			.Where(cm => cm.MemberId == uid)
+			.Where(cm => cm.ClubId == request.ClubId)
+			.AnyAsync(cancellationToken);
 
-		if (memberOrBanned is null) return TypedResults.NotFound();
+		if (isMember) return TypedResults.Ok(true);
 
-		if (memberOrBanned.IsMember) return TypedResults.Ok(true);
-
-		if (memberOrBanned.IsBanned) return TypedResults.Unauthorized();
 
 		context.ClubMembers.Add(new ClubMember
 		{
@@ -55,6 +49,4 @@ public static partial class JoinClub
 
 		return TypedResults.Ok(true);
 	}
-
-	private sealed record MemberOrBanned(bool IsMember, bool IsBanned);
 }

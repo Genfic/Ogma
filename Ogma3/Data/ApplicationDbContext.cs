@@ -66,7 +66,6 @@ public sealed class ApplicationDbContext : IdentityDbContext
 	public required DbSet<ClubThread> ClubThreads { get; init; }
 	public required DbSet<Folder> Folders { get; init; }
 	public required DbSet<FolderStory> FolderStories { get; init; }
-	public required DbSet<ClubBan> ClubBans { get; init; }
 
 
 	// Secondary

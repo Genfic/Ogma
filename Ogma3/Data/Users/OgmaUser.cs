@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
-using Ogma3.Data.Clubs;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
@@ -75,7 +74,6 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	public ICollection<Report> Reports { get; set; } = null!;
 	public ICollection<Infraction> Infractions { get; set; } = null!;
-	public ICollection<Club> ClubsBannedFrom { get; set; } = null!;
 
 	public ICollection<Notification> Notifications { get; set; } = null!;
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -18,9 +19,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240927175317_RemovedClubBans")]
+    partial class RemovedClubBans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,21 @@ namespace Ogma3.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "tsm_system_rows");
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ClubOgmaUser", b =>
+                {
+                    b.Property<long>("BannedUsersId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ClubsBannedFromId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("BannedUsersId", "ClubsBannedFromId");
+
+                    b.HasIndex("ClubsBannedFromId");
+
+                    b.ToTable("ClubOgmaUser");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
@@ -1481,6 +1499,21 @@ namespace Ogma3.Migrations
                         .IsUnique();
 
                     b.ToTable("Votes");
+                });
+
+            modelBuilder.Entity("ClubOgmaUser", b =>
+                {
+                    b.HasOne("Ogma3.Data.Users.OgmaUser", null)
+                        .WithMany()
+                        .HasForeignKey("BannedUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ogma3.Data.Clubs.Club", null)
+                        .WithMany()
+                        .HasForeignKey("ClubsBannedFromId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>

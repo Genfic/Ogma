@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Json;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
-using Ogma3.Data.Clubs;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
@@ -615,31 +614,6 @@ public static RuntimeSkipNavigation CreateSkipNavigation2(RuntimeEntityType decl
 public static RuntimeSkipNavigation CreateSkipNavigation3(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
 {
     var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "ClubsBannedFrom",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("UserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<Club>),
-        propertyInfo: typeof(OgmaUser).GetProperty("ClubsBannedFrom", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<ClubsBannedFrom>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("BannedUsers");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation4(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
         "Followers",
         targetEntityType,
         joinEntityType.FindForeignKey(
@@ -662,7 +636,7 @@ public static RuntimeSkipNavigation CreateSkipNavigation4(RuntimeEntityType decl
     return skipNavigation;
 }
 
-public static RuntimeSkipNavigation CreateSkipNavigation5(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+public static RuntimeSkipNavigation CreateSkipNavigation4(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
 {
     var skipNavigation = declaringEntityType.AddSkipNavigation(
         "Following",
@@ -687,7 +661,7 @@ public static RuntimeSkipNavigation CreateSkipNavigation5(RuntimeEntityType decl
     return skipNavigation;
 }
 
-public static RuntimeSkipNavigation CreateSkipNavigation6(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+public static RuntimeSkipNavigation CreateSkipNavigation5(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
 {
     var skipNavigation = declaringEntityType.AddSkipNavigation(
         "Notifications",
@@ -712,7 +686,7 @@ public static RuntimeSkipNavigation CreateSkipNavigation6(RuntimeEntityType decl
     return skipNavigation;
 }
 
-public static RuntimeSkipNavigation CreateSkipNavigation7(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+public static RuntimeSkipNavigation CreateSkipNavigation6(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
 {
     var skipNavigation = declaringEntityType.AddSkipNavigation(
         "Roles",
@@ -737,7 +711,7 @@ public static RuntimeSkipNavigation CreateSkipNavigation7(RuntimeEntityType decl
     return skipNavigation;
 }
 
-public static RuntimeSkipNavigation CreateSkipNavigation8(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+public static RuntimeSkipNavigation CreateSkipNavigation7(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
 {
     var skipNavigation = declaringEntityType.AddSkipNavigation(
         "SubscribedThreads",
