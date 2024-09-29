@@ -20,18 +20,6 @@
 	<a asp-page="./Edit" asp-route-clubId="@Model.ClubBar.Id" asp-route-id="@Model.Folder.Id">Edit</a>
 }
 
-@if (Model.Folder.ChildFolders.Any())
-{
-	<hr>
-
-	<div class="folder-list tile-list">
-		@foreach (var folder in Model.Folder.ChildFolders)
-		{
-			<partial name="Shared/Minimals/_FolderMinimal" model="folder"/>
-		}
-	</div>
-}
-
 <hr>
 
 <div>

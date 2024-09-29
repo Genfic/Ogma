@@ -1,11 +1,12 @@
+using NetEscapades.EnumGenerators;
 using NpgSqlGenerators;
 
 namespace Ogma3.Data.Clubs;
 
 [PostgresEnum]
+[EnumExtensions]
 public enum EClubMemberRoles
 {
-	Invalid = 0,
 	Founder = 1,
 	Admin = 2,
 	Moderator = 3,

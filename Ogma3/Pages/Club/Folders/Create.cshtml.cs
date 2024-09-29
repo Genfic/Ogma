@@ -44,7 +44,6 @@ public sealed class CreateModel(ApplicationDbContext context, ClubRepository clu
 	{
 		public required string Name { get; init; }
 		public required string Description { get; init; }
-		public required long? ParentId { get; init; }
 		public required EClubMemberRoles Role { get; init; }
 	}
 
@@ -76,7 +75,6 @@ public sealed class CreateModel(ApplicationDbContext context, ClubRepository clu
 			Slug = Input.Name.Friendlify(),
 			Description = Input.Description,
 			ClubId = clubId,
-			ParentFolderId = Input.ParentId,
 			AccessLevel = Input.Role,
 		});
 		await context.SaveChangesAsync();

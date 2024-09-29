@@ -750,6 +750,13 @@
 		<_ContentIncludedByDefault Remove="wwwroot\js\dist-b\vue-directives\closeable.js.map" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\dist-b\watch-chapter-read.js" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\dist-b\watch-chapter-read.js.map" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\account.map.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\admin.map.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\dark.map.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\editors.map.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\light.map.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\login.map.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\dist\style.map.css" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\style.scss">

@@ -29,8 +29,8 @@ public static partial class GetJoinedClubs
 
 		var clubs = await context.ClubMembers
 			.Where(cm => cm.MemberId == uid)
+			.OrderBy(cm => cm.Club.Name)
 			.Select(cm => new Response(cm.ClubId, cm.Club.Name, cm.Club.Icon))
-			.OrderBy(r => r.Name)
 			.ToArrayAsync(cancellationToken);
 
 		return TypedResults.Ok(clubs);

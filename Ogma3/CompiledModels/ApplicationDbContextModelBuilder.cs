@@ -95,7 +95,6 @@ namespace CompiledModels
             CommentsThreadSubscriberEntityType.CreateForeignKey1(commentsThreadSubscriber, commentsThread);
             CommentsThreadSubscriberEntityType.CreateForeignKey2(commentsThreadSubscriber, ogmaUser);
             FolderEntityType.CreateForeignKey1(folder, club);
-            FolderEntityType.CreateForeignKey2(folder, folder);
             FolderStoryEntityType.CreateForeignKey1(folderStory, ogmaUser);
             FolderStoryEntityType.CreateForeignKey2(folderStory, folder);
             FolderStoryEntityType.CreateForeignKey3(folderStory, story);
@@ -1783,11 +1782,6 @@ namespace CompiledModels
             ogma3DataFoldersFolderTableBase.Columns.Add("Id", idColumnBase12);
             var nameColumnBase1 = new ColumnBase<ColumnMappingBase>("Name", "character varying(20)", ogma3DataFoldersFolderTableBase);
             ogma3DataFoldersFolderTableBase.Columns.Add("Name", nameColumnBase1);
-            var parentFolderIdColumnBase = new ColumnBase<ColumnMappingBase>("ParentFolderId", "bigint", ogma3DataFoldersFolderTableBase)
-            {
-                IsNullable = true
-            };
-            ogma3DataFoldersFolderTableBase.Columns.Add("ParentFolderId", parentFolderIdColumnBase);
             var slugColumnBase3 = new ColumnBase<ColumnMappingBase>("Slug", "character varying(20)", ogma3DataFoldersFolderTableBase);
             ogma3DataFoldersFolderTableBase.Columns.Add("Slug", slugColumnBase3);
             var storiesCountColumnBase = new ColumnBase<ColumnMappingBase>("StoriesCount", "integer", ogma3DataFoldersFolderTableBase);
@@ -1801,7 +1795,6 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)clubIdColumnBase2, folder.FindProperty("ClubId")!, ogma3DataFoldersFolderMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase1, folder.FindProperty("Description")!, ogma3DataFoldersFolderMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase1, folder.FindProperty("Name")!, ogma3DataFoldersFolderMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)parentFolderIdColumnBase, folder.FindProperty("ParentFolderId")!, ogma3DataFoldersFolderMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)slugColumnBase3, folder.FindProperty("Slug")!, ogma3DataFoldersFolderMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)storiesCountColumnBase, folder.FindProperty("StoriesCount")!, ogma3DataFoldersFolderMappingBase);
 
@@ -1822,11 +1815,6 @@ namespace CompiledModels
             foldersTable.Columns.Add("Description", descriptionColumn1);
             var nameColumn1 = new Column("Name", "character varying(20)", foldersTable);
             foldersTable.Columns.Add("Name", nameColumn1);
-            var parentFolderIdColumn = new Column("ParentFolderId", "bigint", foldersTable)
-            {
-                IsNullable = true
-            };
-            foldersTable.Columns.Add("ParentFolderId", parentFolderIdColumn);
             var slugColumn3 = new Column("Slug", "character varying(20)", foldersTable);
             foldersTable.Columns.Add("Slug", slugColumn3);
             var storiesCountColumn = new Column("StoriesCount", "integer", foldersTable);
@@ -1847,14 +1835,6 @@ namespace CompiledModels
             iX_Folders_ClubId.MappedIndexes.Add(iX_Folders_ClubIdIx);
             RelationalModel.GetOrCreateTableIndexes(iX_Folders_ClubIdIx).Add(iX_Folders_ClubId);
             foldersTable.Indexes.Add("IX_Folders_ClubId", iX_Folders_ClubId);
-            var iX_Folders_ParentFolderId = new TableIndex(
-            "IX_Folders_ParentFolderId", foldersTable, new[] { parentFolderIdColumn }, false);
-            var iX_Folders_ParentFolderIdIx = RelationalModel.GetIndex(this,
-                "Ogma3.Data.Folders.Folder",
-                new[] { "ParentFolderId" });
-            iX_Folders_ParentFolderId.MappedIndexes.Add(iX_Folders_ParentFolderIdIx);
-            RelationalModel.GetOrCreateTableIndexes(iX_Folders_ParentFolderIdIx).Add(iX_Folders_ParentFolderId);
-            foldersTable.Indexes.Add("IX_Folders_ParentFolderId", iX_Folders_ParentFolderId);
             relationalModel.Tables.Add(("Folders", null), foldersTable);
             var foldersTableMapping = new TableMapping(folder, foldersTable, true);
             foldersTable.AddTypeMapping(foldersTableMapping, false);
@@ -1864,7 +1844,6 @@ namespace CompiledModels
             RelationalModel.CreateColumnMapping(clubIdColumn2, folder.FindProperty("ClubId")!, foldersTableMapping);
             RelationalModel.CreateColumnMapping(descriptionColumn1, folder.FindProperty("Description")!, foldersTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn1, folder.FindProperty("Name")!, foldersTableMapping);
-            RelationalModel.CreateColumnMapping(parentFolderIdColumn, folder.FindProperty("ParentFolderId")!, foldersTableMapping);
             RelationalModel.CreateColumnMapping(slugColumn3, folder.FindProperty("Slug")!, foldersTableMapping);
             RelationalModel.CreateColumnMapping(storiesCountColumn, folder.FindProperty("StoriesCount")!, foldersTableMapping);
 
@@ -4192,19 +4171,6 @@ namespace CompiledModels
             RelationalModel.GetOrCreateForeignKeyConstraints(fK_Folders_Clubs_ClubIdFk).Add(fK_Folders_Clubs_ClubId);
             foldersTable.ForeignKeyConstraints.Add(fK_Folders_Clubs_ClubId);
             clubsTable.ReferencingForeignKeyConstraints.Add(fK_Folders_Clubs_ClubId);
-            var fK_Folders_Folders_ParentFolderId = new ForeignKeyConstraint(
-                "FK_Folders_Folders_ParentFolderId", foldersTable, foldersTable,
-                new[] { parentFolderIdColumn },
-                foldersTable.FindUniqueConstraint("PK_Folders")!, ReferentialAction.SetNull);
-            var fK_Folders_Folders_ParentFolderIdFk = RelationalModel.GetForeignKey(this,
-                "Ogma3.Data.Folders.Folder",
-                new[] { "ParentFolderId" },
-                "Ogma3.Data.Folders.Folder",
-                new[] { "Id" });
-            fK_Folders_Folders_ParentFolderId.MappedForeignKeys.Add(fK_Folders_Folders_ParentFolderIdFk);
-            RelationalModel.GetOrCreateForeignKeyConstraints(fK_Folders_Folders_ParentFolderIdFk).Add(fK_Folders_Folders_ParentFolderId);
-            foldersTable.ForeignKeyConstraints.Add(fK_Folders_Folders_ParentFolderId);
-            foldersTable.ReferencingForeignKeyConstraints.Add(fK_Folders_Folders_ParentFolderId);
             var fK_FolderStories_AspNetUsers_AddedById = new ForeignKeyConstraint(
                 "FK_FolderStories_AspNetUsers_AddedById", folderStoriesTable, aspNetUsersTable,
                 new[] { addedByIdColumn },

@@ -15,12 +15,6 @@ export interface AddStoryToFolderResponse {
 	addedById: number;
 }
 
-export interface BanUserCommand {
-	userId: number;
-	clubId: number;
-	reason: string;
-}
-
 export interface BlockUserCommand {
 	name: string;
 }
@@ -115,13 +109,13 @@ export interface GetClubsWithStoryResult {
 	id: number;
 	name: string;
 	icon: string;
+	folders: string[];
 }
 
 export interface GetFolderResult {
 	id: number;
 	name: string;
 	slug: string;
-	parentFolderId: number | null;
 	canAdd: boolean;
 }
 
@@ -285,11 +279,6 @@ export interface TagDto {
 	namespaceId: number | null;
 }
 
-export interface UnbanUserCommand {
-	userId: number;
-	clubId: number;
-}
-
 export interface UnblockUserCommand {
 	name: string;
 }
@@ -382,7 +371,7 @@ export type CommentSource = "Invalid" | "Chapter" | "Blogpost" | "Profile" | "Fo
 
 export type EDeletedBy = "User" | "Staff";
 
-export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
+export type ENotificationEvent = "Invalid" | "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
 
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
 

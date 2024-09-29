@@ -1,5 +1,4 @@
-@page "/club/{clubid}/folders/create"
-@using Ogma3.Api.V1.Folders
+@page "/club/{clubId:long}/folders/create"
 @using Ogma3.Data.Clubs
 @model CreateModel
 
@@ -21,20 +20,6 @@
 	<div asp-validation-summary="All">
 		<span>Please correct the following errors</span>
 	</div>
-	
-	<div class="o-form-group">
-		<label>Parent folder</label>
-		<p class="desc">Select nothing to create a root-level folder</p>
-		<o-folder-tree id="folder-selector"
-		               clubId="@Model.ClubId"
-		               label="Parent folder"
-		               name="Input_ParentId"
-		               inputSelector="#Input_ParentId"
-		               route="@Url.RouteUrl(nameof(FoldersController))">
-		</o-folder-tree>
-	</div>
-	
-	<input type="hidden" asp-for="Input.ParentId">
 
 	<div class="o-form-group">
 		<label asp-for="Input.Name"></label>
@@ -53,13 +38,16 @@
 		<p class="desc">Choose who can add stories to this folder</p>
 
 		<div class="selector active-border">
-			@foreach (var r in Enum.GetValues<EClubMemberRoles>())
+			@foreach (var r in EClubMemberRolesExtensions.GetValues())
 			{
+				var name = r.ToStringFast();
+				
 				<input type="radio"
 				       asp-for="Input.Role"
-				       id="@r"
-				       value="@((int)r)">
-				<label for="@r" tabindex="0">@r</label>
+				       id="@name"
+				       value="@((int)r)"
+				       checked="@(Model.Input.Role == r)">
+				<label for="@name" tabindex="0">@name</label>
 			}
 		</div>
 	</div>

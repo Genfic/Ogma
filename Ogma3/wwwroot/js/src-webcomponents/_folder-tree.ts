@@ -1,12 +1,11 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { Folders_GetFoldersOfClub as getClubFolders } from "../generated/paths-public";
+import { GetApiFolders as getClubFolders } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
 
 type Folder = {
 	id: number;
-	parentFolderId: number | null;
 	name: string;
 	slug: string;
 	canAdd: boolean;
@@ -20,7 +19,7 @@ type TreeItem = {
 };
 
 @customElement("o-folder-tree")
-export class FolderTree extends LitElement {
+export class _folderTree extends LitElement {
 	@property() accessor clubId: number;
 	@property() accessor value: number | null = null;
 	@property() accessor current: number | null = null;
@@ -89,19 +88,19 @@ export class FolderTree extends LitElement {
 	};
 
 	#unflatten = () => {
-		const hashTable = Object.create(null);
-
-		for (const aData of this.folders) {
-			hashTable[aData.id] = { ...aData, children: [] };
-		}
-
-		for (const aData of this.folders) {
-			if (aData.parentFolderId) {
-				hashTable[aData.parentFolderId].children.push(hashTable[aData.id]);
-			} else {
-				this.tree.push(hashTable[aData.id]);
-			}
-		}
+		// const hashTable = Object.create(null);
+		//
+		// for (const aData of this.folders) {
+		// 	hashTable[aData.id] = { ...aData, children: [] };
+		// }
+		//
+		// for (const aData of this.folders) {
+		// 	if (aData.parentFolderId) {
+		// 		hashTable[aData.parentFolderId].children.push(hashTable[aData.id]);
+		// 	} else {
+		// 		this.tree.push(hashTable[aData.id]);
+		// 	}
+		// }
 	};
 
 	createRenderRoot() {

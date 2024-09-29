@@ -25,6 +25,6 @@ export interface InfractionDto {
 	removedByUserName: string | null;
 }
 
-export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
+export type InfractionType = "Invalid" | "Note" | "Warning" | "Mute" | "Ban";
 
 export type None = undefined;

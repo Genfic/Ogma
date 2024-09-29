@@ -12,7 +12,6 @@ public sealed class FolderCard
 	public required string? Description { get; init; }
 
 	public required int StoriesCount { get; init; }
-	public required IEnumerable<FolderMinimalDto> ChildFolders { get; init; }
 }
 
 [Mapper]

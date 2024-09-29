@@ -35,7 +35,7 @@ const paths = {
 		dest: `${roots.js}/dist`,
 	},
 	wc: {
-		src: `${roots.js}/src-webcomponents/**/*.ts`,
+		src: `${roots.js}/src-webcomponents/**/!(_)*.ts`,
 		dest: `${roots.js}/bundle`,
 	},
 };

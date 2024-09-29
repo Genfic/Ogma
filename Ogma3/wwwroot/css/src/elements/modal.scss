@@ -10,6 +10,7 @@
 	height: 100%;
 	z-index: 999;
 	background: v.$foreground-50;
+	scrollbar-gutter: stable both-edges;
 
 	> .content {
 		min-width: 20rem;

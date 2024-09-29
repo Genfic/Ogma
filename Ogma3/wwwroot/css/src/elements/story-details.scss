@@ -220,7 +220,7 @@ $title-height: 2rem;
 			flex: 1;
 		}
 
-		* {
+		> * {
 			color: v.$foreground-75;
 
 			&:hover {
@@ -228,11 +228,11 @@ $title-height: 2rem;
 			}
 		}
 
-		* {
+		> * {
 			padding: 0 .25rem;
 		}
 
-		a {
+		> a {
 			cursor: pointer;
 		}
 	}

@@ -30,7 +30,6 @@ public sealed class EditModel(ApplicationDbContext context, ClubRepository clubR
 				ClubId = f.ClubId,
 				Name = f.Name,
 				Description = f.Description,
-				ParentId = f.ParentFolderId,
 				Role = f.AccessLevel,
 			})
 			.FirstOrDefaultAsync();
@@ -60,7 +59,6 @@ public sealed class EditModel(ApplicationDbContext context, ClubRepository clubR
 		public required long ClubId { get; init; }
 		public required string Name { get; init; }
 		public required string? Description { get; init; }
-		public required long? ParentId { get; init; }
 		public required EClubMemberRoles Role { get; init; }
 	}
 
@@ -89,7 +87,6 @@ public sealed class EditModel(ApplicationDbContext context, ClubRepository clubR
 		var folder = await context.Folders
 			.Where(f => f.ClubId == clubId)
 			.Where(f => f.Id == Input.Id)
-			.Include(f => f.ChildFolders)
 			.FirstOrDefaultAsync();
 
 		if (folder is null) return NotFound();
@@ -99,20 +96,6 @@ public sealed class EditModel(ApplicationDbContext context, ClubRepository clubR
 		folder.AccessLevel = Input.Role;
 		folder.Description = Input.Description;
 
-		// Prevent nesting the parent folder inside of one of its children or inside of itself
-		if (folder.ChildFolders.Any(cf => cf.Id == Input.ParentId))
-		{
-			ModelState.AddModelError("", "The folder cannot be nested inside of its child");
-			return Page();
-		}
-
-		if (folder.Id == Input.ParentId)
-		{
-			ModelState.AddModelError("", "The folder cannot be nested inside of itself");
-			return Page();
-		}
-
-		folder.ParentFolderId = Input.ParentId;
 
 		await context.SaveChangesAsync();
 

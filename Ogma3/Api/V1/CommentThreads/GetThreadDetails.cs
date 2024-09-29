@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Constants;
+using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
@@ -55,7 +57,7 @@ public static partial class GetThreadDetails
 			{ Profile: true } => CommentSource.Profile,
 			{ Chapter: true } => CommentSource.Chapter,
 			{ Thread: true } => CommentSource.ForumPost,
-			_ => CommentSource.Invalid,
+			_ => throw new SwitchExpressionException(),
 		};
 		
 		if (isStaff)

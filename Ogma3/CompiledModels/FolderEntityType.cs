@@ -56,7 +56,7 @@ namespace CompiledModels
                 propertyInfo: typeof(Folder).GetProperty("AccessLevel", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Folder).GetField("<AccessLevel>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
-                sentinel: EClubMemberRoles.Invalid);
+                sentinel: (EClubMemberRoles)(-1));
             accessLevel.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
                 comparer: new ValueComparer<EClubMemberRoles>(
                     (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
@@ -149,27 +149,6 @@ namespace CompiledModels
         name.TypeMapping = ((NpgsqlStringTypeMapping)name.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
     name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var parentFolderId = runtimeEntityType.AddProperty(
-        "ParentFolderId",
-        typeof(long?),
-        propertyInfo: typeof(Folder).GetProperty("ParentFolderId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Folder).GetField("<ParentFolderId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        nullable: true);
-    parentFolderId.TypeMapping = LongTypeMapping.Default.Clone(
-        comparer: new ValueComparer<long?>(
-            (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-            (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-        keyComparer: new ValueComparer<long?>(
-            (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-            (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-        providerValueComparer: new ValueComparer<long?>(
-            (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-            (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
-    parentFolderId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-
     var slug = runtimeEntityType.AddProperty(
         "Slug",
         typeof(string),
@@ -227,9 +206,6 @@ runtimeEntityType.SetPrimaryKey(key);
 var index = runtimeEntityType.AddIndex(
     new[] { clubId });
 
-var index0 = runtimeEntityType.AddIndex(
-    new[] { parentFolderId });
-
 return runtimeEntityType;
 }
 
@@ -254,30 +230,6 @@ public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEnt
         typeof(ICollection<Folder>),
         propertyInfo: typeof(Club).GetProperty("Folders", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
         fieldInfo: typeof(Club).GetField("<Folders>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    return runtimeForeignKey;
-}
-
-public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-{
-    var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ParentFolderId") },
-        principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-        principalEntityType,
-        deleteBehavior: DeleteBehavior.SetNull);
-
-    var parentFolder = declaringEntityType.AddNavigation("ParentFolder",
-        runtimeForeignKey,
-        onDependent: true,
-        typeof(Folder),
-        propertyInfo: typeof(Folder).GetProperty("ParentFolder", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Folder).GetField("<ParentFolder>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var childFolders = principalEntityType.AddNavigation("ChildFolders",
-        runtimeForeignKey,
-        onDependent: false,
-        typeof(ICollection<Folder>),
-        propertyInfo: typeof(Folder).GetProperty("ChildFolders", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Folder).GetField("<ChildFolders>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
     return runtimeForeignKey;
 }

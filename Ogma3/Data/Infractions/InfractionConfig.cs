@@ -38,6 +38,7 @@ public sealed class InfractionConfig : BaseConfiguration<Infraction>
 
 		builder
 			.Property(i => i.Type)
+			.HasSentinel((InfractionType)(-1))
 			.IsRequired();
 
 		// Navigation

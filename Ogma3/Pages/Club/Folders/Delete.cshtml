@@ -1,5 +1,4 @@
 @page "/club/{clubid}/folder/{id}/delete"
-@using Ogma3.Api.V1.Folders
 @model DeleteModel
 
 @{
@@ -38,21 +37,7 @@
 
 	<form method="post" class="confirm" id="folder">
 
-		<div class="o-form-group">
-			<label>Target folder</label>
-			<p class="desc">Select folder to move all the stories to</p>
-			<o-folder-tree id="folder-selector"
-			               clubId="@Model.Folder.ClubId"
-			               label="Parent folder"
-			               name="Input_ParentId"
-			               inputSelector="#TargetFolder"
-			               route="@Url.RouteUrl(nameof(FoldersController))">
-			</o-folder-tree>
-		</div>
-
-
 		<input type="hidden" asp-for="Folder.Id"/>
-		<input type="hidden" asp-for="TargetFolder"/>
 
 		<hr>
 
@@ -69,14 +54,3 @@
 	</form>
 
 </div>
-
-@section Scripts {
-	<script >
-	const $ = (sel) => document.getElementById(sel);
-		$('folder').addEventListener('submit', (e) => {
-			e.preventDefault();	
-			$('TargetFolder').value = $('folder-selector').selected;
-			e.target.submit();
-		})
-	</script>
-}

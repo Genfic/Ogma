@@ -1,5 +1,4 @@
-@page "/club/{clubid}/folder/{id}/edit"
-@using Ogma3.Api.V1.Folders
+@page "/club/{clubId:long}/folder/{id:long}/edit"
 @using Ogma3.Data.Clubs
 @model EditModel
 
@@ -26,20 +25,6 @@
 	</div>
 
 	<div class="o-form-group">
-		<label>Parent folder</label>
-		<p class="desc">Select nothing to make it a root-level folder</p>
-		<o-folder-tree id="folder-selector"
-		               clubId="@Model.Input.ClubId"
-		               label="Parent folder"
-		               name="Input_ParentId"
-		               inputSelector="#Input_ParentId"
-		               route="@Url.RouteUrl(nameof(FoldersController))">
-		</o-folder-tree>
-	</div>
-	
-	<input type="hidden" asp-for="Input.ParentId">
-
-	<div class="o-form-group">
 		<label asp-for="Input.Name"></label>
 		<input asp-for="Input.Name" class="o-form-control active-border">
 		<span asp-validation-for="Input.Name"></span>
@@ -56,14 +41,16 @@
 		<p class="desc">Choose who can add stories to this folder</p>
 
 		<div class="selector active-border">
-			@foreach (var r in Enum.GetValues<EClubMemberRoles>())
+			@foreach (var r in EClubMemberRolesExtensions.GetValues())
 			{
+				var name = r.ToStringFast();
+				
 				<input type="radio"
 				       asp-for="Input.Role"
-				       id="@r"
+				       id="@name"
 				       value="@((int)r)"
 				       checked="@(Model.Input.Role == r)">
-				<label for="@r" tabindex="0">@r</label>
+				<label for="@name" tabindex="0">@name</label>
 			}
 		</div>
 	</div>

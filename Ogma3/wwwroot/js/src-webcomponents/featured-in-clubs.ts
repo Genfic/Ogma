@@ -2,20 +2,15 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
-import { Clubs_GetClubsWithStory as getFeaturingClubs } from "../generated/paths-public";
+import { GetApiClubsStory as getFeaturingClubs } from "../generated/paths-public";
+import type { GetClubsWithStoryResult } from "../generated/types-public";
 import { log } from "../src-helpers/logger";
-
-interface Club {
-	id: number;
-	name: string;
-	icon: string;
-}
 
 @customElement("o-featured-in-clubs")
 export class FeaturedInClubs extends LitElement {
 	@property() accessor storyId: number;
 	@state() private accessor visible: boolean;
-	@state() private accessor clubs: Club[];
+	@state() private accessor clubs: GetClubsWithStoryResult[];
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -27,8 +22,6 @@ export class FeaturedInClubs extends LitElement {
 		const response = await getFeaturingClubs(this.storyId);
 		if (response.ok) {
 			this.clubs = await response.json();
-		} else {
-			log.error(`Error fetching data: ${response.statusText}`);
 		}
 	}
 
@@ -45,9 +38,11 @@ export class FeaturedInClubs extends LitElement {
 					${map(
 						this.clubs,
 						(c) => html`
-							<a href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}" target="_blank" class="club" tabindex="0">
-								<img src="${c.icon ?? "ph-250.png"}" alt="${c.name}" width="24" height="24" />
+							<a href="/club/${c.id}/${c.name.toLowerCase().replace(" ", "-")}" target="_blank" class="club">
+								<img src="${c.icon ?? "ph-250.png"}" alt="${c.name}" width="48" height="48" />
 								<span>${c.name}</span>
+								${map(c.folders.slice(0, 5), (f) => html`<span class="folder">${f}</span>`)}
+								${when(c.folders.length > 5, () => html`<span class="overflow">+ ${c.folders.length - 5} more</span>`)}
 							</a>
 						`,
 					)}
@@ -57,7 +52,7 @@ export class FeaturedInClubs extends LitElement {
 
 	render() {
 		return html`
-			<a @click="${async () => await this.open()}">Featured in clubs</a>
+			<button class="club-wc-button" @click="${async () => await this.open()}">Featured in clubs</button>
 
 			${when(
 				this.visible,

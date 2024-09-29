@@ -21,7 +21,6 @@ public sealed class IndexModel(ClubRepository clubRepo, ApplicationDbContext con
 		
 		Folders = await context.Folders
 			.Where(f => f.ClubId == id)
-			.Where(f => f.ParentFolderId == null)
 			.ProjectToCard()
 			.ToListAsync();
 

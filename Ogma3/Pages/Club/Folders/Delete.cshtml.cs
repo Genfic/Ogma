@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
-using Ogma3.Data.Folders;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
 public sealed class DeleteModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
 {
-	[BindProperty] public required long TargetFolder { get; set; }
 	[BindProperty] public required DeleteViewModel Folder { get; set; }
 
 	public sealed class DeleteViewModel
@@ -41,7 +39,7 @@ public sealed class DeleteModel(ApplicationDbContext context, ClubRepository clu
 				Name = f.Name,
 				Slug = f.Slug,
 				Description = f.Description,
-				StoriesCount = f.StoriesCount,
+				StoriesCount = f.Stories.Count,
 			})
 			.FirstOrDefaultAsync();
 
@@ -63,30 +61,10 @@ public sealed class DeleteModel(ApplicationDbContext context, ClubRepository clu
 		var folder = await context.Folders
 			.Where(f => f.ClubId == clubId)
 			.Where(f => f.Id == id)
-			.Include(f => f.ChildFolders)
 			.FirstOrDefaultAsync();
 
 		if (folder is null) return NotFound();
 
-		// Prevent deleting a folder that has children
-		if (folder.ChildFolders.Count > 0)
-		{
-			ModelState.AddModelError("asd", "You cannot delete a folder that has children, delete the children first");
-			return Page();
-		}
-
-		var relationships = await context.FolderStories
-			.Where(fs => fs.FolderId == folder.Id)
-			.ToListAsync();
-
-		var newRelationships = relationships.Select(r => new FolderStory
-		{
-			FolderId = TargetFolder,
-			StoryId = r.StoryId,
-		});
-
-		context.FolderStories.RemoveRange(relationships);
-		context.FolderStories.AddRange(newRelationships);
 
 		context.Folders.Remove(folder);
 		await context.SaveChangesAsync();

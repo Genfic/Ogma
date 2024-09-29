@@ -13,7 +13,7 @@ public sealed class ClubMemberConfiguration : IEntityTypeConfiguration<ClubMembe
 			.Property(cm => cm.Role)
 			.IsRequired()
 			.HasDefaultValue(EClubMemberRoles.User)
-			.HasSentinel(EClubMemberRoles.Invalid);
+			.HasSentinel((EClubMemberRoles)(-1));
 
 		builder
 			.Property(cm => cm.MemberSince)

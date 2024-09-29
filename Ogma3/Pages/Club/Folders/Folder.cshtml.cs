@@ -8,7 +8,6 @@ using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Pages.Shared.Cards;
-using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Club.Folders;
 
@@ -20,7 +19,6 @@ public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config,
 		public required string Name { get; init; }
 		public required string Slug { get; init; }
 		public required string? Description { get; init; }
-		public required IEnumerable<FolderMinimal> ChildFolders { get; init; }
 		public required int StoriesCount { get; init; }
 		public required EClubMemberRoles AccessLevel { get; init; }
 	}
@@ -47,16 +45,8 @@ public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config,
 				Name = f.Name,
 				Slug = f.Slug,
 				Description = f.Description,
-				StoriesCount = f.StoriesCount,
+				StoriesCount = f.Stories.Count,
 				AccessLevel = f.AccessLevel,
-				ChildFolders = f.ChildFolders.Select(cf => new FolderMinimal
-				{
-					Id = cf.Id,
-					ClubId = cf.ClubId,
-					Name = cf.Name,
-					Slug = cf.Slug,
-					StoriesCount = cf.StoriesCount,
-				}),
 			})
 			.FirstOrDefaultAsync();
 		if (folder is null) return NotFound();

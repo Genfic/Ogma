@@ -28,22 +28,12 @@ public sealed class FolderConfiguration : BaseConfiguration<Folder>
 			.HasMaxLength(CTConfig.CFolder.MaxDescriptionLength);
 
 		builder
-			.Property(f => f.StoriesCount)
-			.IsRequired()
-			.HasDefaultValue(0);
-
-		builder
 			.Property(f => f.AccessLevel)
 			.IsRequired()
 			.HasDefaultValue(EClubMemberRoles.User)
-			.HasSentinel(EClubMemberRoles.Invalid);
+			.HasSentinel((EClubMemberRoles)(-1));
 
 		// NAVIGATION
-		builder
-			.HasMany(f => f.ChildFolders)
-			.WithOne(f => f.ParentFolder)
-			.HasForeignKey(f => f.ParentFolderId)
-			.OnDelete(DeleteBehavior.SetNull);
 
 		builder
 			.HasMany(f => f.Stories)
