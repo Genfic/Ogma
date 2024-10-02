@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NSwag.Annotations;
 using Ogma3.Data;
 
 namespace Ogma3.Controllers;
 
+[OpenApiIgnore]
 [Route("[controller]")]
 public sealed class ChapterController(ApplicationDbContext context) : ControllerBase
 {

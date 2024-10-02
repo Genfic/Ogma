@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Constants;
-using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
