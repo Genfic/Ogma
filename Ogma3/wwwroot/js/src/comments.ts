@@ -227,9 +227,6 @@ new Vue({
 		};
 
 		const results = await Promise.allSettled([fetchData(), fetchSubscriptionStatus(), load()]);
-		for (const result of results) {
-			console.log(result.status, result);
-		}
 
 		const hash = window.location.hash.split("-");
 		if (hash[0] === "#page" && hash[1]) {

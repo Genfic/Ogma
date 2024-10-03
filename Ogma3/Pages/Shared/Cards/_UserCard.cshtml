@@ -2,7 +2,12 @@
 
 <div class="user-card">
 
-	<cdn-img src="@Model.Avatar" class="avatar"/>
+	<cdn-img 
+		src="@Model.Avatar" 
+		class="avatar" 
+		alt="@(Model.UserName)'s avatar"
+		width="80" height="80"
+		/>
 
 	<a asp-page="/User/Index" asp-route-name="@Model.UserName.ToUpper()" class="name">
 		@Model.UserName

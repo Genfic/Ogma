@@ -20,6 +20,7 @@ $avatar-size: 5rem;
 	> .avatar {
 		grid-area: avatar;
 		height: $avatar-size;
+		aspect-ratio: 1 / 1;
 		object-fit: contain;
 	}
 

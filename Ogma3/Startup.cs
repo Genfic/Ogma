@@ -30,7 +30,6 @@ using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
-using Ogma3.Infrastructure.Mediator.Behaviours;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.NSwag.OperationProcessors;
 using Ogma3.Infrastructure.ServiceRegistrations;

@@ -1,4 +1,4 @@
-@page "{name}"
+@page "{name:alpha}"
 @model IndexModel
 
 @{
@@ -29,7 +29,7 @@
 				var host = link.Split("://")[^1];
 
 				<a href="//@host" target="_blank" rel="noopener noreferrer">
-					<img src="https://www.google.com/s2/favicons?domain=@link" alt="@link">
+					<img src="https://www.google.com/s2/favicons?domain=@link" alt="@link" width="16" height="16">
 					<span>@(host.Replace("www.", ""))</span>
 				</a>
 			}

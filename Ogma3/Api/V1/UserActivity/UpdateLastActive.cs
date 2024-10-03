@@ -14,7 +14,6 @@ using ReturnType = Results<Ok<int>, NoContent>;
 
 [Handler]
 [MapMethod("api/useractivity", "HEAD")]
-[Authorize]
 public static partial class UpdateLastActive
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
