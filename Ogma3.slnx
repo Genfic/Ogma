@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="Ogma3.Tests\Ogma3.Tests.csproj" />
+  <Project Path="Ogma3\Ogma3.csproj" />
+  <Project Path="Utils.Tests\Utils.Tests.csproj" />
+  <Project Path="Utils\Utils.csproj" />
+</Solution>

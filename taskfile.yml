@@ -52,11 +52,6 @@ tasks:
             - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
             - lighthouse https://localhost:5001 --view
 
-    un-score:
-        cmds:
-            - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
-            - bunx unlighthouse --site https://localhost:5001
-
     # EF helpers
     db-migrate: dotnet ef migrations add --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
     db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}

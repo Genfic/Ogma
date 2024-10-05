@@ -11,7 +11,8 @@
 		"css": "bun ./scripts/build-sass.mts",
 		"css:watch": "bun ./scripts/build-sass.mts -- --watch",
 		"js": "bun ./scripts/build-js.mts",
-		"js:watch": "bun ./scripts/build-js.mts -- --watch"
+		"js:watch": "bun ./scripts/build-js.mts -- --watch",
+		"lh": "unlighthouse"
 	},
 	"devDependencies": {
 		"@angius/web-component-analyzer": "2.0.10",
