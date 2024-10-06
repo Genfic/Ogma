@@ -3,7 +3,11 @@
 @model ThreadCard
 
 <div class="thread-card @(Model.IsPinned ? "pinned" : "")">
-	<cdn-img class="img" src="@Model.AuthorAvatar" width="70" height="70"/>
+	<img class="img" 
+	     src="@Model.AuthorAvatar"
+	     alt="@(Model.AuthorName)'s avatar"
+	     width="70" height="70" 
+	     loading="lazy" />
 
 	<a class="title"
 	   asp-page="/Club/Forums/Details"

@@ -4,19 +4,21 @@
 
 <div class="story-card">
 
-	<cdn-img class="image"
-	         buster="@Model.CoverId"
-	         src="@Model.Cover"
-	         alt="@Model.Title"
-	         width="160" height="160"/>
+	<img class="image"
+	     src="@Model.Cover"
+	     alt="@Model.Title"
+	     width="160" height="160"
+	     loading="lazy"/>
 
 	<header class="title">
 
 		<h3>
-			<cdn-img src="@Model.Rating.Icon"
-			         alt="Rated: @Model.Rating.Name"
-			         title="Rating: @Model.Rating.Name"
-			         class="rating"/>
+			@* TODO: width and height *@
+			<img src="@Model.Rating.Icon"
+			     alt="Rated: @Model.Rating.Name"
+			     title="Rating: @Model.Rating.Name"
+			     class="rating"
+			     loading="lazy"/>
 			<a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">@Model.Title</a>
 		</h3>
 

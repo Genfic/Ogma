@@ -7,11 +7,11 @@
 	{
 		<li class="nav-item">
 			<a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
-				<cdn-img src="@(User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar) ?? "")"
-				         width="30" height="30"
-				         eager="true"
-				         class="avatar"
-				         alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar"/>
+				<img src="@(User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar) ?? "/img/placeholders/ph-250.png")"
+				     width="30" height="30"
+				     class="avatar"
+				     alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar"
+				     loading="lazy" />
 				<span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
 			</a>
 		</li>

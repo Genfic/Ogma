@@ -98,7 +98,12 @@
 		@* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
 
 		<div class="titlebar">
-			<cdn-img src="@Model.Story.Rating.Icon" alt="Rated: @Model.Story.Rating.Name" title="Rating: @Model.Story.Rating.Name" class="rating"/>
+			@* TODO: height and width *@
+			<img src="@Model.Story.Rating.Icon" 
+			     alt="Rated: @Model.Story.Rating.Name" 
+			     title="Rating: @Model.Story.Rating.Name" 
+			     class="rating" 
+			     loading="lazy"/>
 			<span style="display:none" itemprop="contentRating">@Model.Story.Rating.Name</span>
 			<h1 class="title" itemprop="name">@Model.Story.Title</h1>
 		</div>
@@ -113,7 +118,7 @@
 
 		<div class="main">
 
-			<cdn-img src="@Model.Story.Cover" alt="@Model.Story.Title cover image" class="cover" height="160" width="160" itemprop="thumbnailUrl"/>
+			<img src="@Model.Story.Cover" alt="@Model.Story.Title cover image" class="cover" height="160" width="160" itemprop="thumbnailUrl"/>
 
 			<div class="description" itemprop="abstract">
 				<markdown preset="Basic">@Model.Story.Description</markdown>
@@ -234,7 +239,7 @@
 	<div id="x-csrf" data-x-csrf="@csrf"></div>
 
 	<div class="backdrop">
-		<cdn-img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" itemprop="thumbnailUrl"/>
+		<img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" loading="lazy" />
 	</div>
 </div>
 

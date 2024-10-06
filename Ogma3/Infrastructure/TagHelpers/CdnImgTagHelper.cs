@@ -4,11 +4,12 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public sealed class CdnImgTagHelper : TagHelper
 {
-	public string? Src { get; set; }
-	public int? Width { get; set; }
-	public int? Height { get; set; }
-	public bool Eager { get; set; } = false;
-	public string? Buster { get; set; } = null;
+	public required string Src { get; init; }
+	public required int Width { get; init; }
+	public required int Height { get; init; }
+	public required string Alt { get; init; }
+	public bool Eager { get; init; } = false;
+	public string? Buster { get; init; } = null;
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
@@ -16,8 +17,9 @@ public sealed class CdnImgTagHelper : TagHelper
 			? "/img/placeholders/ph-250.png"
 			: Src;
 
-		if (Width.HasValue) output.Attributes.SetAttribute("width", Width ?? Height);
-		if (Height.HasValue) output.Attributes.SetAttribute("height", Height ?? Width);
+		output.Attributes.SetAttribute("width", Width);
+		output.Attributes.SetAttribute("height", Height);
+		output.Attributes.SetAttribute("alt", Alt);
 
 		if (!string.IsNullOrEmpty(Buster)) src += $"?v={Buster}";
 

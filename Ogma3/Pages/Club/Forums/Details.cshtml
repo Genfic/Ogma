@@ -33,8 +33,9 @@
 				<div class="bg" style="background-color: @Model.ClubThread.AuthorRole.Color"></div>
 			</div>
 		}
-
-		<cdn-img src="@Model.ClubThread.AuthorAvatar" alt="@Model.ClubThread.AuthorName's avatar" class="avatar"/>
+		
+		@* TODO: height and width *@
+		<img src="@Model.ClubThread.AuthorAvatar" alt="@Model.ClubThread.AuthorName's avatar" class="avatar"/>
 	</div>
 
 	<div class="main">
