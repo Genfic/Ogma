@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
-using Npgsql;
 using NpgSqlGenerators;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
@@ -81,12 +80,11 @@ public sealed class Startup
 
 		// Database
 		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
-		var npgSourceBuilder = new NpgsqlDataSourceBuilder(conn);
-		var source = npgSourceBuilder.MapPostgresEnums().Build();
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
-				.UseNpgsql(source)
-				.UseModel(ApplicationDbContextModel.Instance))
+				.UseNpgsql(conn, o => o.MapPostgresEnums())
+				.UseModel(ApplicationDbContextModel.Instance)
+			)
 			.AddDatabaseDeveloperPageExceptionFilter();
 
 		// Repositories
@@ -236,8 +234,8 @@ public sealed class Startup
 			});
 
 		// Immediate
-		services.AddHandlers();
-		services.AddBehaviors();
+		services.AddOgma3Handlers();
+		services.AddOgma3Behaviors();
 
 		// OpenAPI
 		services.AddEndpointsApiExplorer();
@@ -347,7 +345,7 @@ public sealed class Startup
 		// OpenAPI
 		app.UseOpenApi();
 		app.UseSwaggerUi(config => {
-			config.TransformToExternalPath = (s, _) => s;
+			config.TransformToExternalPath = (string s, HttpRequest _) => s;
 			config.CustomStylesheetPath = "https://cdn.genfic.net/file/Ogma-net/swagger-dark.css";
 		});
 		

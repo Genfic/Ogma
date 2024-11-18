@@ -113,9 +113,6 @@ public sealed class ApplicationDbContext : IdentityDbContext
 			.HasPostgresExtension("uuid-ossp")
 			.HasPostgresExtension("tsm_system_rows");
 
-		// Register all enums with `[PostgresEnum]` attribute
-		builder.RegisterPostgresEnums();
-
 		// Load model configurations
 		builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
 	}

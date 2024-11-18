@@ -3,12 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Json;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
@@ -18,14 +15,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class ChaptersReadEntityType
+    [EntityFrameworkInternal]
+    public partial class ChaptersReadEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Chapters.ChaptersRead",
                 typeof(ChaptersRead),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 3,
+                navigationCount: 2,
+                foreignKeyCount: 2,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var storyId = runtimeEntityType.AddProperty(
                 "StoryId",
@@ -34,19 +37,6 @@ namespace CompiledModels
                 fieldInfo: typeof(ChaptersRead).GetField("<StoryId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            storyId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             storyId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var userId = runtimeEntityType.AddProperty(
@@ -56,19 +46,6 @@ namespace CompiledModels
                 fieldInfo: typeof(ChaptersRead).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            userId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             userId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var chapters = runtimeEntityType.AddProperty(
@@ -77,36 +54,6 @@ namespace CompiledModels
                 propertyInfo: typeof(ChaptersRead).GetProperty("Chapters", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ChaptersRead).GetField("<Chapters>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            chapters.TypeMapping = NpgsqlArrayTypeMapping<List<long>, List<long>, long>.Default.Clone(
-                comparer: new ListComparer<long>(new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v)),
-                keyComparer: new ValueComparer<List<long>>(
-                    (List<long> v1, List<long> v2) => object.Equals(v1, v2),
-                    (List<long> v) => v.GetHashCode(),
-                    (List<long> v) => v),
-                providerValueComparer: new ValueComparer<List<long>>(
-                    (List<long> v1, List<long> v2) => object.Equals(v1, v2),
-                    (List<long> v) => v.GetHashCode(),
-                    (List<long> v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "bigint[]"),
-                jsonValueReaderWriter: new JsonCollectionReaderWriter<List<long>, List<long>, long>(
-                    JsonInt64ReaderWriter.Instance),
-                elementMapping: LongTypeMapping.Default.Clone(
-                    comparer: new ValueComparer<long>(
-                        (long v1, long v2) => v1 == v2,
-                        (long v) => v.GetHashCode(),
-                        (long v) => v),
-                    keyComparer: new ValueComparer<long>(
-                        (long v1, long v2) => v1 == v2,
-                        (long v) => v.GetHashCode(),
-                        (long v) => v),
-                    providerValueComparer: new ValueComparer<long>(
-                        (long v1, long v2) => v1 == v2,
-                        (long v) => v.GetHashCode(),
-                        (long v) => v)));
             chapters.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(

@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Ratings;
@@ -16,14 +15,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class BlacklistedRatingEntityType
+    [EntityFrameworkInternal]
+    public partial class BlacklistedRatingEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Blacklists.BlacklistedRating",
                 typeof(BlacklistedRating),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 2,
+                navigationCount: 2,
+                foreignKeyCount: 2,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var userId = runtimeEntityType.AddProperty(
                 "UserId",
@@ -32,19 +37,6 @@ namespace CompiledModels
                 fieldInfo: typeof(BlacklistedRating).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            userId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             userId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var ratingId = runtimeEntityType.AddProperty(
@@ -54,19 +46,6 @@ namespace CompiledModels
                 fieldInfo: typeof(BlacklistedRating).GetField("<RatingId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            ratingId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             ratingId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(

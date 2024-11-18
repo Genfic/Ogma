@@ -30,8 +30,8 @@ public sealed class FolderConfiguration : BaseConfiguration<Folder>
 		builder
 			.Property(f => f.AccessLevel)
 			.IsRequired()
-			.HasDefaultValue(EClubMemberRoles.User)
-			.HasSentinel((EClubMemberRoles)(-1));
+			.HasDefaultValue(EClubMemberRoles.User);
+			// TODO: (dotnet/efcore/#35142) .HasSentinel((EClubMemberRoles)MinusOne());
 
 		// NAVIGATION
 

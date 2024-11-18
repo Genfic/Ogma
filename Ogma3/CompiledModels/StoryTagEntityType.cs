@@ -2,9 +2,8 @@
 using System;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
@@ -14,14 +13,20 @@ using Ogma3.Data.Tags;
 
 namespace CompiledModels
 {
-    internal partial class StoryTagEntityType
+    [EntityFrameworkInternal]
+    public partial class StoryTagEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Stories.StoryTag",
                 typeof(StoryTag),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 2,
+                navigationCount: 2,
+                foreignKeyCount: 2,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var storyId = runtimeEntityType.AddProperty(
                 "StoryId",
@@ -30,19 +35,6 @@ namespace CompiledModels
                 fieldInfo: typeof(StoryTag).GetField("<StoryId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            storyId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             storyId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var tagId = runtimeEntityType.AddProperty(
@@ -52,19 +44,6 @@ namespace CompiledModels
                 fieldInfo: typeof(StoryTag).GetField("<TagId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            tagId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             tagId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(

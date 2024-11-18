@@ -2,9 +2,8 @@
 using System;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Users;
@@ -14,14 +13,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class NotificationRecipientsEntityType
+    [EntityFrameworkInternal]
+    public partial class NotificationRecipientsEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Notifications.NotificationRecipients",
                 typeof(NotificationRecipients),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 2,
+                navigationCount: 2,
+                foreignKeyCount: 2,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var notificationId = runtimeEntityType.AddProperty(
                 "NotificationId",
@@ -30,19 +35,6 @@ namespace CompiledModels
                 fieldInfo: typeof(NotificationRecipients).GetField("<NotificationId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            notificationId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             notificationId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var recipientId = runtimeEntityType.AddProperty(
@@ -52,19 +44,6 @@ namespace CompiledModels
                 fieldInfo: typeof(NotificationRecipients).GetField("<RecipientId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            recipientId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             recipientId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(

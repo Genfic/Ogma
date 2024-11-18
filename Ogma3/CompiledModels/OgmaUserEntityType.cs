@@ -3,12 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Json;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
@@ -19,14 +16,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class OgmaUserEntityType
+    [EntityFrameworkInternal]
+    public partial class OgmaUserEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Users.OgmaUser",
                 typeof(OgmaUser),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 21,
+                navigationCount: 8,
+                skipNavigationCount: 7,
+                unnamedIndexCount: 3,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -36,19 +39,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var accessFailedCount = runtimeEntityType.AddProperty(
@@ -57,21 +47,6 @@ namespace CompiledModels
                 propertyInfo: typeof(IdentityUser<long>).GetProperty("AccessFailedCount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityUser<long>).GetField("<AccessFailedCount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0);
-            accessFailedCount.TypeMapping = IntTypeMapping.Default.Clone(
-                comparer: new ValueComparer<int>(
-                    (int v1, int v2) => v1 == v2,
-                    (int v) => v,
-                    (int v) => v),
-                keyComparer: new ValueComparer<int>(
-                    (int v1, int v2) => v1 == v2,
-                    (int v) => v,
-                    (int v) => v),
-                providerValueComparer: new ValueComparer<int>(
-                    (int v1, int v2) => v1 == v2,
-                    (int v) => v,
-                    (int v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "integer"));
             accessFailedCount.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var avatar = runtimeEntityType.AddProperty(
@@ -79,21 +54,6 @@ namespace CompiledModels
                 typeof(string),
                 propertyInfo: typeof(OgmaUser).GetProperty("Avatar", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OgmaUser).GetField("<Avatar>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            avatar.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
             avatar.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var avatarId = runtimeEntityType.AddProperty(
@@ -102,21 +62,6 @@ namespace CompiledModels
                 propertyInfo: typeof(OgmaUser).GetProperty("AvatarId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OgmaUser).GetField("<AvatarId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            avatarId.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
             avatarId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var bio = runtimeEntityType.AddProperty(
@@ -126,628 +71,350 @@ namespace CompiledModels
                 fieldInfo: typeof(OgmaUser).GetField("<Bio>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 10000);
-            bio.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(10000)",
-                    size: 10000));
-            bio.TypeMapping = ((NpgsqlStringTypeMapping)bio.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        bio.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            bio.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var concurrencyStamp = runtimeEntityType.AddProperty(
-            "ConcurrencyStamp",
-            typeof(string),
-            propertyInfo: typeof(IdentityUser<long>).GetProperty("ConcurrencyStamp", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(IdentityUser<long>).GetField("<ConcurrencyStamp>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            nullable: true,
-            concurrencyToken: true);
-        concurrencyStamp.TypeMapping = StringTypeMapping.Default.Clone(
-            comparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            keyComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            providerValueComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                dbType: System.Data.DbType.String));
-        concurrencyStamp.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var concurrencyStamp = runtimeEntityType.AddProperty(
+                "ConcurrencyStamp",
+                typeof(string),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("ConcurrencyStamp", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<ConcurrencyStamp>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                concurrencyToken: true);
+            concurrencyStamp.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var deletedAt = runtimeEntityType.AddProperty(
-            "DeletedAt",
-            typeof(DateTimeOffset?),
-            propertyInfo: typeof(OgmaUser).GetProperty("DeletedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(OgmaUser).GetField("<DeletedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            nullable: true);
-        deletedAt.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-            comparer: new ValueComparer<DateTimeOffset?>(
-                (Nullable<DateTimeOffset> v1, Nullable<DateTimeOffset> v2) => v1.HasValue && v2.HasValue && ((DateTimeOffset)v1).EqualsExact((DateTimeOffset)v2) || !v1.HasValue && !v2.HasValue,
-                (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
-                (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
-            keyComparer: new ValueComparer<DateTimeOffset?>(
-                (Nullable<DateTimeOffset> v1, Nullable<DateTimeOffset> v2) => v1.HasValue && v2.HasValue && ((DateTimeOffset)v1).EqualsExact((DateTimeOffset)v2) || !v1.HasValue && !v2.HasValue,
-                (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
-                (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
-            providerValueComparer: new ValueComparer<DateTimeOffset?>(
-                (Nullable<DateTimeOffset> v1, Nullable<DateTimeOffset> v2) => v1.HasValue && v2.HasValue && ((DateTimeOffset)v1).EqualsExact((DateTimeOffset)v2) || !v1.HasValue && !v2.HasValue,
-                (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
-                (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
-            clrType: typeof(DateTimeOffset),
-            jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
-        deletedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var deletedAt = runtimeEntityType.AddProperty(
+                "DeletedAt",
+                typeof(DateTimeOffset?),
+                propertyInfo: typeof(OgmaUser).GetProperty("DeletedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<DeletedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            deletedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var email = runtimeEntityType.AddProperty(
-            "Email",
-            typeof(string),
-            propertyInfo: typeof(OgmaUser).GetProperty("Email", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(IdentityUser<long>).GetField("<Email>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            maxLength: 254);
-        email.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-            comparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            keyComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            providerValueComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "character varying(254)",
-                size: 254));
-        email.TypeMapping = ((NpgsqlStringTypeMapping)email.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-    email.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var email = runtimeEntityType.AddProperty(
+                "Email",
+                typeof(string),
+                propertyInfo: typeof(OgmaUser).GetProperty("Email", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<Email>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 254);
+            email.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var emailConfirmed = runtimeEntityType.AddProperty(
-        "EmailConfirmed",
-        typeof(bool),
-        propertyInfo: typeof(IdentityUser<long>).GetProperty("EmailConfirmed", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(IdentityUser<long>).GetField("<EmailConfirmed>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        sentinel: false);
-    emailConfirmed.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-        comparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        keyComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        providerValueComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v));
-    emailConfirmed.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var emailConfirmed = runtimeEntityType.AddProperty(
+                "EmailConfirmed",
+                typeof(bool),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("EmailConfirmed", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<EmailConfirmed>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: false);
+            emailConfirmed.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var lastActive = runtimeEntityType.AddProperty(
-        "LastActive",
-        typeof(DateTimeOffset),
-        propertyInfo: typeof(OgmaUser).GetProperty("LastActive", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<LastActive>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        valueGenerated: ValueGenerated.OnAdd,
-        sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-    lastActive.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-        comparer: new ValueComparer<DateTimeOffset>(
-            (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-            (DateTimeOffset v) => v.GetHashCode(),
-            (DateTimeOffset v) => v),
-        keyComparer: new ValueComparer<DateTimeOffset>(
-            (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-            (DateTimeOffset v) => v.GetHashCode(),
-            (DateTimeOffset v) => v),
-        providerValueComparer: new ValueComparer<DateTimeOffset>(
-            (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-            (DateTimeOffset v) => v.GetHashCode(),
-            (DateTimeOffset v) => v),
-        clrType: typeof(DateTimeOffset),
-        jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
-    lastActive.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-    lastActive.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+            var lastActive = runtimeEntityType.AddProperty(
+                "LastActive",
+                typeof(DateTimeOffset),
+                propertyInfo: typeof(OgmaUser).GetProperty("LastActive", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<LastActive>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+            lastActive.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            lastActive.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
-    var links = runtimeEntityType.AddProperty(
-        "Links",
-        typeof(List<string>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Links", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Links>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        valueGenerated: ValueGenerated.OnAdd,
-        maxLength: 5);
-    links.TypeMapping = NpgsqlArrayTypeMapping<List<string>, List<string>, string>.Default.Clone(
-        comparer: new ListComparer<string>(new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v)),
-        keyComparer: new ValueComparer<List<string>>(
-            (List<string> v1, List<string> v2) => object.Equals(v1, v2),
-            (List<string> v) => v.GetHashCode(),
-            (List<string> v) => v),
-        providerValueComparer: new ValueComparer<List<string>>(
-            (List<string> v1, List<string> v2) => object.Equals(v1, v2),
-            (List<string> v) => v.GetHashCode(),
-            (List<string> v) => v),
-        mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "text[]"),
-        jsonValueReaderWriter: new JsonCollectionReaderWriter<List<string>, List<string>, string>(
-            JsonStringReaderWriter.Instance),
-        elementMapping: StringTypeMapping.Default.Clone(
-            comparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            keyComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            providerValueComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                dbType: System.Data.DbType.String)));
-    links.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-    links.AddAnnotation("Relational:DefaultValueSql", "'{}'");
+            var links = runtimeEntityType.AddProperty(
+                "Links",
+                typeof(List<string>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Links", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Links>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                maxLength: 5);
+            links.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            links.AddAnnotation("Relational:DefaultValueSql", "'{}'");
 
-    var lockoutEnabled = runtimeEntityType.AddProperty(
-        "LockoutEnabled",
-        typeof(bool),
-        propertyInfo: typeof(IdentityUser<long>).GetProperty("LockoutEnabled", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(IdentityUser<long>).GetField("<LockoutEnabled>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        sentinel: false);
-    lockoutEnabled.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-        comparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        keyComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        providerValueComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v));
-    lockoutEnabled.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var lockoutEnabled = runtimeEntityType.AddProperty(
+                "LockoutEnabled",
+                typeof(bool),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("LockoutEnabled", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<LockoutEnabled>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: false);
+            lockoutEnabled.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var lockoutEnd = runtimeEntityType.AddProperty(
-        "LockoutEnd",
-        typeof(DateTimeOffset?),
-        propertyInfo: typeof(IdentityUser<long>).GetProperty("LockoutEnd", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(IdentityUser<long>).GetField("<LockoutEnd>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        nullable: true);
-    lockoutEnd.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-        comparer: new ValueComparer<DateTimeOffset?>(
-            (Nullable<DateTimeOffset> v1, Nullable<DateTimeOffset> v2) => v1.HasValue && v2.HasValue && ((DateTimeOffset)v1).EqualsExact((DateTimeOffset)v2) || !v1.HasValue && !v2.HasValue,
-            (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
-            (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
-        keyComparer: new ValueComparer<DateTimeOffset?>(
-            (Nullable<DateTimeOffset> v1, Nullable<DateTimeOffset> v2) => v1.HasValue && v2.HasValue && ((DateTimeOffset)v1).EqualsExact((DateTimeOffset)v2) || !v1.HasValue && !v2.HasValue,
-            (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
-            (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
-        providerValueComparer: new ValueComparer<DateTimeOffset?>(
-            (Nullable<DateTimeOffset> v1, Nullable<DateTimeOffset> v2) => v1.HasValue && v2.HasValue && ((DateTimeOffset)v1).EqualsExact((DateTimeOffset)v2) || !v1.HasValue && !v2.HasValue,
-            (Nullable<DateTimeOffset> v) => v.HasValue ? ((DateTimeOffset)v).GetHashCode() : 0,
-            (Nullable<DateTimeOffset> v) => v.HasValue ? (Nullable<DateTimeOffset>)(DateTimeOffset)v : default(Nullable<DateTimeOffset>)),
-        clrType: typeof(DateTimeOffset),
-        jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
-    lockoutEnd.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var lockoutEnd = runtimeEntityType.AddProperty(
+                "LockoutEnd",
+                typeof(DateTimeOffset?),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("LockoutEnd", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<LockoutEnd>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            lockoutEnd.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var normalizedEmail = runtimeEntityType.AddProperty(
-        "NormalizedEmail",
-        typeof(string),
-        propertyInfo: typeof(OgmaUser).GetProperty("NormalizedEmail", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(IdentityUser<long>).GetField("<NormalizedEmail>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        maxLength: 254);
-    normalizedEmail.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-        comparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        keyComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        providerValueComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "character varying(254)",
-            size: 254));
-    normalizedEmail.TypeMapping = ((NpgsqlStringTypeMapping)normalizedEmail.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-normalizedEmail.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var normalizedEmail = runtimeEntityType.AddProperty(
+                "NormalizedEmail",
+                typeof(string),
+                propertyInfo: typeof(OgmaUser).GetProperty("NormalizedEmail", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<NormalizedEmail>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 254);
+            normalizedEmail.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var normalizedUserName = runtimeEntityType.AddProperty(
-    "NormalizedUserName",
-    typeof(string),
-    propertyInfo: typeof(OgmaUser).GetProperty("NormalizedUserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(IdentityUser<long>).GetField("<NormalizedUserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    maxLength: 20);
-normalizedUserName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-    comparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    keyComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    providerValueComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    mappingInfo: new RelationalTypeMappingInfo(
-        storeTypeName: "character varying(20)",
-        size: 20));
-normalizedUserName.TypeMapping = ((NpgsqlStringTypeMapping)normalizedUserName.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-normalizedUserName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var normalizedUserName = runtimeEntityType.AddProperty(
+                "NormalizedUserName",
+                typeof(string),
+                propertyInfo: typeof(OgmaUser).GetProperty("NormalizedUserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<NormalizedUserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            normalizedUserName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var passwordHash = runtimeEntityType.AddProperty(
-    "PasswordHash",
-    typeof(string),
-    propertyInfo: typeof(IdentityUser<long>).GetProperty("PasswordHash", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(IdentityUser<long>).GetField("<PasswordHash>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    nullable: true);
-passwordHash.TypeMapping = StringTypeMapping.Default.Clone(
-    comparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    keyComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    providerValueComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    mappingInfo: new RelationalTypeMappingInfo(
-        dbType: System.Data.DbType.String));
-passwordHash.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var passwordHash = runtimeEntityType.AddProperty(
+                "PasswordHash",
+                typeof(string),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("PasswordHash", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<PasswordHash>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            passwordHash.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var registrationDate = runtimeEntityType.AddProperty(
-    "RegistrationDate",
-    typeof(DateTimeOffset),
-    propertyInfo: typeof(OgmaUser).GetProperty("RegistrationDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(OgmaUser).GetField("<RegistrationDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    valueGenerated: ValueGenerated.OnAdd,
-    sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-registrationDate.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-    comparer: new ValueComparer<DateTimeOffset>(
-        (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-        (DateTimeOffset v) => v.GetHashCode(),
-        (DateTimeOffset v) => v),
-    keyComparer: new ValueComparer<DateTimeOffset>(
-        (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-        (DateTimeOffset v) => v.GetHashCode(),
-        (DateTimeOffset v) => v),
-    providerValueComparer: new ValueComparer<DateTimeOffset>(
-        (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-        (DateTimeOffset v) => v.GetHashCode(),
-        (DateTimeOffset v) => v),
-    clrType: typeof(DateTimeOffset),
-    jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
-registrationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-registrationDate.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+            var registrationDate = runtimeEntityType.AddProperty(
+                "RegistrationDate",
+                typeof(DateTimeOffset),
+                propertyInfo: typeof(OgmaUser).GetProperty("RegistrationDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<RegistrationDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+            registrationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            registrationDate.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
-var securityStamp = runtimeEntityType.AddProperty(
-    "SecurityStamp",
-    typeof(string),
-    propertyInfo: typeof(IdentityUser<long>).GetProperty("SecurityStamp", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(IdentityUser<long>).GetField("<SecurityStamp>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    nullable: true);
-securityStamp.TypeMapping = StringTypeMapping.Default.Clone(
-    comparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    keyComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    providerValueComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    mappingInfo: new RelationalTypeMappingInfo(
-        dbType: System.Data.DbType.String));
-securityStamp.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var securityStamp = runtimeEntityType.AddProperty(
+                "SecurityStamp",
+                typeof(string),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("SecurityStamp", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<SecurityStamp>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            securityStamp.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var title = runtimeEntityType.AddProperty(
-    "Title",
-    typeof(string),
-    propertyInfo: typeof(OgmaUser).GetProperty("Title", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(OgmaUser).GetField("<Title>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    nullable: true,
-    maxLength: 20);
-title.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-    comparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    keyComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    providerValueComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    mappingInfo: new RelationalTypeMappingInfo(
-        storeTypeName: "character varying(20)",
-        size: 20));
-title.TypeMapping = ((NpgsqlStringTypeMapping)title.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-title.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var title = runtimeEntityType.AddProperty(
+                "Title",
+                typeof(string),
+                propertyInfo: typeof(OgmaUser).GetProperty("Title", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Title>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 20);
+            title.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var twoFactorEnabled = runtimeEntityType.AddProperty(
-    "TwoFactorEnabled",
-    typeof(bool),
-    propertyInfo: typeof(IdentityUser<long>).GetProperty("TwoFactorEnabled", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(IdentityUser<long>).GetField("<TwoFactorEnabled>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    sentinel: false);
-twoFactorEnabled.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-    comparer: new ValueComparer<bool>(
-        (bool v1, bool v2) => v1 == v2,
-        (bool v) => v.GetHashCode(),
-        (bool v) => v),
-    keyComparer: new ValueComparer<bool>(
-        (bool v1, bool v2) => v1 == v2,
-        (bool v) => v.GetHashCode(),
-        (bool v) => v),
-    providerValueComparer: new ValueComparer<bool>(
-        (bool v1, bool v2) => v1 == v2,
-        (bool v) => v.GetHashCode(),
-        (bool v) => v));
-twoFactorEnabled.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var twoFactorEnabled = runtimeEntityType.AddProperty(
+                "TwoFactorEnabled",
+                typeof(bool),
+                propertyInfo: typeof(IdentityUser<long>).GetProperty("TwoFactorEnabled", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<TwoFactorEnabled>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: false);
+            twoFactorEnabled.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var userName = runtimeEntityType.AddProperty(
-    "UserName",
-    typeof(string),
-    propertyInfo: typeof(OgmaUser).GetProperty("UserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(IdentityUser<long>).GetField("<UserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    maxLength: 20);
-userName.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-    comparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    keyComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    providerValueComparer: new ValueComparer<string>(
-        (string v1, string v2) => v1 == v2,
-        (string v) => v.GetHashCode(),
-        (string v) => v),
-    mappingInfo: new RelationalTypeMappingInfo(
-        storeTypeName: "character varying(20)",
-        size: 20));
-userName.TypeMapping = ((NpgsqlStringTypeMapping)userName.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-userName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var userName = runtimeEntityType.AddProperty(
+                "UserName",
+                typeof(string),
+                propertyInfo: typeof(OgmaUser).GetProperty("UserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityUser<long>).GetField("<UserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            userName.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var key = runtimeEntityType.AddKey(
-    new[] { id });
-runtimeEntityType.SetPrimaryKey(key);
+            var key = runtimeEntityType.AddKey(
+                new[] { id });
+            runtimeEntityType.SetPrimaryKey(key);
 
-var index = runtimeEntityType.AddIndex(
-    new[] { lastActive });
+            var index = runtimeEntityType.AddIndex(
+                new[] { lastActive });
 
-var index0 = runtimeEntityType.AddIndex(
-    new[] { normalizedEmail });
-index0.AddAnnotation("Relational:Name", "EmailIndex");
+            var index0 = runtimeEntityType.AddIndex(
+                new[] { normalizedEmail });
+            index0.AddAnnotation("Relational:Name", "EmailIndex");
 
-var index1 = runtimeEntityType.AddIndex(
-    new[] { normalizedUserName },
-    unique: true);
-index1.AddAnnotation("Relational:Name", "UserNameIndex");
+            var index1 = runtimeEntityType.AddIndex(
+                new[] { normalizedUserName },
+                unique: true);
+            index1.AddAnnotation("Relational:Name", "UserNameIndex");
 
-return runtimeEntityType;
-}
+            return runtimeEntityType;
+        }
 
-public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Blockers",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("BlockedUserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<OgmaUser>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Blockers", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Blockers>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+        public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Blockers",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("BlockedUserId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<OgmaUser>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Blockers", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Blockers>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    var inverse = targetEntityType.FindSkipNavigation("Blocking");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
+            var inverse = targetEntityType.FindSkipNavigation("Blocking");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static RuntimeSkipNavigation CreateSkipNavigation2(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Blocking",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("BlockingUserId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<OgmaUser>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Blocking", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Blocking>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var inverse = targetEntityType.FindSkipNavigation("Blockers");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static RuntimeSkipNavigation CreateSkipNavigation3(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Followers",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("FollowedUserId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<OgmaUser>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Followers", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Followers>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var inverse = targetEntityType.FindSkipNavigation("Following");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static RuntimeSkipNavigation CreateSkipNavigation4(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Following",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("FollowingUserId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<OgmaUser>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Following", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Following>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var inverse = targetEntityType.FindSkipNavigation("Followers");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static RuntimeSkipNavigation CreateSkipNavigation5(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Notifications",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("RecipientId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<Notification>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Notifications", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Notifications>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var inverse = targetEntityType.FindSkipNavigation("Recipients");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static RuntimeSkipNavigation CreateSkipNavigation6(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Roles",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("UserId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<OgmaRole>),
+                propertyInfo: typeof(OgmaUser).GetProperty("Roles", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<Roles>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var inverse = targetEntityType.FindSkipNavigation("Users");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static RuntimeSkipNavigation CreateSkipNavigation7(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "SubscribedThreads",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("OgmaUserId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<CommentsThread>),
+                propertyInfo: typeof(OgmaUser).GetProperty("SubscribedThreads", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(OgmaUser).GetField("<SubscribedThreads>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var inverse = targetEntityType.FindSkipNavigation("Subscribers");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+        {
+            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+            runtimeEntityType.AddAnnotation("Relational:Schema", null);
+            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+            runtimeEntityType.AddAnnotation("Relational:TableName", "AspNetUsers");
+            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+            Customize(runtimeEntityType);
+        }
+
+        static partial void Customize(RuntimeEntityType runtimeEntityType);
     }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation2(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Blocking",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("BlockingUserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<OgmaUser>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Blocking", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Blocking>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("Blockers");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation3(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Followers",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("FollowedUserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<OgmaUser>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Followers", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Followers>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("Following");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation4(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Following",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("FollowingUserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<OgmaUser>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Following", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Following>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("Followers");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation5(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Notifications",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("RecipientId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<Notification>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Notifications", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Notifications>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("Recipients");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation6(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Roles",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("UserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<OgmaRole>),
-        propertyInfo: typeof(OgmaUser).GetProperty("Roles", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<Roles>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("Users");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static RuntimeSkipNavigation CreateSkipNavigation7(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "SubscribedThreads",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("OgmaUserId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<CommentsThread>),
-        propertyInfo: typeof(OgmaUser).GetProperty("SubscribedThreads", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(OgmaUser).GetField("<SubscribedThreads>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-    var inverse = targetEntityType.FindSkipNavigation("Subscribers");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
-    }
-
-    return skipNavigation;
-}
-
-public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-{
-    runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-    runtimeEntityType.AddAnnotation("Relational:Schema", null);
-    runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-    runtimeEntityType.AddAnnotation("Relational:TableName", "AspNetUsers");
-    runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-    runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-    Customize(runtimeEntityType);
-}
-
-static partial void Customize(RuntimeEntityType runtimeEntityType);
-}
 }

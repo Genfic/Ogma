@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Users;
 
@@ -16,14 +14,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class ClubMemberEntityType
+    [EntityFrameworkInternal]
+    public partial class ClubMemberEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Clubs.ClubMember",
                 typeof(ClubMember),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 4,
+                navigationCount: 2,
+                foreignKeyCount: 2,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var clubId = runtimeEntityType.AddProperty(
                 "ClubId",
@@ -32,19 +36,6 @@ namespace CompiledModels
                 fieldInfo: typeof(ClubMember).GetField("<ClubId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            clubId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             clubId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var memberId = runtimeEntityType.AddProperty(
@@ -54,19 +45,6 @@ namespace CompiledModels
                 fieldInfo: typeof(ClubMember).GetField("<MemberId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            memberId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             memberId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var memberSince = runtimeEntityType.AddProperty(
@@ -76,21 +54,6 @@ namespace CompiledModels
                 fieldInfo: typeof(ClubMember).GetField("<MemberSince>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
                 sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-            memberSince.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-                comparer: new ValueComparer<DateTimeOffset>(
-                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                    (DateTimeOffset v) => v.GetHashCode(),
-                    (DateTimeOffset v) => v),
-                keyComparer: new ValueComparer<DateTimeOffset>(
-                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                    (DateTimeOffset v) => v.GetHashCode(),
-                    (DateTimeOffset v) => v),
-                providerValueComparer: new ValueComparer<DateTimeOffset>(
-                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                    (DateTimeOffset v) => v.GetHashCode(),
-                    (DateTimeOffset v) => v),
-                clrType: typeof(DateTimeOffset),
-                jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
             memberSince.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
             memberSince.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
@@ -100,24 +63,7 @@ namespace CompiledModels
                 propertyInfo: typeof(ClubMember).GetProperty("Role", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ClubMember).GetField("<Role>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
-                sentinel: ((EClubMemberRoles)(-1)));
-            role.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
-                comparer: new ValueComparer<EClubMemberRoles>(
-                    (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
-                    (EClubMemberRoles v) => v.GetHashCode(),
-                    (EClubMemberRoles v) => v),
-                keyComparer: new ValueComparer<EClubMemberRoles>(
-                    (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
-                    (EClubMemberRoles v) => v.GetHashCode(),
-                    (EClubMemberRoles v) => v),
-                providerValueComparer: new ValueComparer<EClubMemberRoles>(
-                    (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
-                    (EClubMemberRoles v) => v.GetHashCode(),
-                    (EClubMemberRoles v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "e_club_member_roles"),
-                clrType: typeof(EClubMemberRoles),
-                jsonValueReaderWriter: new NpgsqlEnumTypeMapping.JsonPgEnumReaderWriter<EClubMemberRoles>());
+                sentinel: (EClubMemberRoles)0);
             role.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
             role.AddAnnotation("Relational:DefaultValue", EClubMemberRoles.User);
 

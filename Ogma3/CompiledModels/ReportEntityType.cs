@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
@@ -22,14 +20,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class ReportEntityType
+    [EntityFrameworkInternal]
+    public partial class ReportEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Reports.Report",
                 typeof(Report),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 11,
+                navigationCount: 7,
+                foreignKeyCount: 7,
+                unnamedIndexCount: 7,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -39,19 +43,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var blogpostId = runtimeEntityType.AddProperty(
@@ -60,19 +51,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("BlogpostId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<BlogpostId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            blogpostId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
             blogpostId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var chapterId = runtimeEntityType.AddProperty(
@@ -81,19 +59,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("ChapterId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<ChapterId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            chapterId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
             chapterId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var clubId = runtimeEntityType.AddProperty(
@@ -102,19 +67,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("ClubId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<ClubId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            clubId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
             clubId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var commentId = runtimeEntityType.AddProperty(
@@ -123,19 +75,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("CommentId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<CommentId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            commentId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
             commentId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var contentType = runtimeEntityType.AddProperty(
@@ -143,21 +82,6 @@ namespace CompiledModels
                 typeof(string),
                 propertyInfo: typeof(Report).GetProperty("ContentType", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<ContentType>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            contentType.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
             contentType.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var reason = runtimeEntityType.AddProperty(
@@ -165,21 +89,6 @@ namespace CompiledModels
                 typeof(string),
                 propertyInfo: typeof(Report).GetProperty("Reason", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<Reason>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            reason.TypeMapping = StringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    dbType: System.Data.DbType.String));
             reason.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var reportDate = runtimeEntityType.AddProperty(
@@ -189,21 +98,6 @@ namespace CompiledModels
                 fieldInfo: typeof(Report).GetField("<ReportDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
                 sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-            reportDate.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-                comparer: new ValueComparer<DateTimeOffset>(
-                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                    (DateTimeOffset v) => v.GetHashCode(),
-                    (DateTimeOffset v) => v),
-                keyComparer: new ValueComparer<DateTimeOffset>(
-                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                    (DateTimeOffset v) => v.GetHashCode(),
-                    (DateTimeOffset v) => v),
-                providerValueComparer: new ValueComparer<DateTimeOffset>(
-                    (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                    (DateTimeOffset v) => v.GetHashCode(),
-                    (DateTimeOffset v) => v),
-                clrType: typeof(DateTimeOffset),
-                jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
             reportDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
             reportDate.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
@@ -213,19 +107,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("ReporterId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<ReporterId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0L);
-            reporterId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             reporterId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var storyId = runtimeEntityType.AddProperty(
@@ -234,19 +115,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("StoryId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<StoryId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            storyId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
             storyId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var userId = runtimeEntityType.AddProperty(
@@ -255,19 +123,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Report).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Report).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
-            userId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                keyComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-                providerValueComparer: new ValueComparer<long?>(
-                    (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                    (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
             userId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(

@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Folders;
@@ -18,14 +16,21 @@ using Ogma3.Data.Stories;
 
 namespace CompiledModels
 {
-    internal partial class FolderEntityType
+    [EntityFrameworkInternal]
+    public partial class FolderEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Folders.Folder",
                 typeof(Folder),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 6,
+                navigationCount: 1,
+                skipNavigationCount: 1,
+                foreignKeyCount: 1,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -35,19 +40,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var accessLevel = runtimeEntityType.AddProperty(
@@ -56,24 +48,7 @@ namespace CompiledModels
                 propertyInfo: typeof(Folder).GetProperty("AccessLevel", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Folder).GetField("<AccessLevel>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
-                sentinel: (EClubMemberRoles)(-1));
-            accessLevel.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
-                comparer: new ValueComparer<EClubMemberRoles>(
-                    (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
-                    (EClubMemberRoles v) => v.GetHashCode(),
-                    (EClubMemberRoles v) => v),
-                keyComparer: new ValueComparer<EClubMemberRoles>(
-                    (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
-                    (EClubMemberRoles v) => v.GetHashCode(),
-                    (EClubMemberRoles v) => v),
-                providerValueComparer: new ValueComparer<EClubMemberRoles>(
-                    (EClubMemberRoles v1, EClubMemberRoles v2) => object.Equals((object)v1, (object)v2),
-                    (EClubMemberRoles v) => v.GetHashCode(),
-                    (EClubMemberRoles v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "e_club_member_roles"),
-                clrType: typeof(EClubMemberRoles),
-                jsonValueReaderWriter: new NpgsqlEnumTypeMapping.JsonPgEnumReaderWriter<EClubMemberRoles>());
+                sentinel: (EClubMemberRoles)0);
             accessLevel.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
             accessLevel.AddAnnotation("Relational:DefaultValue", EClubMemberRoles.User);
 
@@ -83,19 +58,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Folder).GetProperty("ClubId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Folder).GetField("<ClubId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0L);
-            clubId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             clubId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var description = runtimeEntityType.AddProperty(
@@ -105,172 +67,96 @@ namespace CompiledModels
                 fieldInfo: typeof(Folder).GetField("<Description>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 500);
-            description.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(500)",
-                    size: 500));
-            description.TypeMapping = ((NpgsqlStringTypeMapping)description.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var name = runtimeEntityType.AddProperty(
-            "Name",
-            typeof(string),
-            propertyInfo: typeof(Folder).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Folder).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            maxLength: 20);
-        name.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-            comparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            keyComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            providerValueComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "character varying(20)",
-                size: 20));
-        name.TypeMapping = ((NpgsqlStringTypeMapping)name.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-    name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var name = runtimeEntityType.AddProperty(
+                "Name",
+                typeof(string),
+                propertyInfo: typeof(Folder).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Folder).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var slug = runtimeEntityType.AddProperty(
-        "Slug",
-        typeof(string),
-        propertyInfo: typeof(Folder).GetProperty("Slug", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Folder).GetField("<Slug>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        maxLength: 20);
-    slug.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-        comparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        keyComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        providerValueComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "character varying(20)",
-            size: 20));
-    slug.TypeMapping = ((NpgsqlStringTypeMapping)slug.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-slug.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var slug = runtimeEntityType.AddProperty(
+                "Slug",
+                typeof(string),
+                propertyInfo: typeof(Folder).GetProperty("Slug", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Folder).GetField("<Slug>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            slug.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var storiesCount = runtimeEntityType.AddProperty(
-    "StoriesCount",
-    typeof(int),
-    propertyInfo: typeof(Folder).GetProperty("StoriesCount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(Folder).GetField("<StoriesCount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    valueGenerated: ValueGenerated.OnAdd,
-    sentinel: 0);
-storiesCount.TypeMapping = IntTypeMapping.Default.Clone(
-    comparer: new ValueComparer<int>(
-        (int v1, int v2) => v1 == v2,
-        (int v) => v,
-        (int v) => v),
-    keyComparer: new ValueComparer<int>(
-        (int v1, int v2) => v1 == v2,
-        (int v) => v,
-        (int v) => v),
-    providerValueComparer: new ValueComparer<int>(
-        (int v1, int v2) => v1 == v2,
-        (int v) => v,
-        (int v) => v),
-    mappingInfo: new RelationalTypeMappingInfo(
-        storeTypeName: "integer"));
-storiesCount.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-storiesCount.AddAnnotation("Relational:DefaultValue", 0);
+            var key = runtimeEntityType.AddKey(
+                new[] { id });
+            runtimeEntityType.SetPrimaryKey(key);
 
-var key = runtimeEntityType.AddKey(
-    new[] { id });
-runtimeEntityType.SetPrimaryKey(key);
+            var index = runtimeEntityType.AddIndex(
+                new[] { clubId });
 
-var index = runtimeEntityType.AddIndex(
-    new[] { clubId });
+            return runtimeEntityType;
+        }
 
-return runtimeEntityType;
-}
+        public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ClubId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
 
-public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-{
-    var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ClubId") },
-        principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-        principalEntityType,
-        deleteBehavior: DeleteBehavior.Cascade,
-        required: true);
+            var club = declaringEntityType.AddNavigation("Club",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(Club),
+                propertyInfo: typeof(Folder).GetProperty("Club", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Folder).GetField("<Club>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    var club = declaringEntityType.AddNavigation("Club",
-        runtimeForeignKey,
-        onDependent: true,
-        typeof(Club),
-        propertyInfo: typeof(Folder).GetProperty("Club", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Folder).GetField("<Club>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            var folders = principalEntityType.AddNavigation("Folders",
+                runtimeForeignKey,
+                onDependent: false,
+                typeof(ICollection<Folder>),
+                propertyInfo: typeof(Club).GetProperty("Folders", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Club).GetField("<Folders>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    var folders = principalEntityType.AddNavigation("Folders",
-        runtimeForeignKey,
-        onDependent: false,
-        typeof(ICollection<Folder>),
-        propertyInfo: typeof(Club).GetProperty("Folders", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Club).GetField("<Folders>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            return runtimeForeignKey;
+        }
 
-    return runtimeForeignKey;
-}
+        public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Stories",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("FolderId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<Story>),
+                propertyInfo: typeof(Folder).GetProperty("Stories", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Folder).GetField("<Stories>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Stories",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("FolderId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<Story>),
-        propertyInfo: typeof(Folder).GetProperty("Stories", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Folder).GetField("<Stories>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            var inverse = targetEntityType.FindSkipNavigation("Folders");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
 
-    var inverse = targetEntityType.FindSkipNavigation("Folders");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
+            return skipNavigation;
+        }
+
+        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+        {
+            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+            runtimeEntityType.AddAnnotation("Relational:Schema", null);
+            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+            runtimeEntityType.AddAnnotation("Relational:TableName", "Folders");
+            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+            Customize(runtimeEntityType);
+        }
+
+        static partial void Customize(RuntimeEntityType runtimeEntityType);
     }
-
-    return skipNavigation;
-}
-
-public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-{
-    runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-    runtimeEntityType.AddAnnotation("Relational:Schema", null);
-    runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-    runtimeEntityType.AddAnnotation("Relational:TableName", "Folders");
-    runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-    runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-    Customize(runtimeEntityType);
-}
-
-static partial void Customize(RuntimeEntityType runtimeEntityType);
-}
 }

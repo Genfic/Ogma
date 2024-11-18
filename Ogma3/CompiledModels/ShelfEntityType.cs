@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Icons;
 using Ogma3.Data.Shelves;
@@ -19,14 +17,21 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class ShelfEntityType
+    [EntityFrameworkInternal]
+    public partial class ShelfEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Shelves.Shelf",
                 typeof(Shelf),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 10,
+                navigationCount: 2,
+                skipNavigationCount: 1,
+                foreignKeyCount: 2,
+                unnamedIndexCount: 2,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -36,19 +41,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var color = runtimeEntityType.AddProperty(
@@ -58,296 +50,167 @@ namespace CompiledModels
                 fieldInfo: typeof(Shelf).GetField("<Color>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 7);
-            color.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(7)",
-                    size: 7));
-            color.TypeMapping = ((NpgsqlStringTypeMapping)color.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        color.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            color.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var description = runtimeEntityType.AddProperty(
-            "Description",
-            typeof(string),
-            propertyInfo: typeof(Shelf).GetProperty("Description", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Shelf).GetField("<Description>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            valueGenerated: ValueGenerated.OnAdd,
-            maxLength: 100);
-        description.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-            comparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            keyComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            providerValueComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "character varying(100)",
-                size: 100));
-        description.TypeMapping = ((NpgsqlStringTypeMapping)description.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-    description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-    description.AddAnnotation("Relational:DefaultValue", "");
+            var description = runtimeEntityType.AddProperty(
+                "Description",
+                typeof(string),
+                propertyInfo: typeof(Shelf).GetProperty("Description", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<Description>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                maxLength: 100);
+            description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            description.AddAnnotation("Relational:DefaultValue", "");
 
-    var iconId = runtimeEntityType.AddProperty(
-        "IconId",
-        typeof(long?),
-        propertyInfo: typeof(Shelf).GetProperty("IconId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<IconId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        nullable: true);
-    iconId.TypeMapping = LongTypeMapping.Default.Clone(
-        comparer: new ValueComparer<long?>(
-            (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-            (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-        keyComparer: new ValueComparer<long?>(
-            (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-            (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-        providerValueComparer: new ValueComparer<long?>(
-            (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-            (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-            (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
-    iconId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var iconId = runtimeEntityType.AddProperty(
+                "IconId",
+                typeof(long?),
+                propertyInfo: typeof(Shelf).GetProperty("IconId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<IconId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            iconId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var isDefault = runtimeEntityType.AddProperty(
-        "IsDefault",
-        typeof(bool),
-        propertyInfo: typeof(Shelf).GetProperty("IsDefault", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<IsDefault>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        valueGenerated: ValueGenerated.OnAdd,
-        sentinel: false);
-    isDefault.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-        comparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        keyComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        providerValueComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v));
-    isDefault.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-    isDefault.AddAnnotation("Relational:DefaultValue", false);
+            var isDefault = runtimeEntityType.AddProperty(
+                "IsDefault",
+                typeof(bool),
+                propertyInfo: typeof(Shelf).GetProperty("IsDefault", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<IsDefault>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: false);
+            isDefault.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            isDefault.AddAnnotation("Relational:DefaultValue", false);
 
-    var isPublic = runtimeEntityType.AddProperty(
-        "IsPublic",
-        typeof(bool),
-        propertyInfo: typeof(Shelf).GetProperty("IsPublic", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<IsPublic>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        valueGenerated: ValueGenerated.OnAdd,
-        sentinel: false);
-    isPublic.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-        comparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        keyComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        providerValueComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v));
-    isPublic.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-    isPublic.AddAnnotation("Relational:DefaultValue", false);
+            var isPublic = runtimeEntityType.AddProperty(
+                "IsPublic",
+                typeof(bool),
+                propertyInfo: typeof(Shelf).GetProperty("IsPublic", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<IsPublic>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: false);
+            isPublic.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            isPublic.AddAnnotation("Relational:DefaultValue", false);
 
-    var isQuickAdd = runtimeEntityType.AddProperty(
-        "IsQuickAdd",
-        typeof(bool),
-        propertyInfo: typeof(Shelf).GetProperty("IsQuickAdd", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<IsQuickAdd>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        valueGenerated: ValueGenerated.OnAdd,
-        sentinel: false);
-    isQuickAdd.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-        comparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        keyComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v),
-        providerValueComparer: new ValueComparer<bool>(
-            (bool v1, bool v2) => v1 == v2,
-            (bool v) => v.GetHashCode(),
-            (bool v) => v));
-    isQuickAdd.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-    isQuickAdd.AddAnnotation("Relational:DefaultValue", false);
+            var isQuickAdd = runtimeEntityType.AddProperty(
+                "IsQuickAdd",
+                typeof(bool),
+                propertyInfo: typeof(Shelf).GetProperty("IsQuickAdd", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<IsQuickAdd>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: false);
+            isQuickAdd.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            isQuickAdd.AddAnnotation("Relational:DefaultValue", false);
 
-    var name = runtimeEntityType.AddProperty(
-        "Name",
-        typeof(string),
-        propertyInfo: typeof(Shelf).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        maxLength: 20);
-    name.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-        comparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        keyComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        providerValueComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "character varying(20)",
-            size: 20));
-    name.TypeMapping = ((NpgsqlStringTypeMapping)name.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var name = runtimeEntityType.AddProperty(
+                "Name",
+                typeof(string),
+                propertyInfo: typeof(Shelf).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var ownerId = runtimeEntityType.AddProperty(
-    "OwnerId",
-    typeof(long),
-    propertyInfo: typeof(Shelf).GetProperty("OwnerId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(Shelf).GetField("<OwnerId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    sentinel: 0L);
-ownerId.TypeMapping = LongTypeMapping.Default.Clone(
-    comparer: new ValueComparer<long>(
-        (long v1, long v2) => v1 == v2,
-        (long v) => v.GetHashCode(),
-        (long v) => v),
-    keyComparer: new ValueComparer<long>(
-        (long v1, long v2) => v1 == v2,
-        (long v) => v.GetHashCode(),
-        (long v) => v),
-    providerValueComparer: new ValueComparer<long>(
-        (long v1, long v2) => v1 == v2,
-        (long v) => v.GetHashCode(),
-        (long v) => v));
-ownerId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var ownerId = runtimeEntityType.AddProperty(
+                "OwnerId",
+                typeof(long),
+                propertyInfo: typeof(Shelf).GetProperty("OwnerId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<OwnerId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0L);
+            ownerId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var trackUpdates = runtimeEntityType.AddProperty(
-    "TrackUpdates",
-    typeof(bool),
-    propertyInfo: typeof(Shelf).GetProperty("TrackUpdates", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    fieldInfo: typeof(Shelf).GetField("<TrackUpdates>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-    valueGenerated: ValueGenerated.OnAdd,
-    sentinel: false);
-trackUpdates.TypeMapping = NpgsqlBoolTypeMapping.Default.Clone(
-    comparer: new ValueComparer<bool>(
-        (bool v1, bool v2) => v1 == v2,
-        (bool v) => v.GetHashCode(),
-        (bool v) => v),
-    keyComparer: new ValueComparer<bool>(
-        (bool v1, bool v2) => v1 == v2,
-        (bool v) => v.GetHashCode(),
-        (bool v) => v),
-    providerValueComparer: new ValueComparer<bool>(
-        (bool v1, bool v2) => v1 == v2,
-        (bool v) => v.GetHashCode(),
-        (bool v) => v));
-trackUpdates.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-trackUpdates.AddAnnotation("Relational:DefaultValue", false);
+            var trackUpdates = runtimeEntityType.AddProperty(
+                "TrackUpdates",
+                typeof(bool),
+                propertyInfo: typeof(Shelf).GetProperty("TrackUpdates", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<TrackUpdates>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: false);
+            trackUpdates.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            trackUpdates.AddAnnotation("Relational:DefaultValue", false);
 
-var key = runtimeEntityType.AddKey(
-    new[] { id });
-runtimeEntityType.SetPrimaryKey(key);
+            var key = runtimeEntityType.AddKey(
+                new[] { id });
+            runtimeEntityType.SetPrimaryKey(key);
 
-var index = runtimeEntityType.AddIndex(
-    new[] { iconId });
+            var index = runtimeEntityType.AddIndex(
+                new[] { iconId });
 
-var index0 = runtimeEntityType.AddIndex(
-    new[] { ownerId });
+            var index0 = runtimeEntityType.AddIndex(
+                new[] { ownerId });
 
-return runtimeEntityType;
-}
+            return runtimeEntityType;
+        }
 
-public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-{
-    var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IconId") },
-        principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-        principalEntityType,
-        deleteBehavior: DeleteBehavior.SetNull);
+        public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IconId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.SetNull);
 
-    var icon = declaringEntityType.AddNavigation("Icon",
-        runtimeForeignKey,
-        onDependent: true,
-        typeof(Icon),
-        propertyInfo: typeof(Shelf).GetProperty("Icon", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<Icon>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            var icon = declaringEntityType.AddNavigation("Icon",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(Icon),
+                propertyInfo: typeof(Shelf).GetProperty("Icon", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<Icon>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    return runtimeForeignKey;
-}
+            return runtimeForeignKey;
+        }
 
-public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-{
-    var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("OwnerId") },
-        principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-        principalEntityType,
-        deleteBehavior: DeleteBehavior.Cascade,
-        required: true);
+        public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("OwnerId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
 
-    var owner = declaringEntityType.AddNavigation("Owner",
-        runtimeForeignKey,
-        onDependent: true,
-        typeof(OgmaUser),
-        propertyInfo: typeof(Shelf).GetProperty("Owner", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<Owner>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            var owner = declaringEntityType.AddNavigation("Owner",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(OgmaUser),
+                propertyInfo: typeof(Shelf).GetProperty("Owner", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<Owner>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    return runtimeForeignKey;
-}
+            return runtimeForeignKey;
+        }
 
-public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Stories",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("ShelfId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(ICollection<Story>),
-        propertyInfo: typeof(Shelf).GetProperty("Stories", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Shelf).GetField("<Stories>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+        public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Stories",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("ShelfId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(ICollection<Story>),
+                propertyInfo: typeof(Shelf).GetProperty("Stories", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Shelf).GetField("<Stories>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    var inverse = targetEntityType.FindSkipNavigation("Shelves");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
+            var inverse = targetEntityType.FindSkipNavigation("Shelves");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+        {
+            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+            runtimeEntityType.AddAnnotation("Relational:Schema", null);
+            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+            runtimeEntityType.AddAnnotation("Relational:TableName", "Shelves");
+            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+            Customize(runtimeEntityType);
+        }
+
+        static partial void Customize(RuntimeEntityType runtimeEntityType);
     }
-
-    return skipNavigation;
-}
-
-public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-{
-    runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-    runtimeEntityType.AddAnnotation("Relational:Schema", null);
-    runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-    runtimeEntityType.AddAnnotation("Relational:TableName", "Shelves");
-    runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-    runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-    Customize(runtimeEntityType);
-}
-
-static partial void Customize(RuntimeEntityType runtimeEntityType);
-}
 }

@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
@@ -16,14 +14,19 @@ using Ogma3.Data.Tags;
 
 namespace CompiledModels
 {
-    internal partial class TagEntityType
+    [EntityFrameworkInternal]
+    public partial class TagEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Tags.Tag",
                 typeof(Tag),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 5,
+                skipNavigationCount: 1,
+                unnamedIndexCount: 2,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -33,19 +36,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var description = runtimeEntityType.AddProperty(
@@ -55,151 +45,83 @@ namespace CompiledModels
                 fieldInfo: typeof(Tag).GetField("<Description>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 100);
-            description.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(100)",
-                    size: 100));
-            description.TypeMapping = ((NpgsqlStringTypeMapping)description.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var name = runtimeEntityType.AddProperty(
-            "Name",
-            typeof(string),
-            propertyInfo: typeof(Tag).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Tag).GetField("_name", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            maxLength: 20);
-        name.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-            comparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            keyComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            providerValueComparer: new ValueComparer<string>(
-                (string v1, string v2) => v1 == v2,
-                (string v) => v.GetHashCode(),
-                (string v) => v),
-            mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "character varying(20)",
-                size: 20));
-        name.TypeMapping = ((NpgsqlStringTypeMapping)name.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-    name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var name = runtimeEntityType.AddProperty(
+                "Name",
+                typeof(string),
+                propertyInfo: typeof(Tag).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Tag).GetField("_name", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var @namespace = runtimeEntityType.AddProperty(
-        "Namespace",
-        typeof(ETagNamespace?),
-        propertyInfo: typeof(Tag).GetProperty("Namespace", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Tag).GetField("<Namespace>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        nullable: true);
-    @namespace.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
-        comparer: new ValueComparer<ETagNamespace?>(
-            (Nullable<ETagNamespace> v1, Nullable<ETagNamespace> v2) => v1.HasValue && v2.HasValue && object.Equals((object)(ETagNamespace)v1, (object)(ETagNamespace)v2) || !v1.HasValue && !v2.HasValue,
-            (Nullable<ETagNamespace> v) => v.HasValue ? ((ETagNamespace)v).GetHashCode() : 0,
-            (Nullable<ETagNamespace> v) => v.HasValue ? (Nullable<ETagNamespace>)(ETagNamespace)v : default(Nullable<ETagNamespace>)),
-        keyComparer: new ValueComparer<ETagNamespace?>(
-            (Nullable<ETagNamespace> v1, Nullable<ETagNamespace> v2) => v1.HasValue && v2.HasValue && object.Equals((object)(ETagNamespace)v1, (object)(ETagNamespace)v2) || !v1.HasValue && !v2.HasValue,
-            (Nullable<ETagNamespace> v) => v.HasValue ? ((ETagNamespace)v).GetHashCode() : 0,
-            (Nullable<ETagNamespace> v) => v.HasValue ? (Nullable<ETagNamespace>)(ETagNamespace)v : default(Nullable<ETagNamespace>)),
-        providerValueComparer: new ValueComparer<ETagNamespace?>(
-            (Nullable<ETagNamespace> v1, Nullable<ETagNamespace> v2) => v1.HasValue && v2.HasValue && object.Equals((object)(ETagNamespace)v1, (object)(ETagNamespace)v2) || !v1.HasValue && !v2.HasValue,
-            (Nullable<ETagNamespace> v) => v.HasValue ? ((ETagNamespace)v).GetHashCode() : 0,
-            (Nullable<ETagNamespace> v) => v.HasValue ? (Nullable<ETagNamespace>)(ETagNamespace)v : default(Nullable<ETagNamespace>)),
-        mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "e_tag_namespace"),
-        clrType: typeof(ETagNamespace),
-        jsonValueReaderWriter: new NpgsqlEnumTypeMapping.JsonPgEnumReaderWriter<ETagNamespace>());
-    @namespace.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var @namespace = runtimeEntityType.AddProperty(
+                "Namespace",
+                typeof(ETagNamespace?),
+                propertyInfo: typeof(Tag).GetProperty("Namespace", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Tag).GetField("<Namespace>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            @namespace.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-    var slug = runtimeEntityType.AddProperty(
-        "Slug",
-        typeof(string),
-        propertyInfo: typeof(Tag).GetProperty("Slug", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Tag).GetField("<Slug>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        maxLength: 20);
-    slug.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-        comparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        keyComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        providerValueComparer: new ValueComparer<string>(
-            (string v1, string v2) => v1 == v2,
-            (string v) => v.GetHashCode(),
-            (string v) => v),
-        mappingInfo: new RelationalTypeMappingInfo(
-            storeTypeName: "character varying(20)",
-            size: 20));
-    slug.TypeMapping = ((NpgsqlStringTypeMapping)slug.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-slug.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var slug = runtimeEntityType.AddProperty(
+                "Slug",
+                typeof(string),
+                propertyInfo: typeof(Tag).GetProperty("Slug", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Tag).GetField("<Slug>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20);
+            slug.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-var key = runtimeEntityType.AddKey(
-    new[] { id });
-runtimeEntityType.SetPrimaryKey(key);
+            var key = runtimeEntityType.AddKey(
+                new[] { id });
+            runtimeEntityType.SetPrimaryKey(key);
 
-var index = runtimeEntityType.AddIndex(
-    new[] { name });
+            var index = runtimeEntityType.AddIndex(
+                new[] { name });
 
-var index0 = runtimeEntityType.AddIndex(
-    new[] { name, @namespace },
-    unique: true);
+            var index0 = runtimeEntityType.AddIndex(
+                new[] { name, @namespace },
+                unique: true);
 
-return runtimeEntityType;
-}
+            return runtimeEntityType;
+        }
 
-public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
-{
-    var skipNavigation = declaringEntityType.AddSkipNavigation(
-        "Stories",
-        targetEntityType,
-        joinEntityType.FindForeignKey(
-            new[] { joinEntityType.FindProperty("TagId") },
-            declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
-            declaringEntityType),
-        true,
-        false,
-        typeof(IEnumerable<Story>),
-        propertyInfo: typeof(Tag).GetProperty("Stories", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-        fieldInfo: typeof(Tag).GetField("<Stories>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+        public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)
+        {
+            var skipNavigation = declaringEntityType.AddSkipNavigation(
+                "Stories",
+                targetEntityType,
+                joinEntityType.FindForeignKey(
+                    new[] { joinEntityType.FindProperty("TagId") },
+                    declaringEntityType.FindKey(new[] { declaringEntityType.FindProperty("Id") }),
+                    declaringEntityType),
+                true,
+                false,
+                typeof(IEnumerable<Story>),
+                propertyInfo: typeof(Tag).GetProperty("Stories", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Tag).GetField("<Stories>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-    var inverse = targetEntityType.FindSkipNavigation("Tags");
-    if (inverse != null)
-    {
-        skipNavigation.Inverse = inverse;
-        inverse.Inverse = skipNavigation;
+            var inverse = targetEntityType.FindSkipNavigation("Tags");
+            if (inverse != null)
+            {
+                skipNavigation.Inverse = inverse;
+                inverse.Inverse = skipNavigation;
+            }
+
+            return skipNavigation;
+        }
+
+        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+        {
+            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+            runtimeEntityType.AddAnnotation("Relational:Schema", null);
+            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+            runtimeEntityType.AddAnnotation("Relational:TableName", "Tags");
+            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+            Customize(runtimeEntityType);
+        }
+
+        static partial void Customize(RuntimeEntityType runtimeEntityType);
     }
-
-    return skipNavigation;
-}
-
-public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-{
-    runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-    runtimeEntityType.AddAnnotation("Relational:Schema", null);
-    runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-    runtimeEntityType.AddAnnotation("Relational:TableName", "Tags");
-    runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-    runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-    Customize(runtimeEntityType);
-}
-
-static partial void Customize(RuntimeEntityType runtimeEntityType);
-}
 }

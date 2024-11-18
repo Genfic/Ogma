@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Comments;
 
@@ -16,14 +14,20 @@ using Ogma3.Data.Comments;
 
 namespace CompiledModels
 {
-    internal partial class CommentRevisionEntityType
+    [EntityFrameworkInternal]
+    public partial class CommentRevisionEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Comments.CommentRevision",
                 typeof(CommentRevision),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 4,
+                navigationCount: 1,
+                foreignKeyCount: 1,
+                unnamedIndexCount: 1,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -33,19 +37,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var body = runtimeEntityType.AddProperty(
@@ -54,118 +45,73 @@ namespace CompiledModels
                 propertyInfo: typeof(CommentRevision).GetProperty("Body", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(CommentRevision).GetField("<Body>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 maxLength: 5000);
-            body.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(5000)",
-                    size: 5000));
-            body.TypeMapping = ((NpgsqlStringTypeMapping)body.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        body.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            body.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var editTime = runtimeEntityType.AddProperty(
-            "EditTime",
-            typeof(DateTimeOffset),
-            propertyInfo: typeof(CommentRevision).GetProperty("EditTime", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(CommentRevision).GetField("<EditTime>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            valueGenerated: ValueGenerated.OnAdd,
-            sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-        editTime.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-            comparer: new ValueComparer<DateTimeOffset>(
-                (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                (DateTimeOffset v) => v.GetHashCode(),
-                (DateTimeOffset v) => v),
-            keyComparer: new ValueComparer<DateTimeOffset>(
-                (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                (DateTimeOffset v) => v.GetHashCode(),
-                (DateTimeOffset v) => v),
-            providerValueComparer: new ValueComparer<DateTimeOffset>(
-                (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                (DateTimeOffset v) => v.GetHashCode(),
-                (DateTimeOffset v) => v),
-            clrType: typeof(DateTimeOffset),
-            jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
-        editTime.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-        editTime.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+            var editTime = runtimeEntityType.AddProperty(
+                "EditTime",
+                typeof(DateTimeOffset),
+                propertyInfo: typeof(CommentRevision).GetProperty("EditTime", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentRevision).GetField("<EditTime>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+            editTime.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            editTime.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
-        var parentId = runtimeEntityType.AddProperty(
-            "ParentId",
-            typeof(long),
-            propertyInfo: typeof(CommentRevision).GetProperty("ParentId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(CommentRevision).GetField("<ParentId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            sentinel: 0L);
-        parentId.TypeMapping = LongTypeMapping.Default.Clone(
-            comparer: new ValueComparer<long>(
-                (long v1, long v2) => v1 == v2,
-                (long v) => v.GetHashCode(),
-                (long v) => v),
-            keyComparer: new ValueComparer<long>(
-                (long v1, long v2) => v1 == v2,
-                (long v) => v.GetHashCode(),
-                (long v) => v),
-            providerValueComparer: new ValueComparer<long>(
-                (long v1, long v2) => v1 == v2,
-                (long v) => v.GetHashCode(),
-                (long v) => v));
-        parentId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var parentId = runtimeEntityType.AddProperty(
+                "ParentId",
+                typeof(long),
+                propertyInfo: typeof(CommentRevision).GetProperty("ParentId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentRevision).GetField("<ParentId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0L);
+            parentId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var key = runtimeEntityType.AddKey(
-            new[] { id });
-        runtimeEntityType.SetPrimaryKey(key);
+            var key = runtimeEntityType.AddKey(
+                new[] { id });
+            runtimeEntityType.SetPrimaryKey(key);
 
-        var index = runtimeEntityType.AddIndex(
-            new[] { parentId });
+            var index = runtimeEntityType.AddIndex(
+                new[] { parentId });
 
-        return runtimeEntityType;
+            return runtimeEntityType;
+        }
+
+        public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ParentId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
+
+            var parent = declaringEntityType.AddNavigation("Parent",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(Comment),
+                propertyInfo: typeof(CommentRevision).GetProperty("Parent", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentRevision).GetField("<Parent>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var revisions = principalEntityType.AddNavigation("Revisions",
+                runtimeForeignKey,
+                onDependent: false,
+                typeof(IList<CommentRevision>),
+                propertyInfo: typeof(Comment).GetProperty("Revisions", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<Revisions>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            return runtimeForeignKey;
+        }
+
+        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+        {
+            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+            runtimeEntityType.AddAnnotation("Relational:Schema", null);
+            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+            runtimeEntityType.AddAnnotation("Relational:TableName", "CommentRevisions");
+            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+            Customize(runtimeEntityType);
+        }
+
+        static partial void Customize(RuntimeEntityType runtimeEntityType);
     }
-
-    public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-    {
-        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ParentId") },
-            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-            principalEntityType,
-            deleteBehavior: DeleteBehavior.Cascade,
-            required: true);
-
-        var parent = declaringEntityType.AddNavigation("Parent",
-            runtimeForeignKey,
-            onDependent: true,
-            typeof(Comment),
-            propertyInfo: typeof(CommentRevision).GetProperty("Parent", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(CommentRevision).GetField("<Parent>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-        var revisions = principalEntityType.AddNavigation("Revisions",
-            runtimeForeignKey,
-            onDependent: false,
-            typeof(IList<CommentRevision>),
-            propertyInfo: typeof(Comment).GetProperty("Revisions", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<Revisions>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-        return runtimeForeignKey;
-    }
-
-    public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-    {
-        runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-        runtimeEntityType.AddAnnotation("Relational:Schema", null);
-        runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-        runtimeEntityType.AddAnnotation("Relational:TableName", "CommentRevisions");
-        runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-        runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-        Customize(runtimeEntityType);
-    }
-
-    static partial void Customize(RuntimeEntityType runtimeEntityType);
-}
 }

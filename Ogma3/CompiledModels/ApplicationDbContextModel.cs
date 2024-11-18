@@ -35,7 +35,7 @@ namespace CompiledModels
             }
 
             model.Customize();
-            _instance = model;
+            _instance = (ApplicationDbContextModel)model.FinalizeModel();
         }
 
         private static ApplicationDbContextModel _instance;

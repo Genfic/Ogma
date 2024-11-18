@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Comments;
 using Ogma3.Data.CommentsThreads;
@@ -18,14 +16,20 @@ using Ogma3.Data.Users;
 
 namespace CompiledModels
 {
-    internal partial class CommentEntityType
+    [EntityFrameworkInternal]
+    public partial class CommentEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.Comments.Comment",
                 typeof(Comment),
-                baseEntityType);
+                baseEntityType,
+                propertyCount: 7,
+                navigationCount: 5,
+                foreignKeyCount: 3,
+                unnamedIndexCount: 3,
+                keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -35,19 +39,6 @@ namespace CompiledModels
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            id.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             var authorId = runtimeEntityType.AddProperty(
@@ -56,19 +47,6 @@ namespace CompiledModels
                 propertyInfo: typeof(Comment).GetProperty("AuthorId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Comment).GetField("<AuthorId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0L);
-            authorId.TypeMapping = LongTypeMapping.Default.Clone(
-                comparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                keyComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v),
-                providerValueComparer: new ValueComparer<long>(
-                    (long v1, long v2) => v1 == v2,
-                    (long v) => v.GetHashCode(),
-                    (long v) => v));
             authorId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var body = runtimeEntityType.AddProperty(
@@ -77,204 +55,129 @@ namespace CompiledModels
                 propertyInfo: typeof(Comment).GetProperty("Body", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Comment).GetField("<Body>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 maxLength: 5000);
-            body.TypeMapping = NpgsqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "character varying(5000)",
-                    size: 5000));
-            body.TypeMapping = ((NpgsqlStringTypeMapping)body.TypeMapping).Clone(npgsqlDbType: NpgsqlTypes.NpgsqlDbType.Varchar);
-        body.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            body.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var commentsThreadId = runtimeEntityType.AddProperty(
-            "CommentsThreadId",
-            typeof(long),
-            propertyInfo: typeof(Comment).GetProperty("CommentsThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<CommentsThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            sentinel: 0L);
-        commentsThreadId.TypeMapping = LongTypeMapping.Default.Clone(
-            comparer: new ValueComparer<long>(
-                (long v1, long v2) => v1 == v2,
-                (long v) => v.GetHashCode(),
-                (long v) => v),
-            keyComparer: new ValueComparer<long>(
-                (long v1, long v2) => v1 == v2,
-                (long v) => v.GetHashCode(),
-                (long v) => v),
-            providerValueComparer: new ValueComparer<long>(
-                (long v1, long v2) => v1 == v2,
-                (long v) => v.GetHashCode(),
-                (long v) => v));
-        commentsThreadId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var commentsThreadId = runtimeEntityType.AddProperty(
+                "CommentsThreadId",
+                typeof(long),
+                propertyInfo: typeof(Comment).GetProperty("CommentsThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<CommentsThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0L);
+            commentsThreadId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var dateTime = runtimeEntityType.AddProperty(
-            "DateTime",
-            typeof(DateTimeOffset),
-            propertyInfo: typeof(Comment).GetProperty("DateTime", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<DateTime>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            valueGenerated: ValueGenerated.OnAdd,
-            sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-        dateTime.TypeMapping = NpgsqlTimestampTzTypeMapping.Default.Clone(
-            comparer: new ValueComparer<DateTimeOffset>(
-                (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                (DateTimeOffset v) => v.GetHashCode(),
-                (DateTimeOffset v) => v),
-            keyComparer: new ValueComparer<DateTimeOffset>(
-                (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                (DateTimeOffset v) => v.GetHashCode(),
-                (DateTimeOffset v) => v),
-            providerValueComparer: new ValueComparer<DateTimeOffset>(
-                (DateTimeOffset v1, DateTimeOffset v2) => v1.EqualsExact(v2),
-                (DateTimeOffset v) => v.GetHashCode(),
-                (DateTimeOffset v) => v),
-            clrType: typeof(DateTimeOffset),
-            jsonValueReaderWriter: new NpgsqlTimestampTzTypeMapping.NpgsqlJsonTimestampTzDateTimeOffsetReaderWriter());
-        dateTime.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
-        dateTime.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+            var dateTime = runtimeEntityType.AddProperty(
+                "DateTime",
+                typeof(DateTimeOffset),
+                propertyInfo: typeof(Comment).GetProperty("DateTime", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<DateTime>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+            dateTime.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            dateTime.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
-        var deletedBy = runtimeEntityType.AddProperty(
-            "DeletedBy",
-            typeof(EDeletedBy?),
-            propertyInfo: typeof(Comment).GetProperty("DeletedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<DeletedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            nullable: true);
-        deletedBy.TypeMapping = NpgsqlEnumTypeMapping.Default.Clone(
-            comparer: new ValueComparer<EDeletedBy?>(
-                (Nullable<EDeletedBy> v1, Nullable<EDeletedBy> v2) => v1.HasValue && v2.HasValue && object.Equals((object)(EDeletedBy)v1, (object)(EDeletedBy)v2) || !v1.HasValue && !v2.HasValue,
-                (Nullable<EDeletedBy> v) => v.HasValue ? ((EDeletedBy)v).GetHashCode() : 0,
-                (Nullable<EDeletedBy> v) => v.HasValue ? (Nullable<EDeletedBy>)(EDeletedBy)v : default(Nullable<EDeletedBy>)),
-            keyComparer: new ValueComparer<EDeletedBy?>(
-                (Nullable<EDeletedBy> v1, Nullable<EDeletedBy> v2) => v1.HasValue && v2.HasValue && object.Equals((object)(EDeletedBy)v1, (object)(EDeletedBy)v2) || !v1.HasValue && !v2.HasValue,
-                (Nullable<EDeletedBy> v) => v.HasValue ? ((EDeletedBy)v).GetHashCode() : 0,
-                (Nullable<EDeletedBy> v) => v.HasValue ? (Nullable<EDeletedBy>)(EDeletedBy)v : default(Nullable<EDeletedBy>)),
-            providerValueComparer: new ValueComparer<EDeletedBy?>(
-                (Nullable<EDeletedBy> v1, Nullable<EDeletedBy> v2) => v1.HasValue && v2.HasValue && object.Equals((object)(EDeletedBy)v1, (object)(EDeletedBy)v2) || !v1.HasValue && !v2.HasValue,
-                (Nullable<EDeletedBy> v) => v.HasValue ? ((EDeletedBy)v).GetHashCode() : 0,
-                (Nullable<EDeletedBy> v) => v.HasValue ? (Nullable<EDeletedBy>)(EDeletedBy)v : default(Nullable<EDeletedBy>)),
-            mappingInfo: new RelationalTypeMappingInfo(
-                storeTypeName: "e_deleted_by"),
-            clrType: typeof(EDeletedBy),
-            jsonValueReaderWriter: new NpgsqlEnumTypeMapping.JsonPgEnumReaderWriter<EDeletedBy>());
-        deletedBy.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var deletedBy = runtimeEntityType.AddProperty(
+                "DeletedBy",
+                typeof(EDeletedBy?),
+                propertyInfo: typeof(Comment).GetProperty("DeletedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<DeletedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            deletedBy.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var deletedByUserId = runtimeEntityType.AddProperty(
-            "DeletedByUserId",
-            typeof(long?),
-            propertyInfo: typeof(Comment).GetProperty("DeletedByUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<DeletedByUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            nullable: true);
-        deletedByUserId.TypeMapping = LongTypeMapping.Default.Clone(
-            comparer: new ValueComparer<long?>(
-                (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-            keyComparer: new ValueComparer<long?>(
-                (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)),
-            providerValueComparer: new ValueComparer<long?>(
-                (Nullable<long> v1, Nullable<long> v2) => v1.HasValue && v2.HasValue && (long)v1 == (long)v2 || !v1.HasValue && !v2.HasValue,
-                (Nullable<long> v) => v.HasValue ? ((long)v).GetHashCode() : 0,
-                (Nullable<long> v) => v.HasValue ? (Nullable<long>)(long)v : default(Nullable<long>)));
-        deletedByUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            var deletedByUserId = runtimeEntityType.AddProperty(
+                "DeletedByUserId",
+                typeof(long?),
+                propertyInfo: typeof(Comment).GetProperty("DeletedByUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<DeletedByUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            deletedByUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var key = runtimeEntityType.AddKey(
-            new[] { id });
-        runtimeEntityType.SetPrimaryKey(key);
+            var key = runtimeEntityType.AddKey(
+                new[] { id });
+            runtimeEntityType.SetPrimaryKey(key);
 
-        var index = runtimeEntityType.AddIndex(
-            new[] { authorId });
+            var index = runtimeEntityType.AddIndex(
+                new[] { authorId });
 
-        var index0 = runtimeEntityType.AddIndex(
-            new[] { commentsThreadId });
+            var index0 = runtimeEntityType.AddIndex(
+                new[] { commentsThreadId });
 
-        var index1 = runtimeEntityType.AddIndex(
-            new[] { deletedByUserId });
+            var index1 = runtimeEntityType.AddIndex(
+                new[] { deletedByUserId });
 
-        return runtimeEntityType;
+            return runtimeEntityType;
+        }
+
+        public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("AuthorId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
+
+            var author = declaringEntityType.AddNavigation("Author",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(OgmaUser),
+                propertyInfo: typeof(Comment).GetProperty("Author", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<Author>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            return runtimeForeignKey;
+        }
+
+        public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("CommentsThreadId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
+
+            var commentsThread = declaringEntityType.AddNavigation("CommentsThread",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(CommentsThread),
+                propertyInfo: typeof(Comment).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var comments = principalEntityType.AddNavigation("Comments",
+                runtimeForeignKey,
+                onDependent: false,
+                typeof(IList<Comment>),
+                propertyInfo: typeof(CommentsThread).GetProperty("Comments", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentsThread).GetField("<Comments>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            return runtimeForeignKey;
+        }
+
+        public static RuntimeForeignKey CreateForeignKey3(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("DeletedByUserId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType);
+
+            var deletedByUser = declaringEntityType.AddNavigation("DeletedByUser",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(OgmaUser),
+                propertyInfo: typeof(Comment).GetProperty("DeletedByUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<DeletedByUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            return runtimeForeignKey;
+        }
+
+        public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
+        {
+            runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
+            runtimeEntityType.AddAnnotation("Relational:Schema", null);
+            runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
+            runtimeEntityType.AddAnnotation("Relational:TableName", "Comments");
+            runtimeEntityType.AddAnnotation("Relational:ViewName", null);
+            runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
+
+            Customize(runtimeEntityType);
+        }
+
+        static partial void Customize(RuntimeEntityType runtimeEntityType);
     }
-
-    public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-    {
-        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("AuthorId") },
-            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-            principalEntityType,
-            deleteBehavior: DeleteBehavior.Cascade,
-            required: true);
-
-        var author = declaringEntityType.AddNavigation("Author",
-            runtimeForeignKey,
-            onDependent: true,
-            typeof(OgmaUser),
-            propertyInfo: typeof(Comment).GetProperty("Author", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<Author>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-        return runtimeForeignKey;
-    }
-
-    public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-    {
-        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("CommentsThreadId") },
-            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-            principalEntityType,
-            deleteBehavior: DeleteBehavior.Cascade,
-            required: true);
-
-        var commentsThread = declaringEntityType.AddNavigation("CommentsThread",
-            runtimeForeignKey,
-            onDependent: true,
-            typeof(CommentsThread),
-            propertyInfo: typeof(Comment).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-        var comments = principalEntityType.AddNavigation("Comments",
-            runtimeForeignKey,
-            onDependent: false,
-            typeof(IList<Comment>),
-            propertyInfo: typeof(CommentsThread).GetProperty("Comments", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(CommentsThread).GetField("<Comments>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-        return runtimeForeignKey;
-    }
-
-    public static RuntimeForeignKey CreateForeignKey3(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-    {
-        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("DeletedByUserId") },
-            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-            principalEntityType);
-
-        var deletedByUser = declaringEntityType.AddNavigation("DeletedByUser",
-            runtimeForeignKey,
-            onDependent: true,
-            typeof(OgmaUser),
-            propertyInfo: typeof(Comment).GetProperty("DeletedByUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Comment).GetField("<DeletedByUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-        return runtimeForeignKey;
-    }
-
-    public static void CreateAnnotations(RuntimeEntityType runtimeEntityType)
-    {
-        runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
-        runtimeEntityType.AddAnnotation("Relational:Schema", null);
-        runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-        runtimeEntityType.AddAnnotation("Relational:TableName", "Comments");
-        runtimeEntityType.AddAnnotation("Relational:ViewName", null);
-        runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
-
-        Customize(runtimeEntityType);
-    }
-
-    static partial void Customize(RuntimeEntityType runtimeEntityType);
-}
 }

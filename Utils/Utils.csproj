@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>12</LangVersion>
+		<TargetFramework>net9.0</TargetFramework>
+		<LangVersion>13</LangVersion>
 		<Nullable>enable</Nullable>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Flurl" Version="4.0.0" />
-		<PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.11.0-beta1.23525.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

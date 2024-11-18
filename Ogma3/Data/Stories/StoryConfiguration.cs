@@ -44,8 +44,8 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 		builder
 			.Property(s => s.Status)
 			.IsRequired()
-			.HasDefaultValue(EStoryStatus.InProgress)
-			.HasSentinel(EStoryStatus.Unspecified);
+			.HasDefaultValue(EStoryStatus.InProgress);
+			// TODO: (dotnet/efcore/#35142) .HasSentinel(EStoryStatus.Unspecified);
 
 		builder
 			.Property(s => s.WordCount)
