@@ -10,7 +10,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Api.Rss;
 
-using ReturnType = Results<RssResult, ServerError, NotFound>;
+using ReturnType = Results<RssResult, InternalServerError, NotFound>;
 
 [Handler]
 [MapGet("rss/story/{storyId:long}/chapters")]
@@ -34,7 +34,7 @@ public static partial class GetChaptersRssFeed
 		CancellationToken cancellationToken
 	)
 	{
-		if (contextAccessor.HttpContext is not {} httpContext) return ServerError.Instance();
+		if (contextAccessor.HttpContext is not {} httpContext) return TypedResults.InternalServerError();
 
 		var storyResult = await context.Stories
 			.Where(s => !s.Rating.BlacklistedByDefault)

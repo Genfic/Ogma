@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Areas.Admin.Api.V1.Cache;
 
-using ReturnType = Results<Ok<int>, ServerError>;
+using ReturnType = Results<Ok<int>, InternalServerError<string>>;
 
 [Handler]
 [MapGet("admin/api/cache")]
@@ -29,6 +29,6 @@ public static partial class GetCache
 			return TypedResults.Ok(mc.Count);
 		}
 
-		return ServerError.Instance("Could not count cache elements!");
+		return TypedResults.InternalServerError("Could not count cache elements!");
 	}
 }

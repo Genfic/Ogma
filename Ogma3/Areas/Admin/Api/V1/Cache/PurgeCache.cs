@@ -3,12 +3,11 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Caching.Memory;
-using Ogma3.Infrastructure.IResults;
 using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Areas.Admin.Api.V1.Cache;
 
-using ReturnType = Results<Ok, ServerError>;
+using ReturnType = Results<Ok, InternalServerError<string>>;
 
 [Handler]
 [MapDelete("admin/api/cache")]
@@ -32,6 +31,6 @@ public static partial class PurgeCache
 		}
 
 		logger.LogWarning("Could not purge cache!");
-		return ServerError.Instance("Could not purge cache!");
+		return TypedResults.InternalServerError("Could not purge cache!");
 	}
 }
