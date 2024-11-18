@@ -30,7 +30,7 @@ public sealed class DetailsModel(ClubRepository clubRepo, ApplicationDbContext c
 	public required ThreadDetails ClubThread { get; set; }
 	public required ClubBar ClubBar { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(long threadId)
+	public async Task<IActionResult> OnGetAsync(long threadId, long clubId)
 	{
 		var clubThread = await context.ClubThreads
 			.Where(ct => ct.Id == threadId)

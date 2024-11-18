@@ -19,7 +19,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		// Get logged in user
+		// Get logged-in user
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
@@ -98,7 +98,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 	{
 		if (!ModelState.IsValid) return await OnGetAsync(id);
 
-		// Get logged in user
+		// Get logged-in user
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
@@ -116,6 +116,6 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 		if (rows <= 0) return NotFound();
 
-		return RedirectToPage("./Post", new { id, slug = Input.Title.Trim().Friendlify() });
+		return Routes.Pages.Blog_Post.Get(id, Input.Title.Trim().Friendlify()).Redirect(this);
 	}
 }

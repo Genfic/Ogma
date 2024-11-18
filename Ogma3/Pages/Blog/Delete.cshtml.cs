@@ -52,7 +52,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 	{
 		if (id is null) return NotFound();
 
-		// Get logged in user
+		// Get logged-in user
 		var uname = User.GetUsername();
 		if (uname is null) return Unauthorized();
 
@@ -63,6 +63,6 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 
 		if (rows <= 0) return NotFound();
 
-		return RedirectToPage("/User/Blog", new { name = uname });
+		return Routes.Pages.User_Blog.Get(uname).Redirect(this);
 	}
 }

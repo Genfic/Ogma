@@ -75,6 +75,6 @@ public sealed class DeleteModel(ApplicationDbContext context, ClubRepository clu
 			.Select(c => c.Slug)
 			.FirstOrDefaultAsync();
 
-		return RedirectToPage("./Index", new { id = clubId, slug });
+		return Routes.Pages.Club_Index.Get(clubId, slug).Redirect(this);
 	}
 }

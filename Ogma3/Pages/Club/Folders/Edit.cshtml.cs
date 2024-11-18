@@ -99,6 +99,6 @@ public sealed class EditModel(ApplicationDbContext context, ClubRepository clubR
 
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("./Folder", new { clubId, folder.Id, folder.Slug });
+		return Routes.Pages.Club_Folders_Folder.Get(clubId, folder.Id, folder.Slug).Redirect(this);
 	}
 }

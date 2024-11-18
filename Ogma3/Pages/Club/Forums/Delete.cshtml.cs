@@ -88,8 +88,8 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 			.TagWith($"Clubs — Delete — {nameof(OnPostAsync)} — update delete time")
 			.Where(ct => ct.Id == th.Id)
 			.ExecuteUpdateAsync(setters => setters.SetProperty(ct => ct.DeletedAt, DateTimeOffset.UtcNow));
-		
-		return RedirectToPage("Index", new { id = th.ClubId, slug = th.Slug });
+
+		return Routes.Pages.Club_Forums_Index.Get(th.ClubId, th.Slug).Redirect(this);
 	}
 
 	private async Task<(bool allowed, bool isModerator)> CanDelete(long? authorId, long clubId)

@@ -44,6 +44,6 @@ public sealed class CreateModel : PageModel
 		});
 
 		await _context.SaveChangesAsync();
-		return RedirectToPage("./Index");
+		return Routes.Pages.Index.Get().Redirect(this);
 	}
 }

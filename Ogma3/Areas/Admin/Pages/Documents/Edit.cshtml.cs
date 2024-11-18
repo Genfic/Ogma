@@ -76,6 +76,6 @@ public sealed class EditModel : PageModel
 		oldVersion.RevisionDate = now;
 
 		await _context.SaveChangesAsync();
-		return RedirectToPage("./Index");
+		return Routes.Pages.Index.Get().Redirect(this);
 	}
 }

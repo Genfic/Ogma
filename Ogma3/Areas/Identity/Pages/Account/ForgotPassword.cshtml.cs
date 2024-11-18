@@ -42,7 +42,7 @@ public sealed class ForgotPasswordModel(
 		if (user == null || !await userManager.IsEmailConfirmedAsync(user))
 		{
 			// Don't reveal that the user does not exist or is not confirmed
-			return RedirectToPage("./ForgotPasswordConfirmation");
+			return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 		
 		// Check Turnstile
@@ -69,6 +69,6 @@ public sealed class ForgotPasswordModel(
 			"Reset Password",
 			$"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
-		return RedirectToPage("./ForgotPasswordConfirmation");
+		return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
 	}
 }

@@ -119,6 +119,6 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		Log.Information("User {UserId} succeeded in editing club {ClubId}", uid, id);
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("/Club/Index", new { club.Id, club.Slug });
+		return Routes.Pages.Club_Index.Get(club.Id, club.Slug).Redirect(this);
 	}
 }

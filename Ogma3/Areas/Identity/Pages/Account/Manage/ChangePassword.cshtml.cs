@@ -49,7 +49,7 @@ public sealed class ChangePasswordModel(
 		var hasPassword = await userManager.HasPasswordAsync(user);
 		if (!hasPassword)
 		{
-			return RedirectToPage("./SetPassword");
+			return Routes.Areas.Identity.Pages.Account_Manage_SetPassword.Get().Redirect(this);
 		}
 
 		return Page();

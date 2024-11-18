@@ -67,13 +67,13 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 
 		if (result.RequiresTwoFactor)
 		{
-			return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
+			return Routes.Areas.Identity.Pages.Account_LoginWith2fa.Get(Input.RememberMe, returnUrl).Redirect(this);
 		}
 
 		if (result.IsLockedOut)
 		{
 			logger.LogWarning("User account locked out");
-			return RedirectToPage("./Lockout");
+			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
 		}
 
 		ModelState.AddModelError(string.Empty, "Invalid login attempt.");

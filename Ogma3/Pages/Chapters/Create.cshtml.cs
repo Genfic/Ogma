@@ -132,6 +132,6 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			"/Chapter",
 			new { chapter.Id, chapter.Slug });
 
-		return RedirectToPage("../Chapter", new { sid = story.Id, id = chapter.Id, slug = chapter.Slug });
+		return Routes.Pages.Chapter.Get(story.Id, chapter.Id, chapter.Slug).Redirect(this);
 	}
 }

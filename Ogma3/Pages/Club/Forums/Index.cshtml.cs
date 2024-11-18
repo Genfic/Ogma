@@ -16,7 +16,7 @@ public sealed class IndexModel(ApplicationDbContext context, ClubRepository club
 	public required IList<ThreadCard> ThreadCards { get; set; }
 	public required Pagination Pagination { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(long id, [FromQuery] int page = 1)
+	public async Task<IActionResult> OnGetAsync(long id, string slug, [FromQuery] int page = 1)
 	{
 		var clubBar = await clubRepo.GetClubBar(id);
 		if (clubBar is null) return NotFound();

@@ -91,6 +91,6 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 		context.Clubs.Add(club);
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("./Index");
+		return Routes.Pages.Index.Get().Redirect(this);
 	}
 }

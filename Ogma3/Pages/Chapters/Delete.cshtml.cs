@@ -69,6 +69,6 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("../Story", new { id = chapter.StoryId });
+		return Routes.Pages.Story.Get(chapter.StoryId, null).Redirect(this);
 	}
 }

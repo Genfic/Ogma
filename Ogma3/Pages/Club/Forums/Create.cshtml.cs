@@ -71,6 +71,6 @@ public sealed class CreateModel(ApplicationDbContext context, ClubRepository clu
 		context.ClubThreads.Add(clubThread);
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("Details", new { threadId = clubThread.Id, clubId = clubThread.ClubId });
+		return Routes.Pages.Club_Forums_Details.Get(clubThread.Id, clubThread.ClubId).Redirect(this);
 	}
 }

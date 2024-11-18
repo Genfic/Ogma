@@ -91,12 +91,12 @@ public sealed class EnableAuthenticatorModel : PageModel
 
 		StatusMessage = "Your authenticator app has been verified.";
 
-		if (await _userManager.CountRecoveryCodesAsync(user) != 0) return RedirectToPage("./TwoFactorAuthentication");
+		if (await _userManager.CountRecoveryCodesAsync(user) != 0) return Routes.Areas.Identity.Pages.Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
 
 		var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
 		RecoveryCodes = recoveryCodes?.ToArray();
 
-		return RedirectToPage("./ShowRecoveryCodes");
+		return Routes.Areas.Identity.Pages.Account_Manage_ShowRecoveryCodes.Get().Redirect(this);
 	}
 
 	private async Task LoadSharedKeyAndQrCodeUriAsync(OgmaUser user)

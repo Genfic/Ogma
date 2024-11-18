@@ -64,7 +64,7 @@ public sealed class LoginWithRecoveryCodeModel(SignInManager<OgmaUser> signInMan
 		if (result.IsLockedOut)
 		{
 			logger.LogWarning("User with ID '{UserId}' account locked out", user.Id);
-			return RedirectToPage("./Lockout");
+			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
 		}
 
 		logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", user.Id);

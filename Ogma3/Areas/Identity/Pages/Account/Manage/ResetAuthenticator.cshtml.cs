@@ -51,6 +51,6 @@ public sealed class ResetAuthenticatorModel : PageModel
 		await _signInManager.RefreshSignInAsync(user);
 		StatusMessage = "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.";
 
-		return RedirectToPage("./EnableAuthenticator");
+		return Routes.Areas.Identity.Pages.Account_Manage_EnableAuthenticator.Get().Redirect(this);
 	}
 }

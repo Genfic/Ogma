@@ -171,7 +171,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
+		return Routes.Pages.Story.Get(story.Id, story.Slug).Redirect(this);
 	}
 
 	private async Task Hydrate()

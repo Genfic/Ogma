@@ -31,6 +31,6 @@ public sealed class Settings : PageModel
 		}
 
 		await _config.PersistAsync();
-		return RedirectToPage("./Settings");
+		return Routes.Pages.Settings.Get().Redirect(this);
 	}
 }

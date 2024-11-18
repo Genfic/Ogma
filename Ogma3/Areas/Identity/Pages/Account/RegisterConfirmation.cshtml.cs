@@ -29,7 +29,7 @@ public sealed class RegisterConfirmationModel(
 	{
 		if (email is null)
 		{
-			return RedirectToPage("/Index");
+			return Routes.Pages.Index.Get().Redirect(this);
 		}
 
 		var user = await userManager.FindByEmailAsync(email);
@@ -86,7 +86,7 @@ public sealed class RegisterConfirmationModel(
 
 		if (userManager.Options.SignIn.RequireConfirmedAccount)
 		{
-			return RedirectToPage("RegisterConfirmation", new { email = Email });
+			return Routes.Areas.Identity.Pages.Account_RegisterConfirmation.Get(Email).Redirect(this);
 		}
 
 		return LocalRedirect(returnUrl);

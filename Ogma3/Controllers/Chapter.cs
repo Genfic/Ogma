@@ -23,7 +23,7 @@ public sealed class ChapterController(ApplicationDbContext context) : Controller
         
         if (chapterData is null) return NotFound();
 
-		return RedirectToPage("/Chapter", new{ sid, chapterData.Id, chapterData.Slug });
+		return Routes.Pages.Chapter.Get(sid, chapterData.Id, chapterData.Slug).Redirect(this);
 	}
 
 	// GET

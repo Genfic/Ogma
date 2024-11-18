@@ -149,7 +149,7 @@ public sealed class RegisterModel(
 
 			if (userManager.Options.SignIn.RequireConfirmedAccount)
 			{
-				return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
+				return Routes.Areas.Identity.Pages.Account_RegisterConfirmation.Get(Input.Email).Redirect(this);
 			}
 
 			return LocalRedirect(returnUrl);

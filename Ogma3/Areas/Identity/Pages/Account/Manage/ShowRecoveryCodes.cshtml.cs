@@ -13,7 +13,7 @@ public sealed class ShowRecoveryCodesModel : PageModel
 	{
 		if (RecoveryCodes is not { Length: > 0 })
 		{
-			return RedirectToPage("./TwoFactorAuthentication");
+			return Routes.Areas.Identity.Pages.Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
 		}
 
 		return Page();

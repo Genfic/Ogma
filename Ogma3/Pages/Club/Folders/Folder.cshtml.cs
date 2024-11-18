@@ -29,7 +29,7 @@ public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config,
 	public required List<StoryCard> Stories { get; set; }
 	public required Pagination Pagination { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(long clubId, long id, [FromQuery] int page = 1)
+	public async Task<IActionResult> OnGetAsync(long clubId, long id, string slug, [FromQuery] int page = 1)
 	{
 		var uid = User.GetNumericId();
 

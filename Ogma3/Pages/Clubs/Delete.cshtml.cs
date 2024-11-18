@@ -86,6 +86,6 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("./Index");
+		return Routes.Pages.Index.Get().Redirect(this);
 	}
 }

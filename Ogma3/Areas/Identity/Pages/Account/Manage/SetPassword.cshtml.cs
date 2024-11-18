@@ -56,7 +56,7 @@ public sealed class SetPasswordModel : PageModel
 
 		if (hasPassword)
 		{
-			return RedirectToPage("./ChangePassword");
+			return Routes.Areas.Identity.Pages.Account_Manage_ChangePassword.Get().Redirect(this);
 		}
 
 		return Page();

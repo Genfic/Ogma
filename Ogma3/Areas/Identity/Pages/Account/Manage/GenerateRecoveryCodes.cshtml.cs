@@ -60,6 +60,6 @@ public sealed class GenerateRecoveryCodesModel : PageModel
 
 		_logger.LogInformation("User with ID '{UserId}' has generated new 2FA recovery codes", userId);
 		StatusMessage = "You have generated new recovery codes.";
-		return RedirectToPage("./ShowRecoveryCodes");
+		return Routes.Areas.Identity.Pages.Account_Manage_ShowRecoveryCodes.Get().Redirect(this);
 	}
 }

@@ -41,7 +41,7 @@ public sealed class Ban(ApplicationDbContext context) : PageModel
 
 		if (BannedUntil == default)
 		{
-			return RedirectToPage("/Index");
+			return Routes.Pages.Index.Get().Redirect(this);
 		}
 
 		return Page();

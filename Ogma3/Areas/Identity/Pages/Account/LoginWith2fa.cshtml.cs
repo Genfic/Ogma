@@ -73,7 +73,7 @@ public sealed class LoginWith2FaModel(SignInManager<OgmaUser> signInManager, ILo
 		if (result.IsLockedOut)
 		{
 			logger.LogWarning("User with ID '{UserId}' account locked out", user.Id);
-			return RedirectToPage("./Lockout");
+			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
 		}
 
 		logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'", user.Id);

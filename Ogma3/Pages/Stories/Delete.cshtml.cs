@@ -65,6 +65,7 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 	{
 		if (id is null) return NotFound();
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
+		if (User.GetUsername() is not {} uname) return Unauthorized();
 
 		// Get the story and make sure the logged-in user matches author
 		var story = await context.Stories
@@ -86,6 +87,6 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		// Save
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("/User/Stories", new { Name = User.GetUsername() });
+		return Routes.Pages.User_Stories.Get(uname).Redirect(this);
 	}
 }

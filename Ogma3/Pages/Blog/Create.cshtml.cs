@@ -85,12 +85,12 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			return await OnGet(Input.StoryMinimalId, Input.ChapterMinimalId);
 		}
 
-		// Get logged in user
+		// Get logged-in user
 		var uid = User.GetNumericId();
 		var uname = User.GetUsername();
 
 		// Return if not logged in
-		if (uid is null) return Unauthorized();
+		if (uid is null || uname is null) return Unauthorized();
 
 		// Create blogpost
 		var post = new Blogpost
@@ -126,6 +126,6 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			"/Blog/Post",
 			new { post.Id, post.Slug });
 
-		return RedirectToPage("/User/Blog", new { name = uname });
+		return Routes.Pages.User_Blog.Get(uname).Redirect(this);
 	}
 }

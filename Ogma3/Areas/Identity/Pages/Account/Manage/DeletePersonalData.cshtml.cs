@@ -106,6 +106,6 @@ public sealed class DeletePersonalDataModel : PageModel
 
 		_logger.LogInformation("User with ID '{UserId}' deleted themselves", user.Id);
 
-		return Redirect("~/");
+		return Routes.Pages.Index.Get().Redirect(this);
 	}
 }

@@ -48,7 +48,7 @@ public sealed class ExternalLoginModel : PageModel
 
 	public IActionResult OnGet()
 	{
-		return RedirectToPage("./Login");
+		return Routes.Areas.Identity.Pages.Account_Login.Get().Redirect(this);
 	}
 
 	public IActionResult OnPost(string provider, string? returnUrl = null)
@@ -65,14 +65,14 @@ public sealed class ExternalLoginModel : PageModel
 		if (remoteError != null)
 		{
 			ErrorMessage = $"Error from external provider: {remoteError}";
-			return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+			return Routes.Areas.Identity.Pages.Account_Login.Get(returnUrl).Redirect(this);
 		}
 
 		var info = await _signInManager.GetExternalLoginInfoAsync();
 		if (info is null)
 		{
 			ErrorMessage = "Error loading external login information.";
-			return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+			return Routes.Areas.Identity.Pages.Account_Login.Get(returnUrl).Redirect(this);
 		}
 
 		// Sign in the user with this external login provider if the user already has a login.
@@ -85,7 +85,7 @@ public sealed class ExternalLoginModel : PageModel
 
 		if (result.IsLockedOut)
 		{
-			return RedirectToPage("./Lockout");
+			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
 		}
 
 		// If the user does not have an account, then ask the user to create an account.
@@ -110,7 +110,7 @@ public sealed class ExternalLoginModel : PageModel
 		if (info is null)
 		{
 			ErrorMessage = "Error loading external login information during confirmation.";
-			return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+			return Routes.Areas.Identity.Pages.Account_Login.Get(returnUrl).Redirect(this);
 		}
 
 		if (ModelState.IsValid)

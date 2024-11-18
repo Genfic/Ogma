@@ -10,15 +10,13 @@ using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-[Authorize(Roles = $"{RoleNames.Admin},{RoleNames.Moderator}")]
-public sealed class ContentBlock : PageModel
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
+public sealed class ContentBlock(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-	public ContentBlock(ApplicationDbContext context) => _context = context;
-
 	[BindProperty] public ItemType Type { get; set; }
 
 	[BindProperty] public long Id { get; set; }
@@ -32,7 +30,7 @@ public sealed class ContentBlock : PageModel
 
 		Item = type switch
 		{
-			ItemType.Story => await _context.Stories.Where(s => s.Id == id)
+			ItemType.Story => await context.Stories.Where(s => s.Id == id)
 				.Select(s => new ItemData
 				{
 					Blocked = s.ContentBlockId != null,
@@ -41,7 +39,7 @@ public sealed class ContentBlock : PageModel
 					Type = nameof(Story),
 				})
 				.FirstOrDefaultAsync(),
-			ItemType.Chapter => await _context.Chapters.Where(c => c.Id == id)
+			ItemType.Chapter => await context.Chapters.Where(c => c.Id == id)
 				.Select(c => new ItemData
 				{
 					Blocked = c.ContentBlockId != null,
@@ -51,7 +49,7 @@ public sealed class ContentBlock : PageModel
 					Type = nameof(Chapter),
 				})
 				.FirstOrDefaultAsync(),
-			ItemType.Blogpost => await _context.Blogposts.Where(b => b.Id == id)
+			ItemType.Blogpost => await context.Blogposts.Where(b => b.Id == id)
 				.Select(b => new ItemData
 				{
 					Blocked = b.ContentBlockId != null,
@@ -71,7 +69,7 @@ public sealed class ContentBlock : PageModel
 		if (data.Reason.Length < 20)
 		{
 			TempData["error"] = "Reason has to be at least 20 characters long";
-			return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
+			return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
 		}
 
 		if (User.GetNumericId() is not { } staffId) return Unauthorized();
@@ -83,7 +81,7 @@ public sealed class ContentBlock : PageModel
 			_ => false,
 		};
 
-		return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
+		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
 	}
 
 	private async Task<bool> TryBlockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
@@ -91,7 +89,7 @@ public sealed class ContentBlock : PageModel
 		if (User.GetNumericId() is not { } staffId) return false;
 		if (User.GetUsername() is not { } uname) return false;
 
-		var item = await _context.Set<T>()
+		var item = await context.Set<T>()
 			.Where(i => i.Id == itemId)
 			.Include(i => i.ContentBlock)
 			.FirstOrDefaultAsync();
@@ -115,13 +113,13 @@ public sealed class ContentBlock : PageModel
 		};
 
 		// Log the action
-		_context.ModeratorActions.Add(new ModeratorAction
+		context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
 			Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, uname),
 		});
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 		return true;
 	}
 
@@ -135,7 +133,7 @@ public sealed class ContentBlock : PageModel
 			_ => false,
 		};
 
-		return RedirectToPage("./ContentBlock", new { type = Type, id = Id });
+		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
 	}
 
 	private async Task<bool> TryUnblockContent<T>(long itemId) where T : BaseModel, IBlockableContent
@@ -143,7 +141,7 @@ public sealed class ContentBlock : PageModel
 		if (User.GetNumericId() is not { } staffId) return false;
 		if (User.GetUsername() is not { } uname) return false;
 
-		var item = await _context.Set<T>()
+		var item = await context.Set<T>()
 			.Where(i => i.Id == itemId)
 			.Include(i => i.ContentBlock)
 			.FirstOrDefaultAsync();
@@ -162,13 +160,13 @@ public sealed class ContentBlock : PageModel
 		item.ContentBlock = null;
 
 		// Log the action
-		_context.ModeratorActions.Add(new ModeratorAction
+		context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
 			Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, uname),
 		});
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 		return true;
 	}
 

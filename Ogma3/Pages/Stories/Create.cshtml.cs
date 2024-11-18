@@ -146,6 +146,6 @@ public sealed class CreateModel(
 			"/Story",
 			new { story.Id, story.Slug });
 
-		return RedirectToPage("../Story", new { id = story.Id, slug = story.Slug });
+		return Routes.Pages.Story.Get(story.Id, story.Slug).Redirect(this);
 	}
 }

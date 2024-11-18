@@ -123,6 +123,6 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 		if (data is null) return NotFound();
 
-		return RedirectToPage("../Chapter", new { sid = data.StoryId, id = data.Id, slug = data.Slug });
+		return Routes.Pages.Chapter.Get(data.StoryId, data.Id, data.Slug).Redirect(this);
 	}
 }

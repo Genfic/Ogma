@@ -78,6 +78,6 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("./Details", new { clubId = clubThread.ClubId, threadId = clubThread.Id });
+		return Routes.Pages.Club_Forums_Details.Get(clubThread.Id, clubThread.ClubId).Redirect(this);
 	}
 }

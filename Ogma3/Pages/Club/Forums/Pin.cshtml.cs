@@ -62,6 +62,6 @@ public sealed class Pin(ApplicationDbContext context) : PageModel
 		thread.IsPinned = !thread.IsPinned;
 		await context.SaveChangesAsync();
 
-		return RedirectToPage("./Details", new { clubId = thread.ClubId, threadId = thread.Id });
+		return Routes.Pages.Club_Forums_Details.Get(thread.Id, thread.ClubId).Redirect(this);
 	}
 }

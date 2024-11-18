@@ -48,6 +48,6 @@ public sealed class Disable2FaModel
 
 		logger.LogInformation("User with ID '{UserId}' has disabled 2fa", userManager.GetUserId(User));
 		StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
-		return RedirectToPage("./TwoFactorAuthentication");
+		return Routes.Areas.Identity.Pages.Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
 	}
 }

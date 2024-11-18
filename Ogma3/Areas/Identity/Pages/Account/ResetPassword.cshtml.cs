@@ -76,13 +76,13 @@ public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurns
 		if (user is null)
 		{
 			// Don't reveal that the user does not exist
-			return RedirectToPage("./ResetPasswordConfirmation");
+			return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 
 		var result = await userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
 		if (result.Succeeded)
 		{
-			return RedirectToPage("./ResetPasswordConfirmation");
+			return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 
 		foreach (var error in result.Errors)
