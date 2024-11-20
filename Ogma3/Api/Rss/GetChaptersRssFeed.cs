@@ -20,6 +20,7 @@ public static partial class GetChaptersRssFeed
 		=> endpoint
 			.RequireRateLimiting(RateLimiting.Rss)
 			.CacheOutput(CachePolicies.Rss)
+			.ExcludeFromDescription()
 			.WithName(nameof(GetChaptersRssFeed));
 
 	[UsedImplicitly]

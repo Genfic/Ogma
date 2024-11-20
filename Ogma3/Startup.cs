@@ -30,7 +30,7 @@ using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Middleware;
-using Ogma3.Infrastructure.NSwag.OperationProcessors;
+using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Infrastructure.StartupGenerators;
 using Ogma3.Services;
@@ -40,6 +40,7 @@ using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
+using Scalar.AspNetCore;
 using Serilog;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -238,22 +239,15 @@ public sealed class Startup
 		services.AddOgma3Behaviors();
 
 		// OpenAPI
-		services.AddEndpointsApiExplorer();
-		services.AddOpenApiDocument(settings => {
-			settings.DocumentName = "public";
-			settings.OperationProcessors.Insert(0, new MinimalApiTagProcessor());
-			settings.OperationProcessors.Insert(1, new ExcludeRssProcessor());
-			settings.OperationProcessors.Insert(2, new ExcludeInternalApisProcessor());
-			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+		services.AddOpenApi("public", options => {
+			options.AddDocumentTransformer<PublicApiDocumentTransformer>();
+			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 		});
-		services.AddOpenApiDocument(settings => {
-			settings.DocumentName = "internal";
-			settings.OperationProcessors.Insert(0, new MinimalApiTagProcessor());
-			settings.OperationProcessors.Insert(1, new ExcludeRssProcessor());
-			settings.OperationProcessors.Insert(2, new IncludeInternalApisProcessor());
-			settings.SchemaSettings.SchemaNameGenerator = new NSwagNestedNameGenerator();
+		services.AddOpenApi("internal", options => {
+			options.AddDocumentTransformer<InternalApiDocumentTransformer>();
+			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 		});
-
+		
 		// HSTS
 		services.AddHsts(options => {
 			options.Preload = true;
@@ -269,7 +263,7 @@ public sealed class Startup
 
 
 	// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+	public void Configure(WebApplication app, IWebHostEnvironment env)
 	{
 		// Profiler
 		if (env.IsDevelopment())
@@ -312,8 +306,7 @@ public sealed class Startup
 		app.UseRewriter(new RewriteOptions()
 			.AddRedirect(@"^\.well-known/change-password$", "identity/account/manage/changepassword")
 		);
-
-
+		
 		// Map file extensions
 		var extensionsProvider = new FileExtensionContentTypeProvider();
 		extensionsProvider.Mappings.Add(".avif", "image/avif");
@@ -343,20 +336,15 @@ public sealed class Startup
 		app.UseBanMiddleware();
 
 		// OpenAPI
-		app.UseOpenApi();
-		app.UseSwaggerUi(config => {
-			config.TransformToExternalPath = (string s, HttpRequest _) => s;
-			config.CustomStylesheetPath = "https://cdn.genfic.net/file/Ogma-net/swagger-dark.css";
-		});
+		app.MapOpenApi("openapi/{documentName}.json");
+		app.MapScalarApiReference();
 		
 		// Rate limit
 		app.UseRateLimiter();
-		
-		app.UseEndpoints(endpoints => {
-			endpoints.MapRazorPages();
-			endpoints.MapControllers();
-			endpoints.MapOgma3Endpoints();
-		});
+	
+		app.MapRazorPages();
+		app.MapControllers();
+		app.MapOgma3Endpoints();
 
 		// Generate JS manifest
 		new JavascriptFilesManifestGenerator(env).Generate("js/dist", "js/bundle");

@@ -2,7 +2,6 @@
 @using Ogma3.Infrastructure.Constants
 <ul class="nav nav-pills flex-column">
 	
-
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Index, "Dashboard"))"/>
 
 	@if (User.Identity is {IsAuthenticated: true } && User.IsInRole(RoleNames.Admin))
@@ -42,11 +41,19 @@
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.ModLog))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Reports))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Faq))"/>
+
 	<li class="nav-item">
-		@* ReSharper disable once Html.PathError *@
-		<a class="nav-link" href="/swagger" target="_blank">
-			Swagger <icon class="icon" icon="open_in_new"></icon>
-		</a>
+		OpenAPI
 	</li>
+	
+	@* ReSharper disable once Html.PathError *@
+	<a class="nav-link" href="/scalar/public" target="_blank">
+		Scalar public <icon class="icon" icon="open_in_new"></icon>
+	</a>
+
+	@* ReSharper disable once Html.PathError *@
+	<a class="nav-link" href="/scalar/internal" target="_blank">
+		Scalar internal <icon class="icon" icon="open_in_new"></icon>
+	</a>
 	
 </ul>

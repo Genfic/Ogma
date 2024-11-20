@@ -20,6 +20,7 @@ public static partial class GetStoriesRssFeed
 		=> endpoint
 			.RequireRateLimiting(RateLimiting.Rss)
 			.CacheOutput(CachePolicies.Rss)
+			.ExcludeFromDescription()
 			.WithName(nameof(GetStoriesRssFeed));
 
 	[UsedImplicitly]
