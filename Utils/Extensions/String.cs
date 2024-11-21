@@ -20,6 +20,21 @@ public static partial class String
 			.Trim('-');
 	}
 
+	public static string Capitalize(this string input)
+	{
+		if (string.IsNullOrWhiteSpace(input))
+		{
+			return input;
+		}
+		
+		if (char.IsUpper(input[0]))
+		{
+			return input;
+		}
+		
+		return input[0].ToString().ToUpper() + input[1..];
+	}
+
 	/// <summary>
 	/// Replaces elements of the `template` according to the supplied `pattern`
 	/// </summary>

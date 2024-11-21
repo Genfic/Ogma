@@ -7,10 +7,10 @@ tasks:
         env:
             DENO_TLS_CA_STORE: system
         vars:
-            DEST: ./Ogma3/wwwroot/js/generated/
-            URL: https://localhost:5001/swagger/
+            DEST: ./Ogma3/wwwroot/js/generated-new/
+            URL: https://localhost:5001/openapi/
         cmds:
-            - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public/swagger.json" --path.internal="{{.URL}}internal/swagger.json"
+            - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"
 
     # Generate preload code for fonts
     preloads:

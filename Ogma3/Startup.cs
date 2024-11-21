@@ -30,6 +30,7 @@ using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Middleware;
+using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Infrastructure.StartupGenerators;
@@ -242,10 +243,14 @@ public sealed class Startup
 		services.AddOpenApi("public", options => {
 			options.AddDocumentTransformer<PublicApiDocumentTransformer>();
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
+			options.AddOperationTransformer<IdOperationTransformer>();
+			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 		});
 		services.AddOpenApi("internal", options => {
 			options.AddDocumentTransformer<InternalApiDocumentTransformer>();
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
+			options.AddOperationTransformer<IdOperationTransformer>();
+			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 		});
 		
 		// HSTS

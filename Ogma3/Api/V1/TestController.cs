@@ -2,7 +2,6 @@ using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Ogma3.Infrastructure.IResults;
 
 namespace Ogma3.Api.V1;
 

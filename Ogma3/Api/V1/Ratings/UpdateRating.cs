@@ -3,6 +3,7 @@ using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
@@ -39,7 +40,7 @@ public static partial class UpdateRating
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(
-		Command request,
+		[FromForm] Command request,
 		ApplicationDbContext context,
 		ImageUploader uploader,
 		OgmaConfig ogmaConfig,

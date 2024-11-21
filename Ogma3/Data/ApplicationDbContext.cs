@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NpgSqlGenerators;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
