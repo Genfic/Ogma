@@ -21,7 +21,6 @@
 		<AdditionalFiles Include="../BannedSymbols.txt" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AspNetCore.RouteAnalyzer" Version="0.5.3" />
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.0.1" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
 		<PackageReference Include="B2Net" Version="0.7.5" />
@@ -60,26 +59,26 @@
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.8" />
-		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8" />
+		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.13" />
+		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.13" />
 		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" Version="7.1.0" />
 		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta08" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
 		<PackageReference Include="Postmark" Version="5.2.0" />
 		<PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
-		<PackageReference Include="Riok.Mapperly" Version="4.1.0" />
+		<PackageReference Include="Riok.Mapperly" Version="4.1.1" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" />
 		<PackageReference Include="SafeRouting" Version="1.5.0" />
-		<PackageReference Include="Scalar.AspNetCore" Version="1.2.40" />
+		<PackageReference Include="Scalar.AspNetCore" Version="1.2.44" />
 		<PackageReference Include="SendGrid" Version="9.29.3" />
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
 		<PackageReference Include="Sqids" Version="3.1.0" />
 		<PackageReference Include="System.ServiceModel.Syndication" Version="9.0.0" />
 		<PackageReference Include="System.Text.Json" Version="9.0.0" />
 		<PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.9" />
-		<PackageReference Include="ZstdSharp.Port" Version="0.8.2" />
+		<PackageReference Include="ZstdSharp.Port" Version="0.8.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Utils\Utils.csproj" />
