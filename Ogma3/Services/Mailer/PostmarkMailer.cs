@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using PostmarkDotNet;
-using Serilog;
 
 namespace Ogma3.Services.Mailer;
 
-public sealed class PostmarkMailer(IOptions<PostmarkOptions> options) : IEmailSender
+public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<PostmarkMailer> logger) : IEmailSender
 {
 	private readonly PostmarkOptions _options = options.Value;
 
@@ -26,8 +25,12 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options) : IEmailSe
 
 		if (result.Status != PostmarkStatus.Success)
 		{
-			Log.Error(
-				"Postmark email sending error.\n\tStatus: {Status}\n\tMessage: {Message}\n\tError {ErrorCode}",
+			logger.LogError("""
+				Postmark email sending error.
+					Status: {Status}
+					Message: {Message}
+					Error {ErrorCode}",
+				""",
 				result.Status, result.Message, result.ErrorCode
 			);
 		}

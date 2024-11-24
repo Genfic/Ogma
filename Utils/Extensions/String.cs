@@ -132,17 +132,17 @@ public static partial class String
 	{
 		var headers = new List<Header>();
 		
-		var lines = input.Split(Environment.NewLine);
+		var lines = input.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 		foreach (var line in lines)
 		{
 			if (!line.StartsWith('#')) continue;
 
-			var head = new Header();
+			byte level = 0;
 			foreach (var c in line)
 			{
 				if (c == '#')
 				{
-					head.Level++;
+					level++;
 				}
 				else
 				{
@@ -150,29 +150,22 @@ public static partial class String
 				}
 			}
 
-			head.Body = line.TrimStart('#').Trim();
+			var body = line.TrimStart('#').Trim();
 
-			var latest = headers
-				.Where(h => h.Body == head.Body)
-				.MaxBy(h => h.Occurrence);
+			var latest = headers.Count(h => h.Body == body);
 
-			if (latest != null)
-			{
-				head.Occurrence = (byte)(latest.Occurrence + 1);
-			}
+			var occurrence = latest > 0 
+				? (byte)(latest + 1)
+				: (byte)0;
 
-			headers.Add(head);
+			var header = new Header(level, occurrence, body);
+			headers.Add(header);
 		}
 
 		return headers;
 	}
 
-	public sealed record Header
-	{
-		public byte Level { get; set; }
-		public byte Occurrence { get; set; }
-		public string Body { get; set; } = null!;
-	}
+	public record struct Header(byte Level, byte Occurrence, string Body);
 
 	[GeneratedRegex("[^a-zA-Z0-9]+")]
 	private static partial Regex NonAlphanumericCharactersRegex { get; }

@@ -46,6 +46,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			{
 				query = query
 					.TagWith("Searching for blogposts with title")
+					// ReSharper disable once EntityFramework.ClientSideDbFunctionCall
 					.Where(b => EF.Functions.Like(b.Title.ToUpper(), $"%{string.Join(' ', search)}%".ToUpper()));
 			}
 		}
