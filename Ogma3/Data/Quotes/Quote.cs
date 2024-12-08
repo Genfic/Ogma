@@ -1,9 +1,11 @@
+using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Quotes;
 
+[AutoDbSet]
 public sealed class Quote : BaseModel
 {
 	public required string Body { get; init; }

@@ -35,13 +35,13 @@ public static partial class BlockUser
 		
 		if (targetUserId is not {} targetId) return TypedResults.NotFound();
 
-		var exists = await context.BlacklistedUsers
+		var exists = await context.BlockedUsers
 			.Where(bu => bu.BlockingUserId == uid && bu.BlockedUserId == targetUserId)
 			.AnyAsync(cancellationToken);
 
 		if (exists) return TypedResults.Ok(true);
 
-		context.BlacklistedUsers.Add(new UserBlock
+		context.BlockedUsers.Add(new UserBlock
 		{
 			BlockingUserId = uid,
 			BlockedUserId = targetId,

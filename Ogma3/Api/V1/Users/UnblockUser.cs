@@ -35,7 +35,7 @@ public static partial class UnblockUser
 
 		if (targetUserId is null) return TypedResults.NotFound();
 
-		var affectedRows = await context.BlacklistedUsers
+		var affectedRows = await context.BlockedUsers
 			.Where(bu => bu.BlockingUserId == uid)
 			.Where(bu => bu.BlockedUserId == targetUserId)
 			.ExecuteDeleteAsync(cancellationToken);

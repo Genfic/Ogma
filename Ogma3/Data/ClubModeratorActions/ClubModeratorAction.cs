@@ -1,5 +1,6 @@
 #nullable disable
 
+using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
@@ -9,6 +10,7 @@ using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.ClubModeratorActions;
 
+[AutoDbSet]
 public sealed class ClubModeratorAction : BaseModel
 {
 	public OgmaUser Moderator { get; set; }

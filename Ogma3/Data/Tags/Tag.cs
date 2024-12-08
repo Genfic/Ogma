@@ -1,9 +1,11 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Stories;
 using Utils.Extensions;
 
 namespace Ogma3.Data.Tags;
 
+[AutoDbSet]
 public sealed class Tag : BaseModel
 {
 	private readonly string _name = null!;

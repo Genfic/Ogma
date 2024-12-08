@@ -91,7 +91,7 @@ public sealed class DeletePersonalDataModel : PageModel
 		await _context.DeleteRangeAsync<BlacklistedRating>(br => br.UserId == user.Id);
 		await _context.DeleteRangeAsync<BlacklistedTag>(bt => bt.UserId == user.Id);
 		await _context.DeleteRangeAsync<UserFollow>(uf => uf.FollowedUserId == user.Id || uf.FollowingUserId == user.Id);
-		await _context.DeleteRangeAsync<CommentsThreadSubscriber>(cts => cts.OgmaUserId == user.Id);
+		await _context.DeleteRangeAsync<CommentThreadSubscriber>(cts => cts.OgmaUserId == user.Id);
 		await _context.DeleteRangeAsync<NotificationRecipients>(nr => nr.RecipientId == user.Id);
 
 

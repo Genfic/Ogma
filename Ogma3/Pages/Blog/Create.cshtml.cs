@@ -103,14 +103,14 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			Hashtags = Input.Tags.ParseHashtags(),
 			AttachedStoryId = Input.StoryMinimalId,
 			AttachedChapterId = Input.ChapterMinimalId,
-			CommentsThread = new CommentsThread(),
+			CommentThread = new CommentThread(),
 		};
 		context.Blogposts.Add(post);
 
 		// Subscribe author to the comment thread
-		context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
-			CommentsThread = post.CommentsThread,
+			CommentThread = post.CommentThread,
 			OgmaUserId = (long)uid,
 		});
 

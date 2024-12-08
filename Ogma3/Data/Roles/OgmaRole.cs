@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -5,6 +6,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Roles;
 
+[AutoDbSet]
 public sealed class OgmaRole : IdentityRole<long>
 {
 	public new string Name

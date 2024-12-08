@@ -65,7 +65,7 @@ public sealed class CreateModel(ApplicationDbContext context, ClubRepository clu
 			Body = ClubThread.Body,
 			ClubId = ClubThread.ClubId,
 			CreationDate = DateTimeOffset.UtcNow,
-			CommentsThread = new CommentsThread(),
+			CommentThread = new CommentThread(),
 		};
 
 		context.ClubThreads.Add(clubThread);

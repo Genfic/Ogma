@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.ClubThreads;
 using Ogma3.Data.Folders;
@@ -5,6 +6,7 @@ using Ogma3.Data.Reports;
 
 namespace Ogma3.Data.Clubs;
 
+[AutoDbSet]
 public sealed class Club : BaseModel, IReportableContent
 {
 	public required string Name { get; set; }

@@ -136,7 +136,7 @@ namespace CompiledModels
             var commentsThread = declaringEntityType.AddNavigation("CommentsThread",
                 runtimeForeignKey,
                 onDependent: true,
-                typeof(CommentsThread),
+                typeof(CommentThread),
                 propertyInfo: typeof(Comment).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Comment).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
@@ -144,8 +144,8 @@ namespace CompiledModels
                 runtimeForeignKey,
                 onDependent: false,
                 typeof(IList<Comment>),
-                propertyInfo: typeof(CommentsThread).GetProperty("Comments", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<Comments>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThread).GetProperty("Comments", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<Comments>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }

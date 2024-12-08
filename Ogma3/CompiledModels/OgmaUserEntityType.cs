@@ -389,7 +389,7 @@ namespace CompiledModels
                     declaringEntityType),
                 true,
                 false,
-                typeof(ICollection<CommentsThread>),
+                typeof(ICollection<CommentThread>),
                 propertyInfo: typeof(OgmaUser).GetProperty("SubscribedThreads", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OgmaUser).GetField("<SubscribedThreads>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 

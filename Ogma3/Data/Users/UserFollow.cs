@@ -1,7 +1,10 @@
 #nullable disable
 
+using AutoDbSetGenerators;
+
 namespace Ogma3.Data.Users;
 
+[AutoDbSet(Name = "FollowedUsers")]
 public sealed class UserFollow
 {
 	public OgmaUser FollowingUser { get; set; }

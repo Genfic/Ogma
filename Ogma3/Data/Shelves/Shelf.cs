@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Icons;
 using Ogma3.Data.Stories;
@@ -5,6 +6,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Shelves;
 
+[AutoDbSet]
 public sealed class Shelf : BaseModel
 {
 	public string Name { get; set; } = null!;

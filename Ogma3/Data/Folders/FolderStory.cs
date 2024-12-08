@@ -1,10 +1,12 @@
 #nullable disable
 
+using AutoDbSetGenerators;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Folders;
 
+[AutoDbSet]
 public sealed class FolderStory
 {
 	public Folder Folder { get; set; }

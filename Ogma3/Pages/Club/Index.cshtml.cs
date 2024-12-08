@@ -42,7 +42,7 @@ public sealed class IndexModel : PageModel
 				CreationDate = ct.CreationDate,
 				AuthorName = ct.Author.UserName,
 				AuthorAvatar = ct.Author.Avatar,
-				CommentsCount = ct.CommentsThread.Comments.Count,
+				CommentsCount = ct.CommentThread.Comments.Count,
 			})
 			.ToListAsync();
 

@@ -72,9 +72,9 @@ public sealed class ConfirmEmailModel : PageModel
 			.Where(ct => ct.UserId == user.Id)
 			.FirstOrDefaultAsync();
 
-		_context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		_context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
-			CommentsThread = thread,
+			CommentThread = thread,
 			OgmaUser = user,
 		});
 

@@ -1,9 +1,11 @@
 #nullable disable
 
+using AutoDbSetGenerators;
 using Ogma3.Data.Stories;
 
 namespace Ogma3.Data.Shelves;
 
+[AutoDbSet]
 public sealed class ShelfStory
 {
 	public Shelf Shelf { get; init; }

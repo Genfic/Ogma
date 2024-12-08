@@ -1,7 +1,9 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Clubs;
 
+[AutoDbSet]
 public sealed class ClubMember
 {
 	public OgmaUser Member { get; init; } = null!;

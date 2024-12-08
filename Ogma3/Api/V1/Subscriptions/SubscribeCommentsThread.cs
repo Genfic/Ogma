@@ -28,14 +28,14 @@ public static partial class SubscribeCommentsThread
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
-		var isSubscribed = await context.CommentsThreadSubscribers
+		var isSubscribed = await context.CommentThreadSubscribers
 			.Where(cts => cts.OgmaUserId == uid)
 			.Where(cts => cts.CommentsThreadId == request.ThreadId)
 			.AnyAsync(cancellationToken);
 
 		if (isSubscribed) return TypedResults.Ok(true);
 
-		context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
 			OgmaUserId = uid,
 			CommentsThreadId = request.ThreadId,

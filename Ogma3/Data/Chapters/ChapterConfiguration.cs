@@ -49,9 +49,9 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 
 		// NAVIGATION
 		builder
-			.HasOne(c => c.CommentsThread)
+			.HasOne(c => c.CommentThread)
 			.WithOne(ct => ct.Chapter)
-			.HasForeignKey<CommentsThread>(ct => ct.ChapterId)
+			.HasForeignKey<CommentThread>(ct => ct.ChapterId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder

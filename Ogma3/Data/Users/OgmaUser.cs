@@ -49,7 +49,7 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	public DateTimeOffset? DeletedAt { get; set; }
 
-	public CommentsThread CommentsThread { get; set; } = new();
+	public CommentThread CommentThread { get; set; } = new();
 
 	public ICollection<UserRole>? UserRoles { get; set; }
 
@@ -70,7 +70,7 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 	public ICollection<OgmaUser> Following { get; set; } = null!;
 
 	// Subscriptions
-	public ICollection<CommentsThread> SubscribedThreads { get; set; } = null!;
+	public ICollection<CommentThread> SubscribedThreads { get; set; } = null!;
 
 	public ICollection<Report> Reports { get; set; } = null!;
 	public ICollection<Infraction> Infractions { get; set; } = null!;

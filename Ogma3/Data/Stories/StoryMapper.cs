@@ -30,5 +30,5 @@ public static partial class StoryMapper
 	private static bool MapIsPublished(DateTimeOffset? s) => s != null;
 
 	[UserMapping(Default = false)]
-	private static int MapCommentsCount(Story s) => s.Chapters.Sum(c => c.CommentsThread.CommentsCount);
+	private static int MapCommentsCount(Story s) => s.Chapters.Sum(c => c.CommentThread.CommentsCount);
 }

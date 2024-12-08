@@ -30,7 +30,7 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 			.Where(bt => bt.UserId == uid)
 			.Select(bt => bt.TagId)
 			.ToListAsync();
-		BlockedUsers = await context.BlacklistedUsers
+		BlockedUsers = await context.BlockedUsers
 			.Where(bu => bu.BlockingUserId == uid)
 			.Select(bu => bu.BlockedUser)
 			.ProjectToCard()

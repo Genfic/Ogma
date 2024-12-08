@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using JetBrains.Annotations;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
@@ -8,7 +9,8 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.CommentsThreads;
 
-public sealed class CommentsThread : BaseModel
+[AutoDbSet]
+public sealed class CommentThread : BaseModel
 {
 	public IList<Comment> Comments { get; set; } = [];
 

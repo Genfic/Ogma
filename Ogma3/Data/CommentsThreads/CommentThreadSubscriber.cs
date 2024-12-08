@@ -1,12 +1,14 @@
 #nullable disable
 
+using AutoDbSetGenerators;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.CommentsThreads;
 
-public sealed class CommentsThreadSubscriber
+[AutoDbSet]
+public sealed class CommentThreadSubscriber
 {
-	public CommentsThread CommentsThread { get; init; }
+	public CommentThread CommentThread { get; init; }
 	public long CommentsThreadId { get; init; }
 	public OgmaUser OgmaUser { get; init; }
 	public long OgmaUserId { get; init; }

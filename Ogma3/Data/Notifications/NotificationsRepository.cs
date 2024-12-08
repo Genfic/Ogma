@@ -47,7 +47,7 @@ public sealed class NotificationsRepository
 
 	public async Task NotifyUsers(long threadId, long commentId, string body, CancellationToken cancellationToken, long[]? except = null)
 	{
-		var subscribers = await _context.CommentsThreadSubscribers
+		var subscribers = await _context.CommentThreadSubscribers
 			.Where(cts => cts.CommentsThreadId == threadId)
 			.Select(cts => cts.OgmaUserId)
 			.ToListAsync(cancellationToken);

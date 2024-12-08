@@ -25,7 +25,7 @@ namespace CompiledModels
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.CommentsThreads.CommentsThread",
-                typeof(CommentsThread),
+                typeof(CommentThread),
                 baseEntityType,
                 propertyCount: 8,
                 navigationCount: 5,
@@ -47,32 +47,32 @@ namespace CompiledModels
             var blogpostId = runtimeEntityType.AddProperty(
                 "BlogpostId",
                 typeof(long?),
-                propertyInfo: typeof(CommentsThread).GetProperty("BlogpostId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<BlogpostId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("BlogpostId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<BlogpostId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
             blogpostId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var chapterId = runtimeEntityType.AddProperty(
                 "ChapterId",
                 typeof(long?),
-                propertyInfo: typeof(CommentsThread).GetProperty("ChapterId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<ChapterId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("ChapterId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<ChapterId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
             chapterId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var clubThreadId = runtimeEntityType.AddProperty(
                 "ClubThreadId",
                 typeof(long?),
-                propertyInfo: typeof(CommentsThread).GetProperty("ClubThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<ClubThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("ClubThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<ClubThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
             clubThreadId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var commentsCount = runtimeEntityType.AddProperty(
                 "CommentsCount",
                 typeof(int),
-                propertyInfo: typeof(CommentsThread).GetProperty("CommentsCount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<CommentsCount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("CommentsCount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<CommentsCount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
                 sentinel: 0);
             commentsCount.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
@@ -81,8 +81,8 @@ namespace CompiledModels
             var isLocked = runtimeEntityType.AddProperty(
                 "IsLocked",
                 typeof(bool),
-                propertyInfo: typeof(CommentsThread).GetProperty("IsLocked", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<IsLocked>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("IsLocked", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<IsLocked>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAddOrUpdate,
                 beforeSaveBehavior: PropertySaveBehavior.Ignore,
                 afterSaveBehavior: PropertySaveBehavior.Ignore,
@@ -94,16 +94,16 @@ namespace CompiledModels
             var lockDate = runtimeEntityType.AddProperty(
                 "LockDate",
                 typeof(DateTimeOffset?),
-                propertyInfo: typeof(CommentsThread).GetProperty("LockDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<LockDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("LockDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<LockDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
             lockDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var userId = runtimeEntityType.AddProperty(
                 "UserId",
                 typeof(long?),
-                propertyInfo: typeof(CommentsThread).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThread).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
             userId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
@@ -143,13 +143,13 @@ namespace CompiledModels
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(Blogpost),
-                propertyInfo: typeof(CommentsThread).GetProperty("Blogpost", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<Blogpost>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThread).GetProperty("Blogpost", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<Blogpost>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var commentsThread = principalEntityType.AddNavigation("CommentsThread",
                 runtimeForeignKey,
                 onDependent: false,
-                typeof(CommentsThread),
+                typeof(CommentThread),
                 propertyInfo: typeof(Blogpost).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Blogpost).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
@@ -169,13 +169,13 @@ namespace CompiledModels
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(Chapter),
-                propertyInfo: typeof(CommentsThread).GetProperty("Chapter", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<Chapter>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThread).GetProperty("Chapter", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<Chapter>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var commentsThread = principalEntityType.AddNavigation("CommentsThread",
                 runtimeForeignKey,
                 onDependent: false,
-                typeof(CommentsThread),
+                typeof(CommentThread),
                 propertyInfo: typeof(Chapter).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Chapter).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
@@ -194,13 +194,13 @@ namespace CompiledModels
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(ClubThread),
-                propertyInfo: typeof(CommentsThread).GetProperty("ClubThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<ClubThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThread).GetProperty("ClubThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<ClubThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var commentsThread = principalEntityType.AddNavigation("CommentsThread",
                 runtimeForeignKey,
                 onDependent: false,
-                typeof(CommentsThread),
+                typeof(CommentThread),
                 propertyInfo: typeof(ClubThread).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ClubThread).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
@@ -220,13 +220,13 @@ namespace CompiledModels
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(OgmaUser),
-                propertyInfo: typeof(CommentsThread).GetProperty("User", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<User>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThread).GetProperty("User", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<User>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var commentsThread = principalEntityType.AddNavigation("CommentsThread",
                 runtimeForeignKey,
                 onDependent: false,
-                typeof(CommentsThread),
+                typeof(CommentThread),
                 propertyInfo: typeof(OgmaUser).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OgmaUser).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
@@ -245,8 +245,8 @@ namespace CompiledModels
                 true,
                 false,
                 typeof(ICollection<OgmaUser>),
-                propertyInfo: typeof(CommentsThread).GetProperty("Subscribers", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThread).GetField("<Subscribers>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThread).GetProperty("Subscribers", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThread).GetField("<Subscribers>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var inverse = targetEntityType.FindSkipNavigation("SubscribedThreads");
             if (inverse != null)

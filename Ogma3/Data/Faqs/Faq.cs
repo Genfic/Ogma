@@ -1,8 +1,10 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Faqs;
 
+[AutoDbSet]
 public sealed class Faq : BaseModel
 {
 	public required string Question { get; set; }

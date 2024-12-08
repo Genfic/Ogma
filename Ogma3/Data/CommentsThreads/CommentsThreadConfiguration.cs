@@ -4,9 +4,9 @@ using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.CommentsThreads;
 
-public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentsThread>
+public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThread>
 {
-	public override void Configure(EntityTypeBuilder<CommentsThread> builder)
+	public override void Configure(EntityTypeBuilder<CommentThread> builder)
 	{
 		base.Configure(builder);
 
@@ -18,25 +18,25 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentsThre
 
 		builder
 			.Property(ct => ct.IsLocked)
-			.HasComputedColumnSql($"\"{nameof(CommentsThread.LockDate)}\" IS NOT NULL", true);
+			.HasComputedColumnSql($"\"{nameof(CommentThread.LockDate)}\" IS NOT NULL", true);
 
 		// NAVIGATION
 		builder
 			.HasMany(ct => ct.Comments)
-			.WithOne(c => c.CommentsThread)
+			.WithOne(c => c.CommentThread)
 			.HasForeignKey(ct => ct.CommentsThreadId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder
 			.HasMany(ct => ct.Subscribers)
 			.WithMany(u => u.SubscribedThreads)
-			.UsingEntity<CommentsThreadSubscriber>(
+			.UsingEntity<CommentThreadSubscriber>(
 				cts => cts
 					.HasOne(c => c.OgmaUser)
 					.WithMany()
 					.HasForeignKey(c => c.OgmaUserId),
 				cts => cts
-					.HasOne(c => c.CommentsThread)
+					.HasOne(c => c.CommentThread)
 					.WithMany()
 					.HasForeignKey(c => c.CommentsThreadId)
 			);

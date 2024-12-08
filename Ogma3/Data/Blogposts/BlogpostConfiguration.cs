@@ -56,9 +56,9 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder
-			.HasOne(b => b.CommentsThread)
+			.HasOne(b => b.CommentThread)
 			.WithOne(ct => ct.Blogpost)
-			.HasForeignKey<CommentsThread>(ct => ct.BlogpostId)
+			.HasForeignKey<CommentThread>(ct => ct.BlogpostId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder

@@ -89,7 +89,7 @@ public static partial class CreateComment
 	{
 		if (source != CommentSource.Profile) return false;
 		
-		return await context.BlacklistedUsers
+		return await context.BlockedUsers
 			.Where(b => b.BlockingUserId == profileOwnerId)
 			.Where(b => b.BlockedUserId == currentUserId)
 			.AnyAsync(ct);

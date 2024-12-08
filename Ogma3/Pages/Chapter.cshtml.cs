@@ -32,7 +32,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 		Chapter = chapter;
 
 		CommentsThread =
-			new CommentsThreadDto(chapter.CommentsThreadId, CommentSource.Chapter, chapter.CommentsThreadLockDate);
+			new CommentsThreadDto(chapter.CommentThreadId, CommentSource.Chapter, chapter.CommentThreadLockDate);
 
 		Previous = await context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
@@ -70,8 +70,8 @@ public record ChapterDetails
 	string StoryTitle,
 	string StorySlug,
 	long StoryAuthorId,
-	long CommentsThreadId,
-	DateTimeOffset CommentsThreadLockDate,
+	long CommentThreadId,
+	DateTimeOffset CommentThreadLockDate,
 	ContentBlockCard? ContentBlock);
 
 public record ChapterMicroDto(long Id, string Title, string Slug);

@@ -21,7 +21,7 @@
 		<AdditionalFiles Include="../BannedSymbols.txt" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Atulin.AutoDbSet" Version="1.0.0" />
+		<PackageReference Include="Atulin.AutoDbSet" Version="1.1.1" />
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.0.1" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
 		<PackageReference Include="B2Net" Version="0.7.5" />

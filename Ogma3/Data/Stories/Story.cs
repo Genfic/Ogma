@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Chapters;
@@ -11,6 +12,7 @@ using Ogma3.Data.Votes;
 
 namespace Ogma3.Data.Stories;
 
+[AutoDbSet]
 public sealed class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public OgmaUser Author { get; set; } = null!;

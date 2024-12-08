@@ -27,14 +27,14 @@ public static partial class UnsubscribeCommentsThread
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
-		var subscriber = await context.CommentsThreadSubscribers
+		var subscriber = await context.CommentThreadSubscribers
 			.Where(cts => cts.OgmaUserId == uid)
 			.Where(cts => cts.CommentsThreadId == request.ThreadId)
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (subscriber is null) return TypedResults.Ok(false);
 
-		context.CommentsThreadSubscribers.Remove(subscriber);
+		context.CommentThreadSubscribers.Remove(subscriber);
 
 		await context.SaveChangesAsync(cancellationToken);
 

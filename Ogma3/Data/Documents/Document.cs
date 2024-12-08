@@ -1,9 +1,11 @@
 #nullable disable
 
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 
 namespace Ogma3.Data.Documents;
 
+[AutoDbSet]
 public sealed class Document : BaseModel
 {
 	public string Title { get; init; }

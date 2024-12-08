@@ -39,7 +39,7 @@ public sealed class IndexModel(ApplicationDbContext context, ClubRepository club
 				CreationDate = ct.CreationDate,
 				AuthorName = ct.Author.UserName,
 				AuthorAvatar = ct.Author.Avatar,
-				CommentsCount = ct.CommentsThread.Comments.Count,
+				CommentsCount = ct.CommentThread.Comments.Count,
 			})
 			.ToListAsync();
 

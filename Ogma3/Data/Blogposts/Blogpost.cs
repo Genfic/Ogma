@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Chapters;
@@ -8,6 +9,7 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Blogposts;
 
+[AutoDbSet]
 public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public string Title { get; set; } = null!;
@@ -17,7 +19,7 @@ public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent,
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
 	public string Body { get; set; } = null!;
-	public CommentsThread CommentsThread { get; set; } = null!;
+	public CommentThread CommentThread { get; set; } = null!;
 	public int WordCount { get; set; }
 	public string[] Hashtags { get; set; } = [];
 

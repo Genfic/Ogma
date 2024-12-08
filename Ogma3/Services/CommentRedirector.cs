@@ -12,16 +12,16 @@ public sealed class CommentRedirector(ApplicationDbContext context)
 			.Select(c => new CommentMeta
 			{
 				// Get the ordinal number of the comment within the thread.
-				Ordinal = c.CommentsThread.Comments
+				Ordinal = c.CommentThread.Comments
 					.OrderBy(x => x.DateTime)
 					.Count(x => x.Id < commentId),
-				Name = c.CommentsThread.User != null ? c.CommentsThread.User.UserName : null,
-				ClubId = c.CommentsThread.ClubThread != null ? c.CommentsThread.ClubThread.ClubId : null,
-				Id = c.CommentsThread.BlogpostId ?? c.CommentsThread.ChapterId ?? c.CommentsThread.ClubThreadId,
-				Which = c.CommentsThread.UserId != null ? ThreadType.User :
-					c.CommentsThread.BlogpostId != null ? ThreadType.Blogpost :
-					c.CommentsThread.ChapterId != null ? ThreadType.Chapter :
-					c.CommentsThread.ClubThreadId != null ? ThreadType.Club : null,
+				Name = c.CommentThread.User != null ? c.CommentThread.User.UserName : null,
+				ClubId = c.CommentThread.ClubThread != null ? c.CommentThread.ClubThread.ClubId : null,
+				Id = c.CommentThread.BlogpostId ?? c.CommentThread.ChapterId ?? c.CommentThread.ClubThreadId,
+				Which = c.CommentThread.UserId != null ? ThreadType.User :
+					c.CommentThread.BlogpostId != null ? ThreadType.Blogpost :
+					c.CommentThread.ChapterId != null ? ThreadType.Chapter :
+					c.CommentThread.ClubThreadId != null ? ThreadType.Club : null,
 			})
 			.FirstOrDefaultAsync();
 

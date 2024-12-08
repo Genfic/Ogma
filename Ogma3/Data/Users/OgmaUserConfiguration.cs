@@ -66,9 +66,9 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 
 		// NAVIGATION
 		builder
-			.HasOne(u => u.CommentsThread)
+			.HasOne(u => u.CommentThread)
 			.WithOne(ct => ct.User)
-			.HasForeignKey<CommentsThread>(ct => ct.UserId)
+			.HasForeignKey<CommentThread>(ct => ct.UserId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder

@@ -37,7 +37,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 				AuthorId = ct.AuthorId,
 				Title = ct.Title,
 				CreationDate = ct.CreationDate,
-				Replies = ct.CommentsThread.CommentsCount,
+				Replies = ct.CommentThread.CommentsCount,
 			})
 			.FirstOrDefaultAsync();
 

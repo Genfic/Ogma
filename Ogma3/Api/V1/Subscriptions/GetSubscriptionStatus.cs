@@ -25,7 +25,7 @@ public static partial class GetSubscriptionStatus
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
-		var isSubscribed = await context.CommentsThreadSubscribers
+		var isSubscribed = await context.CommentThreadSubscribers
 			.Where(cts => cts.OgmaUserId == uid)
 			.Where(cts => cts.CommentsThreadId == request.ThreadId)
 			.AnyAsync(cancellationToken);

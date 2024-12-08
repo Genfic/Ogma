@@ -20,7 +20,7 @@ namespace CompiledModels
         {
             var runtimeEntityType = model.AddEntityType(
                 "Ogma3.Data.CommentsThreads.CommentsThreadSubscriber",
-                typeof(CommentsThreadSubscriber),
+                typeof(CommentThreadSubscriber),
                 baseEntityType,
                 propertyCount: 2,
                 navigationCount: 2,
@@ -31,8 +31,8 @@ namespace CompiledModels
             var commentsThreadId = runtimeEntityType.AddProperty(
                 "CommentsThreadId",
                 typeof(long),
-                propertyInfo: typeof(CommentsThreadSubscriber).GetProperty("CommentsThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThreadSubscriber).GetField("<CommentsThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("CommentsThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<CommentsThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
             commentsThreadId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
@@ -40,8 +40,8 @@ namespace CompiledModels
             var ogmaUserId = runtimeEntityType.AddProperty(
                 "OgmaUserId",
                 typeof(long),
-                propertyInfo: typeof(CommentsThreadSubscriber).GetProperty("OgmaUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThreadSubscriber).GetField("<OgmaUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("OgmaUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<OgmaUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
             ogmaUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
@@ -67,9 +67,9 @@ namespace CompiledModels
             var commentsThread = declaringEntityType.AddNavigation("CommentsThread",
                 runtimeForeignKey,
                 onDependent: true,
-                typeof(CommentsThread),
-                propertyInfo: typeof(CommentsThreadSubscriber).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThreadSubscriber).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                typeof(CommentThread),
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }
@@ -86,8 +86,8 @@ namespace CompiledModels
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(OgmaUser),
-                propertyInfo: typeof(CommentsThreadSubscriber).GetProperty("OgmaUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CommentsThreadSubscriber).GetField("<OgmaUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("OgmaUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<OgmaUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }

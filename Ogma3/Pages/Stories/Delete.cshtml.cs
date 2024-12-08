@@ -50,7 +50,7 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 				Status = s.Status,
 				VotesCount = s.Votes.Count,
 				ChaptersCount = s.Chapters.Count,
-				CommentsCount = s.Chapters.Sum(c => c.CommentsThread.CommentsCount),
+				CommentsCount = s.Chapters.Sum(c => c.CommentThread.CommentsCount),
 			})
 			.AsNoTracking()
 			.FirstOrDefaultAsync();

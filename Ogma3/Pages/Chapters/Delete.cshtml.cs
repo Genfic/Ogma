@@ -39,7 +39,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 				StoryTitle = c.Story.Title,
 				WordCount = c.WordCount,
 				PublishDate = c.PublicationDate,
-				CommentsThreadCommentsCount = c.CommentsThread.CommentsCount,
+				CommentsThreadCommentsCount = c.CommentThread.CommentsCount,
 			})
 			.FirstOrDefaultAsync();
 

@@ -56,7 +56,7 @@ public static class QueryableExtensions
 					.Where(bt => bt.UserId == userId)
 					.Any(bt => s.Tags.Any(t => t.Id == bt.TagId))
 				)
-				.Where(s => !ctx.BlacklistedUsers
+				.Where(s => !ctx.BlockedUsers
 					.Where(bu => bu.BlockingUserId == userId)
 					.Any(bu => bu.BlockedUserId == s.AuthorId)
 				)

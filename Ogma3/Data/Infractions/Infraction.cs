@@ -1,8 +1,10 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Infractions;
 
+[AutoDbSet]
 public sealed class Infraction : BaseModel
 {
 	public OgmaUser User { get; init; } = null!;

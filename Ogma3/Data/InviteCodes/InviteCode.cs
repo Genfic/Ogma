@@ -1,8 +1,10 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.InviteCodes;
 
+[AutoDbSet]
 public sealed class InviteCode : BaseModel
 {
 	private readonly string _code = null!;

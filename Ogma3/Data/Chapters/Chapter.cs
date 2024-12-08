@@ -1,3 +1,4 @@
+using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.CommentsThreads;
@@ -6,6 +7,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Data.Chapters;
 
+[AutoDbSet]
 public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent
 {
 	public uint Order { get; set; }
@@ -17,7 +19,7 @@ public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, 
 	public string? StartNotes { get; set; }
 	public string? EndNotes { get; set; }
 	public int WordCount { get; set; }
-	public CommentsThread CommentsThread { get; set; } = null!;
+	public CommentThread CommentThread { get; set; } = null!;
 	public Story Story { get; set; } = null!;
 	public long StoryId { get; set; }
 	public ContentBlock? ContentBlock { get; set; }

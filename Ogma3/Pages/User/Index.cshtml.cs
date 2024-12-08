@@ -30,7 +30,7 @@ public sealed class IndexModel(ApplicationDbContext context, UserRepository user
 			{
 				Bio = u.Bio,
 				Links = u.Links,
-				CommentsThread = new CommentsThreadDto(u.CommentsThread.Id, CommentSource.Profile, u.CommentsThread.LockDate),
+				CommentsThread = new CommentsThreadDto(u.CommentThread.Id, CommentSource.Profile, u.CommentThread.LockDate),
 			})
 			.FirstOrDefaultAsync();
 

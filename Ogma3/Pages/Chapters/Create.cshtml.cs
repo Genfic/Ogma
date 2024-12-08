@@ -106,7 +106,7 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			StartNotes = Input.StartNotes?.Trim(),
 			EndNotes = Input.EndNotes?.Trim(),
 			Order = latestChapter + 1,
-			CommentsThread = new CommentsThread(),
+			CommentThread = new CommentThread(),
 			WordCount = Input.Body.Words(),
 		};
 
@@ -118,9 +118,9 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		story.Chapters.Add(chapter);
 
 		// Subscribe author to the comment thread
-		context.CommentsThreadSubscribers.Add(new CommentsThreadSubscriber
+		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
-			CommentsThread = chapter.CommentsThread,
+			CommentThread = chapter.CommentThread,
 			OgmaUserId = (long)uid,
 		});
 

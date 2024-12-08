@@ -36,9 +36,9 @@ public sealed class ClubThreadConfiguration : BaseConfiguration<ClubThread>
 			.OnDelete(DeleteBehavior.SetNull);
 
 		builder
-			.HasOne(b => b.CommentsThread)
+			.HasOne(b => b.CommentThread)
 			.WithOne(ct => ct.ClubThread)
-			.HasForeignKey<CommentsThread>(ct => ct.ClubThreadId)
+			.HasForeignKey<CommentThread>(ct => ct.ClubThreadId)
 			.OnDelete(DeleteBehavior.Cascade);
 	}
 }
