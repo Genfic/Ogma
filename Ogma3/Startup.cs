@@ -244,12 +244,14 @@ public sealed class Startup
 			options.AddDocumentTransformer<PublicApiDocumentTransformer>();
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
+			options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 		});
 		services.AddOpenApi("internal", options => {
 			options.AddDocumentTransformer<InternalApiDocumentTransformer>();
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
+			options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 		});
 		

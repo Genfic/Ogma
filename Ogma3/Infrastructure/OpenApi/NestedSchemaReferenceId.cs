@@ -7,7 +7,7 @@ public static class NestedSchemaReferenceId
 	public static string? Fun(JsonTypeInfo info)
 	{
 		var type = Nullable.GetUnderlyingType(info.Type) ?? info.Type;
-
+		
 		if (PrimitiveTypes.Contains(type) || type.IsArray)
 		{
 			return null;
@@ -16,14 +16,14 @@ public static class NestedSchemaReferenceId
 		return Generate(info.Type);
 	}
 
-	private static string Generate(Type type)
+	private static string? Generate(Type type)
 	{
 		if (!type.IsConstructedGenericType)
 		{
-			return type.FullName!.Split('.')[^1].Replace("+", "");
+			return type.FullName?.Split('.')[^1].Replace("+", "");
 		}
 
-		return type.Name.Split('`').First() + "Of" + string.Join("And", type.GenericTypeArguments.Select(Generate));
+		return null;
 	}
 
 	private static readonly List<Type> PrimitiveTypes =
