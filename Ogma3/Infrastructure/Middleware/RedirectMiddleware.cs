@@ -31,5 +31,5 @@ public static class RedirectMiddlewareExtensions
 
 public sealed class RedirectMiddlewareOptions
 {
-	public Dictionary<string, string> Redirects { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+	public Dictionary<string, string> Redirects { get; } = new(StringComparer.OrdinalIgnoreCase);
 }

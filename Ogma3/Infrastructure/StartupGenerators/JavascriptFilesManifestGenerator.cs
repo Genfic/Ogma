@@ -60,10 +60,10 @@ public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environ
 
 		var filesAndHashes = filesAndHashesConcurrent.ToImmutableSortedDictionary(new AlphaComparer());
 		
-		if (existingManifest is {} em && filesAndHashes.SequenceEqual(em.Files.ToImmutableSortedDictionary(new AlphaComparer()), new KvpComparer()))
+		if (existingManifest is not null && filesAndHashes.SequenceEqual(existingManifest.Files.ToImmutableSortedDictionary(new AlphaComparer()), new KvpComparer()))
 		{
 			stopwatch.Stop();
-			Log.Information("Files are unchanged, stopping manifest generation after {Time}ms", stopwatch.ElapsedMilliseconds);
+			Log.Information("Files are unchanged, stopping manifest generation after {Time} ms", stopwatch.ElapsedMilliseconds);
 			return;
 		}
 		

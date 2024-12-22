@@ -51,12 +51,12 @@ public sealed class CommentRedirector(ApplicationDbContext context)
 		Club,
 	}
 
-	private sealed record CommentMeta
+	private sealed class CommentMeta
 	{
-		public int Ordinal { get; init; }
-		public ThreadType? Which { get; init; }
-		public string? Name { get; init; }
-		public long? Id { get; init; }
-		public long? ClubId { get; init; }
+		public required int Ordinal { get; init; }
+		public required ThreadType? Which { get; init; }
+		public required string? Name { get; init; }
+		public required long? Id { get; init; }
+		public required long? ClubId { get; init; }
 	}
 }

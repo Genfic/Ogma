@@ -2,11 +2,20 @@ using System.Text.Json.Serialization;
 
 namespace Ogma3.Services.TurnstileService;
 
-public record TurnstileResult(
-	[property: JsonPropertyName("success")] bool Success,
-	[property: JsonPropertyName("error-codes")] string[] ErrorCodes,
-	[property: JsonPropertyName("challenge_ts")] DateTimeOffset ChallengeTs,
-	[property: JsonPropertyName("hostname")] string Hostname);
+public sealed class TurnstileResult
+{
+	[JsonPropertyName("success")]
+	public required bool Success { get; init; }
+
+	[JsonPropertyName("error-codes")]
+	public required string[] ErrorCodes { get; init; }
+
+	[JsonPropertyName("challenge_ts")]
+	public required DateTimeOffset ChallengeTs { get; init; }
+
+	[JsonPropertyName("hostname")]
+	public required string Hostname { get; init; }
+}
 
 [JsonSerializable(typeof(TurnstileResult))]
 public sealed partial class TurnstileResultContext : JsonSerializerContext;

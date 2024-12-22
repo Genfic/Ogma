@@ -38,9 +38,9 @@ public static class HtmlExtensions
 		if (htmlHelper.ViewContext.HttpContext.Items[type] is not {} item) return new HtmlString(string.Empty);
 
 		var resources = (List<Func<object?, HelperResult>?>)item;
-		foreach (var resource in resources.Where(resource => resource is not null))
+		foreach (var resource in resources.OfType<Func<object?, HelperResult>>())
 		{
-			htmlHelper.ViewContext.Writer.Write(resource!(null)); // Null-forgiving because we filter out nulls with `.Where()`
+			htmlHelper.ViewContext.Writer.Write(resource(null));
 		}
 
 		return new HtmlString(string.Empty);
