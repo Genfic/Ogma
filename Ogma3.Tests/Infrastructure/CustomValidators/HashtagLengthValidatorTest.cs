@@ -6,24 +6,22 @@ public sealed class HashtagLengthValidatorTest
 {
 	private readonly HashtagLengthValidator<int> _validator = new(10);
 
-	[Theory]
-	[InlineData("short,short")]
-	[InlineData("1234567890, 1234567890")]
-	[InlineData("1234567890,      1234567890")]
-	public void TestIsValid_Valid(string value)
+	[Test]
+	[Arguments("short,short")]
+	[Arguments("1234567890, 1234567890")]
+	[Arguments("1234567890,      1234567890")]
+	public async Task TestIsValid_Valid(string value)
 	{
-		var result = _validator.IsValid(value);
-		Assert.True(result);
+		await Assert.That(_validator.IsValid(value)).IsTrue();
 	}
 	
-	[Theory]
-	[InlineData("super long tag,short,super long tag")]
-	[InlineData("short, super long tag, super long tag")]
-	[InlineData("0123456789a, short")]
-	[InlineData("sho       rt, short      ")]
-	public void TestIsValid_Invalid(string value)
+	[Test]
+	[Arguments("super long tag,short,super long tag")]
+	[Arguments("short, super long tag, super long tag")]
+	[Arguments("0123456789a, short")]
+	[Arguments("sho       rt, short      ")]
+	public async Task TestIsValid_Invalid(string value)
 	{
-		var result = _validator.IsValid(value);
-		Assert.False(result);
+		await Assert.That(_validator.IsValid(value)).IsFalse();
 	}
 }

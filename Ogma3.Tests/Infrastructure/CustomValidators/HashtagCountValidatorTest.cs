@@ -6,24 +6,22 @@ public sealed class HashtagCountValidatorTest
 {
 	private readonly HashtagCountValidator<int> _validator = new(3);
 
-	[Theory]
-	[InlineData("a, b, c")]
-	[InlineData("a,b,c")]
-	[InlineData("")]
-	[InlineData("a, b")]
-	[InlineData("a")]
-	public void TestIsValid_Valid(string value)
+	[Test]
+	[Arguments("a, b, c")]
+	[Arguments("a,b,c")]
+	[Arguments("")]
+	[Arguments("a, b")]
+	[Arguments("a")]
+	public async Task TestIsValid_Valid(string value)
 	{
-		var result = _validator.IsValid(value);
-		Assert.True(result);
+		await Assert.That(_validator.IsValid(value)).IsTrue();
 	}
 	
-	[Theory]
-	[InlineData("a, b, c, d")]
-	[InlineData("a,b,c,d")]
-	public void TestIsValid_Invalid(string value)
+	[Test]
+	[Arguments("a, b, c, d")]
+	[Arguments("a,b,c,d")]
+	public async Task TestIsValid_Invalid(string value)
 	{
-		var result = _validator.IsValid(value);
-		Assert.False(result);
+		await Assert.That(_validator.IsValid(value)).IsFalse();
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -123,12 +124,12 @@ public static partial class String
 			.ToArray();
 	}
 
-	public static IEnumerable<string> FindHashtags(this string input)
+	public static ImmutableArray<string> FindHashtags(this string input)
 	{
-		return HashtagRegex.Matches(input).Select(m => m.Groups["tag"].Value);
+		return [..HashtagRegex.Matches(input).Select(m => m.Groups["tag"].Value)];
 	}
 
-	public static IEnumerable<Header> GetMarkdownHeaders(this string input)
+	public static List<Header> GetMarkdownHeaders(this string input)
 	{
 		var headers = new List<Header>();
 		
