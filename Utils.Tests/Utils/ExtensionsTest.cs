@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Utils.Extensions;
 
@@ -112,8 +113,8 @@ public sealed class ExtensionsTest
 	public async Task TestParseHashtags()
 	{
 		await Assert
-			.That("aaa bbb ccc".ParseHashtags())
-			.IsEqualTo(["aaa", "bbb", "ccc"]);
+			.That("aaa, bbb, ccc".ParseHashtags())
+			.IsEquivalentTo(["aaa", "bbb", "ccc"]);
 	}
 
 	[Test]
@@ -121,7 +122,7 @@ public sealed class ExtensionsTest
 	{
 		await Assert
 			.That("#aaa,  #bbb  , #  ccc".ParseHashtags())
-			.IsEqualTo(["aaa", "bbb", "ccc"]);
+			.IsEquivalentTo(["aaa", "bbb", "ccc"]);
 	}
 	
 	// Test find hashtags
@@ -130,7 +131,7 @@ public sealed class ExtensionsTest
 	{
 		await Assert
 			.That(string.Empty.FindHashtags())
-			.IsEqualTo([]);
+			.IsEquivalentTo(ImmutableArray<string>.Empty);
 	}
 	
 	[Test]
@@ -138,7 +139,7 @@ public sealed class ExtensionsTest
 	{
 		await Assert
 			.That("#one#two #buckle/my/shoe #three!@#$%^&*()_+-={}[]:\";'<>?,./~`".FindHashtags())
-			.IsEqualTo([]);
+			.IsEquivalentTo(ImmutableArray<string>.Empty);
 	}
 	
 	[Test]
@@ -146,6 +147,6 @@ public sealed class ExtensionsTest
 	{
 		await Assert
 			.That("#one two #buckle-my shoe #3_4 buckle #some #m #or #e #yeeeeah".FindHashtags())
-			.IsEqualTo(["#one", "#buckle-my", "#3_4", "#some", "#yeeeeah"]);
+			.IsEquivalentTo(["#one", "#buckle-my", "#3_4", "#some", "#yeeeeah"]);
 	}
 }
