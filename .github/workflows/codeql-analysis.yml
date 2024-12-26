@@ -22,66 +22,40 @@ on:
 
 jobs:
 
-
-  #################################################################
-  #                                                               #
-  #             DISABLED DUE TO LACK OF .NET 6 SUPPORT            #
-  #                                                               #
-  #################################################################
-
-  analyze-csharp:
-    name: Analyze (csharp)
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    strategy:
-      fail-fast: false
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: csharp
-
-    - run: |
-        dotnet nuget add source --username Atulin --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/atulin/index.json"
-        dotnet build
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-
-
-
-
-  analyze-rest:
+  analyze:
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
       security-events: write
-
+      
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'javascript', 'python' ]
+        language: [ 'javascript', 'typescript', 'csharp' ]
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
-
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: actions/checkout@v4
+      
+    - name: Setup C#
+      if: ${{ matrix.language == 'csharp' }}
+      uses: actions/setup-dotnet@v4
       with:
-        languages: ${{ matrix.language }}
+        dotnet-version: '9'
+        
+    - name: Prepare C#
+      if: ${{ matrix.language == 'csharp' }}
+      run: |
+          dotnet nuget add source --username Atulin --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/atulin/index.json"
+          dotnet build
+        
+     # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+          languages: ${{ matrix.language }}
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
