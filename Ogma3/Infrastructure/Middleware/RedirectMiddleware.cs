@@ -1,8 +1,9 @@
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public sealed class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options, ILogger<RedirectMiddleware> logger)
+public sealed partial class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options, ILogger<RedirectMiddleware> logger)
 {
 	private readonly RedirectMiddlewareOptions _options = options.Value;
 
@@ -10,13 +11,16 @@ public sealed class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMi
 	{
 		if (_options.Redirects.TryGetValue(context.Request.Path, out var redirect))
 		{
-			logger.LogInformation("Redirecting from {Source} to {Target}", context.Request.Path, redirect);
+			LogRedirect(logger, context.Request.Path, redirect);
 			context.Response.Redirect(redirect);
 			return;
 		}
 
 		await next(context);
 	}
+	
+	[LoggerMessage(0, LogLevel.Information, "Redirecting from {Source} to {Target}")]
+	public static partial void LogRedirect(ILogger<RedirectMiddleware> logger, PathString source, string target);
 }
 
 public static class RedirectMiddlewareExtensions
@@ -31,5 +35,6 @@ public static class RedirectMiddlewareExtensions
 
 public sealed class RedirectMiddlewareOptions
 {
+	[UsedImplicitly]
 	public Dictionary<string, string> Redirects { get; } = new(StringComparer.OrdinalIgnoreCase);
 }

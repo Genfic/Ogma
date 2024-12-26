@@ -25,7 +25,7 @@ public static class RateLimiting
 					options.PermitLimit = 3;
 				});
 
-			limiterOptions.OnRejected = (OnRejectedContext context, CancellationToken _) => {
+			limiterOptions.OnRejected = (context, _) => {
 				if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
 				{
 					context.HttpContext.Response.Headers.RetryAfter = retryAfter.TotalSeconds.ToString("#");

@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public sealed class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
+public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
 	public static string CacheKey(long id) => $"u{id}_Ban";
 
@@ -22,14 +22,7 @@ public sealed class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext d
 		var banDate = await cache.GetOrCreateAsync(CacheKey(uid), async entry =>
 		{
 			entry.SlidingExpiration = TimeSpan.FromMinutes(30);
-			return await dbContext.Infractions
-				.TagWith($"{nameof(UserBanMiddleware)} querying for ban status")
-				.Where(i => i.UserId == uid)
-				.Where(i => i.Type == InfractionType.Ban)
-				.Where(i => i.RemovedAt == null)
-				.OrderByDescending(i => i.ActiveUntil)
-				.Select(i => i.ActiveUntil)
-				.FirstOrDefaultAsync();
+			return await CompiledQuery(dbContext, uid);
 		});
 
 		if (banDate == default)
@@ -40,7 +33,7 @@ public sealed class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext d
 
 		if (banDate > DateTimeOffset.UtcNow)
 		{
-			logger.LogInformation("Banned user {UserId} tried accessing the site", uid);
+			LogAccessAttempt(logger, uid);
 			if (httpContext.Request.Path.StartsWithSegments("/api"))
 			{
 				httpContext.Response.Clear();
@@ -61,6 +54,20 @@ public sealed class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext d
 			await next(httpContext);
 		}
 	}
+	
+	private static readonly Func<ApplicationDbContext, long, Task<DateTimeOffset>> CompiledQuery = EF.CompileAsyncQuery(
+		(ApplicationDbContext dbContext, long uid) => dbContext.Infractions
+			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
+			.Where(i => i.UserId == uid)
+			.Where(i => i.Type == InfractionType.Ban)
+			.Where(i => i.RemovedAt == null)
+			.OrderByDescending(i => i.ActiveUntil)
+			.Select(i => i.ActiveUntil)
+			.FirstOrDefault()
+		);
+
+	[LoggerMessage(0, LogLevel.Information, "Banned user {UserId} tried accessing the site")]
+	public static partial void LogAccessAttempt(ILogger<UserBanMiddleware> logger, long userId);
 }
 
 public static class UserBanMiddlewareExtension
