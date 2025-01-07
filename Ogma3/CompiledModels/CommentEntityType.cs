@@ -133,12 +133,12 @@ namespace CompiledModels
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);
 
-            var commentsThread = declaringEntityType.AddNavigation("CommentsThread",
+            var commentThread = declaringEntityType.AddNavigation("CommentThread",
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(CommentThread),
-                propertyInfo: typeof(Comment).GetProperty("CommentsThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Comment).GetField("<CommentsThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(Comment).GetProperty("CommentThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Comment).GetField("<CommentThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var comments = principalEntityType.AddNavigation("Comments",
                 runtimeForeignKey,

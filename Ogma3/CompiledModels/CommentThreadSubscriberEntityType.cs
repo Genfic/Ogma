@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Users;
 
 #pragma warning disable 219, 612, 618
@@ -13,13 +14,13 @@ using Ogma3.Data.Users;
 namespace CompiledModels
 {
     [EntityFrameworkInternal]
-    public partial class UserBlockEntityType
+    public partial class CommentThreadSubscriberEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
-                "Ogma3.Data.Users.UserBlock",
-                typeof(UserBlock),
+                "Ogma3.Data.CommentsThreads.CommentThreadSubscriber",
+                typeof(CommentThreadSubscriber),
                 baseEntityType,
                 propertyCount: 2,
                 navigationCount: 2,
@@ -27,66 +28,66 @@ namespace CompiledModels
                 unnamedIndexCount: 1,
                 keyCount: 1);
 
-            var blockingUserId = runtimeEntityType.AddProperty(
-                "BlockingUserId",
+            var commentsThreadId = runtimeEntityType.AddProperty(
+                "CommentsThreadId",
                 typeof(long),
-                propertyInfo: typeof(UserBlock).GetProperty("BlockingUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(UserBlock).GetField("<BlockingUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("CommentsThreadId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<CommentsThreadId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            blockingUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            commentsThreadId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-            var blockedUserId = runtimeEntityType.AddProperty(
-                "BlockedUserId",
+            var ogmaUserId = runtimeEntityType.AddProperty(
+                "OgmaUserId",
                 typeof(long),
-                propertyInfo: typeof(UserBlock).GetProperty("BlockedUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(UserBlock).GetField("<BlockedUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("OgmaUserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<OgmaUserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0L);
-            blockedUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            ogmaUserId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
-                new[] { blockingUserId, blockedUserId });
+                new[] { commentsThreadId, ogmaUserId });
             runtimeEntityType.SetPrimaryKey(key);
 
             var index = runtimeEntityType.AddIndex(
-                new[] { blockedUserId });
+                new[] { ogmaUserId });
 
             return runtimeEntityType;
         }
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("BlockedUserId") },
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("CommentsThreadId") },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);
 
-            var blockedUser = declaringEntityType.AddNavigation("BlockedUser",
+            var commentThread = declaringEntityType.AddNavigation("CommentThread",
                 runtimeForeignKey,
                 onDependent: true,
-                typeof(OgmaUser),
-                propertyInfo: typeof(UserBlock).GetProperty("BlockedUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(UserBlock).GetField("<BlockedUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                typeof(CommentThread),
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("CommentThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<CommentThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }
 
         public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("BlockingUserId") },
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("OgmaUserId") },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);
 
-            var blockingUser = declaringEntityType.AddNavigation("BlockingUser",
+            var ogmaUser = declaringEntityType.AddNavigation("OgmaUser",
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(OgmaUser),
-                propertyInfo: typeof(UserBlock).GetProperty("BlockingUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(UserBlock).GetField("<BlockingUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(CommentThreadSubscriber).GetProperty("OgmaUser", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CommentThreadSubscriber).GetField("<OgmaUser>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }
@@ -96,7 +97,7 @@ namespace CompiledModels
             runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
             runtimeEntityType.AddAnnotation("Relational:Schema", null);
             runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-            runtimeEntityType.AddAnnotation("Relational:TableName", "BlockedUsers");
+            runtimeEntityType.AddAnnotation("Relational:TableName", "CommentThreadSubscribers");
             runtimeEntityType.AddAnnotation("Relational:ViewName", null);
             runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
 

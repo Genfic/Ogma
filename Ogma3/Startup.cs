@@ -81,7 +81,8 @@ public sealed class Startup
 		.Configure<ZstdCompressionProvider.Options>(o => o.CompressionLevel = CompressionLevel.Optimal);
 
 		// Database
-		var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
+		// var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
+		var conn = Configuration.GetConnectionString("ogma3-db") ?? Configuration.GetConnectionString("DbConnection");
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
 				.UseNpgsql(conn, o => o.MapPostgresEnums())

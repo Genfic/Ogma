@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0"/>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsAspireHost>true</IsAspireHost>
+        <UserSecretsId>1f7fa604-b7af-418a-97ae-e1aaea83b0af</UserSecretsId>
+        <AssemblyName>Ogma3.AppHost</AssemblyName>
+        <RootNamespace>Ogma3.AppHost</RootNamespace>
+        <Company>Ogma3.AppHost</Company>
+        <Product>Ogma3.AppHost</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0"/>
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ogma3\Ogma3.csproj" />
+    </ItemGroup>
+
+</Project>

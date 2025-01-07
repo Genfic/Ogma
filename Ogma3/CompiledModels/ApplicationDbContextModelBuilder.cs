@@ -12,7 +12,7 @@ namespace CompiledModels
     public partial class ApplicationDbContextModel
     {
         private ApplicationDbContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("c2b123a7-8e10-41f4-981e-db6a117fa5dc"), entityTypeCount: 43)
+            : base(skipDetectChanges: false, modelId: new Guid("39bd223f-0fff-4f9d-8af3-75e7be8ce4a5"), entityTypeCount: 43)
         {
         }
 
@@ -34,8 +34,8 @@ namespace CompiledModels
             var clubMember = ClubMemberEntityType.Create(this);
             var comment = CommentEntityType.Create(this);
             var commentRevision = CommentRevisionEntityType.Create(this);
-            var commentsThread = CommentsThreadEntityType.Create(this);
-            var commentsThreadSubscriber = CommentsThreadSubscriberEntityType.Create(this);
+            var commentThread = CommentThreadEntityType.Create(this);
+            var commentThreadSubscriber = CommentThreadSubscriberEntityType.Create(this);
             var document = DocumentEntityType.Create(this);
             var faq = FaqEntityType.Create(this);
             var folder = FolderEntityType.Create(this);
@@ -86,15 +86,15 @@ namespace CompiledModels
             ClubMemberEntityType.CreateForeignKey1(clubMember, club);
             ClubMemberEntityType.CreateForeignKey2(clubMember, ogmaUser);
             CommentEntityType.CreateForeignKey1(comment, ogmaUser);
-            CommentEntityType.CreateForeignKey2(comment, commentsThread);
+            CommentEntityType.CreateForeignKey2(comment, commentThread);
             CommentEntityType.CreateForeignKey3(comment, ogmaUser);
             CommentRevisionEntityType.CreateForeignKey1(commentRevision, comment);
-            CommentsThreadEntityType.CreateForeignKey1(commentsThread, blogpost);
-            CommentsThreadEntityType.CreateForeignKey2(commentsThread, chapter);
-            CommentsThreadEntityType.CreateForeignKey3(commentsThread, clubThread);
-            CommentsThreadEntityType.CreateForeignKey4(commentsThread, ogmaUser);
-            CommentsThreadSubscriberEntityType.CreateForeignKey1(commentsThreadSubscriber, commentsThread);
-            CommentsThreadSubscriberEntityType.CreateForeignKey2(commentsThreadSubscriber, ogmaUser);
+            CommentThreadEntityType.CreateForeignKey1(commentThread, blogpost);
+            CommentThreadEntityType.CreateForeignKey2(commentThread, chapter);
+            CommentThreadEntityType.CreateForeignKey3(commentThread, clubThread);
+            CommentThreadEntityType.CreateForeignKey4(commentThread, ogmaUser);
+            CommentThreadSubscriberEntityType.CreateForeignKey1(commentThreadSubscriber, commentThread);
+            CommentThreadSubscriberEntityType.CreateForeignKey2(commentThreadSubscriber, ogmaUser);
             FolderEntityType.CreateForeignKey1(folder, club);
             FolderStoryEntityType.CreateForeignKey1(folderStory, ogmaUser);
             FolderStoryEntityType.CreateForeignKey2(folderStory, folder);
@@ -133,7 +133,7 @@ namespace CompiledModels
             VoteEntityType.CreateForeignKey1(vote, story);
             VoteEntityType.CreateForeignKey2(vote, ogmaUser);
 
-            CommentsThreadEntityType.CreateSkipNavigation1(commentsThread, ogmaUser, commentsThreadSubscriber);
+            CommentThreadEntityType.CreateSkipNavigation1(commentThread, ogmaUser, commentThreadSubscriber);
             FolderEntityType.CreateSkipNavigation1(folder, story, folderStory);
             NotificationEntityType.CreateSkipNavigation1(notification, ogmaUser, notificationRecipients);
             OgmaRoleEntityType.CreateSkipNavigation1(ogmaRole, ogmaUser, userRole);
@@ -148,7 +148,7 @@ namespace CompiledModels
             OgmaUserEntityType.CreateSkipNavigation4(ogmaUser, ogmaUser, userFollow);
             OgmaUserEntityType.CreateSkipNavigation5(ogmaUser, notification, notificationRecipients);
             OgmaUserEntityType.CreateSkipNavigation6(ogmaUser, ogmaRole, userRole);
-            OgmaUserEntityType.CreateSkipNavigation7(ogmaUser, commentsThread, commentsThreadSubscriber);
+            OgmaUserEntityType.CreateSkipNavigation7(ogmaUser, commentThread, commentThreadSubscriber);
 
             IdentityRoleClaimEntityType.CreateAnnotations(identityRoleClaim);
             IdentityUserClaimEntityType.CreateAnnotations(identityUserClaim);
@@ -166,8 +166,8 @@ namespace CompiledModels
             ClubMemberEntityType.CreateAnnotations(clubMember);
             CommentEntityType.CreateAnnotations(comment);
             CommentRevisionEntityType.CreateAnnotations(commentRevision);
-            CommentsThreadEntityType.CreateAnnotations(commentsThread);
-            CommentsThreadSubscriberEntityType.CreateAnnotations(commentsThreadSubscriber);
+            CommentThreadEntityType.CreateAnnotations(commentThread);
+            CommentThreadSubscriberEntityType.CreateAnnotations(commentThreadSubscriber);
             DocumentEntityType.CreateAnnotations(document);
             FaqEntityType.CreateAnnotations(faq);
             FolderEntityType.CreateAnnotations(folder);

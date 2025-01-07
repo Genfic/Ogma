@@ -1,7 +1,9 @@
 using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Ogma3;
+using Ogma3.Data;
 using Ogma3.Infrastructure.Logging;
 using Riok.Mapperly.Abstractions;
 using Serilog;
@@ -35,7 +37,7 @@ builder.Configuration
 
 builder.Host.UseSerilog();
 
-builder.WebHost.UseUrls("https://+:5001", "https://+:8001", "https://+:80");
+builder.WebHost.UseUrls("https://+:5001");
 builder.WebHost.ConfigureKestrel(options =>
 	{
 		options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
@@ -49,6 +51,13 @@ startup.ConfigureServices(builder.Services);
 var app = builder.Build();
 
 startup.Configure(app, app.Environment);
+
+if (app.Environment.IsDevelopment())
+{
+	using var serviceScope = app.Services.CreateScope();
+	var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	await dbContext.Database.MigrateAsync();
+}
 
 if (args.Any(a => a == "--seed"))
 {
