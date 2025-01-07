@@ -42,6 +42,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 			.OrderBy(c => c.Order)
 			.ProjectToMicro()
 			.LastOrDefaultAsync();
+		
 		Next = await context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
 			.Where(c => c.PublicationDate != null)
