@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Logging;
+using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
 using Serilog.Events;
@@ -22,6 +23,7 @@ Log.Logger = new LoggerConfiguration()
 	.WriteTo.Telegram(telegramToken, telegramId, restrictedToMinimumLevel: LogEventLevel.Error)
 	.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
 	.WriteTo.Console(LogEventLevel.Information)
+	.WriteTo.OpenTelemetry()
 	.MinimumLevel.Debug()
 	.CreateLogger(); 
 
@@ -37,7 +39,7 @@ builder.Configuration
 
 builder.Host.UseSerilog();
 
-builder.WebHost.UseUrls("https://+:5001");
+// builder.WebHost.UseUrls("https://+:5001");
 builder.WebHost.ConfigureKestrel(options =>
 	{
 		options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
@@ -47,6 +49,8 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var startup = new Startup(builder.Configuration, builder.Environment);
 startup.ConfigureServices(builder.Services);
+
+builder.AddServiceDefaults();
 
 var app = builder.Build();
 

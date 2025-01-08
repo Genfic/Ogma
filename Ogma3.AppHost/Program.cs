@@ -14,6 +14,7 @@ var database = builder
 
 builder
 	.AddProject<Projects.Ogma3>("ogma3")
+	.WithExternalHttpEndpoints()
 	.WithReference(database)
 	.WaitFor(database);
 
