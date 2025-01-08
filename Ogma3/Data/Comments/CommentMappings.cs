@@ -9,10 +9,7 @@ public static class CommentMappings
 	public static Expression<Func<Comment, CommentDto>> ToCommentDto(long? uid) => c => new CommentDto
 	{
 		Id = c.Id,
-		Body = c.DeletedBy == null
-			? c.Body
-			: string.Empty,
-		Owned = c.AuthorId == uid && c.DeletedBy == null,
+		Body = c.Body,
 		DateTime = c.DateTime,
 		DeletedBy = c.DeletedBy,
 		IsEdited = c.Revisions.Any(),
@@ -24,7 +21,7 @@ public static class CommentMappings
 				Avatar = c.Author.Avatar,
 				Title = c.Author.Title,
 				UserName = c.Author.UserName,
-				Roles = c.Author.Roles.AsQueryable().Select(RoleMappings.ToRoleDto),
+				Roles = c.Author.Roles.Select(r => new RoleTinyDto(r.Name, r.Color, r.Order)),
 			},
 	};
 }

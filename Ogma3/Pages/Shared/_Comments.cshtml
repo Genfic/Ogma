@@ -99,7 +99,7 @@
 				         :comment="c.val"
 				         :idx="c.key"
 				         :csrf="csrf"
-				         :is-authenticated="isAuthenticated"
+				         :authenticated-as="authenticatedAs"
 				         :highlight="highlight === (c.key + 1)"
 				         v-on:report="report"
 				         v-on:change-hl="changeHighlight" />

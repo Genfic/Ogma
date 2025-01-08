@@ -22,8 +22,8 @@ Vue.component("comment", {
 			required: false,
 			default: false,
 		},
-		isAuthenticated: {
-			type: Boolean,
+		authenticatedAs: {
+			type: String,
 			default: false,
 		},
 	},
@@ -31,7 +31,7 @@ Vue.component("comment", {
 	data: function () {
 		return {
 			editData: null,
-			mutComment: this.comment,
+			mutComment: { ...this.comment, owned: this.comment.author?.userName.toLowerCase() === this.authenticatedAs },
 			revisions: [] as GetRevisionResult[],
 			revisionsCache: null as GetRevisionResult[] | null,
 			hide: this.comment.isBlocked,
@@ -178,7 +178,7 @@ Vue.component("comment", {
                         {{ date(mutComment.dateTime) }}
                     </time>
 
-                    <div v-if="isAuthenticated" class="actions">
+                    <div v-if="!authenticatedAs" class="actions">
 
                         <button class="action-btn small red-hl" title="Report" v-on:click="report">
                             <i class="icon material-icons-outlined">flag</i>

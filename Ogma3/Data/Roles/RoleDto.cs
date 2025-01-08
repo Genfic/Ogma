@@ -11,9 +11,13 @@ public sealed class RoleDto
 	public required byte Order { get; init; }
 }
 
+public sealed record RoleTinyDto(string Name, string? Color, byte Order);
+
 [Mapper]
 public static partial class RoleMapper
 {
 	public static partial IQueryable<RoleDto> ProjectToDto(this IQueryable<OgmaRole> queryable);
 	public static partial RoleDto ToDto(this OgmaRole queryable);
+	public static partial IQueryable<RoleTinyDto> ProjectToTinyDto(this IQueryable<OgmaRole> queryable);
+	public static partial RoleTinyDto ToTinyDto(this OgmaRole queryable);
 }

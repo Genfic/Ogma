@@ -31,7 +31,7 @@ new Vue({
 		opName: null,
 
 		// Auth status
-		isAuthenticated: false,
+		authenticatedAs: false,
 		canLock: false,
 
 		// Subscription status
@@ -76,7 +76,7 @@ new Vue({
 
 			this.total = data.total;
 			this.page = data.page ?? this.page;
-			this.isAuthenticated = res.headers.get("x-authenticated").toLowerCase() === "true";
+			this.authenticatedAs = res.headers.get("x-username").toLowerCase();
 
 			this.comments = Object.entries(data.elements).map(([key, val]) => ({
 				val,

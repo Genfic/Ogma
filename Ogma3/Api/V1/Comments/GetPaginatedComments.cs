@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using JetBrains.Annotations;
 using Markdig;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace Ogma3.Api.V1.Comments;
 [MapGet("api/comments")]
 public static partial class GetPaginatedComments
 {
+	[UsedImplicitly]
 	public sealed record Query(long Thread, int? Page, long? Highlight);
 
 	private static async ValueTask<Ok<PaginationResult<CommentDto>>> HandleAsync(
@@ -42,8 +44,7 @@ public static partial class GetPaginatedComments
 			: (int)Math.Ceiling((double)(total - (h - 1)) / ogmaConfig.CommentsPerPage);
 
 		// Send auth data
-		httpContextAccessor.HttpContext?.Response.Headers.Append("X-Authenticated",
-			(userService.User?.Identity?.IsAuthenticated ?? false).ToString());
+		httpContextAccessor.HttpContext?.Response.Headers.Append("X-Username", userService.User?.GetUsername());
 
 		var comments = await context.Comments
 			.Where(c => c.CommentsThreadId == thread)

@@ -7,5 +7,5 @@ public sealed class UserSimpleDto
 	public required string UserName { get; init; }
 	public required string Avatar { get; init; }
 	public string? Title { get; init; }
-	public IEnumerable<RoleDto> Roles { get; init; } = [];
+	public IEnumerable<RoleTinyDto> Roles { get; init; } = [];
 }
