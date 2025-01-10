@@ -47,11 +47,12 @@ export class QuoteBox extends LitElement {
 
 		const response = await getQuote();
 		if (response.ok) {
-			this._quote = await response.json();
+			this._quote = response.data;
 			window.localStorage.setItem("quote", JSON.stringify(this._quote));
+		} else if (response.status === 429) {
+			this._quote = JSON.parse(window.localStorage.getItem("quote"));
 		} else {
 			log.error(response.statusText);
-			this._quote = JSON.parse(window.localStorage.getItem("quote"));
 		}
 
 		this._canReload = false;

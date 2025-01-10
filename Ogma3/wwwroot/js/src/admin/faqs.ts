@@ -58,7 +58,7 @@ new Vue({
 		getFaqs: async function () {
 			const res = await getAllFaqs();
 			if (res.ok) {
-				this.faqs = await res.json();
+				this.faqs = res.data;
 			}
 		},
 

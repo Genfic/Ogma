@@ -72,7 +72,7 @@ new Vue({
 		getShelves: async function () {
 			const res = await getShelves(this.owner, 1);
 			if (res.ok) {
-				this.shelves = await res.json();
+				this.shelves = res.data;
 			}
 		},
 

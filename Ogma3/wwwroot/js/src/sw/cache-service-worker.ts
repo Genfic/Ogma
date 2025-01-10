@@ -12,7 +12,7 @@
 	
 	this.addEventListener("activate", async (event: ExtendableEvent) => {
 		const res = await fetch("/manifest.js.json");
-		const manifest: Manifest = await res.json();
+		const manifest: Manifest = res.data;
 
 		await clearCache(manifest.GeneratedAt);
 

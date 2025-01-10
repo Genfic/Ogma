@@ -49,7 +49,7 @@ new Vue({
 			} else {
 				const res = await getNames(this.input);
 				if (res.ok) {
-					const data = await res.json();
+					const data = res.data;
 					if (Array.isArray(data)) {
 						this.names = data;
 					} else {

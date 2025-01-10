@@ -68,7 +68,7 @@ new Vue({
 		// Gets all existing tags
 		getTags: async function () {
 			const res = await GetApiTagsAll();
-			this.tags = await res.json();
+			this.tags = res.data;
 		},
 
 		// Deletes a selected tag

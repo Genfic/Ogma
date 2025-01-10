@@ -22,17 +22,14 @@ import type {
 	GetRevisionResult,
 	GetSignInDataResult,
 	GetThreadDetailsResult,
-	HashSetOfInt64,
+	GetUserNotificationsResult,
 	InviteCodeDto,
 	IssueInviteCodeCommand,
 	JoinClubCommand,
 	LeaveClubCommand,
-	ListOfGetUserNotificationsResult,
-	ListOfQuoteDto,
 	LockThreadCommand,
 	MarkChapterAsReadCommand,
 	MarkChapterAsUnreadCommand,
-	PaginationResultOfCommentDto,
 	QuickShelvesResult,
 	QuoteDto,
 	RatingApiDto,
@@ -60,7 +57,7 @@ import type {
 import { typedFetch } from './typed-fetch';
 
 
-export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<HashSetOfInt64>("/api/chaptersread",
+export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread",
 	"DELETE",
 	body,
 	headers,
@@ -188,7 +185,7 @@ export const DeleteApiVotes = async (body: DeleteVoteCommand, headers?: HeadersI
 );
 
 
-export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<ListOfQuoteDto>("/api/quotes",
+export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuoteDto[]>("/api/quotes",
 	"GET",
 	undefined,
 	headers,
@@ -196,7 +193,7 @@ export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit)
 );
 
 
-export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<HashSetOfInt64>(`/api/chaptersread/${id}`,
+export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>(`/api/chaptersread/${id}`,
 	"GET",
 	undefined,
 	headers,
@@ -228,7 +225,7 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<PaginationResultOfCommentDto>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
+export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<object>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
 	"GET",
 	undefined,
 	headers,
@@ -292,7 +289,7 @@ export const GetApiInviteCodesPaginated = async (page: number, perpage: number, 
 );
 
 
-export const GetApiNotifications = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<ListOfGetUserNotificationsResult>("/api/notifications",
+export const GetApiNotifications = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetUserNotificationsResult[]>("/api/notifications",
 	"GET",
 	undefined,
 	headers,
@@ -492,7 +489,7 @@ export const PatchApiComments = async (body: UpdateCommentCommand, headers?: Hea
 );
 
 
-export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<HashSetOfInt64>("/api/chaptersread",
+export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread",
 	"POST",
 	body,
 	headers,

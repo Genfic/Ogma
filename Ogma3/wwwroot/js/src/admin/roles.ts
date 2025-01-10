@@ -54,7 +54,7 @@ new Vue({
 		getRoles: async function () {
 			const res = await GetApiRoles();
 			if (res.ok) {
-				this.roles = await res.json();
+				this.roles = res.data;
 			}
 		},
 

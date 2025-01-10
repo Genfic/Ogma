@@ -124,12 +124,12 @@ Vue.component("tag-search-select", {
 	},
 	async created() {
 		const res = await GetApiTagsAll();
-		this.options = await res.json();
+		this.options = res.data;
 		this.loading = false;
 
 		if (this.storyId) {
 			const res = await GetApiTagsStory(this.storyId);
-			this.selected = await res.json();
+			this.selected = res.data;
 			for (const sel of this.selected) {
 				this.options.find((e) => e.id === sel.id).hidden = true;
 			}

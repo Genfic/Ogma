@@ -21,7 +21,7 @@ export class FeaturedInClubs extends LitElement {
 	private async fetch() {
 		const response = await getFeaturingClubs(this.storyId);
 		if (response.ok) {
-			this.clubs = await response.json();
+			this.clubs = response.data;
 		}
 	}
 

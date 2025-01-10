@@ -46,7 +46,13 @@ export class CacheInfo extends LitElement {
 	private async _load() {
 		const res = await GetAdminApiCache();
 		if (!res.ok) return;
-		this.cacheCount = await res.json();
+		
+		if (typeof res.data !== "number"){
+			console.warn(res.data);
+			return;
+		}
+		
+		this.cacheCount = res.data;
 	}
 
 	private async _purge() {

@@ -5,9 +5,7 @@ import {
 	GetAllQuotes as getAllQuotes,
 	PutApiQuotes as updateQuote,
 } from "../../generated/paths-public";
-import type { QuoteDto } from "../../generated/types-public";
-
-type Quote = QuoteDto & { id: number };
+import type { FullQuoteDto } from "../../generated/types-public";
 
 // @ts-ignore
 new Vue({
@@ -17,8 +15,8 @@ new Vue({
 			id: null,
 			body: null,
 			author: null,
-		} as Quote,
-		quotes: [] as QuoteDto[],
+		} as FullQuoteDto,
+		quotes: [] as FullQuoteDto[],
 		json: null,
 		search: "",
 
@@ -28,18 +26,18 @@ new Vue({
 		// Gets all existing namespaces
 		getQuotes: async function () {
 			const data = await getAllQuotes();
-			this.quotes = await data.json();
+			this.quotes = data.data;
 		},
 
-		deleteQuote: async function (q: Quote) {
+		deleteQuote: async function (q: FullQuoteDto) {
 			if (confirm("Delete permanently?")) {
 				const data = await deleteQuote(q.id);
-				const id = await data.json();
-				this.quotes = this.quotes.filter((i) => i.id !== id);
+				const id = data.data;
+				this.quotes = this.quotes.filter((i: FullQuoteDto) => i.id !== id);
 			}
 		},
-
-		openEditor: function (q: Quote) {
+ 
+		openEditor: function (q: FullQuoteDto) {
 			this.editorOpen = true;
 			this.form = q;
 		},
@@ -62,7 +60,7 @@ new Vue({
 		// Upload Json
 		fromJson: async function () {
 			const res = await createQuotesFromJson({ quotes: this.json });
-			alert(`Created ${await res.json()} quotes`);
+			alert(`Created ${res.data} quotes`);
 		},
 	},
 

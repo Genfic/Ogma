@@ -14,9 +14,9 @@ import type {
 	CreateTagCommand,
 	CreateVoteCommand,
 	DeleteVoteCommand,
-	ErrorControllerResult,
 	FaqDto,
 	FollowUserCommand,
+	FullQuoteDto,
 	GetClubsWithStoryResult,
 	GetFolderResult,
 	GetJoinedClubsResponse,
@@ -31,7 +31,6 @@ import type {
 	LockThreadCommand,
 	MarkChapterAsReadCommand,
 	MarkChapterAsUnreadCommand,
-	PaginationResultOfCommentDto,
 	QuickShelvesResult,
 	QuoteDto,
 	RatingApiDto,
@@ -46,7 +45,6 @@ import type {
 	TagDto,
 	UnblockUserCommand,
 	UnfollowUserCommand,
-	UnsubscribeCommentsThreadCommand,
 	UpdateCommentCommand,
 	UpdateCommentResponse,
 	UpdateFaqCommand,
@@ -58,22 +56,6 @@ import type {
 	VoteResult,
 } from './types-public';
 import { typedFetch } from './typed-fetch';
-
-
-export const Chapter_FirstChapter = async (sid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/story/${sid}/chapter/first`,
-	"GET",
-	undefined,
-	headers,
-	options,
-);
-
-
-export const Chapter_LastChapter = async (sid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/story/${sid}/chapter/last`,
-	"GET",
-	undefined,
-	headers,
-	options,
-);
 
 
 export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[]>("/api/chaptersread",
@@ -164,6 +146,14 @@ export const DeleteApiShelves = async (shelfid: number, headers?: HeadersInit, o
 );
 
 
+export const DeleteApiSubscriptionsThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadid=${threadid}`,
+	"DELETE",
+	undefined,
+	headers,
+	options,
+);
+
+
 export const DeleteApiTags = async (tagid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/tags?tagid=${tagid}`,
 	"DELETE",
 	undefined,
@@ -196,15 +186,7 @@ export const DeleteApiVotes = async (body: DeleteVoteCommand, headers?: HeadersI
 );
 
 
-export const Error_OnGet = async (code: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ErrorControllerResult>(`/api/error?code=${code}`,
-	"GET",
-	undefined,
-	headers,
-	options,
-);
-
-
-export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuoteDto[]>("/api/quotes",
+export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<FullQuoteDto[]>("/api/quotes",
 	"GET",
 	undefined,
 	headers,
@@ -244,7 +226,7 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<PaginationResultOfCommentDto>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
+export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ elements: CommentDto[], total: number, perPage: number, pages: number, page: number }>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
 	"GET",
 	undefined,
 	headers,
@@ -332,6 +314,14 @@ export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: Reques
 );
 
 
+export const GetApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto[]>("/api/ratings",
+	"GET",
+	undefined,
+	headers,
+	options,
+);
+
+
 export const GetApiRoles = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto[]>("/api/roles",
 	"GET",
 	undefined,
@@ -365,6 +355,14 @@ export const GetApiShelves = async (username: string, page: number, headers?: He
 
 
 export const GetApiSignin = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetSignInDataResult>(`/api/signin?name=${name}`,
+	"GET",
+	undefined,
+	headers,
+	options,
+);
+
+
+export const GetApiSubscriptionsThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadid=${threadid}`,
 	"GET",
 	undefined,
 	headers,
@@ -437,14 +435,6 @@ export const GetComment = async (commentid: number, headers?: HeadersInit, optio
 
 
 export const GetRatingById = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings/${id}`,
-	"GET",
-	undefined,
-	headers,
-	options,
-);
-
-
-export const GetRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto[]>("/ratings",
 	"GET",
 	undefined,
 	headers,
@@ -580,7 +570,7 @@ export const PostApiQuotesJson = async (body: CreateQuotesFromJsonQuery, headers
 );
 
 
-export const PostApiRatings = async (parameters: unknown, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings?parameters=${parameters}`,
+export const PostApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>("/api/ratings",
 	"POST",
 	undefined,
 	headers,
@@ -613,6 +603,14 @@ export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?:
 
 
 export const PostApiShelves = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>("/api/shelves",
+	"POST",
+	body,
+	headers,
+	options,
+);
+
+
+export const PostApiSubscriptionsThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/subscriptions/thread",
 	"POST",
 	body,
 	headers,
@@ -676,7 +674,7 @@ export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersIn
 );
 
 
-export const PutApiRatings = async (parameters: unknown, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>(`/api/ratings?parameters=${parameters}`,
+export const PutApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto>("/api/ratings",
 	"PUT",
 	undefined,
 	headers,
@@ -702,30 +700,6 @@ export const PutApiShelves = async (body: UpdateShelfCommand, headers?: HeadersI
 
 export const PutApiTags = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>("/api/tags",
 	"PUT",
-	body,
-	headers,
-	options,
-);
-
-
-export const Subscriptions_IsSubscribedToThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadid=${threadid}`,
-	"GET",
-	undefined,
-	headers,
-	options,
-);
-
-
-export const Subscriptions_SubscribeThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/subscriptions/thread",
-	"POST",
-	body,
-	headers,
-	options,
-);
-
-
-export const Subscriptions_UnsubscribeThread = async (body: UnsubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/subscriptions/thread",
-	"DELETE",
 	body,
 	headers,
 	options,

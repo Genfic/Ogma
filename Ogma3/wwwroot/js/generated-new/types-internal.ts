@@ -1,160 +1,98 @@
-export interface Command {
-	chapter: number;
-	story: number;
-}
-
-export interface Command10 {
-	body: string;
-	author: string;
-}
-
-export interface Command11 {
-	id: number;
-	body: string;
-	author: string;
-}
-
-export interface Command12 {
-	itemId: number;
-	reason: string;
-	itemType: EReportableContentTypes;
-}
-
-export interface Command13 {
-	name: string;
-	isStaff: boolean;
-	color: string;
-	order: number;
-}
-
-export interface Command14 {
-	id: number;
-	name: string;
-	isStaff: boolean;
-	color: string;
-	order: number;
-}
-
-export interface Command15 {
+export interface AddBookToShelfCommand {
 	shelfId: number;
 	storyId: number;
 }
 
-export interface Command16 {
-	name: string;
-	description: string;
-	isQuickAdd: boolean;
-	isPublic: boolean;
-	trackUpdates: boolean;
-	color: string;
-	icon: number;
-}
-
-export interface Command17 {
-	id: number;
-	name: string;
-	description: string;
-	isQuickAdd: boolean;
-	isPublic: boolean;
-	trackUpdates: boolean;
-	color: string;
-	icon: number;
-}
-
-export interface Command18 {
-	name: string;
-	description: string | null;
-	namespace: NullableOfETagNamespace;
-}
-
-export interface Command19 {
-	id: number;
-	name: string | null;
-	description: string | null;
-	namespace: NullableOfETagNamespace;
-}
-
-export interface Command2 {
-	clubId: number;
-}
-
-export interface Command20 {
-	name: string;
-}
-
-export interface Command21 {
-	userId: number;
-	roles: number;
-}
-
-export interface Command22 {
-	storyId: number;
-}
-
-export interface Command23 {
-	userId: number;
-	reason: string;
-	endDate: string;
-	type: InfractionType;
-}
-
-export interface Command24 {
-	name: string;
-	description: string;
-	blacklistedByDefault: boolean;
-	order: number;
-	icon: IFormFile;
-}
-
-export interface Command25 {
-	id: number;
-	name: string;
-	description: string;
-	blacklistedByDefault: boolean;
-	order: number;
-	icon: IFormFile;
-}
-
-export interface Command3 {
-	body: string;
-	thread: number;
-	source: CommentSource;
-}
-
-export interface Command4 {
-	body: string;
-	commentId: number;
-}
-
-export interface Command5 {
-	threadId: number;
-}
-
-export interface Command6 {
-	question: string;
-	answer: string;
-}
-
-export interface Command7 {
-	id: number;
-	question: string;
-	answer: string;
-}
-
-export interface Command8 {
+export interface AddStoryToFolderCommand {
 	folderId: number;
 	storyId: number;
+}
+
+export interface AddStoryToFolderResponse {
+	folderId: number;
+	storyId: number;
+	added: string;
+	addedById: number;
+}
+
+export interface BlockUserCommand {
+	name: string;
 }
 
 export interface CommentDto {
 	id: number;
 	author: UserSimpleDto;
 	dateTime: string;
-	owned: boolean;
 	body: string | null;
-	deletedBy: NullableOfEDeletedBy;
+	deletedBy: unknown;
 	isBlocked: boolean;
 	isEdited: boolean;
+}
+
+export interface CreateCommentCommand {
+	body: string;
+	thread: number;
+	source: CommentSource;
+}
+
+export interface CreateFaqCommand {
+	question: string;
+	answer: string;
+}
+
+export interface CreateInfractionCommand {
+	userId: number;
+	reason: string;
+	endDate: string;
+	type: InfractionType;
+}
+
+export interface CreateQuoteCommand {
+	body: string;
+	author: string;
+}
+
+export interface CreateQuotesFromJsonQuery {
+	quotes: object;
+}
+
+export interface CreateRatingCommand {
+	name: string;
+	description: string;
+	blacklistedByDefault: boolean;
+	order: number;
+	icon: IFormFile;
+}
+
+export interface CreateRoleCommand {
+	name: string;
+	isStaff: boolean;
+	color: string;
+	order: number;
+}
+
+export interface CreateShelfCommand {
+	name: string;
+	description: string;
+	isQuickAdd: boolean;
+	isPublic: boolean;
+	trackUpdates: boolean;
+	color: string;
+	icon: number;
+}
+
+export interface CreateTagCommand {
+	name: string;
+	description: string | null;
+	namespace: unknown;
+}
+
+export interface CreateVoteCommand {
+	storyId: number;
+}
+
+export interface DeleteVoteCommand {
+	storyId: number;
 }
 
 export interface FaqDto {
@@ -162,6 +100,64 @@ export interface FaqDto {
 	question: string;
 	answer: string;
 	answerRendered: string;
+}
+
+export interface FollowUserCommand {
+	name: string;
+}
+
+export interface GetClubsWithStoryResult {
+	id: number;
+	name: string;
+	icon: string;
+	folders: string[];
+}
+
+export interface GetFolderResult {
+	id: number;
+	name: string;
+	slug: string;
+	canAdd: boolean;
+}
+
+export interface GetJoinedClubsResponse {
+	id: number;
+	name: string;
+	icon: string;
+}
+
+export interface GetRevisionResult {
+	editTime: string;
+	body: string;
+}
+
+export interface GetSignInDataResult {
+	avatar: string;
+	title: string | null;
+}
+
+export interface GetThreadDetailsResult {
+	perPage: number;
+	minCommentLength: number;
+	maxCommentLength: number;
+	source: CommentSource;
+	isLocked: boolean;
+}
+
+export interface GetUserInfractionsResult {
+	id: number;
+	activeUntil: string;
+	removed: boolean;
+	reason: string;
+}
+
+export interface GetUserNotificationsResult {
+	id: number;
+	body: string | null;
+	url: string;
+	dateTime: string;
+	event: ENotificationEvent;
+	message: string;
 }
 
 export interface InfractionDto {
@@ -187,16 +183,26 @@ export interface InviteCodeDto {
 	usedDate: string | null;
 }
 
-export interface PaginationResultOfCommentDto {
-	elements: object;
-	total: number;
-	perPage: number;
-	pages: number;
-	page: number;
+export interface JoinClubCommand {
+	clubId: number;
 }
 
-export interface Query {
-	quotes: object;
+export interface LeaveClubCommand {
+	clubId: number;
+}
+
+export interface LockThreadCommand {
+	threadId: number;
+}
+
+export interface MarkChapterAsReadCommand {
+	chapter: number;
+	story: number;
+}
+
+export interface MarkChapterAsUnreadCommand {
+	chapter: number;
+	story: number;
 }
 
 export interface QuickShelvesResult {
@@ -221,75 +227,20 @@ export interface RatingApiDto {
 	blacklistedByDefault: boolean;
 }
 
+export interface RemoveBookFromShelfCommand {
+	shelfId: number;
+	storyId: number;
+}
+
 export interface RemoveBookFromShelfResult {
 	shelfId: number;
 	storyId: number;
 }
 
-export interface Response {
-	id: number;
-	name: string;
-	icon: string;
-}
-
-export interface Response2 {
-	body: string;
-	editTime: string;
-}
-
-export interface Response3 {
-	folderId: number;
-	storyId: number;
-	added: string;
-	addedById: number;
-}
-
-export interface Result {
-	id: number;
-	name: string;
-	icon: string;
-	folders: string[];
-}
-
-export interface Result2 {
-	editTime: string;
-	body: string;
-}
-
-export interface Result3 {
-	perPage: number;
-	minCommentLength: number;
-	maxCommentLength: number;
-	source: CommentSource;
-	isLocked: boolean;
-}
-
-export interface Result4 {
-	id: number;
-	name: string;
-	slug: string;
-	canAdd: boolean;
-}
-
-export interface Result5 {
-	id: number;
-	body: string | null;
-	url: string;
-	dateTime: string;
-	event: ENotificationEvent;
-	message: string | null;
-}
-
-export interface Result6 {
-	avatar: string;
-	title: string | null;
-}
-
-export interface Result7 {
-	id: number;
-	activeUntil: string;
-	removed: boolean;
+export interface ReportContentCommand {
+	itemId: number;
 	reason: string;
+	itemType: EReportableContentTypes;
 }
 
 export interface RoleDto {
@@ -297,6 +248,12 @@ export interface RoleDto {
 	name: string;
 	color: string | null;
 	isStaff: boolean;
+	order: number;
+}
+
+export interface RoleTinyDto {
+	name: string;
+	color: string | null;
 	order: number;
 }
 
@@ -313,7 +270,7 @@ export interface ShelfDto {
 	isPublic: boolean;
 	isQuickAdd: boolean;
 	trackUpdates: boolean;
-	color: string | null;
+	color: string;
 	storiesCount: number;
 	iconName: string | null;
 	iconId: number | null;
@@ -327,29 +284,103 @@ export interface ShelfResult {
 	doesContainBook: boolean;
 }
 
+export interface SubscribeCommentsThreadCommand {
+	threadId: number;
+}
+
 export interface TagDto {
 	id: number;
 	name: string;
 	slug: string;
 	description: string | null;
-	namespace: NullableOfETagNamespace;
-	namespaceColor: string | null;
-	namespaceId: number | null;
+	namespace: unknown;
+	namespaceColor: string;
+	namespaceId: number;
+}
+
+export interface UnblockUserCommand {
+	name: string;
+}
+
+export interface UnfollowUserCommand {
+	name: string;
+}
+
+export interface UpdateCommentCommand {
+	body: string;
+	commentId: number;
+}
+
+export interface UpdateCommentResponse {
+	body: string;
+	editTime: string;
+}
+
+export interface UpdateFaqCommand {
+	id: number;
+	question: string;
+	answer: string;
+}
+
+export interface UpdateQuoteCommand {
+	id: number;
+	body: string;
+	author: string;
+}
+
+export interface UpdateRatingCommand {
+	id: number;
+	name: string;
+	description: string;
+	blacklistedByDefault: boolean;
+	order: number;
+	icon: IFormFile;
+}
+
+export interface UpdateRoleCommand {
+	id: number;
+	name: string;
+	isStaff: boolean;
+	color: string;
+	order: number;
+}
+
+export interface UpdateRolesCommand {
+	userId: number;
+	roles: number;
+}
+
+export interface UpdateShelfCommand {
+	id: number;
+	name: string;
+	description: string;
+	isQuickAdd: boolean;
+	isPublic: boolean;
+	trackUpdates: boolean;
+	color: string;
+	icon: number;
+}
+
+export interface UpdateTagCommand {
+	id: number;
+	name: string | null;
+	description: string | null;
+	namespace: unknown;
 }
 
 export interface UserSimpleDto {
 	userName: string;
 	avatar: string;
-	title: string | null;
+	title: string;
 	roles: object;
 }
 
 export interface VoteResult {
 	didVote: boolean;
-	count: number | null;
+	count: number;
 }
 
-export type Command9 = Record<string, never>;
+export type AdminIssueInviteCodeCommand = Record<string, never>;
 
 export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
 
@@ -357,12 +388,10 @@ export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThre
 
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
 
-export type IFormFile = Record<string, never>;
+export type IFormFile = Blob;
 
 export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
 
+export type IssueInviteCodeCommand = Record<string, never>;
+
 export type None = undefined;
-
-export type NullableOfEDeletedBy = "User" | "Staff" | "null";
-
-export type NullableOfETagNamespace = "ContentWarning" | "Genre" | "Franchise" | "null";

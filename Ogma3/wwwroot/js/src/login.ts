@@ -17,7 +17,7 @@ new Vue({
 				const res = await getSignInData(this.name);
 
 				if (res.ok) {
-					const data = await res.json();
+					const data = res.data;
 					this.avatar = data.avatar;
 					this.title = data.title;
 					this.checked = true;

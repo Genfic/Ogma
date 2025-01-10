@@ -23,8 +23,8 @@ export class ShelvesButton extends LitElement {
 	@property() accessor csrf: string;
 	@state() private accessor quickShelves: Shelf[] = [];
 	@state() private accessor shelves: Shelf[] = [];
-	@state() private accessor more: boolean = false;
-	@state() private accessor page: number = 1;
+	@state() private accessor more = false;
+	@state() private accessor page = 1;
 	@state() private accessor moreShelvesLoaded = false;
 
 	async connectedCallback() {
@@ -33,7 +33,9 @@ export class ShelvesButton extends LitElement {
 		await this.#getQuickShelves();
 		this.classList.add("wc-loaded");
 
-		clickOutside(this, () => (this.more = false));
+		clickOutside(this, () => {
+			this.more = false;
+		});
 	}
 
 	#quickShelf = (shelf: Shelf) => html`
@@ -79,7 +81,7 @@ export class ShelvesButton extends LitElement {
 	async #getQuickShelves() {
 		const res = await getQuickShelves(this.storyId);
 		if (res.ok) {
-			this.quickShelves = await res.json();
+			this.quickShelves = res.data;
 		} else {
 			log.error(res.statusText);
 		}
@@ -88,7 +90,7 @@ export class ShelvesButton extends LitElement {
 	async #getShelves() {
 		const res = await getShelves(this.storyId, this.page);
 		if (res.ok) {
-			this.shelves = await res.json();
+			this.shelves = res.data;
 			this.moreShelvesLoaded = true;
 		} else {
 			log.error(res.statusText);
@@ -109,7 +111,7 @@ export class ShelvesButton extends LitElement {
 			},
 		);
 		if (res.ok) {
-			const data = await res.json();
+			const data = res.data;
 			const shelf = [...this.shelves, ...this.quickShelves].find((s) => s.id === data.shelfId);
 			shelf.doesContainBook = !exists;
 			this.requestUpdate();

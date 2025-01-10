@@ -15,7 +15,7 @@ new Vue({
 
 			if (!data.ok) return;
 
-			this.notifications = await data.json();
+			this.notifications = data.data;
 		},
 
 		deleteNotif: async function (id: number) {

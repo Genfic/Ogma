@@ -24,7 +24,7 @@ new Vue({
 			const res = await createUnlimitedCodes({
 				RequestVerificationToken: this.xcsrf,
 			});
-			const data = await res.json();
+			const data = res.data;
 
 			this.newCode = data.id;
 			setTimeout(() => {
@@ -41,7 +41,7 @@ new Vue({
 			this.loading = true;
 
 			const res = await getPaginatedCodes(this.page, this.perPage);
-			const data = await res.json();
+			const data = res.data;
 
 			if (data.length <= 0) {
 				this.completed = true;

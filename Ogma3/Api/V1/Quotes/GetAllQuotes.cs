@@ -18,13 +18,14 @@ public static partial class GetAllQuotes
 	[UsedImplicitly]
 	public sealed record Query;
 
-	private static async ValueTask<Ok<List<QuoteDto>>> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
+	private static async ValueTask<Ok<List<FullQuoteDto>>> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
 	{
 		var quotes = await context.Quotes
 			.OrderBy(q => q.Id)
-			.ProjectToDto()
+			.ProjectToFullDto()
 			.ToListAsync(cancellationToken);
 
 		return TypedResults.Ok(quotes);
 	}
+	
 }

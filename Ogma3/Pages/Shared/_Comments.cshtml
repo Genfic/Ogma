@@ -59,12 +59,6 @@
 	@if (User.Identity is { IsAuthenticated: true })
 	{
 		<div class="buttons">
-			<button class="action-btn" :class="isSubscribed ? 'active' : null"
-			        v-on:click="subscribe"
-			        :title="isSubscribed ? 'Unsubscribe' : 'Subscribe'">
-				<i class="material-icons-outlined">{{isSubscribed ? 'notifications_active' : 'notifications'}}</i>&nbsp;
-				{{isSubscribed ? 'Subscribed!' : 'Subscribe'}}
-			</button>
 
 			<button class="action-btn" :class="isLocked ? 'active' : null"
 			        v-if="canLock"

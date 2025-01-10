@@ -72,7 +72,7 @@ export class TableInfo extends LitElement {
 	private _load = async () => {
 		const res = await GetAdminApiTelemetryGetTableInfo();
 		if (!res.ok) return;
-		const data = await res.json();
+		const data = res.data;
 		this.tableInfo = Object.entries(data).map(([k, v]) => ({
 			name: k,
 			size: Number.parseInt(v),

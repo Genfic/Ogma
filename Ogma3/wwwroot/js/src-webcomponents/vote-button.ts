@@ -17,7 +17,7 @@ export class VoteButton extends LitElement {
 
 		const result = await getVotes(this.storyId);
 		if (result.ok) {
-			const { count, didVote } = await result.json();
+			const { count, didVote } = result.data;
 			this.score = count;
 			this.voted = didVote;
 		} else {
@@ -45,7 +45,7 @@ export class VoteButton extends LitElement {
 		);
 
 		if (result.ok) {
-			const { count, didVote } = await result.json();
+			const { count, didVote } = result.data;
 			this.score = count;
 			this.voted = didVote;
 		} else {

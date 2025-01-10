@@ -43,7 +43,7 @@ export class _folderTree extends LitElement {
 
 		const response = await getClubFolders(this.clubId);
 		if (response.ok) {
-			this.folders = await response.json();
+			this.folders = response.data;
 		} else {
 			log.error(`Error fetching data: ${response.statusText}`);
 		}

@@ -38,7 +38,7 @@ export class FollowButton extends LitElement {
 			},
 		);
 		if (res.ok) {
-			this.isFollowed = await res.json();
+			this.isFollowed = res.data;
 		} else {
 			log.warn(res.statusText);
 		}

@@ -62,7 +62,7 @@ Vue.component("comment", {
 
 			this.editData = {
 				id: this.comment.id,
-				body: await res.json(),
+				body: res.data,
 			};
 		},
 
@@ -79,7 +79,7 @@ Vue.component("comment", {
 
 			if (!res.ok) return;
 
-			const data = await res.json();
+			const data = res.data;
 			Object.assign(this.mutComment, data);
 			this.editData = null;
 		},
@@ -101,7 +101,7 @@ Vue.component("comment", {
 			} else {
 				const res = await GetApiCommentsRevisions(this.comment.id);
 				if (!res.ok) return;
-				this.revisionsCache = this.revisions = await res.json();
+				this.revisionsCache = this.revisions = res.data;
 			}
 		},
 

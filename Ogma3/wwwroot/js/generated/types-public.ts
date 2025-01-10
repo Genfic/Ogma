@@ -21,11 +21,10 @@ export interface BlockUserCommand {
 
 export interface CommentDto {
 	id: number;
-	author: UserSimpleDto | null;
+	author: UserSimpleDto;
 	dateTime: string;
-	owned: boolean;
 	body: string | null;
-	deletedBy: EDeletedBy | null;
+	deletedBy: unknown;
 	isBlocked: boolean;
 	isEdited: boolean;
 }
@@ -41,6 +40,13 @@ export interface CreateFaqCommand {
 	answer: string;
 }
 
+export interface CreateInfractionCommand {
+	userId: number;
+	reason: string;
+	endDate: string;
+	type: InfractionType;
+}
+
 export interface CreateQuoteCommand {
 	body: string;
 	author: string;
@@ -48,14 +54,6 @@ export interface CreateQuoteCommand {
 
 export interface CreateQuotesFromJsonQuery {
 	quotes: object;
-}
-
-export interface CreateRatingCommand {
-	name: string;
-	description: string;
-	blacklistedByDefault: boolean;
-	order: number;
-	icon: string;
 }
 
 export interface CreateRoleCommand {
@@ -78,7 +76,7 @@ export interface CreateShelfCommand {
 export interface CreateTagCommand {
 	name: string;
 	description: string | null;
-	namespace: ETagNamespace | null;
+	namespace: unknown;
 }
 
 export interface CreateVoteCommand {
@@ -87,11 +85,6 @@ export interface CreateVoteCommand {
 
 export interface DeleteVoteCommand {
 	storyId: number;
-}
-
-export interface ErrorControllerResult {
-	code: number | null;
-	reason: string;
 }
 
 export interface FaqDto {
@@ -103,6 +96,12 @@ export interface FaqDto {
 
 export interface FollowUserCommand {
 	name: string;
+}
+
+export interface FullQuoteDto {
+	id: number;
+	body: string;
+	author: string;
 }
 
 export interface GetClubsWithStoryResult {
@@ -143,6 +142,13 @@ export interface GetThreadDetailsResult {
 	isLocked: boolean;
 }
 
+export interface GetUserInfractionsResult {
+	id: number;
+	activeUntil: string;
+	removed: boolean;
+	reason: string;
+}
+
 export interface GetUserNotificationsResult {
 	id: number;
 	body: string | null;
@@ -150,6 +156,19 @@ export interface GetUserNotificationsResult {
 	dateTime: string;
 	event: ENotificationEvent;
 	message: string;
+}
+
+export interface InfractionDto {
+	id: number;
+	userUserName: string;
+	userId: number;
+	issueDate: string;
+	activeUntil: string;
+	removedAt: string | null;
+	reason: string;
+	type: InfractionType;
+	issuedByUserName: string;
+	removedByUserName: string | null;
 }
 
 export interface InviteCodeDto {
@@ -182,14 +201,6 @@ export interface MarkChapterAsReadCommand {
 export interface MarkChapterAsUnreadCommand {
 	chapter: number;
 	story: number;
-}
-
-export interface PaginationResultOfCommentDto {
-	elements: object;
-	total: number;
-	perPage: number;
-	pages: number;
-	page: number;
 }
 
 export interface QuickShelvesResult {
@@ -238,6 +249,12 @@ export interface RoleDto {
 	order: number;
 }
 
+export interface RoleTinyDto {
+	name: string;
+	color: string | null;
+	order: number;
+}
+
 export interface ShelfAddResult {
 	shelfId: number;
 	storyId: number;
@@ -251,7 +268,7 @@ export interface ShelfDto {
 	isPublic: boolean;
 	isQuickAdd: boolean;
 	trackUpdates: boolean;
-	color: string | null;
+	color: string;
 	storiesCount: number;
 	iconName: string | null;
 	iconId: number | null;
@@ -274,9 +291,9 @@ export interface TagDto {
 	name: string;
 	slug: string;
 	description: string | null;
-	namespace: ETagNamespace | null;
-	namespaceColor: string | null;
-	namespaceId: number | null;
+	namespace: unknown;
+	namespaceColor: string;
+	namespaceId: number;
 }
 
 export interface UnblockUserCommand {
@@ -285,10 +302,6 @@ export interface UnblockUserCommand {
 
 export interface UnfollowUserCommand {
 	name: string;
-}
-
-export interface UnsubscribeCommentsThreadCommand {
-	threadId: number;
 }
 
 export interface UpdateCommentCommand {
@@ -311,15 +324,6 @@ export interface UpdateQuoteCommand {
 	id: number;
 	body: string;
 	author: string;
-}
-
-export interface UpdateRatingCommand {
-	id: number;
-	name: string;
-	description: string;
-	blacklistedByDefault: boolean;
-	order: number;
-	icon: string;
 }
 
 export interface UpdateRoleCommand {
@@ -350,32 +354,32 @@ export interface UpdateTagCommand {
 	id: number;
 	name: string | null;
 	description: string | null;
-	namespace: ETagNamespace | null;
+	namespace: unknown;
 }
 
 export interface UserSimpleDto {
 	userName: string;
 	avatar: string;
-	title: string | null;
+	title: string;
 	roles: object;
 }
 
 export interface VoteResult {
 	didVote: boolean;
-	count: number | null;
+	count: number;
 }
 
 export type AdminIssueInviteCodeCommand = Record<string, never>;
 
-export type CommentSource = "Invalid" | "Chapter" | "Blogpost" | "Profile" | "ForumPost";
+export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
 
-export type EDeletedBy = "User" | "Staff";
-
-export type ENotificationEvent = "Invalid" | "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
+export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
 
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
 
-export type ETagNamespace = "ContentWarning" | "Genre" | "Franchise";
+export type IFormFile = Blob;
+
+export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
 
 export type IssueInviteCodeCommand = Record<string, never>;
 

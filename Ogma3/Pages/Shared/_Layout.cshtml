@@ -76,6 +76,8 @@
 
 	@await RenderSectionAsync("CSS", false)
 	@Html.RenderResources("css")
+	
+	@await RenderSectionAsync("Head", required: false)
 </head>
 <body>
 

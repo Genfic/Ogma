@@ -38,7 +38,7 @@ export class BlockUser extends LitElement {
 		);
 
 		if (res.ok) {
-			this.isBlocked = await res.json();
+			this.isBlocked = res.data;
 		} else {
 			log.warn(res.statusText);
 		}

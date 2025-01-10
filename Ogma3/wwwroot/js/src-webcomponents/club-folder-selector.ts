@@ -39,7 +39,7 @@ export class ClubFolderSelector extends LitElement {
 
 		const response = await getUserClubs();
 		if (response.ok) {
-			this.clubs = await response.json();
+			this.clubs = response.data;
 		} else {
 			log.error(`Error fetching data: ${response.statusText}`);
 		}
@@ -50,7 +50,7 @@ export class ClubFolderSelector extends LitElement {
 			if (!selectedClub) throw new Error("Club not selected");
 			const res = await getFolders(selectedClub.id, null, { signal });
 			if (!res.ok) throw new Error(res.statusText);
-			return res.json();
+			return res.data;
 		},
 		args: () => [this.selectedClub],
 	});
@@ -165,9 +165,9 @@ export class ClubFolderSelector extends LitElement {
 				message: "Successfully added",
 				success: true,
 			};
-		} else {
+		} else if (typeof response.data === "string") {
 			this.status = {
-				message: await response.text().then((t) => t.replaceAll('"', "")),
+				message: response.data.replaceAll('"', ""),
 				success: false,
 			};
 		}

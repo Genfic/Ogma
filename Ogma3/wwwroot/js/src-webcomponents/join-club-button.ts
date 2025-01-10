@@ -7,7 +7,7 @@ import { log } from "../src-helpers/logger";
 export class JoinClubButton extends LitElement {
 	@property() accessor clubId: number;
 	@property() accessor csrf: string;
-	@property() accessor isMember: boolean = false;
+	@property() accessor isMember = false;
 
 	connectedCallback() {
 		super.connectedCallback();
@@ -38,7 +38,7 @@ export class JoinClubButton extends LitElement {
 			},
 		);
 		if (res.ok) {
-			const data = await res.json();
+			const data = res.data;
 			this.isMember = data === true;
 		} else {
 			log.warn(res.statusText);

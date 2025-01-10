@@ -35,7 +35,7 @@ import {
 
 		if (!res.ok) return;
 
-		reads = await res.json();
+		reads = res.data;
 		_update();
 	};
 
@@ -53,7 +53,7 @@ import {
 
 		if (!res.ok) return;
 
-		reads = await res.json();
+		reads = res.data;
 		_update();
 	}
 })();

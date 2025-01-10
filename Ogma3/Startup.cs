@@ -358,7 +358,10 @@ public sealed class Startup
 		app.MapRazorPages();
 		app.MapControllers();
 		app.MapOgma3Endpoints();
-
+		
+		// Antiforgery
+		app.UseAntiforgery();
+		
 		// Generate JS manifest
 		new JavascriptFilesManifestGenerator(env).Generate("js/dist", "js/bundle");
 	}

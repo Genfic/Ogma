@@ -6,7 +6,7 @@ import type {
 import { typedFetch } from './typed-fetch';
 
 
-export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>("/admin/api/cache",
+export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>("/admin/api/cache",
 	"DELETE",
 	undefined,
 	headers,
@@ -22,7 +22,7 @@ export const DeleteAdminApiInfractions = async (infractionid: number, headers?: 
 );
 
 
-export const GetAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>("/admin/api/cache",
+export const GetAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number|string>("/admin/api/cache",
 	"GET",
 	undefined,
 	headers,

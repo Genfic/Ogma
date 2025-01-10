@@ -15,7 +15,7 @@ export class NotificationsButton extends LitElement {
 
 		const res = await countNotifications();
 		if (res.ok) {
-			this.notifications = await res.json();
+			this.notifications = res.data;
 		} else {
 			log.error(res.statusText);
 		}

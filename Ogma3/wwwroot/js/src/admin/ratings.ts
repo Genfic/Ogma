@@ -1,4 +1,4 @@
-import { DeleteApiRatings as deleteRating, GetRatings as getRatings } from "../../generated/paths-public";
+import { DeleteApiRatings as deleteRating, GetApiRatings as getRatings } from "../../generated/paths-public";
 import type { RatingApiDto } from "../../generated/types-public";
 
 // @ts-ignore
@@ -71,7 +71,7 @@ new Vue({
 		// Gets all existing namespaces
 		getRatings: async function () {
 			const res = await getRatings();
-			this.ratings = await res.json();
+			this.ratings = res.data;
 		},
 
 		// Deletes a selected namespace

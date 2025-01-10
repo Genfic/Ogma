@@ -15,7 +15,7 @@ new Vue({
 			const res = await createCode({ RequestVerificationToken: this.xcsrf });
 
 			if (res.ok) {
-				this.codes.push(await res.json());
+				this.codes.push(res.data);
 			}
 		},
 
@@ -24,7 +24,7 @@ new Vue({
 			const res = await getCodes();
 
 			if (res.ok) {
-				this.codes = await res.json();
+				this.codes = res.data;
 			}
 		},
 

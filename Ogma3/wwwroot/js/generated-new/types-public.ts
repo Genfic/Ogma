@@ -23,9 +23,8 @@ export interface CommentDto {
 	id: number;
 	author: UserSimpleDto;
 	dateTime: string;
-	owned: boolean;
 	body: string | null;
-	deletedBy: NullableOfEDeletedBy;
+	deletedBy: unknown;
 	isBlocked: boolean;
 	isEdited: boolean;
 }
@@ -77,7 +76,7 @@ export interface CreateShelfCommand {
 export interface CreateTagCommand {
 	name: string;
 	description: string | null;
-	namespace: NullableOfETagNamespace;
+	namespace: unknown;
 }
 
 export interface CreateVoteCommand {
@@ -103,7 +102,7 @@ export interface GetClubsWithStoryResult {
 	id: number;
 	name: string;
 	icon: string;
-	folders: IEnumerableOfString;
+	folders: string[];
 }
 
 export interface GetFolderResult {
@@ -150,7 +149,7 @@ export interface GetUserNotificationsResult {
 	url: string;
 	dateTime: string;
 	event: ENotificationEvent;
-	message: string | null;
+	message: string;
 }
 
 export interface InfractionDto {
@@ -196,14 +195,6 @@ export interface MarkChapterAsReadCommand {
 export interface MarkChapterAsUnreadCommand {
 	chapter: number;
 	story: number;
-}
-
-export interface PaginationResultOfCommentDto {
-	elements: IEnumerableOfCommentDto;
-	total: number;
-	perPage: number;
-	pages: number;
-	page: number;
 }
 
 export interface QuickShelvesResult {
@@ -252,6 +243,12 @@ export interface RoleDto {
 	order: number;
 }
 
+export interface RoleTinyDto {
+	name: string;
+	color: string | null;
+	order: number;
+}
+
 export interface ShelfAddResult {
 	shelfId: number;
 	storyId: number;
@@ -265,7 +262,7 @@ export interface ShelfDto {
 	isPublic: boolean;
 	isQuickAdd: boolean;
 	trackUpdates: boolean;
-	color: string | null;
+	color: string;
 	storiesCount: number;
 	iconName: string | null;
 	iconId: number | null;
@@ -288,9 +285,9 @@ export interface TagDto {
 	name: string;
 	slug: string;
 	description: string | null;
-	namespace: NullableOfETagNamespace;
-	namespaceColor: string | null;
-	namespaceId: number | null;
+	namespace: unknown;
+	namespaceColor: string;
+	namespaceId: number;
 }
 
 export interface UnblockUserCommand {
@@ -333,7 +330,7 @@ export interface UpdateRoleCommand {
 
 export interface UpdateRolesCommand {
 	userId: number;
-	roles: IEnumerableOfInt64;
+	roles: number;
 }
 
 export interface UpdateShelfCommand {
@@ -351,57 +348,33 @@ export interface UpdateTagCommand {
 	id: number;
 	name: string | null;
 	description: string | null;
-	namespace: NullableOfETagNamespace;
+	namespace: unknown;
 }
 
 export interface UserSimpleDto {
 	userName: string;
 	avatar: string;
-	title: string | null;
-	roles: IEnumerableOfRoleDto;
+	title: string;
+	roles: object;
 }
 
 export interface VoteResult {
 	didVote: boolean;
-	count: number | null;
+	count: number;
 }
 
 export type AdminIssueInviteCodeCommand = Record<string, never>;
 
 export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
 
-export type DictionaryOfStringAndInt32 = Record<string, never>;
-
-export type DictionaryOfStringAndUInt64 = Record<string, never>;
-
 export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
 
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
 
-export type HashSetOfInt64 = Record<string, never>;
-
-export type IEnumerableOfCommentDto = Record<string, never>;
-
-export type IEnumerableOfInt64 = Record<string, never>;
-
-export type IEnumerableOfRoleDto = Record<string, never>;
-
-export type IEnumerableOfString = Record<string, never>;
-
-export type IFormFile = Record<string, never>;
+export type IFormFile = Blob;
 
 export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
 
 export type IssueInviteCodeCommand = Record<string, never>;
 
-export type ListOfGetUserInfractionsResult = Record<string, never>;
-
-export type ListOfGetUserNotificationsResult = Record<string, never>;
-
-export type ListOfQuoteDto = Record<string, never>;
-
 export type None = undefined;
-
-export type NullableOfEDeletedBy = "User" | "Staff" | "null";
-
-export type NullableOfETagNamespace = "ContentWarning" | "Genre" | "Franchise" | "null";

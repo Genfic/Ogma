@@ -3,9 +3,6 @@ import {
 	GetApiCommentsThread,
 	PostApiComments,
 	PostApiCommentsThreadLock,
-	Subscriptions_IsSubscribedToThread,
-	Subscriptions_SubscribeThread,
-	Subscriptions_UnsubscribeThread,
 } from "../generated/paths-public";
 
 // @ts-ignore
@@ -72,7 +69,7 @@ new Vue({
 		// Load comments for the thread
 		load: async function () {
 			const res = await GetApiComments(this.thread, this.page, this.highlight ?? -1);
-			const data = await res.json();
+			const data = res.data;
 
 			this.total = data.total;
 			this.page = data.page ?? this.page;
@@ -144,29 +141,12 @@ new Vue({
 			this.$refs.reportModal.visible = true;
 		},
 
-		// Subscribe or unsubscribe from the thread
-		subscribe: async function () {
-			const data = { threadId: this.thread };
-			const headers = { RequestVerificationToken: this.csrf };
-
-			if (this.isSubscribed) {
-				const res = await Subscriptions_UnsubscribeThread(data, headers);
-				if (!res.ok) return;
-
-				this.isSubscribed = await res.json();
-			} else {
-				const res = await Subscriptions_SubscribeThread(data, headers);
-				if (!res.ok) return;
-
-				this.isSubscribed = await res.json();
-			}
-		},
 
 		// Lock or unlock the thread
 		lock: async function () {
 			if (!this.canLock) return false;
 			const res = await PostApiCommentsThreadLock({ threadId: this.thread });
-			this.isLocked = res.ok && (await res.json());
+			this.isLocked = res.ok && (res.data);
 			return this.isLocked;
 		},
 	},
@@ -206,7 +186,7 @@ new Vue({
 			if (threadRes.ok) {
 				this.canLock = threadRes.headers.get("X-IsStaff").toLowerCase() === "true";
 
-				const threadData = await threadRes.json();
+				const threadData = threadRes.data;
 				this.isLocked = threadData.isLocked;
 				this.perPage = threadData.perPage;
 				this.minLength = threadData.minCommentLength;
@@ -215,18 +195,12 @@ new Vue({
 			}
 		};
 
-		const fetchSubscriptionStatus = async () => {
-			const subscriptionRes = await Subscriptions_IsSubscribedToThread(this.thread);
-			if (subscriptionRes.ok) {
-				this.isSubscribed = await subscriptionRes.json();
-			}
-		};
 
 		const load = async () => {
 			await this.load();
 		};
 
-		const results = await Promise.allSettled([fetchData(), fetchSubscriptionStatus(), load()]);
+		await Promise.allSettled([fetchData(), load()]);
 
 		const hash = window.location.hash.split("-");
 		if (hash[0] === "#page" && hash[1]) {
