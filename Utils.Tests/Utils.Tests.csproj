@@ -10,9 +10,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.13.1" />
-		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.5.0" />
+		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.5.1" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" />
-		<PackageReference Include="TUnit" Version="0.6.33" />
+		<PackageReference Include="TUnit" Version="0.6.100" />
 		<PackageReference Include="coverlet.collector" Version="6.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

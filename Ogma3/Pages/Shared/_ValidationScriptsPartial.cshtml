@@ -5,7 +5,9 @@
 <script src="~/lib/wellidate/wellidate.min.js"></script>
 
 <script >
-[].forEach.call(document.getElementsByTagName("form"), form => {
-   new Wellidate(form);
-});
+	document.addEventListener('DOMContentLoaded', () => {
+		[].forEach.call(document.getElementsByTagName("form"), form => {
+			new Wellidate(form);
+		});
+	});
 </script>

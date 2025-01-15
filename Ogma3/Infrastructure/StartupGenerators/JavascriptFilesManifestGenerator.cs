@@ -86,6 +86,16 @@ public sealed class JavascriptFilesManifestGenerator(IWebHostEnvironment environ
 	}
 }
 
+public static class AppExtensions
+{
+	public static WebApplication UseJavascriptFilesManifestGenerator(this WebApplication app, params string[] directories)
+	{
+		var generator = new JavascriptFilesManifestGenerator(app.Environment);
+		generator.Generate(directories);
+		return app;
+	}
+}
+
 [UsedImplicitly]
 internal sealed record Manifest(DateTimeOffset GeneratedAt, ImmutableSortedDictionary<string, string> Files);
 

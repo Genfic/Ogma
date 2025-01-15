@@ -54,7 +54,7 @@ builder.AddServiceDefaults();
 
 var app = builder.Build();
 
-startup.Configure(app, app.Environment);
+Startup.Configure(app, app.Environment);
 
 if (app.Environment.IsDevelopment())
 {

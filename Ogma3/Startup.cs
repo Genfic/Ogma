@@ -34,6 +34,7 @@ using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Infrastructure.StartupGenerators;
+using Ogma3.ServiceDefaults;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.FileUploader;
@@ -276,13 +277,15 @@ public sealed class Startup
 
 
 	// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-	public void Configure(WebApplication app, IWebHostEnvironment env)
+	public static void Configure(WebApplication app, IWebHostEnvironment env)
 	{
 		// Profiler
 		if (env.IsDevelopment())
 		{
 			app.UseMiniProfiler();
 		}
+
+		app.MapDefaultEndpoints();
 
 		// Request timestamp
 		app.UseRequestTimestamp();
@@ -363,6 +366,6 @@ public sealed class Startup
 		app.UseAntiforgery();
 		
 		// Generate JS manifest
-		new JavascriptFilesManifestGenerator(env).Generate("js/dist", "js/bundle");
+		app.UseJavascriptFilesManifestGenerator("js/dist", "js/bundle");
 	}
 }
