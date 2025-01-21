@@ -13,6 +13,8 @@
 		dateTime is { } dt
 			? (ms: (DateTimeOffset.UtcNow - dt).TotalMilliseconds.ToString("F3"), str: (DateTimeOffset.UtcNow - dt).TotalSeconds.ToString("F3"))
 			: (ms: "🤷‍♂️", str: "unknown");
+
+	var proto = Context.Request.Protocol;
 }
 
 <footer class="footer">
@@ -36,6 +38,10 @@
 
 			<span class="item">
 				Serving <story-count class="hl" cache-time="60"></story-count> stories
+			</span>
+			
+			<span class="item">
+				Using @proto
 			</span>
 		</div>
 

@@ -55,6 +55,8 @@ public sealed class Startup
 	public Startup(IConfiguration configuration, IWebHostEnvironment env)
 	{
 		Configuration = new ConfigurationBuilder()
+			.AddConfiguration(configuration)
+			.AddEnvironmentVariables("ogma_")
 			.AddJsonFile("appsettings.json")
 			.AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
 			.AddEnvironmentVariables()
@@ -200,6 +202,9 @@ public sealed class Startup
 
 		// Cache
 		services.AddMemoryCache();
+		services.AddOutputCache(o => {
+			o.AddBasePolicy(p => p.Expire(TimeSpan.FromMinutes(5)));
+		});
 
 		// Runtime compilation
 		services
@@ -248,18 +253,18 @@ public sealed class Startup
 
 		// OpenAPI
 		services.AddOpenApi("public", options => {
-			options.AddDocumentTransformer<PublicApiDocumentTransformer>();
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
 			options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
+			options.ShouldInclude = desc => desc.RelativePath is {} r && !r.StartsWith("admin");
 		});
 		services.AddOpenApi("internal", options => {
-			options.AddDocumentTransformer<InternalApiDocumentTransformer>();
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
 			options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
+			options.ShouldInclude = desc => desc.RelativePath is {} r && r.StartsWith("admin");
 		});
 		
 		// HSTS
@@ -350,9 +355,10 @@ public sealed class Startup
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
+		app.UseOutputCache();
 
 		// OpenAPI
-		app.MapOpenApi("openapi/{documentName}.json");
+		app.MapOpenApi("openapi/{documentName}.json").CacheOutput();
 		app.MapScalarApiReference();
 		
 		// Rate limit

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Ogma3;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Logging;
 using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
@@ -17,15 +16,13 @@ Console.OutputEncoding = Encoding.UTF8;
 
 
 var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
-var (telegramToken, telegramId) = await Telegram.GetCredentials();
 Log.Logger = new LoggerConfiguration()
 	.Enrich.FromLogContext()
-	.WriteTo.Telegram(telegramToken, telegramId, restrictedToMinimumLevel: LogEventLevel.Error)
 	.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
 	.WriteTo.Console(LogEventLevel.Information)
 	.WriteTo.OpenTelemetry()
 	.MinimumLevel.Debug()
-	.CreateLogger(); 
+	.CreateLogger();
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,9 +31,6 @@ builder.Logging
 	.ClearProviders()
 	.AddConsole();
 
-builder.Configuration
-	.AddEnvironmentVariables("ogma_");
-
 builder.Host.UseSerilog();
 
 // builder.WebHost.UseUrls("https://+:5001");
@@ -44,7 +38,7 @@ builder.WebHost.ConfigureKestrel(options =>
 	{
 		options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
 		options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
-		options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2; });
+		options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3; });
 	});
 
 var startup = new Startup(builder.Configuration, builder.Environment);
