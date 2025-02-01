@@ -30,7 +30,10 @@ const tpl = `
 		  <button type="button" class="btn" data-action="${Action.link}" title="${Action.link}">
 		    <span class="material-icons-outlined">link</span>
 		  </button>
-		</nav>`;
+		</nav>`
+	.split("\n")
+	.map((l) => l.trim())
+	.join("");
 
 const map = new Map<Action, PrefixSuffix>([
 	[Action.bold, { prefix: "**", suffix: "**" }],

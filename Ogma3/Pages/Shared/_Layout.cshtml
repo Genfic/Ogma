@@ -28,8 +28,8 @@
 
 
 	@* Base meta *@
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"]</title>
 
 	@* Theme Color for Chrome, Firefox OS and Opera *@
@@ -62,12 +62,12 @@
 
 	@if (theme == "system")
 	{
-		<link rel="stylesheet" href="~/css/dist/light.css" asp-append-version="true"/>
-		<link rel="stylesheet" href="~/css/dist/dark.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true"/>
+		<link rel="stylesheet" href="~/css/dist/light.css" asp-append-version="true" />
+		<link rel="stylesheet" href="~/css/dist/dark.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true" />
 	}
 	else
 	{
-		<link rel="stylesheet" href="@($"~/css/dist/{theme}.css")" asp-append-version="true"/>
+		<link rel="stylesheet" href="@($"~/css/dist/{theme}.css")" asp-append-version="true" />
 	}
 
 	<link id="theme-ph">
@@ -76,7 +76,7 @@
 
 	@await RenderSectionAsync("CSS", false)
 	@Html.RenderResources("css")
-	
+
 	@await RenderSectionAsync("Head", required: false)
 </head>
 <body>
@@ -89,14 +89,14 @@
 
 	<nav id="top-nav">
 
-		<partial name="_MainNav"/>
+		<partial name="_MainNav" />
 
 		@if (isAdmin is not null)
 		{
 			<o-clock date="@DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture)"></o-clock>
 		}
 
-		<partial name="_LoginPartial"/>
+		<partial name="_LoginPartial" />
 
 	</nav>
 </header>
@@ -116,14 +116,16 @@
 {
 	<div id="cookie-consent">
 		<icon icon="cookie"></icon>
-		<span>To nobody's surprise, we're using cookies. You can read more about them in the&nbsp;<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">privacy policy</a>.</span>
+		<span>To nobody's surprise, we're using cookies. You can read more about them in the&nbsp;<a asp-page="/Docs"
+		                                                                                             asp-route-slug="@Config.PrivacyPolicyDoc"
+		                                                                                             class="item">privacy policy</a>.</span>
 		<button class="btn green" id="cookie-consent-button">Noted!</button>
 	</div>
-	
-	<script type="module" async src="~/js/dist/cookie-consent.js" ></script>
+
+	<script type="module" async src="~/js/dist/cookie-consent.js"></script>
 }
 
-<partial name="_Footer"/>
+<partial name="_Footer" />
 
 <script type="module" async defer src="~/js/bundle/components.js" asp-append-version="true"></script>
 
@@ -152,13 +154,26 @@ else
 @if (isAdmin is null)
 {
 	<script>
-    (_=>{fetch('@Url.RouteUrl(nameof(UpdateLastActive))', {method: 'HEAD'});})()
-    </script>
+		(_ => {
+			fetch('@Url.RouteUrl(nameof(UpdateLastActive))', { method: "HEAD" });
+		})();
+	</script>
 }
 
 @if (Env.IsDevelopment())
 {
-	<mini-profiler/>
+	<mini-profiler />
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ryersondmp/sa11y@4.0.3/dist/css/sa11y.min.css" />
+	<script
+		src="https://cdn.jsdelivr.net/combine/gh/ryersondmp/sa11y@4.0.3/dist/js/lang/en.umd.js,gh/ryersondmp/sa11y@4.0.3/dist/js/sa11y.umd.min.js"></script>
+	<script>
+		Sa11y.Lang.addI18n(Sa11yLangEn.strings);
+		const sa11y = new Sa11y.Sa11y({
+			checkRoot: "body",
+			containerIgnore: ".mp-results",
+		});
+	</script>
 }
 
 </body>
