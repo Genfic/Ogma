@@ -1,12 +1,12 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
 	"vcs": {
 		"clientKind": "git",
 		"enabled": true,
 		"useIgnoreFile": true
 	},
 	"files": {
-		"include": ["wwwroot/js/src*/*.js", "wwwroot/js/src*/*.ts", "*.mjs", "*.mts"]
+		"ignore": ["node_modules", "wwwroot/js/dist", "wwwroot/js/bundle", "wwwroot/js/generated"]
 	},
 	"formatter": {
 		"enabled": true,

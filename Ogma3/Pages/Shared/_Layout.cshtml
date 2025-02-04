@@ -81,6 +81,8 @@
 </head>
 <body>
 
+<partial name="_IconSheet"/>
+
 <header>
 
 	<button id="burger">
@@ -89,14 +91,14 @@
 
 	<nav id="top-nav">
 
-		<partial name="_MainNav" />
+		<partial name="_MainNav"/>
 
 		@if (isAdmin is not null)
 		{
 			<o-clock date="@DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture)"></o-clock>
 		}
 
-		<partial name="_LoginPartial" />
+		<partial name="_LoginPartial"/>
 
 	</nav>
 </header>
@@ -116,16 +118,14 @@
 {
 	<div id="cookie-consent">
 		<icon icon="cookie"></icon>
-		<span>To nobody's surprise, we're using cookies. You can read more about them in the&nbsp;<a asp-page="/Docs"
-		                                                                                             asp-route-slug="@Config.PrivacyPolicyDoc"
-		                                                                                             class="item">privacy policy</a>.</span>
+		<span>To nobody's surprise, we're using cookies. You can read more about them in the&nbsp;<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">privacy policy</a>.</span>
 		<button class="btn green" id="cookie-consent-button">Noted!</button>
 	</div>
 
 	<script type="module" async src="~/js/dist/cookie-consent.js"></script>
 }
 
-<partial name="_Footer" />
+<partial name="_Footer"/>
 
 <script type="module" async defer src="~/js/bundle/components.js" asp-append-version="true"></script>
 
@@ -162,9 +162,9 @@ else
 
 @if (Env.IsDevelopment())
 {
-	<mini-profiler />
+	<mini-profiler/>
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ryersondmp/sa11y@4.0.3/dist/css/sa11y.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ryersondmp/sa11y@4.0.3/dist/css/sa11y.min.css"/>
 	<script
 		src="https://cdn.jsdelivr.net/combine/gh/ryersondmp/sa11y@4.0.3/dist/js/lang/en.umd.js,gh/ryersondmp/sa11y@4.0.3/dist/js/sa11y.umd.min.js"></script>
 	<script>

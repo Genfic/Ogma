@@ -7,8 +7,8 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import { browserslistToTargets, transform } from "lightningcss";
-import { hasExtension } from "./helpers/path";
 import { initAsyncCompiler } from "sass-embedded";
+import { hasExtension } from "./helpers/path";
 
 const { values } = parseArgs({
 	args: Bun.argv,
@@ -24,7 +24,7 @@ const { values } = parseArgs({
 	allowPositionals: true,
 });
 
-const log = (...data: any[]) => values.verbose && console.log(data);
+const log = (...data: unknown[]) => values.verbose && console.log(data);
 
 const encoder = new TextEncoder();
 
@@ -35,18 +35,18 @@ const compiler = await initAsyncCompiler();
 
 const compileSass = async (file: string) => {
 	const start = Bun.nanoseconds();
-	
+
 	const { name: filename, base } = path.parse(file);
-	
+
 	const fileContent = await Bun.file(file).text();
-	
+
 	const { css, sourceMap } = await compiler.compileStringAsync(fileContent, {
 		sourceMap: true,
-		loadPaths: [ _base, `${_base}/src/` ],
+		loadPaths: [_base, `${_base}/src/`],
 	});
-	
-	log (css.length);
-	
+
+	log(css.length);
+
 	const { code, map, warnings } = transform({
 		code: encoder.encode(css),
 		inputSourceMap: JSON.stringify(sourceMap),
@@ -55,7 +55,7 @@ const compileSass = async (file: string) => {
 		targets: browserslistToTargets(browserslist("defaults")),
 		minify: true,
 	});
-	
+
 	log(code.length);
 
 	for (const warning of warnings) {
@@ -74,7 +74,7 @@ const compileSass = async (file: string) => {
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
 	const files = [...new Glob(`${_base}/*.scss`).scanSync()];
-	
+
 	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
 	const tasks = [];
@@ -88,7 +88,7 @@ const compileAll = async () => {
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
-	
+
 	await compiler.dispose();
 };
 

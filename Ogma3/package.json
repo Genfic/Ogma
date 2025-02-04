@@ -12,12 +12,14 @@
 		"css:watch": "bun ./scripts/build-sass.mts -- --watch",
 		"js": "bun ./scripts/build-js.mts",
 		"js:watch": "bun ./scripts/build-js.mts -- --watch",
+		"icons": "bun ./scripts/build-icons.mts",
 		"lh": "unlighthouse"
 	},
 	"devDependencies": {
 		"@angius/web-component-analyzer": "2.0.10",
 		"@biomejs/biome": "^1.9.4",
 		"@hail2u/css-mqpacker": "git@github.com:hail2u/node-css-mqpacker.git#f615ec6",
+		"@lit-labs/ssr": "^3.3.0",
 		"@mr-hope/gulp-sass": "3.1.1",
 		"@parcel/watcher": "^2.5.0",
 		"@rollup/plugin-multi-entry": "6.0.1",
@@ -29,6 +31,7 @@
 		"browserslist": "^4.24.2",
 		"chalk": "^5.3.0",
 		"chalk-template": "^1.1.0",
+		"cheerio": "^1.0.0",
 		"concurrently": "^9.1.0",
 		"convert": "^5.7.0",
 		"esbuild": "^0.24.0",
