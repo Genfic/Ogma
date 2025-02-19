@@ -82,7 +82,7 @@
                     if (showForm) cancelEdit();
                     else showForm = true;
                 }">
-			<icon icon="add"></icon>
+			<icon icon="lucide:plus" svg="true"></icon>
 			{{ showForm ? "Cancel" : "Create New" }}
 		</button>
 	}
@@ -109,10 +109,10 @@
 			{
 				<div class="actions">
 					<button class="action" v-on:click="deleteShelf(s)">
-						<icon icon="delete_forever"></icon>
+						<icon icon="lucide:trash-2" svg="true"></icon>
 					</button>
 					<button class="action" v-on:click="editShelf(s)">
-						<icon icon="edit"></icon>
+						<icon icon="lucide:pencil" svg="true"></icon>
 					</button>
 				</div>
 			}

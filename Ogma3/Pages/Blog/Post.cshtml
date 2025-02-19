@@ -48,7 +48,7 @@
 		@if (User.IsUserSameAsLoggedIn(Model.Blogpost.AuthorId))
 		{
 			<a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.Blogpost.Id">
-				<icon class="icon" icon="edit"></icon>
+				<icon class="icon" icon="lucide:pencil" svg="true"></icon>
 				<span class="name">Edit</span>
 			</a>
 		}
@@ -57,13 +57,13 @@
 			<a title="Manage" class="action-btn red" target="_blank"
 			   asp-area="Admin" asp-page="/ContentBlock"
 			   asp-route-type="blogpost" asp-route-id="@Model.Blogpost.Id">
-				<icon class="icon" icon="shield"></icon>
+				<icon class="icon" icon="lucide:shield" svg="true"></icon>
 			</a>
 		}
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
 			<button title="Report" class="action-btn red" id="open-modal-button">
-				<icon class="icon" icon="flag"></icon>
+				<icon class="icon" icon="lucide:flag" svg="true"></icon>
 			</button>
 		}
 	</div>

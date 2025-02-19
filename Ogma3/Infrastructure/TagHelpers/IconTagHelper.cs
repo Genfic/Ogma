@@ -11,11 +11,13 @@ public sealed class IconTagHelper : TagHelper
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
-		if (Svg)
+		if (Svg) 
 		{
 			output.TagName = "svg";
+			output.Attributes.Add("width", "24");
+			output.Attributes.Add("height", "24");
 			output.Content.SetHtmlContent($"<use xlink:href='#{Icon}'></use>");
-		}
+		} 
 		else
 		{
 			output.TagName = "i";

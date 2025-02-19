@@ -41,14 +41,14 @@
 			<span class="text">{{n.order}}</span>
 		</div>
 		<div class="main">
-			<h3 class="name">{{ n.name }}<icon v-if="n.isStaff" class="icon" icon="security"></icon></h3>
+			<h3 class="name">{{ n.name }}<icon v-if="n.isStaff" class="icon" icon="lucide:shield-half" svg="true"></icon></h3>
 		</div>
 		<div class="actions">
 			<button class="action" v-on:click="deleteRole(n)">
-				<icon icon="delete_forever"></icon>
+				<icon icon="lucide:trash-2" svg="true"></icon>
 			</button>
 			<button class="action" v-on:click="editRole(n)">
-				<icon icon="edit"></icon>
+				<icon icon="lucide:pencil" svg="true"></icon>
 			</button>
 		</div>
 	</li>

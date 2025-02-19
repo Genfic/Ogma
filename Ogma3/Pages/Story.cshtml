@@ -49,7 +49,7 @@
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
 				<a title="Write about it" class="action-btn large" asp-page="./Blog/Create" asp-route-story="@Model.Story.Id">
-					<icon class="icon" icon="note_add"></icon>
+					<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
 					<span class="name">Write about it</span>
 				</a>
 			}
@@ -57,19 +57,19 @@
 			@if (Model.Story.AuthorId == uid)
 			{
 				<a title="Edit" class="action-btn large" asp-page="./Stories/Edit" asp-route-id="@Model.Story.Id">
-					<icon class="icon" icon="edit"></icon>
+					<icon class="icon" icon="lucide:pencil" svg="true"></icon>
 					<span class="name">Edit</span>
 				</a>
 
 				<a title="New chapter" class="action-btn large" asp-page="./Chapters/Create" asp-route-id="@Model.Story.Id">
-					<icon class="icon" icon="post_add"></icon>
+					<icon class="icon" icon="lucide:file-plus" svg="true"></icon>
 					<span class="name">New chapter</span>
 				</a>
 			}
 			@if (!Model.Story.IsPublished)
 			{
 				<span class="action-btn large red">
-					<icon class="icon" icon="visibility_off"></icon>
+					<icon class="icon" icon="lucide:eye-off" svg="true"></icon>
 				</span>
 			}
 			@if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
@@ -77,13 +77,13 @@
 				<a title="Manage" class="action-btn large red" target="_blank"
 				   asp-area="Admin" asp-page="/ContentBlock"
 				   asp-route-type="story" asp-route-id="@Model.Story.Id">
-					<icon class="icon" icon="shield"></icon>
+					<icon class="icon" icon="lucide:shield" svg="true"></icon>
 				</a>
 			}
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
 				<button title="Report" class="action-btn large red" id="open-modal-button">
-					<icon class="icon" icon="flag"></icon>
+					<icon class="icon" icon="lucide:flag" svg="true"></icon>
 				</button>
 			}
 
@@ -179,7 +179,7 @@
 		<o-featured-in-clubs storyId="@Model.Story.Id"></o-featured-in-clubs>
 
 		<a asp-route="@(nameof(GetChaptersRssFeed))" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
-			<icon icon="rss_feed"></icon>
+			<icon icon="lucide:rss" svg="true"></icon>
 		</a>
 	</div>
 
@@ -208,7 +208,7 @@
 
 						@if (c.IsBlocked)
 						{
-							<icon icon="warning" class="warning" title="This chapter has been blocked by staff"></icon>
+							<icon icon="lucide:triangle-alert" svg="true" class="warning" title="This chapter has been blocked by staff"></icon>
 						}
 
 						<a class="title" asp-page="/Chapter" asp-route-sid="@Model.Story.Id" asp-route-id="@c.Id" asp-route-slug="@c.Slug">

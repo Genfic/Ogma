@@ -14,7 +14,7 @@
 <h1>
 	@if (Model.ClubThread.IsPinned)
 	{
-		<icon icon="push_pin"></icon>
+		<icon icon="lucide:pin" svg="true"></icon>
 	}
 	@Model.ClubThread.Title
 </h1>
@@ -52,10 +52,10 @@
 			{
 				<div class="actions">
 					<a title="Edit" class="action-btn" asp-page="./Edit" asp-route-id="@Model.ClubThread.Id">
-						<icon icon="edit"></icon>
+						<icon icon="lucide:pencil" svg="true"></icon>
 					</a>
 					<a title="Delete" class="action-btn" asp-page="./Delete" asp-route-id="@Model.ClubThread.Id">
-						<icon icon="delete_forever"></icon>
+						<icon icon="lucide:trash-2" svg="true"></icon>
 					</a>
 				</div>
 			}

@@ -33,7 +33,7 @@
 		<div class="o-dropdown left" x-data="{open: false}">
 
 			<button class="action-btn max" x-on:click="open = !open">
-				<icon icon="more_vert"></icon>
+				<icon icon="lucide:ellipsis-vertical" svg="true"></icon>
 			</button>
 
 			<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
@@ -46,14 +46,14 @@
 				@if (User.Identity?.IsAuthenticated ?? false)
 				{
 					<button title="Report" class="item active red" id="open-modal-button-clubbar">
-						<icon icon="flag"></icon>
+						<icon icon="lucide:flag" svg="true"></icon>
 						Report
 					</button>
 				}
 
 				<a class="item active" title="Moderation log" asp-page="/Club/Modlog" asp-route-id="@Model.Id"
 					asp-route-slug="@Model.Slug">
-					<icon icon="receipt_long"></icon>
+					<icon icon="lucide:scroll-text" svg="true"></icon>
 					Modlog
 				</a>
 			</nav>

@@ -9,11 +9,11 @@
 
 <div class="button-group">
 	<a title="Cancel" class="action-btn large" asp-page="./Index" asp-route-id="@Model.Input.ClubId" asp-route-slug="@Model.Slug">
-		<icon class="icon" icon="arrow_back"></icon>
+		<icon class="icon" icon="lucide:arrow-left" svg="true"></icon>
 		<span class="name">Cancel</span>
 	</a>
 	<a title="Delete" class="action-btn large red" asp-page="./Delete" asp-route-clubId="@Model.Input.ClubId" asp-route-id="@Model.Input.Id">
-		<icon class="icon" icon="delete_forever"></icon>
+		<icon class="icon" icon="lucide:trash-2" svg="true"></icon>
 		<span class="name">Delete</span>
 	</a>
 </div>

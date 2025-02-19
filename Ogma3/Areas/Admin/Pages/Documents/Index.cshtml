@@ -7,7 +7,7 @@
 }
 
 <a class="btn btn-block btn-outline-primary" asp-page="./Create">
-	<icon icon="add"></icon>
+	<icon icon="lucide:plus" svg="true"></icon>
 	Create New
 </a>
 
@@ -27,10 +27,10 @@
 				<div class="actions">
 					@* TODO: Implement document deletion *@
 					<a class="action">
-						<icon icon="delete_forever"></icon>
+						<icon icon="lucide:trash-2" svg="true"></icon>
 					</a>
 					<a asp-page="./Edit" asp-route-slug="@doc.Slug" class="action">
-						<icon icon="edit"></icon>
+						<icon icon="lucide:pencil" svg="true"></icon>
 					</a>
 				</div>
 			</li>

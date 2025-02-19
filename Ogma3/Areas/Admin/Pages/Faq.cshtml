@@ -33,10 +33,10 @@
 		<summary>{{f.question}}</summary>
 		<div class="actions">
 			<button class="small inline action-btn" v-on:click="deleteFaq(f)">
-				<icon icon="delete_forever"></icon>
+				<icon icon="lucide:trash-2" svg="true"></icon>
 			</button>
 			<button class="small inline action-btn" v-on:click="editFaq(f)">
-				<icon icon="edit"></icon>
+				<icon icon="lucide:pencil" svg="true"></icon>
 			</button>
 		</div>
 		<div v-html="f.answerRendered"></div>

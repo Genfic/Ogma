@@ -8,11 +8,11 @@
 		"t:webtypes": "wca-webtypes analyze ./wwwroot/js/src/**/*.ts --format webtypes --outFile ./web-types.json",
 		"biome": "bunx @biomejs/biome check .",
 		"biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag",
-		"css": "bun ./scripts/build-sass.mts",
-		"css:watch": "bun ./scripts/build-sass.mts -- --watch",
-		"js": "bun ./scripts/build-js.mts",
-		"js:watch": "bun ./scripts/build-js.mts -- --watch",
-		"icons": "bun ./scripts/build-icons.mts",
+		"css": "bun ./scripts/build-sass.ts",
+		"css:watch": "bun ./scripts/build-sass.ts -- --watch",
+		"js": "bun ./scripts/build-js.ts",
+		"js:watch": "bun ./scripts/build-js.ts -- --watch",
+		"icons": "bun ./scripts/build-icons.ts",
 		"lh": "unlighthouse"
 	},
 	"devDependencies": {

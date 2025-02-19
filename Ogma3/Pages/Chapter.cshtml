@@ -45,14 +45,14 @@
 			<div class="actions">
 
 				<a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-chapter="@Model.Chapter.Id">
-					<icon class="icon" icon="note_add"></icon>
+					<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
 					<span class="name">Write about it</span>
 				</a>
 
 				@if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
 				{
 					<a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
-						<icon class="icon" icon="edit"></icon>
+						<icon class="icon" icon="lucide:pencil" svg="true"></icon>
 						<span class="name">Edit</span>
 					</a>
 				}
@@ -61,11 +61,11 @@
 					<a title="Manage" class="action-btn red" target="_blank"
 					   asp-area="Admin" asp-page="/ContentBlock"
 					   asp-route-type="chapter" asp-route-id="@Model.Chapter.Id">
-						<icon class="icon" icon="shield"></icon>
+						<icon class="icon" icon="lucide:shield" svg="true"></icon>
 					</a>
 				}
 				<button title="Report" class="action-btn red" id="open-modal-button">
-					<icon class="icon" icon="flag"></icon>
+					<icon class="icon" icon="lucide:flag" svg="true"></icon>
 				</button>
 			</div>
 		}
