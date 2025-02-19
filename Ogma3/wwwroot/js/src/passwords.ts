@@ -3,9 +3,7 @@ const passwordInputs = [...document.querySelectorAll("input[type=password]")] as
 for (const pi of passwordInputs) {
 	const buttons = pi.nextElementSibling;
 
-	if (buttons === null) break;
-
-	buttons.querySelector(".show-password").addEventListener("click", (e) => {
+	buttons?.querySelector(".show-password").addEventListener("click", (e: Event) => {
 		e.preventDefault();
 		if (pi.type === "password") {
 			pi.type = "text";

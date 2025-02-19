@@ -10,12 +10,7 @@ import { html } from "lit/html.js";
 
 const start = Bun.nanoseconds();
 
-const files = new Glob("../**/*.cshtml").scan();
-const handlers: BunFile[] = [];
-
-for await (const file of files) {
-	handlers.push(Bun.file(file));
-}
+const handlers: BunFile[] = [...new Glob("../**/*.cshtml").scanSync()].map((f) => Bun.file(f));
 
 const icons: string[] = [];
 
