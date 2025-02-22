@@ -169,7 +169,7 @@ Vue.component("tag-search-select", {
                         <div class="bg" v-bind:style="{background: s.namespaceColor}"></div>
                         <span class="name">
                         {{ s.namespaceName ? s.namespaceName + ':' : '' }}{{ s.name }}
-                            <i class="material-icons-outlined" v-on:click="selected.remove(s)">clear</i>
+            				<o-icon icon="lucide:x" class="material-icons-outlined" v-on:click="selected.remove(s)" ></o-icon>
                       </span>
                     </div>
 

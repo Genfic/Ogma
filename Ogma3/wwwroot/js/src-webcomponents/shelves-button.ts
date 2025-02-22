@@ -45,7 +45,7 @@ export class ShelvesButton extends LitElement {
 			@click="${() => this.#addOrRemove(shelf.id)}"
 			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
-			<i class="material-icons-outlined" style="color: ${shelf.color}"> ${shelf.iconName ?? "bookmark_border"} </i>
+			<o-icon class="material-icons-outlined" style="color: ${shelf.color}" icon="${shelf.iconName}"></o-icon>
 		</button>
 	`;
 
@@ -56,7 +56,7 @@ export class ShelvesButton extends LitElement {
 			@click="${() => this.#addOrRemove(shelf.id)}"
 			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
-			<i class="material-icons-outlined" style="color: ${shelf.color}"> ${shelf.iconName ?? "bookmark_border"} </i>
+			<o-icon class="material-icons-outlined" style="color: ${shelf.color}" icon="${shelf.iconName}"></o-icon>
 			<span>${shelf.name}</span>
 		</button>
 	`;
@@ -66,7 +66,7 @@ export class ShelvesButton extends LitElement {
 			${this.quickShelves?.map(this.#quickShelf)}
 
 			<button title="All bookshelves" class="shelf action-btn" @click="${() => this.#showMore()}">
-				<i class="material-icons-outlined">more_horiz</i>
+				<o-icon class="material-icons-outlined" icon="lucide:ellipsis-vertical"></o-icon>
 			</button>
 
 			${this.more ? html` <div class="more-shelves">${this.shelves?.map(this.#shelf)}</div> ` : null}

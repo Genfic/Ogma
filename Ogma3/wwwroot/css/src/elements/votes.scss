@@ -15,7 +15,7 @@
 	}
 
 	&.active {
-		> i {
+		::part(icon) {
 			color: v.$gold;
 
 			animation: spin .2s ease-in-out;

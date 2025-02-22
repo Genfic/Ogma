@@ -28,7 +28,7 @@ export class NotificationsButton extends LitElement {
 	render() {
 		return html`
 			<a class="nav-link light notifications-btn" href="/notifications" title="${this.#title()}">
-				<i class="material-icons-outlined">notifications</i>
+				<o-icon class="material-icons-outlined" icon="lucide:bell"></o-icon>
 				${(this.notifications ?? -1) > 0 ? html`<span>${this.#count()}</span>` : null}
 			</a>
 		`;

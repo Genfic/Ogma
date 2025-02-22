@@ -25,7 +25,7 @@ export class QuoteBox extends LitElement {
 		return html`
 			<div id="quote" class="quote active-border">
 				<div class="refresh" @click="${this.load}">
-					<i class="material-icons-outlined ${this.#spinnerClass()}">${this.#spinnerIcon()}</i>
+					<o-icon icon="${this.#spinnerIcon()}" class="material-icons-outlined ${this.#spinnerClass()}"></o-icon>
 				</div>
 				${when(
 					this._quote,
@@ -40,7 +40,7 @@ export class QuoteBox extends LitElement {
 	}
 
 	#spinnerClass = () => (this._loading ? "spin" : "");
-	#spinnerIcon = () => (this._canReload ? "refresh" : "schedule");
+	#spinnerIcon = () => (this._canReload ? "lucide:refresh-cw" : "lucide:clock");
 
 	async load() {
 		if (!this._canReload) return;

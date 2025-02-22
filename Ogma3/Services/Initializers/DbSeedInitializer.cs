@@ -31,7 +31,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		_logger = logger;
 		_clientFactory = clientFactory;
 
-		using var sr = new StreamReader("seed.json");
+		using var sr = new StreamReader("seed.json5");
 		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
 
 		if (data is not null)
@@ -40,7 +40,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		}
 		else
 		{
-			_logger.LogCritical("Could not read seed.json file to seed the database");
+			_logger.LogCritical("Could not read seed.json5 file to seed the database");
 			throw new NullReferenceException("Json data was null");
 		}
 	}
@@ -142,6 +142,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 public sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
 
 [JsonSerializable(typeof(JsonData))]
+[JsonSourceGenerationOptions(AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip)]
 public sealed partial class JsonDataContext : JsonSerializerContext;
 
 public sealed record JsonQuote(string Quote, string Author);

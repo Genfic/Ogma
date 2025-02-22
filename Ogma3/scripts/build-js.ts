@@ -20,6 +20,9 @@ const { values } = parseArgs({
 	strict: true,
 	allowPositionals: true,
 });
+
+const log = (...data: unknown[]) => values.verbose && console.log(data);
+
 const base = "./wwwroot/js";
 const source = `${base}/src`;
 const dest = `${base}/dist`;
@@ -60,12 +63,12 @@ const compileAll = async () => {
 
 	const tasks = [];
 	for (const file of files) {
-		values.verbose && console.info(`Compiling ${file}`);
+		log(`Compiling ${file}`);
 		tasks.push(compileFile(file));
 	}
 	const res = await Promise.allSettled(tasks);
 
-	values.verbose && console.log(res.map((r) => r.status));
+	log(res.map((r) => r.status));
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
@@ -85,7 +88,7 @@ if (values.watch) {
 
 		if (err) {
 			console.error(c.bgRed(err.message));
-			values.verbose && console.error(err);
+			log(err);
 			return;
 		}
 
@@ -96,7 +99,7 @@ if (values.watch) {
 			.map((e) => e.path);
 
 		if (triggerPaths.length > 0) {
-			values.verbose && console.info(c.yellow(`Changed files: ${triggerPaths.join(", ")}`));
+			log(c.yellow(`Changed files: ${triggerPaths.join(", ")}`));
 
 			for (const p of triggerPaths) {
 				const { base } = path.parse(p);

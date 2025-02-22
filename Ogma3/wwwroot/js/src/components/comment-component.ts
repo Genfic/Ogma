@@ -178,20 +178,20 @@ Vue.component("comment", {
                         {{ date(mutComment.dateTime) }}
                     </time>
 
-                    <div v-if="!authenticatedAs" class="actions">
+                    <div v-if="authenticatedAs" class="actions">
 
                         <button class="action-btn small red-hl" title="Report" v-on:click="report">
-                            <i class="icon material-icons-outlined">flag</i>
+                            <o-icon icon="lucide:flag" class="material-icons-outlined icon" ></o-icon>
                         </button>
 
                         <template v-if="mutComment.owned">
 
                             <button class="action-btn small" title="Delete" v-on:click="del">
-                                <i class="icon material-icons-outlined">delete_forever</i>
+                            	<o-icon icon="lucide:trash-2" class="material-icons-outlined icon" ></o-icon>
                             </button>
 
                             <button class="action-btn small" title="Edit" v-on:click="edit">
-                                <i class="icon material-icons-outlined">edit</i>
+                            	<o-icon icon="lucide:pencil" class="material-icons-outlined icon" ></o-icon>
                             </button>
 
                         </template>
@@ -213,11 +213,11 @@ Vue.component("comment", {
 
                     <div class="buttons">
                         <button class="confirm active-border" v-on:click="update">
-                            <i class="material-icons-outlined">edit</i>
+            				<o-icon icon="lucide:pencil" class="material-icons-outlined" ></o-icon>
                             Update
                         </button>
                         <button class="cancel active-border" v-on:click="editData = null">
-                            <i class="material-icons-outlined">cancel</i>
+            				<o-icon icon="lucide:x" class="material-icons-outlined" ></o-icon>
                             Cancel
                         </button>
                     </div>

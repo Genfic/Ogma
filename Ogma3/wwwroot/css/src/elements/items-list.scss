@@ -72,7 +72,7 @@ ul.items-list {
 				text-shadow: 1px 1px 0 v.$foreground-75, -1px 1px 0 v.$foreground-75, 1px -1px 0 v.$foreground-75, -1px -1px 0 v.$foreground-75;
 			}
 
-			> i {
+			> i, o-icon {
 				min-width: unset;
 			}
 		}

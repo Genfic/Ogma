@@ -16,7 +16,7 @@ public sealed class IconTagHelper : TagHelper
 			output.TagName = "svg";
 			output.Attributes.Add("width", "24");
 			output.Attributes.Add("height", "24");
-			output.Content.SetHtmlContent($"<use xlink:href='#{Icon}'></use>");
+			output.Content.SetHtmlContent($"<use href=\"/svg/spritesheet.svg#{Icon}\"></use>");
 		} 
 		else
 		{

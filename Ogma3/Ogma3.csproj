@@ -920,7 +920,7 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="seed.json">
+		<Content Update="seed.json5">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -2777,5 +2777,6 @@
 	<ItemGroup>
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\dom.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\generators.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\icon.ts" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,1 @@
+preload = ['./scripts/plugins/json5-loader.ts']

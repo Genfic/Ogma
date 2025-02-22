@@ -109,7 +109,7 @@ public sealed class Startup
 		ValidatorOptions.Global.LanguageManager.Enabled = false;
 
 		// Custom persistent config
-		services.AddSingleton(OgmaConfig.Init("config.jsonc"));
+		services.AddSingleton(OgmaConfig.Init("config.json5"));
 
 		// Comment redirector
 		services.AddScoped<CommentRedirector>();

@@ -16,19 +16,19 @@ interface PrefixSuffix {
 const tpl = `
 		<nav class="button-group toolbar">
 		  <button type="button" class="btn" data-action="${Action.bold}" title="${Action.bold}">
-		    <span class="material-icons-outlined">format_bold</span>
+            <o-icon icon="lucide:bold" class="material-icons-outlined"></o-icon>
 		  </button>
 		  <button type="button" class="btn" data-action="${Action.italic}" title="${Action.italic}">
-		    <span class="material-icons-outlined">format_italic</span>
+            <o-icon icon="lucide:italic" class="material-icons-outlined" ></o-icon>
 		  </button>
 		  <button type="button" class="btn" data-action="${Action.underline}" title="${Action.underline}">
-		    <span class="material-icons-outlined">format_underlined</span>
+            <o-icon icon="lucide:underline" class="material-icons-outlined" ></o-icon>
 		  </button>
 		  <button type="button" class="btn" data-action="${Action.spoiler}" title="${Action.spoiler}">
-		    <span class="material-icons-outlined">visibility</span>
+            <o-icon icon="lucide:eye-closed" class="material-icons-outlined" ></o-icon>
 		  </button>
 		  <button type="button" class="btn" data-action="${Action.link}" title="${Action.link}">
-		    <span class="material-icons-outlined">link</span>
+            <o-icon icon="lucide:link" class="material-icons-outlined" ></o-icon>
 		  </button>
 		</nav>`
 	.split("\n")

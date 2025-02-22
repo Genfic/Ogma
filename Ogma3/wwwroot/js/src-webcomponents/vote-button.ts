@@ -28,7 +28,7 @@ export class VoteButton extends LitElement {
 	render() {
 		return html`
 			<button class="votes action-btn large ${this.voted ? "active" : ""}" @click="${this.vote}" title="Give it a star!">
-				<i class="material-icons-outlined">${this.voted ? "star" : "star_border"}</i>
+				<o-icon icon="${this.voted ? "ic:round-star" : "ic:round-star-border"}" class="material-icons-outlined" ></o-icon>
 				<span class="count">${this.score ?? 0}</span>
 			</button>
 		`;

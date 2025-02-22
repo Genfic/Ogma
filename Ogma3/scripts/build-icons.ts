@@ -1,3 +1,4 @@
+import { parseArgs } from "node:util";
 import { render } from "@lit-labs/ssr";
 import { collectResultSync } from "@lit-labs/ssr/lib/render-result";
 import { type BunFile, Glob } from "bun";
@@ -5,14 +6,30 @@ import ct from "chalk-template";
 import * as cheerio from "cheerio";
 import convert from "convert";
 import { uniq } from "es-toolkit";
+import { parse } from "json5";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import { html } from "lit/html.js";
+
+const { values } = parseArgs({
+	args: Bun.argv,
+	options: {
+		verbose: {
+			type: "boolean",
+		},
+	},
+	allowPositionals: true,
+});
+
+const log = (...data: unknown[]) => values.verbose && console.log(data);
 
 const start = Bun.nanoseconds();
 
 const handlers: BunFile[] = [...new Glob("../**/*.cshtml").scanSync()].map((f) => Bun.file(f));
 
-const icons: string[] = [];
+const json = await Bun.file("./seed.json5").text();
+const seed = parse(json) as { Icons: string[]; AdditionalIcons: string[] };
+
+const icons: string[] = [...seed.Icons, ...seed.AdditionalIcons];
 
 for (const handler of handlers) {
 	const content = await handler.text();
@@ -31,7 +48,7 @@ for (const handler of handlers) {
 const svgs: { svg: string; name: string }[] = [];
 
 for (const icon of uniq(icons)) {
-	console.log(ct`{dim Fetching icon {reset.bold ${icon}}}`);
+	log(ct`{dim Fetching icon {reset.bold ${icon}}}`);
 	const [set, name] = icon.split(":");
 	const res = await fetch(`https://api.iconify.design/${set}/${name}.svg`);
 	if (res.ok) {

@@ -61,7 +61,7 @@
 						{
 							<input type="radio" name="icons" v-model="form.icon" id="icon-@ico.Id" value="@ico.Id">
 							<label for="icon-@ico.Id">
-								<icon icon="@ico.Name"></icon>
+								<icon icon="@ico.Name" svg="true"></icon>
 							</label>
 						}
 					</div>
@@ -99,7 +99,7 @@
 	<ul v-else class="items-list">
 		<li v-for="s in shelves">
 			<div class="deco" v-bind:style="{background: s.color}">
-				<i class="material-icons-outlined">{{s.iconName ?? "bookmark_outline"}}</i>
+				<o-icon class="material-icons-outlined" :icon="s.iconName"></o-icon>
 			</div>
 			<a class="main" :href="'/Shelf/' + s.id">
 				<h3 class="name">{{ s.name }} – {{ s.storiesCount }}</h3>
