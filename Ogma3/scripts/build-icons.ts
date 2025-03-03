@@ -8,7 +8,7 @@ import convert from "convert";
 import { uniq } from "es-toolkit";
 import { parse } from "json5";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import { html } from "lit/html.js";
+import { html } from "lit";
 
 const { values } = parseArgs({
 	args: Bun.argv,
