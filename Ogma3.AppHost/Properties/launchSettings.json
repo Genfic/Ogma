@@ -12,18 +12,6 @@
 				"DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21252",
 				"DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22080"
 			}
-		},
-		"prod": {
-			"commandName": "Project",
-			"dotnetRunMessages": true,
-			"launchBrowser": true,
-			"applicationUrl": "https://localhost:17226;http://localhost:15203",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Production",
-				"DOTNET_ENVIRONMENT": "Production",
-				"DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21252",
-				"DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22080"
-			}
 		}
 	}
 }

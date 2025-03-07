@@ -1,19 +1,16 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sqlPassword = builder.AddParameter("postgres-password", secret: true);
-var sqlUsername = builder.AddParameter("postgres-username", secret: true);
-
-Console.WriteLine($"{sqlUsername.Resource.Value} / {sqlPassword.Resource.Value}");
+var emulateProd = args.Contains("--emulate-prod");
 
 var database = builder
-	.AddPostgres("postgres", sqlUsername, sqlPassword)
+	.AddPostgres("postgres")
 	.WithDataVolume()
 	.WithLifetime(ContainerLifetime.Persistent)
 	.WithPgWeb()
 	.AddDatabase("ogma3-db");
 
 builder
-	.AddProject<Projects.Ogma3>("ogma3")
+	.AddProject<Projects.Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : null)
 	.WithExternalHttpEndpoints()
 	.WithReference(database)
 	.WaitFor(database);
