@@ -1,27 +1,18 @@
 import path from "node:path";
-import { parseArgs } from "node:util";
-import watcher from "@parcel/watcher";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import { hasExtension } from "./helpers/path";
+import { watch } from "./helpers/watcher";
+import { log } from "./helpers/logger";
+import { program } from "@commander-js/extra-typings";
 
-const { values } = parseArgs({
-	args: Bun.argv,
-	options: {
-		watch: {
-			type: "boolean",
-		},
-		verbose: {
-			type: "boolean",
-		},
-	},
-	strict: true,
-	allowPositionals: true,
-});
-
-const log = (...data: unknown[]) => values.verbose && console.log(data);
+const values = program
+	.option("-v, --verbose", "Verbose mode", false)
+	.option("-w, --watch", "Watch mode", false)
+	.parse(Bun.argv)
+	.opts();
 
 const base = "./wwwroot/js";
 const source = `${base}/src`;
@@ -37,7 +28,7 @@ const compileFile = async (file: string) => {
 		root: source,
 		minify: true,
 		sourcemap: "linked",
-		splitting: false,
+		splitting: false
 	});
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
@@ -63,12 +54,12 @@ const compileAll = async () => {
 
 	const tasks = [];
 	for (const file of files) {
-		log(`Compiling ${file}`);
+		log.verbose(`Compiling ${file}`);
 		tasks.push(compileFile(file));
 	}
 	const res = await Promise.allSettled(tasks);
 
-	log(res.map((r) => r.status));
+	log.verbose(res.map((r) => r.status));
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
@@ -77,42 +68,21 @@ const compileAll = async () => {
 await compileAll();
 
 if (values.watch) {
-	console.log(c.blue("👀 Watching..."));
-
-	const subscription = await watcher.subscribe(source, async (err, events) => {
-		if (values.verbose) {
-			for (const { type, path } of events) {
-				console.info(c.yellow(`${type}: ${path}`));
-			}
-		}
-
-		if (err) {
-			console.error(c.bgRed(err.message));
-			log(err);
-			return;
-		}
-
-		const triggerPaths = events
-			.filter((e) => e.type === "update")
-			.filter((e) => hasExtension(e.path, "ts", "js"))
-			.filter((e) => !e.path.endsWith("~"))
-			.map((e) => e.path);
-
-		if (triggerPaths.length > 0) {
-			log(c.yellow(`Changed files: ${triggerPaths.join(", ")}`));
-
-			for (const p of triggerPaths) {
+	await watch(source, {
+		verbose: values.verbose ?? false,
+		transformer: (events) =>
+			events
+				.filter((e) => e.type === "update")
+				.filter((e) => hasExtension(e.path, "ts", "js"))
+				.filter((e) => !e.path.endsWith("~"))
+				.map((e) => e.path),
+		predicate: (files) => files.length > 0,
+		action: async (files) => {
+			for (const p of files) {
 				const { base } = path.parse(p);
 				console.log(ct`{blueBright 🔔 File {bold ${base}} changed, recompiling...}`);
 				await compileFile(p);
 			}
 		}
-	});
-
-	process.on("SIGINT", async () => {
-		// close watcher when Ctrl-C is pressed
-		console.log("🚪 Closing watcher...");
-		await subscription.unsubscribe();
-		process.exit(0);
 	});
 }

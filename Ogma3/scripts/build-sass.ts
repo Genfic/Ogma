@@ -1,28 +1,19 @@
 import * as path from "node:path";
-import { parseArgs } from "node:util";
-import watcher from "@parcel/watcher";
 import browserslist from "browserslist";
 import { Glob } from "bun";
-import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 import { hasExtension } from "./helpers/path";
+import { watch } from "./helpers/watcher";
+import { program } from "@commander-js/extra-typings";
 
-const { values } = parseArgs({
-	args: Bun.argv,
-	options: {
-		watch: {
-			type: "boolean",
-		},
-		verbose: {
-			type: "boolean",
-		},
-	},
-	strict: true,
-	allowPositionals: true,
-});
+const values = program
+	.option("-v, --verbose", "Verbose mode", false)
+	.option("-w, --watch", "Watch mode", false)
+	.parse(Bun.argv)
+	.opts();
 
 const log = (...data: unknown[]) => values.verbose && console.log(data);
 
@@ -42,7 +33,7 @@ const compileSass = async (file: string) => {
 
 	const { css, sourceMap } = await compiler.compileStringAsync(fileContent, {
 		sourceMap: true,
-		loadPaths: [_base, `${_base}/src/`],
+		loadPaths: [_base, `${_base}/src/`]
 	});
 
 	log(css.length);
@@ -53,7 +44,7 @@ const compileSass = async (file: string) => {
 		sourceMap: true,
 		filename: file,
 		targets: browserslistToTargets(browserslist("defaults")),
-		minify: true,
+		minify: true
 	});
 
 	log(code.length);
@@ -95,31 +86,12 @@ const compileAll = async () => {
 await compileAll();
 
 if (values.watch) {
-	console.log(c.blue("👀 Watching..."));
-
-	const subscription = await watcher.subscribe(_base, async (err, events) => {
-		if (values.verbose) {
-			for (const { type, path } of events) {
-				console.info(c.bgYellow(`${type}: ${path}`));
-			}
-		}
-
-		if (err) {
-			console.error(c.bgRed(err.message));
-			values.verbose && console.error(err);
-			return;
-		}
-
-		if (events.find(({ type, path }) => type === "update" && hasExtension(path, "scss"))) {
-			console.log(c.blueBright("🔔 Files changed, recompiling!"));
+	await watch(_base, {
+		verbose: values.verbose ?? false,
+		transformer: (events) => events.find(({ type, path }) => type === "update" && hasExtension(path, "scss")),
+		predicate: (event) => !!event,
+		action: async (_) => {
 			await compileAll();
 		}
-	});
-
-	process.on("SIGINT", async () => {
-		// close watcher when Ctrl-C is pressed
-		console.log("🚪 Closing watcher...");
-		await subscription.unsubscribe();
-		process.exit(0);
 	});
 }
