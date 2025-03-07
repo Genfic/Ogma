@@ -40,7 +40,7 @@
         "rollup-plugin-html-literals": "1.1.8",
         "sass-embedded": "^1.85.1",
         "typescript": "5.8.2",
-        "unlighthouse": "^0.16.0",
+        "unlighthouse": "^0.16.2",
         "vue": "2.6.14",
       },
     },
@@ -352,13 +352,13 @@
 
     "@types/yauzl": ["@types/yauzl@2.10.3", "", { "dependencies": { "@types/node": "*" } }, "sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q=="],
 
-    "@unlighthouse/cli": ["@unlighthouse/cli@0.16.0", "", { "dependencies": { "@lhci/utils": "^0.14.0", "@unlighthouse/client": "0.16.0", "@unlighthouse/core": "0.16.0", "@unlighthouse/server": "0.16.0", "better-opn": "^3.0.2", "cac": "^6.7.14", "consola": "^3.4.0", "defu": "^6.1.4", "fs-extra": "^11.3.0", "globby": "^14.1.0", "lodash-es": "^4.17.21", "pathe": "^2.0.3", "std-env": "^3.8.1" }, "bin": { "unlighthouse-ci": "bin/unlighthouse-ci.cjs" } }, "sha512-CVtOK/sHtnBZ8l7nz8ZhQbH1XYcNTOa4tGOPoGOhArCrz7B8+bR2qJVQ6JKB+7pi8BQ1Cw7KK7ullRlUN+3t0g=="],
+    "@unlighthouse/cli": ["@unlighthouse/cli@0.16.2", "", { "dependencies": { "@lhci/utils": "^0.14.0", "@unlighthouse/client": "0.16.2", "@unlighthouse/core": "0.16.2", "@unlighthouse/server": "0.16.2", "better-opn": "^3.0.2", "cac": "^6.7.14", "consola": "^3.4.0", "defu": "^6.1.4", "fs-extra": "^11.3.0", "globby": "^14.1.0", "lodash-es": "^4.17.21", "pathe": "^2.0.3", "std-env": "^3.8.1" }, "bin": { "unlighthouse-ci": "bin/unlighthouse-ci.cjs" } }, "sha512-vq7PtiAI5qE+ojql+D/RRVqMpuiFdNP2qj2kfXAyOm6l8AS3wm2wExsrl/qhpE9TBtdx2th4EEWcmrLj7UMXFw=="],
 
-    "@unlighthouse/client": ["@unlighthouse/client@0.16.0", "", { "dependencies": { "@headlessui/vue": "^1.7.23", "dayjs": "^1.11.13", "defu": "^6.1.4", "fuse.js": "^7.1.0", "lightweight-charts": "^5.0.3", "lodash-es": "^4.17.21", "ufo": "^1.5.4", "vue": "^3.5.13" } }, "sha512-nUA76ptyim4cj55WfkeDPY63iTi4HDsA/mA39U/T6D4E5IcSmI7Q3HyIZhb7OwYiApCZ7Ei3ohGeSkRZ6hy4BA=="],
+    "@unlighthouse/client": ["@unlighthouse/client@0.16.2", "", { "dependencies": { "@headlessui/vue": "^1.7.23", "dayjs": "^1.11.13", "defu": "^6.1.4", "fuse.js": "^7.1.0", "lightweight-charts": "^5.0.3", "lodash-es": "^4.17.21", "ufo": "^1.5.4", "vue": "^3.5.13" } }, "sha512-pIG88sDbUvtEXpCOECZXPpa96igNqzS9vGfihyFrIivakxihKe3LF6Ya248HvxFrkdWiAxkz3tEItIdwiYCXKA=="],
 
-    "@unlighthouse/core": ["@unlighthouse/core@0.16.0", "", { "dependencies": { "@puppeteer/browsers": "^2.7.1", "@unrouted/core": "^0.6.0", "@unrouted/fetch": "^0.6.0", "@unrouted/plugins": "^0.6.0", "@unrouted/preset-api": "^0.6.0", "@unrouted/preset-node": "^0.6.0", "axios": "^1.8.1", "c12": "^3.0.2", "cheerio": "1.0.0", "chrome-launcher": "^1.1.2", "consola": "^3.4.0", "defu": "^6.1.4", "execa": "^9.5.2", "fs-extra": "^11.3.0", "globby": "^14.1.0", "h3": "^1.15.1", "hookable": "^5.5.3", "launch-editor": "^2.10.0", "lighthouse": "^12.4.0", "lodash-es": "^4.17.21", "minimist": "^1.2.8", "mlly": "^1.7.4", "object-hash": "^3.0.0", "ofetch": "^1.4.1", "pathe": "^2.0.3", "puppeteer-cluster": "^0.24.0", "puppeteer-core": "^24.3.0", "radix3": "^1.1.2", "regexparam": "^3.0.0", "sanitize-filename": "^1.6.3", "sitemapper": "^3.2.20", "slugify": "^1.6.6", "ufo": "^1.5.4", "unconfig": "^7.2.0", "unctx": "^2.4.1", "wrap-ansi": "^9.0.0", "ws": "^8.18.1" } }, "sha512-UJoXagWJP69h/kW2nfld+33F47ZTjXh2TMSICAJkxeb9iqFyaWjoZhFDyP7gKDhEueyqRozctgsK0Ddrs3Aeiw=="],
+    "@unlighthouse/core": ["@unlighthouse/core@0.16.2", "", { "dependencies": { "@puppeteer/browsers": "^2.7.1", "@unrouted/core": "^0.6.0", "@unrouted/fetch": "^0.6.0", "@unrouted/plugins": "^0.6.0", "@unrouted/preset-api": "^0.6.0", "@unrouted/preset-node": "^0.6.0", "axios": "^1.8.1", "c12": "^3.0.2", "cheerio": "1.0.0", "chrome-launcher": "^1.1.2", "consola": "^3.4.0", "defu": "^6.1.4", "execa": "^9.5.2", "fs-extra": "^11.3.0", "globby": "^14.1.0", "h3": "^1.15.1", "hookable": "^5.5.3", "launch-editor": "^2.10.0", "lighthouse": "^12.4.0", "lodash-es": "^4.17.21", "minimist": "^1.2.8", "mlly": "^1.7.4", "object-hash": "^3.0.0", "ofetch": "^1.4.1", "pathe": "^2.0.3", "puppeteer-cluster": "^0.24.0", "puppeteer-core": "^24.3.0", "radix3": "^1.1.2", "regexparam": "^3.0.0", "sanitize-filename": "^1.6.3", "sitemapper": "^3.2.20", "slugify": "^1.6.6", "ufo": "^1.5.4", "unconfig": "^7.2.0", "unctx": "^2.4.1", "wrap-ansi": "^9.0.0", "ws": "^8.18.1" } }, "sha512-O7CUbpyFBcQEVUknPxKGbpyBe8NF7V4sue4M+6BfAljlb8FJYAPNv4H5wQjBol5CUCxYMCIEd+kQKT0/lWUl4Q=="],
 
-    "@unlighthouse/server": ["@unlighthouse/server@0.16.0", "", { "dependencies": { "@unlighthouse/core": "0.16.0", "h3": "^1.15.1", "listhen": "^1.9.0" } }, "sha512-0bqK376yg7IGh1f27l9+ADDzoZdWmWXBV5PFk7om7XL92jpzPOntsaiQ3shNqMW7xGyjY3C8ckUIjvaBiBgc6A=="],
+    "@unlighthouse/server": ["@unlighthouse/server@0.16.2", "", { "dependencies": { "@unlighthouse/core": "0.16.2", "h3": "^1.15.1", "listhen": "^1.9.0" } }, "sha512-9FxYWbsZZgmXChdZNd7XkHsvLuskCXpRBsj9RNY56LyDTnn0mB/xDoBKWHgKxpSStsQHwUbIhlAjH+wYqqffMg=="],
 
     "@unrouted/core": ["@unrouted/core@0.6.0", "", { "dependencies": { "consola": "^3.2.3", "defu": "^6.1.4", "h3": "^1.11.1", "hookable": "^5.5.3", "mlly": "^1.6.1", "ohash": "^1.1.3", "pathe": "^1.1.2", "radix3": "^1.1.0", "ufo": "^1.4.0", "unctx": "^2.3.1" } }, "sha512-/TYV3jxINoz2wRAKDDd8fP93B3UO/r99qSsh8pONGiLrW/G+UaWOkJYaQRxERX47FsZ7pa0Ji/xYQMvz1W20Bw=="],
 
@@ -1260,7 +1260,7 @@
 
     "universalify": ["universalify@2.0.1", "", {}, "sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw=="],
 
-    "unlighthouse": ["unlighthouse@0.16.0", "", { "dependencies": { "@unlighthouse/cli": "0.16.0", "@unlighthouse/client": "0.16.0", "@unlighthouse/core": "0.16.0" }, "bin": { "unlighthouse": "bin/unlighthouse.mjs", "unlighthouse-ci": "bin/unlighthouse-ci.mjs" } }, "sha512-sUJq9VWSZxoakXJHrTFTs7iZKwhFw8/cAHMmrdNdtOIZB2nZvLEu0+gC9ItTTk6t5gETo44QXb1zZ5GQ3EsJvQ=="],
+    "unlighthouse": ["unlighthouse@0.16.2", "", { "dependencies": { "@unlighthouse/cli": "0.16.2", "@unlighthouse/client": "0.16.2", "@unlighthouse/core": "0.16.2" }, "bin": { "unlighthouse": "bin/unlighthouse.mjs", "unlighthouse-ci": "bin/unlighthouse-ci.mjs" } }, "sha512-yDE3veH+u92ip0O/pq3f9xKJ35rNd0iYNfnLzRHueUCA+qXiL1HXVpmY3abSVgDaCwbkiqXNdzqXcQA6cR9ifA=="],
 
     "unplugin": ["unplugin@2.1.2", "", { "dependencies": { "acorn": "^8.14.0", "webpack-virtual-modules": "^0.6.2" } }, "sha512-Q3LU0e4zxKfRko1wMV2HmP8lB9KWislY7hxXpxd+lGx0PRInE4vhMBVEZwpdVYHvtqzhSrzuIfErsob6bQfCzw=="],
 

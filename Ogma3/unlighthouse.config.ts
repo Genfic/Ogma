@@ -1,4 +1,4 @@
-/// <reference types="unlighthouse" />
+import { defineUnlighthouseConfig } from "unlighthouse/config";
 
 export default defineUnlighthouseConfig({
 	site: "https://localhost:5001",
@@ -8,6 +8,6 @@ export default defineUnlighthouseConfig({
 		samples: 3,
 	},
 	puppeteerOptions: {
-		channel: "stable",
+		channel: "chrome",
 	},
 });
