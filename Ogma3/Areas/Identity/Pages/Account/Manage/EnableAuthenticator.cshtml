@@ -22,12 +22,13 @@
 		</li>
 		<li>
 			<p>Scan the QR Code or enter this key <br><kbd>@Model.SharedKey</kbd><br> into your two factor authenticator app. Spaces and casing do not matter.</p>
-			<div id="qrCode" style="padding: .25rem"></div>
-			<div id="qrCodeData" data-url="@Html.Raw(Model.AuthenticatorUri)"></div>
+			<qr-code width="250">
+				<kbd>@Html.Raw(Model.AuthenticatorUri)</kbd>
+			</qr-code>
 		</li>
 		<li>
 			<p>
-				Once you have scanned the QR code or input the key above, your two factor authentication app will provide you
+				Once you have scanned the QR code or input the key above, your two-factor authentication app will provide you
 				with a unique code. Enter the code in the confirmation box below.
 			</p>
 			<div class="row">
@@ -55,15 +56,4 @@
 
 @section Scripts {
 	@await Html.PartialAsync("_ValidationScriptsPartial")
-
-	<script type="text/javascript" src="~/lib/qrcode/qrcode.min.js"></script>
-	<script type="text/javascript">
-        new QRCode(document.getElementById("qrCode"),
-            {
-                text: "@Html.Raw(Model.AuthenticatorUri)",
-                width: 200,
-                height: 200,
-                correctLevel: QRCode.CorrectLevel.H
-            });
-    </script>
 }

@@ -35,7 +35,10 @@
 
 
 	<div class="info">
-		<h2 class="title">@Model.Title</h2>
+		@if (Model.Title is not null)
+		{
+			<h2 class="title">@Model.Title</h2>
+		}
 
 		<div class="time">
 			<span>Member since</span>

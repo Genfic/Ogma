@@ -10,7 +10,8 @@
 				<img src="@(User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar) ?? "/img/placeholders/ph-250.png")"
 				     width="30" height="30"
 				     class="avatar"
-				     alt="@User.FindFirstValue(ClaimTypes.Name)'s avatar"
+				     alt=""
+				     role="presentation"
 				     loading="lazy" />
 				<span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
 			</a>

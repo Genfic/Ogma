@@ -50,11 +50,17 @@ footer.footer {
 
 				&.follow {
 					display: flex;
+					gap: 1ch;
 
 					img {
 						object-fit: contain;
 						height: 1.5rem;
-						margin-right: 1ch;
+					}
+					
+					svg {
+						height: 18px;
+						width: 18px;
+						color: v.$foreground-50;
 					}
 				}
 			}

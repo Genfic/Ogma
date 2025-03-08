@@ -10,7 +10,7 @@ var database = builder
 	.AddDatabase("ogma3-db");
 
 builder
-	.AddProject<Projects.Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : null)
+	.AddProject<Projects.Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
 	.WithExternalHttpEndpoints()
 	.WithReference(database)
 	.WaitFor(database);

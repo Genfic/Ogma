@@ -8,23 +8,15 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class EnableAuthenticatorModel : PageModel
+public sealed class EnableAuthenticatorModel
+(
+	UserManager<OgmaUser> userManager,
+	ILogger<EnableAuthenticatorModel> logger,
+	UrlEncoder urlEncoder)
+	: PageModel
 {
-	private readonly UserManager<OgmaUser> _userManager;
-	private readonly ILogger<EnableAuthenticatorModel> _logger;
-	private readonly UrlEncoder _urlEncoder;
 
 	private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
-
-	public EnableAuthenticatorModel(
-		UserManager<OgmaUser> userManager,
-		ILogger<EnableAuthenticatorModel> logger,
-		UrlEncoder urlEncoder)
-	{
-		_userManager = userManager;
-		_logger = logger;
-		_urlEncoder = urlEncoder;
-	}
 
 	public required string SharedKey { get; set; }
 
@@ -42,15 +34,15 @@ public sealed class EnableAuthenticatorModel : PageModel
 		[StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
 		[DataType(DataType.Text)]
 		[Display(Name = "Verification Code")]
-		public required string Code { get; set; }
+		public required string Code { get; init; }
 	}
 
 	public async Task<IActionResult> OnGetAsync()
 	{
-		var user = await _userManager.GetUserAsync(User);
+		var user = await userManager.GetUserAsync(User);
 		if (user is null)
 		{
-			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 		}
 
 		await LoadSharedKeyAndQrCodeUriAsync(user);
@@ -60,10 +52,10 @@ public sealed class EnableAuthenticatorModel : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var user = await _userManager.GetUserAsync(User);
+		var user = await userManager.GetUserAsync(User);
 		if (user is null)
 		{
-			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 		}
 
 		if (!ModelState.IsValid)
@@ -75,8 +67,8 @@ public sealed class EnableAuthenticatorModel : PageModel
 		// Strip spaces and hyphens
 		var verificationCode = Input.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-		var is2FaTokenValid = await _userManager.VerifyTwoFactorTokenAsync(
-			user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+		var is2FaTokenValid = await userManager.VerifyTwoFactorTokenAsync(
+			user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
 
 		if (!is2FaTokenValid)
 		{
@@ -85,15 +77,18 @@ public sealed class EnableAuthenticatorModel : PageModel
 			return Page();
 		}
 
-		await _userManager.SetTwoFactorEnabledAsync(user, true);
-		var userId = await _userManager.GetUserIdAsync(user);
-		_logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app", userId);
+		await userManager.SetTwoFactorEnabledAsync(user, true);
+		var userId = await userManager.GetUserIdAsync(user);
+		logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app", userId);
 
 		StatusMessage = "Your authenticator app has been verified.";
 
-		if (await _userManager.CountRecoveryCodesAsync(user) != 0) return Routes.Areas.Identity.Pages.Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
+		if (await userManager.CountRecoveryCodesAsync(user) != 0)
+		{
+			return Routes.Areas.Identity.Pages.Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
+		}
 
-		var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+		var recoveryCodes = await userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
 		RecoveryCodes = recoveryCodes?.ToArray();
 
 		return Routes.Areas.Identity.Pages.Account_Manage_ShowRecoveryCodes.Get().Redirect(this);
@@ -102,16 +97,16 @@ public sealed class EnableAuthenticatorModel : PageModel
 	private async Task LoadSharedKeyAndQrCodeUriAsync(OgmaUser user)
 	{
 		// Load the authenticator key & QR code URI to display on the form
-		var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
+		var unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
 		if (string.IsNullOrEmpty(unformattedKey))
 		{
-			await _userManager.ResetAuthenticatorKeyAsync(user);
-			unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
+			await userManager.ResetAuthenticatorKeyAsync(user);
+			unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
 		}
 
 		SharedKey = FormatKey(unformattedKey!);
 
-		var email = await _userManager.GetEmailAsync(user);
+		var email = await userManager.GetEmailAsync(user);
 		AuthenticatorUri = GenerateQrCodeUri(email!, unformattedKey!);
 	}
 
@@ -137,8 +132,8 @@ public sealed class EnableAuthenticatorModel : PageModel
 	{
 		return string.Format(
 			AuthenticatorUriFormat,
-			_urlEncoder.Encode("Ogma"),
-			_urlEncoder.Encode(email),
+			urlEncoder.Encode("Genfic"),
+			urlEncoder.Encode(email),
 			unformattedKey);
 	}
 }

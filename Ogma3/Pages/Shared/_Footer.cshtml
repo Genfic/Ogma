@@ -2,6 +2,7 @@
 @using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Middleware
+@using OpenTelemetry.Trace
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaConfig Config
 
@@ -71,57 +72,31 @@
 		<div class="col">
 			<span class="header">Follow and support</span>
 
-			@{ var formats = new[] { "avif", "webp" }; }
-
-			<a href="https://www.subscribestar.com/genfic" target="_blank" rel="noopener" class="item follow substar">
-				<picture src="/img/subscribestar.png"
-				         height="24" width="24"
-				         asp-append-version="true"
-				         source-formats="@formats"
-				         alt="SubscribeStar logo">
-				</picture>
-				SubscribeStar
-			</a>
-
-			<a href="https://www.patreon.com/genfic" target="_blank" rel="noopener" class="item follow patreon">
-				<picture src="/img/patreon.png"
-				         height="24" width="24"
-				         asp-append-version="true"
-				         source-formats="@formats"
-				         alt="Patreon logo">
-				</picture>
-				Patreon
-			</a>
-
-			<a href="https://ko-fi.com/genfic" target="_blank" rel="noopener" class="item follow kofi">
-				<picture src="/img/kofi.png"
-				         height="24" width="24"
-				         asp-append-version="true"
-				         source-formats="@formats"
-				         alt="Ko-Fi logo">
-				</picture>
-				Ko-fi
-			</a>
-
-			<a href="https://discord.gg/BNVZmJb" target="_blank" rel="noopener" class="item follow discord">
-				<picture src="/img/discord.png"
-				         height="24" width="24"
-				         asp-append-version="true"
-				         source-formats="@formats"
-				         alt="Discord logo">
-				</picture>
-				Discord
-			</a>
-
-			<a href="https://twitter.com/GenficNet" target="_blank" rel="noopener" class="item follow twitter">
-				<picture src="/img/twitter.png"
-				         height="24" width="24"
-				         asp-append-version="true"
-				         source-formats="@formats"
-				         alt="Twitter logo">
-				</picture>
-				Twitter
-			</a>
+			@{
+				var formats = new[] { "avif", "webp" };
+				var pages = new[]
+				{
+					(name: "SubscribeStar", link: "https://www.subscribestar.com/genfic"),
+					(name: "Patreon", link: "https://www.patreon.com/genfic"),
+					(name: "Ko-Fi", link: "https://ko-fi.com/genfic"),
+					(name: "Discord", link: "https://discord.com/invite/BNVZmJb"),
+					(name: "Twitter", link: "https://twitter.com/GenficNet"),
+				};
+			}
+			
+			@foreach (var (name, link) in pages)
+			{
+				<a href="@link" target="_blank" rel="noopener" aria-label="@name (opens in new tab)" class="item follow @(name.ToLower())">
+					<picture src="/img/@(name.ToLower().Replace("-", "")).png"
+					         height="24" width="24"
+					         asp-append-version="true"
+					         source-formats="@formats"
+					         role="presentation">
+					</picture>
+					@name
+					<icon icon="lucide:external-link" svg="true"></icon>
+				</a>
+			}
 		</div>
 
 	</div>

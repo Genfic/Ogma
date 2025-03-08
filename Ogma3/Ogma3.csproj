@@ -2778,5 +2778,6 @@
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\dom.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\generators.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\icon.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\qr-code.ts" />
 	</ItemGroup>
 </Project>
