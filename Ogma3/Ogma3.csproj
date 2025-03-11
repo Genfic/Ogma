@@ -36,28 +36,28 @@
 		<PackageReference Include="JetBrains.Annotations" Version="2024.3.0" PrivateAssets="all" />
 		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="2.0.0" PrivateAssets="all" />
 		<PackageReference Include="Markdig" Version="0.40.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.11.0-beta1.23525.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" PrivateAssets="all" />
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.5.4" PrivateAssets="all" />
 		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.5.4" PrivateAssets="all" />
@@ -76,8 +76,8 @@
 		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" PrivateAssets="all" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" PrivateAssets="all" />
 		<PackageReference Include="Sqids" Version="3.1.0" PrivateAssets="all" />
-		<PackageReference Include="System.ServiceModel.Syndication" Version="9.0.2" PrivateAssets="all" />
-		<PackageReference Include="System.Text.Json" Version="9.0.2" PrivateAssets="all" />
+		<PackageReference Include="System.ServiceModel.Syndication" Version="9.0.3" PrivateAssets="all" />
+		<PackageReference Include="System.Text.Json" Version="9.0.3" PrivateAssets="all" />
 		<PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.9" PrivateAssets="all" />
 		<PackageReference Include="ZstdSharp.Port" Version="0.8.5" PrivateAssets="all" />
 	</ItemGroup>
