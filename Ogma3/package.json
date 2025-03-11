@@ -38,6 +38,7 @@
 		"convert": "^5.8.0",
 		"esbuild": "^0.25.0",
 		"gradient-string": "^3.0.0",
+		"html-format": "^1.1.7",
 		"json5": "^2.2.3",
 		"lighthouse": "^12.4.0",
 		"lightningcss": "^1.29.2",

@@ -21,9 +21,9 @@
 	</time>
 
 	<div class="info">
-		<div class="user-count">@Model.ClubMembersCount @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
-		<div class="thread-count">@Model.ThreadsCount @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
-		<div class="story-count">@Model.StoriesCount @(Model.StoriesCount == 1 ? "story" : "stories")</div>
+		<div class="user-count">@Model.ClubMembersCount.ToString() @(Model.ClubMembersCount == 1 ? "member" : "members")</div>
+		<div class="thread-count">@Model.ThreadsCount.ToString() @(Model.ThreadsCount == 1 ? "thread" : "threads")</div>
+		<div class="story-count">@Model.StoriesCount.ToString() @(Model.StoriesCount == 1 ? "story" : "stories")</div>
 	</div>
 
 	<div class="buttons">
@@ -39,7 +39,7 @@
 			<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
 
 				<a class="item active" title="Edit club" asp-page="/Clubs/Edit" asp-route-id="@Model.Id">
-					<icon icon="admin_panel_settings"></icon>
+					<icon icon="ic:outline-admin-panel-settings" svg="true"></icon>
 					Manage
 				</a>
 

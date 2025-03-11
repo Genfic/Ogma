@@ -1,3 +1,5 @@
+import { ico } from "../src-helpers/icon-path" with { type: "macro" };
+
 const passwordInputs = [...document.querySelectorAll("input[type=password]")] as HTMLInputElement[];
 
 for (const pi of passwordInputs) {
@@ -7,10 +9,10 @@ for (const pi of passwordInputs) {
 		e.preventDefault();
 		if (pi.type === "password") {
 			pi.type = "text";
-			(e.currentTarget as HTMLElement).querySelector("i").innerText = "visibility";
+			(e.currentTarget as HTMLElement).querySelector("use").setAttribute("href", ico("lucide:eye"));
 		} else {
 			pi.type = "password";
-			(e.currentTarget as HTMLElement).querySelector("i").innerText = "visibility_off";
+			(e.currentTarget as HTMLElement).querySelector("use").setAttribute("href", ico("lucide:eye-closed"));
 		}
 	});
 }

@@ -1,5 +1,5 @@
 {
-  "GeneratedAt": "2025-03-08T09:20:58.4845764+00:00",
+  "GeneratedAt": "2025-03-10T23:26:33.5726923+00:00",
   "Files": {
     "/js/bundle/components.js": "A0XvxYjpzMKXRXC74n0Clcdykk0_yfEQTsiLsGuAbwI",
     "/js/dist/account/blacklists.js": "PGRtUWNQEGq3izgRRCGpzORHU51tsXM4fi4zz7ReOqo",
@@ -17,7 +17,7 @@
     "/js/dist/admin/tags.js": "_3WrEtNactMw_6NX8766HnXvc90mMSIpwEgE4lHf6Y8",
     "/js/dist/admin/users.js": "TpWvnHYgJmaj892GJHLY1-dmNQ9gkK6h1-2ixFt9SP0",
     "/js/dist/alerts.js": "kcWK-RdSOCCbk-8Wi2rPUdpkpxC-ANZAG4kGtXFHI9k",
-    "/js/dist/chapter-reads.js": "XTe_d580bTpJl2_8VFjAm3y8caCJHvVtJPZMUS-UI8Y",
+    "/js/dist/chapter-reads.js": "1IRdhe6d5OwqT_75TlWc5yIyL_3UzSTlheinquSLh4E",
     "/js/dist/comments.js": "ERQUyD3MWFJjEzisHvWPKt26xBWd1Kc0-5XRZ29WbQo",
     "/js/dist/components/comment-component.js": "LINRlqj_rqwvyIiiE7MafWFEpO4UA8hsT5GGKeVpwQs",
     "/js/dist/components/input-blog-tags-component.js": "alMCT2d1OoZ9IcrXCddf7cUB5Uy_Mza-UWjBxQKU-Fg",
@@ -35,7 +35,7 @@
     "/js/dist/login.js": "6w-BQR13iiXDWM_JSYKKQ62m7Fwt0044RIqwrMGIYGc",
     "/js/dist/navbar.js": "Ge0IQuCt73VqgsmYS0V0Lt1TiAk_v_b0UGJ44-VxagE",
     "/js/dist/notifications.js": "UtUHpFYnuwoHhMYDVKWyBfBjiATidgA9ac7F9FnG1bM",
-    "/js/dist/passwords.js": "nn6TtbfGmBf8n3vjvB5CPbZO6UQx4FY6I4qLKXVeYSA",
+    "/js/dist/passwords.js": "aZj78MJ_BNdtO6bY2JOleCBLHbycyGqcURHuXFVjXCk",
     "/js/dist/search/blog.js": "XCUgYN_k2fdcOlNMj9G58f2ztHkNOKG5Lt58x7vPhik",
     "/js/dist/search/story.js": "P7Cw4ZepFPYMgE9qWc18LHKWyQ7SteatC1aLh0mkWOo",
     "/js/dist/shelves.js": "YEnTrHxvwdwVSNYyXN44EgHOpik6T8I2qgNe8AB_Bn0",

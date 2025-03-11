@@ -13,7 +13,7 @@ public sealed class Bookshelf(ApplicationDbContext context) : PageModel
 {
 	public BookshelfDetails Shelf { get; private set; } = null!;
 
-	public sealed record BookshelfDetails(string Name, string Description, string Color, string IconName, ICollection<StoryCard> Stories);
+	public sealed record BookshelfDetails(string Name, string Description, string Color, string IconName, IEnumerable<StoryCard> Stories);
 
 	public async Task<IActionResult> OnGetAsync(int id, string? slug)
 	{
@@ -34,7 +34,7 @@ public sealed class Bookshelf(ApplicationDbContext context) : PageModel
 }
 
 [Mapper]
-public static partial class BoohshelfMapper
+public static partial class BookshelfMapper
 {
 	public static partial IQueryable<Bookshelf.BookshelfDetails> ProjectToDetails(this IQueryable<Shelf> queryable);
 }

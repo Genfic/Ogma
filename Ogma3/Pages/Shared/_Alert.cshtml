@@ -1,11 +1,11 @@
 @using Ogma3.Data.Alerts
 @model Alert
 
-<div class="alert alert-@(Model.AlertType.ToString().ToLower()) @(Model.IsDismissible ? "alert-dismissible" : "")" role="alert">
+<div class="alert alert-@(Model.AlertType.ToStringFast().ToLower()) @(Model.IsDismissible ? "alert-dismissible" : "")" role="alert">
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 	</button>
-	<icon class="icon" icon="@(Model.AlertType.GetIcon())"></icon>
+	<icon class="icon" icon="@(Model.AlertType.GetIcon())" svg="true" dynamic></icon>
 	<p class="body">
 		@Model.Message
 	</p>

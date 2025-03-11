@@ -3,6 +3,7 @@ import {
 	PostApiChaptersread as markRead,
 	DeleteApiChaptersread as markUnread,
 } from "../generated/paths-public";
+import { ico } from "../src-helpers/icon-path" with { type: "macro" };
 
 (async () => {
 	const story = document.querySelector("[data-story-id]") as HTMLElement;
@@ -44,7 +45,7 @@ import {
 			const read = reads?.includes(Number.parseInt(btn.dataset.id)) ?? false;
 
 			btn.classList.toggle("active", read);
-			btn.querySelector("i").innerText = read ? "visibility" : "visibility_off";
+			btn.querySelector("use").setAttribute("href", read ? ico("lucide:eye") : ico("lucide:eye-off"));
 		}
 	}
 

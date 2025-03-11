@@ -22,7 +22,7 @@ export function setCookie(
 	name: string,
 	value: string,
 	expires: Date | null = null,
-	secure = false,
+	secure: boolean = false,
 	sameSite: string | null = null,
 	path: string | null = null,
 ): void {

@@ -11,6 +11,7 @@ import { program } from "@commander-js/extra-typings";
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
+	.option("-r, --release", "Build in release mode", false)
 	.parse(Bun.argv)
 	.opts();
 
@@ -28,18 +29,27 @@ const compileFile = async (file: string) => {
 		root: source,
 		minify: true,
 		sourcemap: "linked",
-		splitting: false
+		splitting: false,
+		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	if (success) {
-		console.log(ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
+		console.log(
+			ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`,
+		);
 	} else {
-		console.error(ct`{red Build of {reset.bold ${base}} failed after {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
+		console.error(
+			ct`{red Build of {reset.bold ${base}} failed after {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`,
+		);
 		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
-				console.log(color(`[${log.level}]: ${log.position.file} (${log.position.line}:${log.position.column}) ${log.message}`));
+				console.log(
+					color(
+						`[${log.level}]: ${log.position.file} (${log.position.line}:${log.position.column}) ${log.message}`,
+					),
+				);
 			} else {
 				console.log(color(`[${log.level}]: ${log.message}`));
 			}
@@ -83,6 +93,6 @@ if (values.watch) {
 				console.log(ct`{blueBright 🔔 File {bold ${base}} changed, recompiling...}`);
 				await compileFile(p);
 			}
-		}
+		},
 	});
 }

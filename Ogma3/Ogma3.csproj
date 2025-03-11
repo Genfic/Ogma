@@ -69,7 +69,7 @@
 		<PackageReference Include="Riok.Mapperly" Version="4.1.1" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" PrivateAssets="all" />
 		<PackageReference Include="SafeRouting" Version="1.5.0" PrivateAssets="all" />
-		<PackageReference Include="Scalar.AspNetCore" Version="2.0.26" PrivateAssets="all" />
+		<PackageReference Include="Scalar.AspNetCore" Version="2.0.29" PrivateAssets="all" />
 		<PackageReference Include="SendGrid" Version="9.29.3" PrivateAssets="all" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" PrivateAssets="all" />
 		<PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
@@ -2777,6 +2777,7 @@
 	<ItemGroup>
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\dom.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\generators.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\src-helpers\icon-path.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\icon.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\qr-code.ts" />
 	</ItemGroup>

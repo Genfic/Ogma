@@ -2,11 +2,11 @@
 @model Bookshelf
 
 @{
-	ViewData["Title"] = $"{Model.Shelf.Name}";
+	ViewData["Title"] = Model.Shelf.Name;
 }
 <div id="bookshelf-details">
 	<h1 class="name">
-		<icon style="background-color: @Model.Shelf.Color" class="icon" icon="@Model.Shelf.IconName"></icon>
+		<icon style="background-color: @Model.Shelf.Color" class="icon" icon="@Model.Shelf.IconName" dynamic svg="true"></icon>
 		@Model.Shelf.Name
 	</h1>
 

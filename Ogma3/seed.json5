@@ -33,9 +33,16 @@
 		"lucide:bold",
 		"lucide:italic",
 		"lucide:underline",
+		"lucide:eye",
 		"lucide:eye-closed",
 		"lucide:link",
 		"lucide:x",
+		"lucide:thumbs-up",
+		"lucide:info",
+		"lucide:triangle-alert",
+		"lucide:circle-x",
+		"mdi:lock-open-variant-outline",
+		"mdi:lock-outline",
 	],
 	"Ratings": [
 		{

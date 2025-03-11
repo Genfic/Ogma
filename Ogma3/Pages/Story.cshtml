@@ -38,12 +38,12 @@
 		<div class="actions">
 
 			<o-vote storyId="@Model.Story.Id" csrf="@csrf"></o-vote>
-
+			
 			<noscript>
-				<span class="votes action-btn large" title="Score">
-					<i class="material-icons-outlined">star_border</i>
+				<div class="votes action-btn large" title="Score">
+					<icon icon="ic:round-star-border" svg="true" class="material-icons-outlined"></icon>
 					<span class="count">@Model.Story.VotesCount</span>
-				</span>
+				</div>
 			</noscript>
 
 			@if (User.Identity?.IsAuthenticated ?? false)
@@ -201,7 +201,7 @@
 						<button class="read-status"
 						        aria-label="Chapter read status"
 						        data-id="@c.Id">
-							<i class="material-icons-outlined">visibility_off</i>
+							<icon icon="lucide:eye-off" svg="true"></icon>
 						</button>
 
 						<span class="order">@(order++)</span>
