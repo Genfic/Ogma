@@ -1,6 +1,6 @@
+import watcher, { type Event } from "@parcel/watcher";
 import c from "chalk";
 import ct from "chalk-template";
-import watcher, { type Event } from "@parcel/watcher";
 
 type WatchParams<T> = {
 	verbose: boolean;

@@ -1,14 +1,14 @@
 import { render } from "@lit-labs/ssr";
-import { collectResultSync, type RenderResult } from "@lit-labs/ssr/lib/render-result";
+import { type RenderResult, collectResultSync } from "@lit-labs/ssr/lib/render-result";
 import { Glob } from "bun";
 import ct from "chalk-template";
 import * as cheerio from "cheerio";
 import convert from "convert";
 import { compact, flow, uniq } from "es-toolkit";
-import { parse } from "json5";
-import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import { html, type TemplateResult } from "lit";
 import format from "html-format";
+import { parse } from "json5";
+import { type TemplateResult, html } from "lit";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
 const start = Bun.nanoseconds();
 

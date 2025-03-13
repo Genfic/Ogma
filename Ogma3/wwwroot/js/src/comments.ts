@@ -141,12 +141,11 @@ new Vue({
 			this.$refs.reportModal.visible = true;
 		},
 
-
 		// Lock or unlock the thread
 		lock: async function () {
 			if (!this.canLock) return false;
 			const res = await PostApiCommentsThreadLock({ threadId: this.thread });
-			this.isLocked = res.ok && (res.data);
+			this.isLocked = res.ok && res.data;
 			return this.isLocked;
 		},
 	},
@@ -194,7 +193,6 @@ new Vue({
 				this.type = threadData.source;
 			}
 		};
-
 
 		const load = async () => {
 			await this.load();

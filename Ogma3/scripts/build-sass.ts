@@ -1,4 +1,5 @@
 import * as path from "node:path";
+import { program } from "@commander-js/extra-typings";
 import browserslist from "browserslist";
 import { Glob } from "bun";
 import ct from "chalk-template";
@@ -7,7 +8,6 @@ import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { program } from "@commander-js/extra-typings";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -33,7 +33,7 @@ const compileSass = async (file: string) => {
 
 	const { css, sourceMap } = await compiler.compileStringAsync(fileContent, {
 		sourceMap: true,
-		loadPaths: [_base, `${_base}/src/`]
+		loadPaths: [_base, `${_base}/src/`],
 	});
 
 	log(css.length);
@@ -44,7 +44,7 @@ const compileSass = async (file: string) => {
 		sourceMap: true,
 		filename: file,
 		targets: browserslistToTargets(browserslist("defaults")),
-		minify: true
+		minify: true,
 	});
 
 	log(code.length);
@@ -59,7 +59,9 @@ const compileSass = async (file: string) => {
 	}
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
-	console.log(ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
+	console.log(
+		ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`,
+	);
 };
 
 const compileAll = async () => {
@@ -92,6 +94,6 @@ if (values.watch) {
 		predicate: (event) => !!event,
 		action: async (_) => {
 			await compileAll();
-		}
+		},
 	});
 }

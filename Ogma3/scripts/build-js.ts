@@ -1,12 +1,12 @@
 import path from "node:path";
+import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
+import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { log } from "./helpers/logger";
-import { program } from "@commander-js/extra-typings";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

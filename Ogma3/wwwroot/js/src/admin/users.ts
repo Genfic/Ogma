@@ -27,8 +27,8 @@ new Vue({
 		},
 
 		saveRoles: async function () {
-			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map((e: HTMLInputElement) =>
-				Number.parseInt(e.value),
+			this.roles = [...document.querySelectorAll("input[type=checkbox][name=roles]:checked")].map(
+				(e: HTMLInputElement) => Number.parseInt(e.value),
 			);
 			const res = await PostApiUsersRoles(
 				{

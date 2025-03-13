@@ -6,7 +6,16 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignore": ["node_modules", "wwwroot/js/dist", "wwwroot/js/bundle", "wwwroot/js/generated"]
+		"ignore": [
+			"node_modules",
+			"wwwroot/js/dist",
+			"wwwroot/js/bundle",
+			"wwwroot/js/generated",
+			"wwwroot/lib",
+			"wwwroot/css/dist",
+			"**/*.map.css",
+			"**/*.diag.json"
+		]
 	},
 	"formatter": {
 		"enabled": true,

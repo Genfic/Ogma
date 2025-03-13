@@ -1,7 +1,7 @@
 import { LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { type QrCodeGenerateSvgOptions, renderSVG } from "uqr";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
+import { type QrCodeGenerateSvgOptions, renderSVG } from "uqr";
 import { parseDom } from "../src-helpers/dom";
 
 const opts: QrCodeGenerateSvgOptions = {

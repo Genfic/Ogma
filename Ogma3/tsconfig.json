@@ -7,8 +7,6 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"moduleResolution": "Bundler",
-		"typeRoots": [
-			"scripts/types"
-		]
+		"typeRoots": ["scripts/types"]
 	}
 }

@@ -1,14 +1,14 @@
+import { program } from "@commander-js/extra-typings";
+import multi from "@rollup/plugin-multi-entry";
+import resolve from "@rollup/plugin-node-resolve";
 import { Glob } from "bun";
 import ct from "chalk-template";
 import convert from "convert";
-import { hasExtension } from "./helpers/path";
-import { watch } from "./helpers/watcher";
 import { rollup } from "rollup";
 import esbuild from "rollup-plugin-esbuild";
 import minifyHTML from "rollup-plugin-html-literals";
-import multi from "@rollup/plugin-multi-entry";
-import resolve from "@rollup/plugin-node-resolve";
-import { program } from "@commander-js/extra-typings";
+import { hasExtension } from "./helpers/path";
+import { watch } from "./helpers/watcher";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

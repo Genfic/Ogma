@@ -2,7 +2,8 @@ import { parseDom } from "../src-helpers/dom";
 
 type InputType = "validated" | "file" | "regular";
 
-const properSplit = (value: string, separator: string | RegExp) => (!value || value.length <= 0 ? [] : value.split(separator));
+const properSplit = (value: string, separator: string | RegExp) =>
+	!value || value.length <= 0 ? [] : value.split(separator);
 
 const inputs: (HTMLInputElement | HTMLTextAreaElement)[] = [
 	...document.querySelectorAll("input.o-form-control:not([disabled]):not([nobar])"),

@@ -53,7 +53,10 @@ Vue.component("textarea-counter", {
 			return this.text.length >= this.min && this.text.length <= this.max;
 		},
 		validationString: function () {
-			return this.validateMsg.replace("{0}", this.label).replace("{1}", `${this.max}`).replace("{2}", `${this.min}`);
+			return this.validateMsg
+				.replace("{0}", this.label)
+				.replace("{1}", `${this.max}`)
+				.replace("{2}", `${this.min}`);
 		},
 	},
 	methods: {

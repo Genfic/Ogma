@@ -49,8 +49,9 @@ Ogma3/logger-tokens.txt
 ogma.env
 postgres/postgres.env
 
-# Lighthouse reports
+# Reports
 *.report.html
+*.diag.json
 
 # Experimental
 Ogma3/wwwroot/lib/comments/

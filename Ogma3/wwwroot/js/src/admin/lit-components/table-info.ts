@@ -85,7 +85,9 @@ export class TableInfo extends LitElement {
 		if (by === "size") {
 			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.size - b.size : b.size - a.size));
 		} else {
-			this.tableInfo.sort((a, b) => (this.sortOrder === "desc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
+			this.tableInfo.sort((a, b) =>
+				this.sortOrder === "desc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
+			);
 		}
 	}
 

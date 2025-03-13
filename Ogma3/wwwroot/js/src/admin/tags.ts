@@ -31,7 +31,9 @@ new Vue({
 			// Validation
 			this.err = [];
 			if (this.form.name.length > this.lens.maxNameLength || this.form.name.length < this.lens.minNameLength)
-				this.err.push(`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`);
+				this.err.push(
+					`Name has to be between ${this.lens.minNameLength} and ${this.lens.maxNameLength} characters long.`,
+				);
 			if (this.form.desc && this.form.desc.length > this.lens.maxDescLength)
 				this.err.push(`Description has to be at most ${this.lens.maxDescLength} characters long.`);
 			if (this.err.length > 0) return;

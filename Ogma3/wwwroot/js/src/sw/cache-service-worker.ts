@@ -9,7 +9,7 @@
 		await Promise.all(keys.map((k) => caches.delete(k)));
 		console.info("SW cache purged.");
 	};
-	
+
 	this.addEventListener("activate", async (event: ExtendableEvent) => {
 		const res = await fetch("/manifest.js.json");
 		const manifest: Manifest = res.data;

@@ -38,7 +38,8 @@ export class ReportModal extends LitElement {
 		this.visible = true;
 	};
 
-	private validate = () => this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
+	private validate = () =>
+		this.reason && this.reason.length >= this.rules.min && this.reason.length <= this.rules.max;
 
 	private message = () => {
 		switch (this.success) {

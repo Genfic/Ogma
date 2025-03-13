@@ -36,7 +36,7 @@ new Vue({
 				this.quotes = this.quotes.filter((i: FullQuoteDto) => i.id !== id);
 			}
 		},
- 
+
 		openEditor: function (q: FullQuoteDto) {
 			this.editorOpen = true;
 			this.form = q;
@@ -68,7 +68,8 @@ new Vue({
 		search() {
 			for (const q of this.quotes) {
 				q.show = this.search
-					? q.body.toLowerCase().includes(this.search.toLowerCase()) || q.author.toLowerCase().includes(this.search.toLowerCase())
+					? q.body.toLowerCase().includes(this.search.toLowerCase()) ||
+						q.author.toLowerCase().includes(this.search.toLowerCase())
 					: true;
 			}
 		},

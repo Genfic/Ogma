@@ -1,5 +1,10 @@
 import { format } from "date-fns";
-import { DeleteApiComments, GetApiCommentsMd, GetApiCommentsRevisions, PatchApiComments } from "../../generated/paths-public";
+import {
+	DeleteApiComments,
+	GetApiCommentsMd,
+	GetApiCommentsRevisions,
+	PatchApiComments,
+} from "../../generated/paths-public";
 import type { GetRevisionResult } from "../../generated/types-public";
 
 // @ts-ignore
@@ -31,7 +36,10 @@ Vue.component("comment", {
 	data: function () {
 		return {
 			editData: null,
-			mutComment: { ...this.comment, owned: this.comment.author?.userName.toLowerCase() === this.authenticatedAs },
+			mutComment: {
+				...this.comment,
+				owned: this.comment.author?.userName.toLowerCase() === this.authenticatedAs,
+			},
 			revisions: [] as GetRevisionResult[],
 			revisionsCache: null as GetRevisionResult[] | null,
 			hide: this.comment.isBlocked,
