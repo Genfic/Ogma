@@ -1,9 +1,9 @@
-import { format } from "date-fns";
 import {
 	DeleteApiNotifications as deleteNotification,
 	GetApiNotifications as getNotifications,
 } from "../generated/paths-public";
 import type { GetUserNotificationsResult } from "../generated/types-public";
+import { long } from "../src-helpers/tinytime-templates";
 
 // @ts-ignore
 new Vue({
@@ -31,7 +31,7 @@ new Vue({
 			await this.load();
 		},
 
-		parseTime: (dt: string) => format(dt, "dd MMMM yyyy, hh:mm"),
+		parseTime: (dt: string) => long.render(new Date(dt)),
 	},
 
 	async mounted() {

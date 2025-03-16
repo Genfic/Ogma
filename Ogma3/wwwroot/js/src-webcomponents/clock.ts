@@ -1,6 +1,7 @@
-import { add, format, parseISO } from "date-fns";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { EU, iso8601 } from "../src-helpers/tinytime-templates";
+import { addToDate } from "../src-helpers/date-helpers";
 
 @customElement("o-clock")
 export class Clock extends LitElement {
@@ -8,11 +9,11 @@ export class Clock extends LitElement {
 		super();
 
 		setInterval(() => {
-			this.date = add(this.date, { seconds: 1 });
+			this.date = addToDate(this.date, { seconds: 1 });
 		}, 1000);
 	}
 
-	@property({ converter: (value, _) => parseISO(value) })
+	@property({ converter: (value, _) => new Date(value) })
 	date: Date;
 
 	// language=CSS
@@ -31,8 +32,8 @@ export class Clock extends LitElement {
 
 	render() {
 		return html`
-			<time class="timer" datetime="${format(this.date, "yyyy-MM-dd HH:mm")}" title="Server time">
-				${format(this.date, "dd.MM.yyyy HH:mm:ss")}
+			<time class="timer" datetime="${iso8601.render(this.date)}" title="Server time">
+				${EU.render(this.date)}
 			</time>
 		`;
 	}

@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import {
 	DeleteApiComments,
 	GetApiCommentsMd,
@@ -6,6 +5,7 @@ import {
 	PatchApiComments,
 } from "../../generated/paths-public";
 import type { GetRevisionResult } from "../../generated/types-public";
+import { long } from "../../src-helpers/tinytime-templates";
 
 // @ts-ignore
 Vue.component("comment", {
@@ -125,7 +125,7 @@ Vue.component("comment", {
 			}
 		},
 
-		date: (dt) => format(dt, "dd MMM yyyy, hh:mm"),
+		date: (dt: string) => long.render(new Date(dt)),
 	},
 	template: `
         <div :id="'comment-' + (idx + 1)"

@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import {
 	PostApiInviteCodesNoLimit as createUnlimitedCodes,
 	DeleteApiInviteCodes as deleteCode,
@@ -6,6 +5,7 @@ import {
 } from "../../generated/paths-public";
 import type { InviteCodeDto } from "../../generated/types-public";
 import { log } from "../../src-helpers/logger";
+import { long } from "../../src-helpers/tinytime-templates";
 
 // @ts-ignore
 new Vue({
@@ -81,7 +81,7 @@ new Vue({
 		},
 
 		// Parse date
-		date: (dt: string) => format(dt, "dd MMM yyyy, hh:mm"),
+		date: (dt: string) => long.render(new Date(dt)),
 	},
 
 	async mounted() {

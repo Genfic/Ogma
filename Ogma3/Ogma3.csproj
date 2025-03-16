@@ -756,6 +756,8 @@
 		<_ContentIncludedByDefault Remove="wwwroot\js\generated-new\typed-fetch.ts" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\generated-new\types-internal.ts" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\generated-new\types-public.ts" />
+		<_ContentIncludedByDefault Remove="wwwroot\js\bundle-pre\vote-button.js" />
+		<_ContentIncludedByDefault Remove="wwwroot\js\bundle-pre\vote-button.js.map" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\style.scss">
@@ -2775,10 +2777,14 @@
 		<Folder Include="wwwroot\js\bundle\" />
 	</ItemGroup>
 	<ItemGroup>
+	  <TypeScriptCompile Include="wwwroot\js\src-helpers\date-helpers.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\dom.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\src-helpers\from-now.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\generators.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-helpers\icon-path.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\src-helpers\tinytime-templates.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\icon.ts" />
 	  <TypeScriptCompile Include="wwwroot\js\src-webcomponents\qr-code.ts" />
+	  <TypeScriptCompile Include="wwwroot\js\types.d.ts" />
 	</ItemGroup>
 </Project>

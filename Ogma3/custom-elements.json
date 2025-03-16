@@ -1,0 +1,1621 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/block-user.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "BlockUser",
+          "members": [
+            {
+              "kind": "field",
+              "name": "userName",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "userName"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "isBlocked",
+              "type": {
+                "text": "boolean"
+              },
+              "attribute": "isBlocked"
+            },
+            {
+              "kind": "method",
+              "name": "#block",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "userName",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "userName"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            },
+            {
+              "name": "isBlocked",
+              "type": {
+                "text": "boolean"
+              },
+              "fieldName": "isBlocked"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-block",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BlockUser",
+          "declaration": {
+            "name": "BlockUser",
+            "module": "wwwroot/js/src-webcomponents/block-user.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-block",
+          "declaration": {
+            "name": "BlockUser",
+            "module": "wwwroot/js/src-webcomponents/block-user.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/chapter-read.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ChapterRead",
+          "members": [
+            {
+              "kind": "field",
+              "name": "route",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "route"
+            },
+            {
+              "kind": "field",
+              "name": "chapterId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "chapterId"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "route",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "route"
+            },
+            {
+              "name": "chapterId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "chapterId"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-read",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "o-read",
+          "declaration": {
+            "name": "ChapterRead",
+            "module": "wwwroot/js/src-webcomponents/chapter-read.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/clock.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Clock",
+          "members": [
+            {
+              "kind": "field",
+              "name": "date",
+              "type": {
+                "text": "Date"
+              },
+              "attribute": "date"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "date",
+              "type": {
+                "text": "Date"
+              },
+              "fieldName": "date"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-clock",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Clock",
+          "declaration": {
+            "name": "Clock",
+            "module": "wwwroot/js/src-webcomponents/clock.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-clock",
+          "declaration": {
+            "name": "Clock",
+            "module": "wwwroot/js/src-webcomponents/clock.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/club-folder-selector.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ClubFolderSelector",
+          "members": [
+            {
+              "kind": "field",
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "storyId"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "clubs",
+              "type": {
+                "text": "Club[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "selectedClub",
+              "type": {
+                "text": "Club | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "status",
+              "type": {
+                "text": "{ message: string; success: boolean }"
+              },
+              "privacy": "private",
+              "default": "{ message: \"\", success: false, }"
+            },
+            {
+              "kind": "field",
+              "name": "visible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "selectedFolder",
+              "type": {
+                "text": "GetFolderResult | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_foldersTask",
+              "privacy": "private",
+              "default": "new Task(this, { task: async ([selectedClub], { signal }) => { if (!selectedClub) throw new Error(\"Club not selected\"); const res = await getFolders(selectedClub.id, null, { signal }); if (!res.ok) throw new Error(res.statusText); return res.data; }, args: () => [this.selectedClub], })"
+            },
+            {
+              "kind": "field",
+              "name": "#renderFolders",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#selectedClubView",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#allClubsView",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#select",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#setClub",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#setVisibility",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#add",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "storyId"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-club-folder-selector",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ClubFolderSelector",
+          "declaration": {
+            "name": "ClubFolderSelector",
+            "module": "wwwroot/js/src-webcomponents/club-folder-selector.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-club-folder-selector",
+          "declaration": {
+            "name": "ClubFolderSelector",
+            "module": "wwwroot/js/src-webcomponents/club-folder-selector.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/featured-in-clubs.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FeaturedInClubs",
+          "members": [
+            {
+              "kind": "field",
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "storyId"
+            },
+            {
+              "kind": "field",
+              "name": "visible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "clubs",
+              "type": {
+                "text": "GetClubsWithStoryResult[]"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "fetch",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "open",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#clubsView",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "storyId"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-featured-in-clubs",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FeaturedInClubs",
+          "declaration": {
+            "name": "FeaturedInClubs",
+            "module": "wwwroot/js/src-webcomponents/featured-in-clubs.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-featured-in-clubs",
+          "declaration": {
+            "name": "FeaturedInClubs",
+            "module": "wwwroot/js/src-webcomponents/featured-in-clubs.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/follow-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FollowButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "userName",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "userName"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "isFollowed",
+              "type": {
+                "text": "boolean"
+              },
+              "attribute": "isFollowed"
+            },
+            {
+              "kind": "method",
+              "name": "#follow",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "userName",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "userName"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            },
+            {
+              "name": "isFollowed",
+              "type": {
+                "text": "boolean"
+              },
+              "fieldName": "isFollowed"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-follow",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FollowButton",
+          "declaration": {
+            "name": "FollowButton",
+            "module": "wwwroot/js/src-webcomponents/follow-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-follow",
+          "declaration": {
+            "name": "FollowButton",
+            "module": "wwwroot/js/src-webcomponents/follow-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/icon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Icon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "icon"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "icon"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Icon",
+          "declaration": {
+            "name": "Icon",
+            "module": "wwwroot/js/src-webcomponents/icon.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-icon",
+          "declaration": {
+            "name": "Icon",
+            "module": "wwwroot/js/src-webcomponents/icon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/join-club-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "JoinClubButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "clubId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "clubId"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "isMember",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "isMember"
+            },
+            {
+              "kind": "field",
+              "name": "join",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "clubId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "clubId"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            },
+            {
+              "name": "isMember",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "isMember"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-join",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "JoinClubButton",
+          "declaration": {
+            "name": "JoinClubButton",
+            "module": "wwwroot/js/src-webcomponents/join-club-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-join",
+          "declaration": {
+            "name": "JoinClubButton",
+            "module": "wwwroot/js/src-webcomponents/join-club-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/modal.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Modal",
+          "members": [
+            {
+              "kind": "field",
+              "name": "visible",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "style",
+              "static": true,
+              "default": "css` .my-modal { position: fixed; display: flex; align-items: center; justify-content: center; inset: 0; width: 100%; height: 100%; z-index: 999; background: var(--foreground-50); } .content { min-width: 20rem; width: min(40rem, 100vw); max-height: 30rem; background: var(--background); padding: 1rem; height: 100%; overflow-y: auto; border: 5px solid var(--background); } `"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-modal",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Modal",
+          "declaration": {
+            "name": "Modal",
+            "module": "wwwroot/js/src-webcomponents/modal.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-modal",
+          "declaration": {
+            "name": "Modal",
+            "module": "wwwroot/js/src-webcomponents/modal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/notifications-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "NotificationsButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "notifications",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#count",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#title",
+              "privacy": "private"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-notifications-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "NotificationsButton",
+          "declaration": {
+            "name": "NotificationsButton",
+            "module": "wwwroot/js/src-webcomponents/notifications-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-notifications-button",
+          "declaration": {
+            "name": "NotificationsButton",
+            "module": "wwwroot/js/src-webcomponents/notifications-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/qr-code.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "QrCode",
+          "members": [
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "number | undefined"
+              },
+              "attribute": "width"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number | undefined"
+              },
+              "attribute": "height"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "width",
+              "type": {
+                "text": "number | undefined"
+              },
+              "fieldName": "width"
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number | undefined"
+              },
+              "fieldName": "height"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "qr-code",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "QrCode",
+          "declaration": {
+            "name": "QrCode",
+            "module": "wwwroot/js/src-webcomponents/qr-code.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "qr-code",
+          "declaration": {
+            "name": "QrCode",
+            "module": "wwwroot/js/src-webcomponents/qr-code.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/quote-box.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "QuoteBox",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_quote",
+              "type": {
+                "text": "Quote"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_canReload",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "#spinnerClass",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#spinnerIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "load"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "quote-box",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "QuoteBox",
+          "declaration": {
+            "name": "QuoteBox",
+            "module": "wwwroot/js/src-webcomponents/quote-box.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "quote-box",
+          "declaration": {
+            "name": "QuoteBox",
+            "module": "wwwroot/js/src-webcomponents/quote-box.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/read-progress.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ReadProgress",
+          "members": [
+            {
+              "kind": "field",
+              "name": "progress",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "windowHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "containerHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "ticking",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "read",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "#handleScroll",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "name": "read",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-read-progress",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ReadProgress",
+          "declaration": {
+            "name": "ReadProgress",
+            "module": "wwwroot/js/src-webcomponents/read-progress.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-read-progress",
+          "declaration": {
+            "name": "ReadProgress",
+            "module": "wwwroot/js/src-webcomponents/read-progress.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/report-modal.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ReportModal",
+          "members": [
+            {
+              "kind": "field",
+              "name": "rules",
+              "type": {
+                "text": "object"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "{ min: 50, max: 500, }"
+            },
+            {
+              "kind": "field",
+              "name": "openSelector",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "public",
+              "attribute": "openSelector"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "itemId",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "attribute": "itemId"
+            },
+            {
+              "kind": "field",
+              "name": "itemType",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "attribute": "itemType"
+            },
+            {
+              "kind": "field",
+              "name": "visible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "chars",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "reason",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "success",
+              "type": {
+                "text": "boolean | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "show",
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "validate",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "message",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "updateText",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "openSelector",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "openSelector"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            },
+            {
+              "name": "itemId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "itemId"
+            },
+            {
+              "name": "itemType",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "itemType"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "report-modal",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ReportModal",
+          "declaration": {
+            "name": "ReportModal",
+            "module": "wwwroot/js/src-webcomponents/report-modal.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "report-modal",
+          "declaration": {
+            "name": "ReportModal",
+            "module": "wwwroot/js/src-webcomponents/report-modal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/shelves-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ShelvesButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "storyId"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "quickShelves",
+              "type": {
+                "text": "Shelf[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "shelves",
+              "type": {
+                "text": "Shelf[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "more",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "page",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "moreShelvesLoaded",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#quickShelf",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#shelf",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#showMore",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#getQuickShelves",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#getShelves",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#addOrRemove",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "storyId"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-shelves",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ShelvesButton",
+          "declaration": {
+            "name": "ShelvesButton",
+            "module": "wwwroot/js/src-webcomponents/shelves-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-shelves",
+          "declaration": {
+            "name": "ShelvesButton",
+            "module": "wwwroot/js/src-webcomponents/shelves-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/vote-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VoteButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "storyId"
+            },
+            {
+              "kind": "field",
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "csrf"
+            },
+            {
+              "kind": "field",
+              "name": "voted",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "score",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "vote",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "storyId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "storyId"
+            },
+            {
+              "name": "csrf",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "csrf"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-vote",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VoteButton",
+          "declaration": {
+            "name": "VoteButton",
+            "module": "wwwroot/js/src-webcomponents/vote-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-vote",
+          "declaration": {
+            "name": "VoteButton",
+            "module": "wwwroot/js/src-webcomponents/vote-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "wwwroot/js/src-webcomponents/_folder-tree.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "_folderTree",
+          "members": [
+            {
+              "kind": "field",
+              "name": "clubId",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "clubId"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "current",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "attribute": "current"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "number | null"
+              },
+              "attribute": "selected"
+            },
+            {
+              "kind": "field",
+              "name": "inputSelector",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "attribute": "inputSelector"
+            },
+            {
+              "kind": "field",
+              "name": "folders",
+              "type": {
+                "text": "Folder[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "tree",
+              "type": {
+                "text": "TreeItem[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#select",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#item",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#unflatten",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "clubId",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "clubId"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "fieldName": "value"
+            },
+            {
+              "name": "current",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "fieldName": "current"
+            },
+            {
+              "name": "selected",
+              "type": {
+                "text": "number | null"
+              },
+              "fieldName": "selected"
+            },
+            {
+              "name": "inputSelector",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "fieldName": "inputSelector"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "o-folder-tree",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "_folderTree",
+          "declaration": {
+            "name": "_folderTree",
+            "module": "wwwroot/js/src-webcomponents/_folder-tree.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "o-folder-tree",
+          "declaration": {
+            "name": "_folderTree",
+            "module": "wwwroot/js/src-webcomponents/_folder-tree.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

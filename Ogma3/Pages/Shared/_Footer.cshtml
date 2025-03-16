@@ -2,14 +2,13 @@
 @using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Middleware
-@using OpenTelemetry.Trace
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaConfig Config
 
 @{
 	var genTimeData = GetData((DateTimeOffset?)Context.Items[RequestTimestampMiddleware.Name]);
 	var renderTimeData = GetData((DateTimeOffset?)ViewData["render_start"]);
-	
+
 	(string ms, string str) GetData(DateTimeOffset? dateTime) =>
 		dateTime is { } dt
 			? (ms: (DateTimeOffset.UtcNow - dt).TotalMilliseconds.ToString("F3"), str: (DateTimeOffset.UtcNow - dt).TotalSeconds.ToString("F3"))
@@ -40,7 +39,7 @@
 			<span class="item">
 				Serving <story-count class="hl" cache-time="60"></story-count> stories
 			</span>
-			
+
 			<span class="item">
 				Using @proto
 			</span>
@@ -54,7 +53,7 @@
 			<a asp-page="/Docs" asp-route-slug="@Config.PrivacyPolicyDoc" class="item">Privacy</a>
 
 			<a asp-page="/Staff" class="item">Staff</a>
- 
+
 			<a asp-page="/Markdown" class="item">Markdown reference</a>
 
 			<a asp-page="/Settings" class="item">Local settings</a>
@@ -83,7 +82,7 @@
 					(name: "Twitter", link: "https://twitter.com/GenficNet"),
 				};
 			}
-			
+
 			@foreach (var (name, link) in pages)
 			{
 				<a href="@link" target="_blank" rel="noopener" aria-label="@name (opens in new tab)" class="item follow @(name.ToLower())">

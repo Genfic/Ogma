@@ -38,7 +38,7 @@ const compileAll = async () => {
 			resolve(),
 			minifyHTML(),
 			esbuild({
-				tsconfig: "../tsconfig.json",
+				tsconfig: `${base}/tsconfig.json`,
 				minify: !values.raw,
 				legalComments: "eof",
 			}),

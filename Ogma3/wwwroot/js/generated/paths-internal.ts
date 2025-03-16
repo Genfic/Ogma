@@ -14,7 +14,7 @@ export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: Reque
 );
 
 
-export const DeleteAdminApiInfractions = async (infractionid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>(`/admin/api/infractions/${infractionid}`,
+export const DeleteAdminApiInfractions = async (infractionId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void>(`/admin/api/infractions/${infractionId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -30,7 +30,7 @@ export const GetAdminApiCache = async (headers?: HeadersInit, options?: RequestI
 );
 
 
-export const GetAdminApiInfractionsUser = async (userid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetUserInfractionsResult[]>(`/admin/api/infractions/user/${userid}`,
+export const GetAdminApiInfractionsUser = async (userId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetUserInfractionsResult[]>(`/admin/api/infractions/user/${userId}`,
 	"GET",
 	undefined,
 	headers,
@@ -38,7 +38,7 @@ export const GetAdminApiInfractionsUser = async (userid: number, headers?: Heade
 );
 
 
-export const GetAdminApiTelemetryGetImportantItemCounts = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<object>("/admin/api/telemetry/getimportantitemcounts",
+export const GetAdminApiTelemetryGetImportantItemCounts = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<object>("/admin/api/telemetry/GetImportantItemCounts",
 	"GET",
 	undefined,
 	headers,
@@ -46,7 +46,7 @@ export const GetAdminApiTelemetryGetImportantItemCounts = async (headers?: Heade
 );
 
 
-export const GetAdminApiTelemetryGetTableInfo = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<object>("/admin/api/telemetry/gettableinfo",
+export const GetAdminApiTelemetryGetTableInfo = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<object>("/admin/api/telemetry/GetTableInfo",
 	"GET",
 	undefined,
 	headers,
@@ -54,7 +54,7 @@ export const GetAdminApiTelemetryGetTableInfo = async (headers?: HeadersInit, op
 );
 
 
-export const GetInfractionDetails = async (infractionid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InfractionDto>(`/admin/api/infractions/${infractionid}`,
+export const GetInfractionDetails = async (infractionId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InfractionDto>(`/admin/api/infractions/${infractionId}`,
 	"GET",
 	undefined,
 	headers,

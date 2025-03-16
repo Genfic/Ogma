@@ -1,69 +1,66 @@
-export interface AddBookToShelfCommand {
+export type AddBookToShelfCommand = {
 	shelfId: number;
 	storyId: number;
-}
+};
 
-export interface AddStoryToFolderCommand {
+export type AddStoryToFolderCommand = {
 	folderId: number;
 	storyId: number;
-}
+};
 
-export interface AddStoryToFolderResponse {
+export type AddStoryToFolderResponse = {
 	folderId: number;
 	storyId: number;
 	added: string;
 	addedById: number;
-}
+};
 
-export interface BlockUserCommand {
+export type AdminIssueInviteCodeCommand = object;
+
+export type BlockUserCommand = {
 	name: string;
-}
+};
 
-export interface CommentDto {
+export type CommentDto = {
 	id: number;
 	author: UserSimpleDto;
 	dateTime: string;
 	body: string | null;
-	deletedBy: unknown;
+	deletedBy: "User" | "Staff" | null;
 	isBlocked: boolean;
 	isEdited: boolean;
-}
+};
 
-export interface CreateCommentCommand {
+export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
+
+export type CreateCommentCommand = {
 	body: string;
 	thread: number;
 	source: CommentSource;
-}
+};
 
-export interface CreateFaqCommand {
+export type CreateFaqCommand = {
 	question: string;
 	answer: string;
-}
+};
 
-export interface CreateInfractionCommand {
-	userId: number;
-	reason: string;
-	endDate: string;
-	type: InfractionType;
-}
-
-export interface CreateQuoteCommand {
+export type CreateQuoteCommand = {
 	body: string;
 	author: string;
-}
+};
 
-export interface CreateQuotesFromJsonQuery {
-	quotes: object;
-}
+export type CreateQuotesFromJsonQuery = {
+	quotes: QuoteDto[];
+};
 
-export interface CreateRoleCommand {
+export type CreateRoleCommand = {
 	name: string;
 	isStaff: boolean;
 	color: string;
 	order: number;
-}
+};
 
-export interface CreateShelfCommand {
+export type CreateShelfCommand = {
 	name: string;
 	description: string;
 	isQuickAdd: boolean;
@@ -71,107 +68,93 @@ export interface CreateShelfCommand {
 	trackUpdates: boolean;
 	color: string;
 	icon: number;
-}
+};
 
-export interface CreateTagCommand {
+export type CreateTagCommand = {
 	name: string;
 	description: string | null;
-	namespace: unknown;
-}
+	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+};
 
-export interface CreateVoteCommand {
+export type CreateVoteCommand = {
 	storyId: number;
-}
+};
 
-export interface DeleteVoteCommand {
+export type DeleteVoteCommand = {
 	storyId: number;
-}
+};
 
-export interface FaqDto {
+export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
+
+export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
+
+export type FaqDto = {
 	id: number;
 	question: string;
 	answer: string;
 	answerRendered: string;
-}
+};
 
-export interface FollowUserCommand {
+export type FollowUserCommand = {
 	name: string;
-}
+};
 
-export interface FullQuoteDto {
+export type FullQuoteDto = {
 	id: number;
 	body: string;
 	author: string;
-}
+};
 
-export interface GetClubsWithStoryResult {
+export type GetClubsWithStoryResult = {
 	id: number;
 	name: string;
 	icon: string;
 	folders: string[];
-}
+};
 
-export interface GetFolderResult {
+export type GetFolderResult = {
 	id: number;
 	name: string;
 	slug: string;
 	canAdd: boolean;
-}
+};
 
-export interface GetJoinedClubsResponse {
+export type GetJoinedClubsResponse = {
 	id: number;
 	name: string;
 	icon: string;
-}
+};
 
-export interface GetRevisionResult {
+export type GetRevisionResult = {
 	editTime: string;
 	body: string;
-}
+};
 
-export interface GetSignInDataResult {
+export type GetSignInDataResult = {
 	avatar: string;
 	title: string | null;
-}
+};
 
-export interface GetThreadDetailsResult {
+export type GetThreadDetailsResult = {
 	perPage: number;
 	minCommentLength: number;
 	maxCommentLength: number;
 	source: CommentSource;
 	isLocked: boolean;
-}
+};
 
-export interface GetUserInfractionsResult {
-	id: number;
-	activeUntil: string;
-	removed: boolean;
-	reason: string;
-}
-
-export interface GetUserNotificationsResult {
+export type GetUserNotificationsResult = {
 	id: number;
 	body: string | null;
 	url: string;
 	dateTime: string;
 	event: ENotificationEvent;
 	message: string;
-}
+};
 
-export interface InfractionDto {
-	id: number;
-	userUserName: string;
-	userId: number;
-	issueDate: string;
-	activeUntil: string;
-	removedAt: string | null;
-	reason: string;
-	type: InfractionType;
-	issuedByUserName: string;
-	removedByUserName: string | null;
-}
+export type IFormFile = Blob;
 
-export interface InviteCodeDto {
+export type InviteCodeDto = {
 	id: number;
 	code: string;
 	normalizedCode: string;
@@ -179,88 +162,92 @@ export interface InviteCodeDto {
 	issuedByUserName: string;
 	issueDate: string;
 	usedDate: string | null;
-}
+};
 
-export interface JoinClubCommand {
+export type IssueInviteCodeCommand = object;
+
+export type JoinClubCommand = {
 	clubId: number;
-}
+};
 
-export interface LeaveClubCommand {
+export type LeaveClubCommand = {
 	clubId: number;
-}
+};
 
-export interface LockThreadCommand {
+export type LockThreadCommand = {
 	threadId: number;
-}
+};
 
-export interface MarkChapterAsReadCommand {
+export type MarkChapterAsReadCommand = {
 	chapter: number;
 	story: number;
-}
+};
 
-export interface MarkChapterAsUnreadCommand {
+export type MarkChapterAsUnreadCommand = {
 	chapter: number;
 	story: number;
-}
+};
 
-export interface QuickShelvesResult {
+export type None = undefined;
+
+export type QuickShelvesResult = {
 	id: number;
 	name: string;
 	color: string | null;
 	iconName: string | null;
 	doesContainBook: boolean;
-}
+};
 
-export interface QuoteDto {
+export type QuoteDto = {
 	body: string;
 	author: string;
-}
+};
 
-export interface RatingApiDto {
+export type RatingApiDto = {
 	id: number;
 	name: string;
 	description: string;
 	order: number;
 	icon: string;
 	blacklistedByDefault: boolean;
-}
+};
 
-export interface RemoveBookFromShelfCommand {
+export type RemoveBookFromShelfCommand = {
 	shelfId: number;
 	storyId: number;
-}
+};
 
-export interface RemoveBookFromShelfResult {
+export type RemoveBookFromShelfResult = {
 	shelfId: number;
 	storyId: number;
-}
+};
 
-export interface ReportContentCommand {
+export type ReportContentCommand = {
 	itemId: number;
 	reason: string;
 	itemType: EReportableContentTypes;
-}
+};
 
-export interface RoleDto {
+export type RoleDto = {
 	id: number;
 	name: string;
 	color: string | null;
 	isStaff: boolean;
 	order: number;
-}
+};
 
-export interface RoleTinyDto {
+export type RoleTinyDto = {
 	name: string;
 	color: string | null;
 	order: number;
-}
+};
 
-export interface ShelfAddResult {
+export type ShelfAddResult = {
 	shelfId: number;
 	storyId: number;
-}
+};
 
-export interface ShelfDto {
+export type ShelfDto = {
 	id: number;
 	name: string;
 	description: string;
@@ -272,74 +259,74 @@ export interface ShelfDto {
 	storiesCount: number;
 	iconName: string | null;
 	iconId: number | null;
-}
+};
 
-export interface ShelfResult {
+export type ShelfResult = {
 	id: number;
 	name: string;
 	color: string | null;
 	iconName: string | null;
 	doesContainBook: boolean;
-}
+};
 
-export interface SubscribeCommentsThreadCommand {
+export type SubscribeCommentsThreadCommand = {
 	threadId: number;
-}
+};
 
-export interface TagDto {
+export type TagDto = {
 	id: number;
 	name: string;
 	slug: string;
 	description: string | null;
-	namespace: unknown;
+	namespace: "ContentWarning" | "Genre" | "Franchise";
 	namespaceColor: string;
 	namespaceId: number;
-}
+};
 
-export interface UnblockUserCommand {
+export type UnblockUserCommand = {
 	name: string;
-}
+};
 
-export interface UnfollowUserCommand {
+export type UnfollowUserCommand = {
 	name: string;
-}
+};
 
-export interface UpdateCommentCommand {
+export type UpdateCommentCommand = {
 	body: string;
 	commentId: number;
-}
+};
 
-export interface UpdateCommentResponse {
+export type UpdateCommentResponse = {
 	body: string;
 	editTime: string;
-}
+};
 
-export interface UpdateFaqCommand {
+export type UpdateFaqCommand = {
 	id: number;
 	question: string;
 	answer: string;
-}
+};
 
-export interface UpdateQuoteCommand {
+export type UpdateQuoteCommand = {
 	id: number;
 	body: string;
 	author: string;
-}
+};
 
-export interface UpdateRoleCommand {
+export type UpdateRoleCommand = {
 	id: number;
 	name: string;
 	isStaff: boolean;
 	color: string;
 	order: number;
-}
+};
 
-export interface UpdateRolesCommand {
+export type UpdateRolesCommand = {
 	userId: number;
-	roles: number;
-}
+	roles: number[];
+};
 
-export interface UpdateShelfCommand {
+export type UpdateShelfCommand = {
 	id: number;
 	name: string;
 	description: string;
@@ -348,39 +335,23 @@ export interface UpdateShelfCommand {
 	trackUpdates: boolean;
 	color: string;
 	icon: number;
-}
+};
 
-export interface UpdateTagCommand {
+export type UpdateTagCommand = {
 	id: number;
 	name: string | null;
 	description: string | null;
-	namespace: unknown;
-}
+	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+};
 
-export interface UserSimpleDto {
+export type UserSimpleDto = {
 	userName: string;
 	avatar: string;
 	title: string;
-	roles: object;
-}
+	roles: RoleTinyDto[];
+} | null;
 
-export interface VoteResult {
+export type VoteResult = {
 	didVote: boolean;
 	count: number;
-}
-
-export type AdminIssueInviteCodeCommand = Record<string, never>;
-
-export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
-
-export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
-
-export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
-
-export type IFormFile = Blob;
-
-export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";
-
-export type IssueInviteCodeCommand = Record<string, never>;
-
-export type None = undefined;
+};

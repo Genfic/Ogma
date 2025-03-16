@@ -1,6 +1,6 @@
-import { addYears } from "date-fns";
 import { getCookieValue, setCookie } from "../src-helpers/cookies";
 import { timedString } from "../src-helpers/generators";
+import { addToDate } from "../src-helpers/date-helpers";
 
 const themeLink = document.querySelector("link#theme-ph") as HTMLLinkElement;
 const themeBtn = document.getElementById("theme-swap") as HTMLButtonElement;
@@ -11,7 +11,7 @@ themeBtn.addEventListener("click", () => {
 	themeLink.setAttribute("rel", "stylesheet");
 	themeLink.setAttribute("href", `/css/${theme}.min.css?v=${timedString()}`);
 
-	const date = addYears(new Date(), 100);
+	const date = addToDate(new Date(), { years: 100 });
 
 	setCookie("theme", theme, date, true, "lax");
 });

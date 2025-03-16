@@ -74,7 +74,7 @@ export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: Header
 );
 
 
-export const DeleteApiComments = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/comments/${commentid}`,
+export const DeleteApiComments = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/comments/${commentId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -90,7 +90,7 @@ export const DeleteApiFaqs = async (id: number, headers?: HeadersInit, options?:
 );
 
 
-export const DeleteApiInviteCodes = async (codeid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/invitecodes/${codeid}`,
+export const DeleteApiInviteCodes = async (codeId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/InviteCodes/${codeId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -114,7 +114,7 @@ export const DeleteApiQuotes = async (id: number, headers?: HeadersInit, options
 );
 
 
-export const DeleteApiRatings = async (ratingid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/ratings/${ratingid}`,
+export const DeleteApiRatings = async (ratingId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/ratings/${ratingId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -122,7 +122,7 @@ export const DeleteApiRatings = async (ratingid: number, headers?: HeadersInit, 
 );
 
 
-export const DeleteApiRoles = async (roleid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/roles?roleid=${roleid}`,
+export const DeleteApiRoles = async (roleId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/roles?roleId=${roleId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -130,7 +130,7 @@ export const DeleteApiRoles = async (roleid: number, headers?: HeadersInit, opti
 );
 
 
-export const DeleteApiShelfStories = async (body: RemoveBookFromShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RemoveBookFromShelfResult>("/api/shelfstories",
+export const DeleteApiShelfStories = async (body: RemoveBookFromShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RemoveBookFromShelfResult>("/api/ShelfStories",
 	"DELETE",
 	body,
 	headers,
@@ -138,7 +138,7 @@ export const DeleteApiShelfStories = async (body: RemoveBookFromShelfCommand, he
 );
 
 
-export const DeleteApiShelves = async (shelfid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/shelves/${shelfid}`,
+export const DeleteApiShelves = async (shelfId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/shelves/${shelfId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -146,7 +146,7 @@ export const DeleteApiShelves = async (shelfid: number, headers?: HeadersInit, o
 );
 
 
-export const DeleteApiSubscriptionsThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadid=${threadid}`,
+export const DeleteApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadId=${threadId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -154,7 +154,7 @@ export const DeleteApiSubscriptionsThread = async (threadid: number, headers?: H
 );
 
 
-export const DeleteApiTags = async (tagid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/tags?tagid=${tagid}`,
+export const DeleteApiTags = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number>(`/api/tags?tagId=${tagId}`,
 	"DELETE",
 	undefined,
 	headers,
@@ -202,7 +202,7 @@ export const GetApiChaptersread = async (id: number, headers?: HeadersInit, opti
 );
 
 
-export const GetApiClubjoin = async (clubid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/clubjoin/${clubid}`,
+export const GetApiClubjoin = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/clubjoin/${clubId}`,
 	"GET",
 	undefined,
 	headers,
@@ -210,7 +210,7 @@ export const GetApiClubjoin = async (clubid: number, headers?: HeadersInit, opti
 );
 
 
-export const GetApiClubsStory = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetClubsWithStoryResult[]>(`/api/clubs/story/${storyid}`,
+export const GetApiClubsStory = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetClubsWithStoryResult[]>(`/api/clubs/story/${storyId}`,
 	"GET",
 	undefined,
 	headers,
@@ -226,7 +226,13 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ elements: CommentDto[], total: number, perPage: number, pages: number, page: number }>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
+export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
+	elements: CommentDto[];
+	total: number;
+	perPage: number;
+	pages: number;
+	page: number;
+}>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
 	"GET",
 	undefined,
 	headers,
@@ -234,7 +240,7 @@ export const GetApiComments = async (thread: number, page: number, highlight: nu
 );
 
 
-export const GetApiCommentsMd = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/api/comments/${commentid}/md`,
+export const GetApiCommentsMd = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string>(`/api/comments/${commentId}/md`,
 	"GET",
 	undefined,
 	headers,
@@ -242,7 +248,7 @@ export const GetApiCommentsMd = async (commentid: number, headers?: HeadersInit,
 );
 
 
-export const GetApiCommentsRevisions = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[]>(`/api/comments/${commentid}/revisions`,
+export const GetApiCommentsRevisions = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[]>(`/api/comments/${commentId}/revisions`,
 	"GET",
 	undefined,
 	headers,
@@ -250,7 +256,7 @@ export const GetApiCommentsRevisions = async (commentid: number, headers?: Heade
 );
 
 
-export const GetApiCommentsThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetThreadDetailsResult>(`/api/commentsthread/${threadid}`,
+export const GetApiCommentsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetThreadDetailsResult>(`/api/CommentsThread/${threadId}`,
 	"GET",
 	undefined,
 	headers,
@@ -266,7 +272,7 @@ export const GetApiFaqs = async (headers?: HeadersInit, options?: RequestInit) =
 );
 
 
-export const GetApiFolders = async (clubid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetFolderResult[]>(`/api/folders?clubid=${clubid}`,
+export const GetApiFolders = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetFolderResult[]>(`/api/folders?clubId=${clubId}`,
 	"GET",
 	undefined,
 	headers,
@@ -274,7 +280,7 @@ export const GetApiFolders = async (clubid: number, headers?: HeadersInit, optio
 );
 
 
-export const GetApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>("/api/invitecodes",
+export const GetApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>("/api/InviteCodes",
 	"GET",
 	undefined,
 	headers,
@@ -282,7 +288,7 @@ export const GetApiInviteCodes = async (headers?: HeadersInit, options?: Request
 );
 
 
-export const GetApiInviteCodesPaginated = async (page: number, perpage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>(`/api/invitecodes/paginated?page=${page}&perpage=${perpage}`,
+export const GetApiInviteCodesPaginated = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto[]>(`/api/InviteCodes/paginated?page=${page}&perPage=${perPage}`,
 	"GET",
 	undefined,
 	headers,
@@ -330,7 +336,7 @@ export const GetApiRoles = async (headers?: HeadersInit, options?: RequestInit) 
 );
 
 
-export const GetApiShelfStories = async (storyid: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfResult[]>(`/api/shelfstories/${storyid}?page=${page}`,
+export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfResult[]>(`/api/ShelfStories/${storyId}?page=${page}`,
 	"GET",
 	undefined,
 	headers,
@@ -338,7 +344,7 @@ export const GetApiShelfStories = async (storyid: number, page: number, headers?
 );
 
 
-export const GetApiShelfStoriesQuick = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuickShelvesResult[]>(`/api/shelfstories/${storyid}/quick`,
+export const GetApiShelfStoriesQuick = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuickShelvesResult[]>(`/api/ShelfStories/${storyId}/quick`,
 	"GET",
 	undefined,
 	headers,
@@ -346,7 +352,7 @@ export const GetApiShelfStoriesQuick = async (storyid: number, headers?: Headers
 );
 
 
-export const GetApiShelves = async (username: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${username}?page=${page}`,
+export const GetApiShelves = async (userName: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto[]>(`/api/shelves/${userName}?page=${page}`,
 	"GET",
 	undefined,
 	headers,
@@ -362,7 +368,7 @@ export const GetApiSignin = async (name: string, headers?: HeadersInit, options?
 );
 
 
-export const GetApiSubscriptionsThread = async (threadid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadid=${threadid}`,
+export const GetApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>(`/api/subscriptions/thread?threadId=${threadId}`,
 	"GET",
 	undefined,
 	headers,
@@ -370,7 +376,7 @@ export const GetApiSubscriptionsThread = async (threadid: number, headers?: Head
 );
 
 
-export const GetApiTags = async (page: number, perpage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags?page=${page}&perpage=${perpage}`,
+export const GetApiTags = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags?page=${page}&perPage=${perPage}`,
 	"GET",
 	undefined,
 	headers,
@@ -386,7 +392,7 @@ export const GetApiTagsAll = async (headers?: HeadersInit, options?: RequestInit
 );
 
 
-export const GetApiTagsSearch = async (searchstring: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/search?searchstring=${searchstring}`,
+export const GetApiTagsSearch = async (searchString: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/search?searchString=${searchString}`,
 	"GET",
 	undefined,
 	headers,
@@ -394,7 +400,7 @@ export const GetApiTagsSearch = async (searchstring: string, headers?: HeadersIn
 );
 
 
-export const GetApiTagsStory = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/story/${storyid}`,
+export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto[]>(`/api/tags/story/${storyId}`,
 	"GET",
 	undefined,
 	headers,
@@ -418,7 +424,7 @@ export const GetApiUsersNames = async (name: string, headers?: HeadersInit, opti
 );
 
 
-export const GetApiVotes = async (storyid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult>(`/api/votes/${storyid}`,
+export const GetApiVotes = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult>(`/api/votes/${storyId}`,
 	"GET",
 	undefined,
 	headers,
@@ -426,7 +432,7 @@ export const GetApiVotes = async (storyid: number, headers?: HeadersInit, option
 );
 
 
-export const GetComment = async (commentid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CommentDto>(`/api/comments/${commentid}`,
+export const GetComment = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<CommentDto>(`/api/comments/${commentId}`,
 	"GET",
 	undefined,
 	headers,
@@ -442,7 +448,7 @@ export const GetRatingById = async (id: number, headers?: HeadersInit, options?:
 );
 
 
-export const GetRoleById = async (roleid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto>(`/api/roles/${roleid}`,
+export const GetRoleById = async (roleId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RoleDto>(`/api/roles/${roleId}`,
 	"GET",
 	undefined,
 	headers,
@@ -450,7 +456,7 @@ export const GetRoleById = async (roleid: number, headers?: HeadersInit, options
 );
 
 
-export const GetShelf = async (shelfid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>(`/api/shelves/${shelfid}`,
+export const GetShelf = async (shelfId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto>(`/api/shelves/${shelfId}`,
 	"GET",
 	undefined,
 	headers,
@@ -458,7 +464,7 @@ export const GetShelf = async (shelfid: number, headers?: HeadersInit, options?:
 );
 
 
-export const GetSingleFaq = async (faqid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto>(`/api/faqs/${faqid}`,
+export const GetSingleFaq = async (faqId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FaqDto>(`/api/faqs/${faqId}`,
 	"GET",
 	undefined,
 	headers,
@@ -474,7 +480,7 @@ export const GetSingleQuote = async (id: number, headers?: HeadersInit, options?
 );
 
 
-export const GetSingleTag = async (tagid: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto>(`/api/tags/${tagid}`,
+export const GetSingleTag = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto>(`/api/tags/${tagId}`,
 	"GET",
 	undefined,
 	headers,
@@ -514,7 +520,7 @@ export const PostApiComments = async (body: CreateCommentCommand, headers?: Head
 );
 
 
-export const PostApiCommentsThreadLock = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/commentsthread/lock",
+export const PostApiCommentsThreadLock = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean>("/api/CommentsThread/lock",
 	"POST",
 	body,
 	headers,
@@ -530,7 +536,7 @@ export const PostApiFaqs = async (body: CreateFaqCommand, headers?: HeadersInit,
 );
 
 
-export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<AddStoryToFolderResponse|string>("/api/folders/addstory",
+export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<AddStoryToFolderResponse|string>("/api/folders/AddStory",
 	"POST",
 	body,
 	headers,
@@ -538,7 +544,7 @@ export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, head
 );
 
 
-export const PostApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto|string>("/api/invitecodes",
+export const PostApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto|string>("/api/InviteCodes",
 	"POST",
 	undefined,
 	headers,
@@ -546,7 +552,7 @@ export const PostApiInviteCodes = async (headers?: HeadersInit, options?: Reques
 );
 
 
-export const PostApiInviteCodesNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto>("/api/invitecodes/no-limit",
+export const PostApiInviteCodesNoLimit = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<InviteCodeDto>("/api/InviteCodes/no-limit",
 	"POST",
 	undefined,
 	headers,
@@ -594,7 +600,7 @@ export const PostApiRoles = async (body: CreateRoleCommand, headers?: HeadersIni
 );
 
 
-export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfAddResult>("/api/shelfstories",
+export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfAddResult>("/api/ShelfStories",
 	"POST",
 	body,
 	headers,

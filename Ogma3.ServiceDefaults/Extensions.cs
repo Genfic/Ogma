@@ -66,6 +66,7 @@ public static class Extensions
 		return builder;
 	}
 
+	// ReSharper disable once UnusedMethodReturnValue.Local
 	private static TBuilder AddOpenTelemetryExporters<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
 	{
 		var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
