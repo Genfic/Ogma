@@ -19,18 +19,18 @@ interface Shelf {
 
 @customElement("o-shelves")
 export class ShelvesButton extends LitElement {
-	@property() accessor storyId: number;
-	@property() accessor csrf: string;
-	@state() private accessor quickShelves: Shelf[] = [];
-	@state() private accessor shelves: Shelf[] = [];
-	@state() private accessor more = false;
-	@state() private accessor page = 1;
-	@state() private accessor moreShelvesLoaded = false;
+	@property() storyId: number;
+	@property() csrf: string;
+	@state() private quickShelves: Shelf[] = [];
+	@state() private shelves: Shelf[] = [];
+	@state() private more = false;
+	@state() private page = 1;
+	@state() private moreShelvesLoaded = false;
 
 	async connectedCallback() {
 		super.connectedCallback();
 
-		await this.#getQuickShelves();
+		await this.getQuickShelves();
 		this.classList.add("wc-loaded");
 
 		clickOutside(this, () => {
@@ -38,22 +38,22 @@ export class ShelvesButton extends LitElement {
 		});
 	}
 
-	#quickShelf = (shelf: Shelf) => html`
+	private quickShelf = (shelf: Shelf) => html`
 		<button
 			class="shelf action-btn"
 			title="Add to ${shelf.name}"
-			@click="${() => this.#addOrRemove(shelf.id)}"
+			@click="${() => this.addOrRemove(shelf.id)}"
 			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
 			<o-icon class="material-icons-outlined" style="color: ${shelf.color}" icon="${shelf.iconName}"></o-icon>
 		</button>
 	`;
 
-	#shelf = (shelf: Shelf) => html`
+	private shelf = (shelf: Shelf) => html`
 		<button
 			class="action-btn"
 			title="Add to ${shelf.name}"
-			@click="${() => this.#addOrRemove(shelf.id)}"
+			@click="${() => this.addOrRemove(shelf.id)}"
 			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
 			<o-icon class="material-icons-outlined" style="color: ${shelf.color}" icon="${shelf.iconName}"></o-icon>
@@ -63,22 +63,29 @@ export class ShelvesButton extends LitElement {
 
 	render() {
 		return html`
-			${this.quickShelves?.map(this.#quickShelf)}
+			${this.quickShelves?.map(this.quickShelf)}
 
-			<button title="All bookshelves" class="shelf action-btn" @click="${() => this.#showMore()}">
+			<button title="All bookshelves" class="shelf action-btn" @click="${() => this.showMore()}">
 				<o-icon class="material-icons-outlined" icon="lucide:ellipsis-vertical"></o-icon>
 			</button>
 
-			${this.more ? html` <div class="more-shelves">${this.shelves?.map(this.#shelf)}</div> ` : null}
+			${
+				this.more
+					? html`
+				<div class="more-shelves">${this.shelves?.map(this.shelf)}</div> `
+					: null
+			}
 		`;
 	}
 
-	async #showMore() {
+	private async showMore() {
 		this.more = !this.more;
-		if (this.more && !this.moreShelvesLoaded) await this.#getShelves();
+		if (this.more && !this.moreShelvesLoaded) {
+			await this.getShelves();
+		}
 	}
 
-	async #getQuickShelves() {
+	private async getQuickShelves() {
 		const res = await getQuickShelves(this.storyId);
 		if (res.ok) {
 			this.quickShelves = res.data;
@@ -87,7 +94,7 @@ export class ShelvesButton extends LitElement {
 		}
 	}
 
-	async #getShelves() {
+	private async getShelves() {
 		const res = await getShelves(this.storyId, this.page);
 		if (res.ok) {
 			this.shelves = res.data;
@@ -97,7 +104,7 @@ export class ShelvesButton extends LitElement {
 		}
 	}
 
-	async #addOrRemove(id: number) {
+	private async addOrRemove(id: number) {
 		const exists = [...this.shelves, ...this.quickShelves].some((s) => s.doesContainBook && s.id === id);
 		const send = exists ? removeFromShelf : addToShelf;
 
@@ -115,8 +122,8 @@ export class ShelvesButton extends LitElement {
 			const shelf = [...this.shelves, ...this.quickShelves].find((s) => s.id === data.shelfId);
 			shelf.doesContainBook = !exists;
 			this.requestUpdate();
-			// await this.#getQuickShelves();
-			// await this.#getShelves();
+			// await this.getQuickShelves();
+			// await this.getShelves();
 		} else {
 			log.error(res.statusText);
 		}

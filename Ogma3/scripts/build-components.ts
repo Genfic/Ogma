@@ -1,4 +1,4 @@
-import { program } from "@commander-js/extra-typings";
+import { Option, program } from "@commander-js/extra-typings";
 import multi from "@rollup/plugin-multi-entry";
 import resolve from "@rollup/plugin-node-resolve";
 import { Glob } from "bun";
@@ -13,7 +13,8 @@ import { watch } from "./helpers/watcher";
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
-	.option("-r, --raw", "Don't minify output", false)
+	.option("-f, --full", "Output full, unminified file", false)
+	.option("-r, --release", "Build in release mode", false)
 	.parse(Bun.argv)
 	.opts();
 
@@ -23,23 +24,24 @@ const dest = `${base}/bundle`;
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
-	const files = [...new Glob(`${source}/**/*.ts`).scanSync()];
+	const files = [...new Glob(`${source}/**/[!_]*.ts`).scanSync()];
 	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
 	await using bundle = await rollup({
 		input: files,
 		output: {
 			file: `${dest}/components.js`,
-			format: "es",
+			format: "esm",
 			sourcemap: true,
 		},
 		plugins: [
 			multi(),
 			resolve(),
-			minifyHTML(),
+			!values.full && minifyHTML(),
 			esbuild({
 				tsconfig: `${base}/tsconfig.json`,
-				minify: !values.raw,
+				treeShaking: true,
+				minify: !values.full,
 				legalComments: "eof",
 			}),
 		],

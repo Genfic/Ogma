@@ -8,7 +8,7 @@ const { values } = parseArgs({
 			short: "v",
 		},
 	},
-	strict: true,
+	strict: false,
 	allowPositionals: true,
 });
 

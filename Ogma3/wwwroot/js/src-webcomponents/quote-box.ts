@@ -11,9 +11,9 @@ interface Quote {
 
 @customElement("quote-box")
 export class QuoteBox extends LitElement {
-	@state() accessor _loading: boolean;
-	@state() accessor _quote: Quote;
-	@state() accessor _canReload = true;
+	@state() _loading: boolean;
+	@state() _quote: Quote;
+	@state() _canReload = true;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -25,7 +25,7 @@ export class QuoteBox extends LitElement {
 		return html`
 			<div id="quote" class="quote active-border">
 				<div class="refresh" @click="${this.load}">
-					<o-icon icon="${this.#spinnerIcon()}" class="material-icons-outlined ${this.#spinnerClass()}"></o-icon>
+					<o-icon icon="${this.spinnerIcon()}" class="material-icons-outlined ${this.spinnerClass()}"></o-icon>
 				</div>
 				${when(
 					this._quote,
@@ -39,11 +39,13 @@ export class QuoteBox extends LitElement {
 		`;
 	}
 
-	#spinnerClass = () => (this._loading ? "spin" : "");
-	#spinnerIcon = () => (this._canReload ? "lucide:refresh-cw" : "lucide:clock");
+	private spinnerClass = () => (this._loading ? "spin" : "");
+	private spinnerIcon = () => (this._canReload ? "lucide:refresh-cw" : "lucide:clock");
 
 	async load() {
-		if (!this._canReload) return;
+		if (!this._canReload) {
+			return;
+		}
 
 		const response = await getQuote();
 		if (response.ok) {

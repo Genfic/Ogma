@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "ESNext",
-		"target": "ES2022",
+		"target": "ESNext",
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
@@ -9,7 +9,9 @@
 		"experimentalDecorators": true,
 		"useDefineForClassFields": false,
 		"skipLibCheck": true,
-		"lib": ["DOM", "ES6", "ES2017", "DOM.Iterable"]
+		"lib": ["DOM", "ES6", "ES2017", "DOM.Iterable"],
+		"importHelpers": true,
+		"downlevelIteration": true
 	},
 	"exclude": ["node_modules", "tools", "src/sw"]
 }

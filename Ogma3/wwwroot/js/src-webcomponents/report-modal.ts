@@ -23,16 +23,16 @@ export class ReportModal extends LitElement {
 		max: 500,
 	};
 
-	@property() public accessor openSelector: string | undefined;
+	@property() public openSelector: string | undefined;
 
-	@property() public accessor csrf: string;
-	@property() public accessor itemId: number;
-	@property() public accessor itemType: string;
+	@property() public csrf: string;
+	@property() public itemId: number;
+	@property() public itemType: string;
 
-	@state() private accessor visible: boolean;
-	@state() private accessor chars = 0;
-	@state() private accessor reason: string;
-	@state() private accessor success: boolean | null = null;
+	@state() private visible: boolean;
+	@state() private chars = 0;
+	@state() private reason: string;
+	@state() private success: boolean | null = null;
 
 	public show = () => {
 		this.visible = true;

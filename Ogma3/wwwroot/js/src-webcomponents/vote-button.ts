@@ -9,11 +9,11 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-vote")
 export class VoteButton extends LitElement {
-	@property() accessor storyId: number;
-	@property() accessor csrf: string;
+	@property() storyId: number;
+	@property() csrf: string;
 
-	@state() private accessor voted: boolean;
-	@state() private accessor score: number;
+	@state() private voted: boolean;
+	@state() private score: number;
 
 	async connectedCallback() {
 		super.connectedCallback();

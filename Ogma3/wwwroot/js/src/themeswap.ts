@@ -1,6 +1,6 @@
 import { getCookieValue, setCookie } from "../src-helpers/cookies";
-import { timedString } from "../src-helpers/generators";
 import { addToDate } from "../src-helpers/date-helpers";
+import { timedString } from "../src-helpers/generators";
 
 const themeLink = document.querySelector("link#theme-ph") as HTMLLinkElement;
 const themeBtn = document.getElementById("theme-swap") as HTMLButtonElement;

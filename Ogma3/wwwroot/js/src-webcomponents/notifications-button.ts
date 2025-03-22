@@ -1,13 +1,11 @@
-import { clamp } from "es-toolkit";
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { GetApiNotificationsCount as countNotifications } from "../generated/paths-public";
-import "../src-helpers/extensions/Number";
 import { log } from "../src-helpers/logger";
 
 @customElement("o-notifications-button")
 export class NotificationsButton extends LitElement {
-	@state() accessor notifications: number;
+	@state() notifications: number;
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -21,15 +19,15 @@ export class NotificationsButton extends LitElement {
 		}
 	}
 
-	#count = () => (this.notifications <= 99 ? clamp(this.notifications, 99).toString() : "99+");
+	private count = () => (this.notifications <= 99 ? this.notifications.toString() : "99+");
 
-	#title = () => (this.notifications > 0 ? `${this.notifications} notifications` : "Notifications");
+	private linkTitle = () => (this.notifications > 0 ? `${this.notifications} notifications` : "Notifications");
 
 	render() {
 		return html`
-			<a class="nav-link light notifications-btn" href="/notifications" title="${this.#title()}">
+			<a class="nav-link light notifications-btn" href="/notifications" title="${this.linkTitle()}">
 				<o-icon class="material-icons-outlined" icon="lucide:bell"></o-icon>
-				${(this.notifications ?? -1) > 0 ? html`<span>${this.#count()}</span>` : null}
+				${(this.notifications ?? -1) > 0 ? html`<span>${this.count()}</span>` : null}
 			</a>
 		`;
 	}

@@ -1,31 +1,24 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
+import { clamp, normalize } from "../src-helpers/math-helpers";
 
 @customElement("o-read-progress")
 export class ReadProgress extends LitElement {
-	@state() private accessor progress = 0;
-	@state() private accessor windowHeight: number;
-	@state() private accessor containerHeight: number;
-	@state() private accessor ticking = false;
-	@state() private accessor read = false;
+	@state() private progress = 0;
+	@state() private ticking = false;
+	@state() private read = false;
 
 	// language=CSS
 	static styles = css`
 		:host {
-			position: fixed;
 			position: sticky;
-			bottom: 0;
-			left: 0;
-			padding: 0;
-			margin: 0;
-			width: 100%;
+			inset: auto 0 0;
 		}
 
 		.bar {
 			position: relative;
 			height: 3px;
-			margin-top: auto;
 			background-color: var(--accent);
 			transition: width 50ms ease-out;
 		}
@@ -35,34 +28,34 @@ export class ReadProgress extends LitElement {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
 
-		this.windowHeight = window.innerHeight;
-		this.containerHeight = this.parentElement.offsetTop + this.parentElement.offsetHeight;
-
 		document.addEventListener("scroll", () => {
 			if (!this.ticking) {
 				window.requestAnimationFrame(() => {
-					this.#handleScroll();
+					this.handleScroll();
 					this.ticking = false;
 				});
 				this.ticking = true;
 			}
 		});
+		window.addEventListener("resize", () => this.handleScroll());
+		this.handleScroll();
 	}
 
 	render() {
-		return html` <div class="bar" style=${styleMap({ width: `${this.progress * 100}%` })}></div> `;
+		return html`
+			<div class="bar" style=${styleMap({ width: `${this.progress * 100}%` })}></div> `;
 	}
 
-	#handleScroll() {
-		if (this.read) return;
-
+	private handleScroll() {
 		const elBottom = this.parentElement.getBoundingClientRect().bottom;
-		const percent = elBottom - this.windowHeight;
-		const maxHeight = Math.max(this.containerHeight - this.windowHeight, 0);
-		this.progress = 1 - percent.normalize(0, maxHeight).clamp();
-		if (this.progress >= 1) {
+		const percent = elBottom - window.innerHeight;
+		const containerHeight = this.parentElement.offsetTop + this.parentElement.offsetHeight;
+		const maxHeight = Math.max(containerHeight - window.innerHeight, 0);
+
+		this.progress = 1 - clamp(normalize(percent, 0, maxHeight));
+
+		if (this.progress >= 1 && !this.read) {
 			this.read = true;
-			console.log("Chapter read!");
 			this.dispatchEvent(new CustomEvent("read"));
 		}
 	}

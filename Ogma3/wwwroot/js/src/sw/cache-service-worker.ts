@@ -12,11 +12,11 @@
 
 	this.addEventListener("activate", async (event: ExtendableEvent) => {
 		const res = await fetch("/manifest.js.json");
-		const manifest: Manifest = res.data;
+		const manifest: Manifest = await res.json();
 
 		await clearCache(manifest.GeneratedAt);
 
-		const paths = Object.keys(manifest.Files).map((k) => `${k}?v=${manifest.Files[k]}`);
+		const paths = Object.entries(manifest.Files).map(([k, v]) => `${k}?v=${v}`);
 
 		event.waitUntil(caches.open(manifest.GeneratedAt).then((cache) => cache.addAll(paths)));
 	});

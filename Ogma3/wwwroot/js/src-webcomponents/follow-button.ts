@@ -5,9 +5,9 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-follow")
 export class FollowButton extends LitElement {
-	@property() accessor userName: string;
-	@property() accessor csrf: string;
-	@property() accessor isFollowed: boolean;
+	@property() userName: string;
+	@property() csrf: string;
+	@property() isFollowed: boolean;
 
 	connectedCallback() {
 		super.connectedCallback();
@@ -19,14 +19,14 @@ export class FollowButton extends LitElement {
 			<button
 				class="button max ${this.isFollowed ? "leave" : "join"}"
 				title="${this.isFollowed ? "Unfollow" : "Follow"}"
-				@click="${this.#follow}"
+				@click="${this.follow}"
 			>
 				${this.isFollowed ? "Following" : "Follow"}
 			</button>
 		`;
 	}
 
-	async #follow() {
+	private async follow() {
 		const send = this.isFollowed ? unfollowUser : followUser;
 
 		const res = await send(

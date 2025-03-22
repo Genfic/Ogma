@@ -5,17 +5,17 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-block")
 export class BlockUser extends LitElement {
-	@property() accessor userName: string;
-	@property() accessor csrf: string;
-	@property() accessor isBlocked: boolean;
+	@property() userName: string;
+	@property() csrf: string;
+	@property() isBlocked: boolean;
 
 	async connectedCallback() {
 		super.connectedCallback();
 		this.classList.add("wc-loaded");
-		this.addEventListener("click", this.#block);
+		this.addEventListener("click", this.block);
 		this.addEventListener("keydown", (e: KeyboardEvent) => {
 			if (e.key === " ") {
-				this.#block();
+				this.block();
 				e.preventDefault();
 			}
 		});
@@ -25,7 +25,7 @@ export class BlockUser extends LitElement {
 		return html`<span> ${this.isBlocked ? "Unblock" : "Block"} </span>`;
 	}
 
-	async #block() {
+	private async block() {
 		const send = this.isBlocked ? unblockUser : blockUser;
 
 		const res = await send(

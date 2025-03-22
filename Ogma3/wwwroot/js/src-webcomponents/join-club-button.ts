@@ -5,9 +5,9 @@ import { log } from "../src-helpers/logger";
 
 @customElement("o-join")
 export class JoinClubButton extends LitElement {
-	@property() accessor clubId: number;
-	@property() accessor csrf: string;
-	@property() accessor isMember = false;
+	@property() clubId: number;
+	@property() csrf: string;
+	@property() isMember = false;
 
 	connectedCallback() {
 		super.connectedCallback();
