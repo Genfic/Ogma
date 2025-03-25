@@ -1,0 +1,73 @@
+{
+	"name": "ogma-3",
+	"sideEffects": false,
+	"scripts": {
+		"t:webtypes": "wca-webtypes analyze ./wwwroot/js/src-webcomponents/**/*.ts --format webtypes --outFile ./web-types.json",
+		"biome": "bunx @biomejs/biome check . --fix",
+		"biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag",
+		"css": "bun ./scripts/build-sass.ts",
+		"css:watch": "bun ./scripts/build-sass.ts -- --watch",
+		"js": "bun ./scripts/build-js.ts",
+		"js:watch": "bun ./scripts/build-js.ts -- --watch",
+		"js:typecheck": "tsc --noEmit -p ./wwwroot/js/tsconfig.json",
+		"wc": "bun ./scripts/build-components.ts",
+		"wc:watch": "bun ./scripts/build-components.ts -- --watch",
+		"icons": "bun ./scripts/build-icons.ts",
+		"lh": "unlighthouse",
+		"build": "bun run css && bun run js && bun run wc && bun run icons"
+	},
+	"devDependencies": {
+		"@angius/web-component-analyzer": "2.0.10",
+		"@biomejs/biome": "^1.9.4",
+		"@commander-js/extra-typings": "^13.1.0",
+		"@custom-elements-manifest/analyzer": "^0.10.4",
+		"@hail2u/css-mqpacker": "git@github.com:hail2u/node-css-mqpacker.git#f615ec6",
+		"@happy-dom/global-registrator": "^17.4.4",
+		"@lit-labs/ssr": "^3.3.1",
+		"@parcel/watcher": "^2.5.1",
+		"@rollup/plugin-multi-entry": "6.0.1",
+		"@rollup/plugin-node-resolve": "^16.0.1",
+		"@types/ansi-colors": "^3.2.6",
+		"@types/bun": "^1.2.5",
+		"@types/json5": "^2.2.0",
+		"@types/node": "^22.13.10",
+		"browserslist": "^4.24.4",
+		"chalk": "^5.4.1",
+		"chalk-template": "^1.1.0",
+		"cheerio": "^1.0.0",
+		"commander": "^13.1.0",
+		"convert": "^5.8.0",
+		"esbuild": "^0.25.1",
+		"gradient-string": "^3.0.0",
+		"html-format": "^1.1.7",
+		"json5": "^2.2.3",
+		"lighthouse": "^12.4.0",
+		"lightningcss": "^1.29.3",
+		"lit-web-types": "0.1.5",
+		"rollup": "^4.36.0",
+		"rollup-plugin-esbuild": "6.2.1",
+		"rollup-plugin-html-literals": "1.1.8",
+		"sass-embedded": "^1.86.0",
+		"typescript": "5.8.2",
+		"unlighthouse": "^0.16.2",
+		"vue": "2.6.14"
+	},
+	"dependencies": {
+		"@angius/tinytime": "^1.1.0",
+		"@lit/task": "^1.0.2",
+		"es-toolkit": "^1.33.0",
+		"lit": "^3.2.1",
+		"sa11y": "^4.1.1",
+		"uqr": "^0.1.2"
+	},
+	"web-types": ["./web-types.json"],
+	"wca-config": {
+		"webtypesConfig": {
+			"name": "Ogma Components",
+			"version": "1.0.0",
+			"framework": "lit",
+			"description-markup": "markdown"
+		}
+	},
+	"customElements": "./custom-elements.json"
+}

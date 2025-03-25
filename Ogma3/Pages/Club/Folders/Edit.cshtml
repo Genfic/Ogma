@@ -44,7 +44,7 @@
 			@foreach (var r in EClubMemberRolesExtensions.GetValues())
 			{
 				var name = r.ToStringFast();
-				
+
 				<input type="radio"
 				       asp-for="Input.Role"
 				       id="@name"
@@ -66,5 +66,5 @@
 <partial name="Shared/_ValidationScriptsPartial"/>
 
 @section Scripts {
-	<script src="~/js/dist/input-progressbars.js" asp-append-version="true"></script>
+	<script src="~/js/input-progressbars.js" asp-append-version="true"></script>
 }

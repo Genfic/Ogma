@@ -7,7 +7,7 @@ tasks:
         env:
             DENO_TLS_CA_STORE: system
         vars:
-            DEST: ./Ogma3/wwwroot/js/generated/
+            DEST: ./Ogma3/FrontendCode/typescript/generated/
             URL: https://localhost:5001/openapi/
         cmds:
             - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"

@@ -60,7 +60,7 @@
 				<span asp-validation-for="Input.InviteCode" class="text-danger"></span>
 				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our Discord!</aside>
 			</div>
-			
+
 			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register"></div>
 
 			<button type="submit" class="btn btn-primary">Register</button>
@@ -89,10 +89,10 @@
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial"/>
-	<script defer src="~/js/dist/account/register.js" asp-append-version="true"></script>
+	<script defer src="~/js/account/register.js" asp-append-version="true"></script>
 	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 }
 
 @section CSS {
-	<link rel="stylesheet" href="~/css/dist/login.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
 }

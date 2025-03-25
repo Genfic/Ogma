@@ -61,17 +61,17 @@
 
 	@if (theme == "system")
 	{
-		<link rel="stylesheet" href="~/css/dist/light.css" asp-append-version="true" />
-		<link rel="stylesheet" href="~/css/dist/dark.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true" />
+		<link rel="stylesheet" href="~/css/light.css" asp-append-version="true" />
+		<link rel="stylesheet" href="~/css/dark.css" media="screen and (prefers-color-scheme: dark)" asp-append-version="true" />
 	}
 	else
 	{
-		<link rel="stylesheet" href="@($"~/css/dist/{theme}.css")" asp-append-version="true" />
+		<link rel="stylesheet" href="@($"~/css/{theme}.css")" asp-append-version="true" />
 	}
 
 	<link id="theme-ph">
 
-	<link rel="stylesheet" href="~/css/dist/style.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
 
 	@await RenderSectionAsync("CSS", false)
 	@Html.RenderResources("css")
@@ -121,7 +121,7 @@
 		<button class="btn green" id="cookie-consent-button">Noted!</button>
 	</div>
 
-	<script type="module" async src="~/js/dist/cookie-consent.js"></script>
+	<script type="module" async src="~/js/cookie-consent.js"></script>
 }
 
 <partial name="_Footer"/>
@@ -144,8 +144,8 @@ else
 	        asp-fallback-test="window.Vue"></script>
 }
 
-<script defer src="~/js/dist/site.js" asp-append-version="true"></script>
-<script defer src="~/js/dist/navbar.js" asp-append-version="true"></script>
+<script defer src="~/js/site.js" asp-append-version="true"></script>
+<script defer src="~/js/navbar.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", false)
 @Html.RenderResources()

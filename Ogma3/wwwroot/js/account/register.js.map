@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\FrontendCode\\typescript\\src\\account\\register.ts"],
+  "sourcesContent": [
+    "const classname = \"visible\";\r\nconst formInputs = [...document.querySelectorAll(\"input[id]\")] as HTMLInputElement[];\r\n\r\nfor (const input of formInputs) {\r\n\tconst info = document.querySelector(`[data-for=\"${input.id}\"]`);\r\n\tif (!info) continue;\r\n\r\n\tinput.addEventListener(\"focusin\", () => {\r\n\t\tinfo.classList.add(classname);\r\n\t});\r\n\tinput.addEventListener(\"focusout\", () => {\r\n\t\tinfo.classList.remove(classname);\r\n\t});\r\n}\r\n"
+  ],
+  "mappings": "AACA,IAAM,EAAa,CAAC,GAAG,SAAS,iBAAiB,WAAW,CAAC,EAE7D,QAAW,KAAS,EAAY,CAC/B,IAAM,EAAO,SAAS,cAAc,cAAc,EAAM,MAAM,EAC9D,IAAK,EAAM,SAEX,EAAM,iBAAiB,UAAW,IAAM,CACvC,EAAK,UAAU,IARC,SAQY,EAC5B,EACD,EAAM,iBAAiB,WAAY,IAAM,CACxC,EAAK,UAAU,OAXC,SAWe,EAC/B",
+  "debugId": "61D8D8CF983B095B64756E2164756E21",
+  "names": []
+}

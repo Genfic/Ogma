@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\FrontendCode\\typescript\\src\\components\\status-select-component.js"],
+  "sourcesContent": [
+    "Vue.component(\"status-select\", {\r\n\tprops: {\r\n\t\tlabel: {\r\n\t\t\ttype: String,\r\n\t\t\trequired: true,\r\n\t\t},\r\n\t\tvalue: {\r\n\t\t\ttype: Number,\r\n\t\t},\r\n\t\tdesc: {\r\n\t\t\ttype: String,\r\n\t\t},\r\n\t\tstatusesStr: {\r\n\t\t\ttype: String,\r\n\t\t\trequired: true,\r\n\t\t},\r\n\t},\r\n\tdata: function () {\r\n\t\treturn {\r\n\t\t\tstatuses: JSON.parse(this.statusesStr),\r\n\t\t\tname: this.label.replace(/\\s+/g, \"\"),\r\n\t\t\tselected: this.value ?? 0,\r\n\t\t};\r\n\t},\r\n\tmethods: {},\r\n\ttemplate: `\r\n        <div class=\"o-form-group status-select\">\r\n        <label>{{ label.replace(/([A-Z])/g, \" $1\") }}</label>\r\n        <p class=\"desc\" v-if=\"desc\">{{ desc }}</p>\r\n\r\n        <div class=\"selector active-border\">\r\n            <template v-for=\"(r, k) in statuses\">\r\n                <input type=\"radio\"\r\n                       :id=\"'sel-' + r\"\r\n                       :name=\"name\"\r\n                       :value='k + 1'\r\n                       v-model=\"selected\">\r\n                <label :for=\"'sel-' + r\" tabindex=\"0\">{{ r }}</label>\r\n            </template>\r\n        </div>\r\n        </div>\r\n    `,\r\n});\r\n"
+  ],
+  "mappings": "AAAA,IAAI,UAAU,gBAAiB,CAC9B,MAAO,CACN,MAAO,CACN,KAAM,OACN,SAAU,EACX,EACA,MAAO,CACN,KAAM,MACP,EACA,KAAM,CACL,KAAM,MACP,EACA,YAAa,CACZ,KAAM,OACN,SAAU,EACX,CACD,EACA,KAAM,QAAS,EAAG,CACjB,MAAO,CACN,SAAU,KAAK,MAAM,KAAK,WAAW,EACrC,KAAM,KAAK,MAAM,QAAQ,OAAQ,EAAE,EACnC,SAAU,KAAK,OAAS,CACzB,GAED,QAAS,CAAC,EACV,SAAU;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,KAiBX,CAAC",
+  "debugId": "79C974A75F76E56C64756E2164756E21",
+  "names": []
+}

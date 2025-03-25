@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\FrontendCode\\typescript\\src\\search\\blog.js"],
+  "sourcesContent": [
+    "function sendForm() {\r\n\tconst inputs = [document.getElementById(\"query\"), document.getElementById(\"sort\")];\r\n\tfor (const e of inputs) {\r\n\t\tif (e.value === null || e.value === \"\") e.disabled = true;\r\n\t}\r\n}\r\n\r\ndocument.getElementById(\"search\").addEventListener(\"submit\", sendForm);\r\n"
+  ],
+  "mappings": "AAAA,SAAS,CAAQ,EAAG,CACnB,IAAM,EAAS,CAAC,SAAS,eAAe,OAAO,EAAG,SAAS,eAAe,MAAM,CAAC,EACjF,QAAW,KAAK,EACf,GAAI,EAAE,QAAU,MAAQ,EAAE,QAAU,GAAI,EAAE,SAAW,GAIvD,SAAS,eAAe,QAAQ,EAAE,iBAAiB,SAAU,CAAQ",
+  "debugId": "1F4C18513A31D5FB64756E2164756E21",
+  "names": []
+}

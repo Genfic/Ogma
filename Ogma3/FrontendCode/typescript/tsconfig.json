@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ESNext",
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "Bundler",
+		"useDefineForClassFields": false,
+		"skipLibCheck": true,
+		"lib": ["DOM", "ES6", "ES2017", "DOM.Iterable"],
+		"importHelpers": true,
+		"downlevelIteration": true
+	},
+	"exclude": ["node_modules", "tools", "src/sw"]
+}

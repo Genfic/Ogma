@@ -227,7 +227,7 @@ public sealed class Startup
 				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			});
-		
+
 		// Json options
 		services.ConfigureHttpJsonOptions(options => {
 			options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -266,7 +266,7 @@ public sealed class Startup
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && r.StartsWith("admin");
 		});
-		
+
 		// HSTS
 		services.AddHsts(options => {
 			options.Preload = true;
@@ -327,7 +327,7 @@ public sealed class Startup
 		app.UseRewriter(new RewriteOptions()
 			.AddRedirect(@"^\.well-known/change-password$", "identity/account/manage/changepassword")
 		);
-		
+
 		// Map file extensions
 		var extensionsProvider = new FileExtensionContentTypeProvider();
 		extensionsProvider.Mappings.Add(".avif", "image/avif");
@@ -351,7 +351,7 @@ public sealed class Startup
 			ContentTypeProvider = extensionsProvider,
 		});
 		app.UseRouting();
-		
+
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
@@ -360,18 +360,18 @@ public sealed class Startup
 		// OpenAPI
 		app.MapOpenApi("openapi/{documentName}.json").CacheOutput();
 		app.MapScalarApiReference();
-		
+
 		// Rate limit
 		app.UseRateLimiter();
-	
+
 		app.MapRazorPages();
 		app.MapControllers();
 		app.MapOgma3Endpoints();
-		
+
 		// Antiforgery
 		app.UseAntiforgery();
-		
+
 		// Generate JS manifest
-		app.UseJavascriptFilesManifestGenerator("js/dist", "js/bundle");
+		app.UseJavascriptFilesManifestGenerator("js");
 	}
 }

@@ -38,7 +38,7 @@
 		<div class="actions">
 
 			<o-vote storyId="@Model.Story.Id" csrf="@csrf"></o-vote>
-			
+
 			<noscript>
 				<div class="votes action-btn large" title="Score">
 					<icon icon="ic:round-star-border" svg="true" class="material-icons-outlined"></icon>
@@ -99,10 +99,10 @@
 
 		<div class="titlebar">
 			@* TODO: height and width *@
-			<img src="@Model.Story.Rating.Icon" 
-			     alt="Rated: @Model.Story.Rating.Name" 
-			     title="Rating: @Model.Story.Rating.Name" 
-			     class="rating" 
+			<img src="@Model.Story.Rating.Icon"
+			     alt="Rated: @Model.Story.Rating.Name"
+			     title="Rating: @Model.Story.Rating.Name"
+			     class="rating"
 			     loading="lazy"/>
 			<span style="display:none" itemprop="contentRating">@Model.Story.Rating.Name</span>
 			<h1 class="title" itemprop="name">@Model.Story.Title</h1>
@@ -245,5 +245,5 @@
 
 @section Scripts
 {
-	<script defer src="~/js/dist/chapter-reads.js" asp-append-version="true"></script>
+	<script defer src="~/js/chapter-reads.js" asp-append-version="true"></script>
 }
