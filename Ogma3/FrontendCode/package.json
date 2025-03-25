@@ -2,7 +2,7 @@
 	"name": "ogma-3",
 	"sideEffects": false,
 	"scripts": {
-		"t:webtypes": "wca-webtypes analyze ./wwwroot/js/src-webcomponents/**/*.ts --format webtypes --outFile ./web-types.json",
+		"webtypes": "wca-webtypes analyze ./typescript/src-webcomponents/**/*.ts --format webtypes --outFile ./web-types.json",
 		"biome": "bunx @biomejs/biome check . --fix",
 		"biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag",
 		"css": "bun ./scripts/build-sass.ts",

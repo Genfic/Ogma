@@ -1,3 +1,4 @@
+import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import multi from "@rollup/plugin-multi-entry";
 import resolve from "@rollup/plugin-node-resolve";
@@ -9,7 +10,6 @@ import esbuild from "rollup-plugin-esbuild";
 import minifyHTML from "rollup-plugin-html-literals";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { dirname, join } from "node:path";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

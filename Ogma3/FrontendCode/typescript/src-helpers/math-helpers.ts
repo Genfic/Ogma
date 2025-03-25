@@ -6,6 +6,7 @@
  * @returns {number} The given number normalized into [0, 1] range
  */
 export function normalize(num: number, min: number, max: number): number {
+	if (min === max) return min;
 	return (num - min) / (max - min);
 }
 

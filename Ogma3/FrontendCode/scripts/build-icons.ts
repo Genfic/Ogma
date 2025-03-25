@@ -1,3 +1,4 @@
+import { dirname, join } from "node:path";
 import { render } from "@lit-labs/ssr";
 import { type RenderResult, collectResultSync } from "@lit-labs/ssr/lib/render-result";
 import { Glob } from "bun";
@@ -9,7 +10,6 @@ import format from "html-format";
 import { parse } from "json5";
 import { type TemplateResult, html } from "lit";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import { dirname, join } from "node:path";
 
 const start = Bun.nanoseconds();
 
