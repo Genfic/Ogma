@@ -1,0 +1,19 @@
+
+.notifications-btn {
+	position: relative;
+
+	span {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		background-color: var(--red);
+		padding: .2rem;
+		height: 1rem;
+		min-width: 1rem;
+		line-height: .4rem;
+		color: var(--foreground);
+		font-size: .8rem;
+		text-align: center;
+		border-radius: 9999999px;
+	}
+}

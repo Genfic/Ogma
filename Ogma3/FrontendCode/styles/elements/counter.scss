@@ -1,0 +1,48 @@
+
+.counter {
+	text-align: end;
+	position: relative;
+	display: flex;
+
+	&:hover {
+		> .o-progress-bar {
+			background-color: var(--accent-50);
+		}
+
+		&.invalid {
+			> .o-progress-bar {
+				background-color: var(--red-50);
+			}
+		}
+	}
+
+	> .o-progress-bar {
+		position: absolute;
+		background-color: var(--accent-25);
+		top: 0;
+		bottom: 0;
+		height: 100%;
+		transition: width 150ms ease, background-color 250ms ease-in-out;
+	}
+
+	& span {
+		margin: .05rem .2rem;
+
+		&:first-child {
+			margin-right: 0;
+		}
+
+		&:last-child {
+			margin-left: 0;
+			flex: 1;
+		}
+	}
+
+	&.invalid {
+		color: red;
+
+		> .o-progress-bar {
+			background-color: var(--red-25);
+		}
+	}
+}

@@ -1,0 +1,43 @@
+
+.story-status {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	line-height: .9;
+	font-size: .9rem;
+	cursor: default;
+
+	width: max-content;
+	padding: 4px;
+	margin: 4px;
+
+	border: 1px solid var(--foreground-75);
+	color: var(--foreground);
+
+	&:hover {
+		opacity: 0.9;
+	}
+
+	&.inprogress {
+		background-color: rgba(0, 116, 255, .5);
+	}
+
+	&.completed {
+		background-color: rgba(0, 241, 0, .5);
+	}
+
+	&.onhiatus {
+		background-color: rgba(127, 127, 127, .5);
+	}
+
+	&.cancelled {
+		background-color: rgba(255, 0, 0, .5);
+	}
+
+	> i.material-icons-outlined {
+		margin-right: .1rem;
+		font-size: .9rem;
+	}
+}
+

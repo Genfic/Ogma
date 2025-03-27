@@ -1,0 +1,45 @@
+
+.minimal {
+	display: flex;
+	flex-direction: column;
+	padding: .5rem;
+	color: var(--foreground);
+
+	&:hover {
+		color: var(--foreground)-75;
+
+		.dot {
+			background-color: var(--foreground)-50;
+		}
+
+		.title {
+			text-decoration: underline;
+		}
+	}
+
+	.title {
+		font-weight: 500;
+		font-size: 1.1rem;
+
+		&.not-published {
+			color: var(--red-75);
+		}
+
+		.icon {
+			font-size: 1rem;
+		}
+	}
+
+	.info {
+		display: flex;
+		align-items: center;
+
+		i.dot {
+			margin: .5rem;
+			width: .25rem;
+			height: .25rem;
+			border-radius: 50%;
+			background-color: var(--foreground)-75;
+		}
+	}
+}

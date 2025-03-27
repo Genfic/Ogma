@@ -1,0 +1,91 @@
+@use "../mixins/active-border" as ab;
+
+$padding: 1rem;
+
+.alert {
+	position: relative;
+	padding: $padding;
+
+	@include ab.active-border;
+
+	&:not(:first-child) {
+		margin-top: .25rem;
+	}
+
+	&-success {
+		background-color: var(--green-25);
+		border-color: var(--green-50);
+
+		&:hover {
+			border-color: var(--green-75);
+
+			> i.icon {
+				color: var(--green);
+			}
+		}
+	}
+
+	&-danger {
+		background-color: var(--red-25);
+		border-color: var(--red-50);
+
+		&:hover {
+			border-color: var(--red-75);
+		}
+
+		> i.icon {
+			color: var(--red);
+		}
+	}
+
+	&-info {
+		background-color: var(--blue-25);
+		border-color: var(--blue-50);
+
+		&:hover {
+			border-color: var(--blue-75);
+		}
+
+		> i.icon {
+			color: var(--blue);
+		}
+	}
+
+	&-warning {
+		background-color: var(--yellow-25);
+		border-color: var(--yellow-50);
+
+		&:hover {
+			border-color: var(--yellow-75);
+		}
+
+		> i.icon {
+			color: var(--yellow);
+		}
+	}
+
+	> i.icon {
+		margin-right: $padding;
+	}
+
+	> button.close {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: .25rem;
+		border: none;
+		color: var(--foreground-75);
+		background: transparent;
+		font-size: 2rem;
+		line-height: 1rem;
+
+		&:hover {
+			color: var(--foreground);
+		}
+
+		span {
+			display: block;
+		}
+	}
+
+}

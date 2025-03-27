@@ -1,0 +1,127 @@
+
+ul.items-list {
+	min-width: 100%;
+	margin-top: 1rem;
+
+	li {
+		contain: content;
+		display: flex;
+		min-width: 100%;
+		border: 1px solid var(--foreground-25);
+		margin: .2rem 0;
+		background-color: var(--ele-1);
+
+		&:hover {
+			border-color: var(--foreground);
+		}
+
+		&.hl {
+			outline: 2px solid transparent;
+			animation: ease-in-out 5s fadeOutline;
+			animation-iteration-count: 1;
+
+			@keyframes fadeOutline {
+				0% {
+					outline-color: var(--accent-75);
+				}
+				100% {
+					outline-color: transparent;
+				}
+			}
+		}
+
+		.count {
+			align-self: center;
+			font-size: 2rem;
+			min-width: 5rem;
+		}
+
+		.main {
+			margin: .5rem;
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			color: var(--foreground);
+			background: transparent;
+			border: none;
+			text-decoration: none;
+			text-align: left;
+
+			&:hover {
+				color: var(--foreground)-75;
+			}
+
+			a {
+				color: var(--foreground);
+			}
+		}
+
+		.deco {
+			height: auto;
+			min-width: 5px;
+			margin-right: .5rem;
+			display: flex;
+			align-items: center;
+
+			> * {
+				margin: 0 .4rem;
+				min-width: 3ch;
+				font-weight: bold;
+				color: var(--background);
+				text-shadow: 1px 1px 0 var(--foreground)-75, -1px 1px 0 var(--foreground)-75, 1px -1px 0 var(--foreground)-75, -1px -1px 0 var(--foreground)-75;
+			}
+
+			> i, o-icon {
+				min-width: unset;
+			}
+		}
+
+		.name {
+			font-size: 1.2rem;
+			text-decoration: none;
+			text-overflow: ellipsis;
+
+			> .icon {
+				color: var(--foreground)-50;
+				font-size: 90%;
+				padding-left: .5rem;
+			}
+		}
+
+		.desc {
+			color: var(--foreground)-75;
+			text-overflow: ellipsis;
+		}
+
+		.actions {
+			display: flex;
+			align-self: baseline;
+			padding: .25rem;
+			gap: .25rem;
+
+			> .action {
+				display: flex;
+				padding: .5rem;
+				border: 1px solid var(--foreground-25);
+				color: var(--foreground)-50;
+				background-color: transparent;
+
+				&:hover {
+					background-color: var(--accent-10);
+					color: var(--foreground)-75;
+					border-color: var(--foreground);
+				}
+
+				> i.material-icons-outlined {
+					font-size: 1.2rem;
+				}
+			}
+		}
+
+		.ph {
+			align-self: center;
+			justify-self: center;
+			margin: .5rem auto;
+		}
+	}
+}

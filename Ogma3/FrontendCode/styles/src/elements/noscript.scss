@@ -1,8 +1,0 @@
-@use '../vars' as v;
-
-noscript.noscript {
-	display: block;
-	background-color: v.$red-25;
-	border: 1px solid v.$foreground-50;
-	padding: .2rem;
-}

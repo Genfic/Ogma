@@ -1,0 +1,43 @@
+
+.active-border {
+	border: 1px solid var(--foreground-25);
+
+	&:hover,
+	&:hover ~ .counter {
+		border-color: var(--foreground-50);
+	}
+
+	&:focus,
+	&:focus ~ .counter {
+		border-color: var(--accent);
+	}
+
+	& ~ .counter {
+		border: 1px solid var(--foreground-25);
+		border-top: none;
+	}
+}
+
+.mt-3 {
+	margin-top: 1rem;
+}
+
+.border-top {
+	border-top: 1px solid var(--foreground-75);
+}
+
+.border-bottom {
+	border-bottom: 1px solid var(--foreground-75);
+}
+
+.box-shadow {
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+[v-cloak] {
+	display: none !important;
+}
+
+[x-cloak] {
+	display: none !important;
+}

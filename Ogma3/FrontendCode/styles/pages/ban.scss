@@ -1,0 +1,42 @@
+
+.ban-info {
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+details.infraction {
+	margin-top: .5rem;
+
+	summary {
+		color: var(--foreground-50);
+
+		&.passed {
+			text-decoration: line-through var(--foreground-75);
+		}
+
+		> time {
+			color: var(--foreground);
+		}
+	}
+
+	.reason {
+	}
+
+	.type {
+		&.ban {
+			color: var(--red-75);
+		}
+
+		&.mute {
+			color: rgba(255, 128, 0, 0.75);
+		}
+
+		&.warning {
+			color: rgba(255, 251, 0, 0.75);
+		}
+
+		&.note {
+			color: royalblue;
+		}
+	}
+}

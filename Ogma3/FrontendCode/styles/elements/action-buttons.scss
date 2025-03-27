@@ -1,0 +1,74 @@
+@use '../mixins/active-border' as ab;
+@use "../vars" as v;
+
+.action-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 .5rem;
+	margin-right: .1rem;
+	background-color: var(--background-75);
+	color: var(--foreground-75);
+
+	@include ab.active-border;
+
+	&.inline {
+		display: inline-flex;
+	}
+
+	&.small {
+		font-size: 1.2rem;
+	}
+
+	&.large {
+		padding: .5rem;
+	}
+
+	&.red {
+		background-color: var(--red-25);
+
+		&:hover {
+			background-color: var(--red-50);
+		}
+
+		&-hl {
+			&:hover {
+				background-color: var(--red-50);
+			}
+		}
+	}
+
+	&.green {
+		background-color: var(--green-25);
+
+		&:hover {
+			background-color: var(--green-50);
+		}
+
+		&-hl {
+			&:hover {
+				background-color: var(--green-50)
+			}
+		}
+	}
+
+	> .icon {
+		font-size: inherit;
+
+		& + * {
+			margin-left: .5rem;
+		}
+	}
+
+	> .name {
+		@media screen and (max-width: v.$mq-mobile) {
+			display: none;
+		}
+	}
+
+	&:hover {
+		color: var(--foreground);
+		text-decoration: none;
+		background-color: var(--accent-25);
+	}
+}

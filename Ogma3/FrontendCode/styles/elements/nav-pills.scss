@@ -1,0 +1,23 @@
+
+.nav-pills {
+
+	.nav-link.active,
+	.show > .nav-link {
+		color: var(--background) !important;
+		background-color: var(--accent-75) !important;
+		border-color: var(--accent) !important;
+
+	}
+
+	.nav-link {
+		display: block;
+		border-radius: .25rem;
+		padding: .5rem 1rem;
+
+		.icon {
+			vertical-align: middle;
+			font-size: 90%;
+		}
+	}
+}
+

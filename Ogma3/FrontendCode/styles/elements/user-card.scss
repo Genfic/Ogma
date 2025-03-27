@@ -1,0 +1,47 @@
+@use "../mixins/active-border" as ab;
+
+$avatar-size: 5rem;
+
+.user-card {
+	contain: content;
+	display: grid;
+	grid-template:
+		"avatar name buttons" auto
+		"avatar roles buttons" auto
+		"avatar title buttons" auto
+		/ auto 1fr auto;
+	gap: .25rem;
+	height: calc($avatar-size + 2px);
+	// adjust for border
+	overflow-anchor: auto;
+	@include ab.active-border;
+
+	> .avatar {
+		grid-area: avatar;
+		height: $avatar-size;
+		aspect-ratio: 1 / 1;
+		object-fit: contain;
+	}
+
+	> .name {
+		grid-area: name;
+		color: var(--foreground);
+		font-weight: 500;
+		font-size: 1.1rem;
+	}
+
+	> .roles {
+		grid-area: roles;
+		display: flex;
+	}
+
+	> .title {
+		grid-area: title;
+		font-size: .9rem;
+	}
+
+	> .buttons {
+		grid-area: buttons;
+		padding: 2px;
+	}
+}

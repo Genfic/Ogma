@@ -1,6 +1,5 @@
-@use "src/vars" as v;
-
-@use "src/elements/nav-pills";
+@use "elements/nav-pills";
+@use "vars" as v;
 
 #account {
 	display: grid;

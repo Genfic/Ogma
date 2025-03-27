@@ -1,0 +1,69 @@
+@use "sass:math";
+
+.monospace {
+	font-family: "Courier New", Courier, monospace;
+}
+
+.nb {
+	white-space: nowrap;
+}
+
+// Headers
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	margin: 0;
+	line-height: 1.2;
+	font-weight: 500;
+}
+
+// Header sizes
+@for $level from 1 to 7 {
+	h#{$level} {
+		font-size: #{math.pow(1.15, 7 - $level)}rem;
+	}
+}
+
+// Links
+a {
+	color: var(--accent);
+
+	&:hover {
+		color: var(--accent)-75;
+	}
+}
+
+// Colors
+.text {
+	&-accent {
+		color: var(--accent);
+	}
+
+	&-green {
+		color: var(--green);
+	}
+
+	&-yellow {
+		color: var(--yellow);
+	}
+
+	&-red {
+		color: var(--red);
+	}
+
+	&-faded {
+		color: var(--foreground-75);
+	}
+}
+
+// Code and stuff
+kbd {
+	padding: .1rem .25rem;
+	border-radius: 3px;
+	background-color: var(--foreground-10);
+}
+
+// Consistent bold
+// See: https://css-tricks.com/firefoxs-bolder-default-is-a-problem-for-variable-fonts/
+b, strong {
+	font-weight: bolder;
+}

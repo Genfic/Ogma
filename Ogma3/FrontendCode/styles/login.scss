@@ -1,5 +1,3 @@
-@use "src/vars" as v;
-
 .login-form {
 	.left {
 		width: min(100%, 240px);
@@ -14,11 +12,11 @@
 			align-items: stretch;
 
 			.avatar {
-				border: 1px solid v.$foreground-25;
+				border: 1px solid var(--foreground-25);
 				width: 100%;
 
 				&:hover {
-					border-color: v.$foreground-50;
+					border-color: var(--foreground-50);
 				}
 
 				&:not(.checked) {

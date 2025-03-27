@@ -10,6 +10,7 @@ import { initAsyncCompiler } from "sass-embedded";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
+import { readdir } from "node:fs/promises";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -32,9 +33,13 @@ const compileSass = async (file: string) => {
 
 	const fileContent = await Bun.file(file).text();
 
+	const extraDirs = (await readdir(_base, { withFileTypes: true }))
+		.filter((v) => v.isDirectory())
+		.map((v) => path.join(_base, v.name));
+
 	const { css, sourceMap } = await compiler.compileStringAsync(fileContent, {
 		sourceMap: true,
-		loadPaths: [_base, join(_base, "src")],
+		loadPaths: [_base, ...extraDirs],
 	});
 
 	log.verbose(css.length);
@@ -51,7 +56,9 @@ const compileSass = async (file: string) => {
 	log.verbose(code.length);
 
 	for (const warning of warnings) {
-		console.warn(ct`{yellow [{bold ${filename}}] WRN: ${warning}}`);
+		console.warn(
+			ct`{yellow [{bold ${filename}}] WRN: ${warning.message} at ${warning.loc.filename} : ${warning.loc.line}:${warning.loc.column}}`,
+		);
 	}
 
 	await Bun.write(path.join(_dest, `${filename}.css`), code);
@@ -67,7 +74,7 @@ const compileSass = async (file: string) => {
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
-	const files = [...new Glob(`${_base}/*.scss`).scanSync()];
+	const files = [...new Glob(`${_base}/[!_]*.scss`).scanSync()];
 
 	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
@@ -78,7 +85,21 @@ const compileAll = async () => {
 	}
 	const res = await Promise.allSettled(tasks);
 
-	values.verbose && console.log(res);
+	log.verbose(
+		res.map((r) => {
+			if (r.status === "fulfilled") {
+				return "ok";
+			}
+
+			return {
+				status: r.status,
+				file: r.reason.fileName,
+				loc: `line ${r.reason?.loc?.line}, column ${r.reason?.loc?.column}`,
+				type: r.reason?.data?.type,
+				r: JSON.stringify(r, null, 4),
+			};
+		}),
+	);
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);

@@ -1,0 +1,84 @@
+@use "../mixins/active-border" as ab;
+@use "../mixins/focus" as f;
+
+button {
+	cursor: pointer;
+}
+
+.btn {
+	cursor: pointer;
+	background-color: transparent;
+	color: var(--accent);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: .5rem;
+
+	@include ab.active-border;
+	@include f.focus;
+
+	&.red {
+		background-color: var(--red-10);
+		color: var(--foreground);
+
+		&:hover {
+			background-color: var(--red-25);
+		}
+
+		&-hl {
+			&:hover {
+				background-color: var(--red-25);
+			}
+		}
+	}
+
+	&.green {
+		background-color: var(--green-10);
+		color: var(--foreground);
+
+		&:hover {
+			background-color: var(--green-25);
+		}
+
+		&-hl {
+			&:hover {
+				background-color: var(--green-25);
+			}
+		}
+	}
+}
+
+.btn-primary {
+	color: var(--background);
+	background-color: var(--accent)-75;
+	border-color: var(--accent);
+
+	&:hover {
+		color: var(--foreground);
+		background-color: var(--accent)-25;
+		border-color: var(--accent)-75;
+	}
+}
+
+button.accept-policy {
+	font-size: 1rem;
+	line-height: inherit;
+}
+
+.button-group {
+	display: flex;
+
+	&.toolbar {
+		gap: .2rem;
+		margin-bottom: .2rem;
+
+		> .btn {
+			min-width: 2.5rem;
+			padding: .5rem;
+
+			> * {
+				font-size: 1.1rem;
+			}
+		}
+	}
+}

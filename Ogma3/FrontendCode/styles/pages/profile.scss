@@ -1,0 +1,32 @@
+@use "../vars" as v;
+
+#profile {
+	display: grid;
+	gap: 1rem;
+	padding: .5rem 0;
+	grid-template-columns: 1fr auto;
+	grid-template-rows: 1fr;
+	grid-template-areas: "bio links";
+	border-bottom: 1px solid var(--foreground-25);
+
+	@media only screen and (max-width: v.$mq-mobile) {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.bio {
+		grid-area: bio;
+	}
+
+	.links {
+		grid-area: links;
+		margin-right: 1rem;
+		font-size: .9rem;
+
+		a {
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+		}
+	}
+}
