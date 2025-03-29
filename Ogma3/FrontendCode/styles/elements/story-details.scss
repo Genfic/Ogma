@@ -83,7 +83,7 @@ $title-height: 2rem;
 				}
 
 				&:hover:not(:has(th)) {
-					background-color: var(--foreground)-10;
+					background-color: var(--foreground-10);
 				}
 			}
 		}
@@ -124,9 +124,9 @@ $title-height: 2rem;
 				}
 
 				.order {
-					color: var(--foreground)-75;
-					border-right: 1px solid var(--foreground)-10;
-					border-left: 1px solid var(--foreground)-10;
+					color: var(--foreground-75);
+					border-right: 1px solid var(--foreground-10);
+					border-left: 1px solid var(--foreground-10);
 					font-weight: 650;
 					padding: 0 .5rem;
 					margin: 0 .5rem;
@@ -150,7 +150,7 @@ $title-height: 2rem;
 
 				.date {
 					font-size: .8rem;
-					color: var(--foreground)-75;
+					color: var(--foreground-75);
 
 					&:hover {
 						color: var(--foreground);
@@ -169,7 +169,7 @@ $title-height: 2rem;
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						color: var(--foreground)-75;
+						color: var(--foreground-75);
 					}
 
 					svg {
@@ -187,7 +187,7 @@ $title-height: 2rem;
 
 	a.start {
 		text-align: center;
-		background-color: var(--accent)-75;
+		background-color: var(--accent-75);
 		color: var(--background);
 		font-weight: 650;
 		letter-spacing: .17rem;
@@ -223,7 +223,7 @@ $title-height: 2rem;
 		}
 
 		> * {
-			color: var(--foreground)-75;
+			color: var(--foreground-75);
 
 			&:hover {
 				color: var(--foreground);

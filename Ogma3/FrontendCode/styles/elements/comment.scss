@@ -108,7 +108,7 @@
 				color: var(--foreground);
 				margin: calc(.1rem + 2px);
 				padding: .25rem;
-				border: 1px solid var(--foreground)-25;
+				border: 1px solid var(--foreground-25);
 
 				&:focus {
 					box-shadow: 0 0 0 2px var(--accent-50);

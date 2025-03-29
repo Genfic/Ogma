@@ -2,31 +2,49 @@
 @use "./mixins/generators" as a;
 
 // Variables
-$foreground: #131313;
-$background: #efefef;
-$accent: #0890ff;
+$foreground: oklch(18.7% 0 89.876deg);
+$background: oklch(95.2% 0 89.876deg);
+$accent: oklch(65% 0.192 252.046deg);
 
-$gold: #d5900e;
-$red: #ff4848;
-$green: #38ff38;
-$blue: #4283ff;
-$yellow: #ffff3e;
+$gold: oklch(70.5% 0.147 74.312deg);
+$red: oklch(66.8% 0.219 25.422deg);
+$green: oklch(87.3% 0.275 142.756deg);
+$blue: oklch(63.4% 0.197 261.749deg);
+$yellow: oklch(97% 0.196 109.557deg);
 
 :root {
-	@include a.alphas('foreground', $foreground, 1, .75, .50, .25, .10);
-	@include a.alphas('background', $background, 1, .75, .50, .25);
-	@include a.alphas('accent', $accent, 1, .75, .50, .25, .10, .05);
+	--foreground: #{$foreground};
 
-	@include a.alphas('red', $red, 1, .75, .50, .25, .10);
-	@include a.alphas('green', $green, 1, .75, .50, .25, .10);
-	@include a.alphas('blue', $blue, 1, .75, .50, .25, .10);
-	@include a.alphas('yellow', $yellow, 1, .75, .50, .25, .10);
+	@include a.alphas('foreground', .75, .50, .25, .10);
 
-	@include a.blends('red', $background, $red, 100, 75, 50, 25, 10);
-	@include a.blends('green', $background, $green, 100, 75, 50, 25, 10);
-	@include a.blends('blue', $background, $blue, 100, 75, 50, 25, 10);
-	@include a.blends('yellow', $background, $yellow, 100, 75, 50, 25, 10);
+	--background: #{$background};
+
+	@include a.alphas('background', .75, .50, .25);
+
+	--accent: #{$accent};
+
+	@include a.alphas('accent', .75, .50, .25, .10, .05);
+
+	--red: #{$red};
+
+	@include a.alphas('red', .75, .50, .25, .10);
+	@include a.blends('red', 'background', 100, 75, 50, 25, 10);
+
+	--green: #{$green};
+
+	@include a.alphas('green', .75, .50, .25, .10);
+	@include a.blends('green', 'background', 100, 75, 50, 25, 10);
+
+	--blue: #{$blue};
+
+	@include a.alphas('blue', .75, .50, .25, .10);
+	@include a.blends('blue', 'background', 100, 75, 50, 25, 10);
+
+	--yellow: #{$yellow};
+
+	@include a.alphas('yellow', .75, .50, .25, .10);
+	@include a.blends('yellow', 'background', 100, 75, 50, 25, 10);
 
 	--gold: #{$gold};
-	--ele-1: #{color.adjust($background, $lightness: 2%)};
+	--ele-1: oklch(from #{$background} calc(l * 1.2) c h);
 }

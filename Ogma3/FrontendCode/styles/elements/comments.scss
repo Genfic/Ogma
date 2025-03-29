@@ -95,7 +95,7 @@ $btn-height: 2.5rem;
 			display: flex;
 			flex-direction: row;
 			margin: .5rem 0;
-			color: var(--foreground)-50;
+			color: var(--foreground-50);
 
 			&:hover {
 				color: var(--foreground);
@@ -104,7 +104,7 @@ $btn-height: 2.5rem;
 			&:before, &:after {
 				content: "";
 				flex: 1 1;
-				border-bottom: 2px solid var(--foreground)-50;
+				border-bottom: 2px solid var(--foreground-50);
 				margin: auto;
 			}
 

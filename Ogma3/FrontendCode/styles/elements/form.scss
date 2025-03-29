@@ -82,7 +82,7 @@ form.form {
 			color: var(--foreground);
 
 			&[disabled] {
-				color: var(--foreground)-50;
+				color: var(--foreground-50);
 			}
 		}
 
@@ -169,7 +169,7 @@ form.form {
 
 		.field-validation-error {
 			color: var(--red);
-			background-color: var(--red)-10;
+			background-color: var(--red-10);
 			padding: .25rem;
 			font-size: .9rem;
 		}
@@ -180,7 +180,7 @@ form.form {
 			top: 1.5rem;
 			min-width: 15rem;
 			background-color: var(--ele-1);
-			border: 1px solid var(--foreground)-25;
+			border: 1px solid var(--foreground-25);
 			padding: .5rem;
 			pointer-events: none;
 			opacity: 0;
@@ -206,7 +206,7 @@ form.form {
 		@include f.focus;
 
 		&.changed {
-			background-color: var(--red)-25;
+			background-color: var(--red-25);
 		}
 	}
 
@@ -226,7 +226,7 @@ form.form {
 			@include ab.active-border;
 
 			&:hover {
-				background-color: var(--accent)-5;
+				background-color: var(--accent-5);
 			}
 		}
 

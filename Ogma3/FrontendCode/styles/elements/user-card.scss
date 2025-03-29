@@ -6,12 +6,13 @@ $avatar-size: 5rem;
 	contain: content;
 	display: grid;
 	grid-template:
-		"avatar name buttons" auto
+		"avatar name  buttons" auto
 		"avatar roles buttons" auto
 		"avatar title buttons" auto
 		/ auto 1fr auto;
 	gap: .25rem;
 	height: calc($avatar-size + 2px);
+
 	// adjust for border
 	overflow-anchor: auto;
 	@include ab.active-border;

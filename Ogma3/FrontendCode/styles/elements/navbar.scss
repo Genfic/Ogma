@@ -32,7 +32,7 @@ nav#top-nav {
 	padding: var(--nav-v-pad) 4rem;
 
 	background-color: var(--ele-1);
-	border-bottom: 1px solid var(--foreground)-50;
+	border-bottom: 1px solid var(--foreground-50);
 
 	transition: padding-top .2s ease-in-out, padding-bottom .2s ease-in-out;
 
@@ -42,7 +42,7 @@ nav#top-nav {
 		padding: .4rem 1rem;
 		box-shadow: var(--shadow);
 		border-bottom: none;
-		border-top: 1px solid var(--foreground)-50;
+		border-top: 1px solid var(--foreground-50);
 	}
 	@media screen and (max-width: v.$mq-mobile-sm) {
 		flex-direction: column;
@@ -127,7 +127,7 @@ nav#top-nav {
 			align-items: center;
 
 			justify-content: stretch;
-			color: var(--foreground)-75;
+			color: var(--foreground-75);
 
 			&:hover {
 				color: var(--foreground);
@@ -163,12 +163,12 @@ nav#top-nav {
 				}
 
 				&.light {
-					color: var(--foreground)-75;
+					color: var(--foreground-75);
 				}
 
 				&.user {
 					> .name {
-						color: var(--foreground)-75;
+						color: var(--foreground-75);
 						padding-left: .5ch;
 					}
 				}

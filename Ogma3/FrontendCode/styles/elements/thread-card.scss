@@ -56,7 +56,7 @@ $avatar-height: 4rem;
 
 		> .author {
 			margin-right: 1rem;
-			color: var(--foreground)-75;
+			color: var(--foreground-75);
 
 			&:hover {
 				color: var(--foreground);
@@ -64,10 +64,10 @@ $avatar-height: 4rem;
 		}
 
 		> .date {
-			color: var(--foreground)-50;
+			color: var(--foreground-50);
 
 			&:hover {
-				color: var(--foreground)-75;
+				color: var(--foreground-75);
 			}
 		}
 	}
@@ -85,7 +85,7 @@ $avatar-height: 4rem;
 		padding: .5rem;
 
 		> .icon {
-			color: var(--foreground)-75;
+			color: var(--foreground-75);
 			margin-right: .25rem;
 		}
 	}

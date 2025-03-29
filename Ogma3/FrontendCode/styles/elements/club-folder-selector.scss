@@ -101,7 +101,7 @@
 				color: var(--foreground-75);
 				font-size: .8rem;
 				margin-left: .5rem;
-				border: 1px solid var(--foreground)-50;
+				border: 1px solid var(--foreground-50);
 				border-radius: 9999px;
 				padding: .1rem .25rem;
 			}
@@ -129,7 +129,7 @@
 			}
 
 			&.locked {
-				color: var(--foreground)-25;
+				color: var(--foreground-25);
 				pointer-events: none;
 			}
 
@@ -138,7 +138,7 @@
 				background-color: var(--accent-10);
 
 				&:hover {
-					background-color: var(--accent)-25;
+					background-color: var(--accent-25);
 				}
 			}
 		}

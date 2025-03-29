@@ -6,10 +6,10 @@
 	color: var(--foreground);
 
 	&:hover {
-		color: var(--foreground)-75;
+		color: var(--foreground-75);
 
 		.dot {
-			background-color: var(--foreground)-50;
+			background-color: var(--foreground-50);
 		}
 
 		.title {
@@ -39,7 +39,7 @@
 			width: .25rem;
 			height: .25rem;
 			border-radius: 50%;
-			background-color: var(--foreground)-75;
+			background-color: var(--foreground-75);
 		}
 	}
 }

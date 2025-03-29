@@ -83,12 +83,12 @@
 				margin: .1rem;
 
 				cursor: pointer;
-				border: 1px solid var(--foreground)-25;
+				border: 1px solid var(--foreground-25);
 				background-color: var(--background);
 
 				&:hover, &.hl {
 					box-shadow: inset 0 0 2px 1px var(--accent-75);
-					border: 1px solid var(--foreground)-75;
+					border: 1px solid var(--foreground-75);
 				}
 			}
 		}

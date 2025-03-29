@@ -50,13 +50,13 @@ button {
 
 .btn-primary {
 	color: var(--background);
-	background-color: var(--accent)-75;
+	background-color: var(--accent-75);
 	border-color: var(--accent);
 
 	&:hover {
 		color: var(--foreground);
-		background-color: var(--accent)-25;
-		border-color: var(--accent)-75;
+		background-color: var(--accent-25);
+		border-color: var(--accent-75);
 	}
 }
 

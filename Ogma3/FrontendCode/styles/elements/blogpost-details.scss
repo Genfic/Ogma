@@ -32,7 +32,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			color: var(--red)-75;
+			color: var(--red-75);
 			font-size: 1rem;
 		}
 	}
@@ -67,6 +67,6 @@
 	.unavailable {
 		padding: .5rem;
 		margin: .5rem 0;
-		background-color: var(--red)-10;
+		background-color: var(--red-10);
 	}
 }

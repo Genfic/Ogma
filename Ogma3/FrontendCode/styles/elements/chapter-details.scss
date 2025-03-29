@@ -34,7 +34,7 @@ $notes-padding-y: .25rem;
 				color: var(--foreground);
 
 				&:before, &:after {
-					color: var(--foreground)-50;
+					color: var(--foreground-50);
 				}
 
 				&:before {
@@ -73,7 +73,7 @@ $notes-padding-y: .25rem;
 		position: relative;
 		text-align: center;
 		font-style: italic;
-		color: var(--foreground)-75;
+		color: var(--foreground-75);
 		text-decoration: underline;
 
 		&:hover:before {
@@ -112,7 +112,7 @@ $notes-padding-y: .25rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			color: var(--red)-75;
+			color: var(--red-75);
 			font-size: 1rem;
 		}
 	}
@@ -125,8 +125,8 @@ $notes-padding-y: .25rem;
 			font-style: italic;
 			padding: $notes-padding-y $notes-padding-x;
 			margin: .5rem 0;
-			color: var(--foreground)-75;
-			border: 1px solid var(--foreground)-25;
+			color: var(--foreground-75);
+			border: 1px solid var(--foreground-25);
 			@include ab.active-border;
 
 			> .an {

@@ -48,7 +48,7 @@ ul.items-list {
 			text-align: left;
 
 			&:hover {
-				color: var(--foreground)-75;
+				color: var(--foreground-75);
 			}
 
 			a {
@@ -68,7 +68,7 @@ ul.items-list {
 				min-width: 3ch;
 				font-weight: bold;
 				color: var(--background);
-				text-shadow: 1px 1px 0 var(--foreground)-75, -1px 1px 0 var(--foreground)-75, 1px -1px 0 var(--foreground)-75, -1px -1px 0 var(--foreground)-75;
+				text-shadow: 1px 1px 0 var(--foreground)-75, -1px 1px 0 var(--foreground)-75, 1px -1px 0 var(--foreground)-75, -1px -1px 0 var(--foreground-75);
 			}
 
 			> i, o-icon {
@@ -82,14 +82,14 @@ ul.items-list {
 			text-overflow: ellipsis;
 
 			> .icon {
-				color: var(--foreground)-50;
+				color: var(--foreground-50);
 				font-size: 90%;
 				padding-left: .5rem;
 			}
 		}
 
 		.desc {
-			color: var(--foreground)-75;
+			color: var(--foreground-75);
 			text-overflow: ellipsis;
 		}
 
@@ -103,12 +103,12 @@ ul.items-list {
 				display: flex;
 				padding: .5rem;
 				border: 1px solid var(--foreground-25);
-				color: var(--foreground)-50;
+				color: var(--foreground-50);
 				background-color: transparent;
 
 				&:hover {
 					background-color: var(--accent-10);
-					color: var(--foreground)-75;
+					color: var(--foreground-75);
 					border-color: var(--foreground);
 				}
 

@@ -66,15 +66,15 @@ form {
 		}
 
 		input[readonly] {
-			color: var(--foreground)-75;
+			color: var(--foreground-75);
 
 			&:focus {
 				outline: none;
-				border: 1px solid var(--foreground)-25;
+				border: 1px solid var(--foreground-25);
 			}
 
 			&:hover {
-				border: 1px solid var(--foreground)-25;
+				border: 1px solid var(--foreground-25);
 			}
 		}
 	}

@@ -25,6 +25,7 @@ const _base = join(root, "..", "styles");
 const _dest = join(root, "..", "..", "wwwroot", "css");
 
 const compiler = await initAsyncCompiler();
+const targets = browserslistToTargets(browserslist("last 2 years and > 0.1% and not dead"));
 
 const compileSass = async (file: string) => {
 	const start = Bun.nanoseconds();
@@ -49,7 +50,7 @@ const compileSass = async (file: string) => {
 		inputSourceMap: JSON.stringify(sourceMap),
 		sourceMap: true,
 		filename: file,
-		targets: browserslistToTargets(browserslist("defaults")),
+		targets,
 		minify: true,
 	});
 

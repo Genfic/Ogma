@@ -1,21 +1,13 @@
 @use 'sass:color';
 
-@mixin alphas($name, $color, $alphas...) {
+@mixin alphas($name, $alphas...) {
 	@each $alpha in $alphas {
-		@if ($alpha == 1) {
-			--#{$name}: #{$color};
-		} @else {
-			--#{$name}-#{$alpha * 100}: #{rgba($color, $alpha)};
-		}
+		--#{$name}-#{$alpha * 100}: oklch(from var(--#{$name}) l c h / #{$alpha});
 	}
 }
 
-@mixin blends($name, $base, $color, $percentages...) {
+@mixin blends($name, $baseName, $percentages...) {
 	@each $percentage in $percentages {
-		@if ($percentage == 100) {
-			--#{$name}-g: #{$color};
-		} @else {
-			--#{$name}-g-#{$percentage}: #{color.mix($color, $base, $percentage * 1%)}
-		}
+		--#{$name}-g-#{$percentage}: color-mix(in oklch, var(--#{$name}), var(--#{$baseName}) #{$percentage}#{'%'})
 	}
 }
