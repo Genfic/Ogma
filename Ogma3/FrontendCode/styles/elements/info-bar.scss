@@ -3,18 +3,18 @@
 @use "../vars" as v;
 @use "sass:math";
 
-$avatarSize: 8.5rem;
+$avatar-size: 8.5rem;
 $margin: .5rem;
 
 .info-bar {
 	display: grid;
-	grid-template-columns: $avatarSize 1fr auto;
+	grid-template-columns: $avatar-size 1fr auto;
 	grid-template-rows: auto auto 1fr;
 	gap: .25rem;
 
 	padding: 0 15px;
 
-	min-height: $avatarSize + $margin;
+	min-height: $avatar-size + $margin;
 	margin-bottom: $margin;
 	border-bottom: 1px solid var(--foreground-25);
 	@media only screen and (max-width: v.$mq-mobile) {
@@ -79,7 +79,7 @@ $margin: .5rem;
 		grid-column: 1;
 		object-fit: contain;
 		align-self: baseline;
-		height: $avatarSize;
+		height: $avatar-size;
 	}
 
 	> .name {

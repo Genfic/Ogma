@@ -6,20 +6,16 @@
 	color: var(--foreground);
 
 	&:hover {
+		--deco: underline;
+		--bc: var(--foreground-50);
+
 		color: var(--foreground-75);
-
-		.dot {
-			background-color: var(--foreground-50);
-		}
-
-		.title {
-			text-decoration: underline;
-		}
 	}
 
 	.title {
 		font-weight: 500;
 		font-size: 1.1rem;
+		text-decoration: var(--deco, none);
 
 		&.not-published {
 			color: var(--red-75);
@@ -39,7 +35,7 @@
 			width: .25rem;
 			height: .25rem;
 			border-radius: 50%;
-			background-color: var(--foreground-75);
+			background-color: var(--bc, var(--foreground-75));
 		}
 	}
 }

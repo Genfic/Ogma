@@ -6,7 +6,7 @@ $avatar-height: 4rem;
 	contain: content;
 	display: grid;
 
-	//height: calc(#{$avatar-height} + 2px) // adjust for border;
+	// height: calc(#{$avatar-height} + 2px) // adjust for border;
 	grid-template-columns:auto 1fr auto;
 	grid-template-rows: 1fr auto;
 	gap: .5rem;

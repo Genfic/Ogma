@@ -8,6 +8,16 @@
 
 		flex-wrap: wrap;
 
+		label {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			padding: .5rem;
+			@include f.focus;
+		}
+
 		input[type="radio"] {
 			display: none;
 
@@ -18,16 +28,6 @@
 			&:hover + label {
 				background-color: var(--accent-50);
 			}
-		}
-
-		label {
-			flex: 1;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			padding: .5rem;
-			@include f.focus;
 		}
 	}
 }

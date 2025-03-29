@@ -223,14 +223,11 @@ $title-height: 2rem;
 
 		> * {
 			color: var(--foreground-75);
+			padding: 0 .25rem;
 
 			&:hover {
 				color: var(--foreground);
 			}
-		}
-
-		> * {
-			padding: 0 .25rem;
 		}
 
 		> a {

@@ -4,6 +4,7 @@ import { program } from "@commander-js/extra-typings";
 import browserslist from "browserslist";
 import { Glob } from "bun";
 import ct from "chalk-template";
+import c from "chalk";
 import convert from "convert";
 import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
@@ -103,6 +104,13 @@ const compileAll = async () => {
 	);
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+
+	const fulfilled = res.filter((r) => r.status === "fulfilled").length;
+	const color = fulfilled === files.length ? c.green : c.red;
+	console.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
+	if (fulfilled !== files.length) {
+		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
+	}
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
 
 	await compiler.dispose();

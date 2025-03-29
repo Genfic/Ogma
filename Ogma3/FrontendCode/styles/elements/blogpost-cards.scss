@@ -14,15 +14,8 @@
 	}
 
 	&:hover {
-		border-color: var(--foreground-50);
-
-		& .info {
-			border-color: var(--foreground-50);
-		}
-
-		& .tags {
-			border-color: var(--foreground-50);
-		}
+		--bc: var(--foreground-50);
+		border-color: var(--bc);
 	}
 
 	> .title {
@@ -40,13 +33,13 @@
 		}
 	}
 
-	& .excerpt {
+	.excerpt {
 		overflow: hidden;
 		padding: .25rem;
 	}
 
-	& .info {
-		border-top: 1px solid var(--foreground-25);
+	.info {
+		border-top: 1px solid var(--bc, var(--foreground-25));
 		display: flex;
 		padding: .25rem;
 
@@ -69,10 +62,10 @@
 		}
 	}
 
-	& .tags {
+	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		border-top: 1px solid var(--foreground-25);
+		border-top: 1px solid var(--bc, var(--foreground-25));
 		padding: .25rem;
 
 		> .tag {

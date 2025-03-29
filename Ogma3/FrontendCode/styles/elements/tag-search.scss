@@ -2,31 +2,31 @@
 .tag-search-select {
 	width: 100%;
 
-	& .output {
+	.output {
 		visibility: collapse;
 		display: contents;
 		height: 0;
 		width: 0;
 	}
 
-	& .tag-search {
+	.tag-search {
 		&.inline {
 			display: flex;
 			align-items: center;
 
-			& .tags {
+			.tags {
 				flex-grow: 1;
 			}
 		}
 
-		& .searchbar {
+		.searchbar {
 			display: flex;
 			flex-direction: column;
 			width: 100%;
 			position: relative;
 		}
 
-		& .tags {
+		.tags {
 			min-height: 2.5rem;
 			padding: .15rem;
 			border: 1px solid var(--foreground-50);
@@ -42,7 +42,7 @@
 					margin-left: 4px;
 				}
 
-				& .material-icons-outlined {
+				.material-icons-outlined {
 					font-size: 1.2rem;
 					cursor: pointer;
 
@@ -52,7 +52,7 @@
 				}
 			}
 
-			& .search {
+			.search {
 				flex-grow: 100;
 				width: 1rem;
 				padding: .5rem;
@@ -63,7 +63,7 @@
 			}
 		}
 
-		& .search-results {
+		.search-results {
 			max-height: 6rem;
 
 			overflow-y: scroll;

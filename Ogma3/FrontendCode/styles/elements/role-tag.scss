@@ -18,16 +18,14 @@
 	}
 
 	&:hover {
-		> .bg {
-			opacity: .6;
-		}
+		--o: .6;
 	}
 
 	> .bg {
 		grid-area: main;
 		left: 0;
 		top: 0;
-		opacity: .5;
+		opacity: var(--o, .5);
 	}
 
 	> .name {

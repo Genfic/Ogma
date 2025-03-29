@@ -4,8 +4,24 @@
 	position: relative;
 
 	&:hover {
-		.toggle {
-			border-color: var(--foreground-75);
+		--bc: var(--foreground-75);
+	}
+
+	.toggle {
+		display: flex;
+		height: calc(1rem + 6px);
+		width: calc(2rem + 6px);
+		border: 1px solid var(--bc, var(--foreground-50));
+		border-radius: calc((1rem + 6px) / 2);
+		padding: 2px;
+		margin-right: .5rem;
+
+		&::before {
+			content: "";
+			height: 1rem;
+			width: 1rem;
+			border-radius: 50%;
+			background-color: var(--foreground-50);
 		}
 	}
 
@@ -56,24 +72,6 @@
 					}
 				}
 			}
-		}
-	}
-
-	.toggle {
-		display: flex;
-		height: calc(1rem + 6px);
-		width: calc(2rem + 6px);
-		border: 1px solid var(--foreground-50);
-		border-radius: calc((1rem + 6px) / 2);
-		padding: 2px;
-		margin-right: .5rem;
-
-		&::before {
-			content: "";
-			height: 1rem;
-			width: 1rem;
-			border-radius: 50%;
-			background-color: var(--foreground-50);
 		}
 	}
 }

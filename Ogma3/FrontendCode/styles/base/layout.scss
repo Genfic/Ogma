@@ -38,15 +38,19 @@ body {
 		width: 100%;
 	}
 
-	> #site-content {
+	%site-content {
 		margin-top: calc(var(--nav-height) + var(--nav-v-pad) * 2);
 		padding: 15px var(--body-padding-horizontal);
 		flex: 1;
 		width: var(--body-width);
 		scrollbar-gutter: stable both-edges;
+	}
+
+	> #site-content {
+		@extend %site-content;
 
 		&-wide {
-			@extend #site-content;
+			@extend %site-content;
 			max-width: min(100%, 1200px);
 		}
 

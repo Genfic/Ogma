@@ -2,6 +2,11 @@
 .active-border {
 	border: 1px solid var(--foreground-25);
 
+	& ~ .counter {
+		border: 1px solid var(--foreground-25);
+		border-top: none;
+	}
+
 	&:hover,
 	&:hover ~ .counter {
 		border-color: var(--foreground-50);
@@ -10,11 +15,6 @@
 	&:focus,
 	&:focus ~ .counter {
 		border-color: var(--accent);
-	}
-
-	& ~ .counter {
-		border: 1px solid var(--foreground-25);
-		border-top: none;
 	}
 }
 

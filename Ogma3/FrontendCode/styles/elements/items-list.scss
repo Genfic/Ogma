@@ -17,10 +17,10 @@ ul.items-list {
 
 		&.hl {
 			outline: 2px solid transparent;
-			animation: ease-in-out 5s fadeOutline;
+			animation: ease-in-out 5s fade-outline;
 			animation-iteration-count: 1;
 
-			@keyframes fadeOutline {
+			@keyframes fade-outline {
 				0% {
 					outline-color: var(--accent-75);
 				}
