@@ -41,8 +41,7 @@ form.form {
 		}
 
 		.input-group-append {
-			align-self: center;
-			justify-self: end;
+			place-self: center end;
 			padding: .5rem;
 		}
 
@@ -91,7 +90,7 @@ form.form {
 			resize: vertical;
 		}
 
-		input[type=color] {
+		input[type="color"] {
 			cursor: pointer;
 			padding: .25rem;
 			min-height: 48px;
@@ -115,6 +114,7 @@ form.form {
 			@media only screen and (max-width: v.$mq-mobile) {
 				display: flex;
 				flex-direction: column;
+
 				> .rating {
 					margin-bottom: .5rem;
 				}
@@ -187,7 +187,7 @@ form.form {
 			transition: opacity 200ms ease-in-out;
 
 			&.visible {
-				opacity: 100%;
+				opacity: 1;
 			}
 
 			> * {
@@ -230,8 +230,8 @@ form.form {
 			}
 		}
 
-		input[type=checkbox],
-		input[type=radio] {
+		input[type="checkbox"],
+		input[type="radio"] {
 			position: absolute !important;
 			height: 1px;
 			width: 1px;

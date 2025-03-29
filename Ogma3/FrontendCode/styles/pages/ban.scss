@@ -28,11 +28,11 @@ details.infraction {
 		}
 
 		&.mute {
-			color: rgba(255, 128, 0, 0.75);
+			color: rgb(255 128 0 / 75%);
 		}
 
 		&.warning {
-			color: rgba(255, 251, 0, 0.75);
+			color: rgb(255 251 0 / 75%);
 		}
 
 		&.note {

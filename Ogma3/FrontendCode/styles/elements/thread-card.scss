@@ -5,6 +5,7 @@ $avatar-height: 4rem;
 .thread-card {
 	contain: content;
 	display: grid;
+
 	//height: calc(#{$avatar-height} + 2px) // adjust for border;
 	grid-template-columns:auto 1fr auto;
 	grid-template-rows: 1fr auto;
@@ -75,9 +76,7 @@ $avatar-height: 4rem;
 	> .comment-count {
 		display: flex;
 
-		align-content: center;
-
-		justify-content: center;
+		place-content: center center;
 		grid-column: 3;
 		grid-row: 1 / 3;
 

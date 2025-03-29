@@ -29,9 +29,7 @@
 	> .name {
 		grid-area: main;
 
-		justify-self: center;
-
-		align-self: center;
+		place-self: center center;
 		line-height: .9;
 		font-size: .9rem;
 		margin: .1rem .2rem;

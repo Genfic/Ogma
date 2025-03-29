@@ -40,7 +40,6 @@
 
 		&:checked {
 			& + label {
-
 				> .label-off {
 					display: none;
 				}
@@ -52,7 +51,7 @@
 				.toggle {
 					flex-direction: row-reverse;
 
-					&:before {
+					&::before {
 						background-color: var(--accent-75);
 					}
 				}
@@ -69,7 +68,7 @@
 		padding: 2px;
 		margin-right: .5rem;
 
-		&:before {
+		&::before {
 			content: "";
 			height: 1rem;
 			width: 1rem;

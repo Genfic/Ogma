@@ -20,19 +20,19 @@
 	}
 
 	&.inprogress {
-		background-color: rgba(0, 116, 255, .5);
+		background-color: rgb(0 116 255 / 50%);
 	}
 
 	&.completed {
-		background-color: rgba(0, 241, 0, .5);
+		background-color: rgb(0 241 0 / 50%);
 	}
 
 	&.onhiatus {
-		background-color: rgba(127, 127, 127, .5);
+		background-color: rgb(127 127 127 / 50%);
 	}
 
 	&.cancelled {
-		background-color: rgba(255, 0, 0, .5);
+		background-color: rgb(255 0 0 / 50%);
 	}
 
 	> i.material-icons-outlined {

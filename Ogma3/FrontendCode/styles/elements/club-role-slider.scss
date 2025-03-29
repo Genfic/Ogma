@@ -1,15 +1,13 @@
 @use "../mixins/focus" as f;
 
 .club-role-slider {
-
 	.selector {
 		display: flex;
-		flex-direction: row-reverse;
-		flex-wrap: wrap;
+		flex-flow: row-reverse wrap;
 		width: 100%;
 		min-height: 48px;
 
-		input[type=radio] {
+		input[type="radio"] {
 			display: none;
 
 			&:checked ~ label {

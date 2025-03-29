@@ -10,8 +10,7 @@ footer.footer {
 
 	> .cols {
 		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
+		flex-flow: row wrap;
 		justify-content: center;
 		width: var(--body-width);
 		padding: .5rem var(--body-padding-horizontal);
@@ -96,8 +95,7 @@ footer.footer {
 	> .bottom {
 		display: flex;
 		width: 100%;
-		justify-content: center;
-		align-content: center;
+		place-content: center center;
 		padding: .5rem;
 		border-top: 1px solid var(--foreground-25);
 

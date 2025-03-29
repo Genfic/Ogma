@@ -48,7 +48,7 @@ form {
 			display: flex;
 		}
 
-		*[type=submit] {
+		*[type="submit"] {
 			grid-column: 1 / 3;
 			width: 100%;
 			padding: .5rem;
@@ -56,12 +56,12 @@ form {
 			@include ab.active-border ;
 		}
 
-		input[type=color] {
+		input[type="color"] {
 			min-height: 2rem;
 			width: 100%;
 		}
 
-		input[type=checkbox] {
+		input[type="checkbox"] {
 			height: 1.5rem;
 		}
 

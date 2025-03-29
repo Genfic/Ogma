@@ -101,8 +101,7 @@ $title-height: 1.8rem;
 	.tags {
 		grid-area: tags;
 		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
+		flex-flow: row wrap;
 	}
 
 	.info {

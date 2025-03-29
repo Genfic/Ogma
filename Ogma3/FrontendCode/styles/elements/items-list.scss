@@ -24,6 +24,7 @@ ul.items-list {
 				0% {
 					outline-color: var(--accent-75);
 				}
+
 				100% {
 					outline-color: transparent;
 				}
@@ -68,7 +69,7 @@ ul.items-list {
 				min-width: 3ch;
 				font-weight: bold;
 				color: var(--background);
-				text-shadow: 1px 1px 0 var(--foreground)-75, -1px 1px 0 var(--foreground)-75, 1px -1px 0 var(--foreground)-75, -1px -1px 0 var(--foreground-75);
+				text-shadow: 1px 1px 0 var(--foreground-75), -1px 1px 0 var(--foreground-75), 1px -1px 0 var(--foreground-75), -1px -1px 0 var(--foreground-75);
 			}
 
 			> i, o-icon {
@@ -119,8 +120,7 @@ ul.items-list {
 		}
 
 		.ph {
-			align-self: center;
-			justify-self: center;
+			place-self: center center;
 			margin: .5rem auto;
 		}
 	}

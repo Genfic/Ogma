@@ -56,7 +56,7 @@
 			}
 
 			> .name {
-				&:before {
+				&::before {
 					content: '#';
 					color: var(--foreground-50);
 				}

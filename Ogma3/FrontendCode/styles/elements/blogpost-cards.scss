@@ -87,7 +87,7 @@
 				color: var(--foreground);
 			}
 
-			&:before {
+			&::before {
 				content: '#';
 				color: var(--foreground-50);
 			}
