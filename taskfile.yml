@@ -33,7 +33,7 @@ tasks:
         vars:
             SRC: ./Ogma3/wwwroot/js/{dist,bundle}/*.js
         cmds:
-            - ogma-tool bundlesize {{.SRC}}
+            - ogma-tool bundle-size {{.SRC}}
 
     # Serve via Ngrok
     serve: ngrok http https://localhost:5001 -host-header="localhost:5001"

@@ -79,12 +79,10 @@ await compileAll();
 
 if (values.watch) {
 	await watch(_source, {
-		verbose: values.verbose ?? false,
 		transformer: (events) =>
 			events
 				.filter((e) => e.type === "update")
 				.filter((e) => hasExtension(e.path, "ts", "js"))
-				.filter((e) => !e.path.endsWith("~"))
 				.map((e) => e.path),
 		predicate: (files) => files.length > 0,
 		action: async (files) => {

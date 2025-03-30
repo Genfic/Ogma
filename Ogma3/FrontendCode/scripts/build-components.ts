@@ -63,7 +63,6 @@ await compileAll();
 
 if (values.watch) {
 	await watch(_source, {
-		verbose: values.verbose ?? false,
 		transformer: (events) =>
 			events
 				.filter((e) => e.type === "update")

@@ -1,21 +1,19 @@
 import watcher, { type Event } from "@parcel/watcher";
 import c from "chalk";
 import ct from "chalk-template";
+import { isVerbose, log } from "./logger";
 
 type WatchParams<T> = {
-	verbose: boolean;
 	transformer: (events: Event[]) => T;
 	predicate: (result: T) => boolean;
 	action: (result: T) => void | Promise<void>;
 };
 
-export const watch = async <T>(directory: string, { verbose, transformer, predicate, action }: WatchParams<T>) => {
-	const log = (...data: unknown[]) => verbose && console.log(data);
-
+export const watch = async <T>(directory: string, { transformer, predicate, action }: WatchParams<T>) => {
 	console.log(c.blue("👀 Watching..."));
 
 	const subscription = await watcher.subscribe(directory, async (err, events) => {
-		if (verbose) {
+		if (isVerbose()) {
 			for (const { type, path } of events) {
 				console.info(ct`{yellow ${type}: ${path}}`);
 			}
@@ -23,7 +21,7 @@ export const watch = async <T>(directory: string, { verbose, transformer, predic
 
 		if (err) {
 			console.error(c.bgRed(err.message));
-			log(err);
+			log.verbose(err);
 			return;
 		}
 

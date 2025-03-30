@@ -12,6 +12,7 @@ import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
 import { readdir } from "node:fs/promises";
+import { attempt, attemptSync } from "./helpers/function-helpers";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -35,25 +36,51 @@ const compileSass = async (file: string) => {
 
 	const fileContent = await Bun.file(file).text();
 
+	log.verbose(`file ${fileContent.length} bytes`);
+
 	const extraDirs = (await readdir(_base, { withFileTypes: true }))
 		.filter((v) => v.isDirectory())
 		.map((v) => path.join(_base, v.name));
 
-	const { css, sourceMap } = await compiler.compileStringAsync(fileContent, {
-		sourceMap: true,
-		loadPaths: [_base, ...extraDirs],
-	});
+	const compileResult = await attempt(
+		async () => {
+			return await compiler.compileStringAsync(fileContent, {
+				sourceMap: true,
+				loadPaths: [_base, ...extraDirs],
+			});
+		},
+		(error) => log.verbose(error),
+	);
+
+	if (!compileResult) {
+		console.log("Compilation error");
+		return;
+	}
+
+	const { css, sourceMap } = compileResult;
 
 	log.verbose(css.length);
 
-	const { code, map, warnings } = transform({
-		code: encoder.encode(css),
-		inputSourceMap: JSON.stringify(sourceMap),
-		sourceMap: true,
-		filename: file,
-		targets,
-		minify: true,
-	});
+	const transformResult = attemptSync(
+		() => {
+			return transform({
+				code: encoder.encode(css),
+				inputSourceMap: JSON.stringify(sourceMap),
+				sourceMap: true,
+				filename: file,
+				targets,
+				minify: true,
+			});
+		},
+		(error) => log.verbose(error),
+	);
+
+	if (!transformResult) {
+		console.log("Transformation error");
+		return;
+	}
+
+	const { code, map, warnings } = transformResult;
 
 	log.verbose(code.length);
 
@@ -112,15 +139,12 @@ const compileAll = async () => {
 		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
 	}
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
-
-	await compiler.dispose();
 };
 
 await compileAll();
 
 if (values.watch) {
 	await watch(_base, {
-		verbose: values.verbose ?? false,
 		transformer: (events) => events.find(({ type, path }) => type === "update" && hasExtension(path, "scss")),
 		predicate: (event) => !!event,
 		action: async (_) => {
@@ -128,3 +152,8 @@ if (values.watch) {
 		},
 	});
 }
+
+process.on("SIGINT", async () => {
+	await compiler.dispose();
+	process.exit(0);
+});

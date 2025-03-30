@@ -12,6 +12,8 @@ const { values } = parseArgs({
 	allowPositionals: true,
 });
 
+export const isVerbose = () => !!values.verbose;
+
 export const log = {
 	verbose: (...data: unknown[]) => values.verbose && console.log(data),
 };
