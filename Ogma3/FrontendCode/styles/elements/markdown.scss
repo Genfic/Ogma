@@ -101,6 +101,17 @@
 		}
 	}
 
+	a[href^="https://" i],
+	a[href^="http://" i] {
+		&:not([href*="genfic.net" i], [href*="localhost" i]) {
+			&::after {
+				content: "🡭";
+				display: inline-block;
+				font-size: .9rem;
+			}
+		}
+	}
+
 	// Spoilers
 	.spoiler {
 		color: transparent;

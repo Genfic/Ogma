@@ -33,9 +33,12 @@
 			{
 				<li class="item">
 					<a asp-page="/Docs" asp-route-v="@ver.Version" asp-route-slug="@ver.Slug">
-						version @ver.Version — @ver.CreationTime
-						@(ver.Version == Model.Document.Version ? "«" : "")
+						version @ver.Version — <time datetime="@ver.CreationTime.ToString("O")">@ver.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</time>
 					</a>
+					@if (ver.Version == Model.Document.Version)
+					{
+						<span class="current">current</span>
+					}
 				</li>
 			}
 		</ul>

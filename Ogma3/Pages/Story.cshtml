@@ -157,7 +157,10 @@
 	</details>
 	}
 
-	<a class="start active-border" asp-controller="Chapter" asp-action="FirstChapter" asp-route-sid="@Model.Story.Id">Start reading</a>
+	@if (Model.Chapters.Length <= 0)
+	{
+		<a class="start active-border" asp-controller="Chapter" asp-action="FirstChapter" asp-route-sid="@Model.Story.Id">Start reading</a>
+	}
 
 	<div class="info">
 		<span class="word-count">@Model.Story.WordCount.ToString("N0") words</span>

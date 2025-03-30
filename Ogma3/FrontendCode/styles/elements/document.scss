@@ -36,7 +36,6 @@
 		.toc-h {
 			font-size: 1rem;
 			margin: .25rem 0;
-			display: list-item;
 
 			&:first-child {
 				margin-top: 0;
@@ -48,7 +47,7 @@
 
 			@for $level from 1 to 6 {
 				&.h#{$level} {
-					margin-left: #{$level}rem;
+					margin-left: #{($level - 1) * .5}rem;
 				}
 			}
 		}
@@ -57,5 +56,33 @@
 	details {
 		grid-row: 3;
 		grid-column: 1;
+
+		ul.my-list li.item {
+			margin: 4px 0 0;
+
+			a {
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+
+			time {
+				font-family: monospace;
+				font-variant-numeric: tabular-nums oldstyle-nums;
+			}
+
+			span.current {
+				font-size: .7rem;
+				padding: .1rem .5rem;
+				margin-left: .5rem;
+				border-radius: 1vw;
+				text-transform: uppercase;
+				color: var(--foreground-75);
+				background: var(--background-75);
+				border: 1px solid var(--foreground-25);
+			}
+		}
 	}
 }
