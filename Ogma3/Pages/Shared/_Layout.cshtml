@@ -121,12 +121,12 @@
 		<button class="btn green" id="cookie-consent-button">Noted!</button>
 	</div>
 
-	<script type="module" async src="~/js/cookie-consent.js"></script>
+	<script type="module" src="~/js/cookie-consent.js"></script>
 }
 
 <partial name="_Footer"/>
 
-<script type="module" async defer src="~/js/bundle/components.js" asp-append-version="true"></script>
+<script type="module" src="~/js/bundle/components.js" asp-append-version="true"></script>
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
         crossorigin="anonymous"></script>
@@ -144,8 +144,8 @@ else
 	        asp-fallback-test="window.Vue"></script>
 }
 
-<script defer src="~/js/site.js" asp-append-version="true"></script>
-<script defer src="~/js/navbar.js" asp-append-version="true"></script>
+<script type="module" src="~/js/site.js" asp-append-version="true"></script>
+<script type="module" src="~/js/navbar.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", false)
 @Html.RenderResources()
