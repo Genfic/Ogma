@@ -73,6 +73,13 @@ const compileAll = async () => {
 	log.verbose(res.map((r) => r.status));
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+
+	const fulfilled = res.filter((r) => r.status === "fulfilled").length;
+	const color = fulfilled === files.length ? c.green : c.red;
+	console.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
+	if (fulfilled !== files.length) {
+		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
+	}
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
 };
 
