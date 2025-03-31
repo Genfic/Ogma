@@ -69,7 +69,7 @@ public sealed class IndexModel(
 		var model = await LoadAsync(uid);
 		if (model is null) return NotFound();
 		Input = model;
-		
+
 		return Page();
 	}
 

@@ -1,22 +1,4 @@
-var d=new DOMParser,l=(t)=>{return d.parseFromString(t,"text/html").body.firstElementChild};var s;((n)=>{n.bold="bold";n.italic="italic";n.underline="underline";n.spoiler="spoiler";n.link="link"})(s||={});var f=`
-		<nav class="button-group toolbar">
-		  <button type="button" class="btn" data-action="bold" title="bold">
-            <o-icon icon="lucide:bold" class="material-icons-outlined"></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="italic" title="italic">
-            <o-icon icon="lucide:italic" class="material-icons-outlined" ></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="underline" title="underline">
-            <o-icon icon="lucide:underline" class="material-icons-outlined" ></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="spoiler" title="spoiler">
-            <o-icon icon="lucide:eye-closed" class="material-icons-outlined" ></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="link" title="link">
-            <o-icon icon="lucide:link" class="material-icons-outlined" ></o-icon>
-		  </button>
-		</nav>`.split(`
-`).map((t)=>t.trim()).join(""),b=new Map([["bold",{prefix:"**",suffix:"**"}],["italic",{prefix:"*",suffix:"*"}],["underline",{prefix:"_",suffix:"_"}],["spoiler",{prefix:"||",suffix:"||"}],["link",{prefix:"[",suffix:"]()"}]]),p=[...document.querySelectorAll("[data-md=true]")];for(let t of p){let o=l(f);for(let e of[...o.querySelectorAll("button.btn[data-action]")]){let a=s[e.dataset.action];e.addEventListener("click",(m)=>{let{prefix:n,suffix:r}=b[a],c=t.selectionStart,i=t.selectionEnd,u=t.value.substring(c,i);t.setRangeText(`${n}${u}${r}`,c,i,"preserve"),t.selectionStart=t.selectionEnd=i+n.length,t.focus()})}t.before(o)}
+var u=new DOMParser,l=(t)=>{return u.parseFromString(t,"text/html").body.firstElementChild};var d={["bold"]:{prefix:"**",suffix:"**"},["italic"]:{prefix:"*",suffix:"*"},["underline"]:{prefix:"_",suffix:"_"},["spoiler"]:{prefix:"||",suffix:"||"},["link"]:{prefix:"[",suffix:"]()"}},f=[...document.querySelectorAll("[data-md=true]")];for(let t of f){let i=l('<nav class="button-group toolbar"><button type="button" class="btn" data-action="bold" title="bold"><o-icon icon="lucide:bold" class="material-icons-outlined"></o-icon></button><button type="button" class="btn" data-action="italic" title="italic"><o-icon icon="lucide:italic" class="material-icons-outlined"></o-icon></button><button type="button" class="btn" data-action="underline" title="underline"><o-icon icon="lucide:underline" class="material-icons-outlined"></o-icon></button><button type="button" class="btn" data-action="spoiler" title="spoiler"><o-icon icon="lucide:eye-closed" class="material-icons-outlined"></o-icon></button><button type="button" class="btn" data-action="link" title="link"><o-icon icon="lucide:link" class="material-icons-outlined"></o-icon></button></nav>');for(let o of[...i.querySelectorAll("button.btn[data-action]")]){let s=o.dataset.action;o.addEventListener("click",()=>{let{prefix:e,suffix:a}=d[s],c=t.selectionStart,n=t.selectionEnd,r=t.value.substring(c,n);t.setRangeText(`${e}${r}${a}`,c,n,"preserve"),t.selectionStart=t.selectionEnd=n+e.length,t.focus()})}t.before(i)}
 
-//# debugId=CF01CA6D28A83F6F64756E2164756E21
+//# debugId=3476AACE06609ABF64756E2164756E21
 //# sourceMappingURL=markdown-toolbar.js.map

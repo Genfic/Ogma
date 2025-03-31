@@ -13,5 +13,5 @@ themeBtn.addEventListener("click", () => {
 
 	const date = addToDate(new Date(), { years: 100 });
 
-	setCookie("theme", theme, date, true, "lax");
+	setCookie("theme", theme, { expires: date, secure: true, sameSite: "Lax" });
 });

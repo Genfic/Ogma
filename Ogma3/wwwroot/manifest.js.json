@@ -1,5 +1,5 @@
 {
-  "GeneratedAt": "2025-03-25T14:12:17.727242+00:00",
+  "GeneratedAt": "2025-03-31T21:20:35.1365345+00:00",
   "Files": {
     "/js/account/blacklists.js": "TcqlE92qLiULRCWi9tNwwMto46PPIMCWqhc3bEZGaww",
     "/js/account/invite-codes.js": "e_fC4pBMTWTpC7TBkmI5z-eAWXU44T7-gk1ZFK9z3bI",
@@ -29,7 +29,7 @@
     "/js/components/textarea-counter-component.js": "YBTq4jSbz4dlPXDcRywTtt3ncNvKui1EUByTkxFIJ_Q",
     "/js/components/toggle-component.js": "hX2FSVs8g0NMKVeDjnD266dPiuikHrzPs9cpNAp8Yp8",
     "/js/cookie-consent.js": "QgDNvDAlFjUaiD7v5GlNXsyymL9Xr-MTtBVqmYcrt0s",
-    "/js/editors/markdown-toolbar.js": "msrqIh-Glw7wNEt6DGWl13SAPyoeikEbNdHtK6neliI",
+    "/js/editors/markdown-toolbar.js": "gev6c-xpNvBziLtrKvxijgavA_jmv0mXFG55oN78PBk",
     "/js/input-progressbars.js": "ga9S-GiQU13k9zWaHJADQifKpeVxjTTtcHiliv9NGc4",
     "/js/local-settings.js": "R4QWu11U9zV_EU3_u4N_1MHdEbTCsipPEVPsChCMSHU",
     "/js/login.js": "GsC1_UmzownmtHY-s2AzacVKUBQbACG9i5G524GE8Jo",

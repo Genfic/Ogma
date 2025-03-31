@@ -7,6 +7,6 @@ const button = banner.querySelector("button#cookie-consent-button");
 button.addEventListener("click", () => {
 	const expiry = addToDate(new Date(), { years: 100 });
 
-	setCookie("cookie-consent", "true", expiry, true, "strict", "/");
+	setCookie("cookie-consent", "true", { expires: expiry, secure: true, sameSite: "Strict", path: "/" });
 	banner.style.display = "none";
 });

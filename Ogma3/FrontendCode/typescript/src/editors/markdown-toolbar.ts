@@ -1,4 +1,5 @@
 import { parseDom } from "../../src-helpers/dom";
+import { minifyHtml } from "../../src-helpers/minify.macro" with { type: "macro" };
 
 enum Action {
 	bold = "bold",
@@ -13,35 +14,32 @@ interface PrefixSuffix {
 	suffix: string;
 }
 
-const tpl = `
-		<nav class="button-group toolbar">
-		  <button type="button" class="btn" data-action="${Action.bold}" title="${Action.bold}">
-            <o-icon icon="lucide:bold" class="material-icons-outlined"></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="${Action.italic}" title="${Action.italic}">
-            <o-icon icon="lucide:italic" class="material-icons-outlined" ></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="${Action.underline}" title="${Action.underline}">
-            <o-icon icon="lucide:underline" class="material-icons-outlined" ></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="${Action.spoiler}" title="${Action.spoiler}">
-            <o-icon icon="lucide:eye-closed" class="material-icons-outlined" ></o-icon>
-		  </button>
-		  <button type="button" class="btn" data-action="${Action.link}" title="${Action.link}">
-            <o-icon icon="lucide:link" class="material-icons-outlined" ></o-icon>
-		  </button>
-		</nav>`
-	.split("\n")
-	.map((l) => l.trim())
-	.join("");
+const tpl = minifyHtml(`
+	<nav class="button-group toolbar">
+	  <button type="button" class="btn" data-action="${Action.bold}" title="${Action.bold}">
+		<o-icon icon="lucide:bold" class="material-icons-outlined"></o-icon>
+	  </button>
+	  <button type="button" class="btn" data-action="${Action.italic}" title="${Action.italic}">
+		<o-icon icon="lucide:italic" class="material-icons-outlined" ></o-icon>
+	  </button>
+	  <button type="button" class="btn" data-action="${Action.underline}" title="${Action.underline}">
+		<o-icon icon="lucide:underline" class="material-icons-outlined" ></o-icon>
+	  </button>
+	  <button type="button" class="btn" data-action="${Action.spoiler}" title="${Action.spoiler}">
+		<o-icon icon="lucide:eye-closed" class="material-icons-outlined" ></o-icon>
+	  </button>
+	  <button type="button" class="btn" data-action="${Action.link}" title="${Action.link}">
+		<o-icon icon="lucide:link" class="material-icons-outlined" ></o-icon>
+	  </button>
+	</nav>`);
 
-const map = new Map<Action, PrefixSuffix>([
-	[Action.bold, { prefix: "**", suffix: "**" }],
-	[Action.italic, { prefix: "*", suffix: "*" }],
-	[Action.underline, { prefix: "_", suffix: "_" }],
-	[Action.spoiler, { prefix: "||", suffix: "||" }],
-	[Action.link, { prefix: "[", suffix: "]()" }],
-]);
+const map: Record<Action, PrefixSuffix> = {
+	[Action.bold]: { prefix: "**", suffix: "**" },
+	[Action.italic]: { prefix: "*", suffix: "*" },
+	[Action.underline]: { prefix: "_", suffix: "_" },
+	[Action.spoiler]: { prefix: "||", suffix: "||" },
+	[Action.link]: { prefix: "[", suffix: "]()" },
+};
 
 const areas = [...document.querySelectorAll("[data-md=true]")] as (HTMLTextAreaElement | HTMLInputElement)[];
 
@@ -49,8 +47,9 @@ for (const area of areas) {
 	const vDom = parseDom(tpl);
 
 	for (const btn of [...vDom.querySelectorAll("button.btn[data-action]")] as HTMLElement[]) {
-		const action: Action = Action[btn.dataset.action];
-		btn.addEventListener("click", (_) => {
+		const action: Action = btn.dataset.action as Action;
+
+		btn.addEventListener("click", () => {
 			const { prefix, suffix } = map[action];
 			const start = area.selectionStart;
 			const end = area.selectionEnd;

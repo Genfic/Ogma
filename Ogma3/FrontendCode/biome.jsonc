@@ -29,7 +29,8 @@
 			},
 			"suspicious": {
 				"noAssignInExpressions": "off",
-				"useAwait": "error"
+				"useAwait": "error",
+				"noConstEnum": "off"
 			}
 		}
 	},

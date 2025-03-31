@@ -1,4 +1,62 @@
-async function o(t,a,n,i,r){let s=await fetch(t,{method:a,headers:{"Content-Type":"application/json",...i},body:n?JSON.stringify(n):null,...r}),d=s.headers.get("content-type"),e;if(d?.includes("application/json"))e=await s.json();else e=await s.text();return{ok:s.ok,status:s.status,statusText:s.statusText,headers:s.headers,data:e}}var m=async(t,a,n)=>await o("/api/chaptersread","DELETE",t,a,n);var c=async(t,a,n)=>await o(`/api/chaptersread/${t}`,"GET",void 0,a,n);var l=async(t,a,n)=>await o("/api/chaptersread","POST",t,a,n);(async()=>{let t=document.querySelector("[data-story-id]"),a=document.querySelector("[data-x-csrf]"),n=[...document.querySelectorAll("button.read-status")];t.remove(),a.remove();let i=[];await d();for(let e of n)e.addEventListener("click",()=>r(Number.parseInt(e.dataset.id)));let r=async(e)=>{let p=await(i.includes(e)?m:l)({story:Number.parseInt(t.dataset.storyId),chapter:e},{RequestVerificationToken:a.dataset["x-csrf"]});if(!p.ok)return;i=p.data,s()};function s(){for(let e of n){let u=i?.includes(Number.parseInt(e.dataset.id))??!1;e.classList.toggle("active",u),e.querySelector("use").setAttribute("href",u?"/svg/spritesheet.svg#lucide:eye":"/svg/spritesheet.svg#lucide:eye-off")}}async function d(){let e=await c(Number.parseInt(t.dataset.storyId));if(!e.ok)return;i=e.data,s()}})();
+async function s(e, t, n, I, R) {
+	let a = await fetch(e, {
+			method: t,
+			headers: { "Content-Type": "application/json", ...I },
+			body: n ? JSON.stringify(n) : null,
+			...R,
+		}),
+		C = a.headers.get("content-type"),
+		o;
+	if (C?.includes("application/json")) o = await a.json();
+	else o = await a.text();
+	return {
+		ok: a.ok,
+		status: a.status,
+		statusText: a.statusText,
+		headers: a.headers,
+		data: o,
+	};
+}
+var d = async (e, t, n) => await s("/api/chaptersread", "DELETE", e, t, n);
+var u = async (e, t, n) =>
+	await s(`/api/chaptersread/${e}`, "GET", void 0, t, n);
+var p = async (e, t, n) => await s("/api/chaptersread", "POST", e, t, n);
+var r = document.querySelector("[data-story-id]"),
+	m = document.querySelector("[data-x-csrf]"),
+	c = [...document.querySelectorAll("button.read-status")];
+r.remove();
+m.remove();
+var i = [];
+await y();
+for (let e of c)
+	e.addEventListener("click", () => T(Number.parseInt(e.dataset.id)));
+var T = async (e) => {
+	let n = await (i.includes(e) ? d : p)(
+		{ story: Number.parseInt(r.dataset.storyId), chapter: e },
+		{ RequestVerificationToken: m.dataset["x-csrf"] },
+	);
+	if (!n.ok) return;
+	(i = n.data), l();
+};
+function l() {
+	for (let e of c) {
+		let t = i?.includes(Number.parseInt(e.dataset.id)) ?? !1;
+		e.classList.toggle("active", t),
+			e
+				.querySelector("use")
+				.setAttribute(
+					"href",
+					t
+						? "/svg/spritesheet.svg#lucide:eye"
+						: "/svg/spritesheet.svg#lucide:eye-off",
+				);
+	}
+}
+async function y() {
+	let e = await u(Number.parseInt(r.dataset.storyId));
+	if (!e.ok) return;
+	(i = e.data), l();
+}
 
-//# debugId=0B27BE7F4CCBF23064756E2164756E21
+//# debugId=09562C43A781280A64756E2164756E21
 //# sourceMappingURL=chapter-reads.js.map

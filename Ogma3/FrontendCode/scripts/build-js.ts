@@ -25,6 +25,7 @@ const compileFile = async (file: string) => {
 
 	const { success, logs } = await Bun.build({
 		entrypoints: [file],
+		format: "esm",
 		outdir: _dest,
 		root: _source,
 		minify: true,
