@@ -1,18 +1,18 @@
+import { readdir } from "node:fs/promises";
 import * as path from "node:path";
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import browserslist from "browserslist";
 import { Glob } from "bun";
-import ct from "chalk-template";
 import c from "chalk";
+import ct from "chalk-template";
 import convert from "convert";
 import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import { attempt, attemptSync } from "./helpers/function-helpers";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { readdir } from "node:fs/promises";
-import { attempt, attemptSync } from "./helpers/function-helpers";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

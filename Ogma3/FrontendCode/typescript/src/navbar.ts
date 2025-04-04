@@ -2,7 +2,7 @@ let last_known_scroll_position = 0;
 let ticking = false;
 
 const nav = document.getElementById("top-nav");
-const btn = document.getElementById("burger") as (HTMLButtonElement | null);
+const btn = document.getElementById("burger") as HTMLButtonElement | null;
 
 let lastPos = 0;
 

@@ -1,9 +1,9 @@
+import { basename, dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { $, Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import { compact } from "es-toolkit";
-import { dirname, join, basename } from "node:path";
 
 const values = program
 	.option("--migrate", "Migrate SCSS files", false)

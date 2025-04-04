@@ -1,15 +1,11 @@
 import { dirname, join } from "node:path";
-import { render } from "@lit-labs/ssr";
-import { type RenderResult, collectResultSync } from "@lit-labs/ssr/lib/render-result";
 import { Glob } from "bun";
+import c from "chalk";
 import ct from "chalk-template";
-import * as cheerio from "cheerio";
 import convert from "convert";
-import { compact, flow, uniq } from "es-toolkit";
-import format from "html-format";
+import dedent from "dedent";
+import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
-import { type TemplateResult, html } from "lit";
-import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
 const start = Bun.nanoseconds();
 
@@ -17,75 +13,61 @@ const _root = dirname(Bun.main);
 const json = await Bun.file(join(_root, "..", "..", "seed.json5")).text();
 const seed = parse(json) as { Icons: string[]; AdditionalIcons: string[] };
 
-const icons: string[] = [...seed.Icons, ...seed.AdditionalIcons];
+const foundIcons: (string | null)[] = [];
+
+const extractor = new HTMLRewriter().on("icon[icon]:not([dynamic])", {
+	element(el) {
+		foundIcons.push(el.getAttribute("icon"));
+	},
+});
 
 for await (const file of new Glob(join(_root, "..", "..", "**", "*.cshtml")).scan()) {
 	const content = await Bun.file(file).text();
-	const dom = cheerio.load(content);
-	const found = dom.extract({
-		icons: [
-			{
-				selector: "icon[icon]:not([dynamic])",
-				value: "icon",
-			},
-		],
-	});
-	icons.push(...found.icons);
+	extractor.transform(content);
 }
 
-const fetchIcon = async (icon: string) => {
+const icons: string[] = uniq([...seed.Icons, ...seed.AdditionalIcons, ...compact(foundIcons)]);
+
+interface Svg {
+	svg: string;
+	name: string;
+}
+
+const fetchIcon = async (icon: string): Promise<Svg | null> => {
 	const [set, name] = icon.split(":");
 	const res = await fetch(`https://api.iconify.design/${set}/${name}.svg`);
 
 	if (res.ok) {
 		const svg = await res.text();
 		console.log(ct`{green Fetched icon: ${icon}}`);
-		return { svg, name: icon };
+		return { svg: svg.trim(), name: icon };
 	}
 
 	console.error(ct`{red Failed to fetch icon: ${icon}}`);
 	return null;
 };
 
-const res = await Promise.all(uniq(icons).map((icon) => fetchIcon(icon)));
+const res = await Promise.all(icons.map((icon) => fetchIcon(icon)));
 
-const svgs = compact(res);
+const svgs = compact(res).toSorted((a, b) => a.name.localeCompare(b.name));
 
-console.log(ct`{green Fetched {bold ${svgs.length}}} icons`);
+const color = svgs.length === icons.length ? c.green : c.red;
+console.log(ct`{bold ${color(ct`Fetched {underline ${svgs.length}} of {underline ${icons.length}}`)} icons}`);
 
-const rewriter = new HTMLRewriter()
-	.on("*", {
-		comments(comment: HTMLRewriterTypes.Comment): void | Promise<void> {
-			comment.remove();
-		},
-	})
-	.on('svg:not([id="spritesheet"])', {
-		element(element: HTMLRewriterTypes.Element): void | Promise<void> {
-			element.removeAndKeepContent();
-		},
-	});
+const rewriter = new HTMLRewriter().on('svg:not([id="spritesheet"])', {
+	element(element: HTMLRewriterTypes.Element): void | Promise<void> {
+		element.removeAndKeepContent();
+	},
+});
 
-const tpl /* lang=svg */ = html`
+// language=svg
+const tpl = dedent`
 	<svg xmlns="http://www.w3.org/2000/svg" id="spritesheet" style="display: none">
-		${svgs
-			.toSorted((a, b) => a.name.localeCompare(b.name))
-			.map(
-				({ svg, name }) => html`
-					<symbol id="${name}" viewBox="0 0 24 24">${unsafeSVG(svg)}</symbol>
-				`,
-			)}
+		${svgs.map(({ svg, name }) => `<symbol id="${name}" viewBox="0 0 24 24">${svg}</symbol>`).join("\n\t\t")}
 	</svg>
-`;
+	`.trim();
 
-const spritesheet = flow(
-	(x: TemplateResult<1>) => render(x),
-	(x: RenderResult) => collectResultSync(x),
-	(x: string) => rewriter.transform(x),
-	(x: string) => format(x, "\t", Number.MAX_VALUE),
-	(x: string) => x.replaceAll(/<!--(.+)-->/g, ""),
-	(x: string) => x.replaceAll("\n\n", "\n"),
-	(x: string) => x.trim(),
-)(tpl);
+const spritesheet = rewriter.transform(tpl);
 
 await Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet);
 await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet);
