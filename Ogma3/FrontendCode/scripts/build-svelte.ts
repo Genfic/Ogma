@@ -1,13 +1,9 @@
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
-import multi from "@rollup/plugin-multi-entry";
-import resolve from "@rollup/plugin-node-resolve";
 import { Glob } from "bun";
 import ct from "chalk-template";
 import convert from "convert";
-import { rollup } from "rollup";
-import esbuild from "rollup-plugin-esbuild";
-import minifyHTML from "rollup-plugin-html-literals";
+import { SveltePlugin } from "bun-plugin-svelte";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
 import { dirsize } from "./helpers/dirsize";
@@ -21,39 +17,24 @@ const values = program
 	.opts();
 
 const _root = dirname(Bun.main);
-const _source = join(_root, "..", "typescript", "src-webcomponents");
-const _dest = join(_root, "..", "..", "wwwroot", "js", "bundle");
+const _source = join(_root, "..", "typescript", "svelte-webcomponents");
+const _dest = join(_root, "..", "..", "wwwroot", "js", "bundle2");
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
-	const files = [...new Glob(`${_source}/**/[!_]*.ts`).scanSync()];
+	const files = [...new Glob(`${_source}/**/[!_]*.svelte`).scanSync()];
 	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
-	await using bundle = await rollup({
-		input: files,
-		output: {
-			file: join(_dest, "components.js"),
-			format: "esm",
-			sourcemap: true,
-		},
-		plugins: [
-			multi(),
-			resolve(),
-			!values.full && minifyHTML(),
-			esbuild({
-				tsconfig: join(_root, "..", "typescript", "tsconfig.json"),
-				treeShaking: true,
-				minify: !values.full,
-				legalComments: "eof",
-			}),
-		],
-	});
-
-	await bundle.write({
-		file: join(_dest, "components.js"),
-		format: "umd",
-		name: "components",
-		sourcemap: true,
+	const res = await Bun.build({
+		entrypoints: files,
+		root: _source,
+		outdir: _dest,
+		format: "esm",
+		sourcemap: "linked",
+		packages: "bundle",
+		splitting: true,
+		minify: !values.full,
+		plugins: [SveltePlugin()],
 	});
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
@@ -62,7 +43,7 @@ const compileAll = async () => {
 
 await compileAll();
 
-const size = await dirsize(`${_dest}/**/[!_]*.js`);
+const size = await dirsize(`${_dest}/**/[!_]*.{js,css}`);
 console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best")}}}`);
 
 if (values.watch) {
@@ -70,7 +51,7 @@ if (values.watch) {
 		transformer: (events) =>
 			events
 				.filter((e) => e.type === "update")
-				.filter((e) => hasExtension(e.path, "ts"))
+				.filter((e) => hasExtension(e.path, "svelte"))
 				.filter((e) => !e.path.endsWith("~"))
 				.map((e) => e.path),
 		predicate: (files) => files.length > 0,

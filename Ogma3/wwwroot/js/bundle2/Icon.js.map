@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\..\\FrontendCode\\typescript\\svelte-webcomponents\\Icon.svelte"],
+  "sourcesContent": [
+    "import 'svelte/internal/disclose-version';\nimport * as $ from 'svelte/internal/client';\n\nvar root = $.ns_template(`<svg width=\"24\" height=\"24\" class=\"o-icon svelte-30ugophiyzroy\" part=\"icon\"><use></use></svg>`);\n\nfunction Icon($$anchor, $$props) {\n\tvar svg = root();\n\tvar use = $.child(svg);\n\n\t$.reset(svg);\n\t$.template_effect(() => $.set_attribute(use, 'href', `/svg/spritesheet.svg#${$$props.icon ?? ''}`));\n\t$.append($$anchor, svg);\n}\n\nif (import.meta.hot) {\n\tIcon = $.hmr(Icon, () => Icon[$.HMR].source);\n\n\timport.meta.hot.accept((module) => {\n\t\t$.cleanup_styles('svelte-30ugophiyzroy');\n\t\tmodule.default[$.HMR].source = Icon[$.HMR].source;\n\t\t$.set(Icon[$.HMR].source, module.default[$.HMR].original);\n\t});\n}\n\nexport default Icon;\n\nif (customElements.get('my-element') == null) customElements.define('my-element', $.create_custom_element(Icon, { icon: {} }, [], [], true));\nimport \"bun-svelte:Icon.svelte-3gtb1s6i69zrl-style.css\";"
+  ],
+  "mappings": "oFAGA,IAAI,EAAS,EAAY,+FAA+F,EAExH,SAAS,CAAI,CAAC,EAAU,EAAS,CAChC,IAAI,EAAM,EAAK,EACX,EAAQ,EAAM,CAAG,EAEnB,EAAM,CAAG,EACT,EAAgB,IAAQ,EAAc,EAAK,OAAQ,wBAAwB,EAAQ,MAAQ,IAAI,CAAC,EAChG,EAAO,EAAU,CAAG,EAavB,IAAe,IAEf,GAAI,eAAe,IAAI,YAAY,GAAK,KAAM,eAAe,OAAO,aAAgB,EAAsB,EAAM,CAAE,KAAM,CAAC,CAAE,EAAG,CAAC,EAAG,CAAC,EAAG,EAAI,CAAC",
+  "debugId": "4FBA514884CB6A5A64756E2164756E21",
+  "names": []
+}

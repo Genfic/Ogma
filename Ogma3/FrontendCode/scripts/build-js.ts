@@ -7,6 +7,7 @@ import convert from "convert";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
+import { dirsize } from "./helpers/dirsize";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -84,6 +85,9 @@ const compileAll = async () => {
 };
 
 await compileAll();
+
+const size = await dirsize(`${_dest}/**/[!_]*.js`);
+console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best")}}}`);
 
 if (values.watch) {
 	await watch(_source, {

@@ -1,4 +1,4 @@
-preload = ['./scripts/plugins/json5-loader.ts']
+preload = ['./scripts/plugins/json5-loader.ts', 'bun-plugin-svelte']
 
 [test]
 preload = ['./typescript/tests/_happy-dom.ts']

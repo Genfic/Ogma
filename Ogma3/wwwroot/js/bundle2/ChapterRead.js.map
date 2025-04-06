@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\..\\FrontendCode\\typescript\\svelte-webcomponents\\ChapterRead.svelte"],
+  "sourcesContent": [
+    "import 'svelte/internal/disclose-version';\nimport * as $ from 'svelte/internal/client';\nimport Icon from './Icon.svelte'; // Assuming Icon.svelte is in the same directory\n\nvar root = $.template(`<button class=\"read-status\" aria-label=\"Chapter read status\"><!></button>`);\n\nfunction ChapterRead($$anchor, $$props) {\n\tvar button = root();\n\tvar node = $.child(button);\n\n\tIcon(node, { icon: 'lucide:eye-off' });\n\t$.reset(button);\n\t$.template_effect(() => $.set_attribute(button, 'data-id', $$props.chapterId));\n\t$.append($$anchor, button);\n}\n\nif (import.meta.hot) {\n\tChapterRead = $.hmr(ChapterRead, () => ChapterRead[$.HMR].source);\n\n\timport.meta.hot.accept((module) => {\n\t\t$.cleanup_styles('svelte-uwe6fx9cxe6z');\n\t\tmodule.default[$.HMR].source = ChapterRead[$.HMR].source;\n\t\t$.set(ChapterRead[$.HMR].source, module.default[$.HMR].original);\n\t});\n}\n\nexport default ChapterRead;\n\nif (customElements.get('my-element') == null) customElements.define('my-element', $.create_custom_element(ChapterRead, { route: {}, chapterId: {} }, [], [], true));\nimport \"bun-svelte:ChapterRead.svelte-2bhwrp86m3dqk-style.css\";"
+  ],
+  "mappings": "wHAIA,FAAI,EAAS,EAAS,2EAA2E,EAEjG,SAAS,CAAW,CAAC,EAAU,EAAS,CACvC,IAAI,EAAS,EAAK,EACd,EAAS,EAAM,CAAM,EAEzB,EAAK,EAAM,CAAE,KAAM,gBAAiB,CAAC,EACnC,EAAM,CAAM,EACZ,EAAgB,IAAQ,EAAc,EAAQ,UAAW,EAAQ,SAAS,CAAC,EAC3E,EAAO,EAAU,CAAM,EAa1B,IAAe,IAEf,GAAI,eAAe,IAAI,YAAY,GAAK,KAAM,eAAe,OAAO,aAAgB,EAAsB,EAAa,CAAE,MAAO,CAAC,EAAG,UAAW,CAAC,CAAE,EAAG,CAAC,EAAG,CAAC,EAAG,EAAI,CAAC",
+  "debugId": "219AD79D30FED7B964756E2164756E21",
+  "names": []
+}
