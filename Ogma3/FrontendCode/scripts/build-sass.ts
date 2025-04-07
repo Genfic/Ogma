@@ -9,11 +9,11 @@ import ct from "chalk-template";
 import convert from "convert";
 import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import { dirsize } from "./helpers/dirsize";
 import { attempt, attemptSync } from "./helpers/function-helpers";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { dirsize } from "./helpers/dirsize";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

@@ -8,9 +8,9 @@ import convert from "convert";
 import { rollup } from "rollup";
 import esbuild from "rollup-plugin-esbuild";
 import minifyHTML from "rollup-plugin-html-literals";
+import { dirsize } from "./helpers/dirsize";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { dirsize } from "./helpers/dirsize";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

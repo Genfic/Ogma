@@ -1,5 +1,5 @@
-import { parseDom } from "../../src-helpers/dom";
-import { minifyHtml } from "../../src-helpers/minify.macro" with { type: "macro" };
+import { parseDom } from "@h/dom";
+import { minifyHtml } from "@h/minify.macro" with { type: "macro" };
 
 enum Action {
 	bold = "bold",

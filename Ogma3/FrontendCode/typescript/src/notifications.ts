@@ -1,9 +1,6 @@
-import {
-	DeleteApiNotifications as deleteNotification,
-	GetApiNotifications as getNotifications,
-} from "../generated/paths-public";
-import type { GetUserNotificationsResult } from "../generated/types-public";
-import { long } from "../src-helpers/tinytime-templates";
+import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "@g/paths-public";
+import type { GetUserNotificationsResult } from "@g/types-public";
+import { long } from "@h/tinytime-templates";
 
 // @ts-ignore
 new Vue({

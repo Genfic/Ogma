@@ -1,4 +1,4 @@
-import { PostApiChaptersread } from "../generated/paths-public";
+import { PostApiChaptersread } from "@g/paths-public";
 
 const progress = document.getElementById("chapter-progress");
 progress.addEventListener("read", async ({ currentTarget: t }) => {

@@ -1,4 +1,4 @@
-import { GetApiSignin as getSignInData } from "../generated/paths-public";
+import { GetApiSignin as getSignInData } from "@g/paths-public";
 
 // @ts-ignore
 new Vue({

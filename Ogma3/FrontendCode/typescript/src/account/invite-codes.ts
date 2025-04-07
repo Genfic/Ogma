@@ -1,7 +1,7 @@
-import { PostApiInviteCodes as createCode, GetApiInviteCodes as getCodes } from "../../generated/paths-public";
-import type { InviteCodeDto } from "../../generated/types-public";
-import { log } from "../../src-helpers/logger";
-import { long } from "../../src-helpers/tinytime-templates";
+import { PostApiInviteCodes as createCode, GetApiInviteCodes as getCodes } from "@g/paths-public";
+import type { InviteCodeDto } from "@g/types-public";
+import { log } from "@h/logger";
+import { long } from "@h/tinytime-templates";
 
 // @ts-ignore
 new Vue({

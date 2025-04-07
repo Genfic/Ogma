@@ -1,4 +1,4 @@
-import { log } from "../../src-helpers/logger";
+import { log } from "@h/logger";
 
 const inputs = [...document.querySelectorAll("input.o-form-control")] as HTMLInputElement[];
 

@@ -4,10 +4,10 @@ import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
+import { dirsize } from "./helpers/dirsize";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { dirsize } from "./helpers/dirsize";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

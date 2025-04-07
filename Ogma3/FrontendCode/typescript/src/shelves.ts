@@ -3,8 +3,8 @@ import {
 	DeleteApiShelves as deleteShelf,
 	GetApiShelves as getShelves,
 	PutApiShelves as updateShelf,
-} from "../generated/paths-public";
-import type { ShelfDto } from "../generated/types-public";
+} from "@g/paths-public";
+import type { ShelfDto } from "@g/types-public";
 
 // @ts-ignore
 new Vue({

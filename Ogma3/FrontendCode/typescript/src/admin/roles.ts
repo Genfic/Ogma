@@ -1,6 +1,6 @@
 // @ts-ignore
-import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "../../generated/paths-public";
-import type { RoleDto } from "../../generated/types-public";
+import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "@g/paths-public";
+import type { RoleDto } from "@g/types-public";
 
 // @ts-ignore
 new Vue({

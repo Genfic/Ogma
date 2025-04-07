@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 import {
 	PostApiShelfStories as addToShelf,
 	GetApiShelfStoriesQuick as getQuickShelves,
@@ -8,7 +9,6 @@ import {
 } from "../generated/paths-public";
 import { clickOutside } from "../src-helpers/click-outside";
 import { log } from "../src-helpers/logger";
-import { styleMap } from "lit/directives/style-map.js";
 
 interface Shelf {
 	id: number;

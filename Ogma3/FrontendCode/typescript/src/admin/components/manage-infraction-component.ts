@@ -1,6 +1,6 @@
-import { PostAdminApiInfractions } from "../../../generated/paths-internal";
-import type { InfractionType } from "../../../generated/types-internal";
-import { log } from "../../../src-helpers/logger";
+import { PostAdminApiInfractions } from "@g/paths-internal";
+import type { InfractionType } from "@g/types-internal";
+import { log } from "@h/logger";
 
 // @ts-ignore
 Vue.component("manage-infraction", {
@@ -53,34 +53,34 @@ Vue.component("manage-infraction", {
 			<div class="content">
 				<strong>Create infraction</strong>
 				<hr>
-			  
+
 			  	<form class="form" v-on:submit.prevent="create">
 				  <div class="o-form-group">
 				    <label for="type">Infraction type</label>
 				    <select id="type" v-model="type">
-				      <option v-for="t in this.types" 
-				              :value="t" 
+				      <option v-for="t in this.types"
+				              :value="t"
 				              :key="t">
 				        {{t}}
 				      </option>
 				    </select>
 				  </div>
-				  
+
 				  <div class="o-form-group">
 				    <label for="time">Expiration date</label>
 				    <input type="date" id="time" v-model="date">
 				  </div>
-				  
+
 				  <div class="o-form-group">
 				    <label for="reason">Reason</label>
 				    <textarea id="reason" v-model="reason"></textarea>
 				  </div>
-				  
+
 				  <div class="o-form-group">
                     <input type="submit" value="Create">
 				  </div>
 			    </form>
-			
+
 			</div>
 		</div>
 	`,

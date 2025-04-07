@@ -1,5 +1,5 @@
-import { GetApiTagsAll, GetApiTagsStory } from "../../generated/paths-public";
-import type { TagDto } from "../../generated/types-public";
+import { GetApiTagsAll, GetApiTagsStory } from "@g/paths-public";
+import type { TagDto } from "@g/types-public";
 
 // @ts-ignore
 Vue.component("tag-search-select", {

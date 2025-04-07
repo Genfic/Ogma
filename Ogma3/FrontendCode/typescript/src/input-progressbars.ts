@@ -1,4 +1,4 @@
-import { parseDom } from "../src-helpers/dom";
+import { parseDom } from "@h/dom";
 
 type InputType = "validated" | "file" | "regular";
 

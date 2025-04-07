@@ -1,9 +1,4 @@
-import {
-	GetApiComments,
-	GetApiCommentsThread,
-	PostApiComments,
-	PostApiCommentsThreadLock,
-} from "../generated/paths-public";
+import { GetApiComments, GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 
 // @ts-ignore
 new Vue({

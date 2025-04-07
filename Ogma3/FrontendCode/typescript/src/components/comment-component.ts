@@ -1,11 +1,6 @@
-import {
-	DeleteApiComments,
-	GetApiCommentsMd,
-	GetApiCommentsRevisions,
-	PatchApiComments,
-} from "../../generated/paths-public";
-import type { GetRevisionResult } from "../../generated/types-public";
-import { long } from "../../src-helpers/tinytime-templates";
+import { DeleteApiComments, GetApiCommentsMd, GetApiCommentsRevisions, PatchApiComments } from "@g/paths-public";
+import type { GetRevisionResult } from "@g/types-public";
+import { long } from "@h/tinytime-templates";
 
 // @ts-ignore
 Vue.component("comment", {

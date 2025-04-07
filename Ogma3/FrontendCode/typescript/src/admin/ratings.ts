@@ -1,5 +1,5 @@
-import { DeleteApiRatings as deleteRating, GetApiRatings as getRatings } from "../../generated/paths-public";
-import type { RatingApiDto } from "../../generated/types-public";
+import { DeleteApiRatings as deleteRating, GetApiRatings as getRatings } from "@g/paths-public";
+import type { RatingApiDto } from "@g/types-public";
 
 // @ts-ignore
 new Vue({

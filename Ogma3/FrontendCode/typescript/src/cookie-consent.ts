@@ -1,5 +1,5 @@
-import { setCookie } from "../src-helpers/cookies";
-import { addToDate } from "../src-helpers/date-helpers";
+import { setCookie } from "@h/cookies";
+import { addToDate } from "@h/date-helpers";
 
 const banner = document.getElementById("cookie-consent");
 const button = banner.querySelector("button#cookie-consent-button");

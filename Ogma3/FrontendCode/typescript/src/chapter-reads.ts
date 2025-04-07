@@ -2,8 +2,8 @@ import {
 	GetApiChaptersread as getRead,
 	PostApiChaptersread as markRead,
 	DeleteApiChaptersread as markUnread,
-} from "../generated/paths-public";
-import { ico } from "../src-helpers/icon-path" with { type: "macro" };
+} from "@g/paths-public";
+import { ico } from "@h/icon-path" with { type: "macro" };
 
 const story = document.querySelector("[data-story-id]") as HTMLElement;
 const csrf = document.querySelector("[data-x-csrf]") as HTMLElement;

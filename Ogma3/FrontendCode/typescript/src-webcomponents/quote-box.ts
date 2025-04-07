@@ -1,9 +1,9 @@
-import { LitElement, html, nothing } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 import { when } from "lit/directives/when.js";
 import { GetApiQuotesRandom as getQuote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
-import { classMap } from "lit/directives/class-map.js";
 
 interface Quote {
 	body: string;

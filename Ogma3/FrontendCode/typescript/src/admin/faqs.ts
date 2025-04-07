@@ -3,9 +3,9 @@ import {
 	DeleteApiFaqs as deleteFaq,
 	GetApiFaqs as getAllFaqs,
 	PutApiFaqs as updateFaq,
-} from "../../generated/paths-public";
-import type { FaqDto } from "../../generated/types-public";
-import { log } from "../../src-helpers/logger";
+} from "@g/paths-public";
+import type { FaqDto } from "@g/types-public";
+import { log } from "@h/logger";
 
 // @ts-ignore
 new Vue({

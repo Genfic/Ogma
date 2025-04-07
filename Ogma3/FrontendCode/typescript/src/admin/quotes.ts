@@ -4,8 +4,8 @@ import {
 	DeleteApiQuotes as deleteQuote,
 	GetAllQuotes as getAllQuotes,
 	PutApiQuotes as updateQuote,
-} from "../../generated/paths-public";
-import type { FullQuoteDto } from "../../generated/types-public";
+} from "@g/paths-public";
+import type { FullQuoteDto } from "@g/types-public";
 
 // @ts-ignore
 new Vue({

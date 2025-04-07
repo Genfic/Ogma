@@ -1,4 +1,4 @@
-import { getCookieValue, setCookie } from "../src-helpers/cookies";
+import { getCookieValue, setCookie } from "@h/cookies";
 
 // @ts-ignore
 const settings_vue = new Vue({

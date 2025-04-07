@@ -1,4 +1,4 @@
-import { ico } from "../src-helpers/icon-path" with { type: "macro" };
+import { ico } from "@h/icon-path" with { type: "macro" };
 
 const passwordInputs = [...document.querySelectorAll("input[type=password]")] as HTMLInputElement[];
 
