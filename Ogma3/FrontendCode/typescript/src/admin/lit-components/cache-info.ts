@@ -4,14 +4,11 @@ import { DeleteAdminApiCache, GetAdminApiCache } from "../../../generated/paths-
 
 @customElement("cache-info")
 export class CacheInfo extends LitElement {
-	@state()
-	private cacheCount: number;
+	@state() private cacheCount: number;
+	@property() private csrf: string;
 
-	@property()
-	private csrf: string;
-
-	static get styles() {
-		return css`
+	// language=CSS
+	static styles = css`
 			.purge {
 				cursor: pointer;
 				padding: 0.5rem 1rem;
@@ -26,7 +23,6 @@ export class CacheInfo extends LitElement {
 				color: var(--red);
 			}
 		`;
-	}
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -38,7 +34,7 @@ export class CacheInfo extends LitElement {
 		return html`
 			<div class="cache">
 				<span class="count"><strong>${this.cacheCount}</strong> elements in the cache</span>
-				<button class="purge" @click="${() => this._purge()}">Purge</button>
+				<button class="purge" @click="${this._purge}">Purge</button>
 			</div>
 		`;
 	}

@@ -48,9 +48,13 @@
 
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
-				<a title="Write about it" class="action-btn large" asp-page="./Blog/Create" asp-route-story="@Model.Story.Id">
-					<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
-					<span class="name">Write about it</span>
+				<a title="Write about it"
+				   class="action-btn large"
+				   asp-page="./Blog/Create"
+				   asp-route-story="@Model.Story.Id"
+				   asp-route-from="@Routes.Pages.Story.Get(Model.Story.Id, Model.Story.Slug).Url(Url)">
+						<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
+						<span class="name">Write about it</span>
 				</a>
 			}
 

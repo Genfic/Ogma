@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	PostApiShelfStories as addToShelf,
@@ -8,6 +8,7 @@ import {
 } from "../generated/paths-public";
 import { clickOutside } from "../src-helpers/click-outside";
 import { log } from "../src-helpers/logger";
+import { styleMap } from "lit/directives/style-map.js";
 
 interface Shelf {
 	id: number;
@@ -38,6 +39,10 @@ export class ShelvesButton extends LitElement {
 		});
 	}
 
+	private iconStyle = (shelf: Shelf) => ({
+		color: shelf.color,
+	});
+
 	private quickShelf = (shelf: Shelf) => html`
 		<button
 			class="shelf action-btn"
@@ -45,7 +50,7 @@ export class ShelvesButton extends LitElement {
 			@click="${() => this.addOrRemove(shelf.id)}"
 			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
-			<o-icon class="material-icons-outlined" style="color: ${shelf.color}" icon="${shelf.iconName}"></o-icon>
+			<o-icon class="material-icons-outlined" style="${styleMap(this.iconStyle(shelf))}" icon="${shelf.iconName}"></o-icon>
 		</button>
 	`;
 
@@ -56,7 +61,7 @@ export class ShelvesButton extends LitElement {
 			@click="${() => this.addOrRemove(shelf.id)}"
 			style="box-shadow: ${shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null}"
 		>
-			<o-icon class="material-icons-outlined" style="color: ${shelf.color}" icon="${shelf.iconName}"></o-icon>
+			<o-icon class="material-icons-outlined" style="${styleMap(this.iconStyle(shelf))}" icon="${shelf.iconName}"></o-icon>
 			<span>${shelf.name}</span>
 		</button>
 	`;
@@ -69,12 +74,7 @@ export class ShelvesButton extends LitElement {
 				<o-icon class="material-icons-outlined" icon="lucide:ellipsis-vertical"></o-icon>
 			</button>
 
-			${
-				this.more
-					? html`
-				<div class="more-shelves">${this.shelves?.map(this.shelf)}</div> `
-					: null
-			}
+			${this.more ? html`<div class="more-shelves">${this.shelves?.map(this.shelf)}</div>` : nothing}
 		`;
 	}
 

@@ -7,7 +7,7 @@ export class Icon extends LitElement {
 
 	render() {
 		return html`
-			<svg width="24" height="24" class="o-icon" part="icon">
+			<svg width="24" height="24" class="o-icon" part="icon" >
 				<use href="/svg/spritesheet.svg#${this.icon}"></use>
 			</svg>
 		`;

@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
+import { convert } from "convert";
 import { GetAdminApiTelemetryGetTableInfo } from "../../../generated/paths-internal";
 
 @customElement("table-info")
@@ -10,8 +11,8 @@ export class TableInfo extends LitElement {
 	@state() private sortOrder: "asc" | "desc" = "asc";
 	@state() private tableInfo: { name: string; size: number }[] = [];
 
-	static get styles() {
-		return css`
+	// language=CSS
+	static styles = css`
 			table {
 				border-collapse: collapse;
 				outline: 1px solid var(--foreground-50);
@@ -28,7 +29,6 @@ export class TableInfo extends LitElement {
 				user-select: none;
 			}
 		`;
-	}
 
 	async connectedCallback() {
 		super.connectedCallback();
@@ -92,15 +92,7 @@ export class TableInfo extends LitElement {
 	}
 
 	private _formatBytes(bytes: number, decimals = 2) {
-		if (bytes === 0) return "0 B";
-
-		const k = 1024;
-		const dm = decimals < 0 ? 0 : decimals;
-		const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		const value = Number.parseFloat((bytes / k ** i).toFixed(dm));
-
-		return `${value} ${sizes[i]}`;
+		const num = convert(bytes, "bytes").to("best");
+		return `${num.quantity.toFixed(Math.abs(decimals))} ${num.unit}`;
 	}
 }

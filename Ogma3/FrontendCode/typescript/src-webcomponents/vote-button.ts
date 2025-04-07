@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
 	DeleteApiVotes as deleteVote,
@@ -17,7 +17,6 @@ export class VoteButton extends LitElement {
 
 	async connectedCallback() {
 		super.connectedCallback();
-		this.classList.add("wc-loaded");
 
 		const result = await getVotes(this.storyId);
 		if (result.ok) {

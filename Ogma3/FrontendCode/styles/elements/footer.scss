@@ -45,7 +45,13 @@ footer.footer {
 				width: 100%;
 				white-space: nowrap;
 				padding: .25rem;
+				display: flex;
+				place-items: center;
 				color: var(--foreground-75);
+
+				.icon {
+					height: 1.2rem;
+				}
 
 				&.follow {
 					display: flex;
@@ -56,9 +62,8 @@ footer.footer {
 						height: 1.5rem;
 					}
 
-					svg {
-						height: 18px;
-						width: 18px;
+					.icon {
+						height: .9rem;
 						color: var(--foreground-50);
 					}
 				}

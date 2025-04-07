@@ -15,5 +15,12 @@
 		font-size: .8rem;
 		text-align: center;
 		border-radius: 9999999px;
+
+		$stroke: 3px var(--background);
+		@supports(--webkit-text-stroke: $stroke) {
+			-webkit-text-stroke: $stroke;
+			-webkit-text-fill-color: var(--foreground);
+			paint-order: stroke fill;
+		}
 	}
 }

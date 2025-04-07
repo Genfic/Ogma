@@ -9,9 +9,9 @@ $title-height: 1.8rem;
 
 	display: grid;
 	grid: " img  title " auto
-		  " img  hook " 1fr
-		  " img  tags " auto
-		  " info info " auto / 10rem 1fr auto;
+		  " img  hook "  1fr
+		  " img  tags "  auto
+		  " info info "  auto / 10rem 1fr auto;
 	gap: .25rem .5rem;
 	grid-column-gap: .25rem;
 
@@ -43,6 +43,43 @@ $title-height: 1.8rem;
 		height: auto;
 	}
 
+	.info {
+		grid-area: info;
+		padding: .25rem;
+		display: flex;
+		flex-wrap: wrap;
+		border-top: 1px solid var(--bc, var(--foreground-25));
+
+		> * {
+			padding: 0 .25rem;
+			color: var(--foreground-75);
+			cursor: default;
+
+			&:hover {
+				color: var(--foreground);
+			}
+		}
+
+		> a {
+			cursor: pointer;
+		}
+
+		.icon {
+			font-size: 1rem;
+		}
+
+		.not-published {
+			color: var(--red-75);
+			margin-left: auto;
+			display: flex;
+			place-items: center;
+
+			.icon {
+				height: 1rem;
+			}
+		}
+	}
+
 	> .title {
 		grid-area: title;
 
@@ -60,7 +97,7 @@ $title-height: 1.8rem;
 			padding: 0 .25rem;
 
 
-			& > a {
+			> a {
 				color: var(--foreground);
 				text-decoration: none;
 				overflow: hidden;
@@ -74,7 +111,7 @@ $title-height: 1.8rem;
 				}
 			}
 
-			& > .rating {
+			> .rating {
 				display: inline;
 				vertical-align: middle;
 				height: $title-height * 0.7;
@@ -82,7 +119,7 @@ $title-height: 1.8rem;
 			}
 		}
 
-		& > .author {
+		> .author {
 			color: var(--foreground-75);
 			font-size: 90%;
 
@@ -102,36 +139,5 @@ $title-height: 1.8rem;
 		grid-area: tags;
 		display: flex;
 		flex-flow: row wrap;
-	}
-
-	.info {
-		grid-area: info;
-		padding: .25rem;
-		display: flex;
-		flex-wrap: wrap;
-		border-top: 1px solid var(--bc, var(--foreground-25));
-
-		> * {
-			padding: 0 .25rem;
-			color: var(--foreground-75);
-			cursor: default;
-
-			&:hover {
-				color: var(--foreground);
-			}
-		}
-
-		& > a {
-			cursor: pointer;
-		}
-
-		.icon {
-			font-size: 1rem;
-		}
-
-		.not-published {
-			color: var(--red-75);
-			margin-left: auto;
-		}
 	}
 }

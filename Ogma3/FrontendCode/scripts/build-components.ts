@@ -42,7 +42,6 @@ const compileAll = async () => {
 			!values.full && minifyHTML(),
 			esbuild({
 				tsconfig: join(_root, "..", "typescript", "tsconfig.json"),
-				treeShaking: true,
 				minify: !values.full,
 				legalComments: "eof",
 			}),
@@ -51,7 +50,7 @@ const compileAll = async () => {
 
 	await bundle.write({
 		file: join(_dest, "components.js"),
-		format: "umd",
+		format: "esm",
 		name: "components",
 		sourcemap: true,
 	});

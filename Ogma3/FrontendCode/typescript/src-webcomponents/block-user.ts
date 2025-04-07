@@ -9,20 +9,8 @@ export class BlockUser extends LitElement {
 	@property() accessor csrf: string;
 	@property() accessor isBlocked: boolean;
 
-	async connectedCallback() {
-		super.connectedCallback();
-		this.classList.add("wc-loaded");
-		this.addEventListener("click", this.block);
-		this.addEventListener("keydown", (e: KeyboardEvent) => {
-			if (e.key === " ") {
-				this.block();
-				e.preventDefault();
-			}
-		});
-	}
-
 	render() {
-		return html`<span> ${this.isBlocked ? "Unblock" : "Block"} </span>`;
+		return html`<button @click="${this.block}"> ${this.isBlocked ? "Unblock" : "Block"} </button>`;
 	}
 
 	private async block() {

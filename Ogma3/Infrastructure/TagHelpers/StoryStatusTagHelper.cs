@@ -14,10 +14,11 @@ public sealed class StoryStatusTagHelper : TagHelper
 	{
 		var (icon, name) = Status switch
 		{
-			EStoryStatus.InProgress => ("autorenew", "In progress"),
-			EStoryStatus.Completed => ("done", "Completed"),
-			EStoryStatus.OnHiatus => ("pause", "On hiatus"),
-			EStoryStatus.Cancelled => ("block", "Cancelled"),
+			EStoryStatus.InProgress => ("ic:round-autorenew", "In progress"),
+			EStoryStatus.Completed => ("ic:round-check", "Completed"),
+			EStoryStatus.OnHiatus => ("ic:round-pause", "On hiatus"),
+			EStoryStatus.Cancelled => ("ic:round-block", "Cancelled"),
+			EStoryStatus.Unspecified => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status)),
 			_ => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status)),
 		};
 
@@ -27,7 +28,11 @@ public sealed class StoryStatusTagHelper : TagHelper
 		output.AddClass(Status.ToString().ToLower(), HtmlEncoder.Default);
 
 		output.Content.SetHtmlContent("");
-		output.Content.AppendHtml($"<i class='material-icons-outlined'>{icon}</i>");
+		output.Content.AppendHtml($"""
+           <svg class="icon" height="24" width="24" part="icon">
+               <use href="/svg/spritesheet.svg#{icon}"></use>
+           </svg>
+           """);
 		output.Content.AppendHtml($"<span class='name'>{name}</span>");
 	}
 }

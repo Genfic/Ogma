@@ -111,9 +111,10 @@ export class ReportModal extends LitElement {
 								${when(
 									!this.validate(),
 									() =>
-										html`<span>
-											Reason must be between ${this.rules.min} and ${this.rules.max} characters long.
-										</span>`,
+										html`
+											<span>
+												Reason must be between ${this.rules.min} and ${this.rules.max} characters long.
+											</span>`,
 								)}
 							</div>
 

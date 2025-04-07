@@ -1,8 +1,8 @@
 
 .story-status {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	place-items: center;
+	gap: .1rem;
 
 	line-height: .9;
 	font-size: .9rem;
@@ -20,24 +20,27 @@
 	}
 
 	&.inprogress {
-		background-color: rgb(0 116 255 / 50%);
+		background-color: oklch(59% 0.225 258deg / 50%);
 	}
 
 	&.completed {
-		background-color: rgb(0 241 0 / 50%);
+		background-color: oklch(83% 0.282 142deg / 50%);
 	}
 
 	&.onhiatus {
-		background-color: rgb(127 127 127 / 50%);
+		background-color: oklch(59% 0 89deg / 50%);
 	}
 
 	&.cancelled {
-		background-color: rgb(255 0 0 / 50%);
+		background-color: oklch(62% 0.258 29deg / 50%);
 	}
 
-	> i.material-icons-outlined {
-		margin-right: .1rem;
-		font-size: .9rem;
+	> .icon {
+		height: 1rem;
+	}
+
+	> .name {
+		display: block;
 	}
 }
 

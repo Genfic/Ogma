@@ -4,12 +4,15 @@
 
 @{
 	ViewData["Title"] = "Create Blogpost";
+
+	var from = Request.Query.TryGetValue("from", out var f) ? f : [];
+	var returnTo = from.Count > 0 ? from[0] : Routes.Pages.User_Index.Get(User.GetUsername() ?? "").Url(Url);
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="button-group">
-	<a title="Cancel" class="action-btn large" asp-page="../User/Index" asp-route-name="@User.GetUsername()">
+	<a title="Cancel" class="action-btn large" href="@returnTo">
 		<icon class="icon" icon="lucide:arrow-left" svg="true"></icon>
 		<span class="name">Cancel</span>
 	</a>

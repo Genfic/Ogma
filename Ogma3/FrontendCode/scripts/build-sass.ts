@@ -21,6 +21,11 @@ const values = program
 	.parse(Bun.argv)
 	.opts();
 
+process.on("SIGINT", async () => {
+	await compiler.dispose();
+	process.exit(0);
+});
+
 const encoder = new TextEncoder();
 
 const root = dirname(Bun.main);
@@ -155,9 +160,6 @@ if (values.watch) {
 			await compileAll();
 		},
 	});
-}
-
-process.on("SIGINT", async () => {
-	await compiler.dispose();
+} else {
 	process.exit(0);
-});
+}

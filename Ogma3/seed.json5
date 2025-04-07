@@ -43,6 +43,10 @@
 		"lucide:circle-x",
 		"mdi:lock-open-variant-outline",
 		"mdi:lock-outline",
+		"ic:round-block",
+		"ic:round-pause",
+		"ic:round-check",
+		"ic:round-autorenew",
 	],
 	"Ratings": [
 		{

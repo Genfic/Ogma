@@ -18,7 +18,7 @@
 
 @section OgMeta {
 	<meta property="og:type" content="book.chapter">
-	<meta property="og:url" content="@Url.PageLink("/Chapter", values: new { Model.Chapter.Id, Model.Chapter.Slug })">
+	<meta property="og:url" content="@Routes.Pages.Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
 	<meta property="og:description" content="@desc">
 }
 
@@ -44,9 +44,13 @@
 		{
 			<div class="actions">
 
-				<a title="Write about it" class="action-btn" asp-page="/Blog/Create" asp-route-chapter="@Model.Chapter.Id">
-					<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
-					<span class="name">Write about it</span>
+				<a title="Write about it"
+				   class="action-btn"
+				   asp-page="/Blog/Create"
+				   asp-route-chapter="@Model.Chapter.Id"
+				   asp-route-from="@Routes.Pages.Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
+						<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
+						<span class="name">Write about it</span>
 				</a>
 
 				@if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))

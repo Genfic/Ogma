@@ -1,8 +1,9 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import { GetApiQuotesRandom as getQuote } from "../generated/paths-public";
 import { log } from "../src-helpers/logger";
+import { classMap } from "lit/directives/class-map.js";
 
 interface Quote {
 	body: string;
@@ -25,7 +26,7 @@ export class QuoteBox extends LitElement {
 		return html`
 			<div id="quote" class="quote active-border">
 				<div class="refresh" @click="${this.load}">
-					<o-icon icon="${this.spinnerIcon()}" class="material-icons-outlined ${this.spinnerClass()}"></o-icon>
+					<o-icon icon="${this.spinnerIcon()}" class="material-icons-outlined ${classMap({ spin: this._loading })}"></o-icon>
 				</div>
 				${when(
 					this._quote,
@@ -38,9 +39,7 @@ export class QuoteBox extends LitElement {
 			</div>
 		`;
 	}
-
-	private spinnerClass = () => (this._loading ? "spin" : "");
-	private spinnerIcon = () => (this._canReload ? "lucide:refresh-cw" : "lucide:clock");
+	private spinnerIcon = (): string => (this._canReload ? "lucide:refresh-cw" : "lucide:clock");
 
 	async load() {
 		if (!this._canReload) {
