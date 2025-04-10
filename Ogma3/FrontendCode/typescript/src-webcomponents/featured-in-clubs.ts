@@ -1,9 +1,9 @@
+import { GetApiClubsStory as getFeaturingClubs } from "@g/paths-public";
+import type { GetClubsWithStoryResult } from "@g/types-public";
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
-import { GetApiClubsStory as getFeaturingClubs } from "../generated/paths-public";
-import type { GetClubsWithStoryResult } from "../generated/types-public";
 
 @customElement("o-featured-in-clubs")
 export class FeaturedInClubs extends LitElement {

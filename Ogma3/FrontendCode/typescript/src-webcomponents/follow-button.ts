@@ -1,7 +1,7 @@
+import { PostApiUsersFollow as followUser, DeleteApiUsersFollow as unfollowUser } from "@g/paths-public";
+import { log } from "@h/logger";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { PostApiUsersFollow as followUser, DeleteApiUsersFollow as unfollowUser } from "../generated/paths-public";
-import { log } from "../src-helpers/logger";
 
 @customElement("o-follow")
 export class FollowButton extends LitElement {

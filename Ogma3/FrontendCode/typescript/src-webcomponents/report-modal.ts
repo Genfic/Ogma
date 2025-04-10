@@ -1,8 +1,8 @@
+import { PostApiReports as postReport } from "@g/paths-public";
+import type { EReportableContentTypes } from "@g/types-public";
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
-import { PostApiReports as postReport } from "../generated/paths-public";
-import type { EReportableContentTypes } from "../generated/types-public";
 
 @customElement("report-modal")
 export class ReportModal extends LitElement {

@@ -1,9 +1,9 @@
+import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
+import { log } from "@h/logger";
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { when } from "lit/directives/when.js";
-import { GetApiQuotesRandom as getQuote } from "../generated/paths-public";
-import { log } from "../src-helpers/logger";
 
 interface Quote {
 	body: string;
@@ -34,7 +34,7 @@ export class QuoteBox extends LitElement {
 						<em class="body">${this._quote.body}</em>
 						<span class="author">${this._quote.author}</span>
 					`,
-					() => html` <span>Loading the quote...</span> `,
+					() => html`<span>Loading the quote...</span>`,
 				)}
 			</div>
 		`;

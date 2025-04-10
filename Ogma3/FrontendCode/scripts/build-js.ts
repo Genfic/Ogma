@@ -92,10 +92,7 @@ console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("b
 if (values.watch) {
 	await watch(_source, {
 		transformer: (events) =>
-			events
-				.filter((e) => e.type === "update")
-				.filter((e) => hasExtension(e.path, "ts", "js"))
-				.map((e) => e.path),
+			events.filter(({ type, path }) => type === "update" && hasExtension(path, "ts", "js")).map((e) => e.path),
 		predicate: (files) => files.length > 0,
 		action: async (files) => {
 			for (const p of files) {

@@ -1,7 +1,7 @@
+import { GetApiNotificationsCount as countNotifications } from "@g/paths-public";
+import { log } from "@h/logger";
 import { LitElement, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { GetApiNotificationsCount as countNotifications } from "../generated/paths-public";
-import { log } from "../src-helpers/logger";
 
 @customElement("o-notifications-button")
 export class NotificationsButton extends LitElement {

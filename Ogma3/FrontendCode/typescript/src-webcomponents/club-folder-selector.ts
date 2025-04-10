@@ -1,16 +1,16 @@
+import {
+	PostApiFoldersAddStory as addStoryToFolder,
+	GetApiFolders as getFolders,
+	GetApiClubsUser as getUserClubs,
+} from "@g/paths-public";
+import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
+import { log } from "@h/logger";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
-import {
-	PostApiFoldersAddStory as addStoryToFolder,
-	GetApiFolders as getFolders,
-	GetApiClubsUser as getUserClubs,
-} from "../generated/paths-public";
-import type { GetFolderResult, GetJoinedClubsResponse } from "../generated/types-public";
-import { log } from "../src-helpers/logger";
 
 @customElement("o-club-folder-selector")
 export class ClubFolderSelector extends LitElement {

@@ -1,7 +1,7 @@
+import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "@g/paths-public";
+import { log } from "@h/logger";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "../generated/paths-public";
-import { log } from "../src-helpers/logger";
 
 @customElement("o-join")
 export class JoinClubButton extends LitElement {

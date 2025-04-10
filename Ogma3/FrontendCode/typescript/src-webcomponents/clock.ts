@@ -1,7 +1,7 @@
+import { addToDate } from "@h/date-helpers";
+import { EU, iso8601 } from "@h/tinytime-templates";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { addToDate } from "../src-helpers/date-helpers";
-import { EU, iso8601 } from "../src-helpers/tinytime-templates";
 
 @customElement("o-clock")
 export class Clock extends LitElement {

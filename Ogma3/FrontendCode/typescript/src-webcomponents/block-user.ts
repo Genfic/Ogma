@@ -1,7 +1,7 @@
+import { PostApiUsersBlock as blockUser, DeleteApiUsersBlock as unblockUser } from "@g/paths-public";
+import { log } from "@h/logger";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { PostApiUsersBlock as blockUser, DeleteApiUsersBlock as unblockUser } from "../generated/paths-public";
-import { log } from "../src-helpers/logger";
 
 @customElement("o-block")
 export class BlockUser extends LitElement {

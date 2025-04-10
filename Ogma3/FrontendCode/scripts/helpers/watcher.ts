@@ -32,7 +32,7 @@ export const watch = async <T>(directory: string, { transformer, predicate, acti
 		}
 	});
 
-	process.on("SIGINT", async () => {
+	process.on("exit", async () => {
 		// close watcher when Ctrl-C is pressed
 		console.log("🚪 Closing watcher...");
 		await subscription.unsubscribe();

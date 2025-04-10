@@ -8,6 +8,7 @@ import convert from "convert";
 import { rollup } from "rollup";
 import esbuild from "rollup-plugin-esbuild";
 import minifyHTML from "rollup-plugin-html-literals";
+import tsConfigPaths from "rollup-plugin-tsconfig-paths";
 import { dirsize } from "./helpers/dirsize";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
@@ -37,6 +38,9 @@ const compileAll = async () => {
 			sourcemap: true,
 		},
 		plugins: [
+			tsConfigPaths({
+				tsConfigPath: join(_root, "..", "typescript", "tsconfig.json"),
+			}),
 			multi(),
 			resolve(),
 			!values.full && minifyHTML(),
@@ -67,11 +71,7 @@ console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("b
 if (values.watch) {
 	await watch(_source, {
 		transformer: (events) =>
-			events
-				.filter((e) => e.type === "update")
-				.filter((e) => hasExtension(e.path, "ts"))
-				.filter((e) => !e.path.endsWith("~"))
-				.map((e) => e.path),
+			events.filter(({ type, path }) => type === "update" && hasExtension(path, "ts")).map((e) => e.path),
 		predicate: (files) => files.length > 0,
 		action: async (_) => {
 			await compileAll();

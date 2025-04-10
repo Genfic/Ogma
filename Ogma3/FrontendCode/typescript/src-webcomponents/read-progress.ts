@@ -1,7 +1,7 @@
+import { clamp, normalize } from "@h/math-helpers";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { clamp, normalize } from "../src-helpers/math-helpers";
 
 @customElement("o-read-progress")
 export class ReadProgress extends LitElement {

@@ -1,9 +1,9 @@
+import { GetApiFolders as getClubFolders } from "@g/paths-public";
+import type { GetFolderResult } from "@g/types-public";
+import { log } from "@h/logger";
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { GetApiFolders as getClubFolders } from "../generated/paths-public";
-import type { GetFolderResult } from "../generated/types-public";
-import { log } from "../src-helpers/logger";
 
 type Folder = {
 	id: number;
