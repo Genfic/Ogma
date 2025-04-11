@@ -19,4 +19,3 @@ Vue.component("input-file",{props:{max:{type:Number,required:!0},label:{type:Str
     `});
 
 //# debugId=FE158332FA266EFB64756E2164756E21
-//# sourceMappingURL=input-file-component.js.map

@@ -26,12 +26,11 @@ const compileFile = async (file: string) => {
 
 	const { success, logs } = await Bun.build({
 		entrypoints: [file],
-		format: "esm",
 		outdir: _dest,
 		root: _source,
 		minify: true,
-		sourcemap: "linked",
-		splitting: false,
+		sourcemap: "external",
+		splitting: true,
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
 

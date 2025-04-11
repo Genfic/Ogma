@@ -23,4 +23,3 @@ Vue.component("textarea-counter",{props:{max:{type:Number,required:!0},min:{type
     `});
 
 //# debugId=C56BE90142E0A5EF64756E2164756E21
-//# sourceMappingURL=textarea-counter-component.js.map

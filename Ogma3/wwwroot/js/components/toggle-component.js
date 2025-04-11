@@ -24,4 +24,3 @@ Vue.component("input-toggle",{props:{label:{type:String,required:!0},desc:{type:
     `});
 
 //# debugId=384BAC96F8F8415064756E2164756E21
-//# sourceMappingURL=toggle-component.js.map

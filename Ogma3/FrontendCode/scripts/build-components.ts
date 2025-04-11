@@ -1,3 +1,4 @@
+import { deserialize, serialize } from "bun:jsc";
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import multi from "@rollup/plugin-multi-entry";
@@ -5,7 +6,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import { Glob } from "bun";
 import ct from "chalk-template";
 import convert from "convert";
-import { rollup } from "rollup";
+import { type RollupCache, rollup } from "rollup";
 import esbuild from "rollup-plugin-esbuild";
 import minifyHTML from "rollup-plugin-html-literals";
 import tsConfigPaths from "rollup-plugin-tsconfig-paths";
@@ -24,6 +25,25 @@ const values = program
 const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript", "src-webcomponents");
 const _dest = join(_root, "..", "..", "wwwroot", "js", "bundle");
+const _cacheFile = join(_root, ".cache", "components.cache");
+
+const saveCache = async (cache: RollupCache | undefined) => {
+	if (!cache) {
+		return;
+	}
+	const bin = serialize(cache);
+	await Bun.write(_cacheFile, bin);
+};
+
+const loadCache = async () => {
+	if (!(await Bun.file(_cacheFile).exists())) {
+		return undefined;
+	}
+	const bin = await Bun.file(_cacheFile).arrayBuffer();
+	return deserialize(bin);
+};
+
+let cache: RollupCache | undefined = await loadCache();
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
@@ -32,11 +52,7 @@ const compileAll = async () => {
 
 	await using bundle = await rollup({
 		input: files,
-		output: {
-			file: join(_dest, "components.js"),
-			format: "esm",
-			sourcemap: true,
-		},
+		cache,
 		plugins: [
 			tsConfigPaths({
 				tsConfigPath: join(_root, "..", "typescript", "tsconfig.json"),
@@ -51,6 +67,9 @@ const compileAll = async () => {
 			}),
 		],
 	});
+
+	cache = bundle.cache;
+	await saveCache(cache);
 
 	await bundle.write({
 		file: join(_dest, "components.js"),

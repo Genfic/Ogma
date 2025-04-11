@@ -1,4 +1,3 @@
 function p(r){let o=[];for(let e=0;e<r.length;e++){let t=r[e];if(t)o.push(t)}return o}function x(r,o,{expires:e,secure:t,httpOnly:s,sameSite:m,path:f}={}){let a=[`${r}=${o}`,e&&`expires=${e.toUTCString()}`,t&&"Secure",s&&"HttpOnly",m&&`samesite=${m}`,f&&`path=${f}`];document.cookie=p(a).join("; ")}var i=(r,o={})=>{return new Date(r.getFullYear()+(o.years??0),r.getMonth()+(o.months??0),r.getDate()+(o.days??0),r.getHours()+(o.hours??0),r.getMinutes()+(o.minutes??0),r.getSeconds()+(o.seconds??0),r.getMilliseconds()+(o.milliseconds??0))};var n=document.getElementById("cookie-consent"),u=n.querySelector("button#cookie-consent-button");u.addEventListener("click",()=>{let r=i(new Date,{years:100});x("cookie-consent","true",{expires:r,secure:!0,sameSite:"Strict",path:"/"}),n.style.display="none"});
 
 //# debugId=320718CAF93F794164756E2164756E21
-//# sourceMappingURL=cookie-consent.js.map

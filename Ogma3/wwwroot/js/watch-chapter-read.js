@@ -1,4 +1,3 @@
 async function r(e,a,n,i,s){let t=await fetch(e,{method:a,headers:{"Content-Type":"application/json",...i},body:n?JSON.stringify(n):null,...s}),p=t.headers.get("content-type"),o;if(p?.includes("application/json"))o=await t.json();else o=await t.text();return{ok:t.ok,status:t.status,statusText:t.statusText,headers:t.headers,data:o}}var d=async(e,a,n)=>await r("/api/chaptersread","POST",e,a,n);var u=document.getElementById("chapter-progress");u.addEventListener("read",async({currentTarget:e})=>{let a=Number.parseInt(e.dataset.chapter),n=Number.parseInt(e.dataset.story),i=e.dataset.csrf,s=await d({story:n,chapter:a},{RequestVerificationToken:i});if(!s.ok&&s.status!==401)alert(`Could not mark chapter as read: ${s.status}`)});
 
 //# debugId=5438EBEACD918D0964756E2164756E21
-//# sourceMappingURL=watch-chapter-read.js.map
