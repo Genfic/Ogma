@@ -12,10 +12,13 @@
 		"importHelpers": true,
 		"downlevelIteration": true,
 		"baseUrl": "./",
+		"typeRoots": ["./types"],
 		"paths": {
 			"@g/*": ["./generated/*"],
 			"@h/*": ["./src-helpers/*"]
-		}
+		},
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js"
 	},
 	"exclude": ["node_modules", "tools", "src/sw"]
 }

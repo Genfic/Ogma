@@ -1,0 +1,11 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\..\\FrontendCode\\typescript\\src-helpers\\minify.macro.ts", "..\\..\\..\\FrontendCode\\typescript\\src-helpers\\jsx-wc-style.ts"],
+  "sourcesContent": [
+    "export const minifyHtml = (input: string): string => {\r\n\treturn input\r\n\t\t.split(\"\\n\")\r\n\t\t.map((s) => s.trim().replaceAll(/<\\s+/g, \"<\").replaceAll(/\\s+>/g, \">\"))\r\n\t\t.join(\"\")\r\n\t\t.trim();\r\n};\r\n\r\nexport const minifyCss = (input: string): string => {\r\n\treturn input\r\n\t\t.split(\"\\n\")\r\n\t\t.map((s) => s.trim())\r\n\t\t.join(\"\")\r\n\t\t.trim();\r\n};\r\n",
+    "import type { ICustomElement } from \"component-register/types/utils\";\r\nimport { minifyCss } from \"./minify.macro\";\r\n\r\nexport const addStyle = (element: ICustomElement, style: string) => {\r\n\tconst styleEl = document.createElement(\"style\");\r\n\r\n\tstyleEl.textContent = minifyCss(style);\r\n\r\n\telement.shadowRoot.appendChild(styleEl);\r\n};\r\n"
+  ],
+  "mappings": "AAQO,IAAM,EAAY,CAAC,IAA0B,CACnD,OAAO,EACL,MAAM;AAAA,CAAI,EACV,IAAI,CAAC,IAAM,EAAE,KAAK,CAAC,EACnB,KAAK,EAAE,EACP,KAAK,GCVD,IAAM,EAAW,CAAC,EAAyB,IAAkB,CACnE,IAAM,EAAU,SAAS,cAAc,OAAO,EAE9C,EAAQ,YAAc,EAAU,CAAK,EAErC,EAAQ,WAAW,YAAY,CAAO",
+  "debugId": "30604F2BB15601A064756E2164756E21",
+  "names": []
+}

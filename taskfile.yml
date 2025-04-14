@@ -31,7 +31,7 @@ tasks:
     # Check the size of the bundle
     bundlesize:
         vars:
-            SRC: ./Ogma3/wwwroot/js/{dist,bundle}/*.js
+            SRC: ./Ogma3/wwwroot/js/*.js ./Ogma3/wwwroot/js/**/*.js
         cmds:
             - ogma-tool bundle-size {{.SRC}}
 

@@ -1,29 +1,32 @@
+import { addStyle } from "@h/jsx-wc-style";
 import { clamp, normalize } from "@h/math-helpers";
-import { customElement } from "solid-element";
+import { type ComponentType, customElement } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
+import { minifyCss } from "@h/minify.macro" with { type: "macro" };
 
-customElement("o-read-progress", {}, (props) => {
+const ReadProgress: ComponentType<null> = (_, { element }) => {
 	const [progress, setProgress] = createSignal(0);
 	const [ticking, setTicking] = createSignal(false);
 	const [read, setRead] = createSignal(false);
 
 	onMount(() => {
 		// Add styles to shadow root
-		const style = document.createElement("style");
-		style.textContent = `
-      :host {
-        position: sticky;
-        inset: auto 0 0;
-      }
+		addStyle(
+			element,
+			minifyCss(`
+				:host {
+					position: sticky;
+					inset: auto 0 0;
+				}
 
-      .bar {
-        position: relative;
-        height: 3px;
-        background-color: var(--accent);
-        transition: width 50ms ease-out;
-      }
-    `;
-		props.element.shadowRoot.appendChild(style);
+				.bar {
+					position: relative;
+					height: 3px;
+					background-color: var(--accent);
+					transition: width 50ms ease-out;
+				}
+			`),
+		);
 
 		const handleScroll = () => {
 			if (!ticking()) {
@@ -36,7 +39,7 @@ customElement("o-read-progress", {}, (props) => {
 		};
 
 		const updateProgress = () => {
-			const parent = props.element.parentElement;
+			const parent = element.parentElement;
 			const elBottom = parent.getBoundingClientRect().bottom;
 			const percent = elBottom - window.innerHeight;
 			const containerHeight = parent.offsetTop + parent.offsetHeight;
@@ -47,7 +50,7 @@ customElement("o-read-progress", {}, (props) => {
 
 			if (newProgress >= 1 && !read()) {
 				setRead(true);
-				props.element.dispatchEvent(new CustomEvent("read"));
+				element.dispatchEvent(new CustomEvent("read"));
 			}
 		};
 
@@ -63,5 +66,7 @@ customElement("o-read-progress", {}, (props) => {
 		});
 	});
 
-	return () => <div class="bar" style={{ width: `${progress() * 100}%` }}></div>;
-});
+	return <div class="bar" style={{ width: `${progress() * 100}%` }} />;
+};
+
+customElement("o-read-progress", null, ReadProgress);

@@ -45,12 +45,15 @@ footer.footer {
 				width: 100%;
 				white-space: nowrap;
 				padding: .25rem;
-				display: flex;
-				place-items: center;
 				color: var(--foreground-75);
 
 				.icon {
 					height: 1.2rem;
+				}
+
+				&:has(.icon) {
+					display: flex;
+					place-items: center;
 				}
 
 				&.follow {

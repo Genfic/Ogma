@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\..\\FrontendCode\\typescript\\src-solid\\chapter-read.ts.tsx"],
+  "sourcesContent": [
+    "import { template as _$template } from \"solid-js/web\";\nimport { getOwner as _$getOwner } from \"solid-js/web\";\nvar _tmpl$ = /*#__PURE__*/_$template(`<button type=button class=read-status aria-label=\"Chapter read status\"data-id=@c.Id><o-icon icon=lucide:eye-off>`, true, false, false);\nimport { customElement, noShadowDOM } from \"solid-element\";\nimport { onMount } from \"solid-js\";\nconst ChapterRead = (props, {\n  element\n}) => {\n  noShadowDOM();\n  onMount(() => {\n    element.classList.add(\"wc-loaded\");\n  });\n  return (() => {\n    var _el$ = _tmpl$(),\n      _el$2 = _el$.firstChild;\n    _el$2._$owner = _$getOwner();\n    return _el$;\n  })();\n};\ncustomElement(\"o-read\", {\n  route: \"\",\n  chapterId: 0\n}, ChapterRead);"
+  ],
+  "mappings": "oEAEA,IAAI,EAAsB,EAAW,mHAAoH,GAAM,GAAO,EAAK,EAGrK,EAAc,CAAC,GACnB,aACI,CAKJ,OAJA,EAAY,EACZ,EAAQ,IAAM,CACZ,EAAQ,UAAU,IAAI,WAAW,EAClC,GACO,IAAM,CACZ,IAAI,EAAO,EAAO,EAChB,EAAQ,EAAK,WAEf,OADA,EAAM,QAAU,EAAW,EACpB,IACN,GAEL,EAAc,SAAU,CACtB,MAAO,GACP,UAAW,CACb,EAAG,CAAW",
+  "debugId": "5CDEB1AD82CAD05964756E2164756E21",
+  "names": []
+}

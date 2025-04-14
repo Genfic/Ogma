@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\..\\FrontendCode\\typescript\\src-helpers\\jsx-wc-style.ts"],
+  "sourcesContent": [
+    "import type { ICustomElement } from \"component-register/types/utils\";\r\n\r\nexport const addStyle = (element: ICustomElement, style: string) => {\r\n\tconst styleEl = document.createElement(\"style\");\r\n\r\n\tstyleEl.textContent = style;\r\n\r\n\telement.shadowRoot.appendChild(styleEl);\r\n};\r\n"
+  ],
+  "mappings": "AAEO,IAAM,EAAW,CAAC,EAAyB,IAAkB,CACnE,IAAM,EAAU,SAAS,cAAc,OAAO,EAE9C,EAAQ,YAAc,EAEtB,EAAQ,WAAW,YAAY,CAAO",
+  "debugId": "3A4588B5A2D70A0964756E2164756E21",
+  "names": []
+}
