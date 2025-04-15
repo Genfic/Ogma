@@ -20,11 +20,13 @@
 <head>
 	@* Preconnects, preloads and prefetches *@
 	<link rel="preconnect" href="https://cdn.genfic.net">
-	<link rel="preconnect" href="https://cdn.skypack.dev">
 
 	<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/Raleway-VF.woff2">
 	<link rel="preload" as="image" crossorigin="anonymous" type="image/svg+xml" href="~/svg/spritesheet.svg">
 
+	@* Module preloads *@
+	<link rel="modulepreload" href="~/js/sw/cache-service-worker.js" as="serviceworker" asp-append-version="true" />
+	<partial name="_ModulePreloads" />
 
 	@* Base meta *@
 	<meta charset="utf-8" />
@@ -66,7 +68,7 @@
 	}
 	else
 	{
-		<link rel="stylesheet" href="@($"~/css/{theme}.css")" asp-append-version="true" />
+		<link rel="stylesheet" href="~/css/@(theme).css" asp-append-version="true" />
 	}
 
 	<link id="theme-ph">
@@ -77,10 +79,45 @@
 	@Html.RenderResources("css")
 
 	@await RenderSectionAsync("Head", required: false)
+
+	@if (Env.IsDevelopment())
+	{
+		<script defer src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"
+		        asp-fallback-src="~/lib/vue/vue.js"
+		        asp-fallback-test="window.Vue"></script>
+	}
+	else
+	{
+		<script defer src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+		        asp-fallback-src="~/lib/vue/vue.min.js"
+		        asp-fallback-test="window.Vue"></script>
+	}
+
+	<script type="module" src="~/js/site.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/navbar.js" asp-append-version="true"></script>
+
+	@* TODO: Load only the ones that are actually necessary *@
+	<script type="module" src="~/js/comp/block-user.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/chapter-read.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/clock.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/club-folder-selector.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/featured-in-clubs.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/follow-button.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/icon.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/join-club-button.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/modal.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/notifications-button.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/qr-code.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/quote-box.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/read-progress.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/report-modal.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/shelves-button.ts.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/vote-button.ts.js" asp-append-version="true"></script>
+
+	@await RenderSectionAsync("Scripts", false)
+	@Html.RenderResources()
 </head>
 <body>
-
-@* <partial name="_IconSheet"/> *@
 
 <header>
 
@@ -126,47 +163,8 @@
 
 <partial name="_Footer"/>
 
-@* <script type="module" src="~/js/bundle/components.js" asp-append-version="true"></script> *@
-
-<script type="module" src="~/js/comp/block-user.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/chapter-read.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/clock.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/club-folder-selector.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/featured-in-clubs.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/follow-button.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/icon.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/join-club-button.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/modal.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/notifications-button.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/qr-code.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/quote-box.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/read-progress.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/report-modal.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/shelves-button.ts.js" asp-append-version="true"></script>
-<script type="module" src="~/js/comp/vote-button.ts.js" asp-append-version="true"></script>
-
-
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js"
         crossorigin="anonymous"></script>
-
-@if (Env.IsDevelopment())
-{
-	<script defer src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"
-	        asp-fallback-src="~/lib/vue/vue.js"
-	        asp-fallback-test="window.Vue"></script>
-}
-else
-{
-	<script defer src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
-	        asp-fallback-src="~/lib/vue/vue.min.js"
-	        asp-fallback-test="window.Vue"></script>
-}
-
-<script type="module" src="~/js/site.js" asp-append-version="true"></script>
-<script type="module" src="~/js/navbar.js" asp-append-version="true"></script>
-
-@await RenderSectionAsync("Scripts", false)
-@Html.RenderResources()
 
 @if (isAdmin is null)
 {

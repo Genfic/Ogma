@@ -1,4 +1,4 @@
-import path, { dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -24,7 +24,7 @@ const _dest = join(_root, "..", "..", "wwwroot", "js", "comp");
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
 
-	const { success, logs } = await Bun.build({
+	const { success, logs, outputs } = await Bun.build({
 		entrypoints: [...new Glob(`${_source}/**/[!_]*.tsx`).scanSync()],
 		outdir: _dest,
 		root: _source,
@@ -34,6 +34,14 @@ const compileAll = async () => {
 		plugins: [SolidPlugin()],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
+
+	const chunks = outputs
+		.filter((o) => o.kind === "chunk")
+		.map((c) => c.path.split("wwwroot").at(-1)?.replaceAll("\\", "/"))
+		.filter((s) => typeof s === "string")
+		.map((p) => `<link rel="modulepreload" href="~${p}" as="script" asp-append-version="true" />`);
+
+	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
 	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 	if (success) {
