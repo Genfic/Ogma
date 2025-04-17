@@ -9,8 +9,36 @@ const ReadProgress: ComponentType<null> = (_, { element }) => {
 	const [ticking, setTicking] = createSignal(false);
 	const [read, setRead] = createSignal(false);
 
+	const updateProgress = () => {
+		const parent = element.parentElement;
+		const elBottom = parent.getBoundingClientRect().bottom;
+		const percent = elBottom - window.innerHeight;
+		const containerHeight = parent.offsetTop + parent.offsetHeight;
+		const maxHeight = Math.max(containerHeight - window.innerHeight, 0);
+
+		const newProgress = 1 - clamp(normalize(percent, 0, maxHeight));
+		setProgress(newProgress);
+
+		if (newProgress >= 1 && !read()) {
+			setRead(true);
+			element.dispatchEvent(new CustomEvent("read"));
+		}
+	};
+
+	const handleScroll = () => {
+		if (!ticking()) {
+			window.requestAnimationFrame(() => {
+				updateProgress();
+				setTicking(false);
+			});
+			setTicking(true);
+		}
+	};
+
+	const handleResize = () => updateProgress();
+
 	onMount(() => {
-		// Add styles to shadow root
+		// language=CSS
 		addStyle(
 			element,
 			minifyCss(`
@@ -28,42 +56,14 @@ const ReadProgress: ComponentType<null> = (_, { element }) => {
 			`),
 		);
 
-		const handleScroll = () => {
-			if (!ticking()) {
-				window.requestAnimationFrame(() => {
-					updateProgress();
-					setTicking(false);
-				});
-				setTicking(true);
-			}
-		};
-
-		const updateProgress = () => {
-			const parent = element.parentElement;
-			const elBottom = parent.getBoundingClientRect().bottom;
-			const percent = elBottom - window.innerHeight;
-			const containerHeight = parent.offsetTop + parent.offsetHeight;
-			const maxHeight = Math.max(containerHeight - window.innerHeight, 0);
-
-			const newProgress = 1 - clamp(normalize(percent, 0, maxHeight));
-			setProgress(newProgress);
-
-			if (newProgress >= 1 && !read()) {
-				setRead(true);
-				element.dispatchEvent(new CustomEvent("read"));
-			}
-		};
-
-		const handleResize = () => updateProgress();
-
 		document.addEventListener("scroll", handleScroll);
 		window.addEventListener("resize", handleResize);
 		updateProgress();
+	});
 
-		onCleanup(() => {
-			document.removeEventListener("scroll", handleScroll);
-			window.removeEventListener("resize", handleResize);
-		});
+	onCleanup(() => {
+		document.removeEventListener("scroll", handleScroll);
+		window.removeEventListener("resize", handleResize);
 	});
 
 	return <div class="bar" style={{ width: `${progress() * 100}%` }} />;

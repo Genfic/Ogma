@@ -37,7 +37,7 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 		}
 	};
 
-	const [quote, { mutate, refetch }] = createResource<QuoteDto>(() => loadQuote(), {});
+	const [quote, { refetch }] = createResource<QuoteDto>(() => loadQuote(), {});
 
 	const spinnerIcon = () => (canLoad() ? "lucide:refresh-cw" : "lucide:clock");
 

@@ -8,17 +8,23 @@ import { dirsize } from "./helpers/dirsize";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
+import { rm } from "node:fs/promises";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
 	.option("-r, --release", "Build in release mode", false)
+	.option("-c, --clean", "Clean output directory", false)
 	.parse(Bun.argv)
 	.opts();
 
 const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript", "src");
 const _dest = join(_root, "..", "..", "wwwroot", "js");
+
+if (values.clean) {
+	await rm(_dest, { recursive: true, force: true });
+}
 
 const compileFile = async (file: string) => {
 	const start = Bun.nanoseconds();

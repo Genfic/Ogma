@@ -274,7 +274,7 @@ public sealed class Startup
 			options.MaxAge = TimeSpan.FromHours(12); // TimeSpan.FromYears(1) when HTTPS config is down pat
 		});
 
-		// Rate limiting profiles
+		// Rate-limiting profiles
 		services.AddRateLimiting();
 		// Cache policies
 		services.AddCachePolicies();

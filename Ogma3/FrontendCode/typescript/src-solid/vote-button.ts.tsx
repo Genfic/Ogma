@@ -47,7 +47,7 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 			title="Give it a star!"
 		>
 			<o-icon icon={voted() ? "ic:round-star" : "ic:round-star-border"} class="material-icons-outlined" />
-			<span class="count">{score() ?? 0}</span>
+			<span class="count">{score()}</span>
 		</button>
 	);
 };

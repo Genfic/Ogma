@@ -6,7 +6,7 @@ import { Show, createSignal, onMount } from "solid-js";
 const NotificationsButton: ComponentType<null> = (_, { element }) => {
 	noShadowDOM();
 
-	const [notifications, setNotifications] = createSignal(null);
+	const [notifications, setNotifications] = createSignal(0);
 
 	onMount(async () => {
 		element.classList.add("wc-loaded");
@@ -26,7 +26,7 @@ const NotificationsButton: ComponentType<null> = (_, { element }) => {
 	return (
 		<a class="nav-link light notifications-btn" href="/notifications" title={linkTitle()}>
 			<o-icon class="material-icons-outlined" icon="lucide:bell" />
-			<Show when={(notifications() ?? -1) > 0}>
+			<Show when={notifications() > 0}>
 				<span>{count()}</span>
 			</Show>
 		</a>

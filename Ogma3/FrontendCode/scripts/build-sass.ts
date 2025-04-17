@@ -1,4 +1,4 @@
-import { readdir } from "node:fs/promises";
+import { readdir, rm } from "node:fs/promises";
 import * as path from "node:path";
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
@@ -18,13 +18,9 @@ import { watch } from "./helpers/watcher";
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
+	.option("-c, --clean", "Clean output directory", false)
 	.parse(Bun.argv)
 	.opts();
-
-process.on("SIGINT", async () => {
-	await compiler.dispose();
-	process.exit(0);
-});
 
 const encoder = new TextEncoder();
 
@@ -32,8 +28,17 @@ const root = dirname(Bun.main);
 const _base = join(root, "..", "styles");
 const _dest = join(root, "..", "..", "wwwroot", "css");
 
+if (values.clean) {
+	await rm(_dest, { recursive: true, force: true });
+}
+
 const compiler = await initAsyncCompiler();
 const targets = browserslistToTargets(browserslist("last 2 years and > 0.1% and not dead"));
+
+process.on("SIGINT", async () => {
+	await compiler.dispose();
+	process.exit(0);
+});
 
 const compileSass = async (file: string) => {
 	const start = Bun.nanoseconds();

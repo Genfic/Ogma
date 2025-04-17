@@ -18,7 +18,6 @@ public sealed class StoryStatusTagHelper : TagHelper
 			EStoryStatus.Completed => ("ic:round-check", "Completed"),
 			EStoryStatus.OnHiatus => ("ic:round-pause", "On hiatus"),
 			EStoryStatus.Cancelled => ("ic:round-block", "Cancelled"),
-			EStoryStatus.Unspecified => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status)),
 			_ => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status)),
 		};
 

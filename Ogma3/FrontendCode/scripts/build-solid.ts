@@ -9,17 +9,23 @@ import { log } from "./helpers/logger";
 import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
+import { rm } from "node:fs/promises";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
 	.option("-r, --release", "Build in release mode", false)
+	.option("-c, --clean", "Clean output directory", false)
 	.parse(Bun.argv)
 	.opts();
 
 const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript", "src-solid");
 const _dest = join(_root, "..", "..", "wwwroot", "js", "comp");
+
+if (values.clean) {
+	await rm(_dest, { recursive: true, force: true });
+}
 
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
@@ -39,7 +45,7 @@ const compileAll = async () => {
 		.filter((o) => o.kind === "chunk")
 		.map((c) => c.path.split("wwwroot").at(-1)?.replaceAll("\\", "/"))
 		.filter((s) => typeof s === "string")
-		.map((p) => `<link rel="modulepreload" href="~${p}" as="script" asp-append-version="true" />`);
+		.map((p) => `<link rel="modulepreload" href="~${p}" as="script" />`);
 
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 

@@ -27,12 +27,12 @@ public static partial class String
 		{
 			return input;
 		}
-		
+
 		if (char.IsUpper(input[0]))
 		{
 			return input;
 		}
-		
+
 		return input[0].ToString().ToUpper() + input[1..];
 	}
 
@@ -47,6 +47,24 @@ public static partial class String
 		foreach (var (key, value) in pattern)
 		{
 			template = template.Replace(key, value);
+		}
+
+		return template;
+	}
+
+
+	/// <summary>
+	/// Replaces elements of the `template` according to the supplied `pattern`
+	/// </summary>
+	/// <param name="template">Template to replace values in</param>
+	/// <param name="pattern">Dictionary in which keys are values to be replaced and values are values to replace them with</param>
+	/// <param name="comparisonType"></param>
+	/// <returns>Resulting string</returns>
+	public static string ReplaceWithPattern(this string template, Dictionary<string, string> pattern, StringComparison comparisonType)
+	{
+		foreach (var (key, value) in pattern)
+		{
+			template = template.Replace(key, value, comparisonType);
 		}
 
 		return template;
@@ -117,7 +135,7 @@ public static partial class String
 	public static string[] ParseHashtags(this string? input)
 	{
 		if (string.IsNullOrWhiteSpace(input)) return [];
-		
+
 		return input.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
 			.Select(t => t.Trim('#').Friendlify())
 			.Distinct()
@@ -132,7 +150,7 @@ public static partial class String
 	public static List<Header> GetMarkdownHeaders(this string input)
 	{
 		var headers = new List<Header>();
-		
+
 		var lines = input.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 		foreach (var line in lines)
 		{
@@ -155,7 +173,7 @@ public static partial class String
 
 			var latest = headers.Count(h => h.Body == body);
 
-			var occurrence = latest > 0 
+			var occurrence = latest > 0
 				? (byte)(latest + 1)
 				: (byte)0;
 

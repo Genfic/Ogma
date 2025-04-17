@@ -7,12 +7,12 @@ public static class NestedSchemaReferenceId
 	public static string? Fun(JsonTypeInfo info)
 	{
 		var type = Nullable.GetUnderlyingType(info.Type) ?? info.Type;
-		
+
 		if (PrimitiveTypes.Contains(type) || type.IsArray)
 		{
 			return null;
 		}
-		
+
 		return Generate(info.Type);
 	}
 

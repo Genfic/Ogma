@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Markdig;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
@@ -17,6 +18,25 @@ namespace Ogma3.Api.V1.Comments;
 [MapGet("api/comments")]
 public static partial class GetPaginatedComments
 {
+	private const string HeaderName = "X-Username";
+
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+		.WithOpenApi(c => {
+			var res = c.Responses["200"];
+			res.Headers ??= new Dictionary<string, OpenApiHeader>();
+
+			res.Headers[HeaderName] = new()
+			{
+				Description = "The username of the user who is requesting the comments or null if the request is anonymous.",
+				Schema = new()
+				{
+					Type = "string",
+					Nullable = true,
+				},
+			};
+			return c;
+		});
+
 	[UsedImplicitly]
 	public sealed record Query(long Thread, int? Page, long? Highlight);
 
@@ -37,14 +57,14 @@ public static partial class GetPaginatedComments
 			.FirstOrDefaultAsync(cancellationToken);
 
 		// If a highlight has been requested, get the page on which the highlighted comment would be.
-		// If not, simply return the requested page or the first page if requested page is null.
-		// `highlight - 1` offsets the fact, that the requested IDs start from 1, not 0
+		// If not, return the requested page or the first page if the requested page is null.
+		// `highlight - 1` offsets the fact that the requested IDs start from 1, not 0
 		var p = highlight is not ({} h and > 0)
 			? Math.Max(1, page ?? 1)
 			: (int)Math.Ceiling((double)(total - (h - 1)) / ogmaConfig.CommentsPerPage);
 
 		// Send auth data
-		httpContextAccessor.HttpContext?.Response.Headers.Append("X-Username", userService.User?.GetUsername());
+		httpContextAccessor.HttpContext?.Response.Headers.Append(HeaderName, userService.User?.GetUsername());
 
 		var comments = await context.Comments
 			.Where(c => c.CommentsThreadId == thread)
