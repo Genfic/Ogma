@@ -14,12 +14,12 @@ const Clock: ComponentType<{ date: string }> = (props, { element }) => {
 		addStyle(
 			element,
 			minifyCss(`
-					time {
-						font-family: "Courier New", Courier, monospace;
-						letter-spacing: -2px;
-						margin: auto 0;
-					}
-				`),
+				.time {
+					font-family: "Courier New", Courier, monospace;
+					letter-spacing: -2px;
+					margin: auto 0;
+				}
+			`),
 		);
 
 		// Set up the timer

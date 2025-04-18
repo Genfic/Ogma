@@ -8,14 +8,34 @@ interface DateDelta {
 	milliseconds?: number;
 }
 
+type Method = {
+	[K in keyof Date]: Date[K] extends (...args: unknown[]) => number ? K : never;
+}[keyof Date];
+
+type Prop = keyof DateDelta;
+
+const methods: [Method, Prop][] = [
+	["getFullYear", "years"],
+	["getMonth", "months"],
+	["getDate", "days"],
+	["getHours", "hours"],
+	["getMinutes", "minutes"],
+	["getSeconds", "seconds"],
+	["getMilliseconds", "milliseconds"],
+] as const;
+
+type DateParams = [
+	year: number,
+	monthIndex: number,
+	date?: number,
+	hours?: number,
+	minutes?: number,
+	seconds?: number,
+	ms?: number,
+];
+
 export const addToDate = (date: Date, delta: DateDelta = {}) => {
 	return new Date(
-		date.getFullYear() + (delta.years ?? 0),
-		date.getMonth() + (delta.months ?? 0),
-		date.getDate() + (delta.days ?? 0),
-		date.getHours() + (delta.hours ?? 0),
-		date.getMinutes() + (delta.minutes ?? 0),
-		date.getSeconds() + (delta.seconds ?? 0),
-		date.getMilliseconds() + (delta.milliseconds ?? 0),
+		...(methods.map(([getter, prop]) => (date[getter] as () => number)() + (delta[prop] ?? 0)) as DateParams),
 	);
 };

@@ -5,5 +5,5 @@ export const addStyle = (element: ICustomElement, style: string) => {
 
 	styleEl.textContent = style;
 
-	element.shadowRoot.appendChild(styleEl);
+	element.renderRoot.appendChild(styleEl);
 };

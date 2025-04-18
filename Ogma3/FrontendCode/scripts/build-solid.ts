@@ -49,11 +49,13 @@ const compileAll = async () => {
 
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
-	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	const time = convert(Bun.nanoseconds() - start, "ns")
+		.to("best")
+		.toString(3);
 	if (success) {
-		console.log(ct`{dim Files compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
+		console.log(ct`{dim Files compiled in {reset.bold {underline ${time}}}}`);
 	} else {
-		console.error(ct`{red Build of files failed after {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`);
+		console.error(ct`{red Build of files failed after {reset.bold {underline ${time}}}}`);
 		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
@@ -67,12 +69,12 @@ const compileAll = async () => {
 			}
 		}
 	}
+
+	const size = await dirsize(`${_dest}/**/[!_]*.js`);
+	console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);
 };
 
 await compileAll();
-
-const size = await dirsize(`${_dest}/**/[!_]*.js`);
-console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best")}}}`);
 
 if (values.watch) {
 	await watch(_source, {

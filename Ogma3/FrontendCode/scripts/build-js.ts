@@ -87,12 +87,12 @@ const compileAll = async () => {
 		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
 	}
 	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
+
+	const size = await dirsize(`${_dest}/**/[!_]*.js`);
+	console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);
 };
 
 await compileAll();
-
-const size = await dirsize(`${_dest}/**/[!_]*.js`);
-console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best")}}}`);
 
 if (values.watch) {
 	await watch(_source, {
