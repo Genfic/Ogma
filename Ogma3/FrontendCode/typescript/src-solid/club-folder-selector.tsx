@@ -6,7 +6,8 @@ import {
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
 import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, Show, createResource, createSignal, onMount } from "solid-js";
+import { For, createResource, createSignal, onMount, Switch, Match } from "solid-js";
+import { Dialog, type DialogApi } from "./common/dialog";
 
 const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 	props: { storyId: number; csrf: string },
@@ -17,8 +18,8 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 	const [clubs, setClubs] = createSignal<GetJoinedClubsResponse[]>([]);
 	const [selectedClub, setSelectedClub] = createSignal<GetJoinedClubsResponse | null>(null);
 	const [status, setStatus] = createSignal({ message: "", success: false });
-	const [visible, setVisible] = createSignal(false);
 	const [selectedFolder, setSelectedFolder] = createSignal<GetFolderResult | null>(null);
+	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
 
 	onMount(async () => {
 		element.classList.add("wc-loaded");
@@ -46,10 +47,6 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 	const setClub = (club: GetJoinedClubsResponse | null) => {
 		setSelectedClub(club);
 		setSelectedFolder(null);
-	};
-
-	const setVisibility = (visibility: boolean) => {
-		setVisible(visibility);
 	};
 
 	const select = (folder: GetFolderResult) => {
@@ -99,23 +96,31 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 			<div class={`msg ${status().success ? "success" : "error"}`}>{status().message}</div>
 
 			<div class="folders">
-				<Show when={!folders.loading} fallback={<div>Loading folders...</div>}>
-					<Show when={!folders.error} fallback={<div>Error: {folders.error?.message}</div>}>
-						<For each={folders()}>
+				<Switch>
+					<Match when={folders.loading}>
+						<div>Loading folders...</div>
+					</Match>
+					<Match when={folders.error}>
+						<div>Error fetching folders</div>
+					</Match>
+					<Match when={folders}>
+						<For each={folders()} fallback={<div>This club has no folders</div>}>
 							{(folder) => (
 								<button
 									type="button"
-									class={`folder ${!folder.canAdd ? "locked" : ""} ${
-										selectedFolder()?.id === folder.id ? "active" : ""
-									}`}
-									onClick={() => select(folder)}
+									classList={{
+										locked: !folder.canAdd,
+										active: selectedFolder()?.id === folder.id,
+									}}
+									class="folder"
+									onClick={[select, folder]}
 								>
 									{folder.name}
 								</button>
 							)}
 						</For>
-					</Show>
-				</Show>
+					</Match>
+				</Switch>
 			</div>
 
 			<div class="buttons">
@@ -136,7 +141,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 			</div>
 
 			<div class="clubs">
-				<For each={clubs()}>
+				<For each={clubs()} fallback={<div>You're not a member of any clubs</div>}>
 					{(c) => (
 						<button type="button" class="club" onClick={() => setClub(c)}>
 							<img src={c.icon ?? "ph-250.png"} alt={c.name} width="48" height="48" />
@@ -150,17 +155,13 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 
 	return (
 		<>
-			<button type="button" class="club-wc-button" onClick={() => setVisibility(true)}>
+			<button type="button" class="club-wc-button" onClick={() => dialogRef()?.open()}>
 				Add to folder
 			</button>
 
-			<Show when={visible()}>
-				<div class="club-folder-selector my-modal" onClick={() => setVisibility(false)}>
-					<div class="content" onClick={(e) => e.stopPropagation()}>
-						{selectedClub() !== null ? selectedClubView() : allClubsView()}
-					</div>
-				</div>
-			</Show>
+			<Dialog ref={setDialogRef} classes="club-folder-selector">
+				<div class="content">{selectedClub() !== null ? selectedClubView() : allClubsView()}</div>
+			</Dialog>
 		</>
 	);
 };

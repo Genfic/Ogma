@@ -94,7 +94,7 @@
 			@if (User.Identity?.IsAuthenticated ?? false)
 			{
 				<div class="spacer"></div>
-				<o-shelves storyId="@Model.Story.Id" csrf="@csrf"></o-shelves>
+				<o-shelves story-id="@Model.Story.Id" csrf="@csrf"></o-shelves>
 			}
 
 		</div>
@@ -178,12 +178,12 @@
 
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
-			<o-club-folder-selector storyId="@Model.Story.Id"
+			<o-club-folder-selector story-id="@Model.Story.Id"
 			                        csrf="@csrf">
 			</o-club-folder-selector>
 		}
 
-		<o-featured-in-clubs storyId="@Model.Story.Id"></o-featured-in-clubs>
+		<o-featured-in-clubs story-id="@Model.Story.Id"></o-featured-in-clubs>
 
 		<a asp-route="@(nameof(GetChaptersRssFeed))" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
 			<icon icon="lucide:rss" svg="true"></icon>

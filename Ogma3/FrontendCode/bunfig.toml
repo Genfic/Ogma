@@ -1,5 +1,3 @@
-jsx = "solid"
-
 preload = ['./scripts/plugins/json5-loader.ts', 'bun-plugin-svelte']
 
 [test]

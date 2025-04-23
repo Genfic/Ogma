@@ -22,3 +22,37 @@
 		border: 5px solid var(--background);
 	}
 }
+
+dialog {
+	&.my-dialog {
+		min-width: 20rem;
+		width: min(40rem, 100vw);
+		max-height: 30rem;
+		background: var(--background);
+		padding: 1rem;
+		height: 100%;
+		overflow-y: auto;
+		border: none;
+
+		> .content {
+			display: flex;
+			flex-direction: column;
+		}
+
+		> .close-btn {
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin: .5rem;
+			padding: .5rem;
+			background: transparent;
+			border: none;
+			color: var(--foreground);
+			font-size: 1.5rem;
+		}
+
+		&::backdrop {
+			background: var(--foreground-50);
+		}
+	}
+}

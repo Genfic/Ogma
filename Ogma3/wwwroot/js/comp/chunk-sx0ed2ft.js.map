@@ -5,6 +5,6 @@
     "/**\r\n * Check if the given variable is an object\r\n * @param {any} obj Variable to check\r\n * @returns {boolean} True if the variable is an object, false if it's a primitive\r\n */\r\nfunction _isObject(obj: unknown): boolean {\r\n\treturn obj === Object(obj);\r\n}\r\n\r\n/**\r\n * Creates a deep copy of the object through parsing and serializing JSON\r\n */\r\nfunction _deepCopy(o: object): object {\r\n\treturn JSON.parse(JSON.stringify({ ...o, __isCopied__: true }));\r\n}\r\n\r\nconst _getMessage = (o: unknown) => (_isObject(o) ? _deepCopy(o as object) : o);\r\n\r\n/**\r\n * Logger object to create better logging experience\r\n */\r\nexport const log = {\r\n\tlog: (o: unknown) => console.log(_getMessage(o)),\r\n\tinfo: (o: unknown) => console.info(_getMessage(o)),\r\n\twarn: (o: unknown) => console.warn(_getMessage(o)),\r\n\terror: (o: unknown) => console.error(_getMessage(o)),\r\n\tdebug: (o: unknown) => console.debug(_getMessage(o)),\r\n};\r\n"
   ],
   "mappings": "AAKA,SAAS,CAAS,CAAC,EAAuB,CACzC,OAAO,IAAQ,OAAO,CAAG,EAM1B,SAAS,CAAS,CAAC,EAAmB,CACrC,OAAO,KAAK,MAAM,KAAK,UAAU,IAAK,EAAG,aAAc,EAAK,CAAC,CAAC,EAG/D,IAAM,EAAc,CAAC,IAAgB,EAAU,CAAC,EAAI,EAAU,CAAW,EAAI,EAKhE,EAAM,CAClB,IAAK,CAAC,IAAe,QAAQ,IAAI,EAAY,CAAC,CAAC,EAC/C,KAAM,CAAC,IAAe,QAAQ,KAAK,EAAY,CAAC,CAAC,EACjD,KAAM,CAAC,IAAe,QAAQ,KAAK,EAAY,CAAC,CAAC,EACjD,MAAO,CAAC,IAAe,QAAQ,MAAM,EAAY,CAAC,CAAC,EACnD,MAAO,CAAC,IAAe,QAAQ,MAAM,EAAY,CAAC,CAAC,CACpD",
-  "debugId": "51D1746CC3D6A8C164756E2164756E21",
+  "debugId": "02075FA81BD216B464756E2164756E21",
   "names": []
 }

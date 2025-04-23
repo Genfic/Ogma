@@ -7,8 +7,26 @@ import {
 import { clickOutsideSolid } from "@h/click-outside";
 import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createSignal, onMount, type Setter } from "solid-js";
 import type { ShelfResult } from "@g/types-public";
+
+const updateShelfData = (
+	currentShelves: ShelfResult[],
+	setShelvesFunc: Setter<ShelfResult[]>,
+	updatedShelfId: number,
+	containsBook: boolean,
+) => {
+	const newShelves = currentShelves.map((shelf) => {
+		if (shelf.id === updatedShelfId) {
+			return {
+				...shelf,
+				doesContainBook: containsBook,
+			};
+		}
+		return shelf;
+	});
+	setShelvesFunc(newShelves);
+};
 
 const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
 	noShadowDOM();
@@ -17,7 +35,6 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 	const [shelves, setShelves] = createSignal<ShelfResult[]>([]);
 	const [more, setMore] = createSignal(false);
 	const [page, setPage] = createSignal(1);
-	const [moreShelvesLoaded, setMoreShelvesLoaded] = createSignal(false);
 
 	onMount(async () => {
 		await getQuickShelvesData();
@@ -45,7 +62,6 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		const res = await getShelves(props.storyId, page());
 		if (res.ok) {
 			setShelves(res.data);
-			setMoreShelvesLoaded(true);
 		} else {
 			log.error(res.statusText);
 		}
@@ -53,7 +69,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 
 	const showMore = async () => {
 		setMore(!more());
-		if (more() && !moreShelvesLoaded()) {
+		if (more() && shelves().length <= 0) {
 			await getShelvesData();
 		}
 	};
@@ -74,27 +90,10 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		);
 
 		if (res.ok) {
-			const data = res.data;
-			// Update the shelf data
-			const updatedQuickShelves = [...quickShelves()];
-			const quickIndex = updatedQuickShelves.findIndex((s) => s.id === data.shelfId);
-			if (quickIndex >= 0) {
-				updatedQuickShelves[quickIndex] = {
-					...updatedQuickShelves[quickIndex],
-					doesContainBook: !exists,
-				};
-				setQuickShelves(updatedQuickShelves);
-			}
+			const { shelfId } = res.data;
 
-			const updatedShelves = [...shelves()];
-			const shelfIndex = updatedShelves.findIndex((s) => s.id === data.shelfId);
-			if (shelfIndex >= 0) {
-				updatedShelves[shelfIndex] = {
-					...updatedShelves[shelfIndex],
-					doesContainBook: !exists,
-				};
-				setShelves(updatedShelves);
-			}
+			updateShelfData(quickShelves(), setQuickShelves, shelfId, !exists);
+			updateShelfData(shelves(), setShelves, shelfId, !exists);
 		} else {
 			log.error(res.statusText);
 		}

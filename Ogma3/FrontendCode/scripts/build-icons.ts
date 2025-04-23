@@ -6,12 +6,24 @@ import convert from "convert";
 import dedent from "dedent";
 import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
+import ejs from "ejs";
+import { findAllTemplates } from "./helpers/template-helpers";
+import { program } from "@commander-js/extra-typings";
 
 const start = Bun.nanoseconds();
+
+const values = program
+	.option("-v, --verbose", "Verbose mode", false)
+	.option("-s, --serve", "Serve the icon index", false)
+	.option("-p, --port <port>", "Port on which to serve", (v) => Number.parseInt(v), 3000)
+	.parse(Bun.argv)
+	.opts();
 
 const _root = dirname(Bun.main);
 const json = await Bun.file(join(_root, "..", "..", "seed.json5")).text();
 const seed = parse(json) as { Icons: string[]; AdditionalIcons: string[] };
+
+const templates = await findAllTemplates(join(_root, "templates", "*.ejs"));
 
 const foundIcons: (string | null)[] = [];
 
@@ -47,7 +59,7 @@ const fetchIcon = async (icon: string): Promise<Svg | null> => {
 	return null;
 };
 
-const res = await Promise.all(icons.map((icon) => fetchIcon(icon)));
+const res = await Promise.all(compact(icons).map((icon) => fetchIcon(icon)));
 
 const svgs = compact(res).toSorted((a, b) => a.name.localeCompare(b.name));
 
@@ -69,10 +81,24 @@ const tpl = dedent`
 
 const spritesheet = rewriter.transform(tpl);
 
-await Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet);
-await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet);
+const index = ejs.render(templates["icon-index"], { svgs });
+await Promise.all([
+	async () => await Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet),
+	async () => await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet),
+	async () => await Bun.write(join(_root, "..", "..", "wwwroot", "icon-index.html"), index),
+]);
 
 console.log(ct`{green Created {reset.bold ./wwwroot/svg/spritesheet.svg}} and {bold ./Pages/Shared/IconSheet.cshtml}`);
 
 const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
 console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}`);
+
+if (values.serve) {
+	const server = Bun.serve({
+		port: values.port,
+		fetch(_) {
+			return new Response(index, { headers: { "Content-Type": "text/html" } });
+		},
+	});
+	console.log(ct`{green Serving icons at {bold ${server.url}}}`);
+}

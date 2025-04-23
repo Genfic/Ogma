@@ -1,27 +1,21 @@
 import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as postVote } from "@g/paths-public";
 import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { createSignal, onMount } from "solid-js";
+import { createResource } from "solid-js";
 
 const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => {
 	noShadowDOM();
 
-	const [voted, setVoted] = createSignal(false);
-	const [score, setScore] = createSignal(0);
-
-	onMount(async () => {
-		const result = await getVotes(props.storyId);
-		if (result.ok) {
-			const { count, didVote } = result.data;
-			setScore(count);
-			setVoted(didVote);
-		} else {
-			log.error(`Error fetching data: ${result.statusText}`);
-		}
-	});
+	const [votes, { mutate }] = createResource(
+		() => props.storyId,
+		async (id) => {
+			const result = await getVotes(id);
+			return result.data;
+		},
+	);
 
 	const vote = async () => {
-		const send = voted() ? deleteVote : postVote;
+		const send = votes().didVote ? deleteVote : postVote;
 
 		const result = await send(
 			{ storyId: props.storyId },
@@ -31,9 +25,7 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 		);
 
 		if (result.ok) {
-			const { count, didVote } = result.data;
-			setScore(count);
-			setVoted(didVote);
+			mutate(result.data);
 		} else {
 			log.error(`Error fetching data: ${result.statusText}`);
 		}
@@ -42,12 +34,16 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 	return () => (
 		<button
 			type="button"
-			class={`votes action-btn large ${voted() ? "active" : ""}`}
+			class="votes action-btn large"
+			classList={{ active: votes()?.didVote }}
 			onClick={vote}
 			title="Give it a star!"
 		>
-			<o-icon icon={voted() ? "ic:round-star" : "ic:round-star-border"} class="material-icons-outlined" />
-			<span class="count">{score()}</span>
+			<o-icon
+				icon={votes()?.didVote ? "ic:round-star" : "ic:round-star-border"}
+				class="material-icons-outlined"
+			/>
+			<span class="count">{votes()?.count ?? 0}</span>
 		</button>
 	);
 };

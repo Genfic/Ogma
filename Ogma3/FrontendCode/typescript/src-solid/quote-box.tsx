@@ -2,6 +2,7 @@ import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { Show, createResource, createSignal, onMount } from "solid-js";
+import { useLocalStorage } from "@h/localStorageHook";
 
 const QuoteBox: ComponentType<null> = (_, { element }) => {
 	noShadowDOM();
@@ -11,10 +12,11 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 	});
 
 	const [canLoad, setCanLoad] = createSignal(true);
+	const [getQuoteFromStore, setQuoteInStore] = useLocalStorage<QuoteDto>("quote");
 
 	const loadQuote = async () => {
 		if (!canLoad()) {
-			return JSON.parse(window.localStorage.getItem("quote")) as QuoteDto;
+			return getQuoteFromStore();
 		}
 		setCanLoad(false);
 
@@ -28,16 +30,16 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 		);
 
 		if (response.ok) {
-			window.localStorage.setItem("quote", JSON.stringify(response.data));
+			setQuoteInStore(response.data);
 			return response.data;
 		}
 
 		if (response.status === 429) {
-			return JSON.parse(window.localStorage.getItem("quote")) as QuoteDto;
+			return getQuoteFromStore();
 		}
 	};
 
-	const [quote, { refetch }] = createResource<QuoteDto>(() => loadQuote(), {});
+	const [quote, { refetch }] = createResource<QuoteDto>(() => loadQuote());
 
 	const spinnerIcon = () => (canLoad() ? "lucide:refresh-cw" : "lucide:clock");
 
