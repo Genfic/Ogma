@@ -28,6 +28,7 @@
 
 	<div class="o-form-group">
 		<label asp-for="Input.Bio"></label>
+		<markdown-editor selector="textarea[data-md=true]"></markdown-editor>
 		<textarea asp-for="Input.Bio" class="o-form-control active-border" rows="10" data-md="true"></textarea>
 		<span asp-validation-for="Input.Bio" class="text-danger"></span>
 	</div>
@@ -47,5 +48,6 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial"/>
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/editors/markdown-toolbar.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	@* <script type="module" src="~/js/editors/markdown-toolbar.js" asp-append-version="true"></script> *@
 }

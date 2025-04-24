@@ -107,7 +107,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						type="button"
 						class="shelf action-btn"
 						title={`Add to ${shelf.name}`}
-						onClick={() => addOrRemove(shelf.id)}
+						onClick={[addOrRemove, shelf.id]}
 						style={{ "box-shadow": shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null }}
 					>
 						<o-icon class="material-icons-outlined" style={iconStyle(shelf)} icon={shelf.iconName} />
@@ -127,7 +127,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 								type="button"
 								class="action-btn"
 								title={`Add to ${shelf.name}`}
-								onClick={() => addOrRemove(shelf.id)}
+								onClick={[addOrRemove, shelf.id]}
 								style={{
 									"box-shadow": shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null,
 								}}

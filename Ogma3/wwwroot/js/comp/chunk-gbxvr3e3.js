@@ -1,4 +1,0 @@
-import{B as m,D as f,F as d,K as $,L as u,M as s,N as p,Q as _,R as g,y as a}from"./chunk-a53ywpea.js";var v=$("<dialog aria-modal><button type=button class=close-btn autofocus><o-icon icon=lucide:x></o-icon></button><div class=content>",!0,!1,!1),M=(l)=>{let e,r=d(),b=()=>e?.showModal();m(()=>{l.ref?.({open:b})});let h=(t)=>{let o=e?.getBoundingClientRect(),i=o.left+e?.clientLeft,n=o.top+e?.clientTop;if(t.clientX<i||t.clientX>=i+e?.clientWidth||t.clientY<n||t.clientY>=n+e?.clientHeight)e?.close()};return(()=>{var t=v(),o=t.firstChild,i=o.firstChild,n=o.nextSibling;t.$$mousedown=h;var c=e;return typeof c==="function"?_(c,t):e=t,s(t,"id",r),o.$$click=()=>e?.close(),s(o,"aria-controls",r),i._$owner=f(),g(n,()=>l.children),a(()=>p(t,`my-dialog ${l.classes}`)),t})()};u(["mousedown","click"]);
-export{M as b};
-
-//# debugId=0B0D47AFE8B662E064756E2164756E21

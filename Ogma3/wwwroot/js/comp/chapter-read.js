@@ -1,3 +1,3 @@
-import{B as e,D as r,K as a,S as o,T as s}from"./chunk-a53ywpea.js";var n=a('<button type=button class=read-status aria-label="Chapter read status"data-id=@c.Id><o-icon icon=lucide:eye-off>',!0,!1,!1),m=(p,{element:d})=>{return o(),e(()=>{d.classList.add("wc-loaded")}),(()=>{var t=n(),l=t.firstChild;return l._$owner=r(),t})()};s("o-read",{route:"",chapterId:0},m);
+import{$ as o,K as e,M as r,T as a,aa as s}from"./chunk-3v8fzpj7.js";var n=a('<button type=button class=read-status aria-label="Chapter read status"data-id=@c.Id><o-icon icon=lucide:eye-off>',!0,!1,!1),m=(p,{element:d})=>{return o(),e(()=>{d.classList.add("wc-loaded")}),(()=>{var t=n(),l=t.firstChild;return l._$owner=r(),t})()};s("o-read",{route:"",chapterId:0},m);
 
-//# debugId=81D183DC74B3C61564756E2164756E21
+//# debugId=2B0D71738FD714F764756E2164756E21

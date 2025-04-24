@@ -1,0 +1,11 @@
+:host {
+	position: sticky;
+	inset: auto 0 0;
+}
+
+.bar {
+	position: relative;
+	height: 3px;
+	background-color: var(--accent);
+	transition: width 50ms ease-out;
+}

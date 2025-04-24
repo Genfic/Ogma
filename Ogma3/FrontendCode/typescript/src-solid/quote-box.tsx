@@ -46,7 +46,7 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 	return () => (
 		<div id="quote" class="quote active-border">
 			<button type="button" class="refresh" onClick={refetch}>
-				<o-icon icon={spinnerIcon()} class={`material-icons-outlined ${quote.loading ? "spin" : ""}`} />
+				<o-icon icon={spinnerIcon()} class="material-icons-outlined" classList={{ spin: quote.loading }} />
 			</button>
 			<Show when={quote()} fallback={<span>Loading the quote...</span>}>
 				<em class="body">{quote().body}</em>

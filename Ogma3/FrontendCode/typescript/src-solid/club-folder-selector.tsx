@@ -127,7 +127,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 				<button type="button" class="active-border add" onClick={add}>
 					Add
 				</button>
-				<button type="button" class="active-border cancel" onClick={() => setClub(null)}>
+				<button type="button" class="active-border cancel" onClick={[setClub, null]}>
 					Go back
 				</button>
 			</div>
@@ -142,10 +142,10 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
 
 			<div class="clubs">
 				<For each={clubs()} fallback={<div>You're not a member of any clubs</div>}>
-					{(c) => (
-						<button type="button" class="club" onClick={() => setClub(c)}>
-							<img src={c.icon ?? "ph-250.png"} alt={c.name} width="48" height="48" />
-							<span>{c.name}</span>
+					{(club) => (
+						<button type="button" class="club" onClick={[setClub, club]}>
+							<img src={club.icon ?? "ph-250.png"} alt={club.name} width="48" height="48" />
+							<span>{club.name}</span>
 						</button>
 					)}
 				</For>

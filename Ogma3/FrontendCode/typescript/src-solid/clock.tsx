@@ -1,9 +1,9 @@
 import { addToDate } from "@h/date-helpers";
-import { addStyle } from "@h/jsx-wc-style";
+import { styled } from "@h/jsx-wc-style";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
-import { minifyCss } from "@h/minify.macro" with { type: "macro" };
+import css from "./clock.css";
 
 const Clock: ComponentType<{ date: string }> = (props, { element }) => {
 	noShadowDOM();
@@ -11,16 +11,6 @@ const Clock: ComponentType<{ date: string }> = (props, { element }) => {
 
 	onMount(() => {
 		element.classList.add("wc-loaded");
-		addStyle(
-			element,
-			minifyCss(`
-				.time {
-					font-family: "Courier New", Courier, monospace;
-					letter-spacing: -2px;
-					margin: auto 0;
-				}
-			`),
-		);
 
 		// Set up the timer
 		const interval = setInterval(() => {
@@ -42,5 +32,5 @@ customElement(
 	{
 		date: "",
 	},
-	Clock,
+	styled(css)(Clock),
 );

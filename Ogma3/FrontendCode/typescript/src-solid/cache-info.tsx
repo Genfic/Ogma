@@ -1,0 +1,70 @@
+import { type ComponentType, customElement } from "solid-element";
+import { createResource, createSignal, Match, Switch } from "solid-js";
+import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
+import css from "./cache-info.css";
+import { styled } from "@h/jsx-wc-style";
+
+const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
+	const [primed, setPrimed] = createSignal(false);
+
+	const [cacheCount, { refetch }] = createResource(async () => {
+		const res = await GetAdminApiCache();
+
+		if (res.ok && typeof res.data === "number") {
+			return res.data;
+		}
+
+		console.warn(res.data);
+		return Number.NaN;
+	});
+
+	let timer: ReturnType<typeof setTimeout>;
+	const mouseLeft = () => {
+		timer = setTimeout(() => setPrimed(false), 500);
+	};
+	const mouseEntered = () => {
+		clearTimeout(timer);
+	};
+
+	const purge = async () => {
+		if (confirm("Are you sure?")) {
+			const res = await DeleteAdminApiCache({ RequestVerificationToken: props.csrf });
+			if (res.ok) {
+				await refetch();
+			} else {
+				console.error("Failed to purge cache:", res);
+			}
+		} else {
+			setPrimed(false);
+		}
+	};
+
+	// The JSX template
+	return (
+		<div class="cache">
+			<span class="count">
+				<strong>{cacheCount()}</strong> elements in the cache
+			</span>
+			<Switch>
+				<Match when={primed()}>
+					<button
+						type="button"
+						class="purge"
+						onClick={purge}
+						onmouseleave={mouseLeft}
+						onmouseenter={mouseEntered}
+					>
+						Purge
+					</button>
+				</Match>
+				<Match when={!primed()}>
+					<button type="button" class="prime" onClick={[setPrimed, true]}>
+						Prime
+					</button>
+				</Match>
+			</Switch>
+		</div>
+	);
+};
+
+customElement("cache-info", { csrf: "" }, styled(css)(CacheInfo));

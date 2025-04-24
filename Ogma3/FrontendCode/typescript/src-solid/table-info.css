@@ -1,0 +1,26 @@
+table {
+	border-collapse: collapse;
+	outline: 1px solid var(--foreground-50);
+}
+tr:hover {
+	background-color: var(--accent-10);
+}
+td {
+	border: 1px solid var(--foreground-25);
+	padding: 0.5rem;
+}
+th {
+	user-select: none;
+	padding: 0;
+
+	button.sort {
+		background: none;
+		border: none;
+		padding: 0;
+		margin: 0;
+		cursor: pointer;
+		font-size: inherit;
+		width: 100%;
+		height: 100%;
+	}
+}

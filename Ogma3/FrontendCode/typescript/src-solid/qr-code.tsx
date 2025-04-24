@@ -24,8 +24,6 @@ const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvg
 		}
 
 		setSvg(svg);
-
-		console.log(svg);
 	});
 
 	return <div innerHTML={svg()} />;

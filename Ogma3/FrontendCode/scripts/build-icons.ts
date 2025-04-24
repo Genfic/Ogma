@@ -61,31 +61,31 @@ const fetchIcon = async (icon: string): Promise<Svg | null> => {
 
 const res = await Promise.all(compact(icons).map((icon) => fetchIcon(icon)));
 
+values.verbose && console.log(res);
+
 const svgs = compact(res).toSorted((a, b) => a.name.localeCompare(b.name));
+
+values.verbose && console.log(svgs);
 
 const color = svgs.length === icons.length ? c.green : c.red;
 console.log(ct`{bold ${color(ct`Fetched {underline ${svgs.length}} of {underline ${icons.length}}`)} icons}`);
 
-const rewriter = new HTMLRewriter().on('svg:not([id="spritesheet"])', {
+const rewriter = new HTMLRewriter().on('svg:not([id="icon-spritesheet"])', {
 	element(element: HTMLRewriterTypes.Element): void | Promise<void> {
 		element.removeAndKeepContent();
 	},
 });
 
-// language=svg
-const tpl = dedent`
-	<svg xmlns="http://www.w3.org/2000/svg" id="spritesheet" style="display: none">
-		${svgs.map(({ svg, name }) => `<symbol id="${name}" viewBox="0 0 24 24">${svg}</symbol>`).join("\n\t\t")}
-	</svg>
-	`.trim();
-
+const tpl = ejs.render(templates.spritesheet, { svgs });
 const spritesheet = rewriter.transform(tpl);
 
+console.log(spritesheet);
+
 const index = ejs.render(templates["icon-index"], { svgs });
-await Promise.all([
-	async () => await Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet),
-	async () => await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet),
-	async () => await Bun.write(join(_root, "..", "..", "wwwroot", "icon-index.html"), index),
+await Promise.allSettled([
+	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet),
+	Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet),
+	Bun.write(join(_root, "..", "..", "wwwroot", "icon-index.html"), index),
 ]);
 
 console.log(ct`{green Created {reset.bold ./wwwroot/svg/spritesheet.svg}} and {bold ./Pages/Shared/IconSheet.cshtml}`);

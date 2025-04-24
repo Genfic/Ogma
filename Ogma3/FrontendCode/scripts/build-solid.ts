@@ -10,6 +10,7 @@ import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
 import { rm } from "node:fs/promises";
+import { cssMinifyPlugin } from "./plugins/minified-css-loader";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -37,7 +38,7 @@ const compileAll = async () => {
 		minify: true,
 		sourcemap: "external",
 		splitting: true,
-		plugins: [SolidPlugin()],
+		plugins: [SolidPlugin(), cssMinifyPlugin],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
 
@@ -79,7 +80,7 @@ await compileAll();
 if (values.watch) {
 	await watch(_source, {
 		transformer: (events) =>
-			events.filter(({ type, path }) => type === "update" && hasExtension(path, "tsx")).map((e) => e.path),
+			events.filter(({ type, path }) => type === "update" && hasExtension(path, "tsx", "css")).map((e) => e.path),
 		predicate: (files) => files.length > 0,
 		action: async (_) => {
 			await compileAll();

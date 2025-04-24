@@ -1,0 +1,32 @@
+.cache {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	align-items: center;
+}
+
+.purge,
+.prime {
+	cursor: pointer;
+	padding: 0.5rem 1rem;
+	color: var(--foreground);
+	background-color: var(--ele-1);
+	border: 1px solid var(--foreground-50);
+	transition: all 100ms ease-in-out;
+}
+
+.purge {
+	text-transform: uppercase;
+}
+
+.prime:hover {
+	background-color: var(--yellow-25);
+	border-color: var(--yellow);
+	color: var(--yellow);
+}
+
+.purge:hover {
+	background-color: var(--red-25);
+	border-color: var(--red);
+	color: var(--red);
+}

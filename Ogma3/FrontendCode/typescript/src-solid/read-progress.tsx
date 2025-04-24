@@ -1,8 +1,8 @@
-import { addStyle } from "@h/jsx-wc-style";
+import { styled } from "@h/jsx-wc-style";
 import { clamp, normalize } from "@h/math-helpers";
 import { type ComponentType, customElement } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
-import { minifyCss } from "@h/minify.macro" with { type: "macro" };
+import css from "./read-progress.css";
 
 const ReadProgress: ComponentType<null> = (_, { element }) => {
 	const [progress, setProgress] = createSignal(0);
@@ -38,24 +38,6 @@ const ReadProgress: ComponentType<null> = (_, { element }) => {
 	const handleResize = () => updateProgress();
 
 	onMount(() => {
-		// language=CSS
-		addStyle(
-			element,
-			minifyCss(`
-				:host {
-					position: sticky;
-					inset: auto 0 0;
-				}
-
-				.bar {
-					position: relative;
-					height: 3px;
-					background-color: var(--accent);
-					transition: width 50ms ease-out;
-				}
-			`),
-		);
-
 		document.addEventListener("scroll", handleScroll);
 		window.addEventListener("resize", handleResize);
 		updateProgress();
@@ -69,4 +51,4 @@ const ReadProgress: ComponentType<null> = (_, { element }) => {
 	return <div class="bar" style={{ width: `${progress() * 100}%` }} />;
 };
 
-customElement("o-read-progress", null, ReadProgress);
+customElement("o-read-progress", null, styled(css)(ReadProgress));
