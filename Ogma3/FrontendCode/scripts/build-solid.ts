@@ -31,7 +31,7 @@ const compileAll = async () => {
 	const start = Bun.nanoseconds();
 
 	const { success, logs, outputs } = await Bun.build({
-		entrypoints: [...new Glob(`${_source}/**/[!_]*.tsx`).scanSync()],
+		entrypoints: [...new Glob(`${_source}/[!_]*.tsx`).scanSync()],
 		outdir: _dest,
 		root: _source,
 		minify: true,

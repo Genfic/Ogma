@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Ogma3;
 using Ogma3.Data;
+using Ogma3.Infrastructure.Middleware;
 using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
@@ -46,9 +47,15 @@ startup.ConfigureServices(builder.Services);
 
 builder.AddServiceDefaults();
 
+// middleware
+builder.UseAddHeaders();
+
 var app = builder.Build();
 
 Startup.Configure(app, app.Environment);
+
+// middleware
+app.UseAddHeaders();
 
 if (app.Environment.IsDevelopment())
 {

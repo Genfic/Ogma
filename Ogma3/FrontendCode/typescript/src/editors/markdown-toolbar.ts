@@ -4,7 +4,7 @@ import { minifyHtml } from "@h/minify.macro" with { type: "macro" };
 enum Action {
 	bold = "bold",
 	italic = "italic",
-	underline = "underline",
+	strikethrough = "strikethrough",
 	spoiler = "spoiler",
 	link = "link",
 }
@@ -22,8 +22,8 @@ const tpl = minifyHtml(`
 	  <button type="button" class="btn" data-action="${Action.italic}" title="${Action.italic}">
 		<o-icon icon="lucide:italic" class="material-icons-outlined" ></o-icon>
 	  </button>
-	  <button type="button" class="btn" data-action="${Action.underline}" title="${Action.underline}">
-		<o-icon icon="lucide:underline" class="material-icons-outlined" ></o-icon>
+	  <button type="button" class="btn" data-action="${Action.strikethrough}" title="${Action.strikethrough}">
+		<o-icon icon="lucide:strikethrough" class="material-icons-outlined" ></o-icon>
 	  </button>
 	  <button type="button" class="btn" data-action="${Action.spoiler}" title="${Action.spoiler}">
 		<o-icon icon="lucide:eye-closed" class="material-icons-outlined" ></o-icon>
@@ -36,7 +36,7 @@ const tpl = minifyHtml(`
 const map: Record<Action, PrefixSuffix> = {
 	[Action.bold]: { prefix: "**", suffix: "**" },
 	[Action.italic]: { prefix: "*", suffix: "*" },
-	[Action.underline]: { prefix: "_", suffix: "_" },
+	[Action.strikethrough]: { prefix: "~", suffix: "~" },
 	[Action.spoiler]: { prefix: "||", suffix: "||" },
 	[Action.link]: { prefix: "[", suffix: "]()" },
 };

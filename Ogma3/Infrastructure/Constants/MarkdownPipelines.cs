@@ -7,10 +7,10 @@ namespace Ogma3.Infrastructure.Constants;
 
 public static class MarkdownPipelines
 {
-	private static MentionOptions MentionOptions => new("/user/", "_blank");
-	private static HashtagOptions HashtagOptions => new("/blog?q=", "_blank");
+	private static MentionOptions MentionOptions { get; } = new("/user/", "_blank");
+	private static HashtagOptions HashtagOptions { get; } = new("/blog?q=", "_blank");
 
-	public static MarkdownPipeline Basic => new MarkdownPipelineBuilder()
+	public static MarkdownPipeline Basic { get; } = new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.DisableHeadings()
 		.UseAutoIdentifiers()
@@ -18,7 +18,7 @@ public static class MarkdownPipelines
 		.UseSpoilers()
 		.Build();
 
-	public static MarkdownPipeline Comment => new MarkdownPipelineBuilder()
+	public static MarkdownPipeline Comment { get; } = new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.DisableHeadings()
 		.UseMentions(MentionOptions)
@@ -27,7 +27,7 @@ public static class MarkdownPipelines
 		.UseSpoilers()
 		.Build();
 
-	public static MarkdownPipeline All => new MarkdownPipelineBuilder()
+	public static MarkdownPipeline All { get; } = new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.UsePipeTables()
 		.UseEmphasisExtras()
@@ -37,7 +37,7 @@ public static class MarkdownPipelines
 		.UseSpoilers()
 		.Build();
 
-	public static MarkdownPipeline Blogpost => new MarkdownPipelineBuilder()
+	public static MarkdownPipeline Blogpost { get; } = new MarkdownPipelineBuilder()
 		.DisableHtml()
 		.UseAdvancedExtensions()
 		.UseEmphasisExtras()

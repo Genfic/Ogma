@@ -19,8 +19,7 @@ public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbC
 			return;
 		}
 
-		var banDate = await cache.GetOrCreateAsync(CacheKey(uid), async entry =>
-		{
+		var banDate = await cache.GetOrCreateAsync(CacheKey(uid), async entry => {
 			entry.SlidingExpiration = TimeSpan.FromMinutes(30);
 			return await CompiledQuery(dbContext, uid);
 		});
@@ -54,9 +53,9 @@ public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbC
 			await next(httpContext);
 		}
 	}
-	
-	private static readonly Func<ApplicationDbContext, long, Task<DateTimeOffset>> CompiledQuery = EF.CompileAsyncQuery(
-		(ApplicationDbContext dbContext, long uid) => dbContext.Infractions
+
+	private static readonly Func<ApplicationDbContext, long, Task<DateTimeOffset>> CompiledQuery =
+		EF.CompileAsyncQuery(static (ApplicationDbContext dbContext, long uid) => dbContext.Infractions
 			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
 			.Where(i => i.UserId == uid)
 			.Where(i => i.Type == InfractionType.Ban)
@@ -72,6 +71,5 @@ public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbC
 
 public static class UserBanMiddlewareExtension
 {
-	public static IApplicationBuilder UseBanMiddleware(this IApplicationBuilder builder)
-		=> builder.UseMiddleware<UserBanMiddleware>();
+	public static IApplicationBuilder UseBanMiddleware(this IApplicationBuilder builder) => builder.UseMiddleware<UserBanMiddleware>();
 }
