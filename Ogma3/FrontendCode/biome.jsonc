@@ -6,7 +6,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignore": ["node_modules", "typescript/generated"]
+		"ignore": ["node_modules", "typescript/generated", ".unlighthouse"]
 	},
 	"formatter": {
 		"enabled": true,

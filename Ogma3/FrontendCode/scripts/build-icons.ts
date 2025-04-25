@@ -23,7 +23,7 @@ const _root = dirname(Bun.main);
 const json = await Bun.file(join(_root, "..", "..", "seed.json5")).text();
 const seed = parse(json) as { Icons: string[]; AdditionalIcons: string[] };
 
-const templates = await findAllTemplates(join(_root, "templates", "*.ejs"));
+const templates = await findAllTemplates();
 
 const foundIcons: (string | null)[] = [];
 
@@ -76,12 +76,10 @@ const rewriter = new HTMLRewriter().on('svg:not([id="icon-spritesheet"])', {
 	},
 });
 
-const tpl = ejs.render(templates.spritesheet, { svgs });
+const tpl = ejs.render(templates.get("spritesheet"), { svgs });
 const spritesheet = rewriter.transform(tpl);
 
-console.log(spritesheet);
-
-const index = ejs.render(templates["icon-index"], { svgs });
+const index = ejs.render(templates.get("icon-index"), { svgs });
 await Promise.allSettled([
 	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet),
 	Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet),

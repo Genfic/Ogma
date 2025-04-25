@@ -22,7 +22,8 @@ export interface Advices {
 
 export interface Advice {
 	diff?: Diff;
-	log?: Array<Message[] | string>;
+	log?: (Message[] | string)[];
+	frame?: Location;
 }
 
 export interface Diff {

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+		body {
+			font-family: sans-serif;
+		}
+
+		main {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+
+		.diag {
+			display: flex;
+			flex-direction: column;
+			border: 1px solid black;
+			padding: .5rem 1rem;
+			gap: 1rem;
+
+			h2 {
+				margin: 0;
+			}
+
+			h3 {
+				margin: 0;
+			}
+
+			.path {
+				font-family: monospace;
+				font-size: 1rem;
+				letter-spacing: .01rem;
+
+				.sep {
+					color: #717171;
+				}
+
+                .fragment {
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+			}
+		}
+
+		.emphasis {
+			font-weight: bold;
+			background-color: lightblue;
+		}
+
+		ul {
+			padding: 0;
+			margin: 0;
+
+			li {
+				margin-left: 1rem;
+
+				&.diff {
+					list-style: none;
+					padding: 0;
+					margin: 0;
+				}
+
+				.tag {
+					border-radius: .5rem;
+					border: 1px solid #ddd;
+					padding: 2px .5rem;
+
+					&.info {
+						background-color: #93e0ff;
+					}
+				}
+			}
+		}
+
+		.diff-container {
+			font-family: monospace;
+			font-size: 14px;
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			display: grid;
+			grid-template-columns: auto 1fr auto 1fr;
+			width: 100%;
+			max-width: 100%;
+			overflow-x: auto;
+		}
+
+		.diff-header {
+			display: contents;
+		}
+
+		.diff-header-cell {
+			background-color: #f5f5f5;
+			padding: 8px;
+			font-weight: bold;
+			border-bottom: 1px solid #ddd;
+			text-align: center;
+		}
+
+		.diff-row {
+			display: contents;
+		}
+
+		.diff-cell {
+			padding: 2px 5px;
+			border-bottom: 1px solid #eee;
+			white-space: pre-wrap;
+			word-break: break-all;
+		}
+
+		.line-number {
+			background-color: #f5f5f5;
+			color: #999;
+			text-align: right;
+			border-right: 1px solid #ddd;
+			white-space: nowrap;
+		}
+
+		.original-content {
+			border-right: 1px solid #ddd;
+		}
+
+		.unchanged {
+			.original-content, .modified-content {
+				background-color: #fff;
+			}
+		}
+
+		.skip {
+			.original-content, .modified-content {
+				background-color: #e1e1e1;
+			}
+
+			.line-number {
+				background-color: #c4c4c4;
+				color: #626262;
+			}
+		}
+
+		.added {
+			.original-content {
+				background-color: #f8f8f8;
+			}
+
+			.modified-content {
+				background-color: #e6ffed;
+			}
+		}
+
+		.removed, .changed {
+			.original-content {
+				background-color: #ffebe9;
+			}
+
+			.modified-content {
+				background-color: #f8f8f8;
+			}
+		}
+
+		/* Override for .changed .modified-content */
+		.changed .modified-content {
+			background-color: #e6ffed;
+		}
+    </style>
+</head>
+<body>
+<main>
+    <% diag.diagnostics.forEach((d) => { %>
+        <div class="diag">
+            <h2><%= d.severity.toUpperCase(); %> <%= d.category; %></h2>
+            <% const path = d.location.path.file.split("\\").map(f => `<span class="fragment">${f}</span>`).join('<span class="sep">/</span>') %>
+            <% if(d.location.span) { %>
+                <div class="path"><%- path; %> | <%= d.location.span.join(", ") %></div>
+            <% } else { %>
+                <div class="path"><%- path; %></div>
+            <% } %>
+            <h3><%= d.description; %></h3>
+            <ul>
+                <% compact(d.advices.advices).forEach((a) => { %>
+                    <% if ("log" in a) { %>
+                        <li>
+                            <% (compact(a.log || [])).forEach((f) => { %>
+                                <% if (typeof f === "string") { %>
+                                    <span class="tag <%= f; %>"><%= f; %></span>
+                                <% } else { %>
+                                    <span>
+                                        <% compact(f).forEach((m) => { %>
+                                            <span class="<%= m.elements.join(" ").toLowerCase(); %>"><%= m.content; %></span>
+                                        <% }); %>
+                                    </span>
+                                <% } %>
+                            <% }); %>
+                        </li>
+                    <% } else if ("sourceCode" in a && a.sourceCode) { %>
+                        <li>
+                            <pre><%= a.sourceCode %></pre>
+                        </li>
+                    <% } else if ("diff" in a) { %>
+                        <li class="diff">
+                            <%- generateDiffHtml(a) %>
+                        </li>
+                    <% } %>
+                <% }); %>
+            </ul>
+        </div>
+    <% }); %>
+</main>
+</body>
+</html>
