@@ -1,4 +1,3 @@
-
 .quote {
 	position: relative;
 	padding: .5rem;
@@ -6,7 +5,17 @@
 	flex-direction: column;
 	background-color: var(--ele-1);
 
-	& .refresh {
+	border: 1px solid var(--foreground-25);
+
+	&:hover {
+		border-color: var(--foreground-50);
+	}
+
+	&:focus {
+		border-color: var(--accent);
+	}
+
+	.refresh {
 		position: absolute;
 
 		display: flex;
@@ -25,12 +34,12 @@
 
 		background: transparent;
 		color: var(--foreground);
-		opacity: .1;
+		opacity: 0.1;
 
 		cursor: pointer;
 
 		&:hover {
-			opacity: .75;
+			opacity: 0.75;
 			background: var(--accent-10);
 		}
 
@@ -38,22 +47,12 @@
 			outline: 0;
 		}
 
-		& .spin {
+		.spin {
 			animation: spin 1s infinite;
-		}
-
-		@keyframes spin {
-			from {
-				transform: rotate(0deg);
-			}
-
-			to {
-				transform: rotate(360deg);
-			}
 		}
 	}
 
-	& .body {
+	.body {
 		&::before {
 			content: "“";
 		}
@@ -63,7 +62,17 @@
 		}
 	}
 
-	& .author {
+	.author {
 		align-self: flex-end;
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
 	}
 }

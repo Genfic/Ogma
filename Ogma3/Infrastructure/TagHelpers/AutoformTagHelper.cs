@@ -58,18 +58,18 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 				var label = prop.Name;
 				var value = prop.GetValue(obj);
 
-				output.Content.AppendHtml("<div class='o-form-group'>");
-				output.Content.AppendHtml($"<label for='{objName}_{label}'>{label}</label>");
+				output.Content.AppendHtml("""<div class="o-form-group">""");
+				output.Content.AppendHtml($"""<label for="{objName}_{label}">{label}</label>""");
 				output.Content.AppendHtml(
-					$"<input type='{type}' id='{objName}_{label}' name='{objName}.{label}' value='{value}' class='o-form-control active-border'>");
+					$"""<input type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
 				output.Content.AppendHtml("</div>");
 			}
 
 			output.Content.AppendHtml("</details>");
 		}
 
-		output.Content.AppendHtml("<div class='o-form-group'>");
-		output.Content.AppendHtml("<button type='submit' class='btn btn-primary'>Save</button>");
+		output.Content.AppendHtml("""<div class="o-form-group">""");
+		output.Content.AppendHtml("""<button type="submit" class="btn btn-primary">Save</button>""");
 		output.Content.AppendHtml("</div>");
 
 		var xcsrf = Generator.GenerateAntiforgery(ViewContext);

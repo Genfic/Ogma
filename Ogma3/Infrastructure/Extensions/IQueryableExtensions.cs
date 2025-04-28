@@ -7,7 +7,7 @@ namespace Ogma3.Infrastructure.Extensions;
 public static class QueryableExtensions
 {
 	/// <summary>
-	/// Apply a filter on `IQueryable` 
+	/// Apply a filter on `IQueryable`
 	/// </summary>
 	/// <param name="stories">Source IQueryable</param>
 	/// <param name="tags">Tags to search by</param>
@@ -21,7 +21,7 @@ public static class QueryableExtensions
 		long? ratingId = null
 	)
 	{
-		// Prepare search query
+		// Prepare the search query
 		var query = stories;
 
 		// Search by title
@@ -45,7 +45,7 @@ public static class QueryableExtensions
 	/// <param name="query">An <see cref="IQueryable{T}"/> to filter</param>
 	/// <param name="predicate">A function to test each element for a condition</param>
 	/// <param name="condition">A condition for filtering the sequence</param>
-	/// <typeparam name="TSource">The type of the elements of source</typeparam>
+	/// <typeparam name="TSource">The type of the elements of the source</typeparam>
 	/// <returns>An <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the condition specified by predicate</returns>
 	public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> query, Expression<Func<TSource, bool>> predicate, bool condition)
 		=> condition ? query.Where(predicate) : query;

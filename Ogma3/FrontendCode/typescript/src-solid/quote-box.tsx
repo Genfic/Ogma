@@ -1,12 +1,12 @@
 import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { type ComponentType, customElement } from "solid-element";
 import { Show, createResource, createSignal, onMount } from "solid-js";
 import { useLocalStorage } from "@h/localStorageHook";
+import css from "./quote-box.css";
+import { styled } from "@h/jsx-wc-style";
 
 const QuoteBox: ComponentType<null> = (_, { element }) => {
-	noShadowDOM();
-
 	onMount(() => {
 		element.classList.add("wc-loaded");
 	});
@@ -56,4 +56,4 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 	);
 };
 
-customElement("quote-box", null, QuoteBox);
+customElement("quote-box", null, styled(css)(QuoteBox));

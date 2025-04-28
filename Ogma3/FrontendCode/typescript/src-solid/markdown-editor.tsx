@@ -1,6 +1,8 @@
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { type ComponentType, customElement } from "solid-element";
 import { For, type JSX } from "solid-js";
-import { findNextSibling } from "@h/dom";
+import css from "./markdown-editor.css";
+import { styled } from "@h/jsx-wc-style";
+import { Comment } from "./common/_comment";
 
 type Action = {
 	name: string;
@@ -17,15 +19,19 @@ const actions: Action[] = [
 	{ name: "spoiler", icon: "lucide:eye-closed", prefix: "||", suffix: "||" },
 ] as const;
 
+const name = "markdown-editor" as const;
+
 const isTextAreaOrInput = (node: JSX.Element): node is HTMLTextAreaElement | HTMLInputElement =>
 	typeof node === "object" && "nodeName" in node && (node.nodeName === "TEXTAREA" || node.nodeName === "INPUT");
 
-type Props = { selector: `textarea${string | ""}` | `input${string | ""}` };
+type Props = {
+	selector: `textarea${string | ""}` | `input${string | ""}`;
+	overrideSelector?: boolean;
+};
 
-export const MarkdownEditor: ComponentType<Props> = ({ selector }, { element }) => {
-	noShadowDOM();
-
-	const area = findNextSibling(element.renderRoot as Element, selector);
+export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelector }) => {
+	const selectorActual = overrideSelector ? selector : `${name} + ${selector}`;
+	const area = document.querySelector(selectorActual);
 
 	if (!area) {
 		throw Error(`Element "${selector}" not found`);
@@ -50,7 +56,8 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector }, { element }) 
 	};
 
 	return (
-		<nav class="button-group toolbar">
+		<nav class="toolbar">
+			<Comment text={selectorActual} />
 			<For each={actions}>
 				{(action) => (
 					<button type="button" class="btn" title={action.name} onClick={[click, action]}>
@@ -62,4 +69,4 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector }, { element }) 
 	);
 };
 
-customElement("markdown-editor", { selector: "textarea" }, MarkdownEditor);
+customElement<Props>(name, { selector: "textarea", overrideSelector: false }, styled(css)(MarkdownEditor));

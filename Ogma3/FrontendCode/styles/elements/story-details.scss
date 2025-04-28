@@ -27,6 +27,13 @@ $title-height: 2rem;
 				line-height: $title-height * 1.5;
 				word-wrap: break-word;
 				word-break: break-all;
+
+				--stroke: 3px var(--background-50);
+				@supports (--webkit-text-stroke:var(--stroke)) {
+					-webkit-text-stroke: var(--stroke);
+					-webkit-text-fill-color: var(--foreground);
+					paint-order: stroke fill;
+				}
 			}
 		}
 
@@ -235,7 +242,7 @@ $title-height: 2rem;
 		}
 	}
 
-	>.backdrop {
+	> .backdrop {
 		$size: 50px;
 
 		position: absolute;

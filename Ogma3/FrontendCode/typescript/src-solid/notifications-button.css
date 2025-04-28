@@ -1,6 +1,14 @@
+* {
+	box-sizing: border-box;
+}
 
 .notifications-btn {
 	position: relative;
+	display: flex;
+	padding: 0 .5rem;
+	height: 100%;
+	align-items: center;
+	color: var(--foreground-75);
 
 	span {
 		position: absolute;
@@ -8,6 +16,7 @@
 		right: 0;
 		background-color: var(--red);
 		padding: .2rem;
+		margin: 0;
 		height: 1rem;
 		min-width: 1rem;
 		line-height: .4rem;
@@ -16,9 +25,9 @@
 		text-align: center;
 		border-radius: 9999999px;
 
-		$stroke: 3px var(--background);
-		@supports(--webkit-text-stroke: $stroke) {
-			-webkit-text-stroke: $stroke;
+		--stroke: 3px var(--background);
+		@supports (--webkit-text-stroke: var(--stroke)) {
+			-webkit-text-stroke: var(--stroke);
 			-webkit-text-fill-color: var(--foreground);
 			paint-order: stroke fill;
 		}

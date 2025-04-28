@@ -165,12 +165,11 @@ Vue.component("tag-search-select", {
             <div class="searchbar" ref="search">
                 <div class="tags">
 
-                    <div class="tag" v-for="s in selected">
-                        <div class="bg" v-bind:style="{background: s.namespaceColor}"></div>
+                    <div class="tag" v-for="s in selected" v-bind:style="{'--tag-color': s.namespaceColor}">
                         <span class="name">
                         {{ s.namespaceName ? s.namespaceName + ':' : '' }}{{ s.name }}
-            				<o-icon icon="lucide:x" class="material-icons-outlined" v-on:click="selected.remove(s)" ></o-icon>
-                      </span>
+                      	</span>
+						<o-icon icon="lucide:x" class="material-icons-outlined" v-on:click="selected.remove(s)" ></o-icon>
                     </div>
 
                     <input type="text"

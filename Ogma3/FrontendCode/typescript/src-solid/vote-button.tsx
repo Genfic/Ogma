@@ -1,11 +1,11 @@
 import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as postVote } from "@g/paths-public";
 import { log } from "@h/logger";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { type ComponentType, customElement } from "solid-element";
 import { createResource } from "solid-js";
+import css from "./vote-button.css";
+import { styled } from "@h/jsx-wc-style";
 
 const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => {
-	noShadowDOM();
-
 	const [votes, { mutate }] = createResource(
 		() => props.storyId,
 		async (id) => {
@@ -34,15 +34,12 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 	return () => (
 		<button
 			type="button"
-			class="votes action-btn large"
+			class="votes"
 			classList={{ active: votes()?.didVote }}
 			onClick={vote}
 			title="Give it a star!"
 		>
-			<o-icon
-				icon={votes()?.didVote ? "ic:round-star" : "ic:round-star-border"}
-				class="material-icons-outlined"
-			/>
+			<o-icon icon={votes()?.didVote ? "ic:round-star" : "ic:round-star-border"} />
 			<span class="count">{votes()?.count ?? 0}</span>
 		</button>
 	);
@@ -54,5 +51,5 @@ customElement(
 		storyId: 0,
 		csrf: "",
 	},
-	VoteButton,
+	styled(css)(VoteButton),
 );

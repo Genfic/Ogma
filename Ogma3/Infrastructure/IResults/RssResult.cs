@@ -14,8 +14,6 @@ public sealed class RssResult(string title, string description, IEnumerable<Synd
 	{
 		var now = DateTimeOffset.UtcNow;
 		
-		Log.Information("Req is {R}",httpContext.Request);
-		
 		var feed = new SyndicationFeed(
 			title,
 			description,
@@ -27,9 +25,9 @@ public sealed class RssResult(string title, string description, IEnumerable<Synd
 			Copyright = new TextSyndicationContent($"2019 — {now.Year}"),
 			Items = items,
 		};
-		
+
 		await using var stream = Manager.GetStream();
-		
+
 		await using var writer = XmlWriter.Create(stream, new XmlWriterSettings
 		{
 			Encoding = Encoding.UTF8,
@@ -38,10 +36,10 @@ public sealed class RssResult(string title, string description, IEnumerable<Synd
 			Indent = true,
 			Async = true,
 		});
-		
+
 		new Rss20FeedFormatter(feed, false).WriteTo(writer);
 		await writer.FlushAsync();
-		
+
 		httpContext.Response.ContentType = "application/rss+xml";
 
 		stream.Position = 0;

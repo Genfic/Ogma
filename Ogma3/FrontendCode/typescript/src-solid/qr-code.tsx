@@ -8,7 +8,7 @@ type WidthOrHeight =
 	| { width: number; height: null | undefined }
 	| { width: number; height: number };
 
-const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvgOptions> = (props, { element }) => {
+const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvgOptions> = (props) => {
 	noShadowDOM();
 
 	const [svg, setSvg] = createSignal<string>("");

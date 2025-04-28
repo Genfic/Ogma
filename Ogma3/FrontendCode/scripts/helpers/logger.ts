@@ -15,5 +15,5 @@ const { values } = parseArgs({
 export const isVerbose = () => !!values.verbose;
 
 export const log = {
-	verbose: (...data: unknown[]) => values.verbose && console.log(data),
+	verbose: (message?: unknown, ...params: unknown[]) => values.verbose && console.log(message, ...params),
 };

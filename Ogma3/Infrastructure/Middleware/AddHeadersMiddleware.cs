@@ -24,8 +24,9 @@ public static class AddHeadersMiddlewareExtensions
 
 	public static TBuilder UseAddHeaders<TBuilder>(this TBuilder builder)  where TBuilder : IHostApplicationBuilder
 	{
-		builder.Services.AddTransient<AddHeadersMiddleware>();
-		builder.Services.Configure<AddHeadersOptions>(settings => builder.Configuration.GetSection("AdditionalHeaders").Bind(settings));
+		builder.Services
+			.AddTransient<AddHeadersMiddleware>()
+			.Configure<AddHeadersOptions>(builder.Configuration.GetSection("AdditionalHeaders"));
 		return builder;
 	}
 }

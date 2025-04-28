@@ -1,11 +1,11 @@
 import { GetApiNotificationsCount as countNotifications } from "@g/paths-public";
 import { log } from "@h/logger";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { type ComponentType, customElement } from "solid-element";
 import { Show, createSignal, onMount } from "solid-js";
+import css from "./notifications-button.css";
+import { styled } from "@h/jsx-wc-style";
 
 const NotificationsButton: ComponentType<null> = (_, { element }) => {
-	noShadowDOM();
-
 	const [notifications, setNotifications] = createSignal(0);
 
 	onMount(async () => {
@@ -33,4 +33,4 @@ const NotificationsButton: ComponentType<null> = (_, { element }) => {
 	);
 };
 
-customElement("o-notifications-button", null, NotificationsButton);
+customElement("o-notifications-button", null, styled(css)(NotificationsButton));

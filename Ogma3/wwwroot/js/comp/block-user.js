@@ -1,3 +1,3 @@
-import{h as i}from"./chunk-gchvq6pe.js";import{k as l,z as n}from"./chunk-1pgp53hp.js";import"./chunk-v3754c6r.js";import{$ as k,G as r,T as c,U as m,_ as a,aa as f}from"./chunk-3v8fzpj7.js";var u=c("<button type=button>"),B=(o)=>{k();let[s,d]=r(o.isBlocked),p=async()=>{let t=await(s()?l:n)({name:o.userName},{RequestVerificationToken:o.csrf});if(t.ok)d(t.data);else i.warn(t.statusText)};return(()=>{var e=u();return e.$$click=p,a(e,()=>s()?"Unblock":"Block"),e})()};f("o-block",{userName:"",csrf:"",isBlocked:!1},B);m(["click"]);
+import{e as i}from"./chunk-5k1k13kq.js";import{h as l,w as n}from"./chunk-k4ry6v6w.js";import"./chunk-s8q2er36.js";import{E as r,R as c,S as m,Y as a,Z as k,_ as f}from"./chunk-qcet3yp8.js";var u=c("<button type=button>"),B=(o)=>{k();let[s,d]=r(o.isBlocked),p=async()=>{let t=await(s()?l:n)({name:o.userName},{RequestVerificationToken:o.csrf});if(t.ok)d(t.data);else i.warn(t.statusText)};return(()=>{var e=u();return e.$$click=p,a(e,()=>s()?"Unblock":"Block"),e})()};f("o-block",{userName:"",csrf:"",isBlocked:!1},B);m(["click"]);
 
-//# debugId=FE47515C402C5A9E64756E2164756E21
+//# debugId=041A1857DDCC3E9764756E2164756E21

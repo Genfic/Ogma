@@ -7,12 +7,9 @@ import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
 import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { For, createResource, createSignal, onMount, Switch, Match } from "solid-js";
-import { Dialog, type DialogApi } from "./common/dialog";
+import { Dialog, type DialogApi } from "./common/_dialog";
 
-const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (
-	props: { storyId: number; csrf: string },
-	{ element },
-) => {
+const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
 	noShadowDOM();
 
 	const [clubs, setClubs] = createSignal<GetJoinedClubsResponse[]>([]);

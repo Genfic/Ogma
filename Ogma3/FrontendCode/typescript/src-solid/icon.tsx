@@ -1,4 +1,6 @@
 import { type ComponentType, customElement } from "solid-element";
+import { styled } from "@h/jsx-wc-style";
+import css from "./icon.css";
 
 const Icon: ComponentType<{ icon: string }> = (props) => {
 	return (
@@ -9,10 +11,4 @@ const Icon: ComponentType<{ icon: string }> = (props) => {
 	);
 };
 
-customElement(
-	"o-icon",
-	{
-		icon: "",
-	},
-	Icon,
-);
+customElement("o-icon", { icon: "" }, styled(css)(Icon));

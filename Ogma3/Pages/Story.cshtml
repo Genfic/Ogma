@@ -161,7 +161,7 @@
 	</details>
 	}
 
-	@if (Model.Chapters.Length <= 0)
+	@if (Model.Chapters.Length > 0)
 	{
 		<a class="start active-border" asp-controller="Chapter" asp-action="FirstChapter" asp-route-sid="@Model.Story.Id">Start reading</a>
 	}

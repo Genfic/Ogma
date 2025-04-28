@@ -31,8 +31,13 @@ if (values.clean) {
 const compileAll = async () => {
 	const start = Bun.nanoseconds();
 
+	const files = [...new Glob(`${_source}/**/[^_]*.tsx`).scanSync()];
+	console.log(ct`Found {bold.underline ${files.length}} files to compile.`);
+
+	log.verbose(`Compiling \n\t${files.join("\n\t")}`);
+
 	const { success, logs, outputs } = await Bun.build({
-		entrypoints: [...new Glob(`${_source}/[!_]*.tsx`).scanSync()],
+		entrypoints: files,
 		outdir: _dest,
 		root: _source,
 		minify: true,

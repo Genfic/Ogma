@@ -110,7 +110,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						onClick={[addOrRemove, shelf.id]}
 						style={{ "box-shadow": shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null }}
 					>
-						<o-icon class="material-icons-outlined" style={iconStyle(shelf)} icon={shelf.iconName} />
+						<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
 					</button>
 				)}
 			</For>
@@ -132,11 +132,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 									"box-shadow": shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null,
 								}}
 							>
-								<o-icon
-									class="material-icons-outlined"
-									style={iconStyle(shelf)}
-									icon={shelf.iconName}
-								/>
+								<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
 								<span>{shelf.name}</span>
 							</button>
 						)}

@@ -3,7 +3,6 @@
 @use "base/image";
 @use "base/typography";
 @use "base/layout";
-@use "elements/icons";
 
 @use "elements/common";
 @use "elements/reset";
@@ -23,14 +22,12 @@
 @use "elements/comments";
 @use "elements/comment";
 @use "elements/separators";
-@use "elements/votes";
 @use "elements/items-list";
 @use "elements/modal";
 @use "elements/profile-bar";
 @use "elements/blogpost-cards";
 @use "elements/blogpost-details";
 @use "elements/story-status";
-@use "elements/quote";
 @use "elements/description-list";
 @use "elements/pagination";
 @use "elements/search";
@@ -64,7 +61,6 @@
 @use "elements/noscript";
 @use "elements/http-status";
 @use "elements/validation-summary";
-@use "elements/notifications-btn";
 
 // Custom elements
 @use "elements/shelves-button";

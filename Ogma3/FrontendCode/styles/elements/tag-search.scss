@@ -37,6 +37,9 @@
 			> .tag {
 				contain: content;
 				flex-grow: 1;
+				background-color: var(--tag-color);
+				display: flex;
+				flex-direction: row;
 
 				&:first-child {
 					margin-left: 4px;

@@ -1,0 +1,8 @@
+:host {
+	display: flex;
+	place-items: center;
+}
+
+::part(icon) {
+	aspect-ratio: 1 / 1;
+}

@@ -24,12 +24,11 @@ var i="GET";async function o(e,t,n,s,u){let a=await fetch(e,{method:t,headers:{"
             <div class="searchbar" ref="search">
                 <div class="tags">
 
-                    <div class="tag" v-for="s in selected">
-                        <div class="bg" v-bind:style="{background: s.namespaceColor}"></div>
+                    <div class="tag" v-for="s in selected" v-bind:style="{'--tag-color': s.namespaceColor}">
                         <span class="name">
                         {{ s.namespaceName ? s.namespaceName + ':' : '' }}{{ s.name }}
-            				<o-icon icon="lucide:x" class="material-icons-outlined" v-on:click="selected.remove(s)" ></o-icon>
-                      </span>
+                      	</span>
+						<o-icon icon="lucide:x" class="material-icons-outlined" v-on:click="selected.remove(s)" ></o-icon>
                     </div>
 
                     <input type="text"
@@ -55,4 +54,4 @@ var i="GET";async function o(e,t,n,s,u){let a=await fetch(e,{method:t,headers:{"
         </div>
     `});
 
-//# debugId=F87304D46ACAB60C64756E2164756E21
+//# debugId=4E6BBF4AE73AFBE464756E2164756E21
