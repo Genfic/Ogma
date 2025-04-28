@@ -1,10 +1,10 @@
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Ogma3;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Middleware;
 using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
@@ -15,7 +15,6 @@ using Serilog.Events;
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
 Console.OutputEncoding = Encoding.UTF8;
 
-
 var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
 Log.Logger = new LoggerConfiguration()
 	.Enrich.FromLogContext()
@@ -25,8 +24,16 @@ Log.Logger = new LoggerConfiguration()
 	.MinimumLevel.Debug()
 	.CreateLogger();
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration
+	.AddEnvironmentVariables("ogma_")
+	.AddJsonFile("appsettings.json5")
+	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true)
+	.AddEnvironmentVariables()
+	// WARN: It probably should not be used in prod, switch to DI instead
+	.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
+
 
 builder.Logging
 	.ClearProviders()
@@ -42,20 +49,13 @@ builder.WebHost.ConfigureKestrel(options =>
 		options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3; });
 	});
 
-var startup = new Startup(builder.Configuration, builder.Environment);
-startup.ConfigureServices(builder.Services);
+builder.ConfigureServices();
 
 builder.AddServiceDefaults();
 
-// middleware
-builder.UseAddHeaders();
-
 var app = builder.Build();
 
-Startup.Configure(app, app.Environment);
-
-// middleware
-app.UseAddHeaders();
+app.Configure();
 
 if (app.Environment.IsDevelopment())
 {

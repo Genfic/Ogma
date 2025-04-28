@@ -26,12 +26,10 @@
 		<ul class="links">
 			@foreach (var link in Model.Data.Links)
 			{
-				var host = link.Split("://")[^1];
-
 				<li>
-					<a href="//@host" target="_blank" rel="noopener noreferrer">
+					<a href="//@link" target="_blank" rel="noopener noreferrer me">
 						<img src="https://www.google.com/s2/favicons?domain=@link" alt="" role="presentation" width="16" height="16">
-						<span>@(host.Replace("www.", ""))</span>
+						<span>@link</span>
 					</a>
 				</li>
 			}

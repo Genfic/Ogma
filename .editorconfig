@@ -6,6 +6,7 @@ insert_final_newline = false
 indent_style = tab
 indent_size = 4
 max_line_length = 140
+ij_json_keep_trailing_comma = true
 
 # Microsoft .NET properties
 csharp_new_line_before_members_in_object_initializers = false
@@ -71,5 +72,3 @@ dotnet_diagnostic.CA1852.severity = warning
 
 [**/Migrations/**.cs]
 generated_code = true
-
-

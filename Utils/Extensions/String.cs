@@ -21,19 +21,26 @@ public static partial class String
 			.Trim('-');
 	}
 
-	public static string Capitalize(this string input)
+	public static string Capitalize(this ReadOnlySpan<char> input)
 	{
-		if (string.IsNullOrWhiteSpace(input))
-		{
-			return input;
-		}
+		var s = string.Create(input.Length, input, (chars, state) => {
+			chars[0] = char.ToUpper(state[0]);
+			state[1..].CopyTo(chars[1..]);
+		});
 
-		if (char.IsUpper(input[0]))
-		{
-			return input;
-		}
+		return s;
 
-		return input[0].ToString().ToUpper() + input[1..];
+		// if (string.IsNullOrWhiteSpace(input))
+		// {
+		// 	return input;
+		// }
+		//
+		// if (char.IsUpper(input[0]))
+		// {
+		// 	return input;
+		// }
+		//
+		// return input[0].ToString().ToUpper() + input[1..];
 	}
 
 	/// <summary>
@@ -98,10 +105,10 @@ public static partial class String
 	}
 
 	/// <summary>
-	/// Get the amount of words in the given string
+	/// Get the number of words in the given string
 	/// </summary>
 	/// <param name="input">String to count words in</param>
-	/// <returns>Amount of words</returns>
+	/// <returns>Number of words</returns>
 	public static int Words(this string input)
 	{
 		var wasLetter = false;
@@ -147,6 +154,7 @@ public static partial class String
 		return [..HashtagRegex.Matches(input).Select(m => m.Groups["tag"].Value)];
 	}
 
+	public record struct Header(byte Level, byte Occurrence, string Body);
 	public static List<Header> GetMarkdownHeaders(this string input)
 	{
 		var headers = new List<Header>();
@@ -183,8 +191,6 @@ public static partial class String
 
 		return headers;
 	}
-
-	public record struct Header(byte Level, byte Occurrence, string Body);
 
 	[GeneratedRegex("[^a-zA-Z0-9]+")]
 	private static partial Regex NonAlphanumericCharactersRegex { get; }

@@ -1,13 +1,13 @@
 {
 	"ConnectionStrings": {
-		"DbConnection": "Host=localhost;Database=Ogma3;Username=;Password="
+		"DbConnection": "Host=localhost;Database=Ogma3;Username=;Password=",
 	},
 	"Logging": {
 		"LogLevel": {
 			"Default": "Debug",
 			"System": "Information",
-			"Microsoft": "Information"
-		}
+			"Microsoft": "Information",
+		},
 	},
 	"AllowedHosts": "*",
 	"migrateDatabase": false,
@@ -16,7 +16,7 @@
 	"AdditionalHeaders": {
 		"Headers": {
 			"X-Robots-Tag": "noai, noimageai",
-			"TDM-Reservation": "1"
-		}
-	}
+			"TDM-Reservation": "1",
+		},
+	},
 }

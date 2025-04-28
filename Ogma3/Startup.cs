@@ -1,5 +1,4 @@
 using System.IO.Compression;
-using System.Reflection;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
@@ -49,43 +48,28 @@ using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace Ogma3;
 
-public sealed class Startup
+public static class Startup
 {
-	// ReSharper disable once UnusedParameter.Local
-	public Startup(IConfiguration configuration, IWebHostEnvironment env)
-	{
-		Configuration = new ConfigurationBuilder()
-			.AddConfiguration(configuration)
-			.AddEnvironmentVariables("ogma_")
-			.AddJsonFile("appsettings.json")
-			.AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-			.AddEnvironmentVariables()
-			// WARN: It probably should not be used in prod, switch to DI instead
-			.AddUserSecrets(Assembly.GetAssembly(GetType()) ?? throw new NullReferenceException("The assembly was, somehow, null"))
-			.Build();
-		// Configuration = configuration;
-	}
-
-	private IConfiguration Configuration { get; }
-
 	// This method gets called by the runtime. Use this method to add services to the container.
-	public void ConfigureServices(IServiceCollection services)
+	public static TBuilder ConfigureServices<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
 	{
+		var services = builder.Services;
+		var configuration = builder.Configuration;
+
 		// Profiler
 		services.AddMiniProfiler().AddEntityFramework();
 
 		// Compression
 		services.AddResponseCompression(options => {
-			options.EnableForHttps = true;
-			options.Providers.Add<ZstdCompressionProvider>();
-			options.Providers.Add<BrotliCompressionProvider>();
-			options.Providers.Add<GzipCompressionProvider>();
-		})
-		.Configure<ZstdCompressionProvider.Options>(o => o.CompressionLevel = CompressionLevel.Optimal);
+				options.EnableForHttps = true;
+				options.Providers.Add<ZstdCompressionProvider>();
+				options.Providers.Add<BrotliCompressionProvider>();
+				options.Providers.Add<GzipCompressionProvider>();
+			})
+			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionLevel = CompressionLevel.Optimal);
 
 		// Database
-		// var conn = Environment.GetEnvironmentVariable("DATABASE_URL") ?? Configuration.GetConnectionString("DbConnection");
-		var conn = Configuration.GetConnectionString("ogma3-db") ?? Configuration.GetConnectionString("DbConnection");
+		var conn = configuration.GetConnectionString("ogma3-db") ?? configuration.GetConnectionString("DbConnection");
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
 				.UseNpgsql(conn, o => o.MapPostgresEnums())
@@ -103,9 +87,10 @@ public sealed class Startup
 		services
 			.AddTransient<RequestTimestampMiddleware>()
 			.AddTransient<UserBanMiddleware>();
+		builder.UseAddHeaders();
 
 		// Validators
-		services.AddValidatorsFromAssemblyContaining<Startup>();
+		services.AddValidatorsFromAssemblyContaining<Program>();
 		ValidatorOptions.Global.LanguageManager.Enabled = false;
 
 		// Custom persistent config
@@ -165,10 +150,10 @@ public sealed class Startup
 		// Email
 		services
 			.AddTransient<IEmailSender, PostmarkMailer>()
-			.Configure<PostmarkOptions>(Configuration);
+			.Configure<PostmarkOptions>(configuration);
 
 		// Backblaze
-		var b2Options = Configuration.GetSection("B2").Get<B2Options>();
+		var b2Options = configuration.GetSection("B2").Get<B2Options>();
 		services.AddSingleton<IB2Client>(new B2Client(b2Options));
 
 		// File uploader
@@ -177,7 +162,7 @@ public sealed class Startup
 		// Turnstile
 		services
 			.AddTransient<ITurnstileService, TurnstileService>()
-			.Configure<TurnstileSettings>(Configuration.GetSection(TurnstileSettings.Section));
+			.Configure<TurnstileSettings>(configuration.GetSection(TurnstileSettings.Section));
 
 		// Seeding
 		services.AddAsyncInitializer<DbSeedInitializer>();
@@ -241,7 +226,7 @@ public sealed class Startup
 		// Fluent Validation
 		services
 			.AddFluentValidationAutoValidation()
-			.AddValidatorsFromAssemblyContaining<Startup>()
+			.AddValidatorsFromAssemblyContaining<Program>()
 			.AddFluentValidationClientsideAdapters(cfg => {
 				cfg.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
 					new FileSizeClientValidator(rule, component);
@@ -278,12 +263,16 @@ public sealed class Startup
 		services.AddRateLimiting();
 		// Cache policies
 		services.AddCachePolicies();
+
+		return builder;
 	}
 
 
 	// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-	public static void Configure(WebApplication app, IWebHostEnvironment env)
+	public static void Configure(this WebApplication app)
 	{
+		var env = app.Environment;
+
 		// Profiler
 		if (env.IsDevelopment())
 		{
@@ -292,8 +281,9 @@ public sealed class Startup
 
 		app.MapDefaultEndpoints();
 
-		// Request timestamp
+		// Middleware
 		app.UseRequestTimestamp();
+		app.UseAddHeaders();
 
 		// Compression
 		app.UseResponseCompression();

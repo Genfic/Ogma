@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,8 @@ using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class IndexModel(
+public sealed partial class IndexModel
+(
 	ApplicationDbContext context,
 	SignInManager<OgmaUser> signInManager,
 	ImageUploader uploader,
@@ -131,10 +133,21 @@ public sealed class IndexModel(
 			user.Bio = Input.Bio;
 		}
 
-		user.Links = Input.Links?
-			.Split(["\r\n", "\r", "\n"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-			.Where(l => Uri.TryCreate(l, UriKind.RelativeOrAbsolute, out _))
-			.ToList() ?? [];
+		if (Input.Links is {} links)
+		{
+			user.Links.Clear();
+			foreach (var link in links.AsSpan().EnumerateLines())
+			{
+				var trimmed = link.Trim();
+				if (trimmed.IsEmpty) continue;
+				var line = link.ToString();
+
+				if (Uri.TryCreate(line, UriKind.RelativeOrAbsolute, out _))
+				{
+					user.Links.Add(UrlRegex.Match(line).Groups[1].Value);
+				}
+			}
+		}
 
 		await context.SaveChangesAsync();
 
@@ -142,4 +155,7 @@ public sealed class IndexModel(
 		StatusMessage = "Your profile has been updated";
 		return RedirectToPage();
 	}
+
+	[GeneratedRegex("(?:https|http)?(?:://)?(?:w{3}\\.)?(.+)")]
+	private partial Regex UrlRegex { get; }
 }

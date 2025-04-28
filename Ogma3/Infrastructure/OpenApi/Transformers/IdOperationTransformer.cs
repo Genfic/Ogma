@@ -18,13 +18,13 @@ public sealed class IdOperationTransformer : IOpenApiOperationTransformer
 			return Task.CompletedTask;
 		}
 
-		var method = context.Description.HttpMethod.ToLower().Capitalize();
+		var method = context.Description.HttpMethod.ToLower().AsSpan().Capitalize();
 		var description = context.Description.RelativePath.Split('/', '-', '_', '.')
 			.Where(p => p is not ['{', .., '}'])
-			.Select(p => p.Capitalize());
+			.Select(p => p.AsSpan().Capitalize());
 
 		operation.OperationId = $"{method}{string.Join("", description)}";
-		
+
 		return Task.CompletedTask;
 	}
 }
