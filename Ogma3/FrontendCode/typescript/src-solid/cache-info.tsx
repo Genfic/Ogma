@@ -2,7 +2,7 @@ import { type ComponentType, customElement } from "solid-element";
 import { createResource, createSignal, Match, Switch } from "solid-js";
 import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
 import css from "./cache-info.css";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 
 const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	const [primed, setPrimed] = createSignal(false);

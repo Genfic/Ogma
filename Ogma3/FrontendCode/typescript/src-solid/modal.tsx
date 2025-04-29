@@ -1,4 +1,4 @@
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { Show, createSignal } from "solid-js";
 import css from "./modal.css";

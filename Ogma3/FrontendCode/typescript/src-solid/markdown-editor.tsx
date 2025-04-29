@@ -1,7 +1,7 @@
 import { type ComponentType, customElement } from "solid-element";
 import { For, type JSX } from "solid-js";
 import css from "./markdown-editor.css";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 import { Comment } from "./common/_comment";
 
 type Action = {

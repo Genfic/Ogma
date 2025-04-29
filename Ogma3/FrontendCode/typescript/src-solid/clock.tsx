@@ -1,5 +1,5 @@
 import { addToDate } from "@h/date-helpers";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";

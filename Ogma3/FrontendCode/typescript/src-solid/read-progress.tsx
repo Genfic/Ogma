@@ -1,4 +1,4 @@
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 import { clamp, normalize } from "@h/math-helpers";
 import { type ComponentType, customElement } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";

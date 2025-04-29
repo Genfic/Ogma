@@ -4,7 +4,7 @@ import { type ComponentType, customElement } from "solid-element";
 import { Show, createResource, createSignal, onMount } from "solid-js";
 import { useLocalStorage } from "@h/localStorageHook";
 import css from "./quote-box.css";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 
 const QuoteBox: ComponentType<null> = (_, { element }) => {
 	onMount(() => {

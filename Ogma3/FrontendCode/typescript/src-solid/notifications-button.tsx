@@ -3,7 +3,7 @@ import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
 import { Show, createSignal, onMount } from "solid-js";
 import css from "./notifications-button.css";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 
 const NotificationsButton: ComponentType<null> = (_, { element }) => {
 	const [notifications, setNotifications] = createSignal(0);

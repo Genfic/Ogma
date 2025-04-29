@@ -2,7 +2,7 @@ import { GetAdminApiTelemetryGetTableInfo } from "@g/paths-internal";
 import { convert } from "convert";
 import { type Component, createSignal, createResource, For } from "solid-js";
 import { customElement } from "solid-element";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 import { orderBy } from "es-toolkit";
 import css from "./table-info.css";
 

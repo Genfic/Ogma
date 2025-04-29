@@ -1,5 +1,5 @@
 import { type ComponentType, customElement } from "solid-element";
-import { styled } from "@h/jsx-wc-style";
+import { styled } from "./common/_styled";
 import css from "./icon.css";
 
 const Icon: ComponentType<{ icon: string }> = (props) => {
