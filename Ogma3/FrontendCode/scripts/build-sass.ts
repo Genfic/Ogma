@@ -2,18 +2,18 @@ import { readdir, rm } from "node:fs/promises";
 import * as path from "node:path";
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
-import browserslist from "browserslist";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
-import { browserslistToTargets, transform } from "lightningcss";
+import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 import { dirsize } from "./helpers/dirsize";
 import { attempt, attemptSync } from "./helpers/function-helpers";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
+import { cssTargets } from "./helpers/css-targets";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -33,7 +33,6 @@ if (values.clean) {
 }
 
 const compiler = await initAsyncCompiler();
-const targets = browserslistToTargets(browserslist("last 2 years and > 0.1% and not dead"));
 
 process.on("SIGINT", async () => {
 	await compiler.dispose();
@@ -79,7 +78,7 @@ const compileSass = async (file: string) => {
 				inputSourceMap: JSON.stringify(sourceMap),
 				sourceMap: true,
 				filename: file,
-				targets,
+				targets: cssTargets,
 				minify: true,
 			});
 		},

@@ -3,7 +3,7 @@ import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource } from "solid-js";
 import css from "./vote-button.css";
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 
 const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => {
 	const [votes, { mutate }] = createResource(
@@ -51,5 +51,5 @@ customElement(
 		storyId: 0,
 		csrf: "",
 	},
-	styled(css)(VoteButton),
+	Styled(VoteButton, css),
 );

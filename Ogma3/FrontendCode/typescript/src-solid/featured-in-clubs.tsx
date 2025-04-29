@@ -23,14 +23,13 @@ const Club = ({ club }: { club: GetClubsWithStoryResult }) => (
 	</a>
 );
 
-const FeaturedInClubs: ComponentType<{ storyId: number }> = (props, { element }) => {
+const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 	noShadowDOM();
 
 	const [clubs, setClubs] = createSignal<GetClubsWithStoryResult[]>([]);
 	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
 
 	onMount(() => {
-		element.classList.add("wc-loaded");
 		if (!dialogRef) {
 			return;
 		}

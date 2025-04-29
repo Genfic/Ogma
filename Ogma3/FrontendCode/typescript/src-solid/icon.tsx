@@ -1,5 +1,5 @@
 import { type ComponentType, customElement } from "solid-element";
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 import css from "./icon.css";
 
 const Icon: ComponentType<{ icon: string }> = (props) => {
@@ -11,4 +11,4 @@ const Icon: ComponentType<{ icon: string }> = (props) => {
 	);
 };
 
-customElement("o-icon", { icon: "" }, styled(css)(Icon));
+customElement("o-icon", { icon: "" }, Styled(Icon, css));

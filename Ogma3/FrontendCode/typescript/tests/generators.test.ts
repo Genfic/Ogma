@@ -1,6 +1,6 @@
 // timedString.test.js
 import { describe, expect, it } from "bun:test";
-import { timedString } from "../src-helpers/generators";
+import { timedString } from "@h/generators";
 
 describe("timedString", () => {
 	it("should return a string", () => {

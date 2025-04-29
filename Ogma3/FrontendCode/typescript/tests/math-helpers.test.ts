@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 // normalize.test.js
-import { clamp, normalize } from "../src-helpers/math-helpers";
+import { clamp, normalize } from "@h/math-helpers";
 
 describe("normalize", () => {
 	it("should normalize a number within the given range to [0, 1]", () => {

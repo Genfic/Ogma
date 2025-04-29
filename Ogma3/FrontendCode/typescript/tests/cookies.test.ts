@@ -1,6 +1,6 @@
 // cookieUtils.test.js
 import { beforeEach, describe, expect, it } from "bun:test";
-import { getCookieValue, setCookie } from "../src-helpers/cookies";
+import { getCookieValue, setCookie } from "@h/cookies";
 
 describe("Cookie Utils", () => {
 	beforeEach(() => {

@@ -1,26 +1,5 @@
-.wc-loaded {
-	animation-name: wc-loaded;
-	animation-duration: 200ms;
-}
-
-@keyframes wc-loaded {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-}
-
-o-vote:empty {
-	min-width: 53.4px;
-}
-
-o-notifications {
-	min-width: 40px;
-}
-
-o-featured-in-clubs {
-	min-width: 135px;
+:where(:not(:defined)) {
+	display: block;
+	opacity: 0;
+	transition: opacity 3s ease-in-out;
 }

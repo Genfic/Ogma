@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { minifyHtml } from "../src-helpers/minify.macro";
+import { minifyHtml } from "@h/minify.macro";
 
 describe("minifyHtml", () => {
 	it("should minify a simple HTML string", () => {

@@ -1,16 +1,12 @@
 import { PostApiUsersFollow as followUser, DeleteApiUsersFollow as unfollowUser } from "@g/paths-public";
 import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { createSignal, onMount } from "solid-js";
+import { createSignal } from "solid-js";
 
-const FollowButton: ComponentType<{ userName: string; csrf: string; isFollowed: boolean }> = (props, { element }) => {
+const FollowButton: ComponentType<{ userName: string; csrf: string; isFollowed: boolean }> = (props) => {
 	noShadowDOM();
 
 	const [isFollowed, setIsFollowed] = createSignal(props.isFollowed);
-
-	onMount(() => {
-		element.classList.add("wc-loaded");
-	});
 
 	const follow = async () => {
 		const send = isFollowed() ? unfollowUser : followUser;

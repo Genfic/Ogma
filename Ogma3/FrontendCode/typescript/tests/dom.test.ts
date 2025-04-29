@@ -1,6 +1,6 @@
 // domUtils.test.js
 import { describe, expect, it } from "bun:test";
-import { parseDom } from "../src-helpers/dom";
+import { parseDom } from "@h/dom";
 
 describe("parseDom", () => {
 	it("should parse a simple HTML string into a DOM element", () => {

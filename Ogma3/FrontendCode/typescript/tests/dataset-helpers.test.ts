@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { getData } from "../src-helpers/dataset-helpers";
+import { getData } from "@h/dataset-helpers";
 
 describe("getData", () => {
 	it("returns single value from document", () => {

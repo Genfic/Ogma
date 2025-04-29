@@ -1,16 +1,12 @@
 import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "@g/paths-public";
 import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { createSignal, onMount } from "solid-js";
+import { createSignal } from "solid-js";
 
-const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: boolean }> = (props, { element }) => {
+const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: boolean }> = (props) => {
 	noShadowDOM();
 
 	const [isMember, setIsMember] = createSignal(props.isMember);
-
-	onMount(() => {
-		element.classList.add("wc-loaded");
-	});
 
 	const join = async () => {
 		const send = isMember() ? leaveClub : joinClub;

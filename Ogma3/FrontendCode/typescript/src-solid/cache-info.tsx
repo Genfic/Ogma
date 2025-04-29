@@ -2,7 +2,7 @@ import { type ComponentType, customElement } from "solid-element";
 import { createResource, createSignal, Match, Switch } from "solid-js";
 import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
 import css from "./cache-info.css";
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 
 const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	const [primed, setPrimed] = createSignal(false);
@@ -67,4 +67,4 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	);
 };
 
-customElement("cache-info", { csrf: "" }, styled(css)(CacheInfo));
+customElement("cache-info", { csrf: "" }, Styled(CacheInfo, css));

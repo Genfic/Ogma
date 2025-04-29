@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["..\\..\\..\\FrontendCode\\typescript\\src-solid\\common\\_styled.ts"],
+  "sourcesContent": [
+    "import type { FunctionComponent, ConstructableComponent, ComponentOptions } from \"component-register\";\r\nimport type { ComponentType } from \"solid-element\";\r\nimport { onMount, createComponent } from \"solid-js\";\r\n\r\n/**\r\n * Higher-Order Component (HOC) factory to apply styles to a solid-element's renderRoot.\r\n * @param css The CSS string to apply.\r\n * @returns A function that takes a ComponentType and returns a new ComponentType with styles applied.\r\n */\r\n\r\nexport const styled = <P>(css: string) => {\r\n\treturn (Component: FunctionComponent<P>): ComponentType<P> => {\r\n\t\treturn (props, context) => {\r\n\t\t\tonMount(() => {\r\n\t\t\t\tconst styleEl = document.createElement(\"style\");\r\n\t\t\t\tstyleEl.textContent = css;\r\n\t\t\t\tcontext.element.renderRoot.appendChild(styleEl);\r\n\t\t\t});\r\n\t\t\treturn Component(props, context);\r\n\t\t};\r\n\t};\r\n};\r\n\r\nexport const Styled = <TProps>(component: ComponentType<TProps>, css: string): ComponentType<TProps> => {\r\n\treturn (props: TProps, options: ComponentOptions) => {\r\n\t\tonMount(() => {\r\n\t\t\tconst styleEl = document.createElement(\"style\");\r\n\t\t\tstyleEl.textContent = css;\r\n\t\t\toptions.element.renderRoot.appendChild(styleEl);\r\n\t\t});\r\n\t\tif (typeof component === \"function\") {\r\n\t\t\treturn (component as FunctionComponent<TProps>)(props, options);\r\n\t\t}\r\n\r\n\t\treturn createComponent(component, props);\r\n\t};\r\n};\r\n"
+  ],
+  "mappings": "+CAuBO,IAAM,EAAS,CAAS,EAAkC,IAAuC,CACvG,MAAO,CAAC,EAAe,IAA8B,CAMpD,GALA,EAAQ,IAAM,CACb,IAAM,EAAU,SAAS,cAAc,OAAO,EAC9C,EAAQ,YAAc,EACtB,EAAQ,QAAQ,WAAW,YAAY,CAAO,EAC9C,EACG,OAAO,IAAc,WACxB,OAAQ,EAAwC,EAAO,CAAO,EAG/D,OAAO,EAAgB,EAAW,CAAK",
+  "debugId": "F5EEC9F7960E78AD64756E2164756E21",
+  "names": []
+}

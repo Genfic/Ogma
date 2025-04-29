@@ -1,7 +1,7 @@
 import { type ComponentType, customElement } from "solid-element";
 import { For, type JSX } from "solid-js";
 import css from "./markdown-editor.css";
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 import { Comment } from "./common/_comment";
 
 type Action = {
@@ -69,4 +69,4 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 	);
 };
 
-customElement<Props>(name, { selector: "textarea", overrideSelector: false }, styled(css)(MarkdownEditor));
+customElement(name, { selector: "textarea", overrideSelector: false }, Styled(MarkdownEditor, css));

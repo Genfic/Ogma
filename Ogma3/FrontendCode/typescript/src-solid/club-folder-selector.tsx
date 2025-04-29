@@ -9,7 +9,7 @@ import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { For, createResource, createSignal, onMount, Switch, Match } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
-const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
+const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (props) => {
 	noShadowDOM();
 
 	const [clubs, setClubs] = createSignal<GetJoinedClubsResponse[]>([]);
@@ -19,8 +19,6 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
 
 	onMount(async () => {
-		element.classList.add("wc-loaded");
-
 		const response = await getUserClubs();
 		if (response.ok) {
 			setClubs(response.data);

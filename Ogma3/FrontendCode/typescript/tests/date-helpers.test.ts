@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { addToDate } from "../src-helpers/date-helpers";
+import { addToDate } from "@h/date-helpers";
 
 describe("addToDate", () => {
 	it("adds years correctly", () => {

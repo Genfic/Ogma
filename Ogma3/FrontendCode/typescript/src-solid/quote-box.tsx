@@ -1,16 +1,12 @@
 import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
 import { type ComponentType, customElement } from "solid-element";
-import { Show, createResource, createSignal, onMount } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import { useLocalStorage } from "@h/localStorageHook";
 import css from "./quote-box.css";
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 
-const QuoteBox: ComponentType<null> = (_, { element }) => {
-	onMount(() => {
-		element.classList.add("wc-loaded");
-	});
-
+const QuoteBox: ComponentType<null> = (_) => {
 	const [canLoad, setCanLoad] = createSignal(true);
 	const [getQuoteFromStore, setQuoteInStore] = useLocalStorage<QuoteDto>("quote");
 
@@ -39,7 +35,7 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 		}
 	};
 
-	const [quote, { refetch }] = createResource<QuoteDto>(() => loadQuote());
+	const [quote, { refetch }] = createResource<QuoteDto>(loadQuote);
 
 	const spinnerIcon = () => (canLoad() ? "lucide:refresh-cw" : "lucide:clock");
 
@@ -56,4 +52,4 @@ const QuoteBox: ComponentType<null> = (_, { element }) => {
 	);
 };
 
-customElement("quote-box", null, styled(css)(QuoteBox));
+customElement("quote-box", null, Styled(QuoteBox, css));

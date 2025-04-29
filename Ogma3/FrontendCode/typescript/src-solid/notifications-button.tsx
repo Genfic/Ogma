@@ -3,14 +3,12 @@ import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
 import { Show, createSignal, onMount } from "solid-js";
 import css from "./notifications-button.css";
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 
-const NotificationsButton: ComponentType<null> = (_, { element }) => {
+const NotificationsButton: ComponentType<null> = (_) => {
 	const [notifications, setNotifications] = createSignal(0);
 
 	onMount(async () => {
-		element.classList.add("wc-loaded");
-
 		const res = await countNotifications();
 		if (res.ok) {
 			setNotifications(res.data);
@@ -33,4 +31,4 @@ const NotificationsButton: ComponentType<null> = (_, { element }) => {
 	);
 };
 
-customElement("o-notifications-button", null, styled(css)(NotificationsButton));
+customElement("o-notifications-button", null, Styled(NotificationsButton, css));

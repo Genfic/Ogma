@@ -1,10 +1,12 @@
 import type { BunPlugin } from "bun";
-import { basename } from "node:path";
 
 export const cssMinifyPlugin: BunPlugin = {
-	name: "minified-css", // A unique name for your loader
+	name: "minified-css",
 	async setup(build) {
 		const { transform } = await import("lightningcss");
+		const { cssTargets } = await import("../helpers/css-targets");
+		const { basename } = await import("node:path");
+
 		const decoder = new TextDecoder();
 
 		build.onLoad({ filter: /\.css$/ }, async (args) => {
@@ -14,6 +16,7 @@ export const cssMinifyPlugin: BunPlugin = {
 					code: content,
 					filename: basename(args.path),
 					minify: true,
+					targets: cssTargets,
 				});
 
 				const minified = decoder.decode(result.code);

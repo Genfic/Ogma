@@ -38,7 +38,6 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 
 	onMount(async () => {
 		await getQuickShelvesData();
-		element.classList.add("wc-loaded");
 
 		clickOutsideSolid(element, () => {
 			setMore(false);

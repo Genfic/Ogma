@@ -1,4 +1,4 @@
-import { styled } from "./common/_styled";
+import { Styled } from "./common/_styled";
 import { clamp, normalize } from "@h/math-helpers";
 import { type ComponentType, customElement } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
@@ -51,4 +51,4 @@ const ReadProgress: ComponentType<null> = (_, { element }) => {
 	return <div class="bar" style={{ width: `${progress() * 100}%` }} />;
 };
 
-customElement("o-read-progress", null, styled(css)(ReadProgress));
+customElement("o-read-progress", null, Styled(ReadProgress, css));
