@@ -4,7 +4,7 @@
   "sourcesContent": [
     "import { template as _$template } from \"solid-js/web\";\nimport { getOwner as _$getOwner } from \"solid-js/web\";\nvar _tmpl$ = /*#__PURE__*/_$template(`<button type=button class=read-status aria-label=\"Chapter read status\"data-id=@c.Id><o-icon icon=lucide:eye-off>`, true, false, false);\nimport { customElement, noShadowDOM } from \"solid-element\";\nconst ChapterRead = props => {\n  noShadowDOM();\n  return (() => {\n    var _el$ = _tmpl$(),\n      _el$2 = _el$.firstChild;\n    _el$2._$owner = _$getOwner();\n    return _el$;\n  })();\n};\ncustomElement(\"o-read\", {\n  route: \"\",\n  chapterId: 0\n}, ChapterRead);"
   ],
-  "mappings": "6DAEA,IAAI,EAAsB,EAAW,mHAAoH,GAAM,GAAO,EAAK,EAErK,EAAc,KAAS,CAE3B,OADA,EAAY,GACJ,IAAM,CACZ,IAAI,EAAO,EAAO,EAChB,EAAQ,EAAK,WAEf,OADA,EAAM,QAAU,EAAW,EACpB,IACN,GAEL,EAAc,SAAU,CACtB,MAAO,GACP,UAAW,CACb,EAAG,CAAW",
-  "debugId": "8EBFAB27D040139164756E2164756E21",
+  "mappings": "8DAEA,IAAI,EAAsB,EAAW,mHAAoH,GAAM,GAAO,EAAK,EAErK,EAAc,KAAS,CAE3B,OADA,EAAY,GACJ,IAAM,CACZ,IAAI,EAAO,EAAO,EAChB,EAAQ,EAAK,WAEf,OADA,EAAM,QAAU,EAAW,EACpB,IACN,GAEL,EAAc,SAAU,CACtB,MAAO,GACP,UAAW,CACb,EAAG,CAAW",
+  "debugId": "225A74EB8B46687464756E2164756E21",
   "names": []
 }

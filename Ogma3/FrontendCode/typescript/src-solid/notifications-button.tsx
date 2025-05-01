@@ -1,20 +1,14 @@
 import { GetApiNotificationsCount as countNotifications } from "@g/paths-public";
-import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
-import { Show, createSignal, onMount } from "solid-js";
+import { Show, createResource } from "solid-js";
 import css from "./notifications-button.css";
 import { Styled } from "./common/_styled";
+import type { Empty } from "@t/utils";
 
-const NotificationsButton: ComponentType<null> = (_) => {
-	const [notifications, setNotifications] = createSignal(0);
-
-	onMount(async () => {
+const NotificationsButton: ComponentType<Empty> = (_) => {
+	const [notifications] = createResource(async () => {
 		const res = await countNotifications();
-		if (res.ok) {
-			setNotifications(res.data);
-		} else {
-			log.error(res.statusText);
-		}
+		return res.ok ? res.data : -1;
 	});
 
 	const count = () => (notifications() <= 99 ? notifications().toString() : "99+");
@@ -31,4 +25,4 @@ const NotificationsButton: ComponentType<null> = (_) => {
 	);
 };
 
-customElement("o-notifications-button", null, Styled(NotificationsButton, css));
+customElement("o-notifications-button", {}, Styled(NotificationsButton, css));

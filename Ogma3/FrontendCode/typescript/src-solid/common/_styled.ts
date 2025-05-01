@@ -12,11 +12,11 @@ import { onMount, createComponent, type Component } from "solid-js";
  * @param {string} css The CSS styles to be applied to the wrapped component.
  * @returns {ComponentType<TProps>} A new component type with the specified styles applied.
  */
-export const Styled = <TProps>(component: ComponentType<TProps>, css: string): ComponentType<TProps> => {
+export const Styled = <TProps>(component: ComponentType<TProps>, ...css: string[]): ComponentType<TProps> => {
 	return (props: TProps, options: ComponentOptions) => {
 		onMount(() => {
 			const styleEl = document.createElement("style");
-			styleEl.textContent = css;
+			styleEl.textContent = css.join("");
 			options.element.renderRoot.appendChild(styleEl);
 		});
 		if (Object.getPrototypeOf(component).constructor === component) {

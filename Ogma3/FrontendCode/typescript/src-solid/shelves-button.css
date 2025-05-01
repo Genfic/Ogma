@@ -1,0 +1,25 @@
+.more-shelves {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--background);
+	z-index: 3;
+	box-shadow: var(--shadow);
+
+	button {
+		padding: .5rem;
+		justify-content: start;
+		margin: 0;
+	}
+
+	.icon {
+		margin-right: .5rem;
+	}
+}
+
+.shelf {
+	/*noinspection CssUnresolvedCustomProperty*/
+	box-shadow: inset var(--s-col, transparent) 0 0 0 3px;
+}

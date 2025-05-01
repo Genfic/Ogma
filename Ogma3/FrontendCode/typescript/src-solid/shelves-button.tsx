@@ -4,15 +4,20 @@ import {
 	GetApiShelfStories as getShelves,
 	DeleteApiShelfStories as removeFromShelf,
 } from "@g/paths-public";
-import { clickOutsideSolid } from "@h/click-outside";
+import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, Show, createSignal, onMount, type Setter } from "solid-js";
-import type { ShelfResult } from "@g/types-public";
+import { type ComponentType, customElement } from "solid-element";
+import { For, Show, createSignal, createResource, type Setter } from "solid-js";
+import type { QuickShelvesResult, ShelfResult } from "@g/types-public";
+import { Styled } from "./common/_styled";
+import css from "./shelves-button.css";
+import sharedCss from "./shared.css";
+
+type Shelf = ShelfResult & QuickShelvesResult;
 
 const updateShelfData = (
-	currentShelves: ShelfResult[],
-	setShelvesFunc: Setter<ShelfResult[]>,
+	currentShelves: Shelf[],
+	setShelvesFunc: Setter<Shelf[]>,
 	updatedShelfId: number,
 	containsBook: boolean,
 ) => {
@@ -29,49 +34,30 @@ const updateShelfData = (
 };
 
 const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
-	noShadowDOM();
-
-	const [quickShelves, setQuickShelves] = createSignal<ShelfResult[]>([]);
-	const [shelves, setShelves] = createSignal<ShelfResult[]>([]);
 	const [more, setMore] = createSignal(false);
 	const [page, setPage] = createSignal(1);
 
-	onMount(async () => {
-		await getQuickShelvesData();
-
-		clickOutsideSolid(element, () => {
-			setMore(false);
-		});
+	const [quickShelves, { mutate: mutateQuick }] = createResource(async () => {
+		const res = await getQuickShelves(props.storyId);
+		return res.ok ? (res.data as Shelf[]) : null;
 	});
+	const [shelves, { mutate: mutateShelves }] = createResource(
+		more,
+		async (trigger) => {
+			if (trigger) {
+				const res = await getShelves(props.storyId, page());
+				return res.ok ? (res.data as Shelf[]) : null;
+			}
+			return null;
+		},
+		{ initialValue: [] },
+	);
+
+	useClickOutside(element, () => setMore(false));
 
 	const iconStyle = (shelf: ShelfResult) => ({
 		color: shelf.color,
 	});
-
-	const getQuickShelvesData = async () => {
-		const res = await getQuickShelves(props.storyId);
-		if (res.ok) {
-			setQuickShelves(res.data);
-		} else {
-			log.error(res.statusText);
-		}
-	};
-
-	const getShelvesData = async () => {
-		const res = await getShelves(props.storyId, page());
-		if (res.ok) {
-			setShelves(res.data);
-		} else {
-			log.error(res.statusText);
-		}
-	};
-
-	const showMore = async () => {
-		setMore(!more());
-		if (more() && shelves().length <= 0) {
-			await getShelvesData();
-		}
-	};
 
 	const addOrRemove = async (id: number) => {
 		const allShelves = [...shelves(), ...quickShelves()];
@@ -91,8 +77,8 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		if (res.ok) {
 			const { shelfId } = res.data;
 
-			updateShelfData(quickShelves(), setQuickShelves, shelfId, !exists);
-			updateShelfData(shelves(), setShelves, shelfId, !exists);
+			updateShelfData(quickShelves(), mutateQuick, shelfId, !exists);
+			updateShelfData(shelves(), mutateShelves, shelfId, !exists);
 		} else {
 			log.error(res.statusText);
 		}
@@ -107,14 +93,16 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						class="shelf action-btn"
 						title={`Add to ${shelf.name}`}
 						onClick={[addOrRemove, shelf.id]}
-						style={{ "box-shadow": shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null }}
+						style={{
+							"--s-col": shelf.doesContainBook && shelf.color,
+						}}
 					>
 						<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
 					</button>
 				)}
 			</For>
 
-			<button type="button" title="All bookshelves" class="shelf action-btn" onClick={showMore}>
+			<button type="button" title="All bookshelves" class="shelf action-btn" onClick={[setMore, !more()]}>
 				<o-icon class="material-icons-outlined" icon="lucide:ellipsis-vertical" />
 			</button>
 
@@ -124,14 +112,14 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						{(shelf) => (
 							<button
 								type="button"
-								class="action-btn"
+								class="shelf action-btn"
 								title={`Add to ${shelf.name}`}
 								onClick={[addOrRemove, shelf.id]}
 								style={{
-									"box-shadow": shelf.doesContainBook ? `${shelf.color} inset 0 0 0 3px` : null,
+									"--s-col": shelf.doesContainBook && shelf.color,
 								}}
 							>
-								<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
+								<o-icon class="icon" style={iconStyle(shelf)} icon={shelf.iconName} />
 								<span>{shelf.name}</span>
 							</button>
 						)}
@@ -148,5 +136,5 @@ customElement(
 		storyId: 0,
 		csrf: "",
 	},
-	ShelvesButton,
+	Styled(ShelvesButton, sharedCss, css),
 );

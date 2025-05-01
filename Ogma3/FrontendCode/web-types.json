@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "framework": "solid",
   "name": "ogma-3",
-  "version": "0.0.0",
+  "version": "beta",
   "js-types-syntax": "typescript",
   "description-markup": "markdown",
   "contributions": {
@@ -23,6 +23,30 @@
           "source": {
             "module": "./typescript\\src-solid\\cache-info.tsx",
             "symbol": "cache-info"
+          }
+        },
+        {
+          "name": "markdown-editor",
+          "description": "Custom element <markdown-editor> defined in typescript\\src-solid\\markdown-editor.tsx",
+          "attributes": [
+            {
+              "name": "selector",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "overrideSelector",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            }
+          ],
+          "source": {
+            "module": "./typescript\\src-solid\\markdown-editor.tsx",
+            "symbol": "markdown-editor"
           }
         },
         {
@@ -47,7 +71,7 @@
               "name": "isBlocked",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "boolean"
               }
             }
           ],
@@ -81,7 +105,7 @@
               "name": "storyId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
@@ -105,58 +129,13 @@
               "name": "storyId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             }
           ],
           "source": {
             "module": "./typescript\\src-solid\\featured-in-clubs.tsx",
             "symbol": "o-featured-in-clubs"
-          }
-        },
-        {
-          "name": "o-folder-tree",
-          "description": "Custom element <o-folder-tree> defined in typescript\\src-solid\\_folder-tree.tsx",
-          "attributes": [
-            {
-              "name": "clubId",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "value",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "current",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "selected",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "inputSelector",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src-solid\\_folder-tree.tsx",
-            "symbol": "o-folder-tree"
           }
         },
         {
@@ -181,7 +160,7 @@
               "name": "isFollowed",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "boolean"
               }
             }
           ],
@@ -215,7 +194,7 @@
               "name": "clubId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
@@ -229,7 +208,7 @@
               "name": "isMember",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "boolean"
               }
             }
           ],
@@ -262,7 +241,7 @@
               "name": "chapterId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             }
           ],
@@ -288,7 +267,7 @@
               "name": "storyId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
@@ -312,7 +291,7 @@
               "name": "storyId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
@@ -336,14 +315,14 @@
               "name": "width",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
               "name": "height",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
@@ -364,7 +343,7 @@
               "name": "pixelSize",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             }
           ],
@@ -404,14 +383,14 @@
               "name": "itemId",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "number"
               }
             },
             {
               "name": "itemType",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "unknown"
               }
             }
           ],

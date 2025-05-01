@@ -1,15 +1,18 @@
 import type { ICustomElement } from "component-register/types/utils";
+import { onCleanup, onMount } from "solid-js";
 
-export const clickOutside = (element: HTMLElement, callback: () => void) =>
-	document.addEventListener("click", (e) => {
-		if (!e.composedPath().includes(element)) {
+export const useClickOutside = (element: ICustomElement, callback: () => void) => {
+	const handleClick = (event: MouseEvent) => {
+		const root = element.renderRoot;
+		const path = event.composedPath();
+		if (root && !path.includes(root as EventTarget)) {
 			callback();
 		}
+	};
+	onMount(() => {
+		document.addEventListener("click", handleClick);
 	});
-
-export const clickOutsideSolid = (element: ICustomElement, callback: () => void) =>
-	document.addEventListener("click", (e) => {
-		if (!e.composedPath().includes(element.renderRoot)) {
-			callback();
-		}
+	onCleanup(() => {
+		document.removeEventListener("click", handleClick);
 	});
+};

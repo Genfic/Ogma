@@ -35,7 +35,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			{
 				query = query
 					.TagWith("Searching for blogposts with tags")
-					.Where(b => tags.Any(i => b.Hashtags.Contains(i)));
+					.Where(b => b.Hashtags.Intersect(tags).Any()); // tags.Any(i => b.Hashtags.Any(h => h == i)));
 			}
 
 			// Search in title
@@ -51,7 +51,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			}
 		}
 
-		// Save post count at this stage
+		// Save post-count at this stage
 		var postsCount = await query.CountAsync();
 
 		// Sort

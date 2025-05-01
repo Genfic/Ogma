@@ -3,8 +3,9 @@ import { clamp, normalize } from "@h/math-helpers";
 import { type ComponentType, customElement } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import css from "./read-progress.css";
+import type { Empty } from "@t/utils";
 
-const ReadProgress: ComponentType<null> = (_, { element }) => {
+const ReadProgress: ComponentType<Empty> = (_, { element }) => {
 	const [progress, setProgress] = createSignal(0);
 	const [ticking, setTicking] = createSignal(false);
 	const [read, setRead] = createSignal(false);
@@ -51,4 +52,4 @@ const ReadProgress: ComponentType<null> = (_, { element }) => {
 	return <div class="bar" style={{ width: `${progress() * 100}%` }} />;
 };
 
-customElement("o-read-progress", null, Styled(ReadProgress, css));
+customElement("o-read-progress", {}, Styled(ReadProgress, css));

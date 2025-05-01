@@ -95,24 +95,9 @@
 
 	<script type="module" src="~/js/site.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/navbar.js" asp-append-version="true"></script>
-
-	@* TODO: Load only the ones that are actually necessary *@
-	<script type="module" src="~/js/comp/block-user.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/chapter-read.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/clock.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/club-folder-selector.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/featured-in-clubs.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/follow-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/icon.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/join-club-button.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/modal.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/notifications-button.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/qr-code.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/quote-box.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/read-progress.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/report-modal.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/shelves-button.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/vote-button.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/notifications-button.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", false)
 	@Html.RenderResources()

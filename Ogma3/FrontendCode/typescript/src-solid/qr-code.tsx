@@ -4,8 +4,8 @@ import { createSignal, onMount } from "solid-js";
 import { type QrCodeGenerateSvgOptions, renderSVG } from "uqr";
 
 type WidthOrHeight =
-	| { width: null | undefined; height: number }
-	| { width: number; height: null | undefined }
+	| { width: number; height?: number }
+	| { width?: number; height: number }
 	| { width: number; height: number };
 
 const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvgOptions> = (props) => {
@@ -32,8 +32,8 @@ const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvg
 customElement(
 	"qr-code",
 	{
-		width: null,
-		height: null,
+		width: 100,
+		height: 100,
 		data: "",
 		ecc: "M",
 		pixelSize: 4,

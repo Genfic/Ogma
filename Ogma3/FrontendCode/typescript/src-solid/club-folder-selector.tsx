@@ -4,30 +4,25 @@ import {
 	GetApiClubsUser as getUserClubs,
 } from "@g/paths-public";
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
-import { log } from "@h/logger";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, createResource, createSignal, onMount, Switch, Match } from "solid-js";
+import { For, createResource, createSignal, Switch, Match } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (props) => {
 	noShadowDOM();
 
-	const [clubs, setClubs] = createSignal<GetJoinedClubsResponse[]>([]);
+	const [isOpen, setIsOpen] = createSignal(false);
 	const [selectedClub, setSelectedClub] = createSignal<GetJoinedClubsResponse | null>(null);
 	const [status, setStatus] = createSignal({ message: "", success: false });
 	const [selectedFolder, setSelectedFolder] = createSignal<GetFolderResult | null>(null);
 	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
 
-	onMount(async () => {
-		const response = await getUserClubs();
-		if (response.ok) {
-			setClubs(response.data);
-		} else {
-			log.error(`Error fetching data: ${response.statusText}`);
-		}
+	const [clubs] = createResource(isOpen, async (condition) => {
+		if (!condition) return null;
+		const res = await getUserClubs();
+		return res.ok ? res.data : null;
 	});
 
-	// Use resource for folders
 	const [folders] = createResource(selectedClub, async (club) => {
 		if (!club) {
 			throw new Error("Club not selected");
@@ -39,14 +34,20 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 		return res.data;
 	});
 
+	const reset = () => {
+		setSelectedClub(null);
+		setSelectedFolder(null);
+		setStatus({ message: "", success: false });
+	};
+
+	const open = () => {
+		setIsOpen(true);
+		dialogRef().open();
+	};
+
 	const setClub = (club: GetJoinedClubsResponse | null) => {
 		setSelectedClub(club);
 		setSelectedFolder(null);
-	};
-
-	const select = (folder: GetFolderResult) => {
-		log.info(`Selecting folder with ID ${folder.id}`);
-		setSelectedFolder(folder);
 	};
 
 	const add = async () => {
@@ -75,7 +76,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 			});
 		} else if (typeof response.data === "string") {
 			setStatus({
-				message: response.data.replaceAll('"', ""),
+				message: response.data,
 				success: false,
 			});
 		}
@@ -108,7 +109,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 										active: selectedFolder()?.id === folder.id,
 									}}
 									class="folder"
-									onClick={[select, folder]}
+									onClick={[setSelectedFolder, folder]}
 								>
 									{folder.name}
 								</button>
@@ -150,11 +151,11 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 
 	return (
 		<>
-			<button type="button" class="club-wc-button" onClick={() => dialogRef()?.open()}>
+			<button type="button" class="club-wc-button" onClick={open}>
 				Add to folder
 			</button>
 
-			<Dialog ref={setDialogRef} classes="club-folder-selector">
+			<Dialog ref={setDialogRef} onClose={reset} classes="club-folder-selector">
 				<div class="content">{selectedClub() !== null ? selectedClubView() : allClubsView()}</div>
 			</Dialog>
 		</>

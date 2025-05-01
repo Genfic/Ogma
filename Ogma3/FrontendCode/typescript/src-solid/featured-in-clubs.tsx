@@ -1,7 +1,7 @@
 import { GetApiClubsStory as getFeaturingClubs } from "@g/paths-public";
 import type { GetClubsWithStoryResult } from "@g/types-public";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createSignal, createResource } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 const id = "featured-in-clubs";
@@ -26,22 +26,17 @@ const Club = ({ club }: { club: GetClubsWithStoryResult }) => (
 const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 	noShadowDOM();
 
-	const [clubs, setClubs] = createSignal<GetClubsWithStoryResult[]>([]);
+	const [isOpen, setIsOpen] = createSignal(false);
+	const [clubs] = createResource(isOpen, async (condition: boolean) => {
+		if (!condition) return null;
+		const res = await getFeaturingClubs(props.storyId);
+		return res.ok ? res.data : null;
+	});
 	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
 
-	onMount(() => {
-		if (!dialogRef) {
-			return;
-		}
-	});
-
-	const open = async () => {
-		const response = await getFeaturingClubs(props.storyId);
-		if (response.ok) {
-			setClubs(response.data);
-		}
-
-		dialogRef()?.open();
+	const open = () => {
+		setIsOpen(true);
+		dialogRef().open();
 	};
 
 	return (

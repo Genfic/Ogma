@@ -44,14 +44,17 @@
 		{
 			<div class="actions">
 
-				<a title="Write about it"
-				   class="action-btn"
-				   asp-page="/Blog/Create"
-				   asp-route-chapter="@Model.Chapter.Id"
-				   asp-route-from="@Routes.Pages.Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
+				@if (Model.Chapter.PublicationDate is not null && Model.Chapter.ContentBlock is null)
+				{
+					<a title="Write about it"
+					   class="action-btn"
+					   asp-page="/Blog/Create"
+					   asp-route-chapter="@Model.Chapter.Id"
+					   asp-route-from="@Routes.Pages.Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
 						<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
 						<span class="name">Write about it</span>
-				</a>
+					</a>
+				}
 
 				@if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
 				{
@@ -140,4 +143,5 @@
 @section Scripts
 {
 	<script type="module" src="~/js/watch-chapter-read.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/read-progress.js" asp-append-version="true"></script>
 }

@@ -5,8 +5,9 @@ import { Show, createResource, createSignal } from "solid-js";
 import { useLocalStorage } from "@h/localStorageHook";
 import css from "./quote-box.css";
 import { Styled } from "./common/_styled";
+import type { Empty } from "@t/utils";
 
-const QuoteBox: ComponentType<null> = (_) => {
+const QuoteBox: ComponentType<Empty> = (_) => {
 	const [canLoad, setCanLoad] = createSignal(true);
 	const [getQuoteFromStore, setQuoteInStore] = useLocalStorage<QuoteDto>("quote");
 
@@ -25,13 +26,13 @@ const QuoteBox: ComponentType<null> = (_) => {
 			Number.parseInt(response.headers.get("retry-after")) * 1000,
 		);
 
+		if (response.status === 429) {
+			return getQuoteFromStore();
+		}
+
 		if (response.ok) {
 			setQuoteInStore(response.data);
 			return response.data;
-		}
-
-		if (response.status === 429) {
-			return getQuoteFromStore();
 		}
 	};
 
@@ -52,4 +53,4 @@ const QuoteBox: ComponentType<null> = (_) => {
 	);
 };
 
-customElement("quote-box", null, Styled(QuoteBox, css));
+customElement("quote-box", {}, Styled(QuoteBox, css));

@@ -3,6 +3,7 @@ import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource } from "solid-js";
 import css from "./vote-button.css";
+import sharedCss from "./shared.css";
 import { Styled } from "./common/_styled";
 
 const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => {
@@ -34,7 +35,7 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 	return () => (
 		<button
 			type="button"
-			class="votes"
+			class="votes action-btn"
 			classList={{ active: votes()?.didVote }}
 			onClick={vote}
 			title="Give it a star!"
@@ -51,5 +52,5 @@ customElement(
 		storyId: 0,
 		csrf: "",
 	},
-	Styled(VoteButton, css),
+	Styled(VoteButton, sharedCss, css),
 );

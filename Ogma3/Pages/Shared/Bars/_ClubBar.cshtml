@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Antiforgery
 @using Microsoft.AspNetCore.Http
 @using Ogma3.Data.Reports
+@using Ogma3.Services
 @model ClubBar
 @inject IAntiforgery Antiforgery
 @inject IHttpContextAccessor Accessor;
@@ -83,3 +84,5 @@
 		openSelector="#open-modal-button-clubbar">
 	</report-modal>
 </div>
+
+@Html.Resource(@<script type="module" src="~/js/comp/join-club-button.js" asp-append-version="true"></script>)

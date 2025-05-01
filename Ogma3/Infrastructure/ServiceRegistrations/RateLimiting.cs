@@ -12,7 +12,8 @@ public static class RateLimiting
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
 		services.AddRateLimiter(limiterOptions => {
-			limiterOptions.AddFixedWindowLimiter(policyName: Rss, options => {
+			limiterOptions
+				.AddFixedWindowLimiter(policyName: Rss, options => {
 					options.Window = TimeSpan.FromHours(1);
 					options.PermitLimit = 1;
 				})
@@ -36,7 +37,7 @@ public static class RateLimiting
 				return new ValueTask();
 			};
 		});
-		
+
 		return services;
 	}
 }

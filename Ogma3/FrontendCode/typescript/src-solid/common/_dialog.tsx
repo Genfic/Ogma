@@ -1,20 +1,40 @@
 import { createUniqueId, onMount, type ParentComponent } from "solid-js";
+import { createEventDispatcher } from "@solid-primitives/event-dispatcher";
 
 export type DialogApi = {
 	open: () => void;
+	close: () => void;
 };
 
-export type DialogType = ParentComponent<{ classes?: string; ref?: (api: DialogApi) => void }>;
+type Props = {
+	classes?: string;
+	ref?: (api: DialogApi) => void;
+	onClose?: (evt: CustomEvent) => void;
+	onOpen?: (evt: CustomEvent) => void;
+};
 
-export const Dialog: DialogType = (props) => {
+export type DialogType<TProps> = ParentComponent<TProps>;
+
+export const Dialog: DialogType<Props> = (props) => {
 	let dialogRef: HTMLDialogElement | undefined;
 	const id = createUniqueId();
 
-	const open = () => dialogRef?.showModal();
+	const dispatch = createEventDispatcher(props);
+
+	const open = () => {
+		dialogRef?.showModal();
+		dispatch("open");
+	};
+
+	const close = () => {
+		dialogRef?.close();
+		dispatch("close");
+	};
 
 	onMount(() => {
 		props.ref?.({
 			open,
+			close,
 		});
 	});
 
@@ -28,7 +48,7 @@ export const Dialog: DialogType = (props) => {
 			e.clientY < minY ||
 			e.clientY >= minY + dialogRef?.clientHeight
 		) {
-			dialogRef?.close();
+			close();
 		}
 	};
 
@@ -40,7 +60,7 @@ export const Dialog: DialogType = (props) => {
 			onmousedown={backdropClose}
 			aria-modal={true}
 		>
-			<button type="button" aria-controls={id} class="close-btn" autofocus onClick={() => dialogRef?.close()}>
+			<button type="button" aria-controls={id} class="close-btn" autofocus onClick={close}>
 				<o-icon icon="lucide:x" />
 			</button>
 

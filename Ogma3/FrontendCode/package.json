@@ -1,5 +1,6 @@
 {
 	"name": "ogma-3",
+	"version": "beta",
 	"sideEffects": false,
 	"type": "module",
 	"scripts": {
@@ -11,7 +12,7 @@
 		"css:watch": "bun ./scripts/build-sass.ts -- --watch",
 		"js": "bun ./scripts/build-js.ts",
 		"js:watch": "bun ./scripts/build-js.ts -- --watch",
-		"js:typecheck": "tsc --noEmit -p ./wwwroot/js/tsconfig.json",
+		"js:typecheck": "tsc --project ./typescript --noEmit",
 		"wc": "bun ./scripts/build-solid.ts",
 		"wc:watch": "bun ./scripts/build-solid.ts -- --watch",
 		"icons": "bun ./scripts/build-icons.ts",
@@ -57,6 +58,7 @@
 		"@angius/tinytime": "^1.1.0",
 		"@atulin/bun-plugin-solid": "npm:@jsr/atulin__bun-plugin-solid",
 		"@atulin/html-sanitizer": "npm:@jsr/atulin__html-sanitizer",
+		"@solid-primitives/event-dispatcher": "^0.1.1",
 		"@types/ejs": "^3.1.5",
 		"es-toolkit": "^1.35.0",
 		"micromark": "^4.0.2",

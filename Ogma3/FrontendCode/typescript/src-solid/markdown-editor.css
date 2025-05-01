@@ -4,26 +4,11 @@
 }
 
 .btn {
-	cursor: pointer;
-	background-color: transparent;
 	color: var(--accent);
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	padding: .5rem;
-	border: 1px solid var(--foreground-25);
 
-	o-icon::part(icon) {
+	.icon::part(icon) {
 		width: 20px;
 		height: 20px;
-	}
-
-	&:hover {
-		border-color: var(--foreground-50);
-	}
-
-	&:focus {
-		border-color: var(--accent);
-		box-shadow: 0 0 0 3px var(--accent-25);
 	}
 }

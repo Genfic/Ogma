@@ -125,7 +125,7 @@ const ReportModal: ComponentType<{
 customElement(
 	"report-modal",
 	{
-		openSelector: undefined as string | undefined,
+		openSelector: "",
 		csrf: "",
 		itemId: 0,
 		itemType: "" as EReportableContentTypes,

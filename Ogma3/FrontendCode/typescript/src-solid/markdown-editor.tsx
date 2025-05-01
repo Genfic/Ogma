@@ -1,6 +1,7 @@
 import { type ComponentType, customElement } from "solid-element";
 import { For, type JSX } from "solid-js";
 import css from "./markdown-editor.css";
+import sharedCss from "./shared.css";
 import { Styled } from "./common/_styled";
 import { Comment } from "./common/_comment";
 
@@ -60,8 +61,8 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 			<Comment text={selectorActual} />
 			<For each={actions}>
 				{(action) => (
-					<button type="button" class="btn" title={action.name} onClick={[click, action]}>
-						<o-icon icon={action.icon} class="material-icons-outlined" />
+					<button type="button" class="btn action-btn" title={action.name} onClick={[click, action]}>
+						<o-icon icon={action.icon} class="icon" />
 					</button>
 				)}
 			</For>
@@ -69,4 +70,4 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 	);
 };
 
-customElement(name, { selector: "textarea", overrideSelector: false }, Styled(MarkdownEditor, css));
+customElement(name, { selector: "textarea", overrideSelector: false }, Styled(MarkdownEditor, sharedCss, css));

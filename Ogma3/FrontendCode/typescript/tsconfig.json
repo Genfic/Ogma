@@ -15,7 +15,8 @@
 		"typeRoots": ["./types"],
 		"paths": {
 			"@g/*": ["./generated/*"],
-			"@h/*": ["./src-helpers/*"]
+			"@h/*": ["./src-helpers/*"],
+			"@t/*": ["./types/*"]
 		},
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js"

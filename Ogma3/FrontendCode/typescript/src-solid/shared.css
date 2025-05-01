@@ -1,0 +1,31 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+button {
+	cursor: pointer;
+}
+
+.action-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 .5rem;
+	margin-right: .1rem;
+	background-color: var(--background-75);
+	color: var(--foreground-75);
+	border: 1px solid var(--foreground-25);
+
+	&:hover {
+		color: var(--foreground);
+		text-decoration: none;
+		background-color: var(--accent-25);
+		border-color: var(--foreground-50);
+	}
+
+	&:focus {
+		border-color: var(--accent);
+	}
+}

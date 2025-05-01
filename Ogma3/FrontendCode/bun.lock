@@ -7,6 +7,7 @@
         "@angius/tinytime": "^1.1.0",
         "@atulin/bun-plugin-solid": "npm:@jsr/atulin__bun-plugin-solid",
         "@atulin/html-sanitizer": "npm:@jsr/atulin__html-sanitizer",
+        "@solid-primitives/event-dispatcher": "^0.1.1",
         "@types/ejs": "^3.1.5",
         "es-toolkit": "^1.35.0",
         "micromark": "^4.0.2",
@@ -362,6 +363,8 @@
     "@sindresorhus/is": ["@sindresorhus/is@4.6.0", "", {}, "sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw=="],
 
     "@sindresorhus/merge-streams": ["@sindresorhus/merge-streams@2.3.0", "", {}, "sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg=="],
+
+    "@solid-primitives/event-dispatcher": ["@solid-primitives/event-dispatcher@0.1.1", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-Lo3OGmGuzCZGxMUDue0fBbbeFGdKWMGnWYk87il4FgSAosVxWbNCI9egxYwwEjdxf2bcgiFJhZfC03cmNc0OAw=="],
 
     "@stylelint-types/stylelint-scss": ["@stylelint-types/stylelint-scss@6.5.0", "", { "peerDependencies": { "stylelint": ">=16.0.0", "stylelint-define-config": ">=1.0.0" }, "optionalPeers": ["stylelint"] }, "sha512-G0JjA520unkSYrPmINZQnnqCZbOCzV8BYf0ZLOW6aCy4LiNOAewrn1gx4jOXrZuXKQ8wyzHEJWSdP5pi2aOy7w=="],
 

@@ -1,70 +1,34 @@
 import { Glob } from "bun";
 import ts from "typescript";
-import path from "node:path";
-import fs from "node:fs/promises";
+import path, { basename, dirname, join } from "node:path";
+import type { HTMLAttribute, HTMLElement, Webtypes } from "./types/webtypes";
+import pkg from "../package.json" with { type: "json" };
+import ct from "chalk-template";
+
+const _root = dirname(Bun.main);
 
 // --- Configuration ---
-const SRC_DIR = path.resolve(process.cwd(), "typescript/src-solid");
-const OUTPUT_FILE = path.resolve(process.cwd(), "../../web-types.json");
+const SRC_DIR = join(_root, "..", "typescript", "src-solid");
+const OUTPUT_FILE = join(_root, "..", "web-types.json");
 const FILE_PATTERN = "**/*.tsx";
-const PACKAGE_JSON_PATH = path.resolve(process.cwd(), "package.json");
 const WEB_TYPES_SCHEMA = "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json";
 // --- End Configuration ---
 
 interface ComponentInfo {
 	tagName: string;
-	attributes: string[];
+	attributes: { name: string; type: string }[];
 	sourceFile: string;
 }
 
-interface WebTypeAttribute {
-	name: string;
-	description?: string;
-	value?: {
-		kind: string;
-		type: string;
-	};
-	default?: string;
-	required?: boolean;
-}
-
-interface WebTypeElement {
-	name: string;
-	description?: string;
-	"doc-url"?: string;
-	attributes: WebTypeAttribute[];
-	source?: {
-		module: string;
-		symbol: string;
-	};
-}
-
-interface WebTypesJson {
-	$schema: string;
-	framework: string;
-	name: string;
-	version: string;
-	"js-types-syntax"?: string;
-	"description-markup"?: string;
-	contributions: {
-		html: {
-			elements?: WebTypeElement[];
-			attributes?: WebTypeAttribute[];
-		};
-	};
-}
-
-async function getPackageInfo(): Promise<{ name: string; version: string }> {
+function getPackageInfo(): { name: string; version: string } {
 	try {
-		const content = await fs.readFile(PACKAGE_JSON_PATH, "utf-8");
-		const pkg = JSON.parse(content);
 		return {
 			name: pkg.name || "unknown-package",
 			version: pkg.version || "0.0.0",
 		};
 	} catch (error) {
-		console.warn(`Could not read ${PACKAGE_JSON_PATH}. Using default name/version.`);
-		console.warn(`Error: ${error instanceof Error ? error.message : error}`);
+		console.warn(ct`{red Could not read package.json. Using default name/version.}`);
+		console.warn(ct`{red Error: {bold ${error instanceof Error ? error.message : error}}}`);
 		return {
 			name: "my-solid-components",
 			version: "1.0.0",
@@ -75,6 +39,8 @@ async function getPackageInfo(): Promise<{ name: string; version: string }> {
 function extractComponentsFromFile(filePath: string, sourceCode: string): ComponentInfo[] {
 	const components: ComponentInfo[] = [];
 	const sourceFile = ts.createSourceFile(filePath, sourceCode, ts.ScriptTarget.Latest, true);
+
+	const base = basename(filePath);
 
 	function visit(node: ts.Node) {
 		if (
@@ -88,36 +54,157 @@ function extractComponentsFromFile(filePath: string, sourceCode: string): Compon
 
 			let tagName = "";
 			if (ts.isStringLiteral(tagNameArg)) {
+				// Direct string literal
 				tagName = tagNameArg.text;
+			} else if (ts.isIdentifier(tagNameArg)) {
+				// Handle variables - try to find the variable declaration and its value
+				const varName = tagNameArg.escapedText as string;
+				let found = false;
+
+				// Look for variable declarations in the file
+				ts.forEachChild(sourceFile, (node) => {
+					if (!found && ts.isVariableStatement(node)) {
+						for (const decl of node.declarationList.declarations) {
+							if (ts.isIdentifier(decl.name) && decl.name.escapedText === varName) {
+								// Handle initializer with possible type assertion
+								let initializer = decl.initializer;
+
+								// Check if it's a type assertion like "x as const"
+								if (initializer && ts.isAsExpression(initializer)) {
+									initializer = initializer.expression;
+								}
+
+								// Extract the string value
+								if (initializer && ts.isStringLiteral(initializer)) {
+									tagName = initializer.text;
+									found = true;
+								}
+							}
+						}
+					}
+				});
+
+				if (!found) {
+					console.warn(`{dim [${base}]} Couldn't resolve variable value for tag name: {red ${varName}}`);
+				}
 			} else {
-				console.warn(`[${filePath}] Skipping customElement call: Tag name is not a string literal.`);
+				console.warn(
+					`{dim [${base}]} Skipping customElement call: {red Tag name is not a string literal or resolvable variable.}`,
+				);
 				return;
 			}
 
-			const attributes: string[] = [];
+			// Change to store both name and type
+			const attributes: Array<{ name: string; type: string }> = [];
+
 			if (ts.isObjectLiteralExpression(propsArg)) {
 				for (const prop of propsArg.properties) {
 					if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
-						attributes.push(prop.name.escapedText as string);
+						const propName = prop.name.escapedText as string;
+						let typeName = "unknown";
+
+						// Determine the type based on the initializer node kind
+						if (ts.isStringLiteral(prop.initializer)) {
+							typeName = "string";
+						} else if (ts.isNumericLiteral(prop.initializer)) {
+							typeName = "number";
+						} else if (
+							prop.initializer.kind === ts.SyntaxKind.TrueKeyword ||
+							prop.initializer.kind === ts.SyntaxKind.FalseKeyword
+						) {
+							typeName = "boolean";
+						} else if (ts.isArrayLiteralExpression(prop.initializer)) {
+							typeName = "array";
+						} else if (ts.isObjectLiteralExpression(prop.initializer)) {
+							typeName = "object";
+						} else if (ts.isIdentifier(prop.initializer)) {
+							// Handle references to constructors or other identifiers
+							const name = prop.initializer.escapedText as string;
+							switch (name) {
+								case "String":
+									typeName = "string";
+									break;
+								case "Number":
+									typeName = "number";
+									break;
+								case "Boolean":
+									typeName = "boolean";
+									break;
+								case "Array":
+									typeName = "array";
+									break;
+								case "Object":
+									typeName = "object";
+									break;
+								default:
+									typeName = name.toLowerCase();
+							}
+						}
+
+						attributes.push({ name: propName, type: typeName });
 					} else if (ts.isShorthandPropertyAssignment(prop)) {
-						attributes.push(prop.name.escapedText as string);
+						const propName = prop.name.escapedText as string;
+						let typeName = "unknown";
+
+						// For shorthand properties, we need a different approach
+						// Try to find the variable declaration to determine its type
+						let found = false;
+						ts.forEachChild(sourceFile, (node) => {
+							if (!found && ts.isVariableStatement(node)) {
+								for (const decl of node.declarationList.declarations) {
+									if (
+										ts.isIdentifier(decl.name) &&
+										decl.name.escapedText === propName &&
+										decl.initializer
+									) {
+										found = true;
+
+										// Determine type from initializer
+										if (ts.isStringLiteral(decl.initializer)) {
+											typeName = "string";
+										} else if (ts.isNumericLiteral(decl.initializer)) {
+											typeName = "number";
+										} else if (
+											decl.initializer.kind === ts.SyntaxKind.TrueKeyword ||
+											decl.initializer.kind === ts.SyntaxKind.FalseKeyword
+										) {
+											typeName = "boolean";
+										} else if (ts.isArrayLiteralExpression(decl.initializer)) {
+											typeName = "array";
+										} else if (ts.isObjectLiteralExpression(decl.initializer)) {
+											typeName = "object";
+										}
+									}
+								}
+							}
+						});
+
+						attributes.push({ name: propName, type: typeName });
 					} else {
 						console.warn(
-							`[${filePath}] Non-standard property found in props definition for <${tagName}>: ${ts.SyntaxKind[prop.kind]}`,
+							ct`{dim [${base}]} Non-standard property found in props definition for {bold <${tagName}>}: {red ${ts.SyntaxKind[prop.kind]}}`,
 						);
 					}
 				}
 			} else {
 				console.warn(
-					`[${filePath}] Skipping props for <${tagName}>: Second argument to customElement is not an object literal.`,
+					ct`{dim [${base}]} Skipping props for {bold <${tagName}>}: {red Second argument to customElement is not an object literal.}`,
 				);
 			}
 
 			if (tagName) {
-				console.log(`[${filePath}] Found component: <${tagName}> with attributes: ${attributes.join(", ")}`);
+				// Format for logging
+				const attributesFormatted = attributes
+					.map((attr) => ct`{blue ${attr.name}:} {green ${attr.type}}`)
+					.join(", ");
+
+				console.log(
+					ct`{dim [${base}]} Found component: {bold <${tagName}>} with attributes: \{ ${attributesFormatted} \}`,
+				);
+
 				components.push({
 					tagName,
-					attributes,
+					attributes, // Now this contains both name and type
 					sourceFile: path.relative(process.cwd(), filePath),
 				});
 			}
@@ -155,25 +242,27 @@ async function generateWebTypes() {
 		return;
 	}
 
-	const packageInfo = await getPackageInfo();
+	const packageInfo = getPackageInfo();
 
-	const webTypesElements: WebTypeElement[] = allComponents.map((comp) => ({
+	const webTypesElements: HTMLElement[] = allComponents.map((comp) => ({
 		name: comp.tagName,
 		description: `Custom element <${comp.tagName}> defined in ${comp.sourceFile}`,
-		attributes: comp.attributes.map((attrName) => ({
-			name: attrName,
-			value: {
-				kind: "expression",
-				type: "string",
-			},
-		})),
+		attributes: comp.attributes.map(
+			(attr): HTMLAttribute => ({
+				name: attr.name,
+				value: {
+					kind: "expression",
+					type: attr.type,
+				},
+			}),
+		),
 		source: {
 			module: `./${comp.sourceFile}`,
 			symbol: comp.tagName,
 		},
 	}));
 
-	const webTypesJson: WebTypesJson = {
+	const webTypesJson: Webtypes = {
 		$schema: WEB_TYPES_SCHEMA,
 		framework: "solid",
 		name: packageInfo.name,
