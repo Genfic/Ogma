@@ -2,6 +2,8 @@ using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 
 namespace Ogma3.Api.V1;
 
@@ -10,11 +12,16 @@ namespace Ogma3.Api.V1;
 public static partial class TestController
 {
 	[UsedImplicitly]
-	public sealed record Query;
-	
-	private static async ValueTask<Results<InternalServerError, Ok>> HandleAsync(Query _, CancellationToken ct)
+	public sealed record Query(string[] Tags);
+
+	private static async ValueTask<Ok<List<Bpost>>> HandleAsync(Query q, ApplicationDbContext db, CancellationToken ct)
 	{
-		await Task.Delay(100, ct);
-		return Random.Shared.Next() > int.MaxValue / 2 ? TypedResults.InternalServerError() : TypedResults.Ok();
+		var b = await db.Blogposts
+			.Where(b => b.Hashtags.Intersect(q.Tags).Any())
+			.Select(b => new Bpost(b.Title, b.Hashtags))
+			.ToListAsync(ct);
+		return TypedResults.Ok(b);
 	}
+
+	public record Bpost(string Title, string[] Hashtags);
 }

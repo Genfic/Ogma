@@ -19,7 +19,7 @@
 			)
 	</markdown>
 
-	@if (Model.Hashtags.Length > 0)
+	@if (Model.Hashtags is [_, ..])
 	{
 		<div class="tags">
 			@foreach (var t in Model.Hashtags)

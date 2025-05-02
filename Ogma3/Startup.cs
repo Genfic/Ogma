@@ -2,7 +2,6 @@ using System.IO.Compression;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
-using CompiledModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -73,7 +72,6 @@ public static class Startup
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
 				.UseNpgsql(conn, o => o.MapPostgresEnums())
-				.UseModel(ApplicationDbContextModel.Instance)
 			)
 			.AddDatabaseDeveloperPageExceptionFilter();
 

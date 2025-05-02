@@ -30,12 +30,13 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			var tags = splitQuery
 				.Where(x => x.StartsWith('#'))
 				.Select(x => x.ToLower().Trim('#'))
-				.ToArray();
-			if (tags.Length > 0)
+				.ToList();
+
+			if (tags.Count > 0)
 			{
 				query = query
 					.TagWith("Searching for blogposts with tags")
-					.Where(b => b.Hashtags.Intersect(tags).Any()); // tags.Any(i => b.Hashtags.Any(h => h == i)));
+					.Where(b => b.Hashtags.Intersect(tags).Any());
 			}
 
 			// Search in title
@@ -84,7 +85,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			})
 			.ToListAsync();
 
-		// Prepare pagination model
+		// Prepare the pagination model
 		Pagination = new Pagination
 		{
 			PerPage = config.BlogpostsPerPage,

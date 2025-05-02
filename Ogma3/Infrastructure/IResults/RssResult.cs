@@ -2,7 +2,6 @@ using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml;
 using Microsoft.IO;
-using Serilog;
 
 namespace Ogma3.Infrastructure.IResults;
 
@@ -13,7 +12,7 @@ public sealed class RssResult(string title, string description, IEnumerable<Synd
 	public async Task ExecuteAsync(HttpContext httpContext)
 	{
 		var now = DateTimeOffset.UtcNow;
-		
+
 		var feed = new SyndicationFeed(
 			title,
 			description,
