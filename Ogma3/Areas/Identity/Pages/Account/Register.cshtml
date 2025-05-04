@@ -6,6 +6,8 @@
 @model RegisterModel
 @{
 	ViewData["Title"] = "Register";
+	Request.Cookies.TryGetValue("theme", out var theme);
+	theme ??= "light";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -33,7 +35,10 @@
 
 			<div class="o-form-group">
 				<label asp-for="Input.Password"></label>
-				<input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password"/>
+				<div class="input-group push">
+					<input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password"/>
+					<o-password-toggle></o-password-toggle>
+				</div>
 				<span asp-validation-for="Input.Password" class="text-danger"></span>
 				<aside class="info" asp-for="Input.Password">
 					The password must contain at least:
@@ -49,7 +54,10 @@
 
 			<div class="o-form-group">
 				<label asp-for="Input.ConfirmPassword"></label>
-				<input asp-for="Input.ConfirmPassword" class="o-form-control active-border" autocomplete="new-password"/>
+				<div class="input-group push">
+					<input asp-for="Input.ConfirmPassword" class="o-form-control active-border" autocomplete="new-password"/>
+					<o-password-toggle></o-password-toggle>
+				</div>
 				<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
 				<aside class="info" asp-for="Input.ConfirmPassword">Just to be safe</aside>
 			</div>
@@ -61,7 +69,7 @@
 				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our Discord!</aside>
 			</div>
 
-			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register"></div>
+			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register" data-theme="@theme"></div>
 
 			<button type="submit" class="btn btn-primary">Register</button>
 		</form>
@@ -90,6 +98,7 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial"/>
 	<script type="module" src="~/js/account/register.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/password-input.js" asp-append-version="true"></script>
 	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 }
 

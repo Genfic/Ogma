@@ -10,7 +10,7 @@ public static class CTConfig
 	/// However, two characters of a valid path are angle brackets, which leaves us with 254
 	/// </summary>
 	public const int MaxEmailAddressLength = 254;
-	
+
 	public static class CFiles
 	{
 		public const int AvatarMaxWeight = 1 * 1024 * 1024;
@@ -147,5 +147,11 @@ public static class CTConfig
 	{
 		public const int MinBodyLength = 3;
 		public const int MaxBodyLength = 5000;
+	}
+
+	public static class CReport
+	{
+		public const int MinReasonLength = 30;
+		public const int MaxReasonLength = 500;
 	}
 }

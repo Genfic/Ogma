@@ -1,3 +1,5 @@
+import { getCookieValue } from "@h/cookies";
+
 const classname = "visible";
 const formInputs = [...document.querySelectorAll("input[id]")] as HTMLInputElement[];
 
@@ -12,3 +14,7 @@ for (const input of formInputs) {
 		info.classList.remove(classname);
 	});
 }
+
+const turnstile = document.querySelector(".cf-turnstile") as HTMLDivElement;
+const theme = getCookieValue("theme");
+turnstile.dataset.theme = theme;

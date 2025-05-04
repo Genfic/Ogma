@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"webtypes": "bun ./scripts/webtypes.ts",
+		"ctconfig": "bun ./scripts/generate-ctconfig.ts",
 		"biome": "bunx @biomejs/biome check . --fix",
 		"biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag",
 		"css": "bun ./scripts/build-sass.ts",

@@ -47,6 +47,7 @@ form.form {
 
 		&.push {
 			display: flex;
+			gap: 2px;
 
 			.o-form-control {
 				flex: 1;
@@ -56,14 +57,6 @@ form.form {
 				display: flex;
 				padding: 0;
 				align-self: stretch;
-
-				button {
-					margin-left: 2px;
-
-					i {
-						font-size: 1rem;
-					}
-				}
 			}
 		}
 	}

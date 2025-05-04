@@ -1,3 +1,8 @@
+:host {
+	display: flex;
+	position: relative;
+}
+
 .more-shelves {
 	position: absolute;
 	top: 100%;

@@ -1,4 +1,4 @@
-import { createUniqueId, onMount, type ParentComponent } from "solid-js";
+import { createUniqueId, type JSX, onMount, type ParentComponent, Show } from "solid-js";
 import { createEventDispatcher } from "@solid-primitives/event-dispatcher";
 
 export type DialogApi = {
@@ -7,7 +7,9 @@ export type DialogApi = {
 };
 
 type Props = {
-	classes?: string;
+	classes?: string[];
+	contentClass?: string;
+	header?: JSX.Element;
 	ref?: (api: DialogApi) => void;
 	onClose?: (evt: CustomEvent) => void;
 	onOpen?: (evt: CustomEvent) => void;
@@ -56,7 +58,7 @@ export const Dialog: DialogType<Props> = (props) => {
 		<dialog
 			id={id}
 			ref={dialogRef}
-			class={`my-dialog ${props.classes}`}
+			class={["my-dialog", ...(props.classes ?? [])].join(" ")}
 			onmousedown={backdropClose}
 			aria-modal={true}
 		>
@@ -64,7 +66,11 @@ export const Dialog: DialogType<Props> = (props) => {
 				<o-icon icon="lucide:x" />
 			</button>
 
-			<div class="content">{props.children}</div>
+			<Show when={props.header}>
+				<div class="header">{props.header}</div>
+			</Show>
+
+			<div class={`content ${props.contentClass}`}>{props.children}</div>
 		</dialog>
 	);
 };

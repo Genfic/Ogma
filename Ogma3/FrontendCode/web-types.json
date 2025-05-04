@@ -227,6 +227,15 @@
           }
         },
         {
+          "name": "o-password-toggle",
+          "description": "Custom element <o-password-toggle> defined in typescript\\src-solid\\password-input.tsx",
+          "attributes": [],
+          "source": {
+            "module": "./typescript\\src-solid\\password-input.tsx",
+            "symbol": "o-password-toggle"
+          }
+        },
+        {
           "name": "o-read",
           "description": "Custom element <o-read> defined in typescript\\src-solid\\chapter-read.tsx",
           "attributes": [

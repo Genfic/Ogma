@@ -72,9 +72,8 @@
 				<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
 
 					<o-block class="item active red"
-					         userName="@Model.UserName"
-					         isBlocked="@Model.IsBlockedBy"
-					         tabindex="0"
+					         user-name="@Model.UserName"
+					         is-blocked="@Model.IsBlockedBy"
 					         csrf="@csrf">
 					</o-block>
 
@@ -118,10 +117,10 @@
 	@Html.AntiForgeryToken()
 
 	<report-modal v-pre
-	              itemId="@Model.Id"
-	              itemType="@EReportableContentTypes.User"
+	              item-id="@Model.Id"
+	              item-type="@EReportableContentTypes.User"
 	              csrf="@csrf"
-	              openSelector="#open-modal-button-profilebar">
+	              open-selector="#open-modal-button-profilebar">
 	</report-modal>
 </div>
 

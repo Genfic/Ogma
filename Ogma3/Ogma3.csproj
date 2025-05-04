@@ -1036,6 +1036,7 @@
 		<_ContentIncludedByDefault Remove="wwwroot\js\comp\shelves-button.js.map" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\comp\vote-button.js" />
 		<_ContentIncludedByDefault Remove="wwwroot\js\comp\vote-button.js.map" />
+		<_ContentIncludedByDefault Remove="FrontendCode\scripts\generated\ctconfig.json" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="Areas\Admin\Pages\InviteCodes.cshtml">

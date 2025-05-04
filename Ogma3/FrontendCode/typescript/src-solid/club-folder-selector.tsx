@@ -84,11 +84,6 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 
 	const selectedClubView = () => (
 		<>
-			<div class="header">
-				<img src={selectedClub().icon ?? "ph-250.png"} alt={selectedClub().name} width="32" height="32" />
-				<span>{selectedClub().name}</span>
-			</div>
-
 			<div class={`msg ${status().success ? "success" : "error"}`}>{status().message}</div>
 
 			<div class="folders">
@@ -131,23 +126,38 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	);
 
 	const allClubsView = () => (
-		<>
-			<div class="header">
-				<span>Your clubs</span>
-			</div>
-
-			<div class="clubs">
-				<For each={clubs()} fallback={<div>You're not a member of any clubs</div>}>
-					{(club) => (
-						<button type="button" class="club" onClick={[setClub, club]}>
-							<img src={club.icon ?? "ph-250.png"} alt={club.name} width="48" height="48" />
-							<span>{club.name}</span>
-						</button>
-					)}
-				</For>
-			</div>
-		</>
+		<div class="clubs">
+			<For each={clubs()} fallback={<div>You're not a member of any clubs</div>}>
+				{(club) => (
+					<button type="button" class="club" onClick={[setClub, club]}>
+						<img src={club.icon ?? "ph-250.png"} alt={club.name} width="48" height="48" />
+						<span>{club.name}</span>
+					</button>
+				)}
+			</For>
+		</div>
 	);
+
+	const selectedView = () => {
+		const club = selectedClub();
+
+		if (!club) {
+			return {
+				view: allClubsView,
+				head: <span>Your clubs</span>,
+			};
+		}
+
+		return {
+			view: selectedClubView,
+			head: (
+				<>
+					<img src={club.icon ?? "ph-250.png"} alt={club.name} width="32" height="32" />
+					<span>{club.name}</span>
+				</>
+			),
+		};
+	};
 
 	return (
 		<>
@@ -155,8 +165,8 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 				Add to folder
 			</button>
 
-			<Dialog ref={setDialogRef} onClose={reset} classes="club-folder-selector">
-				<div class="content">{selectedClub() !== null ? selectedClubView() : allClubsView()}</div>
+			<Dialog ref={setDialogRef} onClose={reset} header={selectedView().head} classes={["club-folder-selector"]}>
+				<div class="content">{selectedView().view()}</div>
 			</Dialog>
 		</>
 	);

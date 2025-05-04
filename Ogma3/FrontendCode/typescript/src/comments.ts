@@ -1,4 +1,5 @@
 import { GetApiComments, GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
+import type { CommentDto } from "@g/types-public";
 
 // @ts-ignore
 new Vue({
@@ -12,7 +13,7 @@ new Vue({
 		minLength: 0,
 		maxLength: 0,
 
-		comments: [],
+		comments: [] as { val: CommentDto; key: number }[],
 		total: 0,
 
 		// Pagination

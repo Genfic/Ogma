@@ -45,18 +45,15 @@ const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 				Featured in clubs
 			</button>
 
-			<Dialog ref={setDialogRef} classes="club-folder-selector">
-				<div class="content">
-					<div class="header">
-						<span>Featured in</span>
-					</div>
-
-					<div class="clubs">
-						<For each={clubs()} fallback={<div>This story hasn't been added to any clubs yet.</div>}>
-							{(c) => <Club club={c} />}
-						</For>
-					</div>
-				</div>
+			<Dialog
+				ref={setDialogRef}
+				classes={["club-folder-selector"]}
+				contentClass="clubs"
+				header={<span>Featured in</span>}
+			>
+				<For each={clubs()} fallback={<div>This story hasn't been added to any clubs yet.</div>}>
+					{(c) => <Club club={c} />}
+				</For>
 			</Dialog>
 		</>
 	);

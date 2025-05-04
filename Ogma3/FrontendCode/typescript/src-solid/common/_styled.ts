@@ -2,6 +2,8 @@ import type { FunctionComponent, ComponentOptions } from "component-register";
 import type { ComponentType } from "solid-element";
 import { onMount, createComponent, type Component } from "solid-js";
 
+type SolidElementInstance = Element & { renderRoot?: Node | null };
+
 /**
  * A higher-order component function that wraps a given component and injects scoped CSS styles
  * into its rendering context. The injected CSS is appended to the component's shadow DOM or
@@ -17,7 +19,14 @@ export const Styled = <TProps>(component: ComponentType<TProps>, ...css: string[
 		onMount(() => {
 			const styleEl = document.createElement("style");
 			styleEl.textContent = css.join("");
-			options.element.renderRoot.appendChild(styleEl);
+
+			const element = options.element as unknown as SolidElementInstance;
+
+			if (element.renderRoot && element.renderRoot !== element) {
+				element.renderRoot.appendChild(styleEl);
+			} else {
+				element.appendChild(styleEl);
+			}
 		});
 		if (Object.getPrototypeOf(component).constructor === component) {
 			return createComponent(component as unknown as Component<TProps>, props);

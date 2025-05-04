@@ -1,0 +1,16 @@
+.block-btn {
+	color: var(--foreground);
+	text-align: start;
+	white-space: nowrap;
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	display: inline;
+	font: inherit;
+	cursor: pointer;
+	width: 100%;
+
+	&:hover {
+		color: var(--accent-75);
+	}
+}

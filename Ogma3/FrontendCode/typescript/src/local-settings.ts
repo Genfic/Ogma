@@ -30,9 +30,9 @@ const settings_vue = new Vue({
 			this.theme = theme;
 
 			themeLink.setAttribute("rel", "stylesheet");
-			themeLink.setAttribute("href", `/css/dist/${theme}.css?v=${rnd}`);
+			themeLink.setAttribute("href", `/css/${theme}.css?v=${rnd}`);
 
-			setCookie("theme", theme, { expires: date, secure: true, sameSite: "Lax" });
+			setCookie("theme", theme, { expires: date, secure: false, sameSite: "Lax" });
 		},
 	},
 });
