@@ -113,6 +113,12 @@
 		</div>
 
 		<div class="tags" itemprop="keywords">
+			@if (Model.Story.IsLocked)
+			{
+				<div class="tag locked" title="This story is available only to registered users">
+					<icon icon="lucide:lock-keyhole" svg="true"></icon>
+				</div>
+			}
 			<story-status status="@Model.Story.Status"></story-status>
 			@foreach (var t in Model.Story.Tags)
 			{

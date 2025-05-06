@@ -23,9 +23,11 @@
 }
 
 <div class="chapter-container">
+
 	<article class="chapter-details" id="chapter-app" itemscope itemtype="https://bib.schema.org/Chapter">
 
-		<a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId" asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
+		<a class="story" asp-page="/Story" asp-route-id="@Model.Chapter.StoryId"
+		   asp-route-slug="@Model.Chapter.StorySlug">@Model.Chapter.StoryTitle</a>
 		<h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
 		@if (Model.Chapter.PublicationDate is {} date)
 		{
@@ -36,8 +38,8 @@
 		else
 		{
 			<span class="date not-published">
-				Not published
-			</span>
+					Not published
+				</span>
 		}
 
 		@if (User.Identity?.IsAuthenticated ?? false)
@@ -79,7 +81,7 @@
 
 		@if (Model.Chapter.ContentBlock is not null)
 		{
-			<partial name="Shared/_ContentBlockCard" model="Model.Chapter.ContentBlock"/>
+			<partial name="Shared/_ContentBlockCard" model="Model.Chapter.ContentBlock" />
 		}
 
 		<div class="body-container">
@@ -104,7 +106,9 @@
 
 		</div>
 
-		<o-read-progress data-csrf="@csrf" data-chapter="@Model.Chapter.Id" data-story="@Model.Chapter.StoryId" id="chapter-progress" v-pre></o-read-progress>
+
+		<o-read-progress data-csrf="@csrf" data-chapter="@Model.Chapter.Id" data-story="@Model.Chapter.StoryId" id="chapter-progress"
+		                 v-pre></o-read-progress>
 	</article>
 
 	<div class="navigation">
@@ -130,7 +134,7 @@
 		}
 	</div>
 
-	<partial name="_Comments" model="@Model.CommentsThread"/>
+	<partial name="_Comments" model="@Model.CommentsThread" />
 </div>
 
 <report-modal

@@ -18,6 +18,7 @@ public sealed class StoryDetails
 	public required IEnumerable<TagDto> Tags { get; init; }
 	public required Rating Rating { get; init; }
 	public required EStoryStatus Status { get; init; }
+	public required bool IsLocked { get; init; }
 	public required int WordCount { get; init; }
 	public required int ChaptersCount { get; init; }
 	public required int CommentsCount { get; init; }

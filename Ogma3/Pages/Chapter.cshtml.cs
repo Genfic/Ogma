@@ -21,6 +21,15 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 	{
 		var uid = User.GetNumericId();
 
+		if (uid is null)
+		{
+			var locked  = await context.Stories.Where(s => s.Id == sid).Select(s => s.IsLocked).FirstOrDefaultAsync();
+			if (locked )
+			{
+				return Routes.Pages.Chapters_Locked.Get(sid, id, slug).Redirect(this);
+			}
+		}
+
 		var chapter = await context.Chapters
 			.Where(c => c.Id == id)
 			.Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
@@ -42,7 +51,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 			.OrderBy(c => c.Order)
 			.ProjectToMicro()
 			.LastOrDefaultAsync();
-		
+
 		Next = await context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
 			.Where(c => c.PublicationDate != null)

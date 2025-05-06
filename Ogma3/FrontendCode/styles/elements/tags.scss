@@ -12,6 +12,16 @@
 	margin: 4px;
 	cursor: pointer;
 
+	&.locked {
+		padding: 0 .2rem;
+		background: var(--background-25);
+
+		.icon {
+			width: 18px;
+			aspect-ratio: 1;
+		}
+	}
+
 	&:first-child {
 		margin-left: 0;
 	}
@@ -36,12 +46,12 @@
 		z-index: 1;
 	}
 
-	.material-icons-outlined {
-		font-size: inherit;
-		cursor: pointer;
-
-		&:hover {
-			background-color: var(--background-25);
-		}
-	}
+	//.material-icons-outlined {
+	//	font-size: inherit;
+	//	cursor: pointer;
+	//
+	//	&:hover {
+	//		background-color: var(--background-25);
+	//	}
+	//}
 }

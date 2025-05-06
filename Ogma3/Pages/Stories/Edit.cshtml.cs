@@ -27,7 +27,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		// Get logged in user
+		// Get logged-in user
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
 		// Get story to edit and make sure author matches logged-in user
@@ -44,13 +44,14 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				Tags = story.Tags.Select(st => st.Id).ToList(),
 				Status = story.Status,
 				Published = story.PublicationDate != null,
+				IsLocked = story.IsLocked,
 				Credits = story.Credits.Select(c => new NullableCredit(c.Role, c.Name, c.Link)).ToList(),
 			})
 			.FirstOrDefaultAsync();
 
 		if (input is null) return NotFound();
 		Input = input;
-		
+
 		// Fill Ratings dropdown
 		await Hydrate();
 		return Page();
@@ -69,11 +70,12 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		public required EStoryStatus Status { get; init; }
 		public required List<long> Tags { get; init; }
 		public required bool Published { get; init; }
+		public required bool IsLocked { get; init; }
 		public List<NullableCredit> Credits { get; init; } = [];
 	}
 
 	public sealed record NullableCredit(string? Role, string? Name, string? Link);
-	
+
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
@@ -99,9 +101,9 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
 
-		// Get logged in user
+		// Get logged-in user
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
-		
+
 		if (!ModelState.IsValid)
 		{
 			await Hydrate();
@@ -152,6 +154,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		story.Rating = rating;
 		story.Tags = tags;
 		story.Status = Input.Status;
+		story.IsLocked = Input.IsLocked;
 		story.PublicationDate = Input.Published ? DateTimeOffset.UtcNow : null;
 		story.Credits = credits;
 
@@ -168,7 +171,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 			story.CoverId = file.FileId;
 			story.Cover = Path.Join(ogmaConfig.Cdn, file.Path);
 		}
-		
+
 		await context.SaveChangesAsync();
 
 		return Routes.Pages.Story.Get(story.Id, story.Slug).Redirect(this);

@@ -25,7 +25,7 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public string? CoverId { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset? PublicationDate { get; set; }
-	
+
 	public ICollection<Credit> Credits { get; set; } = [];
 
 	public IList<Chapter> Chapters { get; set; } = null!;
@@ -41,6 +41,8 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 
 	public int WordCount { get; set; }
 	public int ChapterCount { get; set; }
+
+	public bool IsLocked { get; set; } = false;
 
 	// Just for relationship purposes
 	public ICollection<Folder> Folders { get; set; } = [];

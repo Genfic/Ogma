@@ -59,6 +59,22 @@
 		</div>
 	</div>
 
+	<div class="o-form-group keep-size">
+		<label asp-for="Input.IsLocked"></label>
+		<p class="desc">When a story is locked, the chapters can be read only by logged-in users</p>
+
+		<div class="toggle-input">
+			<input asp-for="Input.IsLocked">
+
+			<label asp-for="Input.IsLocked">
+				<span class="toggle"></span>
+				<span class="label-on">Locked</span>
+				<span class="label-off">Unlocked</span>
+			</label>
+
+		</div>
+	</div>
+
 	<div class="o-form-group">
 		<label asp-for="Input.Title"></label>
 		<p class="desc">Try something catchy</p>

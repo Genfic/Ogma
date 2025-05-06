@@ -1,0 +1,31 @@
+
+.locked {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.icon {
+		width: 10rem;
+		height: auto;
+		margin: 1rem;
+		opacity: .75;
+	}
+
+	h1 {
+		margin-bottom: 1.5rem;
+	}
+
+	.buttons {
+		margin-top: 1.5rem;
+		display: flex;
+		gap: .5rem;
+
+		.btn {
+			padding-left: 2rem;
+			padding-right: 2rem;
+			font-weight: bold;
+			font-size: 1.1rem;
+			letter-spacing: 1.1px;
+		}
+	}
+}

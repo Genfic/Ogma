@@ -1,0 +1,29 @@
+@page "{sid:long}/{id:long}/{slug?}"
+@model Ogma3.Pages.Chapters.Locked
+@inject IUrlHelper Url
+
+@{
+	var returnRoute = Routes.Pages.Chapter.Get(Model.StoryId, Model.ChapterId, Model.Slug).Url(Url);
+	var registerRoute = Routes.Areas.Identity.Pages.Account_Register.Get(returnRoute);
+	var loginRoute = Routes.Areas.Identity.Pages.Account_Login.Get(returnRoute);
+	var backlink = Routes.Pages.Story.Get(Model.StoryId, Model.StorySlug);
+}
+
+<div class="locked">
+	<icon icon="lucide:lock-keyhole" svg="true"></icon>
+
+	<h1>This chapter is available only for registered users</h1>
+
+	<p class="explanation">The author decided to make this story available only for registered users.</p>
+	<p class="explanation">Log in or create a new account to continue reading.</p>
+
+	<div class="buttons">
+		<a class="btn btn-primary" for-route="@registerRoute">Register</a>
+		<a class="btn" for-route="@loginRoute">Login</a>
+		<a class="btn" for-route="backlink">Go back</a>
+	</div>
+</div>
+
+@section CSS {
+	<link rel="stylesheet" href="~/css/locked-story.css" asp-append-version="true">
+}
