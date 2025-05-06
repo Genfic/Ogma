@@ -7,27 +7,23 @@
 	ViewData["ActivePage"] = "Stories";
 }
 
-<partial name="_SubNavigation"/>
+<partial name="_SubNavigation" />
 
-<form id="search" class="search" method="GET" v-on:submit.prevent="submit($event)">
+<form id="search" class="search form" method="GET">
 
-	<div class="inline title field">
-		<label for="query">Title</label>
+	<div class="o-form-group w-3">
+		<label for="query">Search</label>
 		<input class="active-border"
 		       id="query"
-		       name="q"
+		       name="Query"
 		       type="text"
-		       v-on:input="els.query = $event.target.value"
-		       :disabled="dis.query"
-		       value="@Model.SearchBy">
+		       value="@Model.Query">
 	</div>
 
-	<div class="inline rating field">
+	<div class="o-form-group w-1">
 		<label for="rating">Rating</label>
 		<select class="active-border"
-		        name="rating"
-		        v-on:input="els.rating = $event.target.value"
-		        :disabled="dis.rating"
+		        name="Rating"
 		        id="rating">
 			<option value="">---</option>
 			@foreach (var r in Model.Ratings)
@@ -37,36 +33,37 @@
 		</select>
 	</div>
 
-	<div class="inline sort field">
+	<div class="o-form-group w-1">
 		<label for="sort">Sort</label>
 		<select class="active-border"
-		        name="sort"
+		        name="Sort"
 		        id="sort"
-		        v-on:input="els.sort = $event.target.value"
-		        :disabled="dis.sort"
-		        asp-for="SortBy"
+		        asp-for="Sort"
 		        asp-items="Html.GetEnumSelectList<EStorySortingOptions>()">
 		</select>
 	</div>
 
-	<div class="inline tags field">
-		<tag-search-select label="Tags"
-		                   ref="tags"
-		                   inline
-		                   disable-when-empty
-		                   :preselected="@Model.PreselectedTagsJson">
-		</tag-search-select>
+	<div class="o-form-group w-1">
+		<label for="sort">Status</label>
+		<select class="active-border status"
+		        name="Status"
+		        id="status">
+			<option value="">---</option>
+			@foreach (var s in EStoryStatusExtensions.GetValues().Where(v => v != EStoryStatus.Unspecified))
+			{
+				<option selected="@(Model.Status == s)" value="@s">@s.GetEmoji() @s.ToStringFast()</option>
+			}
+		</select>
 	</div>
 
-	<div class="inline submit field">
-		<input class="inline active-border" type="submit" value="Search">
-	</div>
+	<input class="btn btn-primary w-3" type="submit" value="Search">
+
 </form>
 
 <br>
 
 <div>
-	@if (Model.Stories.Count <= 0)
+	@if (Model.Stories is { Count: <= 0})
 	{
 		<h1>No stories found</h1>
 	}
@@ -74,16 +71,13 @@
 	{
 		foreach (var story in Model.Stories)
 		{
-			<partial name="Shared/Cards/_StoryCard" model="@story"/>
+			<partial name="Shared/Cards/_StoryCard" model="@story" />
 		}
 
-		<partial name="_Pagination" model="Model.Pagination"/>
+		<partial name="_Pagination" model="Model.Pagination" />
 	}
 </div>
 
 @section Scripts
 {
-	<script type="module" src="~/js/vue-directives/closeable.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/components/tag-search-select-component.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/search/story.js" asp-append-version="true"></script>
 }

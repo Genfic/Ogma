@@ -16,9 +16,10 @@ public static class QueryableExtensions
 	/// <returns>`IQueryable` objects with applied filters</returns>
 	public static IQueryable<Story> Search(
 		this IQueryable<Story> stories,
-		ICollection<long>? tags = null,
+		List<long>? tags = null,
 		string? searchQuery = null,
-		long? ratingId = null
+		long? ratingId = null,
+		EStoryStatus? status = null
 	)
 	{
 		// Prepare the search query
@@ -26,15 +27,26 @@ public static class QueryableExtensions
 
 		// Search by title
 		if (!string.IsNullOrEmpty(searchQuery))
-			query = query.Where(s => EF.Functions.Like(s.Title.ToUpper(), $"%{searchQuery.Trim().ToUpper()}%"));
+		{
+			query = query.Where(s => EF.Functions.ILike(s.Title, $"%{searchQuery.Trim()}%"));
+		}
 
 		// Search by rating
 		if (ratingId is not null)
+		{
 			query = query.Where(s => s.Rating.Id == ratingId);
+		}
 
 		// Search by tags
-		if (tags is { Count: > 0 })
+		if (tags is [_, ..])
+		{
 			query = query.Where(s => s.Tags.Any(st => tags.Contains(st.Id)));
+		}
+
+		if (status is {} ess)
+		{
+			query = query.Where(s => s.Status == ess);
+		}
 
 		return query;
 	}
@@ -47,6 +59,10 @@ public static class QueryableExtensions
 	/// <param name="condition">A condition for filtering the sequence</param>
 	/// <typeparam name="TSource">The type of the elements of the source</typeparam>
 	/// <returns>An <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the condition specified by predicate</returns>
-	public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> query, Expression<Func<TSource, bool>> predicate, bool condition)
+	public static IQueryable<TSource> WhereIf<TSource>(
+		this IQueryable<TSource> query,
+		Expression<Func<TSource, bool>> predicate,
+		bool condition
+	)
 		=> condition ? query.Where(predicate) : query;
 }

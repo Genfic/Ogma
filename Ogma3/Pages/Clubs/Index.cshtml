@@ -9,19 +9,23 @@
 
 <partial name="_SubNavigation"/>
 
-<form id="search" class="search" method="GET">
-	<label for="title">Query</label>
-	<input class="active-border" id="title" name="q" type="text" value="@Model.Query">
+<form id="search" class="search form" method="GET">
+	<div class="o-form-group w-2">
+		<label for="title">Query</label>
+		<input class="active-border" id="title" name="q" type="text" value="@Model.Query">
+	</div>
 
-	<label for="sort">Sort</label>
-	<select class="active-border"
-	        name="sort"
-	        id="sort"
-	        asp-for="SortBy"
-	        asp-items="Html.GetEnumSelectList<EClubSortingOptions>()">
-	</select>
+	<div class="o-form-group w-1">
+		<label for="sort">Sort</label>
+		<select class="active-border"
+		        name="sort"
+		        id="sort"
+		        asp-for="SortBy"
+		        asp-items="Html.GetEnumSelectList<EClubSortingOptions>()">
+		</select>
+	</div>
 
-	<input class="active-border" type="submit" value="Search">
+	<input class="btn btn-primary w-3" type="submit" value="Search">
 </form>
 
 <a class="btn btn-block btn-outline-primary" asp-page="Create">

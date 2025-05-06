@@ -83,12 +83,9 @@ const compileAll = async () => {
 await compileAll();
 
 if (values.watch) {
-	await watch(_source, {
-		transformer: (events) =>
-			events.filter(({ type, path }) => type === "update" && hasExtension(path, "tsx", "css")).map((e) => e.path),
+	await watch(_source, ["update"], {
+		transformer: (events) => events.filter(({ path }) => hasExtension(path, "tsx", "css")).map((e) => e.path),
 		predicate: (files) => files.length > 0,
-		action: async (_) => {
-			await compileAll();
-		},
+		action: async (_) => await compileAll(),
 	});
 }

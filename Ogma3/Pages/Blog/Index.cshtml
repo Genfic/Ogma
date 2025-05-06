@@ -8,21 +8,24 @@
 	ViewData["ActivePage"] = "Blogs";
 }
 
-<partial name="_SubNavigation"/>
+<partial name="_SubNavigation" />
 
-<form id="search" class="search" method="GET">
-	<label for="title">Query</label>
-	<input class="active-border" id="title" name="q" type="text" value="@Model.SearchBy">
+<form id="search" class="search form" method="GET">
+	<div class="o-form-group w-2">
+		<label for="title">Query</label>
+		<input class="active-border o-form-control" id="title" name="q" type="text" value="@Model.SearchBy">
+	</div>
 
-	<label for="sort">Sort</label>
-	<select class="active-border"
-	        name="sort"
-	        id="sort"
-	        asp-for="SortBy"
-	        asp-items="Html.GetEnumSelectList<EBlogpostSortingOptions>()">
-	</select>
-
-	<input class="active-border" type="submit" value="Search">
+	<div class="o-form-group w-1">
+		<label for="sort">Sort</label>
+		<select class="active-border o-form-control"
+		        name="sort"
+		        id="sort"
+		        asp-for="SortBy"
+		        asp-items="Html.GetEnumSelectList<EBlogpostSortingOptions>()">
+		</select>
+	</div>
+	<input class="btn btn-primary w-3" type="submit" value="Search">
 </form>
 
 <br>
@@ -35,10 +38,10 @@ else
 {
 	foreach (var post in Model.Posts)
 	{
-		<partial name="Shared/Cards/_BlogpostCard" model="@post"/>
+		<partial name="Shared/Cards/_BlogpostCard" model="@post" />
 	}
 
-	<partial name="_Pagination" model="Model.Pagination"/>
+	<partial name="_Pagination" model="Model.Pagination" />
 }
 
 

@@ -32,6 +32,6 @@ public sealed class StoryStatusTagHelper : TagHelper
                <use href="/svg/spritesheet.svg#{icon}"></use>
            </svg>
            """);
-		output.Content.AppendHtml($"<span class='name'>{name}</span>");
+		output.Content.AppendHtml($"""<span class="name">{name}</span>""");
 	}
 }

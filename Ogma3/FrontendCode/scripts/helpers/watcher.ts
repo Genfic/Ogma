@@ -1,4 +1,4 @@
-import watcher, { type Event } from "@parcel/watcher";
+import watcher, { type Event, type EventType } from "@parcel/watcher";
 import c from "chalk";
 import ct from "chalk-template";
 import { isVerbose, log } from "./logger";
@@ -9,7 +9,11 @@ type WatchParams<T> = {
 	action: (result: T) => void | Promise<void>;
 };
 
-export const watch = async <T>(directory: string, { transformer, predicate, action }: WatchParams<T>) => {
+export const watch = async <T>(
+	directory: string,
+	on: EventType[],
+	{ transformer, predicate, action }: WatchParams<T>,
+) => {
 	console.log(c.blue("👀 Watching..."));
 
 	const subscription = await watcher.subscribe(directory, async (err, events) => {
@@ -25,7 +29,7 @@ export const watch = async <T>(directory: string, { transformer, predicate, acti
 			return;
 		}
 
-		const result = transformer(events);
+		const result = transformer(events.filter((e) => on.includes(e.type)));
 		if (predicate(result)) {
 			console.log(c.blueBright("🔔 Files changed, recompiling!"));
 			await action(result);

@@ -68,10 +68,12 @@ form.form {
 		margin-top: 1rem;
 
 		input,
-		textarea {
+		textarea,
+		select {
 			padding: .5rem;
 			background-color: var(--ele-1);
 			color: var(--foreground);
+			height: 100%;
 
 			&[disabled] {
 				color: var(--foreground-50);

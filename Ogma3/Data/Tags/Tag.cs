@@ -19,7 +19,6 @@ public sealed class Tag : BaseModel
 			Slug = value.Friendlify();
 		}
 	}
-
 	public string Slug { get; private set; } = null!;
 	public string? Description { get; init; }
 	public ETagNamespace? Namespace { get; init; }

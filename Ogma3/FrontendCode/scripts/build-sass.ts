@@ -157,12 +157,10 @@ const size = await dirsize(`${_dest}/**/[!_]*.css`);
 console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best")}}}`);
 
 if (values.watch) {
-	await watch(_base, {
-		transformer: (events) => events.find(({ type, path }) => type === "update" && hasExtension(path, "scss")),
+	await watch(_base, ["update"], {
+		transformer: (events) => events.find(({ path }) => hasExtension(path, "scss")),
 		predicate: (event) => !!event,
-		action: async (_) => {
-			await compileAll();
-		},
+		action: async (_) => await compileAll(),
 	});
 } else {
 	process.exit(0);
