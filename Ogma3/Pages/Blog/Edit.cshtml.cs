@@ -35,6 +35,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				Tags = string.Join(", ", b.Hashtags),
 				Published = b.PublicationDate != null,
 				PublicationDate = b.PublicationDate,
+				IsLocked = b.IsLocked,
 				AttachedChapter = b.AttachedChapter == null ? null : new ChapterMinimal
 				{
 					Id = b.AttachedChapter.Id,
@@ -74,6 +75,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		public required ChapterMinimal? AttachedChapter { get; init; }
 		public required StoryMinimal? AttachedStory { get; init; }
 		public required bool Published { get; set; }
+		public required bool IsLocked { get; set; }
 		public required DateTimeOffset? PublicationDate { get; init; }
 	}
 
@@ -112,6 +114,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(p => p.WordCount, Input.Body.Words())
 				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags())
 				.SetProperty(b => b.PublicationDate, Input.Published ? DateTimeOffset.UtcNow : null)
+				.SetProperty(b => b.IsLocked, Input.IsLocked)
 			);
 
 		if (rows <= 0) return NotFound();

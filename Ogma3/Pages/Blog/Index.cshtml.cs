@@ -20,7 +20,14 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 		SearchBy = q;
 		SortBy = sort;
 
-		var query = context.Blogposts.AsQueryable();
+		var query = context.Blogposts
+			.Where(b => b.PublicationDate != null)
+			.Where(b => b.ContentBlockId == null);
+
+		if (User.Identity?.IsAuthenticated is not true)
+		{
+			query = query.Where(b => b.IsLocked == false);
+		}
 
 		if (!string.IsNullOrEmpty(q))
 		{
@@ -69,8 +76,6 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 
 		// Finalize query
 		Posts = await query
-			.Where(b => b.PublicationDate != null)
-			.Where(b => b.ContentBlockId == null)
 			.Paginate(page, config.BlogpostsPerPage)
 			.Select(b => new BlogpostCard
 			{

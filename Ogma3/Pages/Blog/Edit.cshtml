@@ -19,7 +19,7 @@
 	</a>
 </div>
 
-<form class="form" id="blogpost" method="post" v-on:submit="onSubmit">
+<form class="form" id="blogpost" method="post">
 
 	<div asp-validation-summary="All">
 		<span>Please correct the following errors</span>
@@ -56,6 +56,22 @@
 				<span class="label-on">On</span>
 				<span class="label-off">Off</span>
 			</label>
+		</div>
+	</div>
+
+	<div class="o-form-group keep-size">
+		<label asp-for="Input.IsLocked"></label>
+		<p class="desc">When a blogpost is locked, it's only visible to logged-in users</p>
+
+		<div class="toggle-input">
+			<input asp-for="Input.IsLocked">
+
+			<label asp-for="Input.IsLocked">
+				<span class="toggle"></span>
+				<span class="label-on">Locked</span>
+				<span class="label-off">Unlocked</span>
+			</label>
+
 		</div>
 	</div>
 

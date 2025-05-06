@@ -43,13 +43,14 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 			.Where(b => b.Id == id)
 			.Where(b => b.PublicationDate != null || b.AuthorId == uid)
 			.Where(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff())
+			.WhereIf(b => b.IsLocked == false, uid is null)
 			.Select(MapDetails)
 			.FirstOrDefaultAsync();
 
 		if (blogpost is null) return NotFound();
 
 		Blogpost = blogpost;
-		
+
 		if (Blogpost.AttachedChapter is not null && Blogpost.AttachedChapter.PublicationDate is null)
 		{
 			IsUnavailable = true;
@@ -64,7 +65,7 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 		if (profileBar is null) return NotFound();
 
 		ProfileBar = profileBar;
-		
+
 		return Page();
 	}
 
