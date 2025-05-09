@@ -11,12 +11,12 @@ public static class CTConfig
 	/// </summary>
 	public const int MaxEmailAddressLength = 254;
 
-	public static class CFiles
+	public static class Files
 	{
 		public const int AvatarMaxWeight = 1 * 1024 * 1024;
 	}
 
-	public static class CUser
+	public static class User
 	{
 		public const int MinNameLength = 5;
 		public const int MaxNameLength = 20;
@@ -29,7 +29,7 @@ public static class CTConfig
 		public const int MaxLinksAmount = 5;
 	}
 
-	public static class CTag
+	public static class Tag
 	{
 		public const int MinNameLength = 3;
 		public const int MaxNameLength = 20;
@@ -37,7 +37,7 @@ public static class CTConfig
 		public const int MaxDescLength = 100;
 	}
 
-	public static class CRating
+	public static class Rating
 	{
 		public const int MinNameLength = 4;
 		public const int MaxNameLength = 20;
@@ -46,7 +46,7 @@ public static class CTConfig
 		public const int MaxDescriptionLength = 1000;
 	}
 
-	public static class CChapter
+	public static class Chapter
 	{
 		public const int MinTitleLength = 5;
 		public const int MaxTitleLength = 100;
@@ -60,7 +60,7 @@ public static class CTConfig
 		public const string ValidateNoteLengthMsg = "The {0} cannot exceed {1} characters.";
 	}
 
-	public static class CStory
+	public static class Story
 	{
 		public const int MinTitleLength = 3;
 		public const int MaxTitleLength = 100;
@@ -79,13 +79,13 @@ public static class CTConfig
 		public const string ValidateTagCount = "You must select {0} tags or more";
 	}
 
-	public static class CComment
+	public static class Comment
 	{
 		public const int MinBodyLength = 2;
 		public const int MaxBodyLength = 5000;
 	}
 
-	public static class CShelf
+	public static class Shelf
 	{
 		public const int MinNameLength = 3;
 		public const int MaxNameLength = 20;
@@ -93,7 +93,7 @@ public static class CTConfig
 		public const int MaxDescriptionLength = 100;
 	}
 
-	public static class CBlogpost
+	public static class Blogpost
 	{
 		public const int MinTitleLength = 3;
 		public const int MaxTitleLength = 100;
@@ -108,7 +108,7 @@ public static class CTConfig
 		public const string ValidateTagsCountMsg = "The {0} can have a maximum of {1} tags.";
 	}
 
-	public static class CClub
+	public static class Club
 	{
 		public const int MinNameLength = 3;
 		public const int MaxNameLength = 50;
@@ -124,7 +124,7 @@ public static class CTConfig
 		public const string ValidateFileWeight = "The {0} must be less than {1} bytes";
 	}
 
-	public static class CClubThread
+	public static class ClubThread
 	{
 		public const int MinTitleLength = 3;
 		public const int MaxTitleLength = 100;
@@ -133,7 +133,7 @@ public static class CTConfig
 		public const int MaxBodyLength = 25_000;
 	}
 
-	public static class CFolder
+	public static class Folder
 	{
 		public const int MinNameLength = 3;
 		public const int MaxNameLength = 20;
@@ -143,13 +143,13 @@ public static class CTConfig
 		public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
 	}
 
-	public static class CClubThreadComment
+	public static class ClubThreadComment
 	{
 		public const int MinBodyLength = 3;
 		public const int MaxBodyLength = 5000;
 	}
 
-	public static class CReport
+	public static class Report
 	{
 		public const int MinReasonLength = 30;
 		public const int MaxReasonLength = 500;

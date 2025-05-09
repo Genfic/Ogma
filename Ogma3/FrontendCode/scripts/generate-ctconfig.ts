@@ -1,11 +1,11 @@
 import { dirname, join, resolve } from "node:path";
-import { parse } from "json5";
+import { parse, stringify } from "json5";
 import ct from "chalk-template";
 import convert from "convert";
 
 const _root = dirname(Bun.main);
 const _path = join(_root, "..", "..", "Data", "CTConfig.cs");
-const _output = join(_root, "..", "typescript", "generated", "ctconfig.json");
+const _outputTS = join(_root, "..", "typescript", "generated", "ctconfig.ts");
 const _symbols = ["public", "static", "class", "const", "int", "string"];
 
 const start = Bun.nanoseconds();
@@ -42,12 +42,17 @@ const cleaned = file
 	.join("\n");
 
 const json = `{${cleaned}}`;
-const obj = parse(json).CTConfig; // flattenObject(parse(json).CTConfig, { delimiter: "_" });
-await Bun.write(_output, JSON.stringify(obj, null, 4));
+const obj = parse(json).CTConfig;
+
+const ts = Object.entries(obj)
+	.map(([k, v]) => `export const ${k} = ${stringify(v, null, 4)} as const;`)
+	.join("\n\n");
+
+await Bun.write(_outputTS, ts);
 
 const finish = convert(Bun.nanoseconds() - start, "ns")
 	.to("best")
 	.toString(3);
 
-console.log(ct`Generated file {bold ${resolve(_output)}}`);
+console.log(ct`Generated file {bold ${resolve(_outputTS)}}`);
 console.log(ct`{green Completed in {bold ${finish}}}`);

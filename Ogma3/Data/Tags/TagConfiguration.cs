@@ -23,16 +23,16 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 			.Property(t => t.Name)
 			.IsCitext()
 			.IsRequired()
-			.HasMaxLength(CTConfig.CTag.MaxNameLength);
+			.HasMaxLength(CTConfig.Tag.MaxNameLength);
 
 		builder
 			.Property(t => t.Slug)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CTag.MaxNameLength);
+			.HasMaxLength(CTConfig.Tag.MaxNameLength);
 
 		builder
 			.Property(t => t.Description)
-			.HasMaxLength(CTConfig.CTag.MaxDescLength);
+			.HasMaxLength(CTConfig.Tag.MaxDescLength);
 
 		builder
 			.Property(t => t.Namespace)

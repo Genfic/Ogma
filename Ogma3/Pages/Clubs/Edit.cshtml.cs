@@ -38,14 +38,14 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				.NotEmpty();
 			RuleFor(m => m.Name)
 				.NotEmpty()
-				.Length(CTConfig.CClub.MinNameLength, CTConfig.CClub.MaxNameLength);
+				.Length(CTConfig.Club.MinNameLength, CTConfig.Club.MaxNameLength);
 			RuleFor(m => m.Hook)
 				.NotEmpty()
-				.Length(CTConfig.CClub.MinHookLength, CTConfig.CClub.MaxHookLength);
+				.Length(CTConfig.Club.MinHookLength, CTConfig.Club.MaxHookLength);
 			RuleFor(m => m.Description)
-				.MaximumLength(CTConfig.CClub.MaxDescriptionLength);
+				.MaximumLength(CTConfig.Club.MaxDescriptionLength);
 			RuleFor(m => m.Icon)
-				.FileSmallerThan(CTConfig.CClub.CoverMaxWeight)
+				.FileSmallerThan(CTConfig.Club.CoverMaxWeight)
 				.FileHasExtension(".jpg", ".jpeg", ".png", ".webp");
 		}
 	}

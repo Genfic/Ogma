@@ -16,16 +16,16 @@ public sealed class FolderConfiguration : BaseConfiguration<Folder>
 		builder
 			.Property(f => f.Name)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CFolder.MaxNameLength);
+			.HasMaxLength(CTConfig.Folder.MaxNameLength);
 
 		builder
 			.Property(f => f.Slug)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CFolder.MaxNameLength);
+			.HasMaxLength(CTConfig.Folder.MaxNameLength);
 
 		builder
 			.Property(f => f.Description)
-			.HasMaxLength(CTConfig.CFolder.MaxDescriptionLength);
+			.HasMaxLength(CTConfig.Folder.MaxDescriptionLength);
 
 		builder
 			.Property(f => f.AccessLevel)

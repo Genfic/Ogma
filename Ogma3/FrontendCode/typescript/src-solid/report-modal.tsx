@@ -3,7 +3,7 @@ import type { EReportableContentTypes } from "@g/types-public";
 import { customElement, noShadowDOM } from "solid-element";
 import { createSignal, onMount, type ParentComponent } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
-import { CReport } from "@g/ctconfig.json";
+import { Report } from "@g/ctconfig";
 
 const ReportModal: ParentComponent<{
 	openSelector: string;
@@ -14,8 +14,8 @@ const ReportModal: ParentComponent<{
 	noShadowDOM();
 
 	const rules = {
-		min: CReport.MinReasonLength,
-		max: CReport.MaxReasonLength,
+		min: Report.MinReasonLength,
+		max: Report.MaxReasonLength,
 	};
 
 	const [dialogRef, setDialogRef] = createSignal<DialogApi>();

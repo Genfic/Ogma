@@ -31,7 +31,7 @@ public sealed class CommentRevision : BaseModel
 			builder
 				.Property(cr => cr.Body)
 				.IsRequired()
-				.HasMaxLength(CTConfig.CComment.MaxBodyLength);
+				.HasMaxLength(CTConfig.Comment.MaxBodyLength);
 		}
 	}
 }

@@ -26,8 +26,8 @@ public static partial class UpdateComment
 	{
 		public CommandValidator()
 			=> RuleFor(c => c.Body)
-				.MinimumLength(CTConfig.CComment.MinBodyLength)
-				.MaximumLength(CTConfig.CComment.MaxBodyLength);
+				.MinimumLength(CTConfig.Comment.MinBodyLength)
+				.MaximumLength(CTConfig.Comment.MaxBodyLength);
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(

@@ -33,8 +33,8 @@ public static partial class GetThreadDetails
 		var isStaff = userService.User?.HasAnyRole(RoleNames.Admin, RoleNames.Moderator) ?? false;
 		
 		var perPage = config.CommentsPerPage;
-		const int minCommentLength = CTConfig.CComment.MinBodyLength;
-		const int maxCommentLength = CTConfig.CComment.MaxBodyLength;
+		const int minCommentLength = CTConfig.Comment.MinBodyLength;
+		const int maxCommentLength = CTConfig.Comment.MaxBodyLength;
 
 		var threadData = await context.CommentThreads
 			.Where(ct => ct.Id == request.ThreadId)

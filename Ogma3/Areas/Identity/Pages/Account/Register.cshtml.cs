@@ -57,15 +57,15 @@ public sealed class RegisterModel(
 		{
 			RuleFor(im => im.Name)
 				.NotEmpty()
-				.MinimumLength(CTConfig.CUser.MinNameLength)
-				.MaximumLength(CTConfig.CUser.MaxNameLength);
+				.MinimumLength(CTConfig.User.MinNameLength)
+				.MaximumLength(CTConfig.User.MaxNameLength);
 			RuleFor(im => im.Email)
 				.NotEmpty()
 				.EmailAddress();
 			RuleFor(im => im.Password)
 				.NotEmpty()
-				.MinimumLength(CTConfig.CUser.MinPassLength)
-				.MaximumLength(CTConfig.CUser.MaxPassLength);
+				.MinimumLength(CTConfig.User.MinPassLength)
+				.MaximumLength(CTConfig.User.MaxPassLength);
 			RuleFor(im => im.ConfirmPassword)
 				.Equal(im => im.Password);
 			RuleFor(im => im.InviteCode)

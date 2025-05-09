@@ -68,9 +68,9 @@ public sealed class EditModel(ApplicationDbContext context, ClubRepository clubR
 		{
 			RuleFor(b => b.Name)
 				.NotEmpty()
-				.Length(CTConfig.CFolder.MinNameLength, CTConfig.CFolder.MaxNameLength);
+				.Length(CTConfig.Folder.MinNameLength, CTConfig.Folder.MaxNameLength);
 			RuleFor(b => b.Description)
-				.MaximumLength(CTConfig.CFolder.MaxDescriptionLength);
+				.MaximumLength(CTConfig.Folder.MaxDescriptionLength);
 		}
 	}
 

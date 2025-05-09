@@ -30,9 +30,9 @@ public sealed class SetPasswordModel : PageModel
 	{
 		[Required]
 		[StringLength(
-			CTConfig.CUser.MaxPassLength,
+			CTConfig.User.MaxPassLength,
 			ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
-			MinimumLength = CTConfig.CUser.MinPassLength
+			MinimumLength = CTConfig.User.MinPassLength
 		)]
 		[DataType(DataType.Password)]
 		[Display(Name = "New password")]

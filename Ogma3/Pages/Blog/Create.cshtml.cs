@@ -68,13 +68,13 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		{
 			RuleFor(b => b.Title)
 				.NotEmpty()
-				.Length(CTConfig.CBlogpost.MinTitleLength, CTConfig.CBlogpost.MaxTitleLength);
+				.Length(CTConfig.Blogpost.MinTitleLength, CTConfig.Blogpost.MaxTitleLength);
 			RuleFor(b => b.Body)
 				.NotEmpty()
-				.Length(CTConfig.CBlogpost.MinBodyLength, CTConfig.CBlogpost.MaxBodyLength);
+				.Length(CTConfig.Blogpost.MinBodyLength, CTConfig.Blogpost.MaxBodyLength);
 			RuleFor(b => b.Tags)
-				.HashtagsFewerThan(CTConfig.CBlogpost.MaxTagsAmount)
-				.HashtagsShorterThan(CTConfig.CBlogpost.MaxTagLength);
+				.HashtagsFewerThan(CTConfig.Blogpost.MaxTagsAmount)
+				.HashtagsShorterThan(CTConfig.Blogpost.MaxTagLength);
 		}
 	}
 

@@ -53,10 +53,10 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.NotEmpty();
 			RuleFor(m => m.Title)
 				.NotEmpty()
-				.Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
+				.Length(CTConfig.ClubThread.MinTitleLength, CTConfig.ClubThread.MaxTitleLength);
 			RuleFor(m => m.Body)
 				.NotEmpty()
-				.Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
+				.Length(CTConfig.ClubThread.MinBodyLength, CTConfig.ClubThread.MaxBodyLength);
 		}
 	}
 

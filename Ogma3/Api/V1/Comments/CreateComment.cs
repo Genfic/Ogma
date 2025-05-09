@@ -24,8 +24,8 @@ public static partial class CreateComment
 	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator() => RuleFor(c => c.Body)
-			.MinimumLength(CTConfig.CComment.MinBodyLength)
-			.MaximumLength(CTConfig.CComment.MaxBodyLength);
+			.MinimumLength(CTConfig.Comment.MinBodyLength)
+			.MaximumLength(CTConfig.Comment.MaxBodyLength);
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(

@@ -83,15 +83,15 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		{
 			RuleFor(i => i.Title)
 				.NotEmpty()
-				.Length(CTConfig.CStory.MinTitleLength, CTConfig.CStory.MaxTitleLength);
+				.Length(CTConfig.Story.MinTitleLength, CTConfig.Story.MaxTitleLength);
 			RuleFor(i => i.Description)
 				.NotEmpty()
-				.Length(CTConfig.CStory.MinDescriptionLength, CTConfig.CStory.MaxDescriptionLength);
+				.Length(CTConfig.Story.MinDescriptionLength, CTConfig.Story.MaxDescriptionLength);
 			RuleFor(i => i.Hook)
 				.NotEmpty()
-				.Length(CTConfig.CStory.MinHookLength, CTConfig.CStory.MaxHookLength);
+				.Length(CTConfig.Story.MinHookLength, CTConfig.Story.MaxHookLength);
 			RuleFor(i => i.Cover)
-				.FileSmallerThan(CTConfig.CStory.CoverMaxWeight)
+				.FileSmallerThan(CTConfig.Story.CoverMaxWeight)
 				.FileHasExtension(".jpg", ".jpeg", ".png");
 			RuleFor(i => i.Rating).NotEmpty();
 			RuleFor(i => i.Tags).NotEmpty();

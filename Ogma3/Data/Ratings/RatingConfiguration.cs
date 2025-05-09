@@ -18,12 +18,12 @@ public sealed class RatingConfiguration : BaseConfiguration<Rating>
 		builder
 			.Property(r => r.Name)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CRating.MaxNameLength);
+			.HasMaxLength(CTConfig.Rating.MaxNameLength);
 
 		builder
 			.Property(r => r.Description)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CRating.MaxDescriptionLength);
+			.HasMaxLength(CTConfig.Rating.MaxDescriptionLength);
 
 		builder
 			.Property(r => r.Order)

@@ -26,9 +26,9 @@ public sealed class Tags : PageModel
 	{
 		var data = new StaticData(
 			new ValidationData(
-				CTConfig.CTag.MinNameLength,
-				CTConfig.CTag.MaxNameLength,
-				CTConfig.CTag.MaxDescLength
+				CTConfig.Tag.MinNameLength,
+				CTConfig.Tag.MaxNameLength,
+				CTConfig.Tag.MaxDescLength
 			)
 		);
 		StaticDataJson = JsonSerializer.Serialize(data, StaticDataJsonContext.Default.StaticData);

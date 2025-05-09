@@ -53,9 +53,9 @@ public sealed class CreateModel(ApplicationDbContext context, ClubRepository clu
 		{
 			RuleFor(b => b.Name)
 				.NotEmpty()
-				.Length(CTConfig.CFolder.MinNameLength, CTConfig.CFolder.MaxNameLength);
+				.Length(CTConfig.Folder.MinNameLength, CTConfig.Folder.MaxNameLength);
 			RuleFor(b => b.Description)
-				.MaximumLength(CTConfig.CFolder.MaxDescriptionLength);
+				.MaximumLength(CTConfig.Folder.MaxDescriptionLength);
 		}
 	}
 

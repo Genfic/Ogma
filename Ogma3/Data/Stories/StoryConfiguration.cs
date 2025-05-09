@@ -15,22 +15,22 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 		builder
 			.Property(s => s.Title)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CStory.MaxTitleLength);
+			.HasMaxLength(CTConfig.Story.MaxTitleLength);
 
 		builder
 			.Property(s => s.Slug)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CStory.MaxTitleLength);
+			.HasMaxLength(CTConfig.Story.MaxTitleLength);
 
 		builder
 			.Property(s => s.Description)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CStory.MaxDescriptionLength);
+			.HasMaxLength(CTConfig.Story.MaxDescriptionLength);
 
 		builder
 			.Property(s => s.Hook)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CStory.MaxHookLength);
+			.HasMaxLength(CTConfig.Story.MaxHookLength);
 
 		builder
 			.Property(s => s.CreationDate)

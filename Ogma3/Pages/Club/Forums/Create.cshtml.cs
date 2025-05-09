@@ -41,10 +41,10 @@ public sealed class CreateModel(ApplicationDbContext context, ClubRepository clu
 		{
 			RuleFor(p => p.Title)
 				.NotEmpty()
-				.Length(CTConfig.CClubThread.MinTitleLength, CTConfig.CClubThread.MaxTitleLength);
+				.Length(CTConfig.ClubThread.MinTitleLength, CTConfig.ClubThread.MaxTitleLength);
 			RuleFor(p => p.Body)
 				.NotEmpty()
-				.Length(CTConfig.CClubThread.MinBodyLength, CTConfig.CClubThread.MaxBodyLength);
+				.Length(CTConfig.ClubThread.MinBodyLength, CTConfig.ClubThread.MaxBodyLength);
 			RuleFor(p => p.ClubId)
 				.NotEmpty();
 		}

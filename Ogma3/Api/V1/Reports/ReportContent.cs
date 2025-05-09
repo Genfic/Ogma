@@ -28,8 +28,8 @@ public static partial class ReportContent
 	public sealed class CommandValidator : AbstractValidator<Command>
 	{
 		public CommandValidator() => RuleFor(r => r.Reason)
-			.MinimumLength(CTConfig.CReport.MinReasonLength)
-			.MaximumLength(CTConfig.CReport.MaxReasonLength);
+			.MinimumLength(CTConfig.Report.MinReasonLength)
+			.MaximumLength(CTConfig.Report.MaxReasonLength);
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(

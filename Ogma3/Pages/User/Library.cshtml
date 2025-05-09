@@ -20,14 +20,14 @@
 			<div class="form-row">
 				<input-counter label="Name"
 				               v-model="form.name"
-				               :min="@CTConfig.CShelf.MinNameLength"
-				               :max="@CTConfig.CShelf.MaxNameLength"
+				               :min="@CTConfig.Shelf.MinNameLength"
+				               :max="@CTConfig.Shelf.MaxNameLength"
 				               validate-msg="The {0} should be between {2} and {1} characters">
 				</input-counter>
 
 				<input-counter label="Description"
 				               v-model="form.desc"
-				               :max="@CTConfig.CShelf.MaxDescriptionLength"
+				               :max="@CTConfig.Shelf.MaxDescriptionLength"
 				               validate-msg="The {0} should be less than {1} characters">
 				</input-counter>
 			</div>

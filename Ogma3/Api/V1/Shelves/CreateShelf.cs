@@ -33,10 +33,10 @@ public static partial class CreateShelf
 		public CommandValidator()
 		{
 			RuleFor(s => s.Name)
-				.MaximumLength(CTConfig.CShelf.MaxNameLength)
-				.MinimumLength(CTConfig.CShelf.MinNameLength);
+				.MaximumLength(CTConfig.Shelf.MaxNameLength)
+				.MinimumLength(CTConfig.Shelf.MinNameLength);
 			RuleFor(s => s.Description)
-				.MaximumLength(CTConfig.CShelf.MaxDescriptionLength);
+				.MaximumLength(CTConfig.Shelf.MaxDescriptionLength);
 			RuleFor(s => s.Color)
 				.Length(7);
 		}

@@ -24,10 +24,10 @@ public static partial class CreateTag
 		public CommandValidator()
 		{
 			RuleFor(t => t.Name)
-				.MinimumLength(CTConfig.CTag.MinNameLength)
-				.MaximumLength(CTConfig.CTag.MaxNameLength);
+				.MinimumLength(CTConfig.Tag.MinNameLength)
+				.MaximumLength(CTConfig.Tag.MaxNameLength);
 			RuleFor(t => t.Description)
-				.MaximumLength(CTConfig.CTag.MaxDescLength);
+				.MaximumLength(CTConfig.Tag.MaxDescLength);
 		}
 	}
 

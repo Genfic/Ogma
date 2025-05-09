@@ -16,12 +16,12 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 		builder
 			.Property(b => b.Title)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CBlogpost.MaxTitleLength);
+			.HasMaxLength(CTConfig.Blogpost.MaxTitleLength);
 
 		builder
 			.Property(b => b.Slug)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CBlogpost.MaxTitleLength);
+			.HasMaxLength(CTConfig.Blogpost.MaxTitleLength);
 
 		builder
 			.Property(b => b.CreationDate)
@@ -35,7 +35,7 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 		builder
 			.Property(b => b.Body)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CBlogpost.MaxBodyLength);
+			.HasMaxLength(CTConfig.Blogpost.MaxBodyLength);
 
 		builder
 			.Property(b => b.WordCount)
@@ -44,7 +44,7 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 		builder
 			.Property(b => b.Hashtags)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CBlogpost.MaxTagsAmount)
+			.HasMaxLength(CTConfig.Blogpost.MaxTagsAmount)
 			.HasDefaultValue(Array.Empty<string>());
 
 

@@ -62,14 +62,14 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		{
 			RuleFor(s => s.Title)
 				.NotEmpty()
-				.Length(CTConfig.CChapter.MinTitleLength, CTConfig.CChapter.MaxTitleLength);
+				.Length(CTConfig.Chapter.MinTitleLength, CTConfig.Chapter.MaxTitleLength);
 			RuleFor(c => c.Body)
 				.NotEmpty()
-				.Length(CTConfig.CChapter.MinBodyLength, CTConfig.CChapter.MaxBodyLength);
+				.Length(CTConfig.Chapter.MinBodyLength, CTConfig.Chapter.MaxBodyLength);
 			RuleFor(c => c.StartNotes)
-				.MaximumLength(CTConfig.CChapter.MaxNotesLength);
+				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
 			RuleFor(c => c.EndNotes)
-				.MaximumLength(CTConfig.CChapter.MaxNotesLength);
+				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
 		}
 	}
 

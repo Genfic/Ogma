@@ -39,15 +39,15 @@ public sealed partial class IndexModel
 		public InputModelValidation()
 		{
 			RuleFor(x => x.Avatar!)
-				.FileSmallerThan(CTConfig.CFiles.AvatarMaxWeight)
+				.FileSmallerThan(CTConfig.Files.AvatarMaxWeight)
 				.FileHasExtension(".jpg", ".jpeg", ".png")
 				.When(x => x.Avatar is not null);
 			RuleFor(x => x.Title)
-				.MaximumLength(CTConfig.CUser.MaxTitleLength);
+				.MaximumLength(CTConfig.User.MaxTitleLength);
 			RuleFor(x => x.Bio)
-				.MaximumLength(CTConfig.CUser.MaxBioLength);
+				.MaximumLength(CTConfig.User.MaxBioLength);
 			RuleFor(x => x.Links)
-				.MaximumLines(CTConfig.CUser.MaxLinksAmount);
+				.MaximumLines(CTConfig.User.MaxLinksAmount);
 		}
 	}
 

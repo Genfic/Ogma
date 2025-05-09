@@ -20,11 +20,11 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 		// CONSTRAINTS
 		builder
 			.Property(u => u.UserName)
-			.HasMaxLength(CTConfig.CUser.MaxNameLength);
+			.HasMaxLength(CTConfig.User.MaxNameLength);
 		
 		builder
 			.Property(u => u.NormalizedUserName)
-			.HasMaxLength(CTConfig.CUser.MaxNameLength);
+			.HasMaxLength(CTConfig.User.MaxNameLength);
 		
 		builder
 			.Property(u => u.Email)
@@ -36,16 +36,16 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 		
 		builder
 			.Property(u => u.Title)
-			.HasMaxLength(CTConfig.CUser.MaxTitleLength);
+			.HasMaxLength(CTConfig.User.MaxTitleLength);
 
 		builder
 			.Property(u => u.Bio)
-			.HasMaxLength(CTConfig.CUser.MaxBioLength);
+			.HasMaxLength(CTConfig.User.MaxBioLength);
 
 		builder
 			.Property(u => u.Links)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CUser.MaxLinksAmount)
+			.HasMaxLength(CTConfig.User.MaxLinksAmount)
 			.HasDefaultValueSql(PgConstants.EmptyArray);
 		
 		builder

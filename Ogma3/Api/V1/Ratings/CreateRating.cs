@@ -25,11 +25,11 @@ public static partial class CreateRating
 		public CommandValidator()
 		{
 			RuleFor(r => r.Name)
-				.MinimumLength(CTConfig.CRating.MinNameLength)
-				.MaximumLength(CTConfig.CRating.MaxNameLength);
+				.MinimumLength(CTConfig.Rating.MinNameLength)
+				.MaximumLength(CTConfig.Rating.MaxNameLength);
 			RuleFor(r => r.Description)
-				.MinimumLength(CTConfig.CRating.MinDescriptionLength)
-				.MaximumLength(CTConfig.CRating.MaxDescriptionLength);
+				.MinimumLength(CTConfig.Rating.MinDescriptionLength)
+				.MaximumLength(CTConfig.Rating.MaxDescriptionLength);
 			RuleFor(r => r.Icon)
 				.FileHasExtension(".svg")
 				.FileSmallerThan(100 * 1024);

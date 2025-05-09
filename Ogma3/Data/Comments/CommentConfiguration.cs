@@ -20,7 +20,7 @@ public sealed class CommentConfiguration : BaseConfiguration<Comment>
 		builder
 			.Property(c => c.Body)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CComment.MaxBodyLength);
+			.HasMaxLength(CTConfig.Comment.MaxBodyLength);
 
 		builder
 			.Property(c => c.DeletedBy)

@@ -15,21 +15,21 @@ public sealed class ClubConfiguration : BaseConfiguration<Club>
 		builder
 			.Property(c => c.Name)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CClub.MaxNameLength);
+			.HasMaxLength(CTConfig.Club.MaxNameLength);
 
 		builder
 			.Property(c => c.Slug)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CClub.MaxNameLength);
+			.HasMaxLength(CTConfig.Club.MaxNameLength);
 
 		builder
 			.Property(c => c.Hook)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CClub.MaxHookLength);
+			.HasMaxLength(CTConfig.Club.MaxHookLength);
 
 		builder
 			.Property(c => c.Description)
-			.HasMaxLength(CTConfig.CClub.MaxDescriptionLength);
+			.HasMaxLength(CTConfig.Club.MaxDescriptionLength);
 
 		builder
 			.Property(c => c.CreationDate)

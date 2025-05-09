@@ -14,12 +14,12 @@ public sealed class ShelfConfiguration : BaseConfiguration<Shelf>
 		builder
 			.Property(s => s.Name)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CShelf.MaxNameLength);
+			.HasMaxLength(CTConfig.Shelf.MaxNameLength);
 
 		builder
 			.Property(s => s.Description)
 			.HasDefaultValue(string.Empty)
-			.HasMaxLength(CTConfig.CShelf.MaxDescriptionLength);
+			.HasMaxLength(CTConfig.Shelf.MaxDescriptionLength);
 
 		builder
 			.Property(s => s.IsDefault)

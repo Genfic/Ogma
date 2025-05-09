@@ -16,12 +16,12 @@ public sealed class ClubThreadConfiguration : BaseConfiguration<ClubThread>
 		builder
 			.Property(ct => ct.Title)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CClubThread.MaxTitleLength);
+			.HasMaxLength(CTConfig.ClubThread.MaxTitleLength);
 
 		builder
 			.Property(ct => ct.Body)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CClubThread.MaxBodyLength);
+			.HasMaxLength(CTConfig.ClubThread.MaxBodyLength);
 
 		builder
 			.Property(ct => ct.CreationDate)

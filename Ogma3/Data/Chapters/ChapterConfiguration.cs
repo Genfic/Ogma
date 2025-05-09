@@ -25,27 +25,27 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 		builder
 			.Property(c => c.Title)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CChapter.MaxTitleLength);
+			.HasMaxLength(CTConfig.Chapter.MaxTitleLength);
 
 		builder
 			.Property(c => c.Slug)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CChapter.MaxTitleLength);
+			.HasMaxLength(CTConfig.Chapter.MaxTitleLength);
 
 		builder
 			.Property(c => c.Body)
 			.IsRequired()
-			.HasMaxLength(CTConfig.CChapter.MaxBodyLength);
+			.HasMaxLength(CTConfig.Chapter.MaxBodyLength);
 
 		builder
 			.Property(c => c.StartNotes)
 			.IsRequired(false)
-			.HasMaxLength(CTConfig.CChapter.MaxNotesLength);
+			.HasMaxLength(CTConfig.Chapter.MaxNotesLength);
 
 		builder
 			.Property(c => c.EndNotes)
 			.IsRequired(false)
-			.HasMaxLength(CTConfig.CChapter.MaxNotesLength);
+			.HasMaxLength(CTConfig.Chapter.MaxNotesLength);
 
 		// NAVIGATION
 		builder

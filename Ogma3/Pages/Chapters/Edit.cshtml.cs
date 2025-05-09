@@ -60,14 +60,14 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		{
 			RuleFor(b => b.Title)
 				.NotEmpty()
-				.Length(CTConfig.CChapter.MinTitleLength, CTConfig.CChapter.MaxTitleLength);
+				.Length(CTConfig.Chapter.MinTitleLength, CTConfig.Chapter.MaxTitleLength);
 			RuleFor(b => b.Body)
 				.NotEmpty()
-				.Length(CTConfig.CChapter.MinBodyLength, CTConfig.CChapter.MaxBodyLength);
+				.Length(CTConfig.Chapter.MinBodyLength, CTConfig.Chapter.MaxBodyLength);
 			RuleFor(c => c.StartNotes)
-				.MaximumLength(CTConfig.CChapter.MaxNotesLength);
+				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
 			RuleFor(c => c.EndNotes)
-				.MaximumLength(CTConfig.CChapter.MaxNotesLength);
+				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
 			RuleFor(c => c.IsPublished)
 				.NotNull();
 		}
