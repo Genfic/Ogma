@@ -1,22 +1,32 @@
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { type ComponentType, customElement } from "solid-element";
 import { useChaptersRead } from "./common/_chaptersReadData";
-import { PostApiChaptersread } from "@g/paths-public";
+import { DeleteApiChaptersread, PostApiChaptersread } from "@g/paths-public";
+import css from "./chapter-read.css";
+import { Styled } from "./common/_styled";
 
 const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (props) => {
-	noShadowDOM();
+	const [getChaptersRead, { mutate }] = useChaptersRead(props.storyId);
 
-	const [getChaptersRead, _] = useChaptersRead(props.storyId);
-
-	const isRead = () => getChaptersRead().some((c) => c === props.chapterId);
+	const isRead = () => !getChaptersRead.loading && getChaptersRead().has(props.chapterId);
 
 	const markRead = async () => {
-		const res = await PostApiChaptersread({ story: props.storyId, chapter: props.chapterId });
+		const client = isRead() ? DeleteApiChaptersread : PostApiChaptersread;
+		const res = await client({ story: props.storyId, chapter: props.chapterId });
 		if (!res.ok) return;
+
+		mutate(new Set(res.data));
 	};
 
 	return (
-		<button type="button" class="read-status" aria-label="Chapter read status" onClick={markRead}>
-			<o-icon icon={isRead() ? "lucide:eye-on" : "lucide:eye-off"} />
+		<button
+			type="button"
+			class="read-status"
+			classList={{ active: isRead() }}
+			aria-label="Chapter read status"
+			title={isRead() ? "Mark as unread" : "Mark as read"}
+			onClick={markRead}
+		>
+			<o-icon icon={isRead() ? "lucide:eye" : "lucide:eye-closed"} />
 		</button>
 	);
 };
@@ -27,5 +37,5 @@ customElement(
 		chapterId: 0,
 		storyId: 0,
 	},
-	ChapterRead,
+	Styled(ChapterRead, css),
 );

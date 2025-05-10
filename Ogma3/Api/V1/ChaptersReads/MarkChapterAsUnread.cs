@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>, NoContent>
 
 [Handler]
 [MapDelete("api/chaptersread")]
+[Authorize]
 public static partial class MarkChapterAsUnread
 {
 	[UsedImplicitly]

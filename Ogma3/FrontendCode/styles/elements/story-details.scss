@@ -162,31 +162,6 @@ $title-height: 2rem;
 						color: var(--foreground);
 					}
 				}
-
-				.read-status {
-					padding: 0;
-					width: 1.2rem;
-					height: 1.2rem;
-					background-color: transparent;
-					color: var(--foreground-25);
-					border: none;
-
-					&.active {
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						color: var(--foreground-75);
-					}
-
-					svg {
-						color: inherit;
-						font-size: inherit;
-						height: 1.2rem;
-						width: 1.2rem;
-						padding: 0;
-						margin: 0;
-					}
-				}
 			}
 		}
 	}

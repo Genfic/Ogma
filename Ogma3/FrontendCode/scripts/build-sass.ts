@@ -154,7 +154,7 @@ const compileAll = async () => {
 await compileAll();
 
 const size = await dirsize(`${_dest}/**/[!_]*.css`);
-console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best")}}}`);
+console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);
 
 if (values.watch) {
 	await watch(_base, ["update"], {

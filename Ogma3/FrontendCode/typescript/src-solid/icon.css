@@ -1,6 +1,7 @@
 :host {
 	display: flex;
 	place-items: center;
+	pointer-events: none;
 }
 
 ::part(icon) {

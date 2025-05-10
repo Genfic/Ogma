@@ -211,11 +211,7 @@
 				<li class="chapter @(c.IsPublished ? "" : "unpublished")">
 					<div class="left">
 
-						<button class="read-status"
-						        aria-label="Chapter read status"
-						        data-id="@c.Id">
-							<icon icon="lucide:eye-off" svg="true"></icon>
-						</button>
+						<o-read chapter-id="@c.Id" story-id="@Model.Story.Id"></o-read>
 
 						<span class="order">@(order++)</span>
 
@@ -248,9 +244,6 @@
 		open-selector="#open-modal-button">
 	</report-modal>
 
-	<div id="story-id" data-story-id="@Model.Story.Id"></div>
-	<div id="x-csrf" data-x-csrf="@csrf"></div>
-
 	<div class="backdrop">
 		<img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" loading="lazy" />
 	</div>
@@ -258,9 +251,9 @@
 
 @section Scripts
 {
-	<script type="module" src="~/js/chapter-reads.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/club-folder-selector.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/featured-in-clubs.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/shelves-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/vote-button.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/chapter-read.js" asp-append-version="true"></script>
 }

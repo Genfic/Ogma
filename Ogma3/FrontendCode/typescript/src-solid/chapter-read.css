@@ -1,0 +1,18 @@
+:host {
+	display: flex;
+	place-items: center;
+}
+
+.read-status {
+	padding: 0;
+	width: 1.2rem;
+	height: 1.2rem;
+	background-color: transparent;
+	color: var(--foreground-25);
+	border: none;
+	cursor: pointer;
+
+	&.active {
+		color: var(--foreground-75);
+	}
+}

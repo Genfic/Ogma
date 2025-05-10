@@ -1,3 +1,3 @@
-import{G as l}from"./chunk-ja96ng46.js";import{I as o,W as s,Y as m,ba as c,ea as n}from"./chunk-p9p4607h.js";var r=":host{place-items:center;display:flex}::part(icon){aspect-ratio:1}";var p=s("<svg width=24 height=24 class=o-icon part=icon><title></title><use>"),$=(t)=>{return(()=>{var e=p(),i=e.firstChild,a=i.nextSibling;return c(i,()=>t.icon),o(()=>m(a,"href",`/svg/spritesheet.svg#${t.icon}`)),e})()};n("o-icon",{icon:""},l($,r));
+import{H as l}from"./chunk-584t0j1k.js";import{J as o,X as s,Z as n,ca as m,fa as c}from"./chunk-c15tkzxp.js";var r=":host{pointer-events:none;place-items:center;display:flex}::part(icon){aspect-ratio:1}";var f=s("<svg width=24 height=24 class=o-icon part=icon><title></title><use>"),$=(t)=>{return(()=>{var e=f(),i=e.firstChild,a=i.nextSibling;return m(i,()=>t.icon),o(()=>n(a,"href",`/svg/spritesheet.svg#${t.icon}`)),e})()};c("o-icon",{icon:""},l($,r));
 
-//# debugId=7460234CE0D6179F64756E2164756E21
+//# debugId=E905862710D6BE6864756E2164756E21

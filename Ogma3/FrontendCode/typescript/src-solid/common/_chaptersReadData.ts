@@ -1,14 +1,21 @@
 import { GetApiChaptersread } from "@g/paths-public";
-import { createResource } from "solid-js";
+import { createResource, type ResourceReturn } from "solid-js";
 
-export const useChaptersRead = (storyId: number) =>
-	createResource(
+let resource: ResourceReturn<Set<number>, number>;
+
+export const useChaptersRead = (storyId: number) => {
+	if (resource) {
+		return resource;
+	}
+	resource = createResource(
 		() => storyId,
 		async (id: number) => {
 			const res = await GetApiChaptersread(id);
 			if (!res.ok) {
-				return [];
+				return new Set<number>();
 			}
-			return res.data;
+			return new Set(res.data);
 		},
 	);
+	return resource;
+};
