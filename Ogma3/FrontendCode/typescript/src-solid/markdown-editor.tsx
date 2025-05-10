@@ -1,9 +1,10 @@
 import { type ComponentType, customElement } from "solid-element";
-import { For, type JSX } from "solid-js";
+import { createEffect, For, type JSX, onCleanup, onMount } from "solid-js";
 import css from "./markdown-editor.css";
 import sharedCss from "./shared.css";
 import { Styled } from "./common/_styled";
 import { Comment } from "./common/_comment";
+import { createHistory } from "solid-signals";
 
 type Action = {
 	name: string;
@@ -42,6 +43,33 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 		throw Error(`Element "${selector}" is not a textarea or input`);
 	}
 
+	const [cursorPosition, setCursorPosition] = createHistory(0);
+	const [content, setContent] = createHistory(area.value);
+
+	createEffect(() => {
+		area.value = content();
+	});
+
+	const handleCtrlZ = (e: KeyboardEvent) => {
+		if (content.history().length <= 1) {
+			return false;
+		}
+		if (e.ctrlKey && e.key === "z") {
+			setContent.history.back();
+			const cursor = cursorPosition.history().at(-1);
+			area.setSelectionRange(cursor, cursor);
+			setCursorPosition.history.back();
+			return true;
+		}
+	};
+
+	onMount(() => {
+		area.addEventListener("keydown", handleCtrlZ);
+	});
+	onCleanup(() => {
+		area.removeEventListener("keydown", handleCtrlZ);
+	});
+
 	const click = ({ prefix, suffix }: Action) => {
 		const start = area.selectionStart;
 		const end = area.selectionEnd;
@@ -51,6 +79,9 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 		area.setRangeText(newText, start, end, "preserve");
 		area.selectionStart = start + prefix.length;
 		area.selectionEnd = end + prefix.length;
+
+		setContent(area.value);
+		setCursorPosition(end);
 
 		area.focus();
 		area.dispatchEvent(new Event("input"));

@@ -68,6 +68,7 @@
 		"sa11y": "^4.1.8",
 		"solid-element": "^1.9.1",
 		"solid-js": "^1.9.6",
+		"solid-signals": "^1.9.1",
 		"uqr": "^0.1.2"
 	},
 	"web-types": ["./web-types.json"],

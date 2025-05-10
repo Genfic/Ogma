@@ -40,15 +40,13 @@ const compileFile = async (file: string) => {
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
 
-	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	const time = convert(Bun.nanoseconds() - start, "ns")
+		.to("best")
+		.toString(3);
 	if (success) {
-		console.log(
-			ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`,
-		);
+		console.log(ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${time}}}}`);
 	} else {
-		console.error(
-			ct`{red Build of {reset.bold ${base}} failed after {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`,
-		);
+		console.error(ct`{red Build of {reset.bold ${base}} failed after {reset.bold {underline ${time}}}}`);
 		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
@@ -78,15 +76,18 @@ const compileAll = async () => {
 
 	log.verbose(res.map((r) => r.status));
 
-	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	const time = convert(Bun.nanoseconds() - start, "ns")
+		.to("best")
+		.toString(3);
 
 	const fulfilled = res.filter((r) => r.status === "fulfilled").length;
 	const color = fulfilled === files.length ? c.green : c.red;
 	console.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
+
 	if (fulfilled !== files.length) {
 		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
 	}
-	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
+	console.log(ct`{bold Total compilation took {green {underline ${time}}}}\n`);
 
 	const size = await dirsize(`${_dest}/**/[!_]*.js`);
 	console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);

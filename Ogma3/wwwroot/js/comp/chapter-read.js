@@ -1,3 +1,3 @@
-import{$ as a,L as t,S as r,aa as o}from"./chunk-59rmnzyw.js";var l=r('<button type=button class=read-status aria-label="Chapter read status"data-id=@c.Id><o-icon icon=lucide:eye-off>',!0,!1,!1),n=(p)=>{return a(),(()=>{var e=l(),s=e.firstChild;return s._$owner=t(),e})()};o("o-read",{route:"",chapterId:0},n);
+import{l as n,u as f}from"./chunk-dr8dmza4.js";import"./chunk-v3754c6r.js";import{I as m,K as s,O as i,W as d,X as p,da as l,ea as u}from"./chunk-p9p4607h.js";var c=(e)=>s(()=>e,async(r)=>{let a=await n(r);if(!a.ok)return[];return a.data});var y=d('<button type=button class=read-status aria-label="Chapter read status"><o-icon>',!0,!1,!1),_=(e)=>{l();let[r,a]=c(e.storyId),h=()=>r().some((t)=>t===e.chapterId),$=async()=>{if(!(await f({story:e.storyId,chapter:e.chapterId})).ok)return};return(()=>{var t=y(),o=t.firstChild;return t.$$click=$,o._$owner=i(),m(()=>o.icon=h()?"lucide:eye-on":"lucide:eye-off"),t})()};u("o-read",{chapterId:0,storyId:0},_);p(["click"]);
 
-//# debugId=225A74EB8B46687464756E2164756E21
+//# debugId=FC57ACC67D6056C864756E2164756E21
