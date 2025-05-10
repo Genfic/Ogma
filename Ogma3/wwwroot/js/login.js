@@ -1,3 +1,0 @@
-var s="GET";async function i(a,n,e,d,r){let t=await fetch(a,{method:n,headers:{"content-type":"application/json",...d},body:e&&JSON.stringify(e),...r}),u=t.headers.get("content-type")?.includes("application/json")?await t.json():await t.text();return{ok:t.ok,status:t.status,statusText:t.statusText,headers:t.headers,data:u}}var o=async(a,n,e)=>await i(`/api/signin?name=${a}`,s,void 0,n,e);new Vue({el:"#app",data:{name:null,avatar:"https://picsum.photos/200",title:null,checked:!1},methods:{checkDetails:async function(a){if(a.preventDefault(),this.name){let n=await o(this.name);if(n.ok){let e=n.data;this.avatar=e.avatar,this.title=e.title,this.checked=!0}}},reset:function(){this.avatar=null,this.title=null,this.checked=!1}}});
-
-//# debugId=0FB7B6C300447D1564756E2164756E21

@@ -1,3 +1,0 @@
-import{a as f}from"./chunk-kfd0zr41.js";import{H as p}from"./chunk-584t0j1k.js";import{I as n,J as a,P as i,X as l,Y as m,fa as c}from"./chunk-c15tkzxp.js";var r=".show-password{height:100%}";var h=l('<button type=button class="action-btn show-password"><o-icon>',!0,!1,!1),_=(E,{element:o})=>{if(!(o instanceof Element))throw Error("Not an element?");let d=o.previousElementSibling,[t,w]=n(!1),g=()=>{w(!t()),d.type=t()?"text":"password"},u=()=>t()?"lucide:eye":"lucide:eye-closed";return(()=>{var e=h(),s=e.firstChild;return e.$$click=g,s._$owner=i(),a(()=>s.icon=u()),e})()};c("o-password-toggle",{},p(_,f,r));m(["click"]);
-
-//# debugId=44D58E829C343D9764756E2164756E21

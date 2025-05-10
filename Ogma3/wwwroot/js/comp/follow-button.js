@@ -1,3 +1,0 @@
-import{f as F}from"./chunk-rtz3801n.js";import{B as d,k as u}from"./chunk-7ezcb9bq.js";import"./chunk-81baasv3.js";import{I as a,J as m,X as n,Y as i,Z as f,_ as c,ca as w,ea as $,fa as p}from"./chunk-c15tkzxp.js";var b=n("<button type=button>"),g=(l)=>{$();let[t,v]=a(l.isFollowed),_=async()=>{let e=await(t()?u:d)({name:l.userName},{RequestVerificationToken:l.csrf});if(e.ok)v(e.data);else F.warn(e.statusText)};return(()=>{var o=b();return o.$$click=_,w(o,()=>t()?"Following":"Follow"),m((e)=>{var s=`button max ${t()?"leave":"join"}`,r=t()?"Unfollow":"Follow";return s!==e.e&&c(o,e.e=s),r!==e.t&&f(o,"title",e.t=r),e},{e:void 0,t:void 0}),o})()};p("o-follow",{userName:"",csrf:"",isFollowed:!1},g);i(["click"]);
-
-//# debugId=9EE595F87FF2F47E64756E2164756E21

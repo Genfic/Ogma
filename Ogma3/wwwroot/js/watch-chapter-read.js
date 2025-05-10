@@ -1,3 +1,0 @@
-var i="POST";async function d(e,a,n,o,s){let t=await fetch(e,{method:a,headers:{"content-type":"application/json",...o},body:n&&JSON.stringify(n),...s}),u=t.headers.get("content-type")?.includes("application/json")?await t.json():await t.text();return{ok:t.ok,status:t.status,statusText:t.statusText,headers:t.headers,data:u}}var r=async(e,a,n)=>await d("/api/chaptersread",i,e,a,n);var p=document.getElementById("chapter-progress");p.addEventListener("read",async({currentTarget:e})=>{let a=Number.parseInt(e.dataset.chapter),n=Number.parseInt(e.dataset.story),o=e.dataset.csrf,s=await r({story:n,chapter:a},{RequestVerificationToken:o});if(!s.ok&&s.status!==401)alert(`Could not mark chapter as read: ${s.status}`)});
-
-//# debugId=1F2AFB7243DA7A6D64756E2164756E21

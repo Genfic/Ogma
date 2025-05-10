@@ -1,3 +1,0 @@
-import{f as v}from"./chunk-rtz3801n.js";import{h as b,w as d}from"./chunk-7ezcb9bq.js";import"./chunk-81baasv3.js";import{I as a,J as n,X as m,Y as l,Z as c,_ as u,ca as f,ea as $,fa as p}from"./chunk-c15tkzxp.js";var C=m("<button type=button>"),M=(s)=>{$();let[o,_]=a(s.isMember),j=async()=>{let e=await(o()?b:d)({clubId:s.clubId},{RequestVerificationToken:s.csrf});if(e.ok){let r=e.data;_(r===!0)}else v.warn(e.statusText)};return(()=>{var t=C();return t.$$click=j,f(t,()=>o()?"Leave club":"Join club"),n((e)=>{var r=`button max ${o()?"leave":"join"}`,i=o()?"Leave":"Join";return r!==e.e&&u(t,e.e=r),i!==e.t&&c(t,"title",e.t=i),e},{e:void 0,t:void 0}),t})()};p("o-join",{clubId:0,csrf:"",isMember:!1},M);l(["click"]);
-
-//# debugId=E7C237ED9EFFC28F64756E2164756E21
