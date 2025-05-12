@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-[HtmlTargetElement(
-	"picture",
-	Attributes = AppendVersionAttributeName + "," + SrcAttributeName)]
+[HtmlTargetElement("picture", Attributes = $"{AppendVersionAttributeName},{SrcAttributeName}")]
 [method: ActivatorUtilitiesConstructor]
 public sealed class PictureTagHelper(
 	IUrlHelperFactory urlHelperFactory,
@@ -19,7 +17,7 @@ public sealed class PictureTagHelper(
 {
 	private const string AppendVersionAttributeName = "asp-append-version";
 	private const string SrcAttributeName = "src";
-	
+
 	private IFileVersionProvider? FileVersionProvider { get; set; } = fileVersionProvider;
 
 	[HtmlAttributeName(SrcAttributeName)]

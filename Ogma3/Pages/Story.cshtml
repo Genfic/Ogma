@@ -128,7 +128,12 @@
 
 		<div class="main">
 
-			<img src="@Model.Story.Cover" alt="@Model.Story.Title cover image" class="cover" height="160" width="160" itemprop="thumbnailUrl"/>
+			<img src="@Model.Story.Cover"
+			     alt="@Model.Story.Title cover image"
+			     class="cover"
+			     height="160" width="160"
+			     eager="true"
+			     itemprop="thumbnailUrl" cf/>
 
 			<div class="description" itemprop="abstract">
 				<markdown preset="Basic">@Model.Story.Description</markdown>
@@ -245,7 +250,7 @@
 	</report-modal>
 
 	<div class="backdrop">
-		<img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" loading="lazy" />
+		<img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" cf-height="100" cf-width="100" cf />
 	</div>
 </div>
 

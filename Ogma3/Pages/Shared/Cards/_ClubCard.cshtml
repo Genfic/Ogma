@@ -1,7 +1,7 @@
 @model ClubCard
 
 <div class="club-card">
-	<img class="img" src="@Model.Icon" alt="@Model.Name" width="160" height="160" loading="lazy" />
+	<img class="img" src="@Model.Icon" alt="@Model.Name" width="160" height="160" cf />
 
 	<a asp-page="/Club/Index" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="title">
 		<h3>@Model.Name</h3>
