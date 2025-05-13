@@ -14,8 +14,6 @@
 		"js": "bun ./scripts/build-js.ts",
 		"js:watch": "bun ./scripts/build-js.ts -- --watch",
 		"js:typecheck": "tsc --project ./typescript --noEmit",
-		"wc": "bun ./scripts/build-solid.ts",
-		"wc:watch": "bun ./scripts/build-solid.ts -- --watch",
 		"icons": "bun ./scripts/build-icons.ts",
 		"lh": "unlighthouse",
 		"build": "bun run css && bun run js && bun run wc && bun run icons"

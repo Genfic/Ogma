@@ -9,7 +9,7 @@ Vue.config.ignoredElements = [/o-*/];
 const registerServiceWorker = async () => {
 	if ("serviceWorker" in navigator) {
 		try {
-			const registration = await navigator.serviceWorker.register("/js/sw/cache-service-worker.js", {
+			const registration = await navigator.serviceWorker.register("/js/workers/cache-service-worker.js", {
 				scope: "/",
 			});
 			if (registration.installing) {

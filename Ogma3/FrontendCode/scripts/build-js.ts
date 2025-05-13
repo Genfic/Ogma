@@ -1,4 +1,4 @@
-import path, { dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -6,9 +6,12 @@ import ct from "chalk-template";
 import convert from "convert";
 import { dirsize } from "./helpers/dirsize";
 import { log } from "./helpers/logger";
+import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
 import { rm } from "node:fs/promises";
+import { cssMinifyPlugin } from "./plugins/minified-css-loader";
+import { Stopwatch } from "./helpers/stopwatch";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -19,34 +22,52 @@ const values = program
 	.opts();
 
 const _root = dirname(Bun.main);
-const _source = join(_root, "..", "typescript", "src");
+const _source = join(_root, "..", "typescript");
 const _dest = join(_root, "..", "..", "wwwroot", "js");
 
+const artifacts = [
+	{ from: new Glob(`${_source}/src/**/[^_]*.{ts,js}`), root: "src", to: "/", name: "Javascript" },
+	{ from: new Glob(`${_source}/src-solid/**/[^_]*.tsx`), root: "src-solid", to: "/comp", name: "Solid" },
+] as const;
+
+const prefixWidth = Math.max(...artifacts.map((a) => a.name.length));
+
 if (values.clean) {
+	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
 }
 
-const compileFile = async (file: string) => {
-	const start = Bun.nanoseconds();
-	const { base } = path.parse(file);
+const compile = async (from: Glob, to: string, root: string, name: string) => {
+	const timer = new Stopwatch();
+	const prefix = c.bold.dim(`[${name}]`.padEnd(prefixWidth + 2));
 
-	const { success, logs } = await Bun.build({
-		entrypoints: [file],
-		outdir: _dest,
-		root: _source,
+	const files = [...from.scanSync()];
+	console.log(ct`${prefix} Found {bold.underline ${files.length}} files to compile.`);
+
+	log.verbose(`${prefix} Compiling \n\t${files.join("\n\t")}`);
+
+	const { success, logs, outputs } = await Bun.build({
+		entrypoints: files,
+		outdir: to,
+		root: join(_source, root),
 		minify: true,
 		sourcemap: "external",
 		splitting: true,
+		plugins: [SolidPlugin(), cssMinifyPlugin],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
 
-	const time = convert(Bun.nanoseconds() - start, "ns")
-		.to("best")
-		.toString(3);
+	const chunks = outputs
+		.filter((o) => o.kind === "chunk")
+		.map((c) => c.path.split("wwwroot").at(-1)?.replaceAll("\\", "/"))
+		.filter((s) => typeof s === "string")
+		.map((p) => `<link rel="modulepreload" href="~${p}" as="script" />`);
+
+	const { time, unit } = timer.lap(3);
 	if (success) {
-		console.log(ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${time}}}}`);
+		console.log(ct`${prefix} {dim Files compiled in {reset.bold {underline ${time}} ${unit}}}`);
 	} else {
-		console.error(ct`{red Build of {reset.bold ${base}} failed after {reset.bold {underline ${time}}}}`);
+		console.error(ct`${prefix} {red Build of files failed after {reset.bold {underline ${time}} ${unit}}`);
 		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
@@ -60,51 +81,94 @@ const compileFile = async (file: string) => {
 			}
 		}
 	}
+
+	return chunks;
+};
+
+const getHash = async (filePath: string): Promise<string> => {
+	const file = Bun.file(filePath);
+	const hasher = new Bun.CryptoHasher("sha256");
+
+	const stream = file.stream();
+	for await (const chunk of stream) {
+		hasher.update(chunk);
+	}
+	const hashBuffer = hasher.digest();
+	return Buffer.from(hashBuffer).toString("base64url");
+};
+
+type HashedEntry = { hash: string; path: string | undefined };
+type FullHashedEntry = { hash: string; path: string };
+const entryHasPath = (e: HashedEntry): e is FullHashedEntry => !!e.path;
+const generateManifest = async () => {
+	const timer = new Stopwatch();
+	const files = new Glob(`${_dest}/**/[!_]*.js`).scan();
+
+	const tasks = [];
+	for await (const file of files) {
+		tasks.push(
+			(async () => {
+				const hash = await getHash(file);
+				return {
+					hash,
+					path: file.split("wwwroot").at(-1)?.replaceAll("\\", "/"),
+				};
+			})(),
+		);
+	}
+	const hashed = await Promise.all(tasks);
+	const manifest = {
+		GeneratedAt: new Date().toISOString(),
+		Files: hashed
+			.filter(entryHasPath)
+			.toSorted((a, b) => a.path.localeCompare(b.path))
+			.reduce(
+				(acc, { path, hash }) => {
+					acc[path] = hash;
+					return acc;
+				},
+				{} as Record<string, string>,
+			),
+	};
+
+	await Bun.write(join(_source, "generated", "manifest.json"), JSON.stringify(manifest, null, 2));
+
+	const { time, unit } = timer.lap(3);
+	console.log(ct`{dim Generated manifest.json in {reset.bold {underline ${time}} ${unit}}}`);
 };
 
 const compileAll = async () => {
-	const start = Bun.nanoseconds();
-	const files = [...new Glob(`${_source}/**/*.{js,ts}`).scanSync()];
-	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
+	const timer = new Stopwatch();
 
 	const tasks = [];
-	for (const file of files) {
-		log.verbose(`Compiling ${file}`);
-		tasks.push(compileFile(file));
+	for (const { from, to, name, root } of artifacts) {
+		tasks.push(compile(from, join(_dest, to), root, name));
 	}
-	const res = await Promise.allSettled(tasks);
+	const chunks = (await Promise.all(tasks)).flat();
 
-	log.verbose(res.map((r) => r.status));
+	console.log(ct`{dim Generating manifest.json}`);
+	await generateManifest();
+	await compile(new Glob(`${_source}/src-workers/**/[^_]*.ts`), join(_dest, "workers"), "src-workers", "Workers");
 
-	const time = convert(Bun.nanoseconds() - start, "ns")
-		.to("best")
-		.toString(3);
-
-	const fulfilled = res.filter((r) => r.status === "fulfilled").length;
-	const color = fulfilled === files.length ? c.green : c.red;
-	console.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
-
-	if (fulfilled !== files.length) {
-		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
-	}
-	console.log(ct`{bold Total compilation took {green {underline ${time}}}}\n`);
+	console.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
+	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
 	const size = await dirsize(`${_dest}/**/[!_]*.js`);
 	console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);
+
+	await Bun.write(join(_dest, ".gitkeep"), "");
+
+	const { time, unit } = timer.lap(3);
+	console.log(ct`{dim Files compiled in {reset.bold {underline ${time}} ${unit}}}`);
 };
 
 await compileAll();
 
 if (values.watch) {
 	await watch(_source, ["update"], {
-		transformer: (events) => events.filter(({ path }) => hasExtension(path, "ts", "js")).map((e) => e.path),
+		transformer: (events) =>
+			events.filter(({ path }) => hasExtension(path, "tsx", "ts", "js", "css")).map((e) => e.path),
 		predicate: (files) => files.length > 0,
-		action: async (files) => {
-			for (const p of files) {
-				const { base } = path.parse(p);
-				console.log(ct`{blueBright 🔔 File {bold ${base}} changed, recompiling...}`);
-				await compileFile(p);
-			}
-		},
+		action: async (_) => await compileAll(),
 	});
 }
