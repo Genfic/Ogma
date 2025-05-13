@@ -34,7 +34,7 @@ const ReportModal: ParentComponent<{
 	});
 
 	const show = () => {
-		dialogRef().open();
+		dialogRef()?.open();
 	};
 
 	const validate = () => reason() && reason().length >= rules.min && reason().length <= rules.max;

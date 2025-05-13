@@ -11,12 +11,15 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 		() => props.storyId,
 		async (id) => {
 			const result = await getVotes(id);
-			return result.data;
+			if (result.ok) {
+				return result.data;
+			}
+			throw new Error(result.error);
 		},
 	);
 
 	const vote = async () => {
-		const send = votes().didVote ? deleteVote : postVote;
+		const send = votes()?.didVote ? deleteVote : postVote;
 
 		const result = await send(
 			{ storyId: props.storyId },
@@ -28,7 +31,7 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 		if (result.ok) {
 			mutate(result.data);
 		} else {
-			log.error(`Error fetching data: ${result.statusText}`);
+			log.error(`Error fetching data: ${result.error}`);
 		}
 	};
 

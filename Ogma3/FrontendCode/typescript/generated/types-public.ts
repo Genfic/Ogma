@@ -11,7 +11,7 @@ export type AddStoryToFolderCommand = {
 export type AddStoryToFolderResponse = {
 	folderId: number;
 	storyId: number;
-	added: string;
+	added: Date;
 	addedById: number;
 };
 
@@ -24,9 +24,9 @@ export type BlockUserCommand = {
 export type CommentDto = {
 	id: number;
 	author: UserSimpleDto;
-	dateTime: string;
-	body: string | null;
-	deletedBy: "User" | "Staff" | null;
+	dateTime: Date;
+	body: string;
+	deletedBy: "User" | "Staff";
 	isBlocked: boolean;
 	isEdited: boolean;
 };
@@ -72,8 +72,8 @@ export type CreateShelfCommand = {
 
 export type CreateTagCommand = {
 	name: string;
-	description: string | null;
-	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+	description: string;
+	namespace: "ContentWarning" | "Genre" | "Franchise";
 };
 
 export type CreateVoteCommand = {
@@ -126,13 +126,13 @@ export type GetJoinedClubsResponse = {
 };
 
 export type GetRevisionResult = {
-	editTime: string;
+	editTime: Date;
 	body: string;
 };
 
 export type GetSignInDataResult = {
 	avatar: string;
-	title: string | null;
+	title: string;
 };
 
 export type GetThreadDetailsResult = {
@@ -145,9 +145,9 @@ export type GetThreadDetailsResult = {
 
 export type GetUserNotificationsResult = {
 	id: number;
-	body: string | null;
+	body: string;
 	url: string;
-	dateTime: string;
+	dateTime: Date;
 	event: ENotificationEvent;
 	message: string;
 };
@@ -158,10 +158,10 @@ export type InviteCodeDto = {
 	id: number;
 	code: string;
 	normalizedCode: string;
-	usedByUserName: string | null;
+	usedByUserName: string;
 	issuedByUserName: string;
-	issueDate: string;
-	usedDate: string | null;
+	issueDate: Date;
+	usedDate: Date;
 };
 
 export type IssueInviteCodeCommand = object;
@@ -193,8 +193,8 @@ export type None = undefined;
 export type QuickShelvesResult = {
 	id: number;
 	name: string;
-	color: string | null;
-	iconName: string | null;
+	color: string;
+	iconName: string;
 	doesContainBook: boolean;
 };
 
@@ -231,14 +231,14 @@ export type ReportContentCommand = {
 export type RoleDto = {
 	id: number;
 	name: string;
-	color: string | null;
+	color: string;
 	isStaff: boolean;
 	order: number;
 };
 
 export type RoleTinyDto = {
 	name: string;
-	color: string | null;
+	color: string;
 	order: number;
 };
 
@@ -257,15 +257,15 @@ export type ShelfDto = {
 	trackUpdates: boolean;
 	color: string;
 	storiesCount: number;
-	iconName: string | null;
-	iconId: number | null;
+	iconName: string;
+	iconId: number;
 };
 
 export type ShelfResult = {
 	id: number;
 	name: string;
-	color: string | null;
-	iconName: string | null;
+	color: string;
+	iconName: string;
 	doesContainBook: boolean;
 };
 
@@ -277,10 +277,15 @@ export type TagDto = {
 	id: number;
 	name: string;
 	slug: string;
-	description: string | null;
+	description: string;
 	namespace: "ContentWarning" | "Genre" | "Franchise";
 	namespaceColor: string;
 	namespaceId: number;
+};
+
+export type TestControllerBpost = {
+	title: string;
+	hashtags: string[];
 };
 
 export type UnblockUserCommand = {
@@ -298,7 +303,7 @@ export type UpdateCommentCommand = {
 
 export type UpdateCommentResponse = {
 	body: string;
-	editTime: string;
+	editTime: Date;
 };
 
 export type UpdateFaqCommand = {
@@ -339,9 +344,9 @@ export type UpdateShelfCommand = {
 
 export type UpdateTagCommand = {
 	id: number;
-	name: string | null;
-	description: string | null;
-	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+	name: string;
+	description: string;
+	namespace: "ContentWarning" | "Genre" | "Franchise";
 };
 
 export type UserSimpleDto = {
@@ -349,7 +354,7 @@ export type UserSimpleDto = {
 	avatar: string;
 	title: string;
 	roles: RoleTinyDto[];
-} | null;
+};
 
 export type VoteResult = {
 	didVote: boolean;

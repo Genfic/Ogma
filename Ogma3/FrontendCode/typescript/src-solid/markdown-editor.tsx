@@ -24,7 +24,10 @@ const actions: Action[] = [
 const name = "markdown-editor" as const;
 
 const isTextAreaOrInput = (node: JSX.Element): node is HTMLTextAreaElement | HTMLInputElement =>
-	typeof node === "object" && "nodeName" in node && (node.nodeName === "TEXTAREA" || node.nodeName === "INPUT");
+	typeof node === "object" &&
+	node !== null &&
+	"nodeName" in node &&
+	(node.nodeName === "TEXTAREA" || node.nodeName === "INPUT");
 
 type Props = {
 	selector: `textarea${string | ""}` | `input${string | ""}`;
@@ -52,14 +55,14 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 
 	const handleCtrlZ = (e: KeyboardEvent) => {
 		if (content.history().length <= 1) {
-			return false;
+			return;
 		}
 		if (e.ctrlKey && e.key === "z") {
 			setContent.history.back();
-			const cursor = cursorPosition.history().at(-1);
+			const cursor = cursorPosition.history().at(-1) ?? 0;
 			area.setSelectionRange(cursor, cursor);
 			setCursorPosition.history.back();
-			return true;
+			return;
 		}
 	};
 
@@ -71,8 +74,8 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 	});
 
 	const click = ({ prefix, suffix }: Action) => {
-		const start = area.selectionStart;
-		const end = area.selectionEnd;
+		const start = area.selectionStart ?? 0;
+		const end = area.selectionEnd ?? 0;
 		const text = area.value.substring(start, end);
 		const newText = `${prefix}${text}${suffix}`;
 

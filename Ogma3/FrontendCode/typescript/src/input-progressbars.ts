@@ -1,14 +1,14 @@
-import { parseDom } from "@h/dom";
+import { $queryAll, parseDom } from "@h/dom";
 
 type InputType = "validated" | "file" | "regular";
 
 const properSplit = (value: string, separator: string | RegExp) =>
 	!value || value.length <= 0 ? [] : value.split(separator);
 
-const inputs: (HTMLInputElement | HTMLTextAreaElement)[] = [
-	...document.querySelectorAll("input.o-form-control:not([disabled]):not([nobar])"),
-	...document.querySelectorAll("textarea.o-form-control:not([disabled]):not([nobar])"),
-] as (HTMLInputElement | HTMLTextAreaElement)[];
+const inputs = [
+	...$queryAll<HTMLInputElement>("input.o-form-control:not([disabled]):not([nobar])"),
+	...$queryAll<HTMLTextAreaElement>("textarea.o-form-control:not([disabled]):not([nobar])"),
+];
 
 for (const input of inputs) {
 	console.log(`Attaching ${input.type}`);
@@ -41,9 +41,9 @@ for (const input of inputs) {
 			// `data-max-count` is set, so we're counting comma-separated values
 			return input.value.split(",").length;
 		}
-		if (input.dataset.valFilesizeMax && input.type === "file") {
+		if (input.dataset.valFilesizeMax && input instanceof HTMLInputElement && input.type === "file") {
 			// It's a file input with maximum file size defined, so we get the file size
-			return (input as HTMLInputElement).files[0]?.size ?? 0;
+			return input.files?.item(0)?.size ?? 0;
 		}
 		// Just a regular ol' input, get the value length
 		return input.value.length;

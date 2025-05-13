@@ -1,8 +1,9 @@
 import { setCookie } from "@h/cookies";
 import { addToDate } from "@h/date-helpers";
+import { $id, $query } from "@h/dom";
 
-const banner = document.getElementById("cookie-consent");
-const button = banner.querySelector("button#cookie-consent-button");
+const banner = $id("cookie-consent");
+const button = $query<HTMLButtonElement>("button#cookie-consent-button");
 
 button.addEventListener("click", () => {
 	const expiry = addToDate(new Date(), { years: 100 });

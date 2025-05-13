@@ -25,7 +25,7 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 		if (res.ok) {
 			setIsBlocked(res.data);
 		} else {
-			log.warn(res.statusText);
+			log.warn(res.error);
 		}
 	};
 

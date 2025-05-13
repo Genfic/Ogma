@@ -10,21 +10,24 @@ const TableInfo: Component = () => {
 	const [sortBy, setSortBy] = createSignal<"size" | "name">("size");
 	const [sortOrder, setSortOrder] = createSignal<"asc" | "desc">("desc");
 
-	const [tableInfo, { mutate: setTableInfo }] = createResource(async () => {
-		const res = await GetAdminApiTelemetryGetTableInfo();
-		if (!res.ok) {
-			return;
-		}
+	const [tableInfo, { mutate: setTableInfo }] = createResource(
+		async () => {
+			const res = await GetAdminApiTelemetryGetTableInfo();
+			if (!res.ok) {
+				throw new Error(res.error);
+			}
 
-		const data = res.data;
+			const data = res.data;
 
-		const elements = Object.entries(data).map(([k, v]) => ({
-			name: k,
-			size: Number.parseInt(v),
-		}));
+			const elements = Object.entries(data).map(([k, v]) => ({
+				name: k,
+				size: Number.parseInt(v),
+			}));
 
-		return orderBy(elements, [sortBy()], [sortOrder()]);
-	});
+			return orderBy(elements, [sortBy()], [sortOrder()]);
+		},
+		{ initialValue: [] },
+	);
 
 	const sort = (by: "size" | "name") => {
 		setSortBy(by);

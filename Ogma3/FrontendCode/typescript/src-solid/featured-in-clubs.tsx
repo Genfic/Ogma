@@ -36,7 +36,7 @@ const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 
 	const open = () => {
 		setIsOpen(true);
-		dialogRef().open();
+		dialogRef()?.open();
 	};
 
 	return (

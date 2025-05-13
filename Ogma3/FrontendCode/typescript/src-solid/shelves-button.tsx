@@ -37,18 +37,21 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 	const [more, setMore] = createSignal(false);
 	const [page, setPage] = createSignal(1);
 
-	const [quickShelves, { mutate: mutateQuick }] = createResource(async () => {
-		const res = await getQuickShelves(props.storyId);
-		return res.ok ? (res.data as Shelf[]) : null;
-	});
+	const [quickShelves, { mutate: mutateQuick }] = createResource(
+		async () => {
+			const res = await getQuickShelves(props.storyId);
+			return res.ok ? (res.data as Shelf[]) : [];
+		},
+		{ initialValue: [] },
+	);
 	const [shelves, { mutate: mutateShelves }] = createResource(
 		more,
 		async (trigger) => {
 			if (trigger) {
 				const res = await getShelves(props.storyId, page());
-				return res.ok ? (res.data as Shelf[]) : null;
+				return res.ok ? (res.data as Shelf[]) : [];
 			}
-			return null;
+			return [];
 		},
 		{ initialValue: [] },
 	);
@@ -84,6 +87,10 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		}
 	};
 
+	const style = (shelf: Shelf) => ({
+		"--s-col": shelf.doesContainBook ? shelf.color : undefined,
+	});
+
 	return () => (
 		<>
 			<For each={quickShelves()}>
@@ -93,9 +100,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						class="shelf action-btn"
 						title={`Add to ${shelf.name}`}
 						onClick={[addOrRemove, shelf.id]}
-						style={{
-							"--s-col": shelf.doesContainBook && shelf.color,
-						}}
+						style={style(shelf)}
 					>
 						<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
 					</button>
@@ -115,9 +120,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 								class="shelf action-btn"
 								title={`Add to ${shelf.name}`}
 								onClick={[addOrRemove, shelf.id]}
-								style={{
-									"--s-col": shelf.doesContainBook && shelf.color,
-								}}
+								style={style(shelf)}
 							>
 								<o-icon class="icon" style={iconStyle(shelf)} icon={shelf.iconName} />
 								<span>{shelf.name}</span>

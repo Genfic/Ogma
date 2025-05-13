@@ -1,10 +1,11 @@
 import { getCookieValue } from "@h/cookies";
+import { $query, $queryAll } from "@h/dom";
 
 const classname = "visible";
-const formInputs = [...document.querySelectorAll("input[id]")] as HTMLInputElement[];
+const formInputs = $queryAll("input[id]");
 
 for (const input of formInputs) {
-	const info = document.querySelector(`[data-for="${input.id}"]`);
+	const info = $query(`[data-for="${input.id}"]`, true);
 	if (!info) continue;
 
 	input.addEventListener("focusin", () => {
@@ -15,6 +16,6 @@ for (const input of formInputs) {
 	});
 }
 
-const turnstile = document.querySelector(".cf-turnstile") as HTMLDivElement;
+const turnstile = $query(".cf-turnstile");
 const theme = getCookieValue("theme");
 turnstile.dataset.theme = theme;

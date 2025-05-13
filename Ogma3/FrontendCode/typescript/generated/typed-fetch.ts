@@ -1,12 +1,36 @@
-interface TypedResponse<T> {
-	readonly ok: boolean;
+type SuccessResponse<TData> = {
+	readonly ok: true;
 	readonly status: number;
 	readonly statusText: string;
 	readonly headers: Headers;
-	readonly data: T;
-}
+	readonly data: TData;
+};
+
+type ErrorResponse<TError> = {
+	readonly ok: false;
+	readonly status: number;
+	readonly statusText: string;
+	readonly headers: Headers;
+	readonly error: TError;
+};
+
+type TypedResponse<TData, TError> =
+	| SuccessResponse<TData>
+	| ErrorResponse<TError>;
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD";
+
+type ResponseType = {
+	[K in keyof Response]: Response[K] extends (
+		...args: unknown[]
+	) => Promise<unknown>
+		? K
+		: never;
+}[keyof Response];
+
+type RequestOptions = Omit<RequestInit, "method" | "headers" | "body"> & {
+	responseType?: ResponseType;
+};
 
 export const get: HttpMethod = "GET";
 export const post: HttpMethod = "POST";
@@ -20,29 +44,56 @@ export async function typedFetch<TOut, TBody>(
 	method: HttpMethod | (string & { ___?: never }),
 	body?: TBody,
 	headers?: HeadersInit,
-	options?: RequestInit,
-): Promise<Readonly<TypedResponse<TOut>>> {
-	const res = await fetch(url, {
-		method: method,
-		headers: {
-			"content-type": "application/json",
-			...headers,
-		},
-		body: body && JSON.stringify(body),
-		...options,
-	});
+	options?: RequestOptions,
+): Promise<TypedResponse<TOut, string>> {
+	try {
+		const res = await fetch(url, {
+			method: method,
+			headers: {
+				"content-type": "application/json",
+				...headers,
+			},
+			body: body && JSON.stringify(body),
+			...options,
+		});
 
-	const contentType = res.headers.get("content-type");
+		if (!res.ok) {
+			return {
+				ok: false,
+				status: res.status,
+				statusText: res.statusText,
+				headers: res.headers,
+				error: await res.text().catch(() => res.statusText),
+			};
+		}
+		const contentType = res.headers.get("Content-Type")?.toLowerCase() || "";
 
-	const data: TOut = contentType?.includes("application/json")
-		? await res.json()
-		: await res.text();
+		const data = options?.responseType
+			? await res[options.responseType]()
+			: await (() => {
+					if (contentType.includes("application/json")) {
+						return res.json();
+					}
+					if (/^(application|image|audio|video)\//.test(contentType)) {
+						return res.blob();
+					}
+					return res.text();
+				})();
 
-	return {
-		ok: res.ok,
-		status: res.status,
-		statusText: res.statusText,
-		headers: res.headers,
-		data: data,
-	};
+		return {
+			ok: true,
+			status: res.status,
+			statusText: res.statusText,
+			headers: res.headers,
+			data: data,
+		};
+	} catch (e) {
+		return {
+			ok: false,
+			status: 0,
+			statusText: "",
+			headers: new Headers(),
+			error: e instanceof Error ? e.message : String(e),
+		};
+	}
 }

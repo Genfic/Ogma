@@ -1,7 +1,7 @@
 import { GetApiChaptersread } from "@g/paths-public";
-import { createResource, type ResourceReturn } from "solid-js";
+import { createResource, type InitializedResourceReturn } from "solid-js";
 
-let resource: ResourceReturn<Set<number>, number>;
+let resource: InitializedResourceReturn<Set<number>, number>;
 
 export const useChaptersRead = (storyId: number) => {
 	if (resource) {
@@ -16,6 +16,7 @@ export const useChaptersRead = (storyId: number) => {
 			}
 			return new Set(res.data);
 		},
+		{ initialValue: new Set<number>() },
 	);
 	return resource;
 };

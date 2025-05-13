@@ -11,8 +11,8 @@ type WidthOrHeight =
 const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvgOptions> = (props) => {
 	const [svg, setSvg] = createSignal<string>("");
 
-	const width = props.width ?? props.height;
-	const height = props.height ?? props.width;
+	const width = props.width ?? props.height ?? 0;
+	const height = props.height ?? props.width ?? 0;
 
 	onMount(() => {
 		let svg = renderSVG(props.data, props);
@@ -33,8 +33,8 @@ const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvg
 customElement(
 	"qr-code",
 	{
-		width: null,
-		height: null,
+		width: 100,
+		height: undefined,
 		data: "",
 		ecc: "M",
 		pixelSize: 4,

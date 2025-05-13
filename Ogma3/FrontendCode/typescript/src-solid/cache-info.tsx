@@ -10,12 +10,17 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	const [cacheCount, { refetch }] = createResource(async () => {
 		const res = await GetAdminApiCache();
 
-		if (res.ok && typeof res.data === "number") {
-			return res.data;
+		if (!res.ok) {
+			console.warn(res.error);
+			return Number.NaN;
 		}
 
-		console.warn(res.data);
-		return Number.NaN;
+		if (typeof res.data !== "number") {
+			console.warn("Invalid cache count:", res.data);
+			return Number.NaN;
+		}
+
+		return res.data;
 	});
 
 	let timer: ReturnType<typeof setTimeout>;

@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"strict": true,
+		"strictFunctionTypes": false,
 		"module": "ESNext",
 		"target": "ESNext",
 		"sourceMap": true,
@@ -8,7 +10,7 @@
 		"moduleResolution": "Bundler",
 		"useDefineForClassFields": false,
 		"skipLibCheck": true,
-		"lib": ["DOM", "ES6", "ES2023", "DOM.Iterable"],
+		"lib": ["DOM", "ES6", "ES2023", "ESNext", "DOM.Iterable"],
 		"importHelpers": true,
 		"downlevelIteration": true,
 		"baseUrl": "./",

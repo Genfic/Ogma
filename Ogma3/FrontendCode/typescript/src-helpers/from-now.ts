@@ -23,7 +23,7 @@ export const fromNow = (date: string, opts: Options = {}): string => {
 
 	if (abs < MIN) return "just now";
 
-	const periods = {
+	const periods: Record<string, number> = {
 		year: abs / YEAR,
 		month: (abs % YEAR) / MONTH,
 		day: (abs % MONTH) / DAY,

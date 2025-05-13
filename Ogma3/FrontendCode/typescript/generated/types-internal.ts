@@ -1,13 +1,13 @@
 export type CreateInfractionCommand = {
 	userId: number;
 	reason: string;
-	endDate: string;
+	endDate: Date;
 	type: InfractionType;
 };
 
 export type GetUserInfractionsResult = {
 	id: number;
-	activeUntil: string;
+	activeUntil: Date;
 	removed: boolean;
 	reason: string;
 };
@@ -16,13 +16,13 @@ export type InfractionDto = {
 	id: number;
 	userUserName: string;
 	userId: number;
-	issueDate: string;
-	activeUntil: string;
-	removedAt: string | null;
+	issueDate: Date;
+	activeUntil: Date;
+	removedAt: Date;
 	reason: string;
 	type: InfractionType;
 	issuedByUserName: string;
-	removedByUserName: string | null;
+	removedByUserName: string;
 };
 
 export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";

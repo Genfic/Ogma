@@ -211,6 +211,9 @@ public static class Startup
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			});
 
+		// X-CSRF
+		services.AddAntiforgery();
+
 		// Json options
 		services.ConfigureHttpJsonOptions(options => {
 			options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());

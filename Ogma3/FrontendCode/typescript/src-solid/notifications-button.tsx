@@ -6,10 +6,13 @@ import { Styled } from "./common/_styled";
 import type { Empty } from "@t/utils";
 
 const NotificationsButton: ComponentType<Empty> = (_) => {
-	const [notifications] = createResource(async () => {
-		const res = await countNotifications();
-		return res.ok ? res.data : -1;
-	});
+	const [notifications] = createResource(
+		async () => {
+			const res = await countNotifications();
+			return res.ok ? res.data : -1;
+		},
+		{ initialValue: 0 },
+	);
 
 	const count = () => (notifications() <= 99 ? notifications().toString() : "99+");
 

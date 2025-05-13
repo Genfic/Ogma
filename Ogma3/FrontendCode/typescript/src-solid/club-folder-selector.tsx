@@ -42,7 +42,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 
 	const open = () => {
 		setIsOpen(true);
-		dialogRef().open();
+		dialogRef()?.open();
 	};
 
 	const setClub = (club: GetJoinedClubsResponse | null) => {
@@ -51,7 +51,9 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	};
 
 	const add = async () => {
-		if (selectedFolder() === null) {
+		const folder = selectedFolder();
+
+		if (!folder) {
 			setStatus({
 				message: "You must select a folder!",
 				success: false,
@@ -61,7 +63,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 
 		const response = await addStoryToFolder(
 			{
-				folderId: selectedFolder().id,
+				folderId: folder.id,
 				storyId: props.storyId,
 			},
 			{
@@ -69,17 +71,26 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 			},
 		);
 
-		if (response.ok) {
+		if (!response.ok) {
 			setStatus({
-				message: "Successfully added",
-				success: true,
+				message: response.error,
+				success: false,
 			});
-		} else if (typeof response.data === "string") {
+			return;
+		}
+
+		if (typeof response.data === "string") {
 			setStatus({
 				message: response.data,
 				success: false,
 			});
+			return;
 		}
+
+		setStatus({
+			message: "Successfully added",
+			success: true,
+		});
 	};
 
 	const selectedClubView = () => (

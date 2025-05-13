@@ -8,32 +8,36 @@ import { Styled } from "./common/_styled";
 import type { Empty } from "@t/utils";
 
 const QuoteBox: ComponentType<Empty> = (_) => {
-	const [canLoad, setCanLoad] = createSignal(true);
+	const [nextFetchTime, setNextFetchTime] = createSignal(0);
 	const [getQuoteFromStore, setQuoteInStore] = useLocalStorage<QuoteDto>("quote");
 
+	const canLoad = () => Date.now() >= nextFetchTime();
+
 	const loadQuote = async () => {
+		const stored = getQuoteFromStore();
+
 		if (!canLoad()) {
-			return getQuoteFromStore();
+			if (stored) {
+				return stored;
+			}
+			throw new Error("Rate limited with no fallback");
 		}
-		setCanLoad(false);
 
 		const response = await getQuote();
-
-		setTimeout(
-			() => {
-				setCanLoad(true);
-			},
-			Number.parseInt(response.headers.get("retry-after")) * 1000,
-		);
-
-		if (response.status === 429) {
-			return getQuoteFromStore();
-		}
 
 		if (response.ok) {
 			setQuoteInStore(response.data);
 			return response.data;
 		}
+
+		if (response.status === 429) {
+			setNextFetchTime(Number.parseInt(response.headers.get("Retry-After") ?? "0") * 1000);
+			if (stored) {
+				return stored;
+			}
+			throw new Error("Rate limited with no fallback");
+		}
+		throw new Error(`Quote fetch error: ${response.error}`);
 	};
 
 	const [quote, { refetch }] = createResource<QuoteDto>(loadQuote);
@@ -46,8 +50,12 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 				<o-icon icon={spinnerIcon()} class="material-icons-outlined" classList={{ spin: quote.loading }} />
 			</button>
 			<Show when={quote()} fallback={<span>Loading the quote...</span>}>
-				<em class="body">{quote().body}</em>
-				<span class="author">{quote().author}</span>
+				{(q) => (
+					<>
+						<em class="body">{q().body}</em>
+						<span class="author">{q().author}</span>
+					</>
+				)}
 			</Show>
 		</div>
 	);

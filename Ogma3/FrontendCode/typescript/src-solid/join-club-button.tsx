@@ -24,7 +24,7 @@ const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: bo
 			const data = res.data;
 			setIsMember(data === true);
 		} else {
-			log.warn(res.statusText);
+			log.warn(res.error);
 		}
 	};
 

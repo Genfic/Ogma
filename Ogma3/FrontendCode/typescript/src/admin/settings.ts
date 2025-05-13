@@ -1,6 +1,7 @@
 import { log } from "@h/logger";
+import { $queryAll } from "@h/dom";
 
-const inputs = [...document.querySelectorAll("input.o-form-control")] as HTMLInputElement[];
+const inputs = $queryAll<HTMLInputElement>("input.o-form-control");
 
 for (const i of inputs) {
 	i.dataset.init = i.value;

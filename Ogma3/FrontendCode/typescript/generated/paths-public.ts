@@ -43,6 +43,7 @@ import type {
 	ShelfResult,
 	SubscribeCommentsThreadCommand,
 	TagDto,
+	TestControllerBpost,
 	UnblockUserCommand,
 	UnfollowUserCommand,
 	UpdateCommentCommand,
@@ -408,7 +409,7 @@ export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, op
 );
 
 
-export const GetApiTest = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>("/api/test",
+export const GetApiTest = async (tags: unknown, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TestControllerBpost[], undefined>(`/api/test?tags=${tags}`,
 	get,
 	undefined,
 	headers,
