@@ -31,7 +31,6 @@ using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
-using Ogma3.Infrastructure.StartupGenerators;
 using Ogma3.ServiceDefaults;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
@@ -333,7 +332,7 @@ public static class Startup
 					Public = true,
 					MaxAge = TimeSpan.FromDays(365),
 				};
-				if (context.File.Name.Contains("service-worker"))
+				if (context.File.Name.Contains("worker"))
 				{
 					Log.Information("Serving a service worker");
 					context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
@@ -361,8 +360,5 @@ public static class Startup
 
 		// Antiforgery
 		app.UseAntiforgery();
-
-		// Generate JS manifest
-		app.UseJavascriptFilesManifestGenerator("js");
 	}
 }
