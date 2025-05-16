@@ -18,11 +18,11 @@ export type InfractionDto = {
 	userId: number;
 	issueDate: Date;
 	activeUntil: Date;
-	removedAt: Date;
+	removedAt: Date | null;
 	reason: string;
 	type: InfractionType;
 	issuedByUserName: string;
-	removedByUserName: string;
+	removedByUserName: string | null;
 };
 
 export type InfractionType = "Note" | "Warning" | "Mute" | "Ban";

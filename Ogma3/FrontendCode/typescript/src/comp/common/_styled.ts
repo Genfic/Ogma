@@ -14,7 +14,10 @@ type SolidElementInstance = Element & { renderRoot?: Node | null };
  * @param {string} css The CSS styles to be applied to the wrapped component.
  * @returns {ComponentType<TProps>} A new component type with the specified styles applied.
  */
-export const Styled = <TProps>(component: ComponentType<TProps>, ...css: string[]): ComponentType<TProps> => {
+export const Styled = <TProps extends Record<string, unknown>>(
+	component: ComponentType<TProps>,
+	...css: string[]
+): ComponentType<TProps> => {
 	return (props: TProps, options: ComponentOptions) => {
 		onMount(() => {
 			const styleEl = document.createElement("style");

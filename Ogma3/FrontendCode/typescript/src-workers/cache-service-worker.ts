@@ -1,5 +1,7 @@
 import manifest from "@g/manifest.json";
 
+declare let self: ServiceWorkerGlobalScope;
+
 const clearCache = async (key: string) => {
 	const keys = await caches.keys();
 	if (keys.includes(key)) {
@@ -12,9 +14,12 @@ const clearCache = async (key: string) => {
 };
 
 self.addEventListener("activate", async (event: ExtendableEvent) => {
-	await clearCache(manifest.GeneratedAt);
+	await clearCache(manifest.generated);
 
-	const paths = Object.entries(manifest.Files).map(([k, v]) => `${k}?v=${v}`);
+	const paths = manifest.files.map((p) => {
+		const [file, hash] = p.split(":");
+		return `${manifest.prefix}${file}${manifest.ext}?v=${hash}`;
+	});
 
-	event.waitUntil(caches.open(manifest.GeneratedAt).then((cache) => cache.addAll(paths)));
+	event.waitUntil(caches.open(manifest.generated).then((cache) => cache.addAll(paths)));
 });

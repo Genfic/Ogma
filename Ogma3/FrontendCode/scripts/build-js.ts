@@ -1,4 +1,4 @@
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -97,6 +97,8 @@ const getHash = async (filePath: string): Promise<string> => {
 	return Buffer.from(hashBuffer).toString("base64url");
 };
 
+const prefix = "/js/";
+const ext = ".js";
 type HashedEntry = { hash: string; path: string | undefined };
 type FullHashedEntry = { hash: string; path: string };
 const entryHasPath = (e: HashedEntry): e is FullHashedEntry => !!e.path;
@@ -111,24 +113,20 @@ const generateManifest = async () => {
 				const hash = await getHash(file);
 				return {
 					hash,
-					path: file.split("wwwroot").at(-1)?.replaceAll("\\", "/"),
+					path: relative(_dest, file).replaceAll("\\", "/").replace(ext, ""),
 				};
 			})(),
 		);
 	}
 	const hashed = await Promise.all(tasks);
 	const manifest = {
-		GeneratedAt: new Date().toISOString(),
-		Files: hashed
+		generated: new Date().toISOString(),
+		prefix,
+		ext,
+		files: hashed
 			.filter(entryHasPath)
 			.toSorted((a, b) => a.path.localeCompare(b.path))
-			.reduce(
-				(acc, { path, hash }) => {
-					acc[path] = hash;
-					return acc;
-				},
-				{} as Record<string, string>,
-			),
+			.map(({ path, hash }) => `${path}:${hash}`),
 	};
 
 	await Bun.write(join(_source, "generated", "manifest.json"), JSON.stringify(manifest, null, 2));

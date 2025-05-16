@@ -58,10 +58,6 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 
 	useClickOutside(element, () => setMore(false));
 
-	const iconStyle = (shelf: ShelfResult) => ({
-		color: shelf.color,
-	});
-
 	const addOrRemove = async (id: number) => {
 		const allShelves = [...shelves(), ...quickShelves()];
 		const exists = allShelves.some((s) => s.doesContainBook && s.id === id);
@@ -87,8 +83,12 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		}
 	};
 
+	const iconStyle = (shelf: ShelfResult) => ({
+		color: shelf.color ?? undefined,
+	});
+
 	const style = (shelf: Shelf) => ({
-		"--s-col": shelf.doesContainBook ? shelf.color : undefined,
+		"--s-col": shelf.doesContainBook ? (shelf.color ?? undefined) : undefined,
 	});
 
 	return () => (
@@ -102,7 +102,11 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						onClick={[addOrRemove, shelf.id]}
 						style={style(shelf)}
 					>
-						<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
+						{shelf.iconName ? (
+							<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
+						) : (
+							<span style={iconStyle(shelf)}>B</span>
+						)}
 					</button>
 				)}
 			</For>
@@ -122,7 +126,11 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 								onClick={[addOrRemove, shelf.id]}
 								style={style(shelf)}
 							>
-								<o-icon class="icon" style={iconStyle(shelf)} icon={shelf.iconName} />
+								{shelf.iconName ? (
+									<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
+								) : (
+									<span style={iconStyle(shelf)}>B</span>
+								)}
 								<span>{shelf.name}</span>
 							</button>
 						)}

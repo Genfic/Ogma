@@ -18,7 +18,7 @@ describe("parseDom", () => {
 		expect(element).not.toBeNull();
 		expect(element.tagName).toBe("DIV");
 		expect(element.querySelector(".inner")).not.toBeNull();
-		expect(element.querySelector(".inner").textContent).toBe("Inner Text");
+		expect(element.querySelector(".inner")?.textContent).toBe("Inner Text");
 	});
 
 	it("should return null if the HTML string is empty", () => {

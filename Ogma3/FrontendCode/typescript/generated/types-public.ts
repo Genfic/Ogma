@@ -25,8 +25,8 @@ export type CommentDto = {
 	id: number;
 	author: UserSimpleDto;
 	dateTime: Date;
-	body: string;
-	deletedBy: "User" | "Staff";
+	body: string | null;
+	deletedBy: "User" | "Staff" | null;
 	isBlocked: boolean;
 	isEdited: boolean;
 };
@@ -72,8 +72,8 @@ export type CreateShelfCommand = {
 
 export type CreateTagCommand = {
 	name: string;
-	description: string;
-	namespace: "ContentWarning" | "Genre" | "Franchise";
+	description: string | null;
+	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
 };
 
 export type CreateVoteCommand = {
@@ -132,7 +132,7 @@ export type GetRevisionResult = {
 
 export type GetSignInDataResult = {
 	avatar: string;
-	title: string;
+	title: string | null;
 };
 
 export type GetThreadDetailsResult = {
@@ -145,7 +145,7 @@ export type GetThreadDetailsResult = {
 
 export type GetUserNotificationsResult = {
 	id: number;
-	body: string;
+	body: string | null;
 	url: string;
 	dateTime: Date;
 	event: ENotificationEvent;
@@ -158,10 +158,10 @@ export type InviteCodeDto = {
 	id: number;
 	code: string;
 	normalizedCode: string;
-	usedByUserName: string;
+	usedByUserName: string | null;
 	issuedByUserName: string;
 	issueDate: Date;
-	usedDate: Date;
+	usedDate: Date | null;
 };
 
 export type IssueInviteCodeCommand = object;
@@ -193,8 +193,8 @@ export type None = undefined;
 export type QuickShelvesResult = {
 	id: number;
 	name: string;
-	color: string;
-	iconName: string;
+	color: string | null;
+	iconName: string | null;
 	doesContainBook: boolean;
 };
 
@@ -231,14 +231,14 @@ export type ReportContentCommand = {
 export type RoleDto = {
 	id: number;
 	name: string;
-	color: string;
+	color: string | null;
 	isStaff: boolean;
 	order: number;
 };
 
 export type RoleTinyDto = {
 	name: string;
-	color: string;
+	color: string | null;
 	order: number;
 };
 
@@ -257,15 +257,15 @@ export type ShelfDto = {
 	trackUpdates: boolean;
 	color: string;
 	storiesCount: number;
-	iconName: string;
-	iconId: number;
+	iconName: string | null;
+	iconId: number | null;
 };
 
 export type ShelfResult = {
 	id: number;
 	name: string;
-	color: string;
-	iconName: string;
+	color: string | null;
+	iconName: string | null;
 	doesContainBook: boolean;
 };
 
@@ -277,7 +277,7 @@ export type TagDto = {
 	id: number;
 	name: string;
 	slug: string;
-	description: string;
+	description: string | null;
 	namespace: "ContentWarning" | "Genre" | "Franchise";
 	namespaceColor: string;
 	namespaceId: number;
@@ -344,9 +344,9 @@ export type UpdateShelfCommand = {
 
 export type UpdateTagCommand = {
 	id: number;
-	name: string;
-	description: string;
-	namespace: "ContentWarning" | "Genre" | "Franchise";
+	name: string | null;
+	description: string | null;
+	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
 };
 
 export type UserSimpleDto = {
@@ -354,7 +354,7 @@ export type UserSimpleDto = {
 	avatar: string;
 	title: string;
 	roles: RoleTinyDto[];
-};
+} | null;
 
 export type VoteResult = {
 	didVote: boolean;

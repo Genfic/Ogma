@@ -1,4 +1,4 @@
-import { createUniqueId, type JSX, onMount, type ParentComponent, Show } from "solid-js";
+import { createUniqueId, type JSX, onMount, type ParentComponent, type ParentProps, Show } from "solid-js";
 import { createEventDispatcher } from "@solid-primitives/event-dispatcher";
 
 export type DialogApi = {
@@ -15,11 +15,13 @@ type Props = {
 	onOpen?: (evt: CustomEvent) => void;
 };
 
-export type DialogType<TProps> = ParentComponent<TProps>;
-
-export const Dialog: DialogType<Props> = (props) => {
+export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 	let dialogRef: HTMLDialogElement | undefined;
 	const id = createUniqueId();
+
+	if (!dialogRef) {
+		throw new Error("Dialog not mounted");
+	}
 
 	const dispatch = createEventDispatcher(props);
 
@@ -41,7 +43,7 @@ export const Dialog: DialogType<Props> = (props) => {
 	});
 
 	const backdropClose = (e: MouseEvent & { currentTarget: HTMLDialogElement }) => {
-		const rect = dialogRef?.getBoundingClientRect();
+		const rect = dialogRef.getBoundingClientRect();
 		const minX = rect.left + dialogRef?.clientLeft;
 		const minY = rect.top + dialogRef?.clientTop;
 		if (

@@ -67,12 +67,12 @@ const InviteCodes = () => {
 										<h3 class="name">
 											<span class="monospace">{code.code}</span> : {date(code.issueDate)}
 										</h3>
-										<Show when={code.usedByUserName}>
+										{code.usedByUserName && code.usedDate ? (
 											<span class="desc">
 												Redeemed by <strong>{code.usedByUserName}</strong> on{" "}
 												<strong>{date(code.usedDate)}</strong>
 											</span>
-										</Show>
+										) : null}
 									</div>
 									<div class="actions">
 										<button
