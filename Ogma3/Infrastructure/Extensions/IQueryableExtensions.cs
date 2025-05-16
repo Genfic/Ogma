@@ -13,6 +13,7 @@ public static class QueryableExtensions
 	/// <param name="tags">Tags to search by</param>
 	/// <param name="searchQuery">Query to search the titles by</param>
 	/// <param name="ratingId">Rating to filter by</param>
+	/// <param name="status">Story status to filter by</param>
 	/// <returns>`IQueryable` objects with applied filters</returns>
 	public static IQueryable<Story> Search(
 		this IQueryable<Story> stories,

@@ -1,5 +1,4 @@
 @page
-@using Ogma3.Services
 @using Ogma3.Data.Blogposts
 @model IndexModel
 
@@ -43,6 +42,3 @@ else
 
 	<partial name="_Pagination" model="Model.Pagination" />
 }
-
-
-@Html.Resource(@<script type="module" src="~/js/search/blog.js" asp-append-version="true"></script>)

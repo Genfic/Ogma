@@ -10,7 +10,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Stories;
 
-public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, ILogger<IndexModel> logger) : PageModel
+public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
