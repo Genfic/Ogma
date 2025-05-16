@@ -85,6 +85,7 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Description"></label>
 		<p class="desc">The long description, shown when user opens your story's page</p>
+		<markdown-editor></markdown-editor>
 		<textarea asp-for="Input.Description" class="o-form-control active-border" rows="10" data-wordcount="true" data-md="true"></textarea>
 		<span asp-validation-for="Input.Description"></span>
 	</div>
@@ -92,6 +93,7 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Hook"></label>
 		<p class="desc">The short description that appears on story lists</p>
+		<markdown-editor></markdown-editor>
 		<input asp-for="Input.Hook" class="o-form-control active-border" data-md="true">
 		<span asp-validation-for="Input.Hook"></span>
 	</div>
@@ -232,7 +234,7 @@
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/editors/markdown-toolbar.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 }
 
 @section CSS

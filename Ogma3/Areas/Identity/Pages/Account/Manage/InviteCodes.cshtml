@@ -1,5 +1,7 @@
 @page
 @inject OgmaConfig Config
+@inject IAntiforgery Csrf
+@using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Data
 @model InviteCodes
 
@@ -8,32 +10,10 @@
 	ViewData["ActivePage"] = ManageNavPages.InviteCodes;
 }
 
-<button class="btn btn-primary btn-block" v-on:click="createCode">
-	Issue code ({{codes.length}}/@Config.MaxInvitesPerUser)
-</button>
+<div id="invite-codes-app" data-csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken" data-max="@Config.MaxInvitesPerUser">
 
-<button v-if="codes.length <= 0" class="btn btn-primary" type="button" disabled>
-	<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-	Loading...
-</button>
+</div>
 
-<ul class="items-list">
-	<li v-for="n in codes">
-		<div class="deco" v-bind:style="{background: n.userName ? 'green' : 'gray'}"></div>
-		<div class="main">
-			<h3 class="name"><span class="monospace">{{ n.code }}</span> : {{ date(n.issueDate) }}</h3>
-			<span class="desc" v-if="n.userName">Redeemed by <strong>{{n.userName}}</strong> on
-				<strong>{{date(n.usedDate)}}</strong></span>
-		</div>
-		<div class="actions">
-			<button class="action" v-on:click="copyCode(n)">
-				<icon icon="lucide:clipboard-copy" svg="true"></icon>
-			</button>
-		</div>
-	</li>
-</ul>
-
-@Html.AntiForgeryToken()
 
 @section Scripts
 {

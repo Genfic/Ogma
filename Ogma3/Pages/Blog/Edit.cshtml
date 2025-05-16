@@ -33,6 +33,7 @@
 
 	<div class="o-form-group">
 		<label asp-for="Input.Body"></label>
+		<markdown-editor></markdown-editor>
 		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
 		<span asp-validation-for="Input.Body"></span>
 	</div>
@@ -103,5 +104,5 @@
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/editors/markdown-toolbar.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 }

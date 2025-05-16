@@ -1,13 +1,48 @@
-type LocalStorageHook<TData> = [get: () => TData | null, set: (data: TData) => void, remove: () => void];
+import { createSignal } from "solid-js";
 
-export const useLocalStorage = <TData>(key: string, raw = false): LocalStorageHook<TData> => [
-	() => {
-		const item = localStorage.getItem(key);
-		if (raw) {
-			return item as TData;
+export type LocalStorageHook<T> = [getter: () => T | undefined, setter: (value: T) => void, remover: () => void];
+
+export function useLocalStorage<T>(key: string, initialValue?: T): LocalStorageHook<T> {
+	const readValueFromStorage = (): T | undefined => {
+		try {
+			const item = window.localStorage.getItem(key);
+			return item ? JSON.parse(item) : initialValue;
+		} catch (error) {
+			console.error(`Error reading localStorage key "${key}":`, error);
+			return initialValue;
 		}
-		return item ? (JSON.parse(item) as TData) : null;
-	},
-	(data: TData) => localStorage.setItem(key, JSON.stringify(data)),
-	() => localStorage.removeItem(key),
-];
+	};
+
+	const [storedValue, setStoredValue] = createSignal<T | undefined>(readValueFromStorage());
+
+	const setValue = (value: T) => {
+		try {
+			setStoredValue(() => value);
+
+			window.localStorage.setItem(key, JSON.stringify(value));
+		} catch (error) {
+			console.error(`Error setting localStorage key "${key}":`, error);
+		}
+	};
+
+	// The remove function that will be returned
+	const removeValue = () => {
+		try {
+			setStoredValue(() => undefined);
+
+			window.localStorage.removeItem(key);
+		} catch (error) {
+			console.error(`Error removing localStorage key "${key}":`, error);
+		}
+	};
+
+	// Listen for changes in other tabs/windows
+	window.addEventListener("storage", (e) => {
+		if (e.key === key) {
+			const newValue = e.newValue ? JSON.parse(e.newValue) : undefined;
+			setStoredValue(() => newValue);
+		}
+	});
+
+	return [() => storedValue(), setValue, removeValue];
+}

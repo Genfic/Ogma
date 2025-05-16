@@ -47,6 +47,7 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Description"></label>
 		<span class="desc">This will show on the club's home page</span>
+		<markdown-editor></markdown-editor>
 		<textarea asp-for="Input.Description" class="o-form-control active-border" rows="5" data-md="true"></textarea>
 		<span asp-validation-for="Input.Description"></span>
 	</div>
@@ -70,5 +71,5 @@
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/editors/markdown-toolbar.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 }

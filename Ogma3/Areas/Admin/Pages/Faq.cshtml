@@ -1,4 +1,6 @@
 @page
+@inject IAntiforgery Csrf
+@using Microsoft.AspNetCore.Antiforgery
 @model Faq
 
 @{
@@ -6,43 +8,8 @@
 	ViewData["ActivePage"] = NavPages.Faq;
 }
 
-<div id="faqs">
+<div id="faqs" data-csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken">
 
-	<form class="form" v-on:submit.stop.prevent="createFaq">
-
-		<div class="o-form-group">
-			<label for="question">Question</label>
-			<input class="o-form-control" id="question" v-model="form.question">
-		</div>
-
-		<div class="o-form-group">
-			<label for="answer">Answer</label>
-			<textarea class="o-form-control" id="answer" v-model="form.answer"></textarea>
-		</div>
-
-		<div class="o-form-group">
-			<input class="o-form-control btn" type="submit" value="Submit">
-		</div>
-
-		<input type="hidden" name="id" v-model="form.id">
-	</form>
-
-	<br>
-
-	<details class="details" v-for="f in faqs">
-		<summary>{{f.question}}</summary>
-		<div class="actions">
-			<button class="small inline action-btn" v-on:click="deleteFaq(f)">
-				<icon icon="lucide:trash-2" svg="true"></icon>
-			</button>
-			<button class="small inline action-btn" v-on:click="editFaq(f)">
-				<icon icon="lucide:pencil" svg="true"></icon>
-			</button>
-		</div>
-		<div v-html="f.answerRendered"></div>
-	</details>
-
-	@Html.AntiForgeryToken()
 </div>
 
 @section Scripts

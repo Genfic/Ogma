@@ -1,24 +1,22 @@
 import { $id } from "@h/dom";
 
-let last_known_scroll_position = 0;
-let ticking = false;
-
 const nav = $id("top-nav");
 const btn = $id<HTMLButtonElement>("burger");
 
-let lastPos = 0;
-
-function changeNav(pos: number) {
-	nav.classList.toggle("compact", pos - lastPos > 0);
-	lastPos = pos;
-}
+let lastScrollY = window.scrollY;
+let ticking = false;
+const scrollThreshold = 50;
 
 window.addEventListener("scroll", () => {
-	last_known_scroll_position = window.scrollY;
+	const currentScrollY = window.scrollY;
 
 	if (!ticking) {
 		window.requestAnimationFrame(() => {
-			changeNav(last_known_scroll_position);
+			const delta = currentScrollY - lastScrollY;
+			if (Math.abs(delta) > scrollThreshold) {
+				nav.classList.toggle("compact", delta > 0);
+				lastScrollY = currentScrollY;
+			}
 			ticking = false;
 		});
 		ticking = true;

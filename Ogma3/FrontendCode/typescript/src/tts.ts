@@ -1,14 +1,16 @@
+import { $id, $query } from "@h/dom";
+
 (() => {
-	const button = document.getElementById("tts-btn");
-	const stopBtn = document.getElementById("tts-stop");
-	const icon = document.getElementById("tts-btn-ico");
-	const body = document.querySelector(".tts-body");
+	const button = $id("tts-btn");
+	const stopBtn = $id("tts-stop");
+	const icon = $id("tts-btn-ico");
+	const body = $query(".tts-body");
 	const utterance = new SpeechSynthesisUtterance(body.innerText.trim());
 
-	const icons = Object.freeze({
+	const icons = {
 		play: "play_arrow",
 		pause: "pause",
-	});
+	} as const;
 
 	const synth = window.speechSynthesis;
 

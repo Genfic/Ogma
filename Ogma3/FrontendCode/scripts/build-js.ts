@@ -18,6 +18,7 @@ const values = program
 	.option("-w, --watch", "Watch mode", false)
 	.option("-r, --release", "Build in release mode", false)
 	.option("-c, --clean", "Clean output directory", false)
+	.option("-C --clean-always", "Clean output directory before each compilation", false)
 	.parse(Bun.argv)
 	.opts();
 
@@ -25,16 +26,15 @@ const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript");
 const _dest = join(_root, "..", "..", "wwwroot", "js");
 
-const artifacts = [
-	{ from: new Glob(`${_source}/src/**/[^_]*.{ts,js}`), root: "src", to: "/", name: "Javascript" },
-	{ from: new Glob(`${_source}/src-solid/**/[^_]*.tsx`), root: "src-solid", to: "/comp", name: "Solid" },
-] as const;
+const prefixWidth = "Javascript".length;
 
-const prefixWidth = Math.max(...artifacts.map((a) => a.name.length));
-
-if (values.clean) {
+const clean = async () => {
 	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
+};
+
+if (values.clean) {
+	await clean();
 }
 
 const compile = async (from: Glob, to: string, root: string, name: string) => {
@@ -140,16 +140,27 @@ const generateManifest = async () => {
 const compileAll = async () => {
 	const timer = new Stopwatch();
 
-	const tasks = [];
-	for (const { from, to, name, root } of artifacts) {
-		tasks.push(compile(from, join(_dest, to), root, name));
+	if (values.cleanAlways) {
+		await clean();
 	}
-	const chunks = (await Promise.all(tasks)).flat();
+
+	const jsChunks = await compile(
+		new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`),
+		join(_dest, "/"),
+		"src",
+		"Javascript",
+	);
 
 	console.log(ct`{dim Generating manifest.json}`);
 	await generateManifest();
-	await compile(new Glob(`${_source}/src-workers/**/[^_]*.ts`), join(_dest, "workers"), "src-workers", "Workers");
+	const workersChunks = await compile(
+		new Glob(`${_source}/src-workers/**/[^_]*.ts`),
+		join(_dest, "workers"),
+		"src-workers",
+		"Workers",
+	);
 
+	const chunks = [...jsChunks, ...workersChunks];
 	console.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
