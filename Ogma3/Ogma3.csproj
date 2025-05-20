@@ -41,7 +41,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.5" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.5" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.11.0-beta1.23525.2">
+		<PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -69,7 +69,7 @@
 		<PackageReference Include="Riok.Mapperly" Version="4.2.1" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" PrivateAssets="all" />
 		<PackageReference Include="SafeRouting" Version="1.5.0" PrivateAssets="all" />
-		<PackageReference Include="Scalar.AspNetCore" Version="2.3.0" PrivateAssets="all" />
+		<PackageReference Include="Scalar.AspNetCore" Version="2.3.1" PrivateAssets="all" />
 		<PackageReference Include="SendGrid" Version="9.29.3" PrivateAssets="all" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" PrivateAssets="all" />
 		<PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
