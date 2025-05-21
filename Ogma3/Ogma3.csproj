@@ -21,7 +21,7 @@
 		<AdditionalFiles Include="../BannedSymbols.txt" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Atulin.AutoDbSet" Version="1.1.2" PrivateAssets="all" />
+		<PackageReference Include="Atulin.AutoDbSet" Version="1.1.3" PrivateAssets="all" />
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.0.1" PrivateAssets="all" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" PrivateAssets="all" />
 		<PackageReference Include="B2Net" Version="0.7.5" PrivateAssets="all" />
@@ -65,7 +65,6 @@
 		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta08" PrivateAssets="all" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" PrivateAssets="all" />
 		<PackageReference Include="Postmark" Version="5.2.0" PrivateAssets="all" />
-		<PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" PrivateAssets="all" />
 		<PackageReference Include="Riok.Mapperly" Version="4.2.1" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" PrivateAssets="all" />
 		<PackageReference Include="SafeRouting" Version="1.5.0" PrivateAssets="all" />
@@ -78,7 +77,6 @@
 		<PackageReference Include="Sqids" Version="3.1.0" PrivateAssets="all" />
 		<PackageReference Include="System.ServiceModel.Syndication" Version="9.0.5" PrivateAssets="all" />
 		<PackageReference Include="System.Text.Json" Version="9.0.5" PrivateAssets="all" />
-		<PackageReference Include="Zack.EFCore.Batch.Npgsql_NET6" Version="6.1.9" PrivateAssets="all" />
 		<PackageReference Include="ZstdSharp.Port" Version="0.8.5" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>

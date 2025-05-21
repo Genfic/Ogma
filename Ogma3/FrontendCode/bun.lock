@@ -22,14 +22,13 @@
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
         "@commander-js/extra-typings": "^14.0.0",
-        "@hail2u/css-mqpacker": "git@github.com:hail2u/node-css-mqpacker.git#f615ec6",
         "@happy-dom/global-registrator": "^17.4.7",
         "@parcel/watcher": "^2.5.1",
         "@stylelint-types/stylelint-scss": "^6.11.0",
         "@types/ansi-colors": "^3.2.6",
         "@types/bun": "^1.2.13",
         "@types/json5": "^2.2.0",
-        "@types/node": "^22.15.19",
+        "@types/node": "^22.15.20",
         "browserslist": "^4.24.5",
         "chalk": "^5.4.1",
         "chalk-template": "^1.1.0",
@@ -212,8 +211,6 @@
     "@formatjs/icu-skeleton-parser": ["@formatjs/icu-skeleton-parser@1.8.12", "", { "dependencies": { "@formatjs/ecma402-abstract": "2.3.2", "tslib": "2" } }, "sha512-QRAY2jC1BomFQHYDMcZtClqHR55EEnB96V7Xbk/UiBodsuFc5kujybzt87+qj1KqmJozFhk6n4KiT1HKwAkcfg=="],
 
     "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.5.10", "", { "dependencies": { "tslib": "2" } }, "sha512-af3qATX+m4Rnd9+wHcjJ4w2ijq+rAVP3CCinJQvFv1kgSu1W6jypUmvleJxcewdxmutM8dmIRZFxO/IQBZmP2Q=="],
-
-    "@hail2u/css-mqpacker": ["@hail2u/css-mqpacker@git+ssh://git@github.com:hail2u/node-css-mqpacker.git#f615ec698e26e032d128e74a5f7ba0651b334fa1", { "dependencies": { "minimist": "^1.2.6" }, "peerDependencies": { "postcss": "^8.3.5" }, "bin": { "mqpacker": "./bin/mqpacker.js" } }, "f615ec698e26e032d128e74a5f7ba0651b334fa1"],
 
     "@happy-dom/global-registrator": ["@happy-dom/global-registrator@17.4.7", "", { "dependencies": { "happy-dom": "^17.4.7" } }, "sha512-BsKWeI115LT0J/lKJ4Kz638oy4zO+nC4TLh3cYPY6BBypttPZg8Fg+EXL2If4KHMSy3Wx+yRiM+68Hr1iGgiWA=="],
 
@@ -401,7 +398,7 @@
 
     "@types/ms": ["@types/ms@2.1.0", "", {}, "sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA=="],
 
-    "@types/node": ["@types/node@22.15.19", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-3vMNr4TzNQyjHcRZadojpRaD9Ofr6LsonZAoQ+HMUa/9ORTPoxVIw0e0mpqWpdjj8xybyCM+oKOUH2vwFu/oEw=="],
+    "@types/node": ["@types/node@22.15.20", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-A6BohGFRGHAscJsTslDCA9JG7qSJr/DWUvrvY8yi9IgnGtMxCyat7vvQ//MFa0DnLsyuS3wYTpLdw4Hf+Q5JXw=="],
 
     "@types/relateurl": ["@types/relateurl@0.2.33", "", {}, "sha512-bTQCKsVbIdzLqZhLkF5fcJQreE4y1ro4DIyVrlDNSCJRRwHhB8Z+4zXXa8jN6eDvc2HbRsEYgbvrnGvi54EpSw=="],
 
@@ -1622,6 +1619,8 @@
     "babel-plugin-jsx-dom-expressions/@babel/helper-module-imports": ["@babel/helper-module-imports@7.18.6", "", { "dependencies": { "@babel/types": "^7.18.6" } }, "sha512-0NFvs3VkuSYbFi1x2Vd6tKrywq+z/cLeYC/RJNFrIX/30Bf5aiGYbtvGXolEktzJH8o5E5KJ3tT+nkxuuZFVlA=="],
 
     "brace-expansion/balanced-match": ["balanced-match@3.0.1", "", {}, "sha512-vjtV3hiLqYDNRoiAv0zC4QaGAMPomEoq83PRmYIofPswwZurCeWR5LByXm7SyoL0Zh5+2z0+HC7jG8gSZJUh0w=="],
+
+    "bun-types/@types/node": ["@types/node@22.15.19", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-3vMNr4TzNQyjHcRZadojpRaD9Ofr6LsonZAoQ+HMUa/9ORTPoxVIw0e0mpqWpdjj8xybyCM+oKOUH2vwFu/oEw=="],
 
     "c12/chokidar": ["chokidar@4.0.3", "", { "dependencies": { "readdirp": "^4.0.1" } }, "sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA=="],
 

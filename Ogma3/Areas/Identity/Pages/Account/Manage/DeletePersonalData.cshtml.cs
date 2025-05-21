@@ -5,10 +5,8 @@ using HashidsNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Blacklists;
-using Ogma3.Data.CommentsThreads;
-using Ogma3.Data.Notifications;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
@@ -87,12 +85,12 @@ public sealed class DeletePersonalDataModel : PageModel
 		user.RegistrationDate = DateTimeOffset.UtcNow;
 
 		// Delete related data
-		await _context.DeleteRangeAsync<UserBlock>(ub => ub.BlockedUserId == user.Id || ub.BlockingUserId == user.Id);
-		await _context.DeleteRangeAsync<BlacklistedRating>(br => br.UserId == user.Id);
-		await _context.DeleteRangeAsync<BlacklistedTag>(bt => bt.UserId == user.Id);
-		await _context.DeleteRangeAsync<UserFollow>(uf => uf.FollowedUserId == user.Id || uf.FollowingUserId == user.Id);
-		await _context.DeleteRangeAsync<CommentThreadSubscriber>(cts => cts.OgmaUserId == user.Id);
-		await _context.DeleteRangeAsync<NotificationRecipients>(nr => nr.RecipientId == user.Id);
+		await _context.BlockedUsers.Where(ub => ub.BlockedUserId == user.Id || ub.BlockingUserId == user.Id).ExecuteDeleteAsync();
+		await _context.BlacklistedRatings.Where(br => br.UserId == user.Id).ExecuteDeleteAsync();
+		await _context.BlacklistedTags.Where(bt => bt.UserId == user.Id).ExecuteDeleteAsync();
+		await _context.FollowedUsers.Where(uf => uf.FollowedUserId == user.Id || uf.FollowingUserId == user.Id).ExecuteDeleteAsync();
+		await _context.CommentThreadSubscribers.Where(cts => cts.OgmaUserId == user.Id).ExecuteDeleteAsync();
+		await _context.NotificationRecipients.Where(nr => nr.RecipientId == user.Id).ExecuteDeleteAsync();
 
 
 		var result = await _userManager.UpdateAsync(user);
