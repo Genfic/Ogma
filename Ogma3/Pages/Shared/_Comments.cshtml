@@ -1,4 +1,5 @@
 @inject IAntiforgery Xcsrf
+@inject LinkGenerator LinkGenerator
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Data.Reports
 @using Ogma3.Services
@@ -7,6 +8,17 @@
 @{
 	var csrf = Xcsrf.GetAndStoreTokens(Context).RequestToken;
 }
+
+<o-comments
+	csrf="@csrf"
+	id="@Model.Id"
+	is-logged-in="@(User.Identity is { IsAuthenticated: true })"
+	lock-date="@(Model.LockDate == default(DateTimeOffset) ? null : Model.LockDate)"
+	md-ref-route="@Routes.Pages.Markdown.Get().Path(LinkGenerator)"
+	login-route="@Routes.Areas.Identity.Pages.Account_Login.Get().Path(LinkGenerator)"
+	register-route="@Routes.Areas.Identity.Pages.Account_Register.Get().Path(LinkGenerator)"
+></o-comments>
+
 
 <div class="comments-container"
      ref="container"
@@ -139,3 +151,4 @@
 @Html.Resource(@<script type="module" defer src="~/js/components/report-modal.js" asp-append-version="true"></script>)
 
 @Html.Resource(@<script type="module" defer src="~/js/comments.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" defer src="~/js/comments2.js" asp-append-version="true"></script>)

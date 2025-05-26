@@ -1,0 +1,10 @@
+o-comments {
+	display: block;
+	width: 70%;
+}
+.comment-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .5rem;
+}
