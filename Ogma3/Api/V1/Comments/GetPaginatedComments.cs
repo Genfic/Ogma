@@ -3,6 +3,7 @@ using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
 using Markdig;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Ogma3.Data;
@@ -11,6 +12,7 @@ using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
+using PostmarkDotNet;
 
 namespace Ogma3.Api.V1.Comments;
 
@@ -20,22 +22,9 @@ public static partial class GetPaginatedComments
 {
 	private const string HeaderName = "X-Username";
 
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithOpenApi(c => {
-			var res = c.Responses["200"];
-			res.Headers ??= new Dictionary<string, OpenApiHeader>();
-
-			res.Headers[HeaderName] = new()
-			{
-				Description = "The username of the user who is requesting the comments or null if the request is anonymous.",
-				Schema = new()
-				{
-					Type = "string",
-					Nullable = true,
-				},
-			};
-			return c;
-		});
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.");
 
 	[UsedImplicitly]
 	public sealed record Query(long Thread, int? Page, long? Highlight);
@@ -63,8 +52,10 @@ public static partial class GetPaginatedComments
 			? Math.Max(1, page ?? 1)
 			: (int)Math.Ceiling((double)(total - (h - 1)) / ogmaConfig.CommentsPerPage);
 
+		var ctx = httpContextAccessor.HttpContext;
+
 		// Send auth data
-		httpContextAccessor.HttpContext?.Response.Headers.Append(HeaderName, userService.User?.GetUsername());
+		ctx?.Response.Headers.Append(HeaderName, userService.User?.GetUsername());
 
 		var comments = await context.Comments
 			.Where(c => c.CommentsThreadId == thread)
@@ -73,10 +64,13 @@ public static partial class GetPaginatedComments
 			.Paginate(p, ogmaConfig.CommentsPerPage)
 			.ToListAsync(cancellationToken);
 
+		// TODO: Remove after new comment system is done
+		var md = ctx?.Request.Headers["X-Markdown"] is { } mdValue && mdValue == "true";
+
 		foreach (var comment in comments)
 		{
 			if (comment.Body is null) continue;
-			comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
+			comment.Body = md ? comment.Body : Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
 		}
 
 		var pagination = new PaginationResult<CommentDto>

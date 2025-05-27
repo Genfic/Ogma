@@ -1,87 +1,87 @@
 export type AddBookToShelfCommand = {
-	shelfId: number;
-	storyId: number;
+    shelfId: number;
+    storyId: number;
 };
 
 export type AddStoryToFolderCommand = {
-	folderId: number;
-	storyId: number;
+    folderId: number;
+    storyId: number;
 };
 
 export type AddStoryToFolderResponse = {
-	folderId: number;
-	storyId: number;
-	added: Date;
-	addedById: number;
+    folderId: number;
+    storyId: number;
+    added: Date;
+    addedById: number;
 };
 
 export type AdminIssueInviteCodeCommand = object;
 
 export type BlockUserCommand = {
-	name: string;
+    name: string;
 };
 
 export type CommentDto = {
-	id: number;
-	author: UserSimpleDto;
-	dateTime: Date;
-	body: string | null;
-	deletedBy: "User" | "Staff" | null;
-	isBlocked: boolean;
-	isEdited: boolean;
+    id: number;
+    author: UserSimpleDto;
+    dateTime: Date;
+    body: string | null;
+    deletedBy: "User" | "Staff" | null;
+    isBlocked: boolean;
+    isEdited: boolean;
 };
 
 export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
 
 export type CreateCommentCommand = {
-	body: string;
-	thread: number;
-	source: CommentSource;
+    body: string;
+    thread: number;
+    source: CommentSource;
 };
 
 export type CreateFaqCommand = {
-	question: string;
-	answer: string;
+    question: string;
+    answer: string;
 };
 
 export type CreateQuoteCommand = {
-	body: string;
-	author: string;
+    body: string;
+    author: string;
 };
 
 export type CreateQuotesFromJsonQuery = {
-	quotes: QuoteDto[];
+    quotes: QuoteDto[];
 };
 
 export type CreateRoleCommand = {
-	name: string;
-	isStaff: boolean;
-	color: string;
-	order: number;
+    name: string;
+    isStaff: boolean;
+    color: string;
+    order: number;
 };
 
 export type CreateShelfCommand = {
-	name: string;
-	description: string;
-	isQuickAdd: boolean;
-	isPublic: boolean;
-	trackUpdates: boolean;
-	color: string;
-	icon: number;
+    name: string;
+    description: string;
+    isQuickAdd: boolean;
+    isPublic: boolean;
+    trackUpdates: boolean;
+    color: string;
+    icon: number;
 };
 
 export type CreateTagCommand = {
-	name: string;
-	description: string | null;
-	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+    name: string;
+    description: string | null;
+    namespace: "ContentWarning" | "Genre" | "Franchise" | null;
 };
 
 export type CreateVoteCommand = {
-	storyId: number;
+    storyId: number;
 };
 
 export type DeleteVoteCommand = {
-	storyId: number;
+    storyId: number;
 };
 
 export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
@@ -89,274 +89,274 @@ export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThre
 export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
 
 export type FaqDto = {
-	id: number;
-	question: string;
-	answer: string;
-	answerRendered: string;
+    id: number;
+    question: string;
+    answer: string;
+    answerRendered: string;
 };
 
 export type FollowUserCommand = {
-	name: string;
+    name: string;
 };
 
 export type FullQuoteDto = {
-	id: number;
-	body: string;
-	author: string;
+    id: number;
+    body: string;
+    author: string;
 };
 
 export type GetClubsWithStoryResult = {
-	id: number;
-	name: string;
-	icon: string;
-	folders: string[];
+    id: number;
+    name: string;
+    icon: string;
+    folders: string[];
 };
 
 export type GetFolderResult = {
-	id: number;
-	name: string;
-	slug: string;
-	canAdd: boolean;
+    id: number;
+    name: string;
+    slug: string;
+    canAdd: boolean;
 };
 
 export type GetJoinedClubsResponse = {
-	id: number;
-	name: string;
-	icon: string;
+    id: number;
+    name: string;
+    icon: string;
 };
 
 export type GetRevisionResult = {
-	editTime: Date;
-	body: string;
+    editTime: Date;
+    body: string;
 };
 
 export type GetSignInDataResult = {
-	avatar: string;
-	title: string | null;
+    avatar: string;
+    title: string | null;
 };
 
 export type GetThreadDetailsResult = {
-	perPage: number;
-	minCommentLength: number;
-	maxCommentLength: number;
-	source: CommentSource;
-	isLocked: boolean;
+    perPage: number;
+    minCommentLength: number;
+    maxCommentLength: number;
+    source: CommentSource;
+    isLocked: boolean;
 };
 
 export type GetUserNotificationsResult = {
-	id: number;
-	body: string | null;
-	url: string;
-	dateTime: Date;
-	event: ENotificationEvent;
-	message: string;
+    id: number;
+    body: string | null;
+    url: string;
+    dateTime: Date;
+    event: ENotificationEvent;
+    message: string;
 };
 
 export type IFormFile = Blob;
 
 export type InviteCodeDto = {
-	id: number;
-	code: string;
-	normalizedCode: string;
-	usedByUserName: string | null;
-	issuedByUserName: string;
-	issueDate: Date;
-	usedDate: Date | null;
+    id: number;
+    code: string;
+    normalizedCode: string;
+    usedByUserName: string | null;
+    issuedByUserName: string;
+    issueDate: Date;
+    usedDate: Date | null;
 };
 
 export type IssueInviteCodeCommand = object;
 
 export type JoinClubCommand = {
-	clubId: number;
+    clubId: number;
 };
 
 export type LeaveClubCommand = {
-	clubId: number;
+    clubId: number;
 };
 
 export type LockThreadCommand = {
-	threadId: number;
+    threadId: number;
 };
 
 export type MarkChapterAsReadCommand = {
-	chapter: number;
-	story: number;
+    chapter: number;
+    story: number;
 };
 
 export type MarkChapterAsUnreadCommand = {
-	chapter: number;
-	story: number;
+    chapter: number;
+    story: number;
 };
 
 export type None = undefined;
 
 export type QuickShelvesResult = {
-	id: number;
-	name: string;
-	color: string | null;
-	iconName: string | null;
-	doesContainBook: boolean;
+    id: number;
+    name: string;
+    color: string | null;
+    iconName: string | null;
+    doesContainBook: boolean;
 };
 
 export type QuoteDto = {
-	body: string;
-	author: string;
+    body: string;
+    author: string;
 };
 
 export type RatingApiDto = {
-	id: number;
-	name: string;
-	description: string;
-	order: number;
-	icon: string;
-	blacklistedByDefault: boolean;
+    id: number;
+    name: string;
+    description: string;
+    order: number;
+    icon: string;
+    blacklistedByDefault: boolean;
 };
 
 export type RemoveBookFromShelfCommand = {
-	shelfId: number;
-	storyId: number;
+    shelfId: number;
+    storyId: number;
 };
 
 export type RemoveBookFromShelfResult = {
-	shelfId: number;
-	storyId: number;
+    shelfId: number;
+    storyId: number;
 };
 
 export type ReportContentCommand = {
-	itemId: number;
-	reason: string;
-	itemType: EReportableContentTypes;
+    itemId: number;
+    reason: string;
+    itemType: EReportableContentTypes;
 };
 
 export type RoleDto = {
-	id: number;
-	name: string;
-	color: string | null;
-	isStaff: boolean;
-	order: number;
+    id: number;
+    name: string;
+    color: string | null;
+    isStaff: boolean;
+    order: number;
 };
 
 export type RoleTinyDto = {
-	name: string;
-	color: string | null;
-	order: number;
+    name: string;
+    color: string | null;
+    order: number;
 };
 
 export type ShelfAddResult = {
-	shelfId: number;
-	storyId: number;
+    shelfId: number;
+    storyId: number;
 };
 
 export type ShelfDto = {
-	id: number;
-	name: string;
-	description: string;
-	isDefault: boolean;
-	isPublic: boolean;
-	isQuickAdd: boolean;
-	trackUpdates: boolean;
-	color: string;
-	storiesCount: number;
-	iconName: string | null;
-	iconId: number | null;
+    id: number;
+    name: string;
+    description: string;
+    isDefault: boolean;
+    isPublic: boolean;
+    isQuickAdd: boolean;
+    trackUpdates: boolean;
+    color: string;
+    storiesCount: number;
+    iconName: string | null;
+    iconId: number | null;
 };
 
 export type ShelfResult = {
-	id: number;
-	name: string;
-	color: string | null;
-	iconName: string | null;
-	doesContainBook: boolean;
+    id: number;
+    name: string;
+    color: string | null;
+    iconName: string | null;
+    doesContainBook: boolean;
 };
 
 export type SubscribeCommentsThreadCommand = {
-	threadId: number;
+    threadId: number;
 };
 
 export type TagDto = {
-	id: number;
-	name: string;
-	slug: string;
-	description: string | null;
-	namespace: "ContentWarning" | "Genre" | "Franchise";
-	namespaceColor: string;
-	namespaceId: number;
+    id: number;
+    name: string;
+    slug: string;
+    description: string | null;
+    namespace: "ContentWarning" | "Genre" | "Franchise";
+    namespaceColor: string;
+    namespaceId: number;
 };
 
 export type TestControllerBpost = {
-	title: string;
-	hashtags: string[];
+    title: string;
+    hashtags: string[];
 };
 
 export type UnblockUserCommand = {
-	name: string;
+    name: string;
 };
 
 export type UnfollowUserCommand = {
-	name: string;
+    name: string;
 };
 
 export type UpdateCommentCommand = {
-	body: string;
-	commentId: number;
+    body: string;
+    commentId: number;
 };
 
 export type UpdateCommentResponse = {
-	body: string;
-	editTime: Date;
+    body: string;
+    editTime: Date;
 };
 
 export type UpdateFaqCommand = {
-	id: number;
-	question: string;
-	answer: string;
+    id: number;
+    question: string;
+    answer: string;
 };
 
 export type UpdateQuoteCommand = {
-	id: number;
-	body: string;
-	author: string;
+    id: number;
+    body: string;
+    author: string;
 };
 
 export type UpdateRoleCommand = {
-	id: number;
-	name: string;
-	isStaff: boolean;
-	color: string;
-	order: number;
+    id: number;
+    name: string;
+    isStaff: boolean;
+    color: string;
+    order: number;
 };
 
 export type UpdateRolesCommand = {
-	userId: number;
-	roles: number[];
+    userId: number;
+    roles: number[];
 };
 
 export type UpdateShelfCommand = {
-	id: number;
-	name: string;
-	description: string;
-	isQuickAdd: boolean;
-	isPublic: boolean;
-	trackUpdates: boolean;
-	color: string;
-	icon: number;
+    id: number;
+    name: string;
+    description: string;
+    isQuickAdd: boolean;
+    isPublic: boolean;
+    trackUpdates: boolean;
+    color: string;
+    icon: number;
 };
 
 export type UpdateTagCommand = {
-	id: number;
-	name: string | null;
-	description: string | null;
-	namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+    id: number;
+    name: string | null;
+    description: string | null;
+    namespace: "ContentWarning" | "Genre" | "Franchise" | null;
 };
 
 export type UserSimpleDto = {
-	userName: string;
-	avatar: string;
-	title: string;
-	roles: RoleTinyDto[];
+    userName: string;
+    avatar: string;
+    title: string;
+    roles: RoleTinyDto[];
 } | null;
 
 export type VoteResult = {
-	didVote: boolean;
-	count: number;
+    didVote: boolean;
+    count: number;
 };

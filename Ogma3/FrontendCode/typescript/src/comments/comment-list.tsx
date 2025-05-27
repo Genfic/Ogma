@@ -2,6 +2,7 @@ import { type Component, createEffect, createMemo, createResource, createSignal,
 import { GetApiComments } from "@g/paths-public";
 import { CommentListPagination } from "./comment-list-pagination";
 import type { CommentDto } from "@g/types-public";
+import { Comment } from "./comment";
 
 export interface CommentListFunctions {
 	submitted: () => void;
@@ -17,10 +18,13 @@ export const CommentList: Component<Props> = (props) => {
 	const [highlight, setHighlight] = createSignal(0);
 
 	const [commentsData] = createResource(
-		() => [props.id, currentPage()] as const,
+		() => [props.id, currentPage(), highlight()] as const,
 		async ([id, page]) => {
 			console.log(`Fetching page ${currentPage()}`);
-			const res = await GetApiComments(id, page, highlight());
+			const res = await GetApiComments(id, page, highlight(), {
+				// TODO: Remove after new comment system is done
+				"X-Markdown": "true",
+			});
 			if (!res.ok) {
 				throw new Error(res.error ?? res.statusText);
 			}
@@ -67,6 +71,7 @@ export const CommentList: Component<Props> = (props) => {
 	onMount(() => {
 		props.ref?.({
 			submitted: () => {
+				console.log("Submitted");
 				setCurrentPage(1);
 				setHighlight(totalComments() + 1);
 			},
@@ -95,25 +100,7 @@ export const CommentList: Component<Props> = (props) => {
 	return (
 		<div>
 			{pagination()}
-			<For each={comments()}>
-				{(c) => (
-					<div
-						style={{
-							display: "flex",
-							"flex-direction": "column",
-							border: "1px solid var(--foreground-25)",
-							padding: "1rem",
-							gap: "5px",
-						}}
-					>
-						<span>
-							{c.id} : {c.key}
-						</span>
-						<span>{c.author?.userName}</span>
-						<div innerHTML={c.body ?? ""} />
-					</div>
-				)}
-			</For>
+			<For each={comments()}>{(c) => <Comment {...{ ...c, marked: c.key === highlight() }} />}</For>
 			{pagination()}
 		</div>
 	);
