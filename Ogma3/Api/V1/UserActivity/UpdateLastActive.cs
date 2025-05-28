@@ -15,9 +15,10 @@ using ReturnType = Results<Ok<int>, NoContent>;
 [MapMethod("api/useractivity", "HEAD")]
 public static partial class UpdateLastActive
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery()
-		.WithName(nameof(UpdateLastActive));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.DisableAntiforgery()
+			.WithName(nameof(UpdateLastActive));
 
 	[UsedImplicitly]
 	public sealed record Command;
@@ -31,13 +32,15 @@ public static partial class UpdateLastActive
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.NoContent();
 
-		var rows = await context.Users
-			.Where(u => u.Id == uid)
-			.ExecuteUpdateAsync(
-				setters => setters.SetProperty(u => u.LastActive, DateTimeOffset.UtcNow),
-				cancellationToken
-			);
+		var rows = await CompiledQuery(context, uid);
 
 		return TypedResults.Ok(rows);
 	}
+
+	private static readonly Func<ApplicationDbContext, long, Task<int>> CompiledQuery =
+		EF.CompileAsyncQuery(static (ApplicationDbContext context, long uid)
+			=> context.Users
+				.TagWith(nameof(UpdateLastActive))
+				.Where(u => u.Id == uid)
+				.ExecuteUpdate(setters => setters.SetProperty(u => u.LastActive, DateTimeOffset.UtcNow)));
 }

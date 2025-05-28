@@ -2,6 +2,10 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var emulateProd = args.Contains("--emulate-prod");
 
+var garnet = builder.AddGarnet("garnet")
+	.WithDataVolume()
+	.WithPersistence();
+
 var database = builder
 	.AddPostgres("postgres")
 	.WithDataVolume()
@@ -13,6 +17,7 @@ builder
 	.AddProject<Projects.Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
 	.WithExternalHttpEndpoints()
 	.WithReference(database)
+	.WithReference(garnet)
 	.WaitFor(database);
 
 builder.Build().Run();

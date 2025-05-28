@@ -130,7 +130,8 @@ public static class Startup
 		// Add services
 		services
 			.AddScoped<IUserService, UserService>()
-			.AddSingleton<ICodeGenerator, CodeGenerator>();
+			.AddSingleton<ICodeGenerator, CodeGenerator>()
+			.AddScoped<UserActivityService>();
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();

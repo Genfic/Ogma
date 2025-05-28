@@ -47,7 +47,7 @@ public static partial class UpdateTag
 		var res = await context.Tags
 			.Where(t => t.Id == request.Id)
 			.ExecuteUpdateAsync(tag => tag
-					.SetProperty(t => t.Name, t => request.Name ?? t.Name)
+					.SetProperty(t => t.Name, t => request.Name)
 					.SetProperty(t => t.Description, request.Description)
 					.SetProperty(t => t.Namespace, request.Namespace),
 				cancellationToken);

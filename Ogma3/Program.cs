@@ -55,6 +55,7 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.ConfigureServices();
 
 builder.AddServiceDefaults();
+builder.AddRedisClient("garnet");
 
 var app = builder.Build();
 
