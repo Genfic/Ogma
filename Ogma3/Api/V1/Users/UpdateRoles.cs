@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,8 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateRoles
 {
-	public sealed record Command(long UserId, IEnumerable<long> Roles);
+	[Validate]
+	public sealed partial record Command(long UserId, IEnumerable<long> Roles) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

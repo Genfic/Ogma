@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -18,8 +18,8 @@ public static partial class GetReadChapters
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
 		.DisableAntiforgery();
 
-	[UsedImplicitly]
-	public sealed record Query(long Id);
+	[Validate]
+	public sealed partial record Query(long Id) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,

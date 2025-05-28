@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -16,8 +16,8 @@ public static partial class GetSingleFaq
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetSingleFaq));
 
-	[UsedImplicitly]
-	public sealed record Query(long FaqId);
+	[Validate]
+	public sealed partial record Query(long FaqId) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> Handle(
 		Query request,

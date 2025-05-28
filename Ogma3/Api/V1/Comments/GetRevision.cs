@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -10,7 +11,8 @@ namespace Ogma3.Api.V1.Comments;
 [MapGet("api/comments/{commentId:long}/revisions")]
 public static partial class GetRevision
 {
-	public sealed record Query(long CommentId);
+	[Validate]
+	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<Result[]>> HandleAsync(
 		Query request,
@@ -25,6 +27,6 @@ public static partial class GetRevision
 
 		return TypedResults.Ok(revisions);
 	}
-	
+
 	public sealed record Result(DateTimeOffset EditTime, string Body);
 }

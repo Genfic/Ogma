@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -13,8 +13,8 @@ namespace Ogma3.Api.V1.Tags;
 [MapGet("api/tags/search")]
 public static partial class SearchTags
 {
-	[UsedImplicitly]
-	public sealed record Query(string SearchString);
+	[Validate]
+	public sealed partial record Query(string SearchString) : IValidationTarget<Query>;
 
 	private static async ValueTask<Results<Ok<TagDto[]>, BadRequest>> HandleAsync(
 		Query request,
@@ -28,16 +28,16 @@ public static partial class SearchTags
 		{
 			[{ Length: > 0 } ns, { Length: > 0 } name] => (Tag t)
 				=> EF.Functions.ILike(t.Name, $"%{name}%") && EF.Functions.ILike(t.Namespace.ToString() ?? string.Empty, $"%{ns}%"),
-			
-			[{ Length: > 0 } ns, { Length: <= 0 }] 
+
+			[{ Length: > 0 } ns, { Length: <= 0 }]
 				=> (Tag t) => EF.Functions.ILike(t.Namespace.ToString() ?? string.Empty, $"%{ns}%"),
-			
-			[{ Length: <= 0 }, { Length: > 0 } name] 
+
+			[{ Length: <= 0 }, { Length: > 0 } name]
 				=> (Tag t) => EF.Functions.ILike(t.Name, $"%{name}%"),
-			
-			[{ Length: > 0 } q] => (Tag t) 
+
+			[{ Length: > 0 } q] => (Tag t)
 				=> EF.Functions.ILike(t.Name, $"%{q}%") || EF.Functions.ILike(t.Namespace.ToString() ?? string.Empty, $"%{q}%"),
-			
+
 			_ => null,
 		};
 		// ReSharper enable EntityFramework.ClientSideDbFunctionCall

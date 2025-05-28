@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Ogma3;
@@ -11,6 +13,7 @@ using Serilog;
 using Serilog.Events;
 
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+[assembly: Behaviors(typeof(ValidationBehavior<,>))]
 
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
 Console.OutputEncoding = Encoding.UTF8;

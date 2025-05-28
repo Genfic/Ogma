@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +18,8 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>>;
 [Authorize]
 public static partial class MarkChapterAsRead
 {
-	[UsedImplicitly]
-	public sealed record Command(long Chapter, long Story);
+	[Validate]
+	public sealed partial record Command(long Chapter, long Story) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

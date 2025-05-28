@@ -20,7 +20,7 @@ public static partial class GetIssuedInviteCodes
 {
 	[UsedImplicitly]
 	public sealed record Query;
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query _,
 		ApplicationDbContext context,
@@ -29,7 +29,7 @@ public static partial class GetIssuedInviteCodes
 	)
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
-		
+
 		var codes = await context.InviteCodes
 			.Where(ic => ic.IssuedById == uid)
 			.OrderByDescending(ic => ic.IssueDate)

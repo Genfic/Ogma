@@ -36,6 +36,5 @@ public static partial class GetJoinedClubs
 		return TypedResults.Ok(clubs);
 	}
 
-	[UsedImplicitly]
 	public sealed record Response(long Id, string Name, string Icon);
 }

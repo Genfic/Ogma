@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,20 +17,19 @@ using ReturnType = Results<Ok, NotFound, Conflict<string>>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateTag
 {
-	public sealed record Command(long Id, string? Name, string? Description, ETagNamespace? Namespace);
+	[Validate]
+	public sealed partial record Command
+	(
+		long Id,
+		[property: MinLength(CTConfig.Tag.MinNameLength)]
+		[property: MaxLength(CTConfig.Tag.MaxNameLength)]
+		string Name,
+		[property: MaxLength(CTConfig.Tag.MaxDescLength)]
+		string? Description,
+		ETagNamespace? Namespace
+	) : IValidationTarget<Command>;
 
-	public sealed class CommandValidator : AbstractValidator<Command>
-	{
-		public CommandValidator()
-		{
-			RuleFor(t => t.Name)
-				.MinimumLength(CTConfig.Tag.MinNameLength)
-				.MaximumLength(CTConfig.Tag.MaxNameLength);
-			RuleFor(t => t.Description)
-				.MaximumLength(CTConfig.Tag.MaxDescLength);
-		}
-	}
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,

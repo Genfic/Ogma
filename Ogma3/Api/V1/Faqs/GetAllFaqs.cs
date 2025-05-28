@@ -14,7 +14,7 @@ using ReturnType = Ok<FaqDto[]>;
 public static partial class GetAllFaqs
 {
 	public sealed record Query;
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query _,
 		ApplicationDbContext context,

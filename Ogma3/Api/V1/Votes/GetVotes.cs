@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 [Authorize]
 public static partial class GetVotes
 {
-	public sealed record Query(long StoryId);
-	
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,

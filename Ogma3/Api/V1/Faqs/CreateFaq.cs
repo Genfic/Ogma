@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Markdig;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -18,15 +18,13 @@ using ReturnType = CreatedAtRoute<FaqDto>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateFaq
 {
-	public sealed record Command(string Question, string Answer);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator()
-		{
-			RuleFor(f => f.Question).NotEmpty();
-			RuleFor(f => f.Answer).NotEmpty();
-		}
+		[NotEmpty]
+		public required string Question { get; init; }
+		[NotEmpty]
+		public required string Answer { get; init; }
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(

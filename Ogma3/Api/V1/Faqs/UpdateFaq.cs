@@ -1,7 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Markdig;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -19,16 +18,14 @@ using ReturnType = Results<NotFound, Ok>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateFaq
 {
-	public sealed record Command(long Id, string Question, string Answer);
-
-	[UsedImplicitly]
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator()
-		{
-			RuleFor(f => f.Question).NotEmpty();
-			RuleFor(f => f.Answer).NotEmpty();
-		}
+		public required long Id { get; init; }
+		[NotEmpty]
+		public required string Question { get; init; }
+		[NotEmpty]
+		public required string Answer { get; init; }
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(

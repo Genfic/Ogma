@@ -1,7 +1,24 @@
 using FluentValidation;
 using FluentValidation.Validators;
+using Immediate.Validations.Shared;
 
 namespace Ogma3.Infrastructure.CustomValidators;
+
+public sealed class FileExtensionAttribute(params string[] allowedExtensions): ValidatorAttribute
+{
+	public static bool ValidateProperty(IFormFile? value, string[] allowedExtensions)
+	{
+		if (value is null)
+		{
+			return true;
+		}
+
+		var extension = Path.GetExtension(value.FileName);
+		return allowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
+	}
+
+	public static string DefaultMessage => "{PropertyName} must be a file with one of the following extensions: {AllowedExtensionsValue}";
+}
 
 public sealed class FileExtensionValidator<T>(string[] allowedExtensions) : PropertyValidator<T, IFormFile?>
 {

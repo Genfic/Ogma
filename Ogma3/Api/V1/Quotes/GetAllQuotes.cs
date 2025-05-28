@@ -27,5 +27,5 @@ public static partial class GetAllQuotes
 
 		return TypedResults.Ok(quotes);
 	}
-	
+
 }

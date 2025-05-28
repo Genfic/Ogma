@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +11,16 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories;
 
-using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<RemoveBookFromShelfResult>>;
+using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<RemoveBookFromShelf.Result>>;
 
 [Handler]
 [MapDelete("api/ShelfStories")]
 [Authorize]
 public static partial class RemoveBookFromShelf
 {
-	[UsedImplicitly]
-	public sealed record Command(long ShelfId, long StoryId);
-	
+	[Validate]
+	public sealed partial record Command(long ShelfId, long StoryId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		[FromBody]Command request,
 		ApplicationDbContext context,
@@ -39,10 +39,10 @@ public static partial class RemoveBookFromShelf
 			.ExecuteDeleteAsync(cancellationToken);
 
 		await context.SaveChangesAsync(cancellationToken);
-		return affectedRows > 0 
-			? TypedResults.Ok(new RemoveBookFromShelfResult(shelfId, storyId)) 
+		return affectedRows > 0
+			? TypedResults.Ok(new Result(shelfId, storyId))
 			: TypedResults.NotFound();
 	}
-}
 
-public sealed record RemoveBookFromShelfResult(long ShelfId, long StoryId);
+	public sealed record Result(long ShelfId, long StoryId);
+}

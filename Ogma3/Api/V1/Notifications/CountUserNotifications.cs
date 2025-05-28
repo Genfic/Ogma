@@ -17,7 +17,7 @@ using ReturnType = Results<Ok<int>, NoContent>;
 public static partial class CountUserNotifications
 {
 	public sealed record Query;
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query _,
 		ApplicationDbContext context,

@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -18,24 +18,22 @@ namespace Ogma3.Api.V1.Ratings;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateRating
 {
-	public sealed record Command(string Name, string Description, bool BlacklistedByDefault, byte Order, IFormFile Icon);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator()
-		{
-			RuleFor(r => r.Name)
-				.MinimumLength(CTConfig.Rating.MinNameLength)
-				.MaximumLength(CTConfig.Rating.MaxNameLength);
-			RuleFor(r => r.Description)
-				.MinimumLength(CTConfig.Rating.MinDescriptionLength)
-				.MaximumLength(CTConfig.Rating.MaxDescriptionLength);
-			RuleFor(r => r.Icon)
-				.FileHasExtension(".svg")
-				.FileSmallerThan(100 * 1024);
-		}
+		[MinLength(CTConfig.Rating.MinNameLength)]
+		[MaxLength(CTConfig.Rating.MaxNameLength)]
+		public required string Name { get; init; }
+		[MinLength(CTConfig.Rating.MinDescriptionLength)]
+		[MaxLength(CTConfig.Rating.MaxDescriptionLength)]
+		public required string Description { get; init; }
+		public required bool BlacklistedByDefault { get; init; }
+		public required byte Order { get; init; }
+		[FileExtension(".svg")]
+		[FileSize(100 * 1024)]
+		public required IFormFile Icon { get; init; }
 	}
-	
+
 	private static async ValueTask<CreatedAtRoute<RatingApiDto>> HandleAsync(
 		[FromForm] Command request,
 		ApplicationDbContext context,

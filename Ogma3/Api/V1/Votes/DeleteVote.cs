@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>, NotFound>;
 [Authorize]
 public static partial class DeleteVote
 {
-	[UsedImplicitly]
-	public sealed record Command(long StoryId);
-	
+	[Validate]
+	public sealed partial record Command(long StoryId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		[FromBody] Command request,
 		ApplicationDbContext context,

@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [Authorize]
 public static partial class BlockUser
 {
-	public sealed record Command(string Name);
-	
+	[Validate]
+	public sealed partial record Command(string Name) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,
@@ -32,7 +34,7 @@ public static partial class BlockUser
 			.Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
 			.Select(u => (long?)u.Id)
 			.FirstOrDefaultAsync(cancellationToken);
-		
+
 		if (targetUserId is not {} targetId) return TypedResults.NotFound();
 
 		var exists = await context.BlockedUsers

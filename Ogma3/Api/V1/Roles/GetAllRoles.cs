@@ -12,7 +12,7 @@ namespace Ogma3.Api.V1.Roles;
 public static partial class GetAllRoles
 {
 	public sealed record Query;
-	
+
 	private static async ValueTask<Ok<RoleDto[]>> HandleAsync(
 		Query _,
 		ApplicationDbContext context,

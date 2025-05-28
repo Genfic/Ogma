@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -18,9 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<GetThreadDetails
 [MapGet("api/CommentsThread/{threadId:long}")]
 public static partial class GetThreadDetails
 {
-	[UsedImplicitly]
-	public sealed record Query(long ThreadId);
-	
+	[Validate]
+	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,
@@ -31,7 +31,7 @@ public static partial class GetThreadDetails
 	)
 	{
 		var isStaff = userService.User?.HasAnyRole(RoleNames.Admin, RoleNames.Moderator) ?? false;
-		
+
 		var perPage = config.CommentsPerPage;
 		const int minCommentLength = CTConfig.Comment.MinBodyLength;
 		const int maxCommentLength = CTConfig.Comment.MaxBodyLength;
@@ -47,7 +47,7 @@ public static partial class GetThreadDetails
 				Locked = ct.IsLocked,
 			})
 			.FirstOrDefaultAsync(cancellationToken);
-		
+
 		if (threadData is null) return TypedResults.NotFound();
 
 		var source = threadData switch
@@ -58,12 +58,12 @@ public static partial class GetThreadDetails
 			{ Thread: true } => CommentSource.ForumPost,
 			_ => throw new SwitchExpressionException(),
 		};
-		
+
 		if (isStaff)
 		{
 			httpContextAccessor.HttpContext?.Response.Headers.Append("X-IsStaff", isStaff.ToString());
 		}
-		
+
 		return TypedResults.Ok(new Result(perPage, minCommentLength, maxCommentLength, source, threadData.Locked));
 	}
 

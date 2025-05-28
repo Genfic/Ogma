@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
@@ -19,17 +19,15 @@ public static partial class CreateQuote
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
 		.DisableAntiforgery();
 
-	public sealed record Command(string Body, string Author);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator()
-		{
-			RuleFor(q => q.Body).NotEmpty();
-			RuleFor(q => q.Author).NotEmpty();
-		}
+		[NotEmpty]
+		public required string Body { get; init; }
+		[NotEmpty]
+		public required string Author { get; init; }
 	}
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,
@@ -37,16 +35,15 @@ public static partial class CreateQuote
 		CancellationToken cancellationToken
 	)
 	{
-		var (body, author) = request;
 		var quote = new Quote
 		{
-			Body = body,
-			Author = author,
+			Body = request.Body,
+			Author = request.Author,
 		};
 		context.Quotes.Add(quote);
 
 		await context.SaveChangesAsync(cancellationToken);
-		
+
 		logger.LogInformation("Quote created at route {Name}", nameof(GetSingleQuote));
 
 		return TypedResults.CreatedAtRoute(

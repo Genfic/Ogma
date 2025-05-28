@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,9 @@ using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 [Authorize]
 public static partial class DeleteNotification
 {
-	public sealed record Command(long Id);
-	
+	[Validate]
+	public sealed partial record Command(long Id) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,

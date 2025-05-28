@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,9 @@ public static partial class GetShelf
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetShelf));
 
-	public sealed record Query(long ShelfId);
-	
+	[Validate]
+	public sealed partial record Query(long ShelfId) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,

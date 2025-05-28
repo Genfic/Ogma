@@ -236,6 +236,9 @@ public static class Startup
 		services.AddOgma3Handlers();
 		services.AddOgma3Behaviors();
 
+		// Problem details
+		services.AddProblemDetails(ProblemDetailsMiddleware.ConfigureProblemDetails);
+
 		// OpenAPI
 		services.AddOpenApi("public", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();

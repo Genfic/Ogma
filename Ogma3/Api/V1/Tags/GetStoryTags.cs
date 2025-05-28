@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -13,7 +14,8 @@ using ReturnType = Results<Ok<TagDto[]>, NotFound>;
 [MapGet("api/tags/story/{storyId:long}")]
 public static partial class GetStoryTags
 {
-	public sealed record Query(long StoryId);
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
 	{

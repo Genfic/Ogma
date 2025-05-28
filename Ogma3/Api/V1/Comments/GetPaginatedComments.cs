@@ -1,18 +1,15 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Markdig;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
-using PostmarkDotNet;
 
 namespace Ogma3.Api.V1.Comments;
 
@@ -26,8 +23,8 @@ public static partial class GetPaginatedComments
 		=> endpoint
 			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.");
 
-	[UsedImplicitly]
-	public sealed record Query(long Thread, int? Page, long? Highlight);
+	[Validate]
+	public sealed partial record Query(long Thread, int? Page, long? Highlight) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<PaginationResult<CommentDto>>> HandleAsync(
 		Query request,

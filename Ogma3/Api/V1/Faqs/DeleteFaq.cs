@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ using ReturnType = Results<NotFound, Ok<long>>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteFaq
 {
-	public sealed record Command(long Id);
+	[Validate]
+	public sealed partial record Command(long Id) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

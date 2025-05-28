@@ -18,7 +18,7 @@ public static partial class UpdateLastActive
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
 		.DisableAntiforgery()
 		.WithName(nameof(UpdateLastActive));
-	
+
 	[UsedImplicitly]
 	public sealed record Command;
 

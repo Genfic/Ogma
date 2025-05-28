@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +20,8 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class LockThread
 {
-	[UsedImplicitly]
-	public sealed record Command(long ThreadId);
+	[Validate]
+	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

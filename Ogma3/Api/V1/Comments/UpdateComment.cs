@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Markdig;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -20,14 +20,15 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<UpdateComment.Re
 [Authorize]
 public static partial class UpdateComment
 {
-	public sealed record Command(string Body, long CommentId);
 
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator()
-			=> RuleFor(c => c.Body)
-				.MinimumLength(CTConfig.Comment.MinBodyLength)
-				.MaximumLength(CTConfig.Comment.MaxBodyLength);
+		[MaxLength(CTConfig.Comment.MaxBodyLength)]
+		[MinLength(CTConfig.Comment.MinBodyLength)]
+		public required string Body { get; init; }
+		public required long CommentId { get; init; }
+
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(
@@ -39,10 +40,8 @@ public static partial class UpdateComment
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
-		var (body, commentId) = request;
-
 		var comment = await context.Comments
-			.Where(c => c.Id == commentId)
+			.Where(c => c.Id == request.CommentId)
 			.Where(c => c.AuthorId == uid)
 			.FirstOrDefaultAsync(cancellationToken);
 
@@ -56,7 +55,7 @@ public static partial class UpdateComment
 		});
 
 		// Edit the comment
-		comment.Body = body;
+		comment.Body = request.Body;
 
 		await context.SaveChangesAsync(cancellationToken);
 

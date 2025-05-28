@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -15,7 +15,8 @@ using ReturnType = Results<Ok<GetFolder.Result[]>, UnauthorizedHttpResult>;
 [MapGet("api/folders")]
 public static partial class GetFolder
 {
-	public sealed record Query(long ClubId);
+	[Validate]
+	public sealed partial record Query(long ClubId) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
@@ -41,6 +42,5 @@ public static partial class GetFolder
 		return TypedResults.Ok(folders);
 	}
 
-	[UsedImplicitly]
 	public sealed record Result(long Id, string Name, string Slug, bool CanAdd);
 }

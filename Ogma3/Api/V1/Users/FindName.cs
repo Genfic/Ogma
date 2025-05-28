@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +16,9 @@ using ReturnType = Results<Ok<string[]>, UnprocessableEntity<string>>;
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
 public static partial class FindName
 {
-	[UsedImplicitly]
-	public sealed record Query(string Name);
-	
+	[Validate]
+	public sealed partial record Query(string Name) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,

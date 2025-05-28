@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -12,9 +12,9 @@ namespace Ogma3.Api.V1.SignIn;
 [MapGet("api/signin")]
 public static partial class GetSignInData
 {
-	[UsedImplicitly]
-	public sealed record Query(string Name);
-	
+	[Validate]
+	public sealed partial record Query(string Name) : IValidationTarget<Query>;
+
 	private static async ValueTask<Ok<Result>> HandleAsync(
 		Query request,
 		ApplicationDbContext context,
@@ -30,6 +30,6 @@ public static partial class GetSignInData
 
 		return TypedResults.Ok(data);
 	}
-	
+
 	public sealed record Result(string Avatar, string? Title);
 }

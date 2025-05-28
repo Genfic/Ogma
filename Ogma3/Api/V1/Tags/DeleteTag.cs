@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,9 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteTag
 {
-	public sealed record Command(long TagId);
-	
+	[Validate]
+	public sealed partial record Command(long TagId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,

@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +19,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, BadRequest<string>>
 [Authorize]
 public static partial class LeaveClub
 {
-	[UsedImplicitly]
-	public sealed record Command(long ClubId);
-	
+	[Validate]
+	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		[FromBody] Command request,
 		ApplicationDbContext context,

@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -16,8 +16,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound<string>, Conflict<st
 [MapPost("api/folders/AddStory")]
 public static partial class AddStoryToFolder
 {
-	public sealed record Command(long FolderId, long StoryId);
-	
+	[Validate]
+	public sealed partial record Command(long FolderId, long StoryId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,
@@ -57,6 +58,5 @@ public static partial class AddStoryToFolder
 		return TypedResults.Ok(new Response(fs.FolderId, fs.StoryId, fs.Added, fs.AddedById));
 	}
 
-	[UsedImplicitly]
 	public sealed record Response(long FolderId, long StoryId, DateTimeOffset Added, long AddedById);
 }

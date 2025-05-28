@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [Authorize]
 public static partial class UnblockUser
 {
-	public sealed record Command(string Name);
-	
+	[Validate]
+	public sealed partial record Command(string Name) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		[FromBody] Command request,
 		ApplicationDbContext context,

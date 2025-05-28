@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,8 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<long>, NotFound>;
 [Authorize]
 public static partial class DeleteShelf
 {
-	public sealed record Command(long ShelfId);
+	[Validate]
+	public sealed partial record Command(long ShelfId) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

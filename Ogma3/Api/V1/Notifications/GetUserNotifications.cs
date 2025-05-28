@@ -21,7 +21,7 @@ public static partial class GetUserNotifications
 {
 	[UsedImplicitly]
 	public sealed record Query;
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query _,
 		ApplicationDbContext context,
@@ -30,7 +30,7 @@ public static partial class GetUserNotifications
 	)
 	{
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
-		
+
 		var notifications = await context.NotificationRecipients
 			.Where(nr => nr.RecipientId == uid)
 			.Select(nr => nr.Notification)

@@ -20,7 +20,7 @@ public static partial class GetRandomQuote
 
 	[UsedImplicitly]
 	public sealed record Query;
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
 	{
 		var quote = await context.Database.SqlQueryRaw<QuoteDto>("""

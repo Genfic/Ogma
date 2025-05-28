@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -11,8 +11,8 @@ namespace Ogma3.Api.V1;
 [MapGet("api/test")]
 public static partial class TestController
 {
-	[UsedImplicitly]
-	public sealed record Query(string[] Tags);
+	[Validate]
+	public sealed partial record Query(string[] Tags) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<List<Bpost>>> HandleAsync(Query q, ApplicationDbContext db, CancellationToken ct)
 	{

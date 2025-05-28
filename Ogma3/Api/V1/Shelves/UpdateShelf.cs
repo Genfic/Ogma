@@ -1,4 +1,4 @@
-using FluentValidation;
+using System.ComponentModel.DataAnnotations;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -20,31 +20,19 @@ public static partial class UpdateShelf
 	public sealed record Command
 	(
 		long Id,
+		[property: MinLength(CTConfig.Shelf.MinNameLength)]
+		[property: MaxLength(CTConfig.Shelf.MaxNameLength)]
 		string Name,
+		[property: MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
 		string Description,
 		bool IsQuickAdd,
 		bool IsPublic,
 		bool TrackUpdates,
+		[property: MaxLength(7)]
 		string Color,
 		long Icon
 	);
 
-	public sealed class CommandValidator : AbstractValidator<Command>
-	{
-		public CommandValidator()
-		{
-			RuleFor(s => s.Id)
-				.NotEmpty();
-			RuleFor(s => s.Name)
-				.MaximumLength(CTConfig.Shelf.MaxNameLength)
-				.MinimumLength(CTConfig.Shelf.MinNameLength);
-			RuleFor(s => s.Description)
-				.MaximumLength(CTConfig.Shelf.MaxDescriptionLength);
-			RuleFor(s => s.Color)
-				.Length(7);
-		}
-	}
-	
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,

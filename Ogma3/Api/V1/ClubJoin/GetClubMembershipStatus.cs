@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +17,9 @@ using ReturnType = Ok<bool>;
 [Authorize]
 public static partial class GetClubMembershipStatus
 {
-	[UsedImplicitly]
-	public sealed record Query(long ClubId);
-	
+	[Validate]
+	public sealed partial record Query(long ClubId) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,

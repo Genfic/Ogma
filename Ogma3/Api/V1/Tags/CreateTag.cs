@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,19 +17,16 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateTag
 {
-	public sealed record Command(string Name, string? Description, ETagNamespace? Namespace);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
-	{
-		public CommandValidator()
-		{
-			RuleFor(t => t.Name)
-				.MinimumLength(CTConfig.Tag.MinNameLength)
-				.MaximumLength(CTConfig.Tag.MaxNameLength);
-			RuleFor(t => t.Description)
-				.MaximumLength(CTConfig.Tag.MaxDescLength);
-		}
-	}
+	[Validate]
+	public sealed partial record Command
+	(
+		[property: MinLength(CTConfig.Tag.MinNameLength)]
+		[property: MaxLength(CTConfig.Tag.MaxNameLength)]
+		string Name,
+		[property: MaxLength(CTConfig.Tag.MaxDescLength)]
+		string? Description,
+		ETagNamespace? Namespace
+	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

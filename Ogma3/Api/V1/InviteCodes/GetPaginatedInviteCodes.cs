@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,8 @@ using ReturnType = Ok<InviteCodeDto[]>;
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class GetPaginatedInviteCodes
 {
-	public sealed record Query(int Page, int PerPage);
+	[Validate]
+	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,

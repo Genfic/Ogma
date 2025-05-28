@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
@@ -20,8 +20,8 @@ public static partial class CreateQuotesFromJson
 		=> endpoint
 			.DisableAntiforgery();
 
-	[UsedImplicitly]
-	public sealed record Query(QuoteDto[] Quotes);
+	[Validate]
+	public sealed partial record Query(QuoteDto[] Quotes) : IValidationTarget<Query>;
 
 	private static async ValueTask<ResponseType> HandleAsync(
 		Query request,

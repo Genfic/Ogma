@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [Authorize]
 public static partial class FollowUser
 {
-	public sealed record Command(string Name);
+	[Validate]
+	public sealed partial record Command(string Name) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -34,7 +36,7 @@ public static partial class FollowUser
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (targetUserId is not {} targetId) return TypedResults.NotFound();
-		
+
 		var exists = await context.FollowedUsers
 			.Where(bu => bu.FollowingUserId == uid && bu.FollowedUserId == targetUserId)
 			.AnyAsync(cancellationToken);

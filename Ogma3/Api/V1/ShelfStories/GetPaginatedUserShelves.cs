@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +10,16 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories;
 
-using ReturnType = Results<UnauthorizedHttpResult, Ok<ShelfResult[]>>;
+using ReturnType = Results<UnauthorizedHttpResult, Ok<GetPaginatedUserShelves.Result[]>>;
 
 [Handler]
 [MapGet("api/ShelfStories/{storyId:long}")]
 [Authorize]
 public static partial class GetPaginatedUserShelves
 {
-	[UsedImplicitly]
-	public sealed record Query(long StoryId, int Page);
-	
+	[Validate]
+	public sealed partial record Query(long StoryId, int Page) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,
@@ -36,7 +36,7 @@ public static partial class GetPaginatedUserShelves
 			.Where(s => !s.IsQuickAdd)
 			.OrderBy(s => s.Id)
 			.Paginate(page, config.ShelvesPerPage)
-			.Select(s => new ShelfResult(
+			.Select(s => new Result(
 				s.Id,
 				s.Name,
 				s.Color,
@@ -47,6 +47,6 @@ public static partial class GetPaginatedUserShelves
 
 		return TypedResults.Ok(shelves);
 	}
-}
 
-public sealed record ShelfResult(long Id, string Name, string? Color, string? IconName, bool DoesContainBook);
+	public sealed record Result(long Id, string Name, string? Color, string? IconName, bool DoesContainBook);
+}

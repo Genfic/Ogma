@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<long>>;
 [Authorize]
 public static partial class DeleteComment
 {
-	public sealed record Command(long CommentId);
-	
+	[Validate]
+	public sealed partial record Command(long CommentId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,

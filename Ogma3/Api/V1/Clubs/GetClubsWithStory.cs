@@ -1,6 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -11,8 +11,8 @@ namespace Ogma3.Api.V1.Clubs;
 [MapGet("api/clubs/story/{storyId:long}")]
 public static partial class GetClubsWithStory
 {
-	[UsedImplicitly]
-	public sealed record Query(long StoryId);
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<Result[]>> HandleAsync(
 		Query request,
@@ -38,6 +38,5 @@ public static partial class GetClubsWithStory
 		return TypedResults.Ok(clubs);
 	}
 
-	[UsedImplicitly]
 	public sealed record Result(long Id, string Name, string Icon, IEnumerable<string> Folders);
 }

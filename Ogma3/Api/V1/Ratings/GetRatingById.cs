@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -16,8 +17,9 @@ public static partial class GetRatingById
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint.WithName(nameof(GetRatingById));
 
-	public sealed record Query(long Id);
-	
+	[Validate]
+	public sealed partial record Query(long Id) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,

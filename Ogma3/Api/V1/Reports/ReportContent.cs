@@ -1,7 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using JetBrains.Annotations;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
@@ -22,14 +21,14 @@ public static partial class ReportContent
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint.RequireRateLimiting(RateLimiting.Reports);
 
-	[UsedImplicitly]
-	public sealed record Command(long ItemId, string Reason, EReportableContentTypes ItemType);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator() => RuleFor(r => r.Reason)
-			.MinimumLength(CTConfig.Report.MinReasonLength)
-			.MaximumLength(CTConfig.Report.MaxReasonLength);
+		public required long ItemId { get; init; }
+		[MinLength(CTConfig.Report.MinReasonLength)]
+		[MaxLength(CTConfig.Report.MaxReasonLength)]
+		public required string Reason { get; init; }
+		public required EReportableContentTypes ItemType { get; init; }
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(

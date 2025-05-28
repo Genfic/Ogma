@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +19,15 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, CreatedAtRoute>;
 [Authorize]
 public static partial class CreateComment
 {
-	public sealed record Command(string Body, long Thread, CommentSource Source);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public CommandValidator() => RuleFor(c => c.Body)
-			.MinimumLength(CTConfig.Comment.MinBodyLength)
-			.MaximumLength(CTConfig.Comment.MaxBodyLength);
+		[MaxLength(CTConfig.Comment.MaxBodyLength)]
+		[MinLength(CTConfig.Comment.MinBodyLength)]
+		public required string Body { get; init; }
+		public required long Thread { get; init; }
+		public required CommentSource Source { get; init; }
+
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(
@@ -61,7 +63,7 @@ public static partial class CreateComment
 		thread.CommentsCount++;
 
 		await context.SaveChangesAsync(cancellationToken);
-		
+
 		// TODO: Make the notification shit better
 		// await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken, [uid]);
 
@@ -88,7 +90,7 @@ public static partial class CreateComment
 	)
 	{
 		if (source != CommentSource.Profile) return false;
-		
+
 		return await context.BlockedUsers
 			.Where(b => b.BlockingUserId == profileOwnerId)
 			.Where(b => b.BlockedUserId == currentUserId)

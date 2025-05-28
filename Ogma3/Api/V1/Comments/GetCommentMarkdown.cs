@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -12,7 +13,8 @@ using ReturnType = Results<Ok<string>, NotFound>;
 [MapGet("api/comments/{commentId:int}/md")]
 public static partial class GetCommentMarkdown
 {
-	public sealed record Query(long CommentId);
+	[Validate]
+	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
 	{

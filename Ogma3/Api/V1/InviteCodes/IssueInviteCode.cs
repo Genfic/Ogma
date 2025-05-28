@@ -19,7 +19,7 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, Ok<Invite
 public static partial class IssueInviteCode
 {
 	public sealed record Command;
-	
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command _,
 		ApplicationDbContext context,
@@ -53,7 +53,7 @@ public static partial class IssueInviteCode
 			.Where(ic => ic.Id == code.Id)
 			.ProjectToDto()
 			.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-		
+
 		return TypedResults.Ok(newCode);
 	}
 }

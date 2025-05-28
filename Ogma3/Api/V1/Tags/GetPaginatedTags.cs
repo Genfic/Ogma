@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -11,7 +12,8 @@ namespace Ogma3.Api.V1.Tags;
 [MapGet("api/tags")]
 public static partial class GetPaginatedTags
 {
-	public sealed record Query(int Page, int PerPage);
+	[Validate]
+	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<TagDto[]>> HandleAsync(
 		Query request,

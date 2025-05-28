@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -14,8 +15,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [MapGet("api/subscriptions/thread")]
 public static partial class GetSubscriptionStatus
 {
-	public sealed record Query(long ThreadId);
-	
+	[Validate]
+	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		ApplicationDbContext context,

@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [MapPost("api/subscriptions/thread")]
 public static partial class SubscribeCommentsThread
 {
-	public sealed record Command(long ThreadId);
+	[Validate]
+	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

@@ -1,6 +1,6 @@
-using FluentValidation;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Caching.Memory;
@@ -8,6 +8,7 @@ using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
+using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.ServiceRegistrations;
@@ -22,18 +23,14 @@ using ReturnType = Results<UnauthorizedHttpResult, CreatedAtRoute<InfractionDto>
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class CreateInfraction
 {
-	public sealed record Command(long UserId, string Reason, DateTimeOffset EndDate, InfractionType Type);
-
-	public sealed class CommandValidator : AbstractValidator<Command>
-	{
-		public CommandValidator()
-		{
-			RuleFor(c => c.UserId).NotNull();
-			RuleFor(c => c.Reason).NotEmpty();
-			RuleFor(c => c.EndDate).NotNull().GreaterThan(DateTimeOffset.UtcNow);
-			RuleFor(c => c.Type).NotNull();
-		}
-	}
+	[Validate]
+	public sealed partial record Command
+	(
+		long UserId,
+		[property: NotEmpty] string Reason,
+		[property: Future] DateTimeOffset EndDate,
+		InfractionType Type
+	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

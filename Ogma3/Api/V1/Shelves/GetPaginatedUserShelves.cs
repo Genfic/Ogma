@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ using ReturnType = Results<Ok<ShelfDto[]>, UnauthorizedHttpResult>;
 [Authorize]
 public static partial class GetPaginatedUserShelves
 {
-	public sealed record Query(string UserName, int Page);
+	[Validate]
+	public sealed partial record Query(string UserName, int Page) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Query request,

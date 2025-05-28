@@ -1,8 +1,23 @@
 using FluentValidation;
 using FluentValidation.Validators;
 using Humanizer;
+using Immediate.Validations.Shared;
 
 namespace Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
+
+public sealed class FileSizeAttribute(int max): ValidatorAttribute
+{
+	public static bool ValidateProperty(IFormFile? value, int max)
+	{
+		if (value is null)
+		{
+			return true;
+		}
+		return value.Length <= max;
+	}
+
+	public static string DefaultMessage => "{PropertyName} must be a file no larger than {MaxValue} bytes";
+}
 
 public sealed class FileSizeValidator<T>(uint max) : PropertyValidator<T, IFormFile?>, IFileSizeValidator
 {

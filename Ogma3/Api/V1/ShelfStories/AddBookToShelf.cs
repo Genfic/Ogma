@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +11,16 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories;
 
-using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<ShelfAddResult>>;
+using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<AddBookToShelf.Result>>;
 
 [Handler]
 [MapPost("api/ShelfStories")]
 [Authorize]
 public static partial class AddBookToShelf
 {
-	public sealed record Command(long ShelfId, long StoryId);
-	
+	[Validate]
+	public sealed partial record Command(long ShelfId, long StoryId) : IValidationTarget<Command>;
+
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		ApplicationDbContext context,
@@ -34,13 +36,13 @@ public static partial class AddBookToShelf
 			.Where(s => s.Id == shelfId)
 			.Where(s => s.OwnerId == uid)
 			.AnyAsync(cancellationToken);
-		
+
 		if (!shelfExists) return TypedResults.NotFound();
 
 		var storyExists = await context.Stories
 			.Where(s => s.Id == storyId)
 			.AnyAsync(cancellationToken);
-		
+
 		if (!storyExists) return TypedResults.NotFound();
 
 		context.ShelfStories.Add(new ShelfStory
@@ -50,10 +52,8 @@ public static partial class AddBookToShelf
 		});
 
 		await context.SaveChangesAsync(cancellationToken);
-		return TypedResults.Ok(new ShelfAddResult(shelfId, storyId));
+		return TypedResults.Ok(new Result(shelfId, storyId));
 	}
 
-
+	public sealed record Result(long ShelfId, long StoryId);
 }
-
-public sealed record ShelfAddResult(long ShelfId, long StoryId);
