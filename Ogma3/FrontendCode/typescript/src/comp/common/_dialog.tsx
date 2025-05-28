@@ -16,26 +16,30 @@ type Props = {
 };
 
 export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
-	let dialogRef: HTMLDialogElement | undefined;
-	const id = createUniqueId();
+	let maybeDialogRef: HTMLDialogElement | undefined;
+	let dialogRef: HTMLDialogElement;
 
-	if (!dialogRef) {
-		throw new Error("Dialog not mounted");
-	}
+	const id = createUniqueId();
 
 	const dispatch = createEventDispatcher(props);
 
 	const open = () => {
-		dialogRef?.showModal();
+		dialogRef.showModal();
 		dispatch("open");
 	};
 
 	const close = () => {
-		dialogRef?.close();
+		dialogRef.close();
 		dispatch("close");
 	};
 
 	onMount(() => {
+		if (!maybeDialogRef) {
+			throw new Error("Dialog not mounted");
+		}
+
+		dialogRef = maybeDialogRef;
+
 		props.ref?.({
 			open,
 			close,
@@ -44,13 +48,13 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 
 	const backdropClose = (e: MouseEvent & { currentTarget: HTMLDialogElement }) => {
 		const rect = dialogRef.getBoundingClientRect();
-		const minX = rect.left + dialogRef?.clientLeft;
-		const minY = rect.top + dialogRef?.clientTop;
+		const minX = rect.left + dialogRef.clientLeft;
+		const minY = rect.top + dialogRef.clientTop;
 		if (
 			e.clientX < minX ||
-			e.clientX >= minX + dialogRef?.clientWidth ||
+			e.clientX >= minX + dialogRef.clientWidth ||
 			e.clientY < minY ||
-			e.clientY >= minY + dialogRef?.clientHeight
+			e.clientY >= minY + dialogRef.clientHeight
 		) {
 			close();
 		}
@@ -59,7 +63,7 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 	return (
 		<dialog
 			id={id}
-			ref={dialogRef}
+			ref={(e) => (maybeDialogRef = e)}
 			class={["my-dialog", ...(props.classes ?? [])].join(" ")}
 			onmousedown={backdropClose}
 			aria-modal={true}

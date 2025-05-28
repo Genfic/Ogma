@@ -1,5 +1,5 @@
 {
-  "generated": "2025-05-27T22:45:27.624Z",
+  "generated": "2025-05-28T20:50:23.310Z",
   "prefix": "/js/",
   "ext": ".js",
   "files": [
@@ -41,6 +41,7 @@
     "chunk-6j2ncmek:a0PhyKaajorLPCcyPQeIhna7tkMJMAlM_dii9Kw9vO8",
     "chunk-6nb45d08:prrJE4dQfW-toJzv5VAOK0umUxrME4mBK8AaQlH9zRQ",
     "chunk-6pk0grjf:_cdY3b5r-qAddlTRlc4pWUA_YMnqth7UnX20l-pLthM",
+    "chunk-6y45xg6t:xZ7XafRbx5xBjvFO_aR3DRAqBVro8UVqEnkUfYwVMDI",
     "chunk-76zcqwfw:aG-wlWRiS0dI-A2_4e8YpT07OfECPduIyNofTGzcTBk",
     "chunk-78c724s3:xI6jtw9pvbmzZ4N4RdU2SsQZf8p7N6dQEKBILgrSDSU",
     "chunk-7dna8j6n:7mo1dmsvhMNpvbqbPHpEhA3zmeJhOZ9m3sNAoibDmSo",
@@ -137,8 +138,8 @@
     "comp/cache-info:igLATBa6YFHOSmvWvM4z8WVNZy6m2ucNkGtDD4Kd2EI",
     "comp/chapter-read:GJkWaIyP-kMhAQYLPxS0v7k_BfL10DMG6c5LvBFWKNg",
     "comp/clock:9fOsKEDqEphQBC5UmobyyXuqLVY-1sibkjZ9StPqJCo",
-    "comp/club-folder-selector:xsn_e4LHuWM6h8x4FEidlCALDH3YgYQgtBCEktdSwTI",
-    "comp/featured-in-clubs:BJIawF3rCGur80Oy0XPWauN-E19nUMMFWOuGDvV6uNk",
+    "comp/club-folder-selector:8vElhovEmtxBxyt-z_b5t-ORxr7nyk7TPq_zHzlXIFA",
+    "comp/featured-in-clubs:wtCcXSyuPmaU8yWmCajKwxPYQpVfSG4Mo_D9_5CNo6I",
     "comp/follow-button:Ttzg1Lmrv20MLenXvyftfnuayJSqcL618Ox3mW3tHx8",
     "comp/icon:UkPlF9k0Yv2QIhCBwJY0YrA2-1AodSNotllKIjJurjs",
     "comp/join-club-button:yE3VP6uKS3AysVwnIZIW2N3nrsCKVrguSgWe44AMg9o",
@@ -148,7 +149,7 @@
     "comp/qr-code:P4nkukXkjX4ermR8bD-ElWD-Wi5IkUHXwKhwMap3nc4",
     "comp/quote-box:Rujc1KedhkG9gO1pIxLvxZ_acwh-Qh1viTrjcg1WDHE",
     "comp/read-progress:x4SZdQ1HTvR3AZ1GEn912HcPkDjZK7TS6yzneI0w1wQ",
-    "comp/report-modal:F1hU9LGM4H83Owjak8Kq_cqal1whwHROKCRuVxI56C4",
+    "comp/report-modal:L7HCVWOWHkgmztaqFwV4O_YcDxEi_5p9PbpwQv45i_M",
     "comp/shelves-button:heWQ-srdpno6XCMtAfPy7M7uv9qdiLI9C0fzi3LxO4E",
     "comp/table-info:0i0uQhWFXG6K67JHY0nRkrHQ9DvlQYECScLHGtV1r2M",
     "comp/vote-button:CeZF4R9BjQOfn3l4V5i5IQwD9BW33noq-noXob9ql_4",
@@ -170,6 +171,6 @@
     "tts:VDU9EiTXy7YqxzUIoq4NcRId8Tky-NxOa2afa1DOZQY",
     "vue-directives/closeable:p8JM68kz36IDpppmtrUyRErPSLXbqpGB7-gKW1UpUM0",
     "watch-chapter-read:-2I-eeZ6MbFe8Iifwd73M7rhDfSJzeW20S2uTmWlnSk",
-    "workers/cache-service-worker:qxKTOch-MWYDAxOEXVtbp0Kz6K8inLlZ0RkfFI48kzY"
+    "workers/cache-service-worker:JrIpj4zSJpoH5Ca6zvMWGvvZD8yEJwtp9J6nGLBGSZY"
   ]
 }
