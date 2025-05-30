@@ -1,7 +1,12 @@
 import type { CommentDto } from "@g/types-public";
 import { long } from "@h/tinytime-templates";
+import { DeleteApiComments } from "@g/paths-public";
 
-type Props = CommentDto & { key: number; marked: boolean };
+type Props = CommentDto & {
+	marked: boolean;
+	onDelete: () => void;
+	onHighlight: (id: string) => void;
+};
 
 export const Comment = (props: Props) => {
 	const date = (dt: Date) => long.render(dt);
@@ -9,11 +14,19 @@ export const Comment = (props: Props) => {
 	const changeHighlight = (e: Event) => {};
 
 	const report = (e: Event) => {};
-	const del = (e: Event) => {};
+	const del = async (e: Event) => {
+		console.log(`Yeeting ${props.sqid}...`);
+		const res = await DeleteApiComments(props.sqid);
+		if (res.ok) {
+			props.onDelete();
+		} else {
+			console.error(res.error);
+		}
+	};
 	const edit = (e: Event) => {};
 
 	return (
-		<div id={`comment-${props.id}`} classList={{ comment: true, highlight: props.marked }}>
+		<div id={`comment-${props.sqid}`} classList={{ comment: true, highlight: props.marked }}>
 			{props.author && (
 				<div class="author">
 					<a href={`/user/${props.author.userName}`} class="name">
@@ -37,8 +50,8 @@ export const Comment = (props: Props) => {
 			)}
 			<div class="main">
 				<div class="header">
-					<a class="link" href={`#comment-${props.key + 1}`} onClick={changeHighlight}>
-						#{props.key + 1}
+					<a class="link" href={`#comment-${props.sqid}`} onClick={[props.onHighlight, props.sqid]}>
+						#{props.sqid}
 					</a>
 
 					<p class="sm-line" />
@@ -48,13 +61,13 @@ export const Comment = (props: Props) => {
 					</time>
 
 					<div class="actions">
-						<button type={"button"} class="action-btn small red-hl" title="Report" onclick={report}>
+						<button type={"button"} class="action-btn small red-hl" title="Report" onClick={report}>
 							<o-icon icon="lucide:flag" class="material-icons-outlined icon" />
 						</button>
-						<button type={"button"} class="action-btn small" title="Delete" onclick={del}>
+						<button type={"button"} class="action-btn small" title="Delete" onClick={del}>
 							<o-icon icon="lucide:trash-2" class="material-icons-outlined icon" />
 						</button>
-						<button type={"button"} class="action-btn small" title="Edit" onclick={edit}>
+						<button type={"button"} class="action-btn small" title="Edit" onClick={edit}>
 							<o-icon icon="lucide:pencil" class="material-icons-outlined icon" />
 						</button>
 					</div>

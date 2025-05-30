@@ -76,7 +76,7 @@ const Comments = (props: Props) => {
 		}
 
 		setBody("");
-		listRef?.submitted();
+		listRef?.submitted(res.data);
 	};
 
 	const lock = async () => {

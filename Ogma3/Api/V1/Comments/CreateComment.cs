@@ -8,11 +8,12 @@ using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.Sqids;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments;
 
-using ReturnType = Results<UnauthorizedHttpResult, NotFound, CreatedAtRoute>;
+using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<Sqid>>;
 
 [Handler]
 [MapPost("api/comments")]
@@ -67,7 +68,8 @@ public static partial class CreateComment
 		// TODO: Make the notification shit better
 		// await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken, [uid]);
 
-		return TypedResults.CreatedAtRoute(nameof(GetComment), new GetComment.Query(comment.Id));
+		// return TypedResults.CreatedAtRoute(nameof(GetComment), new GetComment.Query(comment.Id));
+		return TypedResults.Ok(new Sqid(comment.Id));
 	}
 
 	private static async ValueTask<bool> CheckIfMuted(ApplicationDbContext context, long currentUserId, CancellationToken ct)

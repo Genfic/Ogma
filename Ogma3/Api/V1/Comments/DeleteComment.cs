@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.Sqids;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments;
@@ -14,12 +15,12 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<long>>;
 
 [Handler]
-[MapDelete("api/comments/{commentId:long}")]
+[MapDelete("api/comments/{commentId:sqid}")]
 [Authorize]
 public static partial class DeleteComment
 {
 	[Validate]
-	public sealed partial record Command(long CommentId) : IValidationTarget<Command>;
+	public sealed partial record Command(Sqid CommentId) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -31,7 +32,7 @@ public static partial class DeleteComment
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
 		var rows = await context.Comments
-			.Where(c => c.Id == request.CommentId)
+			.Where(c => c.Id == request.CommentId.Value)
 			.Where(c => c.AuthorId == uid)
 			.ExecuteUpdateAsync(setters => setters
 					.SetProperty(c => c.DeletedBy, EDeletedBy.User)
@@ -40,11 +41,11 @@ public static partial class DeleteComment
 				cancellationToken);
 
 		_ = await context.CommentRevisions
-			.Where(r => r.ParentId == request.CommentId)
+			.Where(r => r.ParentId == request.CommentId.Value)
 			.ExecuteDeleteAsync(cancellationToken);
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		return rows > 0 ? TypedResults.Ok(request.CommentId) : TypedResults.NotFound();
+		return rows > 0 ? TypedResults.Ok(request.CommentId.Value) : TypedResults.NotFound();
 	}
 }

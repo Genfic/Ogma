@@ -3,12 +3,15 @@ using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
 using Markdig;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.Sqids;
+using Ogma3.Services;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Comments;
@@ -24,7 +27,7 @@ public static partial class GetPaginatedComments
 			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.");
 
 	[Validate]
-	public sealed partial record Query(long Thread, int? Page, long? Highlight) : IValidationTarget<Query>;
+	public sealed partial record Query(long Thread, int? Page, int? Highlight) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<PaginationResult<CommentDto>>> HandleAsync(
 		Query request,

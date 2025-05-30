@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization.Metadata;
+using Ogma3.Infrastructure.Sqids;
 
 namespace Ogma3.Infrastructure.OpenApi;
 
@@ -58,5 +59,6 @@ public static class NestedSchemaReferenceId
 		typeof(Guid),
 		typeof(Uri),
 		typeof(Version),
+		typeof(Sqid), // technically not a primitive, but we want it inlined
 	];
 }

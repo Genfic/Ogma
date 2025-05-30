@@ -5,7 +5,7 @@ import type { CommentDto } from "@g/types-public";
 import { Comment } from "./comment";
 
 export interface CommentListFunctions {
-	submitted: () => void;
+	submitted: (sqid: string) => void;
 }
 
 interface Props {
@@ -15,17 +15,18 @@ interface Props {
 
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
-	const [highlight, setHighlight] = createSignal(0);
+	const [highlight, setHighlight] = createSignal<string | null>(null);
+	const [reload, setReload] = createSignal(0);
 
 	const [commentsData] = createResource(
-		() => [props.id, currentPage(), highlight()] as const,
-		async ([id, page]) => {
-			console.log(`Fetching page ${currentPage()}`);
+		() => [props.id, currentPage(), highlight(), reload()] as const,
+		async ([id, page, _]) => {
 			const res = await GetApiComments(id, page, highlight(), {
 				// TODO: Remove after new comment system is done
 				"X-Markdown": "true",
 			});
 			if (!res.ok) {
+				console.error(highlight());
 				throw new Error(res.error ?? res.statusText);
 			}
 			return res.data;
@@ -33,7 +34,7 @@ export const CommentList: Component<Props> = (props) => {
 	);
 
 	let timeout: ReturnType<typeof setTimeout> | undefined;
-	const changeHighlight = (idx: number) => {
+	const changeHighlight = (idx: string | null) => {
 		if (timeout) {
 			clearTimeout(timeout);
 		}
@@ -52,14 +53,11 @@ export const CommentList: Component<Props> = (props) => {
 		changeHighlight(highlight());
 	});
 
-	const comments = createMemo<(CommentDto & { key: number })[]>((prev) => {
+	const comments = createMemo<CommentDto[]>((prev) => {
 		const data = commentsData();
 
 		if (commentsData.state === "ready" && data) {
-			return data.elements.map((val, key) => ({
-				...val,
-				key: data.total - currentPage() * data.perPage + (data.perPage - (key + 1)),
-			}));
+			return data.elements;
 		}
 
 		return prev ?? [];
@@ -70,10 +68,10 @@ export const CommentList: Component<Props> = (props) => {
 
 	onMount(() => {
 		props.ref?.({
-			submitted: () => {
+			submitted: (sqid: string) => {
 				console.log("Submitted");
 				setCurrentPage(1);
-				setHighlight(totalComments() + 1);
+				setHighlight(sqid);
 			},
 		});
 	});
@@ -82,7 +80,7 @@ export const CommentList: Component<Props> = (props) => {
 		if (page === currentPage()) {
 			return;
 		}
-		setHighlight(0);
+		setHighlight(null);
 		setCurrentPage(page);
 	};
 
@@ -100,7 +98,16 @@ export const CommentList: Component<Props> = (props) => {
 	return (
 		<div>
 			{pagination()}
-			<For each={comments()}>{(c) => <Comment {...{ ...c, marked: c.key === highlight() }} />}</For>
+			<For each={comments()}>
+				{(c) => (
+					<Comment
+						onDelete={() => setReload(reload() + 1)}
+						onHighlight={setHighlight}
+						marked={c.sqid === highlight()}
+						{...c}
+					/>
+				)}
+			</For>
 			{pagination()}
 		</div>
 	);

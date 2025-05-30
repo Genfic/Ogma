@@ -31,6 +31,7 @@ using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Infrastructure.Sqids;
 using Ogma3.ServiceDefaults;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
@@ -97,7 +98,10 @@ public static class Startup
 		services.AddScoped<CommentRedirector>();
 
 		// Routing
-		services.AddRouting(options => options.LowercaseUrls = true);
+		services.AddRouting(options => {
+			options.LowercaseUrls = true;
+			options.ConstraintMap["sqid"] = typeof(Sqid.RouteConstraint);
+		});
 
 		// HttpContextAccessor
 		services.AddHttpContextAccessor();
@@ -131,7 +135,7 @@ public static class Startup
 		services
 			.AddScoped<IUserService, UserService>()
 			.AddSingleton<ICodeGenerator, CodeGenerator>()
-			.AddScoped<UserActivityService>();
+			.AddSingleton<SqidService>();
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
@@ -208,6 +212,7 @@ public static class Startup
 			})
 			.AddJsonOptions(options => {
 				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+				options.JsonSerializerOptions.Converters.Add(new Sqid.JsonConverter());
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			});
 
@@ -217,11 +222,13 @@ public static class Startup
 		// Json options
 		services.ConfigureHttpJsonOptions(options => {
 			options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+			options.SerializerOptions.Converters.Add(new Sqid.JsonConverter());
 		});
 
 		services.Configure<JsonOptions>(options => {
 			options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+			options.JsonSerializerOptions.Converters.Add(new Sqid.JsonConverter());
 		});
 
 		// Fluent Validation
@@ -244,6 +251,8 @@ public static class Startup
 		services.AddOpenApi("public", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
+			options.AddOperationTransformer<SqidOperationTransformer>();
+			options.AddSchemaTransformer<SqidSchemaTransformer>();
 			options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && !r.StartsWith("admin");
@@ -251,6 +260,8 @@ public static class Startup
 		services.AddOpenApi("internal", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
+			options.AddOperationTransformer<SqidOperationTransformer>();
+			options.AddSchemaTransformer<SqidSchemaTransformer>();
 			options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && r.StartsWith("admin");

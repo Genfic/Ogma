@@ -1,5 +1,6 @@
 import type {
 	AddBookToShelfCommand,
+	AddBookToShelfResult,
 	AddStoryToFolderCommand,
 	AddStoryToFolderResponse,
 	AdminIssueInviteCodeCommand,
@@ -18,8 +19,10 @@ import type {
 	FollowUserCommand,
 	FullQuoteDto,
 	GetClubsWithStoryResult,
+	GetCurrentUserQuickShelvesResult,
 	GetFolderResult,
 	GetJoinedClubsResponse,
+	GetPaginatedUserShelvesResult,
 	GetRevisionResult,
 	GetSignInDataResult,
 	GetThreadDetailsResult,
@@ -31,16 +34,13 @@ import type {
 	LockThreadCommand,
 	MarkChapterAsReadCommand,
 	MarkChapterAsUnreadCommand,
-	QuickShelvesResult,
 	QuoteDto,
 	RatingApiDto,
 	RemoveBookFromShelfCommand,
 	RemoveBookFromShelfResult,
 	ReportContentCommand,
 	RoleDto,
-	ShelfAddResult,
 	ShelfDto,
-	ShelfResult,
 	SubscribeCommentsThreadCommand,
 	TagDto,
 	TestControllerBpost,
@@ -75,7 +75,7 @@ export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: Header
 );
 
 
-export const DeleteApiComments = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number, undefined>(`/api/comments/${commentId}`,
+export const DeleteApiComments = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number, undefined>(`/api/comments/${commentId}`,
 	del,
 	undefined,
 	headers,
@@ -227,7 +227,7 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number, highlight: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
+export const GetApiComments = async (thread: number, page: number | null, highlight: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
     /** List of the fetched elements */
     elements: CommentDto[];
     /** Total number of elements */
@@ -342,7 +342,7 @@ export const GetApiRoles = async (headers?: HeadersInit, options?: RequestInit) 
 );
 
 
-export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfResult[], undefined>(`/api/ShelfStories/${storyId}?page=${page}`,
+export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetPaginatedUserShelvesResult[], undefined>(`/api/ShelfStories/${storyId}?page=${page}`,
 	get,
 	undefined,
 	headers,
@@ -350,7 +350,7 @@ export const GetApiShelfStories = async (storyId: number, page: number, headers?
 );
 
 
-export const GetApiShelfStoriesQuick = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuickShelvesResult[], undefined>(`/api/ShelfStories/${storyId}/quick`,
+export const GetApiShelfStoriesQuick = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetCurrentUserQuickShelvesResult[], undefined>(`/api/ShelfStories/${storyId}/quick`,
 	get,
 	undefined,
 	headers,
@@ -518,7 +518,7 @@ export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersIn
 );
 
 
-export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, CreateCommentCommand>("/api/comments",
+export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, CreateCommentCommand>("/api/comments",
 	post,
 	body,
 	headers,
@@ -606,7 +606,7 @@ export const PostApiRoles = async (body: CreateRoleCommand, headers?: HeadersIni
 );
 
 
-export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfAddResult, AddBookToShelfCommand>("/api/ShelfStories",
+export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<AddBookToShelfResult, AddBookToShelfCommand>("/api/ShelfStories",
 	post,
 	body,
 	headers,
