@@ -1,6 +1,6 @@
 import { long } from "@h/tinytime-templates";
 
-export const DeletedComment = (props: { creationDate: Date; deletedBy: string | null }) => {
+export const DeletedCommentBody = (props: { creationDate: Date; deletedBy: string | null }) => {
 	const date = (dt: Date) => long.render(dt);
 
 	return (

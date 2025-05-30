@@ -9,17 +9,13 @@
 	var csrf = Xcsrf.GetAndStoreTokens(Context).RequestToken;
 }
 
-<o-comments
-	csrf="@csrf"
-	id="@Model.Id"
-	is-logged-in="@(User.Identity is { IsAuthenticated: true })"
+<o-comments csrf="@csrf" id="@Model.Id" is-logged-in="@(User.Identity is { IsAuthenticated: true })"
 	lock-date="@(Model.LockDate == default(DateTimeOffset) ? null : Model.LockDate)"
 	md-ref-route="@Routes.Pages.Markdown.Get().Path(LinkGenerator)"
 	login-route="@Routes.Areas.Identity.Pages.Account_Login.Get().Path(LinkGenerator)"
-	register-route="@Routes.Areas.Identity.Pages.Account_Register.Get().Path(LinkGenerator)"
-></o-comments>
+	register-route="@Routes.Areas.Identity.Pages.Account_Register.Get().Path(LinkGenerator)"></o-comments>
 
-
+@*
 <div class="comments-container"
      ref="container"
      data-csrf="@csrf"
@@ -137,7 +133,7 @@
 	</div>
 
 	@* Figure out how to use the webcomponent version *@
-	<vue-report-modal
+@* <vue-report-modal
 		ref="reportModal"
 		:item-id="0"
 		csrf="@csrf"
@@ -148,7 +144,7 @@
 
 @Html.Resource(@<script type="module" defer src="~/js/components/comment-component.js" asp-append-version="true"></script>)
 @Html.Resource(@<script type="module" defer src="~/js/components/textarea-counter-component.js" asp-append-version="true"></script>)
-@Html.Resource(@<script type="module" defer src="~/js/components/report-modal.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" defer src="~/js/components/report-modal.js" asp-append-version="true"></script>) *@
 
 @Html.Resource(@<script type="module" defer src="~/js/comments.js" asp-append-version="true"></script>)
 @Html.Resource(@<script type="module" defer src="~/js/comments2.js" asp-append-version="true"></script>)

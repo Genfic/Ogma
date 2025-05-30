@@ -31,6 +31,9 @@
 				"noAssignInExpressions": "off",
 				"useAwait": "error",
 				"noConstEnum": "off"
+			},
+			"complexity": {
+				"useRegexLiterals": "info"
 			}
 		}
 	},

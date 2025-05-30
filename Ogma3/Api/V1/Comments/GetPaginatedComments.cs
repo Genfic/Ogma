@@ -81,5 +81,4 @@ public static partial class GetPaginatedComments
 
 		return TypedResults.Ok(pagination);
 	}
-
 }

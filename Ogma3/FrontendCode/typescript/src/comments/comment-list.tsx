@@ -16,18 +16,17 @@ interface Props {
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
 	const [highlight, setHighlight] = createSignal(0);
+	const [reload, setReload] = createSignal(0);
+	const [username, setUsername] = createSignal("");
 
 	const [commentsData] = createResource(
-		() => [props.id, currentPage(), highlight()] as const,
+		() => [props.id, currentPage(), highlight(), reload()] as const,
 		async ([id, page]) => {
-			console.log(`Fetching page ${currentPage()}`);
-			const res = await GetApiComments(id, page, highlight(), {
-				// TODO: Remove after new comment system is done
-				"X-Markdown": "true",
-			});
+			const res = await GetApiComments(id, page, highlight());
 			if (!res.ok) {
 				throw new Error(res.error ?? res.statusText);
 			}
+			setUsername(res.headers.get("X-Username") ?? "");
 			return res.data;
 		},
 	);
@@ -100,7 +99,17 @@ export const CommentList: Component<Props> = (props) => {
 	return (
 		<div>
 			{pagination()}
-			<For each={comments()}>{(c) => <Comment {...{ ...c, marked: c.key === highlight() }} />}</For>
+			<For each={comments()}>
+				{(c) => (
+					<Comment
+						onHighlightChange={setHighlight}
+						onDelete={() => setReload(reload() + 1)}
+						marked={c.key === highlight()}
+						owner={username()}
+						{...c}
+					/>
+				)}
+			</For>
 			{pagination()}
 		</div>
 	);

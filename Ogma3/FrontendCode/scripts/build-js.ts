@@ -17,6 +17,7 @@ const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
 	.option("-r, --release", "Build in release mode", false)
+	.option("--no-minify", "Don't minify code", true)
 	.option("-c, --clean", "Clean output directory", false)
 	.option("-C --clean-always", "Clean output directory before each compilation", false)
 	.parse(Bun.argv)
@@ -37,6 +38,8 @@ if (values.clean) {
 	await clean();
 }
 
+console.log(values.minify);
+
 const compile = async (from: Glob, to: string, root: string, name: string) => {
 	const timer = new Stopwatch();
 	const prefix = c.bold.dim(`[${name}]`.padEnd(prefixWidth + 2));
@@ -50,7 +53,7 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		entrypoints: files,
 		outdir: to,
 		root: join(_source, root),
-		minify: true,
+		minify: values.minify,
 		sourcemap: "external",
 		splitting: true,
 		plugins: [SolidPlugin(), cssMinifyPlugin],
