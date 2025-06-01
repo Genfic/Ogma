@@ -2,9 +2,9 @@ import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as 
 import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource } from "solid-js";
-import css from "./vote-button.css";
-import sharedCss from "./shared.css";
 import { Styled } from "./common/_styled";
+import sharedCss from "./shared.css";
+import css from "./vote-button.css";
 
 const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => {
 	const [votes, { mutate }] = createResource(

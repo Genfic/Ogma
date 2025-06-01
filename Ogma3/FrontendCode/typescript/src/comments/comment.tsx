@@ -1,9 +1,9 @@
+import { DeleteApiComments } from "@g/paths-public";
 import type { CommentDto } from "@g/types-public";
 import { long } from "@h/tinytime-templates";
-import { DeleteApiComments } from "@g/paths-public";
-import { createSignal, Match, onMount, Show, Switch } from "solid-js";
-import { HiddenCommentBody } from "./comment-body-hidden";
+import { createSignal, Match, Show, Switch } from "solid-js";
 import { DeletedCommentBody } from "./comment-body-deleted";
+import { HiddenCommentBody } from "./comment-body-hidden";
 
 type Props = CommentDto & {
 	key: number;
@@ -29,24 +29,16 @@ export const Comment = (props: Props) => {
 	const edit = () => {};
 
 	const userOwnsComment = () =>
-		props.owner &&
-		props.author &&
-		props.owner.toLowerCase() === props.author.userName.toLowerCase();
+		props.owner && props.author && props.owner.toLowerCase() === props.author.userName.toLowerCase();
 
 	return (
-		<div
-			id={`comment-${props.id}`}
-			classList={{ comment: true, highlight: props.marked }}
-		>
+		<div id={`comment-${props.id}`} classList={{ comment: true, highlight: props.marked }}>
 			<Switch>
 				<Match when={hidden()}>
 					<HiddenCommentBody onToggleVisibility={() => setHidden(!hidden())} />
 				</Match>
 				<Match when={props.deletedBy}>
-					<DeletedCommentBody
-						creationDate={new Date(props.dateTime)}
-						deletedBy={props.deletedBy}
-					/>
+					<DeletedCommentBody creationDate={new Date(props.dateTime)} deletedBy={props.deletedBy} />
 				</Match>
 				<Match when={!hidden() && !props.deletedBy}>
 					{props.author && (
@@ -61,8 +53,7 @@ export const Comment = (props: Props) => {
 									<div
 										class="bg"
 										style={{
-											"background-color":
-												props.author.roles[0].color ?? "white",
+											"background-color": props.author.roles[0].color ?? "white",
 										}}
 									/>
 								</div>
@@ -88,10 +79,7 @@ export const Comment = (props: Props) => {
 
 							<p class="sm-line" />
 
-							<time
-								datetime={new Date(props.dateTime).toISOString()}
-								class="time"
-							>
+							<time datetime={new Date(props.dateTime).toISOString()} class="time">
 								{date(new Date(props.dateTime))}
 							</time>
 
@@ -103,34 +91,15 @@ export const Comment = (props: Props) => {
 										title="Report"
 										onclick={report}
 									>
-										<o-icon
-											icon="lucide:flag"
-											class="material-icons-outlined icon"
-										/>
+										<o-icon icon="lucide:flag" class="material-icons-outlined icon" />
 									</button>
 								</Show>
 								<Show when={userOwnsComment()}>
-									<button
-										type={"button"}
-										class="action-btn small"
-										title="Delete"
-										onclick={del}
-									>
-										<o-icon
-											icon="lucide:trash-2"
-											class="material-icons-outlined icon"
-										/>
+									<button type={"button"} class="action-btn small" title="Delete" onclick={del}>
+										<o-icon icon="lucide:trash-2" class="material-icons-outlined icon" />
 									</button>
-									<button
-										type={"button"}
-										class="action-btn small"
-										title="Edit"
-										onclick={edit}
-									>
-										<o-icon
-											icon="lucide:pencil"
-											class="material-icons-outlined icon"
-										/>
+									<button type={"button"} class="action-btn small" title="Edit" onclick={edit}>
+										<o-icon icon="lucide:pencil" class="material-icons-outlined icon" />
 									</button>
 								</Show>
 							</div>

@@ -6,12 +6,10 @@ Vue.config.errorHandler = (err: Error) => {
 // @ts-ignore
 Vue.config.ignoredElements = [/o-*/];
 
-const workers = [
-	{name: "cache", path: "/js/workers/cache-service-worker.js", scope: "/"},
-];
+const workers = [{ name: "cache", path: "/js/workers/cache-service-worker.js", scope: "/" }];
 
 const registerServiceWorkers = async () => {
-	for (const {name, path, scope} of workers) {
+	for (const { name, path, scope } of workers) {
 		if ("serviceWorker" in navigator) {
 			try {
 				const registration = await navigator.serviceWorker.register(path, {
@@ -35,4 +33,4 @@ const registerServiceWorkers = async () => {
 
 await registerServiceWorkers();
 
-export { };
+export {};

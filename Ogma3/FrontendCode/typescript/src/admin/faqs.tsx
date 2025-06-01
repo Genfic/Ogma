@@ -1,8 +1,8 @@
-import { PostApiFaqs, DeleteApiFaqs, GetApiFaqs, PutApiFaqs } from "@g/paths-public";
+import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
+import { $id } from "@h/dom";
 import { createResource, createSignal, For } from "solid-js";
 import { render } from "solid-js/web";
-import { $id } from "@h/dom";
 
 interface Faq {
 	question: string;

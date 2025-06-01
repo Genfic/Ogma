@@ -5,7 +5,7 @@
 
 .btn {
 	color: var(--accent);
-	padding: .5rem;
+	padding: 0.5rem;
 
 	.icon::part(icon) {
 		width: 20px;

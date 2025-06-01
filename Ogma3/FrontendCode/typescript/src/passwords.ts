@@ -1,5 +1,5 @@
-import { ico } from "@h/icon-path" with { type: "macro" };
 import { $queryAll } from "@h/dom";
+import { ico } from "@h/icon-path" with { type: "macro" };
 
 const passwordInputs = $queryAll<HTMLInputElement>("input[type=password]");
 

@@ -1,5 +1,5 @@
 import type Vue from "vue";
-import type { DirectiveOptions, VNodeDirective, VNode } from "vue";
+import type { DirectiveOptions, VNode, VNodeDirective } from "vue";
 
 // 1. Define the expected type for the directive's value (v-closable="...")
 interface ClosableBindingValue {

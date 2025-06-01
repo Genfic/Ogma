@@ -1,9 +1,9 @@
-import { createSignal } from "solid-js";
-import { customElement, type ComponentType } from "solid-element";
 import type { Empty } from "@t/utils";
-import sharedCss from "./shared.css";
-import css from "./password-input.css";
+import { type ComponentType, customElement } from "solid-element";
+import { createSignal } from "solid-js";
 import { Styled } from "./common/_styled";
+import css from "./password-input.css";
+import sharedCss from "./shared.css";
 
 const PasswordInput: ComponentType<Empty> = (_, { element }) => {
 	if (!(element instanceof Element)) throw Error("Not an element?");

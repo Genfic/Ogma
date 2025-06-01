@@ -1,5 +1,5 @@
-import { log } from "@h/logger";
 import { $queryAll } from "@h/dom";
+import { log } from "@h/logger";
 
 const inputs = $queryAll<HTMLInputElement>("input.o-form-control");
 

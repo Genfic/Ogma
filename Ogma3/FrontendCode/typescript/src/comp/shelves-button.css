@@ -14,13 +14,13 @@
 	box-shadow: var(--shadow);
 
 	button {
-		padding: .5rem;
+		padding: 0.5rem;
 		justify-content: start;
 		margin: 0;
 	}
 
 	.icon {
-		margin-right: .5rem;
+		margin-right: 0.5rem;
 	}
 }
 

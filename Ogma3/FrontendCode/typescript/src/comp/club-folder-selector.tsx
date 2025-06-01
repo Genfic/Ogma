@@ -5,7 +5,7 @@ import {
 } from "@g/paths-public";
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, createResource, createSignal, Switch, Match } from "solid-js";
+import { createResource, createSignal, For, Match, Switch } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (props) => {

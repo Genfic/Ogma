@@ -1,8 +1,8 @@
 import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "@g/paths-public";
+import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
-import { createResource, For, Switch, Match, createSignal, onMount } from "solid-js";
+import { createResource, createSignal, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
-import { $id, $query } from "@h/dom";
 
 const parent = $id("notifications");
 

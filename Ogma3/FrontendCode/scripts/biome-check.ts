@@ -1,9 +1,9 @@
 import { $, serve } from "bun";
-import { compact } from "es-toolkit";
-import type { BiomeDiag } from "./types/biome-diag";
-import { findAllTemplates } from "./helpers/template-helpers";
-import { generateDiffHtml } from "./helpers/diff-parser";
 import ejs from "ejs";
+import { compact } from "es-toolkit";
+import { generateDiffHtml } from "./helpers/diff-parser";
+import { findAllTemplates } from "./helpers/template-helpers";
+import type { BiomeDiag } from "./types/biome-diag";
 
 await $`bunx @biomejs/biome check . --reporter=json > biome.diag.json`.quiet().nothrow();
 

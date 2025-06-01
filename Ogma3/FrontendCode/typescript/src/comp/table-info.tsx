@@ -1,9 +1,9 @@
 import { GetAdminApiTelemetryGetTableInfo } from "@g/paths-internal";
 import { convert } from "convert";
-import { type Component, createSignal, createResource, For } from "solid-js";
-import { customElement } from "solid-element";
-import { Styled } from "./common/_styled";
 import { orderBy } from "es-toolkit";
+import { customElement } from "solid-element";
+import { type Component, createResource, createSignal, For } from "solid-js";
+import { Styled } from "./common/_styled";
 import css from "./table-info.css";
 
 const TableInfo: Component = () => {

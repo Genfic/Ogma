@@ -1,9 +1,9 @@
-import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount } from "solid-js";
 import { GetApiComments } from "@g/paths-public";
-import { CommentListPagination } from "./comment-list-pagination";
 import type { CommentDto } from "@g/types-public";
-import { Comment } from "./comment";
 import { stripNullish } from "@h/csharping";
+import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount } from "solid-js";
+import { Comment } from "./comment";
+import { CommentListPagination } from "./comment-list-pagination";
 
 export interface CommentListFunctions {
 	submitted: () => void;
@@ -25,11 +25,14 @@ export const CommentList: Component<Props> = (props) => {
 	const [commentsData] = createResource(
 		() => [props.id, currentPage(), highlight(), reload()] as const,
 		async ([id, page]) => {
-
-			const headers = stripNullish(perPageEtags()[page], (v) => ({
-				"If-None-Match": v
-			}), undefined);
-			console.log('Headers are', headers);
+			const headers = stripNullish(
+				perPageEtags()[page],
+				(v) => ({
+					"If-None-Match": v,
+				}),
+				undefined,
+			);
+			console.log("Headers are", headers);
 
 			let data;
 
@@ -51,7 +54,6 @@ export const CommentList: Component<Props> = (props) => {
 					}
 				}
 			} else {
-
 				setPerPageEtags((old) => ({ ...old, [page]: res.headers.get("ETag") ?? "" }));
 				data = res.data;
 			}

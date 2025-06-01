@@ -1,4 +1,4 @@
-import type { Extension, Tokenizer, State, Construct, HtmlExtension, Effects } from "micromark-util-types";
+import type { Construct, Extension, HtmlExtension, State, Tokenizer } from "micromark-util-types";
 
 // Augment token types (ensure this is correctly picked up by your environment)
 declare module "micromark-util-types" {

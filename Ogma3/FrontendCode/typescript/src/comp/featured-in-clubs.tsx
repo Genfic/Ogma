@@ -1,7 +1,7 @@
 import { GetApiClubsStory as getFeaturingClubs } from "@g/paths-public";
 import type { GetClubsWithStoryResult } from "@g/types-public";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { For, Show, createSignal, createResource } from "solid-js";
+import { createResource, createSignal, For, Show } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 const id = "featured-in-clubs";

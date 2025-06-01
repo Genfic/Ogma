@@ -1,8 +1,8 @@
-import { PostApiInviteCodes, GetApiInviteCodes } from "@g/paths-public";
+import { GetApiInviteCodes, PostApiInviteCodes } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
-import { long } from "@h/tinytime-templates";
-import { createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import { $id } from "@h/dom";
+import { long } from "@h/tinytime-templates";
+import { createResource, createSignal, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
 
 const parent = $id("invite-codes-app");

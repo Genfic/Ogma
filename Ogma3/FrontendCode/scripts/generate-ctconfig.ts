@@ -1,7 +1,7 @@
 import { dirname, join, resolve } from "node:path";
-import { parse, stringify } from "json5";
 import ct from "chalk-template";
 import convert from "convert";
+import { parse, stringify } from "json5";
 
 const _root = dirname(Bun.main);
 const _path = join(_root, "..", "..", "Data", "CTConfig.cs");

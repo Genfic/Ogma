@@ -8,12 +8,12 @@ import ct from "chalk-template";
 import convert from "convert";
 import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
 import { attempt, attemptSync } from "./helpers/function-helpers";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { watch } from "./helpers/watcher";
-import { cssTargets } from "./helpers/css-targets";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

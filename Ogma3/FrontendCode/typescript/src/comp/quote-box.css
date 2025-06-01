@@ -1,6 +1,6 @@
 .quote {
 	position: relative;
-	padding: .5rem;
+	padding: 0.5rem;
 	display: flex;
 	flex-direction: column;
 	background-color: var(--ele-1);

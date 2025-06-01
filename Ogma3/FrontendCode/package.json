@@ -6,8 +6,8 @@
 	"scripts": {
 		"webtypes": "bun ./scripts/webtypes.ts",
 		"ctconfig": "bun ./scripts/generate-ctconfig.ts",
-		"biome": "bunx @biomejs/biome check . --fix",
-		"biome:report": "bunx @biomejs/biome check . --max-diagnostics 500 *> biome.diag",
+		"biome": "bunx biome check --write",
+		"biome:report": "bunx biome check --max-diagnostics 500 *> biome.diag",
 		"css": "bun ./scripts/build-sass.ts",
 		"css:lint": "bunx stylelint '**/*.scss'",
 		"css:watch": "bun ./scripts/build-sass.ts -- --watch",
@@ -19,7 +19,7 @@
 		"build": "bun run css && bun run js && bun run wc && bun run icons"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
+		"@biomejs/biome": "^2.0.0-beta.5",
 		"@commander-js/extra-typings": "^14.0.0",
 		"@happy-dom/global-registrator": "^17.5.6",
 		"@parcel/watcher": "^2.5.1",
@@ -68,7 +68,9 @@
 		"solid-signals": "^1.9.1",
 		"uqr": "^0.1.2"
 	},
-	"web-types": ["./web-types.json"],
+	"web-types": [
+		"./web-types.json"
+	],
 	"webtypesConfig": {
 		"name": "Ogma Components",
 		"version": "1.0.0",

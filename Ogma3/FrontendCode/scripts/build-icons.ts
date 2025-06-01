@@ -1,14 +1,13 @@
 import { dirname, join } from "node:path";
+import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
-import dedent from "dedent";
+import ejs from "ejs";
 import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
-import ejs from "ejs";
 import { findAllTemplates } from "./helpers/template-helpers";
-import { program } from "@commander-js/extra-typings";
 
 const start = Bun.nanoseconds();
 

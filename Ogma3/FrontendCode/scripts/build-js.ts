@@ -1,4 +1,6 @@
+import { rm } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
+import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -6,12 +8,10 @@ import ct from "chalk-template";
 import convert from "convert";
 import { dirsize } from "./helpers/dirsize";
 import { log } from "./helpers/logger";
-import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { hasExtension } from "./helpers/path";
-import { watch } from "./helpers/watcher";
-import { rm } from "node:fs/promises";
-import { cssMinifyPlugin } from "./plugins/minified-css-loader";
 import { Stopwatch } from "./helpers/stopwatch";
+import { watch } from "./helpers/watcher";
+import { cssMinifyPlugin } from "./plugins/minified-css-loader";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)

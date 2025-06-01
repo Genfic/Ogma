@@ -1,11 +1,11 @@
 .votes {
-	padding: .5rem;
+	padding: 0.5rem;
 
 	&.active {
 		::part(icon) {
 			color: var(--gold);
 
-			animation: spin .2s ease-in-out;
+			animation: spin 0.2s ease-in-out;
 		}
 	}
 }

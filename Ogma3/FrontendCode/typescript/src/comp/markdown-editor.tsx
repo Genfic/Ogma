@@ -1,10 +1,10 @@
 import { type ComponentType, customElement } from "solid-element";
 import { createEffect, For, type JSX, onCleanup, onMount } from "solid-js";
+import { createHistory } from "solid-signals";
+import { Comment } from "./common/_comment";
+import { Styled } from "./common/_styled";
 import css from "./markdown-editor.css";
 import sharedCss from "./shared.css";
-import { Styled } from "./common/_styled";
-import { Comment } from "./common/_comment";
-import { createHistory } from "solid-signals";
 
 type Action = {
 	name: string;

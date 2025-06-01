@@ -12,8 +12,8 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0 .5rem;
-	margin-right: .1rem;
+	padding: 0 0.5rem;
+	margin-right: 0.1rem;
 	background-color: var(--background-75);
 	color: var(--foreground-75);
 	border: 1px solid var(--foreground-25);

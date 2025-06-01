@@ -1,6 +1,6 @@
-import type { FunctionComponent, ComponentOptions } from "component-register";
+import type { ComponentOptions, FunctionComponent } from "component-register";
 import type { ComponentType } from "solid-element";
-import { onMount, createComponent, type Component } from "solid-js";
+import { type Component, createComponent, onMount } from "solid-js";
 
 type SolidElementInstance = Element & { renderRoot?: Node | null };
 

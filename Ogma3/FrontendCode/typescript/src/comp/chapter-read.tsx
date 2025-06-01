@@ -1,7 +1,7 @@
-import { type ComponentType, customElement } from "solid-element";
-import { useChaptersRead } from "./common/_chaptersReadData";
 import { DeleteApiChaptersread, PostApiChaptersread } from "@g/paths-public";
+import { type ComponentType, customElement } from "solid-element";
 import css from "./chapter-read.css";
+import { useChaptersRead } from "./common/_chaptersReadData";
 import { Styled } from "./common/_styled";
 
 const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (props) => {

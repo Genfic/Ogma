@@ -1,9 +1,9 @@
+import { Report } from "@g/ctconfig";
 import { PostApiReports as postReport } from "@g/paths-public";
 import type { EReportableContentTypes } from "@g/types-public";
 import { customElement, noShadowDOM } from "solid-element";
 import { createSignal, onMount, type ParentComponent } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
-import { Report } from "@g/ctconfig";
 
 const ReportModal: ParentComponent<{
 	openSelector: string;

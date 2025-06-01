@@ -1,9 +1,9 @@
 import { GetApiNotificationsCount as countNotifications } from "@g/paths-public";
-import { type ComponentType, customElement } from "solid-element";
-import { Show, createResource } from "solid-js";
-import css from "./notifications-button.css";
-import { Styled } from "./common/_styled";
 import type { Empty } from "@t/utils";
+import { type ComponentType, customElement } from "solid-element";
+import { createResource, Show } from "solid-js";
+import { Styled } from "./common/_styled";
+import css from "./notifications-button.css";
 
 const NotificationsButton: ComponentType<Empty> = (_) => {
 	const [notifications] = createResource(

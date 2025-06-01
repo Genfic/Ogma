@@ -1,6 +1,6 @@
+import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource, createSignal, Match, Switch } from "solid-js";
-import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
 import css from "./cache-info.css";
 import { Styled } from "./common/_styled";
 

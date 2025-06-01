@@ -1,5 +1,5 @@
-import { Glob } from "bun";
 import { dirname, join, parse } from "node:path";
+import { Glob } from "bun";
 
 const _root = dirname(Bun.main);
 

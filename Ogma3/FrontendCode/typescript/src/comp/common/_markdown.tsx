@@ -1,8 +1,8 @@
-import { micromark } from "micromark";
-import type { Component } from "solid-js";
 import { HtmlSanitizer } from "@atulin/html-sanitizer";
-import { gfmStrikethrough, gfmStrikethroughHtml } from "micromark-extension-gfm-strikethrough";
+import { micromark } from "micromark";
 import { gfmAutolinkLiteral, gfmAutolinkLiteralHtml } from "micromark-extension-gfm-autolink-literal";
+import { gfmStrikethrough, gfmStrikethroughHtml } from "micromark-extension-gfm-strikethrough";
+import type { Component } from "solid-js";
 
 const disableExtension = { disable: { null: ["headingAtx"] } };
 const sanitizer = new HtmlSanitizer();

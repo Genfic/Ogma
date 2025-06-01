@@ -1,9 +1,8 @@
 import { getCookieValue, setCookie } from "@h/cookies";
-import { useLocalStorage } from "@h/localStorageHook";
 import { $id, $query } from "@h/dom";
+import { useLocalStorage } from "@h/localStorageHook";
 import { createEffect, createSignal } from "solid-js";
 import { render } from "solid-js/web";
-import { customElement } from "solid-element";
 
 const LocalSettings = () => {
 	const [getCollapseDeleted, setCollapseDeleted] = useLocalStorage<boolean>("collapse-deleted", false);

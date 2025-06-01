@@ -1,10 +1,10 @@
-import { customElement, noShadowDOM } from "solid-element";
-import { createResource, createSignal, Show } from "solid-js";
 import { GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
+import { customElement, noShadowDOM } from "solid-element";
+import { createResource, createSignal, Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";
-import { Styled } from "./comp/common/_styled";
 import css from "./comments.css";
+import { Styled } from "./comp/common/_styled";
 
 interface Props extends Record<string, unknown> {
 	csrf: string;

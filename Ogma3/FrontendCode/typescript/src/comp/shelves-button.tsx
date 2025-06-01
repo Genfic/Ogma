@@ -4,14 +4,14 @@ import {
 	GetApiShelfStories as getShelves,
 	DeleteApiShelfStories as removeFromShelf,
 } from "@g/paths-public";
+import type { QuickShelvesResult, ShelfResult } from "@g/types-public";
 import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
-import { For, Show, createSignal, createResource, type Setter } from "solid-js";
-import type { QuickShelvesResult, ShelfResult } from "@g/types-public";
+import { createResource, createSignal, For, type Setter, Show } from "solid-js";
 import { Styled } from "./common/_styled";
-import css from "./shelves-button.css";
 import sharedCss from "./shared.css";
+import css from "./shelves-button.css";
 
 type Shelf = ShelfResult & QuickShelvesResult;
 

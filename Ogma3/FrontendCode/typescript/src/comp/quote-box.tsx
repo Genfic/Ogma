@@ -1,11 +1,11 @@
 import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
-import { type ComponentType, customElement } from "solid-element";
-import { Show, createResource, createSignal } from "solid-js";
 import { useLocalStorage } from "@h/localStorageHook";
-import css from "./quote-box.css";
-import { Styled } from "./common/_styled";
 import type { Empty } from "@t/utils";
+import { type ComponentType, customElement } from "solid-element";
+import { createResource, createSignal, Show } from "solid-js";
+import { Styled } from "./common/_styled";
+import css from "./quote-box.css";
 
 const QuoteBox: ComponentType<Empty> = (_) => {
 	const [nextFetchTime, setNextFetchTime] = createSignal(0);

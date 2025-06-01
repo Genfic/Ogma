@@ -1,9 +1,9 @@
-import { Glob } from "bun";
-import ts from "typescript";
 import path, { basename, dirname, join } from "node:path";
-import type { HTMLAttribute, HTMLElement, Webtypes } from "./types/webtypes";
-import pkg from "../package.json" with { type: "json" };
+import { Glob } from "bun";
 import ct from "chalk-template";
+import ts from "typescript";
+import pkg from "../package.json" with { type: "json" };
+import type { HTMLAttribute, HTMLElement, Webtypes } from "./types/webtypes";
 
 const _root = dirname(Bun.main);
 

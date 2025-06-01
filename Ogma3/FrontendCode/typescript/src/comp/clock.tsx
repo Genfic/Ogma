@@ -1,9 +1,9 @@
 import { addToDate } from "@h/date-helpers";
-import { Styled } from "./common/_styled";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import css from "./clock.css";
+import { Styled } from "./common/_styled";
 
 const Clock: ComponentType<{ date: string }> = (props) => {
 	noShadowDOM();

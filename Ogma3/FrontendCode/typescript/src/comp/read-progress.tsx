@@ -1,9 +1,9 @@
-import { Styled } from "./common/_styled";
 import { clamp, normalize } from "@h/math-helpers";
+import type { Empty } from "@t/utils";
 import { type ComponentType, customElement } from "solid-element";
 import { createSignal, onCleanup, onMount } from "solid-js";
+import { Styled } from "./common/_styled";
 import css from "./read-progress.css";
-import type { Empty } from "@t/utils";
 
 const ReadProgress: ComponentType<Empty> = (_, { element }) => {
 	const [progress, setProgress] = createSignal(0);

@@ -1,5 +1,5 @@
-import { createUniqueId, type JSX, onMount, type ParentComponent, type ParentProps, Show } from "solid-js";
 import { createEventDispatcher } from "@solid-primitives/event-dispatcher";
+import { createUniqueId, type JSX, onMount, type ParentComponent, type ParentProps, Show } from "solid-js";
 
 export type DialogApi = {
 	open: () => void;
