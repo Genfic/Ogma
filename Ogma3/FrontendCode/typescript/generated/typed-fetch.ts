@@ -57,7 +57,7 @@ export async function typedFetch<TOut, TBody>(
 			...options,
 		});
 
-		if (!res.ok) {
+		if (res.status >= 400) {
 			return {
 				ok: false,
 				status: res.status,

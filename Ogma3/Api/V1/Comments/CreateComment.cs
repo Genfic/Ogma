@@ -4,11 +4,14 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Api.V1.Comments;
 
@@ -34,6 +37,7 @@ public static partial class CreateComment
 		Command request,
 		ApplicationDbContext context,
 		IUserService userService,
+		ETagService eTagService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -66,6 +70,8 @@ public static partial class CreateComment
 
 		// TODO: Make the notification shit better
 		// await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken, [uid]);
+
+		eTagService.Create(ETagFor.Comments, request.Thread);
 
 		return TypedResults.CreatedAtRoute(nameof(GetComment), new GetComment.Query(comment.Id));
 	}

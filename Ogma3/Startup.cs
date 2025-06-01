@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Net.Http.Headers;
 using NpgSqlGenerators;
 using Ogma3.Data;
@@ -34,6 +35,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.ServiceDefaults;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
+using Ogma3.Services.ETagService;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
@@ -41,6 +43,9 @@ using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
 using Serilog;
+using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Backplane.StackExchangeRedis;
+using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
@@ -131,7 +136,8 @@ public static class Startup
 		services
 			.AddScoped<IUserService, UserService>()
 			.AddSingleton<ICodeGenerator, CodeGenerator>()
-			.AddScoped<UserActivityService>();
+			.AddScoped<UserActivityService>()
+			.AddScoped<ETagService>();
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
@@ -188,6 +194,10 @@ public static class Startup
 		services.AddOutputCache(o => {
 			o.AddBasePolicy(p => p.Expire(TimeSpan.FromMinutes(5)));
 		});
+		services.AddFusionCache()
+			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
+			.WithDistributedCache(new RedisCache(new RedisCacheOptions { Configuration = configuration.GetConnectionString("garnet") ?? "localhost" }))
+			.WithBackplane(new RedisBackplane(new RedisBackplaneOptions { Configuration = configuration.GetConnectionString("garnet") ?? "localhost" }));
 
 		// Runtime compilation
 		services

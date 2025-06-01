@@ -28,10 +28,6 @@ export const Comment = (props: Props) => {
 	};
 	const edit = () => {};
 
-	onMount(() => {
-		console.log(props.owner, props.author);
-	});
-
 	const userOwnsComment = () =>
 		props.owner &&
 		props.author &&

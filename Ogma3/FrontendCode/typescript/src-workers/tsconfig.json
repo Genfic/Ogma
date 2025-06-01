@@ -1,7 +1,7 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"lib": ["WebWorker", "ES2022"],
+		"lib": ["WebWorker", "esnext"],
 		"target": "ES2022",
 		"module": "ES2022"
 	},

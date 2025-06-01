@@ -3,6 +3,7 @@ import { GetApiComments } from "@g/paths-public";
 import { CommentListPagination } from "./comment-list-pagination";
 import type { CommentDto } from "@g/types-public";
 import { Comment } from "./comment";
+import { stripNullish } from "@h/csharping";
 
 export interface CommentListFunctions {
 	submitted: () => void;
@@ -17,17 +18,48 @@ export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
 	const [highlight, setHighlight] = createSignal(0);
 	const [reload, setReload] = createSignal(0);
-	const [username, setUsername] = createSignal("");
+	const [username, setUsername] = createSignal<string | null>(null);
+
+	const [perPageEtags, setPerPageEtags] = createSignal<Record<number, string>>({});
 
 	const [commentsData] = createResource(
 		() => [props.id, currentPage(), highlight(), reload()] as const,
 		async ([id, page]) => {
-			const res = await GetApiComments(id, page, highlight());
+
+			const headers = stripNullish(perPageEtags()[page], (v) => ({
+				"If-None-Match": v
+			}), undefined);
+			console.log('Headers are', headers);
+
+			let data;
+
+			const res = await GetApiComments(id, page, highlight(), headers);
 			if (!res.ok) {
 				throw new Error(res.error ?? res.statusText);
 			}
-			setUsername(res.headers.get("X-Username") ?? "");
-			return res.data;
+
+			if (res.status === 304) {
+				console.log("Cache hit");
+				const cached = window.sessionStorage.getItem(perPageEtags()[page] ?? "");
+				if (cached) {
+					data = JSON.parse(cached) as typeof res.data;
+					console.log("Loading from cache", page, data);
+				} else {
+					const newRes = await GetApiComments(id, page, highlight());
+					if (newRes.ok && newRes.data) {
+						data = newRes.data;
+					}
+				}
+			} else {
+
+				setPerPageEtags((old) => ({ ...old, [page]: res.headers.get("ETag") ?? "" }));
+				data = res.data;
+			}
+
+			window.sessionStorage.setItem(perPageEtags()[page] ?? "", JSON.stringify(data));
+
+			setUsername(res.headers.get("X-Username"));
+			return data;
 		},
 	);
 
@@ -48,6 +80,7 @@ export const CommentList: Component<Props> = (props) => {
 	};
 
 	createEffect(() => {
+		if (highlight() === 0) return;
 		changeHighlight(highlight());
 	});
 
