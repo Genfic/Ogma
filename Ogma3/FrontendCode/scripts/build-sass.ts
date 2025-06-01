@@ -28,8 +28,13 @@ const root = dirname(Bun.main);
 const _base = join(root, "..", "styles");
 const _dest = join(root, "..", "..", "wwwroot", "css");
 
-if (values.clean) {
+const clean = async () => {
+	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
+};
+
+if (values.clean) {
+	await clean();
 }
 
 const compiler = await initAsyncCompiler();

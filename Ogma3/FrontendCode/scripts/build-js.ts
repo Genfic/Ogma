@@ -6,7 +6,6 @@ import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
-import { dirsize } from "./helpers/dirsize";
 import { log } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { Stopwatch } from "./helpers/stopwatch";
@@ -85,7 +84,12 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		}
 	}
 
-	return chunks;
+	const size = outputs
+		.filter((c) => (["chunk", "asset", "entry-point"] as (typeof c.kind)[]).includes(c.kind))
+		.map((o) => o.size)
+		.reduce((a, b) => a + b, 0);
+
+	return { chunks, size };
 };
 
 const getHash = async (filePath: string): Promise<string> => {
@@ -145,7 +149,7 @@ const compileAll = async () => {
 		await clean();
 	}
 
-	const jsChunks = await compile(
+	const { chunks: jsChunks, size: jsSize } = await compile(
 		new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`),
 		join(_dest, "/"),
 		"src",
@@ -154,7 +158,7 @@ const compileAll = async () => {
 
 	console.log(ct`{dim Generating manifest.json}`);
 	await generateManifest();
-	const workersChunks = await compile(
+	const { chunks: workersChunks, size: workersSize } = await compile(
 		new Glob(`${_source}/src-workers/**/[^_]*.ts`),
 		join(_dest, "workers"),
 		"src-workers",
@@ -165,8 +169,10 @@ const compileAll = async () => {
 	console.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
-	const size = await dirsize(`${_dest}/**/[!_]*.js`);
-	console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);
+	const size = convert(jsSize + workersSize, "bytes")
+		.to("best")
+		.toString(3);
+	console.log(ct`{green Total size: {bold.underline ${size}}}`);
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
 
