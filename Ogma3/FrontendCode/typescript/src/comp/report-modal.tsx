@@ -1,16 +1,20 @@
 import { Report } from "@g/ctconfig";
 import { PostApiReports as postReport } from "@g/paths-public";
 import type { EReportableContentTypes } from "@g/types-public";
-import { customElement, noShadowDOM } from "solid-element";
-import { createSignal, onMount, type ParentComponent } from "solid-js";
+import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { createSignal, onMount } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
-const ReportModal: ParentComponent<{
-	openSelector: string;
+export type ReportModalElement = HTMLElement & {
+	createNew: (id: number, type: EReportableContentTypes) => void;
+};
+
+const ReportModal: ComponentType<{
+	openSelector?: string | undefined;
 	csrf: string;
 	itemId: number;
 	itemType: EReportableContentTypes;
-}> = (props) => {
+}> = (props, { element }) => {
 	noShadowDOM();
 
 	const rules = {
@@ -21,19 +25,29 @@ const ReportModal: ParentComponent<{
 	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
 	const [reason, setReason] = createSignal("");
 	const [success, setSuccess] = createSignal<boolean | null>(null);
+	const [itemId, setItemId] = createSignal(props.itemId);
+	const [itemType, setItemType] = createSignal(props.itemType);
 
 	onMount(() => {
 		if (props.openSelector) {
-			const element = document.querySelector(props.openSelector);
-			if (element) {
-				element.addEventListener("click", show);
+			const el = document.querySelector(props.openSelector);
+			if (el) {
+				el.addEventListener("click", show);
 			} else {
 				console.log(`Element for selector ${props.openSelector} not found`);
 			}
+		} else {
+			element.createNew = createNew;
 		}
 	});
 
 	const show = () => {
+		dialogRef()?.open();
+	};
+
+	const createNew = (id: number, type: EReportableContentTypes) => {
+		setItemId(id);
+		setItemType(type);
 		dialogRef()?.open();
 	};
 
@@ -56,9 +70,9 @@ const ReportModal: ParentComponent<{
 		if (!validate()) return;
 		const res = await postReport(
 			{
-				itemId: props.itemId,
+				itemId: itemId(),
 				reason: reason(),
-				itemType: props.itemType,
+				itemType: itemType(),
 			},
 			{
 				RequestVerificationToken: props.csrf,
@@ -112,7 +126,7 @@ const ReportModal: ParentComponent<{
 customElement(
 	"report-modal",
 	{
-		openSelector: "",
+		openSelector: undefined,
 		csrf: "",
 		itemId: 0,
 		itemType: "" as EReportableContentTypes,

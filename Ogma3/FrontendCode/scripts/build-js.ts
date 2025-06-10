@@ -53,7 +53,7 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		outdir: to,
 		root: join(_source, root),
 		minify: values.minify,
-		sourcemap: "external",
+		sourcemap: "linked",
 		splitting: true,
 		plugins: [SolidPlugin(), cssMinifyPlugin],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,

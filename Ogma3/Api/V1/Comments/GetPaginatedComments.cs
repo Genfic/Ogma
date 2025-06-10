@@ -78,7 +78,7 @@ public static partial class GetPaginatedComments
 			.ToListAsync(cancellationToken);
 
 		// TODO: Remove after new comment system is done
-		var md = ctx.Request.Headers["X-Markdown"] is { } mdValue && mdValue == "true";
+		var md = ctx.Request.Headers["X-Markdown"] is var mdValue && mdValue == "true";
 
 		foreach (var comment in comments)
 		{
@@ -101,8 +101,8 @@ public static partial class GetPaginatedComments
 
 	private static string MakeEtag(Guid etag, int? page, long? highlight)
 	{
-		var p = page is { } ? page.ToString() : "n";
-		var h = highlight is { } ? highlight.ToString() : "n";
+		var p = page is not null ? page.ToString() : "n";
+		var h = highlight is not null ? highlight.ToString() : "n";
 		return $"{etag}-{p}-{h}";
 	}
 }

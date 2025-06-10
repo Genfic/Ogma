@@ -1,6 +1,7 @@
 o-comments {
 	display: block;
 	width: 70%;
+	margin-top: 1rem;
 }
 .comment-btn {
 	display: flex;

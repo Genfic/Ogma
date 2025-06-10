@@ -1,23 +1,36 @@
-import { DeleteApiComments } from "@g/paths-public";
-import type { CommentDto } from "@g/types-public";
+import { DeleteApiComments, GetApiCommentsRevisions } from "@g/paths-public";
+import type { CommentDto, GetRevisionResult } from "@g/types-public";
 import { long } from "@h/tinytime-templates";
-import { createSignal, Match, Show, Switch } from "solid-js";
+import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { DeletedCommentBody } from "./comment-body-deleted";
+import { CommentBodyEditor } from "./comment-body-editor";
 import { HiddenCommentBody } from "./comment-body-hidden";
+import { ReportModalElement } from "../comp/report-modal";
 
-type Props = CommentDto & {
+type Props = CommentDto & CommentProps;
+
+export type CommentProps = {
 	key: number;
 	marked: boolean;
 	owner: string | null;
 	onDelete: () => void;
 	onHighlightChange: (idx: number) => void;
 };
+
 const date = (dt: Date) => long.render(dt);
 
 export const Comment = (props: Props) => {
 	const [hidden, setHidden] = createSignal(props.isBlocked);
+	const [body, setBody] = createSignal(props.body);
+	const [editing, setEditing] = createSignal(false);
+	const [revisions, setRevisions] = createSignal<GetRevisionResult[]>([]);
+	const [showRevision, setShowRevision] = createSignal(false);
 
-	const report = () => {};
+	const report = () => {
+		const modal = document.getElementById("report-comment") as ReportModalElement;
+		if (!modal) return;
+		modal.createNew(props.id, "Comment");
+	};
 	const del = async () => {
 		const res = await DeleteApiComments(props.id);
 		if (res.ok) {
@@ -26,7 +39,42 @@ export const Comment = (props: Props) => {
 			console.error(res.error);
 		}
 	};
-	const edit = () => {};
+	const edit = () => {
+		setEditing(true);
+	};
+
+	const updated = (body: string) => {
+		setEditing(false);
+		setBody(body);
+	};
+
+	const history = async () => {
+		if (showRevision()) {
+			setShowRevision(false);
+			return;
+		}
+
+		const res = await GetApiCommentsRevisions(props.id);
+		if (res.ok) {
+			setRevisions(res.data);
+			setShowRevision(true);
+		} else {
+			console.error(res.error);
+		}
+	};
+
+	const commentState = () => {
+		if (hidden()) {
+			return "hidden";
+		}
+		if (props.deletedBy) {
+			return "deleted";
+		}
+		if (editing()) {
+			return "editing";
+		}
+		return "regular";
+	};
 
 	const userOwnsComment = () =>
 		props.owner && props.author && props.owner.toLowerCase() === props.author.userName.toLowerCase();
@@ -34,13 +82,16 @@ export const Comment = (props: Props) => {
 	return (
 		<div id={`comment-${props.id}`} classList={{ comment: true, highlight: props.marked }}>
 			<Switch>
-				<Match when={hidden()}>
+				<Match when={commentState() === "hidden"}>
 					<HiddenCommentBody onToggleVisibility={() => setHidden(!hidden())} />
 				</Match>
-				<Match when={props.deletedBy}>
+				<Match when={commentState() === "deleted"}>
 					<DeletedCommentBody creationDate={new Date(props.dateTime)} deletedBy={props.deletedBy} />
 				</Match>
-				<Match when={!hidden() && !props.deletedBy}>
+				<Match when={commentState() === "editing"}>
+					<CommentBodyEditor id={props.id} onCancel={() => setEditing(false)} onUpdate={updated} />
+				</Match>
+				<Match when={commentState() === "regular"}>
 					{props.author && (
 						<div class="author">
 							<a href={`/user/${props.author.userName}`} class="name">
@@ -79,12 +130,12 @@ export const Comment = (props: Props) => {
 
 							<p class="sm-line" />
 
-							<time datetime={new Date(props.dateTime).toISOString()} class="time">
-								{date(new Date(props.dateTime))}
+							<time datetime={props.dateTime.toISOString()} class="time">
+								{date(props.dateTime)}
 							</time>
 
 							<div class="actions">
-								<Show when={props.owner && !userOwnsComment()}>
+								<Show when={props.owner /*&& !userOwnsComment()*/}>
 									<button
 										type={"button"}
 										class="action-btn small red-hl"
@@ -105,7 +156,28 @@ export const Comment = (props: Props) => {
 							</div>
 						</div>
 
-						{props.body && <div class="body md" innerHTML={props.body} />}
+						<Show when={body()} keyed>
+							{(b) => <div class="body md" innerHTML={b} />}
+						</Show>
+
+						<Show when={props.isEdited}>
+							<button type="button" onClick={history} class="edit-data">
+								Edited
+							</button>
+						</Show>
+
+						<Show when={showRevision()}>
+							<ol class="history">
+								<For each={revisions()} fallback={<span>No revisions found</span>}>
+									{(rev) => (
+										<li>
+											<time datetime={rev.editTime.toISOString()}>{date(rev.editTime)}</time>
+											<div class="body" innerHTML={rev.body} />
+										</li>
+									)}
+								</For>
+							</ol>
+						</Show>
 					</div>
 				</Match>
 			</Switch>

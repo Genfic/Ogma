@@ -196,8 +196,7 @@ public static class Startup
 		});
 		services.AddFusionCache()
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
-			.WithDistributedCache(new RedisCache(new RedisCacheOptions { Configuration = configuration.GetConnectionString("garnet") ?? "localhost" }))
-			.WithBackplane(new RedisBackplane(new RedisBackplaneOptions { Configuration = configuration.GetConnectionString("garnet") ?? "localhost" }));
+			.WithDistributedCache(new RedisCache(new RedisCacheOptions { Configuration = configuration.GetConnectionString("garnet") ?? "localhost" }));
 
 		// Runtime compilation
 		services

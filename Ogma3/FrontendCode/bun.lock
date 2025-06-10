@@ -7,6 +7,7 @@
         "@angius/tinytime": "^1.2.0",
         "@atulin/bun-plugin-solid": "npm:@jsr/atulin__bun-plugin-solid",
         "@atulin/html-sanitizer": "npm:@jsr/atulin__html-sanitizer",
+        "@solid-primitives/destructure": "^0.2.1",
         "@solid-primitives/event-dispatcher": "^0.1.1",
         "@types/ejs": "^3.1.5",
         "es-toolkit": "^1.38.0",
@@ -362,7 +363,11 @@
 
     "@sindresorhus/merge-streams": ["@sindresorhus/merge-streams@2.3.0", "", {}, "sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg=="],
 
+    "@solid-primitives/destructure": ["@solid-primitives/destructure@0.2.1", "", { "dependencies": { "@solid-primitives/utils": "^6.3.1" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-TIT3g14kokQ7Zi0uDgs0xv6GVaxZsFZzxuNyIAjKj5Ywd3vgE1Gf2gf8t9CDIWZJ/LNEnI01Bm+BFk43GMap0A=="],
+
     "@solid-primitives/event-dispatcher": ["@solid-primitives/event-dispatcher@0.1.1", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-Lo3OGmGuzCZGxMUDue0fBbbeFGdKWMGnWYk87il4FgSAosVxWbNCI9egxYwwEjdxf2bcgiFJhZfC03cmNc0OAw=="],
+
+    "@solid-primitives/utils": ["@solid-primitives/utils@6.3.1", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-4/Z59nnwu4MPR//zWZmZm2yftx24jMqQ8CSd/JobL26TPfbn4Ph8GKNVJfGJWShg1QB98qObJSskqizbTvcLLA=="],
 
     "@stylelint-types/stylelint-scss": ["@stylelint-types/stylelint-scss@6.11.0", "", { "peerDependencies": { "stylelint": ">=16.0.0", "stylelint-define-config": ">=1.0.0" }, "optionalPeers": ["stylelint"] }, "sha512-KvM1i/vCS+ZMpGRU1RJB1lVvtwvc0DQGwQSA01exJm+acnugte3nS9x29XyjlDBDRAN0ulblI4G+UB1O9T8Keg=="],
 

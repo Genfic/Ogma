@@ -4,14 +4,12 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Hybrid;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
-using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Api.V1.Comments;
 
@@ -41,7 +39,7 @@ public static partial class CreateComment
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.User?.GetNumericId() is not { } uid) return TypedResults.Unauthorized();
 
 		var isMuted = await CheckIfMuted(context, uid, cancellationToken);
 		if (isMuted) return TypedResults.Unauthorized();

@@ -3,6 +3,11 @@ export type AddBookToShelfCommand = {
     storyId: number;
 };
 
+export type AddBookToShelfResult = {
+    shelfId: number;
+    storyId: number;
+};
+
 export type AddStoryToFolderCommand = {
     folderId: number;
     storyId: number;
@@ -112,6 +117,14 @@ export type GetClubsWithStoryResult = {
     folders: string[];
 };
 
+export type GetCurrentUserQuickShelvesResult = {
+    id: number;
+    name: string;
+    color: string | null;
+    iconName: string | null;
+    doesContainBook: boolean;
+};
+
 export type GetFolderResult = {
     id: number;
     name: string;
@@ -123,6 +136,14 @@ export type GetJoinedClubsResponse = {
     id: number;
     name: string;
     icon: string;
+};
+
+export type GetPaginatedUserShelvesResult = {
+    id: number;
+    name: string;
+    color: string | null;
+    iconName: string | null;
+    doesContainBook: boolean;
 };
 
 export type GetRevisionResult = {
@@ -190,14 +211,6 @@ export type MarkChapterAsUnreadCommand = {
 
 export type None = undefined;
 
-export type QuickShelvesResult = {
-    id: number;
-    name: string;
-    color: string | null;
-    iconName: string | null;
-    doesContainBook: boolean;
-};
-
 export type QuoteDto = {
     body: string;
     author: string;
@@ -242,11 +255,6 @@ export type RoleTinyDto = {
     order: number;
 };
 
-export type ShelfAddResult = {
-    shelfId: number;
-    storyId: number;
-};
-
 export type ShelfDto = {
     id: number;
     name: string;
@@ -259,14 +267,6 @@ export type ShelfDto = {
     storiesCount: number;
     iconName: string | null;
     iconId: number | null;
-};
-
-export type ShelfResult = {
-    id: number;
-    name: string;
-    color: string | null;
-    iconName: string | null;
-    doesContainBook: boolean;
 };
 
 export type SubscribeCommentsThreadCommand = {
@@ -344,7 +344,7 @@ export type UpdateShelfCommand = {
 
 export type UpdateTagCommand = {
     id: number;
-    name: string | null;
+    name: string;
     description: string | null;
     namespace: "ContentWarning" | "Genre" | "Franchise" | null;
 };

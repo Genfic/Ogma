@@ -50,15 +50,17 @@ const Comments = (props: Props) => {
 
 	const handleEnterKey = async (e: KeyboardEvent) => {
 		if (e.key === "Enter" && e.ctrlKey) {
-			e.preventDefault();
-			await submit(e);
+			await send();
 		}
 	};
 
 	const submit = async (e: Event) => {
 		e.preventDefault();
+		await send();
+	};
 
-		if (body().length >= maxLength()) {
+	const send = async () => {
+		if (body().trim().length >= maxLength()) {
 			return;
 		}
 
@@ -108,9 +110,9 @@ const Comments = (props: Props) => {
 					<form>
 						<textarea
 							class="comment-box active-border"
-							onChange={(e) => setBody(e.target.value)}
+							onInput={(e) => setBody(e.target.value)}
 							value={body()}
-							onKeyDown={handleEnterKey}
+							onKeyUp={handleEnterKey}
 							name="body"
 							id="body"
 							rows="3"
@@ -128,7 +130,7 @@ const Comments = (props: Props) => {
 						</div>
 
 						<div class="buttons">
-							<button type="submit" class="comment-btn active-border" onclick={submit}>
+							<button type="submit" class="comment-btn active-border" onClick={submit}>
 								<o-icon icon="lucide:message-square-plus" />
 								Comment
 							</button>
