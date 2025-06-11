@@ -8,7 +8,7 @@ import type { HTMLAttribute, HTMLElement, Webtypes } from "./types/webtypes";
 const _root = dirname(Bun.main);
 
 // --- Configuration ---
-const SRC_DIR = join(_root, "..", "typescript", "src-solid");
+const SRC_DIR = join(_root, "..", "typescript", "src");
 const OUTPUT_FILE = join(_root, "..", "web-types.json");
 const FILE_PATTERN = "**/*.tsx";
 const WEB_TYPES_SCHEMA = "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json";
