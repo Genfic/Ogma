@@ -44,7 +44,6 @@ using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
 using Serilog;
 using ZiggyCreatures.Caching.Fusion;
-using ZiggyCreatures.Caching.Fusion.Backplane.StackExchangeRedis;
 using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
 using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
