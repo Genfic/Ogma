@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Pages;
 
-public sealed class IndexModel(ApplicationDbContext context, IMemoryCache cache, ILogger<IndexModel> logger)
+public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache, ILogger<IndexModel> logger)
 	: PageModel
 {
 	public required List<StoryCard> RecentStories { get; set; }
@@ -19,35 +19,34 @@ public sealed class IndexModel(ApplicationDbContext context, IMemoryCache cache,
 	{
 		var shortExpiry = TimeSpan.FromMinutes(5);
 		var longExpiry = TimeSpan.FromHours(1);
-		var uid = User.GetNumericId();
 
-		// Try getting recent stories from cache
-		RecentStories = await cache.GetOrCreateAsync("IndexRecent", async entry =>
-		{
+		// Try getting recent stories from the cache
+		RecentStories = await cache.GetOrSetAsync("IndexRecent", async ct => {
 			logger.LogInformation("{Stories} cache miss!", nameof(RecentStories));
-			entry.AbsoluteExpirationRelativeToNow = shortExpiry;
-			return await GetTopStoryCards(10, uid);
-		}) ?? [];
+			return await GetTopStoryCards(10, cancellationToken: ct);
+		}, options => options.Duration = shortExpiry);
 
-		// Try getting top stories from cache
-		TopStories = await cache.GetOrCreateAsync("IndexTop", async entry =>
-		{
+		// Try getting top stories from the cache
+		TopStories = await cache.GetOrSetAsync("IndexTop", async ct => {
 			logger.LogInformation("{Stories} cache miss!", nameof(TopStories));
-			entry.AbsoluteExpirationRelativeToNow = longExpiry;
-			return await GetTopStoryCards(10, uid, EStorySortingOptions.ScoreDescending);
-		}) ?? [];
+			return await GetTopStoryCards(10, EStorySortingOptions.ScoreDescending, ct);
+		}, options => options.Duration = longExpiry);
 
-		// Try getting recently updated stories from cache
-		LastUpdatedStories = await cache.GetOrCreateAsync("IndexUpdated", async entry =>
-		{
+		// Try getting recently updated stories from the cache
+		LastUpdatedStories = await cache.GetOrSetAsync("IndexUpdated", async ct => {
 			logger.LogInformation("{Stories} cache miss!", nameof(LastUpdatedStories));
-			entry.AbsoluteExpirationRelativeToNow = shortExpiry;
-			return await GetTopStoryCards(10, uid, EStorySortingOptions.UpdatedDescending);
-		}) ?? [];
+			return await GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending, ct);
+		}, options => options.Duration = shortExpiry);
 	}
-	
-	private async Task<List<StoryCard>> GetTopStoryCards(int count, long? userId, EStorySortingOptions sort = EStorySortingOptions.DateDescending)
+
+	private async Task<List<StoryCard>> GetTopStoryCards(
+		int count,
+		EStorySortingOptions sort = EStorySortingOptions.DateDescending,
+		CancellationToken cancellationToken = default
+	)
 	{
+		var userId = User.GetNumericId();
+
 		return await context.Stories
 			.TagWith($"{nameof(GetTopStoryCards)} -> {count}, {sort}")
 			.Where(b => b.PublicationDate != null)
@@ -56,6 +55,6 @@ public sealed class IndexModel(ApplicationDbContext context, IMemoryCache cache,
 			.SortByEnum(sort)
 			.Take(count)
 			.ProjectToCard()
-			.ToListAsync();
+			.ToListAsync(cancellationToken);
 	}
 }
