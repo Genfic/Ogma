@@ -41,8 +41,10 @@ public static partial class GetPaginatedComments
 	{
 		var ctx = httpContextAccessor.HttpContext ?? throw new InvalidOperationException("HttpContext is null");
 
+		var uid = userService.User?.GetNumericId();
+
 		var (thread, page, highlight) = request;
-		var etag = eTagService.Get(ETagFor.Comments, request.Thread);
+		var etag = eTagService.Get(ETagFor.Comments, request.Thread, uid);
 
 		ctx.Response.Headers.CacheControl = "public, max-age=0, must-revalidate";
 		ctx.Response.Headers.ETag = etag.ToString();
@@ -73,7 +75,7 @@ public static partial class GetPaginatedComments
 		var comments = await context.Comments
 			.Where(c => c.CommentsThreadId == thread)
 			.OrderByDescending(c => c.DateTime)
-			.Select(CommentMappings.ToCommentDto(userService.User?.GetNumericId()))
+			.Select(CommentMappings.ToCommentDto(uid))
 			.Paginate(p, ogmaConfig.CommentsPerPage)
 			.ToListAsync(cancellationToken);
 

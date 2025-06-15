@@ -264,7 +264,6 @@ async function generateWebTypes() {
 
 	const webTypesJson: Webtypes = {
 		$schema: WEB_TYPES_SCHEMA,
-		framework: "solid",
 		name: packageInfo.name,
 		version: packageInfo.version,
 		"js-types-syntax": "typescript",

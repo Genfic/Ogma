@@ -69,7 +69,7 @@ public static partial class CreateComment
 		// TODO: Make the notification shit better
 		// await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken, [uid]);
 
-		eTagService.Create(ETagFor.Comments, request.Thread);
+		eTagService.Create(ETagFor.Comments, request.Thread, uid);
 
 		return TypedResults.CreatedAtRoute(nameof(GetComment), new GetComment.Query(comment.Id));
 	}
