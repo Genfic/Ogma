@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Images;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
@@ -168,8 +169,11 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				ogmaConfig.StoryCoverWidth,
 				ogmaConfig.StoryCoverHeight
 			);
-			story.CoverId = file.FileId;
-			story.Cover = Path.Join(ogmaConfig.Cdn, file.Path);
+			story.Cover = new Image
+			{
+				Url = Path.Join(ogmaConfig.Cdn, file.Path),
+				BackblazeId = file.FileId,
+			};
 		}
 
 		await context.SaveChangesAsync();

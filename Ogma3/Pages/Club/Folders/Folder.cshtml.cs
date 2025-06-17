@@ -63,7 +63,7 @@ public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config,
 			.Blacklist(context, uid)
 			.OrderByDescending(s => s.PublicationDate)
 			.Paginate(page, config.StoriesPerPage)
-			.ProjectToCard()
+			.Select(StoryMapper.MapToCard)
 			.ToListAsync();
 
 		// Prepare pagination

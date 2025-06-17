@@ -43,7 +43,7 @@ public sealed class DetailsModel(ClubRepository clubRepo, ApplicationDbContext c
 				CreationDate = ct.CreationDate,
 				AuthorName = ct.Author.UserName,
 				AuthorId = ct.Author.Id,
-				AuthorAvatar = ct.Author.Avatar,
+				AuthorAvatar = ct.Author.Avatar.Url,
 				AuthorRole = ct.Author.Roles
 					.Where(ur => ur.Order > 0)
 					.OrderBy(ur => ur.Order)
@@ -55,7 +55,7 @@ public sealed class DetailsModel(ClubRepository clubRepo, ApplicationDbContext c
 
 		if (clubThread is null) return NotFound();
 		ClubThread = clubThread;
-		
+
 		var clubBar = await clubRepo.GetClubBar(ClubThread.ClubId);
 		if (clubBar is null) return NotFound();
 		ClubBar = clubBar;

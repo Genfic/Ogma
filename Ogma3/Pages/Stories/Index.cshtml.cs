@@ -63,7 +63,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			.AsSplitQuery()
 			.SortByEnum(Sort)
 			.Paginate(page ?? 1, config.StoriesPerPage)
-			.ProjectToCard()
+			.Select(StoryMapper.MapToCard)
 			.ToListAsync();
 
 		// Prepare pagination

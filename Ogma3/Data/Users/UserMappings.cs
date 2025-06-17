@@ -13,7 +13,7 @@ public static partial class UserMappings
 	{
 		Id = u.Id,
 		UserName = u.UserName,
-		Avatar = u.Avatar,
+		Avatar = u.Avatar.Url,
 		Email = u.Email,
 		Title = u.Title,
 		LastActive = u.LastActive,

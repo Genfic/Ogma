@@ -41,7 +41,7 @@ public sealed class IndexModel : PageModel
 				IsPinned = ct.IsPinned,
 				CreationDate = ct.CreationDate,
 				AuthorName = ct.Author.UserName,
-				AuthorAvatar = ct.Author.Avatar,
+				AuthorAvatar = ct.Author.Avatar.Url,
 				CommentsCount = ct.CommentThread.Comments.Count,
 			})
 			.ToListAsync();

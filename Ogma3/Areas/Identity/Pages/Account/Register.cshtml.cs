@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
 
@@ -86,7 +87,7 @@ public sealed class RegisterModel(
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
 		if (!ModelState.IsValid) return Page();
-		
+
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);
 		if (!turnstileResponse.Success)
@@ -120,7 +121,10 @@ public sealed class RegisterModel(
 		{
 			UserName = Input.Name,
 			Email = Input.Email,
-			Avatar = avatar,
+			Avatar = new Image
+			{
+				Url = avatar,
+			},
 		};
 		var result = await userManager.CreateAsync(user, Input.Password);
 

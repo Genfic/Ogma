@@ -45,7 +45,7 @@ public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext c
 		Stories = await query
 			.SortByEnum(EStorySortingOptions.DateDescending)
 			.Paginate(page, PerPage)
-			.ProjectToCard()
+			.Select(StoryMapper.MapToCard)
 			.AsNoTracking()
 			.ToListAsync();
 

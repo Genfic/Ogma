@@ -36,7 +36,6 @@ public sealed class ClubConfiguration : BaseConfiguration<Club>
 			.IsRequired()
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
-
 		// NAVIGATION
 		builder
 			.HasMany(c => c.Threads)
@@ -55,5 +54,11 @@ public sealed class ClubConfiguration : BaseConfiguration<Club>
 			.WithOne(r => r.Club)
 			.HasForeignKey(r => r.ClubId)
 			.OnDelete(DeleteBehavior.Cascade);
+
+		builder
+			.HasOne(c => c.Icon)
+			.WithOne()
+			.HasForeignKey<Club>(c => c.IconId)
+			.OnDelete(DeleteBehavior.Restrict);
 	}
 }

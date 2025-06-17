@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.Images;
 using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Reports;
@@ -40,8 +41,8 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	[PersonalData] public List<string> Links { get; set; } = [];
 
-	[PersonalData] public string Avatar { get; set; } = null!;
-	public string? AvatarId { get; set; }
+	public Image Avatar { get; set; } = null!;
+	public long AvatarId { get; set; }
 
 	[PersonalData] public DateTimeOffset RegistrationDate { get; set; }
 

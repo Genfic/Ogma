@@ -41,7 +41,7 @@ public sealed class TagModel(ApplicationDbContext context) : PageModel
 		Stories = await query
 			.OrderByDescending(s => s.PublicationDate)
 			.Paginate(page, PerPage)
-			.ProjectToCard()
+			.Select(StoryMapper.MapToCard)
 			.ToListAsync();
 
 		// Prepare pagination

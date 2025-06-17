@@ -3,6 +3,7 @@ using Ogma3.Data.Bases;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.Folders;
+using Ogma3.Data.Images;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Shelves;
@@ -21,8 +22,8 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public string Slug { get; set; } = null!;
 	public string Description { get; set; } = null!;
 	public string Hook { get; set; } = null!;
-	public string Cover { get; set; } = null!;
-	public string? CoverId { get; set; }
+	public Image Cover { get; set; } = null!;
+	public long CoverId { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset? PublicationDate { get; set; }
 

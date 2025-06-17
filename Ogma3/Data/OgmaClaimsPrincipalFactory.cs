@@ -11,6 +11,7 @@ public sealed class OgmaClaimsPrincipalFactory
 (
 	UserManager<OgmaUser> userManager,
 	RoleManager<OgmaRole> roleManager,
+	ApplicationDbContext context,
 	IOptions<IdentityOptions> options)
 	: UserClaimsPrincipalFactory<OgmaUser, OgmaRole>(userManager, roleManager, options)
 {
@@ -24,8 +25,13 @@ public sealed class OgmaClaimsPrincipalFactory
 			.Where(r => r.Users.Any(u => u.Id == user.Id))
 			.AnyAsync();
 
+		var avatarUrl = await context.Users
+			.Where(u => u.Id == user.Id)
+			.Select(u => u.Avatar.Url)
+			.FirstOrDefaultAsync();
+
 		((ClaimsIdentity?)principal.Identity)?.AddClaims([
-			new(ClaimTypes.Avatar, user.Avatar),
+			new(ClaimTypes.Avatar, avatarUrl ?? string.Empty),
 			new(ClaimTypes.Title, user.Title ?? string.Empty),
 			new(ClaimTypes.IsStaff, isStaff.ToString()),
 		]);

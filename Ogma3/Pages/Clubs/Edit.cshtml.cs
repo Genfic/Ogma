@@ -6,17 +6,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.Images;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
-using Serilog;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
+public sealed class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig, ILogger<EditModel> logger) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -84,7 +84,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
 
-		Log.Information("User {UserId} attempted to edit club {ClubId}", uid, id);
+		logger.LogInformation("User {UserId} attempted to edit club {ClubId}", uid, id);
 
 		var club = await context.Clubs
 			.Where(c => c.Id == id)
@@ -95,7 +95,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 		if (club is null)
 		{
-			Log.Information("User {UserId} did not have the right role to update club {ClubId}, or club does not exist", uid, id);
+			logger.LogInformation("User {UserId} did not have the right role to update club {ClubId}, or club does not exist", uid, id);
 			return NotFound();
 		}
 
@@ -112,11 +112,14 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				ogmaConfig.ClubIconWidth,
 				ogmaConfig.ClubIconHeight
 			);
-			club.IconId = file.FileId;
-			club.Icon = Path.Join(ogmaConfig.Cdn, file.Path);
+			club.Icon = new Image
+			{
+				Url = Path.Join(ogmaConfig.Cdn, file.Path),
+				BackblazeId = file.FileId,
+			};
 		}
 
-		Log.Information("User {UserId} succeeded in editing club {ClubId}", uid, id);
+		logger.LogInformation("User {UserId} succeeded in editing club {ClubId}", uid, id);
 		await context.SaveChangesAsync();
 
 		return Routes.Pages.Club_Index.Get(club.Id, club.Slug).Redirect(this);

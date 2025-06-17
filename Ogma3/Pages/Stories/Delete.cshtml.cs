@@ -57,7 +57,7 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 
 		if (story is null) return NotFound();
 		Story = story;
-		
+
 		return Page();
 	}
 
@@ -70,6 +70,7 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		// Get the story and make sure the logged-in user matches author
 		var story = await context.Stories
 			.Where(s => s.Id == id)
+			.Include(story => story.Cover)
 			.FirstOrDefaultAsync();
 
 		if (story is null) return NotFound();
@@ -79,9 +80,9 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		context.Stories.Remove(story);
 
 		// Delete cover
-		if (story.CoverId is not null)
+		if (story.Cover is { BackblazeId: not null })
 		{
-			await uploader.Delete(story.Cover, story.CoverId);
+			await uploader.Delete(story.Cover.Url, story.Cover.BackblazeId);
 		}
 
 		// Save

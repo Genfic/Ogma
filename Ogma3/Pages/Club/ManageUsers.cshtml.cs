@@ -28,7 +28,7 @@ public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 					.FirstOrDefault()
 			))
 			.FirstOrDefaultAsync();
-		
+
 		if (club is null) return NotFound();
 		Club = club;
 
@@ -41,7 +41,7 @@ public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 				cm.MemberId,
 				cm.Member.UserName,
 				cm.MemberSince,
-				cm.Member.Avatar,
+				cm.Member.Avatar.Url,
 				cm.Role
 			))
 			.ToListAsync();

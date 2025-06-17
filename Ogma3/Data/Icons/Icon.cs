@@ -10,21 +10,21 @@ namespace Ogma3.Data.Icons;
 public sealed class Icon : BaseModel
 {
 	public string Name { get; init; }
+}
 
-	public sealed class IconConfiguration : BaseConfiguration<Icon>
+public sealed class IconConfiguration : BaseConfiguration<Icon>
+{
+	public override void Configure(EntityTypeBuilder<Icon> builder)
 	{
-		public override void Configure(EntityTypeBuilder<Icon> builder)
-		{
-			base.Configure(builder);
+		base.Configure(builder);
 
-			builder
-				.HasIndex(i => i.Name)
-				.IsUnique();
+		builder
+			.HasIndex(i => i.Name)
+			.IsUnique();
 
-			builder
-				.Property(i => i.Name)
-				.IsRequired()
-				.HasMaxLength(32);
-		}
+		builder
+			.Property(i => i.Name)
+			.IsRequired()
+			.HasMaxLength(32);
 	}
 }

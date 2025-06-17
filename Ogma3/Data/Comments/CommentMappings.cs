@@ -18,7 +18,7 @@ public static class CommentMappings
 			? null
 			: new UserSimpleDto
 			{
-				Avatar = c.Author.Avatar,
+				Avatar = c.Author.Avatar.Url,
 				Title = c.Author.Title,
 				UserName = c.Author.UserName,
 				Roles = c.Author.Roles.Select(r => new RoleTinyDto(r.Name, r.Color, r.Order)),

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Images;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
@@ -33,7 +34,7 @@ public sealed class CreateModel(
 	public async Task<IActionResult> OnGetAsync()
 	{
 		Input = new InputModel();
-		
+
 		Ratings = await context.Ratings
 			.OrderBy(r => r.Order)
 			.ProjectToDto()
@@ -103,7 +104,7 @@ public sealed class CreateModel(
 			.Where(c => c.Name is not null)
 			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
 			.ToList();
-		
+
 		// Add story
 		var story = new Story
 		{
@@ -114,7 +115,10 @@ public sealed class CreateModel(
 			Hook = Input.Hook,
 			RatingId = Input.Rating,
 			Tags = tags,
-			Cover = "/img/placeholders/ph-250.png",
+			Cover = new Image
+			{
+				Url = "/img/placeholders/ph-250.png",
+			},
 			Credits = credits,
 		};
 
@@ -127,8 +131,11 @@ public sealed class CreateModel(
 				ogmaConfig.StoryCoverWidth,
 				ogmaConfig.StoryCoverHeight
 			);
-			story.CoverId = file.FileId;
-			story.Cover = Path.Join(ogmaConfig.Cdn, file.Path);
+			story.Cover = new Image
+			{
+				Url = Path.Join(ogmaConfig.Cdn, file.Path),
+				BackblazeId = file.FileId,
+			};
 		}
 
 		context.Stories.Add(story);

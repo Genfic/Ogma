@@ -30,7 +30,7 @@ public static partial class GetClubsWithStory
 			.Select(c => new Result(
 				c.Club.Id,
 				c.Club.Name,
-				c.Club.Icon,
+				c.Club.Icon.Url,
 				c.Folders.Select(f => f.Name)
 			))
 			.ToArrayAsync(cancellationToken);

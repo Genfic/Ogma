@@ -19,7 +19,7 @@ public sealed class Members(ClubRepository clubRepo, ApplicationDbContext contex
 		var clubBar = await clubRepo.GetClubBar(id);
 		if (clubBar is null) return NotFound();
 		ClubBar = clubBar;
-		
+
 		ClubMembers = await context.ClubMembers
 			.Where(cm => cm.ClubId == id)
 			.Select(cm => cm.Member)
@@ -28,7 +28,7 @@ public sealed class Members(ClubRepository clubRepo, ApplicationDbContext contex
 			{
 				UserName = u.UserName,
 				Title = u.Title,
-				Avatar = u.Avatar,
+				Avatar = u.Avatar.Url,
 				Roles = u.Roles.Select(r => new RoleDto
 				{
 					Id = r.Id,

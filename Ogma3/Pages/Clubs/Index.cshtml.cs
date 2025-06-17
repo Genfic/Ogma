@@ -52,7 +52,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 				Name = c.Name,
 				Slug = c.Slug,
 				Hook = c.Hook,
-				Icon = c.Icon,
+				Icon = c.Icon.Url,
 				StoriesCount = c.Folders.Sum(f => f.Stories.Count),
 				ThreadsCount = c.Threads.Count,
 				ClubMembersCount = c.ClubMembers.Count,

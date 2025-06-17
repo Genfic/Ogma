@@ -6,12 +6,11 @@ using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
-using Serilog;
 
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uploader, ILogger<DeleteModel> logger) : PageModel
 {
 	[BindProperty] public required GetData Club { get; set; }
 
@@ -61,30 +60,40 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
-		Log.Information("User {UserId} attempted to delete club {ClubId}", uid, id);
+		logger.LogInformation("User {UserId} attempted to delete club {ClubId}", uid, id);
 
-		var club = await context.Clubs
+		var icon = await context.Clubs
 			.Where(c => c.Id == id)
+			.Select(c => c.Icon)
+			.FirstOrDefaultAsync();
+
+		var rows = await context.Clubs
 			.Where(c => c.ClubMembers
 				.Where(cm => cm.MemberId == uid)
 				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
-			.FirstOrDefaultAsync();
+			.ExecuteDeleteAsync();
 
-		if (club is null)
+		if (rows <= 0)
 		{
-			Log.Information("User {UserId} did not succeed in deleting club {ClubId}", uid, id);
+			logger.LogInformation("User {UserId} did not succeed in deleting club {ClubId}", uid, id);
 			return NotFound();
 		}
 
-		Log.Information("User {UserId} succeeded in deleting club {ClubId}", uid, id);
-		context.Clubs.Remove(club);
+		logger.LogInformation("User {UserId} succeeded in deleting club {ClubId}", uid, id);
 
-		if (club.IconId is not null)
+		if (icon is { BackblazeId: not null })
 		{
-			await uploader.Delete(club.Icon, club.IconId);
+			await uploader.Delete(icon.Url, icon.BackblazeId);
 		}
 
-		await context.SaveChangesAsync();
+		var imageRows = await context.Images
+			.Where(i => i.Id == (icon == null ? null : icon.Id))
+			.ExecuteDeleteAsync();
+
+		if (imageRows <= 0)
+		{
+			logger.LogInformation("User {UserId} did not succeed in deleting club icon {ClubId}", uid, id);
+		}
 
 		return Routes.Pages.Index.Get().Redirect(this);
 	}

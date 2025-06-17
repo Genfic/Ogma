@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
+using Ogma3.Data.Images;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
@@ -76,8 +77,11 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 			Slug = Input.Name.Friendlify(),
 			Hook = Input.Hook,
 			Description = Input.Description,
-			Icon = icon,
-			IconId = iconId,
+			Icon = new Image
+			{
+				Url = icon,
+				BackblazeId = iconId,
+			},
 			ClubMembers = new List<ClubMember>
 			{
 				new()

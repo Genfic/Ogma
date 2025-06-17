@@ -21,7 +21,7 @@ public sealed class IndexModel(ApplicationDbContext context, ClubRepository club
 		var clubBar = await clubRepo.GetClubBar(id);
 		if (clubBar is null) return NotFound();
 		ClubBar = clubBar;
-		
+
 		var query = context.ClubThreads
 			.Where(ct => ct.ClubId == id)
 			.Where(ct => ct.DeletedAt == null);
@@ -38,7 +38,7 @@ public sealed class IndexModel(ApplicationDbContext context, ClubRepository club
 				IsPinned = ct.IsPinned,
 				CreationDate = ct.CreationDate,
 				AuthorName = ct.Author.UserName,
-				AuthorAvatar = ct.Author.Avatar,
+				AuthorAvatar = ct.Author.Avatar.Url,
 				CommentsCount = ct.CommentThread.Comments.Count,
 			})
 			.ToListAsync();

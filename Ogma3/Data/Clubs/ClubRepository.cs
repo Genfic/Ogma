@@ -20,7 +20,7 @@ public sealed class ClubRepository(ApplicationDbContext context, IUserService us
 				Slug = c.Slug,
 				Hook = c.Hook,
 				Description = c.Description,
-				Icon = c.Icon,
+				Icon = c.Icon.Url,
 				CreationDate = c.CreationDate,
 				ThreadsCount = c.Threads.Count,
 				ClubMembersCount = c.ClubMembers.Count,

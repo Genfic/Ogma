@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
@@ -81,6 +82,7 @@ public sealed partial class IndexModel
 
 		var user = await context.Users
 			.Where(u => u.Id == uid)
+			.Include(u => u.Avatar)
 			.FirstOrDefaultAsync();
 
 		if (user is null) return NotFound("Unable to load user");
@@ -97,9 +99,9 @@ public sealed partial class IndexModel
 		if (Input.Avatar is { Length: > 0 })
 		{
 			// Delete the old avatar if exists
-			if (user.AvatarId is not null)
+			if (user.Avatar.BackblazeId is not null)
 			{
-				await uploader.Delete(user.Avatar, user.AvatarId);
+				await uploader.Delete(user.Avatar.Url, user.Avatar.BackblazeId);
 			}
 
 			// Upload the new one
@@ -109,18 +111,24 @@ public sealed partial class IndexModel
 				config.AvatarWidth,
 				config.AvatarHeight
 			);
-			user.AvatarId = file.FileId;
-			user.Avatar = Path.Join(config.Cdn, file.Path);
+			user.Avatar = new Image
+			{
+				Url = Path.Join(config.Cdn, file.Path),
+				BackblazeId = file.FileId,
+			};
 		}
 		else if (Input.DeleteAvatar)
 		{
-			if (user.AvatarId is not null)
+			if (user.Avatar.BackblazeId is not null)
 			{
-				await uploader.Delete(user.Avatar, user.AvatarId);
+				await uploader.Delete(user.Avatar.Url, user.Avatar.BackblazeId);
 			}
 
-			user.AvatarId = null;
-			user.Avatar = new Uri(config.AvatarServiceUrl).AppendSegments($"{user.UserName}.png").ToString();
+			user.Avatar = new Image
+			{
+				Url = new Uri(config.AvatarServiceUrl).AppendSegments($"{user.UserName}.png").ToString(),
+				BackblazeId = null,
+			};
 		}
 
 		if (Input.Title != user.Title)

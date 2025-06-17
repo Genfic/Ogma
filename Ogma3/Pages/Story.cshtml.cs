@@ -26,7 +26,7 @@ public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext con
 			.Where(s => s.PublicationDate != null || s.AuthorId == uid)
 			.Where(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff())
 			.AsSplitQuery()
-			.ProjectToStoryDetails()
+			.Select(StoryMapper.MapToDetails)
 			.FirstOrDefaultAsync();
 
 		if (story is null) return NotFound();
@@ -45,7 +45,7 @@ public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext con
 			.OrderBy(c => c.Order)
 			.ProjectToBasic()
 			.ToArrayAsync();
-		
+
 		return Page();
 	}
 }

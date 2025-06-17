@@ -36,7 +36,7 @@ public sealed class Users(ApplicationDbContext context) : PageModel
 				Name = u.UserName,
 				Email = u.Email,
 				Title = u.Title,
-				Avatar = u.Avatar,
+				Avatar = u.Avatar.Url,
 				RoleNames = u.Roles.Select(r => r.Name),
 				RegistrationDate = u.RegistrationDate,
 				LastActive = u.LastActive,

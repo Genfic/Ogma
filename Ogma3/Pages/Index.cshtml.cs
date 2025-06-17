@@ -54,7 +54,7 @@ public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache,
 			.Blacklist(context, userId)
 			.SortByEnum(sort)
 			.Take(count)
-			.ProjectToCard()
+			.Select(StoryMapper.MapToCard)
 			.ToListAsync(cancellationToken);
 	}
 }
