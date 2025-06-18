@@ -1,10 +1,11 @@
+using Ogma3.Infrastructure.Constants;
 using StackExchange.Redis;
 
 namespace Ogma3.Services.ETagService;
 
 public sealed class ETagService(IConnectionMultiplexer garnet)
 {
-	private IDatabase Db => garnet.GetDatabase();
+	private IDatabase Db => garnet.GetDatabase(GarnetDatabase.ETag);
 	private static string GetKey<T>(ETagFor etagFor, T id, long? userId = null)
 		=> $"etag_{etagFor.ToStringFast()}:{id}" + (userId.HasValue ? $":{userId}" : "");
 

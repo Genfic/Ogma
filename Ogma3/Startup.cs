@@ -26,6 +26,7 @@ using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Compression;
+using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Middleware;
@@ -195,7 +196,14 @@ public static class Startup
 		});
 		services.AddFusionCache()
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
-			.WithDistributedCache(new RedisCache(new RedisCacheOptions { Configuration = configuration.GetConnectionString("garnet") ?? "localhost" }));
+			.WithDistributedCache(new RedisCache(new RedisCacheOptions
+			{
+				Configuration = configuration.GetConnectionString("garnet") ?? "localhost",
+				ConfigurationOptions = new()
+				{
+					DefaultDatabase = GarnetDatabase.Cache,
+				}
+			}));
 
 		// Runtime compilation
 		services
