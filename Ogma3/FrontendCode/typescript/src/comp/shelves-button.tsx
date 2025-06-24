@@ -4,7 +4,7 @@ import {
 	GetApiShelfStories as getShelves,
 	DeleteApiShelfStories as removeFromShelf,
 } from "@g/paths-public";
-import type { QuickShelvesResult, ShelfResult } from "@g/types-public";
+import type { GetCurrentUserQuickShelvesResult, GetPaginatedUserShelvesResult } from "@g/types-public";
 import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
@@ -13,7 +13,7 @@ import { Styled } from "./common/_styled";
 import sharedCss from "./shared.css";
 import css from "./shelves-button.css";
 
-type Shelf = ShelfResult & QuickShelvesResult;
+type Shelf = GetPaginatedUserShelvesResult & GetCurrentUserQuickShelvesResult;
 
 const updateShelfData = (
 	currentShelves: Shelf[],
@@ -83,7 +83,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		}
 	};
 
-	const iconStyle = (shelf: ShelfResult) => ({
+	const iconStyle = (shelf: Shelf) => ({
 		color: shelf.color ?? undefined,
 	});
 

@@ -1,481 +1,481 @@
 {
-  "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
-  "name": "ogma-3",
-  "version": "beta",
-  "js-types-syntax": "typescript",
-  "description-markup": "markdown",
-  "contributions": {
-    "html": {
-      "elements": [
-        {
-          "name": "cache-info",
-          "description": "Custom element <cache-info> defined in typescript\\src\\comp\\cache-info.tsx",
-          "attributes": [
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\cache-info.tsx",
-            "symbol": "cache-info"
-          }
-        },
-        {
-          "name": "markdown-editor",
-          "description": "Custom element <markdown-editor> defined in typescript\\src\\comp\\markdown-editor.tsx",
-          "attributes": [
-            {
-              "name": "selector",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "overrideSelector",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\markdown-editor.tsx",
-            "symbol": "markdown-editor"
-          }
-        },
-        {
-          "name": "o-block",
-          "description": "Custom element <o-block> defined in typescript\\src\\comp\\block-user.tsx",
-          "attributes": [
-            {
-              "name": "userName",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "isBlocked",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\block-user.tsx",
-            "symbol": "o-block"
-          }
-        },
-        {
-          "name": "o-clock",
-          "description": "Custom element <o-clock> defined in typescript\\src\\comp\\clock.tsx",
-          "attributes": [
-            {
-              "name": "date",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\clock.tsx",
-            "symbol": "o-clock"
-          }
-        },
-        {
-          "name": "o-club-folder-selector",
-          "description": "Custom element <o-club-folder-selector> defined in typescript\\src\\comp\\club-folder-selector.tsx",
-          "attributes": [
-            {
-              "name": "storyId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\club-folder-selector.tsx",
-            "symbol": "o-club-folder-selector"
-          }
-        },
-        {
-          "name": "o-comments",
-          "description": "Custom element <o-comments> defined in typescript\\src\\comments.tsx",
-          "attributes": [
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "isLoggedIn",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
-            },
-            {
-              "name": "lockDate",
-              "value": {
-                "kind": "expression",
-                "type": "unknown"
-              }
-            },
-            {
-              "name": "mdRefRoute",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "loginRoute",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "registerRoute",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comments.tsx",
-            "symbol": "o-comments"
-          }
-        },
-        {
-          "name": "o-featured-in-clubs",
-          "description": "Custom element <o-featured-in-clubs> defined in typescript\\src\\comp\\featured-in-clubs.tsx",
-          "attributes": [
-            {
-              "name": "storyId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\featured-in-clubs.tsx",
-            "symbol": "o-featured-in-clubs"
-          }
-        },
-        {
-          "name": "o-follow",
-          "description": "Custom element <o-follow> defined in typescript\\src\\comp\\follow-button.tsx",
-          "attributes": [
-            {
-              "name": "userName",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "isFollowed",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\follow-button.tsx",
-            "symbol": "o-follow"
-          }
-        },
-        {
-          "name": "o-icon",
-          "description": "Custom element <o-icon> defined in typescript\\src\\comp\\icon.tsx",
-          "attributes": [
-            {
-              "name": "icon",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\icon.tsx",
-            "symbol": "o-icon"
-          }
-        },
-        {
-          "name": "o-join",
-          "description": "Custom element <o-join> defined in typescript\\src\\comp\\join-club-button.tsx",
-          "attributes": [
-            {
-              "name": "clubId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "isMember",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\join-club-button.tsx",
-            "symbol": "o-join"
-          }
-        },
-        {
-          "name": "o-notifications-button",
-          "description": "Custom element <o-notifications-button> defined in typescript\\src\\comp\\notifications-button.tsx",
-          "attributes": [],
-          "source": {
-            "module": "./typescript\\src\\comp\\notifications-button.tsx",
-            "symbol": "o-notifications-button"
-          }
-        },
-        {
-          "name": "o-password-toggle",
-          "description": "Custom element <o-password-toggle> defined in typescript\\src\\comp\\password-input.tsx",
-          "attributes": [],
-          "source": {
-            "module": "./typescript\\src\\comp\\password-input.tsx",
-            "symbol": "o-password-toggle"
-          }
-        },
-        {
-          "name": "o-read",
-          "description": "Custom element <o-read> defined in typescript\\src\\comp\\chapter-read.tsx",
-          "attributes": [
-            {
-              "name": "chapterId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "storyId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\chapter-read.tsx",
-            "symbol": "o-read"
-          }
-        },
-        {
-          "name": "o-read-progress",
-          "description": "Custom element <o-read-progress> defined in typescript\\src\\comp\\read-progress.tsx",
-          "attributes": [],
-          "source": {
-            "module": "./typescript\\src\\comp\\read-progress.tsx",
-            "symbol": "o-read-progress"
-          }
-        },
-        {
-          "name": "o-shelves",
-          "description": "Custom element <o-shelves> defined in typescript\\src\\comp\\shelves-button.tsx",
-          "attributes": [
-            {
-              "name": "storyId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\shelves-button.tsx",
-            "symbol": "o-shelves"
-          }
-        },
-        {
-          "name": "o-vote",
-          "description": "Custom element <o-vote> defined in typescript\\src\\comp\\vote-button.tsx",
-          "attributes": [
-            {
-              "name": "storyId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\vote-button.tsx",
-            "symbol": "o-vote"
-          }
-        },
-        {
-          "name": "qr-code",
-          "description": "Custom element <qr-code> defined in typescript\\src\\comp\\qr-code.tsx",
-          "attributes": [
-            {
-              "name": "width",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "height",
-              "value": {
-                "kind": "expression",
-                "type": "undefined"
-              }
-            },
-            {
-              "name": "data",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "ecc",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "pixelSize",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\qr-code.tsx",
-            "symbol": "qr-code"
-          }
-        },
-        {
-          "name": "quote-box",
-          "description": "Custom element <quote-box> defined in typescript\\src\\comp\\quote-box.tsx",
-          "attributes": [],
-          "source": {
-            "module": "./typescript\\src\\comp\\quote-box.tsx",
-            "symbol": "quote-box"
-          }
-        },
-        {
-          "name": "report-modal",
-          "description": "Custom element <report-modal> defined in typescript\\src\\comp\\report-modal.tsx",
-          "attributes": [
-            {
-              "name": "openSelector",
-              "value": {
-                "kind": "expression",
-                "type": "undefined"
-              }
-            },
-            {
-              "name": "csrf",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "itemId",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "itemType",
-              "value": {
-                "kind": "expression",
-                "type": "unknown"
-              }
-            }
-          ],
-          "source": {
-            "module": "./typescript\\src\\comp\\report-modal.tsx",
-            "symbol": "report-modal"
-          }
-        },
-        {
-          "name": "table-info",
-          "description": "Custom element <table-info> defined in typescript\\src\\comp\\table-info.tsx",
-          "attributes": [],
-          "source": {
-            "module": "./typescript\\src\\comp\\table-info.tsx",
-            "symbol": "table-info"
-          }
-        }
-      ]
-    }
-  }
+	"$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
+	"name": "ogma-3",
+	"version": "beta",
+	"js-types-syntax": "typescript",
+	"description-markup": "markdown",
+	"contributions": {
+		"html": {
+			"elements": [
+				{
+					"name": "cache-info",
+					"description": "Custom element <cache-info> defined in typescript\\src\\comp\\cache-info.tsx",
+					"attributes": [
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\cache-info.tsx",
+						"symbol": "cache-info"
+					}
+				},
+				{
+					"name": "markdown-editor",
+					"description": "Custom element <markdown-editor> defined in typescript\\src\\comp\\markdown-editor.tsx",
+					"attributes": [
+						{
+							"name": "selector",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "overrideSelector",
+							"value": {
+								"kind": "expression",
+								"type": "boolean"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\markdown-editor.tsx",
+						"symbol": "markdown-editor"
+					}
+				},
+				{
+					"name": "o-block",
+					"description": "Custom element <o-block> defined in typescript\\src\\comp\\block-user.tsx",
+					"attributes": [
+						{
+							"name": "userName",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "isBlocked",
+							"value": {
+								"kind": "expression",
+								"type": "boolean"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\block-user.tsx",
+						"symbol": "o-block"
+					}
+				},
+				{
+					"name": "o-clock",
+					"description": "Custom element <o-clock> defined in typescript\\src\\comp\\clock.tsx",
+					"attributes": [
+						{
+							"name": "date",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\clock.tsx",
+						"symbol": "o-clock"
+					}
+				},
+				{
+					"name": "o-club-folder-selector",
+					"description": "Custom element <o-club-folder-selector> defined in typescript\\src\\comp\\club-folder-selector.tsx",
+					"attributes": [
+						{
+							"name": "storyId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\club-folder-selector.tsx",
+						"symbol": "o-club-folder-selector"
+					}
+				},
+				{
+					"name": "o-comments",
+					"description": "Custom element <o-comments> defined in typescript\\src\\comments.tsx",
+					"attributes": [
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "id",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "isLoggedIn",
+							"value": {
+								"kind": "expression",
+								"type": "boolean"
+							}
+						},
+						{
+							"name": "lockDate",
+							"value": {
+								"kind": "expression",
+								"type": "unknown"
+							}
+						},
+						{
+							"name": "mdRefRoute",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "loginRoute",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "registerRoute",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comments.tsx",
+						"symbol": "o-comments"
+					}
+				},
+				{
+					"name": "o-featured-in-clubs",
+					"description": "Custom element <o-featured-in-clubs> defined in typescript\\src\\comp\\featured-in-clubs.tsx",
+					"attributes": [
+						{
+							"name": "storyId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\featured-in-clubs.tsx",
+						"symbol": "o-featured-in-clubs"
+					}
+				},
+				{
+					"name": "o-follow",
+					"description": "Custom element <o-follow> defined in typescript\\src\\comp\\follow-button.tsx",
+					"attributes": [
+						{
+							"name": "userName",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "isFollowed",
+							"value": {
+								"kind": "expression",
+								"type": "boolean"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\follow-button.tsx",
+						"symbol": "o-follow"
+					}
+				},
+				{
+					"name": "o-icon",
+					"description": "Custom element <o-icon> defined in typescript\\src\\comp\\icon.tsx",
+					"attributes": [
+						{
+							"name": "icon",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\icon.tsx",
+						"symbol": "o-icon"
+					}
+				},
+				{
+					"name": "o-join",
+					"description": "Custom element <o-join> defined in typescript\\src\\comp\\join-club-button.tsx",
+					"attributes": [
+						{
+							"name": "clubId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "isMember",
+							"value": {
+								"kind": "expression",
+								"type": "boolean"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\join-club-button.tsx",
+						"symbol": "o-join"
+					}
+				},
+				{
+					"name": "o-notifications-button",
+					"description": "Custom element <o-notifications-button> defined in typescript\\src\\comp\\notifications-button.tsx",
+					"attributes": [],
+					"source": {
+						"module": "./typescript\\src\\comp\\notifications-button.tsx",
+						"symbol": "o-notifications-button"
+					}
+				},
+				{
+					"name": "o-password-toggle",
+					"description": "Custom element <o-password-toggle> defined in typescript\\src\\comp\\password-input.tsx",
+					"attributes": [],
+					"source": {
+						"module": "./typescript\\src\\comp\\password-input.tsx",
+						"symbol": "o-password-toggle"
+					}
+				},
+				{
+					"name": "o-read",
+					"description": "Custom element <o-read> defined in typescript\\src\\comp\\chapter-read.tsx",
+					"attributes": [
+						{
+							"name": "chapterId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "storyId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\chapter-read.tsx",
+						"symbol": "o-read"
+					}
+				},
+				{
+					"name": "o-read-progress",
+					"description": "Custom element <o-read-progress> defined in typescript\\src\\comp\\read-progress.tsx",
+					"attributes": [],
+					"source": {
+						"module": "./typescript\\src\\comp\\read-progress.tsx",
+						"symbol": "o-read-progress"
+					}
+				},
+				{
+					"name": "o-shelves",
+					"description": "Custom element <o-shelves> defined in typescript\\src\\comp\\shelves-button.tsx",
+					"attributes": [
+						{
+							"name": "storyId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\shelves-button.tsx",
+						"symbol": "o-shelves"
+					}
+				},
+				{
+					"name": "o-vote",
+					"description": "Custom element <o-vote> defined in typescript\\src\\comp\\vote-button.tsx",
+					"attributes": [
+						{
+							"name": "storyId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\vote-button.tsx",
+						"symbol": "o-vote"
+					}
+				},
+				{
+					"name": "qr-code",
+					"description": "Custom element <qr-code> defined in typescript\\src\\comp\\qr-code.tsx",
+					"attributes": [
+						{
+							"name": "width",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "height",
+							"value": {
+								"kind": "expression",
+								"type": "undefined"
+							}
+						},
+						{
+							"name": "data",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "ecc",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "pixelSize",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\qr-code.tsx",
+						"symbol": "qr-code"
+					}
+				},
+				{
+					"name": "quote-box",
+					"description": "Custom element <quote-box> defined in typescript\\src\\comp\\quote-box.tsx",
+					"attributes": [],
+					"source": {
+						"module": "./typescript\\src\\comp\\quote-box.tsx",
+						"symbol": "quote-box"
+					}
+				},
+				{
+					"name": "report-modal",
+					"description": "Custom element <report-modal> defined in typescript\\src\\comp\\report-modal.tsx",
+					"attributes": [
+						{
+							"name": "openSelector",
+							"value": {
+								"kind": "expression",
+								"type": "undefined"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "itemId",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "itemType",
+							"value": {
+								"kind": "expression",
+								"type": "unknown"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript\\src\\comp\\report-modal.tsx",
+						"symbol": "report-modal"
+					}
+				},
+				{
+					"name": "table-info",
+					"description": "Custom element <table-info> defined in typescript\\src\\comp\\table-info.tsx",
+					"attributes": [],
+					"source": {
+						"module": "./typescript\\src\\comp\\table-info.tsx",
+						"symbol": "table-info"
+					}
+				}
+			]
+		}
+	}
 }

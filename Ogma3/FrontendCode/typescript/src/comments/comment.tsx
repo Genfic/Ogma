@@ -2,10 +2,10 @@ import { DeleteApiComments, GetApiCommentsRevisions } from "@g/paths-public";
 import type { CommentDto, GetRevisionResult } from "@g/types-public";
 import { long } from "@h/tinytime-templates";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
+import type { ReportModalElement } from "../comp/report-modal";
 import { DeletedCommentBody } from "./comment-body-deleted";
 import { CommentBodyEditor } from "./comment-body-editor";
 import { HiddenCommentBody } from "./comment-body-hidden";
-import type { ReportModalElement } from "../comp/report-modal";
 
 type Props = CommentDto & CommentProps;
 

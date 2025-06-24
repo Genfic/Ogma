@@ -1,10 +1,10 @@
 import { GetApiComments } from "@g/paths-public";
+import { DateSafeJsonParse } from "@g/typed-fetch";
 import type { CommentDto } from "@g/types-public";
 import { stripNullish } from "@h/csharping";
-import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount } from "solid-js";
+import { type Component, createMemo, createResource, createSignal, For, onMount } from "solid-js";
 import { Comment } from "./comment";
 import { CommentListPagination } from "./comment-list-pagination";
-import { DateSafeJsonParse } from "@g/typed-fetch";
 
 export interface CommentListFunctions {
 	submitted: () => void;
