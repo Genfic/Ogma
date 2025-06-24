@@ -194,16 +194,17 @@ public static class Startup
 		services.AddOutputCache(o => {
 			o.AddBasePolicy(p => p.Expire(TimeSpan.FromMinutes(5)));
 		});
+		builder.AddRedisDistributedCache(connectionName: "garnet");
+		services.AddStackExchangeRedisCache(o => {
+			o.Configuration = configuration.GetConnectionString("garnet") ?? "localhost";
+			o.ConfigurationOptions = new()
+			{
+				DefaultDatabase = GarnetDatabase.Cache,
+			};
+		});
 		services.AddFusionCache()
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
-			.WithDistributedCache(new RedisCache(new RedisCacheOptions
-			{
-				Configuration = configuration.GetConnectionString("garnet") ?? "localhost",
-				ConfigurationOptions = new()
-				{
-					DefaultDatabase = GarnetDatabase.Cache,
-				}
-			}));
+			.WithRegisteredDistributedCache();
 
 		// Runtime compilation
 		services

@@ -32,13 +32,14 @@ public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext c
 		var query = context.Stories
 			.Where(b => b.AuthorId == ProfileBar.Id);
 
-		if (!User.GetUsername()?.Equals(name, StringComparison.InvariantCultureIgnoreCase) ?? false)
+		if (User.GetUsername()?.Equals(name, StringComparison.InvariantCultureIgnoreCase) is not true)
 		{
 			// If the profile page doesn't belong to the current user, apply additional filters
 			query = query
 				.Where(s => s.PublicationDate != null)
 				.Where(s => s.ContentBlockId == null)
 				.Blacklist(context, uid);
+
 		}
 
 		// Resolve query
@@ -46,7 +47,6 @@ public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext c
 			.SortByEnum(EStorySortingOptions.DateDescending)
 			.Paginate(page, PerPage)
 			.Select(StoryMapper.MapToCard)
-			.AsNoTracking()
 			.ToListAsync();
 
 		// Prepare pagination

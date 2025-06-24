@@ -5,7 +5,7 @@ import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { DeletedCommentBody } from "./comment-body-deleted";
 import { CommentBodyEditor } from "./comment-body-editor";
 import { HiddenCommentBody } from "./comment-body-hidden";
-import { ReportModalElement } from "../comp/report-modal";
+import type { ReportModalElement } from "../comp/report-modal";
 
 type Props = CommentDto & CommentProps;
 
@@ -14,7 +14,7 @@ export type CommentProps = {
 	marked: boolean;
 	owner: string | null;
 	onDelete: () => void;
-	onHighlightChange: (idx: number) => void;
+	onHighlightChange: (e: MouseEvent, idx: number) => void;
 };
 
 const date = (dt: Date) => long.render(dt);
@@ -80,7 +80,7 @@ export const Comment = (props: Props) => {
 		props.owner && props.author && props.owner.toLowerCase() === props.author.userName.toLowerCase();
 
 	return (
-		<div id={`comment-${props.id}`} classList={{ comment: true, highlight: props.marked }}>
+		<div id={`comment-${props.key}`} classList={{ comment: true, marked: props.marked }}>
 			<Switch>
 				<Match when={commentState() === "hidden"}>
 					<HiddenCommentBody onToggleVisibility={() => setHidden(!hidden())} />
@@ -122,10 +122,10 @@ export const Comment = (props: Props) => {
 						<div class="header">
 							<a
 								class="link"
-								href={`#comment-${props.key + 1}`}
-								onClick={[props.onHighlightChange, props.key + 1]}
+								href={`#comment-${props.key}`}
+								onClick={(e) => props.onHighlightChange(e, props.key)}
 							>
-								#{props.key + 1}
+								#{props.key}
 							</a>
 
 							<p class="sm-line" />

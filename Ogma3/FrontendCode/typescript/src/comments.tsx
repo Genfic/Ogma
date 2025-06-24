@@ -96,9 +96,8 @@ const Comments = (props: Props) => {
 		<div class="comments-container" style={{ width: "100%", opacity: 1, margin: "auto" }}>
 			<Show when={!props.isLoggedIn}>
 				<div class="info">
-					<a href={props.loginRoute}>Log in</a> or
-					<a href={props.registerRoute}>register</a>
-					to be able to leave comments
+					<a href={props.loginRoute}>Log in</a>&nbsp;or&nbsp;
+					<a href={props.registerRoute}>register</a> to be able to leave comments
 				</div>
 			</Show>
 

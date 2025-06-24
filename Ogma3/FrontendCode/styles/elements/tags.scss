@@ -1,15 +1,20 @@
 
 .tags {
 	display: flex;
+	padding: 4px;
+	gap: 2px;
 }
 
 .tag {
-	display: grid;
-	grid-template-areas: "main";
+	display: flex;
+	place-items: center;
 	line-height: .9;
 	border: 1px solid var(--foreground-75);
 	color: var(--foreground);
-	margin: 4px;
+	background-color: oklch(from var(--tag-bg, transparent) l c h / 50%);
+
+	margin: 4px 0;
+	padding: 0 .2rem;
 	cursor: pointer;
 
 	&.locked {
@@ -22,36 +27,14 @@
 		}
 	}
 
-	&:first-child {
-		margin-left: 0;
-	}
-
 	&:hover {
 		opacity: 0.9;
 		color: var(--foreground);
 	}
 
-	> .bg {
-		grid-area: main;
-		opacity: .5;
-	}
-
 	> .name {
-		grid-area: main;
-
-		place-self: center center;
 		line-height: .9;
 		font-size: .9rem;
 		margin: .1rem .2rem;
-		z-index: 1;
 	}
-
-	//.material-icons-outlined {
-	//	font-size: inherit;
-	//	cursor: pointer;
-	//
-	//	&:hover {
-	//		background-color: var(--background-25);
-	//	}
-	//}
 }

@@ -21,7 +21,7 @@ type CommentsData = SuccessDataFrom<ReturnType<typeof GetApiComments>>;
 
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
-	const [highlight, setHighlight] = createSignal(0);
+	const [highlight, setHighlight] = createSignal(Number(window.location.hash.match(/^#comment-(\d+)$/)?.[1]) || 0);
 	const [reload, setReload] = createSignal(0);
 	const [username, setUsername] = createSignal<string | null>(null);
 	const [deleted, setDeleted] = createSignal<number[]>([]);
@@ -29,7 +29,7 @@ export const CommentList: Component<Props> = (props) => {
 	const [perPageEtags, setPerPageEtags] = createSignal<Record<number, string>>({});
 
 	const [commentsData] = createResource(
-		() => [props.id, currentPage(), highlight(), reload()] as const,
+		() => [props.id, currentPage(), reload()] as const,
 		async ([id, page]) => {
 			const headers = stripNullish(
 				perPageEtags()[page],
@@ -71,26 +71,22 @@ export const CommentList: Component<Props> = (props) => {
 		},
 	);
 
-	let timeout: ReturnType<typeof setTimeout> | undefined;
-	const changeHighlight = (idx: number) => {
-		if (timeout) {
-			clearTimeout(timeout);
+	const changeHighlight = (e: MouseEvent, idx: number) => {
+		e.preventDefault();
+		setHighlight(idx);
+
+		if (idx === 0) {
+			return;
 		}
 
-		timeout = setTimeout(() => {
-			document.getElementById(`comment-${idx}`)?.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
-				inline: "nearest",
-			});
-			history.replaceState(undefined, "", `#comment-${idx}`);
-		}, 10);
-	};
+		document.getElementById(`comment-${idx}`)?.scrollIntoView({
+			behavior: "smooth",
+			block: "center",
+			inline: "nearest",
+		});
 
-	createEffect(() => {
-		if (highlight() === 0) return;
-		changeHighlight(highlight());
-	});
+		history.replaceState(undefined, "", `#comment-${idx}`);
+	};
 
 	const comments = createMemo<(CommentDto & { key: number })[]>((prev) => {
 		const data = commentsData();
@@ -100,7 +96,7 @@ export const CommentList: Component<Props> = (props) => {
 				.map((c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }) as CommentDto)
 				.map((val, key) => ({
 					...val,
-					key: data.total - currentPage() * data.perPage + (data.perPage - (key + 1)),
+					key: data.total - ((currentPage() - 1) * data.perPage + key),
 				}));
 		}
 
@@ -150,7 +146,7 @@ export const CommentList: Component<Props> = (props) => {
 			<For each={comments()}>
 				{(c) => (
 					<Comment
-						onHighlightChange={setHighlight}
+						onHighlightChange={changeHighlight}
 						onDelete={() => deleteComment(c.id)}
 						marked={c.key === highlight()}
 						owner={username()}

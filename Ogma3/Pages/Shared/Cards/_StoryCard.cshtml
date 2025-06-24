@@ -10,7 +10,7 @@
 <div class="story-card">
 
 	<img class="image"
-	     src="@Model.Cover"
+	     src="@(Model.Cover ?? "/img/placeholders/ph-250.png")"
 	     alt="@Model.Title"
 	     width="160" height="160" cf/>
 

@@ -57,10 +57,9 @@ public static partial class GetPaginatedComments
 			}
 		}
 
-		var total = await context.CommentThreads
-			.Where(ct => ct.Id == thread)
-			.Select(ct => ct.CommentsCount)
-			.FirstOrDefaultAsync(cancellationToken);
+		var total = await context.Comments
+			.Where(c => c.CommentsThreadId == thread)
+			.CountAsync(cancellationToken);
 
 		// If a highlight has been requested, get the page on which the highlighted comment would be.
 		// If not, return the requested page or the first page if the requested page is null.

@@ -15,7 +15,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
-	public required Pagination Pagination { get; set; }
+	public required Pagination? Pagination { get; set; }
 
 	[FromQuery]
 	public string? Query { get; set; } = null;
@@ -50,8 +50,8 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 
 			query = string.Join(' ', Query?.Split(' ').Where(s => !s.StartsWith('#')).ToArray() ?? []).Trim();
 		}
-
-		var (stories, count) = await cache.GetOrSetAsync<(List<StoryCard> s, int c)>($"{Query}:{Rating}:{Status?.ToStringFast()}:{Sort.ToStringFast()}:${Pagination.CurrentPage}", async ct => {
+		var key = Query + ":" + string.Join(':', [Rating, (long?)Status, (long?)Sort, page]);
+		var (stories, count) = await cache.GetOrSetAsync<(List<StoryCard> s, int c)>(key, async ct => {
 			var storiesQuery = context.Stories
 				.AsQueryable()
 				.Search(tagIds, query, Rating, Status)

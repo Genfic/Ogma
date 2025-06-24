@@ -12,8 +12,11 @@ public sealed class TagTagHelper(LinkGenerator generator) : TagHelper
 	{
 		var href = Routes.Pages.Tag.Get(Tag.Id, Tag.Slug).Path(generator);
 
+		var color = Tag.NamespaceColor?.Trim('#') ?? "transparent";
+
 		output.TagName = "a";
 		output.AddClass("tag", NullHtmlEncoder.Default);
+		output.Attributes.Add("style", $"--tag-bg: #{color}");
 
 		output.Attributes.Add("href", href);
 
@@ -21,10 +24,6 @@ public sealed class TagTagHelper(LinkGenerator generator) : TagHelper
 		{
 			output.Attributes.Add("title", ns.ToStringFast());
 		}
-
-		output.Content.AppendHtml(Tag.NamespaceColor is not {} color
-			? "<div class='bg'></div>"
-			: $"<div class='bg' style='background-color: #{color.Trim('#')}'></div>");
 
 		output.Content.AppendHtml($"<span class='name'>{Tag.Name}</span>");
 	}

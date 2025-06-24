@@ -1,7 +1,7 @@
 .story-status {
 	display: flex;
 	place-items: center;
-	gap: .1rem;
+	gap: .2rem;
 
 	line-height: .9;
 	font-size: .9rem;
@@ -9,14 +9,10 @@
 
 	width: max-content;
 	padding: 4px;
-	margin: 4px;
+	margin: 4px 0;
 
 	border: 1px solid var(--foreground-75);
 	color: var(--foreground);
-
-	&:hover {
-		opacity: 0.9;
-	}
 
 	&.inprogress {
 		background-color: oklch(59% 0.225 258deg / 50%);
@@ -35,7 +31,8 @@
 	}
 
 	> .icon {
-		height: 1rem;
+		height: 16px;
+		width: 16px;
 	}
 
 	> .name {

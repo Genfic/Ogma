@@ -128,7 +128,7 @@
 
 		<div class="main">
 
-			<img src="@Model.Story.Cover"
+			<img src="@(Model.Story.Cover ?? "/img/placeholders/ph-250.png")"
 			     alt="@Model.Story.Title cover image"
 			     class="cover"
 			     height="160" width="160"
