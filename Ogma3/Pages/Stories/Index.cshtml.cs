@@ -7,10 +7,11 @@ using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Pages.Stories;
 
-public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
+public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, IFusionCache cache) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
@@ -50,27 +51,34 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			query = string.Join(' ', Query?.Split(' ').Where(s => !s.StartsWith('#')).ToArray() ?? []).Trim();
 		}
 
-		// Load stories
-		var storiesQuery = context.Stories
-			.AsQueryable()
-			.Search(tagIds, query, Rating, Status)
-			.Where(s => s.PublicationDate != null)
-			.Where(s => s.ContentBlockId == null)
-			.Blacklist(context, uid);
+		var (stories, count) = await cache.GetOrSetAsync<(List<StoryCard> s, int c)>($"{Query}:{Rating}:{Status?.ToStringFast()}:{Sort.ToStringFast()}:${Pagination.CurrentPage}", async ct => {
+			var storiesQuery = context.Stories
+				.AsQueryable()
+				.Search(tagIds, query, Rating, Status)
+				.Where(s => s.PublicationDate != null)
+				.Where(s => s.ContentBlockId == null)
+				.Blacklist(context, uid);
 
-		Stories = await storiesQuery
-			.TagWith("Searching for stories")
-			.AsSplitQuery()
-			.SortByEnum(Sort)
-			.Paginate(page ?? 1, config.StoriesPerPage)
-			.Select(StoryMapper.MapToCard)
-			.ToListAsync();
+			var s = await storiesQuery
+				.TagWith("Searching for stories")
+				.AsSplitQuery()
+				.SortByEnum(Sort)
+				.Paginate(page ?? 1, config.StoriesPerPage)
+				.Select(StoryMapper.MapToCard)
+				.ToListAsync(ct);
+
+			var c = await storiesQuery.TagWith("Counting stories").CountAsync(ct);
+
+			return (s, c);
+		}, o => o.SetDuration(TimeSpan.FromMinutes(5)));
+
+		Stories = stories;
 
 		// Prepare pagination
 		Pagination = new Pagination
 		{
 			PerPage = config.StoriesPerPage,
-			ItemCount = await storiesQuery.TagWith("Counting stories").CountAsync(),
+			ItemCount = count,
 			CurrentPage = page ?? 1,
 		};
 	}

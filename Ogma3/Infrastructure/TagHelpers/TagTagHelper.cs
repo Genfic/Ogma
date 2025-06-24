@@ -1,28 +1,16 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data.Tags;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class TagTagHelper : TagHelper
+public sealed class TagTagHelper(LinkGenerator generator) : TagHelper
 {
-	private readonly IUrlHelper _urlHelper;
-
-	public TagTagHelper(IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
-	{
-		if (actionContextAccessor is not { ActionContext: not null })
-			throw new NullReferenceException(nameof(actionContextAccessor.ActionContext));
-		_urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
-	}
-
 	public required TagDto Tag { get; set; }
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
-		var href = _urlHelper.Page("/Tag", new { id = Tag.Id, slug = Tag.Slug });
+		var href = Routes.Pages.Tag.Get(Tag.Id, Tag.Slug).Path(generator);
 
 		output.TagName = "a";
 		output.AddClass("tag", NullHtmlEncoder.Default);

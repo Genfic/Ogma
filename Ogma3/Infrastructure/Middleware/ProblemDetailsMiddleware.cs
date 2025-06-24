@@ -5,9 +5,8 @@ namespace Ogma3.Infrastructure.Middleware;
 
 public static class ProblemDetailsMiddleware
 {
-	public static void ConfigureProblemDetails(ProblemDetailsOptions options) =>
-		options.CustomizeProblemDetails = c =>
-		{
+	public static void ConfigureProblemDetails(ProblemDetailsOptions options)
+		=> options.CustomizeProblemDetails = c => {
 			if (c.Exception is null)
 			{
 				return;
@@ -29,12 +28,11 @@ public static class ProblemDetailsMiddleware
 					Status = StatusCodes.Status400BadRequest,
 				},
 
-				// other exception handling as desired
-
 				var ex => new ProblemDetails
 				{
-					Detail = "An error has occurred.",
+					Detail = $"An error has occurred: {ex.Message}",
 					Status = StatusCodes.Status500InternalServerError,
+					Title = "Internal Server Error",
 				},
 			};
 

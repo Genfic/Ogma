@@ -2,6 +2,11 @@
 @using Utils.Extensions
 @model StoryCard
 
+@{
+	var authorRoute = Routes.Pages.User_Index.Get(Model.AuthorUserName);
+	var storyRoute = Routes.Pages.Story.Get(Model.Id, Model.Slug);
+}
+
 <div class="story-card">
 
 	<img class="image"
@@ -18,10 +23,10 @@
 			     title="Rating: @Model.Rating.Name"
 			     class="rating"
 			     loading="lazy"/>
-			<a asp-page="/Story" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">@Model.Title</a>
+			<a for-route="storyRoute">@Model.Title</a>
 		</h3>
 
-		<a class="author" asp-page="/User/Index" asp-route-name="@Model.AuthorUserName">By&nbsp;@Model.AuthorUserName</a>
+		<a class="author" for-route="authorRoute">By&nbsp;@Model.AuthorUserName</a>
 	</header>
 
 	<div class="hook">

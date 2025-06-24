@@ -22,7 +22,7 @@
 }
 else
 {
-	@foreach (var story in Model.Stories)
+	foreach (var story in Model.Stories)
 	{
 		<partial name="Shared/Cards/_StoryCard" model="story"/>
 	}
