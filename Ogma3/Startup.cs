@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Net.Http.Headers;
 using NpgSqlGenerators;
 using Ogma3.Data;
@@ -191,9 +190,7 @@ public static class Startup
 
 		// Cache
 		services.AddMemoryCache();
-		services.AddOutputCache(o => {
-			o.AddBasePolicy(p => p.Expire(TimeSpan.FromMinutes(5)));
-		});
+		services.AddOutputCache();
 		builder.AddRedisDistributedCache(connectionName: "garnet");
 		services.AddStackExchangeRedisCache(o => {
 			o.Configuration = configuration.GetConnectionString("garnet") ?? "localhost";

@@ -1,4 +1,5 @@
 import "solid-js";
+import "solid-labels";
 
 declare module "solid-js" {
 	namespace JSX {

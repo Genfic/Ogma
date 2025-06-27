@@ -1,14 +1,14 @@
 import { clamp, normalize } from "@h/math-helpers";
 import type { Empty } from "@t/utils";
 import { type ComponentType, customElement } from "solid-element";
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 import { Styled } from "./common/_styled";
 import css from "./read-progress.css";
 
 const ReadProgress: ComponentType<Empty> = (_, { element }) => {
-	const [progress, setProgress] = createSignal(0);
-	const [ticking, setTicking] = createSignal(false);
-	const [read, setRead] = createSignal(false);
+	let progress = $signal(0);
+	let ticking = $signal(false);
+	let read = $signal(false);
 
 	const updateProgress = () => {
 		const parent = element.parentElement;
@@ -18,21 +18,21 @@ const ReadProgress: ComponentType<Empty> = (_, { element }) => {
 		const maxHeight = Math.max(containerHeight - window.innerHeight, 0);
 
 		const newProgress = 1 - clamp(normalize(percent, 0, maxHeight));
-		setProgress(newProgress);
+		progress = newProgress;
 
-		if (newProgress >= 1 && !read()) {
-			setRead(true);
+		if (newProgress >= 1 && !read) {
+			read = true;
 			element.dispatchEvent(new CustomEvent("read"));
 		}
 	};
 
 	const handleScroll = () => {
-		if (!ticking()) {
+		if (!ticking) {
 			window.requestAnimationFrame(() => {
 				updateProgress();
-				setTicking(false);
+				ticking = false;
 			});
-			setTicking(true);
+			ticking = true;
 		}
 	};
 
@@ -49,7 +49,7 @@ const ReadProgress: ComponentType<Empty> = (_, { element }) => {
 		window.removeEventListener("resize", handleResize);
 	});
 
-	return <div class="bar" style={{ width: `${progress() * 100}%` }} />;
+	return <div class="bar" style={{ width: `${progress * 100}%` }} />;
 };
 
 customElement("o-read-progress", {}, Styled(ReadProgress, css));

@@ -15,6 +15,7 @@
 
 	var uid = User.GetNumericId();
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+	var isLoggedIn = User.Identity?.IsAuthenticated ?? false;
 }
 
 @section OgMeta {
@@ -46,7 +47,7 @@
 				</div>
 			</noscript>
 
-			@if (User.Identity?.IsAuthenticated ?? false)
+			@if (isLoggedIn)
 			{
 				<a title="Write about it"
 				   class="action-btn large"
@@ -84,14 +85,14 @@
 					<icon class="icon" icon="lucide:shield" svg="true"></icon>
 				</a>
 			}
-			@if (User.Identity?.IsAuthenticated ?? false)
+			@if (isLoggedIn)
 			{
 				<button title="Report" class="action-btn large red" id="open-modal-button">
 					<icon class="icon" icon="lucide:flag" svg="true"></icon>
 				</button>
 			}
 
-			@if (User.Identity?.IsAuthenticated ?? false)
+			@if (isLoggedIn)
 			{
 				<div class="spacer"></div>
 				<o-shelves story-id="@Model.Story.Id" csrf="@csrf"></o-shelves>
@@ -187,7 +188,7 @@
 
 		<div class="spacer"></div>
 
-		@if (User.Identity?.IsAuthenticated ?? false)
+		@if (isLoggedIn)
 		{
 			<o-club-folder-selector story-id="@Model.Story.Id"
 			                        csrf="@csrf">
@@ -216,7 +217,10 @@
 				<li class="chapter @(c.IsPublished ? "" : "unpublished")">
 					<div class="left">
 
-						<o-read chapter-id="@c.Id" story-id="@Model.Story.Id"></o-read>
+						@if (isLoggedIn)
+						{
+							<o-read chapter-id="@c.Id" story-id="@Model.Story.Id"></o-read>
+						}
 
 						<span class="order">@(order++)</span>
 

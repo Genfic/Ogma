@@ -11,6 +11,7 @@ import { hasExtension } from "./helpers/path";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
 import { cssMinifyPlugin } from "./plugins/minified-css-loader";
+import solidLabels from "solid-labels/babel";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -55,7 +56,14 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		minify: values.minify,
 		sourcemap: "linked",
 		splitting: true,
-		plugins: [SolidPlugin(), cssMinifyPlugin],
+		plugins: [
+			SolidPlugin({
+				babelOptions: {
+					plugins: [[solidLabels, {}]],
+				},
+			}),
+			cssMinifyPlugin,
+		],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 	});
 

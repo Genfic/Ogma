@@ -7,8 +7,8 @@ import { Styled } from "./common/_styled";
 import css from "./table-info.css";
 
 const TableInfo: Component = () => {
-	const [sortBy, setSortBy] = createSignal<"size" | "name">("size");
-	const [sortOrder, setSortOrder] = createSignal<"asc" | "desc">("desc");
+	let sortBy = $signal<"size" | "name">("size");
+	let sortOrder = $signal<"asc" | "desc">("desc");
 
 	const [tableInfo, { mutate: setTableInfo }] = createResource(
 		async () => {
@@ -24,15 +24,15 @@ const TableInfo: Component = () => {
 				size: Number.parseInt(v),
 			}));
 
-			return orderBy(elements, [sortBy()], [sortOrder()]);
+			return orderBy(elements, [sortBy], [sortOrder]);
 		},
 		{ initialValue: [] },
 	);
 
 	const sort = (by: "size" | "name") => {
-		setSortBy(by);
-		setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"));
-		setTableInfo((prev) => orderBy(prev, [by], [sortOrder()]));
+		sortBy = by;
+		sortOrder = sortOrder === "desc" ? "asc" : "desc";
+		setTableInfo((prev) => orderBy(prev, [by], [sortOrder]));
 	};
 
 	const formatBytes = (bytes: number, decimals = 2) => {
@@ -45,12 +45,12 @@ const TableInfo: Component = () => {
 				<tr>
 					<th>
 						<button type="button" class="sort" onClick={[sort, "name"]}>
-							Table {sortBy() !== "name" ? "⯁" : sortOrder() === "asc" ? "⯆" : "⯅"}
+							Table {sortBy !== "name" ? "⯁" : sortOrder === "asc" ? "⯆" : "⯅"}
 						</button>
 					</th>
 					<th colSpan={2}>
 						<button type="button" class="sort" onClick={[sort, "size"]}>
-							Size {sortBy() !== "size" ? "⯁" : sortOrder() === "asc" ? "⯆" : "⯅"}
+							Size {sortBy !== "size" ? "⯁" : sortOrder === "asc" ? "⯆" : "⯅"}
 						</button>
 					</th>
 				</tr>

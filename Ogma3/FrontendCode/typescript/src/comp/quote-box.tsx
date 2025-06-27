@@ -3,20 +3,18 @@ import type { QuoteDto } from "@g/types-public";
 import { useLocalStorage } from "@h/localStorageHook";
 import type { Empty } from "@t/utils";
 import { type ComponentType, customElement } from "solid-element";
-import { createResource, createSignal, Show } from "solid-js";
+import { createResource, Show } from "solid-js";
 import { Styled } from "./common/_styled";
 import css from "./quote-box.css";
 
 const QuoteBox: ComponentType<Empty> = (_) => {
-	const [nextFetchTime, setNextFetchTime] = createSignal(0);
+	let canFetch = $signal(true);
 	const [getQuoteFromStore, setQuoteInStore] = useLocalStorage<QuoteDto>("quote");
-
-	const canLoad = () => Date.now() >= nextFetchTime();
 
 	const loadQuote = async () => {
 		const stored = getQuoteFromStore();
 
-		if (!canLoad()) {
+		if (!canFetch) {
 			if (stored) {
 				return stored;
 			}
@@ -31,7 +29,9 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 		}
 
 		if (response.status === 429) {
-			setNextFetchTime(Number.parseInt(response.headers.get("Retry-After") ?? "0") * 1000);
+			const nextFetchTime = Number.parseInt(response.headers.get("Retry-After") ?? "0") * 1000;
+			canFetch = false;
+			window.setTimeout(() => (canFetch = true), nextFetchTime);
 			if (stored) {
 				return stored;
 			}
@@ -42,7 +42,7 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 
 	const [quote, { refetch }] = createResource<QuoteDto>(loadQuote);
 
-	const spinnerIcon = () => (canLoad() ? "lucide:refresh-cw" : "lucide:clock");
+	const spinnerIcon = () => (canFetch ? "lucide:refresh-cw" : "lucide:clock");
 
 	return () => (
 		<div id="quote" class="quote active-border">

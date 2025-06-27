@@ -1,7 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -14,7 +13,6 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 
 [Handler]
 [MapGet("api/votes/{storyId:long}")]
-[Authorize]
 public static partial class GetVotes
 {
 	[Validate]
@@ -27,15 +25,18 @@ public static partial class GetVotes
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
-
 		var count = await context.Votes
 			.Where(v => v.StoryId == request.StoryId)
 			.CountAsync(cancellationToken);
-		var didUserVote = await context.Votes
-			.Where(v => v.StoryId == request.StoryId)
-			.Where(v => v.UserId == uid)
-			.AnyAsync(cancellationToken);
+
+		var didUserVote = userService.User?.GetNumericId() switch
+		{
+			{} uid => await context.Votes
+				.Where(v => v.StoryId == request.StoryId)
+				.Where(v => v.UserId == uid)
+				.AnyAsync(cancellationToken),
+			_ => false,
+		};
 
 		return TypedResults.Ok(new VoteResult(didUserVote, count));
 	}

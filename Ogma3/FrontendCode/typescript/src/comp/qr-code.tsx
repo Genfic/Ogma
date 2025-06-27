@@ -1,6 +1,6 @@
 import { parseDom } from "@h/dom";
 import { type ComponentType, customElement } from "solid-element";
-import { createSignal, onMount } from "solid-js";
+import { onMount } from "solid-js";
 import { type QrCodeGenerateSvgOptions, renderSVG } from "uqr";
 
 type WidthOrHeight =
@@ -9,25 +9,25 @@ type WidthOrHeight =
 	| { width: number; height: number };
 
 const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvgOptions> = (props) => {
-	const [svg, setSvg] = createSignal<string>("");
+	let svg = $signal<string>("");
 
 	const width = props.width ?? props.height ?? 0;
 	const height = props.height ?? props.width ?? 0;
 
 	onMount(() => {
-		let svg = renderSVG(props.data, props);
+		let newSvg = renderSVG(props.data, props);
 
 		if (props.width || props.height) {
-			const svgDom = parseDom(svg);
+			const svgDom = parseDom(newSvg);
 			svgDom.setAttribute("width", width.toString());
 			svgDom.setAttribute("height", height.toString());
-			svg = svgDom.outerHTML;
+			newSvg = svgDom.outerHTML;
 		}
 
-		setSvg(svg);
+		svg = newSvg;
 	});
 
-	return <div style={{ width: `${width}px`, height: `${height}px`, padding: "5px" }} innerHTML={svg()} />;
+	return <div style={{ width: `${width}px`, height: `${height}px`, padding: "5px" }} innerHTML={svg} />;
 };
 
 customElement(

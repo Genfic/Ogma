@@ -7,7 +7,7 @@
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "Bundler",
+		"moduleResolution": "node",
 		"useDefineForClassFields": false,
 		"skipLibCheck": true,
 		"lib": ["DOM", "ES6", "ES2023", "ESNext", "DOM.Iterable"],
@@ -23,5 +23,5 @@
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js"
 	},
-	"exclude": ["node_modules", "tools", "src/sw"]
+	"exclude": ["tools", "src/sw"]
 }
