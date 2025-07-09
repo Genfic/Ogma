@@ -9,7 +9,7 @@ namespace Ogma3.Data;
 public sealed class OgmaConfig
 {
 	[JsonIgnore] private string _persistentFileLocation = string.Empty;
-	
+
 	/// <summary>
 	/// Persist `this` in a file asynchronously
 	/// </summary>
@@ -19,7 +19,7 @@ public sealed class OgmaConfig
 		var json = JsonSerializer.Serialize(this, OgmaConfigJsonContext.Default.OgmaConfig);
 		await sw.WriteAsync(json);
 	}
-	
+
 	/// <summary>
 	/// Initialize the config with data
 	/// </summary>
@@ -32,17 +32,17 @@ public sealed class OgmaConfig
 		config._persistentFileLocation = persistentFileLocation;
 		return config;
 	}
-	
+
 	public string Cdn { get; set; }
-	
 	public string AvatarServiceUrl { get; set; }
 	public string AdminEmail { get; set; }
 	public int MaxInvitesPerUser { get; set; }
-	
+
 	// Docs
 	[AutoformCategory("Docs")] public string PrivacyPolicyDoc { get; set; }
 	[AutoformCategory("Docs")] public string AboutDoc { get; set; }
-	
+	[AutoformCategory("Docs")] public string TosDoc { get; set; }
+
 	// Pagination settings
 	[AutoformCategory("Pagination")] public int CommentsPerPage { get; set; } = 25;
 	[AutoformCategory("Pagination")] public int ClubsPerPage { get; set; } = 25;
@@ -50,7 +50,7 @@ public sealed class OgmaConfig
 	[AutoformCategory("Pagination")] public int StoriesPerPage { get; set; } = 25;
 	[AutoformCategory("Pagination")] public int ClubThreadsPerPage { get; set; } = 25;
 	[AutoformCategory("Pagination")] public int ShelvesPerPage { get; set; } = 50;
-	
+
 	// Image sizes
 	[AutoformCategory("Image sizes")] public int StoryCoverWidth { get; set; } = 250;
 	[AutoformCategory("Image sizes")] public int StoryCoverHeight { get; set; } = 250;
@@ -58,7 +58,7 @@ public sealed class OgmaConfig
 	[AutoformCategory("Image sizes")] public int ClubIconHeight { get; set; } = 250;
 	[AutoformCategory("Image sizes")] public int AvatarWidth { get; set; } = 250;
 	[AutoformCategory("Image sizes")] public int AvatarHeight { get; set; } = 250;
-	
+
 	[AutoformCategory("Moderation")] public int MinReportLength { get; set; } = 30;
 }
 

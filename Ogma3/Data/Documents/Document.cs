@@ -14,4 +14,8 @@ public sealed class Document : BaseModel
 	public DateTimeOffset CreationTime { get; init; }
 	public uint Version { get; init; }
 	public string Body { get; init; }
+	public string CompiledBody { get; init; }
+	public List<Header> Headers { get; init; } = [];
+
+	public sealed record Header(byte Level, byte Occurrence, string Body);
 }

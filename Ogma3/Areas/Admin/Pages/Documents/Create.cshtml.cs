@@ -1,21 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using Markdig;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Documents;
+using Ogma3.Infrastructure.Constants;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
-public sealed class CreateModel : PageModel
+public sealed class CreateModel(ApplicationDbContext context) : PageModel
 {
-	private readonly ApplicationDbContext _context;
-
-	public CreateModel(ApplicationDbContext context)
-	{
-		_context = context;
-	}
-
 	[BindProperty] public required InputModel Input { get; set; }
 
 	public sealed class InputModel
@@ -27,23 +22,30 @@ public sealed class CreateModel : PageModel
 		[Required] public required string Body { get; set; }
 	}
 
-	public void OnGet()
+	public IActionResult OnGet()
 	{
+		return Page();
 	}
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		_context.Documents.Add(new Document
+		var html = Markdown.ToHtml(Input.Body, MarkdownPipelines.All);
+
+		context.Documents.Add(new Document
 		{
 			Title = Input.Title,
 			Slug = Input.Title.Friendlify(),
 			Body = Input.Body,
+			CompiledBody = html,
 			Version = 1,
 			CreationTime = DateTimeOffset.UtcNow,
 			RevisionDate = null,
+			Headers = Input.Body.GetMarkdownHeaders()
+				.Select(h => new Document.Header(h.Level, h.Occurrence, h.Body))
+				.ToList(),
 		});
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 		return Routes.Pages.Index.Get().Redirect(this);
 	}
 }

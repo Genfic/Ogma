@@ -1,4 +1,4 @@
-import { readdir, rm } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import * as path from "node:path";
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
@@ -11,8 +11,9 @@ import { initAsyncCompiler } from "sass-embedded";
 import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
 import { attempt, attemptSync } from "./helpers/function-helpers";
-import { log } from "./helpers/logger";
+import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
+import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
 
 const values = program
@@ -45,13 +46,14 @@ process.on("SIGINT", async () => {
 });
 
 const compileSass = async (file: string) => {
-	const start = Bun.nanoseconds();
+	const timer = new Stopwatch();
+	const logger = new Logger();
 
 	const { name: filename, base } = path.parse(file);
 
 	const fileContent = await Bun.file(file).text();
 
-	log.verbose(`file ${fileContent.length} bytes`);
+	logger.verbose(`file ${fileContent.length} bytes`);
 
 	const extraDirs = (await readdir(_base, { withFileTypes: true }))
 		.filter((v) => v.isDirectory())
@@ -64,17 +66,17 @@ const compileSass = async (file: string) => {
 				loadPaths: [_base, ...extraDirs],
 			});
 		},
-		(error) => log.verbose(error),
+		(error) => logger.verbose(error),
 	);
 
 	if (!compileResult) {
-		console.log("Compilation error");
+		logger.log("Compilation error");
 		return;
 	}
 
 	const { css, sourceMap } = compileResult;
 
-	log.verbose(css.length);
+	logger.verbose(css.length);
 
 	const transformResult = attemptSync(
 		() => {
@@ -87,22 +89,20 @@ const compileSass = async (file: string) => {
 				minify: true,
 			});
 		},
-		(error) => log.verbose(error),
+		(error) => logger.verbose(error),
 	);
 
 	if (!transformResult) {
-		console.log("Transformation error");
+		logger.log("Transformation error");
 		return;
 	}
 
 	const { code, map, warnings } = transformResult;
 
-	log.verbose(code.length);
+	logger.verbose(code.length);
 
-	for (const warning of warnings) {
-		console.warn(
-			ct`{yellow [{bold ${filename}}] WRN: ${warning.message} at ${warning.loc.filename} : ${warning.loc.line}:${warning.loc.column}}`,
-		);
+	for (const { message, loc } of warnings) {
+		logger.warn(ct`{yellow [{bold ${filename}}] WRN: ${message} at ${loc.filename} : ${loc.line}:${loc.column}}`);
 	}
 
 	await Bun.write(path.join(_dest, `${filename}.css`), code);
@@ -110,50 +110,29 @@ const compileSass = async (file: string) => {
 		await Bun.write(path.join(_dest, `${filename}.map.css`), map);
 	}
 
-	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
-	console.log(
-		ct`{dim File {reset.bold ${base}} compiled in {reset.bold {underline ${quantity.toFixed(2)}} ${unit}}}`,
-	);
+	logger.log(ct`{dim File {reset.bold ${base}} compiled in}`, timer);
 };
 
 const compileAll = async () => {
-	const start = Bun.nanoseconds();
+	const timer = new Stopwatch();
+	const logger = new Logger();
 	const files = [...new Glob(`${_base}/[!_]*.scss`).scanSync()];
 
-	console.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
+	logger.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
 	const tasks = [];
 	for (const file of files) {
-		values.verbose && console.info(`Compiling ${file}`);
+		logger.verbose(`Compiling ${file}`);
 		tasks.push(compileSass(file));
 	}
 	const res = await Promise.allSettled(tasks);
 
-	log.verbose(
-		res.map((r) => {
-			if (r.status === "fulfilled") {
-				return "ok";
-			}
-
-			return {
-				status: r.status,
-				file: r.reason.fileName,
-				loc: `line ${r.reason?.loc?.line}, column ${r.reason?.loc?.column}`,
-				type: r.reason?.data?.type,
-				r: JSON.stringify(r, null, 4),
-			};
-		}),
-	);
-
-	const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
+	logger.verbose(res.map((r) => (r.status === "fulfilled" ? "ok" : JSON.stringify(r, null, 4))));
 
 	const fulfilled = res.filter((r) => r.status === "fulfilled").length;
 	const color = fulfilled === files.length ? c.green : c.red;
-	console.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
-	if (fulfilled !== files.length) {
-		console.log(ct`{bold.yellow Run again with {dim --verbose} for more info}`);
-	}
-	console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}\n`);
+	logger.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
+	logger.log(ct`{bold Total compilation took}`, timer);
 };
 
 await compileAll();

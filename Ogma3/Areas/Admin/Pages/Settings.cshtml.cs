@@ -7,30 +7,23 @@ using Ogma3.Infrastructure.Constants;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(Roles = RoleNames.Admin)]
-public sealed class Settings : PageModel
+public sealed class Settings(OgmaConfig config) : PageModel
 {
-	private readonly OgmaConfig _config;
-
-	public Settings(OgmaConfig config)
-	{
-		_config = config;
-	}
-
 	[BindProperty] public required OgmaConfig Config { get; set; }
 
 	public void OnGet()
 	{
-		Config = _config;
+		Config = config;
 	}
 
 	public async Task<IActionResult> OnPostAsync()
 	{
 		foreach (var prop in typeof(OgmaConfig).GetProperties().Where(p => p.CanWrite))
 		{
-			prop.SetValue(_config, prop.GetValue(Config, null), null);
+			prop.SetValue(config, prop.GetValue(Config, null), null);
 		}
 
-		await _config.PersistAsync();
+		await config.PersistAsync();
 		return Routes.Pages.Settings.Get().Redirect(this);
 	}
 }

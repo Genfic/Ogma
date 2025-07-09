@@ -14,10 +14,12 @@ public sealed class DocumentConfiguration : BaseConfiguration<Document>
 		// CONSTRAINTS
 		builder
 			.Property(d => d.Title)
+			.HasMaxLength(500)
 			.IsRequired();
 
 		builder
 			.Property(d => d.Slug)
+			.HasMaxLength(500)
 			.IsRequired();
 
 		builder
@@ -38,7 +40,18 @@ public sealed class DocumentConfiguration : BaseConfiguration<Document>
 			.Property(d => d.Body)
 			.IsRequired();
 
-		// NAVIGATION
+		builder
+			.Property(d => d.CompiledBody)
+			.IsRequired();
+
+		builder
+			.OwnsMany<Document.Header>(
+				c => c.Headers,
+				d => {
+					d.ToJson();
+				}
+			);
+
 		builder
 			.HasIndex(d => new { d.Slug, d.Version })
 			.IsUnique();

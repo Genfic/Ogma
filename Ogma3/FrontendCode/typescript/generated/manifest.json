@@ -1,5 +1,5 @@
 {
-  "generated": "2025-06-27T19:17:11.628Z",
+  "generated": "2025-07-04T03:55:07.675Z",
   "prefix": "/js/",
   "ext": ".js",
   "files": [
@@ -125,6 +125,6 @@
     "tts:O1yUc6zLWyk4UwYcJTt0ce_KFA4oR5rNWbB_ZlkahOw",
     "vue-directives/closeable:vQm5fQ8p3-z3dUtfT5gafRKOkkhZmCd165TTtn98qsw",
     "watch-chapter-read:tt-4pWi1T-Pej-QbKh91_KLPZTvxpQPWfUdFM3KE59k",
-    "workers/cache-service-worker:Dv3EkjO5PwCbcQHQN3rfjt3OEixTWs8TLk2McDK8XO8"
+    "workers/cache-service-worker:M_LB_PxcMCMSg_0uRESrl3pNX2u5wIdm54EZ0GDStMg"
   ]
 }

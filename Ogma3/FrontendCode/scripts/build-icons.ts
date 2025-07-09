@@ -3,13 +3,15 @@ import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
-import convert from "convert";
 import ejs from "ejs";
 import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
+import { Logger } from "./helpers/logger";
+import { Stopwatch } from "./helpers/stopwatch";
 import { findAllTemplates } from "./helpers/template-helpers";
 
-const start = Bun.nanoseconds();
+const timer = new Stopwatch();
+const logger = new Logger();
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -50,24 +52,24 @@ const fetchIcon = async (icon: string): Promise<Svg | null> => {
 
 	if (res.ok) {
 		const svg = await res.text();
-		console.log(ct`{green Fetched icon: ${icon}}`);
+		logger.log(ct`{green Fetched icon: ${icon}}`);
 		return { svg: svg.trim(), name: icon };
 	}
 
-	console.error(ct`{red Failed to fetch icon: ${icon}}`);
+	logger.error(ct`{red Failed to fetch icon: ${icon}}`);
 	return null;
 };
 
 const res = await Promise.all(compact(icons).map((icon) => fetchIcon(icon)));
 
-values.verbose && console.log(res);
+logger.verbose(res);
 
 const svgs = compact(res).toSorted((a, b) => a.name.localeCompare(b.name));
 
-values.verbose && console.log(svgs);
+logger.verbose(svgs);
 
 const color = svgs.length === icons.length ? c.green : c.red;
-console.log(ct`{bold ${color(ct`Fetched {underline ${svgs.length}} of {underline ${icons.length}}`)} icons}`);
+logger.log(ct`{bold ${color(ct`Fetched {underline ${svgs.length}} of {underline ${icons.length}}`)} icons}`);
 
 const rewriter = new HTMLRewriter().on('svg:not([id="icon-spritesheet"])', {
 	element(element: HTMLRewriterTypes.Element): void | Promise<void> {
@@ -85,10 +87,9 @@ await Promise.allSettled([
 	Bun.write(join(_root, "..", "..", "wwwroot", "icon-index.html"), index),
 ]);
 
-console.log(ct`{green Created {reset.bold ./wwwroot/svg/spritesheet.svg}} and {bold ./Pages/Shared/IconSheet.cshtml}`);
+logger.log(ct`{green Created {reset.bold ./wwwroot/svg/spritesheet.svg}} and {bold ./Pages/Shared/IconSheet.cshtml}`);
 
-const { quantity, unit } = convert(Bun.nanoseconds() - start, "ns").to("best");
-console.log(ct`{bold Total compilation took {green {underline ${quantity.toFixed(2)}} ${unit}}}`);
+logger.log(ct`{bold Total compilation took}`, timer);
 
 if (values.serve) {
 	const server = Bun.serve({
@@ -97,5 +98,5 @@ if (values.serve) {
 			return new Response(index, { headers: { "Content-Type": "text/html" } });
 		},
 	});
-	console.log(ct`{green Serving icons at {bold ${server.url}}}`);
+	logger.log(ct`{green Serving icons at {bold ${server.url}}}`);
 }

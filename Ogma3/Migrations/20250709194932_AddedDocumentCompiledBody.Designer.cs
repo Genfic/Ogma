@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -18,9 +19,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250709194932_AddedDocumentCompiledBody")]
+    partial class AddedDocumentCompiledBody
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1807,39 +1810,6 @@ namespace Ogma3.Migrations
                     b.Navigation("CommentThread");
 
                     b.Navigation("OgmaUser");
-                });
-
-            modelBuilder.Entity("Ogma3.Data.Documents.Document", b =>
-                {
-                    b.OwnsMany("Ogma3.Data.Documents.Document+Header", "Headers", b1 =>
-                        {
-                            b1.Property<long>("DocumentId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Body")
-                                .HasColumnType("text");
-
-                            b1.Property<byte>("Level")
-                                .HasColumnType("smallint");
-
-                            b1.Property<byte>("Occurrence")
-                                .HasColumnType("smallint");
-
-                            b1.HasKey("DocumentId", "__synthesizedOrdinal");
-
-                            b1.ToTable("Documents");
-
-                            b1.ToJson("Headers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DocumentId");
-                        });
-
-                    b.Navigation("Headers");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Folders.Folder", b =>

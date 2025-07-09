@@ -28,8 +28,7 @@ public sealed class Followers(UserRepository userRepo, ApplicationDbContext cont
 			.Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
 			.Select(u => u.FollowedUser)
 			.Paginate(page, PerPage)
-			.ProjectToCard()
-			.AsNoTracking()
+			.Select(UserMappings.ToUserCard)
 			.ToListAsync();
 
 		var count = await context.Users

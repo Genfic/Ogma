@@ -4,15 +4,17 @@
 
 @{
 	ViewData["Title"] = Model.Document.Title;
+	var maxVersion = Model.Versions.Select(v => v.Version).Max();
+	var digits = (int)Math.Abs(Math.Log(maxVersion, 10)) + 1;
 }
 
 <article class="document">
 	<h1 class="header">@Model.Document.Title</h1>
 
-	@if (Model.Headers.Any())
+	@if (Model.Document.Headers.Any())
 	{
 		<div class="toc">
-			@foreach (var h in Model.Headers)
+			@foreach (var h in Model.Document.Headers)
 			{
 				<a href="#@h.Body.Friendlify()@(h.Occurrence > 0 ? $"-{h.Occurrence}" : "")"
 				   class="toc-h @("h" + h.Level)">
@@ -22,9 +24,9 @@
 		</div>
 	}
 
-	<markdown preset="All">
-		@Model.Document.Body
-	</markdown>
+	<div class="md">
+		@Html.Raw(Model.Document.CompiledBody)
+	</div>
 
 	<details class="details">
 		<summary>Version history</summary>
@@ -33,7 +35,7 @@
 			{
 				<li class="item">
 					<a asp-page="/Docs" asp-route-v="@ver.Version" asp-route-slug="@ver.Slug">
-						version @ver.Version — <time datetime="@ver.CreationTime.ToString("O")">@ver.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</time>
+						version @ver.Version.ToString($"D{digits}") — <time datetime="@ver.CreationTime.ToString("O")">@ver.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</time>
 					</a>
 					@if (ver.Version == Model.Document.Version)
 					{

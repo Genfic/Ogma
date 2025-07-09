@@ -33,7 +33,7 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 		BlockedUsers = await context.BlockedUsers
 			.Where(bu => bu.BlockingUserId == uid)
 			.Select(bu => bu.BlockedUser)
-			.ProjectToCard()
+			.Select(UserMappings.ToUserCard)
 			.ToListAsync();
 
 		Ratings = await context.Ratings.ToListAsync();

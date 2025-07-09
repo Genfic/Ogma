@@ -15,7 +15,7 @@ public sealed class StaffModel(ApplicationDbContext context) : PageModel
 		Staff = await context.Users
 			.Where(u => u.Roles.Any(ur => ur.IsStaff))
 			.OrderBy(uc => uc.Roles.OrderBy(r => r.Order).First().Order)
-			.ProjectToCard()
+			.Select(UserMappings.ToUserCard)
 			.ToArrayAsync();
 	}
 }

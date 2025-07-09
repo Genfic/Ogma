@@ -1,7 +1,7 @@
 import watcher, { type Event, type EventType } from "@parcel/watcher";
 import c from "chalk";
 import ct from "chalk-template";
-import { isVerbose, log } from "./logger";
+import { isVerbose, Logger } from "./logger";
 
 type WatchParams<T> = {
 	transformer: (events: Event[]) => T;
@@ -9,36 +9,38 @@ type WatchParams<T> = {
 	action: (result: T) => void | Promise<void>;
 };
 
+const logger = new Logger();
+
 export const watch = async <T>(
 	directory: string,
 	on: EventType[],
 	{ transformer, predicate, action }: WatchParams<T>,
 ) => {
-	console.log(c.blue("👀 Watching..."));
+	logger.log(c.blue("👀  Watching..."));
 
 	const subscription = await watcher.subscribe(directory, async (err, events) => {
 		if (isVerbose()) {
 			for (const { type, path } of events) {
-				console.info(ct`{yellow ${type}: ${path}}`);
+				logger.info(ct`{yellow ${type}: ${path}}`);
 			}
 		}
 
 		if (err) {
-			console.error(c.bgRed(err.message));
-			log.verbose(err);
+			logger.error(c.bgRed(err.message));
+			logger.verbose(err);
 			return;
 		}
 
 		const result = transformer(events.filter((e) => on.includes(e.type)));
 		if (predicate(result)) {
-			console.log(c.blueBright("🔔 Files changed, recompiling!"));
+			logger.log(c.blueBright("🔔  Files changed, recompiling!"));
 			await action(result);
 		}
 	});
 
 	process.on("exit", async () => {
 		// close watcher when Ctrl-C is pressed
-		console.log("🚪 Closing watcher...");
+		logger.log("🚪 Closing watcher...");
 		await subscription.unsubscribe();
 		process.exit(0);
 	});

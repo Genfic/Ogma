@@ -6,12 +6,14 @@ import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
-import { log } from "./helpers/logger";
+import solidLabels from "solid-labels/babel";
+import { log } from "../typescript/src-helpers/logger";
+import { getHash } from "./helpers/hash";
+import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
 import { cssMinifyPlugin } from "./plugins/minified-css-loader";
-import solidLabels from "solid-labels/babel";
 
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
@@ -38,16 +40,13 @@ if (values.clean) {
 	await clean();
 }
 
-console.log(values.minify);
-
 const compile = async (from: Glob, to: string, root: string, name: string) => {
 	const timer = new Stopwatch();
-	const prefix = c.bold.dim(`[${name}]`.padEnd(prefixWidth + 2));
+	const logger = new Logger(`[${name}]`, prefixWidth);
 
 	const files = [...from.scanSync()];
-	console.log(ct`${prefix} Found {bold.underline ${files.length}} files to compile.`);
-
-	log.verbose(`${prefix} Compiling \n\t${files.join("\n\t")}`);
+	logger.log(ct`Found {bold.underline ${files.length}} files to compile.`);
+	logger.verbose(`Compiling \n\t${files.join("\n\t")}`);
 
 	const { success, logs, outputs } = await Bun.build({
 		entrypoints: files,
@@ -73,21 +72,17 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		.filter((s) => typeof s === "string")
 		.map((p) => `<link rel="modulepreload" href="~${p}" as="script" />`);
 
-	const { time, unit } = timer.lap(3);
 	if (success) {
-		console.log(ct`${prefix} {dim Files compiled in {reset.bold {underline ${time}} ${unit}}}`);
+		logger.log(ct`{dim Files compiled in}`, timer);
 	} else {
-		console.error(ct`${prefix} {red Build of files failed after {reset.bold {underline ${time}} ${unit}}`);
+		logger.error(ct`{red Build of files failed after}`, timer);
 		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {
 			const color = log.level === "error" ? c.red : c.yellow;
 			if (log.position) {
-				console.log(
-					color(
-						`[${log.level}]: ${log.position.file} (${log.position.line}:${log.position.column}) ${log.message}`,
-					),
-				);
+				const msg = `[${log.level}]: ${log.position.file} (${log.position.line}:${log.position.column}) ${log.message}`;
+				logger.log(color(msg));
 			} else {
-				console.log(color(`[${log.level}]: ${log.message}`));
+				logger.log(color(`[${log.level}]: ${log.message}`));
 			}
 		}
 	}
@@ -100,23 +95,10 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 	return { chunks, size };
 };
 
-const getHash = async (filePath: string): Promise<string> => {
-	const file = Bun.file(filePath);
-	const hasher = new Bun.CryptoHasher("sha256");
-
-	const stream = file.stream();
-	for await (const chunk of stream) {
-		hasher.update(chunk);
-	}
-	const hashBuffer = hasher.digest();
-	return Buffer.from(hashBuffer).toString("base64url");
-};
-
 const prefix = "/js/";
 const ext = ".js";
-type HashedEntry = { hash: string; path: string | undefined };
+
 type FullHashedEntry = { hash: string; path: string };
-const entryHasPath = (e: HashedEntry): e is FullHashedEntry => !!e.path;
 const generateManifest = async () => {
 	const timer = new Stopwatch();
 	const files = new Glob(`${_dest}/**/[!_]*.js`).scan();
@@ -125,7 +107,7 @@ const generateManifest = async () => {
 	for await (const file of files) {
 		tasks.push(
 			(async () => {
-				const hash = await getHash(file);
+				const hash = await getHash(Bun.file(file), "sha256");
 				return {
 					hash,
 					path: relative(_dest, file).replaceAll("\\", "/").replace(ext, ""),
@@ -139,7 +121,7 @@ const generateManifest = async () => {
 		prefix,
 		ext,
 		files: hashed
-			.filter(entryHasPath)
+			.filter((e): e is FullHashedEntry => !!e.path)
 			.toSorted((a, b) => a.path.localeCompare(b.path))
 			.map(({ path, hash }) => `${path}:${hash}`),
 	};
@@ -152,6 +134,7 @@ const generateManifest = async () => {
 
 const compileAll = async () => {
 	const timer = new Stopwatch();
+	const logger = new Logger();
 
 	if (values.cleanAlways) {
 		await clean();
@@ -164,7 +147,7 @@ const compileAll = async () => {
 		"Javascript",
 	);
 
-	console.log(ct`{dim Generating manifest.json}`);
+	logger.log(ct`{dim Generating manifest.json}`);
 	await generateManifest();
 	const { chunks: workersChunks, size: workersSize } = await compile(
 		new Glob(`${_source}/src-workers/**/[^_]*.ts`),
@@ -174,18 +157,17 @@ const compileAll = async () => {
 	);
 
 	const chunks = [...jsChunks, ...workersChunks];
-	console.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
+	logger.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
 	const size = convert(jsSize + workersSize, "bytes")
 		.to("best")
 		.toString(3);
-	console.log(ct`{green Total size: {bold.underline ${size}}}`);
+	logger.log(ct`{green Total size: {bold.underline ${size}}}`);
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
 
-	const { time, unit } = timer.lap(3);
-	console.log(ct`{dim Files compiled in {reset.bold {underline ${time}} ${unit}}}`);
+	logger.log(ct`{dim Files compiled in}`, timer);
 };
 
 await compileAll();

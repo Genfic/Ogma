@@ -1,4 +1,5 @@
 using System.Reflection;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -55,7 +56,7 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 					TypeCode.DateTime => "date",
 					_ => "text",
 				};
-				var label = prop.Name;
+				var label = prop.Name.Humanize();
 				var value = prop.GetValue(obj);
 
 				output.Content.AppendHtml("""<div class="o-form-group">""");

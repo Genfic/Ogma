@@ -28,7 +28,7 @@ public sealed class Follows(UserRepository userRepo, ApplicationDbContext contex
 			.Where(u => u.FollowedUser.NormalizedUserName == name.Normalize().ToUpper())
 			.Select(u => u.FollowingUser)
 			.Paginate(page, PerPage)
-			.ProjectToCard()
+			.Select(UserMappings.ToUserCard)
 			.AsNoTracking()
 			.ToListAsync();
 
