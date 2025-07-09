@@ -6,6 +6,7 @@
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
+@using Routes.Pages
 @model StoryModel
 
 @{
@@ -53,7 +54,7 @@
 				   class="action-btn large"
 				   asp-page="./Blog/Create"
 				   asp-route-story="@Model.Story.Id"
-				   asp-route-from="@Routes.Pages.Story.Get(Model.Story.Id, Model.Story.Slug).Url(Url)">
+				   asp-route-from="@Story.Get(Model.Story.Id, Model.Story.Slug).Url(Url)">
 						<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
 						<span class="name">Write about it</span>
 				</a>
@@ -117,7 +118,7 @@
 			@if (Model.Story.IsLocked)
 			{
 				<div class="tag locked" title="This story is available only to registered users">
-					<icon icon="lucide:lock-keyhole" svg="true"></icon>
+					<icon icon="lucide:shield" svg="true"></icon>
 				</div>
 			}
 			<story-status status="@Model.Story.Status"></story-status>

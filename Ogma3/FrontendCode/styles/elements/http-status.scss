@@ -7,6 +7,8 @@
 	.number {
 		font-size: clamp(8rem, 10vw, 20rem);
 		margin: 2rem 0 1rem;
+		transform: rotate(-10deg);
+		transform-origin: center;
 		animation: swing infinite ease-in-out 1s alternate;
 	}
 

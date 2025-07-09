@@ -1,4 +1,4 @@
-import { rm } from "node:fs/promises";
+import fs, { rm } from "node:fs/promises";
 import * as path from "node:path";
 import { dirname, join } from "node:path";
 import { program } from "@commander-js/extra-typings";
@@ -20,6 +20,7 @@ const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-w, --watch", "Watch mode", false)
 	.option("-c, --clean", "Clean output directory", false)
+	.option("-r, --raw", "Output raw css", false)
 	.parse(Bun.argv)
 	.opts();
 
@@ -55,7 +56,7 @@ const compileSass = async (file: string) => {
 
 	logger.verbose(`file ${fileContent.length} bytes`);
 
-	const extraDirs = (await readdir(_base, { withFileTypes: true }))
+	const extraDirs = (await fs.readdir(_base, { withFileTypes: true }))
 		.filter((v) => v.isDirectory())
 		.map((v) => path.join(_base, v.name));
 
@@ -78,19 +79,22 @@ const compileSass = async (file: string) => {
 
 	logger.verbose(css.length);
 
-	const transformResult = attemptSync(
-		() => {
-			return transform({
-				code: encoder.encode(css),
-				inputSourceMap: JSON.stringify(sourceMap),
-				sourceMap: true,
-				filename: file,
-				targets: cssTargets,
-				minify: true,
-			});
-		},
-		(error) => logger.verbose(error),
-	);
+	const transformResult = values.raw
+		? { code: css, map: JSON.stringify(sourceMap), warnings: [] }
+		: attemptSync(
+				() => {
+					return transform({
+						projectRoot: _dest,
+						code: encoder.encode(css),
+						inputSourceMap: JSON.stringify(sourceMap),
+						sourceMap: true,
+						filename: file,
+						targets: cssTargets,
+						minify: true,
+					});
+				},
+				(error) => logger.verbose(error),
+			);
 
 	if (!transformResult) {
 		logger.log("Transformation error");

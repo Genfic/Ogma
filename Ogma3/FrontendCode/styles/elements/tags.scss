@@ -20,10 +20,28 @@
 	&.locked {
 		padding: 0 .2rem;
 		background: var(--background-25);
+		position: relative;
+		overflow: hidden;
+		cursor: default;
 
 		.icon {
 			width: 18px;
 			aspect-ratio: 1;
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: -50%;
+			background: linear-gradient(to bottom, rgb(229 172 142 / 0%), rgb(255 255 255 / 50%) 50%, rgb(229 172 142 / 0%));
+			transform: rotateZ(60deg) translate(0, 4em);
+			animation: sheen 2s forwards infinite;
+		}
+
+		@keyframes sheen {
+			100% {
+				transform: rotateZ(60deg) translate(0, -4em);
+			}
 		}
 	}
 

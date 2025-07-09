@@ -67,14 +67,14 @@
 		flex-wrap: wrap;
 		border-top: 1px solid var(--bc, var(--foreground-25));
 		padding: .25rem;
+		gap:.25rem;
 
 		> .tag {
-			display: flex;
 			border: none;
 			padding: 0 .25rem;
-			margin: 4px;
 			cursor: default;
 			white-space: nowrap;
+			background-color: transparent;
 
 			&:hover {
 				color: var(--foreground);
