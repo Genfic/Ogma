@@ -26,6 +26,10 @@ public sealed class RatingConfiguration : BaseConfiguration<Rating>
 			.HasMaxLength(CTConfig.Rating.MaxDescriptionLength);
 
 		builder
+			.Property(r => r.Color)
+			.HasMaxLength(6);
+
+		builder
 			.Property(r => r.Order)
 			.IsRequired()
 			.HasDefaultValue(0);

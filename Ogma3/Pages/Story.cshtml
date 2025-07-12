@@ -12,7 +12,7 @@
 @{
 	ViewData["Title"] = Model.Story.Title;
 	ViewData["Description"] = Model.Story.Hook;
-	ViewData["Rating"] = Model.Story.Rating.Name;
+	ViewData["Rating"] = Model.Story.Rating;
 
 	var uid = User.GetNumericId();
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
@@ -104,14 +104,8 @@
 		@* <cache expires-after="TimeSpan.FromMinutes(60)"> *@
 
 		<div class="titlebar">
-			@* TODO: height and width *@
-			<img src="@Model.Story.Rating.Icon"
-			     alt="Rated: @Model.Story.Rating.Name"
-			     title="Rating: @Model.Story.Rating.Name"
-			     class="rating"
-			     loading="lazy"/>
-			<span style="display:none" itemprop="contentRating">@Model.Story.Rating.Name</span>
-			<h1 class="title" itemprop="name">@Model.Story.Title</h1>
+			<span style="display:none" itemprop="contentRating">@Model.Story.Rating</span>
+			<h1 class="title" itemprop="name"><partial name="_RatingIcon" model="Model.Story.Rating"/> @Model.Story.Title</h1>
 		</div>
 
 		<div class="tags" itemprop="keywords">

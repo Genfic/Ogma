@@ -13,7 +13,7 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 {
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
-	/// <exception cref="Exception">Thrown when after `tries` amount of tries file could not be uploaded</exception>
+	/// <exception cref="Exception">Thrown when after `tries` number of tries, the file could not be uploaded</exception>
 	public async Task<FileUploaderResult> Upload(
 		IFormFile file,
 		string folder,
@@ -28,7 +28,7 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
-	/// <exception cref="FileUploadException">Thrown when after `tries` amount of tries file could not be uploaded</exception>
+	/// <exception cref="FileUploadException">Thrown when after `tries` number of tries, the file could not be uploaded</exception>
 	public async Task<FileUploaderResult> Upload(
 		IFormFile file,
 		string folder,

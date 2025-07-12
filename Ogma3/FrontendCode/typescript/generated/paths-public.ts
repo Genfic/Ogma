@@ -10,6 +10,7 @@ import type {
 	CreateFaqCommand,
 	CreateQuoteCommand,
 	CreateQuotesFromJsonQuery,
+	CreateRatingCommand,
 	CreateRoleCommand,
 	CreateShelfCommand,
 	CreateTagCommand,
@@ -50,13 +51,14 @@ import type {
 	UpdateCommentResponse,
 	UpdateFaqCommand,
 	UpdateQuoteCommand,
+	UpdateRatingCommand,
 	UpdateRoleCommand,
 	UpdateRolesCommand,
 	UpdateShelfCommand,
 	UpdateTagCommand,
 	VoteResult,
-} from './types-public';
-import { typedFetch, get, post, put, patch, del, head } from './typed-fetch';
+} from "./types-public";
+import { del, get, head, patch, post, put, typedFetch } from "./typed-fetch";
 
 
 export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[], MarkChapterAsUnreadCommand>("/api/chaptersread",
@@ -582,9 +584,9 @@ export const PostApiQuotesJson = async (body: CreateQuotesFromJsonQuery, headers
 );
 
 
-export const PostApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto, undefined>("/api/ratings",
+export const PostApiRatings = async (body: CreateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto, CreateRatingCommand>("/api/ratings",
 	post,
-	undefined,
+	body,
 	headers,
 	options,
 );
@@ -686,9 +688,9 @@ export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersIn
 );
 
 
-export const PutApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto, undefined>("/api/ratings",
+export const PutApiRatings = async (body: UpdateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, UpdateRatingCommand>("/api/ratings",
 	put,
-	undefined,
+	body,
 	headers,
 	options,
 );

@@ -1,0 +1,13 @@
+.rating-icon {
+	align-self: center;
+	height: 100%;
+	aspect-ratio: 1;
+	background-color: var(--rating-color);
+	display: inline-flex;
+	place-content: center;
+
+	.icon {
+		height: 20px;
+		filter: drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
+	}
+}

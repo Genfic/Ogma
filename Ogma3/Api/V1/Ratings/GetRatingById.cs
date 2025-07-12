@@ -28,7 +28,7 @@ public static partial class GetRatingById
 	{
 		var ratings = await context.Ratings
 			.Where(r => r.Id == request.Id)
-			.ProjectToApiDto()
+			.Select(RatingMapper.ToApiDto)
 			.FirstOrDefaultAsync(cancellationToken);
 
 		return ratings is null ? TypedResults.NotFound() : TypedResults.Ok(ratings);

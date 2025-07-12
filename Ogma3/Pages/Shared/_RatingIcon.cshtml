@@ -1,0 +1,10 @@
+@model RatingIcon
+
+@{
+	var icon = $"tabler:letter-{char.ToLower(Model.Name[0])}";
+	var color = $"#{Model.Color}";
+}
+
+<div title="@Model.Name" class="rating-icon" style="--rating-color: @color">
+	<icon icon="@icon" svg="true"></icon>
+</div>

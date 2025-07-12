@@ -6,60 +6,7 @@
 	ViewData["ActivePage"] = NavPages.Ratings;
 }
 
-<form id="namespace" class="auto" method="post" v-on:submit.stop.prevent="createRating">
-
-	<ul v-if="err">
-		<li class="text-danger" v-for="e in err">{{ e }}</li>
-	</ul>
-
-	<label asp-for="Input.Name"></label>
-	<input asp-for="Input.Name" v-model="form.name">
-
-	<label asp-for="Input.Description"></label>
-	<input asp-for="Input.Description" v-model="form.desc">
-
-	<label asp-for="Input.Icon"></label>
-	<input asp-for="Input.Icon" v-on:change="iconChanged" ref="file" accept=".svg">
-
-	<label asp-for="Input.BlacklistedByDefault"></label>
-	<input asp-for="Input.BlacklistedByDefault" v-model="form.blacklist">
-
-	<label asp-for="Input.Order"></label>
-	<input asp-for="Input.Order" v-model="form.order">
-
-	<input type="hidden" :value="form.id">
-
-	<div class="form-row">
-		<button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-		<button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
-	</div>
-
-</form>
-
-<button v-if="ratings.length <= 0" class="btn btn-primary" type="button" disabled>
-	<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-	Loading...
-</button>
-
-<ul class="items-list">
-	<li v-for="n in ratings">
-		<div class="deco" :style="{ border: n.blacklistedByDefault ? '1px solid red' : '1px solid transparent'}">
-			<img :src="n.icon" alt="" height="30" width="30">
-		</div>
-		<div class="main">
-			<h3 class="name">{{ n.name }}</h3>
-			<div class="desc">{{ n.desc }}</div>
-		</div>
-		<div class="actions">
-			<button class="action" v-on:click="deleteRating(n)">
-				<icon icon="lucide:trash-2" svg="true"></icon>
-			</button>
-			<button class="action" v-on:click="editRating(n)">
-				<icon icon="lucide:pencil" svg="true"></icon>
-			</button>
-		</div>
-	</li>
-</ul>
+<div id="ratings-app"></div>
 
 @section Scripts
 {

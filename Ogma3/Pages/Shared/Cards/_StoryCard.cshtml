@@ -1,10 +1,11 @@
 @using System.Globalization
+@using Routes.Pages
 @using Utils.Extensions
 @model StoryCard
 
 @{
-	var authorRoute = Routes.Pages.User_Index.Get(Model.AuthorUserName);
-	var storyRoute = Routes.Pages.Story.Get(Model.Id, Model.Slug);
+	var authorRoute = User_Index.Get(Model.AuthorUserName);
+	var storyRoute = Story.Get(Model.Id, Model.Slug);
 }
 
 <div class="story-card">
@@ -14,20 +15,15 @@
 	     alt="@Model.Title"
 	     width="160" height="160" cf/>
 
-	<header class="title">
-
+	<div class="title">
 		<h3>
-			@* TODO: width and height *@
-			<img src="@Model.Rating.Icon"
-			     alt="Rated: @Model.Rating.Name"
-			     title="Rating: @Model.Rating.Name"
-			     class="rating"
-			     loading="lazy"/>
+			<partial name="_RatingIcon" model="Model.Rating"/>
+
 			<a for-route="storyRoute">@Model.Title</a>
 		</h3>
 
 		<a class="author" for-route="authorRoute">By&nbsp;@Model.AuthorUserName</a>
-	</header>
+	</div>
 
 	<div class="hook">
 		<markdown preset="Basic">

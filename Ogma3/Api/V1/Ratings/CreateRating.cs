@@ -3,13 +3,9 @@ using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
-using Ogma3.Infrastructure.CustomValidators;
-using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.ServiceRegistrations;
-using Ogma3.Services.FileUploader;
 
 namespace Ogma3.Api.V1.Ratings;
 
@@ -29,16 +25,15 @@ public static partial class CreateRating
 		public required string Description { get; init; }
 		public required bool BlacklistedByDefault { get; init; }
 		public required byte Order { get; init; }
-		[FileExtension(".svg")]
-		[FileSize(100 * 1024)]
-		public required IFormFile Icon { get; init; }
+
+		[MinLength(3)]
+		[MaxLength(6)]
+		public required string Color { get; init; }
 	}
 
 	private static async ValueTask<CreatedAtRoute<RatingApiDto>> HandleAsync(
-		[FromForm] Command request,
+		Command request,
 		ApplicationDbContext context,
-		ImageUploader uploader,
-		OgmaConfig ogmaConfig,
 		CancellationToken cancellationToken
 	)
 	{
@@ -48,14 +43,8 @@ public static partial class CreateRating
 			Description = request.Description,
 			BlacklistedByDefault = request.BlacklistedByDefault,
 			Order = request.Order,
+			Color = request.Color,
 		};
-
-		if (request.Icon is { Length: > 0 })
-		{
-			var fileData = await uploader.Upload(request.Icon, "ratings");
-			rating.Icon = Path.Join(ogmaConfig.Cdn, fileData.Path);
-			rating.IconId = fileData.FileId;
-		}
 
 		context.Ratings.Add(rating);
 

@@ -1,4 +1,3 @@
-using Ogma3.Data.Ratings;
 using Ogma3.Data.Tags;
 using Ogma3.Pages.Shared;
 
@@ -16,7 +15,7 @@ public sealed class StoryDetails
 	public required DateTimeOffset ReleaseDate { get; init; }
 	public required bool IsPublished { get; init; }
 	public required IEnumerable<TagDto> Tags { get; init; }
-	public required Rating Rating { get; init; }
+	public required RatingIcon Rating { get; init; }
 	public required EStoryStatus Status { get; init; }
 	public required bool IsLocked { get; init; }
 	public required int WordCount { get; init; }
@@ -24,7 +23,6 @@ public sealed class StoryDetails
 	public required int CommentsCount { get; init; }
 	public required int VotesCount { get; init; }
 	public required ContentBlockCard? ContentBlock { get; init; }
-
 	public required ICollection<CreditDto> Credits { get; init; }
 }
 

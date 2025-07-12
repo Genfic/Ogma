@@ -23,7 +23,7 @@ public static partial class GetAllRatings
 	{
 		var ratings = await context.Ratings
 			.OrderBy(r => r.Order)
-			.ProjectToApiDto()
+			.Select(RatingMapper.ToApiDto)
 			.ToArrayAsync(cancellationToken);
 
 		return TypedResults.Ok(ratings);

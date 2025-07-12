@@ -58,6 +58,14 @@ export type CreateQuotesFromJsonQuery = {
     quotes: QuoteDto[];
 };
 
+export type CreateRatingCommand = {
+    name: string;
+    description: string;
+    blacklistedByDefault: boolean;
+    order: number;
+    color: string;
+};
+
 export type CreateRoleCommand = {
     name: string;
     isStaff: boolean;
@@ -173,8 +181,6 @@ export type GetUserNotificationsResult = {
     message: string;
 };
 
-export type IFormFile = Blob;
-
 export type InviteCodeDto = {
     id: number;
     code: string;
@@ -221,8 +227,8 @@ export type RatingApiDto = {
     name: string;
     description: string;
     order: number;
-    icon: string;
     blacklistedByDefault: boolean;
+    color: string;
 };
 
 export type RemoveBookFromShelfCommand = {
@@ -316,6 +322,15 @@ export type UpdateQuoteCommand = {
     id: number;
     body: string;
     author: string;
+};
+
+export type UpdateRatingCommand = {
+    id: number;
+    name: string;
+    description: string;
+    blacklistedByDefault: boolean;
+    order: number;
+    color: string;
 };
 
 export type UpdateRoleCommand = {

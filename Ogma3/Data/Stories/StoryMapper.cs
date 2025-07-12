@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Ogma3.Data.Tags;
+using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Data.Stories;
@@ -16,7 +17,11 @@ public static class StoryMapper
 		Cover = s.Cover == null ? null : s.Cover.Url,
 		PublicationDate = s.PublicationDate,
 		Tags = s.Tags.OrderBy(t => t.Namespace).ThenBy(t => t.Name).Select(t => t.ToDto()),
-		Rating = s.Rating,
+		Rating = new RatingIcon
+		{
+			Name = s.Rating.Name,
+			Color = s.Rating.Color,
+		},
 		Status = s.Status,
 		WordCount = s.WordCount,
 		ChapterCount = s.ChapterCount,
@@ -34,14 +39,18 @@ public static class StoryMapper
 		ReleaseDate = s.PublicationDate ?? s.CreationDate,
 		IsPublished = s.PublicationDate != null,
 		Tags = s.Tags.OrderBy(t => t.Namespace).ThenBy(t => t.Name).Select(t => t.ToDto()),
-		Rating = s.Rating,
+		Rating = new RatingIcon
+		{
+			Name = s.Rating.Name,
+			Color = s.Rating.Color,
+		},
 		Status = s.Status,
 		IsLocked = s.IsLocked,
 		WordCount = s.WordCount,
 		ChaptersCount = s.Chapters.Count,
 		CommentsCount = s.Chapters.Sum(c => c.CommentThread.CommentsCount),
 		VotesCount = s.Votes.Count,
-		ContentBlock = s.ContentBlock != null ? new Pages.Shared.ContentBlockCard(
+		ContentBlock = s.ContentBlock != null ? new ContentBlockCard(
 			s.ContentBlock.Reason ?? "",
 			s.ContentBlock.DateTime,
 			s.ContentBlock.Issuer != null ? s.ContentBlock.Issuer.UserName : ""

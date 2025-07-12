@@ -1,5 +1,4 @@
 using MemoryPack;
-using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 
@@ -16,7 +15,7 @@ public sealed partial class StoryCard
 	public required string? Cover { get; init; }
 	public required DateTimeOffset? PublicationDate { get; init; }
 	public required IEnumerable<TagDto> Tags { get; init; }
-	public required Rating Rating { get; init; } // TODO: Probably shouldn't be using a database entity here
+	public required RatingIcon Rating { get; init; }
 	public required EStoryStatus Status { get; init; }
 	public required int WordCount { get; init; }
 	public required int ChapterCount { get; init; }

@@ -10,7 +10,7 @@ import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
-import { attempt, attemptSync } from "./helpers/function-helpers";
+import { $try } from "./helpers/function-helpers";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { Stopwatch } from "./helpers/stopwatch";
@@ -60,15 +60,12 @@ const compileSass = async (file: string) => {
 		.filter((v) => v.isDirectory())
 		.map((v) => path.join(_base, v.name));
 
-	const compileResult = await attempt(
-		async () => {
-			return await compiler.compileStringAsync(fileContent, {
-				sourceMap: true,
-				loadPaths: [_base, ...extraDirs],
-			});
-		},
-		(error) => logger.verbose(error),
-	);
+	const compileResult = await $try(async () => {
+		return await compiler.compileStringAsync(fileContent, {
+			sourceMap: true,
+			loadPaths: [_base, ...extraDirs],
+		});
+	}, logger.verbose);
 
 	if (!compileResult) {
 		logger.log("Compilation error");
@@ -81,9 +78,9 @@ const compileSass = async (file: string) => {
 
 	const transformResult = values.raw
 		? { code: css, map: JSON.stringify(sourceMap), warnings: [] }
-		: attemptSync(
-				() => {
-					return transform({
+		: $try(
+				() =>
+					transform({
 						projectRoot: _dest,
 						code: encoder.encode(css),
 						inputSourceMap: JSON.stringify(sourceMap),
@@ -91,9 +88,8 @@ const compileSass = async (file: string) => {
 						filename: file,
 						targets: cssTargets,
 						minify: true,
-					});
-				},
-				(error) => logger.verbose(error),
+					}),
+				logger.verbose,
 			);
 
 	if (!transformResult) {

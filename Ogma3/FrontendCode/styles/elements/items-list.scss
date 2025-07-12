@@ -81,11 +81,17 @@ ul.items-list {
 			font-size: 1.2rem;
 			text-decoration: none;
 			text-overflow: ellipsis;
+			display: inline-flex;
+			gap: .5em;
 
 			> .icon {
 				color: var(--foreground-50);
-				font-size: 90%;
-				padding-left: .5rem;
+				height: 90%;
+				display: inline-flex;
+
+				&::part(icon) {
+					max-height: 20px;
+				}
 			}
 		}
 
