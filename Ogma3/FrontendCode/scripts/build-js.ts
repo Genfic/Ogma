@@ -109,7 +109,7 @@ const generateManifest = async () => {
 
 	const manifest = {
 		generated: new Date().toISOString(),
-		prefix: '/js/',
+		prefix: "/js/",
 		ext,
 		files: hashed.toSorted((a, b) => a.path.localeCompare(b.path)).map(({ path, hash }) => `${path}:${hash}`),
 	};
@@ -120,6 +120,7 @@ const generateManifest = async () => {
 	console.log(ct`{dim Generated manifest.json in {reset.bold {underline ${time}} ${unit}}}`);
 };
 
+const sizeHistory: number[] = [];
 const compileAll = async () => {
 	const timer = new Stopwatch();
 	const logger = new Logger();
@@ -148,10 +149,17 @@ const compileAll = async () => {
 	logger.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
-	const size = convert(jsSize + workersSize, "bytes")
-		.to("best")
-		.toString(3);
-	logger.log(ct`{green Total size: {bold.underline ${size}}}`);
+	const best = (size: number) => convert(size, "bytes").to("best").toString();
+
+	const currentSize = jsSize + workersSize;
+	logger.log(ct`{green Total size: {bold.underline ${best(currentSize)}}}`);
+
+	const prev = sizeHistory.at(-1);
+	if (prev) {
+		const text = (x: number) => (x > 0 ? c.red : c.green)((x < 0 ? "" : "+") + best(x));
+		logger.log(`Size difference: ${text(currentSize - prev)} (total: ${text(currentSize - sizeHistory[0])})`);
+	}
+	sizeHistory.push(currentSize);
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
 

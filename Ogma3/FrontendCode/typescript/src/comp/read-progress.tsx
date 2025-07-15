@@ -17,10 +17,9 @@ const ReadProgress: ComponentType<Empty> = (_, { element }) => {
 		const containerHeight = parent.offsetTop + parent.offsetHeight;
 		const maxHeight = Math.max(containerHeight - window.innerHeight, 0);
 
-		const newProgress = 1 - clamp(normalize(percent, 0, maxHeight));
-		progress = newProgress;
+		progress = 1 - clamp(normalize(percent, 0, maxHeight));
 
-		if (newProgress >= 1 && !read) {
+		if (progress >= 1 && !read) {
 			read = true;
 			element.dispatchEvent(new CustomEvent("read"));
 		}

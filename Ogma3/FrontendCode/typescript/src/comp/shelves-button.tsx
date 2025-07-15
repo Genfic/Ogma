@@ -1,14 +1,14 @@
 import {
-	PostApiShelfStories as addToShelf,
-	GetApiShelfStoriesQuick as getQuickShelves,
-	GetApiShelfStories as getShelves,
 	DeleteApiShelfStories as removeFromShelf,
+	GetApiShelfStories as getShelves,
+	GetApiShelfStoriesQuick as getQuickShelves,
+	PostApiShelfStories as addToShelf,
 } from "@g/paths-public";
 import type { GetCurrentUserQuickShelvesResult, GetPaginatedUserShelvesResult } from "@g/types-public";
 import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
-import { createResource, createSignal, For, type Setter, Show } from "solid-js";
+import { createResource, For, type Setter, Show } from "solid-js";
 import { Styled } from "./common/_styled";
 import sharedCss from "./shared.css";
 import css from "./shelves-button.css";
@@ -34,8 +34,8 @@ const updateShelfData = (
 };
 
 const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
-	const [more, setMore] = createSignal(false);
-	const [page, setPage] = createSignal(1);
+	let more = $signal(false);
+	let page = $signal(1);
 
 	const [quickShelves, { mutate: mutateQuick }] = createResource(
 		async () => {
@@ -45,10 +45,10 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		{ initialValue: [] },
 	);
 	const [shelves, { mutate: mutateShelves }] = createResource(
-		more,
+		() => more,
 		async (trigger) => {
 			if (trigger) {
-				const res = await getShelves(props.storyId, page());
+				const res = await getShelves(props.storyId, page);
 				return res.ok ? (res.data as Shelf[]) : [];
 			}
 			return [];
@@ -56,7 +56,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		{ initialValue: [] },
 	);
 
-	useClickOutside(element, () => setMore(false));
+	useClickOutside(element, () => (more = false));
 
 	const addOrRemove = async (id: number) => {
 		const allShelves = [...shelves(), ...quickShelves()];
@@ -111,11 +111,11 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 				)}
 			</For>
 
-			<button type="button" title="All bookshelves" class="shelf action-btn" onClick={[setMore, !more()]}>
+			<button type="button" title="All bookshelves" class="shelf action-btn" onClick={() => (more = !more)}>
 				<o-icon class="material-icons-outlined" icon="lucide:ellipsis-vertical" />
 			</button>
 
-			<Show when={more()}>
+			<Show when={more}>
 				<div class="more-shelves">
 					<For each={shelves()}>
 						{(shelf) => (

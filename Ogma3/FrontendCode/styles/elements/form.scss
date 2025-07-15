@@ -74,6 +74,7 @@ form.form {
 			background-color: var(--ele-1);
 			color: var(--foreground);
 			height: 100%;
+			@include ab.active-border;
 
 			&[disabled] {
 				color: var(--foreground-50);

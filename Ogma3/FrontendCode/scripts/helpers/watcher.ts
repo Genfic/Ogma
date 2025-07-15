@@ -1,3 +1,4 @@
+import { relative } from "node:path";
 import watcher, { type Event, type EventType } from "@parcel/watcher";
 import c from "chalk";
 import ct from "chalk-template";
@@ -31,9 +32,13 @@ export const watch = async <T>(
 			return;
 		}
 
-		const result = transformer(events.filter((e) => on.includes(e.type)));
+		const filteredEvents = events.filter((e) => on.includes(e.type));
+		const result = transformer(filteredEvents);
 		if (predicate(result)) {
 			logger.log(c.blueBright("🔔  Files changed, recompiling!"));
+			for (const { path } of filteredEvents) {
+				logger.log(c.blueBright.dim(`└→ ${relative(directory, path)}`));
+			}
 			await action(result);
 		}
 	});

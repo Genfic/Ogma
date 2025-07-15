@@ -1,11 +1,11 @@
 import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
 import { type ComponentType, customElement } from "solid-element";
-import { createResource, createSignal, Match, Switch } from "solid-js";
+import { createResource, Match, Switch } from "solid-js";
 import css from "./cache-info.css";
 import { Styled } from "./common/_styled";
 
 const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
-	const [primed, setPrimed] = createSignal(false);
+	let primed = $signal(false);
 
 	const [cacheCount, { refetch }] = createResource(async () => {
 		const res = await GetAdminApiCache();
@@ -25,7 +25,7 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 
 	let timer: ReturnType<typeof setTimeout>;
 	const mouseLeft = () => {
-		timer = setTimeout(() => setPrimed(false), 500);
+		timer = setTimeout(() => (primed = false), 500);
 	};
 	const mouseEntered = () => {
 		clearTimeout(timer);
@@ -40,7 +40,7 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 				console.error("Failed to purge cache:", res);
 			}
 		} else {
-			setPrimed(false);
+			primed = false;
 		}
 	};
 
@@ -51,7 +51,7 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 				<strong>{cacheCount()}</strong> elements in the cache
 			</span>
 			<Switch>
-				<Match when={primed()}>
+				<Match when={primed}>
 					<button
 						type="button"
 						class="purge"
@@ -62,8 +62,8 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 						Purge
 					</button>
 				</Match>
-				<Match when={!primed()}>
-					<button type="button" class="prime" onClick={[setPrimed, true]}>
+				<Match when={!primed}>
+					<button type="button" class="prime" onClick={() => (primed = true)}>
 						Prime
 					</button>
 				</Match>

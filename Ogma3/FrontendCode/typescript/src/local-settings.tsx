@@ -1,12 +1,12 @@
 import { getCookieValue, setCookie } from "@h/cookies";
 import { $id, $query } from "@h/dom";
 import { useLocalStorage } from "@h/localStorageHook";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect } from "solid-js";
 import { render } from "solid-js/web";
 
 const LocalSettings = () => {
 	const [getCollapseDeleted, setCollapseDeleted] = useLocalStorage<boolean>("collapse-deleted", false);
-	const [getTheme, setTheme] = createSignal(((x) => ((x?.length ?? 0) > 0 ? x : "light"))(getCookieValue("theme")));
+	let theme = $signal(((x) => ((x?.length ?? 0) > 0 ? x : "light"))(getCookieValue("theme")));
 
 	createEffect(() => {
 		console.log(getCollapseDeleted());
@@ -20,8 +20,7 @@ const LocalSettings = () => {
 			.slice(0, 5);
 		const date = new Date();
 		date.setFullYear(date.getFullYear() + 100);
-		const theme = getTheme() === "dark" ? "light" : "dark";
-		setTheme(theme);
+		theme = theme === "dark" ? "light" : "dark";
 		themeLink.setAttribute("rel", "stylesheet");
 		themeLink.setAttribute("href", `/css/${theme}.css?v=${rnd}`);
 		setCookie("theme", theme, { expires: date, secure: false, sameSite: "Lax" });
@@ -43,7 +42,7 @@ const LocalSettings = () => {
 			<dt>Theme</dt>
 			<dd>
 				<button type="button" onClick={swapTheme}>
-					{getTheme()}
+					{theme}
 				</button>
 			</dd>
 		</>

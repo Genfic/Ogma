@@ -1,7 +1,7 @@
 import { GetApiClubsStory as getFeaturingClubs } from "@g/paths-public";
 import type { GetClubsWithStoryResult } from "@g/types-public";
 import { type ComponentType, customElement, noShadowDOM } from "solid-element";
-import { createResource, createSignal, For, Show } from "solid-js";
+import { createResource, For, Show } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 const id = "featured-in-clubs";
@@ -26,17 +26,17 @@ const Club = ({ club }: { club: GetClubsWithStoryResult }) => (
 const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 	noShadowDOM();
 
-	const [isOpen, setIsOpen] = createSignal(false);
-	const [clubs] = createResource(isOpen, async (condition: boolean) => {
+	let isOpen = $signal(false);
+	const [clubs] = createResource($get(isOpen), async (condition: boolean) => {
 		if (!condition) return null;
 		const res = await getFeaturingClubs(props.storyId);
 		return res.ok ? res.data : null;
 	});
-	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
+	const dialogRef = $signal<DialogApi>();
 
 	const open = () => {
-		setIsOpen(true);
-		dialogRef()?.open();
+		isOpen = true;
+		dialogRef?.open();
 	};
 
 	return (
@@ -46,7 +46,7 @@ const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 			</button>
 
 			<Dialog
-				ref={setDialogRef}
+				ref={$set(dialogRef)}
 				classes={["club-folder-selector"]}
 				contentClass="clubs"
 				header={<span>Featured in</span>}

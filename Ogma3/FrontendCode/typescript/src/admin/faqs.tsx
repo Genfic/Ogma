@@ -1,7 +1,7 @@
 import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
-import { createResource, createSignal, For } from "solid-js";
+import { createResource, For } from "solid-js";
 import { render } from "solid-js/web";
 
 interface Faq {
@@ -26,18 +26,15 @@ const FAQ = () => {
 		{ initialValue: [] },
 	);
 
-	const [formData, setFormData] = createSignal<Faq>({ question: "", answer: "" });
+	let formData = $signal<Faq>({ question: "", answer: "" });
 
 	const handleInput = (e: InputEvent) => {
 		const target = e.target as HTMLInputElement;
 		console.log(`Setting ${target.name} to ${target.value}`);
-		setFormData(
-			(prev) =>
-				prev && {
-					...prev,
-					[target.name]: target.value,
-				},
-		);
+		formData = {
+			...formData,
+			[target.name]: target.value,
+		};
 	};
 
 	const deleteFaq = async (id: number) => {
@@ -52,7 +49,7 @@ const FAQ = () => {
 	const createFaq = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		const data = formData();
+		const data = formData;
 		if (!data) return;
 
 		if (data.id) {
@@ -74,11 +71,11 @@ const FAQ = () => {
 	};
 
 	const openForEdit = (faq: FaqDto) => {
-		setFormData(faq);
+		formData = faq;
 	};
 
 	const clear = () => {
-		setFormData({ question: "", answer: "", id: undefined });
+		formData = { question: "", answer: "", id: undefined };
 	};
 
 	return (
@@ -86,19 +83,18 @@ const FAQ = () => {
 			<form class="form" onSubmit={createFaq}>
 				<div class="o-form-group">
 					<label for="question">Question</label>
-					<input class="o-form-control" name="question" value={formData()?.question} onInput={handleInput} />
+					<input class="o-form-control" name="question" value={formData?.question} onInput={handleInput} />
 				</div>
 				<div class="o-form-group">
 					<label for="answer">Answer</label>
-					<textarea class="o-form-control" name="answer" value={formData()?.answer} onInput={handleInput} />
+					<textarea class="o-form-control" name="answer" value={formData?.answer} onInput={handleInput} />
 				</div>
 				<div class="o-form-group">
 					<input class="o-form-control btn" type="submit" value="Submit" />
 				</div>
 				{(() => {
-					const data = formData();
-					if (data?.id) {
-						return <input type="hidden" name="id" value={data.id} />;
+					if (formData?.id) {
+						return <input type="hidden" name="id" value={formData.id} />;
 					}
 					return null;
 				})()}
