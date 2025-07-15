@@ -6,6 +6,7 @@ import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
+import { attemptAsync } from "es-toolkit";
 import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 import { cssTargets } from "./helpers/css-targets";
@@ -13,6 +14,7 @@ import { dirsize } from "./helpers/dirsize";
 import { $try } from "./helpers/function-helpers";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
+import { Parallel } from "./helpers/promises";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
 
@@ -51,6 +53,8 @@ const compileSass = async (file: string) => {
 	const logger = new Logger();
 
 	const { name: filename, base } = path.parse(file);
+
+	logger.verbose(`Compiling ${file}`);
 
 	const fileContent = await Bun.file(file).text();
 
@@ -120,16 +124,13 @@ const compileAll = async () => {
 
 	logger.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
-	const tasks = [];
-	for (const file of files) {
-		logger.verbose(`Compiling ${file}`);
-		tasks.push(compileSass(file));
-	}
-	const res = await Promise.allSettled(tasks);
+	const res = await Parallel.forEach(files, async (f) => {
+		return await attemptAsync(async () => await compileSass(f));
+	});
 
-	logger.verbose(res.map((r) => (r.status === "fulfilled" ? "ok" : JSON.stringify(r, null, 4))));
+	logger.verbose(res.map(([err]) => (err ? JSON.stringify(err, null, 4) : "ok")));
 
-	const fulfilled = res.filter((r) => r.status === "fulfilled").length;
+	const fulfilled = res.filter(([err]) => !err).length;
 	const color = fulfilled === files.length ? c.green : c.red;
 	logger.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
 	logger.log(ct`{bold Total compilation took}`, timer);

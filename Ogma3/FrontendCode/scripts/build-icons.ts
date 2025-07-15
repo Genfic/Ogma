@@ -7,6 +7,7 @@ import ejs from "ejs";
 import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
 import { Logger } from "./helpers/logger";
+import { Parallel } from "./helpers/promises";
 import { Stopwatch } from "./helpers/stopwatch";
 import { findAllTemplates } from "./helpers/template-helpers";
 
@@ -26,11 +27,15 @@ const seed = parse(json) as { Icons: string[]; AdditionalIcons: string[] };
 
 const templates = await findAllTemplates();
 
-const foundIcons: (string | null)[] = [];
+const foundIcons: string[] = [];
 
 const extractor = new HTMLRewriter().on("icon[icon]:not([dynamic])", {
 	element(el) {
-		foundIcons.push(el.getAttribute("icon"));
+		const ico = el.getAttribute("icon");
+		if (!ico) {
+			return;
+		}
+		foundIcons.push(ico);
 	},
 });
 
@@ -39,7 +44,7 @@ for await (const file of new Glob(join(_root, "..", "..", "**", "*.cshtml")).sca
 	extractor.transform(content);
 }
 
-const icons: string[] = uniq([...seed.Icons, ...seed.AdditionalIcons, ...compact(foundIcons)]);
+const icons: string[] = compact(uniq([...seed.Icons, ...seed.AdditionalIcons, ...foundIcons]));
 
 interface Svg {
 	svg: string;
@@ -60,7 +65,7 @@ const fetchIcon = async (icon: string): Promise<Svg | null> => {
 	return null;
 };
 
-const res = await Promise.all(compact(icons).map((icon) => fetchIcon(icon)));
+const res = await Parallel.forEach(icons, fetchIcon);
 
 logger.verbose(res);
 

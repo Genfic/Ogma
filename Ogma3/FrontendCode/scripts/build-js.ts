@@ -11,6 +11,7 @@ import { log } from "../typescript/src-helpers/logger";
 import { getHash } from "./helpers/hash";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
+import { Parallel } from "./helpers/promises";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
 import { cssMinifyPlugin } from "./plugins/minified-css-loader";
@@ -68,9 +69,8 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 
 	const chunks = outputs
 		.filter((o) => o.kind === "chunk")
-		.map((c) => c.path.split("wwwroot").at(-1)?.replaceAll("\\", "/"))
-		.filter((s) => typeof s === "string")
-		.map((p) => `<link rel="modulepreload" href="~${p}" as="script" />`);
+		.map((c) => relative(join(_root, "..", "..", "wwwroot"), c.path).replaceAll("\\", "/"))
+		.map((p) => `<link rel="modulepreload" href="~/${p}" as="script" />`);
 
 	if (success) {
 		logger.log(ct`{dim Files compiled in}`, timer);
@@ -89,41 +89,29 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 
 	const size = outputs
 		.filter((c) => (["chunk", "asset", "entry-point"] as (typeof c.kind)[]).includes(c.kind))
-		.map((o) => o.size)
-		.reduce((a, b) => a + b, 0);
+		.reduce((a, b) => a + b.size, 0);
 
 	return { chunks, size };
 };
 
-const prefix = "/js/";
 const ext = ".js";
-
-type FullHashedEntry = { hash: string; path: string };
 const generateManifest = async () => {
 	const timer = new Stopwatch();
 	const files = new Glob(`${_dest}/**/[!_]*.js`).scan();
 
-	const tasks = [];
-	for await (const file of files) {
-		tasks.push(
-			(async () => {
-				const hash = await getHash(Bun.file(file), "sha256");
-				return {
-					hash,
-					path: relative(_dest, file).replaceAll("\\", "/").replace(ext, ""),
-				};
-			})(),
-		);
-	}
-	const hashed = await Promise.all(tasks);
+	const hashed = await Parallel.forEach(files, async (file) => {
+		const hash = await getHash(Bun.file(file), "sha256");
+		return {
+			hash,
+			path: relative(_dest, file).replaceAll("\\", "/").replace(ext, ""),
+		};
+	});
+
 	const manifest = {
 		generated: new Date().toISOString(),
-		prefix,
+		prefix: '/js/',
 		ext,
-		files: hashed
-			.filter((e): e is FullHashedEntry => !!e.path)
-			.toSorted((a, b) => a.path.localeCompare(b.path))
-			.map(({ path, hash }) => `${path}:${hash}`),
+		files: hashed.toSorted((a, b) => a.path.localeCompare(b.path)).map(({ path, hash }) => `${path}:${hash}`),
 	};
 
 	await Bun.write(join(_source, "generated", "manifest.json"), JSON.stringify(manifest, null, 2));
