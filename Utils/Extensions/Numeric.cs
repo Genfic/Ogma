@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Utils.Extensions;
 
@@ -70,5 +71,23 @@ public static class Numeric
 		if (num.CompareTo(min) < 0) return min;
 		if (num.CompareTo(max) > 0) return max;
 		return num;
+	}
+
+	/// <summary>
+	/// Returns the ordinal suffix for the given number (e.g., "st", "nd", "rd", "th").
+	/// </summary>
+	/// <param name="number">The input number to determine the ordinal suffix for.</param>
+	/// <typeparam name="T">Type of the number. Must implement IBinaryInteger and IModulusOperators.</typeparam>
+	/// <returns>The ordinal suffix as a string corresponding to the number.</returns>
+	public static string GetOrdinalSuffix<T>(this T number) where T : IBinaryInteger<T>
+	{
+		var mod = int.CreateTruncating(number % T.CreateChecked(10));
+		return mod switch
+		{
+			1 => "st",
+			2 => "nd",
+			3 => "rd",
+			_ => "th",
+		};
 	}
 }

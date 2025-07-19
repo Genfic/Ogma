@@ -10,6 +10,7 @@ using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Minimals;
+using Routes.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog;
@@ -85,7 +86,7 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			return await OnGet(Input.StoryMinimalId, Input.ChapterMinimalId);
 		}
 
-		// Get logged-in user
+		// Get the logged-in user
 		var uid = User.GetNumericId();
 		var uname = User.GetUsername();
 
@@ -100,7 +101,7 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			Body = Input.Body.Trim(),
 			AuthorId = (long)uid,
 			WordCount = Input.Body.Words(),
-			Hashtags = Input.Tags.ParseHashtags(),
+			Hashtags = Input.Tags.ParseHashtags().ToArray(),
 			AttachedStoryId = Input.StoryMinimalId,
 			AttachedChapterId = Input.ChapterMinimalId,
 			CommentThread = new CommentThread(),
@@ -126,6 +127,6 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			"/Blog/Post",
 			new { post.Id, post.Slug });
 
-		return Routes.Pages.User_Blog.Get(uname).Redirect(this);
+		return User_Blog.Get(uname).Redirect(this);
 	}
 }

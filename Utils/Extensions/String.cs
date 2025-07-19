@@ -21,26 +21,65 @@ public static partial class String
 			.Trim('-');
 	}
 
+
+	/// <summary>
+	/// Counts the number of lines in the given ReadOnlySpan of characters.
+	/// </summary>
+	/// <param name="span">The ReadOnlySpan of characters to process.</param>
+	/// <returns>The total number of lines in the provided span.</returns>
+	public static int CountLines(this ReadOnlySpan<char> span)
+	{
+		if (span.IsEmpty) return 0;
+
+		var count = 0;
+		var i = 0;
+
+		while (i < span.Length)
+		{
+			switch (span[i++])
+			{
+				case '\r':
+				{
+					count++;
+					if (i < span.Length && span[i] == '\n')
+					{
+						i++; // Skip the `\n` in `\r\n`
+					}
+					break;
+				}
+				case '\n':
+					count++;
+					break;
+			}
+		}
+
+		// We need to add one more line in case the string does not end in a newline.
+		if (span is not [.., '\n' or '\r'])
+		{
+			count++;
+		}
+
+		return count;
+	}
+
 	public static string Capitalize(this ReadOnlySpan<char> input)
 	{
+		if (input.IsEmpty)
+		{
+			return string.Empty;
+		}
+
+		if (input.Length == 1)
+		{
+			return char.ToUpper(input[0]).ToString();
+		}
+
 		var s = string.Create(input.Length, input, (chars, state) => {
 			chars[0] = char.ToUpper(state[0]);
 			state[1..].CopyTo(chars[1..]);
 		});
 
 		return s;
-
-		// if (string.IsNullOrWhiteSpace(input))
-		// {
-		// 	return input;
-		// }
-		//
-		// if (char.IsUpper(input[0]))
-		// {
-		// 	return input;
-		// }
-		//
-		// return input[0].ToString().ToUpper() + input[1..];
 	}
 
 	/// <summary>
@@ -139,14 +178,32 @@ public static partial class String
 	/// </summary>
 	/// <param name="input">String to parse into tags</param>
 	/// <returns>An array of strings representing the tags</returns>
-	public static string[] ParseHashtags(this string? input)
+	public static ImmutableArray<string> ParseHashtags(this string? input)
 	{
 		if (string.IsNullOrWhiteSpace(input)) return [];
 
-		return input.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-			.Select(t => t.Trim('#').Friendlify())
-			.Distinct()
-			.ToArray();
+		var builder = ImmutableArray.CreateBuilder<string>();
+		var seen = new HashSet<string>();
+		var span = input.AsSpan();
+
+		foreach (var segment in span.Split(','))
+		{
+			var trimmed = span[segment].Trim();
+			if (trimmed.IsEmpty) continue;
+
+			if (trimmed[0] == '#')
+			{
+				trimmed = trimmed[1..];
+			}
+
+			var processed = trimmed.ToString().Friendlify();
+			if (seen.Add(processed))
+			{
+				builder.Add(processed);
+			}
+		}
+
+		return builder.ToImmutable();
 	}
 
 	public static ImmutableArray<string> FindHashtags(this string input)
@@ -155,6 +212,7 @@ public static partial class String
 	}
 
 	public record struct Header(byte Level, byte Occurrence, string Body);
+
 	public static List<Header> GetMarkdownHeaders(this string input)
 	{
 		var headers = new List<Header>();

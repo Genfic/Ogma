@@ -7,6 +7,7 @@ using Ogma3.Data;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Minimals;
+using Routes.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Blog;
@@ -100,7 +101,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 	{
 		if (!ModelState.IsValid) return await OnGetAsync(id);
 
-		// Get logged-in user
+		// Get the logged-in user
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
@@ -112,13 +113,13 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(p => p.Slug, Input.Title.Trim().Friendlify())
 				.SetProperty(p => p.Body, Input.Body.Trim())
 				.SetProperty(p => p.WordCount, Input.Body.Words())
-				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags())
+				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags().ToArray())
 				.SetProperty(b => b.PublicationDate, Input.Published ? DateTimeOffset.UtcNow : null)
 				.SetProperty(b => b.IsLocked, Input.IsLocked)
 			);
 
 		if (rows <= 0) return NotFound();
 
-		return Routes.Pages.Blog_Post.Get(id, Input.Title.Trim().Friendlify()).Redirect(this);
+		return Blog_Post.Get(id, Input.Title.Trim().Friendlify()).Redirect(this);
 	}
 }

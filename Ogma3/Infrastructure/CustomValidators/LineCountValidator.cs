@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.Validators;
+using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.CustomValidators;
 
@@ -8,9 +9,8 @@ public sealed class LineCountValidator<T>(uint max) : PropertyValidator<T, strin
 	public override bool IsValid(ValidationContext<T> context, string? value)
 	{
 		if (value is null) return true;
-		
-		// TODO: Optimize this
-		if (value.Split(["\r\n", "\r", "\n"], StringSplitOptions.None).Length <= max)
+
+		if (value.AsSpan().CountLines() <= max)
 		{
 			return true;
 		}

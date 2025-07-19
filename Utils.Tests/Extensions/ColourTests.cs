@@ -41,7 +41,7 @@ public sealed class ColourTests
 	public async Task TestParseHexColor((string given, Color expected) data)
 	{
 		var (given, expected) = data;
-		
+
 		await Assert.That(given.ParseHexColor()).IsEqualTo(expected);
 	}
 
