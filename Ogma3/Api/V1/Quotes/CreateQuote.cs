@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Api.V1.Quotes;
 
-using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<QuoteDto>>;
+using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<FullQuoteDto>>;
 
 [Handler]
 [MapPost("api/quotes")]
@@ -47,7 +47,7 @@ public static partial class CreateQuote
 		logger.LogInformation("Quote created at route {Name}", nameof(GetSingleQuote));
 
 		return TypedResults.CreatedAtRoute(
-			new QuoteDto(quote.Body, quote.Author),
+			new FullQuoteDto(quote.Id, quote.Body, quote.Author),
 			nameof(GetSingleQuote),
 			new { quote.Id }
 		);

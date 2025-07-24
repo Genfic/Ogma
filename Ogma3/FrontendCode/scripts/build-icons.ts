@@ -6,6 +6,7 @@ import ct from "chalk-template";
 import ejs from "ejs";
 import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
+import { alphaBy } from "./helpers/function-helpers";
 import { Logger } from "./helpers/logger";
 import { Parallel } from "./helpers/promises";
 import { Stopwatch } from "./helpers/stopwatch";
@@ -28,20 +29,23 @@ const seed = parse(json) as { Icons: string[]; AdditionalIcons: string[] };
 const templates = await findAllTemplates();
 
 const foundIcons: string[] = [];
+const files: Record<string, string> = {};
 
-const extractor = new HTMLRewriter().on("icon[icon]:not([dynamic])", {
-	element(el) {
-		const ico = el.getAttribute("icon");
-		if (!ico) {
-			return;
-		}
-		foundIcons.push(ico);
-	},
-});
+const extractor = (file: string) =>
+	new HTMLRewriter().on("icon[icon]:not([dynamic])", {
+		element(el) {
+			const ico = el.getAttribute("icon");
+			if (!ico) {
+				return;
+			}
+			foundIcons.push(ico);
+			files[ico] = file;
+		},
+	});
 
 for await (const file of new Glob(join(_root, "..", "..", "**", "*.cshtml")).scan()) {
 	const content = await Bun.file(file).text();
-	extractor.transform(content);
+	extractor(file).transform(content);
 }
 
 const icons: string[] = compact(uniq([...seed.Icons, ...seed.AdditionalIcons, ...foundIcons]));
@@ -61,7 +65,9 @@ const fetchIcon = async (icon: string): Promise<Svg | null> => {
 		return { svg: svg.trim(), name: icon };
 	}
 
-	logger.error(ct`{red Failed to fetch icon: ${icon}}`);
+	logger.error(
+		ct`{red Failed to fetch icon: ${icon}}` + (files[icon] ? ct` in file {underline ${files[icon]}}` : ""),
+	);
 	return null;
 };
 
@@ -69,7 +75,7 @@ const res = await Parallel.forEach(icons, fetchIcon);
 
 logger.verbose(res);
 
-const svgs = compact(res).toSorted((a, b) => a.name.localeCompare(b.name));
+const svgs = compact(res).toSorted(alphaBy((s) => s.name));
 
 logger.verbose(svgs);
 

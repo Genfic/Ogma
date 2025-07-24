@@ -18,7 +18,7 @@ self.addEventListener("activate", async (event: ExtendableEvent) => {
 
 	const paths = manifest.files.map((p) => {
 		const [file, hash] = p.split(":");
-		return `${manifest.prefix}${file}${manifest.ext}?v=${hash}`;
+		return `/js/${file}.js?v=${hash}`;
 	});
 
 	event.waitUntil(caches.open(manifest.generated).then((cache) => cache.addAll(paths)));

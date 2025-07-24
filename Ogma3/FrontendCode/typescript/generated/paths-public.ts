@@ -568,7 +568,7 @@ export const PostApiInviteCodesNoLimit = async (headers?: HeadersInit, options?:
 );
 
 
-export const PostApiQuotes = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuoteDto, CreateQuoteCommand>("/api/quotes",
+export const PostApiQuotes = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FullQuoteDto, CreateQuoteCommand>("/api/quotes",
 	post,
 	body,
 	headers,

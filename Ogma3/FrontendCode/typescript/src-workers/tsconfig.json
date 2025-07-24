@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"lib": ["WebWorker", "esnext"],
 		"target": "ES2022",
-		"module": "ES2022"
+		"module": "ES2022",
+		"resolveJsonModule": true
 	},
 	"files": ["cache-service-worker.ts"]
 }

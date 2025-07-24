@@ -8,6 +8,7 @@ import ct from "chalk-template";
 import convert from "convert";
 import solidLabels from "solid-labels/babel";
 import { log } from "../typescript/src-helpers/logger";
+import { alphaBy } from "./helpers/function-helpers";
 import { getHash } from "./helpers/hash";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
@@ -109,9 +110,7 @@ const generateManifest = async () => {
 
 	const manifest = {
 		generated: new Date().toISOString(),
-		prefix: "/js/",
-		ext,
-		files: hashed.toSorted((a, b) => a.path.localeCompare(b.path)).map(({ path, hash }) => `${path}:${hash}`),
+		files: hashed.toSorted(alphaBy((d) => d.path)).map(({ path, hash }) => `${path}:${hash}`),
 	};
 
 	await Bun.write(join(_source, "generated", "manifest.json"), JSON.stringify(manifest, null, 2));

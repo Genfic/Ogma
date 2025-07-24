@@ -3,6 +3,7 @@ import { Glob } from "bun";
 import ct from "chalk-template";
 import ts from "typescript";
 import pkg from "../package.json" with { type: "json" };
+import { alphaBy } from "./helpers/function-helpers";
 import type { HTMLAttribute, HTMLElement, Webtypes } from "./types/webtypes";
 
 const _root = dirname(Bun.main);
@@ -270,7 +271,7 @@ async function generateWebTypes() {
 		"description-markup": "markdown",
 		contributions: {
 			html: {
-				elements: webTypesElements.sort((a, b) => a.name.localeCompare(b.name)),
+				elements: webTypesElements.sort(alphaBy((e) => e.name)),
 			},
 		},
 	};
