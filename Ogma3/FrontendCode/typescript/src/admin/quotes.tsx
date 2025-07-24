@@ -47,7 +47,7 @@ const Quotes = () => {
 		return quot.filter((q) => `${q.id} ${q.author} ${q.body}`.toLowerCase().includes(search.toLowerCase()));
 	};
 
-	const fromJson = async (e: Event) => {
+	const fromJson = async () => {
 		const obj = JSON.parse(json);
 		if (!isQuoteDtoArray(obj)) return;
 
@@ -85,13 +85,7 @@ const Quotes = () => {
 		if (id) {
 			const res = await PutApiQuotes(form as FullQuoteDto, headers);
 			if (!res.ok) throw res.error;
-			mutate((old) => {
-				if (!old) return undefined;
-				const copy = [...old];
-				const idx = copy.findIndex((v) => v.id === id);
-				copy[idx] = { id, author, body };
-				return copy;
-			});
+			mutate((old) => old?.map((v) => (v.id === id ? { id, author, body } : v)));
 		} else {
 			const res = await PostApiQuotes(omit(form as FullQuoteDto, ["id"]), headers);
 			if (!res.ok) throw res.error;

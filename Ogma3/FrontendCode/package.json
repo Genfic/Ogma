@@ -28,6 +28,7 @@
 		"@types/bun": "^1.2.18",
 		"@types/json5": "^2.2.0",
 		"@types/node": "^24.0.15",
+		"@typescript/native-preview": "^7.0.0-dev.20250724.1",
 		"browserslist": "^4.25.1",
 		"chalk": "^5.4.1",
 		"chalk-template": "^1.1.0",
@@ -45,7 +46,6 @@
 		"stylelint": "^16.22.0",
 		"stylelint-config-standard-scss": "^15.0.1",
 		"stylelint-define-config": "^16.21.0",
-		"typescript": "5.8.3",
 		"unlighthouse": "^0.17.1",
 		"utility-types": "^3.11.0",
 		"vue": "2.6.14"
