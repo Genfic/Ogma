@@ -1,58 +1,16 @@
 @page
+@using Microsoft.AspNetCore.Antiforgery
 @model Roles
+@inject IAntiforgery Csrf
 
 @{
 	ViewData["Title"] = "Roles";
 	ViewData["ActivePage"] = NavPages.Roles;
 }
 
-<form id="namespace" class="auto" method="post" v-on:submit.stop.prevent="createRole">
+<div id="roles-app" data-csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken">
 
-	<label asp-for="Input.Name"></label>
-	<input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
-
-	<label asp-for="Input.Color"></label>
-	<input asp-for="Input.Color" type="color" class="o-form-control" v-model="form.color">
-
-	<label asp-for="Input.IsStaff"></label>
-	<input asp-for="Input.IsStaff" type="checkbox" class="o-form-control" v-model="form.isStaff">
-
-	<label asp-for="Input.Order"></label>
-	<input asp-for="Input.Order" type="number" class="o-form-control" min="0" v-model="form.order">
-
-
-	<input type="hidden" :value="form.id">
-
-	<div class="form-row">
-		<button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-		<button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
-	</div>
-
-</form>
-
-<button v-if="roles.length <= 0" class="btn btn-primary" type="button" disabled>
-	<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-	Loading...
-</button>
-
-<ul class="items-list">
-	<li v-for="n in roles">
-		<div class="deco" v-bind:style="{background: n.color}">
-			<span class="text">{{n.order}}</span>
-		</div>
-		<div class="main">
-			<h3 class="name">{{ n.name }}<icon v-if="n.isStaff" class="icon" icon="lucide:shield-half" svg="true"></icon></h3>
-		</div>
-		<div class="actions">
-			<button class="action" v-on:click="deleteRole(n)">
-				<icon icon="lucide:trash-2" svg="true"></icon>
-			</button>
-			<button class="action" v-on:click="editRole(n)">
-				<icon icon="lucide:pencil" svg="true"></icon>
-			</button>
-		</div>
-	</li>
-</ul>
+</div>
 
 @section Scripts
 {

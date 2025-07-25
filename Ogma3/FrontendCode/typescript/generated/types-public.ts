@@ -164,6 +164,11 @@ export type GetSignInDataResult = {
     title: string | null;
 };
 
+export type GetTagNamespacesNamespaceDto = {
+    value: number;
+    name: string;
+};
+
 export type GetThreadDetailsResult = {
     perPage: number;
     minCommentLength: number;

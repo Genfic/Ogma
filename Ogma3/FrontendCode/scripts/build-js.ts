@@ -60,7 +60,7 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		plugins: [
 			SolidPlugin({
 				babelOptions: {
-					plugins: [[solidLabels, {}]],
+					plugins: [[solidLabels, { dev: false }]],
 				},
 			}),
 			cssMinifyPlugin,

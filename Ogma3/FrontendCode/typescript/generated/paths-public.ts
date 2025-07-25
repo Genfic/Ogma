@@ -26,6 +26,7 @@ import type {
 	GetPaginatedUserShelvesResult,
 	GetRevisionResult,
 	GetSignInDataResult,
+	GetTagNamespacesNamespaceDto,
 	GetThreadDetailsResult,
 	GetUserNotificationsResult,
 	InviteCodeDto,
@@ -489,6 +490,14 @@ export const GetSingleQuote = async (id: number, headers?: HeadersInit, options?
 
 
 export const GetSingleTag = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<TagDto, undefined>(`/api/tags/${tagId}`,
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
+export const GetTagNamespaces = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetTagNamespacesNamespaceDto[], undefined>("/api/tags/namespaces",
 	get,
 	undefined,
 	headers,

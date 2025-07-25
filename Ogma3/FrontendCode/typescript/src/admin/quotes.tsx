@@ -1,6 +1,7 @@
 import { DeleteApiQuotes, GetAllQuotes, PostApiQuotes, PostApiQuotesJson, PutApiQuotes } from "@g/paths-public";
 import type { FullQuoteDto, QuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { makeEmpty } from "@h/type-helpers";
 import { omit } from "es-toolkit";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -71,7 +72,7 @@ const Quotes = () => {
 	};
 
 	const openEditor = (q?: FullQuoteDto) => {
-		setForm(q ?? {});
+		setForm(q ?? makeEmpty(q));
 		dialogRef?.open();
 	};
 
@@ -163,7 +164,7 @@ const Quotes = () => {
 				</Match>
 			</Switch>
 
-			<Dialog ref={(t) => (dialogRef = t)}>
+			<Dialog ref={(t) => (dialogRef = t)} onClose={() => setForm(makeEmpty)}>
 				<form class="content form" onsubmit={saveQuote}>
 					<strong>{form?.id === null ? "Create" : "Edit"} quote</strong>
 

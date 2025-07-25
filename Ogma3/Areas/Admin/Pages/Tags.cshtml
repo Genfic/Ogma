@@ -1,65 +1,17 @@
 ﻿@page
-@using Ogma3.Data.Tags
+@using Microsoft.AspNetCore.Antiforgery
 @model Tags
+@inject IAntiforgery Csrf
 
 @{
 	ViewData["Title"] = "Tags";
 	ViewData["ActivePage"] = NavPages.Tags;
 }
 
-<form id="tag" class="auto" method="post" v-on:submit.stop.prevent="createTag">
+<div id="roles-app" data-csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken">
 
-	<ul v-if="err" style="margin: 0">
-		<li class="text-danger" v-for="e in err">{{ e }}</li>
-	</ul>
+</div>
 
-	<label asp-for="Input.Name"></label>
-	<input asp-for="Input.Name" type="text" class="o-form-control" v-model="form.name">
-
-	<label asp-for="Input.Description"></label>
-	<input asp-for="Input.Description" type="text" class="o-form-control" v-model="form.desc">
-
-	<label asp-for="Input.Namespace"></label>
-	<select asp-for="Input.Namespace"
-	        asp-items="Html.GetEnumSelectList<ETagNamespace>()"
-	        v-model="form.namespace"
-	        class="o-form-control">
-		<option value="null" selected>None</option>
-	</select>
-
-	<input type="hidden" :value="form.id">
-
-	<div class="form-row">
-		<button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-		<button v-if="form.id" class="btn btn-secondary" v-on:click="cancelEdit">Cancel</button>
-	</div>
-
-</form>
-
-<button v-if="tags.length <= 0" class="btn btn-primary" type="button" disabled>
-	<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-	Loading...
-</button>
-
-<ul class="items-list">
-	<li v-for="t in tags">
-		<div class="deco" :style="{backgroundColor: t.namespaceColor}"></div>
-		<div class="main">
-			<h3 class="name">{{ t.name }}</h3>
-			<span class="desc">{{ t.description }}</span>
-		</div>
-		<div class="actions">
-			<button class="action" v-on:click="deleteTag(t)">
-				<icon icon="lucide:trash-2" svg="true"></icon>
-			</button>
-			<button class="action" v-on:click="editTag(t)">
-				<icon icon="lucide:pencil" svg="true"></icon>
-			</button>
-		</div>
-	</li>
-</ul>
-
-<div v-if="!lens" id="static-data">@Model.StaticDataJson</div>
 
 @section Scripts
 {
