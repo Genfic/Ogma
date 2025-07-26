@@ -64,6 +64,9 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 				Position = AnchorPositionMode.Center,
 			}));
 
+			// Strip EXIF metadata
+			img.Metadata.ExifProfile = null;
+
 			// Save it as PNG
 			ms.Seek(0, SeekOrigin.Begin);
 			await img.SaveAsync(ms, new WebpEncoder());

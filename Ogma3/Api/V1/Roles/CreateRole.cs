@@ -21,16 +21,17 @@ public static partial class CreateRole
 	(
 		[property: NotEmpty] string Name,
 		bool IsStaff,
-		string Color,
+		string? Color,
 		byte Order
 	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		RoleManager<OgmaRole> roleManager,
-		CancellationToken _
+		CancellationToken cancellationToken
 	)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
 		if (await roleManager.RoleExistsAsync(request.Name)) return TypedResults.Conflict($"Role {request.Name} already exists");
 
 		var role = new OgmaRole

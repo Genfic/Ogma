@@ -2,13 +2,15 @@
 import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "@g/paths-public";
 import type { RoleDto } from "@g/types-public";
 import { $id } from "@h/dom";
-import { makeEmpty } from "@h/type-helpers";
+import { createTypeGuard, makeEmpty } from "@h/type-helpers";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 
 const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
+
+const formGuard = createTypeGuard<RoleDto>("id", "name", "color", "isStaff", "order");
 
 const Roles = () => {
 	const [form, setForm] = createStore<Partial<RoleDto>>({});
@@ -22,9 +24,8 @@ const Roles = () => {
 	const createRole = async (e: Event) => {
 		e.preventDefault();
 
+		if (!formGuard(form)) return;
 		const { id, name, color, isStaff, order } = form;
-
-		if (!name || !color || !isStaff || !order) return;
 
 		const data = {
 			name,

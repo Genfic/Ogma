@@ -69,7 +69,7 @@ export type CreateRatingCommand = {
 export type CreateRoleCommand = {
     name: string;
     isStaff: boolean;
-    color: string;
+    color: string | null;
     order: number;
 };
 
@@ -164,7 +164,7 @@ export type GetSignInDataResult = {
     title: string | null;
 };
 
-export type GetTagNamespacesNamespaceDto = {
+export type GetTagNamespacesNamespaceDto2 = {
     value: number;
     name: string;
 };
@@ -227,7 +227,7 @@ export type QuoteDto = {
     author: string;
 };
 
-export type RatingApiDto = {
+export type RatingApiDto2 = {
     id: number;
     name: string;
     description: string;
@@ -246,7 +246,7 @@ export type RemoveBookFromShelfResult = {
     storyId: number;
 };
 
-export type ReportContentCommand = {
+export type ReportContentCommand2 = {
     itemId: number;
     reason: string;
     itemType: EReportableContentTypes;
@@ -342,7 +342,7 @@ export type UpdateRoleCommand = {
     id: number;
     name: string;
     isStaff: boolean;
-    color: string;
+    color: string | null;
     order: number;
 };
 
@@ -351,7 +351,7 @@ export type UpdateRolesCommand = {
     roles: number[];
 };
 
-export type UpdateShelfCommand = {
+export type UpdateShelfCommand2 = {
     id: number;
     name: string;
     description: string;

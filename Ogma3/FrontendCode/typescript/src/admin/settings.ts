@@ -1,17 +1,16 @@
 import { $queryAll } from "@h/dom";
-import { log } from "@h/logger";
 
 const inputs = $queryAll<HTMLInputElement>("input.o-form-control");
 
+const initValues = new Map<string, string>();
+
 for (const i of inputs) {
-	i.dataset.init = i.value;
+	initValues.set(i.name, i.value);
 
 	i.addEventListener("input", (e: Event) => {
 		const element = e.target as HTMLInputElement;
 
-		log.log(element.value !== element.dataset.init);
-
-		if (element.value !== element.dataset.init) {
+		if (element.value !== initValues.get(element.name)) {
 			element.classList.add("changed");
 		} else {
 			element.classList.remove("changed");

@@ -119,28 +119,17 @@ form.form {
 			.rating {
 				position: relative;
 
-				.radio {
-					opacity: 0;
-					position: absolute;
-
-					&:checked + .radio-label {
-						background: var(--accent-25);
-						border-color: var(--accent);
-					}
-
-					&:focus + .radio-label {
-						border-color: var(--accent);
-						box-shadow: 0 0 0 3px var(--accent-25);
-					}
-				}
-
 				.radio-label {
 					display: flex;
 					cursor: pointer;
+					padding: .25rem;
 
-					> img {
-						flex-basis: 3rem;
-						height: 100%;
+					.rating-icon {
+						height: 2.5rem;
+
+						svg {
+							height: 100%;
+						}
 					}
 
 					> .main {
@@ -158,6 +147,21 @@ form.form {
 						> span {
 							font-weight: 500;
 						}
+					}
+				}
+
+				.radio {
+					opacity: 0;
+					position: absolute;
+
+					&:checked + .radio-label {
+						background: var(--accent-25);
+						border-color: var(--accent);
+					}
+
+					&:focus + .radio-label {
+						border-color: var(--accent);
+						box-shadow: 0 0 0 3px var(--accent-25);
 					}
 				}
 			}

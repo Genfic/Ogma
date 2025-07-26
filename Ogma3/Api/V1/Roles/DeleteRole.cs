@@ -22,9 +22,11 @@ public static partial class DeleteRole
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		RoleManager<OgmaRole> roleManager,
-		CancellationToken _
+		CancellationToken cancellationToken
 	)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
 		var role = await roleManager.FindByIdAsync(request.RoleId.ToString());
 
 		if (role is null) return TypedResults.NotFound();

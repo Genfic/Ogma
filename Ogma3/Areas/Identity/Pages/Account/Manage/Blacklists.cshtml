@@ -1,4 +1,5 @@
 @page
+@using Ogma3.Pages.Shared
 @model Blacklists
 
 @{
@@ -30,7 +31,7 @@
 					       class="radio">
 
 					<label class="radio-label active-border" for="@r.Name">
-						<img src="@r.Name" alt="'Rating: @r.Name" height="50" width="50" loading="lazy" />
+						<partial name="_RatingIcon" model="@(new RatingIcon {Name = r.Name, Color = r.Color})"/>
 						<div class="main">
 							<strong>@r.Name</strong>
 							<span>@r.Description</span>
@@ -47,11 +48,7 @@
 		<h5>Tags</h5>
 		<p class="desc">Select tags to blacklist</p>
 
-		<tag-search-select label="BlacklistedTags"
-		                   ref="tags"
-		                   hide-labels
-		                   :preselected="@Model.Preselected">
-		</tag-search-select>
+		<input asp-for="BlacklistedTags" type="text" />
 
 	</div>
 
@@ -65,8 +62,6 @@
 			<partial name="Shared/Cards/_UserCard" model="u"/>
 		}
 
-		@* <input type="text" name="BlacklistedUsers"> *@
-
 	</div>
 
 	<br>
@@ -75,9 +70,3 @@
 		<button id="update-blacklists-button" type="submit" class="btn btn-primary">Save</button>
 	</div>
 </form>
-
-@section Scripts {
-	<script type="module" src="~/js/vue-directives/closeable.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/components/tag-search-select-component.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/account/blacklists.js" asp-append-version="true"></script>
-}

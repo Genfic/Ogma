@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +6,7 @@ using Ogma3.Data.Blacklists;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
@@ -16,7 +15,6 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<UserCard> BlockedUsers { get; set; }
-	public string Preselected => JsonSerializer.Serialize(BlacklistedTags, PreselectedJsonContext.Default.ListInt64);
 
 	public async Task<IActionResult> OnGetAsync()
 	{
@@ -26,10 +24,11 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 			.Where(br => br.UserId == uid)
 			.Select(br => br.RatingId)
 			.ToListAsync();
-		BlacklistedTags = await context.BlacklistedTags
+		var blacklistedTags = await context.BlacklistedTags
 			.Where(bt => bt.UserId == uid)
-			.Select(bt => bt.TagId)
+			.Select(bt => bt.Tag.Name)
 			.ToListAsync();
+		BlacklistedTags = string.Join(' ', blacklistedTags.Select(t => t.Trim(':').ToLower()));
 		BlockedUsers = await context.BlockedUsers
 			.Where(bu => bu.BlockingUserId == uid)
 			.Select(bu => bu.BlockedUser)
@@ -42,7 +41,7 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 	}
 
 	[BindProperty] public required List<long> BlacklistedRatings { get; set; }
-	[BindProperty] public required List<long> BlacklistedTags { get; set; }
+	[BindProperty] public required string? BlacklistedTags { get; set; }
 
 	public async Task<IActionResult> OnPostAsync()
 	{
@@ -55,7 +54,7 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 			.FirstOrDefaultAsync();
 		if (user is null) return Unauthorized();
 
-		// Clear blacklists
+		// Clear the blacklists
 		context.BlacklistedRatings.RemoveRange(user.BlacklistedRatings);
 		context.BlacklistedTags.RemoveRange(user.BlacklistedTags);
 
@@ -69,9 +68,15 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 				UserId = uid,
 			})
 			.ToList();
+
 		// And tags
-		user.BlacklistedTags = BlacklistedTags
-			.Select(tag => new BlacklistedTag
+		var blacklistedTags = BlacklistedTags?.Split(' ') ?? [];
+		var tagsToBlacklist = await context.Tags
+			.Where(t => blacklistedTags.Contains(t.Name.ToLower()))
+			.Select(t => t.Id)
+			.ToListAsync();
+		// And add them to the blacklist
+		user.BlacklistedTags = tagsToBlacklist.Select(tag => new BlacklistedTag
 			{
 				TagId = tag,
 				UserId = uid,
@@ -82,7 +87,6 @@ public sealed class Blacklists(ApplicationDbContext context) : PageModel
 
 		return RedirectToPage();
 	}
-}
 
-[JsonSerializable(typeof(List<long>))]
-public sealed partial class PreselectedJsonContext : JsonSerializerContext;
+	public sealed record RatingDto(long Id, RatingIcon Icon);
+}

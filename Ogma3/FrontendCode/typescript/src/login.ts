@@ -1,33 +1,16 @@
 import { GetApiSignin as getSignInData } from "@g/paths-public";
+import { $id } from "@h/dom";
 
-// @ts-ignore
-new Vue({
-	el: "#app",
-	data: {
-		name: null as string | null,
-		avatar: "https://picsum.photos/200",
-		title: null as string | null,
-		checked: false,
-	},
-	methods: {
-		checkDetails: async function (e: Event) {
-			e.preventDefault();
+const avatar = $id<HTMLImageElement>("user-avatar");
+const title = $id("user-title");
+const name = $id<HTMLInputElement>("Input_Name");
 
-			if (this.name) {
-				const res = await getSignInData(this.name);
+name.addEventListener("focusout", async (e) => {
+	const target = e.target as HTMLInputElement;
 
-				if (res.ok) {
-					const data = res.data;
-					this.avatar = data.avatar;
-					this.title = data.title;
-					this.checked = true;
-				}
-			}
-		},
-		reset: function () {
-			this.avatar = null;
-			this.title = null;
-			this.checked = false;
-		},
-	},
+	const res = await getSignInData(target.value);
+	if (!res.ok) throw res.error;
+
+	avatar.src = res.data.avatar;
+	title.innerText = res.data.title ?? "";
 });

@@ -22,7 +22,7 @@ public static partial class UpdateRole
 		long Id,
 		[property: NotEmpty] string Name,
 		bool IsStaff,
-		string Color,
+		string? Color,
 		byte Order
 	) : IValidationTarget<Command>;
 

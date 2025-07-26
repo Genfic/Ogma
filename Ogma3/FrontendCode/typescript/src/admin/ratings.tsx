@@ -1,5 +1,5 @@
 import { DeleteApiRatings, GetApiRatings, PostApiRatings, PutApiRatings } from "@g/paths-public";
-import type { RatingApiDto } from "@g/types-public";
+import type { RatingApiDto2 as RatingApiDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { createNormalizedForm } from "@h/normalized-form";
 import { omit } from "es-toolkit";

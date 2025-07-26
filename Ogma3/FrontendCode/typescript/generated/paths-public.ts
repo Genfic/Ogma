@@ -26,7 +26,7 @@ import type {
 	GetPaginatedUserShelvesResult,
 	GetRevisionResult,
 	GetSignInDataResult,
-	GetTagNamespacesNamespaceDto,
+	GetTagNamespacesNamespaceDto2,
 	GetThreadDetailsResult,
 	GetUserNotificationsResult,
 	InviteCodeDto,
@@ -37,10 +37,10 @@ import type {
 	MarkChapterAsReadCommand,
 	MarkChapterAsUnreadCommand,
 	QuoteDto,
-	RatingApiDto,
+	RatingApiDto2,
 	RemoveBookFromShelfCommand,
 	RemoveBookFromShelfResult,
-	ReportContentCommand,
+	ReportContentCommand2,
 	RoleDto,
 	ShelfDto,
 	SubscribeCommentsThreadCommand,
@@ -55,7 +55,7 @@ import type {
 	UpdateRatingCommand,
 	UpdateRoleCommand,
 	UpdateRolesCommand,
-	UpdateShelfCommand,
+	UpdateShelfCommand2,
 	UpdateTagCommand,
 	VoteResult,
 } from "./types-public";
@@ -329,7 +329,7 @@ export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: Reques
 );
 
 
-export const GetApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto[], undefined>("/api/ratings",
+export const GetApiRatings = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto2[], undefined>("/api/ratings",
 	get,
 	undefined,
 	headers,
@@ -449,7 +449,7 @@ export const GetComment = async (commentId: number, headers?: HeadersInit, optio
 );
 
 
-export const GetRatingById = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto, undefined>(`/api/ratings/${id}`,
+export const GetRatingById = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto2, undefined>(`/api/ratings/${id}`,
 	get,
 	undefined,
 	headers,
@@ -497,7 +497,7 @@ export const GetSingleTag = async (tagId: number, headers?: HeadersInit, options
 );
 
 
-export const GetTagNamespaces = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetTagNamespacesNamespaceDto[], undefined>("/api/tags/namespaces",
+export const GetTagNamespaces = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetTagNamespacesNamespaceDto2[], undefined>("/api/tags/namespaces",
 	get,
 	undefined,
 	headers,
@@ -593,7 +593,7 @@ export const PostApiQuotesJson = async (body: CreateQuotesFromJsonQuery, headers
 );
 
 
-export const PostApiRatings = async (body: CreateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto, CreateRatingCommand>("/api/ratings",
+export const PostApiRatings = async (body: CreateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RatingApiDto2, CreateRatingCommand>("/api/ratings",
 	post,
 	body,
 	headers,
@@ -601,7 +601,7 @@ export const PostApiRatings = async (body: CreateRatingCommand, headers?: Header
 );
 
 
-export const PostApiReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number, ReportContentCommand>("/api/reports",
+export const PostApiReports = async (body: ReportContentCommand2, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number, ReportContentCommand2>("/api/reports",
 	post,
 	body,
 	headers,
@@ -713,7 +713,7 @@ export const PutApiRoles = async (body: UpdateRoleCommand, headers?: HeadersInit
 );
 
 
-export const PutApiShelves = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, UpdateShelfCommand>("/api/shelves",
+export const PutApiShelves = async (body: UpdateShelfCommand2, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, UpdateShelfCommand2>("/api/shelves",
 	put,
 	body,
 	headers,

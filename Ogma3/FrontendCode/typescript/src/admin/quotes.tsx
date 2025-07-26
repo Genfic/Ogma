@@ -1,7 +1,7 @@
 import { DeleteApiQuotes, GetAllQuotes, PostApiQuotes, PostApiQuotesJson, PutApiQuotes } from "@g/paths-public";
 import type { FullQuoteDto, QuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
-import { makeEmpty } from "@h/type-helpers";
+import { createTypeGuard, makeEmpty } from "@h/type-helpers";
 import { omit } from "es-toolkit";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -12,6 +12,8 @@ const parent = $id("quotes-app");
 
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 const isAdmin = Boolean(parent.dataset.admin);
+
+const formGuard = createTypeGuard<FullQuoteDto>("id", "author", "body");
 
 const isQuoteDto = (value: unknown): value is QuoteDto => {
 	if (value === null || typeof value !== "object") return false;
@@ -79,9 +81,8 @@ const Quotes = () => {
 	const saveQuote = async (e: SubmitEvent) => {
 		e.preventDefault();
 
+		if (!formGuard(form)) return;
 		const { id, author, body } = form;
-
-		if (!body || !author) return;
 
 		if (id) {
 			const res = await PutApiQuotes(form as FullQuoteDto, headers);

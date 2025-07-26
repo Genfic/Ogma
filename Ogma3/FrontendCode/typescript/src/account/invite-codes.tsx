@@ -2,16 +2,16 @@ import { GetApiInviteCodes, PostApiInviteCodes } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
-import { createResource, createSignal, For, Match, Switch } from "solid-js";
+import { createResource, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
 
 const parent = $id("invite-codes-app");
 const date = (dt: string | Date) => long.render(new Date(dt));
 
-const InviteCodes = () => {
-	const [csrf] = createSignal<string>(parent.dataset.csrf ?? "");
-	const [max] = createSignal(Number.parseInt(parent.dataset.max ?? "0"));
+const csrf = parent.dataset.csrf ?? "";
+const max = Number.parseInt(parent.dataset.max ?? "0");
 
+const InviteCodes = () => {
 	const [codes, { mutate }] = createResource<InviteCodeDto[]>(
 		async () => {
 			const res = await GetApiInviteCodes();
@@ -24,10 +24,11 @@ const InviteCodes = () => {
 	);
 
 	const createCode = async () => {
-		const res = await PostApiInviteCodes({ RequestVerificationToken: csrf() });
+		const res = await PostApiInviteCodes({ RequestVerificationToken: csrf });
 
-		if (res.ok && Array.isArray(res.data)) {
-			mutate((prev) => [...prev, res.data as InviteCodeDto]);
+		if (res.ok && typeof res.data !== "string") {
+			const d = res.data;
+			mutate((prev) => [...prev, d]);
 		} else {
 			console.log(res.ok ? res.data : res.error);
 		}
@@ -46,7 +47,7 @@ const InviteCodes = () => {
 	return (
 		<>
 			<button type="button" class="btn btn-primary btn-block" onClick={createCode}>
-				Issue code ({codes().length}/{max()})
+				Issue code ({codes().length}/{max})
 			</button>
 
 			<Switch>
