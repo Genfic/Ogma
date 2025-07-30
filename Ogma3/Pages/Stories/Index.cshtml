@@ -1,4 +1,5 @@
 @page
+@inject OgmaConfig Config
 @using Ogma3.Data.Stories
 @model IndexModel
 
@@ -14,7 +15,7 @@
 <form id="search" class="search form" method="GET">
 
 	<div class="o-form-group w-3">
-		<label for="query">Search</label>
+		<label for="query">Search <a href="/docs/@Config.SearchHelpDoc">(help)</a></label>
 		<input class="active-border"
 		       id="query"
 		       name="Query"

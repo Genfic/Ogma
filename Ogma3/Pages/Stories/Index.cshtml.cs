@@ -7,6 +7,7 @@ using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
+using Utils.Extensions;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Pages.Stories;
@@ -32,29 +33,38 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 		Ratings = await context.Ratings.ToListAsync();
 
 		var uid = User.GetNumericId();
-		var tags = Query?.Split(' ')
-			.Where(s => s.StartsWith('#'))
+
+		var grouped = Query?.Split(' ').GroupBy(s => {
+			if (s.StartsWith('#')) return QueryPartType.Tag;
+			if (s.StartsWith("by:")) return QueryPartType.Author;
+			return QueryPartType.Query;
+		}).ToArray();
+
+		var tags = grouped?.GetValues(k => k == QueryPartType.Tag)
 			.Select(t => t.ToLowerInvariant().Trim('#'))
-			.Select(t => t.StartsWith("cw:") ? t.Replace("cw:", "content_warning:") : t)
-			.Select(t => t.Contains(':') ? t : $":{t}").ToArray();
+			.ToHashSet();
 
-		List<long> tagIds = [];
-		var query = Query;
-		if (tags != null)
-		{
-			tagIds = await context.Tags
+		var query = string.Join(' ', grouped?.GetValues(k => k == QueryPartType.Query).ToArray() ?? []).Trim();
+
+		var author = grouped?.GetValues(k => k == QueryPartType.Author).FirstOrDefault()?.Replace("by:", "").Trim().Replace('_', ' ');
+
+		var tagIds = tags is { Count: > 0 }
+			? await context.Tags
 				.TagWith("Searching for tags")
-				.Where(t => tags.Contains(t.Namespace + ":" + t.Name.ToLower()))
+				.Where(t => tags.Contains(t.Name.ToLower()))
 				.Select(t => t.Id)
-				.ToListAsync();
+				.ToListAsync()
+			: [];
 
-			query = string.Join(' ', Query?.Split(' ').Where(s => !s.StartsWith('#')).ToArray() ?? []).Trim();
-		}
 		var key = Query + ":" + string.Join(':', [Rating, (long?)Status, (long?)Sort, page]);
 		var (stories, count) = await cache.GetOrSetAsync<(List<StoryCard> s, int c)>(key, async ct => {
 			var storiesQuery = context.Stories
 				.AsQueryable()
-				.Search(tagIds, query, Rating, Status)
+				.WhereIf(s => EF.Functions.ILike(s.Title, $"%{query}%"), !string.IsNullOrEmpty(query))
+				.WhereIf(s => s.Rating.Id == Rating, Rating is not null)
+				.WhereIf(s => s.Tags.Any(st => tagIds.Contains(st.Id)), tagIds is { Count: > 0})
+				.WhereIf(s => s.Status == Status, Status is not null)
+				.WhereIf(s => s.Author.NormalizedUserName == author, author is not null)
 				.Where(s => s.PublicationDate != null)
 				.Where(s => s.ContentBlockId == null)
 				.Blacklist(context, uid);
@@ -83,5 +93,10 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 		};
 	}
 
-	private sealed record TagEntry(string Name, string Namespace);
+	private enum QueryPartType
+	{
+		Tag,
+		Query,
+		Author,
+	}
 }

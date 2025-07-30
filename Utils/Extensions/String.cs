@@ -12,14 +12,22 @@ public static partial class String
 	/// Replace non-alphanumeric characters with underscores, and double underscores with single ones.
 	/// </summary>
 	/// <param name="input">String to friendlify</param>
+	/// <param name="separator">Char to use as a replacement for non-alpha characters</param>
 	/// <returns>Friendlified string</returns>
-	public static string Friendlify(this string input)
+	public static string Friendlify(this string input, char separator)
 	{
 		return NonAlphanumericCharactersRegex
-			.Replace(input, "-")
+			.Replace(input, separator.ToString())
 			.ToLower()
-			.Trim('-');
+			.Trim(separator);
 	}
+
+	/// <summary>
+	/// Because expression trees are fucking garbage piece of shit
+	/// </summary>
+	/// <param name="input"></param>
+	/// <returns></returns>
+	public static string Friendlify(this string input) => Friendlify(input, '-');
 
 
 	/// <summary>

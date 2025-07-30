@@ -18,6 +18,8 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 
 	public required ModelExpression For { get; set; }
 
+	public string Action { get; set; } = "";
+
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
 		output.TagName = "form";
@@ -25,6 +27,7 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 		output.AddClass("autoform", NullHtmlEncoder.Default);
 		output.Attributes.Add("id", "config");
 		output.Attributes.Add("method", "post");
+		output.Attributes.Add("action", Action);
 
 		var obj = For.Model;
 		var objName = For.Name;
@@ -56,11 +59,11 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 					TypeCode.DateTime => "date",
 					_ => "text",
 				};
-				var label = prop.Name.Humanize();
+				var label = prop.Name;
 				var value = prop.GetValue(obj);
 
 				output.Content.AppendHtml("""<div class="o-form-group">""");
-				output.Content.AppendHtml($"""<label for="{objName}_{label}">{label}</label>""");
+				output.Content.AppendHtml($"""<label for="{objName}_{label}">{label.Humanize()}</label>""");
 				output.Content.AppendHtml(
 					$"""<input type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
 				output.Content.AppendHtml("</div>");

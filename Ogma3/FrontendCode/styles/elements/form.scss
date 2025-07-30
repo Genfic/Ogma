@@ -66,6 +66,7 @@ form.form {
 		display: flex;
 		flex-direction: column;
 		margin-top: 1rem;
+		gap: .25rem;
 
 		input,
 		textarea,
@@ -79,6 +80,11 @@ form.form {
 			&[disabled] {
 				color: var(--foreground-50);
 			}
+		}
+
+		input[type="text"],
+		textarea {
+			letter-spacing: .05em;
 		}
 
 		textarea {
@@ -95,8 +101,8 @@ form.form {
 		}
 
 		label {
-			font-weight: 600;
-			font-size: .95rem;
+			font-weight: 400;
+			font-size: 1rem;
 			margin: 0;
 			white-space: nowrap;
 		}

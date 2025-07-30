@@ -17,7 +17,12 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 			.IsUnique();
 
 		builder
-			.HasIndex(t => t.Name);
+			.HasIndex(t => t.Name)
+			.IsUnique();
+
+		builder
+			.HasIndex(t => t.Slug)
+			.IsUnique();
 
 		builder
 			.Property(t => t.Name)
@@ -27,12 +32,15 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 
 		builder
 			.Property(t => t.Slug)
+			.IsCitext()
 			.IsRequired()
 			.HasMaxLength(CTConfig.Tag.MaxNameLength);
 
 		builder
 			.Property(t => t.Description)
-			.HasMaxLength(CTConfig.Tag.MaxDescLength);
+			.HasMaxLength(CTConfig.Tag.MaxDescLength)
+			.IsRequired(false)
+			.HasDefaultValue(null);
 
 		builder
 			.Property(t => t.Namespace)

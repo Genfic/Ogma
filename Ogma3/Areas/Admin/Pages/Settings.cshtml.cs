@@ -24,6 +24,6 @@ public sealed class Settings(OgmaConfig config) : PageModel
 		}
 
 		await config.PersistAsync();
-		return Routes.Pages.Settings.Get().Redirect(this);
+		return Routes.Areas.Admin.Pages.Settings.Get().Redirect(this);
 	}
 }

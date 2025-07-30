@@ -47,12 +47,12 @@ const Tags = () => {
 
 		const { id, name, namespace, description } = form;
 
-		if (!name || description === undefined) return;
+		if (!name) return;
 
 		const data = {
 			name,
 			namespace: (namespaces()?.find((n) => n.value === namespace)?.name ?? null) as TagDto["namespace"],
-			description,
+			description: description ?? null,
 		};
 
 		if (id) {
@@ -132,7 +132,9 @@ const Tags = () => {
 								<li>
 									<div class="deco" style={{ "background-color": t.namespaceColor }} />
 									<div class="main">
-										<h3 class="name">{t.name}</h3>
+										<h3 class="name" title={t.slug}>
+											{t.name}
+										</h3>
 										<span class="desc">{t.description}</span>
 									</div>
 									<div class="actions">

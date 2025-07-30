@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1.Tags;
 
@@ -47,7 +48,8 @@ public static partial class UpdateTag
 		var res = await context.Tags
 			.Where(t => t.Id == request.Id)
 			.ExecuteUpdateAsync(tag => tag
-					.SetProperty(t => t.Name, t => request.Name)
+					.SetProperty(t => t.Name, request.Name)
+					.SetProperty(t => t.Slug, request.Name.Friendlify('_'))
 					.SetProperty(t => t.Description, request.Description)
 					.SetProperty(t => t.Namespace, request.Namespace),
 				cancellationToken);

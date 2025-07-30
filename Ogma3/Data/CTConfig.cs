@@ -32,9 +32,9 @@ public static class CTConfig
 	public static class Tag
 	{
 		public const int MinNameLength = 3;
-		public const int MaxNameLength = 20;
+		public const int MaxNameLength = 25;
 
-		public const int MaxDescLength = 100;
+		public const int MaxDescLength = 250;
 	}
 
 	public static class Rating

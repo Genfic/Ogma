@@ -19,7 +19,7 @@ public static partial class GetAllTags
 	private static async ValueTask<Ok<TagDto[]>> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
 	{
 		var tags = await context.Tags
-			.OrderBy(t => t.Id)
+			.OrderByDescending(t => t.Id)
 			.ProjectToDto()
 			.ToArrayAsync(cancellationToken);
 

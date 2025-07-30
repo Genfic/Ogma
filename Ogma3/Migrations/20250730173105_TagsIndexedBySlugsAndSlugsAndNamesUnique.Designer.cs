@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -18,9 +19,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250730173105_TagsIndexedBySlugsAndSlugsAndNamesUnique")]
+    partial class TagsIndexedBySlugsAndSlugsAndNamesUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1305,12 +1308,12 @@ namespace Ogma3.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(25)
+                        .HasMaxLength(20)
                         .HasColumnType("citext");
 
                     b.Property<ETagNamespace?>("Namespace")
@@ -1318,7 +1321,7 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasMaxLength(25)
+                        .HasMaxLength(20)
                         .HasColumnType("citext");
 
                     b.HasKey("Id");
@@ -1394,7 +1397,7 @@ namespace Ogma3.Migrations
                     b.Property<string>("NormalizedUserName")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("citext");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");

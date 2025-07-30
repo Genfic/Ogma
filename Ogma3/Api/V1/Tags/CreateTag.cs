@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1.Tags;
 
@@ -43,6 +44,7 @@ public static partial class CreateTag
 		var tag = new Tag
 		{
 			Name = request.Name,
+			Slug = request.Name.Friendlify('_'),
 			Description = request.Description,
 			Namespace = request.Namespace,
 		};

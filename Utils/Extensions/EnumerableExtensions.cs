@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Utils.Extensions;
 
@@ -19,4 +20,7 @@ public static class EnumerableExtensions
 		foreach (var element in elements) yield return element;
 	#endif
 	}
+
+	public static IEnumerable<T> GetValues<TKey, T>(this IEnumerable<IGrouping<TKey, T>> grouping, Func<TKey, bool> predicate)
+		=> grouping.Where(g => predicate(g.Key)).SelectMany(x => x);
 }
