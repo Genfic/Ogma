@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Users;
+using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -31,7 +32,7 @@ public sealed class LoginWith2FaModel(SignInManager<OgmaUser> signInManager, ILo
 
 	public async Task<IActionResult> OnGetAsync(bool rememberMe, string? returnUrl = null)
 	{
-		// Ensure the user has gone through the username & password screen first
+		// Ensure the user has gone through the username and password screen first
 		var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
 
 		if (user is null)
@@ -73,7 +74,7 @@ public sealed class LoginWith2FaModel(SignInManager<OgmaUser> signInManager, ILo
 		if (result.IsLockedOut)
 		{
 			logger.LogWarning("User with ID '{UserId}' account locked out", user.Id);
-			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
+			return Account_Lockout.Get().Redirect(this);
 		}
 
 		logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'", user.Id);
