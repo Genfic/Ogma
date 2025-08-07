@@ -28,7 +28,7 @@
 		<PackageReference Include="Atulin.AutoDbSet" Version="1.1.3" PrivateAssets="all" />
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.0.1" PrivateAssets="all" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" PrivateAssets="all" />
-		<PackageReference Include="B2Net" Version="0.8.0" PrivateAssets="all" />
+		<PackageReference Include="B2Net" Version="[0.7.5]" PrivateAssets="all" />
 		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" PrivateAssets="all" />
 		<PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="9.0.0" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation" Version="12.0.0" PrivateAssets="all" />
