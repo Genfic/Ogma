@@ -1,10 +1,9 @@
 @using System.Globalization
 @using Humanizer
 @using Microsoft.AspNetCore.Antiforgery
-@using Microsoft.AspNetCore.Http
-@using Ogma3.Infrastructure.Extensions
-@using Ogma3.Infrastructure.Constants
 @using Ogma3.Data.Reports
+@using Ogma3.Infrastructure.Constants
+@using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
 @model ProfileBar
 @inject IAntiforgery Antiforgery
@@ -61,15 +60,15 @@
 	<div class="buttons">
 		@if (!User.IsUserSameAsLoggedIn(Model.Id) && (User.Identity?.IsAuthenticated ?? false))
 		{
-			<o-follow userName="@Model.UserName" isFollowed="@Model.IsFollowedBy"></o-follow>
+			<o-follow user-name="@Model.UserName" is-followed="@Model.IsFollowedBy"></o-follow>
 
-			<div class="o-dropdown left" x-data="{open: false}">
+			<div class="o-dropdown left" o-dropdown>
 
-				<button class="action-btn max" x-on:click="open = !open">
+				<button class="action-btn max" o-dd-btn>
 					<icon icon="lucide:ellipsis-vertical" svg="true"></icon>
 				</button>
 
-				<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
+				<nav class="menu" o-dd-body>
 
 					<o-block class="item active red"
 					         user-name="@Model.UserName"
@@ -80,6 +79,7 @@
 					@if (User.Identity?.IsAuthenticated ?? false)
 					{
 						<button title="Report" class="item active red" id="open-modal-button-profilebar">
+							<icon icon="lucide:flag" svg="true"></icon>
 							Report
 						</button>
 					}
@@ -90,6 +90,7 @@
 						   asp-page="/Users"
 						   asp-route-name="@Model.UserName"
 						   class="item active">
+							<icon icon="ic:outline-admin-panel-settings" svg="true"></icon>
 							Manage
 						</a>
 					}
@@ -113,9 +114,6 @@
 		</a>
 	</nav>
 
-	<div v-if="!done" id="data-blocked" data-blocked="@Model.IsBlockedBy" style="display: none"></div>
-	@Html.AntiForgeryToken()
-
 	<report-modal v-pre
 	              item-id="@Model.Id"
 	              item-type="@EReportableContentTypes.User"
@@ -127,3 +125,4 @@
 
 @Html.Resource(@<script type="module" src="~/js/comp/block-user.js" asp-append-version="true"></script>)
 @Html.Resource(@<script type="module" src="~/js/comp/follow-button.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" src="~/js/dropdown.js" asp-append-version="true"></script>)

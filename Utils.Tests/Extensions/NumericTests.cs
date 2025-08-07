@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using TUnit.Assertions.AssertConditions.Throws;
 using Utils.Extensions;
 
 namespace Utils.Tests.Extensions;

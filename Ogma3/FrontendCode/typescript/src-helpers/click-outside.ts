@@ -16,3 +16,15 @@ export const useClickOutside = (element: ICustomElement, callback: () => void) =
 		document.removeEventListener("click", handleClick);
 	});
 };
+
+export const onClickOutside = (element: Element, callback: () => void) => {
+	const handleClick = (event: MouseEvent) => {
+		if (event.composedPath().includes(element)) {
+			return;
+		}
+		callback();
+	};
+	document.addEventListener("click", handleClick);
+
+	return () => document.removeEventListener("click", handleClick);
+};

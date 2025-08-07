@@ -9,26 +9,40 @@
 
 <quote-box></quote-box>
 
-<div id="tabs" class="tab-view mt-3" x-data="{tab: 1}">
-	<div class="tabs">
+<div id="tabs" class="tab-view mt-3" x-data="tabs">
+	<div class="tabs" role="tablist" aria-label="Story categories">
 		<button class="tab"
-		        x-bind:class="tab === 1 && 'active'"
-		        x-on:click="tab = 1">
+		        x-bind="tab1ButtonAttrs"
+		        x-on:click="selectTab1"
+		        id="tab-1"
+		        role="tab"
+		        aria-controls="panel-1">
 			Top
 		</button>
 		<button class="tab"
-		        x-bind:class="tab === 2 && 'active'"
-		        x-on:click="tab = 2">
+		        x-bind="tab2ButtonAttrs"
+		        x-on:click="selectTab2"
+		        id="tab-2"
+		        role="tab"
+		        aria-controls="panel-2">
 			New
 		</button>
 		<button class="tab"
-		        x-bind:class="tab === 3 && 'active'"
-		        x-on:click="tab = 3">
+		        x-bind="tab3ButtonAttrs"
+		        x-on:click="selectTab3"
+		        id="tab-3"
+		        role="tab"
+		        aria-controls="panel-3">
 			Updated
 		</button>
 	</div>
 
-	<div class="tab-body" x-show="tab === 1">
+	<div class="tab-body"
+	     x-show="showTab1"
+	     id="panel-1"
+	     role="tabpanel"
+	     tabindex="0"
+	     aria-labelledby="tab-1">
 		<h2 class="title">Top stories of all time</h2>
 
 		<div>
@@ -39,7 +53,12 @@
 		</div>
 	</div>
 
-	<div class="tab-body" x-show="tab === 2">
+	<div class="tab-body"
+	     x-show="showTab2"
+	     id="panel-2"
+	     role="tabpanel"
+	     tabindex="0"
+	     aria-labelledby="tab-2">
 		<h2 class="title">Newest stories</h2>
 
 		<div>
@@ -50,7 +69,12 @@
 		</div>
 	</div>
 
-	<div class="tab-body" x-show="tab === 3">
+	<div class="tab-body"
+	     x-show="showTab3"
+	     id="panel-3"
+	     role="tabpanel"
+	     tabindex="0"
+	     aria-labelledby="tab-3">
 		<h2 class="title">Freshly updated</h2>
 
 		<div>
@@ -65,4 +89,49 @@
 
 @section Scripts {
 	<script type="module" src="~/js/comp/quote-box.js" asp-append-version="true"></script>
+
+	<script async src="~/lib/alpine/alpine.min.js"></script>
+	<script asp-add-nonce>
+		// TODO: this Alpine CSP thingamajig ain't working out if you ask me
+		document.addEventListener('alpine:init', () => {
+			Alpine.data('tabs', () => ({
+				tab: 1,
+
+				// Individual methods for each tab (CSP-friendly)
+				selectTab1() { this.tab = 1; },
+				selectTab2() { this.tab = 2; },
+				selectTab3() { this.tab = 3; },
+
+				// Show/hide computed properties
+				get showTab1() { return this.tab === 1; },
+				get showTab2() { return this.tab === 2; },
+				get showTab3() { return this.tab === 3; },
+
+				// Tab button attributes (only dynamic stuff)
+				get tab1ButtonAttrs() {
+					return {
+						'class': this.tab === 1 ? 'active' : '',
+						'aria-selected': this.tab === 1 ? 'true' : 'false',
+						'tabindex': this.tab === 1 ? '0' : '-1'
+					};
+				},
+
+				get tab2ButtonAttrs() {
+					return {
+						'class': this.tab === 2 ? 'active' : '',
+						'aria-selected': this.tab === 2 ? 'true' : 'false',
+						'tabindex': this.tab === 2 ? '0' : '-1'
+					};
+				},
+
+				get tab3ButtonAttrs() {
+					return {
+						'class': this.tab === 3 ? 'active' : '',
+						'aria-selected': this.tab === 3 ? 'true' : 'false',
+						'tabindex': this.tab === 3 ? '0' : '-1'
+					};
+				}
+			}))
+		})
+	</script>
 }

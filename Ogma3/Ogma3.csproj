@@ -69,6 +69,8 @@
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.5.4" PrivateAssets="all" />
 		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.5.4" PrivateAssets="all" />
 		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" Version="7.1.0" PrivateAssets="all" />
+		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.1.0" />
+		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" Version="1.1.0" />
 		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta08" PrivateAssets="all" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" PrivateAssets="all" />
 		<PackageReference Include="Postmark" Version="5.2.0" PrivateAssets="all" />

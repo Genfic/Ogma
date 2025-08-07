@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
-using TUnit.Assertions.AssertConditions.Throws;
 using Utils.Extensions;
 
 namespace Utils.Tests.Extensions;

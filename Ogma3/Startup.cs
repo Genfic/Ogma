@@ -378,5 +378,15 @@ public static class Startup
 
 		// Antiforgery
 		app.UseAntiforgery();
+
+		// Security headers
+		app.UseSecurityHeaders(cfg => {
+			cfg.AddContentSecurityPolicy(builder => {
+				builder.AddScriptSrc()
+					.Self()
+					.UnsafeInline()
+					.WithNonce();
+			});
+		});
 	}
 }

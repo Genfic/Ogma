@@ -1,4 +1,4 @@
-import { PostApiUsersBlock as blockUser, DeleteApiUsersBlock as unblockUser } from "@g/paths-public";
+import { DeleteApiUsersBlock as unblockUser, PostApiUsersBlock as blockUser } from "@g/paths-public";
 import { log } from "@h/logger";
 import { customElement } from "solid-element";
 import { type Component, createSignal } from "solid-js";
@@ -31,6 +31,7 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 
 	return (
 		<button class="block-btn" type="button" onClick={block}>
+			<o-icon icon="ic:round-block" />
 			{isBlocked() ? "Unblock" : "Block"}
 		</button>
 	);

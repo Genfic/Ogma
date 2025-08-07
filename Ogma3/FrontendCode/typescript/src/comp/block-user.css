@@ -10,6 +10,10 @@
 	cursor: pointer;
 	width: 100%;
 
+	o-icon {
+		margin-right: 4px;
+	}
+
 	&:hover {
 		color: var(--accent-75);
 	}

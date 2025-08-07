@@ -1,6 +1,5 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Antiforgery
-@using Microsoft.AspNetCore.Http
 @using Ogma3.Data.Reports
 @using Ogma3.Services
 @model ClubBar
@@ -31,13 +30,13 @@
 
 		<o-join clubId="@Model.Id" isMember="@Model.IsMember" csrf="@csrf"></o-join>
 
-		<div class="o-dropdown left" x-data="{open: false}">
+		<div class="o-dropdown left" o-dropdown>
 
-			<button class="action-btn max" x-on:click="open = !open">
+			<button class="action-btn max" o-dd-btn>
 				<icon icon="lucide:ellipsis-vertical" svg="true"></icon>
 			</button>
 
-			<nav class="menu" x-show="open" x-cloak x-on:click.outside="open = false">
+			<nav class="menu" o-dd-body>
 
 				<a class="item active" title="Edit club" asp-page="/Clubs/Edit" asp-route-id="@Model.Id">
 					<icon icon="ic:outline-admin-panel-settings" svg="true"></icon>
@@ -86,3 +85,4 @@
 </div>
 
 @Html.Resource(@<script type="module" src="~/js/comp/join-club-button.js" asp-append-version="true"></script>)
+@Html.Resource(@<script type="module" src="~/js/dropdown.js" asp-append-version="true"></script>)

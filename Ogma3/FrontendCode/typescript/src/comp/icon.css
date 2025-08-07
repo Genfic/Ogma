@@ -1,5 +1,5 @@
 :host {
-	display: flex;
+	display: inline-flex;
 	place-items: center;
 	pointer-events: none;
 }
