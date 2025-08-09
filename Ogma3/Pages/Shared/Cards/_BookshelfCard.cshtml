@@ -1,0 +1,11 @@
+@using Routes.Pages
+@using Utils.Extensions
+@model BookshelfCard
+
+<a class="bookshelf-card" style="--shelf-color: @Model.Color" for-route="@Shelves_Bookshelf.Get(Model.Id, Model.Name.Friendlify())" >
+	<div class="ico">
+		<icon icon="@Model.IconName" svg="true"></icon>
+	</div>
+	<span class="name">@Model.Name — @Model.StoriesCount</span>
+	<span class="desc">@Model.Description &nbsp;</span>
+</a>

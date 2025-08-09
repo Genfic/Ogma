@@ -5,6 +5,7 @@
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
+@using Routes.Pages
 @model ProfileBar
 @inject IAntiforgery Antiforgery
 @inject IHttpContextAccessor Accessor;
@@ -100,16 +101,16 @@
 	</div>
 
 	<nav class="nav">
-		<a class="nav-item @(tab == "Profile" ? "active" : null)" asp-area="" asp-page="/User/Index" asp-route-name="@Model.UserName">
+		<a class="nav-item @(tab == "Profile" ? "active" : null)" for-route="@User_Index.Get(Model.UserName)">
 			Home
 		</a>
-		<a class="nav-item @(tab == "Stories" ? "active" : null)" asp-area="" asp-page="/User/Stories" asp-route-name="@Model.UserName">
+		<a class="nav-item @(tab == "Stories" ? "active" : null)" for-route="@User_Stories.Get(Model.UserName)">
 			Stories (@Model.StoriesCount)
 		</a>
-		<a class="nav-item @(tab == "Blog" ? "active" : null)" asp-area="" asp-page="/User/Blog" asp-route-name="@Model.UserName">
+		<a class="nav-item @(tab == "Blog" ? "active" : null)" for-route="@User_Blog.Get(Model.UserName)">
 			Blog (@Model.BlogpostsCount)
 		</a>
-		<a class="nav-item @(tab == "Library" ? "active" : null)" asp-area="" asp-page="/User/Library" asp-route-name="@Model.UserName">
+		<a class="nav-item @(tab == "Library" ? "active" : null)" for-route="@User_Library_Index.Get(Model.UserName)">
 			Library
 		</a>
 	</nav>

@@ -1,0 +1,46 @@
+@use "../mixins/active-border" as ab;
+
+.bookshelf-card {
+	@include ab.active-border;
+
+	display: grid;
+	grid: "icon name" auto
+		  "icon description" auto
+		  / auto 1fr;
+	gap: .25rem 1rem;
+	color: var(--foreground);
+
+	&:hover {
+		border-color: var(--shelf-color);
+		color: var(--foreground);
+		border-right-width: 1rem;
+	}
+
+	.ico {
+		grid-area: icon;
+		background-color: var(--shelf-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 0 1rem;
+
+		.icon {
+			background-color: var(--background);
+			outline: .5rem solid var(--background);
+			border-radius: 999px;
+		}
+	}
+
+	.name {
+		grid-area: name;
+		font-weight: bold;
+		font-size: 1.1rem;
+		padding-top: .25rem;
+	}
+
+	.desc {
+		grid-area: description;
+		padding-bottom: .25rem;
+	}
+}

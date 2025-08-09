@@ -1,0 +1,41 @@
+@page "/user/{name}/library"
+@using Ogma3.Infrastructure.Extensions
+@using Routes.Pages
+@model LibraryModel
+
+@{
+	ViewData["Title"] = $"{Model.ProfileBar.UserName}'s library";
+	ViewData["Tab"] = "Library";
+}
+
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
+
+@if (Model.IsCurrentUser)
+{
+	<a class="btn btn-block btn-outline-primary" for-route="@(User_Library_Manage.Get(User.GetUsername() ?? ""))">
+		Manage
+	</a>
+
+}
+
+<br />
+
+<div id="shelves">
+
+	@if (Model.Shelves.Count == 0)
+	{
+		<button class="btn btn-primary" type="button" disabled>
+			No bookshelves found
+		</button>
+	}
+
+	<div class="generic-list">
+		@foreach (var s in Model.Shelves)
+		{
+			<partial name="Shared/Cards/_BookshelfCard" model="@s"/>
+		}
+	</div>
+
+	<div id="owner" data-owner="@Model.ProfileBar.UserName.ToUpper()" v-if="!owner"></div>
+	@Html.AntiForgeryToken()
+</div>

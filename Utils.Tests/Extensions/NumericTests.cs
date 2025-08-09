@@ -1,6 +1,4 @@
-using System;
 using System.Numerics;
-using System.Threading.Tasks;
 using Utils.Extensions;
 
 namespace Utils.Tests.Extensions;

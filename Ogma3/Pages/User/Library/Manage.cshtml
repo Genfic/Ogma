@@ -1,16 +1,15 @@
-@page "/user/{name}/library"
-@model LibraryModel
+@page "/user/{username}/library/manage"
+@model ManageModel
 
 @{
-	ViewData["Title"] = $"{Model.ProfileBar.UserName}'s library";
+	ViewData["Title"] = "Manage your library";
 	ViewData["Tab"] = "Library";
 }
 
+@* TODO: This stuff needs to be done *@
+
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
-<div id="shelves">
-	@if (Model.IsCurrentUser)
-	{
 		<form class="form" v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">
 
 			<ul class="validation-summary" v-if="err">
@@ -91,42 +90,3 @@
 		<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
 		Loading...
 	</button>
-
-	<button v-else-if="shelves === null" class="btn btn-primary" type="button" disabled>
-		No bookshelves found
-	</button>
-
-	<ul v-else class="items-list">
-		<li v-for="s in shelves">
-			<div class="deco" v-bind:style="{background: s.color}">
-				<o-icon class="material-icons-outlined" :icon="s.iconName"></o-icon>
-			</div>
-			<a class="main" :href="'/Shelf/' + s.id">
-				<h3 class="name">{{ s.name }} – {{ s.storiesCount }}</h3>
-				<span class="desc">{{ s.description }}</span>
-			</a>
-			@if (Model.IsCurrentUser)
-			{
-				<div class="actions">
-					<button class="action" v-on:click="deleteShelf(s)">
-						<icon icon="lucide:trash-2" svg="true"></icon>
-					</button>
-					<button class="action" v-on:click="editShelf(s)">
-						<icon icon="lucide:pencil" svg="true"></icon>
-					</button>
-				</div>
-			}
-		</li>
-	</ul>
-
-	<div id="owner" data-owner="@Model.ProfileBar.UserName.ToUpper()" v-if="!owner"></div>
-	@Html.AntiForgeryToken()
-</div>
-
-
-@section Scripts
-{
-	<script type="module" src="~/js/components/toggle-component.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/components/input-counter-component.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/shelves.js" asp-append-version="true"></script>
-}

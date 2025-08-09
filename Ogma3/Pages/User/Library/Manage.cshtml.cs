@@ -7,21 +7,21 @@ using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
 
-namespace Ogma3.Pages.User;
+namespace Ogma3.Pages.User.Library;
 
-public sealed class LibraryModel(ApplicationDbContext context, UserRepository userRepo) : PageModel
+public sealed class ManageModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
 {
-	public required bool IsCurrentUser { get; set; }
-	public required List<Icon> Icons { get; set; }
 	public required ProfileBar ProfileBar { get; set; }
+	public required List<Icon> Icons { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(string name)
+	public async Task<IActionResult> OnGetAsync(string username)
 	{
+		var name = User.GetUsername();
+		if (name is null) return Unauthorized();
+
 		var profileBar = await userRepo.GetProfileBar(name.ToUpper());
 		if (profileBar is null) return NotFound();
 		ProfileBar = profileBar;
-
-		IsCurrentUser = string.Equals(name, User.GetUsername(), StringComparison.OrdinalIgnoreCase);
 
 		Icons = await context.Icons
 			.AsNoTracking()

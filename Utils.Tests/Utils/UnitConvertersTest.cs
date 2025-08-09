@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Utils.Tests.Utils;
 
 public sealed class UnitConvertersTest

@@ -14,7 +14,7 @@ public sealed class Bookshelf(ApplicationDbContext context) : PageModel
 
 	public sealed record BookshelfDetails(string Name, string Description, string? Color, string? IconName, IEnumerable<StoryCard> Stories);
 
-	public async Task<IActionResult> OnGetAsync(int id, string? slug)
+	public async Task<IActionResult> OnGetAsync(long id, string? slug)
 	{
 		var uid = User.GetNumericId();
 

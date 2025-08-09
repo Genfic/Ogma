@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 using Utils.Extensions;
 
 namespace Utils.Tests.Extensions;
@@ -37,10 +34,8 @@ public sealed class ColourTests
 	// Test Color.ParseHexColor()
 	[Test]
 	[MethodDataSource(typeof(ColourTestDataSource), nameof(ColourTestDataSource.TestParseHexColorData))]
-	public async Task TestParseHexColor((string given, Color expected) data)
+	public async Task TestParseHexColor(string given, Color expected)
 	{
-		var (given, expected) = data;
-
 		await Assert.That(given.ParseHexColor()).IsEqualTo(expected);
 	}
 
