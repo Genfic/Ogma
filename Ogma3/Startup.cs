@@ -2,10 +2,10 @@ using System.IO.Compression;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
+using CompressedStaticFiles;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,9 +15,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 using NpgSqlGenerators;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
@@ -42,7 +40,6 @@ using Ogma3.Services.Mailer;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
-using Serilog;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
 using static Ogma3.Services.RoutingHelpers;
@@ -203,6 +200,9 @@ public static class Startup
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
 			.WithRegisteredDistributedCache();
 
+		// Precompressed files
+		services.AddCompressedStaticFiles();
+
 		// Runtime compilation
 		services
 			.AddControllersWithViews();
@@ -336,28 +336,8 @@ public static class Startup
 			.AddRedirect(@"^\.well-known/change-password$", "identity/account/manage/changepassword")
 		);
 
-		// Map file extensions
-		var extensionsProvider = new FileExtensionContentTypeProvider();
-		extensionsProvider.Mappings.Add(".avif", "image/avif");
-
-		// Serve static files with cache headers and compression
-		app.UseStaticFiles(new StaticFileOptions
-		{
-			HttpsCompression = HttpsCompressionMode.Compress,
-			OnPrepareResponse = context => {
-				context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
-				{
-					Public = true,
-					MaxAge = TimeSpan.FromDays(365),
-				};
-				if (context.File.Name.Contains("worker"))
-				{
-					Log.Information("Serving a service worker");
-					context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
-				}
-			},
-			ContentTypeProvider = extensionsProvider,
-		});
+		// Serve static files
+		app.UseCustomStaticFiles();
 		app.UseRouting();
 
 		app.UseAuthentication();

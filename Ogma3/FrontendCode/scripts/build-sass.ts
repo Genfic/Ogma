@@ -9,6 +9,7 @@ import convert from "convert";
 import { attemptAsync } from "es-toolkit";
 import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import { brotliCompressSync } from "zlib";
 import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
 import { $try } from "./helpers/function-helpers";
@@ -110,6 +111,9 @@ const compileSass = async (file: string) => {
 	}
 
 	await Bun.write(path.join(_dest, `${filename}.css`), code);
+	await Bun.write(path.join(_dest, `${filename}.css.gz`), Bun.gzipSync(code));
+	await Bun.write(path.join(_dest, `${filename}.css.br`), brotliCompressSync(code));
+	await Bun.write(path.join(_dest, `${filename}.css.zst`), Bun.zstdCompressSync(code));
 	if (map) {
 		await Bun.write(path.join(_dest, `${filename}.map.css`), map);
 	}
@@ -139,7 +143,13 @@ const compileAll = async () => {
 await compileAll();
 
 const size = await dirsize(`${_dest}/**/[!_]*.css`);
-console.log(ct`{green Total size: {bold.underline ${convert(size, "bytes").to("best").toString(3)}}}`);
+const sizeGz = await dirsize(`${_dest}/**/[!_]*.css.gz`);
+const sizeBr = await dirsize(`${_dest}/**/[!_]*.css.br`);
+const sizeZst = await dirsize(`${_dest}/**/[!_]*.css.zst`);
+const best = (num: number) => convert(num, "bytes").to("best").toString(3);
+console.log(
+	ct`{green Total size: {bold.underline ${best(size)}}} {dim Gzipped: {bold.underline ${best(sizeGz)}} Brotli: {bold.underline ${best(sizeBr)}} Zstd: {bold.underline ${best(sizeZst)}}}`,
+);
 
 if (values.watch) {
 	await watch(_base, ["update"], {

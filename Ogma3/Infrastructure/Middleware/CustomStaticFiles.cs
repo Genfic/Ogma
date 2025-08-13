@@ -1,0 +1,45 @@
+using CompressedStaticFiles;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Net.Http.Headers;
+using NuGet.Packaging;
+using Serilog;
+
+namespace Ogma3.Infrastructure.Middleware;
+
+public static class CustomStaticFiles
+{
+	private static readonly Dictionary<string, string> CustomMimeTypes = new()
+	{
+		[".avif"] = "image/avif",
+	};
+
+	public static WebApplication UseCustomStaticFiles(this WebApplication app)
+	{
+		var extensionsProvider = new FileExtensionContentTypeProvider();
+		extensionsProvider.Mappings.AddRange(CustomMimeTypes);
+
+		app.UseCompressedStaticFiles(new StaticFileOptions
+		{
+			HttpsCompression = HttpsCompressionMode.Compress,
+			OnPrepareResponse = PrepareResponse,
+			ContentTypeProvider = extensionsProvider,
+		});
+		return app;
+	}
+
+	private static void PrepareResponse(StaticFileResponseContext context)
+	{
+		context.Context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
+		{
+			Public = true,
+			MaxAge = TimeSpan.FromDays(365),
+		};
+
+		if (context.File.Name.Contains("worker"))
+		{
+			Log.Information("Serving a service worker");
+			context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
+		}
+	}
+}

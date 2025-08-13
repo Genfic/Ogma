@@ -6,6 +6,7 @@ import ct from "chalk-template";
 import ejs from "ejs";
 import { compact, uniq } from "es-toolkit";
 import { parse } from "json5";
+import { brotliCompressSync } from "zlib";
 import { alphaBy } from "./helpers/function-helpers";
 import { Logger } from "./helpers/logger";
 import { Parallel } from "./helpers/promises";
@@ -94,6 +95,9 @@ const spritesheet = rewriter.transform(tpl);
 const index = ejs.render(templates.get("icon-index"), { svgs });
 await Promise.allSettled([
 	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet),
+	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg.gz"), Bun.gzipSync(spritesheet)),
+	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg.br"), brotliCompressSync(spritesheet)),
+	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg.zst"), Bun.zstdCompressSync(spritesheet)),
 	Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet),
 	Bun.write(join(_root, "..", "..", "wwwroot", "icon-index.html"), index),
 ]);

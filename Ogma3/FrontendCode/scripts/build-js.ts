@@ -7,6 +7,7 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import solidLabels from "solid-labels/babel";
+import { brotliCompressSync } from "zlib";
 import { log } from "../typescript/src-helpers/logger";
 import { alphaBy } from "./helpers/function-helpers";
 import { getHash } from "./helpers/hash";
@@ -70,8 +71,7 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 
 	const chunks = outputs
 		.filter((o) => o.kind === "chunk")
-		.map((c) => relative(join(_root, "..", "..", "wwwroot"), c.path).replaceAll("\\", "/"))
-		.map((p) => `<link rel="modulepreload" href="~/${p}" as="script" />`);
+		.map((c) => relative(join(_root, "..", "..", "wwwroot"), c.path).replaceAll("\\", "/"));
 
 	if (success) {
 		logger.log(ct`{dim Files compiled in}`, timer);
@@ -88,11 +88,28 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		}
 	}
 
-	const size = outputs
-		.filter((c) => (["chunk", "asset", "entry-point"] as (typeof c.kind)[]).includes(c.kind))
-		.reduce((a, b) => a + b.size, 0);
+	const results = outputs.filter((c) => (["chunk", "asset", "entry-point"] as (typeof c.kind)[]).includes(c.kind));
 
-	return { chunks, size };
+	const size = results.reduce((a, b) => a + b.size, 0);
+
+	const compSizes = { gz: 0, br: 0, zstd: 0 };
+	await Parallel.forEach(results, async (c) => {
+		const buf = await c.arrayBuffer();
+
+		const gzipped = Bun.gzipSync(buf);
+		const brotli = brotliCompressSync(buf);
+		const zstd = Bun.zstdCompressSync(buf);
+
+		await Bun.write(`${c.path}.gz`, gzipped);
+		await Bun.write(`${c.path}.br`, brotli);
+		await Bun.write(`${c.path}.zst`, zstd);
+
+		compSizes.gz += gzipped.length;
+		compSizes.br += brotli.length;
+		compSizes.zstd += zstd.length;
+	});
+
+	return { chunks, size: { size, ...compSizes } };
 };
 
 const ext = ".js";
@@ -144,14 +161,19 @@ const compileAll = async () => {
 		"Workers",
 	);
 
-	const chunks = [...jsChunks, ...workersChunks];
+	const chunks = [...jsChunks, ...workersChunks].map((p) => `<link rel="modulepreload" href="~/${p}" as="script" />`);
 	logger.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
-	const best = (size: number) => convert(size, "bytes").to("best").toString();
+	const best = (size: number) => convert(size, "bytes").to("best").toString(3);
 
-	const currentSize = jsSize + workersSize;
-	logger.log(ct`{green Total size: {bold.underline ${best(currentSize)}}}`);
+	const currentSize = jsSize.size + workersSize.size;
+	const gzSize = jsSize.gz + workersSize.gz;
+	const brSize = jsSize.br + workersSize.br;
+	const zstdSize = jsSize.zstd + workersSize.zstd;
+	logger.log(
+		ct`{green Total size: {bold.underline ${best(currentSize)}}} {dim Gzipped: {bold.underline ${best(gzSize)}} Brotli: {bold.underline ${best(brSize)}} Zstd: {bold.underline ${best(zstdSize)}}}`,
+	);
 
 	const prev = sizeHistory.at(-1);
 	if (prev) {

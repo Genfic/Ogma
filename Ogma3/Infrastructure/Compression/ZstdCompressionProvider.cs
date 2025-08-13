@@ -15,10 +15,10 @@ namespace Ogma3.Infrastructure.Compression;
 public sealed class ZstdCompressionProvider(IOptions<ZstdCompressionProvider.Options> options) : ICompressionProvider
 {
 	private readonly Options _options = options.Value;
-	
+
 	/// <inheritdoc />
 	public string EncodingName => "zstd";
-	
+
 	/// <inheritdoc />
 	public bool SupportsFlush => true;
 
@@ -39,6 +39,6 @@ public sealed class ZstdCompressionProvider(IOptions<ZstdCompressionProvider.Opt
 	public sealed class Options : IOptions<Options>
 	{
 		public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Fastest;
-		public Options Value => this;
+		Options IOptions<Options>.Value => this;
 	}
 }
