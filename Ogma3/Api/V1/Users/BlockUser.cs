@@ -31,7 +31,7 @@ public static partial class BlockUser
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
 		var targetUserId = await context.Users
-			.Where(u => u.NormalizedUserName == request.Name.ToUpperInvariant().Normalize())
+			.Where(u => u.NormalizedUserName == request.Name)
 			.Select(u => (long?)u.Id)
 			.FirstOrDefaultAsync(cancellationToken);
 

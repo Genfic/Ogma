@@ -3,18 +3,14 @@
 .bookshelf-card {
 	@include ab.active-border;
 
+	--count-offset: 1rem;
+
 	display: grid;
-	grid: "icon name" auto
-		  "icon description" auto
-		  / auto 1fr;
+	grid: "icon name count" auto
+		  "icon description count" auto
+		  / auto 1fr auto;
 	gap: .25rem 1rem;
 	color: var(--foreground);
-
-	&:hover {
-		border-color: var(--shelf-color);
-		color: var(--foreground);
-		border-right-width: 1rem;
-	}
 
 	.ico {
 		grid-area: icon;
@@ -28,6 +24,7 @@
 		.icon {
 			background-color: var(--background);
 			outline: .5rem solid var(--background);
+			outline-offset: -1px;
 			border-radius: 999px;
 		}
 	}
@@ -42,5 +39,25 @@
 	.desc {
 		grid-area: description;
 		padding-bottom: .25rem;
+	}
+
+	.count {
+		grid-area: count;
+		margin-right: var(--count-offset);
+		font-size: 2.2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-right: .5rem;
+	}
+
+	&:hover {
+		border-color: var(--shelf-color);
+		color: var(--foreground);
+		border-right-width: var(--count-offset);
+
+		.count {
+			margin-right: 1px;
+		}
 	}
 }

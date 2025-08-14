@@ -1,20 +1,40 @@
 
 #bookshelf-details {
-	> .name {
+	.details {
+		display: grid;
+		grid: "icon name" auto
+			  "icon desc" auto
+			  / auto 1fr;
+		gap: .25rem 1rem;
+		align-items: center;
+		margin-bottom: .5rem;
 		padding-bottom: .5rem;
+		border-bottom: .5rem solid var(--shelf-color);
 
 		.icon {
-			margin: 0 .4rem;
-			padding: .25rem;
-			font-weight: bold;
-			color: var(--background);
-			text-shadow: 1px 1px 0 var(--foreground-75);
-			border: 1px solid var(--foreground-50);
-		}
-	}
+			grid-area: icon;
+			color: var(--foreground);
+			border-radius: 999px;
+			background-color: var(--background);
+			border: .5rem solid var(--shelf-color);
 
-	> .desc {
-		padding-bottom: 1rem;
-		font-size: 1.1rem;
+			svg {
+				display: block;
+				margin: .5rem;
+				border: none;
+				height: 30px;
+				width: 30px;
+			}
+		}
+
+		.name {
+			grid-area: name;
+			padding-bottom: .5rem;
+		}
+
+		.desc {
+			grid-area: desc;
+			font-size: 1.1rem;
+		}
 	}
 }

@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Constants;
-using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Data.Users;
 
@@ -25,7 +24,7 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 
 		builder
 			.Property(u => u.NormalizedUserName)
-			.IsCitext()
+			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent)
 			.HasMaxLength(CTConfig.User.MaxNameLength);
 
 		builder

@@ -13,7 +13,7 @@ public sealed class UserRepository(ApplicationDbContext context, IUserService us
 	{
 		return await context.Users
 			.TagWith($"{nameof(UserRepository)}.{nameof(GetProfileBar)} -> {name}")
-			.Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
+			.Where(u => u.NormalizedUserName == name)
 			.Select(UserMappings.ToProfileBar(_uid))
 			.FirstOrDefaultAsync();
 	}

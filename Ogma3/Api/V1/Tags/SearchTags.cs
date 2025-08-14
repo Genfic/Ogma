@@ -23,20 +23,24 @@ public static partial class SearchTags
 	)
 	{
 		// TODO: Could probably have been done better
+		// We need to use `EF.Functions.Collate` because Postgres versions < 18 don't support `ILIKE` for
+		// columns with non-deterministic collations.
 		// ReSharper disable EntityFramework.ClientSideDbFunctionCall
 		Expression<Func<Tag, bool>>? search = request.SearchString.Split(':') switch
 		{
 			[{ Length: > 0 } ns, { Length: > 0 } name] => (Tag t)
-				=> EF.Functions.ILike(t.Name, $"%{name}%") && EF.Functions.ILike(t.Namespace.ToString() ?? string.Empty, $"%{ns}%"),
+				=> EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{name}%")
+				   && EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{ns}%"),
 
-			[{ Length: > 0 } ns, { Length: <= 0 }]
-				=> (Tag t) => EF.Functions.ILike(t.Namespace.ToString() ?? string.Empty, $"%{ns}%"),
+			[{ Length: > 0 } ns, _]
+				=> (Tag t) => EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{ns}%"),
 
-			[{ Length: <= 0 }, { Length: > 0 } name]
-				=> (Tag t) => EF.Functions.ILike(t.Name, $"%{name}%"),
+			[_, { Length: > 0 } name]
+				=> (Tag t) => EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{name}%"),
 
 			[{ Length: > 0 } q] => (Tag t)
-				=> EF.Functions.ILike(t.Name, $"%{q}%") || EF.Functions.ILike(t.Namespace.ToString() ?? string.Empty, $"%{q}%"),
+				=> EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{q}%")
+				   || EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{q}%"),
 
 			_ => null,
 		};

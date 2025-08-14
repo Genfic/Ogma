@@ -32,7 +32,7 @@ public static partial class GetPaginatedUserShelves
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
 		var shelves = await context.Shelves
-			.Where(s => s.Owner.NormalizedUserName == request.UserName.Normalize().ToUpperInvariant())
+			.Where(s => s.Owner.NormalizedUserName == request.UserName)
 			.Where(s => s.OwnerId == uid || s.IsPublic)
 			.Paginate(request.Page, config.ShelvesPerPage)
 			.ProjectToDto()

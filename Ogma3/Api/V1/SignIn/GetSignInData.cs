@@ -22,7 +22,7 @@ public static partial class GetSignInData
 	)
 	{
 		var user = await context.Users
-			.Where(u => u.NormalizedUserName == request.Name.Normalize().ToUpperInvariant())
+			.Where(u => u.NormalizedUserName == request.Name)
 			.Select(u => new Result(u.Avatar.Url, u.Title))
 			.FirstOrDefaultAsync(cancellationToken);
 

@@ -27,10 +27,8 @@ public static partial class FindName
 	{
 		if (request.Name.Length < 3) return TypedResults.UnprocessableEntity("You need at least 3 characters");
 
-		var name = request.Name.Normalize().ToUpperInvariant();
-
 		var names = await context.Users
-			.Where(u => EF.Functions.Like(u.NormalizedUserName, $"%{name}%"))
+			.Where(u => EF.Functions.Like(EF.Functions.Collate(u.NormalizedUserName, "C"), $"%{request.Name}%"))
 			.Select(u => u.UserName)
 			.ToArrayAsync(cancellationToken);
 

@@ -25,7 +25,7 @@ public sealed class IndexModel(ApplicationDbContext context, UserRepository user
 	public async Task<IActionResult> OnGetAsync(string name)
 	{
 		var data = await context.Users
-			.Where(u => u.NormalizedUserName == name.Normalize().ToUpperInvariant())
+			.Where(u => u.NormalizedUserName == name)
 			.Select(u => new ProfileDetails
 			{
 				Bio = u.Bio,
@@ -40,7 +40,7 @@ public sealed class IndexModel(ApplicationDbContext context, UserRepository user
 		var bar = await userRepo.GetProfileBar(name.ToUpper());
 		if (bar is null) return NotFound();
 		ProfileBar = bar;
-		
+
 		return Page();
 	}
 }

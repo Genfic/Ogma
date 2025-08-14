@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
-using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.Constants;
 
 namespace Ogma3.Data.Tags;
 
@@ -26,13 +26,13 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 
 		builder
 			.Property(t => t.Name)
-			.IsCitext()
+			.UseCollation(PgConstants.CollationNames.CaseInsensitive)
 			.IsRequired()
 			.HasMaxLength(CTConfig.Tag.MaxNameLength);
 
 		builder
 			.Property(t => t.Slug)
-			.IsCitext()
+			.UseCollation(PgConstants.CollationNames.CaseInsensitive)
 			.IsRequired()
 			.HasMaxLength(CTConfig.Tag.MaxNameLength);
 

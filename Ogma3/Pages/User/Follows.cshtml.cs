@@ -25,7 +25,7 @@ public sealed class Follows(UserRepository userRepo, ApplicationDbContext contex
 		ProfileBar = profileBar;
 
 		Users = await context.FollowedUsers
-			.Where(u => u.FollowedUser.NormalizedUserName == name.Normalize().ToUpper())
+			.Where(u => u.FollowedUser.NormalizedUserName == name)
 			.Select(u => u.FollowingUser)
 			.Paginate(page, PerPage)
 			.Select(UserMappings.ToUserCard)
@@ -33,7 +33,7 @@ public sealed class Follows(UserRepository userRepo, ApplicationDbContext contex
 			.ToListAsync();
 
 		var count = await context.Users
-			.Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
+			.Where(u => u.NormalizedUserName == name)
 			.Select(u => u.Following)
 			.CountAsync();
 

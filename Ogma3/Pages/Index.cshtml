@@ -9,27 +9,21 @@
 
 <quote-box></quote-box>
 
-<div id="tabs" class="tab-view mt-3" x-data="tabs">
+<div id="tabs" class="tab-view mt-3" tab-view>
 	<div class="tabs" role="tablist" aria-label="Story categories">
-		<button class="tab"
-		        x-bind="tab1ButtonAttrs"
-		        x-on:click="selectTab1"
+		<button class="tab active"
 		        id="tab-1"
 		        role="tab"
 		        aria-controls="panel-1">
 			Top
 		</button>
 		<button class="tab"
-		        x-bind="tab2ButtonAttrs"
-		        x-on:click="selectTab2"
 		        id="tab-2"
 		        role="tab"
 		        aria-controls="panel-2">
 			New
 		</button>
 		<button class="tab"
-		        x-bind="tab3ButtonAttrs"
-		        x-on:click="selectTab3"
 		        id="tab-3"
 		        role="tab"
 		        aria-controls="panel-3">
@@ -37,8 +31,7 @@
 		</button>
 	</div>
 
-	<div class="tab-body"
-	     x-show="showTab1"
+	<div class="tab-body active"
 	     id="panel-1"
 	     role="tabpanel"
 	     tabindex="0"
@@ -54,7 +47,6 @@
 	</div>
 
 	<div class="tab-body"
-	     x-show="showTab2"
 	     id="panel-2"
 	     role="tabpanel"
 	     tabindex="0"
@@ -70,7 +62,6 @@
 	</div>
 
 	<div class="tab-body"
-	     x-show="showTab3"
 	     id="panel-3"
 	     role="tabpanel"
 	     tabindex="0"
@@ -89,49 +80,5 @@
 
 @section Scripts {
 	<script type="module" src="~/js/comp/quote-box.js" asp-append-version="true"></script>
-
-	<script async src="~/lib/alpine/alpine.min.js"></script>
-	<script asp-add-nonce>
-		// TODO: this Alpine CSP thingamajig ain't working out if you ask me
-		document.addEventListener('alpine:init', () => {
-			Alpine.data('tabs', () => ({
-				tab: 1,
-
-				// Individual methods for each tab (CSP-friendly)
-				selectTab1() { this.tab = 1; },
-				selectTab2() { this.tab = 2; },
-				selectTab3() { this.tab = 3; },
-
-				// Show/hide computed properties
-				get showTab1() { return this.tab === 1; },
-				get showTab2() { return this.tab === 2; },
-				get showTab3() { return this.tab === 3; },
-
-				// Tab button attributes (only dynamic stuff)
-				get tab1ButtonAttrs() {
-					return {
-						'class': this.tab === 1 ? 'active' : '',
-						'aria-selected': this.tab === 1 ? 'true' : 'false',
-						'tabindex': this.tab === 1 ? '0' : '-1'
-					};
-				},
-
-				get tab2ButtonAttrs() {
-					return {
-						'class': this.tab === 2 ? 'active' : '',
-						'aria-selected': this.tab === 2 ? 'true' : 'false',
-						'tabindex': this.tab === 2 ? '0' : '-1'
-					};
-				},
-
-				get tab3ButtonAttrs() {
-					return {
-						'class': this.tab === 3 ? 'active' : '',
-						'aria-selected': this.tab === 3 ? 'true' : 'false',
-						'tabindex': this.tab === 3 ? '0' : '-1'
-					};
-				}
-			}))
-		})
-	</script>
+	<script type="module" src="~/js/tabs.js" asp-append-version="true"></script>
 }

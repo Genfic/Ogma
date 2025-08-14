@@ -1,5 +1,5 @@
 {
-  "generated": "2025-08-13T01:04:42.019Z",
+  "generated": "2025-08-14T04:25:09.507Z",
   "files": [
     "account/invite-codes:vpH-B3DbgrTbXvGpZSPVutavP1HxQGddd68eIkiIfHo",
     "account/register:yE--FtsOjcFmP9Bnu2W5dEWijtBYJ5s2BtcpvboIXSo",
@@ -74,9 +74,10 @@
     "passwords:02kiqm7jdX0gtFXg35qPVn9R3mn3dvOAas9aQysLjXI",
     "shelves:ZRDMvVxyiEQtEC90uHYb39BnEeDMmHTT_pvg-9N07bY",
     "site:Du7cMwnuifsoyjjziHpMeZ4W9O62oFVblZPH7QbJRf8",
+    "tabs:LqRHI26do1SGJX3cAzei7MztAHOiNXRvFVwIH_BhgVE",
     "tts:fYSnc-R4Umhgc8ck8mCAZNvGLN6OJZmr2SBE02hoPrk",
     "vue-directives/closeable:vQm5fQ8p3-z3dUtfT5gafRKOkkhZmCd165TTtn98qsw",
     "watch-chapter-read:m5O2TR4Z7h7KJxzTiA3FFn-qd88Rild73gLnO6xqFag",
-    "workers/cache-service-worker:xrEpjcnzrWOS4IRwfu7PcfFNDmtalWXHG9HutgbJeKw"
+    "workers/cache-service-worker:vnGHQ0pWfY_7fF5ya-eROqVCPiMbG1N3dQLwnmW_vFQ"
   ]
 }

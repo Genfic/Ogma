@@ -25,14 +25,14 @@ public sealed class Followers(UserRepository userRepo, ApplicationDbContext cont
 		ProfileBar = profileBar;
 
 		Users = await context.FollowedUsers
-			.Where(u => u.FollowingUser.NormalizedUserName == name.Normalize().ToUpper())
+			.Where(u => u.FollowingUser.NormalizedUserName == name)
 			.Select(u => u.FollowedUser)
 			.Paginate(page, PerPage)
 			.Select(UserMappings.ToUserCard)
 			.ToListAsync();
 
 		var count = await context.Users
-			.Where(u => u.NormalizedUserName == name.Normalize().ToUpper())
+			.Where(u => u.NormalizedUserName == name)
 			.Select(u => u.Followers)
 			.CountAsync();
 
