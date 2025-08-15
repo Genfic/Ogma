@@ -1,5 +1,7 @@
 import { GetApiCommentsMd, PatchApiComments } from "@g/paths-public";
 import { createResource, createSignal } from "solid-js";
+import { LucidePencil } from "../icons/LucidePencil";
+import { LucideX } from "../icons/LucideX";
 
 type Props = {
 	id: number;
@@ -60,11 +62,11 @@ export const CommentBodyEditor = (props: Props) => {
 
 				<div class="buttons">
 					<button type="submit" class="confirm active-border" onClick={submit}>
-						<o-icon icon="lucide:pencil" class="material-icons-outlined" />
+						<LucidePencil />
 						Update
 					</button>
 					<button type="reset" class="cancel active-border" onClick={() => props.onCancel()}>
-						<o-icon icon="lucide:x" class="material-icons-outlined" />
+						<LucideX />
 						Cancel
 					</button>
 				</div>

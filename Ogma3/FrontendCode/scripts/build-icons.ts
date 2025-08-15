@@ -1,13 +1,15 @@
 import { dirname, join } from "node:path";
+import { brotliCompressSync } from "node:zlib";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
+import * as cheerio from "cheerio";
 import ejs from "ejs";
-import { compact, uniq } from "es-toolkit";
+import { compact, uniqBy } from "es-toolkit";
 import { parse } from "json5";
-import { brotliCompressSync } from "zlib";
 import { alphaBy } from "./helpers/function-helpers";
+import { fetchIcon } from "./helpers/icons";
 import { Logger } from "./helpers/logger";
 import { Parallel } from "./helpers/promises";
 import { Stopwatch } from "./helpers/stopwatch";
@@ -49,30 +51,28 @@ for await (const file of new Glob(join(_root, "..", "..", "**", "*.cshtml")).sca
 	extractor(file).transform(content);
 }
 
-const icons: string[] = compact(uniq([...seed.Icons, ...seed.AdditionalIcons, ...foundIcons]));
+const brand = (icons: string[], brand: string) => icons.map((i) => ({ value: i, type: brand }));
+
+const icons = compact([
+	...brand(seed.Icons, "base"),
+	...brand(seed.AdditionalIcons, "additional"),
+	...brand(foundIcons, "found"),
+]);
 
 interface Svg {
 	svg: string;
 	name: string;
 }
 
-const fetchIcon = async (icon: string): Promise<Svg | null> => {
-	const [set, name] = icon.split(":");
-	const res = await fetch(`https://api.iconify.design/${set}/${name}.svg`);
-
-	if (res.ok) {
-		const svg = await res.text();
-		logger.log(ct`{green Fetched icon: ${icon}}`);
-		return { svg: svg.trim(), name: icon };
+const res = await Parallel.forEach(icons, async ({ value: i, type }) => {
+	const res = await fetchIcon(i);
+	if (res) {
+		logger.log(ct`{green Fetched icon: ${i}}`);
+		return { ...res, type };
 	}
-
-	logger.error(
-		ct`{red Failed to fetch icon: ${icon}}` + (files[icon] ? ct` in file {underline ${files[icon]}}` : ""),
-	);
+	logger.error(ct`{red Failed to fetch icon: ${i}}` + (files[i] ? ct` in file {underline ${files[i]}}` : ""));
 	return null;
-};
-
-const res = await Parallel.forEach(icons, fetchIcon);
+});
 
 logger.verbose(res);
 
@@ -89,16 +89,25 @@ const rewriter = new HTMLRewriter().on('svg:not([id="icon-spritesheet"])', {
 	},
 });
 
-const tpl = ejs.render(templates.get("spritesheet"), { svgs });
+const tpl = ejs.render(templates.get("spritesheet"), { svgs: svgs.filter((s) => s.type === "base") });
 const spritesheet = rewriter.transform(tpl);
 
-const index = ejs.render(templates.get("icon-index"), { svgs });
+const paths = svgs.map(
+	(s): Svg => ({
+		name: s.name,
+		svg: cheerio.load(s.svg, { xmlMode: true })("svg").html() as string,
+	}),
+);
+logger.verbose(paths);
+const csharp = ejs.render(templates.get("icons-csharp"), { svgs: uniqBy(paths, (s) => s.name) });
+
+const index = ejs.render(templates.get("icon-index"), { svgs: uniqBy(svgs, (s) => s.name) });
 await Promise.allSettled([
 	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg"), spritesheet),
 	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg.gz"), Bun.gzipSync(spritesheet)),
 	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg.br"), brotliCompressSync(spritesheet)),
 	Bun.write(join(_root, "..", "..", "wwwroot", "svg", "spritesheet.svg.zst"), Bun.zstdCompressSync(spritesheet)),
-	Bun.write(join(_root, "..", "..", "Pages", "Shared", "_IconSheet.cshtml"), spritesheet),
+	Bun.write(join(_root, "..", "..", "Data", "Icons.g.cs"), csharp),
 	Bun.write(join(_root, "..", "..", "wwwroot", "icon-index.html"), index),
 ]);
 

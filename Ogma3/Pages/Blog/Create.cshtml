@@ -1,19 +1,20 @@
 @page
 @using Ogma3.Infrastructure.Extensions
+@using Routes.Pages
 @model CreateModel
 
 @{
 	ViewData["Title"] = "Create Blogpost";
 
 	var from = Request.Query.TryGetValue("from", out var f) ? f : [];
-	var returnTo = from.Count > 0 ? from[0] : Routes.Pages.User_Index.Get(User.GetUsername() ?? "").Url(Url);
+	var returnTo = from.Count > 0 ? from[0] : User_Index.Get(User.GetUsername() ?? "").Url(Url);
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="button-group">
 	<a title="Cancel" class="action-btn large" href="@returnTo">
-		<icon class="icon" icon="lucide:arrow-left" svg="true"></icon>
+		<icon class="icon" icon="lucide:arrow-left"></icon>
 		<span class="name">Cancel</span>
 	</a>
 </div>

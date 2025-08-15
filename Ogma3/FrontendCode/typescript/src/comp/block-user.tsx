@@ -2,6 +2,7 @@ import { DeleteApiUsersBlock as unblockUser, PostApiUsersBlock as blockUser } fr
 import { log } from "@h/logger";
 import { customElement } from "solid-element";
 import { type Component, createSignal } from "solid-js";
+import { IcRoundBlock } from "../icons/IcRoundBlock";
 import css from "./block-user.css";
 import { Styled } from "./common/_styled";
 
@@ -31,7 +32,7 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 
 	return (
 		<button class="block-btn" type="button" onClick={block}>
-			<o-icon icon="ic:round-block" />
+			<IcRoundBlock />
 			{isBlocked() ? "Unblock" : "Block"}
 		</button>
 	);

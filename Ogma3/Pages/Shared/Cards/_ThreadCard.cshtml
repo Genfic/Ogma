@@ -14,7 +14,7 @@
 	   asp-route-threadId="@Model.Id">
 		@if (Model.IsPinned)
 		{
-			<icon icon="lucide:pin" svg="true"></icon>
+			<icon icon="lucide:pin"></icon>
 		}
 		@Model.Title
 	</a>
@@ -34,7 +34,7 @@
 	</div>
 
 	<div class="comment-count">
-		<icon class="icon" icon="lucide:message-square" svg="true"></icon>
+		<icon class="icon" icon="lucide:message-square"></icon>
 		@Model.CommentsCount
 	</div>
 </div>

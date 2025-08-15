@@ -1,5 +1,6 @@
 import { createEventDispatcher } from "@solid-primitives/event-dispatcher";
 import { createUniqueId, type JSX, onMount, type ParentComponent, type ParentProps, Show } from "solid-js";
+import { LucideX } from "../../icons/LucideX";
 
 export type DialogApi = {
 	open: () => void;
@@ -63,13 +64,14 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 	return (
 		<dialog
 			id={id}
+			closedby="any"
 			ref={(e) => (maybeDialogRef = e)}
 			class={["my-dialog", ...(props.classes ?? [])].join(" ")}
 			onmousedown={backdropClose}
 			aria-modal={true}
 		>
 			<button type="button" aria-controls={id} class="close-btn" autofocus onClick={close}>
-				<o-icon icon="lucide:x" />
+				<LucideX />
 			</button>
 
 			<Show when={props.header}>

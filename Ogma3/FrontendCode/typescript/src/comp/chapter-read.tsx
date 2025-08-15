@@ -1,5 +1,7 @@
 import { DeleteApiChaptersread, PostApiChaptersread } from "@g/paths-public";
 import { type ComponentType, customElement } from "solid-element";
+import { LucideEye } from "../icons/LucideEye";
+import { LucideEyeClosed } from "../icons/LucideEyeClosed";
 import css from "./chapter-read.css";
 import { useChaptersRead } from "./common/_chaptersReadData";
 import { Styled } from "./common/_styled";
@@ -26,7 +28,7 @@ const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (prop
 			title={isRead() ? "Mark as unread" : "Mark as read"}
 			onClick={markRead}
 		>
-			<o-icon icon={isRead() ? "lucide:eye" : "lucide:eye-closed"} />
+			{isRead() ? <LucideEye /> : <LucideEyeClosed />}
 		</button>
 	);
 };

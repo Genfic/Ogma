@@ -58,9 +58,9 @@
 
 			<a asp-page="/Settings" class="item">Local settings</a>
 
-			<a asp-route="@(nameof(GetStoriesRssFeed))" class="item"><icon icon="lucide:rss" svg="true" class="rss"></icon>Stories RSS</a>
+			<a asp-route="@(nameof(GetStoriesRssFeed))" class="item"><icon icon="lucide:rss" class="rss"></icon>Stories RSS</a>
 
-			<a asp-route="@(nameof(GetBlogpostsRssFeed))" class="item"><icon icon="lucide:rss" svg="true" class="rss"></icon>Blogpost RSS</a>
+			<a asp-route="@(nameof(GetBlogpostsRssFeed))" class="item"><icon icon="lucide:rss" class="rss"></icon>Blogpost RSS</a>
 
 			@if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
 			{
@@ -94,7 +94,7 @@
 					         role="presentation">
 					</picture>
 					@name
-					<icon icon="lucide:external-link" svg="true"></icon>
+					<icon icon="lucide:external-link"></icon>
 				</a>
 			}
 		</div>

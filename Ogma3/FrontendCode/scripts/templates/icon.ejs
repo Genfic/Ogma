@@ -1,0 +1,10 @@
+import type { JSX } from "solid-js";
+
+export function <%= name %>(props: JSX.IntrinsicElements["svg"]) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" {...props}>
+            <title><%= title %></title>
+            <%- icon %>
+        </svg>
+    );
+}

@@ -1,0 +1,15 @@
+#nullable enable
+
+public static class Icons
+{
+    private readonly static Dictionary<string, string> _icons = new()
+    {
+    <%_ svgs.forEach(({ svg, name }) => { -%>
+        ["<%= name %>"] = """<%- svg %>""",
+    <%_ }) -%>
+    };
+
+    public static string? GetSvg(string name) => _icons.TryGetValue(name, out var svg) ? svg : null;
+}
+
+#nullable disable

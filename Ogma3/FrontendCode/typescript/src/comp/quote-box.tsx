@@ -4,6 +4,8 @@ import { useLocalStorage } from "@h/localStorageHook";
 import type { Empty } from "@t/utils";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource, Show } from "solid-js";
+import { LucideClock } from "../icons/LucideClock";
+import { LucideRefreshCw } from "../icons/LucideRefreshCw";
 import { Styled } from "./common/_styled";
 import css from "./quote-box.css";
 
@@ -42,12 +44,10 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 
 	const [quote, { refetch }] = createResource<QuoteDto>(loadQuote);
 
-	const spinnerIcon = () => (canFetch ? "lucide:refresh-cw" : "lucide:clock");
-
 	return () => (
 		<div id="quote" class="quote active-border">
 			<button type="button" class="refresh" onClick={refetch}>
-				<o-icon icon={spinnerIcon()} class="material-icons-outlined" classList={{ spin: quote.loading }} />
+				{canFetch ? <LucideRefreshCw /> : <LucideClock />}
 			</button>
 			<Show when={quote()} fallback={<span>Loading the quote...</span>}>
 				{(q) => (

@@ -12,10 +12,10 @@
 @if (Model.ClubBar.Role is EClubMemberRoles.Admin or EClubMemberRoles.Founder)
 {
 	<a asp-page="./Create" asp-route-clubId="@Model.ClubBar.Id" class="btn btn-block btn-outline-primary">
-		<icon icon="lucide:plus" svg="true"></icon>
+		<icon icon="lucide:plus"></icon>
 		Create New
 	</a>
-	
+
 	<br />
 }
 

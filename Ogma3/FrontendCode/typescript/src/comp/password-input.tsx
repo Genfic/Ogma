@@ -1,6 +1,8 @@
 import type { Empty } from "@t/utils";
 import { type ComponentType, customElement } from "solid-element";
 import { createSignal } from "solid-js";
+import { LucideEye } from "../icons/LucideEye";
+import { LucideEyeClosed } from "../icons/LucideEyeClosed";
 import { Styled } from "./common/_styled";
 import css from "./password-input.css";
 import sharedCss from "./shared.css";
@@ -16,11 +18,9 @@ const PasswordInput: ComponentType<Empty> = (_, { element }) => {
 		input.type = showPassword() ? "text" : "password";
 	};
 
-	const icon = (): string => (showPassword() ? "lucide:eye" : "lucide:eye-closed");
-
 	return (
 		<button type="button" class="action-btn show-password" onClick={toggle}>
-			<o-icon icon={icon()} />
+			{showPassword() ? <LucideEye /> : <LucideEyeClosed />}
 		</button>
 	);
 };

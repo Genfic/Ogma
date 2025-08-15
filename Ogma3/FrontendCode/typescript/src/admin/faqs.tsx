@@ -3,6 +3,8 @@ import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { createResource, For } from "solid-js";
 import { render } from "solid-js/web";
+import { LucidePencil } from "../icons/LucidePencil";
+import { LucideTrash2 } from "../icons/LucideTrash2";
 
 interface Faq {
 	question: string;
@@ -106,10 +108,10 @@ const FAQ = () => {
 						<summary>{faq.question}</summary>
 						<div class="actions">
 							<button type="button" class="small inline action-btn" onClick={[deleteFaq, faq.id]}>
-								<o-icon icon="lucide:trash-2" />
+								<LucideTrash2 />
 							</button>
 							<button type="button" class="small inline action-btn" onClick={[openForEdit, faq]}>
-								<o-icon icon="lucide:pencil" />
+								<LucidePencil />
 							</button>
 						</div>
 						<div innerHTML={faq.answerRendered} />

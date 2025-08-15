@@ -5,6 +5,8 @@ import { log } from "@h/logger";
 import { long } from "@h/tinytime-templates";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { render } from "solid-js/web";
+import { LucideTrash2 } from "../icons/LucideTrash2";
+import { LucideClipboardCopy } from "../icons/LucideClipboardCopy";
 
 const parent = $id("invite-codes-app");
 
@@ -99,10 +101,10 @@ const InviteCodes = () => {
 
 			<div class="actions">
 				<button type="button" class="action" onClick={[deleteCode, c]}>
-					<o-icon icon="lucide:trash-2" />
+					<LucideTrash2 />
 				</button>
 				<button type="button" class="action" onClick={[copyCode, c]}>
-					<o-icon icon="lucide:clipboard-copy" />
+					<LucideClipboardCopy />
 				</button>
 			</div>
 		</li>

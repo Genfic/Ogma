@@ -60,7 +60,7 @@
 						{
 							<input type="radio" name="icons" v-model="form.icon" id="icon-@ico.Id" value="@ico.Id">
 							<label for="icon-@ico.Id">
-								<icon icon="@ico.Name" dynamic svg="true"></icon>
+								<icon icon="@ico.Name" dynamic></icon>
 							</label>
 						}
 					</div>
@@ -81,7 +81,7 @@
                     if (showForm) cancelEdit();
                     else showForm = true;
                 }">
-			<icon icon="lucide:plus" svg="true"></icon>
+			<icon icon="lucide:plus"></icon>
 			{{ showForm ? "Cancel" : "Create New" }}
 		</button>
 	}

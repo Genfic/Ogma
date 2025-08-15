@@ -1,16 +1,18 @@
 @page "{sid:long}/{id:long}/{slug?}"
-@model Ogma3.Pages.Chapters.Locked
+@using Routes.Areas.Identity.Pages
+@using Routes.Pages
+@model Locked
 @inject IUrlHelper Url
 
 @{
-	var returnRoute = Routes.Pages.Chapter.Get(Model.StoryId, Model.ChapterId, Model.Slug).Url(Url);
-	var registerRoute = Routes.Areas.Identity.Pages.Account_Register.Get(returnRoute);
-	var loginRoute = Routes.Areas.Identity.Pages.Account_Login.Get(returnRoute);
-	var backlink = Routes.Pages.Story.Get(Model.StoryId, Model.StorySlug);
+	var returnRoute = Chapter.Get(Model.StoryId, Model.ChapterId, Model.Slug).Url(Url);
+	var registerRoute = Account_Register.Get(returnRoute);
+	var loginRoute = Account_Login.Get(returnRoute);
+	var backlink = Story.Get(Model.StoryId, Model.StorySlug);
 }
 
 <div class="locked">
-	<icon icon="lucide:lock-keyhole" svg="true"></icon>
+	<icon icon="lucide:lock-keyhole"></icon>
 
 	<h1>This chapter is available only for registered users</h1>
 

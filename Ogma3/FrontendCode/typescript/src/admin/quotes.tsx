@@ -7,6 +7,9 @@ import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import { Dialog, type DialogApi } from "../comp/common/_dialog";
+import { LucidePencil } from "../icons/LucidePencil";
+import { LucidePlus } from "../icons/LucidePlus";
+import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("quotes-app");
 
@@ -134,7 +137,7 @@ const Quotes = () => {
 			<br />
 
 			<button type="button" class="btn btn-block btn-outline-primary" onclick={() => openEditor()}>
-				<o-icon icon="lucide:plus" />
+				<LucidePlus />
 				Create New
 			</button>
 
@@ -152,10 +155,10 @@ const Quotes = () => {
 									</div>
 									<div class="actions">
 										<button type="button" class="action" onclick={[deleteQuote, q]}>
-											<o-icon icon="lucide:trash-2" />
+											<LucideTrash2 />
 										</button>
 										<button type="button" class="action" onclick={[openEditor, q]}>
-											<o-icon icon="lucide:pencil" />
+											<LucidePencil />
 										</button>
 									</div>
 								</li>

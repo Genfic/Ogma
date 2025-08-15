@@ -6,6 +6,9 @@ import type { ReportModalElement } from "../comp/report-modal";
 import { DeletedCommentBody } from "./comment-body-deleted";
 import { CommentBodyEditor } from "./comment-body-editor";
 import { HiddenCommentBody } from "./comment-body-hidden";
+import { LucideFlag } from "../icons/LucideFlag";
+import { LucideTrash2 } from "../icons/LucideTrash2";
+import { LucidePencil } from "../icons/LucidePencil";
 
 type Props = CommentDto & CommentProps;
 
@@ -142,15 +145,15 @@ export const Comment = (props: Props) => {
 										title="Report"
 										onclick={report}
 									>
-										<o-icon icon="lucide:flag" class="material-icons-outlined icon" />
+										<LucideFlag />
 									</button>
 								</Show>
 								<Show when={userOwnsComment()}>
 									<button type={"button"} class="action-btn small" title="Delete" onclick={del}>
-										<o-icon icon="lucide:trash-2" class="material-icons-outlined icon" />
+										<LucideTrash2 />
 									</button>
 									<button type={"button"} class="action-btn small" title="Edit" onclick={edit}>
-										<o-icon icon="lucide:pencil" class="material-icons-outlined icon" />
+										<LucidePencil />
 									</button>
 								</Show>
 							</div>

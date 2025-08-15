@@ -6,6 +6,8 @@ import { makeEmpty } from "@h/type-helpers";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
+import { LucidePencil } from "../icons/LucidePencil";
+import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
@@ -139,10 +141,10 @@ const Tags = () => {
 									</div>
 									<div class="actions">
 										<button type="button" class="action" onclick={[deleteTag, t]}>
-											<o-icon icon="lucide:trash-2" />
+											<LucideTrash2 />
 										</button>
 										<button type="button" class="action" onclick={[editTag, t]}>
-											<o-icon icon="lucide:pencil" />
+											<LucidePencil />
 										</button>
 									</div>
 								</li>

@@ -4,6 +4,7 @@
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
+@using Routes.Pages
 @model ChapterModel
 @inject IAntiforgery Antiforgery
 @{
@@ -18,7 +19,7 @@
 
 @section OgMeta {
 	<meta property="og:type" content="book.chapter">
-	<meta property="og:url" content="@Routes.Pages.Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
+	<meta property="og:url" content="@Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
 	<meta property="og:description" content="@desc">
 }
 
@@ -52,8 +53,8 @@
 					   class="action-btn"
 					   asp-page="/Blog/Create"
 					   asp-route-chapter="@Model.Chapter.Id"
-					   asp-route-from="@Routes.Pages.Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
-						<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
+					   asp-route-from="@Chapter.Get(Model.Chapter.StoryId, Model.Chapter.Id, Model.Chapter.Slug).Url(Url)">
+						<icon class="icon" icon="lucide:notebook-pen"></icon>
 						<span class="name">Write about it</span>
 					</a>
 				}
@@ -61,7 +62,7 @@
 				@if (User.IsUserSameAsLoggedIn(Model.Chapter.StoryAuthorId))
 				{
 					<a title="Edit" class="action-btn" asp-page="./Chapters/Edit" asp-route-id="@Model.Chapter.Id">
-						<icon class="icon" icon="lucide:pencil" svg="true"></icon>
+						<icon class="icon" icon="lucide:pencil"></icon>
 						<span class="name">Edit</span>
 					</a>
 				}
@@ -70,11 +71,11 @@
 					<a title="Manage" class="action-btn red" target="_blank"
 					   asp-area="Admin" asp-page="/ContentBlock"
 					   asp-route-type="chapter" asp-route-id="@Model.Chapter.Id">
-						<icon class="icon" icon="lucide:shield" svg="true"></icon>
+						<icon class="icon" icon="lucide:shield"></icon>
 					</a>
 				}
 				<button title="Report" class="action-btn red" id="open-modal-button">
-					<icon class="icon" icon="lucide:flag" svg="true"></icon>
+					<icon class="icon" icon="lucide:flag"></icon>
 				</button>
 			</div>
 		}

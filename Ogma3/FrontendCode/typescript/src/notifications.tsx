@@ -3,6 +3,7 @@ import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
 import { createResource, createSignal, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
+import { LucideTrash2 } from "./icons/LucideTrash2";
 
 const parent = $id("notifications");
 
@@ -43,7 +44,7 @@ const Notifications = () => {
 							<span class="time">{long.render(new Date(notif.dateTime))}</span>
 							<div class="actions">
 								<button type="button" onClick={[deleteNotif, notif.id]}>
-									<o-icon icon="lucide:trash-2" />
+									<LucideTrash2 />
 								</button>
 							</div>
 						</div>

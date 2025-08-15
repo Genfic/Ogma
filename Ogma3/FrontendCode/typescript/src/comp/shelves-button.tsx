@@ -9,6 +9,7 @@ import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource, For, type Setter, Show } from "solid-js";
+import { LucideEllipsisVertical } from "../icons/LucideEllipsisVertical";
 import { Styled } from "./common/_styled";
 import sharedCss from "./shared.css";
 import css from "./shelves-button.css";
@@ -35,7 +36,7 @@ const updateShelfData = (
 
 const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
 	let more = $signal(false);
-	let page = $signal(1);
+	const page = $signal(1);
 
 	const [quickShelves, { mutate: mutateQuick }] = createResource(
 		async () => {
@@ -112,7 +113,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 			</For>
 
 			<button type="button" title="All bookshelves" class="shelf action-btn" onClick={() => (more = !more)}>
-				<o-icon class="material-icons-outlined" icon="lucide:ellipsis-vertical" />
+				<LucideEllipsisVertical />
 			</button>
 
 			<Show when={more}>

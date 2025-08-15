@@ -6,6 +6,9 @@ import { omit } from "es-toolkit";
 import { createResource, For } from "solid-js";
 import { render } from "solid-js/web";
 import type { Optional, Required } from "utility-types";
+import { LucideEyeOff } from "../icons/LucideEyeOff";
+import { LucidePencil } from "../icons/LucidePencil";
+import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("ratings-app");
 
@@ -141,16 +144,16 @@ const Ratings = () => {
 							<div class="main">
 								<h3 class="name">
 									{rating.name}
-									{rating.blacklistedByDefault && <o-icon class="icon" icon="lucide:eye-off" />}
+									{rating.blacklistedByDefault && <LucideEyeOff />}
 								</h3>
 								<div class="desc">{rating.description}</div>
 							</div>
 							<div class="actions">
 								<button type="button" class="action" onclick={[deleteRating, rating.id]}>
-									<o-icon icon="lucide:trash-2" />
+									<LucideTrash2 />
 								</button>
 								<button type="button" class="action" onclick={[openForEdit, rating]}>
-									<o-icon icon="lucide:pencil" />
+									<LucidePencil />
 								</button>
 							</div>
 						</li>

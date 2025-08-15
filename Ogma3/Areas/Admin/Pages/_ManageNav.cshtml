@@ -1,7 +1,7 @@
 @using Ogma3.Areas.Admin.Pages.Shared
 @using Ogma3.Infrastructure.Constants
 <ul class="nav nav-pills flex-column">
-	
+
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Index, "Dashboard"))"/>
 
 	@if (User.Identity is {IsAuthenticated: true } && User.IsInRole(RoleNames.Admin))
@@ -13,14 +13,14 @@
 	<li class="nav-item">
 		Categorization
 	</li>
-	
+
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Tags))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Ratings))"/>
-	
+
 	<li class="nav-item">
 		Content
 	</li>
-	
+
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Quotes))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial("Documents/Index", "Documents"))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.ContentBlock))"/>
@@ -28,7 +28,7 @@
 	<li class="nav-item">
 		Users
 	</li>
-	
+
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.InviteCodes))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Roles, "User roles"))"/>
     <partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Users, "User management"))" />
@@ -45,15 +45,15 @@
 	<li class="nav-item">
 		OpenAPI
 	</li>
-	
+
 	@* ReSharper disable once Html.PathError *@
 	<a class="nav-link" href="/scalar/public" target="_blank">
-		Scalar public <icon class="icon" icon="lucide:external-link" svg="true"></icon>
+		Scalar public <icon class="icon" icon="lucide:external-link"></icon>
 	</a>
 
 	@* ReSharper disable once Html.PathError *@
 	<a class="nav-link" href="/scalar/internal" target="_blank">
-		Scalar internal <icon class="icon" icon="lucide:external-link" svg="true"></icon>
+		Scalar internal <icon class="icon" icon="lucide:external-link"></icon>
 	</a>
-	
+
 </ul>

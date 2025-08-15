@@ -2,6 +2,7 @@ import { GetApiNotificationsCount as countNotifications } from "@g/paths-public"
 import type { Empty } from "@t/utils";
 import { type ComponentType, customElement } from "solid-element";
 import { createResource, Show } from "solid-js";
+import { LucideBell } from "../icons/LucideBell";
 import { Styled } from "./common/_styled";
 import css from "./notifications-button.css";
 
@@ -20,7 +21,7 @@ const NotificationsButton: ComponentType<Empty> = (_) => {
 
 	return (
 		<a class="nav-link light notifications-btn" href="/notifications" title={linkTitle()}>
-			<o-icon class="material-icons-outlined" icon="lucide:bell" />
+			<LucideBell />
 			<Show when={notifications() > 0}>
 				<span>{count()}</span>
 			</Show>

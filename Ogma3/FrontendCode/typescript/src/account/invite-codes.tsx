@@ -4,6 +4,7 @@ import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
 import { createResource, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
+import { LucideClipboardCopy } from "../Icons/LucideClipboardCopy";
 
 const parent = $id("invite-codes-app");
 const date = (dt: string | Date) => long.render(new Date(dt));
@@ -82,7 +83,7 @@ const InviteCodes = () => {
 											onClick={[copyCode, code]}
 											disabled={!!code.usedByUserName}
 										>
-											<o-icon icon="lucide:clipboard-copy" />
+											<LucideClipboardCopy />
 										</button>
 									</div>
 								</li>

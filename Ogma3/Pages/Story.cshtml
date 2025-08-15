@@ -43,7 +43,7 @@
 
 			<noscript>
 				<div class="votes action-btn large" title="Score">
-					<icon icon="ic:round-star-border" svg="true" class="material-icons-outlined"></icon>
+					<icon icon="ic:round-star-border" class="material-icons-outlined"></icon>
 					<span class="count">@Model.Story.VotesCount</span>
 				</div>
 			</noscript>
@@ -55,7 +55,7 @@
 				   asp-page="./Blog/Create"
 				   asp-route-story="@Model.Story.Id"
 				   asp-route-from="@Story.Get(Model.Story.Id, Model.Story.Slug).Url(Url)">
-						<icon class="icon" icon="lucide:notebook-pen" svg="true"></icon>
+						<icon class="icon" icon="lucide:notebook-pen"></icon>
 						<span class="name">Write about it</span>
 				</a>
 			}
@@ -63,19 +63,19 @@
 			@if (Model.Story.AuthorId == uid)
 			{
 				<a title="Edit" class="action-btn large" asp-page="./Stories/Edit" asp-route-id="@Model.Story.Id">
-					<icon class="icon" icon="lucide:pencil" svg="true"></icon>
+					<icon class="icon" icon="lucide:pencil"></icon>
 					<span class="name">Edit</span>
 				</a>
 
 				<a title="New chapter" class="action-btn large" asp-page="./Chapters/Create" asp-route-id="@Model.Story.Id">
-					<icon class="icon" icon="lucide:file-plus" svg="true"></icon>
+					<icon class="icon" icon="lucide:file-plus"></icon>
 					<span class="name">New chapter</span>
 				</a>
 			}
 			@if (!Model.Story.IsPublished)
 			{
 				<span class="action-btn large red">
-					<icon class="icon" icon="lucide:eye-off" svg="true"></icon>
+					<icon class="icon" icon="lucide:eye-off"></icon>
 				</span>
 			}
 			@if (User.IsInRole(RoleNames.Admin) || User.IsInRole(RoleNames.Moderator))
@@ -83,13 +83,13 @@
 				<a title="Manage" class="action-btn large red" target="_blank"
 				   asp-area="Admin" asp-page="/ContentBlock"
 				   asp-route-type="story" asp-route-id="@Model.Story.Id">
-					<icon class="icon" icon="lucide:shield" svg="true"></icon>
+					<icon class="icon" icon="lucide:shield"></icon>
 				</a>
 			}
 			@if (isLoggedIn)
 			{
 				<button title="Report" class="action-btn large red" id="open-modal-button">
-					<icon class="icon" icon="lucide:flag" svg="true"></icon>
+					<icon class="icon" icon="lucide:flag"></icon>
 				</button>
 			}
 
@@ -112,7 +112,7 @@
 			@if (Model.Story.IsLocked)
 			{
 				<div class="tag locked" title="This story is available only to registered users">
-					<icon icon="lucide:shield" svg="true"></icon>
+					<icon icon="lucide:shield"></icon>
 				</div>
 			}
 			<story-status status="@Model.Story.Status"></story-status>
@@ -193,7 +193,7 @@
 		<o-featured-in-clubs story-id="@Model.Story.Id"></o-featured-in-clubs>
 
 		<a asp-route="@(nameof(GetChaptersRssFeed))" asp-route-storyid="@Model.Story.Id" title="RSS feed of the chapters">
-			<icon icon="lucide:rss" svg="true"></icon>
+			<icon icon="lucide:rss"></icon>
 		</a>
 	</div>
 
@@ -221,7 +221,7 @@
 
 						@if (c.IsBlocked)
 						{
-							<icon icon="lucide:triangle-alert" svg="true" class="warning" title="This chapter has been blocked by staff"></icon>
+							<icon icon="lucide:triangle-alert" class="warning" title="This chapter has been blocked by staff"></icon>
 						}
 
 						<a class="title" asp-page="/Chapter" asp-route-sid="@Model.Story.Id" asp-route-id="@c.Id" asp-route-slug="@c.Slug">

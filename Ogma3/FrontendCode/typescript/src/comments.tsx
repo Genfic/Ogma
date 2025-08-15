@@ -5,6 +5,10 @@ import { createResource, createSignal, Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";
 import css from "./comments.css";
 import { Styled } from "./comp/common/_styled";
+import { LucideCircleHelp } from "./icons/LucideCircleHelp";
+import { LucideMessageSquarePlus } from "./icons/LucideMessageSquarePlus";
+import { MdiLockOpenVariantOutline } from "./icons/MdiLockOpenVariantOutline";
+import { MdiLockOutline } from "./icons/MdiLockOutline";
 
 interface Props extends Record<string, unknown> {
 	csrf: string;
@@ -130,11 +134,11 @@ const Comments = (props: Props) => {
 
 						<div class="buttons">
 							<button type="submit" class="comment-btn active-border" onClick={submit}>
-								<o-icon icon="lucide:message-square-plus" />
+								<LucideMessageSquarePlus />
 								Comment
 							</button>
 							<a class="help-btn active-border" rel="noreferrer" target="_blank" href={props.mdRefRoute}>
-								<o-icon icon="lucide:circle-help" />
+								<LucideCircleHelp />
 							</a>
 						</div>
 					</form>
@@ -145,7 +149,7 @@ const Comments = (props: Props) => {
 				<div class="buttons">
 					<Show when={isStaff()}>
 						<button type="button" class="action-btn" classList={{ active: isLocked() }} onClick={lock}>
-							<o-icon icon={isLocked() ? "mdi:lock-outline" : "mdi:lock-open-variant-outline"} />
+							{isLocked() ? <MdiLockOutline /> : <MdiLockOpenVariantOutline />}
 							&nbsp;
 							{isLocked() ? "Unlock" : "Lock"}
 						</button>

@@ -33,27 +33,27 @@
 		<div class="o-dropdown left" o-dropdown>
 
 			<button class="action-btn max" o-dd-btn>
-				<icon icon="lucide:ellipsis-vertical" svg="true"></icon>
+				<icon icon="lucide:ellipsis-vertical"></icon>
 			</button>
 
 			<nav class="menu" o-dd-body>
 
 				<a class="item active" title="Edit club" asp-page="/Clubs/Edit" asp-route-id="@Model.Id">
-					<icon icon="ic:outline-admin-panel-settings" svg="true"></icon>
+					<icon icon="ic:outline-admin-panel-settings"></icon>
 					Manage
 				</a>
 
 				@if (User.Identity?.IsAuthenticated ?? false)
 				{
 					<button title="Report" class="item active red" id="open-modal-button-clubbar">
-						<icon icon="lucide:flag" svg="true"></icon>
+						<icon icon="lucide:flag"></icon>
 						Report
 					</button>
 				}
 
 				<a class="item active" title="Moderation log" asp-page="/Club/Modlog" asp-route-id="@Model.Id"
 					asp-route-slug="@Model.Slug">
-					<icon icon="lucide:scroll-text" svg="true"></icon>
+					<icon icon="lucide:scroll-text"></icon>
 					Modlog
 				</a>
 			</nav>

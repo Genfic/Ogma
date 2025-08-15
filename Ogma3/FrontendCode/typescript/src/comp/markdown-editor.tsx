@@ -1,6 +1,11 @@
 import { type ComponentType, customElement } from "solid-element";
 import { createEffect, For, type JSX, onCleanup, onMount } from "solid-js";
 import { createHistory } from "solid-signals";
+import { LucideBold } from "../icons/LucideBold";
+import { LucideEyeClosed } from "../icons/LucideEyeClosed";
+import { LucideItalic } from "../icons/LucideItalic";
+import { LucideLink } from "../icons/LucideLink";
+import { LucideStrikethrough } from "../icons/LucideStrikethrough";
 import { Comment } from "./common/_comment";
 import { Styled } from "./common/_styled";
 import css from "./markdown-editor.css";
@@ -8,17 +13,17 @@ import sharedCss from "./shared.css";
 
 type Action = {
 	name: string;
-	icon: string;
+	icon: JSX.Element;
 	prefix: string;
 	suffix: string;
 };
 
 const actions: Action[] = [
-	{ name: "bold", icon: "lucide:bold", prefix: "**", suffix: "**" },
-	{ name: "italic", icon: "lucide:italic", prefix: "*", suffix: "*" },
-	{ name: "strikethrough", icon: "lucide:strikethrough", prefix: "~~", suffix: "~~" },
-	{ name: "link", icon: "lucide:link", prefix: "[", suffix: "](url)" },
-	{ name: "spoiler", icon: "lucide:eye-closed", prefix: "||", suffix: "||" },
+	{ name: "bold", icon: <LucideBold />, prefix: "**", suffix: "**" },
+	{ name: "italic", icon: <LucideItalic />, prefix: "*", suffix: "*" },
+	{ name: "strikethrough", icon: <LucideStrikethrough />, prefix: "~~", suffix: "~~" },
+	{ name: "link", icon: <LucideLink />, prefix: "[", suffix: "](url)" },
+	{ name: "spoiler", icon: <LucideEyeClosed />, prefix: "||", suffix: "||" },
 ] as const;
 
 const name = "markdown-editor" as const;
@@ -96,7 +101,7 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 			<For each={actions}>
 				{(action) => (
 					<button type="button" class="btn action-btn" title={action.name} onClick={[click, action]}>
-						<o-icon icon={action.icon} class="icon" />
+						{action.icon}
 					</button>
 				)}
 			</For>

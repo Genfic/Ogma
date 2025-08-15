@@ -1,5 +1,6 @@
 import { rm } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
+import { brotliCompressSync } from "node:zlib";
 import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
@@ -7,7 +8,6 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import solidLabels from "solid-labels/babel";
-import { brotliCompressSync } from "zlib";
 import { log } from "../typescript/src-helpers/logger";
 import { alphaBy } from "./helpers/function-helpers";
 import { getHash } from "./helpers/hash";
