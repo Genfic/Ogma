@@ -81,8 +81,14 @@ public static class Numeric
 	/// <returns>The ordinal suffix as a string corresponding to the number.</returns>
 	public static string GetOrdinalSuffix<T>(this T number) where T : IBinaryInteger<T>
 	{
-		var mod = int.CreateTruncating(number % T.CreateChecked(10));
-		return mod switch
+		var mod100 = int.CreateTruncating(number % T.CreateChecked(100));
+		if (mod100 is >= 11 and <= 13)
+		{
+			return "th";
+		}
+
+		var mod10 = int.CreateTruncating(number % T.CreateChecked(10));
+		return mod10 switch
 		{
 			1 => "st",
 			2 => "nd",

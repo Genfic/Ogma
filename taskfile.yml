@@ -41,10 +41,10 @@ tasks:
     # Serve via Cloudflare Tunnel (see Documentation/Testing/public-access.md)
     tunnel: cloudflared tunnel run genfic-beta
 
+    build-prod: dotnet run -c release --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --emulate-prod
+
     tunnel-prod:
-        cmds:
-            - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
-            - task: tunnel
+        deps: [build-prod, tunnel]
 
     # Get Lighthouse CLI score
     score:

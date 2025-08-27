@@ -1,6 +1,10 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var emulateProd = args.Contains("--emulate-prod");
+
+builder.AddDockerComposeEnvironment("ogma3-docker");
 
 var garnet = builder.AddGarnet("garnet")
 	.WithDataVolume()
@@ -14,10 +18,11 @@ var database = builder
 	.AddDatabase("ogma3-db");
 
 builder
-	.AddProject<Projects.Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
+	.AddProject<Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
 	.WithExternalHttpEndpoints()
 	.WithReference(database)
+	.WaitFor(database)
 	.WithReference(garnet)
-	.WaitFor(database);
+	.WaitFor(garnet);
 
 builder.Build().Run();

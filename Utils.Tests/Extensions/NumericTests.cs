@@ -65,42 +65,58 @@ public sealed class NumericExtensionsTests
 	}
 
 	// Test GetOrdinalSuffix()
-	[Test]
-	[Arguments(1)]
-	[Arguments(11)]
-	[Arguments(21)]
-	public async Task TestGetOrdinalSuffix_First<T>(T number) where T : IBinaryInteger<T>
-	{
-		await Assert.That(number.GetOrdinalSuffix()).IsEqualTo("st");
-	}
+    [Test]
+    [MethodDataSource(nameof(AllTestData))]
+    public async Task GetOrdinalSuffix_Returns_Correct_Suffix_For_All_Integer_Types<T>(T number, string expectedSuffix)
+        where T : IBinaryInteger<T>
+    {
+        var actualSuffix = number.GetOrdinalSuffix();
 
-	[Test]
-	[Arguments(2)]
-	[Arguments(12)]
-	[Arguments(22)]
-	public async Task TestGetOrdinalSuffix_Second<T>(T number) where T : IBinaryInteger<T>
-	{
-		await Assert.That(number.GetOrdinalSuffix()).IsEqualTo("nd");
-	}
+        await Assert.That(actualSuffix).IsEqualTo(expectedSuffix);
+    }
 
-	[Test]
-	[Arguments(3)]
-	[Arguments(13)]
-	[Arguments(23)]
-	public async Task TestGetOrdinalSuffix_Third<T>(T number) where T : IBinaryInteger<T>
-	{
-		await Assert.That(number.GetOrdinalSuffix()).IsEqualTo("rd");
-	}
+    public static IEnumerable<object[]> AllTestData()
+    {
+        foreach (var data in GetIntegerCases<int>()) yield return data;
+        foreach (var data in GetIntegerCases<long>()) yield return data;
+        foreach (var data in GetIntegerCases<short>()) yield return data;
+        foreach (var data in GetIntegerCases<byte>()) yield return data;
+        foreach (var data in GetIntegerCases<uint>()) yield return data;
+        foreach (var data in GetIntegerCases<ulong>()) yield return data;
+        foreach (var data in GetIntegerCases<ushort>()) yield return data;
+        foreach (var data in GetIntegerCases<sbyte>()) yield return data;
+        foreach (var data in GetBigIntegerCases()) yield return data;
+    }
 
-	[Test]
-	[Arguments(4)]
-	[Arguments(10)]
-	[Arguments(14)]
-	[Arguments(20)]
-	[Arguments(24)]
-	[Arguments(30)]
-	public async Task TestGetOrdinalSuffix_Other<T>(T number) where T : IBinaryInteger<T>
-	{
-		await Assert.That(number.GetOrdinalSuffix()).IsEqualTo("th");
-	}
+    private static IEnumerable<object[]> GetIntegerCases<T>() where T : IBinaryInteger<T>
+    {
+        // Standard cases
+        yield return [T.CreateChecked(0), "th"];
+        yield return [T.CreateChecked(1), "st"];
+        yield return [T.CreateChecked(2), "nd"];
+        yield return [T.CreateChecked(3), "rd"];
+        yield return [T.CreateChecked(4), "th"];
+        yield return [T.CreateChecked(10), "th"];
+        yield return [T.CreateChecked(21), "st"];
+        yield return [T.CreateChecked(22), "nd"];
+        yield return [T.CreateChecked(23), "rd"];
+        yield return [T.CreateChecked(101), "st"];
+
+        // Edge cases
+        yield return [T.CreateChecked(11), "th"];
+        yield return [T.CreateChecked(12), "th"];
+        yield return [T.CreateChecked(13), "th"];
+        yield return [T.CreateChecked(111), "th"];
+    }
+
+    // BigInteger needs a separate method because it's created by parsing a string,
+    // not directly from a number like the other types.
+    private static IEnumerable<object[]> GetBigIntegerCases()
+    {
+        yield return [BigInteger.Parse("0"), "th"];
+        yield return [BigInteger.Parse("1"), "st"];
+        yield return [BigInteger.Parse("11"), "th"]; // Should be "th"
+        yield return [BigInteger.Parse("22"), "nd"];
+        yield return [BigInteger.Parse("123456789012345678901234567893"), "rd"];
+    }
 }

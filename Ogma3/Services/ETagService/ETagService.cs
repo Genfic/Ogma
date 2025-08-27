@@ -11,7 +11,7 @@ public sealed class ETagService(IConnectionMultiplexer garnet)
 
 	public void Create<T>(ETagFor etagFor, T id, long? userId)
 	{
-		Db.StringSet(GetKey(etagFor, id, userId), Guid.CreateVersion7().ToString());
+		Db.StringSet(GetKey(etagFor, id, userId), Guid.CreateVersion7().ToString(), TimeSpan.FromHours(1));
 	}
 
 	public Guid Get<T>(ETagFor etagFor, T id, long? userId)
