@@ -1,27 +1,20 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
+using Ogma3.Services.FileLogService;
 
 namespace Ogma3.Api.V1;
 
 [Handler]
 [MapGet("api/test")]
-public static partial class TestController
+public sealed partial class TestController(IFileLogService fls)
 {
-	[Validate]
-	public sealed partial record Query(string[] Tags) : IValidationTarget<Query>;
+	public record Query(string Msg);
 
-	private static async ValueTask<Ok<List<Bpost>>> HandleAsync(Query q, ApplicationDbContext db, CancellationToken ct)
+	private async ValueTask<Ok<string>> HandleAsync(Query q, CancellationToken ct)
 	{
-		var b = await db.Blogposts
-			.Where(b => b.Hashtags.Intersect(q.Tags).Any())
-			.Select(b => new Bpost(b.Title, b.Hashtags))
-			.ToListAsync(ct);
-		return TypedResults.Ok(b);
+		await fls.Write(q.Msg, ct);
+		var cont = fls.ReadAll();
+		return TypedResults.Ok(cont);
 	}
-
-	public record Bpost(string Title, string[] Hashtags);
 }

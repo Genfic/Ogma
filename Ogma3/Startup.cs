@@ -34,6 +34,7 @@ using Ogma3.ServiceDefaults;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.ETagService;
+using Ogma3.Services.FileLogService;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
@@ -133,7 +134,12 @@ public static class Startup
 			.AddScoped<IUserService, UserService>()
 			.AddSingleton<ICodeGenerator, CodeGenerator>()
 			.AddScoped<UserActivityService>()
-			.AddScoped<ETagService>();
+			.AddScoped<ETagService>()
+			.AddSingleton<IFileLogService, FileLogService>()
+			.Configure<FileLogOptions>(c => {
+				c.MaxSizeInBytes = 50 * 1024 * 1024;
+				c.Directory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
+			});
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
@@ -364,7 +370,6 @@ public static class Startup
 			cfg.AddContentSecurityPolicy(builder => {
 				builder.AddScriptSrc()
 					.Self()
-					.UnsafeInline()
 					.WithNonce();
 			});
 		});
