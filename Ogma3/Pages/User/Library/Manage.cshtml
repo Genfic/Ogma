@@ -1,92 +1,18 @@
 @page "/user/{username}/library/manage"
+@using Microsoft.AspNetCore.Antiforgery
 @model ManageModel
+@inject IAntiforgery Csrf
 
 @{
 	ViewData["Title"] = "Manage your library";
 	ViewData["Tab"] = "Library";
+	var csrf = Csrf.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
-@* TODO: This stuff needs to be done *@
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" csrf="@csrf" />
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
+<o-shelves-management icons="@Model.IconsJson" user-name="@Model.ProfileBar.UserName"></o-shelves-management>
 
-		<form class="form" v-if="showForm" id="category" method="post" v-on:submit.stop.prevent="createShelf">
-
-			<ul class="validation-summary" v-if="err">
-				<li class="text-danger" v-for="e in err">{{ e }}</li>
-			</ul>
-
-			<div class="form-row">
-				<input-counter label="Name"
-				               v-model="form.name"
-				               :min="@CTConfig.Shelf.MinNameLength"
-				               :max="@CTConfig.Shelf.MaxNameLength"
-				               validate-msg="The {0} should be between {2} and {1} characters">
-				</input-counter>
-
-				<input-counter label="Description"
-				               v-model="form.desc"
-				               :max="@CTConfig.Shelf.MaxDescriptionLength"
-				               validate-msg="The {0} should be less than {1} characters">
-				</input-counter>
-			</div>
-
-			<div class="form-row">
-				<div class="o-form-group keep-size">
-					<label for="Color">Color</label>
-					<input id="Color" type="color" class="form-control" v-model="form.color">
-					<span class="text-danger"></span>
-				</div>
-
-				<input-toggle label="Quick Access"
-				              v-model="form.quick">
-				</input-toggle>
-
-				<input-toggle label="Public"
-				              v-model="form.pub">
-				</input-toggle>
-
-				<input-toggle label="Track updates"
-				              v-model="form.track">
-				</input-toggle>
-			</div>
-
-			<div class="form-row">
-				<div class="o-form-group">
-					<label>Icon</label>
-
-					<div class="select-group">
-						@foreach (var ico in Model.Icons)
-						{
-							<input type="radio" name="icons" v-model="form.icon" id="icon-@ico.Id" value="@ico.Id">
-							<label for="icon-@ico.Id">
-								<icon icon="@ico.Name" dynamic></icon>
-							</label>
-						}
-					</div>
-				</div>
-			</div>
-
-
-			<input type="hidden" :value="form.id">
-
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary">{{ form.id ? 'Edit' : 'Add' }}</button>
-			</div>
-
-		</form>
-
-		<button class="btn btn-block btn-outline-primary"
-		        v-on:click="() => {
-                    if (showForm) cancelEdit();
-                    else showForm = true;
-                }">
-			<icon icon="lucide:plus"></icon>
-			{{ showForm ? "Cancel" : "Create New" }}
-		</button>
-	}
-
-	<button v-if="shelves !== null && shelves.length <= 0" class="btn btn-primary" type="button" disabled>
-		<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-		Loading...
-	</button>
+@section Scripts {
+	<script type="module" src="~/js/manage-shelves.js" asp-append-version="true"></script>
+}

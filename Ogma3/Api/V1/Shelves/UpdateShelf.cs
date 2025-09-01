@@ -30,7 +30,7 @@ public static partial class UpdateShelf
 		bool TrackUpdates,
 		[property: MaxLength(7)]
 		string Color,
-		long Icon
+		long IconId
 	);
 
 	private static async ValueTask<ReturnType> HandleAsync(
@@ -52,7 +52,7 @@ public static partial class UpdateShelf
 				.SetProperty(s => s.IsPublic, request.IsPublic)
 				.SetProperty(s => s.TrackUpdates, request.TrackUpdates)
 				.SetProperty(s => s.Color, request.Color)
-				.SetProperty(s => s.IconId, request.Icon), cancellationToken: cancellationToken);
+				.SetProperty(s => s.IconId, request.IconId), cancellationToken: cancellationToken);
 
 		return rows > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}

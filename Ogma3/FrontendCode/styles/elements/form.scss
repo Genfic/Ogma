@@ -28,6 +28,10 @@ form.form {
 
 			&.keep-size {
 				flex: 0;
+
+				label, legend {
+					text-wrap: nowrap;
+				}
 			}
 		}
 	}
@@ -74,8 +78,11 @@ form.form {
 			padding: .5rem;
 			background-color: var(--ele-1);
 			color: var(--foreground);
-			height: 100%;
 			@include ab.active-border;
+
+			&:not([type="color"]) {
+				height: 100%;
+			}
 
 			&[disabled] {
 				color: var(--foreground-50);

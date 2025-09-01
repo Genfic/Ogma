@@ -6,9 +6,9 @@
 	--count-offset: 1rem;
 
 	display: grid;
-	grid: "icon name count" auto
-		  "icon description count" auto
-		  / auto 1fr auto;
+	grid: "icon name count buttons" auto
+		  "icon description count buttons" auto
+		  / auto 1fr auto auto;
 	gap: .25rem 1rem;
 	color: var(--foreground);
 
@@ -21,7 +21,7 @@
 		height: 100%;
 		padding: 0 1rem;
 
-		.icon {
+		.icon, &::part(icon) {
 			background-color: var(--background);
 			outline: .5rem solid var(--background);
 			outline-offset: -1px;
@@ -51,13 +51,21 @@
 		padding-right: .5rem;
 	}
 
+	.buttons {
+		grid-area: buttons;
+		display: flex;
+	}
+
 	&:hover {
 		border-color: var(--shelf-color);
 		color: var(--foreground);
-		border-right-width: var(--count-offset);
 
-		.count {
-			margin-right: 1px;
+		&:not(.calm) {
+			border-right-width: var(--count-offset);
+
+			.count {
+				margin-right: 1px;
+			}
 		}
 	}
 }

@@ -1,6 +1,7 @@
+import { toCamelCaseKeys } from "es-toolkit";
 import { createSignal } from "solid-js";
 
-type InputType = 'color' | 'checkbox' | 'number' | 'text' | 'email' | 'password' | 'url';
+type InputType = "color" | "checkbox" | "number" | "text" | "email" | "password" | "url";
 
 type NormalizedValue = string | number | boolean | null;
 
@@ -15,16 +16,16 @@ interface FormElement extends HTMLInputElement {
 
 interface NormalizedFormReturn<T extends FormData> {
 	formData: Accessor<T>;
-	handleInput: (event: Event) => void;
-	handleSubmit: (event: SubmitEvent) => T;
+	handleInput: (name: keyof T, customValue?: NormalizedValue, raw?: boolean) => (event: Event) => void;
+	handleSubmit: (event: SubmitEvent, rawValuesFor?: (keyof T)[]) => T;
 	setFormData: Setter<T>;
 }
 
 // Normalization functions with proper typing
 const normalizers: Record<InputType, (value: string, checked?: boolean) => NormalizedValue> = {
-	color: (value: string): string => value.replace('#', ''),
+	color: (value: string): string => value.replace("#", ""),
 	checkbox: (_, checked: boolean = false): boolean => checked,
-	number: (value: string): number | null => value === '' ? null : Number(value),
+	number: (value: string): number | null => (value === "" ? null : Number(value)),
 	text: (value: string): string => value,
 	email: (value: string): string => value.trim().toLowerCase(),
 	password: (value: string): string => value,
@@ -45,38 +46,38 @@ export function createNormalizedForm<T extends FormData>(initialData: T = {} as 
 		return value;
 	};
 
-	const handleInput = (event: Event): void => {
+	const handleInput = (name: keyof T, customValue?: NormalizedValue, raw?: boolean) => (event: Event) => {
 		const input = event.target as FormElement;
 		if (!input.name) return;
 
-		const normalizedValue = normalizeValue(input);
+		const normalizedValue = customValue ? customValue : raw ? input.value : normalizeValue(input);
 
-		setFormData(prev => ({
+		setFormData((prev) => ({
 			...prev,
-			[input.name]: normalizedValue
-		} as T));
+			[name]: normalizedValue,
+		}));
 	};
 
-	const handleSubmit = (event: SubmitEvent): T => {
+	const handleSubmit = (event: SubmitEvent, rawValuesFor?: (keyof T)[]): T => {
 		event.preventDefault();
 		const formElement = event.target as HTMLFormElement;
 		const normalized = {} as T;
 
 		// Normalize all form data
 		const elements = Array.from(formElement.elements) as FormElement[];
-		elements.forEach(input => {
+		elements.forEach((input) => {
 			if (input.name) {
 				normalized[input.name as keyof T] = normalizeValue(input) as T[keyof T];
 			}
 		});
 
-		return normalized;
+		return toCamelCaseKeys(normalized) as T;
 	};
 
 	return {
 		formData,
 		handleInput,
 		handleSubmit,
-		setFormData
+		setFormData,
 	};
 }

@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
@@ -17,7 +17,8 @@ using ReturnType = Results<CreatedAtRoute<ShelfDto>, UnauthorizedHttpResult>;
 [Authorize]
 public static partial class CreateShelf
 {
-	public sealed record Command
+	[Validate]
+	public sealed partial record Command
 	(
 		[property: MinLength(CTConfig.Shelf.MinNameLength)]
 		[property: MaxLength(CTConfig.Shelf.MaxNameLength)]
@@ -29,8 +30,8 @@ public static partial class CreateShelf
 		bool TrackUpdates,
 		[property: MaxLength(7)]
 		string Color,
-		long Icon
-	);
+		long IconId
+	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -49,7 +50,7 @@ public static partial class CreateShelf
 			IsPublic = request.IsPublic,
 			TrackUpdates = request.TrackUpdates,
 			Color = request.Color,
-			IconId = request.Icon,
+			IconId = request.IconId,
 			OwnerId = uid,
 		};
 

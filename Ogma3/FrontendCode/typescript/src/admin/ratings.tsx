@@ -83,10 +83,15 @@ const Ratings = () => {
 		<>
 			<form class="auto" onSubmit={createRating}>
 				<label for="name">Name</label>
-				<input class="o-form-control" name="name" value={formData().name} onInput={handleInput} />
+				<input class="o-form-control" name="name" value={formData().name} onInput={handleInput("name")} />
 
 				<label for="description">Description</label>
-				<input class="o-form-control" name="description" value={formData().description} onInput={handleInput} />
+				<input
+					class="o-form-control"
+					name="description"
+					value={formData().description}
+					onInput={handleInput("description")}
+				/>
 
 				<label for="color">Color</label>
 				<input
@@ -94,7 +99,7 @@ const Ratings = () => {
 					class="o-form-control"
 					name="color"
 					value={`#${formData().color}`}
-					onInput={handleInput}
+					onInput={handleInput("color")}
 				/>
 
 				<label for="order">Order</label>
@@ -105,7 +110,7 @@ const Ratings = () => {
 					class="o-form-control"
 					name="order"
 					value={formData().order}
-					onInput={handleInput}
+					onInput={handleInput("order")}
 				/>
 
 				<label for="blacklistedByDefault">Blacklisted by default</label>
@@ -114,7 +119,7 @@ const Ratings = () => {
 					class="o-form-control"
 					name="blacklistedByDefault"
 					checked={formData().blacklistedByDefault}
-					onInput={handleInput}
+					onInput={handleInput("blacklistedByDefault")}
 				/>
 
 				<input class="o-form-control btn" type="submit" value="Submit" />

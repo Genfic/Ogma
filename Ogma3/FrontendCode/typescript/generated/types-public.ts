@@ -80,7 +80,7 @@ export type CreateShelfCommand = {
     isPublic: boolean;
     trackUpdates: boolean;
     color: string;
-    icon: number;
+    iconId: number;
 };
 
 export type CreateTagCommand = {
@@ -164,7 +164,7 @@ export type GetSignInDataResult = {
     title: string | null;
 };
 
-export type GetTagNamespacesNamespaceDto2 = {
+export type GetTagNamespacesNamespaceDto = {
     value: number;
     name: string;
 };
@@ -227,7 +227,7 @@ export type QuoteDto = {
     author: string;
 };
 
-export type RatingApiDto2 = {
+export type RatingApiDto = {
     id: number;
     name: string;
     description: string;
@@ -246,7 +246,7 @@ export type RemoveBookFromShelfResult = {
     storyId: number;
 };
 
-export type ReportContentCommand2 = {
+export type ReportContentCommand = {
     itemId: number;
     reason: string;
     itemType: EReportableContentTypes;
@@ -292,11 +292,6 @@ export type TagDto = {
     namespace: "ContentWarning" | "Genre" | "Franchise";
     namespaceColor: string;
     namespaceId: number;
-};
-
-export type TestControllerBpost = {
-    title: string;
-    hashtags: string[];
 };
 
 export type UnblockUserCommand = {
@@ -351,7 +346,7 @@ export type UpdateRolesCommand = {
     roles: number[];
 };
 
-export type UpdateShelfCommand2 = {
+export type UpdateShelfCommand = {
     id: number;
     name: string;
     description: string;
@@ -359,7 +354,7 @@ export type UpdateShelfCommand2 = {
     isPublic: boolean;
     trackUpdates: boolean;
     color: string;
-    icon: number;
+    iconId: number;
 };
 
 export type UpdateTagCommand = {
