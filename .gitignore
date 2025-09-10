@@ -11,6 +11,10 @@ nupkg/
 # Rider
 .idea
 
+# Resharper
+Ogma3.sln.DotSettings.user
+Ogma3.sln.DotSettings
+
 # User-specific files
 *.suo
 *.user
@@ -52,6 +56,7 @@ postgres/postgres.env
 # Reports
 *.report.html
 *.diag.json
+*.binlog
 
 # Experimental
 Ogma3/wwwroot/lib/comments/

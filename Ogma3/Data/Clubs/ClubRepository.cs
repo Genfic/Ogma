@@ -41,7 +41,7 @@ public sealed class ClubRepository(ApplicationDbContext context, IUserService us
 			.TagWith($"{nameof(ClubRepository)} : {nameof(CheckRoles)} — {clubId}, {userId}")
 			.Where(c => c.Id == clubId)
 			.Where(c => c.ClubMembers
-				.Any(cm => cm.MemberId == userId && roles.Contains(cm.Role))
+				.Any(cm => cm.MemberId == userId && roles.ToList().Contains(cm.Role))
 			)
 			.AnyAsync();
 	}

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
+using Routes.Pages;
 
 namespace Ogma3.Pages.Club.Forums;
 
@@ -49,7 +50,7 @@ public sealed class Pin(ApplicationDbContext context) : PageModel
 			.Where(ct => ct.Id == id)
 			.Where(ct => ct.Club.ClubMembers
 				.Where(cm => cm.MemberId == uid)
-				.Any(cm => new[]
+				.Any(cm => new List<EClubMemberRoles>
 				{
 					EClubMemberRoles.Founder,
 					EClubMemberRoles.Admin,
@@ -62,6 +63,6 @@ public sealed class Pin(ApplicationDbContext context) : PageModel
 		thread.IsPinned = !thread.IsPinned;
 		await context.SaveChangesAsync();
 
-		return Routes.Pages.Club_Forums_Details.Get(thread.Id, thread.ClubId).Redirect(this);
+		return Club_Forums_Details.Get(thread.Id, thread.ClubId).Redirect(this);
 	}
 }

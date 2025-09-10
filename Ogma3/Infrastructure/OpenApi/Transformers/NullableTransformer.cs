@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Any;
 
 // This transformer attempts to coalesce nullable and non-nullable schemas by removing the `nullable` property
 // wherever nullability is already implied by the `required` property.
@@ -34,27 +33,22 @@ public static partial class NullableTransformer
 		options.AddSchemaTransformer((schema, _, _) =>
 		{
 			if (schema.Properties is null) return Task.CompletedTask;
-			
+
 			foreach (var property in schema.Properties)
 			{
-				if (schema.Required?.Contains(property.Key) != true)
-				{
-					property.Value.Nullable = false;
-				}
-				
 				// Also need to remove `null` from enum values if present
 				if (property.Value.Enum is not null)
 				{
-					property.Value.Enum = property.Value.Enum.Where(e => (e as OpenApiString)?.Value is not null).ToList();
+					schema.Required?.Add(property.Key);
 				}
-				
+
 				// And remove default value of null if set
-				if (property.Value.Default is OpenApiNull)
-				{
-					property.Value.Default = null;
-				}
+				// if (property.Value.Default is NullOpenApiString)
+				// {
+				// 	property.Value.Default = null;
+				// }
 			}
-			
+
 			return Task.CompletedTask;
 		});
 

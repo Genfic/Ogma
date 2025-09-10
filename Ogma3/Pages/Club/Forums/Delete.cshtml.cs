@@ -7,6 +7,7 @@ using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Routes.Pages;
 
 namespace Ogma3.Pages.Club.Forums;
 
@@ -45,7 +46,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 		ClubThread = clubThread;
 
 		var (allowed, _) = await CanDelete(ClubThread.AuthorId, ClubThread.ClubId);
-		
+
 		if (!allowed) return Unauthorized();
 
 		return Page();
@@ -54,7 +55,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
-		
+
 		var th = await context.ClubThreads
 			.TagWith($"Clubs — Delete — {nameof(OnPostAsync)} — get threads")
 			.Where(ct => ct.Id == id)
@@ -69,11 +70,11 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 			.FirstOrDefaultAsync();
 
 		if (th is null) return NotFound();
-		
+
 		var (allowed, isModerator) = await CanDelete(th.AuthorId, th.ClubId);
-		
+
 		if (!allowed) return Unauthorized();
-		
+
 		if (isModerator)
 		{
 			context.ClubModeratorActions.Add(new ClubModeratorAction
@@ -89,7 +90,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 			.Where(ct => ct.Id == th.Id)
 			.ExecuteUpdateAsync(setters => setters.SetProperty(ct => ct.DeletedAt, DateTimeOffset.UtcNow));
 
-		return Routes.Pages.Club_Forums_Index.Get(th.ClubId, th.Slug).Redirect(this);
+		return Club_Forums_Index.Get(th.ClubId, th.Slug).Redirect(this);
 	}
 
 	private async Task<(bool allowed, bool isModerator)> CanDelete(long? authorId, long clubId)
@@ -104,7 +105,7 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 			.TagWith($"Clubs — Delete — {nameof(CanDelete)}")
 			.Where(cm => cm.ClubId == clubId)
 			.Where(cm => cm.MemberId == uid)
-			.Where(cm => new[]
+			.Where(cm => new List<EClubMemberRoles>
 			{
 				EClubMemberRoles.Founder,
 				EClubMemberRoles.Admin,

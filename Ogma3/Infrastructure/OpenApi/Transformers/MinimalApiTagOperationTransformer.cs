@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Ogma3.Infrastructure.OpenApi.Transformers;
 
@@ -11,20 +11,17 @@ public sealed class MinimalApiTagOperationTransformer : IOpenApiOperationTransfo
 		{
 			return Task.CompletedTask;
 		}
-		
+
 		split = split[0] == "admin" ? split[1..] : split;
-		
+
 		if (split is not ["api", var name, ..])
 		{
 			return Task.CompletedTask;
 		}
-		
-		operation.Tags.Clear();
-		operation.Tags.Add(new OpenApiTag
-		{
-			Name = name,
-		});
-		
+
+		operation.Tags?.Clear();
+		operation.Tags?.Add(new OpenApiTagReference(name));
+
 		return Task.CompletedTask;
 	}
 }

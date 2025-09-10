@@ -13,14 +13,14 @@ public sealed class NotificationsRepository
 	private readonly CommentRedirector _redirector;
 
 	public NotificationsRepository(
-		ApplicationDbContext context, 
+		ApplicationDbContext context,
 		IUrlHelperFactory urlHelperFactory,
-		IActionContextAccessor actionContextAccessor, 
+		IActionContextAccessor actionContextAccessor,
 		CommentRedirector redirector
 	) {
 		if (actionContextAccessor is not { ActionContext: not null })
 			throw new NullReferenceException(nameof(actionContextAccessor.ActionContext));
-		
+
 		_context = context;
 		_redirector = redirector;
 		_urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);

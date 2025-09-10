@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.OpenApi.Transformers;
