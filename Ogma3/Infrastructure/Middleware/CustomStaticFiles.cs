@@ -11,7 +11,7 @@ public static class CustomStaticFiles
 {
 	private static readonly Dictionary<string, string> CustomMimeTypes = new()
 	{
-		[".avif"] = "image/avif",
+		[".epub"] = "application/epub+zip",
 	};
 
 	public static WebApplication UseCustomStaticFiles(this WebApplication app)

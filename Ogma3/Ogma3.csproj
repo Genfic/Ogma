@@ -15,7 +15,7 @@
 		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
 
 		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
-		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsNamespaces>
+		<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsPreviewNamespaces>
 	</PropertyGroup>
 
 	<ItemGroup> 

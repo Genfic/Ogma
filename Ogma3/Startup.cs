@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
@@ -105,7 +104,6 @@ public static class Startup
 		services.AddHttpContextAccessor();
 
 		// ActionContextAccessor
-		services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 		services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
 		// Identity
