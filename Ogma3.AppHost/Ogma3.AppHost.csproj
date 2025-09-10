@@ -4,9 +4,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <IsAspireHost>true</IsAspireHost>
         <UserSecretsId>1f7fa604-b7af-418a-97ae-e1aaea83b0af</UserSecretsId>
         <AssemblyName>Ogma3.AppHost</AssemblyName>

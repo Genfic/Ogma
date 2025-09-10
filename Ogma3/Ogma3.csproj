@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
 		<UserSecretsId>aspnet-Ogma3-F6D42650-6752-41E8-81E2-FCAB6D0941CB</UserSecretsId>
-		<LangVersion>13</LangVersion>
 		<PackageId>Ogma3</PackageId>
 		<Authors>Ogma3</Authors>
 		<Company>Ogma3</Company>
 		<Product>Ogma3</Product>
-		<Nullable>enable</Nullable>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
 		<NeutralLanguage>en</NeutralLanguage>
@@ -15,13 +12,10 @@
 		<AnalysisLevel>latest</AnalysisLevel>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
-		<ImplicitUsings>true</ImplicitUsings>
 		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
 		<InterceptorNamespaces>$(InterceptorsNamespaces);Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorNamespaces>
 	</PropertyGroup>
-	<ItemGroup>
-		<AdditionalFiles Include="../BannedSymbols.txt" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis" Version="9.4.1" />
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.4.1" />
@@ -48,10 +42,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.8" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.8" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.8" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">

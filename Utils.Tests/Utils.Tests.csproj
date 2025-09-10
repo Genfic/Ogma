@@ -1,11 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<ImplicitUsings>true</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net9.0</TargetFramework>
-
 		<IsTestingPlatformApplication>true</IsTestingPlatformApplication>
 	</PropertyGroup>
 
