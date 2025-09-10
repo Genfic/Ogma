@@ -2,7 +2,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Flurl" Version="4.0.0" />
-		<PackageReference Include="JetBrains.Annotations" Version="2025.2.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" />
 	</ItemGroup>
 
