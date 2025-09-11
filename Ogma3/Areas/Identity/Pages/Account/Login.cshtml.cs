@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Users;
+using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -32,6 +33,9 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 	}
 
 
+	private const string HoneypotSessionKey = "LoginHoneypotKey";
+	public string? HoneypotFieldName { get; private set; }
+
 	public async Task OnGetAsync(string? returnUrl = null)
 	{
 		if (!string.IsNullOrEmpty(ErrorMessage))
@@ -47,12 +51,33 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
 		ReturnUrl = returnUrl;
+
+		HoneypotFieldName = Guid.NewGuid().ToString("N")[..16];
+		HttpContext.Session.SetString(HoneypotSessionKey, HoneypotFieldName);
 	}
 
 
 	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
+
+		// Check honeypot
+		HoneypotFieldName = HttpContext.Session.GetString(HoneypotSessionKey);
+		if (string.IsNullOrEmpty(HoneypotFieldName))
+		{
+			ModelState.AddModelError("Expired", "Your session has expired. Try again.");
+			logger.LogInformation("Session tampered with, honeypot session key was unset during login.");
+			return Page();
+		}
+
+		var honeypot = Request.Form[HoneypotFieldName].ToString();
+		if (!string.IsNullOrEmpty(honeypot))
+		{
+			ModelState.AddModelError("Suspicious", "Suspicious activity detected. Try again later.");
+			logger.LogInformation("Honeypot field was filled out during login: {Honeypot}.", honeypot);
+			return Page();
+		}
+		HttpContext.Session.Remove(HoneypotSessionKey);
 
 		if (!ModelState.IsValid) return Page();
 
@@ -67,13 +92,13 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 
 		if (result.RequiresTwoFactor)
 		{
-			return Routes.Areas.Identity.Pages.Account_LoginWith2fa.Get(Input.RememberMe, returnUrl).Redirect(this);
+			return Account_LoginWith2fa.Get(Input.RememberMe, returnUrl).Redirect(this);
 		}
 
 		if (result.IsLockedOut)
 		{
 			logger.LogWarning("User account locked out");
-			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
+			return Account_Lockout.Get().Redirect(this);
 		}
 
 		ModelState.AddModelError(string.Empty, "Invalid login attempt.");

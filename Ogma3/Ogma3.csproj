@@ -15,7 +15,7 @@
 		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
 
 		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
-		<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsPreviewNamespaces>
+		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsNamespaces>
 	</PropertyGroup>
 
 	<ItemGroup> 
@@ -74,7 +74,7 @@
 		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" PrivateAssets="all" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" PrivateAssets="all" />
 		<PackageReference Include="Sqids" Version="3.1.0" PrivateAssets="all" />
-		<PackageReference Include="stbychkov.AutoLoggerMessage" Version="1.0.13" />
+		<PackageReference Include="stbychkov.AutoLoggerMessage" Version="1.0.14" />
 		<PackageReference Include="System.ServiceModel.Syndication" Version="10.0.0-rc.1.25451.107" PrivateAssets="all" />
 		<PackageReference Include="ZiggyCreatures.FusionCache" Version="2.4.0" />
 		<PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.4.0" />

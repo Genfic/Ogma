@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.ClubJoin;
 using ReturnType = Ok<bool>;
 
 [Handler]
-[MapGet("/api/clubjoin/{clubId:long}")]
+[MapGet("/api/ClubJoin/{clubId:long}")]
 [Authorize]
 public static partial class GetClubMembershipStatus
 {

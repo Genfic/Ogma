@@ -1,3 +1,4 @@
+import { del, get, head, patch, post, put, typedFetch } from "./typed-fetch";
 import type {
 	AddBookToShelfCommand,
 	AddBookToShelfResult,
@@ -58,7 +59,6 @@ import type {
 	UpdateTagCommand,
 	VoteResult,
 } from "./types-public";
-import { del, get, head, patch, post, put, typedFetch } from "./typed-fetch";
 
 
 export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[], MarkChapterAsUnreadCommand>("/api/chaptersread",
@@ -197,7 +197,7 @@ export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit)
 );
 
 
-export const GetApiChaptersread = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[], undefined>(`/api/chaptersread/${id}`,
+export const GetApiChaptersRead = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number[], undefined>(`/api/ChaptersRead/${id}`,
 	get,
 	undefined,
 	headers,
@@ -205,7 +205,7 @@ export const GetApiChaptersread = async (id: number, headers?: HeadersInit, opti
 );
 
 
-export const GetApiClubjoin = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean, undefined>(`/api/clubjoin/${clubId}`,
+export const GetApiClubJoin = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean, undefined>(`/api/ClubJoin/${clubId}`,
 	get,
 	undefined,
 	headers,
@@ -229,18 +229,7 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number | null, highlight: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
-    /** List of the fetched elements */
-    elements: CommentDto[];
-    /** Total number of elements */
-    total: number;
-    /** Number of elements per page */
-    perPage: number;
-    /** Number of pages the total number of elements can be divided into */
-    pages: number;
-    /** The requested page */
-    page: number;
-}, undefined>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
+export const GetApiComments = async (thread: number, page: number | null, highlight: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
 	get,
 	undefined,
 	headers,

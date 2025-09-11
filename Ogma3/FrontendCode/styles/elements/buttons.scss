@@ -49,6 +49,15 @@
 	background-color: var(--accent-75);
 	border-color: var(--accent);
 
+	&.register {
+		margin-top: -32px;
+		background-color: color-mix(in oklab, var(--accent), var(--background) 25%);
+
+		&:hover {
+			background-color: color-mix(in oklab, var(--accent), var(--background) 75%);
+		}
+	}
+
 	&:hover {
 		color: var(--foreground);
 		background-color: var(--accent-25);

@@ -12,7 +12,7 @@ namespace Ogma3.Api.V1.ChaptersReads;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>>;
 
 [Handler]
-[MapGet("api/chaptersread/{id:long}")]
+[MapGet("api/ChaptersRead/{id:long}")]
 public static partial class GetReadChapters
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint

@@ -71,7 +71,9 @@
 
 			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register" data-theme="@theme"></div>
 
-			<button type="submit" class="btn btn-primary">Register</button>
+			<input name="@Model.HoneypotFieldName" type="text" autocomplete="off">
+
+			<button type="submit" class="btn btn-primary register" >Register</button>
 		</form>
 	</div>
 	@if (Model.ExternalLogins.Count > 0)
@@ -99,7 +101,7 @@
 	<partial name="_ValidationScriptsPartial"/>
 	<script type="module" src="~/js/account/register.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/password-input.js" asp-append-version="true"></script>
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer asp-add-nonce></script>
 }
 
 @section CSS {

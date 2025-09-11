@@ -249,7 +249,7 @@
 	</report-modal>
 
 	<div class="backdrop">
-		<img src="@Model.Story.Cover" alt="@Model.Story.Title backdrop image" height="1000" width="1920" cf-height="100" cf-width="100" cf />
+		<img src="@(Model.Story.Cover ?? "/img/placeholders/ph-250.png")" alt="@Model.Story.Title backdrop image" height="1000" width="1920" cf-height="100" cf-width="100" cf />
 	</div>
 </div>
 

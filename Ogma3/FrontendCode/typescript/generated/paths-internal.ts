@@ -1,9 +1,5 @@
-import type {
-	CreateInfractionCommand,
-	GetUserInfractionsResult,
-	InfractionDto,
-} from './types-internal';
-import { typedFetch, get, post, put, patch, del, head } from './typed-fetch';
+import { del, get, post, typedFetch } from "./typed-fetch";
+import type { CreateInfractionCommand, GetUserInfractionsResult, InfractionDto } from "./types-internal";
 
 
 export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/admin/api/cache",

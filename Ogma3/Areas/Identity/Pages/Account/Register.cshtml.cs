@@ -15,6 +15,7 @@ using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
+using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -75,10 +76,16 @@ public sealed class RegisterModel(
 		}
 	}
 
+	private const string HoneypotSessionKey = "RegisterHoneypotKey";
+	public string? HoneypotFieldName { get; private set; }
+
 	public async Task OnGetAsync(string? returnUrl = null)
 	{
 		ReturnUrl = returnUrl;
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+		HoneypotFieldName = Guid.NewGuid().ToString("N")[..16];
+		HttpContext.Session.SetString(HoneypotSessionKey, HoneypotFieldName);
 	}
 
 	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
@@ -87,6 +94,24 @@ public sealed class RegisterModel(
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
 		if (!ModelState.IsValid) return Page();
+
+		// Check honeypot
+		HoneypotFieldName = HttpContext.Session.GetString(HoneypotSessionKey);
+		if (string.IsNullOrEmpty(HoneypotFieldName))
+		{
+			ModelState.AddModelError("Expired", "Your session has expired. Try again.");
+			logger.LogInformation("Session tampered with, honeypot session key was unset during registration.");
+			return Page();
+		}
+
+		var honeypot = Request.Form[HoneypotFieldName].ToString();
+		if (!string.IsNullOrEmpty(honeypot))
+		{
+			ModelState.AddModelError("Suspicious", "Suspicious activity detected. Try again later.");
+			logger.LogInformation("Honeypot field was filled out during registration: {Honeypot}.", honeypot);
+			return Page();
+		}
+		HttpContext.Session.Remove(HoneypotSessionKey);
 
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);
@@ -153,7 +178,7 @@ public sealed class RegisterModel(
 
 			if (userManager.Options.SignIn.RequireConfirmedAccount)
 			{
-				return Routes.Areas.Identity.Pages.Account_RegisterConfirmation.Get(Input.Email).Redirect(this);
+				return Account_RegisterConfirmation.Get(Input.Email).Redirect(this);
 			}
 
 			return LocalRedirect(returnUrl);

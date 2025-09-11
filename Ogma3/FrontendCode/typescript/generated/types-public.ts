@@ -28,15 +28,15 @@ export type BlockUserCommand = {
 
 export type CommentDto = {
     id: number;
-    author: UserSimpleDto;
+    author: UserSimpleDto | null;
     dateTime: Date;
     body: string | null;
-    deletedBy: "User" | "Staff" | null;
+    deletedBy: "Staff" | "User" | null;
     isBlocked: boolean;
     isEdited: boolean;
 };
 
-export type CommentSource = "Chapter" | "Blogpost" | "Profile" | "ForumPost";
+export type CommentSource = "Blogpost" | "Chapter" | "ForumPost" | "Profile";
 
 export type CreateCommentCommand = {
     body: string;
@@ -86,7 +86,7 @@ export type CreateShelfCommand = {
 export type CreateTagCommand = {
     name: string;
     description: string | null;
-    namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+    namespace: "ContentWarning" | "Franchise" | "Genre" | null;
 };
 
 export type CreateVoteCommand = {
@@ -97,9 +97,9 @@ export type DeleteVoteCommand = {
     storyId: number;
 };
 
-export type ENotificationEvent = "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "CommentReply";
+export type ENotificationEvent = "CommentReply" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment";
 
-export type EReportableContentTypes = "Comment" | "User" | "Story" | "Chapter" | "Blogpost" | "Club";
+export type EReportableContentTypes = "Blogpost" | "Chapter" | "Club" | "Comment" | "Story" | "User";
 
 export type FaqDto = {
     id: number;
@@ -183,7 +183,7 @@ export type GetUserNotificationsResult = {
     url: string;
     dateTime: Date;
     event: ENotificationEvent;
-    message: string;
+    message: string | null;
 };
 
 export type InviteCodeDto = {
@@ -274,7 +274,7 @@ export type ShelfDto = {
     isPublic: boolean;
     isQuickAdd: boolean;
     trackUpdates: boolean;
-    color: string;
+    color: string | null;
     storiesCount: number;
     iconName: string | null;
     iconId: number | null;
@@ -289,9 +289,9 @@ export type TagDto = {
     name: string;
     slug: string;
     description: string | null;
-    namespace: "ContentWarning" | "Genre" | "Franchise";
-    namespaceColor: string;
-    namespaceId: number;
+    namespace: "ContentWarning" | "Franchise" | "Genre" | null;
+    namespaceColor: string | null;
+    namespaceId: number | null;
 };
 
 export type UnblockUserCommand = {
@@ -361,17 +361,17 @@ export type UpdateTagCommand = {
     id: number;
     name: string;
     description: string | null;
-    namespace: "ContentWarning" | "Genre" | "Franchise" | null;
+    namespace: "ContentWarning" | "Franchise" | "Genre" | null;
 };
 
 export type UserSimpleDto = {
     userName: string;
     avatar: string;
-    title: string;
+    title: string | null;
     roles: RoleTinyDto[];
-} | null;
+};
 
 export type VoteResult = {
     didVote: boolean;
-    count: number;
+    count: number | null;
 };

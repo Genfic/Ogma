@@ -229,6 +229,8 @@ public static class Startup
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 			});
 
+		services.AddSession();
+
 		// X-CSRF
 		services.AddAntiforgery();
 
@@ -348,6 +350,8 @@ public static class Startup
 		app.UseAuthorization();
 		app.UseBanMiddleware();
 		app.UseOutputCache();
+
+		app.UseSession();
 
 		// OpenAPI
 		app.MapOpenApi("openapi/{documentName}.json").CacheOutput();
