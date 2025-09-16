@@ -7,7 +7,7 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import { attemptAsync } from "es-toolkit";
-import { transform } from "lightningcss";
+import { transform, type TransformResult } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 import { brotliCompressSync } from "zlib";
 import { cssTargets } from "./helpers/css-targets";
@@ -81,8 +81,8 @@ const compileSass = async (file: string) => {
 
 	logger.verbose(css.length);
 
-	const transformResult = values.raw
-		? { code: css, map: JSON.stringify(sourceMap), warnings: [] }
+	const transformResult: Pick<TransformResult, "code" | "map" | "warnings"> | undefined = values.raw
+		? { code: encoder.encode(css), map: encoder.encode(JSON.stringify(sourceMap)), warnings: [] }
 		: $try(
 				() =>
 					transform({
@@ -111,7 +111,7 @@ const compileSass = async (file: string) => {
 	}
 
 	await Bun.write(path.join(_dest, `${filename}.css`), code);
-	await Bun.write(path.join(_dest, `${filename}.css.gz`), Bun.gzipSync(code));
+	await Bun.write(path.join(_dest, `${filename}.css.gz`), Bun.gzipSync(code.buffer as ArrayBuffer));
 	await Bun.write(path.join(_dest, `${filename}.css.br`), brotliCompressSync(code));
 	await Bun.write(path.join(_dest, `${filename}.css.zst`), Bun.zstdCompressSync(code));
 	if (map) {

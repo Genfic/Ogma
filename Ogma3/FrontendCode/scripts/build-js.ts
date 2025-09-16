@@ -14,6 +14,7 @@ import { getHash } from "./helpers/hash";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { Parallel } from "./helpers/promises";
+import { SizeHistory } from "./helpers/size-history";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
 import { cssMinifyPlugin } from "./plugins/minified-css-loader";
@@ -136,7 +137,7 @@ const generateManifest = async () => {
 	console.log(ct`{dim Generated manifest.json in {reset.bold {underline ${time}} ${unit}}}`);
 };
 
-const sizeHistory: number[] = [];
+const sizeHistory = new SizeHistory("JS");
 const compileAll = async () => {
 	const timer = new Stopwatch();
 	const logger = new Logger();
@@ -175,12 +176,13 @@ const compileAll = async () => {
 		ct`{green Total size: {bold.underline ${best(currentSize)}}} {dim Gzipped: {bold.underline ${best(gzSize)}} Brotli: {bold.underline ${best(brSize)}} Zstd: {bold.underline ${best(zstdSize)}}}`,
 	);
 
-	const prev = sizeHistory.at(-1);
+	const [prev] = await sizeHistory.at(-1);
+	const [first] = await sizeHistory.at(0);
 	if (prev) {
 		const text = (x: number) => (x > 0 ? c.red : c.green)((x < 0 ? "" : "+") + best(x));
-		logger.log(`Size difference: ${text(currentSize - prev)} (total: ${text(currentSize - sizeHistory[0])})`);
+		logger.log(`Size difference: ${text(currentSize - prev)} (total: ${text(currentSize - first)})`);
 	}
-	sizeHistory.push(currentSize);
+	await sizeHistory.push(currentSize);
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
 
