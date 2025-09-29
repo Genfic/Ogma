@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment())
 	await dbContext.Database.MigrateAsync();
 }
 
-if (args.Any(a => a == "--seed"))
+if (builder.Configuration.GetValue<bool>("SHOULD_SEED"))
 {
 	await app.InitAsync();
 }

@@ -351,6 +351,37 @@
           }
         },
         {
+          "name": "o-shelves-management",
+          "description": "Custom element <o-shelves-management> defined in typescript\\src\\manage-shelves.tsx",
+          "attributes": [
+            {
+              "name": "icons",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "userName",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "csrf",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            }
+          ],
+          "source": {
+            "module": "./typescript\\src\\manage-shelves.tsx",
+            "symbol": "o-shelves-management"
+          }
+        },
+        {
           "name": "o-vote",
           "description": "Custom element <o-vote> defined in typescript\\src\\comp\\vote-button.tsx",
           "attributes": [

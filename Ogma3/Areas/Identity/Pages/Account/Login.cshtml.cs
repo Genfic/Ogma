@@ -15,7 +15,7 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 
 	[BindProperty] public required InputModel Input { get; set; }
 
-	public required IList<AuthenticationScheme> ExternalLogins { get; set; }
+	public required List<AuthenticationScheme> ExternalLogins { get; set; } = [];
 
 	public required string ReturnUrl { get; set; }
 
@@ -101,6 +101,7 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 			return Account_Lockout.Get().Redirect(this);
 		}
 
+		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 		ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 		return Page();
 	}

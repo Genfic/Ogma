@@ -7,10 +7,13 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Icons;
+using Ogma3.Data.Images;
 using Ogma3.Data.Quotes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Roles;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
+using Utils;
 
 namespace Ogma3.Services.Initializers;
 
@@ -44,22 +47,24 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			throw new NullReferenceException("Json data was null");
 		}
 	}
-	
+
 	public async Task InitializeAsync(CancellationToken ct)
 	{
+		_logger.LogInformation("Async initialization started.");
+
 		var timer = new Stopwatch();
 		timer.Start();
-		
+
 		await Time(SeedRoles, nameof(SeedRoles));
-		await Time(SeedUserRoles, nameof(SeedUserRoles));
+		await Time(SeedUsers, nameof(SeedUsers));
 		await Time(SeedRatings, nameof(SeedRatings));
 		await Time(SeedIcons, nameof(SeedIcons));
 		await Time(SeedQuotes, nameof(SeedQuotes));
-		
+
 		timer.Stop();
 		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);
 	}
-	
+
 	private async Task SeedRoles()
 	{
 		var roles = new[]
@@ -74,15 +79,34 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		await BulkUpsert(_context.Roles, roles, r => r.NormalizedName);
 	}
 
-	private async Task SeedUserRoles()
+	private const string Email = "admin@genfic.net";
+	public async Task SeedUsers()
 	{
-		var user = await _context.Users
-			.Where(u => u.NormalizedUserName == "ANGIUS")
-			.Where(u => u.Roles.All(r => r.NormalizedName != RoleNames.Admin.ToUpper()))
-			.FirstOrDefaultAsync();
-		if (user is not null)
+		var exists = await _userManager.FindByEmailAsync(Email);
+		if (exists is not null) return;
+
+		var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.NormalizedName == RoleNames.Admin);
+
+		var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()".AsSpan();
+		var password = new string(Random.Shared.GetItems(alpha, 20));
+		var user = new OgmaUser
 		{
-			await _userManager.AddToRoleAsync(user, RoleNames.Admin);
+			UserName = "Angius",
+			Email = Email,
+			Avatar = new Image
+			{
+				Url = Gravatar.Generate(Email),
+			},
+			Roles = adminRole is null ? [] : [ adminRole ],
+		};
+		var result = await _userManager.CreateAsync(user, password);
+		if (result.Succeeded)
+		{
+			_logger.LogCritical("Admin user created with password {Password}. Change it ASAP.", password);
+		}
+		else
+		{
+			_logger.LogCritical("Creating admin failed with errors: {Errors}", result.Errors.Select(e => e.Description));
 		}
 	}
 
@@ -121,7 +145,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 
 		var exceptor = extractor.Compile();
 		var toAdd = entries.ExceptBy(existing, exceptor);
-		
+
 		source.AddRange(toAdd);
 
 		await _context.SaveChangesAsync();
@@ -133,7 +157,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		stopwatch.Start();
 
 		await func();
-		
+
 		stopwatch.Stop();
 		_logger.LogInformation("{Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
 	}
