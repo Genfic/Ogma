@@ -83,24 +83,28 @@
 			"Description": "12345",
 			"Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
 			"IconId": "12345",
+			"Color": "17f934"
 		},
 		{
 			"Name": "Teen",
 			"Description": "12345",
 			"Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
 			"IconId": "12345",
+			"Color": "484dff"
 		},
 		{
 			"Name": "Mature",
 			"Description": "12345",
 			"Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
 			"IconId": "12345",
+			"Color": "ffa704"
 		},
 		{
 			"Name": "Adult",
 			"Description": "12345",
 			"Icon": "https://cdn.genfic.net/file/Ogma-net/avatars/7-ANGIUS.png",
 			"IconId": "12345",
+			"Color": "dd0005"
 		},
 	],
 }

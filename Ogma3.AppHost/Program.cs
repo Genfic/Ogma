@@ -4,7 +4,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var emulateProd = args.Contains("--emulate-prod");
 
-var shouldSeed = builder.AddParameter("seed");
+var shouldSeed = builder.AddParameter("should-seed");
 
 builder.AddDockerComposeEnvironment("ogma3-docker");
 

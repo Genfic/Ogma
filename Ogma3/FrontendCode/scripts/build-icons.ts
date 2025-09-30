@@ -89,7 +89,7 @@ const rewriter = new HTMLRewriter().on('svg:not([id="icon-spritesheet"])', {
 	},
 });
 
-const tpl = ejs.render(templates.get("spritesheet"), { svgs: svgs.filter((s) => s.type === "base") });
+const tpl = ejs.render(templates.get("spritesheet"), { svgs: svgs.filter((s) => s.type !== "found") });
 const spritesheet = rewriter.transform(tpl);
 
 const paths = svgs.map(

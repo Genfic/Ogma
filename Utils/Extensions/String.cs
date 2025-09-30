@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Utils.Extensions;
@@ -148,6 +145,13 @@ public static partial class String
 	{
 		return input.Length > length
 			? input[..length] + cap
+			: input;
+	}
+
+	public static string Trim(this string input, int length)
+	{
+		return input.Length > length
+			? input[..length]
 			: input;
 	}
 

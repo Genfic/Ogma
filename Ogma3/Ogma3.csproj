@@ -25,6 +25,7 @@
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.0.1" PrivateAssets="all" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" PrivateAssets="all" />
 		<PackageReference Include="B2Net" Version="[0.7.5]" PrivateAssets="all" />
+		<PackageReference Include="Bogus" Version="35.6.4" />
 		<PackageReference Include="CompressedStaticFiles" Version="2.2.0" />
 		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" PrivateAssets="all" />
 		<PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="9.100.1" PrivateAssets="all" />
@@ -76,6 +77,7 @@
 		<PackageReference Include="Sqids" Version="3.1.0" PrivateAssets="all" />
 		<PackageReference Include="stbychkov.AutoLoggerMessage" Version="1.0.14" />
 		<PackageReference Include="System.ServiceModel.Syndication" Version="10.0.0-rc.1.25451.107" PrivateAssets="all" />
+		<PackageReference Include="WaffleGenerator.Bogus" Version="4.2.2" />
 		<PackageReference Include="ZiggyCreatures.FusionCache" Version="2.4.0" />
 		<PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.4.0" />
 		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.4.0" />
