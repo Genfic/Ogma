@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
@@ -42,7 +44,6 @@ using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
-using static Ogma3.Services.RoutingHelpers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace Ogma3;
@@ -86,10 +87,6 @@ public static class Startup
 			.AddTransient<RequestTimestampMiddleware>()
 			.AddTransient<UserBanMiddleware>();
 		builder.UseAddHeaders();
-
-		// Validators
-		services.AddValidatorsFromAssemblyContaining<Program>();
-		ValidatorOptions.Global.LanguageManager.Enabled = false;
 
 		// Custom persistent config
 		services.AddSingleton(OgmaConfig.Init("config.json5"));
@@ -154,7 +151,7 @@ public static class Startup
 		// Email
 		services
 			.AddTransient<IEmailSender, PostmarkMailer>()
-			.Configure<PostmarkOptions>(configuration);
+			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"));
 
 		// Backblaze
 		var b2Options = configuration.GetSection("B2").Get<B2Options>();
@@ -184,9 +181,6 @@ public static class Startup
 			options.AccessDeniedPath = new PathString("/login");
 			options.Cookie.SameSite = SameSiteMode.Lax;
 			options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-
-			options.Events.OnRedirectToLogin = HandleApiRequest(StatusCodes.Status401Unauthorized, options.Events.OnRedirectToLogin);
-			options.Events.OnRedirectToAccessDenied = HandleApiRequest(StatusCodes.Status403Forbidden, options.Events.OnRedirectToLogin);
 		});
 
 		// Cache
@@ -207,16 +201,15 @@ public static class Startup
 		// Precompressed files
 		services.AddCompressedStaticFiles();
 
-		// Runtime compilation
-		services
-			.AddControllersWithViews();
+		static void ConfigJson(JsonSerializerOptions options)
+		{
+			options.Converters.Add(new JsonStringEnumConverter());
+			options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+			options.NumberHandling = JsonNumberHandling.Strict;
+		}
 
-		// Razor
-		services
-			.AddRazorPages()
-			.AddRazorPagesOptions(options => {
-				options.Conventions.AuthorizeAreaFolder("Admin", "/", AuthorizationPolicies.RequireAdminRole);
-			});
+		// Json options
+		services.ConfigureHttpJsonOptions(options => ConfigJson(options.SerializerOptions));
 
 		// MVC
 		services
@@ -224,25 +217,18 @@ public static class Startup
 				options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 				options.Filters.Add<ValidationExceptionFilter>();
 			})
-			.AddJsonOptions(options => {
-				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+			.AddJsonOptions(options => ConfigJson(options.JsonSerializerOptions));
+
+		// Razor
+		services
+			.AddRazorPages(options => {
+				options.Conventions.AuthorizeAreaFolder("Admin", "/", AuthorizationPolicies.RequireAdminRole);
 			});
 
 		services.AddSession();
 
 		// X-CSRF
 		services.AddAntiforgery();
-
-		// Json options
-		services.ConfigureHttpJsonOptions(options => {
-			options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-		});
-
-		services.Configure<JsonOptions>(options => {
-			options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-			options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-		});
 
 		// Fluent Validation
 		services
@@ -252,6 +238,7 @@ public static class Startup
 				cfg.ClientValidatorFactories[typeof(IFileSizeValidator)] = (_, rule, component) =>
 					new FileSizeClientValidator(rule, component);
 			});
+		ValidatorOptions.Global.LanguageManager.Enabled = false;
 
 		// Immediate
 		services.AddOgma3Handlers();
@@ -332,8 +319,15 @@ public static class Startup
 
 		// Handle errors
 		// TODO: handle it better somehow, using a magic string to discern API endpoints feels iffy at best
-		app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
-			appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"); });
+		// app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+		// 	appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
+
+		app.UseWhen(context => {
+				if (context.GetEndpoint() is not {} endpoint) return true;
+				return endpoint.Metadata.GetMetadata<IApiBehaviorMetadata>() is null;
+			},
+			appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
+
 		// app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
 		// Redirects

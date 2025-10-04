@@ -91,7 +91,7 @@ public sealed class ConfirmEmailModel : PageModel
 				TrackUpdates = true,
 				IsQuickAdd = true,
 				OwnerId = user.Id,
-				IconId = 12,
+				IconId = 11,
 			},
 			new()
 			{

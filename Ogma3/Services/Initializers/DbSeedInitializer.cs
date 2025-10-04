@@ -89,6 +89,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 
 	private async Task SeedRoles()
 	{
+		if (await Any<OgmaRole>()) return;
 		var roles = new[]
 		{
 			new OgmaRole { Name = RoleNames.Admin, IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue }.Normalize(),
@@ -167,6 +168,8 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 
 	public async Task SeedUsers()
 	{
+		if (await Any<OgmaUser>()) return;
+
 		var avatars = new Faker<Image>()
 			.RuleFor(i => i.Url, f => f.Internet.Avatar());
 
@@ -246,14 +249,15 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		})
 		.ToArray();
 
-		_context.Tags.AddRange(tags);
-		await _context.SaveChangesAsync();
+		await BulkUpsert(_context.Tags, tags, t => t.Name);
 
 		return tags.Select(t => (t.Id, t.Namespace)).ToArray();
 	}
 
 	public async Task<long[]> SeedStories()
 	{
+		if (await Any<Story>()) return [];
+
 		var userIds = await _context.Users.Select(u => u.Id).ToListAsync();
 		var ratings = await _context.Ratings.Select(r => r.Id).ToListAsync();
 
@@ -305,6 +309,8 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 
 	public async Task SeedStoryTags(long[] storyIds, (long, ETagNamespace?)[] tags)
 	{
+		if (await Any<StoryTag>()) return;
+
 		var genreTags = tags.Where(g => g.Item2 == ETagNamespace.Genre).ToArray();
 		var otherTags = tags.Where(g => g.Item2 != ETagNamespace.Genre).ToArray();
 
@@ -329,6 +335,8 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 
 	public async Task SeedBlogposts(long[] storyIds)
 	{
+		if (await Any<Blogpost>()) return;
+
 		var userIds = await _context.Users.Select(u => u.Id).ToListAsync();
 		var chapterIds = await _context.Chapters.Select(c => c.Id).ToListAsync();
 
@@ -368,6 +376,12 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		source.AddRange(toAdd);
 
 		await _context.SaveChangesAsync();
+	}
+
+	private async Task<bool> Any<T>() where T : class
+	{
+		var any = await _context.Set<T>().AnyAsync();
+		return any;
 	}
 
 	private async Task Time(Func<Task> func, string name)

@@ -13,14 +13,14 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 		var message = new PostmarkMessage
 		{
 			To = email,
-			From = $"Genfic <noreply@{_options.PostmarkDomain}>",
+			From = $"Genfic <noreply@{_options.Domain}>",
 			TrackOpens = true,
 			TrackLinks = LinkTrackingOptions.HtmlAndText,
 			Subject = subject,
 			HtmlBody = htmlMessage, Attachments = new List<PostmarkMessageAttachment>(),
 		};
 
-		var client = new PostmarkClient(_options.PostmarkKey);
+		var client = new PostmarkClient(_options.Key);
 		var result = await client.SendMessageAsync(message);
 
 		if (result.Status != PostmarkStatus.Success)
