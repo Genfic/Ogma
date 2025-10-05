@@ -1,5 +1,5 @@
 {
-  "generated": "2025-09-16T02:46:59.911Z",
+  "generated": "2025-10-05T20:14:28.027Z",
   "files": [
     "account/invite-codes:GkGvetAbvnGRPsXx8wBD5XuGMMh6OfgYdjOsgxwrKDY",
     "account/register:Wx_zEqaslo1wcg-BSKZFtR_qRl9Uq7pdME5plmmnSKw",
@@ -98,12 +98,12 @@
     "comp/notifications-button:ULFGxfqJyfsJ1Tcpb6NaxihqvCcvS6JA1MJGuyA5UoY",
     "comp/password-input:PU_D3RJ3-tQQrmrRnP-rxReC9rZnkWshDST5umI94Yc",
     "comp/qr-code:WLURLv5isb2e_vB1EbTL8t9s8eW4f1gumLUq7Zvqtgo",
-    "comp/quote-box:3OwK4_NW2w_5KS9Ii6_DuvHpAjvifkSxoWXCBZ0oARY",
+    "comp/quote-box:W-7rYGvU_dS5SDOPjnUyRi6Eep3ptnvq4tfIS96gt5k",
     "comp/read-progress:ug3nmLfKaT9RQNVyfTZIPAVWr5W5fDo0zFf4wD9l8SQ",
     "comp/report-modal:_drvT-17fnp0ORMiLmuLhFwFcdqyySsYZGgaRrbLQfg",
     "comp/shelves-button:ibjmJchvmf5HL9_x190tWaEGQAMzrymLzWHJJy2L9YQ",
     "comp/table-info:t1XKaK5Yc0nbsbn7a9zSW4mRm1VU6VNJTda3XwFUQH0",
-    "comp/vote-button:bG5ybfQ0iny3RBYygSIjRl8-7BgpyEBQmpbAr7B-Xoo",
+    "comp/vote-button:cN__DHfKLk-XZn6p02lqRyfcGE5EWfAxiRWE65BYADU",
     "components/input-counter-component:h7UKFnd8mOeRBAntieYUd06uQW9d7HtK9LXKLT70fKk",
     "components/report-modal:y6k-ZXJdAYuYo2I12WqGXzavEh4DagjD8aD7eOQFOck",
     "components/tag-search-select-component:SUs6hZfgbLsRuTCVD8T9to47rlk06zOOoD22-VqSEBM",
@@ -149,6 +149,6 @@
     "tts:0Q9p9MRHmJfN65I-kfbLioOFIWg_Wb7yix_DGvC0vr0",
     "vue-directives/closeable:vQm5fQ8p3-z3dUtfT5gafRKOkkhZmCd165TTtn98qsw",
     "watch-chapter-read:2QEc2P02ivcBRwHN9XYsq4flRZxU76KAsFHllDhCKi0",
-    "workers/cache-service-worker:LSScaP-yxQrti4XioagM5Oaj5ex6Q_YlL9gC-bPPNWc"
+    "workers/cache-service-worker:nXfXs0MOlZFcvoOVbdEvGFrGqvQYbQLhJj0_b6wuEKo"
   ]
 }

@@ -31,7 +31,7 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 		}
 
 		if (response.status === 429) {
-			const nextFetchTime = Number.parseInt(response.headers.get("Retry-After") ?? "0") * 1000;
+			const nextFetchTime = Number.parseInt(response.headers.get("Retry-After") ?? "0", 10) * 1000;
 			canFetch = false;
 			window.setTimeout(() => (canFetch = true), nextFetchTime);
 			if (stored) {
@@ -46,7 +46,7 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 
 	return () => (
 		<div id="quote" class="quote active-border">
-			<button type="button" class="refresh" onClick={refetch}>
+			<button type="button" class="refresh" onClick={refetch} title="Get new quote">
 				{canFetch ? <LucideRefreshCw /> : <LucideClock />}
 			</button>
 			<Show when={quote()} fallback={<span>Loading the quote...</span>}>

@@ -131,6 +131,7 @@ $margin: .5rem;
 		.button {
 			background-color: var(--accent-10);
 			margin-left: .25rem;
+			padding: 0 .5rem;
 			height: 100%;
 			@include ab.active-border;
 			@include f.focus;

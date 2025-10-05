@@ -2,10 +2,11 @@
 	padding: 0.5rem;
 
 	&.active {
-		::part(icon) {
+		svg {
 			color: var(--gold);
 
 			animation: spin 0.2s ease-in-out;
+			pointer-events: none;
 		}
 	}
 }

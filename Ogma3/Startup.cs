@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
@@ -319,14 +318,14 @@ public static class Startup
 
 		// Handle errors
 		// TODO: handle it better somehow, using a magic string to discern API endpoints feels iffy at best
-		// app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
-		// 	appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
-
-		app.UseWhen(context => {
-				if (context.GetEndpoint() is not {} endpoint) return true;
-				return endpoint.Metadata.GetMetadata<IApiBehaviorMetadata>() is null;
-			},
+		app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
 			appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
+
+		// app.UseWhen(context => {
+		// 		if (context.GetEndpoint() is not {} endpoint) return true;
+		// 		return endpoint.Metadata.GetMetadata<IApiBehaviorMetadata>() is null;
+		// 	},
+		// 	appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
 
 		// app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 

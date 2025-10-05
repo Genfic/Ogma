@@ -1,4 +1,3 @@
-
 .tags {
 	display: flex;
 	padding: 4px;
@@ -8,13 +7,17 @@
 .tag {
 	display: flex;
 	place-items: center;
+
 	line-height: .9;
+	font-size: .9rem;
+
 	border: 1px solid var(--foreground-75);
 	color: var(--foreground);
 	background-color: oklch(from var(--tag-bg, transparent) l c h / 50%);
 
+	width: max-content;
+	padding: 4px;
 	margin: 4px 0;
-	padding: 0 .2rem;
 	cursor: pointer;
 
 	&.locked {

@@ -1,18 +1,19 @@
 .story-status {
 	display: flex;
 	place-items: center;
-	gap: .2rem;
 
 	line-height: .9;
 	font-size: .9rem;
+
+	border: 1px solid var(--foreground-75);
+	color: var(--foreground);
+
+	gap: .2rem;
 	cursor: default;
 
 	width: max-content;
 	padding: 4px;
 	margin: 4px 0;
-
-	border: 1px solid var(--foreground-75);
-	color: var(--foreground);
 
 	&.inprogress {
 		background-color: oklch(59% 0.225 258deg / 50%);

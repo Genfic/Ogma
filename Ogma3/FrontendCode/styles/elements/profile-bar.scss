@@ -1,12 +1,26 @@
 .profile-bar {
-	& .roles {
+	>.name {
+		-webkit-text-stroke: 5px var(--background-50);
+		-webkit-text-fill-color: var(--foreground);
+		paint-order: stroke fill;
+	}
+
+	.info {
+		div {
+			-webkit-text-stroke: 5px var(--background-50);
+			-webkit-text-fill-color: var(--foreground);
+			paint-order: stroke fill;
+		}
+	}
+
+	.roles {
 		grid-row: 2;
 		grid-column: 2 / 3;
 		display: flex;
 		margin: .1rem 0;
 	}
 
-	& .title {
+	.title {
 		font-size: 1.1rem;
 		font-weight: 320;
 	}
