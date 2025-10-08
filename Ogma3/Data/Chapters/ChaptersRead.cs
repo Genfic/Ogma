@@ -15,8 +15,22 @@ public sealed class ChaptersRead
 	public long StoryId { get; init; }
 	public OgmaUser User { get; init; }
 	public long UserId { get; init; }
-	// TODO: Should be a HashSet<long>, but #82 blocks that
-	public List<long> Chapters { get; set; }
+
+	// TODO: Workaround for #82
+	private List<long> _chaptersInternal = [];
+	public IReadOnlySet<long> Chapters => _chaptersInternal.ToHashSet();
+
+	public void AddChapter(long chapterId)
+	{
+		if (_chaptersInternal.Contains(chapterId)) return;
+		_chaptersInternal.Add(chapterId);
+	}
+
+	public void RemoveChapter(long chapterId)
+	{
+		_chaptersInternal.Remove(chapterId);
+	}
+	// END WORKAROUND
 
 	public sealed class Configuration : IEntityTypeConfiguration<ChaptersRead>
 	{
@@ -26,15 +40,11 @@ public sealed class ChaptersRead
 				.HasKey(cr => new { cr.StoryId, cr.UserId });
 
 			builder
-				.PrimitiveCollection(cr => cr.Chapters);
-			// .HasConversion(
-			// 	v => v.ToList(), 
-			// 	v => v.ToHashSet()) // BUG: This bitch broken
-			// .Metadata.SetValueComparer(new ValueComparer<HashSet<long>>(
-			// 	(a, b) => a.SetEquals(b),
-			// 	l => l.Aggregate(0, (i, l1) => HashCode.Combine(i, l1.GetHashCode())),
-			// 	h => h.ToHashSet()
-			// ));
+				.PrimitiveCollection(nameof(_chaptersInternal))
+				.HasColumnName(nameof(Chapters));
+
+			builder
+				.Ignore(cr => cr.Chapters);
 		}
 	}
 }

@@ -39,7 +39,7 @@ public static partial class MarkChapterAsUnread
 
 		if (chaptersReadObj is null) return TypedResults.NoContent();
 
-		chaptersReadObj.Chapters.Remove(chapter);
+		chaptersReadObj.RemoveChapter(chapter);
 
 		if (chaptersReadObj.Chapters.Count < 1)
 		{

@@ -269,6 +269,9 @@ public static class Startup
 			options.MaxAge = TimeSpan.FromHours(12); // TimeSpan.FromYears(1) when HTTPS config is down pat
 		});
 
+		// Security headers
+		services.AddCustomSecurityHeaderPolicies();
+
 		// Rate-limiting profiles
 		services.AddRateLimiting();
 		// Cache policies
@@ -348,7 +351,7 @@ public static class Startup
 
 		// OpenAPI
 		app.MapOpenApi("openapi/{documentName}.json").CacheOutput();
-		app.MapScalarApiReference();
+		app.MapScalarApiReference().WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax);
 
 		// Rate limit
 		app.UseRateLimiter();
@@ -361,12 +364,6 @@ public static class Startup
 		app.UseAntiforgery();
 
 		// Security headers
-		app.UseSecurityHeaders(cfg => {
-			cfg.AddContentSecurityPolicy(builder => {
-				builder.AddScriptSrc()
-					.Self()
-					.WithNonce();
-			});
-		});
+		app.UseSecurityHeaders();
 	}
 }

@@ -39,19 +39,18 @@ public static partial class MarkChapterAsRead
 
 		if (chaptersReadObj is null)
 		{
-			var result = context.ChaptersRead.Add(new ChaptersRead
+			var cr = new ChaptersRead
 			{
 				StoryId = story,
 				UserId = uid,
-				Chapters = [chapter],
-			});
+			};
+			cr.AddChapter(chapter);
+			var result = context.ChaptersRead.Add(cr);
 			chaptersReadObj = result.Entity;
 		}
 		else
 		{
-			// NOTE: Workaround until hashsets in #83 are fixed
-			HashSet<long> chapters = [..chaptersReadObj.Chapters, chapter];
-			chaptersReadObj.Chapters = chapters.ToList();
+			chaptersReadObj.AddChapter(chapter);
 		}
 
 		await context.SaveChangesAsync(cancellationToken);
