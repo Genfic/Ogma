@@ -2,7 +2,7 @@ import { appendFile } from "node:fs/promises";
 
 export class SizeHistory {
 	private filename = ".sizehist";
-	private label;
+	private readonly label;
 
 	constructor(label: string) {
 		this.label = label;

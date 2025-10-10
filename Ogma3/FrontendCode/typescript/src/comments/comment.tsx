@@ -3,12 +3,12 @@ import type { CommentDto, GetRevisionResult } from "@g/types-public";
 import { long } from "@h/tinytime-templates";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import type { ReportModalElement } from "../comp/report-modal";
+import { LucideFlag } from "../icons/LucideFlag";
+import { LucidePencil } from "../icons/LucidePencil";
+import { LucideTrash2 } from "../icons/LucideTrash2";
 import { DeletedCommentBody } from "./comment-body-deleted";
 import { CommentBodyEditor } from "./comment-body-editor";
 import { HiddenCommentBody } from "./comment-body-hidden";
-import { LucideFlag } from "../icons/LucideFlag";
-import { LucideTrash2 } from "../icons/LucideTrash2";
-import { LucidePencil } from "../icons/LucidePencil";
 
 type Props = CommentDto & CommentProps;
 

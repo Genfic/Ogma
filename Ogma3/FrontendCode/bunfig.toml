@@ -5,3 +5,9 @@ preload = [
 
 [test]
 preload = ['./typescript/tests/_happy-dom.ts']
+
+[install]
+minimumReleaseAge = 25_9200 # 3 days in seconds
+
+[install.security]
+provider = "@socketsecurity/bun-security-scanner"

@@ -5,7 +5,7 @@ import { generateDiffHtml } from "./helpers/diff-parser";
 import { findAllTemplates } from "./helpers/template-helpers";
 import type { BiomeDiag } from "./types/biome-diag";
 
-await $`bunx @biomejs/biome check . --reporter=json > biome.diag.json`.quiet().nothrow();
+await $`bunx biome check . --reporter=json > biome.diag.json`.quiet().nothrow();
 
 const diag: BiomeDiag = await Bun.file("biome.diag.json").json();
 const templates = await findAllTemplates();

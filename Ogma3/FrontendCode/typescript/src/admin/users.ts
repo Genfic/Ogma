@@ -1,7 +1,7 @@
 import { DeleteAdminApiInfractions } from "@g/paths-internal";
 import { GetApiUsersNames as getNames, PostApiUsersRoles } from "@g/paths-public";
 
-// @ts-ignore
+// @ts-expect-error
 new Vue({
 	el: "#app",
 	data: {

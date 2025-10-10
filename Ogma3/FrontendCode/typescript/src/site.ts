@@ -1,9 +1,9 @@
 ﻿// Set Vue error handling
-// @ts-ignore
+// @ts-expect-error
 Vue.config.errorHandler = (err: Error) => {
 	console.info(err.message); // "Oops"
 };
-// @ts-ignore
+// @ts-expect-error
 Vue.config.ignoredElements = [/o-*/];
 
 const workers = [{ name: "cache", path: "/js/workers/cache-service-worker.js", scope: "/" }];

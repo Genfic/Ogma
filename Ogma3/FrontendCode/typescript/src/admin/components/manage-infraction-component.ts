@@ -2,7 +2,7 @@ import { PostAdminApiInfractions } from "@g/paths-internal";
 import type { InfractionType } from "@g/types-internal";
 import { log } from "@h/logger";
 
-// @ts-ignore
+// @ts-expect-error
 Vue.component("manage-infraction", {
 	props: {
 		csrf: {

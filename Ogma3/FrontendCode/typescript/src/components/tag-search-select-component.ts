@@ -1,7 +1,7 @@
 import { GetApiTagsAll, GetApiTagsStory } from "@g/paths-public";
 import type { TagDto } from "@g/types-public";
 
-// @ts-ignore
+// @ts-expect-error
 Vue.component("tag-search-select", {
 	props: {
 		min: {

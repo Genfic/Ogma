@@ -1,7 +1,6 @@
 import { join, relative } from "node:path";
 import { Glob } from "bun";
 
-
 /**
  * Processes and expands SCSS `@use` statements in the given SCSS string.
  *
@@ -16,21 +15,22 @@ import { Glob } from "bun";
  * @return An array of processed SCSS lines where wildcard imports
  *                    are expanded into specific `@use` statements.
  */
-export const expandScss = (scss: string, basePath: string) => scss.split("\n").flatMap((l) => {
-	if (!l.startsWith("@use")) return [l];
+export const expandScss = (scss: string, basePath: string) =>
+	scss.split("\n").flatMap((l) => {
+		if (!l.startsWith("@use")) return [l];
 
-	const p = l.split('"')[1];
+		const p = l.split('"')[1];
 
-	console.log(p);
+		console.log(p);
 
-	if (!p.endsWith("*")) {
-		return [l];
-	}
+		if (!p.endsWith("*")) {
+			return [l];
+		}
 
-	const g = join(basePath, `${p}.scss`);
-	return [...new Glob(g).scanSync()]
-		.map((i) => relative(basePath, i))
-		.map((i) => i.replace(".scss", ""))
-		.map((i) => i.replaceAll("\\", "/"))
-		.map((i) => `@use "${i}";`);
-});
+		const g = join(basePath, `${p}.scss`);
+		return [...new Glob(g).scanSync()]
+			.map((i) => relative(basePath, i))
+			.map((i) => i.replace(".scss", ""))
+			.map((i) => i.replaceAll("\\", "/"))
+			.map((i) => `@use "${i}";`);
+	});

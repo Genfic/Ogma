@@ -5,8 +5,8 @@ import { log } from "@h/logger";
 import { long } from "@h/tinytime-templates";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { render } from "solid-js/web";
-import { LucideTrash2 } from "../icons/LucideTrash2";
 import { LucideClipboardCopy } from "../icons/LucideClipboardCopy";
+import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("invite-codes-app");
 
@@ -118,7 +118,7 @@ const InviteCodes = () => {
 
 			<Switch>
 				<Match when={codes.loading}>
-					<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+					<span class="spinner-grow spinner-grow-sm" aria-hidden="true" />
 					Loading...
 				</Match>
 				<Match when={codes}>
