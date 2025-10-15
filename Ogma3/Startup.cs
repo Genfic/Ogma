@@ -153,7 +153,7 @@ public static class Startup
 			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"));
 
 		// Backblaze
-		var b2Options = configuration.GetSection("B2").Get<B2Options>();
+		var b2Options = configuration.GetSection("B2").Get<B2Options>() ?? throw new InvalidOperationException("B2 options not found");
 		services.AddSingleton<IB2Client>(new B2Client(b2Options));
 
 		// File uploader

@@ -39,7 +39,9 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 	)
 	{
 		if (file is not { Length: > 0 })
+		{
 			throw new ArgumentException("File cannot be null or empty");
+		}
 
 		// Read file extension
 		var ext = file.FileName.Split('.').Last();
@@ -84,7 +86,14 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 
 			try
 			{
-				var result = await b2Client.Files.Upload(ms.ToArray(), fileName);
+				var uploadUrl = await b2Client.Files.GetUploadUrl();
+				var uploadContext = new B2FileUploadContext
+				{
+					FileName = fileName,
+					B2UploadUrl = uploadUrl,
+				};
+
+				var result = await b2Client.Files.Upload(ms.ToArray(), uploadContext);
 				return new FileUploaderResult(result.FileId, fileName);
 			}
 			catch (B2Exception e)
