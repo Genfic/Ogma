@@ -112,6 +112,7 @@ export const CommentList: Component<Props> = (props) => {
 				console.log("Submitted");
 				setCurrentPage(1);
 				setHighlight(totalComments() + 1);
+				setReload((r) => r + 1);
 			},
 		});
 	});

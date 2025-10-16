@@ -250,14 +250,14 @@ public static class Startup
 		services.AddOpenApi("public", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
-			options.AddNullableTransformer();
+			// options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && !r.StartsWith("admin");
 		});
 		services.AddOpenApi("internal", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
-			options.AddNullableTransformer();
+			// options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && r.StartsWith("admin");
 		});
@@ -350,7 +350,7 @@ public static class Startup
 		app.UseSession();
 
 		// OpenAPI
-		app.MapOpenApi("openapi/{documentName}.json").CacheOutput();
+		app.MapOpenApi("openapi/{documentName}.json");
 		app.MapScalarApiReference().WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax);
 
 		// Rate limit

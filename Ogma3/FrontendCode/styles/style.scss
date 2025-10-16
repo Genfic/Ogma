@@ -15,13 +15,11 @@
 @use "elements/cookie-banner";
 
 @use "elements/tags";
-@use "elements/images";
 @use "elements/story-cards";
 @use "elements/story-details";
 @use "elements/chapter-details";
 @use "elements/comments";
 @use "elements/comment";
-@use "elements/separators";
 @use "elements/items-list";
 @use "elements/modal";
 @use "elements/profile-bar";
@@ -51,8 +49,6 @@
 @use "elements/alert";
 @use "elements/notifications";
 @use "elements/details";
-@use "elements/tile-list";
-@use "elements/rss";
 @use "elements/recovery-codes";
 @use "elements/rating-icon";
 @use "elements/bookshelf-card";

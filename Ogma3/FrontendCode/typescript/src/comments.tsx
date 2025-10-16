@@ -10,7 +10,7 @@ import { LucideMessageSquarePlus } from "./icons/LucideMessageSquarePlus";
 import { MdiLockOpenVariantOutline } from "./icons/MdiLockOpenVariantOutline";
 import { MdiLockOutline } from "./icons/MdiLockOutline";
 
-interface Props extends Record<string, unknown> {
+interface Props {
 	csrf: string;
 	id: number;
 	isLoggedIn: boolean;
@@ -71,7 +71,7 @@ const Comments = (props: Props) => {
 		const res = await PostApiComments(
 			{
 				body: body(),
-				thread: props.id,
+				thread: Number(props.id),
 				source: threadData()?.source ?? ("" as CommentSource),
 			},
 			{ RequestVerificationToken: props.csrf },

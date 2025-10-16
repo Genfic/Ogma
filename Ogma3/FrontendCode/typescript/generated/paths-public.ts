@@ -229,7 +229,18 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number | null, highlight: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
+export const GetApiComments = async (thread: number, page: number | null, highlight: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
+    /** List of the fetched elements */
+    elements: CommentDto[];
+    /** Total number of elements */
+    total: number;
+    /** Number of elements per page */
+    perPage: number;
+    /** Number of pages the total number of elements can be divided into */
+    pages: number;
+    /** The requested page */
+    page: number;
+}, undefined>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
 	get,
 	undefined,
 	headers,

@@ -1,6 +1,6 @@
-import type { ComponentOptions, FunctionComponent } from "component-register";
+import type { ComponentOptions } from "component-register";
 import type { ComponentType } from "solid-element";
-import { type Component, createComponent, onMount } from "solid-js";
+import { type JSX, onMount } from "solid-js";
 
 type SolidElementInstance = Element & { renderRoot?: Node | null };
 
@@ -14,8 +14,8 @@ type SolidElementInstance = Element & { renderRoot?: Node | null };
  * @param {string} css The CSS styles to be applied to the wrapped component.
  * @returns {ComponentType<TProps>} A new component type with the specified styles applied.
  */
-export const Styled = <TProps extends Record<string, unknown>>(
-	component: ComponentType<TProps>,
+export const Styled = <TProps extends object>(
+	component: (props: TProps, options: ComponentOptions) => JSX.Element,
 	...css: string[]
 ): ComponentType<TProps> => {
 	return (props: TProps, options: ComponentOptions) => {
@@ -31,10 +31,7 @@ export const Styled = <TProps extends Record<string, unknown>>(
 				element.appendChild(styleEl);
 			}
 		});
-		if (Object.getPrototypeOf(component).constructor === component) {
-			return createComponent(component as unknown as Component<TProps>, props);
-		}
 
-		return (component as FunctionComponent<TProps>)(props, options);
+		return component(props, options);
 	};
 };

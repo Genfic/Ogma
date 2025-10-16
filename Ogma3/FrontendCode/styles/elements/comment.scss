@@ -13,6 +13,14 @@
 		--bc: var(--foreground-75);
 	}
 
+	.sm-line {
+		display: inline-block;
+		width: 1px;
+		height: .8rem;
+		background-color: var(--foreground-50);
+		margin: 0 .5rem;
+	}
+
 	&.marked {
 		background: transparent linear-gradient(90deg, transparent 0%, var(--accent-25) 40%, var(--accent-25) 60%, transparent 100%);
 		transition: background-color 100ms ease-in-out;
@@ -96,7 +104,7 @@
 			white-space: pre-line;
 			margin: .5rem;
 			overflow-wrap: break-word;
-			word-wrap: break-word;
+			overflow-wrap: break-word;
 			word-break: break-word;
 			hyphens: auto;
 		}
@@ -190,7 +198,7 @@
 
 				.body {
 					overflow-wrap: break-word;
-					word-wrap: break-word;
+					overflow-wrap: break-word;
 					word-break: break-word;
 					hyphens: auto;
 				}

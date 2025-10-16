@@ -1,7 +1,7 @@
 import fs, { rm } from "node:fs/promises";
 import * as path from "node:path";
 import { dirname, join } from "node:path";
-import { brotliCompressSync } from "node:zlib";
+import { brotliCompressSync, gzipSync, zstdCompressSync } from "node:zlib";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -79,7 +79,7 @@ const compileSass = async (file: string) => {
 
 	const { css, sourceMap } = compileResult;
 
-	logger.verbose(css.length);
+	logger.verbose(`Compiled ${css.length} bytes`);
 
 	const transformResult: Pick<TransformResult, "code" | "map" | "warnings"> | undefined = values.raw
 		? { code: encoder.encode(css), map: encoder.encode(JSON.stringify(sourceMap)), warnings: [] }
@@ -104,16 +104,17 @@ const compileSass = async (file: string) => {
 
 	const { code, map, warnings } = transformResult;
 
-	logger.verbose(code.length);
+	logger.verbose(`Transformed ${code.length} bytes`);
+	logger.verbose(`Warnings: ${warnings.length}`);
 
 	for (const { message, loc } of warnings) {
 		logger.warn(ct`{yellow [{bold ${filename}}] WRN: ${message} at ${loc.filename} : ${loc.line}:${loc.column}}`);
 	}
 
 	await Bun.write(path.join(_dest, `${filename}.css`), code);
-	await Bun.write(path.join(_dest, `${filename}.css.gz`), Bun.gzipSync(code.buffer as ArrayBuffer));
+	await Bun.write(path.join(_dest, `${filename}.css.gz`), gzipSync(code.buffer as ArrayBuffer));
 	await Bun.write(path.join(_dest, `${filename}.css.br`), brotliCompressSync(code));
-	await Bun.write(path.join(_dest, `${filename}.css.zst`), Bun.zstdCompressSync(code));
+	await Bun.write(path.join(_dest, `${filename}.css.zst`), zstdCompressSync(code));
 	if (map) {
 		await Bun.write(path.join(_dest, `${filename}.map.css`), map);
 	}
@@ -132,9 +133,9 @@ const compileAll = async () => {
 		return await attemptAsync(async () => await compileSass(f));
 	});
 
-	logger.verbose(res.map(([err]) => (err ? JSON.stringify(err, null, 4) : "ok")));
+	logger.verbose(JSON.stringify(res, null, 4));
 
-	const fulfilled = res.filter(([err]) => !err).length;
+	const fulfilled = res.filter(([err, _]) => !err).length;
 	const color = fulfilled === files.length ? c.green : c.red;
 	logger.log(ct`{bold compiled ${color(ct`{underline ${fulfilled}} of {underline ${files.length}}`)} files}`);
 	logger.log(ct`{bold Total compilation took}`, timer);
