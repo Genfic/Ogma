@@ -115,7 +115,7 @@ public sealed class NumericExtensionsTests
     {
         yield return [BigInteger.Parse("0"), "th"];
         yield return [BigInteger.Parse("1"), "st"];
-        yield return [BigInteger.Parse("11"), "th"]; // Should be "th"
+        yield return [BigInteger.Parse("11"), "th"];
         yield return [BigInteger.Parse("22"), "nd"];
         yield return [BigInteger.Parse("123456789012345678901234567893"), "rd"];
     }

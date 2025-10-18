@@ -15,7 +15,8 @@ using Serilog.Events;
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 [assembly: Behaviors(typeof(ValidationBehavior<,>))]
 
-Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-GB");
+Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 Console.OutputEncoding = Encoding.UTF8;
 
 var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
