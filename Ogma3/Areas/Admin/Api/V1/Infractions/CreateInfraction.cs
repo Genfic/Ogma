@@ -16,7 +16,7 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 
-using ReturnType = Results<UnauthorizedHttpResult, CreatedAtRoute<InfractionDto>>;
+using ReturnType = Results<UnauthorizedHttpResult, Ok>;
 
 [Handler]
 [MapPost("admin/api/infractions")]
@@ -68,10 +68,12 @@ public static partial class CreateInfraction
 			cache.Set(UserBanMiddleware.CacheKey(infraction.UserId), infraction.ActiveUntil);
 		}
 
-		return TypedResults.CreatedAtRoute(
-			infraction.MapToResult(),
-			nameof(GetInfractionDetails),
-			new GetInfractionDetails.Query(infraction.Id)
-		);
+		return TypedResults.Ok();
+
+		// return TypedResults.CreatedAtRoute(
+		// 	infraction.MapToResult(),
+		// 	nameof(GetInfractionDetails),
+		// 	new GetInfractionDetails.Query(infraction.Id)
+		// );
 	}
 }

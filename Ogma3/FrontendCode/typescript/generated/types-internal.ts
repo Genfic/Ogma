@@ -5,6 +5,30 @@ export type CreateInfractionCommand = {
     type: InfractionType;
 };
 
+export type GetUserDataInfractionDto = {
+    id: number;
+    issueDate: Date;
+    activeUntil: Date;
+    removedAt: Date | null;
+    reason: string;
+    type: InfractionType;
+    removedBy: string | null;
+};
+
+export type GetUserDataUserDetailsDto = {
+    id: number;
+    name: string;
+    email: string;
+    title: string | null;
+    avatar: string | null;
+    registrationDate: Date;
+    lastActive: Date;
+    storiesCount: number;
+    blogpostsCount: number;
+    roleNames: string[];
+    infractions: GetUserDataInfractionDto[];
+};
+
 export type GetUserInfractionsResult = {
     id: number;
     activeUntil: Date;

@@ -1,5 +1,5 @@
 import { del, get, post, typedFetch } from "./typed-fetch";
-import type { CreateInfractionCommand, GetUserInfractionsResult, InfractionDto } from "./types-internal";
+import type { CreateInfractionCommand, GetUserDataUserDetailsDto, GetUserInfractionsResult, InfractionDto } from "./types-internal";
 
 
 export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/admin/api/cache",
@@ -43,6 +43,14 @@ export const GetAdminApiTelemetryGetImportantItemCounts = async (headers?: Heade
 
 
 export const GetAdminApiTelemetryGetTableInfo = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<number, undefined>("/admin/api/telemetry/GetTableInfo",
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
+export const GetAdminApiUsers = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetUserDataUserDetailsDto, undefined>(`/admin/api/users/${name}`,
 	get,
 	undefined,
 	headers,

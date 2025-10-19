@@ -25,6 +25,9 @@ public static class ModeratorActionTemplates
 	public static string UserRoleAdded(OgmaUser user, string modName, string roleName)
 		=> $"User **{user.UserName}** (id: {user.Id}) has been granted a **{roleName}** role by **{modName}**.";
 
+	public static string UserRolesChanged(string userName, long userId, string modName, long[] oldRoles, long[] newRoles)
+		=> $"User **{userName}** (id: {userId}) had their roles changed by **{modName}** from [{string.Join(", ", oldRoles)}] to [{string.Join(", ", newRoles)}].";
+
 	// Content templates
 	public static string ContentBlocked(string type, string title, long id, string modName)
 		=> $"{type.Humanize()} ***\"{title}\"*** (id: {id}) has been blocked by **{modName}**";

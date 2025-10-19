@@ -632,12 +632,6 @@ export interface HTMLAttribute {
 	default?: string;
 	required?: boolean;
 	value?: HTMLAttributeValue;
-	"vue-argument"?: DeprecatedHTMLAttributeVueArgument;
-	/**
-	 * Deprecated vue-specific property - contribute Vue directives to
-	 * /contributions/html/vue-directives
-	 */
-	"vue-modifiers"?: DeprecatedHTMLAttributeVueModifier[];
 	abstract?: boolean;
 	css?: CSS;
 	deprecated?: Deprecated;
@@ -991,27 +985,6 @@ export interface HTMLAttributeValue {
 }
 
 export type ValueKind = "no-value" | "plain" | "expression";
-
-/**
- * Deprecated vue-specific property - contribute Vue directives to
- * /contributions/html/vue-directives
- */
-export interface DeprecatedHTMLAttributeVueArgument {
-	description?: string;
-	"doc-url"?: string;
-	pattern?: NamePatternRoot;
-	/**
-	 * Whether directive requires an argument
-	 */
-	required?: boolean;
-}
-
-export interface DeprecatedHTMLAttributeVueModifier {
-	description?: string;
-	"doc-url"?: string;
-	name: string;
-	pattern?: NamePatternRoot;
-}
 
 /**
  * Deprecated, use top-level property.

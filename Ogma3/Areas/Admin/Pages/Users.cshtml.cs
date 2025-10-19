@@ -14,52 +14,14 @@ public sealed class Users(ApplicationDbContext context) : PageModel
 	public required List<RoleDto> Roles { get; set; }
 	public string InfractionNamesJson =>
 		JsonSerializer.Serialize(InfractionTypeExtensions.GetNames(), InfractionNamesJsonContext.Default.StringArray);
+	public string RolesJson =>
+		JsonSerializer.Serialize(Roles, RoleDtoJsonContext.Default.ListRoleDto);
+
+	public string? Name { get; set;  }
 
 	public async Task<ActionResult> OnGet([FromQuery] string? name)
 	{
-		if (string.IsNullOrEmpty(name)) return Page();
-
-		var query = context.Users.AsQueryable();
-
-		if (name.StartsWith("id:", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(name[3..], out var id))
-		{
-			query = query.Where(u => u.Id == id);
-		}
-		else
-		{
-			query = query.Where(u => u.NormalizedUserName == name.ToUpperInvariant());
-		}
-
-		OgmaUser = await query.Select(u => new UserDetailsDto
-			{
-				Id = u.Id,
-				Name = u.UserName,
-				Email = u.Email,
-				Title = u.Title,
-				Avatar = u.Avatar.Url,
-				RoleNames = u.Roles.Select(r => r.Name),
-				RegistrationDate = u.RegistrationDate,
-				LastActive = u.LastActive,
-				StoriesCount = u.Stories.Count,
-				BlogpostsCount = u.Blogposts.Count,
-				Infractions = u.Infractions
-					.OrderByDescending(i => i.Type)
-					.ThenByDescending(i => i.ActiveUntil)
-					.Select(i => new InfractionDto
-					{
-						Id = i.Id,
-						Reason = i.Reason,
-						Type = i.Type,
-						ActiveUntil = i.ActiveUntil,
-						IssueDate = i.IssueDate,
-						RemovedAt = i.RemovedAt,
-						RemovedBy = i.RemovedBy != null ? i.RemovedBy.UserName : null,
-					})
-					.ToList(),
-			})
-			.FirstOrDefaultAsync();
-
-		if (OgmaUser is null) return NotFound();
+		Name = name;
 
 		Roles = await context.Roles
 			.Select(r => new RoleDto(r.Id, r.Name))
@@ -99,3 +61,6 @@ public sealed class Users(ApplicationDbContext context) : PageModel
 
 [JsonSerializable(typeof(string[]))]
 public sealed partial class InfractionNamesJsonContext : JsonSerializerContext;
+
+[JsonSerializable(typeof(List<Users.RoleDto>))]
+public sealed partial class RoleDtoJsonContext : JsonSerializerContext;

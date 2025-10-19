@@ -63,7 +63,7 @@
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.2.0" />
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" Version="1.2.0" />
 		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta14" PrivateAssets="all" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.1" PrivateAssets="all" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.2" PrivateAssets="all" />
 		<PackageReference Include="Postmark" Version="5.2.0" PrivateAssets="all" />
 		<PackageReference Include="Riok.Mapperly" Version="4.2.1" />
 		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" PrivateAssets="all" />
@@ -332,4 +332,5 @@
 		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
+
 </Project>

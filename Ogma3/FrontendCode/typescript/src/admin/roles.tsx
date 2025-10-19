@@ -141,7 +141,7 @@ const Roles = () => {
 									</div>
 									<div class="main">
 										<h3 class="name">
-											{role.name}
+											<span>{role.id}</span>|<span>{role.name}</span>
 											<Show when={role.isStaff}>
 												<LucideShieldHalf />
 											</Show>

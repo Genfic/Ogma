@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.ModeratorActions;
-using Ogma3.Infrastructure.Comparers;
+using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.UserService;
-using Serilog;
 
 namespace Ogma3.Api.V1.Users;
 
@@ -23,7 +22,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 public static partial class UpdateRoles
 {
 	[Validate]
-	public sealed partial record Command(long UserId, IEnumerable<long> Roles) : IValidationTarget<Command>;
+	public sealed partial record Command(long UserId, List<long> Roles) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -37,50 +36,35 @@ public static partial class UpdateRoles
 
 		var user = await context.Users
 			.Where(u => u.Id == request.UserId)
-			.Include(u => u.Roles)
+			.Select(u => new
+			{
+				u.Id,
+				u.UserName,
+				Roles = u.Roles.Select(r => r.Id).ToArray(),
+			})
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (user is null) return TypedResults.NotFound();
 
-		var newRoles = await context.OgmaRoles
-			.Where(ur => request.Roles.Contains(ur.Id))
-			.ToListAsync(cancellationToken);
+		await context.UserRoles
+			.Where(r => r.UserId == user.Id)
+			.ExecuteDeleteAsync(cancellationToken);
 
-		// Handle role removal
-		var removedRoles = user.Roles.Except(newRoles, new OgmaRoleComparer()).ToList();
-		foreach (var role in removedRoles)
-		{
-			user.Roles.Remove(role);
-		}
+		context.UserRoles
+			.AddRange(request.Roles.Select(r => new UserRole
+			{
+				UserId = user.Id,
+				RoleId = r,
+			}));
 
-		context.ModeratorActions.AddRange(removedRoles.Select(r => new ModeratorAction
+		context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.UserRoleRemoved(user, username, r.Name),
-		}));
+			Description = ModeratorActionTemplates.UserRolesChanged(user.UserName, user.Id, username, user.Roles, request.Roles.ToArray()),
+		});
 
-		// Handle role adding
-		var addedRoles = newRoles.Except(user.Roles, new OgmaRoleComparer()).ToList();
-		foreach (var role in addedRoles)
-		{
-			user.Roles.Add(role);
-		}
+		await context.SaveChangesAsync(cancellationToken);
 
-		context.ModeratorActions.AddRange(addedRoles.Select(r => new ModeratorAction
-		{
-			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.UserRoleAdded(user, username, r.Name),
-		}));
-
-		try
-		{
-			await context.SaveChangesAsync(cancellationToken);
-		}
-		catch (Exception e)
-		{
-			Log.Error(e, "Exception occurred when staff member {Staff} tried adding roles {Role} to user {User}", uid, request.Roles, request.UserId);
-			return TypedResults.StatusCode(StatusCodes.Status500InternalServerError);
-		}
 
 		return TypedResults.Ok();
 	}

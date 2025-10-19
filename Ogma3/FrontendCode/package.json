@@ -49,8 +49,7 @@
 		"stylelint-config-standard-scss": "^16.0.0",
 		"stylelint-define-config": "^16.24.0",
 		"unlighthouse": "^0.17.4",
-		"utility-types": "^3.11.0",
-		"vue": "2.6.14"
+		"utility-types": "^3.11.0"
 	},
 	"dependencies": {
 		"@angius/tinytime": "^1.2.0",

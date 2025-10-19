@@ -80,15 +80,6 @@
 
 	@await RenderSectionAsync("Head", required: false)
 
-	@if (Env.IsDevelopment())
-	{
-		<script defer src="~/lib/vue/vue.js"></script>
-	}
-	else
-	{
-		<script defer src="~/lib/vue/vue.min.js"></script>
-	}
-
 	<script type="module" src="~/js/site.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/navbar.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/icon.js" asp-append-version="true"></script>
