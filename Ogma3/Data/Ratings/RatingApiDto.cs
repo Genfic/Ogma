@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Ratings;
 
@@ -13,11 +12,8 @@ public sealed class RatingApiDto
 	public required string Color { get; init; }
 }
 
-[Mapper]
 public static partial class RatingMapper
 {
-	public static partial RatingApiDto MapToApiDto(this Rating rating);
-
 	public static readonly Expression<Func<Rating, RatingApiDto>> ToApiDto = r => new RatingApiDto
 	{
 		Id = r.Id,

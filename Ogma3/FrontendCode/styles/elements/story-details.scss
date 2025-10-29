@@ -25,7 +25,7 @@ $title-height: 2rem;
 			h1.title {
 				font-size: $title-height;
 				line-height: $title-height * 1.5;
-				word-wrap: break-word;
+				overflow-wrap: break-word;
 				word-break: break-all;
 
 				--stroke: 3px var(--background-50);
@@ -222,8 +222,8 @@ $title-height: 2rem;
 
 		position: absolute;
 		top: 0;
-		left: $size * -1;
-		right: $size * -1;
+		left: 0;
+		right: 0;
 		z-index: -1;
 		height: 75vh;
 		overflow: hidden;

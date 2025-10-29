@@ -37,7 +37,7 @@ public sealed class CreateModel(
 
 		Ratings = await context.Ratings
 			.OrderBy(r => r.Order)
-			.ProjectToDto()
+			.Select(RatingMapper.ToDto)
 			.ToListAsync();
 
 		var tags = await context.Tags
@@ -65,7 +65,10 @@ public sealed class CreateModel(
 		public List<NullableCredit> Credits { get; init; } = [];
 	}
 
-	public sealed record NullableCredit(string? Role, string? Name, string? Link);
+	public sealed record NullableCredit(string? Role, string? Name, string? Link)
+	{
+		public static readonly NullableCredit Empty = new("", "", "");
+	}
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
@@ -105,7 +108,7 @@ public sealed class CreateModel(
 			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
 			.ToList();
 
-		// Add story
+		// Add a story
 		var story = new Story
 		{
 			AuthorId = uid,

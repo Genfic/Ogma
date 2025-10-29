@@ -31,6 +31,8 @@ public static partial class CreateRating
 		public required string Color { get; init; }
 	}
 
+	private static readonly Func<Rating, RatingApiDto> Mapper = RatingMapper.ToApiDto.Compile();
+
 	private static async ValueTask<CreatedAtRoute<RatingApiDto>> HandleAsync(
 		Command request,
 		ApplicationDbContext context,
@@ -50,6 +52,6 @@ public static partial class CreateRating
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		return TypedResults.CreatedAtRoute(rating.MapToApiDto(), nameof(GetRatingById), new GetRatingById.Query(rating.Id));
+		return TypedResults.CreatedAtRoute(Mapper(rating), nameof(GetRatingById), new GetRatingById.Query(rating.Id));
 	}
 }

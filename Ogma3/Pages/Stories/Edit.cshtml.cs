@@ -14,6 +14,7 @@ using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
+using Story = Routes.Pages.Story;
 
 namespace Ogma3.Pages.Stories;
 
@@ -178,14 +179,14 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 		await context.SaveChangesAsync();
 
-		return Routes.Pages.Story.Get(story.Id, story.Slug).Redirect(this);
+		return Story.Get(story.Id, story.Slug).Redirect(this);
 	}
 
 	private async Task Hydrate()
 	{
 		Ratings = await context.Ratings
 			.OrderBy(r => r.Order)
-			.ProjectToDto()
+			.Select(RatingMapper.ToDto)
 			.ToListAsync();
 
 		var tags = await context.Tags

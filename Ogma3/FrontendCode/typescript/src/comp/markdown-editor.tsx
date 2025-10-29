@@ -13,17 +13,17 @@ import sharedCss from "./shared.css";
 
 type Action = {
 	name: string;
-	icon: JSX.Element;
+	icon: () => JSX.Element;
 	prefix: string;
 	suffix: string;
 };
 
 const actions: Action[] = [
-	{ name: "bold", icon: <LucideBold />, prefix: "**", suffix: "**" },
-	{ name: "italic", icon: <LucideItalic />, prefix: "*", suffix: "*" },
-	{ name: "strikethrough", icon: <LucideStrikethrough />, prefix: "~~", suffix: "~~" },
-	{ name: "link", icon: <LucideLink />, prefix: "[", suffix: "](url)" },
-	{ name: "spoiler", icon: <LucideEyeClosed />, prefix: "||", suffix: "||" },
+	{ name: "bold", icon: () => <LucideBold />, prefix: "**", suffix: "**" },
+	{ name: "italic", icon: () => <LucideItalic />, prefix: "*", suffix: "*" },
+	{ name: "strikethrough", icon: () => <LucideStrikethrough />, prefix: "~~", suffix: "~~" },
+	{ name: "link", icon: () => <LucideLink />, prefix: "[", suffix: "](url)" },
+	{ name: "spoiler", icon: () => <LucideEyeClosed />, prefix: "||", suffix: "||" },
 ] as const;
 
 const name = "markdown-editor" as const;
@@ -101,7 +101,7 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 			<For each={actions}>
 				{(action) => (
 					<button type="button" class="btn action-btn" title={action.name} onClick={[click, action]}>
-						{action.icon}
+						{action.icon()}
 					</button>
 				)}
 			</For>

@@ -68,7 +68,7 @@ public static class Startup
 			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionLevel = CompressionLevel.Optimal);
 
 		// Database
-		var conn = configuration.GetConnectionString("ogma3-db") ?? configuration.GetConnectionString("DbConnection");
+		var conn = configuration.GetConnectionString("ogma3-db");
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
 				.UseNpgsql(conn, o => o.MapPostgresEnums())
@@ -137,6 +137,7 @@ public static class Startup
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
+		// services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
 		// services.AddScoped(s => s.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
 		// Argon2 hasher

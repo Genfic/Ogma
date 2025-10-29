@@ -1,6 +1,8 @@
 @use "../mixins/focus" as f;
 @use "../vars" as v;
 
+$burger-size: 48px;
+
 button#burger {
 	position: fixed;
 	bottom: .5rem;
@@ -8,8 +10,8 @@ button#burger {
 	background-color: var(--ele-1);
 	border: 1px solid var(--foreground-10);
 	border-radius: 50%;
-	height: 48px;
-	width: 48px;
+	height: $burger-size;
+	width: $burger-size;
 	z-index: 999999999;
 	color: var(--foreground);
 	display: flex;
@@ -96,27 +98,45 @@ nav#top-nav {
 
 		@media screen and (max-width: v.$mq-mobile-sm) {
 			min-height: 48px;
+			padding: 0 1rem;
 		}
 	}
 
 	.navbar-nav {
 		display: flex;
-
 		flex-direction: row;
 
 		@media screen and (max-width: v.$mq-mobile-sm) {
-
-			flex-direction: column;
 			padding: .2rem .5rem;
+			flex-direction: column;
 
 			&.left {
 				margin-right: 0;
+			}
+
+			&.right {
+				&.logged-in {
+					display: grid;
+					grid-template-rows: auto auto;
+					grid-template-columns: 1fr 1fr 1fr;
+					margin-right: $burger-size;
+
+					.nav-item {
+						&:not(.user) {
+							justify-self: center;
+							min-width: 48px;
+						}
+
+						&.user {
+							grid-column: 1 / 4;
+						}
+					}
+				}
 			}
 		}
 
 		&.left {
 			margin-right: auto;
-
 		}
 
 		> .nav-item {

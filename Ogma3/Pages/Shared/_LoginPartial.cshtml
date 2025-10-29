@@ -1,18 +1,24 @@
 ﻿@using System.Security.Claims
 @using Ogma3.Data.Users
+@using Routes.Pages
 @inject SignInManager<OgmaUser> SignInManager
 
-<ul class="navbar-nav right">
-	@if (SignInManager.IsSignedIn(User))
-	{
-		<li class="nav-item">
-			<a class="nav-link user" asp-area="" asp-page="/User/Index" asp-route-name="@User.FindFirstValue(ClaimTypes.Name)" title="Manage">
-				<img src="@(User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar) ?? "/img/placeholders/ph-250.png")"
+@{
+	var username = User.FindFirstValue(ClaimTypes.Name);
+	var avatar = User.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.Avatar) ?? "/img/placeholders/ph-250.png";
+}
+
+@if (SignInManager.IsSignedIn(User) && username is not null)
+{
+	<ul class="navbar-nav right logged-in">
+		<li class="nav-item user">
+			<a class="nav-link user" for-route="@User_Index.Get(username)" title="Profile">
+				<img src="@avatar"
 				     width="30" height="30"
 				     class="avatar"
 				     alt=""
 				     role="presentation" cf />
-				<span class="name">Hello @User.FindFirstValue(ClaimTypes.Name)!</span>
+				<span class="name">Hello @(username)!</span>
 			</a>
 		</li>
 
@@ -31,9 +37,13 @@
 				<icon icon="lucide:log-out"></icon>
 			</a>
 		</li>
-	}
-	else
-	{
+
+	</ul>
+}
+else
+{
+	<ul class="navbar-nav right">
+
 		<li class="nav-item register">
 			<a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
 		</li>
@@ -41,6 +51,6 @@
 		<li class="nav-item">
 			<a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
 		</li>
-	}
 
-</ul>
+	</ul>
+}

@@ -1,4 +1,5 @@
 ﻿@page
+@using Ogma3.Pages.Shared
 @model CreateModel
 
 @{
@@ -50,6 +51,12 @@
 		<div class="ratings">
 			@foreach (var r in Model.Ratings)
 			{
+				var icon = new RatingIcon
+				{
+					Name = r.Name,
+					Color = r.Color,
+				};
+
 				<div class="rating">
 
 					<input type="radio"
@@ -60,7 +67,7 @@
 					       class="radio">
 
 					<label class="radio-label active-border" for="@r.Name.ToLower()">
-						<img src="@r.Name" height="50" width="50" alt="Rating: @r.Name" loading="lazy" />
+						<partial name="_RatingIcon" model="icon"/>
 						<div class="main">
 							<strong>@r.Name</strong>
 							<span>@r.Description</span>
@@ -136,15 +143,17 @@
 			</tr>
 			@for (var i = 0; i < 10; i++)
 			{
+				var credit = Model.Input.Credits.ElementAtOrDefault(i) ?? CreateModel.NullableCredit.Empty;
+
 				<tr>
 					<td>
-						<input list="credit-roles" type="text" asp-for="@Model.Input.Credits[@i].Role">
+						<input list="credit-roles" type="text" asp-for="@(credit.Role)">
 					</td>
 					<td>
-						<input type="text" asp-for="@Model.Input.Credits[@i].Name">
+						<input type="text" asp-for="@(credit.Name)">
 					</td>
 					<td>
-						<input type="text" asp-for="@Model.Input.Credits[@i].Link">
+						<input type="text" asp-for="@(credit.Link)">
 					</td>
 				</tr>
 			}

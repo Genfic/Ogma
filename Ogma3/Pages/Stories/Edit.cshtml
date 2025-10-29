@@ -1,5 +1,6 @@
 ﻿@page
 @using Ogma3.Data.Stories
+@using Ogma3.Pages.Shared
 @using Utils.Extensions
 @model EditModel
 
@@ -112,6 +113,12 @@
 		<div class="ratings">
 			@foreach (var r in Model.Ratings)
 			{
+				var icon = new RatingIcon
+				{
+					Name = r.Name,
+					Color = r.Color,
+				};
+
 				<div class="rating">
 
 					<input type="radio"
@@ -122,7 +129,7 @@
 					       class="radio">
 
 					<label class="radio-label active-border" for="@r.Name.ToLower()">
-						<img src="@r.Name" height="50" width="50" alt="Rating: @r.Name" loading="lazy" />
+						<partial name="_RatingIcon" model="icon"/>
 						<div class="main">
 							<strong>@r.Name</strong>
 							<span>@r.Description</span>
