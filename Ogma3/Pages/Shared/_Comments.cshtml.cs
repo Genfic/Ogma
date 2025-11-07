@@ -2,4 +2,10 @@ using Ogma3.Data.Comments;
 
 namespace Ogma3.Pages.Shared;
 
-public record CommentsThreadDto(long Id, CommentSource Type, DateTimeOffset? LockDate);
+public sealed class CommentsThreadDto
+{
+	public required long Id { get; init; }
+	public required CommentSource Type { get; init; }
+	public required DateTimeOffset? LockDate { get; init; }
+
+}

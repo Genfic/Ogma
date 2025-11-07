@@ -2,17 +2,19 @@
 @inject LinkGenerator LinkGenerator
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Services
+@using Routes.Areas.Identity.Pages
+@using Routes.Pages
 @model CommentsThreadDto
 
 @{
 	var csrf = Xcsrf.GetAndStoreTokens(Context).RequestToken;
 }
 
-<o-comments csrf="@csrf" id="@Model.Id" is-logged-in="@(User.Identity is { IsAuthenticated: true })"
+<o-comments csrf="@csrf" thread-id="@Model.Id" is-logged-in="@(User.Identity is { IsAuthenticated: true })"
             lock-date="@(Model.LockDate == default(DateTimeOffset) ? null : Model.LockDate)"
-            md-ref-route="@Routes.Pages.Markdown.Get().Path(LinkGenerator)"
-            login-route="@Routes.Areas.Identity.Pages.Account_Login.Get().Path(LinkGenerator)"
-            register-route="@Routes.Areas.Identity.Pages.Account_Register.Get().Path(LinkGenerator)"></o-comments>
+            md-ref-route="@Markdown.Get().Path(LinkGenerator)"
+            login-route="@Account_Login.Get().Path(LinkGenerator)"
+            register-route="@Account_Register.Get().Path(LinkGenerator)"></o-comments>
 
 <report-modal id="report-comment" csrf="@csrf"></report-modal>
 

@@ -78,7 +78,12 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 		Body = b.Body,
 		Hashtags = b.Hashtags,
 		PublicationDate = b.PublicationDate,
-		CommentsThread = new CommentsThreadDto(b.CommentThread.Id, CommentSource.Blogpost, b.CommentThread.LockDate),
+		CommentsThread = new CommentsThreadDto
+		{
+			Id = b.CommentThread.Id,
+			Type = CommentSource.Blogpost,
+			LockDate = b.CommentThread.LockDate,
+		},
 		ContentBlock = b.ContentBlock == null
 			? null
 			: new ContentBlockCard(b.ContentBlock.Reason, b.ContentBlock.DateTime, b.ContentBlock.Issuer.UserName),

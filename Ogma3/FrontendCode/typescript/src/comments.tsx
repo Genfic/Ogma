@@ -12,7 +12,7 @@ import { MdiLockOutline } from "./icons/MdiLockOutline";
 
 interface Props {
 	csrf: string;
-	id: number;
+	threadId: number;
 	isLoggedIn: boolean;
 	lockDate: Date | null;
 	mdRefRoute: string;
@@ -28,7 +28,7 @@ const Comments = (props: Props) => {
 	const [body, setBody] = createSignal("");
 	const [threadData] = createResource(
 		async () => {
-			const res = await GetApiCommentsThread(props.id);
+			const res = await GetApiCommentsThread(props.threadId);
 			if (!res.ok) {
 				throw new Error(res.error ?? res.statusText);
 			}
@@ -71,7 +71,7 @@ const Comments = (props: Props) => {
 		const res = await PostApiComments(
 			{
 				body: body(),
-				thread: Number(props.id),
+				thread: Number(props.threadId),
 				source: threadData()?.source ?? ("" as CommentSource),
 			},
 			{ RequestVerificationToken: props.csrf },
@@ -89,7 +89,7 @@ const Comments = (props: Props) => {
 		if (!isStaff()) {
 			return false;
 		}
-		const res = await PostApiCommentsThreadLock({ threadId: props.id });
+		const res = await PostApiCommentsThreadLock({ threadId: props.threadId });
 		if (!res.ok) {
 			console.error(res.error);
 		}
@@ -157,7 +157,7 @@ const Comments = (props: Props) => {
 				</div>
 			</Show>
 
-			<CommentList ref={(f) => (listRef = f)} id={props.id} />
+			<CommentList ref={(f) => (listRef = f)} id={props.threadId} />
 		</div>
 	);
 };
@@ -166,12 +166,12 @@ customElement(
 	"o-comments",
 	{
 		csrf: "",
-		id: 0,
+		threadId: 0,
 		isLoggedIn: false,
 		lockDate: null,
 		mdRefRoute: "",
 		loginRoute: "",
 		registerRoute: "",
 	},
-	Styled(Comments, css),
+	Styled<Props>(Comments, css),
 );

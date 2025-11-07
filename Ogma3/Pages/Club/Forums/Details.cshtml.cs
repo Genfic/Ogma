@@ -49,7 +49,12 @@ public sealed class DetailsModel(ClubRepository clubRepo, ApplicationDbContext c
 					.OrderBy(ur => ur.Order)
 					.First(),
 				Body = ct.Body,
-				CommentsThread = new CommentsThreadDto(ct.CommentThread.Id, CommentSource.ForumPost, ct.CommentThread.LockDate),
+				CommentsThread = new CommentsThreadDto
+				{
+					Id = ct.CommentThread.Id,
+					Type = CommentSource.ForumPost,
+					LockDate = ct.CommentThread.LockDate,
+				},
 			})
 			.FirstOrDefaultAsync();
 

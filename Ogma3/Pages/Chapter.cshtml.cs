@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Chapters;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Riok.Mapperly.Abstractions;
+using Routes.Pages;
+using Chapter = Ogma3.Data.Chapters.Chapter;
 
 namespace Ogma3.Pages;
 
@@ -26,7 +27,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 			var locked  = await context.Stories.Where(s => s.Id == sid).Select(s => s.IsLocked).FirstOrDefaultAsync();
 			if (locked )
 			{
-				return Routes.Pages.Chapters_Locked.Get(sid, id, slug).Redirect(this);
+				return Chapters_Locked.Get(sid, id, slug).Redirect(this);
 			}
 		}
 
@@ -40,8 +41,12 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 		if (chapter is null) return NotFound();
 		Chapter = chapter;
 
-		CommentsThread =
-			new CommentsThreadDto(chapter.CommentThreadId, CommentSource.Chapter, chapter.CommentThreadLockDate);
+		CommentsThread = new CommentsThreadDto
+			{
+				Id = chapter.CommentThreadId,
+				Type = CommentSource.Chapter,
+				LockDate = chapter.CommentThreadLockDate,
+			};
 
 		Previous = await context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
