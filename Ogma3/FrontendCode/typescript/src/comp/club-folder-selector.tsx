@@ -1,10 +1,7 @@
-import {
-	PostApiFoldersAddStory as addStoryToFolder,
-	GetApiFolders as getFolders,
-	GetApiClubsUser as getUserClubs,
-} from "@g/paths-public";
+import { GetApiClubsUser as getUserClubs, GetApiFolders as getFolders, PostApiFoldersAddStory as addStoryToFolder } from "@g/paths-public";
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { component } from "@h/web-components";
+import { type ComponentType, noShadowDOM } from "solid-element";
 import { createResource, createSignal, For, Match, Switch } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
@@ -183,7 +180,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	);
 };
 
-customElement(
+component(
 	"o-club-folder-selector",
 	{
 		storyId: 0,

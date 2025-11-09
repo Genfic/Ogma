@@ -10,7 +10,7 @@ const parent = $id("invite-codes-app");
 const date = (dt: string | Date) => long.render(new Date(dt));
 
 const csrf = parent.dataset.csrf ?? "";
-const max = Number.parseInt(parent.dataset.max ?? "0");
+const max = Number.parseInt(parent.dataset.max ?? "0", 10);
 
 const InviteCodes = () => {
 	const [codes, { mutate }] = createResource<InviteCodeDto[]>(

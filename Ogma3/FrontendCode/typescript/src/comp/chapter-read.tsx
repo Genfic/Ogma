@@ -1,10 +1,10 @@
 import { DeleteApiChaptersread, PostApiChaptersread } from "@g/paths-public";
-import { type ComponentType, customElement } from "solid-element";
+import { component } from "@h/web-components";
+import type { ComponentType } from "solid-element";
 import { LucideEye } from "../icons/LucideEye";
 import { LucideEyeClosed } from "../icons/LucideEyeClosed";
 import css from "./chapter-read.css";
 import { useChaptersRead } from "./common/_chaptersReadData";
-import { Styled } from "./common/_styled";
 
 const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (props) => {
 	const [getChaptersRead, { mutate }] = useChaptersRead(props.storyId);
@@ -33,11 +33,12 @@ const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (prop
 	);
 };
 
-customElement(
+component(
 	"o-read",
 	{
 		chapterId: 0,
 		storyId: 0,
 	},
-	Styled(ChapterRead, css),
+	ChapterRead,
+	css,
 );

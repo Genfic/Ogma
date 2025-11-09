@@ -1,9 +1,9 @@
+import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
-import { type ComponentType, customElement } from "solid-element";
+import type { ComponentType } from "solid-element";
 import { createSignal } from "solid-js";
 import { LucideEye } from "../icons/LucideEye";
 import { LucideEyeClosed } from "../icons/LucideEyeClosed";
-import { Styled } from "./common/_styled";
 import css from "./password-input.css";
 import sharedCss from "./shared.css";
 
@@ -25,4 +25,4 @@ const PasswordInput: ComponentType<Empty> = (_, { element }) => {
 	);
 };
 
-customElement("o-password-toggle", {}, Styled(PasswordInput, sharedCss, css));
+component("o-password-toggle", {}, PasswordInput, [sharedCss, css]);

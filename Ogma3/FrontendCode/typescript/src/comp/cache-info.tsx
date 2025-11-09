@@ -1,8 +1,8 @@
 import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
-import { type ComponentType, customElement } from "solid-element";
+import { component } from "@h/web-components";
+import type { ComponentType } from "solid-element";
 import { createResource, Match, Switch } from "solid-js";
 import css from "./cache-info.css";
-import { Styled } from "./common/_styled";
 
 const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	let primed = $signal(false);
@@ -72,4 +72,4 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	);
 };
 
-customElement("cache-info", { csrf: "" }, Styled(CacheInfo, css));
+component("cache-info", { csrf: "" }, CacheInfo, css);

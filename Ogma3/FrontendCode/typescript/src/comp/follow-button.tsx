@@ -1,6 +1,7 @@
-import { PostApiUsersFollow as followUser, DeleteApiUsersFollow as unfollowUser } from "@g/paths-public";
+import { DeleteApiUsersFollow as unfollowUser, PostApiUsersFollow as followUser } from "@g/paths-public";
 import { log } from "@h/logger";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { component } from "@h/web-components";
+import { type ComponentType, noShadowDOM } from "solid-element";
 import { createSignal } from "solid-js";
 
 const FollowButton: ComponentType<{ userName: string; csrf: string; isFollowed: boolean }> = (props) => {
@@ -39,7 +40,7 @@ const FollowButton: ComponentType<{ userName: string; csrf: string; isFollowed: 
 	);
 };
 
-customElement(
+component(
 	"o-follow",
 	{
 		userName: "",

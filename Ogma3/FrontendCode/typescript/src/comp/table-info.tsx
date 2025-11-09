@@ -1,9 +1,8 @@
 import { GetAdminApiTelemetryGetTableInfo } from "@g/paths-internal";
+import { component } from "@h/web-components";
 import { convert } from "convert";
 import { orderBy } from "es-toolkit";
-import { customElement } from "solid-element";
 import { type Component, createResource, For } from "solid-js";
-import { Styled } from "./common/_styled";
 import css from "./table-info.css";
 
 const TableInfo: Component = () => {
@@ -21,7 +20,7 @@ const TableInfo: Component = () => {
 
 			const elements = Object.entries(data).map(([k, v]) => ({
 				name: k,
-				size: Number.parseInt(v),
+				size: Number.parseInt(v, 10),
 			}));
 
 			return orderBy(elements, [sortBy], [sortOrder]);
@@ -77,4 +76,4 @@ const TableInfo: Component = () => {
 	);
 };
 
-customElement("table-info", {}, Styled(TableInfo, css));
+component("table-info", {}, TableInfo, css);

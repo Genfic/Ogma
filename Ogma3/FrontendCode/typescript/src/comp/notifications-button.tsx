@@ -1,9 +1,9 @@
 import { GetApiNotificationsCount as countNotifications } from "@g/paths-public";
+import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
-import { type ComponentType, customElement } from "solid-element";
+import type { ComponentType } from "solid-element";
 import { createResource, Show } from "solid-js";
 import { LucideBell } from "../icons/LucideBell";
-import { Styled } from "./common/_styled";
 import css from "./notifications-button.css";
 
 const NotificationsButton: ComponentType<Empty> = (_) => {
@@ -29,4 +29,4 @@ const NotificationsButton: ComponentType<Empty> = (_) => {
 	);
 };
 
-customElement("o-notifications-button", {}, Styled(NotificationsButton, css));
+component("o-notifications-button", {}, NotificationsButton, css);

@@ -1,5 +1,6 @@
 import { parseDom } from "@h/dom";
-import { type ComponentType, customElement } from "solid-element";
+import { component } from "@h/web-components";
+import type { ComponentType } from "solid-element";
 import { onMount } from "solid-js";
 import { type QrCodeGenerateSvgOptions, renderSVG } from "uqr";
 
@@ -30,7 +31,7 @@ const QrCode: ComponentType<WidthOrHeight & { data: string } & QrCodeGenerateSvg
 	return <div style={{ width: `${width}px`, height: `${height}px`, padding: "5px" }} innerHTML={svg} />;
 };
 
-customElement(
+component(
 	"qr-code",
 	{
 		width: 100,

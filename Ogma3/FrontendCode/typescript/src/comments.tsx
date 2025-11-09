@@ -1,10 +1,10 @@
 import { GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
-import { customElement, noShadowDOM } from "solid-element";
+import { component } from "@h/web-components";
+import { noShadowDOM } from "solid-element";
 import { createResource, createSignal, Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";
 import css from "./comments.css";
-import { Styled } from "./comp/common/_styled";
 import { LucideCircleHelp } from "./icons/LucideCircleHelp";
 import { LucideMessageSquarePlus } from "./icons/LucideMessageSquarePlus";
 import { MdiLockOpenVariantOutline } from "./icons/MdiLockOpenVariantOutline";
@@ -162,7 +162,7 @@ const Comments = (props: Props) => {
 	);
 };
 
-customElement(
+component(
 	"o-comments",
 	{
 		csrf: "",
@@ -173,5 +173,6 @@ customElement(
 		loginRoute: "",
 		registerRoute: "",
 	},
-	Styled<Props>(Comments, css),
+	Comments,
+	css,
 );

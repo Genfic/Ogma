@@ -1,10 +1,9 @@
 import { DeleteApiUsersBlock as unblockUser, PostApiUsersBlock as blockUser } from "@g/paths-public";
 import { log } from "@h/logger";
-import { customElement } from "solid-element";
+import { component } from "@h/web-components";
 import { type Component, createSignal } from "solid-js";
 import { IcRoundBlock } from "../icons/IcRoundBlock";
 import css from "./block-user.css";
-import { Styled } from "./common/_styled";
 
 const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean }> = (props) => {
 	// noShadowDOM();
@@ -38,12 +37,13 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 	);
 };
 
-customElement(
+component(
 	"o-block",
 	{
 		userName: "",
 		csrf: "",
 		isBlocked: false,
 	},
-	Styled(BlockUser, css),
+	BlockUser,
+	css,
 );

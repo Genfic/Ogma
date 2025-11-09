@@ -1,6 +1,7 @@
-import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "@g/paths-public";
+import { DeleteApiClubjoin as leaveClub, PostApiClubjoin as joinClub } from "@g/paths-public";
 import { log } from "@h/logger";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { component } from "@h/web-components";
+import { type ComponentType, noShadowDOM } from "solid-element";
 import { createSignal } from "solid-js";
 
 const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: boolean }> = (props) => {
@@ -40,7 +41,7 @@ const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: bo
 	);
 };
 
-customElement(
+component(
 	"o-join",
 	{
 		clubId: 0,

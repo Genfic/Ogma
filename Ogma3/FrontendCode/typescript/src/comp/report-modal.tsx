@@ -1,7 +1,8 @@
 import { Report } from "@g/ctconfig";
 import { PostApiReports as postReport } from "@g/paths-public";
 import type { EReportableContentTypes } from "@g/types-public";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { component } from "@h/web-components";
+import { type ComponentType, noShadowDOM } from "solid-element";
 import { createSignal, onMount } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
@@ -123,7 +124,7 @@ const ReportModal: ComponentType<{
 	);
 };
 
-customElement(
+component(
 	"report-modal",
 	{
 		openSelector: undefined,

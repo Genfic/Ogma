@@ -1,8 +1,9 @@
 import { Shelf } from "@g/ctconfig";
 import { DeleteApiShelves, GetApiShelves, PostApiShelves, PutApiShelves } from "@g/paths-public";
+import { component } from "@h/web-components";
 import type { ProblemDetails } from "@t/utils";
 import { omit } from "es-toolkit";
-import { customElement, noShadowDOM } from "solid-element";
+import { noShadowDOM } from "solid-element";
 import { createResource, For } from "solid-js";
 import { InputCounter } from "./comp/common/_input-counter";
 import { InputToggle } from "./comp/common/_input-toggle";
@@ -212,7 +213,7 @@ const ManageShelves = (props: Props) => {
 			<ul class="shelves generic-list">
 				<For each={shelves()}>
 					{(s) => (
-						<li class="bookshelf-card calm" style={{ "--shelf-color": s.color }}>
+						<li class="bookshelf-card calm" style={{ "--shelf-color": s.color ?? undefined }}>
 							<o-icon class="ico" icon={s.iconName ?? ""} />
 							<span class="name">{s.name}</span>
 							<span class="desc">{s.description} &nbsp;</span>
@@ -238,7 +239,7 @@ const ManageShelves = (props: Props) => {
 	);
 };
 
-customElement(
+component(
 	"o-shelves-management",
 	{
 		icons: "",

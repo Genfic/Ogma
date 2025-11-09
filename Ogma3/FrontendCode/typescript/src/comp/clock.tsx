@@ -1,9 +1,9 @@
 import { addToDate } from "@h/date-helpers";
 import { EU, iso8601 } from "@h/tinytime-templates";
-import { type ComponentType, customElement } from "solid-element";
+import { component } from "@h/web-components";
+import type { ComponentType } from "solid-element";
 import { onCleanup, onMount } from "solid-js";
 import css from "./clock.css";
-import { Styled } from "./common/_styled";
 
 const Clock: ComponentType<{ date: string }> = (props) => {
 	let date = $signal(new Date(props.date));
@@ -24,10 +24,11 @@ const Clock: ComponentType<{ date: string }> = (props) => {
 	);
 };
 
-customElement(
+component(
 	"o-clock",
 	{
 		date: "",
 	},
-	Styled(Clock, css),
+	Clock,
+	css,
 );

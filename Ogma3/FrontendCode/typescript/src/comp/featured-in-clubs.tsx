@@ -1,6 +1,7 @@
 import { GetApiClubsStory as getFeaturingClubs } from "@g/paths-public";
 import type { GetClubsWithStoryResult } from "@g/types-public";
-import { type ComponentType, customElement, noShadowDOM } from "solid-element";
+import { component } from "@h/web-components";
+import { type ComponentType, noShadowDOM } from "solid-element";
 import { createResource, For, Show } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
@@ -59,7 +60,7 @@ const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 	);
 };
 
-customElement(
+component(
 	"o-featured-in-clubs",
 	{
 		storyId: 0,

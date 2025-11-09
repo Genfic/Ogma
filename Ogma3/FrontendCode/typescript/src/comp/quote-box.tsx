@@ -1,12 +1,12 @@
 import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
 import { useLocalStorage } from "@h/localStorageHook";
+import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
-import { type ComponentType, customElement } from "solid-element";
+import type { ComponentType } from "solid-element";
 import { createResource, Show } from "solid-js";
 import { LucideClock } from "../icons/LucideClock";
 import { LucideRefreshCw } from "../icons/LucideRefreshCw";
-import { Styled } from "./common/_styled";
 import css from "./quote-box.css";
 
 const QuoteBox: ComponentType<Empty> = (_) => {
@@ -33,7 +33,9 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 		if (response.status === 429) {
 			const nextFetchTime = Number.parseInt(response.headers.get("Retry-After") ?? "0", 10) * 1000;
 			canFetch = false;
-			window.setTimeout(() => (canFetch = true), nextFetchTime);
+			window.setTimeout(() => {
+				canFetch = true;
+			}, nextFetchTime);
 			if (stored) {
 				return stored;
 			}
@@ -61,4 +63,4 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 	);
 };
 
-customElement("quote-box", {}, Styled(QuoteBox, css));
+component("quote-box", {}, QuoteBox, css);

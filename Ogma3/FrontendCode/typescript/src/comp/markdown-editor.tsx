@@ -1,4 +1,5 @@
-import { type ComponentType, customElement } from "solid-element";
+import { component } from "@h/web-components";
+import type { ComponentType } from "solid-element";
 import { createEffect, For, type JSX, onCleanup, onMount } from "solid-js";
 import { createHistory } from "solid-signals";
 import { LucideBold } from "../icons/LucideBold";
@@ -7,7 +8,6 @@ import { LucideItalic } from "../icons/LucideItalic";
 import { LucideLink } from "../icons/LucideLink";
 import { LucideStrikethrough } from "../icons/LucideStrikethrough";
 import { Comment } from "./common/_comment";
-import { Styled } from "./common/_styled";
 import css from "./markdown-editor.css";
 import sharedCss from "./shared.css";
 
@@ -109,4 +109,4 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 	);
 };
 
-customElement(name, { selector: "textarea", overrideSelector: false }, Styled(MarkdownEditor, sharedCss, css));
+component(name, { selector: "textarea", overrideSelector: false }, MarkdownEditor, [sharedCss, css]);
