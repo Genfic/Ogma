@@ -36,6 +36,7 @@ using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.FileLogService;
 using Ogma3.Services.FileUploader;
+using Ogma3.Services.Hosted;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.TurnstileService;
@@ -134,6 +135,9 @@ public static class Startup
 				c.MaxSizeInBytes = 50 * 1024 * 1024;
 				c.Directory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
 			});
+
+		// Hosted services
+		services.AddHostedService<InfractionRemover>();
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();

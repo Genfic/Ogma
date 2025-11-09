@@ -1,9 +1,9 @@
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
-using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Areas.Admin.Pages;
 
@@ -15,17 +15,28 @@ public sealed class InfractionsModel(ApplicationDbContext context) : PageModel
 	{
 		Infractions = await context.Infractions
 			.OrderBy(i => i.IssueDate)
-			.ToInfractionDtos()
+			.Select(InfractionMapper.ToInfractionDto)
 			.ToListAsync();
 
 		return Page();
 	}
 }
 
-[Mapper(PreferParameterlessConstructors = false)]
-public static partial class InfractionMapper
+public static class InfractionMapper
 {
-	public static partial IQueryable<InfractionDto> ToInfractionDtos(this IQueryable<Infraction> infraction);
+	public static readonly Expression<Func<Infraction, InfractionDto>> ToInfractionDto = i => new InfractionDto(
+		i.User.UserName,
+		i.UserId,
+		i.IssueDate,
+		i.ActiveUntil,
+		i.RemovedAt,
+		i.Reason,
+		i.Type,
+		i.IssuedBy.UserName,
+		i.IssuedById,
+		i.RemovedBy == null ? null : i.RemovedBy.UserName,
+		i.RemovedById
+	);
 }
 
 public record InfractionDto(
@@ -38,6 +49,6 @@ public record InfractionDto(
 		InfractionType Type,
 		string IssuedByUserName,
 		long IssuedById,
-		string RemovedByUserName,
-		long RemovedById
+		string? RemovedByUserName,
+		long? RemovedById
 	);
