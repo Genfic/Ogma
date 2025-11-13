@@ -17,8 +17,8 @@ public sealed class Club : BaseModel, IReportableContent
 	public required Image Icon { get; set; }
 	public long IconId { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
-	public ICollection<ClubMember> ClubMembers { get; set; } = [];
-	public ICollection<ClubThread> Threads { get; set; } = [];
-	public ICollection<Folder> Folders { get; set; } = [];
-	public ICollection<Report> Reports { get; set; } = [];
+	public List<ClubMember> ClubMembers { get; set; } = [];
+	public List<ClubThread> Threads { get; set; } = [];
+	public List<Folder> Folders { get; set; } = [];
+	public List<Report> Reports { get; set; } = [];
 }

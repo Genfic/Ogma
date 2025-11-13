@@ -11,5 +11,5 @@ public sealed class Notification : BaseModel
 	public string Url { get; init; } = null!;
 	public DateTimeOffset DateTime { get; init; }
 	public ENotificationEvent Event { get; init; }
-	public ICollection<OgmaUser> Recipients { get; init; } = null!;
+	public List<OgmaUser> Recipients { get; init; } = null!;
 }

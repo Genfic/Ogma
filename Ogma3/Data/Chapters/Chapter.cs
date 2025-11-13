@@ -24,5 +24,5 @@ public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, 
 	public long StoryId { get; set; }
 	public ContentBlock? ContentBlock { get; set; }
 	public long? ContentBlockId { get; set; }
-	public ICollection<Report> Reports { get; set; } = null!;
+	public List<Report> Reports { get; set; } = null!;
 }

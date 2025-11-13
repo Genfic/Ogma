@@ -34,5 +34,5 @@ public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent,
 	public ContentBlock? ContentBlock { get; set; }
 	public long? ContentBlockId { get; set; }
 
-	public ICollection<Report> Reports { get; set; } = null!;
+	public List<Report> Reports { get; set; } = null!;
 }

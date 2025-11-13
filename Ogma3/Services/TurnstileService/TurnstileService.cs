@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Ogma3.Services.TurnstileService;
 
@@ -14,9 +13,9 @@ public sealed class TurnstileService(
 
 	public async Task<TurnstileResult> Verify(string token, string ip)
 	{
-		if (token.IsNullOrEmpty()) throw new ValidationException("Turnstile token cannot be empty");
-		if (ip.IsNullOrEmpty()) throw new ValidationException("IP cannot be empty");
-		
+		if (string.IsNullOrEmpty(token)) throw new ValidationException("Turnstile token cannot be empty");
+		if (string.IsNullOrEmpty(ip)) throw new ValidationException("IP cannot be empty");
+
 		using var client = clientFactory.CreateClient();
 		using var formData = new FormUrlEncodedContent(new Dictionary<string, string>
 		{
@@ -38,7 +37,7 @@ public sealed class TurnstileService(
 		var data = JsonSerializer.Deserialize(content, TurnstileResultContext.Default.TurnstileResult);
 
 		if (data is not null) return data;
-		
+
 		logger.LogError("Turnstile response was empty");
 		throw new ValidationException("Turnstile response was empty");
 	}

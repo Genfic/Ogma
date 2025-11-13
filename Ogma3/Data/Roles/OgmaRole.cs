@@ -22,7 +22,7 @@ public sealed class OgmaRole : IdentityRole<long>
 	public bool IsStaff { get; set; }
 	public string? Color { get; set; }
 	public byte Order { get; set; }
-	public IEnumerable<OgmaUser> Users { get; init; } = [];
+	public List<OgmaUser> Users { get; init; } = [];
 
 	public sealed class OgmaRoleConfig : IEntityTypeConfiguration<OgmaRole>
 	{

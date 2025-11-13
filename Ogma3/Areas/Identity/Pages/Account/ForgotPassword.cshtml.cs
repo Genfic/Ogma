@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
+using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -22,7 +23,7 @@ public sealed class ForgotPasswordModel(
 	ILogger<ForgotPasswordModel> logger) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
-	
+
 	[Required(ErrorMessage = "Turnstile response is required")]
 	[BindProperty(Name = "cf-turnstile-response")]
 	public string TurnstileResponse { get; set; } = null!;
@@ -42,19 +43,19 @@ public sealed class ForgotPasswordModel(
 		if (user == null || !await userManager.IsEmailConfirmedAsync(user))
 		{
 			// Don't reveal that the user does not exist or is not confirmed
-			return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
+			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
-		
+
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);
 		if (!turnstileResponse.Success)
 		{
 			ModelState.TryAddModelError("Turnstile", "Incorrect Turnstile response");
-			logger.LogInformation("Forgot password attempt with Turnstile errors: {Errors}", (object)turnstileResponse.ErrorCodes);
+			logger.LogInformation("Forgot password attempt with Turnstile errors: {Errors}", turnstileResponse.ErrorCodes);
 			return Page();
 		}
 
-		// For more information on how to enable account confirmation and password reset please 
+		// For more information on how to enable account confirmation and password reset please
 		// visit https://go.microsoft.com/fwlink/?LinkID=532713
 		var code = await userManager.GeneratePasswordResetTokenAsync(user);
 		code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -69,6 +70,6 @@ public sealed class ForgotPasswordModel(
 			"Reset Password",
 			$"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
-		return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
+		return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 	}
 }

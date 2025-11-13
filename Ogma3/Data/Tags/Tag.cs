@@ -11,5 +11,5 @@ public sealed class Tag : BaseModel
 	public string Slug { get; init; } = null!;
 	public string? Description { get; init; }
 	public ETagNamespace? Namespace { get; init; }
-	public IEnumerable<Story> Stories { get; init; } = null!;
+	public List<Story> Stories { get; init; } = null!;
 }

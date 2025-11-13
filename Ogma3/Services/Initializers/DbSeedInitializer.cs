@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using Bogus;
 using Extensions.Hosting.AsyncInitialization;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
@@ -31,7 +32,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 	private readonly OgmaUserManager _userManager;
 	private readonly ILogger<DbSeedInitializer> _logger;
 	private readonly IHttpClientFactory _clientFactory;
-	private readonly Faker _faker = new();
+	private readonly IPasswordHasher<OgmaUser> _passwordHasher;
 
 	private readonly JsonData _data;
 
@@ -39,13 +40,15 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		ApplicationDbContext context,
 		OgmaUserManager userManager,
 		ILogger<DbSeedInitializer> logger,
-		IHttpClientFactory clientFactory
+		IHttpClientFactory clientFactory,
+		IPasswordHasher<OgmaUser> passwordHasher
 	)
 	{
 		_context = context;
 		_userManager = userManager;
 		_logger = logger;
 		_clientFactory = clientFactory;
+		_passwordHasher = passwordHasher;
 
 		using var sr = new StreamReader("seed.json5");
 		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
@@ -68,11 +71,11 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		var timer = new Stopwatch();
 		timer.Start();
 
-		await using var transaction = await _context.Database.BeginTransactionAsync(ct);
+		// await using var transaction = await _context.Database.BeginTransactionAsync(ct);
 
 		await Time(SeedRoles, nameof(SeedRoles));
-		await Time(SeedAdmin, nameof(SeedAdmin));
 		await Time(SeedUsers, nameof(SeedUsers));
+		await Time(SeedAdmin, nameof(SeedAdmin));
 		await Time(SeedRatings, nameof(SeedRatings));
 		await Time(SeedIcons, nameof(SeedIcons));
 		await Time(SeedQuotes, nameof(SeedQuotes));
@@ -81,7 +84,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		await Time(() => SeedStoryTags(storyIds, tagIds), nameof(SeedStoryTags));
 		await Time(() => SeedBlogposts(storyIds), nameof(SeedBlogposts));
 
-		await transaction.CommitAsync(ct);
+		// await transaction.CommitAsync(ct);
 
 		timer.Stop();
 		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);
@@ -108,7 +111,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		var exists = await _userManager.FindByEmailAsync(Email);
 		if (exists is not null) return;
 
-		var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.NormalizedName == RoleNames.Admin);
+		var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
 		if (adminRole is null) throw new NullReferenceException("Admin role does not exist, somehow");
 
 		var password = RandomPassword();
@@ -116,7 +119,13 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		{
 			UserName = "Angius",
 			Email = Email,
+			Avatar = new Image
+			{
+				Url = Gravatar.Generate(Email),
+			},
 		};
+		user.Roles.Add(adminRole);
+
 		var result = await _userManager.CreateAsync(user, password);
 		if (result.Succeeded)
 		{
@@ -126,17 +135,6 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		{
 			_logger.LogCritical("Creating admin failed with errors: {Errors}", result.Errors.Select(e => e.Description));
 		}
-
-		var admin = await _context.Users.SingleOrDefaultAsync(u => u.Email == Email);
-		if (admin is not null)
-		{
-			admin.Roles.Add(adminRole);
-			admin.Avatar = new Image
-			{
-				Url = Gravatar.Generate(Email),
-			};
-		}
-		await _context.SaveChangesAsync();
 	}
 
 	private async Task SeedRatings()
@@ -168,7 +166,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 
 	public async Task SeedUsers()
 	{
-		if (await Any<OgmaUser>()) return;
+		if (await Any<OgmaUser>(u => u.Email != Email)) return;
 
 		var avatars = new Faker<Image>()
 			.RuleFor(i => i.Url, f => f.Internet.Avatar());
@@ -176,11 +174,22 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		var usersGenerator = new Faker<OgmaUser>()
 			.RuleFor(u => u.UserName, f => f.Internet.UserNameUnicode())
 			.RuleFor(u => u.Email, f => f.Internet.Email())
-			.RuleFor(u => u.Avatar, _ => avatars.Generate());
+			.RuleFor(u => u.Bio, f => f.Lorem.Paragraph())
+			.RuleFor(u => u.EmailConfirmed, true)
+			.RuleFor(u => u.CommentThread, new CommentThread())
+			.RuleFor(u => u.RegistrationDate, f => f.Date.PastOffset().ToUniversalTime())
+			.RuleFor(u => u.Title, f => f.Random.String2(f.Random.Int(5, 20)).OrNull(f, 0.6f));
 
 		var users = usersGenerator.Generate(10);
 		foreach (var user in users)
 		{
+			var avatar = avatars.Generate();
+
+			_context.Images.Add(avatar);
+			await _context.SaveChangesAsync();
+
+			user.AvatarId = avatar.Id;
+
 			var password = RandomPassword();
 			var result = await _userManager.CreateAsync(user, password);
 
@@ -189,19 +198,6 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 				_logger.LogInformation("User {UserName} created with password {Password}.", user.UserName, password);
 			}
 		}
-
-		var userList = await _context.Users.ToListAsync();
-
-		foreach (var user in userList)
-		{
-			user.Bio = _faker.Lorem.Paragraph();
-			user.EmailConfirmed = true;
-			user.CommentThread = new CommentThread();
-			user.RegistrationDate = _faker.Date.PastOffset().ToUniversalTime();
-			user.Title = _faker.Random.String2(_faker.Random.Int(5, 20)).OrNull(_faker, 0.6f);
-		}
-
-		await _context.SaveChangesAsync();
 	}
 
 	public async Task<(long, ETagNamespace?)[]> SeedTags()
@@ -378,15 +374,18 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		await _context.SaveChangesAsync();
 	}
 
-	private async Task<bool> Any<T>() where T : class
+	private async Task<bool> Any<T>(Expression<Func<T, bool>>? predicate = null) where T : class
 	{
-		var any = await _context.Set<T>().AnyAsync();
+		var any = predicate != null
+			? await _context.Set<T>().AnyAsync(predicate)
+			: await _context.Set<T>().AnyAsync();
+
 		return any;
 	}
 
 	private async Task Time(Func<Task> func, string name)
 	{
-		_logger.LogInformation("Starting {Name}", name);
+		_logger.LogInformation("▶️ Starting {Name}", name);
 
 		var stopwatch = new Stopwatch();
 		stopwatch.Start();
@@ -394,18 +393,20 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		await func();
 
 		stopwatch.Stop();
-		_logger.LogInformation("{Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
+		_logger.LogInformation("⌚ {Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
 	}
 
 	private async Task<T> Time<T>(Func<Task<T>> func, string name)
 	{
+		_logger.LogInformation("▶️ Starting {Name}", name);
+
 		var stopwatch = new Stopwatch();
 		stopwatch.Start();
 
 		var res = await func();
 
 		stopwatch.Stop();
-		_logger.LogInformation("{Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
+		_logger.LogInformation("⌚ {Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
 
 		return res;
 	}

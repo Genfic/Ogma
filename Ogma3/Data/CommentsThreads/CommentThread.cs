@@ -12,7 +12,7 @@ namespace Ogma3.Data.CommentsThreads;
 [AutoDbSet]
 public sealed class CommentThread : BaseModel
 {
-	public IList<Comment> Comments { get; set; } = [];
+	public List<Comment> Comments { get; set; } = [];
 
 	public int CommentsCount { get; set; }
 	public DateTimeOffset? LockDate { get; set; }
@@ -31,5 +31,5 @@ public sealed class CommentThread : BaseModel
 	public ClubThread? ClubThread { get; set; }
 	public long? ClubThreadId { get; set; }
 
-	public ICollection<OgmaUser> Subscribers { get; set; } = [];
+	public List<OgmaUser> Subscribers { get; set; } = [];
 }

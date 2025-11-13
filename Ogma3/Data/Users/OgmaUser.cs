@@ -52,29 +52,29 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	public CommentThread CommentThread { get; set; } = new();
 
-	public ICollection<UserRole>? UserRoles { get; set; }
+	public List<UserRole>? UserRoles { get; set; }
 
-	public ICollection<Story> Stories { get; set; } = [];
+	public List<Story> Stories { get; set; } = [];
 
-	public ICollection<Blogpost> Blogposts { get; set; } = [];
+	public List<Blogpost> Blogposts { get; set; } = [];
 
-	public ICollection<OgmaRole> Roles { get; set; } = [];
+	public List<OgmaRole> Roles { get; set; } = [];
 
 	// Blacklist
-	public ICollection<BlacklistedRating> BlacklistedRatings { get; set; } = [];
-	public ICollection<BlacklistedTag> BlacklistedTags { get; set; } = [];
-	public ICollection<OgmaUser> Blockers { get; set; } = [];
-	public ICollection<OgmaUser> Blocking { get; set; } = [];
+	public List<BlacklistedRating> BlacklistedRatings { get; set; } = [];
+	public List<BlacklistedTag> BlacklistedTags { get; set; } = [];
+	public List<OgmaUser> Blockers { get; set; } = [];
+	public List<OgmaUser> Blocking { get; set; } = [];
 
 	// Follows
-	public ICollection<OgmaUser> Followers { get; set; } = [];
-	public ICollection<OgmaUser> Following { get; set; } = [];
+	public List<OgmaUser> Followers { get; set; } = [];
+	public List<OgmaUser> Following { get; set; } = [];
 
 	// Subscriptions
-	public ICollection<CommentThread> SubscribedThreads { get; set; } = [];
+	public List<CommentThread> SubscribedThreads { get; set; } = [];
 
-	public ICollection<Report> Reports { get; set; } = [];
-	public ICollection<Infraction> Infractions { get; set; } = [];
+	public List<Report> Reports { get; set; } = [];
+	public List<Infraction> Infractions { get; set; } = [];
 
-	public ICollection<Notification> Notifications { get; set; } = [];
+	public List<Notification> Notifications { get; set; } = [];
 }

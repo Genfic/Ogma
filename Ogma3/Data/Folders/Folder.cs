@@ -14,6 +14,6 @@ public sealed class Folder : BaseModel
 
 	public Club Club { get; set; } = null!;
 	public required long ClubId { get; set; }
-	public ICollection<Story> Stories { get; init; } = [];
+	public List<Story> Stories { get; init; } = [];
 	public EClubMemberRoles AccessLevel { get; set; }
 }

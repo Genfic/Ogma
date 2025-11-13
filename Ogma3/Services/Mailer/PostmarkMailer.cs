@@ -23,14 +23,18 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 		var client = new PostmarkClient(_options.Key);
 		var result = await client.SendMessageAsync(message);
 
-		if (result.Status != PostmarkStatus.Success)
+		if (result.Status == PostmarkStatus.Success)
+		{
+			logger.LogInformation("Email {EmailId} sent to {Email} at {Time}", result.MessageID, email, result.SubmittedAt);
+		}
+		else
 		{
 			logger.LogError("""
-				Postmark email sending error.
-					Status: {Status}
-					Message: {Message}
-					Error {ErrorCode}",
-				""",
+			                Postmark email sending error.
+			                	Status: {Status}
+			                	Message: {Message}
+			                	Error {ErrorCode}",
+			                """,
 				result.Status, result.Message, result.ErrorCode
 			);
 		}

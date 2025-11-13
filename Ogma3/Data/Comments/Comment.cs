@@ -20,6 +20,6 @@ public sealed class Comment : BaseModel, IReportableContent
 	public EDeletedBy? DeletedBy { get; set; }
 	public OgmaUser? DeletedByUser { get; set; }
 	public long? DeletedByUserId { get; set; }
-	public IList<CommentRevision> Revisions { get; set; } = null!;
-	public ICollection<Report> Reports { get; set; } = null!;
+	public List<CommentRevision> Revisions { get; set; } = null!;
+	public List<Report> Reports { get; set; } = null!;
 }

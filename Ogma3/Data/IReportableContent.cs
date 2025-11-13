@@ -4,5 +4,5 @@ namespace Ogma3.Data;
 
 public interface IReportableContent
 {
-	public ICollection<Report> Reports { get; set; }
+	List<Report> Reports { get; set; }
 }

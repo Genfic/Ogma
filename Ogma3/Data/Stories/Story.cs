@@ -27,11 +27,11 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset? PublicationDate { get; set; }
 
-	public ICollection<Credit> Credits { get; set; } = [];
+	public List<Credit> Credits { get; set; } = [];
 
-	public IList<Chapter> Chapters { get; set; } = null!;
-	public IEnumerable<Tag> Tags { get; set; } = null!;
-	public ICollection<Vote> Votes { get; set; } = null!;
+	public List<Chapter> Chapters { get; set; } = null!;
+	public List<Tag> Tags { get; set; } = null!;
+	public List<Vote> Votes { get; set; } = null!;
 
 	// Rating
 	public Rating Rating { get; set; } = null!;
@@ -46,13 +46,13 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public bool IsLocked { get; set; } = false;
 
 	// Just for relationship purposes
-	public ICollection<Folder> Folders { get; set; } = [];
+	public List<Folder> Folders { get; set; } = [];
 
 	public ContentBlock? ContentBlock { get; set; }
 	public long? ContentBlockId { get; set; }
 
-	public ICollection<Report> Reports { get; set; } = null!;
-	public ICollection<Shelf> Shelves { get; set; } = null!;
+	public List<Report> Reports { get; set; } = null!;
+	public List<Shelf> Shelves { get; set; } = null!;
 }
 
 public sealed record Credit(string Role, string Name, string? Link);

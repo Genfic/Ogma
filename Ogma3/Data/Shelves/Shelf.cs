@@ -22,5 +22,5 @@ public sealed class Shelf : BaseModel
 	public long? IconId { get; set; }
 
 	// Stories
-	public ICollection<Story> Stories { get; set; } = null!;
+	public List<Story> Stories { get; set; } = null!;
 }
