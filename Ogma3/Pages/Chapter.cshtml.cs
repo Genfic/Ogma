@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -22,10 +23,11 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 	{
 		var uid = User.GetNumericId();
 
+		// If the user is not logged in, check if the story is locked to logged-in users only.
 		if (uid is null)
 		{
-			var locked  = await context.Stories.Where(s => s.Id == sid).Select(s => s.IsLocked).FirstOrDefaultAsync();
-			if (locked )
+			var locked = await context.Stories.Where(s => s.Id == sid).Select(s => s.IsLocked).FirstOrDefaultAsync();
+			if (locked)
 			{
 				return Chapters_Locked.Get(sid, id, slug).Redirect(this);
 			}
@@ -42,32 +44,27 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 		Chapter = chapter;
 
 		CommentsThread = new CommentsThreadDto
-			{
-				Id = chapter.CommentThreadId,
-				Type = CommentSource.Chapter,
-				LockDate = chapter.CommentThreadLockDate,
-			};
+		{
+			Id = chapter.CommentThreadId,
+			Type = CommentSource.Chapter,
+			LockDate = chapter.CommentThreadLockDate,
+		};
 
-		Previous = await context.Chapters
-			.Where(c => c.StoryId == Chapter.StoryId)
-			.Where(c => c.PublicationDate != null)
-			.Where(c => c.ContentBlockId == null)
-			.Where(c => c.Order < Chapter.Order)
-			.OrderBy(c => c.Order)
-			.ProjectToMicro()
-			.LastOrDefaultAsync();
-
-		Next = await context.Chapters
-			.Where(c => c.StoryId == Chapter.StoryId)
-			.Where(c => c.PublicationDate != null)
-			.Where(c => c.ContentBlockId == null)
-			.Where(c => c.Order > Chapter.Order)
-			.OrderBy(c => c.Order)
-			.ProjectToMicro()
-			.FirstOrDefaultAsync();
+		Previous = await FetchAdjacentChapter(c => c.Order < Chapter.Order);
+		Next = await FetchAdjacentChapter(c => c.Order > Chapter.Order);
 
 		return Page();
 	}
+
+	private async Task<ChapterMicroDto?> FetchAdjacentChapter(Expression<Func<Chapter, bool>> filter)
+		=> await context.Chapters
+			.Where(c => c.StoryId == Chapter.StoryId)
+			.Where(c => c.PublicationDate != null)
+			.Where(c => c.ContentBlockId == null)
+			.Where(filter)
+			.OrderBy(c => c.Order)
+			.ProjectToMicro()
+			.FirstOrDefaultAsync();
 }
 
 public record ChapterDetails

@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +53,7 @@ public sealed class ForgotPasswordModel(
 			return Page();
 		}
 
-		// For more information on how to enable account confirmation and password reset please
+		// For more information on how to enable account confirmation and password reset, please
 		// visit https://go.microsoft.com/fwlink/?LinkID=532713
 		var code = await userManager.GeneratePasswordResetTokenAsync(user);
 		code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

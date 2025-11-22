@@ -2,8 +2,8 @@ using CompressedStaticFiles;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
-using NuGet.Packaging;
 using Serilog;
+using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.Middleware;
 

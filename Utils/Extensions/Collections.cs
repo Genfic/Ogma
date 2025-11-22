@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Utils.Extensions;
 
@@ -24,6 +23,17 @@ public static class List
 		foreach (var item in items)
 		{
 			list.Add(item);
+		}
+	}
+}
+
+public static class Dictionary
+{
+	public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other)
+	{
+		foreach (var (key, value) in other)
+		{
+			dict.Add(key, value);
 		}
 	}
 }
