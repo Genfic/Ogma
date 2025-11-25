@@ -29,11 +29,18 @@ public static class List
 
 public static class Dictionary
 {
-	public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other)
+	public static void AddMany<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, bool replace = true)
 	{
 		foreach (var (key, value) in other)
 		{
-			dict.Add(key, value);
+			if (replace)
+			{
+				dict[key] = value;
+			}
+			else
+			{
+				_ = dict.TryAdd(key, value);
+			}
 		}
 	}
 }

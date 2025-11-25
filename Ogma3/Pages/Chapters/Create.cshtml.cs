@@ -129,8 +129,8 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		// Notify
 		await notificationsRepo.Create(ENotificationEvent.WatchedStoryUpdated,
 			story.Shelves.Select(s => s.OwnerId),
-			"/Chapter",
-			new { chapter.Id, chapter.Slug });
+			Routes.Pages.Chapter.Get(story.Id, chapter.Id, chapter.Slug).Url(Url) ?? "",
+			$"A new chapter was added to {story.Title}");
 
 		return Routes.Pages.Chapter.Get(story.Id, chapter.Id, chapter.Slug).Redirect(this);
 	}

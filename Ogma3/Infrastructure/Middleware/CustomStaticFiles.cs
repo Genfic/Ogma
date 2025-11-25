@@ -17,7 +17,7 @@ public static class CustomStaticFiles
 	public static WebApplication UseCustomStaticFiles(this WebApplication app)
 	{
 		var extensionsProvider = new FileExtensionContentTypeProvider();
-		extensionsProvider.Mappings.AddRange(CustomMimeTypes);
+		extensionsProvider.Mappings.AddMany(CustomMimeTypes);
 
 		app.UseCompressedStaticFiles(new StaticFileOptions
 		{

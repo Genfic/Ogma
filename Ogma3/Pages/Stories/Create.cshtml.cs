@@ -153,8 +153,8 @@ public sealed class CreateModel(
 		// Notify
 		await notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewStory,
 			notificationRecipients,
-			"/Story",
-			new { story.Id, story.Slug });
+			Routes.Pages.Story.Get(story.Id, story.Slug).Url(Url) ?? "",
+			$"A new story was posted by {story.Author.UserName}");
 
 		return Routes.Pages.Story.Get(story.Id, story.Slug).Redirect(this);
 	}

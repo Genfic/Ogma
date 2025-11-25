@@ -45,6 +45,6 @@ public sealed class Reports(ApplicationDbContext context, CommentRedirector redi
 
 		if (redirect is null) return NotFound();
 
-		return RedirectToPage(redirect.Url, null, redirect.Params, redirect.Fragment);
+		return Redirect(redirect);
 	}
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Routes.Pages;
 
 namespace Ogma3.Controllers;
 
@@ -19,10 +20,10 @@ public sealed class ChapterController(ApplicationDbContext context) : Controller
 			.OrderBy(ch => ch.Order)
 			.Select(ch => new { ch.Id, ch.Slug })
 			.FirstOrDefaultAsync();
-        
+
         if (chapterData is null) return NotFound();
 
-		return Routes.Pages.Chapter.Get(sid, chapterData.Id, chapterData.Slug).Redirect(this);
+		return Chapter.Get(sid, chapterData.Id, chapterData.Slug).Redirect(this);
 	}
 
 	// GET
@@ -36,9 +37,9 @@ public sealed class ChapterController(ApplicationDbContext context) : Controller
 			.OrderByDescending(ch => ch.Order)
 			.Select(ch => new { ch.Id, ch.Slug })
 			.FirstOrDefaultAsync();
-        
+
         if (chapterData is null) return NotFound();
 
-		return RedirectToPage("/Chapter", new{ sid, chapterData.Id, chapterData.Slug });
+        return Chapter.Get(sid, chapterData.Id, chapterData.Slug).Redirect(this);
 	}
 }

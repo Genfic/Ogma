@@ -71,7 +71,9 @@ public static class Startup
 		var conn = configuration.GetConnectionString("ogma3-db");
 		services
 			.AddDbContext<ApplicationDbContext>(options => options
-				.UseNpgsql(conn, o => o.MapPostgresEnums())
+				.UseNpgsql(conn, o => o
+					.MapPostgresEnums()
+					.SetPostgresVersion(18, 0))
 			)
 			.AddDatabaseDeveloperPageExceptionFilter();
 

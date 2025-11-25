@@ -124,8 +124,8 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			.ToListAsync();
 		await notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewBlogpost,
 			notificationRecipients,
-			"/Blog/Post",
-			new { post.Id, post.Slug });
+			Blog_Post.Get(post.Id, post.Slug).Url(Url) ?? "",
+			$"A new blogpost was posted by {uname}");
 
 		return User_Blog.Get(uname).Redirect(this);
 	}
