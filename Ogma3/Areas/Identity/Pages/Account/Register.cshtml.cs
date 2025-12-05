@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using FluentValidation;
-using Flurl;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +15,7 @@ using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
 using Routes.Areas.Identity.Pages;
+using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -26,7 +26,6 @@ public sealed class RegisterModel(
 	IEmailSender emailSender,
 	ITurnstileService turnstile,
 	ApplicationDbContext context,
-	OgmaConfig config,
 	ILogger<RegisterModel> logger) : PageModel
 {
 	[BindProperty] public InputModel Input { get; set; } = null!;
@@ -126,6 +125,7 @@ public sealed class RegisterModel(
 		var inviteCode = await context.InviteCodes
 			.Where(ic => Input.InviteCode != null && ic.NormalizedCode == Input.InviteCode.ToUpper())
 			.FirstOrDefaultAsync();
+
 		if (inviteCode is null)
 		{
 			ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
@@ -138,9 +138,6 @@ public sealed class RegisterModel(
 			return Page();
 		}
 
-		// Generate Gravatar
-		var avatar = new Url(config.AvatarServiceUrl).AppendPathSegment($"{Input.Name}.png").ToString()!;
-
 		// Create user
 		var user = new OgmaUser
 		{
@@ -148,7 +145,7 @@ public sealed class RegisterModel(
 			Email = Input.Email,
 			Avatar = new Image
 			{
-				Url = avatar,
+				Url = Gravatar.Generate(Input.Email),
 			},
 		};
 		var result = await userManager.CreateAsync(user, Input.Password);

@@ -8,30 +8,25 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Ogma3.Data;
+using Ogma3.Data.Images;
 using Ogma3.Data.Users;
-using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.OAuthProviders.Patreon;
+using Routes.Areas.Identity.Pages;
+using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public sealed class ExternalLoginModel : PageModel
+public sealed class ExternalLoginModel
+(
+	SignInManager<OgmaUser> signInManager,
+	UserManager<OgmaUser> userManager,
+	ILogger<ExternalLoginModel> logger,
+	IEmailSender emailSender,
+	OgmaConfig config)
+	: PageModel
 {
-	private readonly SignInManager<OgmaUser> _signInManager;
-	private readonly UserManager<OgmaUser> _userManager;
-	private readonly IEmailSender _emailSender;
-	private readonly ILogger<ExternalLoginModel> _logger;
-
-	public ExternalLoginModel(
-		SignInManager<OgmaUser> signInManager,
-		UserManager<OgmaUser> userManager,
-		ILogger<ExternalLoginModel> logger,
-		IEmailSender emailSender)
-	{
-		_signInManager = signInManager;
-		_userManager = userManager;
-		_logger = logger;
-		_emailSender = emailSender;
-	}
 
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -43,19 +38,20 @@ public sealed class ExternalLoginModel : PageModel
 
 	public sealed class InputModel
 	{
-		[Required] [EmailAddress] public required string Email { get; set; }
+		[Required] public required string UserName { get; set; }
+		[Required][EmailAddress] public required string Email { get; set; }
 	}
 
 	public IActionResult OnGet()
 	{
-		return Routes.Areas.Identity.Pages.Account_Login.Get().Redirect(this);
+		return Account_Login.Get().Redirect(this);
 	}
 
 	public IActionResult OnPost(string provider, string? returnUrl = null)
 	{
 		// Request a redirect to the external login provider.
 		var redirectUrl = Url.Page("./ExternalLogin", "Callback", new { returnUrl });
-		var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+		var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 		return new ChallengeResult(provider, properties);
 	}
 
@@ -65,39 +61,42 @@ public sealed class ExternalLoginModel : PageModel
 		if (remoteError != null)
 		{
 			ErrorMessage = $"Error from external provider: {remoteError}";
-			return Routes.Areas.Identity.Pages.Account_Login.Get(returnUrl).Redirect(this);
+			return Account_Login.Get(returnUrl).Redirect(this);
 		}
 
-		var info = await _signInManager.GetExternalLoginInfoAsync();
+		var info = await signInManager.GetExternalLoginInfoAsync();
 		if (info is null)
 		{
 			ErrorMessage = "Error loading external login information.";
-			return Routes.Areas.Identity.Pages.Account_Login.Get(returnUrl).Redirect(this);
+			return Account_Login.Get(returnUrl).Redirect(this);
 		}
 
 		// Sign in the user with this external login provider if the user already has a login.
-		var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
+		var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
 		if (result.Succeeded)
 		{
-			_logger.LogInformation("{Name} logged in with {LoginProvider} provider", info.Principal.Identity?.Name, info.LoginProvider);
+			logger.LogInformation("{Name} logged in with {LoginProvider} provider", info.Principal.Identity?.Name, info.LoginProvider);
 			return LocalRedirect(returnUrl);
 		}
 
 		if (result.IsLockedOut)
 		{
-			return Routes.Areas.Identity.Pages.Account_Lockout.Get().Redirect(this);
+			return Account_Lockout.Get().Redirect(this);
 		}
 
 		// If the user does not have an account, then ask the user to create an account.
 		ReturnUrl = returnUrl;
 		LoginProvider = info.LoginProvider;
-		if (info.Principal.TryGetClaim(ClaimTypes.Email, out var email))
+
+		var vanity = info.Principal.FindFirstValue(PatreonAuthenticationConstants.Claims.Vanity);
+		var name = info.Principal.FindFirstValue(ClaimTypes.Name);
+		var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+		Input = new InputModel
 		{
-			Input = new InputModel
-			{
-				Email = email,
-			};
-		}
+			UserName = vanity ?? name ?? email?.Split('@')[0] ?? "",
+			Email = email ?? "",
+		};
 
 		return Page();
 	}
@@ -106,27 +105,37 @@ public sealed class ExternalLoginModel : PageModel
 	{
 		returnUrl ??= Url.Content("~/");
 		// Get the information about the user from the external login provider
-		var info = await _signInManager.GetExternalLoginInfoAsync();
+		var info = await signInManager.GetExternalLoginInfoAsync();
 		if (info is null)
 		{
 			ErrorMessage = "Error loading external login information during confirmation.";
-			return Routes.Areas.Identity.Pages.Account_Login.Get(returnUrl).Redirect(this);
+			return Account_Login.Get(returnUrl).Redirect(this);
 		}
+
+		var avatar = info.Principal.FindFirstValue(PatreonAuthenticationConstants.Claims.Avatar);
 
 		if (ModelState.IsValid)
 		{
-			var user = new OgmaUser { UserName = Input.Email, Email = Input.Email };
-			var result = await _userManager.CreateAsync(user);
+			var user = new OgmaUser
+			{
+				UserName = Input.UserName,
+				Email = Input.Email,
+				Avatar = new Image
+				{
+					Url = Path.Join(config.Cdn, avatar ?? Gravatar.Generate(Input.Email)),
+				},
+			};
+			var result = await userManager.CreateAsync(user);
 			if (result.Succeeded)
 			{
-				result = await _userManager.AddLoginAsync(user, info);
+				result = await userManager.AddLoginAsync(user, info);
 				if (result.Succeeded)
 				{
-					await _signInManager.SignInAsync(user, false);
-					_logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
+					await signInManager.SignInAsync(user, false);
+					logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
 
-					var userId = await _userManager.GetUserIdAsync(user);
-					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+					var userId = await userManager.GetUserIdAsync(user);
+					var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 					code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 					var callbackUrl = Url.Page(
 						"/Account/ConfirmEmail",
@@ -134,7 +143,7 @@ public sealed class ExternalLoginModel : PageModel
 						new { area = "Identity", userId, code },
 						Request.Scheme);
 
-					await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+					await emailSender.SendEmailAsync(Input.Email, "Confirm your email",
 						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
 					return LocalRedirect(returnUrl);

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Users;
+using Index = Routes.Pages.Index;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -71,13 +72,13 @@ public sealed class DeletePersonalDataModel : PageModel
 			}
 		}
 
-		var hashids = new Hashids();
+		var hashids = new Hashids(minHashLength: 6);
 
 		// Clean basic data
-		user.UserName = $"Deleted User #{hashids.EncodeLong(user.Id)}";
+		user.UserName = $"Deleted User {hashids.EncodeLong(user.Id)}";
 		user.NormalizedUserName = user.UserName.ToUpperInvariant().Normalize();
-		user.Email = string.Empty;
-		user.NormalizedEmail = string.Empty;
+		user.Email = "noreply@example.com";
+		user.NormalizedEmail = user.Email.ToUpperInvariant().Normalize();
 		user.Bio = null;
 		user.Title = null;
 		user.DeletedAt = DateTimeOffset.UtcNow;
@@ -91,6 +92,7 @@ public sealed class DeletePersonalDataModel : PageModel
 		await _context.FollowedUsers.Where(uf => uf.FollowedUserId == user.Id || uf.FollowingUserId == user.Id).ExecuteDeleteAsync();
 		await _context.CommentThreadSubscribers.Where(cts => cts.OgmaUserId == user.Id).ExecuteDeleteAsync();
 		await _context.NotificationRecipients.Where(nr => nr.RecipientId == user.Id).ExecuteDeleteAsync();
+		await _context.UserLogins.Where(ul => ul.UserId == user.Id).ExecuteDeleteAsync();
 
 
 		var result = await _userManager.UpdateAsync(user);
@@ -104,6 +106,6 @@ public sealed class DeletePersonalDataModel : PageModel
 
 		_logger.LogInformation("User with ID '{UserId}' deleted themselves", user.Id);
 
-		return Routes.Pages.Index.Get().Redirect(this);
+		return Index.Get().Redirect(this);
 	}
 }

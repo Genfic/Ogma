@@ -38,6 +38,7 @@ using Ogma3.Services.FileLogService;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
+using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
@@ -171,7 +172,9 @@ public static class Startup
 		services.AddAsyncInitializer<DbSeedInitializer>();
 
 		// Auth
-		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+		services
+			.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			.AddPatreon(options => configuration.Bind("Authentication:Patreon", options));
 
 		// Auth
 		services.AddAuthorizationPolicies();

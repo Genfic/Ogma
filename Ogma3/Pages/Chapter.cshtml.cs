@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -50,21 +49,24 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 			LockDate = chapter.CommentThreadLockDate,
 		};
 
-		Previous = await FetchAdjacentChapter(c => c.Order < Chapter.Order);
-		Next = await FetchAdjacentChapter(c => c.Order > Chapter.Order);
-
-		return Page();
-	}
-
-	private async Task<ChapterMicroDto?> FetchAdjacentChapter(Expression<Func<Chapter, bool>> filter)
-		=> await context.Chapters
+		var chapterQuery = context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
 			.Where(c => c.PublicationDate != null)
-			.Where(c => c.ContentBlockId == null)
-			.Where(filter)
+			.Where(c => c.ContentBlockId == null);
+
+		Previous = await chapterQuery
+			.Where(c => c.Order < Chapter.Order)
+			.OrderByDescending(c => c.Order)
+			.ProjectToMicro()
+			.FirstOrDefaultAsync();
+		Next = await chapterQuery
+			.Where(c => c.Order > Chapter.Order)
 			.OrderBy(c => c.Order)
 			.ProjectToMicro()
 			.FirstOrDefaultAsync();
+
+		return Page();
+	}
 }
 
 public record ChapterDetails
