@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
-using Ogma3.Services.OAuthProviders.Patreon;
+using Ogma3.Infrastructure.Extensions;
 using Routes.Areas.Identity.Pages;
 using Utils;
 
@@ -39,7 +39,7 @@ public sealed class ExternalLoginModel
 	public sealed class InputModel
 	{
 		[Required] public required string UserName { get; set; }
-		[Required][EmailAddress] public required string Email { get; set; }
+		[EmailAddress] public string? Email { get; set; }
 	}
 
 	public IActionResult OnGet()
@@ -73,6 +73,10 @@ public sealed class ExternalLoginModel
 
 		// Sign in the user with this external login provider if the user already has a login.
 		var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
+
+		logger.LogInformation("Result {Result}", result);
+
+
 		if (result.Succeeded)
 		{
 			logger.LogInformation("{Name} logged in with {LoginProvider} provider", info.Principal.Identity?.Name, info.LoginProvider);
@@ -88,14 +92,13 @@ public sealed class ExternalLoginModel
 		ReturnUrl = returnUrl;
 		LoginProvider = info.LoginProvider;
 
-		var vanity = info.Principal.FindFirstValue(PatreonAuthenticationConstants.Claims.Vanity);
 		var name = info.Principal.FindFirstValue(ClaimTypes.Name);
 		var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
 		Input = new InputModel
 		{
-			UserName = vanity ?? name ?? email?.Split('@')[0] ?? "",
-			Email = email ?? "",
+			UserName = name ?? email?.Split('@')[0] ?? "",
+			Email = email,
 		};
 
 		return Page();
@@ -112,17 +115,27 @@ public sealed class ExternalLoginModel
 			return Account_Login.Get(returnUrl).Redirect(this);
 		}
 
-		var avatar = info.Principal.FindFirstValue(PatreonAuthenticationConstants.Claims.Avatar);
+		var avatar = info.Principal.FindFirstValue(ClaimTypes.Avatar);
+		var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+		if (Input.Email is null && email is null)
+		{
+			ModelState.AddModelError(nameof(Input.Email), "Email is required.");
+
+			LoginProvider = info.LoginProvider;
+			ReturnUrl = returnUrl;
+			return Page();
+		}
 
 		if (ModelState.IsValid)
 		{
 			var user = new OgmaUser
 			{
 				UserName = Input.UserName,
-				Email = Input.Email,
+				Email = email ?? Input.Email ?? "",
 				Avatar = new Image
 				{
-					Url = Path.Join(config.Cdn, avatar ?? Gravatar.Generate(Input.Email)),
+					Url = avatar ?? Gravatar.Generate(email ?? Input.Email ?? ""),
 				},
 			};
 			var result = await userManager.CreateAsync(user);
@@ -136,6 +149,13 @@ public sealed class ExternalLoginModel
 
 					var userId = await userManager.GetUserIdAsync(user);
 					var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+					if (email is not null)
+					{
+						await userManager.ConfirmEmailAsync(user, code);
+						return LocalRedirect(returnUrl);
+					}
+
 					code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 					var callbackUrl = Url.Page(
 						"/Account/ConfirmEmail",
@@ -143,10 +163,16 @@ public sealed class ExternalLoginModel
 						new { area = "Identity", userId, code },
 						Request.Scheme);
 
-					await emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+					await emailSender.SendEmailAsync(Input.Email!, "Confirm your email",
 						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
 					return LocalRedirect(returnUrl);
+				}
+
+				var deleteResult = await userManager.DeleteAsync(user);
+				if (!deleteResult.Succeeded)
+				{
+					logger.LogError("Failed to delete user {UserId} after failed external login linking.", user.Id);
 				}
 			}
 

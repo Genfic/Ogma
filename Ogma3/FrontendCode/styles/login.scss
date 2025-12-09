@@ -1,6 +1,7 @@
 .login-form {
 	display: flex;
-	flex-direction: row;
+	flex-flow: row wrap;
+	justify-content: center;
 	gap: 1rem;
 
 	.left {
@@ -27,6 +28,8 @@
 			}
 
 			.remember-me {
+				margin-bottom: 1rem;
+
 				label {
 					display: flex;
 					align-items: center;
@@ -59,7 +62,7 @@
 		}
 	}
 
-	.right {
-
+	.space {
+		flex: 1;
 	}
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Data;
 
@@ -37,12 +38,5 @@ public sealed class OgmaClaimsPrincipalFactory
 		]);
 
 		return principal;
-	}
-
-	public static class ClaimTypes
-	{
-		public const string Avatar = "Avatar";
-		public const string Title = "Title";
-		public const string IsStaff = "IsStaff";
 	}
 }

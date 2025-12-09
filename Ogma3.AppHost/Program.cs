@@ -8,12 +8,13 @@ var shouldSeed = builder.AddParameter("should-seed");
 
 builder.AddDockerComposeEnvironment("ogma3-docker");
 
-var garnet = builder.AddGarnet("garnet")
+var garnet = builder
+	.AddGarnet("garnet", port: 6379)
 	.WithDataVolume()
 	.WithPersistence();
 
 var database = builder
-	.AddPostgres("postgres")
+	.AddPostgres("postgres", port: 5432)
 	.WithImageTag("18.0")
 	.WithEnvironment("PGDATA", "/var/lib/postgresql/data")
 	.WithDataVolume()

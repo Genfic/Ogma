@@ -12,8 +12,10 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<hr>
+
 <div class="login-form">
-	<div class="left wide">
+	<section class="left wide">
 		<form class="form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
 			<h4>Create a new account.</h4>
 
@@ -21,14 +23,14 @@
 
 			<div class="o-form-group">
 				<label asp-for="Input.Name"></label>
-				<input asp-for="Input.Name" class="o-form-control active-border" autocomplete="username"/>
+				<input asp-for="Input.Name" class="o-form-control active-border" autocomplete="username" />
 				<span asp-validation-for="Input.Name" class="text-danger"></span>
 				<aside class="info" asp-for="Input.Name">Can consist of alphanumeric characters, dashes, underscores, and spaces</aside>
 			</div>
 
 			<div class="o-form-group">
 				<label asp-for="Input.Email"></label>
-				<input asp-for="Input.Email" class="o-form-control active-border" autocomplete="email"/>
+				<input asp-for="Input.Email" class="o-form-control active-border" autocomplete="email" />
 				<span asp-validation-for="Input.Email" class="text-danger"></span>
 				<aside class="info" asp-for="Input.Email">No worries, we will never send you unwanted spam</aside>
 			</div>
@@ -36,7 +38,7 @@
 			<div class="o-form-group">
 				<label asp-for="Input.Password"></label>
 				<div class="input-group push">
-					<input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password"/>
+					<input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password" />
 					<o-password-toggle></o-password-toggle>
 				</div>
 				<span asp-validation-for="Input.Password" class="text-danger"></span>
@@ -55,7 +57,7 @@
 			<div class="o-form-group">
 				<label asp-for="Input.ConfirmPassword"></label>
 				<div class="input-group push">
-					<input asp-for="Input.ConfirmPassword" class="o-form-control active-border" autocomplete="new-password"/>
+					<input asp-for="Input.ConfirmPassword" class="o-form-control active-border" autocomplete="new-password" />
 					<o-password-toggle></o-password-toggle>
 				</div>
 				<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
@@ -66,49 +68,51 @@
 				<label asp-for="Input.InviteCode"></label>
 				<input asp-for="Input.InviteCode" class="o-form-control active-border" autocomplete="one-time-code">
 				<span asp-validation-for="Input.InviteCode" class="text-danger"></span>
-				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our Discord!</aside>
+				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our
+					Discord!
+				</aside>
 			</div>
 
 			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register" data-theme="@theme"></div>
 
 			<input name="@Model.HoneypotFieldName" type="text" autocomplete="off">
 
-			<button type="submit" class="btn btn-primary register" >Register</button>
+			<button type="submit" class="btn btn-primary register">Register</button>
 		</form>
-	</div>
+	</section>
 	@if (Model.ExternalLogins.Count > 0)
 	{
 		var logoColor = theme == "light" ? "white" : "black";
 
-		<div class="col-md-6 col-md-offset-2">
-			<section>
-				<h4>Use another service to register.</h4>
-				<hr/>
-				<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-					<div>
-						<p>
-							@foreach (var provider in Model.ExternalLogins)
-							{
-								<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-									<img alt="" src="https://api.iconify.design/simple-icons:@(provider.Name.ToLower()).svg?color=@logoColor" />
-									@provider.DisplayName
-								</button>
-							}
-						</p>
-					</div>
-				</form>
-			</section>
-		</div>
+		<section class="right">
+			<h4>Use another service to register.</h4>
+			<hr />
+			<form id="external-account"
+			      asp-page="./ExternalLogin"
+			      method="post"
+			      asp-route-returnUrl="@Model.ReturnUrl"
+			      class="form-horizontal">
+
+				@foreach (var provider in Model.ExternalLogins)
+				{
+					<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name"
+					        title="Log in using your @provider.DisplayName account">
+						<img alt="" src="https://api.iconify.design/simple-icons:@(provider.Name.ToLower()).svg?color=@logoColor" />
+						@provider.DisplayName
+					</button>
+				}
+			</form>
+		</section>
 	}
-</div>
+	</div>
 
-@section Scripts {
-	<partial name="_ValidationScriptsPartial"/>
-	<script type="module" src="~/js/account/register.js" asp-append-version="true"></script>
-	<script type="module" src="~/js/comp/password-input.js" asp-append-version="true"></script>
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer asp-add-nonce></script>
-}
+	@section Scripts {
+		<partial name="_ValidationScriptsPartial" />
+		<script type="module" src="~/js/account/register.js" asp-append-version="true"></script>
+		<script type="module" src="~/js/comp/password-input.js" asp-append-version="true"></script>
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer asp-add-nonce></script>
+	}
 
-@section CSS {
-	<link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
+	@section CSS {
+		<link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
 }

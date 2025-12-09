@@ -1,6 +1,8 @@
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Services.OAuthProviders.Patreon;
 
@@ -8,24 +10,59 @@ public sealed class PatreonAuthenticationOptions : OAuthOptions
 {
 	public PatreonAuthenticationOptions()
 	{
-		ClaimsIssuer = PatreonAuthenticationDefaults.Issuer;
-		CallbackPath = PatreonAuthenticationDefaults.CallbackPath;
+		ClaimsIssuer = "Patreon";
+		CallbackPath = "/oauth/patreon";
 
-		AuthorizationEndpoint = PatreonAuthenticationDefaults.AuthorizationEndpoint;
-		TokenEndpoint = PatreonAuthenticationDefaults.TokenEndpoint;
-		UserInformationEndpoint = PatreonAuthenticationDefaults.UserInformationEndpoint;
+		AuthorizationEndpoint = "https://www.patreon.com/oauth2/authorize";
+		TokenEndpoint = "https://www.patreon.com/api/oauth2/token";
+		UserInformationEndpoint = "https://www.patreon.com/api/oauth2/v2/identity";
 
 		Scope.Add("identity");
 		Scope.Add("identity[email]");
 
 		ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
 		ClaimActions.MapJsonSubKey(ClaimTypes.Email, "attributes", "email");
-		ClaimActions.MapJsonSubKey(ClaimTypes.GivenName, "attributes", "first_name");
-		ClaimActions.MapJsonSubKey(ClaimTypes.Name, "attributes", "full_name");
-		ClaimActions.MapJsonSubKey(ClaimTypes.Surname, "attributes", "last_name");
-		ClaimActions.MapJsonSubKey(ClaimTypes.Webpage, "attributes", "url");
-		ClaimActions.MapJsonSubKey(PatreonAuthenticationConstants.Claims.Avatar, "attributes", "image_url");
-		ClaimActions.MapJsonSubKey(PatreonAuthenticationConstants.Claims.Vanity, "attributes", "vanity");
+		ClaimActions.MapJsonSubKey(ClaimTypes.Avatar, "attributes", "image_url");
+
+		Events.OnCreatingTicket = context => {
+			var user = context.User;
+			string? name = null;
+
+			if (user.TryGetProperty("data", out var dataEl))
+			{
+				var attributes = dataEl.GetProperty("attributes");
+
+				if (attributes.TryGetProperty("vanity", out var vanityEl) && vanityEl.ValueKind != JsonValueKind.Null)
+				{
+					name = vanityEl.GetString();
+				}
+
+				if (string.IsNullOrEmpty(name))
+				{
+					if (attributes.TryGetProperty("full_name", out var fullNameEl) && fullNameEl.ValueKind != JsonValueKind.Null)
+					{
+						name = fullNameEl.GetString();
+					}
+				}
+			}
+
+			if (string.IsNullOrEmpty(name))
+			{
+				return Task.CompletedTask;
+			}
+
+			var identity = (ClaimsIdentity?)context.Principal?.Identity;
+
+			var existingClaim = identity?.FindFirst(ClaimTypes.Name);
+			if (existingClaim is not null)
+			{
+				identity?.RemoveClaim(existingClaim);
+			}
+
+			identity?.AddClaim(new Claim(ClaimTypes.Name, name, ClaimValueTypes.String, context.Options.ClaimsIssuer));
+
+			return Task.CompletedTask;
+		};
 	}
 
 	/// <summary>

@@ -117,7 +117,7 @@ public sealed class RegisterModel(
 		if (!turnstileResponse.Success)
 		{
 			ModelState.TryAddModelError("Turnstile", "Incorrect Turnstile response");
-			logger.LogInformation("Register attempt with Turnstile errors: {Errors}", (object)turnstileResponse.ErrorCodes);
+			logger.LogInformation("Register attempt with Turnstile errors: {Errors}", turnstileResponse.ErrorCodes);
 			return Page();
 		}
 

@@ -31,9 +31,15 @@ public sealed class ImageTagHelper(
 		ArgumentNullException.ThrowIfNull(context);
 		ArgumentNullException.ThrowIfNull(output);
 
-		var src = Src.StartsWith("//")
-			? $"https://genfic.net/cdn-cgi/image/h={CfHeight ?? Height},w={CfWidth ?? Width},format=auto/https:{Src}"
-			: Src;
+		var h = CfHeight ?? Height;
+		var w = CfWidth ?? Width;
+
+		var src = Src[..2] switch
+		{
+			['/', '/'] => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/https:{Src}",
+			['/', _] => Src,
+			_ => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/{Src}",
+		};
 
 		output.Attributes.SetAttribute("width", Width);
 		output.Attributes.SetAttribute("height", Height);

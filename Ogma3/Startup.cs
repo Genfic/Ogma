@@ -39,6 +39,7 @@ using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.OAuthProviders.Patreon;
+using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
@@ -174,7 +175,8 @@ public static class Startup
 		// Auth
 		services
 			.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			.AddPatreon(options => configuration.Bind("Authentication:Patreon", options));
+			.AddPatreon(options => configuration.Bind("Authentication:Patreon", options))
+			.AddTumblr(options => configuration.Bind("Authentication:Tumblr", options));
 
 		// Auth
 		services.AddAuthorizationPolicies();

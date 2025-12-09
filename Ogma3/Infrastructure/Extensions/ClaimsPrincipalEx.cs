@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
-using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.Extensions;
 
@@ -41,7 +40,7 @@ public static class ClaimsPrincipalEx
 		/// <returns>True if the user is logged in and a staff member, false otherwise</returns>
 		public bool IsStaff()
 		{
-			var str = principal.FindFirstValue(OgmaClaimsPrincipalFactory.ClaimTypes.IsStaff);
+			var str = principal.FindFirstValue(ClaimTypes.IsStaff);
 			return bool.TryParse(str, out var isStaff) && isStaff;
 		}
 

@@ -1,0 +1,17 @@
+form#external-account {
+	display: flex;
+	flex-direction: column;
+	gap: .25rem;
+
+	button {
+		display: flex;
+		align-items: center;
+		gap: .5rem;
+
+		&:hover {
+			img {
+				filter: invert(1);
+			}
+		}
+	}
+}

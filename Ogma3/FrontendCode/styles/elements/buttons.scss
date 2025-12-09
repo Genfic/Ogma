@@ -50,8 +50,10 @@
 	border-color: var(--accent);
 
 	&.register {
-		margin-top: -32px;
+		margin-top: -40px;
+		min-height: 40px;
 		background-color: color-mix(in oklab, var(--accent), var(--background) 25%);
+		outline: .25rem solid var(--background);
 
 		&:hover {
 			background-color: color-mix(in oklab, var(--accent), var(--background) 75%);
