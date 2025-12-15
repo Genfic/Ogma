@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
@@ -23,8 +22,7 @@ public sealed class ExternalLoginModel
 	SignInManager<OgmaUser> signInManager,
 	UserManager<OgmaUser> userManager,
 	ILogger<ExternalLoginModel> logger,
-	IEmailSender emailSender,
-	OgmaConfig config)
+	IEmailSender emailSender)
 	: PageModel
 {
 
@@ -144,7 +142,6 @@ public sealed class ExternalLoginModel
 				result = await userManager.AddLoginAsync(user, info);
 				if (result.Succeeded)
 				{
-					await signInManager.SignInAsync(user, false);
 					logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
 
 					var userId = await userManager.GetUserIdAsync(user);
@@ -153,6 +150,7 @@ public sealed class ExternalLoginModel
 					if (email is not null)
 					{
 						await userManager.ConfirmEmailAsync(user, code);
+						await signInManager.SignInAsync(user, false);
 						return LocalRedirect(returnUrl);
 					}
 
@@ -165,6 +163,8 @@ public sealed class ExternalLoginModel
 
 					await emailSender.SendEmailAsync(Input.Email!, "Confirm your email",
 						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
+
+					Response.Cookies.Append("Message", "Confirmation link sent. Please check your email.");
 
 					return LocalRedirect(returnUrl);
 				}

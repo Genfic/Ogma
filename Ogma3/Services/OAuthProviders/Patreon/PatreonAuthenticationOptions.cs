@@ -24,45 +24,48 @@ public sealed class PatreonAuthenticationOptions : OAuthOptions
 		ClaimActions.MapJsonSubKey(ClaimTypes.Email, "attributes", "email");
 		ClaimActions.MapJsonSubKey(ClaimTypes.Avatar, "attributes", "image_url");
 
-		Events.OnCreatingTicket = context => {
-			var user = context.User;
-			string? name = null;
+		Events.OnCreatingTicket = OnCreatingTicket;
+	}
 
-			if (user.TryGetProperty("data", out var dataEl))
+	private static Task OnCreatingTicket(OAuthCreatingTicketContext context)
+	{
+		var user = context.User;
+		string? name = null;
+
+		if (user.TryGetProperty("data", out var dataEl))
+		{
+			var attributes = dataEl.GetProperty("attributes");
+
+			if (attributes.TryGetProperty("vanity", out var vanityEl) && vanityEl.ValueKind != JsonValueKind.Null)
 			{
-				var attributes = dataEl.GetProperty("attributes");
-
-				if (attributes.TryGetProperty("vanity", out var vanityEl) && vanityEl.ValueKind != JsonValueKind.Null)
-				{
-					name = vanityEl.GetString();
-				}
-
-				if (string.IsNullOrEmpty(name))
-				{
-					if (attributes.TryGetProperty("full_name", out var fullNameEl) && fullNameEl.ValueKind != JsonValueKind.Null)
-					{
-						name = fullNameEl.GetString();
-					}
-				}
+				name = vanityEl.GetString();
 			}
 
 			if (string.IsNullOrEmpty(name))
 			{
-				return Task.CompletedTask;
+				if (attributes.TryGetProperty("full_name", out var fullNameEl) && fullNameEl.ValueKind != JsonValueKind.Null)
+				{
+					name = fullNameEl.GetString();
+				}
 			}
+		}
 
-			var identity = (ClaimsIdentity?)context.Principal?.Identity;
-
-			var existingClaim = identity?.FindFirst(ClaimTypes.Name);
-			if (existingClaim is not null)
-			{
-				identity?.RemoveClaim(existingClaim);
-			}
-
-			identity?.AddClaim(new Claim(ClaimTypes.Name, name, ClaimValueTypes.String, context.Options.ClaimsIssuer));
-
+		if (string.IsNullOrEmpty(name))
+		{
 			return Task.CompletedTask;
-		};
+		}
+
+		var identity = (ClaimsIdentity?)context.Principal?.Identity;
+
+		var existingClaim = identity?.FindFirst(ClaimTypes.Name);
+		if (existingClaim is not null)
+		{
+			identity?.RemoveClaim(existingClaim);
+		}
+
+		identity?.AddClaim(new Claim(ClaimTypes.Name, name, ClaimValueTypes.String, context.Options.ClaimsIssuer));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>

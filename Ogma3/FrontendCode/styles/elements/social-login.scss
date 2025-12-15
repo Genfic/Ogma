@@ -1,4 +1,4 @@
-form#external-account {
+form.social-login {
 	display: flex;
 	flex-direction: column;
 	gap: .25rem;
@@ -7,6 +7,8 @@ form#external-account {
 		display: flex;
 		align-items: center;
 		gap: .5rem;
+		min-width: 20ch;
+		min-height: 48px;
 
 		&:hover {
 			img {

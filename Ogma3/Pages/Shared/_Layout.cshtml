@@ -11,6 +11,8 @@
 	Context.Request.Cookies.TryGetValue("cookie-consent", out var consent);
 	var cookieConsent = consent is "true";
 
+	Context.Request.Cookies.TryGetValue("Message", out var message);
+
 	var isAdmin = ViewData["is-admin"];
 
 	ViewData["render_start"] = DateTimeOffset.UtcNow;
@@ -85,6 +87,7 @@
 	<script type="module" src="~/js/comp/icon.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/report-modal.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/notifications-button.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/alerts.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", false)
 	@Html.RenderResources()
@@ -112,6 +115,8 @@
 </header>
 
 <div class="container" id="site-content">
+
+	<partial name="_StatusMessage" for="@message" />
 
 	<noscript class="noscript">
 		While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>

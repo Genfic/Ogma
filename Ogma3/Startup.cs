@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using B2Net;
@@ -6,6 +7,7 @@ using B2Net.Models;
 using CompressedStaticFiles;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +27,7 @@ using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.OpenApi;
@@ -51,7 +54,6 @@ namespace Ogma3;
 
 public static class Startup
 {
-	// This method gets called by the runtime. Use this method to add services to the container.
 	public static TBuilder ConfigureServices<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
 	{
 		var services = builder.Services;
@@ -176,7 +178,12 @@ public static class Startup
 		services
 			.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddPatreon(options => configuration.Bind("Authentication:Patreon", options))
-			.AddTumblr(options => configuration.Bind("Authentication:Tumblr", options));
+			.AddTumblr(options => configuration.Bind("Authentication:Tumblr", options))
+			.AddGoogle(options => {
+				configuration.Bind("Authentication:Google", options);
+				options.CallbackPath = "/oauth/google";
+				options.ClaimActions.MapJsonKey(ClaimTypes.Avatar, "picture");
+			});
 
 		// Auth
 		services.AddAuthorizationPolicies();
