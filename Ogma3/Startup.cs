@@ -41,6 +41,7 @@ using Ogma3.Services.FileLogService;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
+using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.TurnstileService;
@@ -179,6 +180,7 @@ public static class Startup
 			.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddPatreon(options => configuration.Bind("Authentication:Patreon", options))
 			.AddTumblr(options => configuration.Bind("Authentication:Tumblr", options))
+			.AddDiscord(options => configuration.Bind("Authentication:Discord", options))
 			.AddGoogle(options => {
 				configuration.Bind("Authentication:Google", options);
 				options.CallbackPath = "/oauth/google";
