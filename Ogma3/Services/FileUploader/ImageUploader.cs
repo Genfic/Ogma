@@ -69,7 +69,7 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 			// Strip EXIF metadata
 			img.Metadata.ExifProfile = null;
 
-			// Save it as PNG
+			// Save it as WEBP
 			ms.Seek(0, SeekOrigin.Begin);
 			await img.SaveAsync(ms, new WebpEncoder());
 			ext = "webp";

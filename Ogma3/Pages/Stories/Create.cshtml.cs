@@ -106,6 +106,7 @@ public sealed class CreateModel(
 			.Where(c => c.Role is not null)
 			.Where(c => c.Name is not null)
 			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
+			.Take(25)
 			.ToList();
 
 		// Add a story
@@ -143,18 +144,6 @@ public sealed class CreateModel(
 
 		context.Stories.Add(story);
 		await context.SaveChangesAsync();
-
-		// Get a list of users that should receive notifications
-		var notificationRecipients = await context.Users
-			.Where(u => u.Following.Any(a => a.Id == uid))
-			.Select(u => u.Id)
-			.ToListAsync();
-
-		// Notify
-		await notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewStory,
-			notificationRecipients,
-			Routes.Pages.Story.Get(story.Id, story.Slug).Url(Url) ?? "",
-			$"A new story was posted by {story.Author.UserName}");
 
 		return Routes.Pages.Story.Get(story.Id, story.Slug).Redirect(this);
 	}

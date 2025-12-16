@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Images;
+using Ogma3.Data.Notifications;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
@@ -19,7 +20,11 @@ using Story = Routes.Pages.Story;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig)
+public sealed class EditModel(
+	ApplicationDbContext context,
+	ImageUploader uploader,
+	OgmaConfig ogmaConfig,
+	NotificationsRepository notificationsRepo)
 	: PageModel
 {
 	public required List<RatingDto> Ratings { get; set; }
@@ -29,10 +34,9 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
-		// Get logged-in user
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		// Get story to edit and make sure author matches logged-in user
+		// Get the story to edit and make sure author matches logged-in user
 		var input = await context.Stories
 			.Where(s => s.Id == id)
 			.Where(s => s.AuthorId == uid)
@@ -102,8 +106,6 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
-
-		// Get logged-in user
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
 		if (!ModelState.IsValid)
@@ -146,6 +148,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 			.Where(c => c.Role is not null)
 			.Where(c => c.Name is not null)
 			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
+			.Take(25)
 			.ToList();
 
 		// Update story
@@ -157,7 +160,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		story.Tags = tags;
 		story.Status = Input.Status;
 		story.IsLocked = Input.IsLocked;
-		story.PublicationDate = Input.Published ? DateTimeOffset.UtcNow : null;
+		story.PublicationDate ??= Input.Published ? DateTimeOffset.UtcNow : null;
 		story.Credits = credits;
 
 		// Handle cover upload
@@ -175,6 +178,21 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				Url = Path.Join(ogmaConfig.Cdn, file.Path),
 				BackblazeId = file.FileId,
 			};
+		}
+
+		if (story.PublicationDate is not null)
+		{
+			// Get a list of users that should receive notifications
+			var notificationRecipients = await context.Users
+				.Where(u => u.Following.Any(a => a.Id == uid))
+				.Select(u => u.Id)
+				.ToListAsync();
+
+			// Notify
+			await notificationsRepo.Create(ENotificationEvent.FollowedAuthorNewStory,
+				notificationRecipients,
+				Story.Get(story.Id, story.Slug).Url(Url) ?? "",
+				$"A new story was published by {User.GetUsername()}: “{story.Title}”");
 		}
 
 		await context.SaveChangesAsync();

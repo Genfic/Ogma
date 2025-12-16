@@ -25,7 +25,8 @@
 		<label asp-for="Input.Description"></label>
 		<p class="desc">The long description, shown when user opens your story's page</p>
 		<markdown-editor></markdown-editor>
-		<textarea asp-for="Input.Description" class="o-form-control active-border" rows="10" data-wordcount="true" data-md="true"></textarea>
+		<textarea asp-for="Input.Description" class="o-form-control active-border" rows="10" data-wordcount="true"
+		          data-md="true"></textarea>
 		<span asp-validation-for="Input.Description"></span>
 	</div>
 
@@ -67,7 +68,7 @@
 					       class="radio">
 
 					<label class="radio-label active-border" for="@r.Name.ToLower()">
-						<partial name="_RatingIcon" model="icon"/>
+						<partial name="_RatingIcon" model="icon" />
 						<div class="main">
 							<strong>@r.Name</strong>
 							<span>@r.Description</span>
@@ -135,28 +136,25 @@
 
 	<div class="o-form-group">
 		<label>Credits</label>
-		<table>
+		<table class="credits-table">
+			<thead>
 			<tr>
 				<th>Role</th>
 				<th>Name</th>
 				<th>Link (optional)</th>
+				<th></th>
 			</tr>
-			@for (var i = 0; i < 10; i++)
-			{
-				var credit = Model.Input.Credits.ElementAtOrDefault(i) ?? CreateModel.NullableCredit.Empty;
+			</thead>
 
-				<tr>
-					<td>
-						<input list="credit-roles" type="text" asp-for="@(credit.Role)">
-					</td>
-					<td>
-						<input type="text" asp-for="@(credit.Name)">
-					</td>
-					<td>
-						<input type="text" asp-for="@(credit.Link)">
-					</td>
-				</tr>
-			}
+			<tbody></tbody>
+
+			<tfoot>
+			<tr class="add-row-container">
+				<td colspan="4">
+					<button type="button" class="add-row btn">Add credit</button>
+				</td>
+			</tr>
+			</tfoot>
 		</table>
 		<datalist id="credit-roles">
 			<option value="editor"></option>
@@ -173,11 +171,12 @@
 
 </form>
 
-<partial name="Shared/_ValidationScriptsPartial"/>
+<partial name="Shared/_ValidationScriptsPartial" />
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/credits.js" asp-append-version="true"></script>
 }
 
 @section CSS

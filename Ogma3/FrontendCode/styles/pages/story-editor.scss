@@ -38,3 +38,18 @@ form {
 		}
 	}
 }
+
+table.credits-table {
+	input {
+		width: 100%;
+	}
+
+	input, button {
+		height: 1.2rem;
+		min-height: 48px;
+	}
+
+	.btn.remove {
+		aspect-ratio: 1/1;
+	}
+}

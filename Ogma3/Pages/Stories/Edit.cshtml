@@ -200,12 +200,17 @@
 
 	<div class="o-form-group">
 		<label>Credits</label>
-		<table>
+		<table class="credits-table">
+			<thead>
 			<tr>
 				<th>Role</th>
 				<th>Name</th>
 				<th>Link (optional)</th>
+				<th></th>
 			</tr>
+			</thead>
+
+			<tbody>
 			@for (var i = 0; i < Model.Input.Credits.Count; i++)
 			{
 				<tr>
@@ -220,6 +225,15 @@
 					</td>
 				</tr>
 			}
+			</tbody>
+
+			<tfoot>
+			<tr class="add-row-container">
+				<td colspan="4">
+					<button type="button" class="add-row btn">Add credit</button>
+				</td>
+			</tr>
+			</tfoot>
 		</table>
 		<datalist id="credit-roles">
 			<option value="editor"></option>
@@ -242,6 +256,7 @@
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/credits.js" asp-append-version="true"></script>
 }
 
 @section CSS

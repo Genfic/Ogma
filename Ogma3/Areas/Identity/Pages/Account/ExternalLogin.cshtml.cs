@@ -72,9 +72,6 @@ public sealed class ExternalLoginModel
 		// Sign in the user with this external login provider if the user already has a login.
 		var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
 
-		logger.LogInformation("Result {Result}", result);
-
-
 		if (result.Succeeded)
 		{
 			logger.LogInformation("{Name} logged in with {LoginProvider} provider", info.Principal.Identity?.Name, info.LoginProvider);

@@ -25,10 +25,9 @@ public sealed class DiscordAuthenticationOptions : OAuthOptions
 		ClaimActions.MapCustomJson(ClaimTypes.Avatar, user =>
 			string.Format(
 				CultureInfo.InvariantCulture,
-				"https://cdn.discordapp.com/avatars/{0}/{1}.{2}",
+				"https://cdn.discordapp.com/avatars/{0}/{1}.png",
 				user.GetString("id"),
-				user.GetString("avatar"),
-				user.GetString("avatar")?.StartsWith("a_") is true ? "gif" : "png"
+				user.GetString("avatar")
 			)
 		);
 
