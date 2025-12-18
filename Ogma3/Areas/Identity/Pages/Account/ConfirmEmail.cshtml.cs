@@ -15,16 +15,8 @@ using Ogma3.Data.Shelves;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public sealed class ConfirmEmailModel : PageModel
+public sealed class ConfirmEmailModel(OgmaUserManager userManager, ApplicationDbContext context) : PageModel
 {
-	private readonly OgmaUserManager _userManager;
-	private readonly ApplicationDbContext _context;
-
-	public ConfirmEmailModel(OgmaUserManager userManager, ApplicationDbContext context)
-	{
-		_userManager = userManager;
-		_context = context;
-	}
 
 	// ReSharper disable once MemberCanBePrivate.Global
 	[TempData] public required string StatusMessage { get; set; }
@@ -45,18 +37,18 @@ public sealed class ConfirmEmailModel : PageModel
 	{
 		if (!ModelState.IsValid) return Page();
 
-		var user = await _userManager.FindByNameAsync(UserName);
+		var user = await userManager.FindByNameAsync(UserName);
 		if (user is null) return NotFound($"Unable to load user with name '{UserName}'.");
 
 		var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
-		var result = await _userManager.ConfirmEmailAsync(user, code);
+		var result = await userManager.ConfirmEmailAsync(user, code);
 
 		StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
 
 		if (!result.Succeeded) return Page();
 
 		// Setup default blacklists
-		var defaultBlockedRatings = await _context.Ratings
+		var defaultBlockedRatings = await context.Ratings
 			.Where(r => r.BlacklistedByDefault)
 			.Select(r => r.Id)
 			.ToListAsync();
@@ -65,14 +57,14 @@ public sealed class ConfirmEmailModel : PageModel
 			User = user,
 			RatingId = dbr,
 		});
-		_context.BlacklistedRatings.AddRange(blockedRatings);
+		context.BlacklistedRatings.AddRange(blockedRatings);
 
 		// Setup profile comment thread subscription
-		var thread = await _context.CommentThreads
+		var thread = await context.CommentThreads
 			.Where(ct => ct.UserId == user.Id)
 			.FirstOrDefaultAsync();
 
-		_context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
+		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
 			CommentThread = thread,
 			OgmaUser = user,
@@ -106,9 +98,9 @@ public sealed class ConfirmEmailModel : PageModel
 				IconId = 22,
 			},
 		};
-		_context.Shelves.AddRange(shelves);
+		context.Shelves.AddRange(shelves);
 
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 
 		return Page();
 	}

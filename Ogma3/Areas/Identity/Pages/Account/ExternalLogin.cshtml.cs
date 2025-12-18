@@ -141,7 +141,7 @@ public sealed class ExternalLoginModel
 				{
 					logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
 
-					var userId = await userManager.GetUserIdAsync(user);
+					var userName = await userManager.GetUserNameAsync(user);
 					var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
 					if (email is not null)
@@ -155,7 +155,7 @@ public sealed class ExternalLoginModel
 					var callbackUrl = Url.Page(
 						"/Account/ConfirmEmail",
 						null,
-						new { area = "Identity", userId, code },
+						new { area = "Identity", userName, code },
 						Request.Scheme);
 
 					await emailSender.SendEmailAsync(Input.Email!, "Confirm your email",

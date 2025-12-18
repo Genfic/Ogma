@@ -1,9 +1,9 @@
 @page
-@model Ogma3.Areas.Admin.Pages.Email
+@model Email
 
 @{
 	ViewData["Title"] = "Email";
-	ViewData["ActivePage"] = NavPages.Faq;
+	ViewData["ActivePage"] = NavPages.Email;
 }
 
 <div id="email">
@@ -23,7 +23,7 @@
 
 		<label asp-for="Mail.Markdown"></label>
 		<input asp-for="Mail.Markdown">
-		
+
 		<input type="submit">
 	</form>
 </div>

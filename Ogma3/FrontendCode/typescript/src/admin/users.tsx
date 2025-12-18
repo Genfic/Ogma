@@ -36,6 +36,7 @@ const Users = () => {
 	const user = $memo(userResource());
 
 	let userRoles = $signal<number[]>([]);
+	const userInfractions = $memo(user?.infractions ?? []);
 
 	$effect(() => {
 		userRoles = compact(
@@ -71,10 +72,17 @@ const Users = () => {
 	};
 
 	const removeInfraction = async (id: number) => {
-		const res = await DeleteAdminApiInfractions(id, headers);
-		if (res.ok) {
-			location.reload();
+		if (!window.confirm(`Are you sure you want to remove infraction #${id}?`)) {
+			return;
 		}
+
+		const res = await DeleteAdminApiInfractions(id, headers);
+
+		if (!res.ok) {
+			console.error(res.error);
+		}
+
+		refetch();
 	};
 
 	const addInfraction = () => {
@@ -189,7 +197,7 @@ const Users = () => {
 						Create new
 					</button>
 
-					<For each={user.infractions}>
+					<For each={userInfractions}>
 						{(infra) => {
 							const isDone = infra.activeUntil < new Date() || infra.removedAt;
 							return (
@@ -212,10 +220,10 @@ const Users = () => {
 									<div class="reason">
 										<b>Reason:</b> {infra.reason}
 									</div>
-									{!!infra.removedAt && (
+									{!infra.removedAt && (
 										<>
 											<br />
-											<button type="button" class="btn" onClick={[removeInfraction, user.id]}>
+											<button type="button" class="btn" onClick={[removeInfraction, infra.id]}>
 												Remove
 											</button>
 										</>
@@ -238,18 +246,7 @@ const Users = () => {
 					<div class="form-row">
 						<div class="o-form-group">
 							<label for="name">Go to user</label>
-							<input
-								class="o-form-control active-border"
-								v-on-input="getNames"
-								v-model="input"
-								list="names"
-								type="text"
-								name="name"
-								id="name"
-							/>
-							<datalist id="names">
-								<option v-for="n in names" value="n" key="n" />
-							</datalist>
+							<input class="o-form-control active-border" type="text" name="name" id="name" />
 						</div>
 
 						<div class="o-form-group keep-size">
