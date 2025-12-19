@@ -22,7 +22,7 @@ public static partial class GetCache
 	private static async ValueTask<ReturnType> HandleAsync(Query _, IMemoryCache cache, CancellationToken __)
 	{
 		await Task.Yield();
-		
+
 		if (cache is MemoryCache mc)
 		{
 			return TypedResults.Ok(mc.Count);

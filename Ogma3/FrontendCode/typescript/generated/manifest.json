@@ -1,5 +1,5 @@
 {
-  "generated": "2025-12-18T02:15:48.237Z",
+  "generated": "2025-12-19T19:40:03.807Z",
   "files": [
     "account/invite-codes:fIHR7CvD6iGzoe9E4XgCzclP4WTvFNRM4AgBuGM6jqY",
     "account/register:YsbD8u1SU2oXmtP58GPZbHsqQ983QgQRRHrC2pU8Tfc",
@@ -55,7 +55,7 @@
     "comp/read-progress:ewarWEIcRpWWq_X17P0xi7-zpmPk3x5JOTHbkqG8350",
     "comp/report-modal:v3vfOmykDUcHIRWQCbEYA_Eg11mkUuTs-rHjAqkYKpI",
     "comp/shelves-button:Hx0KITOPn0n74ur7HwZ2HS5rrkva5EqDNwA0HDO_lGM",
-    "comp/table-info:AKrH2_FhvqiAymr1j4DUjKDCPrjTTK97H4JMdIUAJ6s",
+    "comp/table-info:9YidRD-bc3nz1qzGMp9URzdv1FuLXoI_yC-8zyXWx60",
     "comp/vote-button:K6MJ7SIuXIbBPVUE0EnB7Bkk8ZVOrBi1qX3tXPOXRp0",
     "components/tag-search-select-component:IKAEuvrSnO-bgsmYFI0MzN3aHo9QxMrbiB0ysWIVHek",
     "cookie-consent:CafxWaxxVIzl5KdqrzeyCsR9LSIbPOjRmyWQPD7qXWg",
@@ -98,6 +98,6 @@
     "tabs:ROZQELX2_tsq9om-HC2L6r1bXDPMVc3sJcqyehHN-pA",
     "tts:-4sLIOyfs4R_aspGT9CU_4BgzC4XiFPoN3_sdvw_KlI",
     "watch-chapter-read:ZxUt4p8-K0KiKiBDPiS2rfDWLboY-wgidqBhSfBb58I",
-    "workers/cache-service-worker:asnJ1CRpIWdzWZy-CRO3FyNkjb9brU96TQKlpppuZf0"
+    "workers/cache-service-worker:ne6nv-fbGukaK6HGjcS5rchyhMmtcoxk5QKTRrpommg"
   ]
 }
