@@ -1,4 +1,4 @@
-import { type Component, createUniqueId, type JSX, mergeProps, Show } from "solid-js";
+import { type Component, createUniqueId, mergeProps, Show } from "solid-js";
 
 interface InputToggleProps {
 	label: string;
@@ -7,7 +7,7 @@ interface InputToggleProps {
 	onChange?: (event: Event) => void;
 }
 
-const id = createUniqueId();
+const instanceId = createUniqueId();
 
 export const InputToggle: Component<InputToggleProps> = (props) => {
 	const merged = mergeProps(
@@ -19,14 +19,7 @@ export const InputToggle: Component<InputToggleProps> = (props) => {
 		props,
 	);
 
-	let isChecked = $(merged.value);
-
-	const name = $(merged.label.replace(/\s+/g, ""));
-
-	const handleChange: JSX.EventHandler<HTMLInputElement, Event> = (event) => {
-		isChecked = event.currentTarget.checked;
-		merged.onChange(event);
-	};
+	const name = $memo(merged.label.replace(/\s+/g, ""));
 
 	return (
 		<div class="o-form-group keep-size">
@@ -36,12 +29,18 @@ export const InputToggle: Component<InputToggleProps> = (props) => {
 			</Show>
 
 			<div class="toggle-input">
-				<input type="checkbox" name={name} id={id + name} checked={isChecked} onchange={handleChange} />
-				<label for={id + name}>
+				<input
+					type="checkbox"
+					name={name}
+					id={instanceId + name}
+					checked={merged.value}
+					onchange={merged.onChange}
+				/>
+				<label for={instanceId + name}>
 					<span class="toggle">
 						<span class="dot" />
 					</span>
-					{isChecked ? "On" : "Off"}
+					{merged.value ? "On" : "Off"}
 				</label>
 			</div>
 		</div>

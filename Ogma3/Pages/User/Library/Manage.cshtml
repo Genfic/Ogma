@@ -11,7 +11,7 @@
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" csrf="@csrf" />
 
-<o-shelves-management icons="@Model.IconsJson" user-name="@Model.ProfileBar.UserName"></o-shelves-management>
+<o-shelves-management icons="@Model.IconsJson" user-name="@Model.ProfileBar.UserName" csrf="@csrf"></o-shelves-management>
 
 @section Scripts {
 	<script type="module" src="~/js/manage-shelves.js" asp-append-version="true"></script>

@@ -11,6 +11,9 @@ public static class CTConfig
 	/// </summary>
 	public const int MaxEmailAddressLength = 254;
 
+	public static readonly string[] ImageFileTypes = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
+	public static readonly string[] ExtendedImageFileTypes = [..ImageFileTypes, ".gif", ".apng"];
+
 	public static class Files
 	{
 		public const int AvatarMaxWeight = 1 * 1024 * 1024;

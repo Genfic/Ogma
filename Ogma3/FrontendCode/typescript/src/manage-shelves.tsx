@@ -168,24 +168,21 @@ const ManageShelves = (props: Props) => {
 
 						<div class="select-group">
 							<For each={icons()}>
-								{(i) => {
-									const id = `icon-${i.Id}`;
-									return (
-										<>
-											<input
-												type="radio"
-												name="iconId"
-												id={id}
-												value={i.Id}
-												checked={formData.iconId === i.Id}
-												onchange={handleInput("iconId", i.Id)}
-											/>
-											<label for={id}>
-												<o-icon icon={i.Name} />
-											</label>
-										</>
-									);
-								}}
+								{(i) => (
+									<>
+										<input
+											type="radio"
+											name="iconId"
+											id={`icon-${i.Id}`}
+											value={i.Id}
+											checked={formData.iconId === i.Id}
+											onchange={handleInput("iconId", i.Id)}
+										/>
+										<label for={`icon-${i.Id}`}>
+											<o-icon icon={i.Name} />
+										</label>
+									</>
+								)}
 							</For>
 						</div>
 					</fieldset>
@@ -202,7 +199,7 @@ const ManageShelves = (props: Props) => {
 					<button type="submit" class="btn btn-primary">
 						{formData.id ? "Update" : "Create"}
 					</button>
-					<button type="reset" class="btn" onclick={[$set(formData), EmptyShelf]}>
+					<button type="reset" class="btn" onclick={clear}>
 						Clear
 					</button>
 				</div>

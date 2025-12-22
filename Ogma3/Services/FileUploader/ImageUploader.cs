@@ -43,40 +43,46 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 			throw new ArgumentException("File cannot be null or empty");
 		}
 
-		// Read file extension
-		var ext = file.FileName.Split('.').Last();
-
 		// Load the image to a memory stream
-		await using var ms = new MemoryStream();
-		await file.CopyToAsync(ms);
+		await using var inputMs = new MemoryStream();
+		await file.CopyToAsync(inputMs);
+		inputMs.Seek(0, SeekOrigin.Begin);
+
+		using var img = await Image.LoadAsync(inputMs);
+
+		// Remove all but the second frame if the image is animated
+		if (img.Frames.Count > 1)
+		{
+			img.Frames.RemoveFrame(0);
+
+			while (img.Frames.Count > 1)
+			{
+				img.Frames.RemoveFrame(1);
+			}
+		}
 
 		if ((width ?? height) is {} w && (height ?? width) is {} h)
 		{
 			using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
-			// Reset memory stream position
-			ms.Seek(0, SeekOrigin.Begin);
-
 			// Load and resize the image
-			using var img = await Image.LoadAsync(ms);
 			img.Mutate(i => i.Resize(new ResizeOptions
 			{
 				Size = new Size(w, h),
 				Mode = ResizeMode.Crop,
 				Position = AnchorPositionMode.Center,
 			}));
-
-			// Strip EXIF metadata
-			img.Metadata.ExifProfile = null;
-
-			// Save it as WEBP
-			ms.Seek(0, SeekOrigin.Begin);
-			await img.SaveAsync(ms, new WebpEncoder());
-			ext = "webp";
 		}
 
+		// Strip EXIF metadata
+		img.Metadata.ExifProfile = null;
+
+		// Save it as WEBP
+		await using var outputMs = new MemoryStream();
+		await img.SaveAsync(outputMs, new WebpEncoder());
+
 		// Assemble the final path
-		var fileName = $"{folder}/{name}.{ext}";
+		var fileName = $"{folder}/{name}.webp";
 
 		// Try to upload the image to the bucket
 		var counter = tries;
@@ -93,7 +99,7 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 					B2UploadUrl = uploadUrl,
 				};
 
-				var result = await b2Client.Files.Upload(ms.ToArray(), uploadContext);
+				var result = await b2Client.Files.Upload(outputMs.ToArray(), uploadContext);
 				return new FileUploaderResult(result.FileId, fileName);
 			}
 			catch (B2Exception e)

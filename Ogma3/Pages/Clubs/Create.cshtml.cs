@@ -10,6 +10,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Routes.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Clubs;
@@ -29,7 +30,6 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 		public required string Name { get; init; }
 		public required string Hook { get; init; }
 		public required string Description { get; init; }
-
 		[DataType(DataType.Upload)] public IFormFile? Icon { get; init; }
 	}
 
@@ -47,7 +47,7 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 				.MaximumLength(CTConfig.Club.MaxDescriptionLength);
 			RuleFor(m => m.Icon)
 				.FileSmallerThan(CTConfig.Club.CoverMaxWeight)
-				.FileHasExtension(".jpg", ".jpeg", ".png", ".webp");
+				.FileHasExtension(CTConfig.ImageFileTypes);
 		}
 	}
 
@@ -82,19 +82,20 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 				Url = icon,
 				BackblazeId = iconId,
 			},
-			ClubMembers = new List<ClubMember>
-			{
+			ClubMembers =
+			[
 				new()
 				{
 					MemberId = uid,
 					Role = EClubMemberRoles.Founder,
 				},
-			},
+
+			],
 		};
 
 		context.Clubs.Add(club);
 		await context.SaveChangesAsync();
 
-		return Routes.Pages.Index.Get().Redirect(this);
+		return Club_Index.Get(club.Id, club.Slug).Redirect(this);
 	}
 }

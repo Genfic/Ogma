@@ -18,7 +18,7 @@ public static partial class PurgeCache
 	public sealed record Query;
 
 	// ReSharper disable once UnusedParameter.Local
-	private static async ValueTask<ReturnType> HandleAsync(Query _, IMemoryCache cache, FusionCache fusionCache, ILogger<Query> logger, CancellationToken ct)
+	private static async ValueTask<ReturnType> HandleAsync(Query _, IMemoryCache cache, IFusionCache fusionCache, ILogger<Query> logger, CancellationToken ct)
 	{
 		await Task.Yield();
 
