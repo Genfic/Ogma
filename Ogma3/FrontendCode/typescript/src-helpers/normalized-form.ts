@@ -58,7 +58,7 @@ export function createNormalizedForm<T extends FormData>(initialData: T = {} as 
 		}));
 	};
 
-	const handleSubmit = (event: SubmitEvent, rawValuesFor?: (keyof T)[]): T => {
+	const handleSubmit = (event: SubmitEvent): T => {
 		event.preventDefault();
 		const formElement = event.target as HTMLFormElement;
 		const normalized = {} as T;

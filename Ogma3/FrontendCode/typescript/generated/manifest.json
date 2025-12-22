@@ -1,5 +1,5 @@
 {
-  "generated": "2025-12-22T02:06:47.379Z",
+  "generated": "2025-12-22T04:09:06.846Z",
   "files": [
     "account/invite-codes:iWFrbCrR4PgmwmJw3VTZMvDFpsyWM8ssfyIuAW9u3-s",
     "account/register:hUIgTfTVzKRunB4rjjr2lk0aKiY3hKtc-xphiHQLbXE",
@@ -7,10 +7,10 @@
     "admin/faqs:xEFoar9mAXTF883pdYBsgn0zbHGRlrLrOjiC8inVmFE",
     "admin/invite-codes:07okeE90nxTKc-g3wweXS_5QnqRzEtYUbBvFhnHu5_s",
     "admin/quotes:JMwFSgPBAER6jPE0tYRF6JdRCZOXi6balzV_cc7mg-Y",
-    "admin/ratings:M7ha-dGD2NKkIYc0igaHCpZ9LUyLogXqXl-xdCojb6M",
+    "admin/ratings:kS4lqHu2AlJRI5K1DByc85rr4NXvq9JKp4Hf_BtJ8BQ",
     "admin/roles:nuqUjn-2jjCwidWbmlimUe3KswAOfw_MFSEcFb-mr_I",
     "admin/settings:UmvMV4LkNIhKZgI3NcyQAqjd8ZyBdp84bq-PEa5MW90",
-    "admin/tags:ltmUXlyZsD6J-P80DfzS68QKmTGXafZ_HwRHm-UavbI",
+    "admin/tags:06vUtbL29onzWEE_lF7z7gN_bPQzReYsMUgqJDaQRTY",
     "admin/users:4cWXxNQDzM16ulKpFoPXW9z3cHgYUoH-6TMMO2LtO0o",
     "alerts:jNqGlx5pgK7cRrWZ9SKwZ547K3ZXeyM6ShmgeOzPXH0",
     "chunk-056jkh9f:wK_bTAsHd4wpbbDv9wzch8In_38RNkHo9ZzWuRKvZCg",
@@ -119,7 +119,7 @@
     "site:fvjYO0ceZUq-6rDPllcPSz1PWulNO-0uI6YFAjRKaKw",
     "tabs:BFbKQScU9eytX2Nl_XqUxqKIqKbpx--h8ALh9yNJKyY",
     "tts:05gClZnMysNZFVR0_pdc6Kt3eUYBk7thIC7qn32wbq8",
-    "watch-chapter-read:9tQNDk4HE55wtUSILkXlCFkqMM5OnrKdflCpvoO2EUU",
-    "workers/cache-service-worker:t5UnxSw5OH5RB4jAEWc5qb6wZJbTFM8heoEh75nbJl8"
+    "watch-chapter-read:8Iwa-B89h1SAtaUTLBQWnsHpTnpFjeG-p5a7YLiWalo",
+    "workers/cache-service-worker:gZe8WRyw2nt6zqIR9CaxIZwZ-Kpq3iuRAz1RJ5jwqy8"
   ]
 }

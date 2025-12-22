@@ -21,7 +21,7 @@ const logger = new Logger();
 const values = program
 	.option("-v, --verbose", "Verbose mode", false)
 	.option("-s, --serve", "Serve the icon index", false)
-	.option("-p, --port <port>", "Port on which to serve", (v) => Number.parseInt(v), 3000)
+	.option("-p, --port <port>", "Port on which to serve", (v) => Number.parseInt(v, 10), 3000)
 	.parse(Bun.argv)
 	.opts();
 

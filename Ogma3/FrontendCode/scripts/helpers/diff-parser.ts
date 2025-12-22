@@ -42,7 +42,7 @@ export function generateDiffHtml(diffJson: BiomeDiff) {
 
 	const mapLine = (line: string) => {
 		const found = /^\[(\d+) unchanged lines]$/.exec(line);
-		const num = found ? Number.parseInt(found[1]) : null;
+		const num = found ? Number.parseInt(found[1], 10) : null;
 		return found && num ? { text: line, cls: "skip", lines: num } : line;
 	};
 

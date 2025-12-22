@@ -5,8 +5,8 @@ const progress = $id("chapter-progress");
 progress.addEventListener("read", async ({ currentTarget: t }: CustomEvent) => {
 	if (!t || !(t instanceof HTMLElement)) return;
 
-	const chapterId = Number.parseInt(t.dataset.chapter ?? "");
-	const storyId = Number.parseInt(t.dataset.story ?? "");
+	const chapterId = Number.parseInt(t.dataset.chapter ?? "", 10);
+	const storyId = Number.parseInt(t.dataset.story ?? "", 10);
 
 	if (Number.isNaN(chapterId) || Number.isNaN(storyId)) {
 		throw new Error(`Incorrect IDs: ${chapterId}, ${storyId}`);

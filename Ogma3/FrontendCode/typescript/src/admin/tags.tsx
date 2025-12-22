@@ -98,7 +98,7 @@ const Tags = () => {
 					id="tag-namespace"
 					class="o-form-control"
 					value={form.namespace ?? ""}
-					oninput={({ target }) => setForm("namespace", Number.parseInt(target.value))}
+					oninput={({ target }) => setForm("namespace", Number.parseInt(target.value, 10))}
 				>
 					<option value="" selected>
 						None
@@ -123,7 +123,7 @@ const Tags = () => {
 			<Switch>
 				<Match when={namespaces.loading}>
 					<button class="btn btn-primary" type="button" disabled>
-						<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+						<span class="spinner-grow spinner-grow-sm" aria-hidden="true" />
 						Loading...
 					</button>
 				</Match>
@@ -132,7 +132,10 @@ const Tags = () => {
 						<For each={tags()}>
 							{(t) => (
 								<li>
-									<div class="deco" style={{ "background-color": t.namespaceColor }} />
+									<div
+										class="deco"
+										style={{ "background-color": t.namespaceColor as string | undefined }}
+									/>
 									<div class="main">
 										<h3 class="name" title={t.slug}>
 											{t.name}
