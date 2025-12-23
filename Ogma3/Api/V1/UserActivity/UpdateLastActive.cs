@@ -12,7 +12,7 @@ namespace Ogma3.Api.V1.UserActivity;
 using ReturnType = Results<Ok<int>, NoContent>;
 
 [Handler]
-[MapMethod("api/useractivity", "HEAD")]
+[MapMethod("HEAD", "api/useractivity")]
 public static partial class UpdateLastActive
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
