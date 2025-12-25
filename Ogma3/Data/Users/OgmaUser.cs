@@ -8,6 +8,7 @@ using Ogma3.Data.Notifications;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;
+using Ogma3.Data.Subscriptions;
 
 namespace Ogma3.Data.Users;
 
@@ -77,4 +78,7 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 	public List<Infraction> Infractions { get; set; } = [];
 
 	public List<Notification> Notifications { get; set; } = [];
+
+	public Subscription? Subscription { get; set; }
+	public long? SubscriptionId { get; set; }
 }
