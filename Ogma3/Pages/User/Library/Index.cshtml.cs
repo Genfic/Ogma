@@ -33,7 +33,7 @@ public sealed class LibraryModel(ApplicationDbContext context, UserRepository us
 				Description = s.Description,
 				IconName = s.Icon == null ? null : s.Icon.Name,
 				Color = s.Color,
-				StoriesCount = s.Stories.Count,
+				StoriesCount = s.Stories.Count(st => st.PublicationDate != null),
 			})
 			.ToListAsync();
 

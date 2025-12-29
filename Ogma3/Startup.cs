@@ -336,19 +336,6 @@ public static class Startup
 			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
 		});
 
-		// Handle errors
-		// TODO: handle it better somehow, using a magic string to discern API endpoints feels iffy at best
-		app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
-			appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
-
-		// app.UseWhen(context => {
-		// 		if (context.GetEndpoint() is not {} endpoint) return true;
-		// 		return endpoint.Metadata.GetMetadata<IApiBehaviorMetadata>() is null;
-		// 	},
-		// 	appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/StatusCode/{0}"));
-
-		// app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
-
 		// Redirects
 		app.UseHttpsRedirection();
 		app.UseRewriter(new RewriteOptions()
@@ -358,6 +345,18 @@ public static class Startup
 		// Serve static files
 		app.UseCustomStaticFiles();
 		app.UseRouting();
+
+		app.UseStatusCodePages(ctx => {
+			var endpoint = ctx.HttpContext.GetEndpoint();
+			var isApiEndpoint = endpoint?.Metadata.GetMetadata<ApiEndpointAttribute>() is not null;
+
+			if (isApiEndpoint) return Task.CompletedTask;
+
+			var statusCode = ctx.HttpContext.Response.StatusCode;
+			ctx.HttpContext.Response.Redirect($"/StatusCode/{statusCode}");
+
+			return Task.CompletedTask;
+		});
 
 		app.UseAuthentication();
 		app.UseAuthorization();
@@ -375,7 +374,9 @@ public static class Startup
 
 		app.MapRazorPages();
 		app.MapControllers();
-		app.MapOgma3Endpoints();
+		app.MapGroup("/")
+			.WithMetadata(new ApiEndpointAttribute())
+			.MapOgma3Endpoints();
 
 		// Antiforgery
 		app.UseAntiforgery();
@@ -383,4 +384,6 @@ public static class Startup
 		// Security headers
 		app.UseSecurityHeaders();
 	}
+
+	private sealed class ApiEndpointAttribute : Attribute;
 }

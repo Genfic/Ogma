@@ -127,7 +127,7 @@ public sealed class EditModel(
 			.Where(t => Input.Tags.Contains(t.Id))
 			.ToListAsync();
 
-		// Get the story and make sure the logged-in user matches author
+		// Get the story and make sure the logged-in user matches the author
 		var story = await context.Stories
 			.Include(s => s.Tags)
 			.Include(s => s.Rating)

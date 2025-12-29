@@ -26,7 +26,11 @@ public sealed class Bookshelf(ApplicationDbContext context) : PageModel
 				s.Description,
 				s.Color,
 				s.Icon == null ? null : s.Icon.Name,
-				s.Stories.AsQueryable().Select(StoryMapper.MapToCard).ToList()))
+				s.Stories.AsQueryable()
+					.Where(st => st.PublicationDate != null)
+					.Select(StoryMapper.MapToCard)
+					.ToList()
+				))
 			.FirstOrDefaultAsync();
 
 		if (shelf is null) return NotFound();

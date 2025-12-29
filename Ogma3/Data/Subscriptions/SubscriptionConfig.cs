@@ -26,6 +26,10 @@ public sealed class SubscriptionConfig : BaseConfiguration<Subscription>
 			.HasMaxLength(64);
 
 		builder
+			.Property(s => s.PatreonUserId)
+			.HasMaxLength(128);
+
+		builder
 			.Property(s => s.CreationDate)
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
 

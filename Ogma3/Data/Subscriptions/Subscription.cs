@@ -15,6 +15,7 @@ public sealed class Subscription : BaseModel
 
 	public List<string> PatreonTierIds { get; set; } = [];
 	public string PatreonStatus { get; set; } = "";
+	public string PatreonUserId { get; set; } = "";
 
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset LastChange { get; set; }

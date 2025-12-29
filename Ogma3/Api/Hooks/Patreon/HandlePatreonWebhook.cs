@@ -37,6 +37,8 @@ public static partial class HandlePatreonWebhook
 		CancellationToken cancellationToken
 	)
 	{
+		logger.LogInformation("Patreon webhook for {Event} received.", request.Event);
+
 		if (config["Webhooks:Patreon:Secret"] is not {} secret)
 		{
 			logger.LogCritical("Patreon webhook secret is not set.");
@@ -48,8 +50,11 @@ public static partial class HandlePatreonWebhook
 			return TypedResults.InternalServerError();
 		}
 
-		using var reader = new StreamReader(httpContext.Request.Body);
+		httpContext.Request.EnableBuffering();
+
+		using var reader = new StreamReader(httpContext.Request.Body, Encoding.UTF8, leaveOpen: true);
 		var body = await reader.ReadToEndAsync(cancellationToken);
+		httpContext.Request.Body.Position = 0;
 
 		if (!ValidateSignature(request.Signature, secret, body))
 		{
@@ -63,15 +68,26 @@ public static partial class HandlePatreonWebhook
 			return TypedResults.BadRequest("Unexpected payload format.");
 		}
 
-		var patreonUserId = payload.Data.Data.Attributes.Relationships.User.Data.Id;
-		var entitledCents = payload.Data.Data.Attributes.CurrentlyEntitledAmountCents;
-		var tierIds = payload.Data.Data.Attributes.Relationships.CurrentlyEntitledTiers.Data.Select(x => x.Id).ToList();
-		var status = payload.Data.Data.Attributes.PatronStatus;
+		var patreonUserId = payload.Data.Relationships.User.Data.Id;
+		var entitledCents = payload.Data.Attributes.CurrentlyEntitledAmountCents;
+		var tierIds = payload.Data.Relationships.CurrentlyEntitledTiers.Data.Select(x => x.Id).ToList();
+		var status = payload.Data.Attributes.PatronStatus;
 
 		var user = await userManager.FindByLoginAsync("Patreon", patreonUserId);
 		if (user is null)
 		{
 			logger.LogWarning("Patreon webhook payload contained nonexistent user id: {UserId}", patreonUserId);
+
+			// just to be sure, let's delete any subscriptions that might be tied to this ID if the event is deletion
+			if (request.Event is "members:pledge:delete" or "members:delete" or "members:pledge:update" or "members:update")
+			{
+				var rows = await context.Subscriptions
+					.Where(s => s.PatreonUserId == patreonUserId)
+					.ExecuteDeleteAsync(cancellationToken);
+
+				logger.LogInformation("Deleted {Rows} subscriptions tied to deleted Patreon user {UserId}.", rows, patreonUserId);
+			}
+
 			return TypedResults.NotFound();
 		}
 
@@ -87,7 +103,9 @@ public static partial class HandlePatreonWebhook
 
 		if (subscriptionExists)
 		{
-			await context.Subscriptions.ExecuteUpdateAsync(set => set
+			await context.Subscriptions
+				.Where(s => s.UserId == user.Id)
+				.ExecuteUpdateAsync(set => set
 					.SetProperty(s => s.PatreonStatus, status)
 					.SetProperty(s => s.PatreonTierIds, tierIds)
 					.SetProperty(s => s.TierId, tierId)
@@ -100,6 +118,7 @@ public static partial class HandlePatreonWebhook
 			{
 				PatreonStatus = status,
 				PatreonTierIds = tierIds,
+				PatreonUserId = patreonUserId,
 				UserId = user.Id,
 				TierId = tierId,
 			};

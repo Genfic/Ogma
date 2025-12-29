@@ -12,6 +12,7 @@
 	var cookieConsent = consent is "true";
 
 	Context.Request.Cookies.TryGetValue("Message", out var message);
+	Context.Response.Cookies.Delete("Message");
 
 	var isAdmin = ViewData["is-admin"];
 
