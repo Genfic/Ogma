@@ -32,9 +32,12 @@
 		<h1 class="title" itemprop="name">@Model.Chapter.Title</h1>
 		@if (Model.Chapter.PublicationDate is {} date)
 		{
-			<time class="date" itemprop="datePublished" datetime="@date.ToString(CultureInfo.InvariantCulture)">
-				@date.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-			</time>
+			<time-display
+				class="date"
+				itemprop="datePublished"
+				utc-date="date"
+				formatter="@(d => d.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture))">
+			</time-display>
 		}
 		else
 		{

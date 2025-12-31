@@ -42,17 +42,16 @@
 
 		<div class="time">
 			<span>Member since</span>
-			<time datetime="@Model.RegistrationDate.ToString("dd MMM yyyy, HH:mm", CultureInfo.InvariantCulture)">
-				@Model.RegistrationDate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)
-			</time>
+			<time-display
+				utc-date="@Model.RegistrationDate"
+				formatter="@(d => d.ToString("dd MMM yyyy", CultureInfo.InvariantCulture))"></time-display>
 		</div>
 
 		<div class="time">
 			<span>Last seen</span>
-			<time datetime="@Model.LastActive.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
-			      title="@Model.LastActive.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture)">
+			<time-display utc-date="@Model.LastActive">
 				@Model.LastActive.Humanize(culture: CultureInfo.InvariantCulture)
-			</time>
+			</time-display>
 		</div>
 
 	</div>

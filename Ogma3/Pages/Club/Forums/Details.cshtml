@@ -1,5 +1,4 @@
 @page "/club/{clubId:long}/thread/{threadId:long}"
-@using System.Globalization
 @using Ogma3.Infrastructure.Extensions
 @using Utils.Extensions
 @model DetailsModel
@@ -42,11 +41,11 @@
 
 		<div class="header">
 
-			<time class="time"
-			      datetime="@Model.ClubThread.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
-			      title="@Model.ClubThread.CreationDate.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)">
-				@Model.ClubThread.CreationDate.FormatDateWithDaySuffix()
-			</time>
+			<time-display
+				class="time"
+				utc-date="Model.ClubThread.CreationDate"
+				formatter="d => d.FormatDateWithDaySuffix()">
+			</time-display>
 
 			@if (User.GetNumericId() == Model.ClubThread.AuthorId)
 			{

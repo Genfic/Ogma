@@ -10,9 +10,10 @@
 	<h1>You have been banned</h1>
 	<h2>
 		Until
-		<time datetime="@Model.BannedUntil.ToString("o")">
-			@Model.BannedUntil.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-		</time>
+		<time-display
+			utc-date="Model.BannedUntil"
+			formatter="@(d => d.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture))">
+		</time-display>
 	</h2>
 </div>
 
@@ -24,11 +25,11 @@
 
 	<details class="infraction details">
 		<summary class="@(isDone ? "passed" : null)">
-			<b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time datetime="@i.IssueDate.ToString("o")">@i.IssueDate.ToString("dd.MM.yyyy HH:mm")</time>, expires <time datetime="@i.ActiveUntil.ToString("o")">@i.ActiveUntil.ToString("dd.MM.yyyy HH:mm")</time>
+			<b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time-display utc-date="i.IssueDate" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display>, expires <time-display utc-date="i.ActiveUntil" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display>
 		</summary>
 		@if (i.RemovedAt is {} d)
 		{
-			<div class="time">Removed on <time datetime="@d.ToString("o")">@d.ToString("dd.MM.yyyy HH:mm")</time></div>
+			<div class="time">Removed on <time-display utc-date="d" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display></div>
 		}
 		<div class="reason">
 			<b>Reason:</b> @i.Reason

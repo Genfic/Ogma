@@ -1,4 +1,3 @@
-@using System.Globalization
 @using Utils.Extensions
 @model BlogpostCard
 
@@ -13,10 +12,10 @@
 			var words = exc.Split(' ');
 		}
 		@(
-				words.Length > 80
-					? words.Take(80).ToArray().JoinToString(' ') + "..."
-					: exc
-			)
+		words.Length > 80
+			? words.Take(80).ToArray().JoinToString(' ') + "..."
+			: exc
+		)
 	</markdown>
 
 	@if (Model.Hashtags is [_, ..])
@@ -34,9 +33,11 @@
 
 		@if (Model.PublicationDate is {} date)
 		{
-			<time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-				published @date.FormatDateWithDaySuffix()
-			</time> @("⦁")
+			<span class="release-date">
+				published
+				<time-display utc-date="@date" formatter="d => d.FormatDateWithDaySuffix()"></time-display>
+			</span>
+			@("⦁")
 		}
 
 		<span class="author">by <strong>@Model.AuthorUserName</strong></span>

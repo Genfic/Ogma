@@ -1,5 +1,4 @@
 @page "{id}/{slug?}"
-@using System.Globalization
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
@@ -33,9 +32,12 @@
 
 	@if (Model.Blogpost.PublicationDate is {} date)
 	{
-		<time class="date" itemprop="datePublished" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-			@date.FormatDateWithDaySuffix()
-		</time>
+		<time-display
+			class="date"
+			itemprop="datePublished"
+			utc-date="date"
+			formatter="dt => dt.FormatDateWithDaySuffix()">
+		</time-display>
 	}
 	else
 	{

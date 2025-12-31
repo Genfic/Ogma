@@ -1,4 +1,3 @@
-@using System.Globalization
 @using Routes.Pages
 @using Utils.Extensions
 @model StoryCard
@@ -47,9 +46,10 @@
 
 		@if (Model.PublicationDate is {} date)
 		{
-			<time class="release-date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-				published @date.FormatDateWithDaySuffix()
-			</time>
+			<span>
+				published
+				<time-display utc-date="date" formatter="d => d.FormatDateWithDaySuffix()"></time-display>
+			</span>
 		}
 		else
 		{

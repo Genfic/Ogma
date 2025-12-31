@@ -40,6 +40,11 @@
 	</div>
 
 	<div class="o-form-group">
+		<label asp-for="Input.Timezone"></label>
+		<select asp-for="Input.Timezone" asp-items="Model.AvailableTimezones"></select>
+	</div>
+
+	<div class="o-form-group">
 		<button type="submit" class="btn btn-primary">Save</button>
 	</div>
 </form>

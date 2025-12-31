@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using FluentValidation;
+using MemoryPack;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Images;
@@ -13,6 +15,7 @@ using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -21,10 +24,14 @@ public sealed partial class IndexModel
 	ApplicationDbContext context,
 	SignInManager<OgmaUser> signInManager,
 	ImageUploader uploader,
-	OgmaConfig config) : PageModel
+	OgmaConfig config,
+	IFusionCache cache) : PageModel
 {
 	[TempData] public string StatusMessage { get; set; } = "";
 	[BindProperty] public required InputModel Input { get; set; }
+
+	private List<TimezoneEntry> _availableTimezones = [];
+	public List<SelectListItem> AvailableTimezones => _availableTimezones.Select(tz => new SelectListItem(tz.Text, tz.Value)).ToList();
 
 	public sealed class InputModel
 	{
@@ -33,6 +40,7 @@ public sealed partial class IndexModel
 		public string? Title { get; init; }
 		public string? Bio { get; init; }
 		public string? Links { get; init; }
+		public string? Timezone { get; set; }
 	}
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
@@ -61,6 +69,7 @@ public sealed partial class IndexModel
 				Title = u.Title,
 				Bio = u.Bio,
 				Links = string.Join('\n', u.Links),
+				Timezone = u.TimeZone,
 			})
 			.FirstOrDefaultAsync();
 	}
@@ -72,6 +81,25 @@ public sealed partial class IndexModel
 		var model = await LoadAsync(uid);
 		if (model is null) return NotFound();
 		Input = model;
+
+		_availableTimezones = cache.GetOrSet(
+			"AvailableTimezones",
+			TimeZoneInfo.GetSystemTimeZones()
+				.Select(tzi => {
+					if (tzi.HasIanaId)
+					{
+						return new TimezoneEntry(tzi.Id, tzi.DisplayName);
+					}
+
+					return TimeZoneInfo.TryConvertWindowsIdToIanaId(tzi.Id, out var ianaId)
+						? new TimezoneEntry(ianaId, tzi.DisplayName)
+						: null;
+				})
+				.OfType<TimezoneEntry>()
+				.OrderBy(i => i.Text)
+				.ToList(),
+			opt => opt.Duration = TimeSpan.FromSeconds(3)
+		);
 
 		return Page();
 	}
@@ -141,6 +169,11 @@ public sealed partial class IndexModel
 			user.Bio = Input.Bio;
 		}
 
+		if (Input.Timezone is not null && Input.Timezone != user.TimeZone)
+		{
+			user.TimeZone = Input.Timezone;
+		}
+
 		if (Input.Links is {} links)
 		{
 			user.Links.Clear();
@@ -163,6 +196,9 @@ public sealed partial class IndexModel
 		StatusMessage = "Your profile has been updated";
 		return RedirectToPage();
 	}
+
+	[MemoryPackable]
+	private partial record TimezoneEntry(string Value, string Text);
 
 	[GeneratedRegex("(?:https|http)?(?:://)?(?:w{3}\\.)?(.+)")]
 	private partial Regex UrlRegex { get; }

@@ -1,4 +1,3 @@
-@using System.Globalization
 @using Utils.Extensions
 @model StoryMinimal
 
@@ -14,9 +13,11 @@
 
 		@if (Model.PublicationDate is {} date)
 		{
-			<time class="date" datetime="@date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-				@date.FormatDateWithDaySuffix()
-			</time>
+			<time-display
+				class="date"
+				utc-date="date"
+				formatter="d => d.FormatDateWithDaySuffix()">
+			</time-display>
 		}
 	</div>
 </a>

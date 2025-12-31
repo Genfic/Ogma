@@ -81,4 +81,6 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	public Subscription? Subscription { get; set; }
 	public long? SubscriptionId { get; set; }
+
+	public string TimeZone { get; set; } = "UTC";
 }

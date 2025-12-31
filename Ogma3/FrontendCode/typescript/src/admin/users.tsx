@@ -1,6 +1,7 @@
 import { DeleteAdminApiInfractions, GetAdminApiUsers } from "@g/paths-internal";
 import { PostApiUsersRoles } from "@g/paths-public";
 import type { InfractionType } from "@g/types-internal";
+import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { compact } from "es-toolkit";
@@ -16,7 +17,7 @@ const roles = JSON.parse(parent.dataset.roles ?? "[]") as { Id: number; Name: st
 const name = parent.dataset.name as string | null;
 
 const date = (dt: Date) => iso8601.render(dt);
-const dateEu = (dt: Date) => EU.render(dt);
+const dateEu = (dt: Date) => EU.render(toCurrentTimezone(dt));
 
 const Users = () => {
 	const [userResource, { refetch }] = createResource(async () => {

@@ -62,6 +62,11 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.ValueGeneratedOnAdd();
 
 		builder
+			.Property(u => u.TimeZone)
+			.HasMaxLength(50)
+			.IsRequired();
+
+		builder
 			.Ignore(u => u.PhoneNumber)
 			.Ignore(u => u.PhoneNumberConfirmed);
 

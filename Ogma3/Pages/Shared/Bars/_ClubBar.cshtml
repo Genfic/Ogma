@@ -16,9 +16,10 @@
 
 	<h1 class="name">@Model.Name</h1>
 
-	<time class="date" datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-		Founded @Model.CreationDate.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
-	</time>
+	<span class="date">
+		Founded
+		<time-display utc-date="Model.CreationDate" formatter="@(d => d.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture))"></time-display>
+	</span>
 
 	<div class="info">
 		<div class="user-count">@Model.ClubMembersCount.ToString() @(Model.ClubMembersCount == 1 ? "member" : "members")</div>

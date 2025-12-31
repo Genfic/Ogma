@@ -9,5 +9,6 @@ public static class ClaimTypesExtensions
 		public static string Avatar => "x:Avatar";
 		public static string Title => "x:Title";
 		public static string IsStaff => "x:IsStaff";
+		public static string Timezone => "x:Timezone";
 	}
 }

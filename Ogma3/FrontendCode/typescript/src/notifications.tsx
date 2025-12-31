@@ -1,4 +1,5 @@
 import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "@g/paths-public";
+import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
 import { createResource, createSignal, For, Match, Switch } from "solid-js";
@@ -41,7 +42,7 @@ const Notifications = () => {
 								{notif.message}
 							</a>
 							<span class="body">{notif.body}</span>
-							<span class="time">{long.render(new Date(notif.dateTime))}</span>
+							<span class="time">{long.render(toCurrentTimezone(new Date(notif.dateTime)))}</span>
 							<div class="actions">
 								<button type="button" onClick={[deleteNotif, notif.id]}>
 									<LucideTrash2 />

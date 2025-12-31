@@ -1,13 +1,14 @@
 import { GetApiInviteCodes, PostApiInviteCodes } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
+import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
 import { createResource, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
-import { LucideClipboardCopy } from "../Icons/LucideClipboardCopy";
+import { LucideClipboardCopy } from "../icons/LucideClipboardCopy";
 
 const parent = $id("invite-codes-app");
-const date = (dt: string | Date) => long.render(new Date(dt));
+const date = (dt: string | Date) => long.render(toCurrentTimezone(new Date(dt)));
 
 const csrf = parent.dataset.csrf ?? "";
 const max = Number.parseInt(parent.dataset.max ?? "0", 10);

@@ -35,7 +35,7 @@
 			{
 				<li class="item">
 					<a asp-page="/Docs" asp-route-v="@ver.Version" asp-route-slug="@ver.Slug">
-						version @ver.Version.ToString($"D{digits}") — <time datetime="@ver.CreationTime.ToString("O")">@ver.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</time>
+						version @ver.Version.ToString($"D{digits}") — <time-display utc-date="ver.CreationTime" formatter="@(d => d.ToString("yyyy-MM-dd HH:mm:ss"))"></time-display>
 					</a>
 					@if (ver.Version == Model.Document.Version)
 					{

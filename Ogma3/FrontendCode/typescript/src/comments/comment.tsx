@@ -1,5 +1,6 @@
 import { DeleteApiComments, GetApiCommentsRevisions } from "@g/paths-public";
 import type { CommentDto, GetRevisionResult } from "@g/types-public";
+import { toCurrentTimezone } from "@h/date-helpers";
 import { long } from "@h/tinytime-templates";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import type { ReportModalElement } from "../comp/report-modal";
@@ -20,7 +21,7 @@ export type CommentProps = {
 	onHighlightChange: (e: MouseEvent, idx: number) => void;
 };
 
-const date = (dt: Date) => long.render(dt);
+const date = (dt: Date) => long.render(toCurrentTimezone(dt));
 
 export const Comment = (props: Props) => {
 	const [hidden, setHidden] = createSignal(props.isBlocked);

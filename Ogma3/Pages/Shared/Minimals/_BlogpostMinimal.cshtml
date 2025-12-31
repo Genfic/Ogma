@@ -1,5 +1,4 @@
 @using Utils.Extensions
-@using System.Globalization
 @model BlogpostMinimal
 
 <a asp-page="/Blog/Post" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug" class="minimal active-border">
@@ -11,8 +10,10 @@
 
 		<i class="dot"></i>
 
-		<time class="date" datetime="@Model.PublishDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)">
-			@Model.PublishDate.FormatDateWithDaySuffix()
-		</time>
+		<time-display
+			class="date"
+			utc-date="Model.PublishDate"
+			formatter="d => d.FormatDateWithDaySuffix()">
+		</time-display>
 	</div>
 </a>

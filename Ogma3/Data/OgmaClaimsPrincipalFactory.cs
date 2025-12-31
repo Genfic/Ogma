@@ -35,6 +35,7 @@ public sealed class OgmaClaimsPrincipalFactory
 			new(ClaimTypes.Avatar, avatarUrl ?? string.Empty),
 			new(ClaimTypes.Title, user.Title ?? string.Empty),
 			new(ClaimTypes.IsStaff, isStaff.ToString()),
+			new(ClaimTypes.Timezone, user.TimeZone),
 		]);
 
 		return principal;

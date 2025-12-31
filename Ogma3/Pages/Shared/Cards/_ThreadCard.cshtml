@@ -25,11 +25,9 @@
 			@Model.AuthorName
 		</span>
 
-		<time class="date"
-		      datetime="@Model.CreationDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)"
-		      title="@Model.CreationDate.ToString("dd MMMM yyyy HH:mm", CultureInfo.InvariantCulture)">
+		<time-display class="date" utc-date="Model.CreationDate">
 			@Model.CreationDate.Humanize(culture: CultureInfo.InvariantCulture)
-		</time>
+		</time-display>
 
 	</div>
 

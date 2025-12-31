@@ -15,18 +15,19 @@ defaults:
 
 jobs:
     build:
-        
+
         runs-on: ubuntu-latest
-        
+
         strategy:
             matrix:
                 node-version: [ latest ]
-        
+
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v6
             -   name: Use Bun ${{ matrix.node-version }}
-                uses: oven-sh/setup-bun@v1
+                uses: oven-sh/setup-bun@v2
                 with:
                     bun-version: ${{ matrix.node-version }}
+            -   run: cd ./Ogma3/FrontendCode
             -   run: bun i
             -   run: bun run build

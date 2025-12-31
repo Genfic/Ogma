@@ -1,5 +1,6 @@
 import { DeleteApiInviteCodes, GetApiInviteCodesPaginated, PostApiInviteCodesNoLimit } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
+import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { log } from "@h/logger";
 import { long } from "@h/tinytime-templates";
@@ -75,7 +76,7 @@ const InviteCodes = () => {
 		}
 	};
 
-	const date = (dt: Date) => long.render(new Date(dt));
+	const date = (dt: Date) => long.render(toCurrentTimezone(new Date(dt)));
 
 	const Code = ({ c }: { c: InviteCodeDto }) => (
 		<li classList={{ hl: c.id === newCode }}>
