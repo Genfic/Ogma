@@ -24,6 +24,7 @@ using Ogma3.Data.Clubs;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
@@ -347,10 +348,7 @@ public static class Startup
 		app.UseRouting();
 
 		app.UseStatusCodePages(ctx => {
-			var endpoint = ctx.HttpContext.GetEndpoint();
-			var isApiEndpoint = endpoint?.Metadata.GetMetadata<ApiEndpointAttribute>() is not null;
-
-			if (isApiEndpoint) return Task.CompletedTask;
+			if (ctx.HttpContext.IsApiEndpoint()) return Task.CompletedTask;
 
 			var statusCode = ctx.HttpContext.Response.StatusCode;
 			ctx.HttpContext.Response.Redirect($"/StatusCode/{statusCode}");
@@ -384,6 +382,4 @@ public static class Startup
 		// Security headers
 		app.UseSecurityHeaders();
 	}
-
-	private sealed class ApiEndpointAttribute : Attribute;
 }

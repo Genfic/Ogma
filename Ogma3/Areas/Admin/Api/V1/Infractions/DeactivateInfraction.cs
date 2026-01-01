@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Infractions;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.UserService;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 
@@ -25,6 +28,7 @@ public static partial class DeactivateInfraction
 		Command request,
 		ApplicationDbContext context,
 		IUserService userService,
+		IFusionCache cache,
 		CancellationToken cancellationToken
 	)
 	{
@@ -48,6 +52,11 @@ public static partial class DeactivateInfraction
 		context.ModeratorActions.Add(action);
 
 		await context.SaveChangesAsync(cancellationToken);
+
+		if (infraction.Type == InfractionType.Ban)
+		{
+			await cache.ExpireAsync(UserBanMiddleware.CacheKey(infraction.UserId), token: cancellationToken);
+		}
 
 		return TypedResults.Ok();
 	}

@@ -1,15 +1,16 @@
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
+using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
+public sealed partial class UserBanMiddleware(IFusionCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
-	public static string CacheKey(long id) => $"ban:{id}";
+	public static string CacheKey(long id) => $"user-ban:{id}";
 
 	public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
 	{
@@ -19,29 +20,27 @@ public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbC
 			return;
 		}
 
-		var banDate = await cache.GetOrCreateAsync(CacheKey(uid), async entry => {
-			entry.SlidingExpiration = TimeSpan.FromMinutes(30);
-			return await CompiledQuery(dbContext, uid);
-		});
-
-		if (banDate == default)
+		var allowBanned = httpContext.GetEndpoint()?.Metadata.GetMetadata<AllowBannedUsersAttribute>();
+		if (allowBanned is not null)
 		{
 			await next(httpContext);
 			return;
 		}
 
-		if (banDate > DateTimeOffset.UtcNow)
+		var isBanned = await cache.GetOrSetAsync(
+			CacheKey(uid),
+			async _ => await CompiledQuery(dbContext, uid),
+			o => o.Duration = TimeSpan.FromMinutes(30)
+		);
+
+		if (isBanned)
 		{
 			LogAccessAttempt(logger, uid);
-			if (httpContext.Request.Path.StartsWithSegments("/api"))
+			if (httpContext.IsApiEndpoint())
 			{
 				httpContext.Response.Clear();
 				httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-				await httpContext.Response.WriteAsync($"Account banned until {banDate:o}");
-			}
-			else if (httpContext.Request.Path.StartsWithSegments("/Ban"))
-			{
-				await next(httpContext);
+				await httpContext.Response.WriteAsync("Account banned.");
 			}
 			else
 			{
@@ -54,15 +53,13 @@ public sealed partial class UserBanMiddleware(IMemoryCache cache, ApplicationDbC
 		}
 	}
 
-	private static readonly Func<ApplicationDbContext, long, Task<DateTimeOffset>> CompiledQuery =
+	private static readonly Func<ApplicationDbContext, long, Task<bool>> CompiledQuery =
 		EF.CompileAsyncQuery(static (ApplicationDbContext dbContext, long uid) => dbContext.Infractions
 			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
 			.Where(i => i.UserId == uid)
 			.Where(i => i.Type == InfractionType.Ban)
 			.Where(i => i.RemovedAt == null)
-			.OrderByDescending(i => i.ActiveUntil)
-			.Select(i => i.ActiveUntil)
-			.FirstOrDefault()
+			.Any(i => i.ActiveUntil > DateTimeOffset.UtcNow)
 		);
 
 	[LoggerMessage(0, LogLevel.Information, "Banned user {UserId} tried accessing the site")]

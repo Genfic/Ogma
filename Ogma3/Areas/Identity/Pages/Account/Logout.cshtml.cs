@@ -3,29 +3,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Attributes;
+using Index = Routes.Pages.Index;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public sealed class LogoutModel : PageModel
+[AllowBannedUsers]
+public sealed class LogoutModel(SignInManager<OgmaUser> signInManager) : PageModel
 {
-	private readonly SignInManager<OgmaUser> _signInManager;
-	private readonly ILogger<LogoutModel> _logger;
-
-	public LogoutModel(SignInManager<OgmaUser> signInManager, ILogger<LogoutModel> logger)
-	{
-		_signInManager = signInManager;
-		_logger = logger;
-	}
-
-
 	public async Task<IActionResult> OnGetAsync(string? returnUrl = null)
 	{
-		await _signInManager.SignOutAsync();
-		_logger.LogInformation("User logged out");
+		await signInManager.SignOutAsync();
 
 		return returnUrl is null
-			? RedirectToPage("/Index", new { Area = "" })
+			? Index.Get().Redirect(this)
 			: RedirectToPage(returnUrl);
 	}
 }

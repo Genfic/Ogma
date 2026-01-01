@@ -75,7 +75,7 @@
 
 			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register" data-theme="@theme"></div>
 
-			<input name="@Model.HoneypotFieldName" type="text" autocomplete="off">
+			<input asp-for="Input.Occupation" type="text" autocomplete="off">
 
 			<button type="submit" class="btn btn-primary register">Register</button>
 		</form>

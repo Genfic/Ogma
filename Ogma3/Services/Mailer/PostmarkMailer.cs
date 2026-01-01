@@ -4,7 +4,7 @@ using PostmarkDotNet;
 
 namespace Ogma3.Services.Mailer;
 
-public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<PostmarkMailer> logger) : IEmailSender
+public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<PostmarkMailer> logger ) : IEmailSender
 {
 	private readonly PostmarkOptions _options = options.Value;
 
@@ -13,11 +13,12 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 		var message = new PostmarkMessage
 		{
 			To = email,
-			From = $"Genfic <noreply@{_options.Domain}>",
+			From = $"admin@{_options.Domain}",
 			TrackOpens = true,
 			TrackLinks = LinkTrackingOptions.HtmlAndText,
 			Subject = subject,
-			HtmlBody = htmlMessage, Attachments = new List<PostmarkMessageAttachment>(),
+			HtmlBody = htmlMessage,
+			MessageStream = "outbound",
 		};
 
 		var client = new PostmarkClient(_options.Key);

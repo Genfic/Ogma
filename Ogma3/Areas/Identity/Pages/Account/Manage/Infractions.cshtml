@@ -12,7 +12,7 @@
 {
 	<strong>You're clear! 🎉</strong>
 }
-t
+
 @foreach (var i in Model.AllInfractions)
 {
 	var isDone = i.ActiveUntil < DateTimeOffset.UtcNow || i.RemovedAt is not null;

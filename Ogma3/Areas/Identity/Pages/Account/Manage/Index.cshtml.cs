@@ -198,7 +198,7 @@ public sealed partial class IndexModel
 	}
 
 	[MemoryPackable]
-	private partial record TimezoneEntry(string Value, string Text);
+	private sealed partial record TimezoneEntry(string Value, string Text);
 
 	[GeneratedRegex("(?:https|http)?(?:://)?(?:w{3}\\.)?(.+)")]
 	private partial Regex UrlRegex { get; }

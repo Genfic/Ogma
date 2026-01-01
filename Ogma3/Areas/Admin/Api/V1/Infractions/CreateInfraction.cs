@@ -3,7 +3,6 @@ using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.Caching.Memory;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
 using Ogma3.Data.ModeratorActions;
@@ -13,6 +12,7 @@ using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.UserService;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 
@@ -36,7 +36,7 @@ public static partial class CreateInfraction
 		Command request,
 		ApplicationDbContext context,
 		IUserService userService,
-		IMemoryCache cache,
+		IFusionCache cache,
 		CancellationToken cancellationToken
 	)
 	{
@@ -65,7 +65,12 @@ public static partial class CreateInfraction
 
 		if (infraction.Type == InfractionType.Ban)
 		{
-			cache.Set(UserBanMiddleware.CacheKey(infraction.UserId), infraction.ActiveUntil);
+			await cache.SetAsync(
+				UserBanMiddleware.CacheKey(infraction.UserId),
+				true,
+				o => o.Duration = TimeSpan.FromMinutes(30),
+				cancellationToken
+			);
 		}
 
 		return TypedResults.Ok();

@@ -50,6 +50,8 @@ public sealed class RegisterModel(
 		public string ConfirmPassword { get; init; } = null!;
 
 		[Display(Name = "Invite code")] public string? InviteCode { get; init; }
+
+		public string? Occupation { get; set; }
 	}
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
@@ -71,20 +73,15 @@ public sealed class RegisterModel(
 				.Equal(im => im.Password);
 			RuleFor(im => im.InviteCode)
 				.NotEmpty()
-				.Length(13);
+				.MinimumLength(10)
+				.MaximumLength(18);
 		}
 	}
-
-	private const string HoneypotSessionKey = "RegisterHoneypotKey";
-	public string? HoneypotFieldName { get; private set; }
 
 	public async Task OnGetAsync(string? returnUrl = null)
 	{
 		ReturnUrl = returnUrl;
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-		HoneypotFieldName = Guid.NewGuid().ToString("N")[..16];
-		HttpContext.Session.SetString(HoneypotSessionKey, HoneypotFieldName);
 	}
 
 	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
@@ -95,22 +92,12 @@ public sealed class RegisterModel(
 		if (!ModelState.IsValid) return Page();
 
 		// Check honeypot
-		HoneypotFieldName = HttpContext.Session.GetString(HoneypotSessionKey);
-		if (string.IsNullOrEmpty(HoneypotFieldName))
-		{
-			ModelState.AddModelError("Expired", "Your session has expired. Try again.");
-			logger.LogInformation("Session tampered with, honeypot session key was unset during registration.");
-			return Page();
-		}
-
-		var honeypot = Request.Form[HoneypotFieldName].ToString();
-		if (!string.IsNullOrEmpty(honeypot))
+		if (!string.IsNullOrEmpty(Input.Occupation))
 		{
 			ModelState.AddModelError("Suspicious", "Suspicious activity detected. Try again later.");
-			logger.LogInformation("Honeypot field was filled out during registration: {Honeypot}.", honeypot);
+			logger.LogInformation("Honeypot field was filled out during registration: {Honeypot}.", Input.Occupation);
 			return Page();
 		}
-		HttpContext.Session.Remove(HoneypotSessionKey);
 
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);

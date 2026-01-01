@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
+using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
+using Index = Routes.Pages.Index;
 
 namespace Ogma3.Pages;
 
+[AllowBannedUsers]
 public sealed class Ban(ApplicationDbContext context) : PageModel
 {
 	public DateTimeOffset BannedUntil { get; private set; }
@@ -41,7 +44,7 @@ public sealed class Ban(ApplicationDbContext context) : PageModel
 
 		if (BannedUntil == default)
 		{
-			return Routes.Pages.Index.Get().Redirect(this);
+			return Index.Get().Redirect(this);
 		}
 
 		return Page();

@@ -1,5 +1,7 @@
 @page
 @using System.Globalization
+@using Ogma3.Data.Infractions
+@using Routes.Areas.Identity.Pages
 @model Ban
 
 @{
@@ -25,7 +27,7 @@
 
 	<details class="infraction details">
 		<summary class="@(isDone ? "passed" : null)">
-			<b class="type @i.Type.ToString().ToLower()">@i.Type</b> issued <time-display utc-date="i.IssueDate" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display>, expires <time-display utc-date="i.ActiveUntil" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display>
+			<b class="type @i.Type.ToStringFast().ToLower()">@i.Type</b> issued <time-display utc-date="i.IssueDate" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display>, expires <time-display utc-date="i.ActiveUntil" formatter="@(dt => dt.ToString("dd.MM.yyyy HH:mm"))"></time-display>
 		</summary>
 		@if (i.RemovedAt is {} d)
 		{
@@ -36,3 +38,9 @@
 		</div>
 	</details>
 }
+
+<br>
+
+<a class="btn btn-primary" for-route="@Account_Logout.Get()">
+	Log out
+</a>
