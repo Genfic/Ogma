@@ -4,30 +4,24 @@
 name: Node.js CI
 
 on:
-    push:
-        branches: [ master ]
-    pull_request:
-        branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 defaults:
-    run:
-        working-directory: ./Ogma3
+  run:
+    working-directory: ./Ogma3/FrontendCode
 
 jobs:
-    build:
+  build:
+    runs-on: ubuntu-latest
 
-        runs-on: ubuntu-latest
-
-        strategy:
-            matrix:
-                node-version: [ latest ]
-
-        steps:
-            -   uses: actions/checkout@v6
-            -   name: Use Bun ${{ matrix.node-version }}
-                uses: oven-sh/setup-bun@v2
-                with:
-                    bun-version: ${{ matrix.node-version }}
-            -   run: cd ./Ogma3/FrontendCode
-            -   run: bun i
-            -   run: bun run build
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Bun latest
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun i
+      - run: bun run build

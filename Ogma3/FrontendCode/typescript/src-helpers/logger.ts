@@ -14,10 +14,10 @@ function _deepCopy(o: object): object {
 	return JSON.parse(JSON.stringify({ ...o, __isCopied__: true }));
 }
 
-const _getMessage = (o: unknown) => (_isObject(o) ? _deepCopy(o as object) : o);
+const _getMessage = (o: unknown) => (import.meta.env.DEV ? (_isObject(o) ? _deepCopy(o as object) : o) : o);
 
 /**
- * Logger object to create better logging experience
+ * Logger object to create a better logging experience
  */
 export const log = {
 	log: (o: unknown) => console.log(_getMessage(o)),

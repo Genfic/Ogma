@@ -68,6 +68,9 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 			cssMinifyPlugin,
 		],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
+		define: {
+			"import.meta.env.DEV": values.release ? "false" : "true",
+		},
 	});
 
 	const chunks = outputs

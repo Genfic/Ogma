@@ -27,4 +27,5 @@
 .shelf {
 	/*noinspection CssUnresolvedCustomProperty*/
 	box-shadow: inset var(--s-col, transparent) 0 0 0 3px;
+	padding: 0.5rem;
 }

@@ -117,7 +117,7 @@ form.form {
 		.ratings {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
-			grid-gap: .5rem;
+			gap: .5rem;
 			margin-top: .5rem;
 
 			@media only screen and (max-width: v.$mq-mobile) {
@@ -198,6 +198,7 @@ form.form {
 			pointer-events: none;
 			opacity: 0;
 			transition: opacity 200ms ease-in-out;
+			z-index: 1;
 
 			&.visible {
 				opacity: 1;

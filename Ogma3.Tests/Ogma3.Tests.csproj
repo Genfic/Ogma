@@ -4,7 +4,6 @@
 		<OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-		<IsTestingPlatformApplication>true</IsTestingPlatformApplication>
     </PropertyGroup>
 
     <ItemGroup>
