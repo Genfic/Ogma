@@ -8,6 +8,10 @@ preload = ['./typescript/tests/_happy-dom.ts']
 
 [install]
 minimumReleaseAge = 25_9200 # 3 days in seconds
+minimumReleaseAgeExcludes = ["@angius/tinytime", "@jsr/atulin__bun-plugin-solid", "@jsr/atulin__html-sanitizer"]
 
 [install.security]
 provider = "@socketsecurity/bun-security-scanner"
+
+[install.scopes]
+"@jsr" = "https://npm.jsr.io"
