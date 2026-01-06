@@ -36,7 +36,9 @@
 		<PackageReference Include="Immediate.Handlers" Version="3.1.0" PrivateAssets="all" />
 		<PackageReference Include="Immediate.Validations" Version="3.2.0" />
 		<PackageReference Include="JetBrains.Annotations" Version="2025.2.4" PrivateAssets="all" />
-		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.2.0" PrivateAssets="all" />
+		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.2.0" PrivateAssets="all" >
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 		<PackageReference Include="Markdig" Version="0.44.0" PrivateAssets="all" />
 		<PackageReference Include="MemoryPack" Version="1.21.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.1" />
@@ -64,10 +66,10 @@
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" PrivateAssets="all" />
 		<PackageReference Include="Postmark" Version="5.3.0" PrivateAssets="all" />
 		<PackageReference Include="Riok.Mapperly" Version="4.3.1" />
-		<PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" PrivateAssets="all" />
 		<PackageReference Include="SafeRouting" Version="1.5.0" PrivateAssets="all" />
 		<PackageReference Include="Scalar.AspNetCore" Version="2.11.10" PrivateAssets="all" />
 		<PackageReference Include="SendGrid" Version="9.29.3" PrivateAssets="all" />
+		<PackageReference Include="Serilog" Version="4.3.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" PrivateAssets="all" />
 		<PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" PrivateAssets="all" />

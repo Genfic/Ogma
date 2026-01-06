@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -19,6 +20,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<GetThreadDetails
 public static partial class GetThreadDetails
 {
 	[Validate]
+	[UsedImplicitly]
 	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(

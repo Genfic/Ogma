@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Images;
-using Ogma3.Data.Notifications;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
@@ -22,8 +21,7 @@ namespace Ogma3.Pages.Stories;
 public sealed class CreateModel(
 	ApplicationDbContext context,
 	ImageUploader uploader,
-	OgmaConfig ogmaConfig,
-	NotificationsRepository notificationsRepo)
+	OgmaConfig ogmaConfig)
 	: PageModel
 {
 	public required List<RatingDto> Ratings { get; set; }

@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 public static partial class LockThread
 {
 	[Validate]
+	[UsedImplicitly]
 	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
@@ -43,14 +45,14 @@ public static partial class LockThread
 
 		thread.LockDate = thread.LockDate is null ? DateTimeOffset.UtcNow : null;
 
-		string type;
-		if (thread.BlogpostId is not null) type = "blogpost";
-		else if (thread.ChapterId is not null) type = "chapter";
-		else if (thread.ClubThreadId is not null) type = "club";
-		else if (thread.UserId is not null) type = "user profile";
-		else type = "unknown";
-
-		var typeId = thread.BlogpostId ?? thread.ChapterId ?? thread.ClubThreadId ?? thread.UserId ?? 0;
+		var (type, typeId) = thread switch
+		{
+			{ BlogpostId: {} id } => ("blogpost", id),
+			{ ChapterId: {} id } => ("chapter", id),
+			{ ClubThreadId: {} id } => ("club", id),
+			{ UserId: {} id } => ("user profile", id),
+			_ => ("unknown", 0),
+		};
 
 		var message = thread.IsLocked
 			? ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, uname)
