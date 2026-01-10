@@ -1,4 +1,10 @@
-css/*
-!css/*.gitkeep
-js/*
-!js/*.gitkeep
+# Ignore everything in /js and /css directories, except .gitkeep files
+/js/**
+!/js/.gitkeep
+/css/**
+!/css/.gitkeep
+
+# Ignore all .br, .gz, and .zst files
+*.br
+*.gz
+*.zst

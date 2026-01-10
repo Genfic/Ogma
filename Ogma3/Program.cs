@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using AutoSeal;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -14,6 +15,7 @@ using Serilog.Events;
 
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 [assembly: Behaviors(typeof(ValidationBehavior<,>))]
+[assembly: SealPublicClasses]
 
 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
