@@ -1,13 +1,15 @@
 #nullable enable
 
+using System.Collections.Frozen;
+
 public static class Icons
 {
-    private readonly static Dictionary<string, string> _icons = new()
+    private readonly static FrozenDictionary<string, string> _icons = new Dictionary<string, string>()
     {
     <%_ svgs.forEach(({ svg, name }) => { -%>
         ["<%= name %>"] = """<%- svg %>""",
     <%_ }) -%>
-    };
+    }.ToFrozenDictionary();
 
     public static string? GetSvg(string name) => _icons.TryGetValue(name, out var svg) ? svg : null;
 }

@@ -40,7 +40,7 @@ export class Logger {
 	}
 
 	public info(msg: unknown, stopwatch?: Stopwatch) {
-		console.warn("ℹ️", ...this.args(msg, stopwatch));
+		console.info("ℹ️", ...this.args(msg, stopwatch));
 	}
 
 	public warn(msg: unknown, stopwatch?: Stopwatch) {

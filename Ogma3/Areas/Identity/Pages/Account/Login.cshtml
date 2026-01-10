@@ -66,8 +66,6 @@
 
 		@if (Model.ExternalLogins.Count > 0)
 		{
-			var logoColor = theme == "light" ? "white" : "black";
-
 			<form id="external-account"
 			      asp-page="./ExternalLogin"
 			      method="post"
@@ -76,10 +74,10 @@
 
 				@foreach (var provider in Model.ExternalLogins)
 				{
-					<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name"
+					<button type="submit" class="btn btn-primary @(provider.Name.ToLower()) @theme" name="provider" value="@provider.Name"
 					        title="Log in using your @provider.DisplayName account">
-						<img alt="" src="https://api.iconify.design/simple-icons:@(provider.Name.ToLower()).svg?color=@logoColor" />
-						@provider.DisplayName
+						<icon icon="@(provider.Name.ToLower())" size="48" dynamic></icon>
+						Log in with @provider.DisplayName
 					</button>
 				}
 

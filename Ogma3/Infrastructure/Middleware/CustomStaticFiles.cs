@@ -1,4 +1,3 @@
-using CompressedStaticFiles;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
@@ -19,7 +18,7 @@ public static class CustomStaticFiles
 		var extensionsProvider = new FileExtensionContentTypeProvider();
 		extensionsProvider.Mappings.AddMany(CustomMimeTypes);
 
-		app.UseCompressedStaticFiles(new StaticFileOptions
+		app.UseStaticFiles(new StaticFileOptions
 		{
 			HttpsCompression = HttpsCompressionMode.Compress,
 			OnPrepareResponse = PrepareResponse,

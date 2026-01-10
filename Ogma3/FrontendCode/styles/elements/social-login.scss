@@ -1,18 +1,81 @@
 form.social-login {
+	--icon-size: 20px;
+
 	display: flex;
 	flex-direction: column;
 	gap: .25rem;
 
-	button {
+	.btn {
 		display: flex;
 		align-items: center;
-		gap: .5rem;
+		justify-content: start;
+		gap: max(.25rem, calc(var(--icon-size) / 2));
 		min-width: 20ch;
 		min-height: 48px;
+		color: var(--foreground);
+		border-color: var(--foreground-25);
+
+		.icon {
+			height: var(--icon-size);
+			aspect-ratio: 1/1;
+			transition: height .1s ease-in-out;
+		}
+
+		&.patreon {
+			background-color: oklch(95% 0.05 31.998deg);
+
+			.icon {
+				color: #FC674D;
+			}
+
+			&.dark {
+				background-color: oklch(10% 0.1 31.998deg);
+			}
+		}
+
+		&.tumblr {
+			background-color: oklch(90% 0.064 252.202deg);
+
+			.icon {
+				color: #001935;
+			}
+
+			&.dark {
+				background-color: #001935;
+
+				.icon {
+					color: #fff;
+				}
+			}
+		}
+
+		&.discord {
+			background-color: #e0e3ff;
+
+			.icon {
+				color: #5865f2;
+			}
+
+			&.dark {
+				background-color: #000;
+			}
+		}
+
+		&.google {
+			color: #1F1F1F;
+			background-color: white;
+
+			&.dark {
+				color: #E3E3E3;
+				background-color: #131314;
+			}
+		}
 
 		&:hover {
-			img {
-				filter: invert(1);
+			border-color: var(--foreground-75);
+
+			.icon {
+				height: calc(var(--icon-size) + 4px);
 			}
 		}
 	}

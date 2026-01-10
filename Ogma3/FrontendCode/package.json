@@ -44,6 +44,7 @@
 		"lighthouse": "^13.0.1",
 		"lightningcss": "^1.30.2",
 		"sass-embedded": "^1.97.1",
+		"sharp": "^0.34.5",
 		"solid-labels": "^0.17.0",
 		"stylelint": "^16.26.1",
 		"stylelint-config-standard-scss": "^16.0.0",

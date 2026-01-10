@@ -119,6 +119,8 @@ const compileSass = async (file: string) => {
 		await Bun.write(path.join(_dest, `${filename}.map.css`), map);
 	}
 
+	await Bun.write(join(_dest, ".gitkeep"), "");
+
 	logger.log(ct`{dim File {reset.bold ${base}} compiled in}`, timer);
 };
 

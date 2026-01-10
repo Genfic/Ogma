@@ -4,7 +4,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using B2Net;
 using B2Net.Models;
-using CompressedStaticFiles;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -214,9 +213,6 @@ public static class Startup
 		services.AddFusionCache()
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
 			.WithRegisteredDistributedCache();
-
-		// Precompressed files
-		services.AddCompressedStaticFiles();
 
 		static void ConfigJson(JsonSerializerOptions options)
 		{

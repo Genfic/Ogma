@@ -1,3 +1,4 @@
+import { readdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { brotliCompressSync } from "node:zlib";
 import { program } from "@commander-js/extra-typings";
@@ -95,11 +96,27 @@ const spritesheet = rewriter.transform(tpl);
 const paths = svgs.map(
 	(s): Svg => ({
 		name: s.name,
-		svg: cheerio.load(s.svg, { xmlMode: true })("svg").html() as string,
+		svg: cheerio.load(s.svg, { xml: true })("svg").html() as string,
 	}),
 );
 logger.verbose(paths);
-const csharp = ejs.render(templates.get("icons-csharp"), { svgs: uniqBy(paths, (s) => s.name) });
+
+const extraPaths = await readdir(join(_root, "..", "svg")).then(async (files) => {
+	return await Parallel.forEach(files, async (f) => {
+		const file = await Bun.file(join(_root, "..", "svg", f)).text();
+		const svg = cheerio.load(file, { xml: true })("svg").html() as string;
+
+		const name = f.replace(/\.svg$/, "");
+
+		return {
+			name,
+			svg: svg.replace(/\s*[\r\n]+\s*/g, "").trim(),
+		};
+	});
+});
+logger.verbose(extraPaths);
+
+const csharp = ejs.render(templates.get("icons-csharp"), { svgs: uniqBy([...paths, ...extraPaths], (s) => s.name) });
 
 const index = ejs.render(templates.get("icon-index"), { svgs: uniqBy(svgs, (s) => s.name) });
 await Promise.allSettled([

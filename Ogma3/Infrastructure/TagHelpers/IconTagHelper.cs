@@ -8,6 +8,7 @@ public sealed class IconTagHelper : TagHelper
 {
 	public string Icon { get; set; } = "bug_report";
 	public bool FromSpritesheet { get; set; } = false;
+	public int Size { get; set; } = 24;
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
@@ -15,9 +16,10 @@ public sealed class IconTagHelper : TagHelper
 
 		output.AddClass("icon", HtmlEncoder.Default);
 		output.Attributes.Add("part", "icon");
-		output.Attributes.Add("width", "24");
-		output.Attributes.Add("height", "24");
-		output.Attributes.Add("viewbox", "0 0 24 24");
+		output.Attributes.Add("width", Size);
+		output.Attributes.Add("height", Size);
+		output.Attributes.Add("viewbox", $"0 0 {Size} {Size}");
+
 		if (FromSpritesheet)
 		{
 			output.Content.SetHtmlContent($"""<use href="/svg/spritesheet.svg#{Icon}"></use>""");

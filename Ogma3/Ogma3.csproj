@@ -27,7 +27,6 @@
 		<PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" />
 		<PackageReference Include="B2Net" Version="0.8.0.1-beta" PrivateAssets="all" />
 		<PackageReference Include="Bogus" Version="35.6.5" />
-		<PackageReference Include="CompressedStaticFiles" Version="2.2.0" />
 		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation" Version="12.1.1" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" PrivateAssets="all" />
@@ -99,5 +98,21 @@
 		</Content>
 		<Content Remove="FrontendCode\**\*" />
 		<None Include="FrontendCode\**\*" />
+		<Content Update="FrontendCode\svg\discord.svg">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="FrontendCode\svg\google.svg">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="FrontendCode\svg\patreon.svg">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="FrontendCode\svg\tumblr.svg">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 </Project>
