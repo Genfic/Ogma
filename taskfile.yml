@@ -2,62 +2,71 @@ version: "3"
 silent: true
 
 tasks:
-    # Generate JS API clients based on Swagger
-    paths:
-        env:
-            DENO_TLS_CA_STORE: system
-        vars:
-            DEST: ./Ogma3/FrontendCode/typescript/generated/
-            URL: https://localhost:5001/openapi/
-        cmds:
-            - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"
+  watch: dotnet watch --project ./Ogma3.AppHost/Ogma3.AppHost.csproj
 
-    # Generate preload code for fonts
-    preloads:
-        vars:
-            SRC: ./Ogma3/wwwroot/fonts
-            DEST: fonts
-        cmds:
-            - ogma-tool generate-preloads {{.SRC}} {{.DEST}}
+  watch-dbg:
+    env:
+      Microsoft_CodeAnalysis_EditAndContinue_LogDir: '{{.TASKFILE_DIR | toSlash}}/.logs/{{now | date "2006-01-02_15-04-05"}}'
+    cmds:
+      - echo "Logging to $Microsoft_CodeAnalysis_EditAndContinue_LogDir"
+      - dotnet watch --verbose --project ./Ogma3.AppHost/Ogma3.AppHost.csproj
 
-    # Generate CSS import conde for fonts
-    imports:
-        vars:
-            SRC: ./Ogma3/wwwroot/fonts
-            DEST: fonts
-        cmds:
-            - ogma-tool generate-imports {{.SRC}} {{.DEST}}
+  # Generate JS API clients based on Swagger
+  paths:
+    env:
+      DENO_TLS_CA_STORE: system
+    vars:
+      DEST: ./Ogma3/FrontendCode/typescript/generated/
+      URL: https://localhost:5001/openapi/
+    cmds:
+      - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"
 
-    # Check the size of the bundle
-    bundlesize:
-        vars:
-            SRC: ./Ogma3/wwwroot/js/*.js ./Ogma3/wwwroot/js/**/*.js
-        cmds:
-            - ogma-tool bundle-size {{.SRC}}
+  # Generate preload code for fonts
+  preloads:
+    vars:
+      SRC: ./Ogma3/wwwroot/fonts
+      DEST: fonts
+    cmds:
+      - ogma-tool generate-preloads {{.SRC}} {{.DEST}}
 
-    # Serve via Ngrok
-    serve: ngrok http https://localhost:5001 -host-header="localhost:5001"
+  # Generate CSS import conde for fonts
+  imports:
+    vars:
+      SRC: ./Ogma3/wwwroot/fonts
+      DEST: fonts
+    cmds:
+      - ogma-tool generate-imports {{.SRC}} {{.DEST}}
 
-    # Serve via Cloudflare Tunnel (see Documentation/Testing/public-access.md)
-    tunnel: cloudflared tunnel run genfic-beta
+  # Check the size of the bundle
+  bundlesize:
+    vars:
+      SRC: ./Ogma3/wwwroot/js/*.js ./Ogma3/wwwroot/js/**/*.js
+    cmds:
+      - ogma-tool bundle-size {{.SRC}}
 
-    build-prod: dotnet run -c release --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --emulate-prod
+  # Serve via Ngrok
+  serve: ngrok http https://localhost:5001 -host-header="localhost:5001"
 
-    tunnel-prod:
-        deps: [build-prod, tunnel]
+  # Serve via Cloudflare Tunnel (see Documentation/Testing/public-access.md)
+  tunnel: cloudflared tunnel run genfic-beta
 
-    # Get Lighthouse CLI score
-    score:
-        cmds:
-            - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
-            - lighthouse https://localhost:5001 --view
+  build-prod: dotnet run -c release --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --emulate-prod
 
-    # EF helpers
-    db-migrate: dotnet ef migrations add --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
-    db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
-    db-compile: dotnet ef dbcontext optimize --project ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
-    db-all:
-        cmds:
-            - task: db-migrate
-            - task: db-up
-            - task: db-compile
+  tunnel-prod:
+    deps: [ build-prod, tunnel ]
+
+  # Get Lighthouse CLI score
+  score:
+    cmds:
+      - dotnet run -c release --project ./Ogma3/Ogma3.csproj --environment testing
+      - lighthouse https://localhost:5001 --view
+
+  # EF helpers
+  db-migrate: dotnet ef migrations add --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
+  db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
+  db-compile: dotnet ef dbcontext optimize --project ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
+  db-all:
+    cmds:
+      - task: db-migrate
+      - task: db-up
+      - task: db-compile

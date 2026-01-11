@@ -36,6 +36,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.ServiceDefaults;
 using Ogma3.Services;
 using Ogma3.Services.CodeGenerator;
+using Ogma3.Services.EmailBlocklistProvider;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.FileLogService;
 using Ogma3.Services.FileUploader;
@@ -44,6 +45,7 @@ using Ogma3.Services.Mailer;
 using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
+using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
@@ -55,7 +57,7 @@ namespace Ogma3;
 
 public static class Startup
 {
-	public static TBuilder ConfigureServices<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+	public static async Task<TBuilder> ConfigureServices<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
 	{
 		var services = builder.Services;
 		var configuration = builder.Configuration;
@@ -91,7 +93,8 @@ public static class Startup
 		// Middleware
 		services
 			.AddTransient<RequestTimestampMiddleware>()
-			.AddTransient<UserBanMiddleware>();
+			.AddTransient<UserBanMiddleware>()
+			.AddTransient<CloudflareIpForwardingMiddleware>();
 		builder.UseAddHeaders();
 
 		// Custom persistent config
@@ -130,12 +133,17 @@ public static class Startup
 				IdentityRoleClaim<long>>>()
 			.AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
 
+		// Data protection
+		services.AddDataProtection();
+
 		// Add services
 		services
 			.AddScoped<IUserService, UserService>()
 			.AddSingleton<ICodeGenerator, CodeGenerator>()
 			.AddScoped<UserActivityService>()
 			.AddScoped<ETagService>()
+			.AddSingleton<IEmailBlocklistProvider>(await EmailBlocklistProvider.CreateAsync())
+			.AddSingleton<ISpeedTrapService, SpeedTrapService>()
 			.AddSingleton<IFileLogService, FileLogService>()
 			.Configure<FileLogOptions>(c => {
 				c.MaxSizeInBytes = 50 * 1024 * 1024;
@@ -144,8 +152,6 @@ public static class Startup
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
-		// services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
-		// services.AddScoped(s => s.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
 		// Argon2 hasher
 		services
@@ -323,7 +329,7 @@ public static class Startup
 		else
 		{
 			app.UseExceptionHandler("/Error");
-			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+			// NOTE: The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 			app.UseHsts();
 		}
 
@@ -332,6 +338,7 @@ public static class Startup
 		{
 			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
 		});
+		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
 
 		// Redirects
 		app.UseHttpsRedirection();

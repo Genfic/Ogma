@@ -55,7 +55,7 @@ builder.WebHost.ConfigureKestrel(options =>
 		options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3; });
 	});
 
-builder.ConfigureServices();
+await builder.ConfigureServices();
 
 builder.AddServiceDefaults();
 builder.AddRedisClient("garnet");

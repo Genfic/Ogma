@@ -67,3 +67,6 @@ Ogma3/wwwroot/lib/admin/
 
 # Publish
 .publish/
+
+# Logs
+.logs/

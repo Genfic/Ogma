@@ -8,11 +8,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.EmailBlocklistProvider;
+using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
 using Routes.Areas.Identity.Pages;
 using Utils;
@@ -25,10 +30,11 @@ public sealed class RegisterModel(
 	SignInManager<OgmaUser> signInManager,
 	IEmailSender emailSender,
 	ITurnstileService turnstile,
+	ISpeedTrapService speedTrap,
 	ApplicationDbContext context,
 	ILogger<RegisterModel> logger) : PageModel
 {
-	[BindProperty] public InputModel Input { get; set; } = null!;
+	[BindProperty] public InputModel Input { get; set; } = new();
 
 	[Required(ErrorMessage = "Turnstile response is required")]
 	[BindProperty(Name = "cf-turnstile-response")]
@@ -41,22 +47,27 @@ public sealed class RegisterModel(
 	public sealed class InputModel
 	{
 		public string Name { get; init; } = null!;
+		[DataType(DataType.EmailAddress)]
 		public string Email { get; init; } = null!;
 
-		[DataType(DataType.Password)] public string Password { get; init; } = null!;
+		[DataType(DataType.Password)]
+		public string Password { get; init; } = null!;
 
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm password")]
 		public string ConfirmPassword { get; init; } = null!;
 
-		[Display(Name = "Invite code")] public string? InviteCode { get; init; }
+		[Display(Name = "Invite code")]
+		public string? InviteCode { get; init; }
 
-		public string? Occupation { get; set; }
+		public string? Occupation { get; init; }
+
+		public string SubmissionToken { get; set; } = "";
 	}
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
 	{
-		public InputModelValidation()
+		public InputModelValidation(IEmailBlocklistProvider blocklistProvider, ISpeedTrapService speedTrap)
 		{
 			RuleFor(im => im.Name)
 				.NotEmpty()
@@ -64,7 +75,8 @@ public sealed class RegisterModel(
 				.MaximumLength(CTConfig.User.MaxNameLength);
 			RuleFor(im => im.Email)
 				.NotEmpty()
-				.EmailAddress();
+				.EmailAddress()
+				.NotDisposable(blocklistProvider);
 			RuleFor(im => im.Password)
 				.NotEmpty()
 				.MinimumLength(CTConfig.User.MinPassLength)
@@ -75,15 +87,21 @@ public sealed class RegisterModel(
 				.NotEmpty()
 				.MinimumLength(10)
 				.MaximumLength(18);
+			RuleFor(im => im.SubmissionToken)
+				.NotEmpty()
+				.Must(token => speedTrap.IsHumanSpeed(token, 5))
+				.WithMessage("Submission too fast. Slow down and try again.");
 		}
 	}
 
 	public async Task OnGetAsync(string? returnUrl = null)
 	{
 		ReturnUrl = returnUrl;
+		Input.SubmissionToken = speedTrap.GenerateToken();
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 	}
 
+	[EnableRateLimiting(policyName: RateLimiting.Registration)]
 	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
