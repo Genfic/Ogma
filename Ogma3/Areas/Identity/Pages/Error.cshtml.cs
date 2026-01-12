@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +9,7 @@ namespace Ogma3.Areas.Identity.Pages;
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 public sealed class ErrorModel : PageModel
 {
-	public string RequestId { get; set; }
+	public required string RequestId { get; set; }
 
 	public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 

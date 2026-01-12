@@ -1,9 +1,8 @@
-﻿#nullable disable
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Users;
+using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -48,6 +47,6 @@ public sealed class Disable2FaModel
 
 		logger.LogInformation("User with ID '{UserId}' has disabled 2fa", userManager.GetUserId(User));
 		StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
-		return Routes.Areas.Identity.Pages.Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
+		return Account_Manage_TwoFactorAuthentication.Get().Redirect(this);
 	}
 }

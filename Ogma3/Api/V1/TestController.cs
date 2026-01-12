@@ -8,7 +8,7 @@ namespace Ogma3.Api.V1;
 [MapGet("api/test")]
 public sealed partial class TestController
 {
-	public record Query(string Q);
+	public sealed record Query(string Q);
 
 	private async ValueTask<Ok> HandleAsync(Query _, CancellationToken ct)
 	{

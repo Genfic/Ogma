@@ -6,7 +6,7 @@ namespace Ogma3.Areas.Admin.Pages;
 
 public sealed class Index(ApplicationDbContext context) : PageModel
 {
-	public record CountItem(int Count, string Name);
+	public sealed record CountItem(int Count, string Name);
 
 	public required List<CountItem> Counts { get; set; }
 

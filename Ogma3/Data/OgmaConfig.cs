@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Ogma3.Infrastructure.Attributes;
@@ -33,16 +31,16 @@ public sealed class OgmaConfig
 		return config;
 	}
 
-	public string Cdn { get; set; }
-	public string AvatarServiceUrl { get; set; }
-	public string AdminEmail { get; set; }
+	public string Cdn { get; set; } = "";
+	public string AvatarServiceUrl { get; set; } = "";
+	public string AdminEmail { get; set; } = "";
 	public int MaxInvitesPerUser { get; set; }
 
 	// Docs
-	[AutoformCategory("Docs")] public string PrivacyPolicyDoc { get; set; }
-	[AutoformCategory("Docs")] public string AboutDoc { get; set; }
-	[AutoformCategory("Docs")] public string TosDoc { get; set; }
-	[AutoformCategory("Docs")] public string SearchHelpDoc { get; set; }
+	[AutoformCategory("Docs")] public string PrivacyPolicyDoc { get; set; } = "";
+	[AutoformCategory("Docs")] public string AboutDoc { get; set; } = "";
+	[AutoformCategory("Docs")] public string TosDoc { get; set; } = "";
+	[AutoformCategory("Docs")] public string SearchHelpDoc { get; set; } = "";
 
 	// Pagination settings
 	[AutoformCategory("Pagination")] public int CommentsPerPage { get; set; } = 25;

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
+using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -16,7 +15,7 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurnstileService turnstile, ILogger<ResetPasswordModel> logger)
 	: PageModel
 {
-	[BindProperty] public InputModel Input { get; set; }
+	[BindProperty] public InputModel Input { get; set; } = null!;
 
 	[Required(ErrorMessage = "Turnstile response is required")]
 	[BindProperty(Name = "cf-turnstile-response")]
@@ -26,22 +25,22 @@ public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurns
 	{
 		[Required,
 		 EmailAddress]
-		public string Email { get; set; }
+			public string Email { get; set; } = "";
 
 		[Required,
 		 StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6),
 		 DataType(DataType.Password)]
-		public string Password { get; set; }
+			public string Password { get; set; } = "";
 
 		[DataType(DataType.Password),
 		 Display(Name = "Confirm password"),
 		 Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-		public string ConfirmPassword { get; set; }
+			public string ConfirmPassword { get; set; } = "";
 
-		public string Code { get; set; }
+		public string Code { get; set; } = "";
 	}
 
-	public IActionResult OnGet(string code = null)
+	public IActionResult OnGet(string? code = null)
 	{
 		if (code is null)
 		{
@@ -76,13 +75,13 @@ public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurns
 		if (user is null)
 		{
 			// Don't reveal that the user does not exist
-			return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
+			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 
 		var result = await userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
 		if (result.Succeeded)
 		{
-			return Routes.Areas.Identity.Pages.Account_ForgotPasswordConfirmation.Get().Redirect(this);
+			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 
 		foreach (var error in result.Errors)

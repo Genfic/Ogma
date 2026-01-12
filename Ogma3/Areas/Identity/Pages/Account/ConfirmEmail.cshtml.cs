@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
@@ -66,7 +64,7 @@ public sealed class ConfirmEmailModel(OgmaUserManager userManager, ApplicationDb
 
 		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
-			CommentThread = thread,
+			CommentThread = thread ?? new(),
 			OgmaUser = user,
 		});
 

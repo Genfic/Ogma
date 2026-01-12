@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,9 +10,9 @@ namespace Ogma3.Data.ModeratorActions;
 [AutoDbSet]
 public sealed class ModeratorAction : BaseModel
 {
-	public OgmaUser StaffMember { get; init; }
+	public OgmaUser StaffMember { get; init; } = null!;
 	public long StaffMemberId { get; init; }
-	public string Description { get; init; }
+	public required string Description { get; init; }
 	public DateTimeOffset DateTime { get; init; }
 
 	public sealed class ModeratorActionConfiguration : BaseConfiguration<ModeratorAction>
@@ -25,6 +23,7 @@ public sealed class ModeratorAction : BaseModel
 
 			builder
 				.Property(ma => ma.Description)
+				.HasMaxLength(5000)
 				.IsRequired();
 			builder
 				.Property(ma => ma.DateTime)

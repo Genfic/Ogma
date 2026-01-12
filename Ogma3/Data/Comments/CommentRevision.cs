@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,8 +10,8 @@ namespace Ogma3.Data.Comments;
 public sealed class CommentRevision : BaseModel
 {
 	public DateTimeOffset EditTime { get; init; }
-	public string Body { get; init; }
-	public Comment Parent { get; init; }
+	public required string Body { get; init; }
+	public Comment Parent { get; init; } = null!;
 	public long ParentId { get; init; }
 
 	public sealed class CommentRevisionConfiguration : BaseConfiguration<CommentRevision>

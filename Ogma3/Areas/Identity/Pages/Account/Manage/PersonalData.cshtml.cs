@@ -1,24 +1,19 @@
-﻿#nullable disable
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class PersonalDataModel : PageModel
+public sealed class PersonalDataModel(UserManager<OgmaUser> userManager) : PageModel
 {
-	private readonly UserManager<OgmaUser> _userManager;
-
-	public PersonalDataModel(UserManager<OgmaUser> userManager) => _userManager = userManager;
 
 	public async Task<IActionResult> OnGet()
 	{
-		var user = await _userManager.GetUserAsync(User);
+		var user = await userManager.GetUserAsync(User);
 		if (user is null)
 		{
-			return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 		}
 
 		return Page();

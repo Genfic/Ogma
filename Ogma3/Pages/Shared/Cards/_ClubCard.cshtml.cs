@@ -1,6 +1,6 @@
 namespace Ogma3.Pages.Shared.Cards;
 
-public record ClubCard
+public sealed record ClubCard
 {
 	public required long Id { get; init; }
 	public required string Name { get; init; }

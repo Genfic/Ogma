@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,9 +9,9 @@ namespace Ogma3.Data.Chapters;
 [AutoDbSet(Name = nameof(ChaptersRead))]
 public sealed class ChaptersRead
 {
-	public Story Story { get; init; }
+	public Story Story { get; init; } = null!;
 	public long StoryId { get; init; }
-	public OgmaUser User { get; init; }
+	public OgmaUser User { get; init; } = null!;
 	public long UserId { get; init; }
 
 	// TODO: Workaround for #82

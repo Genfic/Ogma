@@ -14,7 +14,7 @@ public sealed class TagModel(ApplicationDbContext context) : PageModel
 {
 	private const int PerPage = 25;
 
-	public record TagInfo(string Name, ETagNamespace? Namespace);
+	public sealed record TagInfo(string Name, ETagNamespace? Namespace);
 
 	public TagInfo Tag { get; private set; } = null!;
 	public IList<StoryCard> Stories { get; private set; } = null!;

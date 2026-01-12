@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
@@ -9,7 +7,7 @@ namespace Ogma3.Data.Icons;
 [AutoDbSet]
 public sealed class Icon : BaseModel
 {
-	public string Name { get; init; }
+	public required string Name { get; init; }
 }
 
 public sealed class IconConfiguration : BaseConfiguration<Icon>

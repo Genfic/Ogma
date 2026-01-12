@@ -39,7 +39,7 @@ public static class InfractionMapper
 	);
 }
 
-public record InfractionDto(
+public sealed record InfractionDto(
 		string UserUserName,
 		long UserId,
 		DateTimeOffset IssueDate,

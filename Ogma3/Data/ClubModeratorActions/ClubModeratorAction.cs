@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,11 +11,11 @@ namespace Ogma3.Data.ClubModeratorActions;
 [AutoDbSet]
 public sealed class ClubModeratorAction : BaseModel
 {
-	public OgmaUser Moderator { get; set; }
+	public OgmaUser Moderator { get; set; } = null!;
 	public long ModeratorId { get; set; }
-	public string Description { get; set; }
+	public required string Description { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
-	public Club Club { get; set; }
+	public Club Club { get; set; } = null!;
 	public long ClubId { get; set; }
 
 	public sealed class ModeratorActionConfiguration : BaseConfiguration<ClubModeratorAction>
@@ -28,6 +26,7 @@ public sealed class ClubModeratorAction : BaseModel
 
 			builder
 				.Property(ma => ma.Description)
+				.HasMaxLength(5000)
 				.IsRequired();
 			builder
 				.Property(ma => ma.CreationDate)

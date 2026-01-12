@@ -2,7 +2,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Shelves;
 
-public record ShelfDto
+public sealed record ShelfDto
 {
 	public required long Id { get; init; }
 	public required string Name { get; init; }

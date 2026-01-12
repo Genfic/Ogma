@@ -16,7 +16,7 @@ public sealed class ExternalLoginsModel
 
 	[TempData] public required string StatusMessage { get; set; }
 
-	public record LoginProvider(string DisplayName, string Name, bool Active, string? Key);
+	public sealed record LoginProvider(string DisplayName, string Name, bool Active, string? Key);
 
 	public async Task<IActionResult> OnGetAsync()
 	{

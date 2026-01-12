@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Users;
@@ -9,8 +7,8 @@ namespace Ogma3.Data.Blacklists;
 [AutoDbSet]
 public sealed class BlacklistedRating
 {
-	public OgmaUser User { get; init; }
+	public OgmaUser User { get; init; } = null!;
 	public long UserId { get; init; }
-	public Rating Rating { get; init; }
+	public Rating Rating { get; init; } = null!;
 	public long RatingId { get; init; }
 }

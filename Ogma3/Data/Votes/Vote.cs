@@ -1,5 +1,3 @@
-#nullable disable
-
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,7 +9,7 @@ namespace Ogma3.Data.Votes;
 [AutoDbSet]
 public sealed class Vote : BaseModel
 {
-	public OgmaUser User { get; init; }
+	public OgmaUser User { get; init; } = null!;
 	public long UserId { get; init; }
 	public long StoryId { get; init; }
 

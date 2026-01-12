@@ -69,7 +69,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 	}
 }
 
-public record ChapterDetails
+public sealed record ChapterDetails
 (
 	long Id,
 	string Title,
@@ -85,10 +85,10 @@ public record ChapterDetails
 	string StorySlug,
 	long StoryAuthorId,
 	long CommentThreadId,
-	DateTimeOffset CommentThreadLockDate,
+	DateTimeOffset? CommentThreadLockDate,
 	ContentBlockCard? ContentBlock);
 
-public record ChapterMicroDto(long Id, string Title, string Slug);
+public sealed record ChapterMicroDto(long Id, string Title, string Slug);
 
 [Mapper]
 public static partial class ChapterMapper
