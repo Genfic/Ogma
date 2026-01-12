@@ -11,6 +11,8 @@ tasks:
       - echo "Logging to $Microsoft_CodeAnalysis_EditAndContinue_LogDir"
       - dotnet watch --verbose --project ./Ogma3.AppHost/Ogma3.AppHost.csproj
 
+  run-prod: dotnet run -c release --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --emulate-prod
+
   # Generate JS API clients based on Swagger
   paths:
     env:
@@ -43,14 +45,6 @@ tasks:
       SRC: ./Ogma3/wwwroot/js/*.js ./Ogma3/wwwroot/js/**/*.js
     cmds:
       - ogma-tool bundle-size {{.SRC}}
-
-  # Serve via Cloudflare Tunnel (see Documentation/Testing/public-access.md)
-  tunnel: cloudflared tunnel run genfic-beta
-
-  build-prod: dotnet run -c release --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --emulate-prod
-
-  tunnel-prod:
-    deps: [ build-prod, tunnel ]
 
   # Get Lighthouse CLI score
   score:

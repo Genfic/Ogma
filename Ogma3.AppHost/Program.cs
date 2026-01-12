@@ -22,7 +22,7 @@ var database = builder
 	.WithPgWeb()
 	.AddDatabase("ogma3-db");
 
-builder
+var genfic = builder
 	.AddProject<Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
 	.WithExternalHttpEndpoints()
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
@@ -30,5 +30,12 @@ builder
 	.WaitFor(database)
 	.WithReference(garnet)
 	.WaitFor(garnet);
+
+builder.AddContainer("tunnel", "cloudflare/cloudflared")
+	.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
+	.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
+	.WithArgs("tunnel", "--no-autoupdate", "run")
+	.WithReference(genfic)
+	.WaitFor(genfic);
 
 builder.Build().Run();
