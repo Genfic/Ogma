@@ -36,6 +36,7 @@ builder.AddContainer("tunnel", "cloudflare/cloudflared")
 	.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
 	.WithArgs("tunnel", "--no-autoupdate", "run")
 	.WithReference(genfic)
-	.WaitFor(genfic);
+	.WaitFor(genfic)
+	.WithExplicitStart();
 
 builder.Build().Run();

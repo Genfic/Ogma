@@ -25,7 +25,8 @@
 		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.2.0" PrivateAssets="all" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" PrivateAssets="all" />
 		<PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" />
-		<PackageReference Include="B2Net" Version="0.8.0.1-beta" PrivateAssets="all" />
+		<PackageReference Include="AWSSDK.S3" Version="4.0.17.1" />
+		<PackageReference Include="B2Net" Version="0.8.0" />
 		<PackageReference Include="Bogus" Version="35.6.5" />
 		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation" Version="12.1.1" PrivateAssets="all" />

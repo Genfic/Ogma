@@ -43,6 +43,45 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 			throw new ArgumentException("File cannot be null or empty");
 		}
 
+		await using var outputMs = await ProcessImage(file, width, height);
+		outputMs.Seek(0, SeekOrigin.Begin);
+
+		// Assemble the final path
+		var fileName = $"{folder}/{name}.webp";
+
+		// Try to upload the image to the bucket
+		var counter = tries;
+		while (counter >= 0)
+		{
+			using var op = logger.TimeOperation("Uploading image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
+
+			try
+			{
+				var uploadUrl = await b2Client.Files.GetUploadUrl();
+				var uploadContext = new B2FileUploadContext
+				{
+					FileName = fileName,
+					B2UploadUrl = uploadUrl,
+				};
+
+				var result = await b2Client.Files.Upload(outputMs.ToArray(), uploadContext);
+				return new FileUploaderResult(result.FileId, fileName);
+			}
+			catch (B2Exception e)
+			{
+				logger.LogError("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
+			}
+		}
+
+		logger.LogError("Couldn't upload file {Name} ({Size} bytes)", file.Name, file.Length);
+		throw new FileUploadException("Could not upload file. Check server logs.", file.Name, file.Length);
+	}
+
+	public async Task Delete(string name, string id, CancellationToken cancellationToken = default)
+		=> _ = await b2Client.Files.Delete(id, name.Replace(ogmaConfig.Cdn, string.Empty).Trim('/'), cancellationToken);
+
+	private async Task<MemoryStream> ProcessImage(IFormFile file, int? width = null, int? height = null)
+	{
 		// Load the image to a memory stream
 		await using var inputMs = new MemoryStream();
 		await file.CopyToAsync(inputMs);
@@ -78,40 +117,9 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 		img.Metadata.ExifProfile = null;
 
 		// Save it as WEBP
-		await using var outputMs = new MemoryStream();
+		var outputMs = new MemoryStream();
 		await img.SaveAsync(outputMs, new WebpEncoder());
 
-		// Assemble the final path
-		var fileName = $"{folder}/{name}.webp";
-
-		// Try to upload the image to the bucket
-		var counter = tries;
-		while (counter >= 0)
-		{
-			using var op = logger.TimeOperation("Uploading image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
-
-			try
-			{
-				var uploadUrl = await b2Client.Files.GetUploadUrl();
-				var uploadContext = new B2FileUploadContext
-				{
-					FileName = fileName,
-					B2UploadUrl = uploadUrl,
-				};
-
-				var result = await b2Client.Files.Upload(outputMs.ToArray(), uploadContext);
-				return new FileUploaderResult(result.FileId, fileName);
-			}
-			catch (B2Exception e)
-			{
-				logger.LogError("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
-			}
-		}
-
-		logger.LogError("Couldn't upload file {Name} ({Size} bytes)", file.Name, file.Length);
-		throw new FileUploadException("Could not upload file. Check server logs.", file.Name, file.Length);
+		return outputMs;
 	}
-
-	public async Task Delete(string name, string id, CancellationToken cancellationToken = default)
-		=> _ = await b2Client.Files.Delete(id, name.Replace(ogmaConfig.Cdn, string.Empty).Trim('/'), cancellationToken);
 }
