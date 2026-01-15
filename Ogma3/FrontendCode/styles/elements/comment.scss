@@ -101,11 +101,8 @@
 		}
 
 		> .body {
-			white-space: pre-line;
 			margin: .5rem;
 			overflow-wrap: break-word;
-			overflow-wrap: break-word;
-			word-break: break-word;
 			hyphens: auto;
 		}
 
@@ -179,7 +176,7 @@
 		> .history {
 			padding: .5rem;
 
-			li {
+			.item {
 				display: flex;
 				flex-direction: column;
 				border-bottom: 1px solid var(--foreground-50);
@@ -191,13 +188,12 @@
 					margin-bottom: 0;
 				}
 
-				time {
+				.time {
 					font-size: .75rem;
 					color: var(--foreground-50);
 				}
 
 				.body {
-					overflow-wrap: break-word;
 					overflow-wrap: break-word;
 					word-break: break-word;
 					hyphens: auto;

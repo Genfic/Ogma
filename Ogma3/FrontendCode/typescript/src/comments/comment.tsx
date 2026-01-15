@@ -3,6 +3,7 @@ import type { CommentDto, GetRevisionResult } from "@g/types-public";
 import { toCurrentTimezone } from "@h/date-helpers";
 import { long } from "@h/tinytime-templates";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
+import { Markdown } from "../comp/common/_markdown";
 import type { ReportModalElement } from "../comp/report-modal";
 import { LucideFlag } from "../icons/LucideFlag";
 import { LucidePencil } from "../icons/LucidePencil";
@@ -161,7 +162,7 @@ export const Comment = (props: Props) => {
 						</div>
 
 						<Show when={body()} keyed>
-							{(b) => <div class="body md" innerHTML={b} />}
+							{(b) => <Markdown class={"body"} text={b} />}
 						</Show>
 
 						<Show when={props.isEdited}>
@@ -171,16 +172,19 @@ export const Comment = (props: Props) => {
 						</Show>
 
 						<Show when={showRevision()}>
-							<ol class="history">
+							<div class="history">
 								<For each={revisions()} fallback={<span>No revisions found</span>}>
 									{(rev) => (
-										<li>
-											<time datetime={rev.editTime.toISOString()}>{date(rev.editTime)}</time>
-											<div class="body" innerHTML={rev.body} />
-										</li>
+										<div class="item">
+											<time class="time" datetime={rev.editTime.toISOString()}>
+												{date(rev.editTime)}
+											</time>
+											<hr />
+											<Markdown text={rev.body} class={"body"} />
+										</div>
 									)}
 								</For>
-							</ol>
+							</div>
 						</Show>
 					</div>
 				</Match>

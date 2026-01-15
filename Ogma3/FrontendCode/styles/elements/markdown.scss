@@ -4,10 +4,10 @@
 .md {
 	// Paragraphs
 	p {
-		padding-bottom: .5rem;
+		margin-bottom: .5rem;
 
 		&:last-child {
-			padding-bottom: 0;
+			margin-bottom: 0;
 		}
 	}
 
@@ -26,6 +26,35 @@
 
 	ins {
 		text-decoration: underline;
+		text-decoration-style: dotted;
+	}
+
+	mark {
+		--slant: .4em;
+
+		position: relative;
+		background-color: var(--accent-25);
+		color: var(--foreground);
+
+		&::before, &::after {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: var(--slant);
+			content: "";
+			background-color: var(--accent-25);
+			pointer-events: none;
+		}
+
+		&::before {
+			left: calc(-1 * var(--slant));
+			clip-path: polygon(100% 0, 0 100%, 100% 100%);
+		}
+
+		&::after {
+			right: calc(-1 * var(--slant));
+			clip-path: polygon(0 0, 0 100%, 100% 0);
+		}
 	}
 
 	// Headers
@@ -46,7 +75,8 @@
 	code {
 		font-size: 87.5%;
 		color: #e83e8c;
-		word-break: break-word;
+		overflow-wrap: break-word;
+		word-break: normal;
 	}
 
 	pre {
@@ -99,6 +129,10 @@
 		td {
 			padding: .5rem;
 		}
+	}
+
+	ul, ol {
+		margin: .5rem 0;
 	}
 
 	a[href^="https://" i],

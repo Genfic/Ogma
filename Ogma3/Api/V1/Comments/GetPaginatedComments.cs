@@ -1,13 +1,12 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
-using Markdig;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
@@ -27,6 +26,7 @@ public static partial class GetPaginatedComments
 			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.");
 
 	[Validate]
+	[UsedImplicitly]
 	public sealed partial record Query(long Thread, int? Page, long? Highlight) : IValidationTarget<Query>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
@@ -66,7 +66,7 @@ public static partial class GetPaginatedComments
 		// `highlight - 1` offsets the fact that the requested IDs start from 1, not 0
 		var p = highlight is not ({ } h and > 0)
 			? Math.Max(1, page ?? 1)
-			: (int)Math.Ceiling((double)(total - (h - 1)) / ogmaConfig.CommentsPerPage);
+			: (int)Math.Ceiling((total - (h - 1d)) / ogmaConfig.CommentsPerPage);
 
 		// Send auth data
 		ctx.Response.Headers.Append(HeaderName, userService.User?.GetUsername());
@@ -78,14 +78,6 @@ public static partial class GetPaginatedComments
 			.Paginate(p, ogmaConfig.CommentsPerPage)
 			.ToListAsync(cancellationToken);
 
-		// TODO: Remove after new comment system is done
-		var md = ctx.Request.Headers["X-Markdown"] is var mdValue && mdValue == "true";
-
-		foreach (var comment in comments)
-		{
-			if (comment.Body is null) continue;
-			comment.Body = md ? comment.Body : Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
-		}
 		ctx.Response.Headers.ETag = MakeEtag(etag, page, highlight);
 
 		var pagination = new PaginationResult<CommentDto>

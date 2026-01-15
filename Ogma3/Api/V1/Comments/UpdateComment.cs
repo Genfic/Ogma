@@ -1,13 +1,12 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
-using Markdig;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
@@ -22,6 +21,7 @@ public static partial class UpdateComment
 {
 
 	[Validate]
+	[UsedImplicitly]
 	public sealed partial record Command : IValidationTarget<Command>
 	{
 		[MaxLength(CTConfig.Comment.MaxBodyLength)]
@@ -47,14 +47,12 @@ public static partial class UpdateComment
 
 		if (comment is null) return TypedResults.NotFound();
 
-		// Create revision
 		context.CommentRevisions.Add(new CommentRevision
 		{
-			Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment),
+			Body = comment.Body,
 			ParentId = comment.Id,
 		});
 
-		// Edit the comment
 		comment.Body = request.Body;
 
 		await context.SaveChangesAsync(cancellationToken);

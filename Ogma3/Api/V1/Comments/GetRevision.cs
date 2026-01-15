@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -12,6 +13,7 @@ namespace Ogma3.Api.V1.Comments;
 public static partial class GetRevision
 {
 	[Validate]
+	[UsedImplicitly]
 	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
 
 	private static async ValueTask<Ok<Result[]>> HandleAsync(
