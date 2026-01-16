@@ -1,6 +1,7 @@
 import path, { basename, dirname, join } from "node:path";
 import { Glob } from "bun";
 import ct from "chalk-template";
+import { kebabCase } from "es-toolkit";
 import ts from "typescript";
 import pkg from "../package.json" with { type: "json" };
 import { alphaBy } from "./helpers/function-helpers";
@@ -47,7 +48,7 @@ function extractComponentsFromFile(filePath: string, sourceCode: string): Compon
 		if (
 			ts.isCallExpression(node) &&
 			ts.isIdentifier(node.expression) &&
-			node.expression.escapedText === "customElement" &&
+			node.expression.escapedText === "component" &&
 			node.arguments.length >= 2
 		) {
 			const tagNameArg = node.arguments[0];
@@ -142,7 +143,7 @@ function extractComponentsFromFile(filePath: string, sourceCode: string): Compon
 							}
 						}
 
-						attributes.push({ name: propName, type: typeName });
+						attributes.push({ name: kebabCase(propName), type: typeName });
 					} else if (ts.isShorthandPropertyAssignment(prop)) {
 						const propName = prop.name.escapedText as string;
 						let typeName = "unknown";

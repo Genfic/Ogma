@@ -14,7 +14,7 @@ interface Props {
 	csrf: string;
 	threadId: number;
 	isLoggedIn: boolean;
-	lockDate: Date | null;
+	lockDate?: Date;
 	mdRefRoute: string;
 	loginRoute: string;
 	registerRoute: string;
@@ -168,11 +168,12 @@ component(
 		csrf: "",
 		threadId: 0,
 		isLoggedIn: false,
-		lockDate: null,
+		lockDate: undefined,
 		mdRefRoute: "",
 		loginRoute: "",
 		registerRoute: "",
 	},
 	Comments,
 	css,
+	["lockDate"],
 );

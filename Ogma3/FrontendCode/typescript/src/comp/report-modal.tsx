@@ -133,4 +133,6 @@ component(
 		itemType: "" as EReportableContentTypes,
 	},
 	ReportModal,
+	[],
+	["openSelector"],
 );

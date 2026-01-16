@@ -14,6 +14,7 @@
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
 
+		<UseRazorSourceGenerator>true</UseRazorSourceGenerator>
 		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
 		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsNamespaces>
 	</PropertyGroup>

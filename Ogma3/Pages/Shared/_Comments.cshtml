@@ -1,4 +1,4 @@
-@inject IAntiforgery Xcsrf
+@inject IAntiforgery XCsrf
 @inject LinkGenerator LinkGenerator
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Services
@@ -7,7 +7,7 @@
 @model CommentsThreadDto
 
 @{
-	var csrf = Xcsrf.GetAndStoreTokens(Context).RequestToken;
+	var csrf = XCsrf.GetAndStoreTokens(Context).RequestToken;
 }
 
 <o-comments csrf="@csrf" thread-id="@Model.Id" is-logged-in="@(User.Identity is { IsAuthenticated: true })"
@@ -16,7 +16,7 @@
             login-route="@Account_Login.Get().Path(LinkGenerator)"
             register-route="@Account_Register.Get().Path(LinkGenerator)"></o-comments>
 
-<report-modal id="report-comment" csrf="@csrf"></report-modal>
+<report-modal id="report-comment" csrf="@csrf" item-id="@Model.Id" item-type="Comment"></report-modal>
 
 @Html.Resource(@<script type="module" defer src="~/js/comments.js" asp-append-version="true"></script>)
 @Html.Resource(@<script type="module" defer src="~/js/comp/report-modal.js" asp-append-version="true"></script>)
