@@ -128,7 +128,7 @@ public sealed class RegisterModel(
 
 		// Check if invite code is correct
 		var inviteCode = await context.InviteCodes
-			.Where(ic => Input.InviteCode != null && ic.NormalizedCode == Input.InviteCode.ToUpper())
+			.Where(ic => Input.InviteCode != null && ic.Code == Input.InviteCode)
 			.FirstOrDefaultAsync();
 
 		if (inviteCode is null)

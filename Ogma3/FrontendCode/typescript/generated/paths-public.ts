@@ -34,6 +34,7 @@ import type {
 	IssueInviteCodeCommand,
 	JoinClubCommand,
 	LeaveClubCommand,
+	LocateCommentResponse,
 	LockThreadCommand,
 	MarkChapterAsReadCommand,
 	MarkChapterAsUnreadCommand,
@@ -77,7 +78,7 @@ export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: Header
 );
 
 
-export const DeleteApiComments = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<number, undefined>(`/api/comments/${commentId}`,
+export const DeleteApiComments = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>(`/api/comments/${commentId}`,
 	del,
 	undefined,
 	headers,
@@ -229,7 +230,7 @@ export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestIn
 );
 
 
-export const GetApiComments = async (thread: number, page: number | null, highlight: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
+export const GetApiComments = async (thread: number, page: number | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{
     /** List of the fetched elements */
     elements: CommentDto[];
     /** Total number of elements */
@@ -240,7 +241,15 @@ export const GetApiComments = async (thread: number, page: number | null, highli
     pages: number;
     /** The requested page */
     page: number;
-}, undefined>(`/api/comments?thread=${thread}&page=${page}&highlight=${highlight}`,
+}, undefined>(`/api/comments?thread=${thread}&page=${page}`,
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
+export const GetApiCommentsLocate = async (threadId: number, commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<LocateCommentResponse, undefined>(`/api/comments/locate?threadId=${threadId}&commentId=${commentId}`,
 	get,
 	undefined,
 	headers,
@@ -256,7 +265,7 @@ export const GetApiCommentsMd = async (commentId: number, headers?: HeadersInit,
 );
 
 
-export const GetApiCommentsRevisions = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[], undefined>(`/api/comments/${commentId}/revisions`,
+export const GetApiCommentsRevisions = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetRevisionResult[], undefined>(`/api/comments/${commentId}/revisions`,
 	get,
 	undefined,
 	headers,
@@ -416,7 +425,7 @@ export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, op
 );
 
 
-export const GetApiTest = async (msg: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>(`/api/test?msg=${msg}`,
+export const GetApiTest = async (q: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>(`/api/test?q=${q}`,
 	get,
 	undefined,
 	headers,
@@ -528,7 +537,7 @@ export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersIn
 );
 
 
-export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, CreateCommentCommand>("/api/comments",
+export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, CreateCommentCommand>("/api/comments",
 	post,
 	body,
 	headers,
@@ -675,6 +684,14 @@ export const PostApiUsersRoles = async (body: UpdateRolesCommand, headers?: Head
 export const PostApiVotes = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<VoteResult, CreateVoteCommand>("/api/votes",
 	post,
 	body,
+	headers,
+	options,
+);
+
+
+export const PostHooksPatreon = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/hooks/patreon",
+	post,
+	undefined,
 	headers,
 	options,
 );

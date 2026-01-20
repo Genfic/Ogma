@@ -77,14 +77,20 @@
 			display: flex;
 			align-items: center;
 			padding-left: .5rem;
+			gap: .5rem;
 			color: var(--foreground-50);
 
 			> *:hover {
-				color: var(--foreground-75);
+				color: var(--foreground-75) !important;
 			}
 
 			> .link {
 				color: var(--foreground-50);
+				padding-top: 4px;
+
+				svg {
+					height: 16px;
+				}
 			}
 
 			> .actions {
@@ -96,6 +102,10 @@
 
 				&:hover {
 					opacity: 1;
+				}
+
+				svg {
+					height: 20px;
 				}
 			}
 		}

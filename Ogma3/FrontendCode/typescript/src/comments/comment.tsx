@@ -6,6 +6,7 @@ import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { Markdown } from "../comp/common/_markdown";
 import type { ReportModalElement } from "../comp/report-modal";
 import { LucideFlag } from "../icons/LucideFlag";
+import { LucideLink } from "../icons/LucideLink";
 import { LucidePencil } from "../icons/LucidePencil";
 import { LucideTrash2 } from "../icons/LucideTrash2";
 import { DeletedCommentBody } from "./comment-body-deleted";
@@ -15,11 +16,10 @@ import { HiddenCommentBody } from "./comment-body-hidden";
 type Props = CommentDto & CommentProps;
 
 export type CommentProps = {
-	key: number;
 	marked: boolean;
 	owner: string | null;
 	onDelete: () => void;
-	onHighlightChange: (e: MouseEvent, idx: number) => void;
+	onHighlightChange: (e: MouseEvent, idx: string) => void;
 };
 
 const date = (dt: Date) => long.render(toCurrentTimezone(dt));
@@ -37,6 +37,8 @@ export const Comment = (props: Props) => {
 		modal.createNew(props.id, "Comment");
 	};
 	const del = async () => {
+		if (!confirm("Are you sure you want to delete this comment?")) return;
+
 		const res = await DeleteApiComments(props.id);
 		if (res.ok) {
 			props.onDelete();
@@ -85,7 +87,7 @@ export const Comment = (props: Props) => {
 		props.owner && props.author && props.owner.toLowerCase() === props.author.userName.toLowerCase();
 
 	return (
-		<div id={`comment-${props.key}`} classList={{ comment: true, marked: props.marked }}>
+		<div id={`comment-${props.id}`} classList={{ comment: true, marked: props.marked }}>
 			<Switch>
 				<Match when={commentState() === "hidden"}>
 					<HiddenCommentBody onToggleVisibility={() => setHidden(!hidden())} />
@@ -94,7 +96,12 @@ export const Comment = (props: Props) => {
 					<DeletedCommentBody creationDate={new Date(props.dateTime)} deletedBy={props.deletedBy} />
 				</Match>
 				<Match when={commentState() === "editing"}>
-					<CommentBodyEditor id={props.id} onCancel={() => setEditing(false)} onUpdate={updated} />
+					<CommentBodyEditor
+						id={props.id}
+						body={props.body}
+						onCancel={() => setEditing(false)}
+						onUpdate={updated}
+					/>
 				</Match>
 				<Match when={commentState() === "regular"}>
 					{props.author && (
@@ -127,13 +134,12 @@ export const Comment = (props: Props) => {
 						<div class="header">
 							<a
 								class="link"
-								href={`#comment-${props.key}`}
-								onClick={(e) => props.onHighlightChange(e, props.key)}
+								href={`#comment-${props.id}`}
+								onClick={(e) => props.onHighlightChange(e, props.id)}
+								title="Permalink"
 							>
-								#{props.key}
+								<LucideLink />
 							</a>
-
-							<p class="sm-line" />
 
 							<time datetime={props.dateTime.toISOString()} class="time">
 								{date(props.dateTime)}

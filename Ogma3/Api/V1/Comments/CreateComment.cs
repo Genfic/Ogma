@@ -10,10 +10,11 @@ using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
+using Sqids;
 
 namespace Ogma3.Api.V1.Comments;
 
-using ReturnType = Results<UnauthorizedHttpResult, NotFound, CreatedAtRoute>;
+using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
 
 [Handler]
 [MapPost("api/comments")]
@@ -36,23 +37,33 @@ public static partial class CreateComment
 		ApplicationDbContext context,
 		IUserService userService,
 		ETagService eTagService,
+		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not { } uid) return TypedResults.Unauthorized();
+		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
 		var isMuted = await CheckIfMuted(context, uid, cancellationToken);
-		if (isMuted) return TypedResults.Unauthorized();
+		if (isMuted)
+		{
+			return TypedResults.Unauthorized();
+		}
 
 		var thread = await context.CommentThreads
 			.Where(ct => ct.Id == request.Thread)
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (thread is null) return TypedResults.NotFound();
-		if (thread.LockDate is not null) return TypedResults.Unauthorized();
+		if (thread.LockDate is not null)
+		{
+			return TypedResults.Unauthorized();
+		}
 
 		var isBlocked = await CheckIfBlocked(context, thread.UserId, uid, request.Source, cancellationToken);
-		if (isBlocked) return TypedResults.Unauthorized();
+		if (isBlocked)
+		{
+			return TypedResults.Unauthorized();
+		}
 
 		var comment = new Comment
 		{
@@ -71,7 +82,7 @@ public static partial class CreateComment
 
 		eTagService.Create(ETagFor.Comments, request.Thread, uid);
 
-		return TypedResults.CreatedAtRoute(nameof(GetComment), new GetComment.Query(comment.Id));
+		return TypedResults.Ok(sqids.Encode(comment.Id));
 	}
 
 	private static async ValueTask<bool> CheckIfMuted(ApplicationDbContext context, long currentUserId, CancellationToken ct)
@@ -83,7 +94,7 @@ public static partial class CreateComment
 	}
 
 	/// <summary>
-	/// Check if comment thread is a profile thread, and if so, if the profile owner has the current user blocked
+	/// Check if the comment thread is a profile thread, and if so, if the profile owner has the current user blocked
 	/// </summary>
 	private static async ValueTask<bool> CheckIfBlocked(
 		ApplicationDbContext context,

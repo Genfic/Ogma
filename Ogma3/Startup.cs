@@ -49,6 +49,7 @@ using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
+using Sqids;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -270,17 +271,22 @@ public static class Startup
 		services.AddOpenApi("public", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
-			// options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && !r.StartsWith("admin");
 		});
 		services.AddOpenApi("internal", options => {
 			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
 			options.AddOperationTransformer<IdOperationTransformer>();
-			// options.AddNullableTransformer();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && r.StartsWith("admin");
 		});
+
+		// Sqids
+		services.AddSingleton(new SqidsEncoder<long>(new SqidsOptions
+		{
+			Alphabet = "Wg9CaYxPpd3ehvQ1KAJDTzi8tE0coLluSswyRVrqI5OUF6GZ2fj4mXMBbNn7kH",
+			MinLength = 5,
+		}));
 
 		// HSTS
 		services.AddHsts(options => {

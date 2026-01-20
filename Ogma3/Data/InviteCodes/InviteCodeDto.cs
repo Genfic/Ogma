@@ -6,7 +6,6 @@ public sealed class InviteCodeDto
 {
 	public required long Id { get; init; }
 	public required string Code { get; init; } = null!;
-	public required string NormalizedCode { get; init; } = null!;
 	public required string? UsedByUserName { get; init; }
 	public required string IssuedByUserName { get; init; } = null!;
 	public required DateTimeOffset IssueDate { get; init; }

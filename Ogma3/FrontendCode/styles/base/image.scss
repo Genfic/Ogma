@@ -5,7 +5,7 @@ img {
 	position: relative;
 	display: inline-block;
 	color: transparent;
-	
+
 	&::before {
 		content: '🖼';
 		word-break: break-all;
@@ -21,4 +21,8 @@ img {
 		overflow: hidden;
 		text-overflow: clip;
 	}
+}
+
+svg {
+	pointer-events: none;
 }

@@ -47,7 +47,7 @@ const Comments = (props: Props) => {
 		},
 	);
 
-	const [isLocked, setIsLocked] = createSignal(props.lockDate !== null);
+	const [isLocked, setIsLocked] = createSignal(!!props.lockDate);
 
 	const maxLength = () => threadData().maxCommentLength;
 	const isStaff = () => threadData().isStaff;
@@ -82,7 +82,7 @@ const Comments = (props: Props) => {
 		}
 
 		setBody("");
-		listRef?.submitted();
+		listRef?.submitted(res.data);
 	};
 
 	const lock = async () => {

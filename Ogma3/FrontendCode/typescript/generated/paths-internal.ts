@@ -66,7 +66,7 @@ export const GetInfractionDetails = async (infractionId: number, headers?: Heade
 );
 
 
-export const PostAdminApiInfractions = async (body: CreateInfractionCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<InfractionDto, CreateInfractionCommand>("/admin/api/infractions",
+export const PostAdminApiInfractions = async (body: CreateInfractionCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, CreateInfractionCommand>("/admin/api/infractions",
 	post,
 	body,
 	headers,

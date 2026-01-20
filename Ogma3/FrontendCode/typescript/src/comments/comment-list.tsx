@@ -1,13 +1,13 @@
-import { GetApiComments } from "@g/paths-public";
+import { GetApiComments, GetApiCommentsLocate } from "@g/paths-public";
 import { DateSafeJsonParse } from "@g/typed-fetch";
 import type { CommentDto } from "@g/types-public";
 import { stripNullish } from "@h/csharping";
-import { type Component, createMemo, createResource, createSignal, For, onMount } from "solid-js";
+import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount } from "solid-js";
 import { Comment } from "./comment";
 import { CommentListPagination } from "./comment-list-pagination";
 
 export interface CommentListFunctions {
-	submitted: () => void;
+	submitted: (id: string) => void;
 }
 
 interface Props {
@@ -16,16 +16,14 @@ interface Props {
 }
 
 type SuccessDataFrom<T> = T extends Promise<infer R> ? (R extends { ok: true; data: infer D } ? D : never) : never;
-
 type CommentsData = SuccessDataFrom<ReturnType<typeof GetApiComments>>;
 
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
-	const [highlight, setHighlight] = createSignal(Number(window.location.hash.match(/^#comment-(\d+)$/)?.[1]) || 0);
-	const [reload, setReload] = createSignal(0);
+	const [highlight, setHighlight] = createSignal("");
+	const [reload, setReload] = createSignal("");
 	const [username, setUsername] = createSignal<string | null>(null);
-	const [deleted, setDeleted] = createSignal<number[]>([]);
-
+	const [deleted, setDeleted] = createSignal<string[]>([]);
 	const [perPageEtags, setPerPageEtags] = createSignal<Record<number, string>>({});
 
 	const [commentsData] = createResource(
@@ -39,7 +37,7 @@ export const CommentList: Component<Props> = (props) => {
 				undefined,
 			);
 
-			const res = await GetApiComments(id, page, highlight(), headers);
+			const res = await GetApiComments(id, page, headers);
 			if (!res.ok) {
 				throw new Error(res.error ?? res.statusText);
 			}
@@ -52,7 +50,7 @@ export const CommentList: Component<Props> = (props) => {
 					data = DateSafeJsonParse<CommentsData>(cached);
 					console.log("Loading from cache", page, data);
 				} else {
-					const newRes = await GetApiComments(id, page, highlight());
+					const newRes = await GetApiComments(id, page);
 					if (newRes.ok) {
 						data = newRes.data;
 					} else {
@@ -62,7 +60,6 @@ export const CommentList: Component<Props> = (props) => {
 			} else {
 				setPerPageEtags((old) => ({ ...old, [page]: res.headers.get("ETag") ?? "" }));
 				data = res.data;
-
 				setUsername(res.headers.get("X-Username"));
 			}
 
@@ -71,61 +68,84 @@ export const CommentList: Component<Props> = (props) => {
 		},
 	);
 
-	const changeHighlight = (e: MouseEvent, idx: number) => {
-		e.preventDefault();
-		setHighlight(idx);
+	createEffect(() => {
+		const targetId = highlight();
+		if (commentsData.state === "ready" && targetId.length > 0) {
+			const element = document.getElementById(`comment-${targetId}`);
 
-		if (idx === 0) {
-			return;
+			if (element) {
+				element.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+					inline: "nearest",
+				});
+			}
 		}
+	});
 
-		document.getElementById(`comment-${idx}`)?.scrollIntoView({
+	const changeHighlight = (e: MouseEvent, id: string) => {
+		e.preventDefault();
+		setHighlight(id);
+
+		if (id.length <= 0) return;
+
+		document.getElementById(`comment-${id}`)?.scrollIntoView({
 			behavior: "smooth",
 			block: "center",
 			inline: "nearest",
 		});
 
-		history.replaceState(undefined, "", `#comment-${idx}`);
+		history.replaceState(undefined, "", `#comment-${id}`);
 	};
 
-	const comments = createMemo<(CommentDto & { key: number })[]>((prev) => {
+	const comments = createMemo<CommentDto[]>((prev) => {
 		const data = commentsData();
-
 		if (commentsData.state === "ready" && data) {
-			return data.elements
-				.map((c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }) as CommentDto)
-				.map((val, key) => ({
-					...val,
-					key: data.total - ((currentPage() - 1) * data.perPage + key),
-				}));
+			return data.elements.map(
+				(c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }) as CommentDto,
+			);
 		}
-
 		return prev ?? [];
 	});
+
 	const totalComments = () => commentsData()?.total ?? 0;
 	const commentsPerPage = () => commentsData()?.perPage ?? 0;
 	const totalPages = () => commentsData()?.pages ?? 0;
 
 	onMount(() => {
 		props.ref?.({
-			submitted: () => {
-				console.log("Submitted");
+			submitted: (id: string) => {
 				setCurrentPage(1);
-				setHighlight(totalComments() + 1);
+				setHighlight(id);
 				setReload((r) => r + 1);
 			},
 		});
 	});
 
-	const changePage = (page: number) => {
-		if (page === currentPage()) {
-			return;
+	// Handle Deep Linking
+	onMount(async () => {
+		const hash = window.location.hash;
+		const match = hash.match(/^#comment-([a-zA-Z0-9]+)$/);
+
+		if (!match || !match[1]) return;
+
+		setHighlight(match[1]);
+
+		const res = await GetApiCommentsLocate(props.id, match[1]);
+		if (res.ok) {
+			setCurrentPage(res.data.page);
+		} else {
+			console.error(res.error);
 		}
-		setHighlight(0);
+	});
+
+	const changePage = (page: number) => {
+		if (page === currentPage()) return;
+		setHighlight("");
 		setCurrentPage(page);
 	};
 
-	const deleteComment = (id: number) => {
+	const deleteComment = (id: string) => {
 		setReload(id);
 		setDeleted([...deleted(), id]);
 	};
@@ -147,9 +167,9 @@ export const CommentList: Component<Props> = (props) => {
 			<For each={comments()}>
 				{(c) => (
 					<Comment
-						onHighlightChange={changeHighlight}
+						onHighlightChange={(e) => changeHighlight(e, c.id)}
 						onDelete={() => deleteComment(c.id)}
-						marked={c.key === highlight()}
+						marked={c.id === highlight()}
 						owner={username()}
 						{...c}
 					/>

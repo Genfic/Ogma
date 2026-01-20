@@ -27,7 +27,7 @@ export type BlockUserCommand = {
 };
 
 export type CommentDto = {
-    id: number;
+    id: string;
     author: UserSimpleDto | null;
     dateTime: Date;
     body: string | null;
@@ -189,7 +189,6 @@ export type GetUserNotificationsResult = {
 export type InviteCodeDto = {
     id: number;
     code: string;
-    normalizedCode: string;
     usedByUserName: string | null;
     issuedByUserName: string;
     issueDate: Date;
@@ -204,6 +203,10 @@ export type JoinClubCommand = {
 
 export type LeaveClubCommand = {
     clubId: number;
+};
+
+export type LocateCommentResponse = {
+    page: number;
 };
 
 export type LockThreadCommand = {
@@ -247,7 +250,7 @@ export type RemoveBookFromShelfResult = {
 };
 
 export type ReportContentCommand = {
-    itemId: number;
+    itemId: string;
     reason: string;
     itemType: EReportableContentTypes;
 };
@@ -304,7 +307,7 @@ export type UnfollowUserCommand = {
 
 export type UpdateCommentCommand = {
     body: string;
-    commentId: number;
+    commentId: string;
 };
 
 export type UpdateCommentResponse = {

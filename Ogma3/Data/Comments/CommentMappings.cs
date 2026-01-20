@@ -8,7 +8,8 @@ public static class CommentMappings
 {
 	public static Expression<Func<Comment, CommentDto>> ToCommentDto(long? uid) => c => new CommentDto
 	{
-		Id = c.Id,
+		Id = string.Empty,
+		InternalId = c.Id,
 		Body = c.Body,
 		DateTime = c.DateTime,
 		DeletedBy = c.DeletedBy,

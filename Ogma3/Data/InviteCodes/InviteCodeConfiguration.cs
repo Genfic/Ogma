@@ -14,10 +14,8 @@ public sealed class InviteCodeConfiguration : BaseConfiguration<InviteCode>
 		// CONSTRAINTS
 		builder
 			.Property(ic => ic.Code)
-			.IsRequired();
-
-		builder
-			.Property(ic => ic.NormalizedCode)
+			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent)
+			.HasMaxLength(20)
 			.IsRequired();
 
 		builder

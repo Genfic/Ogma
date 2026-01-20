@@ -42,7 +42,7 @@ public static partial class IssueInviteCode
 
 		var code = new InviteCode
 		{
-			Code = codeGenerator.GetInviteCode(true),
+			Code = codeGenerator.GetInviteCode(),
 			IssuedById = uid,
 		};
 		context.InviteCodes.Add(code);

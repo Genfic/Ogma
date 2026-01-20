@@ -7,20 +7,7 @@ namespace Ogma3.Data.InviteCodes;
 [AutoDbSet]
 public sealed class InviteCode : BaseModel
 {
-	private readonly string _code = null!;
-
-	public string Code
-	{
-		get => _code;
-		init
-		{
-			NormalizedCode = value.ToUpper();
-			_code = value;
-		}
-	}
-
-	public string NormalizedCode { get; private set; } = null!;
-
+	public required string Code { get; set; }
 	public OgmaUser? UsedBy { get; set; }
 	public long? UsedById { get; set; }
 	public OgmaUser IssuedBy { get; set; } = null!;

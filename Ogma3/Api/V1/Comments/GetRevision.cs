@@ -5,25 +5,32 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Sqids;
 
 namespace Ogma3.Api.V1.Comments;
 
 [Handler]
-[MapGet("api/comments/{commentId:long}/revisions")]
+[MapGet("api/comments/{commentId}/revisions")]
 public static partial class GetRevision
 {
 	[Validate]
 	[UsedImplicitly]
-	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
+	public sealed partial record Query(string CommentId) : IValidationTarget<Query>;
 
-	private static async ValueTask<Ok<Result[]>> HandleAsync(
+	private static async ValueTask<Results<Ok<Result[]>, NotFound>> HandleAsync(
 		Query request,
 		ApplicationDbContext context,
+		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
+		if (sqids.Decode(request.CommentId) is not [var id])
+		{
+			return TypedResults.NotFound();
+		}
+
 		var revisions = await context.CommentRevisions
-			.Where(r => r.ParentId == request.CommentId)
+			.Where(r => r.ParentId == id)
 			.Select(r => new Result(r.EditTime, r.Body))
 			.ToArrayAsync(cancellationToken);
 

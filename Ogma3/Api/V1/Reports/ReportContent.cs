@@ -8,6 +8,7 @@ using Ogma3.Data.Reports;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.UserService;
+using Sqids;
 
 namespace Ogma3.Api.V1.Reports;
 
@@ -18,13 +19,12 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest, Ok<long>>;
 [Authorize]
 public static partial class ReportContent
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
-		=> endpoint.RequireRateLimiting(RateLimiting.Reports);
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.RequireRateLimiting(RateLimiting.Reports);
 
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>
 	{
-		public required long ItemId { get; init; }
+		public required string ItemId { get; init; }
 		[MinLength(CTConfig.Report.MinReasonLength)]
 		[MaxLength(CTConfig.Report.MaxReasonLength)]
 		public required string Reason { get; init; }
@@ -35,10 +35,31 @@ public static partial class ReportContent
 		Command request,
 		ApplicationDbContext context,
 		IUserService userService,
+		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		long itemId;
+		if (request.ItemType == EReportableContentTypes.Comment)
+		{
+			if (sqids.Decode(request.ItemId) is not [var id])
+			{
+				return TypedResults.BadRequest();
+			}
+			itemId = id;
+		}
+		else
+		{
+			if (!long.TryParse(request.ItemId, out itemId))
+			{
+				return TypedResults.BadRequest();
+			}
+		}
+
+		if (userService.User?.GetNumericId() is not {} uid)
+		{
+			return TypedResults.Unauthorized();
+		}
 
 		var report = new Report
 		{
@@ -50,22 +71,22 @@ public static partial class ReportContent
 		switch (request.ItemType)
 		{
 			case EReportableContentTypes.Comment:
-				report.CommentId = request.ItemId;
+				report.CommentId = itemId;
 				break;
 			case EReportableContentTypes.User:
-				report.UserId = request.ItemId;
+				report.UserId = itemId;
 				break;
 			case EReportableContentTypes.Story:
-				report.StoryId = request.ItemId;
+				report.StoryId = itemId;
 				break;
 			case EReportableContentTypes.Chapter:
-				report.ChapterId = request.ItemId;
+				report.ChapterId = itemId;
 				break;
 			case EReportableContentTypes.Blogpost:
-				report.BlogpostId = request.ItemId;
+				report.BlogpostId = itemId;
 				break;
 			case EReportableContentTypes.Club:
-				report.ClubId = request.ItemId;
+				report.ClubId = itemId;
 				break;
 			default:
 				return TypedResults.BadRequest();

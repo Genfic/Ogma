@@ -9,6 +9,7 @@ using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
+using Sqids;
 
 namespace Ogma3.Api.V1.Comments;
 
@@ -27,7 +28,7 @@ public static partial class UpdateComment
 		[MaxLength(CTConfig.Comment.MaxBodyLength)]
 		[MinLength(CTConfig.Comment.MinBodyLength)]
 		public required string Body { get; init; }
-		public required long CommentId { get; init; }
+		public required string CommentId { get; init; }
 
 	}
 
@@ -35,13 +36,19 @@ public static partial class UpdateComment
 		Command request,
 		ApplicationDbContext context,
 		IUserService userService,
+		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
+		if (sqids.Decode(request.CommentId) is not [var id])
+		{
+			return TypedResults.NotFound();
+		}
+
 		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 
 		var comment = await context.Comments
-			.Where(c => c.Id == request.CommentId)
+			.Where(c => c.Id == id)
 			.Where(c => c.AuthorId == uid)
 			.FirstOrDefaultAsync(cancellationToken);
 

@@ -1,24 +1,17 @@
-import { GetApiCommentsMd, PatchApiComments } from "@g/paths-public";
-import { createResource, createSignal } from "solid-js";
+import { PatchApiComments } from "@g/paths-public";
+import { createSignal } from "solid-js";
 import { LucidePencil } from "../icons/LucidePencil";
 import { LucideX } from "../icons/LucideX";
 
 type Props = {
-	id: number;
+	id: string;
+	body: string | null;
 	onCancel: () => void;
 	onUpdate: (body: string) => void;
 };
 
 export const CommentBodyEditor = (props: Props) => {
 	const [text, setText] = createSignal("");
-
-	const [body] = createResource(async () => {
-		const res = await GetApiCommentsMd(props.id);
-		if (res.ok) {
-			return res.data;
-		}
-		throw new Error(res.error);
-	});
 
 	const enter = async (e: KeyboardEvent) => {
 		if (e.key === "Enter" && e.ctrlKey) {
@@ -57,7 +50,7 @@ export const CommentBodyEditor = (props: Props) => {
 					id="edit-body"
 					rows="3"
 					aria-label="Comment"
-					value={body()}
+					value={props.body ?? ""}
 				/>
 
 				<div class="buttons">

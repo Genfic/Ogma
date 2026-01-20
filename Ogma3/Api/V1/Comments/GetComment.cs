@@ -1,12 +1,10 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
-using Markdig;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
@@ -38,11 +36,6 @@ public static partial class GetComment
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (comment is null) return TypedResults.NotFound();
-
-		if (comment.Body is not null)
-		{
-			comment.Body = Markdown.ToHtml(comment.Body, MarkdownPipelines.Comment);
-		}
 
 		return TypedResults.Ok(comment);
 	}

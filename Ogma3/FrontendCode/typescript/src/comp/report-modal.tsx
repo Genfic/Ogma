@@ -7,13 +7,13 @@ import { createSignal, onMount } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 export type ReportModalElement = HTMLElement & {
-	createNew: (id: number, type: EReportableContentTypes) => void;
+	createNew: (id: number | string, type: EReportableContentTypes) => void;
 };
 
 const ReportModal: ComponentType<{
 	openSelector?: string | undefined;
 	csrf: string;
-	itemId: number;
+	itemId: number | string;
 	itemType: EReportableContentTypes;
 }> = (props, { element }) => {
 	noShadowDOM();
@@ -69,9 +69,10 @@ const ReportModal: ComponentType<{
 	const submit = async (e: SubmitEvent) => {
 		e.preventDefault();
 		if (!validate()) return;
+
 		const res = await postReport(
 			{
-				itemId: itemId(),
+				itemId: String(itemId()),
 				reason: reason(),
 				itemType: itemType(),
 			},
