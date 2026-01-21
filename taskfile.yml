@@ -39,6 +39,12 @@ tasks:
     cmds:
       - ogma-tool generate-imports {{.SRC}} {{.DEST}}
 
+  # Download a new icon
+  get-icon:
+    dir: ./Ogma3/FrontendCode
+    cmds:
+      - bun ./scripts/icon-dl.ts
+
   # Check the size of the bundle
   bundlesize:
     vars:

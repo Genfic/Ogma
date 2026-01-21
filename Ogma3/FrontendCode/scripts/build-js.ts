@@ -1,6 +1,5 @@
 import { rm } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
-import { brotliCompressSync } from "node:zlib";
 import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
@@ -9,14 +8,12 @@ import ct from "chalk-template";
 import convert from "convert";
 import solidLabels from "solid-labels/babel";
 import { log } from "../typescript/src-helpers/logger";
-import { alphaBy } from "./helpers/function-helpers";
-import { getHash } from "./helpers/hash";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
-import { Parallel } from "./helpers/promises";
 import { SizeHistory } from "./helpers/size-history";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
+import { manifestPlugin } from "./plugins/manifest-plugin";
 import { cssMinifyPlugin } from "./plugins/minified-css-loader";
 
 const values = program
@@ -33,8 +30,6 @@ const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript");
 const _dest = join(_root, "..", "..", "wwwroot", "js");
 
-const prefixWidth = "Javascript".length;
-
 const clean = async () => {
 	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
@@ -44,9 +39,9 @@ if (values.clean) {
 	await clean();
 }
 
-const compile = async (from: Glob, to: string, root: string, name: string) => {
+const compile = async (from: Glob, to: string, root: string) => {
 	const timer = new Stopwatch();
-	const logger = new Logger(`[${name}]`, prefixWidth);
+	const logger = new Logger();
 
 	const files = [...from.scanSync()];
 	logger.log(ct`Found {bold.underline ${files.length}} files to compile.`);
@@ -66,6 +61,7 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 				},
 			}),
 			cssMinifyPlugin,
+			manifestPlugin(),
 		],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
 		define: {
@@ -92,52 +88,11 @@ const compile = async (from: Glob, to: string, root: string, name: string) => {
 		}
 	}
 
-	const results = outputs.filter((c) => (["chunk", "asset", "entry-point"] as (typeof c.kind)[]).includes(c.kind));
+	const results = outputs.filter((c) => c.kind !== "sourcemap");
 
 	const size = results.reduce((a, b) => a + b.size, 0);
 
-	const compSizes = { gz: 0, br: 0, zstd: 0 };
-	await Parallel.forEach(results, async (c) => {
-		const buf = await c.arrayBuffer();
-
-		const gzipped = Bun.gzipSync(buf);
-		const brotli = brotliCompressSync(buf);
-		const zstd = Bun.zstdCompressSync(buf);
-
-		await Bun.write(`${c.path}.gz`, gzipped);
-		await Bun.write(`${c.path}.br`, brotli);
-		await Bun.write(`${c.path}.zst`, zstd);
-
-		compSizes.gz += gzipped.length;
-		compSizes.br += brotli.length;
-		compSizes.zstd += zstd.length;
-	});
-
-	return { chunks, size: { size, ...compSizes } };
-};
-
-const ext = ".js";
-const generateManifest = async () => {
-	const timer = new Stopwatch();
-	const files = new Glob(`${_dest}/**/[!_]*.js`).scan();
-
-	const hashed = await Parallel.forEach(files, async (file) => {
-		const hash = await getHash(Bun.file(file), "sha256");
-		return {
-			hash,
-			path: relative(_dest, file).replaceAll("\\", "/").replace(ext, ""),
-		};
-	});
-
-	const manifest = {
-		generated: new Date().toISOString(),
-		files: hashed.toSorted(alphaBy((d) => d.path)).map(({ path, hash }) => `${path}:${hash}`),
-	};
-
-	await Bun.write(join(_source, "generated", "manifest.json"), JSON.stringify(manifest, null, 2));
-
-	const { time, unit } = timer.lap(3);
-	console.log(ct`{dim Generated manifest.json in {reset.bold {underline ${time}} ${unit}}}`);
+	return { chunks, size };
 };
 
 const sizeHistory = new SizeHistory("JS");
@@ -149,43 +104,29 @@ const compileAll = async () => {
 		await clean();
 	}
 
-	const { chunks: jsChunks, size: jsSize } = await compile(
+	const { chunks: jsChunks, size } = await compile(
 		new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`),
 		join(_dest, "/"),
 		"src",
-		"Javascript",
 	);
 
-	logger.log(ct`{dim Generating manifest.json}`);
-	await generateManifest();
-	const { chunks: workersChunks, size: workersSize } = await compile(
-		new Glob(`${_source}/src-workers/**/[^_]*.ts`),
-		join(_dest, "workers"),
-		"src-workers",
-		"Workers",
+	const chunks = jsChunks.map(
+		(p) => `<link rel="modulepreload" href="~/${p}" as="script" asp-append-version="true" />`,
 	);
-
-	const chunks = [...jsChunks, ...workersChunks].map((p) => `<link rel="modulepreload" href="~/${p}" as="script" />`);
 	logger.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
 	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
 
 	const best = (size: number) => convert(size, "bytes").to("best").toString(3);
 
-	const currentSize = jsSize.size + workersSize.size;
-	const gzSize = jsSize.gz + workersSize.gz;
-	const brSize = jsSize.br + workersSize.br;
-	const zstdSize = jsSize.zstd + workersSize.zstd;
-	logger.log(
-		ct`{green Total size: {bold.underline ${best(currentSize)}}} {dim Gzipped: {bold.underline ${best(gzSize)}} Brotli: {bold.underline ${best(brSize)}} Zstd: {bold.underline ${best(zstdSize)}}}`,
-	);
+	logger.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
 
 	const [prev] = await sizeHistory.at(-1);
 	const [first] = await sizeHistory.at(0);
 	if (prev) {
 		const text = (x: number) => (x > 0 ? c.red : c.green)((x < 0 ? "" : "+") + best(x));
-		logger.log(`Size difference: ${text(currentSize - prev)} (total: ${text(currentSize - first)})`);
+		logger.log(`Size difference: ${text(size - prev)} (total: ${text(size - first)})`);
 	}
-	await sizeHistory.push(currentSize);
+	await sizeHistory.push(size);
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
 

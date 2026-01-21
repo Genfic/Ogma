@@ -1,4 +1,6 @@
-﻿const workers = [{ name: "cache", path: "/js/workers/cache-service-worker.js", scope: "/" }];
+﻿import type { Message } from "./workers/cache-service-worker";
+
+const workers = [{ name: "cache", path: "/js/workers/cache-service-worker.js", scope: "/" }];
 
 const registerServiceWorkers = async () => {
 	for (const { name, path, scope } of workers) {
@@ -17,6 +19,13 @@ const registerServiceWorkers = async () => {
 			} catch (error) {
 				console.error(`Registration of ${name} failed with ${error}`);
 			}
+
+			navigator.serviceWorker.addEventListener("message", (e) => {
+				if ("type" in e.data && e.data.type === "log") {
+					const { level, from, msg, args } = e.data as Message;
+					console[level](`%c[${from} says]`, "color: #999", msg, ...args);
+				}
+			});
 		} else {
 			console.warn("Service workers are not supported");
 		}
@@ -24,5 +33,3 @@ const registerServiceWorkers = async () => {
 };
 
 await registerServiceWorkers();
-
-export {};

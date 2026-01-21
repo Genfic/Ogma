@@ -23,7 +23,7 @@ for await (const line of console) {
 	const title = lowerCase(res.name).replace(":", "");
 
 	const ico = ejs.render(templates.get("icon"), {
-		icon: cheerio.load(res.svg, { xmlMode: true })("svg").html() as string,
+		icon: cheerio.load(res.svg, { xml: true })("svg").html() as string,
 		name,
 		title,
 	});

@@ -1,7 +1,5 @@
 import fs, { rm } from "node:fs/promises";
-import * as path from "node:path";
-import { dirname, join } from "node:path";
-import { brotliCompressSync, gzipSync, zstdCompressSync } from "node:zlib";
+import { dirname, join, parse } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -33,8 +31,12 @@ const root = dirname(Bun.main);
 const _base = join(root, "..", "styles");
 const _dest = join(root, "..", "..", "wwwroot", "css");
 
+const projectRoot = join(root, "..", "..");
+
+console.log(projectRoot);
+
 const clean = async () => {
-	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_dest}}`);
+	console.log(ct`{bold.red 🗑️ {dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
 };
 
@@ -53,44 +55,45 @@ const compileSass = async (file: string) => {
 	const timer = new Stopwatch();
 	const logger = new Logger();
 
-	const { name: filename, base } = path.parse(file);
-
+	const { name: filename, base } = parse(file);
 	logger.verbose(`Compiling ${file}`);
 
-	const fileContent = await Bun.file(file).text();
-
-	logger.verbose(`file ${fileContent.length} bytes`);
+	const fileContent = await Bun.file(file).stat();
+	logger.verbose(`File size: ${fileContent.size} bytes`);
 
 	const extraDirs = (await fs.readdir(_base, { withFileTypes: true }))
 		.filter((v) => v.isDirectory())
-		.map((v) => path.join(_base, v.name));
+		.map((v) => join(_base, v.name));
 
 	const compileResult = await $try(async () => {
-		return await compiler.compileStringAsync(fileContent, {
+		return await compiler.compileAsync(file, {
 			sourceMap: true,
+			sourceMapIncludeSources: true,
 			loadPaths: [_base, ...extraDirs],
 		});
 	}, logger.verbose);
 
 	if (!compileResult) {
-		logger.log("Compilation error");
+		logger.log("Sass compilation error");
 		return;
 	}
 
 	const { css, sourceMap } = compileResult;
 
-	logger.verbose(`Compiled ${css.length} bytes`);
+	logger.verbose(`Sass compiled: ${css.length} bytes`);
+
+	const outFile = `${filename}.css`;
 
 	const transformResult: Pick<TransformResult, "code" | "map" | "warnings"> | undefined = values.raw
 		? { code: encoder.encode(css), map: encoder.encode(JSON.stringify(sourceMap)), warnings: [] }
 		: $try(
 				() =>
 					transform({
-						projectRoot: _dest,
+						projectRoot: projectRoot,
 						code: encoder.encode(css),
-						inputSourceMap: JSON.stringify(sourceMap),
+						inputSourceMap: sourceMap ? JSON.stringify(sourceMap) : undefined,
 						sourceMap: true,
-						filename: file,
+						filename: outFile,
 						targets: cssTargets,
 						minify: true,
 					}),
@@ -98,25 +101,22 @@ const compileSass = async (file: string) => {
 			);
 
 	if (!transformResult) {
-		logger.log("Transformation error");
+		logger.log("LightningCSS transformation error");
 		return;
 	}
 
 	const { code, map, warnings } = transformResult;
 
-	logger.verbose(`Transformed ${code.length} bytes`);
+	logger.verbose(`LightningCSS output: ${code.length} bytes`);
 	logger.verbose(`Warnings: ${warnings.length}`);
-
 	for (const { message, loc } of warnings) {
-		logger.warn(ct`{yellow [{bold ${filename}}] WRN: ${message} at ${loc.filename} : ${loc.line}:${loc.column}}`);
+		logger.warn(ct`{yellow [{bold ${filename}}] WRN: ${message} at ${loc.filename}:${loc.line}:${loc.column}}`);
 	}
 
-	await Bun.write(path.join(_dest, `${filename}.css`), code);
-	await Bun.write(path.join(_dest, `${filename}.css.gz`), gzipSync(code.buffer as ArrayBuffer));
-	await Bun.write(path.join(_dest, `${filename}.css.br`), brotliCompressSync(code));
-	await Bun.write(path.join(_dest, `${filename}.css.zst`), zstdCompressSync(code));
+	await Bun.write(join(_dest, outFile), code);
+
 	if (map) {
-		await Bun.write(path.join(_dest, `${filename}.map.css`), map);
+		await Bun.write(join(_dest, `${outFile}.map`), map);
 	}
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
@@ -146,13 +146,8 @@ const compileAll = async () => {
 await compileAll();
 
 const size = await dirsize(`${_dest}/**/[!_]*.css`);
-const sizeGz = await dirsize(`${_dest}/**/[!_]*.css.gz`);
-const sizeBr = await dirsize(`${_dest}/**/[!_]*.css.br`);
-const sizeZst = await dirsize(`${_dest}/**/[!_]*.css.zst`);
 const best = (num: number) => convert(num, "bytes").to("best").toString(3);
-console.log(
-	ct`{green Total size: {bold.underline ${best(size)}}} {dim Gzipped: {bold.underline ${best(sizeGz)}} Brotli: {bold.underline ${best(sizeBr)}} Zstd: {bold.underline ${best(sizeZst)}}}`,
-);
+console.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
 
 if (values.watch) {
 	await watch(_base, ["update"], {
