@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Services.UserService;
 
@@ -7,7 +6,7 @@ namespace Ogma3.Data.Users;
 
 public sealed class UserRepository(ApplicationDbContext context, IUserService userService)
 {
-	private readonly long? _uid = userService.User?.GetNumericId();
+	private readonly long? _uid = userService.UserId;
 
 	public async Task<ProfileBar?> GetProfileBar(string name)
 	{

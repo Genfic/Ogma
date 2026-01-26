@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Services.UserService;
 
@@ -9,7 +8,7 @@ public sealed class ClubRepository(ApplicationDbContext context, IUserService us
 {
 	public async Task<ClubBar?> GetClubBar(long clubId)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return null;
+		if (userService.UserId is not {} uid) return null;
 		return await context.Clubs
 			.TagWithCallSite()
 			.Where(c => c.Id == clubId)

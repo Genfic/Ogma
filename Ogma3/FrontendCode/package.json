@@ -15,7 +15,7 @@
 		"js:watch": "bun ./scripts/build-js.ts -- --watch",
 		"js:typecheck": "tsc --project ./typescript --noEmit",
 		"icons": "bun ./scripts/build-icons.ts",
-		"lh": "unlighthouse",
+		"lh": "bunx unlighthouse",
 		"build": "bun run css && bun run js && bun run webtypes && bun run icons"
 	},
 	"devDependencies": {
@@ -44,13 +44,14 @@
 		"json5": "^2.2.3",
 		"lighthouse": "^13.0.1",
 		"lightningcss": "^1.30.2",
+		"oxfmt": "^0.24.0",
+		"oxlint": "^1.39.0",
 		"sass-embedded": "^1.97.2",
 		"sharp": "^0.34.5",
 		"solid-labels": "^0.17.0",
 		"stylelint": "^16.26.1",
 		"stylelint-config-standard-scss": "^16.0.0",
 		"stylelint-define-config": "^16.26.0",
-		"unlighthouse": "^0.17.4",
 		"utility-types": "^3.11.0",
 		"zod": "^4.3.5"
 	},

@@ -8,7 +8,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public sealed partial class UserBanMiddleware(IFusionCache cache, ApplicationDbContext dbContext, ILogger<UserBanMiddleware> logger) : IMiddleware
+public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
 	public static string CacheKey(long id) => $"user-ban:{id}";
 
@@ -29,28 +29,30 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ApplicationDbC
 
 		var isBanned = await cache.GetOrSetAsync(
 			CacheKey(uid),
-			async _ => await CompiledQuery(dbContext, uid),
+			async _ => {
+				var dbContext = httpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
+				return await CompiledQuery(dbContext, uid);
+			},
 			o => o.Duration = TimeSpan.FromMinutes(30)
 		);
 
 		if (isBanned)
 		{
 			LogAccessAttempt(logger, uid);
+
 			if (httpContext.IsApiEndpoint())
 			{
 				httpContext.Response.Clear();
-				httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+				httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				await httpContext.Response.WriteAsync("Account banned.");
+				return;
 			}
-			else
-			{
-				httpContext.Response.Redirect("/Ban");
-			}
+
+			httpContext.Response.Redirect("/Ban");
+			return;
 		}
-		else
-		{
-			await next(httpContext);
-		}
+
+		await next(httpContext);
 	}
 
 	private static readonly Func<ApplicationDbContext, long, Task<bool>> CompiledQuery =

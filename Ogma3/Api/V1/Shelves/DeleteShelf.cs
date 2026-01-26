@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Shelves;
@@ -27,7 +26,7 @@ public static partial class DeleteShelf
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var res = await context.Shelves
 			.Where(s => s.Id == request.ShelfId)

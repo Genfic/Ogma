@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Votes;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Votes;
@@ -28,7 +27,7 @@ public static partial class CreateVote
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var didUserVote = await context.Votes
 			.Where(v => v.StoryId == request.StoryId)

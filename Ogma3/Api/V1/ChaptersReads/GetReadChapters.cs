@@ -4,7 +4,6 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ChaptersReads;
@@ -28,7 +27,7 @@ public static partial class GetReadChapters
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var chaptersRead = await context.ChaptersRead
 			.Where(cr => cr.StoryId == request.Id)

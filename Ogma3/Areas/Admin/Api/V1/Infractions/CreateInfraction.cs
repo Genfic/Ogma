@@ -40,7 +40,7 @@ public static partial class CreateInfraction
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 		if (userService.User?.GetUsername() is not {} modName) return TypedResults.Unauthorized();
 
 		var (userId, reason, dateTime, type) = request;

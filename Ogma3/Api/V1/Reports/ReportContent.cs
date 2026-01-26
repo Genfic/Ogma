@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
 using Ogma3.Data.Reports;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.UserService;
 using Sqids;
@@ -56,7 +55,7 @@ public static partial class ReportContent
 			}
 		}
 
-		if (userService.User?.GetNumericId() is not {} uid)
+		if (userService.UserId is not {} uid)
 		{
 			return TypedResults.Unauthorized();
 		}

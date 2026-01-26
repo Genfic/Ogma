@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Folders;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Folders;
@@ -26,7 +25,7 @@ public static partial class AddStoryToFolder
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var folder = await context.Folders
 			.Where(f => f.Id == request.FolderId)

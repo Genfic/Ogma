@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 using Sqids;
 
@@ -45,7 +44,7 @@ public static partial class UpdateComment
 			return TypedResults.NotFound();
 		}
 
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var comment = await context.Comments
 			.Where(c => c.Id == id)

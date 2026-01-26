@@ -4,7 +4,6 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Votes;
@@ -29,7 +28,7 @@ public static partial class GetVotes
 			.Where(v => v.StoryId == request.StoryId)
 			.CountAsync(cancellationToken);
 
-		var didUserVote = userService.User?.GetNumericId() switch
+		var didUserVote = userService.UserId switch
 		{
 			{} uid => await context.Votes
 				.Where(v => v.StoryId == request.StoryId)

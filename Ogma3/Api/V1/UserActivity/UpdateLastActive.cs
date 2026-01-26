@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.UserActivity;
@@ -30,7 +29,7 @@ public static partial class UpdateLastActive
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.NoContent();
+		if (userService.UserId is not {} uid) return TypedResults.NoContent();
 
 		// var rows = await CompiledQuery(context, uid, cancellationToken);
 

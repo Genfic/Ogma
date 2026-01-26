@@ -43,7 +43,7 @@ public static partial class GetPaginatedComments
 	{
 		var ctx = httpContextAccessor.HttpContext ?? throw new InvalidOperationException("HttpContext is null");
 
-		var uid = userService.User?.GetNumericId();
+		var uid = userService.UserId;
 
 		var (thread, page) = request;
 		var etag = eTagService.Get(ETagFor.Comments, request.Thread, uid);

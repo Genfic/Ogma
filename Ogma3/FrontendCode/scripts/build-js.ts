@@ -1,12 +1,13 @@
-import { rm } from "node:fs/promises";
-import { dirname, join, relative } from "node:path";
 import { SolidPlugin } from "@atulin/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
+import { rm } from "node:fs/promises";
+import { dirname, join, relative } from "node:path";
 import solidLabels from "solid-labels/babel";
+
 import { log } from "../typescript/src-helpers/logger";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";

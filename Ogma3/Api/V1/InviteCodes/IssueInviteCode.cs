@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.CodeGenerator;
 using Ogma3.Services.UserService;
 
@@ -29,7 +28,7 @@ public static partial class IssueInviteCode
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var issuedCount = await context.InviteCodes
 			.Where(ic => ic.IssuedById == uid)

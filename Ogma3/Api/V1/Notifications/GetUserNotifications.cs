@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Exceptions;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Notifications;
@@ -29,7 +28,7 @@ public static partial class GetUserNotifications
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
 		var notifications = await context.NotificationRecipients
 			.Where(nr => nr.RecipientId == uid)

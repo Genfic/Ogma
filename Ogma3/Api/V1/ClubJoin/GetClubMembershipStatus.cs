@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ClubJoin;
@@ -27,7 +26,7 @@ public static partial class GetClubMembershipStatus
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Ok(false);
+		if (userService.UserId is not {} uid) return TypedResults.Ok(false);
 
 		var isMember = await context.ClubMembers
 			.Where(cm => cm.ClubId == request.ClubId)

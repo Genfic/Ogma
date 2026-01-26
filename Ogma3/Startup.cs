@@ -30,6 +30,7 @@ using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Middleware;
+using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware;
 using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
@@ -93,7 +94,7 @@ public static class Startup
 
 		// Middleware
 		services
-			.AddTransient<RequestTimestampMiddleware>()
+			.AddTransient<RequestTimingMiddleware>()
 			.AddTransient<UserBanMiddleware>()
 			.AddTransient<CloudflareIpForwardingMiddleware>();
 		builder.UseAddHeaders();
@@ -321,7 +322,7 @@ public static class Startup
 		app.MapDefaultEndpoints();
 
 		// Middleware
-		app.UseRequestTimestamp();
+		app.UseRequestTiming();
 		app.UseAddHeaders();
 
 		// Compression

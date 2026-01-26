@@ -32,7 +32,7 @@ public static partial class DeactivateInfraction
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 		if (userService.User?.GetUsername() is not {} modName) return TypedResults.Unauthorized();
 
 		var infraction = await context.Infractions

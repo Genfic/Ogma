@@ -1,18 +1,12 @@
 @using Ogma3.Api.Rss
 @using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Constants
-@using Ogma3.Infrastructure.Middleware
+@using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaConfig Config
 
 @{
-	var genTimeData = GetData((DateTimeOffset?)Context.Items[RequestTimestampMiddleware.Name]);
-	var renderTimeData = GetData((DateTimeOffset?)ViewData["render_start"]);
-
-	(string ms, string str) GetData(DateTimeOffset? dateTime) =>
-		dateTime is { } dt
-			? (ms: (DateTimeOffset.UtcNow - dt).TotalMilliseconds.ToString("F3"), str: (DateTimeOffset.UtcNow - dt).TotalSeconds.ToString("F3"))
-			: (ms: "🤷‍♂️", str: "unknown");
+	var duration = Context.GetRequestDuration() ?? TimeSpan.Zero;
 
 	var proto = Context.Request.Protocol;
 }
@@ -25,11 +19,7 @@
 			<span class="header">Stats</span>
 
 			<span class="item">
-				Request time <span class="hl" title="@(genTimeData.ms) ms">@(genTimeData.str)</span> seconds
-			</span>
-
-			<span class="item">
-				Render time <span class="hl" title="@(renderTimeData.ms) ms">@(renderTimeData.str)</span> seconds
+				Request time <span class="hl" title="@(duration.TotalMilliseconds.ToString("0.###")) ms">@(duration.TotalSeconds.ToString("0.###"))</span> seconds
 			</span>
 
 			<span class="item">
@@ -41,7 +31,7 @@
 			</span>
 
 			<span class="item">
-				Using @proto
+				Using <span class="hl">@proto</span>
 			</span>
 		</div>
 
@@ -72,7 +62,6 @@
 			<span class="header">Follow and support</span>
 
 			@{
-				var formats = new[] { "avif", "webp" };
 				var pages = new[]
 				{
 					(name: "SubscribeStar", link: "https://www.subscribestar.com/genfic"),
@@ -90,7 +79,7 @@
 					<picture src="/img/@(name.ToLower().Replace("-", "")).png"
 					         height="24" width="24"
 					         asp-append-version="true"
-					         source-formats="@formats"
+					         source-formats="@(["avif", "webp"])"
 					         role="presentation">
 					</picture>
 					@name
@@ -104,5 +93,4 @@
 	<div class="bottom">
 		<span class="copy-text">&copy;2019-@DateTimeOffset.UtcNow.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
 	</div>
-
 </footer>

@@ -11,7 +11,7 @@ public sealed class AddHeadersMiddleware(IOptions<AddHeadersOptions> options) : 
 	{
 		foreach (var (key, value) in _options.Headers)
 		{
-			context.Response.Headers.Append(key, value);
+			context.Response.Headers.TryAdd(key, value);
 		}
 		await next(context);
 	}
@@ -25,8 +25,10 @@ public static class AddHeadersMiddlewareExtensions
 	public static TBuilder UseAddHeaders<TBuilder>(this TBuilder builder)  where TBuilder : IHostApplicationBuilder
 	{
 		builder.Services
-			.AddTransient<AddHeadersMiddleware>()
-			.Configure<AddHeadersOptions>(builder.Configuration.GetSection("AdditionalHeaders"));
+			.AddSingleton<AddHeadersMiddleware>()
+			.AddOptions<AddHeadersOptions>()
+			.Bind(builder.Configuration.GetSection("AdditionalHeaders"))
+			.ValidateOnStart();
 		return builder;
 	}
 }
@@ -34,5 +36,5 @@ public static class AddHeadersMiddlewareExtensions
 public sealed class AddHeadersOptions
 {
 	[UsedImplicitly]
-	public required Dictionary<string, string> Headers { get; init; }
+	public Dictionary<string, string> Headers { get; init; } = [];
 }

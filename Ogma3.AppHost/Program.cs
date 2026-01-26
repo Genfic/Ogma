@@ -34,7 +34,7 @@ var genfic = builder
 builder.AddContainer("tunnel", "cloudflare/cloudflared")
 	.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
 	.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
-	.WithArgs("tunnel", "--no-autoupdate", "run")
+	.WithArgs("tunnel", "--no-autoupdate", "run", "--protocol", "http2")
 	.WithReference(genfic)
 	.WaitFor(genfic)
 	.WithExplicitStart();

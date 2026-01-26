@@ -31,7 +31,7 @@ public static partial class UpdateRoles
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.User?.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 		if (userService.User?.GetUsername() is not {} username) return TypedResults.Unauthorized();
 
 		var user = await context.Users

@@ -1,11 +1,13 @@
+using System.Buffers.Binary;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using MemoryPack;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-public sealed class CloudflareIpForwardingMiddleware
+public sealed partial class CloudflareIpForwardingMiddleware
 (
 	IFusionCache cache,
 	ILogger<CloudflareIpForwardingMiddleware> logger,
@@ -24,11 +26,11 @@ public sealed class CloudflareIpForwardingMiddleware
 			return;
 		}
 
-		var cloudflareRanges = await GetCloudflareIpRangesAsync();
+		var ranges = await GetCloudflareIpRangesAsync();
 
-		if (!IsCloudflareIp(connectingIp, cloudflareRanges))
+		if (!IsCloudflareIp(connectingIp, ranges))
 		{
-			logger.LogDebug("Request not from Cloudflare IP: {RemoteIp}", connectingIp);
+			LogRequestNotFromCloudflare(connectingIp);
 			await next(context);
 			return;
 		}
@@ -37,95 +39,167 @@ public sealed class CloudflareIpForwardingMiddleware
 
 		if (string.IsNullOrEmpty(cfConnectingIp) || !IPAddress.TryParse(cfConnectingIp, out var realIp))
 		{
-			logger.LogWarning("Request from Cloudflare IP {CloudflareIp} but CF-Connecting-IP header is missing or invalid",
-				connectingIp);
+			LogMissingOrInvalidCfHeader(connectingIp);
 			await next(context);
 			return;
 		}
-
-		logger.LogDebug("Setting RemoteIpAddress from CF-Connecting-IP: {RealIp} (was {CloudflareIp})", realIp, connectingIp);
 
 		context.Connection.RemoteIpAddress = realIp;
 
 		await next(context);
 	}
 
+
 	private async Task<CloudflareIpRanges> GetCloudflareIpRangesAsync()
 	{
-		return await cache.GetOrSetAsync(CacheKey, async ct => {
-				var client = clientFactory.CreateClient();
+		return await cache.GetOrSetAsync(CacheKey, async ct =>
+		{
+			var client = clientFactory.CreateClient();
 
-				// Fetch IPv4 ranges
-				var ipv4Response = await client.GetStringAsync("https://www.cloudflare.com/ips-v4", ct);
-				var ipv4Ranges = ipv4Response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-					.Select(ParseCidr)
-					.OfType<IPNetwork>()
-					.Select(SerializableIpNetwork.FromIpNetwork)
-					.ToList();
+			var ipv4Text = await client.GetStringAsync("https://www.cloudflare.com/ips-v4", ct);
+			var ipv6Text = await client.GetStringAsync("https://www.cloudflare.com/ips-v6", ct);
 
-				// Fetch IPv6 ranges
-				var ipv6Response = await client.GetStringAsync("https://www.cloudflare.com/ips-v6", ct);
-				var ipv6Ranges = ipv6Response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-					.Select(ParseCidr)
-					.OfType<IPNetwork>()
-					.Select(SerializableIpNetwork.FromIpNetwork)
-					.ToList();
+			var ipv4 = ParseRanges(ipv4Text);
+			var ipv6 = ParseRanges(ipv6Text);
 
-				logger.LogInformation("Successfully fetched {Ipv4Count} IPv4 and {Ipv6Count} IPv6 Cloudflare ranges", ipv4Ranges.Count,
-					ipv6Ranges.Count);
+			LogFetchedCloudflareRanges(ipv4.Length, ipv6.Length);
 
-				return new CloudflareIpRanges
-				{
-					IPv4Ranges = ipv4Ranges,
-					IPv6Ranges = ipv6Ranges,
-				};
-			},
-			options => options.Duration = TimeSpan.FromDays(1));
+			return new CloudflareIpRanges
+			{
+				IPv4 = ipv4,
+				IPv6 = ipv6,
+			};
+		},
+		options => options.Duration = TimeSpan.FromDays(1));
 	}
 
-	private IPNetwork? ParseCidr(string cidr)
+	private static IpRange[] ParseRanges(string text)
 	{
-		try
+		var list = text.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+			.Select(ParseCidr)
+			.OfType<IPNetwork>()
+			.Select(ConvertCidr)
+			.OrderBy(r => r.StartHigh)
+			.ThenBy(r => r.StartLow)
+			.ToArray();
+
+		return list;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static bool IsCloudflareIp(IPAddress ip, CloudflareIpRanges ranges)
+	{
+		ConvertIp(ip, out var high, out var low);
+
+		var arr = ip.AddressFamily == AddressFamily.InterNetworkV6
+			? ranges.IPv6
+			: ranges.IPv4;
+
+		var lo = 0;
+		var hi = arr.Length - 1;
+
+		while (lo <= hi)
 		{
-			var parts = cidr.Trim().Split('/');
-			if (parts.Length == 2 && IPAddress.TryParse(parts[0], out var address) && int.TryParse(parts[1], out var prefixLength))
+			var mid = lo + ((hi - lo) >> 1);
+			ref readonly var r = ref arr[mid];
+
+			if (high < r.StartHigh || (high == r.StartHigh && low < r.StartLow))
 			{
-				return new IPNetwork(address, prefixLength);
+				hi = mid - 1;
+			}
+			else if (high > r.EndHigh || (high == r.EndHigh && low > r.EndLow))
+			{
+				lo = mid + 1;
+			}
+			else
+			{
+				return true;
 			}
 		}
-		catch (Exception ex)
-		{
-			logger.LogWarning(ex, "Failed to parse CIDR: {Cidr}", cidr);
-		}
-		return null;
+
+		return false;
 	}
 
-	private static bool IsCloudflareIp(IPAddress ipAddress, CloudflareIpRanges ranges)
+	private static IPNetwork? ParseCidr(string cidr)
 	{
-		var rangeList = ipAddress.AddressFamily == AddressFamily.InterNetworkV6
-			? ranges.IPv6Ranges
-			: ranges.IPv4Ranges;
+		var span = cidr.AsSpan().Trim();
+		var slash = span.IndexOf('/');
 
-		return rangeList.Any(range => range.ToIpNetwork().Contains(ipAddress));
+		if (slash <= 0 || slash == span.Length - 1)
+		{
+			return null;
+		}
+
+		if (!IPAddress.TryParse(span[..slash], out var ip))
+		{
+			return null;
+		}
+
+		if (!int.TryParse(span[(slash + 1)..], out var prefix))
+		{
+			return null;
+		}
+
+		return new IPNetwork(ip, prefix);
 	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static void ConvertIp(IPAddress ip, out ulong high, out ulong low)
+	{
+		Span<byte> bytes = stackalloc byte[16];
+		ip.TryWriteBytes(bytes, out _);
+
+		high = BinaryPrimitives.ReadUInt64BigEndian(bytes[..8]);
+		low  = BinaryPrimitives.ReadUInt64BigEndian(bytes[8..]);
+	}
+
+	private static IpRange ConvertCidr(IPNetwork net)
+	{
+		ConvertIp(net.BaseAddress, out var high, out var low);
+
+		var bits = net.BaseAddress.AddressFamily == AddressFamily.InterNetwork ? 32 : 128;
+		var hostBits = bits - net.PrefixLength;
+
+		switch (hostBits)
+		{
+			case <= 0:
+				return new(high, low, high, low);
+			case >= 64:
+			{
+				var shift = hostBits - 64;
+				var mask = ulong.MaxValue >> shift;
+				return new(high & ~mask, 0, high | mask, ulong.MaxValue);
+			}
+			default:
+			{
+				var lowMask = ulong.MaxValue >> hostBits;
+				return new(high, low & ~lowMask, high, low | lowMask);
+			}
+		}
+	}
+
+	[LoggerMessage(Level = LogLevel.Debug, Message = "Request not from Cloudflare IP: {RemoteIp}")]
+	private partial void LogRequestNotFromCloudflare(IPAddress? remoteIp);
+
+	[LoggerMessage(Level = LogLevel.Warning, Message = "Request from Cloudflare IP {CloudflareIp} but CF-Connecting-IP header is missing or invalid")]
+	private partial void LogMissingOrInvalidCfHeader(IPAddress? cloudflareIp);
+
+	[LoggerMessage(Level = LogLevel.Information, Message = "Fetched {Ipv4Count} IPv4 and {Ipv6Count} IPv6 Cloudflare ranges")]
+	private partial void LogFetchedCloudflareRanges(int ipv4Count, int ipv6Count);
 }
 
 [MemoryPackable]
 public sealed partial class CloudflareIpRanges
 {
-	public List<SerializableIpNetwork> IPv4Ranges { get; init; } = [];
-	public List<SerializableIpNetwork> IPv6Ranges { get; init; } = [];
+	public IpRange[] IPv4 { get; init; } = [];
+	public IpRange[] IPv6 { get; init; } = [];
 }
 
 [MemoryPackable]
-public sealed partial record SerializableIpNetwork(string BaseAddress, int PrefixLength)
+public readonly partial struct IpRange(ulong startHigh, ulong startLow, ulong endHigh, ulong endLow)
 {
-
-	public IPNetwork ToIpNetwork() => new(IPAddress.Parse(BaseAddress), PrefixLength);
-
-	public static SerializableIpNetwork FromIpNetwork(IPNetwork network)
-		=> new(
-			network.BaseAddress.ToString(),
-			network.PrefixLength
-		);
+	public ulong StartHigh { get; } = startHigh;
+	public ulong StartLow { get; } = startLow;
+	public ulong EndHigh { get; } = endHigh;
+	public ulong EndLow { get; } = endLow;
 }
