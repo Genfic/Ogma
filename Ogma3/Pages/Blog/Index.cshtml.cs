@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
 

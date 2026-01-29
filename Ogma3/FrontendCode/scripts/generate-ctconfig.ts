@@ -1,7 +1,6 @@
-import { dirname, join, resolve } from "node:path";
 import ct from "chalk-template";
 import convert from "convert";
-import { parse, stringify } from "json5";
+import { dirname, join, resolve } from "node:path";
 
 const _root = dirname(Bun.main);
 const _path = join(_root, "..", "..", "Data", "CTConfig.cs");
@@ -31,21 +30,22 @@ const cleaned = file
 		if (!l.includes("=")) return `"${l}":`;
 
 		const [name, value] = l.split("=").map((s) => s.trim());
-		const f = new Function(`return ${value}`);
 
-		const v = f();
-		const newValue = typeof v === "number" ? v : `"${v}"`;
+		const val = value.replaceAll("..", "...").replaceAll(";", "");
 
-		return `"${name}": ${newValue},`;
+		return `"${name}": ${val},`;
 	})
 	.map((l) => (l === "}" ? "}," : l))
 	.join("\n");
 
 const json = `{${cleaned}}`;
-const obj = parse(json).CTConfig;
 
-const ts = Object.entries(obj)
-	.map(([k, v]) => `export const ${k} = ${stringify(v, null, 4)} as const;`)
+console.log(Bun.JSON5.parse(json));
+
+const obj = (Bun.JSON5.parse(json) as Record<string, unknown>).CTConfig;
+
+const ts = Object.entries(obj as object)
+	.map(([k, v]) => `export const ${k} = ${Bun.JSON5.stringify(v, null, 4)} as const;`)
 	.join("\n\n");
 
 await Bun.write(_outputTS, ts);

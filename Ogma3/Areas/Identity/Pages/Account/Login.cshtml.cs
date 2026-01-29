@@ -12,7 +12,6 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<LoginModel> logger) : PageModel
 {
-
 	[BindProperty] public required InputModel Input { get; set; }
 
 	public required List<AuthenticationScheme> ExternalLogins { get; set; } = [];
@@ -30,11 +29,9 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 		public required string Password { get; init; }
 
 		[Display(Name = "Remember me?")] public required bool RememberMe { get; init; }
+
+		public string? Occupation { get; init; }
 	}
-
-
-	private const string HoneypotSessionKey = "LoginHoneypotKey";
-	public string? HoneypotFieldName { get; private set; }
 
 	public async Task OnGetAsync(string? returnUrl = null)
 	{
@@ -51,9 +48,6 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
 		ReturnUrl = returnUrl;
-
-		HoneypotFieldName = Guid.NewGuid().ToString("N")[..16];
-		HttpContext.Session.SetString(HoneypotSessionKey, HoneypotFieldName);
 	}
 
 
@@ -62,22 +56,12 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 		returnUrl ??= Url.Content("~/");
 
 		// Check honeypot
-		HoneypotFieldName = HttpContext.Session.GetString(HoneypotSessionKey);
-		if (string.IsNullOrEmpty(HoneypotFieldName))
-		{
-			ModelState.AddModelError("Expired", "Your session has expired. Try again.");
-			logger.LogInformation("Session tampered with, honeypot session key was unset during login.");
-			return Page();
-		}
-
-		var honeypot = Request.Form[HoneypotFieldName].ToString();
-		if (!string.IsNullOrEmpty(honeypot))
+		if (!string.IsNullOrEmpty(Input.Occupation))
 		{
 			ModelState.AddModelError("Suspicious", "Suspicious activity detected. Try again later.");
-			logger.LogInformation("Honeypot field was filled out during login: {Honeypot}.", honeypot);
+			logger.LogInformation("Honeypot field was filled out during registration: {Honeypot}.", Input.Occupation);
 			return Page();
 		}
-		HttpContext.Session.Remove(HoneypotSessionKey);
 
 		if (!ModelState.IsValid) return Page();
 

@@ -8,16 +8,20 @@ public sealed class EmailBlocklistProvider : IEmailBlocklistProvider
 	private EmailBlocklistProvider(string[] domains)
 	{
 		_domains = new HashSet<string>(domains)
-			.Where(l => !string.IsNullOrWhiteSpace(l))
 			.Select(l => l.Trim())
-			.ToFrozenSet();
+			.Where(l => l.Length > 0)
+			.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 	}
 
 	public static async Task<EmailBlocklistProvider> CreateAsync()
 	{
-		var lines = await File.ReadAllLinesAsync("disposable_email_blocklist.conf");
+		var lines = await File.ReadAllLinesAsync("disposable_email_blocklist.txt");
 		return new EmailBlocklistProvider(lines);
 	}
 
-	public bool IsDisposable(string email) => _domains.Contains(email.Split('@').Last());
+	public bool IsDisposable(string email)
+	{
+		var domain = email[(email.LastIndexOf('@') + 1)..];
+		return _domains.Contains(domain);
+	}
 }

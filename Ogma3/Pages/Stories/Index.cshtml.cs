@@ -5,6 +5,7 @@ using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
 using Utils.Extensions;

@@ -31,6 +31,7 @@ using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Filters;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
@@ -100,7 +101,7 @@ public static class Startup
 		builder.UseAddHeaders();
 
 		// Custom persistent config
-		services.AddSingleton(OgmaConfig.Init("config.json5"));
+		await services.AddOgmaConfigAsync("config.json5");
 
 		// Comment redirector
 		services.AddScoped<CommentRedirector>();

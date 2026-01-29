@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Reflection;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,6 +21,8 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 
 	public string Action { get; set; } = "";
 
+	private static readonly ConcurrentDictionary<Type, Dictionary<string, List<PropertyInfo>>> GroupedPropertiesCache = new();
+
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
 		output.TagName = "form";
@@ -32,11 +35,15 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 		var obj = For.Model;
 		var objName = For.Name;
 
-		var groupedProps = obj
-			.GetType()
-			.GetProperties()
-			.GroupBy(p => p.GetCustomAttribute<AutoformCategoryAttribute>()?.Name ?? "General")
-			.ToDictionary(p => p.Key, p => p.ToList());
+		var modelType = obj.GetType();
+
+		var groupedProps = GroupedPropertiesCache.GetOrAdd(
+			modelType,
+			modelType
+				.GetProperties()
+				.GroupBy(p => p.GetCustomAttribute<AutoformCategoryAttribute>()?.Name ?? "General")
+				.ToDictionary(p => p.Key, p => p.ToList())
+		);
 
 		foreach (var (key, propertyInfos) in groupedProps)
 		{

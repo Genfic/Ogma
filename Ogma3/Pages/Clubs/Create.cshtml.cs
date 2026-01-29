@@ -9,6 +9,7 @@ using Ogma3.Data.Images;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services.FileUploader;
 using Routes.Pages;
 using Utils.Extensions;

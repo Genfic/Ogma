@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Ogma3.Data;
 using Ogma3.Infrastructure.Constants;
+using Ogma3.Infrastructure.OgmaConfig;
 
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(Roles = RoleNames.Admin)]
-public sealed class Settings(OgmaConfig config) : PageModel
+public sealed class Settings(OgmaConfig config, OgmaConfigPersistence persistence) : PageModel
 {
 	[BindProperty] public required OgmaConfig Config { get; set; }
 
@@ -18,12 +18,8 @@ public sealed class Settings(OgmaConfig config) : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		foreach (var prop in typeof(OgmaConfig).GetProperties().Where(p => p.CanWrite))
-		{
-			prop.SetValue(config, prop.GetValue(Config, null), null);
-		}
-
-		await config.PersistAsync();
+		OgmaConfigMapper.CopyTo(Config, config);
+		await persistence.PersistAsync();
 		return Routes.Areas.Admin.Pages.Settings.Get().Redirect(this);
 	}
 }

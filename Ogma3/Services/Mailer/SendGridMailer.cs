@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
-using Ogma3.Data;
+using Ogma3.Infrastructure.OgmaConfig;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 

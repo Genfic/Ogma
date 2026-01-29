@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class CdnPictureTagHelper(OgmaConfig config) : TagHelper
+public sealed class CdnPictureTagHelper(OgmaConfig.OgmaConfig config) : TagHelper
 {
 	public string Src { get; set; } = null!;
 	public int Width { get; set; }
@@ -27,7 +26,6 @@ public sealed class CdnPictureTagHelper(OgmaConfig config) : TagHelper
 			var fullUrl = $"{bareUrl}.{format}";
 			output.Content.AppendHtml($"""<source type="image/{format}" srcset="{fullUrl}" />""");
 		}
-
 
 		output.Content.AppendHtml(!Eager
 			? $"""<img src="{url}" alt="{Alt}" width="{Width}" height="{Height}">"""

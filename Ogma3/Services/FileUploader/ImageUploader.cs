@@ -1,8 +1,8 @@
 using B2Net;
 using B2Net.Models;
-using Ogma3.Data;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Logging.OperationTiming;
+using Ogma3.Infrastructure.OgmaConfig;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;

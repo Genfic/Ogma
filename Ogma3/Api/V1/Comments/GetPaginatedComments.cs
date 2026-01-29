@@ -8,6 +8,7 @@ using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
 using Sqids;

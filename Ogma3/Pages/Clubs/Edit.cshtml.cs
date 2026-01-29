@@ -10,7 +10,9 @@ using Ogma3.Data.Images;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services.FileUploader;
+using Routes.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Clubs;
@@ -122,6 +124,6 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		logger.LogInformation("User {UserId} succeeded in editing club {ClubId}", uid, id);
 		await context.SaveChangesAsync();
 
-		return Routes.Pages.Club_Index.Get(club.Id, club.Slug).Redirect(this);
+		return Club_Index.Get(club.Id, club.Slug).Redirect(this);
 	}
 }
