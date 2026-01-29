@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -13,13 +14,23 @@ using Ogma3.Data.Subscriptions;
 
 namespace Ogma3.Api.Hooks.Patreon;
 
-using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound, BadRequest<string>, InternalServerError>;
+using ReturnType = Results<Ok, NotFound, BadRequest, InternalServerError>;
 
 [Handler]
 [MapPost("hooks/patreon")]
 [AllowAnonymous]
 public static partial class HandlePatreonWebhook
 {
+	private static readonly FrozenSet<string> AllowedEvents =
+	[
+		"members:create",
+		"members:update",
+		"members:delete",
+		"members:pledge:create",
+		"members:pledge:update",
+		"members:pledge:delete",
+	];
+
 	[UsedImplicitly]
 	public sealed record Query
 	(
@@ -37,7 +48,10 @@ public static partial class HandlePatreonWebhook
 		CancellationToken cancellationToken
 	)
 	{
-		logger.LogInformation("Patreon webhook for {Event} received.", request.Event);
+		if (!AllowedEvents.Contains(request.Event))
+		{
+			return TypedResults.Ok();
+		}
 
 		if (config["Webhooks:Patreon:Secret"] is not {} secret)
 		{
@@ -50,22 +64,33 @@ public static partial class HandlePatreonWebhook
 			return TypedResults.InternalServerError();
 		}
 
-		httpContext.Request.EnableBuffering();
+		logger.LogInformation("Patreon webhook for {Event} received.", request.Event);
 
-		using var reader = new StreamReader(httpContext.Request.Body, Encoding.UTF8, leaveOpen: true);
-		var body = await reader.ReadToEndAsync(cancellationToken);
-		httpContext.Request.Body.Position = 0;
+		using var ms = new MemoryStream(4096); // 4096 should be enough for the webhook payload
+		await httpContext.Request.Body.CopyToAsync(ms, cancellationToken);
+		var body = ms.GetBuffer().AsSpan(0, (int)ms.Length);
 
 		if (!ValidateSignature(request.Signature, secret, body))
 		{
-			return TypedResults.Unauthorized();
+			logger.LogWarning("Invalid Patreon webhook signature: {Signature}", request.Signature);
+			return TypedResults.BadRequest();
 		}
 
-		var payload = JsonSerializer.Deserialize(body, PatreonWebhookContext.Default.PatreonWebhook);
+		PatreonWebhook? payload;
+		try
+		{
+			payload = JsonSerializer.Deserialize(body, PatreonWebhookContext.Default.PatreonWebhook);
+		}
+		catch (Exception ex)
+		{
+			logger.LogWarning(ex, "Failed to deserialize Patreon webhook payload");
+			return TypedResults.BadRequest();
+		}
+
 		if (payload is null)
 		{
-			logger.LogWarning("Patreon webhook payload was invalid. {Payload}", body);
-			return TypedResults.BadRequest("Unexpected payload format.");
+			logger.LogWarning("Invalid Patreon webhook payload");
+			return TypedResults.BadRequest();
 		}
 
 		var patreonUserId = payload.Data.Relationships.User.Data.Id;
@@ -91,6 +116,14 @@ public static partial class HandlePatreonWebhook
 			return TypedResults.NotFound();
 		}
 
+		if (entitledCents <= 0 || status is "former_patron")
+		{
+			var rows = await context.Subscriptions
+				.Where(s => s.PatreonUserId == patreonUserId)
+				.ExecuteDeleteAsync(cancellationToken);
+			logger.LogInformation("Deleted {Rows} subscriptions tied to deleted user {UserId} (Patreon: {PatreonId}).", rows, user.Id, patreonUserId);
+		}
+
 		var subscriptionExists = await context.Subscriptions
 			.Where(s => s.UserId == user.Id)
 			.AnyAsync(cancellationToken);
@@ -100,6 +133,12 @@ public static partial class HandlePatreonWebhook
 			.Where(t => t.AmountCents <= entitledCents)
 			.Select(t => (long?)t.Id)
 			.FirstOrDefaultAsync(cancellationToken);
+
+		if (tierId is null)
+		{
+			logger.LogWarning("No tier matched {Entitlement} cents of entitlement", entitledCents);
+			return TypedResults.Ok();
+		}
 
 		if (subscriptionExists)
 		{
@@ -123,22 +162,36 @@ public static partial class HandlePatreonWebhook
 				TierId = tierId,
 			};
 			context.Subscriptions.Add(sub);
+			await context.SaveChangesAsync(cancellationToken);
 		}
-		await context.SaveChangesAsync(cancellationToken);
 
 		return TypedResults.Ok();
 	}
 
-	private static bool ValidateSignature(string signature, string key, string body)
+	private static bool ValidateSignature(string signature, string key, ReadOnlySpan<byte> body)
 	{
+		// MD5 produces 16 bytes, so 32 hex chars
+		if (signature.Length != 32)
+		{
+			return false;
+		}
+
+		Span<byte> signatureBytes = stackalloc byte[16];
+
+		try
+		{
+			Convert.FromHexString(signature, signatureBytes, out _, out _);
+		}
+		catch
+		{
+			return false;
+		}
+
 		var keyBytes = Encoding.UTF8.GetBytes(key);
-		var bodyBytes = Encoding.UTF8.GetBytes(body);
-
 		using var hmac = new HMACMD5(keyBytes);
-		var hashBytes = hmac.ComputeHash(bodyBytes);
 
-		var calculatedSignature = Convert.ToHexString(hashBytes);
+		Span<byte> computedHash = stackalloc byte[16];
 
-		return string.Equals(signature, calculatedSignature, StringComparison.OrdinalIgnoreCase);
+		return hmac.TryComputeHash(body, computedHash, out _) && CryptographicOperations.FixedTimeEquals(signatureBytes, computedHash);
 	}
 }

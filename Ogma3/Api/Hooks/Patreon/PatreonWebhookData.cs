@@ -1,57 +1,105 @@
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
 namespace Ogma3.Api.Hooks.Patreon;
 
 [JsonSerializable(typeof(PatreonWebhook))]
+[JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
+[UsedImplicitly]
 public sealed partial class PatreonWebhookContext : JsonSerializerContext;
 
-public sealed record PatreonWebhook
-(
-	[property: JsonPropertyName("type")] string Type,
-	[property: JsonPropertyName("data")] WebhookData Data
-);
+public sealed class PatreonWebhook
+{
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
 
-public sealed record WebhookData
-(
-	[property: JsonPropertyName("attributes")] Attributes Attributes,
-	[property: JsonPropertyName("relationships")] Relationships Relationships
-);
+    [JsonPropertyName("data")]
+    public required WebhookData Data { get; init; }
+}
 
-public sealed record Attributes
-(
-	[property: JsonPropertyName("campaign_lifetime_support_cents")] long CampaignLifetimeSupportCents,
-	[property: JsonPropertyName("currently_entitled_amount_cents")] long CurrentlyEntitledAmountCents,
-	[property: JsonPropertyName("is_follower")] bool IsFollower,
-	[property: JsonPropertyName("is_free_trial")] bool IsFreeTrial,
-	[property: JsonPropertyName("is_gifted")] bool IsGifted,
-	[property: JsonPropertyName("last_charge_date")] DateTimeOffset? LastChargeDate,
-	[property: JsonPropertyName("last_charge_status")] string? LastChargeStatus,
-	[property: JsonPropertyName("lifetime_support_cents")] long LifetimeSupportCents,
-	[property: JsonPropertyName("next_charge_date")] DateTimeOffset NextChargeDate,
-	[property: JsonPropertyName("patron_status")] string PatronStatus,
-	[property: JsonPropertyName("pledge_cadence")] int PledgeCadence,
-	[property: JsonPropertyName("pledge_relationship_start")] DateTimeOffset PledgeRelationshipStart,
-	[property: JsonPropertyName("will_pay_amount_cents")] long WillPayAmountCents
-);
+[UsedImplicitly]
+public sealed class WebhookData
+{
+    [JsonPropertyName("attributes")]
+    public required Attributes Attributes { get; init; }
 
-public sealed record Relationships
-(
-	[property: JsonPropertyName("currently_entitled_tiers")] CurrentlyEntitledTiers CurrentlyEntitledTiers,
-	[property: JsonPropertyName("user")] User User
-);
+    [JsonPropertyName("relationships")]
+    public required Relationships Relationships { get; init; }
+}
 
-public sealed record CurrentlyEntitledTiers
-(
-	[property: JsonPropertyName("data")] Dat[] Data
-);
+[UsedImplicitly]
+public sealed class Attributes
+{
+    [JsonPropertyName("campaign_lifetime_support_cents")]
+    public required long CampaignLifetimeSupportCents { get; init; }
 
-public sealed record Dat
-(
-	[property: JsonPropertyName("id")] string Id,
-	[property: JsonPropertyName("type")] string Type
-);
+    [JsonPropertyName("currently_entitled_amount_cents")]
+    public required long CurrentlyEntitledAmountCents { get; init; }
 
-public sealed record User
-(
-	[property: JsonPropertyName("data")] Dat Data
-);
+    [JsonPropertyName("is_follower")]
+    public required bool IsFollower { get; init; }
+
+    [JsonPropertyName("is_free_trial")]
+    public required bool IsFreeTrial { get; init; }
+
+    [JsonPropertyName("is_gifted")]
+    public required bool IsGifted { get; init; }
+
+    [JsonPropertyName("last_charge_date")]
+    public required DateTimeOffset? LastChargeDate { get; init; }
+
+    [JsonPropertyName("last_charge_status")]
+    public required string? LastChargeStatus { get; init; }
+
+    [JsonPropertyName("lifetime_support_cents")]
+    public required long LifetimeSupportCents { get; init; }
+
+    [JsonPropertyName("next_charge_date")]
+    public required DateTimeOffset NextChargeDate { get; init; }
+
+    [JsonPropertyName("patron_status")]
+    public required string PatronStatus { get; init; }
+
+    [JsonPropertyName("pledge_cadence")]
+    public required int PledgeCadence { get; init; }
+
+    [JsonPropertyName("pledge_relationship_start")]
+    public required DateTimeOffset PledgeRelationshipStart { get; init; }
+
+    [JsonPropertyName("will_pay_amount_cents")]
+    public required long WillPayAmountCents { get; init; }
+}
+
+[UsedImplicitly]
+public sealed class Relationships
+{
+    [JsonPropertyName("currently_entitled_tiers")]
+    public required CurrentlyEntitledTiers CurrentlyEntitledTiers { get; init; }
+
+    [JsonPropertyName("user")]
+    public required User User { get; init; }
+}
+
+[UsedImplicitly]
+public sealed class CurrentlyEntitledTiers
+{
+    [JsonPropertyName("data")]
+    public required Data[] Data { get; init; }
+}
+
+[UsedImplicitly]
+public sealed class Data
+{
+    [JsonPropertyName("id")]
+    public required string Id { get; init; }
+
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+}
+
+[UsedImplicitly]
+public sealed class User
+{
+    [JsonPropertyName("data")]
+    public required Data Data { get; init; }
+}
