@@ -1,0 +1,24 @@
+@page
+@model Passkeys
+
+<table>
+	<thead>
+	<tr>
+		<td>Name</td>
+		<td>Created At</td>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach (var key in Model.UserPasskeys)
+	{
+		<tr>
+			<td>@(key.Name ?? "[unnamed]")</td>
+			<td><time-display utc-date="@key.CreationDate"></time-display></td>
+		</tr>
+	}
+	</tbody>
+</table>
+
+<setup-passkey></setup-passkey>
+
+<script type="module" src="~/js/comp/setup-passkey.js" asp-append-version="true" asp-add-nonce="true"></script>

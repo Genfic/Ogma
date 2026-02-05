@@ -40,6 +40,7 @@ import type {
 	MarkChapterAsUnreadCommand,
 	QuoteDto,
 	RatingApiDto,
+	RegisterPasskeyQuery,
 	RemoveBookFromShelfCommand,
 	RemoveBookFromShelfResult,
 	ReportContentCommand,
@@ -385,6 +386,14 @@ export const GetApiSignin = async (name: string, headers?: HeadersInit, options?
 );
 
 
+export const GetApiSigninPasskeyOptions = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/api/signin/passkey-options",
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
 export const GetApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean, undefined>(`/api/subscriptions/thread?threadId=${threadId}`,
 	get,
 	undefined,
@@ -641,6 +650,14 @@ export const PostApiShelves = async (body: CreateShelfCommand, headers?: Headers
 );
 
 
+export const PostApiSigninPasskeyRegister = async (body: RegisterPasskeyQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string[], RegisterPasskeyQuery>("/api/signin/passkey-register",
+	post,
+	body,
+	headers,
+	options,
+);
+
+
 export const PostApiSubscriptionsThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<boolean, SubscribeCommentsThreadCommand>("/api/subscriptions/thread",
 	post,
 	body,
@@ -689,7 +706,7 @@ export const PostApiVotes = async (body: CreateVoteCommand, headers?: HeadersIni
 );
 
 
-export const PostHooksPatreon = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/hooks/patreon",
+export const PostHooksPatreon = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>("/hooks/patreon",
 	post,
 	undefined,
 	headers,

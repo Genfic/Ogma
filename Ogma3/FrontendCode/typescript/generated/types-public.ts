@@ -239,6 +239,10 @@ export type RatingApiDto = {
     color: string;
 };
 
+export type RegisterPasskeyQuery = {
+    credentials: string;
+};
+
 export type RemoveBookFromShelfCommand = {
     shelfId: number;
     storyId: number;

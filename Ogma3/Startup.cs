@@ -120,6 +120,7 @@ public static class Startup
 				config.SignIn.RequireConfirmedEmail = true;
 				config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ";
 				config.User.RequireUniqueEmail = true;
+				config.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
 			})
 			.AddEntityFrameworkStores<ApplicationDbContext>()
 			.AddUserManager<OgmaUserManager>()
@@ -135,6 +136,9 @@ public static class Startup
 				IdentityUserToken<long>,
 				IdentityRoleClaim<long>>>()
 			.AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
+		services.Configure<IdentityPasskeyOptions>(options => {
+			options.ServerDomain = "genfic.net";
+		});
 
 		// Data protection
 		services.AddDataProtection();

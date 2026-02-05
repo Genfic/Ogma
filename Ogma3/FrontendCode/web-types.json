@@ -498,6 +498,15 @@
           }
         },
         {
+          "name": "setup-passkey",
+          "description": "Custom element <setup-passkey> defined in typescript\\src\\comp\\setup-passkey.tsx",
+          "attributes": [],
+          "source": {
+            "module": "./typescript\\src\\comp\\setup-passkey.tsx",
+            "symbol": "setup-passkey"
+          }
+        },
+        {
           "name": "table-info",
           "description": "Custom element <table-info> defined in typescript\\src\\comp\\table-info.tsx",
           "attributes": [],
