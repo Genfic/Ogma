@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="TUnit" Version="1.12.125" />
+        <PackageReference Include="TUnit" Version="1.13.40" />
         <PackageReference Update="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.0.0-1.25277.114">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

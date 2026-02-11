@@ -21,7 +21,7 @@ export const Styled = <TProps extends object>(
 	return (props: TProps, options: ComponentOptions) => {
 		onMount(() => {
 			const styleEl = document.createElement("style");
-			styleEl.textContent = css.join("");
+			styleEl.textContent = css.join("\n");
 
 			const element = options.element as unknown as SolidElementInstance;
 

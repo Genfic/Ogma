@@ -17,6 +17,8 @@ public static partial class GetPasskeyOptions
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
 		.Produces<string>(contentType: "application/json", statusCode: 200)
+		.WithSummary("Returns WebAuthn creation options JSON")
+		.WithDescription("Returns PublicKeyCredentialCreationOptionsJSON as defined by the WebAuthn spec.")
 		.DisableAntiforgery();
 
 	[UsedImplicitly]

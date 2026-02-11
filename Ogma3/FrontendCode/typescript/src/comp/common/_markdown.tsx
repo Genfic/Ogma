@@ -19,14 +19,15 @@ const escapeHTML = (text: string) =>
 marked.use({
 	gfm: true,
 	tokenizer: {
-		emStrong() {
-			return undefined;
-		},
+		// we're replacing it with a custom implementation, so that
+		// emStrong() {
+		// 	return undefined;
+		// },
 	},
 	extensions: [
-		createInlineFormatExtension("bold", "*", "strong"),
-		createInlineFormatExtension("italic", "_", "em"),
-		createInlineFormatExtension("super", "^", "sup"),
+		// createInlineFormatExtension("bold", "*", "strong"),
+		// createInlineFormatExtension("italic", "_", "em"),
+		// createInlineFormatExtension("super", "^", "sup"),
 		createInlineFormatExtension("sub", "~", "sub"),
 		createInlineFormatExtension("insert", "++", "ins"),
 		createInlineFormatExtension("mark", "==", "mark"),
