@@ -1,7 +1,7 @@
 @use "sass:math";
 
 .monospace {
-	font-family: "Courier New", Courier, monospace;
+	font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 }
 
 .nb {
@@ -60,6 +60,10 @@ kbd {
 	padding: .1rem .25rem;
 	border-radius: 3px;
 	background-color: var(--foreground-10);
+}
+
+code, pre, kbd {
+	font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 }
 
 // Consistent bold

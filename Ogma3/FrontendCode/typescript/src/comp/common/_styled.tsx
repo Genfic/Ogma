@@ -16,12 +16,12 @@ type SolidElementInstance = Element & { renderRoot?: Node | null };
  */
 export const Styled = <TProps extends object>(
 	component: FunctionComponent<TProps>,
-	...css: string[]
+	css: string | string[],
 ): ComponentType<TProps> => {
 	return (props: TProps, options: ComponentOptions) => {
 		onMount(() => {
 			const styleEl = document.createElement("style");
-			styleEl.textContent = css.join("\n");
+			styleEl.textContent = Array.isArray(css) ? css.join("\n") : css;
 
 			const element = options.element as unknown as SolidElementInstance;
 

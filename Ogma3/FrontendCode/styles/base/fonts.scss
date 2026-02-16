@@ -1,10 +1,35 @@
 // noinspection CssUnknownTarget
 @font-face {
-	font-family: 'Raleway Var';
-	font-style: normal;
+	font-family: 'Inter Variable';
 	font-weight: 100 900;
 	font-display: swap;
-	src: local('Raleway'),
-		 url('/fonts/Raleway-VF.woff2') format('woff2'),
-		 url('/fonts/Raleway-VF.woff') format('woff')
+	font-style: normal;
+	src:
+		local('Inter Variable'),
+		local('Inter-Variable'),
+		url('/fonts/InterVariable.woff2') format('woff2-variations');
+}
+
+// noinspection CssUnknownTarget
+@font-face {
+	font-family: 'Inter Variable';
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: italic;
+	src:
+		local('Inter Variable'),
+		local('Inter-Variable'),
+		url('/fonts/InterVariable-Italic.woff2') format('woff2-variations');
+}
+
+// noinspection CssUnknownTarget
+@font-face {
+	font-family: 'Inconsolata Variable';
+	font-weight: 200 900;
+	font-display: swap;
+	font-style: normal;
+	src:
+		local('Inconsolata Variable'),
+		local('Inconsolata-Variable'),
+		url('/fonts/InconsolataVariable.woff2') format('woff2-variations');
 }

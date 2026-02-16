@@ -25,10 +25,13 @@ html {
 }
 
 body {
+	font-family: 'Inter Variable', Inter, Arial, sans-serif;
+	font-weight: 350;
+	font-feature-settings: 'dlig' 1, 'ss01' 1, 'ss03' 1, 'cv05' 1;
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	font-family: 'Raleway Var', Arial, sans-serif;
 	padding-left: calc(100vw - 100%);
 	background-color: var(--background);
 	color: var(--foreground);

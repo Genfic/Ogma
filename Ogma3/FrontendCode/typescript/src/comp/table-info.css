@@ -1,6 +1,7 @@
 table {
 	border-collapse: collapse;
 	outline: 1px solid var(--foreground-50);
+	font-variant-numeric: tabular-nums oldstyle-nums;
 }
 tr:hover {
 	background-color: var(--accent-10);

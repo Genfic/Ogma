@@ -64,7 +64,7 @@ export const component = <T extends NoHTMLAttributeKeys<T>>(
 		validated = component;
 	}
 
-	const comp = styles && styles.length > 0 ? Styled(validated, ...styles) : validated;
+	const comp = styles && styles.length > 0 ? Styled(validated, styles) : validated;
 
 	customElement(name, defaultProps, comp);
 };
