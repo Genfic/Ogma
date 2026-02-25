@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Identity;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 
-namespace Ogma3.Api.V1.SignIn;
+namespace Ogma3.Api.V1.Passkeys;
 
-using ReturnType = Results<BadRequest<string>, BadRequest<IEnumerable<string>>, InternalServerError, Ok, NotFound>;
+using ReturnType = Results<BadRequest<string>, BadRequest<IEnumerable<string>>, InternalServerError, Ok<RegisterPasskey.Response>, NotFound>;
 
 [Handler]
-[MapPost("api/signin/passkey-register")]
+[MapPost("api/passkeys/register")]
 public static partial class RegisterPasskey
 {
 	[UsedImplicitly]
-	public sealed record Query(string Credentials);
+	public sealed record Query(string Credentials, string? Name);
 
 	private static async ValueTask<ReturnType> Handle(
 		Query query,
@@ -42,6 +42,8 @@ public static partial class RegisterPasskey
 			return TypedResults.BadRequest($"Error: {attestationResult.Failure?.Message}");
 		}
 
+		attestationResult.Passkey.Name = query.Name;
+
 		var addResult = await userManager.AddOrUpdatePasskeyAsync(user, attestationResult.Passkey);
 
 		if (!addResult.Succeeded)
@@ -49,6 +51,11 @@ public static partial class RegisterPasskey
 			return TypedResults.BadRequest(addResult.Errors.Select(e => $"[{e.Code}]: ${e.Description}"));
 		}
 
-		return TypedResults.Ok();
+		var passkey = attestationResult.Passkey;
+		var response = new Response(Convert.ToBase64String(passkey.CredentialId), passkey.Name, passkey.CreatedAt);
+
+		return TypedResults.Ok(response);
 	}
+
+	public sealed record Response(string Id, string? Name, DateTimeOffset CreationDate);
 }

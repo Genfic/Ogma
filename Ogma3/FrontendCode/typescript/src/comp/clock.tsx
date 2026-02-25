@@ -1,4 +1,4 @@
-import { addToDate } from "@h/date-helpers";
+import { addToDate } from "@angius/tinytime/addtoDate";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";

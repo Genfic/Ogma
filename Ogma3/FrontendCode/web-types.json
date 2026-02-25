@@ -499,10 +499,18 @@
         },
         {
           "name": "setup-passkey",
-          "description": "Custom element <setup-passkey> defined in typescript\\src\\comp\\setup-passkey.tsx",
-          "attributes": [],
+          "description": "Custom element <setup-passkey> defined in typescript\\src\\account\\setup-passkey.tsx",
+          "attributes": [
+            {
+              "name": "csrf",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            }
+          ],
           "source": {
-            "module": "./typescript\\src\\comp\\setup-passkey.tsx",
+            "module": "./typescript\\src\\account\\setup-passkey.tsx",
             "symbol": "setup-passkey"
           }
         },

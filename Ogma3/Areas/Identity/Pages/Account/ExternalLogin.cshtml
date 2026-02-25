@@ -10,8 +10,7 @@
 
 <p class="text-info">
 	You've successfully authenticated with <strong>@Model.LoginProvider</strong>.
-	You can edit the username below and click the Connect button to finish
-	logging in.
+	You can edit the username below and click the Connect button to create your account.
 </p>
 
 <div class="row">
@@ -34,6 +33,12 @@
 					<span asp-validation-for="Input.Email" class="text-danger"></span>
 				</div>
 			}
+
+			<div class="o-form-group">
+				<label asp-for="Input.InviteCode">Invite code</label>
+				<input asp-for="Input.InviteCode" class="o-form-control active-border" />
+				<span asp-validation-for="Input.InviteCode" class="text-danger"></span>
+			</div>
 
 			<hr />
 

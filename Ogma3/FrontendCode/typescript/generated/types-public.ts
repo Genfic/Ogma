@@ -205,6 +205,12 @@ export type LeaveClubCommand = {
     clubId: number;
 };
 
+export type ListPasskeysUserPasskey = {
+    id: string;
+    name: string | null;
+    creationDate: Date;
+};
+
 export type LocateCommentResponse = {
     page: number;
 };
@@ -241,6 +247,13 @@ export type RatingApiDto = {
 
 export type RegisterPasskeyQuery = {
     credentials: string;
+    name: string | null;
+};
+
+export type RegisterPasskeyResponse = {
+    id: string;
+    name: string | null;
+    creationDate: Date;
 };
 
 export type RemoveBookFromShelfCommand = {
@@ -285,6 +298,10 @@ export type ShelfDto = {
     storiesCount: number;
     iconName: string | null;
     iconId: number | null;
+};
+
+export type SignInWithPasskeyQuery = {
+    credentials: string;
 };
 
 export type SubscribeCommentsThreadCommand = {

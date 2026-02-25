@@ -1,5 +1,5 @@
+import { addToDate } from "@angius/tinytime/addtoDate";
 import { setCookie } from "@h/cookies";
-import { addToDate } from "@h/date-helpers";
 import { $id, $query } from "@h/dom";
 
 const banner = $id("cookie-consent");

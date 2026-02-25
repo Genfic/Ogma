@@ -72,11 +72,16 @@
 			      asp-route-returnUrl="@Model.ReturnUrl"
 			      class="social-login">
 
+				<button type="button" class="btn btn-primary passkey @theme" id="passkey-login">
+					<icon icon="ic:outline-fingerprint" size="48" from-spritesheet></icon>
+					Log in with passkey
+				</button>
+
 				@foreach (var provider in Model.ExternalLogins)
 				{
 					<button type="submit" class="btn btn-primary @(provider.Name.ToLower()) @theme" name="provider" value="@provider.Name"
 					        title="Log in using your @provider.DisplayName account">
-						<icon icon="@(provider.Name.ToLower())" size="48" dynamic></icon>
+						<icon icon="@(provider.Name.ToLower())" size="48"></icon>
 						Log in with @provider.DisplayName
 					</button>
 				}

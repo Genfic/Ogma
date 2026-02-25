@@ -21,6 +21,22 @@ form.social-login {
 			transition: height .1s ease-in-out;
 		}
 
+		&:hover {
+			border-color: var(--foreground-75);
+
+			.icon {
+				height: calc(var(--icon-size) + 4px);
+			}
+		}
+
+		&.passkey {
+			background-color: var(--accent-10);
+
+			.icon {
+				color: var(--foreground);
+			}
+		}
+
 		&.patreon {
 			background-color: oklch(95% 0.05 31.998deg);
 
@@ -30,6 +46,18 @@ form.social-login {
 
 			&.dark {
 				background-color: oklch(10% 0.1 31.998deg);
+			}
+		}
+
+		&.discord {
+			background-color: #e0e3ff;
+
+			.icon {
+				color: #5865f2;
+			}
+
+			&.dark {
+				background-color: #000;
 			}
 		}
 
@@ -49,18 +77,6 @@ form.social-login {
 			}
 		}
 
-		&.discord {
-			background-color: #e0e3ff;
-
-			.icon {
-				color: #5865f2;
-			}
-
-			&.dark {
-				background-color: #000;
-			}
-		}
-
 		&.google {
 			color: #1F1F1F;
 			background-color: white;
@@ -68,14 +84,6 @@ form.social-login {
 			&.dark {
 				color: #E3E3E3;
 				background-color: #131314;
-			}
-		}
-
-		&:hover {
-			border-color: var(--foreground-75);
-
-			.icon {
-				height: calc(var(--icon-size) + 4px);
 			}
 		}
 	}

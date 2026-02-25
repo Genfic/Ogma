@@ -61,10 +61,8 @@ export type KnownHeaders =
     | "Referer"
     | "User-Agent";
 
-export const isoDateRegex = /^(\d{4}-\d{2}-\d{2})[T\s](\d{2}:\d{2}(:\d{2}(\.\d{1,6})?)?)((Z)|([+-]\d{2}:\d{2}))?$/;
-
 export const DateSafeJsonParse = <T>(text: string): T => JSON.parse(text, (_, value) => {
-    if (typeof value === 'string' && isoDateRegex.test(value)) {
+    if (typeof value === 'string') {
         const date = new Date(value);
         if (!Number.isNaN(date.getTime())) return date;
     }

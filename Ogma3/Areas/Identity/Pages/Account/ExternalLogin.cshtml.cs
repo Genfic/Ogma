@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
@@ -21,6 +23,7 @@ public sealed class ExternalLoginModel
 (
 	SignInManager<OgmaUser> signInManager,
 	UserManager<OgmaUser> userManager,
+	ApplicationDbContext context,
 	ILogger<ExternalLoginModel> logger,
 	IEmailSender emailSender)
 	: PageModel
@@ -36,8 +39,9 @@ public sealed class ExternalLoginModel
 
 	public sealed class InputModel
 	{
-		[Required] public required string UserName { get; set; }
-		[EmailAddress] public string? Email { get; set; }
+		[Required] public required string UserName { get; init; }
+		[EmailAddress] public string? Email { get; init; }
+		public string? InviteCode { get; init; }
 	}
 
 	public IActionResult OnGet()
@@ -124,6 +128,23 @@ public sealed class ExternalLoginModel
 
 		if (ModelState.IsValid)
 		{
+			// Check if invite code is correct
+			var inviteCode = await context.InviteCodes
+				.Where(ic => Input.InviteCode != null && ic.Code == Input.InviteCode)
+				.FirstOrDefaultAsync();
+
+			if (inviteCode is null)
+			{
+				ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
+				return Page();
+			}
+
+			if (inviteCode.UsedDate is not null)
+			{
+				ModelState.TryAddModelError("InviteCode", "This invite code has been used");
+				return Page();
+			}
+
 			var user = new OgmaUser
 			{
 				UserName = Input.UserName,

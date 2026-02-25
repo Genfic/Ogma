@@ -34,6 +34,7 @@ import type {
 	IssueInviteCodeCommand,
 	JoinClubCommand,
 	LeaveClubCommand,
+	ListPasskeysUserPasskey,
 	LocateCommentResponse,
 	LockThreadCommand,
 	MarkChapterAsReadCommand,
@@ -41,11 +42,13 @@ import type {
 	QuoteDto,
 	RatingApiDto,
 	RegisterPasskeyQuery,
+	RegisterPasskeyResponse,
 	RemoveBookFromShelfCommand,
 	RemoveBookFromShelfResult,
 	ReportContentCommand,
 	RoleDto,
 	ShelfDto,
+	SignInWithPasskeyQuery,
 	SubscribeCommentsThreadCommand,
 	TagDto,
 	UnblockUserCommand,
@@ -104,6 +107,14 @@ export const DeleteApiInviteCodes = async (codeId: number, headers?: HeadersInit
 
 
 export const DeleteApiNotifications = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>(`/api/notifications/${id}`,
+	del,
+	undefined,
+	headers,
+	options,
+);
+
+
+export const DeleteApiPasskeysDelete = async (id: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, undefined>(`/api/passkeys/delete?id=${id}`,
 	del,
 	undefined,
 	headers,
@@ -330,6 +341,30 @@ export const GetApiNotificationsCount = async (headers?: HeadersInit, options?: 
 );
 
 
+export const GetApiPasskeysList = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<ListPasskeysUserPasskey[], undefined>("/api/passkeys/list",
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
+export const GetApiPasskeysOptions = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/api/passkeys/options",
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
+export const GetApiPasskeysRequestOptions = async (username: string | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>(`/api/passkeys/request-options?username=${username}`,
+	get,
+	undefined,
+	headers,
+	options,
+);
+
+
 export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<QuoteDto, undefined>("/api/quotes/random",
 	get,
 	undefined,
@@ -379,14 +414,6 @@ export const GetApiShelves = async (userName: string, page: number, headers?: He
 
 
 export const GetApiSignin = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<GetSignInDataResult, undefined>(`/api/signin?name=${name}`,
-	get,
-	undefined,
-	headers,
-	options,
-);
-
-
-export const GetApiSigninPasskeyOptions = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<string, undefined>("/api/signin/passkey-options",
 	get,
 	undefined,
 	headers,
@@ -594,6 +621,22 @@ export const PostApiInviteCodesNoLimit = async (headers?: HeadersInit, options?:
 );
 
 
+export const PostApiPasskeysRegister = async (body: RegisterPasskeyQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<RegisterPasskeyResponse|string[], RegisterPasskeyQuery>("/api/passkeys/register",
+	post,
+	body,
+	headers,
+	options,
+);
+
+
+export const PostApiPasskeysSignin = async (body: SignInWithPasskeyQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<void, SignInWithPasskeyQuery>("/api/passkeys/signin",
+	post,
+	body,
+	headers,
+	options,
+);
+
+
 export const PostApiQuotes = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<FullQuoteDto, CreateQuoteCommand>("/api/quotes",
 	post,
 	body,
@@ -643,14 +686,6 @@ export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?:
 
 
 export const PostApiShelves = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<ShelfDto, CreateShelfCommand>("/api/shelves",
-	post,
-	body,
-	headers,
-	options,
-);
-
-
-export const PostApiSigninPasskeyRegister = async (body: RegisterPasskeyQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<string[], RegisterPasskeyQuery>("/api/signin/passkey-register",
 	post,
 	body,
 	headers,

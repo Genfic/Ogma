@@ -7,13 +7,13 @@ using Ogma3.Data;
 using Ogma3.Data.Users;
 using SimpleBase;
 
-namespace Ogma3.Api.V1.SignIn;
+namespace Ogma3.Api.V1.Passkeys;
 
 using ReturnType = Results<ContentHttpResult, InternalServerError, NotFound>;
 
 [Handler]
-[MapGet("api/signin/passkey-options")]
-public static partial class GetPasskeyOptions
+[MapGet("api/passkeys/options")]
+public static partial class GetPasskeyCreationOptions
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
 		.Produces<string>(contentType: "application/json", statusCode: 200)
