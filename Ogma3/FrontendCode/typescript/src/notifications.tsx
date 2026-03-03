@@ -2,25 +2,25 @@ import { DeleteApiNotifications as deleteNotification, GetApiNotifications as ge
 import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
-import { createResource, createSignal, For, Match, Switch } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
 import { LucideTrash2 } from "./icons/LucideTrash2";
 
 const parent = $id("notifications");
 
 const Notifications = () => {
-	const [notifications, { refetch }] = createResource(async () => {
+	const [notifications, { refetch }] = $resource(async () => {
 		const res = await getNotifications();
 		if (!res.ok) {
 			throw new Error(res.error);
 		}
 		return res.data;
 	});
-	const [csrf] = createSignal(parent.dataset.csrf ?? "");
+	const csrf = parent.dataset.csrf ?? "";
 
 	const deleteNotif = async (id: number) => {
 		const res = await deleteNotification(id, {
-			RequestVerificationToken: csrf(),
+			RequestVerificationToken: csrf,
 		});
 		if (!res.ok) return;
 		refetch();

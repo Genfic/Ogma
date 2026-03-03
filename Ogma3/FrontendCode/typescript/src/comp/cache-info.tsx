@@ -1,13 +1,13 @@
 import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
-import { createResource, Match, Switch } from "solid-js";
+import { Match, Switch } from "solid-js";
 import css from "./cache-info.css";
 
 const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 	let primed = $signal(false);
 
-	const [cacheCount, { refetch }] = createResource(async () => {
+	const [cacheCount, { refetch }] = $resource(async () => {
 		const res = await GetAdminApiCache();
 
 		if (!res.ok) {

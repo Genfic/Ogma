@@ -2,7 +2,7 @@ import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "@g/paths
 import type { RoleDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { createTypeGuard, makeEmpty } from "@h/type-helpers";
-import { createResource, For, Match, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import { LucidePencil } from "../icons/LucidePencil";
@@ -17,7 +17,7 @@ const formGuard = createTypeGuard<RoleDto>("id", "name", "color", "isStaff", "or
 const Roles = () => {
 	const [form, setForm] = createStore<Partial<RoleDto>>({});
 
-	const [roles, { refetch: refetchRoles }] = createResource(async () => {
+	const [roles, { refetch: refetchRoles }] = $resource(async () => {
 		const res = await GetApiRoles();
 		if (!res.ok) throw res.error;
 		return res.data;

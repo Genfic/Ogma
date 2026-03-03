@@ -2,14 +2,14 @@ import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as 
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
-import { createResource } from "solid-js";
+
 import { IcRoundStar } from "../icons/IcRoundStar";
 import { IcRoundStarBorder } from "../icons/IcRoundStarBorder";
 import sharedCss from "./shared.css";
 import css from "./vote-button.css";
 
 const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => {
-	const [votes, { mutate }] = createResource(
+	const [votes, { mutate }] = $resource(
 		() => props.storyId,
 		async (id) => {
 			const result = await getVotes(id);

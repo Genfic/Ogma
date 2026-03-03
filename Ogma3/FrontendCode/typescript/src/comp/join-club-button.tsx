@@ -2,15 +2,14 @@ import { DeleteApiClubjoin as leaveClub, PostApiClubjoin as joinClub } from "@g/
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
-import { createSignal } from "solid-js";
 
 const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: boolean }> = (props) => {
 	noShadowDOM();
 
-	const [isMember, setIsMember] = createSignal(props.isMember);
+	let isMember = $signal(props.isMember);
 
 	const join = async () => {
-		const send = isMember() ? leaveClub : joinClub;
+		const send = isMember ? leaveClub : joinClub;
 
 		const res = await send(
 			{
@@ -22,8 +21,7 @@ const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: bo
 		);
 
 		if (res.ok) {
-			const data = res.data;
-			setIsMember(data === true);
+			isMember = res.data === true;
 		} else {
 			log.warn(res.error);
 		}
@@ -32,11 +30,11 @@ const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: bo
 	return (
 		<button
 			type="button"
-			class={`button max ${isMember() ? "leave" : "join"}`}
-			title={isMember() ? "Leave" : "Join"}
+			class={`button max ${isMember ? "leave" : "join"}`}
+			title={isMember ? "Leave" : "Join"}
 			onClick={join}
 		>
-			{isMember() ? "Leave club" : "Join club"}
+			{isMember ? "Leave club" : "Join club"}
 		</button>
 	);
 };

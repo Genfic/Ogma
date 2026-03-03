@@ -3,7 +3,7 @@ import type { FullQuoteDto, QuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { createTypeGuard, makeEmpty } from "@h/type-helpers";
 import { omit } from "es-toolkit";
-import { createResource, For, Match, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import { Dialog, type DialogApi } from "../comp/common/_dialog";
@@ -39,7 +39,7 @@ const Quotes = () => {
 	const [form, setForm] = createStore<Partial<FullQuoteDto>>({});
 	let dialogRef = $signal<DialogApi>();
 
-	const [quotes, { mutate }] = createResource(async () => {
+	const [quotes, { mutate }] = $resource(async () => {
 		const res = await GetAllQuotes(headers);
 		if (!res.ok) {
 			throw res.error;

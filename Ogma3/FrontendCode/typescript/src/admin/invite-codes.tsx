@@ -4,7 +4,7 @@ import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { log } from "@h/logger";
 import { long } from "@h/tinytime-templates";
-import { createResource, For, Match, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { render } from "solid-js/web";
 import { LucideClipboardCopy } from "../icons/LucideClipboardCopy";
 import { LucideTrash2 } from "../icons/LucideTrash2";
@@ -20,7 +20,7 @@ const InviteCodes = () => {
 	let newCode = $signal<number | null>(null);
 	let page = $signal(1);
 
-	const [codes, { mutate }] = createResource(
+	const [codes, { mutate }] = $resource(
 		() => page,
 		async (p) => {
 			const res = await GetApiInviteCodesPaginated(p, perPage);

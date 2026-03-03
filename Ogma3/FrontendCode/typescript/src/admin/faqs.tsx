@@ -1,7 +1,7 @@
 import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
-import { createResource, For } from "solid-js";
+import { For } from "solid-js";
 import { render } from "solid-js/web";
 import { LucidePencil } from "../icons/LucidePencil";
 import { LucideTrash2 } from "../icons/LucideTrash2";
@@ -17,7 +17,7 @@ const parent = $id("faqs");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 
 const FAQ = () => {
-	const [faqs, { refetch }] = createResource(
+	const [faqs, { refetch }] = $resource(
 		async () => {
 			const res = await GetApiFaqs();
 			if (!res.ok) {
@@ -32,7 +32,6 @@ const FAQ = () => {
 
 	const handleInput = (e: InputEvent) => {
 		const target = e.target as HTMLInputElement;
-		console.log(`Setting ${target.name} to ${target.value}`);
 		formData = {
 			...formData,
 			[target.name]: target.value,

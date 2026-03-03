@@ -1,9 +1,9 @@
 import { DeleteApiRatings, GetApiRatings, PostApiRatings, PutApiRatings } from "@g/paths-public";
-import type { RatingApiDto2 as RatingApiDto } from "@g/types-public";
+import type { RatingApiDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { createNormalizedForm } from "@h/normalized-form";
 import { omit } from "es-toolkit";
-import { createResource, For } from "solid-js";
+import { For } from "solid-js";
 import { render } from "solid-js/web";
 import type { Optional, Required } from "utility-types";
 import { LucideEyeOff } from "../icons/LucideEyeOff";
@@ -25,7 +25,7 @@ const EmptyRating = {
 } satisfies Rating;
 
 const Ratings = () => {
-	const [ratings, { refetch }] = createResource(
+	const [ratings, { refetch }] = $resource(
 		async () => {
 			const res = await GetApiRatings();
 			if (!res.ok) {

@@ -1,17 +1,17 @@
 import { DeleteApiUsersBlock as unblockUser, PostApiUsersBlock as blockUser } from "@g/paths-public";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
-import { type Component, createSignal } from "solid-js";
+import type { Component } from "solid-js";
 import { IcRoundBlock } from "../icons/IcRoundBlock";
 import css from "./block-user.css";
 
 const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean }> = (props) => {
 	// noShadowDOM();
 
-	const [isBlocked, setIsBlocked] = createSignal(props.isBlocked);
+	let isBlocked = $signal(props.isBlocked);
 
 	const block = async () => {
-		const send = isBlocked() ? unblockUser : blockUser;
+		const send = isBlocked ? unblockUser : blockUser;
 
 		const res = await send(
 			{
@@ -23,7 +23,7 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 		);
 
 		if (res.ok) {
-			setIsBlocked(res.data);
+			isBlocked = res.data;
 		} else {
 			log.warn(res.error);
 		}
@@ -32,7 +32,7 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 	return (
 		<button class="block-btn" type="button" onClick={block}>
 			<IcRoundBlock />
-			{isBlocked() ? "Unblock" : "Block"}
+			{isBlocked ? "Unblock" : "Block"}
 		</button>
 	);
 };

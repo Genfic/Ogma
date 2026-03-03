@@ -3,7 +3,7 @@ import { DeleteApiTags, GetApiTagsAll, GetTagNamespaces, PostApiTags, PutApiTags
 import type { TagDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { makeEmpty } from "@h/type-helpers";
-import { createResource, For, Match, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import { LucidePencil } from "../icons/LucidePencil";
@@ -13,13 +13,13 @@ const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 
 const Tags = () => {
-	const [namespaces] = createResource(async () => {
+	const [namespaces] = $resource(async () => {
 		const res = await GetTagNamespaces();
 		if (!res.ok) throw res.error;
 		return res.data;
 	});
 
-	const [tags, { refetch }] = createResource(async () => {
+	const [tags, { refetch }] = $resource(async () => {
 		const res = await GetApiTagsAll();
 		if (!res.ok) throw res.error;
 		return res.data;

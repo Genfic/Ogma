@@ -1,7 +1,6 @@
 import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
 import type { ComponentType } from "solid-element";
-import { createSignal } from "solid-js";
 import { LucideEye } from "../icons/LucideEye";
 import { LucideEyeClosed } from "../icons/LucideEyeClosed";
 import css from "./password-input.css";
@@ -11,16 +10,16 @@ const PasswordInput: ComponentType<Empty> = (_, { element }) => {
 	if (!(element instanceof Element)) throw Error("Not an element?");
 	const input = element.previousElementSibling as HTMLInputElement;
 
-	const [showPassword, setShowPassword] = createSignal(false);
+	let showPassword = $signal(false);
 
 	const toggle = () => {
-		setShowPassword(!showPassword());
-		input.type = showPassword() ? "text" : "password";
+		showPassword = !showPassword;
+		input.type = showPassword ? "text" : "password";
 	};
 
 	return (
 		<button type="button" class="action-btn show-password" onClick={toggle}>
-			{showPassword() ? <LucideEye /> : <LucideEyeClosed />}
+			{showPassword ? <LucideEye /> : <LucideEyeClosed />}
 		</button>
 	);
 };

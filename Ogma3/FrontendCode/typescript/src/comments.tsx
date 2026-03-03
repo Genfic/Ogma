@@ -2,7 +2,7 @@ import { GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from
 import type { CommentSource } from "@g/types-public";
 import { component } from "@h/web-components";
 import { noShadowDOM } from "solid-element";
-import { createResource, createSignal, Show } from "solid-js";
+import { Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";
 import css from "./comments.css";
 import { LucideCircleHelp } from "./icons/LucideCircleHelp";
@@ -25,8 +25,8 @@ const Comments = (props: Props) => {
 
 	let listRef: CommentListFunctions | undefined;
 
-	const [body, setBody] = createSignal("");
-	const [threadData] = createResource(
+	let body = $signal("");
+	const [threadData] = $resource(
 		async () => {
 			const res = await GetApiCommentsThread(props.threadId);
 			if (!res.ok) {
@@ -47,10 +47,10 @@ const Comments = (props: Props) => {
 		},
 	);
 
-	const [isLocked, setIsLocked] = createSignal(!!props.lockDate);
+	let isLocked = $signal(!!props.lockDate);
 
-	const maxLength = () => threadData().maxCommentLength;
-	const isStaff = () => threadData().isStaff;
+	const maxLength = $memo(threadData().maxCommentLength);
+	const isStaff = $memo(threadData().isStaff);
 
 	const handleEnterKey = async (e: KeyboardEvent) => {
 		if (e.key === "Enter" && e.ctrlKey) {
@@ -64,13 +64,13 @@ const Comments = (props: Props) => {
 	};
 
 	const send = async () => {
-		if (body().trim().length >= maxLength()) {
+		if (body.trim().length >= maxLength) {
 			return;
 		}
 
 		const res = await PostApiComments(
 			{
-				body: body(),
+				body: body,
 				thread: Number(props.threadId),
 				source: threadData()?.source ?? ("" as CommentSource),
 			},
@@ -81,19 +81,19 @@ const Comments = (props: Props) => {
 			return;
 		}
 
-		setBody("");
+		body = "";
 		listRef?.submitted(res.data);
 	};
 
 	const lock = async () => {
-		if (!isStaff()) {
+		if (!isStaff) {
 			return false;
 		}
 		const res = await PostApiCommentsThreadLock({ threadId: props.threadId });
 		if (!res.ok) {
 			console.error(res.error);
 		}
-		setIsLocked(res.ok && res.data);
+		isLocked = res.ok && res.data;
 	};
 
 	return (
@@ -106,15 +106,15 @@ const Comments = (props: Props) => {
 			</Show>
 
 			<Show when={props.isLoggedIn}>
-				<Show when={isLocked()}>
+				<Show when={isLocked}>
 					<div class="info">Thread is locked.</div>
 				</Show>
-				<Show when={!isLocked() && threadData()}>
+				<Show when={!isLocked && threadData()}>
 					<form>
 						<textarea
 							class="comment-box active-border"
-							onInput={(e) => setBody(e.target.value)}
-							value={body()}
+							onInput={(e) => (body = e.target.value)}
+							value={body}
 							onKeyUp={handleEnterKey}
 							name="body"
 							id="body"
@@ -122,13 +122,13 @@ const Comments = (props: Props) => {
 							aria-label="Comment"
 						/>
 
-						<div class="counter" classList={{ invalid: body().length >= maxLength() }}>
+						<div class="counter" classList={{ invalid: body.length >= maxLength }}>
 							<div
 								class="o-progress-bar"
-								style={{ width: `${Math.min(100, 100 * (body().length / maxLength()))}%` }}
+								style={{ width: `${Math.min(100, 100 * (body.length / maxLength))}%` }}
 							/>
 							<span>
-								{body().length} / {maxLength()}
+								{body.length} / {maxLength}
 							</span>
 						</div>
 
@@ -147,11 +147,11 @@ const Comments = (props: Props) => {
 				<Show when={threadData.error}>Error: {threadData.error}</Show>
 
 				<div class="buttons">
-					<Show when={isStaff()}>
-						<button type="button" class="action-btn" classList={{ active: isLocked() }} onClick={lock}>
-							{isLocked() ? <MdiLockOutline /> : <MdiLockOpenVariantOutline />}
+					<Show when={isStaff}>
+						<button type="button" class="action-btn" classList={{ active: isLocked }} onClick={lock}>
+							{isLocked ? <MdiLockOutline /> : <MdiLockOpenVariantOutline />}
 							&nbsp;
-							{isLocked() ? "Unlock" : "Lock"}
+							{isLocked ? "Unlock" : "Lock"}
 						</button>
 					</Show>
 				</div>

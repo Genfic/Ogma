@@ -3,7 +3,7 @@ import { PostApiReports as postReport } from "@g/paths-public";
 import type { EReportableContentTypes } from "@g/types-public";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
-import { createSignal, onMount } from "solid-js";
+import { onMount } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 export type ReportModalElement = HTMLElement & {
@@ -23,11 +23,11 @@ const ReportModal: ComponentType<{
 		max: Report.MaxReasonLength,
 	};
 
-	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
-	const [reason, setReason] = createSignal("");
-	const [success, setSuccess] = createSignal<boolean | null>(null);
-	const [itemId, setItemId] = createSignal(props.itemId);
-	const [itemType, setItemType] = createSignal(props.itemType);
+	let dialogRef = $signal<DialogApi>();
+	let reason = $signal("");
+	let success = $signal<boolean | null>(null);
+	let itemId = $signal(props.itemId);
+	let itemType = $signal(props.itemType);
 
 	onMount(() => {
 		if (props.openSelector) {
@@ -43,20 +43,20 @@ const ReportModal: ComponentType<{
 	});
 
 	const show = () => {
-		dialogRef()?.open();
+		dialogRef?.open();
 	};
 
 	const createNew = (id: number, type: EReportableContentTypes) => {
-		setItemId(id);
-		setItemType(type);
-		dialogRef()?.open();
+		itemId = id;
+		itemType = type;
+		dialogRef?.open();
 	};
 
-	const validate = () => reason() && reason().length >= rules.min && reason().length <= rules.max;
-	const chars = () => reason().length;
+	const validate = () => reason && reason.length >= rules.min && reason.length <= rules.max;
+	const chars = () => reason.length;
 
 	const message = () => {
-		switch (success()) {
+		switch (success) {
 			case true:
 				return { msg: "Report delivered!", cls: "green" };
 			case false:
@@ -72,24 +72,23 @@ const ReportModal: ComponentType<{
 
 		const res = await postReport(
 			{
-				itemId: String(itemId()),
-				reason: reason(),
-				itemType: itemType(),
+				itemId: String(itemId),
+				reason: reason,
+				itemType: itemType,
 			},
 			{
 				RequestVerificationToken: props.csrf,
 			},
 		);
-		setSuccess(res.ok);
+		success = res.ok;
 	};
 
 	const updateText = (e: InputEvent) => {
-		const value = (e.currentTarget as HTMLTextAreaElement).value;
-		setReason(value);
+		reason = (e.currentTarget as HTMLTextAreaElement).value;
 	};
 
 	return (
-		<Dialog ref={setDialogRef} header={<span>Report</span>}>
+		<Dialog ref={$set(dialogRef)} header={<span>Report</span>}>
 			<form class="form" onSubmit={submit}>
 				<div class="o-form-group">
 					<label for="reason">Reason</label>

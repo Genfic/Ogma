@@ -2,25 +2,25 @@ import { GetApiClubsUser as getUserClubs, GetApiFolders as getFolders, PostApiFo
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
-import { createResource, createSignal, For, Match, Switch } from "solid-js";
+import { createResource, For, Match, Switch } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (props) => {
 	noShadowDOM();
 
-	const [isOpen, setIsOpen] = createSignal(false);
-	const [selectedClub, setSelectedClub] = createSignal<GetJoinedClubsResponse | null>(null);
-	const [status, setStatus] = createSignal({ message: "", success: false });
-	const [selectedFolder, setSelectedFolder] = createSignal<GetFolderResult | null>(null);
-	const [dialogRef, setDialogRef] = createSignal<DialogApi>();
+	let isOpen = $signal(false);
+	let selectedClub = $signal<GetJoinedClubsResponse | null>(null);
+	let status = $signal({ message: "", success: false });
+	let selectedFolder = $signal<GetFolderResult | null>(null);
+	let dialogRef = $signal<DialogApi>();
 
-	const [clubs] = createResource(isOpen, async (condition) => {
+	const [clubs] = createResource($get(isOpen), async (condition) => {
 		if (!condition) return null;
 		const res = await getUserClubs();
 		return res.ok ? res.data : null;
 	});
 
-	const [folders] = createResource(selectedClub, async (club) => {
+	const [folders] = createResource($get(selectedClub), async (club) => {
 		if (!club) {
 			throw new Error("Club not selected");
 		}
@@ -32,29 +32,29 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	});
 
 	const reset = () => {
-		setSelectedClub(null);
-		setSelectedFolder(null);
-		setStatus({ message: "", success: false });
+		selectedClub = null;
+		selectedFolder = null;
+		status = { message: "", success: false };
 	};
 
 	const open = () => {
-		setIsOpen(true);
-		dialogRef()?.open();
+		isOpen = true;
+		dialogRef?.open();
 	};
 
 	const setClub = (club: GetJoinedClubsResponse | null) => {
-		setSelectedClub(club);
-		setSelectedFolder(null);
+		selectedClub = club;
+		selectedFolder = null;
 	};
 
 	const add = async () => {
-		const folder = selectedFolder();
+		const folder = selectedFolder;
 
 		if (!folder) {
-			setStatus({
+			status = {
 				message: "You must select a folder!",
 				success: false,
-			});
+			};
 			return;
 		}
 
@@ -69,30 +69,30 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 		);
 
 		if (!response.ok) {
-			setStatus({
+			status = {
 				message: response.error,
 				success: false,
-			});
+			};
 			return;
 		}
 
 		if (typeof response.data === "string") {
-			setStatus({
+			status = {
 				message: response.data,
 				success: false,
-			});
+			};
 			return;
 		}
 
-		setStatus({
+		status = {
 			message: "Successfully added",
 			success: true,
-		});
+		};
 	};
 
 	const selectedClubView = () => (
 		<>
-			<div class={`msg ${status().success ? "success" : "error"}`}>{status().message}</div>
+			<div class={`msg ${status.success ? "success" : "error"}`}>{status.message}</div>
 
 			<div class="folders">
 				<Switch>
@@ -109,10 +109,10 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 									type="button"
 									classList={{
 										locked: !folder.canAdd,
-										active: selectedFolder()?.id === folder.id,
+										active: selectedFolder?.id === folder.id,
 									}}
 									class="folder"
-									onClick={[setSelectedFolder, folder]}
+									onClick={() => (selectedFolder = folder)}
 								>
 									{folder.name}
 								</button>
@@ -147,7 +147,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	);
 
 	const selectedView = () => {
-		const club = selectedClub();
+		const club = selectedClub;
 
 		if (!club) {
 			return {
@@ -173,7 +173,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 				Add to folder
 			</button>
 
-			<Dialog ref={setDialogRef} onClose={reset} header={selectedView().head} classes={["club-folder-selector"]}>
+			<Dialog ref={$set(dialogRef)} onClose={reset} header={selectedView().head} classes={["club-folder-selector"]}>
 				<div class="content">{selectedView().view()}</div>
 			</Dialog>
 		</>

@@ -3,7 +3,7 @@ import type { InviteCodeDto } from "@g/types-public";
 import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
-import { createResource, For, Match, Switch } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
 import { LucideClipboardCopy } from "../icons/LucideClipboardCopy";
 
@@ -14,7 +14,7 @@ const csrf = parent.dataset.csrf ?? "";
 const max = Number.parseInt(parent.dataset.max ?? "0", 10);
 
 const InviteCodes = () => {
-	const [codes, { mutate }] = createResource<InviteCodeDto[]>(
+	const [codes, { mutate }] = $resource<InviteCodeDto[]>(
 		async () => {
 			const res = await GetApiInviteCodes();
 			if (!res.ok) {
@@ -32,7 +32,7 @@ const InviteCodes = () => {
 			const d = res.data;
 			mutate((prev) => [...prev, d]);
 		} else {
-			console.log(res.ok ? res.data : res.error);
+			console.error(res.ok ? res.data : res.error);
 		}
 	};
 

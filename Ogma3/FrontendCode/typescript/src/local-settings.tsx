@@ -1,15 +1,14 @@
 import { getCookieValue, setCookie } from "@h/cookies";
 import { $id, $query } from "@h/dom";
 import { useLocalStorage } from "@h/localStorageHook";
-import { createEffect } from "solid-js";
 import { render } from "solid-js/web";
 
 const LocalSettings = () => {
 	const [getCollapseDeleted, setCollapseDeleted] = useLocalStorage<boolean>("collapse-deleted", false);
 	let theme = $signal(((x) => ((x?.length ?? 0) > 0 ? x : "light"))(getCookieValue("theme")));
 
-	createEffect(() => {
-		console.log(getCollapseDeleted());
+	$effect(() => {
+		getCollapseDeleted();
 	});
 
 	const swapTheme = () => {
@@ -50,3 +49,4 @@ const LocalSettings = () => {
 };
 
 render(() => <LocalSettings />, $id("local-settings"));
+
