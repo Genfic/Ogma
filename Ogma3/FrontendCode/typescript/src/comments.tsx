@@ -2,7 +2,7 @@ import { GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from
 import type { CommentSource } from "@g/types-public";
 import { component } from "@h/web-components";
 import { noShadowDOM } from "solid-element";
-import { Show } from "solid-js";
+import { createResource, Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";
 import css from "./comments.css";
 import { LucideCircleHelp } from "./icons/LucideCircleHelp";
@@ -26,7 +26,7 @@ const Comments = (props: Props) => {
 	let listRef: CommentListFunctions | undefined;
 
 	let body = $signal("");
-	const [threadData] = $resource(
+	const [threadData] = createResource(
 		async () => {
 			const res = await GetApiCommentsThread(props.threadId);
 			if (!res.ok) {

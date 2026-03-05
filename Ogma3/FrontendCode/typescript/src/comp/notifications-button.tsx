@@ -2,12 +2,12 @@ import { GetApiNotificationsCount as countNotifications } from "@g/paths-public"
 import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
 import type { ComponentType } from "solid-element";
-import { Show } from "solid-js";
+import { createResource, Show } from "solid-js";
 import { LucideBell } from "../icons/LucideBell";
 import css from "./notifications-button.css";
 
 const NotificationsButton: ComponentType<Empty> = (_) => {
-	const [notifications] = $resource(
+	const [notifications] = createResource(
 		async () => {
 			const res = await countNotifications();
 			return res.ok ? res.data : -1;

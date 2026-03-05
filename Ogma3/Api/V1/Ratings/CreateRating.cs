@@ -24,6 +24,7 @@ public static partial class CreateRating
 		[MaxLength(CTConfig.Rating.MaxDescriptionLength)]
 		public required string Description { get; init; }
 		public required bool BlacklistedByDefault { get; init; }
+		[LessThanOrEqual(byte.MaxValue)]
 		public required byte Order { get; init; }
 
 		[MinLength(3)]

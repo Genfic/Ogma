@@ -1,23 +1,27 @@
 import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
-import { For } from "solid-js";
+import { getFormData } from "@h/form-helpers";
+import { createResource, For, Show } from "solid-js";
+import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
+import * as v from "valibot";
 import { LucidePencil } from "../icons/LucidePencil";
 import { LucideTrash2 } from "../icons/LucideTrash2";
 
-interface Faq {
-	question: string;
-	answer: string;
-	id?: number | undefined;
-}
+const FaqSchema = v.object({
+	question: v.string(),
+	answer: v.string(),
+	id: v.optional(v.pipe(v.string(), v.transform(Number), v.integer())),
+});
+type Faq = v.InferOutput<typeof FaqSchema>;
 
 const parent = $id("faqs");
 
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 
 const FAQ = () => {
-	const [faqs, { refetch }] = $resource(
+	const [faqs, { refetch }] = createResource(
 		async () => {
 			const res = await GetApiFaqs();
 			if (!res.ok) {
@@ -28,15 +32,7 @@ const FAQ = () => {
 		{ initialValue: [] },
 	);
 
-	let formData = $signal<Faq>({ question: "", answer: "" });
-
-	const handleInput = (e: InputEvent) => {
-		const target = e.target as HTMLInputElement;
-		formData = {
-			...formData,
-			[target.name]: target.value,
-		};
-	};
+	const [form, setForm] = createStore<Faq>({ question: "", answer: "" });
 
 	const deleteFaq = async (id: number) => {
 		const res = await DeleteApiFaqs(id, headers);
@@ -50,33 +46,33 @@ const FAQ = () => {
 	const createFaq = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		const data = formData;
-		if (!data) return;
+		const [error, data] = getFormData(e, FaqSchema);
+
+		if (error) {
+			console.error(error);
+			return;
+		}
 
 		if (data.id) {
-			const res = await PutApiFaqs({ id: data.id, question: data.question, answer: data.answer }, headers);
+			const res = await PutApiFaqs({ ...data, id: data.id }, headers);
 			if (res.ok) {
 				refetch();
 			} else {
 				throw new Error(res.error);
 			}
 		} else {
-			const res = await PostApiFaqs({ question: data.question, answer: data.answer }, headers);
+			const res = await PostApiFaqs(data, headers);
 			if (res.ok) {
 				refetch();
 			} else {
 				throw new Error(res.error);
 			}
 		}
-		clear();
+		setForm({ question: "", answer: "", id: undefined });
 	};
 
 	const openForEdit = (faq: FaqDto) => {
-		formData = faq;
-	};
-
-	const clear = () => {
-		formData = { question: "", answer: "", id: undefined };
+		setForm(faq);
 	};
 
 	return (
@@ -84,22 +80,21 @@ const FAQ = () => {
 			<form class="form" onSubmit={createFaq}>
 				<div class="o-form-group">
 					<label for="question">Question</label>
-					<input class="o-form-control" name="question" value={formData?.question} onInput={handleInput} />
+					<input class="o-form-control" name="question" prop:value={form.question} />
 				</div>
 				<div class="o-form-group">
 					<label for="answer">Answer</label>
-					<textarea class="o-form-control" name="answer" value={formData?.answer} onInput={handleInput} />
+					<textarea class="o-form-control" name="answer" prop:value={form.answer} />
 				</div>
 				<div class="o-form-group">
 					<input class="o-form-control btn" type="submit" value="Submit" />
 				</div>
-				{(() => {
-					if (formData?.id) {
-						return <input type="hidden" name="id" value={formData.id} />;
-					}
-					return null;
-				})()}
+				<Show when={form.id}>
+					<input type="hidden" name="id" prop:value={form.id} />
+				</Show>
 			</form>
+
+			<br />
 
 			<For each={faqs()}>
 				{(faq) => (

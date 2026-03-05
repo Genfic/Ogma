@@ -2,30 +2,48 @@ import { Tag as TagConfig } from "@g/ctconfig";
 import { DeleteApiTags, GetApiTagsAll, GetTagNamespaces, PostApiTags, PutApiTags } from "@g/paths-public";
 import type { TagDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { getFormData } from "@h/form-helpers";
 import { makeEmpty } from "@h/type-helpers";
-import { For, Match, Show, Switch } from "solid-js";
+import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
+import * as v from "valibot";
 import { LucidePencil } from "../icons/LucidePencil";
 import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 
+const FormTagSchema = v.object({
+	name: v.string(),
+	namespace: v.nullable(v.pipe(v.string(), v.transform(Number), v.integer())),
+	description: v.nullable(v.string()),
+	id: v.optional(v.pipe(v.string(), v.transform(Number), v.integer())),
+});
+
+type FormTag = v.InferOutput<typeof FormTagSchema>;
+
+const EmptyTag = {
+	id: undefined,
+	name: "",
+	namespace: null,
+	description: null,
+} satisfies FormTag;
+
 const Tags = () => {
-	const [namespaces] = $resource(async () => {
+	const [namespaces] = createResource(async () => {
 		const res = await GetTagNamespaces();
 		if (!res.ok) throw res.error;
 		return res.data;
 	});
 
-	const [tags, { refetch }] = $resource(async () => {
+	const [tags, { refetch }] = createResource(async () => {
 		const res = await GetApiTagsAll();
 		if (!res.ok) throw res.error;
 		return res.data;
 	});
 
-	const [form, setForm] = createStore<Partial<Omit<TagDto, "namespace"> & { namespace: number }>>({});
+	const [form, setForm] = createStore<FormTag>(EmptyTag);
 
 	const deleteTag = async (t: TagDto) => {
 		if (confirm("Delete permanently?")) {
@@ -44,12 +62,17 @@ const Tags = () => {
 		setForm(makeEmpty);
 	};
 
-	const createTag = async (e: Event) => {
+	const createTag = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		const { id, name, namespace, description } = form;
+		const [error, f] = getFormData(e, FormTagSchema);
 
-		if (!name) return;
+		if (error) {
+			console.error(error);
+			return;
+		}
+
+		const { id, name, namespace, description } = f;
 
 		const data = {
 			name,
@@ -77,10 +100,10 @@ const Tags = () => {
 					id="tag-name"
 					type="text"
 					class="o-form-control"
-					value={form.name ?? ""}
+					name="name"
+					prop:value={form.name}
 					minlength={TagConfig.MinNameLength}
 					maxlength={TagConfig.MaxNameLength}
-					oninput={({ target }) => setForm("name", target.value)}
 				/>
 
 				<label for="tag-desc">Description</label>
@@ -88,25 +111,22 @@ const Tags = () => {
 					id="tag-desc"
 					type="text"
 					class="o-form-control"
-					value={form.description ?? ""}
+					name="description"
+					prop:value={form.description}
 					maxlength={TagConfig.MaxDescLength}
-					oninput={({ target }) => setForm("description", target.value)}
 				/>
 
 				<label for="tag-namespace">Namespace</label>
-				<select
-					id="tag-namespace"
-					class="o-form-control"
-					value={form.namespace ?? ""}
-					oninput={({ target }) => setForm("namespace", Number.parseInt(target.value, 10))}
-				>
+				<select id="tag-namespace" class="o-form-control" name="namespace" prop:value={form.namespace}>
 					<option value="" selected>
 						None
 					</option>
 					<For each={namespaces()}>{({ value, name }) => <option value={value}>{name}</option>}</For>
 				</select>
 
-				<input type="hidden" value={form.id ?? ""} />
+				<Show when={form.id}>
+					<input type="hidden" name="id" value={form.id} />
+				</Show>
 
 				<div class="form-row">
 					<button type="submit" class="btn btn-primary">

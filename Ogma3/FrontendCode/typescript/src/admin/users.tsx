@@ -5,7 +5,7 @@ import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { compact } from "es-toolkit";
-import { For } from "solid-js";
+import { createResource, For } from "solid-js";
 import { Portal, render } from "solid-js/web";
 import { ManageInfraction, type ManageInfractionApi } from "./components/manage-infraction-component";
 
@@ -20,7 +20,7 @@ const date = (dt: Date) => iso8601.render(dt);
 const dateEu = (dt: Date) => EU.render(toCurrentTimezone(dt));
 
 const Users = () => {
-	const [userResource, { refetch }] = $resource(async () => {
+	const [userResource, { refetch }] = createResource(async () => {
 		if (name === null) {
 			return null;
 		}

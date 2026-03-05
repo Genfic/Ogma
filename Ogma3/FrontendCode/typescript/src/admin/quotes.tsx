@@ -1,11 +1,12 @@
 import { DeleteApiQuotes, GetAllQuotes, PostApiQuotes, PostApiQuotesJson, PutApiQuotes } from "@g/paths-public";
-import type { FullQuoteDto, QuoteDto } from "@g/types-public";
+import type { FullQuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
-import { createTypeGuard, makeEmpty } from "@h/type-helpers";
-import { omit } from "es-toolkit";
-import { For, Match, Show, Switch } from "solid-js";
+import { getFormData } from "@h/form-helpers";
+import { makeEmpty } from "@h/type-helpers";
+import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
+import * as v from "valibot";
 import { Dialog, type DialogApi } from "../comp/common/_dialog";
 import { LucidePencil } from "../icons/LucidePencil";
 import { LucidePlus } from "../icons/LucidePlus";
@@ -16,30 +17,21 @@ const parent = $id("quotes-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 const isAdmin = Boolean(parent.dataset.admin);
 
-const formGuard = createTypeGuard<FullQuoteDto>("id", "author", "body");
+const QuoteSchema = v.object({
+	body: v.string(),
+	author: v.string(),
+	id: v.optional(v.pipe(v.string(), v.transform(Number), v.integer())),
+});
 
-const isQuoteDto = (value: unknown): value is QuoteDto => {
-	if (value === null || typeof value !== "object") return false;
-
-	if (!("body" in value) || typeof value.body !== "string") return false;
-	if (!("author" in value) || typeof value.author !== "string") return false;
-
-	return true;
-};
-
-const isQuoteDtoArray = (value: unknown): value is QuoteDto[] => {
-	if (!Array.isArray(value)) return false;
-
-	return value.every(isQuoteDto);
-};
+type Quote = v.InferOutput<typeof QuoteSchema>;
 
 const Quotes = () => {
 	let json = $signal("");
 	let search = $signal("");
-	const [form, setForm] = createStore<Partial<FullQuoteDto>>({});
-	let dialogRef = $signal<DialogApi>();
+	const [form, setForm] = createStore<Quote>({ author: "", body: "" });
+	const dialogRef = $signal<DialogApi>();
 
-	const [quotes, { mutate }] = $resource(async () => {
+	const [quotes, { mutate }] = createResource(async () => {
 		const res = await GetAllQuotes(headers);
 		if (!res.ok) {
 			throw res.error;
@@ -54,10 +46,14 @@ const Quotes = () => {
 	};
 
 	const fromJson = async () => {
-		const obj = JSON.parse(json);
-		if (!isQuoteDtoArray(obj)) return;
+		const { success, issues, output } = v.safeParse(v.array(QuoteSchema), JSON.parse(json));
 
-		const res = await PostApiQuotesJson({ quotes: obj });
+		if (!success) {
+			console.error(issues);
+			return;
+		}
+
+		const res = await PostApiQuotesJson({ quotes: output });
 
 		if (!res.ok) {
 			throw res.error;
@@ -77,27 +73,33 @@ const Quotes = () => {
 	};
 
 	const openEditor = (q?: FullQuoteDto) => {
-		setForm(q ?? makeEmpty(q));
+		setForm(q ?? { author: "", body: "", id: undefined });
 		dialogRef?.open();
 	};
 
 	const saveQuote = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		if (!formGuard(form)) return;
-		const { id, author, body } = form;
+		const [error, data] = getFormData(e, QuoteSchema);
+
+		if (error) {
+			console.error(error);
+			return;
+		}
+
+		const { id, author, body } = data;
 
 		if (id) {
-			const res = await PutApiQuotes(form as FullQuoteDto, headers);
+			const res = await PutApiQuotes({ ...data, id }, headers);
 			if (!res.ok) throw res.error;
 			mutate((old) => old?.map((v) => (v.id === id ? { id, author, body } : v)));
 		} else {
-			const res = await PostApiQuotes(omit(form as FullQuoteDto, ["id"]), headers);
+			const res = await PostApiQuotes(data, headers);
 			if (!res.ok) throw res.error;
 			mutate((old) => (old ? [res.data, ...old] : [res.data]));
 		}
 
-		setForm({});
+		setForm({ body: "", author: "", id: undefined });
 	};
 
 	return (
@@ -168,35 +170,26 @@ const Quotes = () => {
 				</Match>
 			</Switch>
 
-			<Dialog ref={(t) => (dialogRef = t)} onClose={() => setForm(makeEmpty)}>
+			<Dialog ref={$set(dialogRef)} onClose={() => setForm(makeEmpty)}>
 				<form class="content form" onsubmit={saveQuote}>
 					<strong>{form?.id === null ? "Create" : "Edit"} quote</strong>
 
 					<div class="o-form-group">
 						<label for="author">Author</label>
-						<input
-							type="text"
-							name="author"
-							id="author"
-							value={form?.author ?? ""}
-							oninput={({ target }) => setForm("author", target.value)}
-						/>
+						<input type="text" name="author" id="author" prop:value={form.author} />
 					</div>
 
 					<div class="o-form-group">
 						<label for="body">Body</label>
-						<textarea
-							name="body"
-							id="body"
-							cols="40"
-							rows="5"
-							value={form?.body ?? ""}
-							oninput={({ target }) => setForm("body", target.value)}
-						/>
+						<textarea name="body" id="body" cols="40" rows="5" prop:value={form.body} />
 					</div>
 
+					<Show when={form.id}>
+						<input type="hidden" name="id" prop:value={form.id} />
+					</Show>
+
 					<div class="o-form-group">
-						<input class="btn" type="submit" value={form?.id === null ? "Create" : "Save"} />
+						<input class="btn" type="submit" value={form.id === null ? "Create" : "Save"} />
 					</div>
 				</form>
 			</Dialog>

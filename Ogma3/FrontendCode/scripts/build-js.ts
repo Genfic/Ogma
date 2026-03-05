@@ -1,6 +1,6 @@
 import { rm } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
-import { SolidPlugin } from "@atulin/bun-plugin-solid";
+import { SolidPlugin } from "@angius/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -61,7 +61,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 					plugins: [[solidLabels, { dev: false }]],
 				},
 			}),
-			cssMinifyPlugin,
+			await cssMinifyPlugin(),
 			manifestPlugin(),
 		],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,

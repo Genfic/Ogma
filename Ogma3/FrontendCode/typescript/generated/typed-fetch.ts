@@ -61,8 +61,10 @@ export type KnownHeaders =
     | "Referer"
     | "User-Agent";
 
+const ISO_8601 = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})?)?$/;
+
 export const DateSafeJsonParse = <T>(text: string): T => JSON.parse(text, (_, value) => {
-    if (typeof value === 'string') {
+    if (typeof value === 'string' && ISO_8601.test(value)) {
         const date = new Date(value);
         if (!Number.isNaN(date.getTime())) return date;
     }

@@ -10,7 +10,7 @@ import { iso8601 } from "@h/tinytime-templates";
 import { component } from "@h/web-components";
 import { clsx } from "clsx";
 import { noShadowDOM } from "solid-element";
-import { type Component, For, Show } from "solid-js";
+import { type Component, createResource, For, Show } from "solid-js";
 import css from "./setup-passkey.css";
 
 const makeRaw = (data: ArrayBuffer): string =>
@@ -24,7 +24,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 
 	const headers = { RequestVerificationToken: props.csrf };
 
-	const [passkeys, { mutate }] = $resource(async () => {
+	const [passkeys, { mutate }] = createResource(async () => {
 		const res = await listPasskeys();
 		if (!res.ok) {
 			throw res.error;
