@@ -1,6 +1,6 @@
 ﻿<script defer src="~/lib/wellidate/wellidate.min.js"></script>
 
-<script >
+<script asp-add-nonce>
 	document.addEventListener('DOMContentLoaded', () => {
 		[].forEach.call(document.getElementsByTagName("form"), form => {
 			new Wellidate(form);

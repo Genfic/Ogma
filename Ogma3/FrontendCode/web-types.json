@@ -172,6 +172,20 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "pow-token",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "pow-difficulty",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
             }
           ],
           "source": {

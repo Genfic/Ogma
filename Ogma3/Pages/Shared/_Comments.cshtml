@@ -1,20 +1,28 @@
 @inject IAntiforgery XCsrf
 @inject LinkGenerator LinkGenerator
+@inject PowService PowService
 @using Microsoft.AspNetCore.Antiforgery
 @using Ogma3.Services
+@using Ogma3.Services.PowService
 @using Routes.Areas.Identity.Pages
 @using Routes.Pages
 @model CommentsThreadDto
 
 @{
 	var csrf = XCsrf.GetAndStoreTokens(Context).RequestToken;
+	var pow = await PowService.IssueChallenge();
 }
 
-<o-comments csrf="@csrf" thread-id="@Model.Id" is-logged-in="@(User.Identity is { IsAuthenticated: true })"
+<o-comments csrf="@csrf"
+            thread-id="@Model.Id"
+            is-logged-in="@(User.Identity is { IsAuthenticated: true })"
             lock-date="@(Model.LockDate == default(DateTimeOffset) ? null : Model.LockDate)"
             md-ref-route="@Markdown.Get().Path(LinkGenerator)"
             login-route="@Account_Login.Get().Path(LinkGenerator)"
-            register-route="@Account_Register.Get().Path(LinkGenerator)"></o-comments>
+            register-route="@Account_Register.Get().Path(LinkGenerator)"
+            pow-difficulty="@pow.Difficulty"
+            pow-token="@pow.Token"
+></o-comments>
 
 <report-modal id="report-comment" csrf="@csrf" item-id="@Model.Id" item-type="Comment"></report-modal>
 

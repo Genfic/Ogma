@@ -6,8 +6,7 @@
 @model RegisterModel
 @{
 	ViewData["Title"] = "Register";
-	Request.Cookies.TryGetValue("theme", out var theme);
-	theme ??= "light";
+	var theme = Request.Cookies.TryGetValue("theme", out var t) ? t : "light";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -16,7 +15,12 @@
 
 <div class="login-form">
 	<section class="left wide">
-		<form class="form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+		<form class="form"
+		      asp-route-returnUrl="@Model.ReturnUrl"
+		      data-pow-token="@Model.PowChallenge.Token"
+		      data-pow-diff="@Model.PowChallenge.Difficulty"
+		      method="post"
+		>
 			<h4>Create a new account.</h4>
 
 			<div asp-validation-summary="All" class="text-danger"></div>
@@ -79,7 +83,11 @@
 
 			<input asp-for="Input.SubmissionToken" type="hidden">
 
-			<button type="submit" class="btn btn-primary register">Register</button>
+			<input asp-for="Input.PowToken" type="hidden">
+			<input asp-for="Input.PowHash" type="hidden">
+			<input asp-for="Input.PowNonce" type="hidden">
+
+			<button type="submit" class="btn btn-primary register" disabled>Register</button>
 		</form>
 	</section>
 	@if (Model.ExternalLogins.Count > 0)
@@ -104,15 +112,15 @@
 			</form>
 		</section>
 	}
-	</div>
+</div>
 
-	@section Scripts {
-		<partial name="_ValidationScriptsPartial" />
-		<script type="module" src="~/js/account/register.js" asp-append-version="true"></script>
-		<script type="module" src="~/js/comp/password-input.js" asp-append-version="true"></script>
-		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer asp-add-nonce></script>
-	}
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script type="module" src="~/js/account/register.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/password-input.js" asp-append-version="true"></script>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer asp-add-nonce></script>
+}
 
-	@section CSS {
-		<link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
+@section CSS {
+	<link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
 }

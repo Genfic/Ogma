@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +9,13 @@ using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
 using Ogma3.Services.ETagService;
+using Ogma3.Services.PowService;
 using Ogma3.Services.UserService;
 using Sqids;
 
 namespace Ogma3.Api.V1.Comments;
 
-using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
+using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, NotFound, Ok<string>>;
 
 [Handler]
 [MapPost("api/comments")]
@@ -21,6 +23,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
 public static partial class CreateComment
 {
 	[Validate]
+	[UsedImplicitly]
 	public sealed partial record Command : IValidationTarget<Command>
 	{
 		[MaxLength(CTConfig.Comment.MaxBodyLength)]
@@ -29,6 +32,8 @@ public static partial class CreateComment
 		public required long Thread { get; init; }
 		public required CommentSource Source { get; init; }
 
+		public required PowResult Pow { get; init; }
+
 	}
 
 	private static async ValueTask<ReturnType> HandleAsync(
@@ -36,11 +41,17 @@ public static partial class CreateComment
 		ApplicationDbContext context,
 		IUserService userService,
 		ETagService eTagService,
+		PowService powService,
 		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
 		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
+
+		if (!await powService.VerifyChallenge(request.Pow.Token, request.Pow.Nonce, request.Pow.Hash))
+		{
+			return TypedResults.BadRequest("Invalid challenge");
+		}
 
 		var isMuted = await CheckIfMuted(context, uid, cancellationToken);
 		if (isMuted)

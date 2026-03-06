@@ -17,6 +17,7 @@ using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.EmailBlocklistProvider;
+using Ogma3.Services.PowService;
 using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
 using Routes.Areas.Identity.Pages;
@@ -30,6 +31,7 @@ public sealed class RegisterModel(
 	SignInManager<OgmaUser> signInManager,
 	IEmailSender emailSender,
 	ITurnstileService turnstile,
+	PowService powService,
 	ISpeedTrapService speedTrap,
 	ApplicationDbContext context,
 	ILogger<RegisterModel> logger) : PageModel
@@ -41,6 +43,8 @@ public sealed class RegisterModel(
 	public string TurnstileResponse { get; set; } = null!;
 
 	public string? ReturnUrl { get; set; }
+
+	public required PowChallenge PowChallenge { get; set; } = null!;
 
 	public IList<AuthenticationScheme> ExternalLogins { get; set; } = null!;
 
@@ -63,6 +67,9 @@ public sealed class RegisterModel(
 		public string? Occupation { get; init; }
 
 		public string SubmissionToken { get; set; } = "";
+		public string PowHash { get; init; } = "";
+		public string PowToken { get; init; } = "";
+		public int PowNonce { get; init; }
 	}
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
@@ -94,18 +101,24 @@ public sealed class RegisterModel(
 		}
 	}
 
-	public async Task OnGetAsync(string? returnUrl = null)
+	private async Task Hydrate(string? returnUrl = null)
 	{
 		ReturnUrl = returnUrl;
 		Input.SubmissionToken = speedTrap.GenerateToken();
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+		PowChallenge = await powService.IssueChallenge();
+	}
+
+	public async Task OnGetAsync(string? returnUrl = null)
+	{
+		await Hydrate(returnUrl);
 	}
 
 	[EnableRateLimiting(policyName: RateLimiting.Registration)]
 	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
-		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+		await Hydrate(returnUrl);
 
 		if (!ModelState.IsValid) return Page();
 
@@ -114,6 +127,14 @@ public sealed class RegisterModel(
 		{
 			ModelState.AddModelError("Suspicious", "Suspicious activity detected. Try again later.");
 			logger.LogInformation("Honeypot field was filled out during registration: {Honeypot}.", Input.Occupation);
+			return Page();
+		}
+
+		// Check PoW
+		if (!await powService.VerifyChallenge(Input.PowToken, Input.PowNonce, Input.PowHash))
+		{
+			ModelState.AddModelError("PoW", "Incorrect PoW response");
+			logger.LogInformation("PoW verification failed during registration");
 			return Page();
 		}
 

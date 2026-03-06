@@ -51,6 +51,11 @@
 		color: var(--foreground-75);
 	}
 
+	&[disabled] {
+		cursor: not-allowed;
+		filter: grayscale(0.7);
+	}
+
 	@keyframes shimmer {
 		from { background-position: -800px 0; }
 		to { background-position: 800px 0; }
@@ -69,12 +74,12 @@
 		background-color: color-mix(in oklab, var(--accent), var(--background) 25%);
 		outline: .25rem solid var(--background);
 
-		&:hover {
+		&:not([disabled]):hover {
 			background-color: color-mix(in oklab, var(--accent), var(--background) 75%);
 		}
 	}
 
-	&:hover {
+	&:not([disabled]):hover {
 		color: var(--foreground);
 		background-color: var(--accent-25);
 		border-color: var(--accent-75);

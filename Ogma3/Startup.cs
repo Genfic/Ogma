@@ -48,6 +48,7 @@ using Ogma3.Services.Mailer;
 using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
+using Ogma3.Services.PowService;
 using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
@@ -159,7 +160,8 @@ public static class Startup
 			.Configure<FileLogOptions>(c => {
 				c.MaxSizeInBytes = 50 * 1024 * 1024;
 				c.Directory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
-			});
+			})
+			.AddTransient<PowService>();
 
 		// Claims
 		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();

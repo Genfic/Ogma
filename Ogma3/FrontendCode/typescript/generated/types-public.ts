@@ -42,6 +42,7 @@ export type CreateCommentCommand = {
     body: string;
     thread: number;
     source: CommentSource;
+    pow: PowResult;
 };
 
 export type CreateFaqCommand = {
@@ -230,6 +231,12 @@ export type MarkChapterAsUnreadCommand = {
 };
 
 export type None = undefined;
+
+export type PowResult = {
+    token: string;
+    nonce: number;
+    hash: string;
+};
 
 export type QuoteDto = {
     body: string;

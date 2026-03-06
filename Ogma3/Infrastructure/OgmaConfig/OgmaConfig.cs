@@ -34,6 +34,9 @@ public sealed class OgmaConfig
 
 	// Moderation
 	[AutoformCategory("Moderation")] public int MinReportLength { get; set; } = 30;
+	[AutoformCategory("Moderation")] public int PowDifficulty { get; set; } = 16;
+	[AutoformCategory("Moderation")] public int PowExpirySeconds { get; set; } = 10 * 60;
+	[AutoformCategory("Moderation")] public int PowMinimumSolveTimeSeconds { get; set; } = 2;
 }
 
 [Mapper]

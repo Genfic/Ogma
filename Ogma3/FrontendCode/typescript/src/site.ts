@@ -1,6 +1,6 @@
-﻿import type { Message } from "./workers/cache-service-worker";
+﻿import type { Message } from "./workers/cache-service.worker";
 
-const workers = [{ name: "cache", path: "/js/workers/cache-service-worker.js", scope: "/" }];
+const workers = [{ name: "cache", path: "/js/workers/cache-service.worker.js", scope: "/" }];
 
 const registerServiceWorkers = async () => {
 	for (const { name, path, scope } of workers) {
