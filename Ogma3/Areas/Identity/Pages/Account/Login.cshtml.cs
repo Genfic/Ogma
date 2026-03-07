@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
@@ -51,6 +53,7 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 	}
 
 
+	[EnableRateLimiting(policyName: RateLimiting.Login)]
 	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");

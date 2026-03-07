@@ -10,6 +10,7 @@ public static class RateLimiting
 	public const string Quotes = nameof(Quotes);
 	public const string Reports = nameof(Reports);
 	public const string Registration = nameof(Registration);
+	public const string Login = nameof(Login);
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
@@ -31,6 +32,13 @@ public static class RateLimiting
 					options.Window = TimeSpan.FromHours(2);
 					options.PermitLimit = 5;
 					options.SegmentsPerWindow = 5;
+					options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+					options.QueueLimit = 0;
+				})
+				.AddPartitionedSlidingWindowLimiter(policyName: Login, options => {
+					options.Window = TimeSpan.FromMinutes(30);
+					options.PermitLimit = 10;
+					options.SegmentsPerWindow = 10;
 					options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 					options.QueueLimit = 0;
 				});

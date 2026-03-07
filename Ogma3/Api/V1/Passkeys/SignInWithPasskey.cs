@@ -20,8 +20,11 @@ public static partial class SignInWithPasskey
 	{
 		var res = await signInManager.PasskeySignInAsync(request.Credentials);
 
-		return res.Succeeded
-			? TypedResults.Ok()
-			: TypedResults.Unauthorized();
+		if (res.IsLockedOut || res.IsNotAllowed || !res.Succeeded)
+		{
+			return TypedResults.Unauthorized();
+		}
+
+		return TypedResults.Ok();
 	}
 }

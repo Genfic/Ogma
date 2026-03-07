@@ -37,13 +37,6 @@ public sealed class ForgotPasswordModel(
 	{
 		if (!ModelState.IsValid) return Page();
 
-		var user = await userManager.FindByEmailAsync(Input.Email);
-		if (user == null || !await userManager.IsEmailConfirmedAsync(user))
-		{
-			// Don't reveal that the user does not exist or is not confirmed
-			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
-		}
-
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);
 		if (!turnstileResponse.Success)
@@ -51,6 +44,13 @@ public sealed class ForgotPasswordModel(
 			ModelState.TryAddModelError("Turnstile", "Incorrect Turnstile response");
 			logger.LogInformation("Forgot password attempt with Turnstile errors: {Errors}", turnstileResponse.ErrorCodes);
 			return Page();
+		}
+
+		var user = await userManager.FindByEmailAsync(Input.Email);
+		if (user == null || !await userManager.IsEmailConfirmedAsync(user))
+		{
+			// Don't reveal that the user does not exist or is not confirmed
+			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 
 		// For more information on how to enable account confirmation and password reset, please

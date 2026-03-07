@@ -15,12 +15,12 @@ public sealed class ConfirmEmailChangeModel(UserManager<OgmaUser> userManager, S
 
 	[TempData] public required string StatusMessage { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(string userId, string email, string code)
+	public async Task<IActionResult> OnGetAsync(string userName, string email, string code)
 	{
-		var user = await userManager.FindByIdAsync(userId);
+		var user = await userManager.FindByNameAsync(userName);
 		if (user == null)
 		{
-			return NotFound($"Unable to load user with ID '{userId}'.");
+			return NotFound($"Unable to load user with name '{userName}'.");
 		}
 
 		code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
@@ -31,8 +31,8 @@ public sealed class ConfirmEmailChangeModel(UserManager<OgmaUser> userManager, S
 			return Page();
 		}
 
-		// In our UI email and user name are one and the same, so when we update the email
-		// we need to update the user name.
+		// In our UI email and username are one and the same, so when we update the email,
+		// we need to update the username.
 		var setUserNameResult = await userManager.SetUserNameAsync(user, email);
 		if (!setUserNameResult.Succeeded)
 		{

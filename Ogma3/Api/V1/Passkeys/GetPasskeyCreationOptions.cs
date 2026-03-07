@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Ogma3.Data;
@@ -12,6 +13,7 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<ContentHttpResult, InternalServerError, NotFound>;
 
 [Handler]
+[Authorize]
 [MapGet("api/passkeys/options")]
 public static partial class GetPasskeyCreationOptions
 {
@@ -32,12 +34,12 @@ public static partial class GetPasskeyCreationOptions
 		CancellationToken ct
 	)
 	{
-		if (contextAccessor.HttpContext is not {} httpContext)
+		if (contextAccessor.HttpContext is not { } httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
+		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
 		{
 			return TypedResults.NotFound();
 		}

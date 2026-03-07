@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Ogma3.Data;
@@ -10,6 +11,7 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<Ok, NotFound, InternalServerError>;
 
 [Handler]
+[Authorize]
 [MapDelete("api/passkeys/delete")]
 public sealed partial class DeletePasskey(
 	OgmaUserManager userManager,
@@ -24,12 +26,12 @@ public sealed partial class DeletePasskey(
 		CancellationToken _
 	)
 	{
-		if (contextAccessor.HttpContext is not {} httpContext)
+		if (contextAccessor.HttpContext is not { } httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
+		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
 		{
 			return TypedResults.NotFound();
 		}

@@ -1,5 +1,6 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
 
@@ -8,6 +9,7 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<Ok<List<ListPasskeys.UserPasskey>>, NotFound, InternalServerError>;
 
 [Handler]
+[Authorize]
 [MapGet("api/passkeys/list")]
 public static partial class ListPasskeys
 {
@@ -20,12 +22,12 @@ public static partial class ListPasskeys
 		CancellationToken ct
 	)
 	{
-		if (contextAccessor.HttpContext is not {} httpContext)
+		if (contextAccessor.HttpContext is not { } httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
+		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
 		{
 			return TypedResults.NotFound();
 		}

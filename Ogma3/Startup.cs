@@ -378,11 +378,10 @@ public static class Startup
 		});
 
 		app.UseAuthentication();
+		app.UseSession();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
 		app.UseOutputCache();
-
-		app.UseSession();
 
 		// OpenAPI
 		app.MapOpenApi("openapi/{documentName}.json");

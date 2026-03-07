@@ -75,12 +75,17 @@ public sealed class EmailModel(UserManager<OgmaUser> userManager, IEmailSender e
 		var email = await userManager.GetEmailAsync(user);
 		if (Input.NewEmail != email)
 		{
-			var userId = await userManager.GetUserIdAsync(user);
+			var userName = await userManager.GetUserNameAsync(user);
 			var code = await userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
 			var callbackUrl = Url.Page(
 				"/Account/ConfirmEmailChange",
 				null,
-				new { userId, email = Input.NewEmail, code },
+				new
+				{
+					userId = userName,
+					email = Input.NewEmail,
+					code,
+				},
 				Request.Scheme);
 			await emailSender.SendEmailAsync(
 				Input.NewEmail,

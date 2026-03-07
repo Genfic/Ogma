@@ -1,6 +1,7 @@
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Ogma3.Data;
@@ -11,6 +12,7 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<BadRequest<string>, BadRequest<IEnumerable<string>>, InternalServerError, Ok<RegisterPasskey.Response>, NotFound>;
 
 [Handler]
+[Authorize]
 [MapPost("api/passkeys/register")]
 public static partial class RegisterPasskey
 {
@@ -25,12 +27,12 @@ public static partial class RegisterPasskey
 		CancellationToken _
 	)
 	{
-		if (contextAccessor.HttpContext is not {} httpContext)
+		if (contextAccessor.HttpContext is not { } httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
+		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
 		{
 			return TypedResults.NotFound();
 		}
