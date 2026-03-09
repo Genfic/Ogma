@@ -13,17 +13,21 @@ $blue: oklch(52.8% 0.225 261.757deg);
 $yellow: oklch(86.5% 0.177 90.382deg);
 
 :root {
+	--trans: transparent;
 	--foreground: #{$foreground};
 
 	@include a.alphas('foreground', .75, .50, .25, .10);
+	@include a.blends('foreground', 'background', 75, 50, 25, 10);
 
 	--background: #{$background};
 
 	@include a.alphas('background', .75, .50, .25);
+	@include a.blends('background', 'trans', 75, 50, 25, 10);
 
 	--accent: #{$accent};
 
 	@include a.alphas('accent', .75, .50, .25, .10, .05);
+	@include a.blends('accent', 'background', 75, 50, 25, 10, 5);
 
 	--red: #{$red};
 

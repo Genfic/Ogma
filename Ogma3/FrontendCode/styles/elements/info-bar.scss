@@ -17,7 +17,7 @@ $margin: .5rem;
 	min-height: $avatar-size + $margin;
 	margin-bottom: $margin;
 	border-bottom: 1px solid var(--foreground-25);
-	@media only screen and (max-width: v.$mq-mobile) {
+	@media (width <= v.$mq-mobile) {
 		grid-template-columns: auto auto;
 		grid-template-rows: auto auto auto 1fr;
 		height: auto;
@@ -32,7 +32,7 @@ $margin: .5rem;
 		display: flex;
 		justify-content: flex-end;
 		align-items: flex-end;
-		@media only screen and (max-width: v.$mq-mobile) {
+		@media (width <= v.$mq-mobile) {
 			grid-row: 4;
 			grid-column: 1 / 4;
 		}
@@ -62,7 +62,7 @@ $margin: .5rem;
 				border-top-right-radius: .25rem;
 			}
 
-			@media only screen and (max-width: v.$mq-mobile) {
+			@media (width <= v.$mq-mobile) {
 				flex: 1;
 			}
 

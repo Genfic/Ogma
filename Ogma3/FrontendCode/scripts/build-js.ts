@@ -1,5 +1,5 @@
 import { rm } from "node:fs/promises";
-import { dirname, join, relative } from "node:path";
+import { dirname, join } from "node:path";
 import { SolidPlugin } from "@angius/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
@@ -7,7 +7,6 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import solidLabels from "solid-labels/babel";
-
 import { log } from "../typescript/src-helpers/logger";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
@@ -61,7 +60,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 					plugins: [[solidLabels, { dev: false }]],
 				},
 			}),
-			await cssMinifyPlugin(),
+			cssMinifyPlugin(),
 			manifestPlugin(),
 		],
 		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
@@ -69,10 +68,6 @@ const compile = async (from: Glob, to: string, root: string) => {
 			"import.meta.env.DEV": values.release ? "false" : "true",
 		},
 	});
-
-	const chunks = outputs
-		.filter((o) => o.kind === "chunk")
-		.map((c) => relative(join(_root, "..", "..", "wwwroot"), c.path).replaceAll("\\", "/"));
 
 	if (success) {
 		logger.log(ct`{dim Files compiled in}`, timer);
@@ -89,11 +84,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 		}
 	}
 
-	const results = outputs.filter((c) => c.kind !== "sourcemap");
-
-	const size = results.reduce((a, b) => a + b.size, 0);
-
-	return { chunks, size };
+	return outputs.filter((c) => c.kind !== "sourcemap").reduce((a, b) => a + b.size, 0);
 };
 
 const sizeHistory = new SizeHistory("JS");
@@ -105,24 +96,13 @@ const compileAll = async () => {
 		await clean();
 	}
 
-	const { chunks: jsChunks, size } = await compile(
-		new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`),
-		join(_dest, "/"),
-		"src",
-	);
-
-	const chunks = jsChunks.map(
-		(p) => `<link rel="modulepreload" href="~/${p}" as="script" asp-append-version="true" />`,
-	);
-	logger.log(ct`{dim Writing _ModulePreloads.cshtml with {reset.bold.underline ${chunks.length}} chunks}`);
-	await Bun.write(join(_root, "..", "..", "Pages", "Shared", "_ModulePreloads.cshtml"), chunks.join("\n"));
+	const size = await compile(new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`), join(_dest, "/"), "src");
 
 	const best = (size: number) => convert(size, "bytes").to("best").toString(3);
 
 	logger.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
 
-	const [prev] = await sizeHistory.at(-1);
-	const [first] = await sizeHistory.at(0);
+	const [first, prev] = await sizeHistory.sizeAt(0, -1);
 	if (prev) {
 		const text = (x: number) => (x > 0 ? c.red : c.green)((x < 0 ? "" : "+") + best(x));
 		logger.log(`Size difference: ${text(size - prev)} (total: ${text(size - first)})`);

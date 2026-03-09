@@ -73,7 +73,6 @@
 
 	// Code
 	code {
-		font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 		font-size: 87.5%;
 		color: #e83e8c;
 		overflow-wrap: break-word;
@@ -81,7 +80,6 @@
 	}
 
 	pre {
-		font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 		position: relative;
 		width: max-content;
 		color: var(--foreground-75);

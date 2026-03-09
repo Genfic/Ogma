@@ -28,7 +28,7 @@ details.infraction {
 		}
 
 		&.warning {
-			color: rgb(255 251 0 / 75%);
+			color: var(--yellow-75);
 		}
 
 		&.note {

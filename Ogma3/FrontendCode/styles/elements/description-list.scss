@@ -1,7 +1,7 @@
 dl {
 	&.rows {
 		display: grid;
-		grid-gap: .5rem;
+		gap: .5rem;
 		grid-template-columns: max-content auto;
 
 		> dt {

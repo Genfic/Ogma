@@ -11,7 +11,6 @@ $avatar-height: 4rem;
 	grid-template-rows: 1fr auto;
 	gap: .5rem;
 	margin-top: .25rem;
-	overflow-anchor: auto;
 	@include ab.active-border;
 
 	&:first-child {
@@ -41,7 +40,6 @@ $avatar-height: 4rem;
 		&:hover {
 			color: var(--accent);
 			text-decoration: underline;
-			text-decoration-skip-ink: auto;
 		}
 
 		i {

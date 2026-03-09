@@ -1,17 +1,15 @@
+import fs, { rm } from "node:fs/promises";
+import { dirname, join, parse } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
-import { attemptAsync } from "es-toolkit";
-import { transform, type TransformResult } from "lightningcss";
-import fs, { rm } from "node:fs/promises";
-import { dirname, join, parse } from "node:path";
+import { attempt, attemptAsync } from "es-toolkit";
+import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
-
 import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
-import { $try } from "./helpers/function-helpers";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { Parallel } from "./helpers/promises";
@@ -34,8 +32,6 @@ const _dest = join(root, "..", "..", "wwwroot", "css");
 
 const projectRoot = join(root, "..", "..");
 
-console.log(projectRoot);
-
 const clean = async () => {
 	console.log(ct`{bold.red 🗑️ {dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
@@ -52,6 +48,10 @@ process.on("SIGINT", async () => {
 	process.exit(0);
 });
 
+const extraDirs = (await fs.readdir(_base, { withFileTypes: true }))
+	.filter((v) => v.isDirectory())
+	.map((v) => join(_base, v.name));
+
 const compileSass = async (file: string) => {
 	const timer = new Stopwatch();
 	const logger = new Logger();
@@ -59,54 +59,50 @@ const compileSass = async (file: string) => {
 	const { name: filename, base } = parse(file);
 	logger.verbose(`Compiling ${file}`);
 
-	const fileContent = await Bun.file(file).stat();
-	logger.verbose(`File size: ${fileContent.size} bytes`);
+	const size = Bun.file(file).size;
+	logger.verbose(`File size: ${size} bytes`);
 
-	const extraDirs = (await fs.readdir(_base, { withFileTypes: true }))
-		.filter((v) => v.isDirectory())
-		.map((v) => join(_base, v.name));
-
-	const compileResult = await $try(async () => {
+	const [compileError, compileResult] = await attemptAsync(async () => {
 		return await compiler.compileAsync(file, {
 			sourceMap: true,
 			sourceMapIncludeSources: true,
 			loadPaths: [_base, ...extraDirs],
 		});
-	}, logger.verbose);
+	});
 
 	if (!compileResult) {
-		logger.log("Sass compilation error");
+		logger.log(`Sass compilation error: ${compileError}`);
 		return;
 	}
 
 	const { css, sourceMap } = compileResult;
 
+	if (values.raw) {
+		await Bun.write(join(_dest, `${filename}.raw.css`), css);
+	}
+
 	logger.verbose(`Sass compiled: ${css.length} bytes`);
 
 	const outFile = `${filename}.css`;
 
-	const transformResult: Pick<TransformResult, "code" | "map" | "warnings"> | undefined = values.raw
-		? { code: encoder.encode(css), map: encoder.encode(JSON.stringify(sourceMap)), warnings: [] }
-		: $try(
-				() =>
-					transform({
-						projectRoot: projectRoot,
-						code: encoder.encode(css),
-						inputSourceMap: sourceMap ? JSON.stringify(sourceMap) : undefined,
-						sourceMap: true,
-						filename: outFile,
-						targets: cssTargets,
-						minify: true,
-					}),
-				logger.verbose,
-			);
+	const [error, result] = attempt(() =>
+		transform({
+			projectRoot: projectRoot,
+			code: encoder.encode(css),
+			inputSourceMap: sourceMap ? JSON.stringify(sourceMap) : undefined,
+			sourceMap: true,
+			filename: outFile,
+			targets: cssTargets,
+			minify: true,
+		}),
+	);
 
-	if (!transformResult) {
-		logger.log("LightningCSS transformation error");
+	if (!result) {
+		logger.log(`LightningCSS transformation error: ${error}`);
 		return;
 	}
 
-	const { code, map, warnings } = transformResult;
+	const { code, map, warnings } = result;
 
 	logger.verbose(`LightningCSS output: ${code.length} bytes`);
 	logger.verbose(`Warnings: ${warnings.length}`);
@@ -114,10 +110,13 @@ const compileSass = async (file: string) => {
 		logger.warn(ct`{yellow [{bold ${filename}}] WRN: ${message} at ${loc.filename}:${loc.line}:${loc.column}}`);
 	}
 
-	await Bun.write(join(_dest, outFile), code);
+	const mapPath = join(_dest, `${outFile}.map`);
+	const fullCode = Buffer.concat([code, encoder.encode(`\n/*# sourceMappingURL=/css/${outFile}.map */`)]);
+
+	await Bun.write(join(_dest, outFile), fullCode);
 
 	if (map) {
-		await Bun.write(join(_dest, `${outFile}.map`), map);
+		await Bun.write(mapPath, map);
 	}
 
 	await Bun.write(join(_dest, ".gitkeep"), "");

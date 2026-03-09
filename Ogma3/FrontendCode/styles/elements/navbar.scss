@@ -18,7 +18,7 @@ button#burger {
 	align-items: center;
 	justify-content: center;
 	box-shadow: var(--shadow);
-	@media screen and (min-width: v.$mq-mobile-sm) {
+	@media (width >= v.$mq-mobile-sm) {
 		display: none;
 	}
 }
@@ -38,7 +38,7 @@ nav#top-nav {
 
 	transition: padding-top .2s ease-in-out, padding-bottom .2s ease-in-out;
 
-	@media screen and (max-width: v.$mq-mobile) {
+	@media (width <= v.$mq-mobile) {
 		bottom: 0;
 		top: unset;
 		padding: .4rem 1rem;
@@ -46,7 +46,7 @@ nav#top-nav {
 		border-bottom: none;
 		border-top: 1px solid var(--foreground-50);
 	}
-	@media screen and (max-width: v.$mq-mobile-sm) {
+	@media (width <= v.$mq-mobile-sm) {
 		flex-direction: column;
 		padding: .2rem .5rem;
 		height: auto;
@@ -68,10 +68,10 @@ nav#top-nav {
 		@media (prefers-reduced-motion) {
 			height: var(--nav-height);
 		}
-		@media screen and (max-width: v.$mq-mobile) {
+		@media (width <= v.$mq-mobile) {
 			padding: .4rem 1rem;
 		}
-		@media screen and (max-width: v.$mq-mobile-sm) {
+		@media (width <= v.$mq-mobile-sm) {
 			padding: .2rem .5rem;
 		}
 	}
@@ -96,7 +96,7 @@ nav#top-nav {
 			background-color: var(--accent-10);
 		}
 
-		@media screen and (max-width: v.$mq-mobile-sm) {
+		@media (width <= v.$mq-mobile-sm) {
 			min-height: 48px;
 			padding: 0 1rem;
 		}
@@ -106,7 +106,7 @@ nav#top-nav {
 		display: flex;
 		flex-direction: row;
 
-		@media screen and (max-width: v.$mq-mobile-sm) {
+		@media (width <= v.$mq-mobile-sm) {
 			padding: .2rem .5rem;
 			flex-direction: column;
 
@@ -177,7 +177,7 @@ nav#top-nav {
 				color: var(--foreground);
 				@include f.focus;
 
-				@media screen and (max-width: v.$mq-mobile-sm) {
+				@media (width <= v.$mq-mobile-sm) {
 					width: 100%;
 					min-height: 48px;
 				}

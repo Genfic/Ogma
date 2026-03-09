@@ -1,10 +1,9 @@
+import { basename } from "node:path";
 import type { BunPlugin } from "bun";
+import { transform } from "lightningcss";
+import { cssTargets } from "../helpers/css-targets";
 
-export const cssMinifyPlugin = async (): Promise<BunPlugin> => {
-	const { transform } = await import("lightningcss");
-	const { cssTargets } = await import("../helpers/css-targets");
-	const { basename } = await import("node:path");
-
+export function cssMinifyPlugin(): BunPlugin {
 	const decoder = new TextDecoder();
 	return {
 		name: "minified-css",
@@ -41,4 +40,4 @@ export const cssMinifyPlugin = async (): Promise<BunPlugin> => {
 			});
 		},
 	};
-};
+}

@@ -43,10 +43,11 @@ export const watch = async <T>(
 		}
 	});
 
-	process.on("exit", async () => {
-		// close watcher when Ctrl-C is pressed
-		logger.log("🚪 Closing watcher...");
-		await subscription.unsubscribe();
-		process.exit(0);
-	});
+	for (const event of ["exit", "SIGINT", "SIGTERM"]) {
+		process.on(event, async () => {
+			logger.log("🚪 Closing watcher...");
+			await subscription.unsubscribe();
+			process.exit(0);
+		});
+	}
 };

@@ -8,7 +8,6 @@ $title-height: 2rem;
 
 	.story-details {
 		overflow-y: auto;
-		overflow-anchor: auto;
 
 		.titlebar {
 			display: flex;
@@ -29,11 +28,9 @@ $title-height: 2rem;
 				word-break: break-all;
 
 				--stroke: 3px var(--background-50);
-				@supports (--webkit-text-stroke:var(--stroke)) {
-					-webkit-text-stroke: var(--stroke);
-					-webkit-text-fill-color: var(--foreground);
-					paint-order: stroke fill;
-				}
+				-webkit-text-stroke: var(--stroke);
+				-webkit-text-fill-color: var(--foreground);
+				paint-order: stroke fill;
 			}
 		}
 

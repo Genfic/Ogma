@@ -7,7 +7,6 @@
 	margin: .75rem 0 0;
 	padding: .25rem;
 	background-color: var(--ele-1);
-	overflow-anchor: auto;
 
 	&:first-of-type {
 		margin: 0;
@@ -29,7 +28,6 @@
 		&:hover {
 			color: var(--foreground-75);
 			text-decoration: underline;
-			text-decoration-skip-ink: auto;
 		}
 	}
 

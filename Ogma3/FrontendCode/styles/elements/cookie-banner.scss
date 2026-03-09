@@ -14,7 +14,7 @@
 	text-align: center;
 	z-index: 999;
 
-	@media screen and (max-width: v.$mq-mobile) {
+	@media (width <= v.$mq-mobile) {
 		top: 0;
 		bottom: unset;
 		border-bottom: 1px solid var(--foreground-50);

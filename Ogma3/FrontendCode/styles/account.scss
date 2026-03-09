@@ -7,7 +7,7 @@
 	grid-template-rows: auto 1fr;
 	gap: 1rem;
 
-	@media screen and (max-width: v.$mq-mobile) {
+	@media (width <= v.$mq-mobile) {
 		display: flex;
 		flex-direction: column;
 	}

@@ -62,12 +62,6 @@ kbd {
 	background-color: var(--foreground-10);
 }
 
-code, pre, kbd {
+code, pre, kbd, samp {
 	font-family: "Inconsolata Variable", Consolas, Courier, monospace;
-}
-
-// Consistent bold
-// See: https://css-tricks.com/firefoxs-bolder-default-is-a-problem-for-variable-fonts/
-b, strong {
-	font-weight: bolder;
 }

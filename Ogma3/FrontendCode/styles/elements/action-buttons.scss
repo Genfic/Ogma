@@ -61,7 +61,7 @@
 	}
 
 	> .name {
-		@media screen and (max-width: v.$mq-mobile) {
+		@media (width <= v.$mq-mobile) {
 			display: none;
 		}
 	}

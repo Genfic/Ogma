@@ -7,7 +7,7 @@
 }
 
 @mixin blends($name, $baseName, $percentages...) {
-	@each $percentage in $percentages {
-		--#{$name}-g-#{$percentage}: color-mix(in oklch, var(--#{$name}), var(--#{$baseName}) #{$percentage}#{'%'})
-	}
+	// @each $percentage in $percentages {
+	//	--#{$name}-b-#{$percentage}: color-mix(in srgb-linear, var(--#{$name}), var(--#{$baseName}) #{$percentage}#{'%'})
+	// }
 }

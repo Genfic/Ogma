@@ -219,70 +219,66 @@ function extractComponentsFromFile(filePath: string, sourceCode: string): Compon
 	return components;
 }
 
-async function generateWebTypes() {
-	console.log(`Scanning for components in ${SRC_DIR} using pattern: ${FILE_PATTERN}`);
-	const glob = new Glob(FILE_PATTERN);
-	const allComponents: ComponentInfo[] = [];
-	let fileCount = 0;
+console.log(`Scanning for components in ${SRC_DIR} using pattern: ${FILE_PATTERN}`);
+const glob = new Glob(FILE_PATTERN);
+const allComponents: ComponentInfo[] = [];
+let fileCount = 0;
 
-	for await (const file of glob.scan(SRC_DIR)) {
-		fileCount++;
-		const filePath = path.join(SRC_DIR, file);
-		try {
-			const fileContent = await Bun.file(filePath).text();
-			const componentsInFile = extractComponentsFromFile(filePath, fileContent);
-			allComponents.push(...componentsInFile);
-		} catch (error) {
-			console.error(`Error processing file ${filePath}:`, error);
-		}
-	}
-
-	console.log(`\nScanned ${fileCount} files. Found ${allComponents.length} components.`);
-
-	if (allComponents.length === 0) {
-		console.log("No components found matching the criteria. Exiting.");
-		return;
-	}
-
-	const packageInfo = getPackageInfo();
-
-	const webTypesElements: HTMLElement[] = allComponents.map((comp) => ({
-		name: comp.tagName,
-		description: `Custom element <${comp.tagName}> defined in ${comp.sourceFile}`,
-		attributes: comp.attributes.map(
-			(attr): HTMLAttribute => ({
-				name: attr.name,
-				value: {
-					kind: "expression",
-					type: attr.type,
-				},
-			}),
-		),
-		source: {
-			module: `./${comp.sourceFile}`,
-			symbol: comp.tagName,
-		},
-	}));
-
-	const webTypesJson: Webtypes = {
-		$schema: WEB_TYPES_SCHEMA,
-		name: packageInfo.name,
-		version: packageInfo.version,
-		"js-types-syntax": "typescript",
-		"description-markup": "markdown",
-		contributions: {
-			html: {
-				elements: webTypesElements.sort(alphaBy((e) => e.name)),
-			},
-		},
-	};
-
+for await (const file of glob.scan(SRC_DIR)) {
+	fileCount++;
+	const filePath = path.join(SRC_DIR, file);
 	try {
-		await Bun.write(OUTPUT_FILE, JSON.stringify(webTypesJson, null, 2));
-		console.log(`\nSuccessfully generated ${OUTPUT_FILE}`);
+		const fileContent = await Bun.file(filePath).text();
+		const componentsInFile = extractComponentsFromFile(filePath, fileContent);
+		allComponents.push(...componentsInFile);
 	} catch (error) {
-		console.error(`Error writing ${OUTPUT_FILE}:`, error);
+		console.error(`Error processing file ${filePath}:`, error);
 	}
 }
 
-await generateWebTypes();
+console.log(`\nScanned ${fileCount} files. Found ${allComponents.length} components.`);
+
+if (allComponents.length === 0) {
+	console.log("No components found matching the criteria. Exiting.");
+	process.exit(0);
+}
+
+const packageInfo = getPackageInfo();
+
+const webTypesElements: HTMLElement[] = allComponents.map((comp) => ({
+	name: comp.tagName,
+	description: `Custom element <${comp.tagName}> defined in ${comp.sourceFile}`,
+	attributes: comp.attributes.map(
+		(attr): HTMLAttribute => ({
+			name: attr.name,
+			value: {
+				kind: "expression",
+				type: attr.type,
+			},
+		}),
+	),
+	source: {
+		module: `./${comp.sourceFile}`,
+		symbol: comp.tagName,
+	},
+}));
+
+const webTypesJson: Webtypes = {
+	$schema: WEB_TYPES_SCHEMA,
+	name: packageInfo.name,
+	version: packageInfo.version,
+	"js-types-syntax": "typescript",
+	"description-markup": "markdown",
+	contributions: {
+		html: {
+			elements: webTypesElements.sort(alphaBy((e) => e.name)),
+		},
+	},
+};
+
+try {
+	await Bun.write(OUTPUT_FILE, JSON.stringify(webTypesJson, null, 2));
+	console.log(`\nSuccessfully generated ${OUTPUT_FILE}`);
+} catch (error) {
+	console.error(`Error writing ${OUTPUT_FILE}:`, error);
+}

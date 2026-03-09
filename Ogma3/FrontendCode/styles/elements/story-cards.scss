@@ -13,15 +13,13 @@ $title-height: 1.8rem;
 		  " img  tags "  auto
 		  " info info "  auto / 10rem 1fr auto;
 	gap: .25rem .5rem;
-	grid-column-gap: .25rem;
 
 	margin: .75rem 0 0;
 	padding: .25rem .25rem 0;
 	background-color: var(--ele-1);
-	overflow-anchor: auto;
 	@include ab.active-border;
 
-	@media only screen and (max-width: v.$mq-mobile) {
+	@media (width <= v.$mq-mobile) {
 		grid: " title  title " auto
 			  " img    hook  " 1fr
 			  " tags   tags  " auto
@@ -107,7 +105,6 @@ $title-height: 1.8rem;
 				&:hover {
 					color: var(--foreground-75);
 					text-decoration: underline;
-					text-decoration-skip-ink: auto;
 				}
 			}
 
@@ -133,6 +130,7 @@ $title-height: 1.8rem;
 		grid-area: hook;
 		margin: 2px 4px;
 		flex: 1;
+		overflow-x: hidden;
 	}
 
 	.tags {

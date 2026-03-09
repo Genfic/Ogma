@@ -6,7 +6,6 @@
 	flex-direction: row;
 	align-items: flex-start;
 	padding: .5rem 0;
-	overflow-anchor: auto;
 	scroll-margin-top: 10vh;
 
 	&:hover {
@@ -38,7 +37,7 @@
 		margin-right: .5rem;
 		min-height: 100px;
 		background-color: var(--ele-1);
-		@media screen and (max-width: v.$mq-mobile) {
+		@media (width <= v.$mq-mobile) {
 			flex: 0 0 4rem;
 			min-height: 75px;
 		}
