@@ -281,14 +281,12 @@ public static class Startup
 
 		// OpenAPI
 		services.AddOpenApi("public", options => {
-			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
-			options.AddOperationTransformer<IdOperationTransformer>();
+			options.AddSharedOperationTransformers();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && !r.StartsWith("admin");
 		});
 		services.AddOpenApi("internal", options => {
-			options.AddOperationTransformer<MinimalApiTagOperationTransformer>();
-			options.AddOperationTransformer<IdOperationTransformer>();
+			options.AddSharedOperationTransformers();
 			options.CreateSchemaReferenceId = NestedSchemaReferenceId.Fun;
 			options.ShouldInclude = desc => desc.RelativePath is {} r && r.StartsWith("admin");
 		});

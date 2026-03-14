@@ -14,6 +14,9 @@ using ReturnType = Results<Ok<GetFolder.Result[]>, UnauthorizedHttpResult>;
 [MapGet("api/folders")]
 public static partial class GetFolder
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long ClubId) : IValidationTarget<Query>;
 

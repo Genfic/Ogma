@@ -14,7 +14,9 @@ using ReturnType = Results<Ok<RoleDto>, NotFound>;
 [MapGet("api/roles/{roleId:long}")]
 public static partial class GetRoleById
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetRoleById));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+		.WithName(nameof(GetRoleById))
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long RoleId) : IValidationTarget<Query>;

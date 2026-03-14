@@ -24,9 +24,6 @@ const FAQ = () => {
 	const [faqs, { refetch }] = createResource(
 		async () => {
 			const res = await GetApiFaqs();
-			if (!res.ok) {
-				throw new Error(res.error);
-			}
 			return res.data;
 		},
 		{ initialValue: [] },
@@ -39,7 +36,7 @@ const FAQ = () => {
 		if (res.ok) {
 			refetch();
 		} else {
-			throw new Error(res.error);
+			throw new Error(res.data ?? res.statusText);
 		}
 	};
 
@@ -58,14 +55,14 @@ const FAQ = () => {
 			if (res.ok) {
 				refetch();
 			} else {
-				throw new Error(res.error);
+				throw new Error(res.data ?? res.statusText);
 			}
 		} else {
 			const res = await PostApiFaqs(data, headers);
 			if (res.ok) {
 				refetch();
 			} else {
-				throw new Error(res.error);
+				throw new Error(res.data ?? res.statusText);
 			}
 		}
 		setForm({ question: "", answer: "", id: undefined });

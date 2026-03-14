@@ -36,7 +36,7 @@ const Comments = (props: Props) => {
 		async () => {
 			const res = await GetApiCommentsThread(props.threadId);
 			if (!res.ok) {
-				throw new Error(res.error ?? res.statusText);
+				throw new Error(res.data ?? res.statusText);
 			}
 			const isStaff = res.headers.get("X-IsStaff")?.toLowerCase() === "true";
 			return { ...res.data, isStaff };
@@ -124,7 +124,7 @@ const Comments = (props: Props) => {
 		}
 		const res = await PostApiCommentsThreadLock({ threadId: props.threadId });
 		if (!res.ok) {
-			console.error(res.error);
+			console.error(res.data ?? res.statusText);
 		}
 		isLocked = res.ok && res.data;
 	};

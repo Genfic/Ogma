@@ -13,6 +13,9 @@ using ReturnType = Results<Ok<string>, NotFound>;
 [MapGet("api/comments/{commentId:int}/md")]
 public static partial class GetCommentMarkdown
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
 

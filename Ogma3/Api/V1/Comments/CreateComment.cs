@@ -22,6 +22,9 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, NotFound,
 [Authorize]
 public static partial class CreateComment
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Command : IValidationTarget<Command>

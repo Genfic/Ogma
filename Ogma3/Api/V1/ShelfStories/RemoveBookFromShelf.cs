@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<RemoveBookFromSh
 [Authorize]
 public static partial class RemoveBookFromShelf
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long ShelfId, long StoryId) : IValidationTarget<Command>;
 

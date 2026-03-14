@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetPaginatedUserShelves.Re
 [Authorize]
 public static partial class GetPaginatedUserShelves
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long StoryId, int Page) : IValidationTarget<Query>;
 

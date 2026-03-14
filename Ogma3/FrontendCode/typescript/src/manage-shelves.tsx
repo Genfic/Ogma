@@ -43,8 +43,8 @@ const ManageShelves = (props: Props) => {
 
 	const [shelves, { refetch }] = createResource(async () => {
 		const res = await GetApiShelves(props.userName, 1);
-		if (!res.ok) throw res.error;
-		return res.data;
+		if (res.ok) return res.data;
+		throw res.data;
 	});
 
 	let formData = $signal<ShelfModel>(EmptyShelf);
@@ -75,8 +75,6 @@ const ManageShelves = (props: Props) => {
 				refetch();
 			} else if (res.status === 400) {
 				errors = Object.values((res as unknown as ProblemDetails).errors).flat() as string[];
-			} else {
-				throw new Error(res.error);
 			}
 		} else {
 			const res = await PostApiShelves(omit(data, ["id"]), headers);
@@ -84,8 +82,6 @@ const ManageShelves = (props: Props) => {
 				refetch();
 			} else if (res.status === 400) {
 				errors = Object.values((res as unknown as ProblemDetails).errors).flat() as string[];
-			} else {
-				throw new Error(res.error);
 			}
 		}
 		clear();
@@ -102,7 +98,7 @@ const ManageShelves = (props: Props) => {
 	const deleteShelf = async (id: number) => {
 		if (confirm("Deleting a bookshelf is irreversible. Are you sure?")) {
 			const res = await DeleteApiShelves(id);
-			if (!res.ok) throw new Error(res.error);
+			if (!res.ok) throw new Error(res.data);
 			await refetch();
 		}
 	};

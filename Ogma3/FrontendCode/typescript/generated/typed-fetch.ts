@@ -1,22 +1,12 @@
-export type SuccessResponse<TData> = {
-    readonly ok: true;
-    readonly status: number;
-    readonly statusText: string;
-    readonly headers: Headers;
-    readonly data: TData;
-};
-
-export type ErrorResponse<TError> = {
-    readonly ok: false;
-    readonly status: number;
-    readonly statusText: string;
-    readonly headers: Headers;
-    readonly error: TError;
-};
-
-export type TypedResponse<TData, TError> =
-    | SuccessResponse<TData>
-    | ErrorResponse<TError>;
+export type TypedResponse<TResponses extends Record<number, unknown>> = {
+    [S in keyof TResponses & number]: {
+        readonly ok: `${S}` extends `4${string}` | `5${string}` ? false : true;
+        readonly status: S;
+        readonly statusText: string;
+        readonly headers: Headers;
+        readonly data: TResponses[S];
+    }
+}[keyof TResponses & number];
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD";
 
@@ -34,12 +24,12 @@ export type RequestOptions = Omit<RequestInit, "method" | "headers" | "body"> & 
     ignoreErrors?: boolean;
 };
 
-export const get: HttpMethod = "GET";
-export const post: HttpMethod = "POST";
-export const put: HttpMethod = "PUT";
-export const patch: HttpMethod = "PATCH";
-export const del: HttpMethod = "DELETE";
-export const head: HttpMethod = "HEAD";
+export const GET: HttpMethod = "GET";
+export const POST: HttpMethod = "POST";
+export const PUT: HttpMethod = "PUT";
+export const PATCH: HttpMethod = "PATCH";
+export const DELETE: HttpMethod = "DELETE";
+export const HEAD: HttpMethod = "HEAD";
 
 export type KnownHeaders =
     | "Accept"
@@ -71,13 +61,13 @@ export const DateSafeJsonParse = <T>(text: string): T => JSON.parse(text, (_, va
     return value as T;
 })
 
-export async function typedFetch<TOut, TBody>(
+export async function typedFetch<TResponses extends Record<number, unknown>, TBody>(
     url: string,
     method: HttpMethod | CustomString,
     body?: TBody,
     headers?: HeadersInit,
     options?: RequestOptions,
-): Promise<TypedResponse<TOut, string>> {
+): Promise<TypedResponse<TResponses>> {
     try {
         const res = await fetch(url, {
             method: method as string,
@@ -89,15 +79,6 @@ export async function typedFetch<TOut, TBody>(
             ...options,
         } as RequestInit);
 
-        if (res.status >= 400 && !options?.ignoreErrors) {
-            return {
-                ok: false,
-                status: res.status,
-                statusText: res.statusText,
-                headers: res.headers,
-                error: await res.text().catch(() => res.statusText),
-            };
-        }
         const contentType = res.headers.get("Content-Type")?.toLowerCase() ?? "";
 
         let data: unknown;
@@ -114,19 +95,13 @@ export async function typedFetch<TOut, TBody>(
         }
 
         return {
-            ok: true,
+            ok: res.ok,
             status: res.status,
             statusText: res.statusText,
             headers: res.headers,
-            data: data as TOut,
-        };
+            data: data,
+        } as unknown as TypedResponse<TResponses>;
     } catch (e) {
-        return {
-            ok: false,
-            status: 0,
-            statusText: "",
-            headers: new Headers(),
-            error: e instanceof Error ? e.message : String(e),
-        };
+        throw e;
     }
 }

@@ -43,9 +43,10 @@ export const Comment = (props: Props) => {
 		if (res.ok) {
 			props.onDelete();
 		} else {
-			console.error(res.error);
+			console.error(res.data ?? res.statusText);
 		}
 	};
+
 	const edit = () => {
 		setEditing(true);
 	};
@@ -66,7 +67,7 @@ export const Comment = (props: Props) => {
 			setRevisions(res.data);
 			setShowRevision(true);
 		} else {
-			console.error(res.error);
+			console.error(res.data ?? res.statusText);
 		}
 	};
 

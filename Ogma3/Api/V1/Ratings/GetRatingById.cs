@@ -15,7 +15,9 @@ using ReturnType = Results<NotFound, Ok<RatingApiDto>>;
 public static partial class GetRatingById
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
-		=> endpoint.WithName(nameof(GetRatingById));
+		=> endpoint
+			.WithName(nameof(GetRatingById))
+			.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long Id) : IValidationTarget<Query>;

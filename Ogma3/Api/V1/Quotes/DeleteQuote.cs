@@ -17,7 +17,8 @@ using ResponseType=Results<Ok<long>, NotFound>;
 public static partial class DeleteQuote
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery();
+		.DisableAntiforgery()
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Command(long Id) : IValidationTarget<Command>;

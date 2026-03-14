@@ -16,6 +16,9 @@ using ReturnType = Ok<bool>;
 [Authorize]
 public static partial class GetClubMembershipStatus
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long ClubId) : IValidationTarget<Query>;
 

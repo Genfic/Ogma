@@ -17,7 +17,8 @@ using ReturnType=Results<Ok, NotFound>;
 public static partial class UpdateQuote
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery();
+		.DisableAntiforgery()
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>

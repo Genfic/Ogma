@@ -10,7 +10,7 @@ const NotificationsButton: ComponentType<Empty> = (_) => {
 	const [notifications] = createResource(
 		async () => {
 			const res = await countNotifications();
-			return res.ok ? res.data : -1;
+			return res.ok ? (res.data ?? 0) : -1;
 		},
 		{ initialValue: 0 },
 	);

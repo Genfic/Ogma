@@ -14,7 +14,9 @@ using ReturnType = Results<Ok<TagDto>, NotFound>;
 [MapGet("api/tags/{tagId:long}")]
 public static partial class GetSingleTag
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetSingleTag));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+		.WithName(nameof(GetSingleTag))
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long TagId) : IValidationTarget<Query>;

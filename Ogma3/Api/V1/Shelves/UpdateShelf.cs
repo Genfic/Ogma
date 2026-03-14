@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -16,21 +16,25 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 [Authorize]
 public static partial class UpdateShelf
 {
-	public sealed record Command
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
+	[Validate]
+	public sealed partial record Command
 	(
 		long Id,
-		[property: MinLength(CTConfig.Shelf.MinNameLength)]
-		[property: MaxLength(CTConfig.Shelf.MaxNameLength)]
+		[property: System.ComponentModel.DataAnnotations.MinLength(CTConfig.Shelf.MinNameLength)]
+		[property: System.ComponentModel.DataAnnotations.MaxLength(CTConfig.Shelf.MaxNameLength)]
 		string Name,
-		[property: MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
+		[property: System.ComponentModel.DataAnnotations.MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
 		string Description,
 		bool IsQuickAdd,
 		bool IsPublic,
 		bool TrackUpdates,
-		[property: MaxLength(7)]
+		[property: System.ComponentModel.DataAnnotations.MaxLength(7)]
 		string Color,
 		long IconId
-	);
+	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(
 		Command request,

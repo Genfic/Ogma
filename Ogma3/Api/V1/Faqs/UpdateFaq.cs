@@ -18,6 +18,9 @@ using ReturnType = Results<NotFound, Ok>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateFaq
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>
 	{

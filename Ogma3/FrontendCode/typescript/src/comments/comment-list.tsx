@@ -39,7 +39,7 @@ export const CommentList: Component<Props> = (props) => {
 
 			const res = await GetApiComments(id, page, headers);
 			if (!res.ok) {
-				throw new Error(res.error ?? res.statusText);
+				throw new Error(res.data ?? res.statusText);
 			}
 
 			let data: CommentsData;
@@ -54,7 +54,7 @@ export const CommentList: Component<Props> = (props) => {
 					if (newRes.ok) {
 						data = newRes.data;
 					} else {
-						throw new Error(newRes.error);
+						throw new Error(res.data ?? res.statusText);
 					}
 				}
 			} else {
@@ -135,7 +135,7 @@ export const CommentList: Component<Props> = (props) => {
 		if (res.ok) {
 			setCurrentPage(res.data.page);
 		} else {
-			console.error(res.error);
+			console.error(res.data ?? res.statusText);
 		}
 	});
 

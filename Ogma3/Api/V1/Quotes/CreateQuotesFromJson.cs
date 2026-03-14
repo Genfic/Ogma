@@ -18,7 +18,8 @@ public static partial class CreateQuotesFromJson
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
-			.DisableAntiforgery();
+			.DisableAntiforgery()
+			.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(QuoteDto[] Quotes) : IValidationTarget<Query>;

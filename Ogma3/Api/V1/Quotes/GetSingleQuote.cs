@@ -15,7 +15,9 @@ using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 public static partial class GetSingleQuote
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
-		=> endpoint.WithName(nameof(GetSingleQuote));
+		=> endpoint
+			.WithName(nameof(GetSingleQuote))
+			.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long Id) : IValidationTarget<Query>;

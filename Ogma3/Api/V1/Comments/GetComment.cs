@@ -15,7 +15,10 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<CommentDto>>;
 [MapGet("api/comments/{commentId:long}")]
 public static partial class GetComment
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetComment));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) =>
+		endpoint
+			.WithName(nameof(GetComment))
+			.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;

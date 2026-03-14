@@ -14,7 +14,9 @@ using ReturnType = Results<NotFound, Ok<FaqDto>>;
 [MapGet("api/faqs/{faqId:long}")]
 public static partial class GetSingleFaq
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetSingleFaq));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+		.WithName(nameof(GetSingleFaq))
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long FaqId) : IValidationTarget<Query>;

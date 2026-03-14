@@ -18,6 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, BadRequest<string>>
 [Authorize]
 public static partial class LeaveClub
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
 

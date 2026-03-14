@@ -16,6 +16,9 @@ using ReturnType = Results<Ok<string[]>, UnprocessableEntity<string>>;
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
 public static partial class FindName
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(string Name) : IValidationTarget<Query>;
 

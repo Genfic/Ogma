@@ -13,7 +13,7 @@ const TableInfo: Component = () => {
 		async () => {
 			const res = await GetAdminApiTelemetryGetTableInfo();
 			if (!res.ok) {
-				throw new Error(res.error);
+				throw new Error(res.data ?? res.statusText);
 			}
 
 			const data = res.data;

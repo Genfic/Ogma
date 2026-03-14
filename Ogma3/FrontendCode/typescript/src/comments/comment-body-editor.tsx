@@ -35,7 +35,7 @@ export const CommentBodyEditor = (props: Props) => {
 			setText("");
 			props.onUpdate(res.data.body);
 		} else {
-			console.error(res.error);
+			console.error(res.data ?? res.statusText);
 		}
 	};
 

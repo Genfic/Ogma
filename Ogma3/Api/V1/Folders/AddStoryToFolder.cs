@@ -15,6 +15,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound<string>, Conflict<st
 [MapPost("api/folders/AddStory")]
 public static partial class AddStoryToFolder
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long FolderId, long StoryId) : IValidationTarget<Command>;
 

@@ -27,13 +27,14 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 	const [passkeys, { mutate }] = createResource(async () => {
 		const res = await listPasskeys();
 		if (!res.ok) {
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		}
 		return res.data;
 	});
 
 	let loading = $signal(false);
 	let name = $signal<string | null>(null);
+	let errors = $signal<string[]>([]);
 
 	const remove = async (id: string) => {
 		if (!confirm("Are you sure you want to delete the passkey?")) {
@@ -42,7 +43,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 
 		const res = await deletePasskey(encodeURIComponent(id), headers);
 		if (!res.ok) {
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		}
 		mutate((old) => old?.filter((p) => p.id !== id));
 	};
@@ -52,7 +53,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 		const res = await getOptions();
 
 		if (!res.ok) {
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		}
 
 		const optionsResult = attempt(() =>
@@ -103,14 +104,17 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 			headers,
 		);
 
-		if (!keyRes.ok) {
-			throw keyRes.error;
+		if (keyRes.status === 400) {
+			errors = keyRes.data ?? [];
+			return;
 		}
 
-		if (!Array.isArray(keyRes.data)) {
-			const newKey = keyRes.data;
-			mutate((old) => [...(old ?? []), newKey]);
+		if (!keyRes.ok) {
+			return;
 		}
+
+		const newKey = keyRes.data;
+		mutate((old) => [...(old ?? []), newKey]);
 
 		loading = false;
 	};

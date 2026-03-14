@@ -19,6 +19,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
 [Authorize]
 public static partial class DeleteComment
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Command(string CommentId) : IValidationTarget<Command>;

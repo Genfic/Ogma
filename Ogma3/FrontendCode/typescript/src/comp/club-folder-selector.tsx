@@ -70,15 +70,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 
 		if (!response.ok) {
 			status = {
-				message: response.error,
-				success: false,
-			};
-			return;
-		}
-
-		if (typeof response.data === "string") {
-			status = {
-				message: response.data,
+				message: response.data ?? response.statusText,
 				success: false,
 			};
 			return;

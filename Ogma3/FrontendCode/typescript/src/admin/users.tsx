@@ -31,7 +31,7 @@ const Users = () => {
 			return res.data;
 		}
 
-		throw res.error;
+		throw new Error(res.data ?? res.statusText);
 	});
 
 	const user = $memo(userResource());
@@ -80,7 +80,7 @@ const Users = () => {
 		const res = await DeleteAdminApiInfractions(id, headers);
 
 		if (!res.ok) {
-			console.error(res.error);
+			throw new Error(res.data ?? res.statusText);
 		}
 
 		refetch();
@@ -102,7 +102,7 @@ const Users = () => {
 		);
 
 		if (!res.ok) {
-			console.error(res.error);
+			throw new Error(res.data ?? res.statusText);
 		}
 	};
 

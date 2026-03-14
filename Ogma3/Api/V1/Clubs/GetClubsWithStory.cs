@@ -11,6 +11,9 @@ namespace Ogma3.Api.V1.Clubs;
 [MapGet("api/clubs/story/{storyId:long}")]
 public static partial class GetClubsWithStory
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 

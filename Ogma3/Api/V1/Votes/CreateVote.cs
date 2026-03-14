@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 [Authorize]
 public static partial class CreateVote
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long StoryId) : IValidationTarget<Command>;
 

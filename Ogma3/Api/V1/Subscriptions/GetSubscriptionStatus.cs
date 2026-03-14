@@ -14,6 +14,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [MapGet("api/subscriptions/thread")]
 public static partial class GetSubscriptionStatus
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
 

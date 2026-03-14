@@ -16,6 +16,9 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteRating
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long RatingId) : IValidationTarget<Command>;
 

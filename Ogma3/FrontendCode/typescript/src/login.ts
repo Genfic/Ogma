@@ -10,7 +10,7 @@ name.addEventListener("focusout", async (e) => {
 	const target = e.target as HTMLInputElement;
 
 	const res = await getSignInData(target.value);
-	if (!res.ok) throw res.error;
+	if (!res.ok) return;
 
 	avatar.src = res.data.avatar;
 	title.innerText = res.data.title ?? "";
@@ -20,7 +20,6 @@ passkeyButton.addEventListener("click", async () => {
 	try {
 		const res = await GetApiPasskeysRequestOptions(name.value);
 		if (!res.ok) {
-			console.error(res.error);
 			return;
 		}
 
@@ -41,8 +40,6 @@ passkeyButton.addEventListener("click", async () => {
 
 		if (loginRes.ok) {
 			window.location.href = "/";
-		} else {
-			console.error(loginRes.error);
 		}
 	} catch (e) {
 		console.error("Passkey login failed", e);

@@ -32,7 +32,7 @@ const InviteCodes = () => {
 				return res.data;
 			}
 
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		},
 	);
 
@@ -40,7 +40,7 @@ const InviteCodes = () => {
 		const res = await PostApiInviteCodesNoLimit(headers);
 
 		if (!res.ok) {
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		}
 
 		newCode = res.data.id;

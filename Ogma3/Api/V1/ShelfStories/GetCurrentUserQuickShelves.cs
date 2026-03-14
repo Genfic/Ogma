@@ -16,6 +16,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetCurrentUserQuickShelves
 [Authorize]
 public static partial class GetCurrentUserQuickShelves
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 

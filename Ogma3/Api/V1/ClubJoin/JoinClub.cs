@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [Authorize]
 public static partial class JoinClub
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
 

@@ -12,6 +12,9 @@ namespace Ogma3.Api.V1.Tags;
 [MapGet("api/tags")]
 public static partial class GetPaginatedTags
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
 

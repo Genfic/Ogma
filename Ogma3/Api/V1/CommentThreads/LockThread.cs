@@ -21,6 +21,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class LockThread
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;

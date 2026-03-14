@@ -20,6 +20,9 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<GetThreadDetails
 [MapGet("api/CommentsThread/{threadId:long}")]
 public static partial class GetThreadDetails
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;

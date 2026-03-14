@@ -12,7 +12,7 @@ const Notifications = () => {
 	const [notifications, { refetch }] = createResource(async () => {
 		const res = await getNotifications();
 		if (!res.ok) {
-			throw new Error(res.error);
+			throw new Error(res.statusText);
 		}
 		return res.data;
 	});

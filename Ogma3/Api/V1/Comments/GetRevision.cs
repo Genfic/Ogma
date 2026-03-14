@@ -13,6 +13,9 @@ namespace Ogma3.Api.V1.Comments;
 [MapGet("api/comments/{commentId}/revisions")]
 public static partial class GetRevision
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Query(string CommentId) : IValidationTarget<Query>;

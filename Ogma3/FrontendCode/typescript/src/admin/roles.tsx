@@ -37,7 +37,6 @@ const Roles = () => {
 
 	const [roles, { refetch: refetchRoles }] = createResource(async () => {
 		const res = await GetApiRoles();
-		if (!res.ok) throw res.error;
 		return res.data.map((r) => ({ ...r, color: r.color ? `#${r.color.replace("#", "")}` : "" }));
 	});
 

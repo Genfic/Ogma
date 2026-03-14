@@ -41,7 +41,7 @@ const QuoteBox: ComponentType<Empty> = (_) => {
 			}
 			throw new Error("Rate limited with no fallback");
 		}
-		throw new Error(`Quote fetch error: ${response.error}`);
+		throw new Error(`Quote fetch error: ${response.statusText}`);
 	};
 
 	const [quote, { refetch }] = createResource<QuoteDto>(loadQuote);

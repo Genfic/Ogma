@@ -33,10 +33,6 @@ const Quotes = () => {
 
 	const [quotes, { mutate }] = createResource(async () => {
 		const res = await GetAllQuotes(headers);
-		if (!res.ok) {
-			throw res.error;
-		}
-
 		return res.data;
 	});
 
@@ -56,7 +52,7 @@ const Quotes = () => {
 		const res = await PostApiQuotesJson({ quotes: output });
 
 		if (!res.ok) {
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		}
 
 		alert(`Created ${res.data} quotes`);
@@ -66,7 +62,7 @@ const Quotes = () => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiQuotes(q.id);
 			if (!res.ok) {
-				throw res.error;
+				throw new Error(res.data ?? res.statusText);
 			}
 			mutate((old) => old?.filter((i) => i.id !== res.data));
 		}
@@ -91,11 +87,15 @@ const Quotes = () => {
 
 		if (id) {
 			const res = await PutApiQuotes({ ...data, id }, headers);
-			if (!res.ok) throw res.error;
+			if (!res.ok) {
+				throw new Error(res.data ?? res.statusText);
+			}
 			mutate((old) => old?.map((v) => (v.id === id ? { id, author, body } : v)));
 		} else {
 			const res = await PostApiQuotes(data, headers);
-			if (!res.ok) throw res.error;
+			if (!res.ok) {
+				throw new Error(res.data ?? res.statusText);
+			}
 			mutate((old) => (old ? [res.data, ...old] : [res.data]));
 		}
 

@@ -16,6 +16,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [MapDelete("api/subscriptions/thread")]
 public static partial class UnsubscribeCommentsThread
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 

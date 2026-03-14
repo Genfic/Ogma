@@ -187,6 +187,15 @@ export type GetUserNotificationsResult = {
     message: string | null;
 };
 
+export type HttpValidationProblemDetails = {
+    type: string | null;
+    title: string | null;
+    status: number | null;
+    detail: string | null;
+    instance: string | null;
+    errors: object[];
+};
+
 export type InviteCodeDto = {
     id: number;
     code: string;

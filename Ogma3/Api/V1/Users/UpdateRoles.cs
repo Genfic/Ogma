@@ -21,6 +21,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class UpdateRoles
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long UserId, List<long> Roles) : IValidationTarget<Command>;
 

@@ -16,6 +16,9 @@ using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 [Authorize]
 public static partial class DeleteNotification
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long Id) : IValidationTarget<Command>;
 

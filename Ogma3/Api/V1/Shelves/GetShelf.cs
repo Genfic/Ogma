@@ -17,7 +17,9 @@ using ReturnType = Results<Ok<ShelfDto>, NotFound, UnauthorizedHttpResult>;
 [Authorize]
 public static partial class GetShelf
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetShelf));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+		.WithName(nameof(GetShelf))
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long ShelfId) : IValidationTarget<Query>;

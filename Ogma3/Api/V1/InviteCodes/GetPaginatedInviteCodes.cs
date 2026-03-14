@@ -17,6 +17,9 @@ using ReturnType = Ok<InviteCodeDto[]>;
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public static partial class GetPaginatedInviteCodes
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
 

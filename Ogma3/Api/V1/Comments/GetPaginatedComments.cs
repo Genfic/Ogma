@@ -8,6 +8,7 @@ using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.IResults;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
@@ -15,7 +16,7 @@ using Sqids;
 
 namespace Ogma3.Api.V1.Comments;
 
-using ReturnType = Results<Ok<PaginationResult<CommentDto>>, StatusCodeHttpResult>;
+using ReturnType = Results<Ok<PaginationResult<CommentDto>>, NotModifiedResult>;
 
 [Handler]
 [MapGet("api/comments")]
@@ -23,9 +24,11 @@ public static partial class GetPaginatedComments
 {
 	private const string HeaderName = "X-Username";
 
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
-			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.");
+			// .Produces(StatusCodes.Status304NotModified)
+			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.")
+			.ProducesValidationProblem();
 
 	[Validate]
 	[UsedImplicitly]
@@ -56,7 +59,7 @@ public static partial class GetPaginatedComments
 		{
 			if (MakeEtag(etag, page) == inm.ToString())
 			{
-				return TypedResults.StatusCode(StatusCodes.Status304NotModified);
+				return TypedResults.NotModified();
 			}
 		}
 

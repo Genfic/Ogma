@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [Authorize]
 public static partial class UnfollowUser
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(string Name) : IValidationTarget<Command>;
 

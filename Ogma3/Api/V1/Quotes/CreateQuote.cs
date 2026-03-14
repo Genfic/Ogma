@@ -17,7 +17,8 @@ using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<FullQuoteDto>>;
 public static partial class CreateQuote
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery();
+		.DisableAntiforgery()
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>

@@ -18,7 +18,7 @@ const InviteCodes = () => {
 		async () => {
 			const res = await GetApiInviteCodes();
 			if (!res.ok) {
-				throw new Error(res.error);
+				throw new Error(res.statusText);
 			}
 			return res.data;
 		},
@@ -28,11 +28,10 @@ const InviteCodes = () => {
 	const createCode = async () => {
 		const res = await PostApiInviteCodes({ RequestVerificationToken: csrf });
 
-		if (res.ok && typeof res.data !== "string") {
-			const d = res.data;
-			mutate((prev) => [...prev, d]);
+		if (res.ok) {
+			mutate((prev) => [...prev, res.data]);
 		} else {
-			console.error(res.ok ? res.data : res.error);
+			console.error(res.data ?? res.statusText);
 		}
 	};
 

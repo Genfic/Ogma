@@ -19,6 +19,8 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<UpdateComment.Re
 [Authorize]
 public static partial class UpdateComment
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
 
 	[Validate]
 	[UsedImplicitly]

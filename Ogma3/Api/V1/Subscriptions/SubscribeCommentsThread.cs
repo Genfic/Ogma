@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [MapPost("api/subscriptions/thread")]
 public static partial class SubscribeCommentsThread
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 

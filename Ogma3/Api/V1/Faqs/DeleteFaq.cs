@@ -16,6 +16,9 @@ using ReturnType = Results<NotFound, Ok<long>>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class DeleteFaq
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long Id) : IValidationTarget<Command>;
 

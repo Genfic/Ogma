@@ -16,6 +16,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<long>, NotFound>;
 [Authorize]
 public static partial class DeleteShelf
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long ShelfId) : IValidationTarget<Command>;
 

@@ -33,13 +33,14 @@ const EmptyTag = {
 const Tags = () => {
 	const [namespaces] = createResource(async () => {
 		const res = await GetTagNamespaces();
-		if (!res.ok) throw res.error;
 		return res.data;
 	});
 
 	const [tags, { refetch }] = createResource(async () => {
 		const res = await GetApiTagsAll();
-		if (!res.ok) throw res.error;
+		if (!res.ok) {
+			throw new Error(res.data ?? res.statusText);
+		}
 		return res.data;
 	});
 
@@ -48,7 +49,9 @@ const Tags = () => {
 	const deleteTag = async (t: TagDto) => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiTags(t.id, headers);
-			if (!res.ok) throw res.error;
+			if (!res.ok) {
+				throw new Error(res.data ?? res.statusText);
+			}
 			await refetch();
 		}
 	};
@@ -82,12 +85,16 @@ const Tags = () => {
 
 		if (id) {
 			const res = await PutApiTags({ id, ...data }, headers);
-			if (!res.ok) throw res.error;
+			if (!res.ok) {
+				throw new Error(res.data ?? res.statusText);
+			}
 			await refetch();
 			cancelEdit();
 		} else {
 			const res = await PostApiTags(data, headers);
-			if (!res.ok) throw res.error;
+			if (!res.ok) {
+				throw new Error(res.data ?? res.statusText);
+			}
 			await refetch();
 		}
 	};

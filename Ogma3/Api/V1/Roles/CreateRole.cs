@@ -16,6 +16,9 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<RoleDto>>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateRole
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command
 	(

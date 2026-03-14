@@ -15,7 +15,8 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>>;
 public static partial class GetReadChapters
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery();
+		.DisableAntiforgery()
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(long Id) : IValidationTarget<Query>;

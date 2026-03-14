@@ -17,7 +17,7 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 			if (result.ok) {
 				return result.data;
 			}
-			throw new Error(result.error);
+			throw new Error(result.data ?? result.statusText);
 		},
 	);
 
@@ -33,8 +33,8 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 
 		if (result.ok) {
 			mutate(result.data);
-		} else if (result.status !== 401) {
-			log.error(`Error fetching data: ${result.error}`);
+		} else {
+			log.error(`Error fetching data: ${result.statusText}`);
 		}
 	};
 

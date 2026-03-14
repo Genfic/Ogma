@@ -18,7 +18,9 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest, Ok<long>>;
 [Authorize]
 public static partial class ReportContent
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.RequireRateLimiting(RateLimiting.Reports);
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+		.RequireRateLimiting(RateLimiting.Reports)
+		.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>

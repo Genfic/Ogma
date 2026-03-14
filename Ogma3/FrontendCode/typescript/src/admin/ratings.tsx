@@ -39,9 +39,6 @@ const Ratings = () => {
 	const [ratings, { refetch }] = createResource(
 		async () => {
 			const res = await GetApiRatings();
-			if (!res.ok) {
-				throw new Error(res.error);
-			}
 			return res.data;
 		},
 		{ initialValue: [] },
@@ -56,7 +53,7 @@ const Ratings = () => {
 		if (res.ok) {
 			refetch();
 		} else {
-			throw new Error(res.error);
+			throw new Error(res.data ?? res.statusText);
 		}
 	};
 
@@ -74,14 +71,14 @@ const Ratings = () => {
 			if (res.ok) {
 				refetch();
 			} else {
-				throw new Error(res.error);
+				throw new Error(res.data ?? res.statusText);
 			}
 		} else {
 			const res = await PostApiRatings(data, headers);
 			if (res.ok) {
 				refetch();
 			} else {
-				throw new Error(res.error);
+				throw new Error(res.data ?? res.statusText);
 			}
 		}
 

@@ -51,7 +51,7 @@ export const ManageInfraction: Component<ManageInfractionProps> = (props) => {
 		setReason(null);
 
 		if (!res.ok) {
-			throw res.error;
+			throw new Error(res.data ?? res.statusText);
 		}
 
 		props.onSuccess();

@@ -14,6 +14,9 @@ namespace Ogma3.Api.V1.Ratings;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateRating
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>
 	{

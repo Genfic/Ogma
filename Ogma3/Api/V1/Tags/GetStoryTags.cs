@@ -14,6 +14,9 @@ using ReturnType = Results<Ok<TagDto[]>, NotFound>;
 [MapGet("api/tags/story/{storyId:long}")]
 public static partial class GetStoryTags
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 

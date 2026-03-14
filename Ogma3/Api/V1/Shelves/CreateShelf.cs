@@ -16,6 +16,9 @@ using ReturnType = Results<CreatedAtRoute<ShelfDto>, UnauthorizedHttpResult>;
 [Authorize]
 public static partial class CreateShelf
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command
 	(

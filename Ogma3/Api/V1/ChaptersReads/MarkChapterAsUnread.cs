@@ -17,6 +17,9 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>, NoContent>
 [Authorize]
 public static partial class MarkChapterAsUnread
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+			.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command(long Chapter, long Story) : IValidationTarget<Command>;
 

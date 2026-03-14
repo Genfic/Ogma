@@ -11,12 +11,7 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 		const res = await GetAdminApiCache();
 
 		if (!res.ok) {
-			console.warn(res.error);
-			return Number.NaN;
-		}
-
-		if (typeof res.data !== "number") {
-			console.warn("Invalid cache count:", res.data);
+			console.warn(res.data ?? res.statusText);
 			return Number.NaN;
 		}
 

@@ -12,7 +12,7 @@ const reindexRows = () => {
 		for (const input of inputs) {
 			const name = input.getAttribute("name");
 			if (name) {
-				const newName = name.replace(/Input\.Credits\[\d+\]/, `Input.Credits[${i}]`);
+				const newName = name.replace(/Input\.Credits\[\d+]/, `Input.Credits[${i}]`);
 				input.setAttribute("name", newName);
 			}
 		}

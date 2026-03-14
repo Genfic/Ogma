@@ -18,6 +18,9 @@ using ReturnType = CreatedAtRoute<FaqDto>;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public static partial class CreateFaq
 {
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
+		.ProducesValidationProblem();
+
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>
 	{
