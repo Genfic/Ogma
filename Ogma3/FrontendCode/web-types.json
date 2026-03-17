@@ -474,6 +474,15 @@
           }
         },
         {
+          "name": "reader-settings",
+          "description": "Custom element <reader-settings> defined in typescript\\src\\comp\\reader-settings.tsx",
+          "attributes": [],
+          "source": {
+            "module": "./typescript\\src\\comp\\reader-settings.tsx",
+            "symbol": "reader-settings"
+          }
+        },
+        {
           "name": "report-modal",
           "description": "Custom element <report-modal> defined in typescript\\src\\comp\\report-modal.tsx",
           "attributes": [

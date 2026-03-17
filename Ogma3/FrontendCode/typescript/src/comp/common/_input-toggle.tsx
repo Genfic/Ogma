@@ -5,6 +5,7 @@ interface InputToggleProps {
 	desc?: string;
 	value?: boolean;
 	onChange?: (event: Event) => void;
+	onToggle?: (value: boolean) => void;
 }
 
 const instanceId = createUniqueId();
@@ -15,11 +16,17 @@ export const InputToggle: Component<InputToggleProps> = (props) => {
 			desc: null,
 			value: false,
 			onChange: () => {},
+			onToggle: () => {},
 		},
 		props,
 	);
 
 	const name = $memo(merged.label.replace(/\s+/g, ""));
+
+	const handle = (e: Event) => {
+		merged.onChange(e);
+		merged.onToggle((e.target as HTMLInputElement).checked);
+	};
 
 	return (
 		<div class="o-form-group keep-size">
@@ -29,13 +36,7 @@ export const InputToggle: Component<InputToggleProps> = (props) => {
 			</Show>
 
 			<div class="toggle-input">
-				<input
-					type="checkbox"
-					name={name}
-					id={instanceId + name}
-					checked={merged.value}
-					onchange={merged.onChange}
-				/>
+				<input type="checkbox" name={name} id={instanceId + name} checked={merged.value} onchange={handle} />
 				<label for={instanceId + name}>
 					<span class="toggle">
 						<span class="dot" />
