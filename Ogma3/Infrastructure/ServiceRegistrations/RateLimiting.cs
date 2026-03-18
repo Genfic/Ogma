@@ -1,5 +1,4 @@
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.RateLimiting;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Infrastructure.ServiceRegistrations;
@@ -16,11 +15,11 @@ public static class RateLimiting
 	{
 		services.AddRateLimiter(limiterOptions => {
 			limiterOptions
-				.AddFixedWindowLimiter(policyName: Rss, options => {
+				.AddPartitionedFixedWindowLimiter(policyName: Rss, options => {
 					options.Window = TimeSpan.FromHours(1);
 					options.PermitLimit = 1;
 				})
-				.AddFixedWindowLimiter(policyName: Quotes, options => {
+				.AddPartitionedFixedWindowLimiter(policyName: Quotes, options => {
 					options.Window = TimeSpan.FromSeconds(5);
 					options.PermitLimit = 1;
 				})
@@ -32,26 +31,24 @@ public static class RateLimiting
 					options.Window = TimeSpan.FromHours(2);
 					options.PermitLimit = 5;
 					options.SegmentsPerWindow = 5;
-					options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 					options.QueueLimit = 0;
 				})
 				.AddPartitionedSlidingWindowLimiter(policyName: Login, options => {
 					options.Window = TimeSpan.FromMinutes(30);
 					options.PermitLimit = 10;
 					options.SegmentsPerWindow = 10;
-					options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 					options.QueueLimit = 0;
 				});
 
 			limiterOptions.OnRejected = (context, _) => {
 				if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
 				{
-					context.HttpContext.Response.Headers.RetryAfter = retryAfter.TotalSeconds.ToString("#");
+					context.HttpContext.Response.Headers.RetryAfter = ((int)Math.Ceiling(retryAfter.TotalSeconds)).ToString();
 				}
 
 				context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
 
-				return new ValueTask();
+				return ValueTask.CompletedTask;
 			};
 		});
 
