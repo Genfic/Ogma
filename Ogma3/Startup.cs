@@ -8,7 +8,6 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -86,8 +85,12 @@ public static class Startup
 				.UseNpgsql(conn, o => o
 					.MapPostgresEnums()
 					.SetPostgresVersion(18, 0))
-			)
-			.AddDatabaseDeveloperPageExceptionFilter();
+			);
+
+		if (builder.Environment.IsDevelopment())
+		{
+			services.AddDatabaseDeveloperPageExceptionFilter();
+		}
 
 		// Repositories
 		services
@@ -214,7 +217,7 @@ public static class Startup
 			options.LoginPath = new PathString("/login");
 			options.LogoutPath = new PathString("/logout");
 			options.AccessDeniedPath = new PathString("/login");
-			options.Cookie.SameSite = SameSiteMode.Lax;
+			options.Cookie.SameSite = SameSiteMode.Strict;
 			options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 		});
 
@@ -256,8 +259,6 @@ public static class Startup
 			.AddRazorPages(options => {
 				options.Conventions.AuthorizeAreaFolder("Admin", "/", AuthorizationPolicies.RequireAdminRole);
 			});
-
-		services.AddSession();
 
 		// X-CSRF
 		services.AddAntiforgery();
@@ -350,10 +351,6 @@ public static class Startup
 		}
 
 		// Forward the IP
-		app.UseForwardedHeaders(new ForwardedHeadersOptions
-		{
-			ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-		});
 		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
 
 		// Redirects
@@ -376,14 +373,16 @@ public static class Startup
 		});
 
 		app.UseAuthentication();
-		app.UseSession();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
 		app.UseOutputCache();
 
 		// OpenAPI
-		app.MapOpenApi("openapi/{documentName}.json");
-		app.MapScalarApiReference().WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax);
+		if (app.Environment.IsDevelopment())
+		{
+			app.MapOpenApi("openapi/{documentName}.json");
+			app.MapScalarApiReference().WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax);
+		}
 
 		// Rate limit
 		app.UseRateLimiter();

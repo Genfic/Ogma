@@ -46,6 +46,11 @@ public sealed partial class CloudflareIpForwardingMiddleware
 
 		context.Connection.RemoteIpAddress = realIp;
 
+		if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var proto))
+		{
+			context.Request.Scheme = proto.ToString();
+		}
+
 		await next(context);
 	}
 
