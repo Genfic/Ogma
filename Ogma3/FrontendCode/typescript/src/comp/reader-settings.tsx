@@ -1,6 +1,6 @@
 import { $query } from "@h/dom";
 import { component } from "@h/web-components";
-import { makePersisted } from "@solid-primitives/storage";
+import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { type ComponentType, noShadowDOM } from "solid-element";
 import { createEffect, createUniqueId } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -10,10 +10,10 @@ import { InputToggle } from "./common/_input-toggle";
 import css from "./reader-settings.css";
 
 const unitMap = {
-	"--chapter-align": "",
-	"--chapter-para-spacing": "rem",
-	"--chapter-line-height": "",
-	"--chapter-font-size": "rem",
+	"--align": "",
+	"--para-spacing": "rem",
+	"--line-height": "",
+	"--font-size": "rem",
 } as const;
 
 const cssVars = Object.keys(unitMap) as readonly (keyof typeof unitMap)[];
@@ -40,7 +40,10 @@ const ReaderSettings: ComponentType<never> = () => {
 	);
 
 	const dialog = $signal<DialogApi>();
-	const [getStore, setStore] = makePersisted(createStore({ ...defaults }), { name: "reader-settings" });
+	const [getStore, setStore] = makePersisted(createStore({ ...defaults }), {
+		name: "reader-settings",
+		storage: cookieStorage,
+	});
 
 	createEffect(() => {
 		for (const [name, value] of Object.entries(getStore)) {
@@ -73,38 +76,38 @@ const ReaderSettings: ComponentType<never> = () => {
 			<Dialog ref={$set(dialog)}>
 				<InputToggle
 					label="justify"
-					value={getStore["--chapter-align"] === "justify"}
-					onToggle={(b) => setStore("--chapter-align", b ? "justify" : "left")}
+					value={getStore["--align"] === "justify"}
+					onToggle={(b) => setStore("--align", b ? "justify" : "left")}
 				/>
-				<label for={$id("spacing")}>Paragraph spacing: {getStore["--chapter-para-spacing"]}</label>
+				<label for={$id("spacing")}>Paragraph spacing: {getStore["--para-spacing"]}</label>
 				<input
 					id={$id("spacing")}
 					type="range"
 					min="0"
 					max="5"
 					step="0.05"
-					value={getStore["--chapter-para-spacing"]}
-					oninput={setVar("--chapter-para-spacing")}
+					value={getStore["--para-spacing"]}
+					oninput={setVar("--para-spacing")}
 				/>
-				<label for={$id("line-height")}>Line height: {getStore["--chapter-line-height"]}</label>
+				<label for={$id("line-height")}>Line height: {getStore["--line-height"]}</label>
 				<input
 					id={$id("line-height")}
 					type="range"
 					min="0.75"
 					max="5"
 					step="0.01"
-					value={getStore["--chapter-line-height"]}
-					oninput={setVar("--chapter-line-height")}
+					value={getStore["--line-height"]}
+					oninput={setVar("--line-height")}
 				/>
-				<label for={$id("font-size")}>Font size: {getStore["--chapter-font-size"]}</label>
+				<label for={$id("font-size")}>Font size: {getStore["--font-size"]}</label>
 				<input
 					id={$id("font-size")}
 					type="range"
 					min="0.5"
 					max="5"
 					step="0.05"
-					value={getStore["--chapter-font-size"]}
-					oninput={setVar("--chapter-font-size")}
+					value={getStore["--font-size"]}
+					oninput={setVar("--font-size")}
 				/>
 
 				<br />

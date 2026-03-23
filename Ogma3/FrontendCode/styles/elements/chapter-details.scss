@@ -135,17 +135,17 @@ $notes-padding-y: .25rem;
 		}
 
 		> .body {
-			--chapter-para-spacing: 0.5rem;
-			--chapter-line-height: 1.75;
-			--chapter-align: justify;
-			--chapter-font-size: 1rem;
+			--para-spacing: 0.5rem;
+			--line-height: 1.75;
+			--align: justify;
+			--font-size: 1rem;
 
-			text-align: var(--chapter-align);
-			line-height: var(--chapter-line-height);
-			font-size: var(--chapter-font-size);
+			text-align: var(--align);
+			line-height: var(--line-height);
+			font-size: var(--font-size);
 
 			> * {
-				margin-bottom: var(--chapter-para-spacing);
+				margin-bottom: var(--para-spacing);
 			}
 		}
 	}
