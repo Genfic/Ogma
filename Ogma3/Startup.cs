@@ -2,8 +2,6 @@ using System.IO.Compression;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using B2Net;
-using B2Net.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -48,6 +46,7 @@ using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.PowService;
+using Ogma3.Services.S3Storage;
 using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
 using Ogma3.Services.UserService;
@@ -183,8 +182,7 @@ public static class Startup
 			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"));
 
 		// Backblaze
-		var b2Options = configuration.GetSection("B2").Get<B2Options>() ?? throw new InvalidOperationException("B2 options not found");
-		services.AddSingleton<IB2Client>(new B2Client(b2Options));
+		services.AddS3Storage(configuration);
 
 		// File uploader
 		services.AddSingleton<ImageUploader>();

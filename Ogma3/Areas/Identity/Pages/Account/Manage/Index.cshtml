@@ -1,12 +1,15 @@
 ﻿@page
+@using Ogma3.Infrastructure.OgmaConfig
 @model IndexModel
+
+@inject OgmaConfig Config;
 @{
 	ViewData["Title"] = "Profile";
 	ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
 <h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
 
 <form id="profile-form" class="form" method="post" enctype="multipart/form-data">
 
@@ -14,15 +17,20 @@
 
 	<div class="o-form-group">
 		<label asp-for="Input.Avatar"></label>
-		<input asp-for="Input.Avatar" accept=".png,.jpg,.jpeg,.webp" class="o-form-control active-border">
+		<input asp-for="Input.Avatar"
+		       accept=".png,.jpg,.jpeg,.webp"
+		       class="o-form-control active-border"
+		       data-resize="@(Config.AvatarWidth)x@(Config.AvatarHeight)">
 		<span asp-validation-for="Input.Avatar" class="text-danger"></span>
 
-		<label asp-for="Input.DeleteAvatar">Reset avatar<input asp-for="Input.DeleteAvatar"></label>
+		<label asp-for="Input.DeleteAvatar">Reset avatar
+			<input asp-for="Input.DeleteAvatar">
+		</label>
 	</div>
 
 	<div class="o-form-group">
 		<label asp-for="Input.Title"></label>
-		<input asp-for="Input.Title" class="o-form-control active-border"/>
+		<input asp-for="Input.Title" class="o-form-control active-border" />
 		<span asp-validation-for="Input.Title" class="text-danger"></span>
 	</div>
 
@@ -51,7 +59,8 @@
 
 
 @section Scripts {
-	<partial name="_ValidationScriptsPartial"/>
+	<partial name="_ValidationScriptsPartial" />
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/resizer.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 }

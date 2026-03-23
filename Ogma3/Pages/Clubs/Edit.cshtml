@@ -1,6 +1,8 @@
 @page "{id}"
+@using Ogma3.Infrastructure.OgmaConfig
 @model EditModel
 
+@inject OgmaConfig Config
 @{
 	ViewData["Title"] = $"Manage {Model.Input.Name}";
 }
@@ -24,7 +26,7 @@
 	</a>
 </div>
 
-<form class="form" id="club" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
+<form class="form" id="club" method="post" enctype="multipart/form-data">
 
 	<div asp-validation-summary="All">
 		<span>Please correct the following errors</span>
@@ -55,7 +57,10 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Icon"></label>
 		<span class="desc">Something that will set your club apart</span>
-		<input asp-for="Input.Icon" class="o-form-control active-border">
+		<input asp-for="Input.Icon"
+		       accept=".png,.jpg,.jpeg,.webp"
+		       data-resize="@(Config.ClubIconWidth)x@(Config.ClubIconHeight)"
+		       class="o-form-control active-border">
 		<span asp-validation-for="Input.Icon"></span>
 	</div>
 
@@ -71,5 +76,6 @@
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/resizer.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 }

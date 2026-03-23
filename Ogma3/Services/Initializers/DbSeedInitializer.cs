@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using Bogus;
 using Extensions.Hosting.AsyncInitialization;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
@@ -32,7 +31,6 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 	private readonly OgmaUserManager _userManager;
 	private readonly ILogger<DbSeedInitializer> _logger;
 	private readonly IHttpClientFactory _clientFactory;
-	private readonly IPasswordHasher<OgmaUser> _passwordHasher;
 
 	private readonly JsonData _data;
 
@@ -40,15 +38,13 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		ApplicationDbContext context,
 		OgmaUserManager userManager,
 		ILogger<DbSeedInitializer> logger,
-		IHttpClientFactory clientFactory,
-		IPasswordHasher<OgmaUser> passwordHasher
+		IHttpClientFactory clientFactory
 	)
 	{
 		_context = context;
 		_userManager = userManager;
 		_logger = logger;
 		_clientFactory = clientFactory;
-		_passwordHasher = passwordHasher;
 
 		using var sr = new StreamReader("seed.json5");
 		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
@@ -71,8 +67,6 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		var timer = new Stopwatch();
 		timer.Start();
 
-		// await using var transaction = await _context.Database.BeginTransactionAsync(ct);
-
 		await Time(SeedRoles, nameof(SeedRoles));
 		await Time(SeedUsers, nameof(SeedUsers));
 		await Time(SeedAdmin, nameof(SeedAdmin));
@@ -83,8 +77,6 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		var storyIds = await Time(SeedStories, nameof(SeedStories));
 		await Time(() => SeedStoryTags(storyIds, tagIds), nameof(SeedStoryTags));
 		await Time(() => SeedBlogposts(storyIds), nameof(SeedBlogposts));
-
-		// await transaction.CommitAsync(ct);
 
 		timer.Stop();
 		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);

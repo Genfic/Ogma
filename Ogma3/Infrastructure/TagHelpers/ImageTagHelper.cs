@@ -9,7 +9,8 @@ namespace Ogma3.Infrastructure.TagHelpers;
 [method: ActivatorUtilitiesConstructor]
 public sealed class ImageTagHelper(
 	IUrlHelperFactory urlHelperFactory,
-	HtmlEncoder htmlEncoder
+	HtmlEncoder htmlEncoder,
+	OgmaConfig.OgmaConfig config
 ) : UrlResolutionTagHelper(urlHelperFactory, htmlEncoder)
 {
 	[HtmlAttributeName("cf")]
@@ -38,7 +39,8 @@ public sealed class ImageTagHelper(
 		{
 			['/', '/'] => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/https:{Src}",
 			['/', _] => Src,
-			_ => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/{Src}",
+			['h', 't'] => Src,
+			_ => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/https:{Path.Join(config.Cdn, Src)}",
 		};
 
 		output.Attributes.SetAttribute("width", Width);

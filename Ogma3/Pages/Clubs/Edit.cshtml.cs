@@ -93,6 +93,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 			.Where(c => c.ClubMembers
 				.Where(cm => cm.MemberId == uid)
 				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
+			.Include(c => c.Icon)
 			.FirstOrDefaultAsync();
 
 		if (club is null)
@@ -108,6 +109,11 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 
 		if (Input.Icon is { Length: > 0 })
 		{
+			if (club.Icon.ETag is not null)
+			{
+				await uploader.Delete(club.Icon.Url);
+			}
+
 			var file = await uploader.Upload(
 				Input.Icon,
 				"club-icons",
@@ -116,8 +122,8 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 			);
 			club.Icon = new Image
 			{
-				Url = Path.Join(ogmaConfig.Cdn, file.Path),
-				BackblazeId = file.FileId,
+				Url = file.Key,
+				ETag = file.ETag,
 			};
 		}
 

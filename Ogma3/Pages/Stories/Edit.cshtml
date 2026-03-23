@@ -1,9 +1,11 @@
 ﻿@page
 @using Ogma3.Data.Stories
+@using Ogma3.Infrastructure.OgmaConfig
 @using Ogma3.Pages.Shared
 @using Utils.Extensions
 @model EditModel
 
+@inject OgmaConfig Config
 @{
 	ViewData["Title"] = $"Edit {Model.Input.Title}";
 }
@@ -21,7 +23,7 @@
 	</a>
 </div>
 
-<form class="form" id="story" method="post" enctype="multipart/form-data" v-on:submit="onSubmit">
+<form class="form" id="story" method="post" enctype="multipart/form-data">
 
 	<div asp-validation-summary="All">
 		<span>Please correct the following errors</span>
@@ -102,7 +104,10 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Cover"></label>
 		<span class="desc">First thing people often notice</span>
-		<input asp-for="Input.Cover" class="o-form-control active-border">
+		<input asp-for="Input.Cover"
+		       accept=".png,.jpg,.jpeg,.webp"
+		       data-resize="@(Config.StoryCoverWidth)x@(Config.StoryCoverHeight)"
+		       class="o-form-control active-border">
 		<span asp-validation-for="Input.Cover"></span>
 	</div>
 
@@ -256,6 +261,7 @@
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/resizer.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/credits.js" asp-append-version="true"></script>
 }
 

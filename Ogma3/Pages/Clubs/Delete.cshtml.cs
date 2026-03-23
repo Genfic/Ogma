@@ -6,6 +6,7 @@ using Ogma3.Data;
 using Ogma3.Data.Clubs;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Index = Routes.Pages.Index;
 
 namespace Ogma3.Pages.Clubs;
 
@@ -81,9 +82,9 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 
 		logger.LogInformation("User {UserId} succeeded in deleting club {ClubId}", uid, id);
 
-		if (icon is { BackblazeId: not null })
+		if (icon is { ETag: not null })
 		{
-			await uploader.Delete(icon.Url, icon.BackblazeId);
+			await uploader.Delete(icon.Url);
 		}
 
 		var imageRows = await context.Images
@@ -95,6 +96,6 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 			logger.LogInformation("User {UserId} did not succeed in deleting club icon {ClubId}", uid, id);
 		}
 
-		return Routes.Pages.Index.Get().Redirect(this);
+		return Index.Get().Redirect(this);
 	}
 }

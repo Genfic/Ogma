@@ -9,11 +9,13 @@ public static class S3Storage
 	{
 		var options = config.GetSection("B2").Get<S3StorageOptions>() ?? throw new InvalidOperationException("S3 storage options not found");
 
+		services.AddSingleton(options);
+
 		services.AddSingleton<IAmazonS3>(_ => {
 			var s3Config = new AmazonS3Config
 			{
 				ServiceURL = options.ServiceUrl,
-				ForcePathStyle = false,
+				ForcePathStyle = true,
 			};
 
 			var credentials = new BasicAWSCredentials(options.KeyId, options.ApplicationKey);

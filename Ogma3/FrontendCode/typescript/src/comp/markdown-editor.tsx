@@ -1,6 +1,6 @@
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
-import { For, type JSX, onCleanup, onMount } from "solid-js";
+import { createEffect, For, type JSX, onCleanup, onMount } from "solid-js";
 import { createHistory } from "solid-signals";
 import { LucideBold } from "../icons/LucideBold";
 import { LucideEyeClosed } from "../icons/LucideEyeClosed";
@@ -54,7 +54,7 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 	const [cursorPosition, setCursorPosition] = createHistory(0);
 	const [content, setContent] = createHistory(area.value);
 
-	$effect(() => {
+	createEffect(() => {
 		area.value = content();
 	});
 

@@ -37,7 +37,7 @@ public sealed class EditModel(
 	{
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
-		// Get the story to edit and make sure author matches logged-in user
+		// Get the story to edit and make sure the author matches logged-in user
 		var input = await context.Stories
 			.Where(s => s.Id == id)
 			.Where(s => s.AuthorId == uid)
@@ -132,6 +132,7 @@ public sealed class EditModel(
 		var story = await context.Stories
 			.Include(s => s.Tags)
 			.Include(s => s.Rating)
+			.Include(s => s.Cover)
 			.FirstOrDefaultAsync(s => s.Id == id && s.AuthorId == uid);
 
 		// 404 if none found
@@ -164,10 +165,13 @@ public sealed class EditModel(
 		story.PublicationDate ??= Input.Published ? DateTimeOffset.UtcNow : null;
 		story.Credits = credits;
 
-		// Handle cover upload
 		if (Input.Cover is { Length: > 0 })
 		{
-			// Upload cover
+			if (story.Cover?.ETag is not null)
+			{
+				await uploader.Delete(story.Cover.Url);
+			}
+
 			var file = await uploader.Upload(
 				Input.Cover,
 				"covers",
@@ -176,8 +180,8 @@ public sealed class EditModel(
 			);
 			story.Cover = new Image
 			{
-				Url = Path.Join(ogmaConfig.Cdn, file.Path),
-				BackblazeId = file.FileId,
+				Url = file.Key,
+				ETag = file.ETag,
 			};
 		}
 

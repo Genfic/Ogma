@@ -7,8 +7,8 @@ namespace Ogma3.Data.Images;
 [AutoDbSet]
 public sealed class Image : BaseModel
 {
-	public required string Url { get; set; }
-	public string? BackblazeId { get; set; }
+	public required string Url { get; init; }
+	public string? ETag { get; init; }
 }
 
 public sealed class ImageConfiguration : BaseConfiguration<Image>
@@ -21,7 +21,7 @@ public sealed class ImageConfiguration : BaseConfiguration<Image>
 			.Property(i => i.Url)
 			.HasMaxLength(255);
 		builder
-			.Property(i => i.BackblazeId)
+			.Property(i => i.ETag)
 			.HasMaxLength(255);
 	}
 }

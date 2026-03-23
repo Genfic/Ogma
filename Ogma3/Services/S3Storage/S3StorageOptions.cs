@@ -6,4 +6,5 @@ public sealed class S3StorageOptions
 	public required string KeyId { get; init; }
 	public required string ApplicationKey { get; init; }
 	public required string BucketName { get; init; }
+	public required string BucketId { get; init; }
 }

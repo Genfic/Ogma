@@ -6,6 +6,7 @@ using Ogma3.Data;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Routes.Pages;
 
 namespace Ogma3.Pages.Stories;
 
@@ -80,14 +81,14 @@ public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uplo
 		context.Stories.Remove(story);
 
 		// Delete cover
-		if (story.Cover is { BackblazeId: not null })
+		if (story.Cover is { ETag: not null })
 		{
-			await uploader.Delete(story.Cover.Url, story.Cover.BackblazeId);
+			await uploader.Delete(story.Cover.Url);
 		}
 
 		// Save
 		await context.SaveChangesAsync();
 
-		return Routes.Pages.User_Stories.Get(uname).Redirect(this);
+		return User_Stories.Get(uname).Redirect(this);
 	}
 }

@@ -68,8 +68,8 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 				ogmaConfig.ClubIconWidth,
 				ogmaConfig.ClubIconHeight
 			);
-			icon = Path.Join(ogmaConfig.Cdn, file.Path);
-			iconId = file.FileId;
+			icon = file.Key;
+			iconId = file.ETag;
 		}
 
 		var club = new Data.Clubs.Club
@@ -81,7 +81,7 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 			Icon = new Image
 			{
 				Url = icon,
-				BackblazeId = iconId,
+				ETag = iconId,
 			},
 			ClubMembers =
 			[

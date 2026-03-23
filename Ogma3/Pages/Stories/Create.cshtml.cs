@@ -136,8 +136,8 @@ public sealed class CreateModel(
 			);
 			story.Cover = new Image
 			{
-				Url = Path.Join(ogmaConfig.Cdn, file.Path),
-				BackblazeId = file.FileId,
+				Url = file.Key,
+				ETag = file.ETag,
 			};
 		}
 

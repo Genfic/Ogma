@@ -15,7 +15,7 @@ using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services.FileUploader;
-using Utils.Extensions;
+using Utils;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
@@ -50,7 +50,7 @@ public sealed partial class IndexModel
 		{
 			RuleFor(x => x.Avatar!)
 				.FileSmallerThan(CTConfig.Files.AvatarMaxWeight)
-				.FileHasExtension(".jpg", ".jpeg", ".png")
+				.FileHasExtension(".jpg", ".jpeg", ".png", ".webp")
 				.When(x => x.Avatar is not null);
 			RuleFor(x => x.Title)
 				.MaximumLength(CTConfig.User.MaxTitleLength);
@@ -99,7 +99,7 @@ public sealed partial class IndexModel
 				.OfType<TimezoneEntry>()
 				.OrderBy(i => i.Text)
 				.ToList(),
-			opt => opt.Duration = TimeSpan.FromSeconds(3)
+			opt => opt.Duration = TimeSpan.FromHours(1)
 		);
 
 		return Page();
@@ -128,9 +128,9 @@ public sealed partial class IndexModel
 		if (Input.Avatar is { Length: > 0 })
 		{
 			// Delete the old avatar if exists
-			if (user.Avatar.BackblazeId is not null)
+			if (user.Avatar.ETag is not null)
 			{
-				await uploader.Delete(user.Avatar.Url, user.Avatar.BackblazeId);
+				await uploader.Delete(user.Avatar.Url.Replace(config.Cdn, ""));
 			}
 
 			// Upload the new one
@@ -142,21 +142,20 @@ public sealed partial class IndexModel
 			);
 			user.Avatar = new Image
 			{
-				Url = Path.Join(config.Cdn, file.Path),
-				BackblazeId = file.FileId,
+				Url = file.Key,
+				ETag = file.ETag,
 			};
 		}
 		else if (Input.DeleteAvatar)
 		{
-			if (user.Avatar.BackblazeId is not null)
+			if (user.Avatar.ETag is not null)
 			{
-				await uploader.Delete(user.Avatar.Url, user.Avatar.BackblazeId);
+				await uploader.Delete(user.Avatar.Url.Replace(config.Cdn, ""));
 			}
 
 			user.Avatar = new Image
 			{
-				Url = new Uri(config.AvatarServiceUrl).AppendSegments($"{user.UserName}.png").ToString(),
-				BackblazeId = null,
+				Url = Gravatar.Generate(user.Email),
 			};
 		}
 

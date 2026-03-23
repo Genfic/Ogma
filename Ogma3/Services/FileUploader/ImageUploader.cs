@@ -1,20 +1,20 @@
-using B2Net;
-using B2Net.Models;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Logging.OperationTiming;
-using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services.S3Storage;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
 
-public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILogger<ImageUploader> logger) : IFileUploader
+public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options, ILogger<ImageUploader> logger) : IFileUploader
 {
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
 	/// <exception cref="Exception">Thrown when after `tries` number of tries, the file could not be uploaded</exception>
-	public async Task<FileUploaderResult> Upload(
+	public async Task<FileUploadResult> Upload(
 		IFormFile file,
 		string folder,
 		int? width = null,
@@ -29,7 +29,7 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
 	/// <exception cref="FileUploadException">Thrown when after `tries` number of tries, the file could not be uploaded</exception>
-	public async Task<FileUploaderResult> Upload(
+	public async Task<FileUploadResult> Upload(
 		IFormFile file,
 		string folder,
 		string name,
@@ -44,10 +44,11 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 		}
 
 		await using var outputMs = await ProcessImage(file, width, height);
-		outputMs.Seek(0, SeekOrigin.Begin);
+		outputMs.Position = 0;
+		var bytes = outputMs.ToArray();
 
 		// Assemble the final path
-		var fileName = $"{folder}/{name}.webp";
+		var key = $"{folder}/{name}.webp";
 
 		// Try to upload the image to the bucket
 		var counter = tries;
@@ -57,17 +58,20 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 
 			try
 			{
-				var uploadUrl = await b2Client.Files.GetUploadUrl();
-				var uploadContext = new B2FileUploadContext
-				{
-					FileName = fileName,
-					B2UploadUrl = uploadUrl,
-				};
+				using var uploadStream = new MemoryStream(bytes);
 
-				var result = await b2Client.Files.Upload(outputMs.ToArray(), uploadContext);
-				return new FileUploaderResult(result.FileId, fileName);
+				var request = new PutObjectRequest
+				{
+					BucketName = s3Options.BucketName,
+					Key = key,
+					InputStream = uploadStream,
+					ContentType = "image/webp",
+				};
+				var res = await s3Client.PutObjectAsync(request);
+
+				return new(key, res.ETag.Trim('"'));
 			}
-			catch (B2Exception e)
+			catch (AmazonS3Exception e)
 			{
 				logger.LogError("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
 			}
@@ -77,8 +81,15 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 		throw new FileUploadException("Could not upload file. Check server logs.", file.Name, file.Length);
 	}
 
-	public async Task Delete(string name, string id, CancellationToken cancellationToken = default)
-		=> _ = await b2Client.Files.Delete(id, name.Replace(ogmaConfig.Cdn, string.Empty).Trim('/'), cancellationToken);
+	public async Task Delete(string key, CancellationToken cancellationToken = default)
+	{
+		var request = new DeleteObjectRequest
+		{
+			BucketName = s3Options.BucketName,
+			Key = key,
+		};
+		await s3Client.DeleteObjectAsync(request, cancellationToken);
+	}
 
 	private async Task<MemoryStream> ProcessImage(IFormFile file, int? width = null, int? height = null)
 	{
@@ -100,7 +111,7 @@ public sealed class ImageUploader(IB2Client b2Client, OgmaConfig ogmaConfig, ILo
 			}
 		}
 
-		if ((width ?? height) is {} w && (height ?? width) is {} h)
+		if ((width ?? height) is {} w && (height ?? width) is {} h && (img.Width > w || img.Height > h))
 		{
 			using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
