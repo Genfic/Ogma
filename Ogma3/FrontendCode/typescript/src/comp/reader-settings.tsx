@@ -1,3 +1,4 @@
+import { CSS } from "@h/css-helpers";
 import { $query } from "@h/dom";
 import { component } from "@h/web-components";
 import { cookieStorage, makePersisted } from "@solid-primitives/storage";
@@ -9,16 +10,28 @@ import { Dialog, type DialogApi } from "./common/_dialog";
 import { InputToggle } from "./common/_input-toggle";
 import css from "./reader-settings.css";
 
-const unitMap = {
-	"--align": "",
-	"--para-spacing": "rem",
-	"--line-height": "",
-	"--font-size": "rem",
-} as const;
-
-const cssVars = Object.keys(unitMap) as readonly (keyof typeof unitMap)[];
-
+const cssVars = ["--align", "--para-spacing", "--line-height", "--font-size", "--bg-color", "--fg-color"] as const;
 type CSSVar = (typeof cssVars)[number];
+
+const articleBody = $query("article.chapter-details div.body[itemprop='text']");
+
+// We have to remove the contents rendered from the server so that the computed style
+// actually uses the defaults from the stylesheet instead of the customized ones.
+const savedStyle = articleBody.style.cssText;
+articleBody.style.cssText = "";
+
+const defaults = Object.freeze(
+	cssVars.reduce(
+		(acc, curr) => {
+			acc[curr] = getComputedStyle(articleBody).getPropertyValue(curr);
+			return acc;
+		},
+		{} as Record<CSSVar, string>,
+	),
+);
+
+// and it needs to be restored
+articleBody.style.cssText = savedStyle;
 
 const ReaderSettings: ComponentType<never> = () => {
 	noShadowDOM();
@@ -26,28 +39,22 @@ const ReaderSettings: ComponentType<never> = () => {
 	const uid = createUniqueId();
 	const $id = (id: string) => `${uid}-${id}`;
 
-	const articleBody = $query("article.chapter-details div.body[itemprop='text']");
-
-	const defaults = Object.freeze(
-		cssVars.reduce(
-			(acc, curr) => {
-				const value = getComputedStyle(articleBody).getPropertyValue(curr);
-				acc[curr] = value.replace(unitMap[curr], "");
-				return acc;
-			},
-			{} as Record<CSSVar, string>,
-		),
-	);
-
 	const dialog = $signal<DialogApi>();
 	const [getStore, setStore] = makePersisted(createStore({ ...defaults }), {
 		name: "reader-settings",
 		storage: cookieStorage,
+		storageOptions: {
+			path: "/",
+			maxAge: 365 * 24 * 60 * 60,
+			sameSite: "strict",
+		},
+		serialize: CSS.serialize,
+		deserialize: CSS.deserialize<CSSVar>,
 	});
 
 	createEffect(() => {
 		for (const [name, value] of Object.entries(getStore)) {
-			articleBody.style.setProperty(name, value + unitMap[name as CSSVar]);
+			articleBody.style.setProperty(name, value);
 		}
 	});
 
@@ -108,6 +115,20 @@ const ReaderSettings: ComponentType<never> = () => {
 					step="0.05"
 					value={getStore["--font-size"]}
 					oninput={setVar("--font-size")}
+				/>
+				<label for={$id("bg-color")}>Background color</label>
+				<input
+					id={$id("bg-color")}
+					type="color"
+					value={CSS.toHex(getStore["--bg-color"])}
+					oninput={setVar("--bg-color")}
+				/>
+				<label for={$id("fg-color")}>Text color</label>
+				<input
+					id={$id("fg-color")}
+					type="color"
+					value={CSS.toHex(getStore["--fg-color"])}
+					oninput={setVar("--fg-color")}
 				/>
 
 				<br />

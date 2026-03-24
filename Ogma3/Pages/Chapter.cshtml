@@ -15,6 +15,8 @@
 	ViewData["Rating"] = Model.Chapter.StoryRatingName;
 
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+
+	var readerSettings = Request.Cookies.TryGetValue("reader-settings", out var settings) ? settings : null;
 }
 
 @section OgMeta {
@@ -99,7 +101,7 @@
 				</aside>
 			}
 
-			<markdown preset="Basic" class="body" itemprop="text">
+			<markdown preset="Basic" class="body" itemprop="text" style="@readerSettings">
 				@Model.Chapter.Body
 			</markdown>
 
@@ -113,8 +115,7 @@
 		</div>
 
 
-		<o-read-progress data-csrf="@csrf" data-chapter="@Model.Chapter.Id" data-story="@Model.Chapter.StoryId" id="chapter-progress"
-		                 v-pre></o-read-progress>
+		<o-read-progress data-csrf="@csrf" data-chapter="@Model.Chapter.Id" data-story="@Model.Chapter.StoryId" id="chapter-progress"></o-read-progress>
 	</article>
 
 	<div class="navigation">

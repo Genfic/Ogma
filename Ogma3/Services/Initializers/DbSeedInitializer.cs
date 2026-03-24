@@ -68,8 +68,8 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		timer.Start();
 
 		await Time(SeedRoles, nameof(SeedRoles));
-		await Time(SeedUsers, nameof(SeedUsers));
 		await Time(SeedAdmin, nameof(SeedAdmin));
+		await Time(SeedUsers, nameof(SeedUsers));
 		await Time(SeedRatings, nameof(SeedRatings));
 		await Time(SeedIcons, nameof(SeedIcons));
 		await Time(SeedQuotes, nameof(SeedQuotes));
@@ -168,7 +168,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			.RuleFor(u => u.Email, f => f.Internet.Email())
 			.RuleFor(u => u.Bio, f => f.Lorem.Paragraph())
 			.RuleFor(u => u.EmailConfirmed, true)
-			.RuleFor(u => u.CommentThread, new CommentThread())
+			.RuleFor(u => u.CommentThread, _ => new CommentThread())
 			.RuleFor(u => u.RegistrationDate, f => f.Date.PastOffset().ToUniversalTime())
 			.RuleFor(u => u.Title, f => f.Random.String2(f.Random.Int(5, 20)).OrNull(f, 0.6f));
 
@@ -271,7 +271,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 					.RuleFor(c => c.PublicationDate, cf => s.PublicationDate is {} pd
 						? cf.Date.BetweenOffset(pd, DateTimeOffset.UtcNow).ToUniversalTime()
 						: null)
-					.RuleFor(c => c.CommentThread, new CommentThread())
+					.RuleFor(c => c.CommentThread, _ => new CommentThread())
 					.RuleFor(c => c.Order, () => order++)
 					.RuleFor(c => c.CreationDate, (cf, c) => cf.Date.BetweenOffset(s.CreationDate, c.PublicationDate ?? DateTimeOffset.UtcNow).ToUniversalTime())
 					.RuleFor(c => c.WordCount, (_, c) => c.Body.Words())
@@ -281,8 +281,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 						.OrNull(cf, 0.7f))
 					.RuleFor(c => c.EndNotes, cf => cf.WaffleMarkdown(includeHeading: false)
 						.Trim(CTConfig.Chapter.MaxNotesLength)
-						.OrNull(cf, 0.7f))
-					.RuleFor(c => c.CommentThread, new CommentThread());
+						.OrNull(cf, 0.7f));
 				return chapterGenerator.Generate(f.Random.Int(1, 5));
 			})
 			.RuleFor(s => s.ChapterCount, (_, s) => s.Chapters.Count)
@@ -336,7 +335,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			.RuleFor(b => b.CreationDate, f => f.Date.PastOffset().ToUniversalTime())
 			.RuleFor(b => b.PublicationDate, (f, b) => f.Date.BetweenOffset(b.CreationDate, DateTimeOffset.UtcNow).ToUniversalTime().OrNull(f, 0.2f))
 			.RuleFor(b => b.Hashtags, f => f.Lorem.Words())
-			.RuleFor(b => b.CommentThread, new CommentThread())
+			.RuleFor(b => b.CommentThread, _ => new CommentThread())
 			.RuleFor(b => b.WordCount, (_, b) => b.Body.Words())
 			.RuleFor(b => b.AttachedStoryId, f => f.PickRandom(storyIds).OrNull(f, 0.9f))
 			.RuleFor(b => b.AttachedChapterId, (f, b) => b.AttachedStoryId is null

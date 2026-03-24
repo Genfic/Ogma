@@ -37,12 +37,13 @@ $notes-padding-y: .25rem;
 				}
 
 				&::before {
-					content: '❝';
-					margin-right: .2rem;
+					content: '\201C';
+					font-size: 1.2rem;
 				}
 
 				&::after {
-					content: '❞';
+					content: '\201D';
+					font-size: 1.2rem;
 				}
 
 				@media (width <= v.$mq-mobile-sm) {
@@ -135,17 +136,22 @@ $notes-padding-y: .25rem;
 		}
 
 		> .body {
-			--para-spacing: 0.5rem;
+			--para-spacing: 0.5;
 			--line-height: 1.75;
-			--align: justify;
-			--font-size: 1rem;
+			--align: left;
+			--font-size: 1;
+			--bg-color: transparent;
+			--fg-color: var(--foreground);
 
 			text-align: var(--align);
 			line-height: var(--line-height);
-			font-size: var(--font-size);
+			font-size: calc(var(--font-size) * 1rem);
+			background-color: var(--bg-color);
+			box-shadow: 0 0 .5rem 1rem var(--bg-color);
+			color: var(--fg-color);
 
 			> * {
-				margin-bottom: var(--para-spacing);
+				margin-bottom: calc(var(--para-spacing) * 1rem);
 			}
 		}
 	}

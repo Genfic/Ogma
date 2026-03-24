@@ -17,3 +17,7 @@ export const attemptAsync = async <T, E>(func: () => Promise<T>): Promise<Attemp
 		return { success: false as const, error: e as E };
 	}
 };
+
+export const attemptOr = <T, E>(func: () => T, fallback: T): T => (attempt<T, E>(func).success ? func() : fallback);
+export const attemptOrAsync = async <T, E>(func: () => Promise<T>, fallback: T): Promise<T> =>
+	(await attemptAsync<T, E>(func)).success ? await func() : fallback;

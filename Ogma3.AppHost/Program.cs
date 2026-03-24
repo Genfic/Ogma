@@ -15,8 +15,7 @@ var garnet = builder
 
 var database = builder
 	.AddPostgres("postgres", port: 5432)
-	.WithImageTag("18.0")
-	.WithEnvironment("PGDATA", "/var/lib/postgresql/data")
+	.WithImageTag("18")
 	.WithDataVolume()
 	.WithLifetime(ContainerLifetime.Persistent)
 	.WithPgWeb()

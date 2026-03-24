@@ -1,8 +1,6 @@
 @use "../mixins/active-border" as ab;
 @use "../vars" as v;
 
-$title-height: 1.8rem;
-
 .story-card {
 	contain: content;
 	width: 100%;
@@ -12,10 +10,10 @@ $title-height: 1.8rem;
 		  " img  hook "  1fr
 		  " img  tags "  auto
 		  " info info "  auto / 10rem 1fr auto;
-	gap: .25rem .5rem;
+	gap: .5rem;
 
 	margin: .75rem 0 0;
-	padding: .25rem .25rem 0;
+	padding: .5rem .5rem 0;
 	background-color: var(--ele-1);
 	@include ab.active-border;
 
@@ -88,12 +86,9 @@ $title-height: 1.8rem;
 		text-overflow: ellipsis;
 
 		h3 {
-			font-size: $title-height;
-			line-height: $title-height;
 			display: inline;
 			white-space: nowrap;
 			padding: 0 .25rem;
-
 
 			> a {
 				color: var(--foreground);
@@ -106,13 +101,6 @@ $title-height: 1.8rem;
 					color: var(--foreground-75);
 					text-decoration: underline;
 				}
-			}
-
-			> .rating {
-				display: inline;
-				vertical-align: middle;
-				height: $title-height * 0.7;
-				width: $title-height * 0.7;
 			}
 		}
 

@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using System.Text.Encodings.Web;
 using Markdig;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Infrastructure.Constants;
 using Utils.Extensions;
@@ -10,7 +12,8 @@ public sealed class MarkdownTagHelper : TagHelper
 {
 	public Presets Preset { get; set; } = Presets.Basic;
 
-	public string Class { get; set; } = "";
+	[HtmlAttributeName(DictionaryAttributePrefix = "")]
+	public Dictionary<string, string> Attributes { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
 	public enum Presets
 	{
@@ -36,7 +39,13 @@ public sealed class MarkdownTagHelper : TagHelper
 		var markdownHtmlContent = Markdown.ToHtml(childContent.GetContent(NullHtmlEncoder.Default).RemoveLeadingWhiteSpace(), builder);
 
 		output.TagName = "div";
-		output.Attributes.SetAttribute("class", $"md {Class}");
+
+		foreach (var (key, value) in Attributes)
+		{
+			output.Attributes.Add(key, value);
+		}
+		output.AddClass("md", HtmlEncoder.Default);
+
 		output.Content.SetHtmlContent(markdownHtmlContent);
 	}
 }
