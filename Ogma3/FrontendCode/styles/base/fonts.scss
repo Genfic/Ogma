@@ -33,3 +33,29 @@
 		local('Inconsolata-Variable'),
 		url('/fonts/InconsolataVariable.woff2') format('woff2-variations');
 }
+
+// noinspection CssUnknownTarget
+@font-face {
+	font-family: IMFellEnglish;
+	font-weight: 200 900;
+	font-display: swap;
+	font-style: normal;
+	src:
+		local('IMFellEnglish-Regular'),
+		local('IMFellEnglish'),
+		url("/fonts/IMFellEnglish-Regular.woff2") format("woff2-variations");
+
+}
+
+// noinspection CssUnknownTarget
+@font-face {
+	font-family: IMFellEnglish;
+	font-weight: 200 900;
+	font-display: swap;
+	font-style: italic;
+	src:
+		local('IMFellEnglish-Italic'),
+		local('IMFellEnglish Italic'),
+		url("/fonts/IMFellEnglish-Italic.woff2") format("woff2-variations");
+
+}

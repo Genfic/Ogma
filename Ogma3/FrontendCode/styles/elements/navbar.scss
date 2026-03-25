@@ -24,6 +24,9 @@ button#burger {
 }
 
 nav#top-nav {
+	--pad: var(--nav-v-pad);
+	--font: 2rem;
+
 	display: flex;
 	position: fixed;
 	top: 0;
@@ -31,7 +34,7 @@ nav#top-nav {
 	width: 100%;
 	min-height: var(--nav-height);
 	z-index: 99999;
-	padding: var(--nav-v-pad) 4rem;
+	padding: var(--pad) 4rem;
 
 	background-color: var(--ele-1);
 	border-bottom: 1px solid var(--foreground-50);
@@ -63,8 +66,9 @@ nav#top-nav {
 	}
 
 	&.compact {
-		padding-top: .1rem;
-		padding-bottom: .1rem;
+		--pad: .1rem;
+		--font: 1.3rem;
+
 		@media (prefers-reduced-motion) {
 			height: var(--nav-height);
 		}
@@ -76,20 +80,24 @@ nav#top-nav {
 		}
 	}
 
-	> .brand {
+	.brand {
 		color: var(--foreground);
 		padding: 0 .5rem;
+
+		margin-top: calc(-1 * var(--pad));
+		margin-bottom: calc(-1 * var(--pad));
 		margin-right: 1rem;
-		font-size: 1rem;
 
-		line-height: inherit;
-
-		white-space: nowrap;
+		font-family: IMFellEnglish, serif;
+		font-size: var(--font, 2rem);
 
 		display: flex;
+		gap: .5rex;
 
 		align-items: center;
 		@include f.focus;
+
+		transition: all .2s ease-in-out;
 
 		&:hover {
 			color: var(--foreground);

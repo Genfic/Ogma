@@ -8,6 +8,10 @@
 	white-space: nowrap;
 }
 
+.olde {
+	font-family: IMFellEnglish, serif;
+}
+
 // Headers
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -19,7 +23,12 @@ h1, h2, h3, h4, h5, h6,
 // Header sizes
 @for $level from 1 to 7 {
 	h#{$level} {
-		font-size: #{math.pow(1.15, 7 - $level)}rem;
+		$size: math.pow(1.15, 7 - $level);
+		font-size: #{$size}rem;
+
+		&.olde {
+			font-size: #{$size * 1.2}rem;
+		}
 	}
 }
 
