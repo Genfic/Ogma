@@ -1,22 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-		<OutputType>Exe</OutputType>
+        <OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="TUnit" Version="1.21.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
+        <PackageReference Include="Testcontainers.PostgreSql" Version="4.4.0" />
+        <PackageReference Include="Testcontainers.Redis" Version="4.4.0" />
+        <PackageReference Include="FakeItEasy" Version="8.3.0" />
         <PackageReference Update="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.0.0-1.25277.114">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
-
     <ItemGroup>
-      <ProjectReference Include="..\Ogma3\Ogma3.csproj" />
+        <ProjectReference Include="..\Ogma3\Ogma3.csproj" />
     </ItemGroup>
 
 </Project>
