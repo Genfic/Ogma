@@ -12,6 +12,7 @@ using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 [assembly: Behaviors(typeof(ValidationBehavior<,>))]
@@ -19,13 +20,13 @@ using Serilog.Events;
 
 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-Console.OutputEncoding = Encoding.UTF8;
+Console.OutputEncoding = Encoding.Unicode;
 
 var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
 Log.Logger = new LoggerConfiguration()
 	.Enrich.FromLogContext()
 	.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
-	.WriteTo.Console(LogEventLevel.Information)
+	.WriteTo.Console(LogEventLevel.Information, theme: ConsoleTheme.None)
 	.WriteTo.OpenTelemetry()
 	.MinimumLevel.Debug()
 	.CreateLogger();
@@ -39,11 +40,6 @@ builder.Configuration
 	.AddEnvironmentVariables()
 	// WARN: It probably should not be used in prod, switch to DI instead
 	.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
-
-
-builder.Logging
-	.ClearProviders()
-	.AddConsole();
 
 builder.Host.UseSerilog();
 

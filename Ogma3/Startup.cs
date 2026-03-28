@@ -171,6 +171,8 @@ public static class Startup
 		// Argon2 hasher
 		services
 			.UpgradePasswordSecurity()
+			.WithMemLimit(67108864) // 64 MB in bytes
+			.WithOpsLimit(3L)
 			.UseArgon2<OgmaUser>();
 
 		// HttpClient factory

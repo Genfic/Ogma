@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.ServiceRegistrations;
@@ -20,8 +19,8 @@ using Ogma3.Services.EmailBlocklistProvider;
 using Ogma3.Services.PowService;
 using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
+using Ogma3.Services.UserService;
 using Routes.Areas.Identity.Pages;
-using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -34,6 +33,7 @@ public sealed class RegisterModel(
 	PowService powService,
 	ISpeedTrapService speedTrap,
 	ApplicationDbContext context,
+	IUserService userService,
 	ILogger<RegisterModel> logger) : PageModel
 {
 	[BindProperty] public InputModel Input { get; set; } = new();
@@ -165,16 +165,7 @@ public sealed class RegisterModel(
 		}
 
 		// Create user
-		var user = new OgmaUser
-		{
-			UserName = Input.Name,
-			Email = Input.Email,
-			Avatar = new Image
-			{
-				Url = Gravatar.Generate(Input.Email),
-			},
-		};
-		var result = await userManager.CreateAsync(user, Input.Password);
+		var result = await userService.CreateAsync(Input.Name, Input.Email, Input.Password);
 
 		// If everything went fine...
 		if (result.Succeeded)
@@ -182,18 +173,18 @@ public sealed class RegisterModel(
 			logger.LogInformation("User {Name} created an account!", Input.Name);
 
 			// Modify invite code
-			inviteCode.UsedBy = user;
+			inviteCode.UsedById = result.User.Id;
 			inviteCode.UsedDate = DateTimeOffset.UtcNow;
 			await context.SaveChangesAsync();
 
 			// Send confirmation code
-			var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+			var code = await userManager.GenerateEmailConfirmationTokenAsync(result.User);
 			code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
 			var callbackUrl = Url.Page(
 				"/Account/ConfirmEmail",
 				null,
-				new { area = "Identity", userName = user.UserName, code },
+				new { area = "Identity", userName = result.User.UserName, code },
 				Request.Scheme);
 
 			await emailSender.SendEmailAsync(Input.Email, "Confirm your email",

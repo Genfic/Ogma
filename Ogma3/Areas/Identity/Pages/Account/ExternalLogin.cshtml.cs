@@ -106,6 +106,7 @@ public sealed class ExternalLoginModel
 	public async Task<IActionResult> OnPostConfirmationAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
+
 		// Get the information about the user from the external login provider
 		var info = await signInManager.GetExternalLoginInfoAsync();
 		if (info is null)

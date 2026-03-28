@@ -1,19 +1,20 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
 
-namespace Ogma3.Areas.Admin.Pages;
+namespace Ogma3.Areas.Admin.Pages.Users;
 
-public sealed class Users(ApplicationDbContext context) : PageModel
+public sealed class Index(ApplicationDbContext context) : PageModel
 {
 	public required UserDetailsDto? OgmaUser { get; set; }
 	public required List<RoleDto> Roles { get; set; }
 	public string InfractionNamesJson =>
-		JsonSerializer.Serialize(InfractionTypeExtensions.GetNames(), InfractionNamesJsonContext.Default.StringArray);
+		JsonSerializer.Serialize(InfractionType.GetNames(), InfractionNamesJsonContext.Default.StringArray);
 	public string RolesJson =>
 		JsonSerializer.Serialize(Roles, RoleDtoJsonContext.Default.ListRoleDto);
 
@@ -60,7 +61,9 @@ public sealed class Users(ApplicationDbContext context) : PageModel
 }
 
 [JsonSerializable(typeof(string[]))]
+[UsedImplicitly]
 public sealed partial class InfractionNamesJsonContext : JsonSerializerContext;
 
-[JsonSerializable(typeof(List<Users.RoleDto>))]
+[JsonSerializable(typeof(List<Index.RoleDto>))]
+[UsedImplicitly]
 public sealed partial class RoleDtoJsonContext : JsonSerializerContext;

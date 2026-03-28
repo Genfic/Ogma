@@ -2,18 +2,13 @@ using Humanizer;
 
 namespace Ogma3.Areas.Admin.Pages.Shared;
 
-public sealed class NavItemPartial
+public sealed class NavItemPartial(string page, string? text = null)
 {
-	public NavItemPartial(string page) => Page = page;
+	public string Page { get; init; } = page;
 
-	public NavItemPartial(string page, string text) => (Page, Text) = (page, text);
-
-	public string Page { get; set; }
-
-	private string? _text;
 	public string Text
 	{
-		get => _text ?? Page.Humanize();
-		set => _text = value;
-	}
+		get => field ?? Page.Humanize();
+		init;
+	} = text;
 }

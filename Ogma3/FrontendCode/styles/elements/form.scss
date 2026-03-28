@@ -2,6 +2,12 @@
 @use '../mixins/active-border' as ab;
 @use "../vars" as v;
 
+form {
+	input[type="submit"], input[type="button"], input[type="reset"] {
+		cursor: pointer;
+	}
+}
+
 form.form {
 	display: flex;
 	flex-direction: column;

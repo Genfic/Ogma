@@ -1,0 +1,22 @@
+@page
+@model Ogma3.Areas.Admin.Pages.Users.Create
+
+@{
+	ViewData["Title"] = "Create User";
+	ViewData["ActivePage"] = NavPages.Users;
+}
+
+<form class="auto" method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+	<label asp-for="Input.Username">Name</label>
+	<input asp-for="Input.Username">
+
+	<label asp-for="Input.Email">Email</label>
+	<input asp-for="Input.Email" type="email">
+
+	<label asp-for="Input.Password">Password</label>
+	<input asp-for="Input.Password" type="password">
+
+	<input type="submit" value="Create">
+</form>

@@ -31,7 +31,7 @@
 
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.InviteCodes))"/>
 	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Roles, "User roles"))"/>
-    <partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Users, "User management"))" />
+    <partial name="Shared/_NavItemPartial" model="@(new NavItemPartial("Users/Index", "User management"))" />
     <partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Infractions, "Infractions"))" />
 
 	<li class="nav-item">

@@ -19,7 +19,7 @@ using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
-using Utils;
+using Ogma3.Services.UserService;
 using Utils.Extensions;
 
 namespace Ogma3.Services.Initializers;
@@ -31,6 +31,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 	private readonly OgmaUserManager _userManager;
 	private readonly ILogger<DbSeedInitializer> _logger;
 	private readonly IHttpClientFactory _clientFactory;
+	private readonly IUserService _userService;
 
 	private readonly JsonData _data;
 
@@ -38,13 +39,15 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		ApplicationDbContext context,
 		OgmaUserManager userManager,
 		ILogger<DbSeedInitializer> logger,
-		IHttpClientFactory clientFactory
+		IHttpClientFactory clientFactory,
+		IUserService userService
 	)
 	{
 		_context = context;
 		_userManager = userManager;
 		_logger = logger;
 		_clientFactory = clientFactory;
+		_userService = userService;
 
 		using var sr = new StreamReader("seed.json5");
 		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
@@ -103,25 +106,18 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		var exists = await _userManager.FindByEmailAsync(Email);
 		if (exists is not null) return;
 
-		var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
-		if (adminRole is null) throw new NullReferenceException("Admin role does not exist, somehow");
-
 		var password = RandomPassword();
-		var user = new OgmaUser
-		{
-			UserName = "Angius",
-			Email = Email,
-			Avatar = new Image
-			{
-				Url = Gravatar.Generate(Email),
-			},
-		};
-		user.Roles.Add(adminRole);
 
-		var result = await _userManager.CreateAsync(user, password);
+		var result = await _userService.CreateAsync("Angius", Email, password, true);
 		if (result.Succeeded)
 		{
+			var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
+			if (adminRole is null) throw new NullReferenceException("Admin role does not exist, somehow");
+
 			_logger.LogCritical("Admin user created with password {Password}. Change it ASAP.", password);
+
+			result.User.Roles.Add(adminRole);
+			await _context.SaveChangesAsync();
 		}
 		else
 		{
@@ -183,7 +179,7 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			user.AvatarId = avatar.Id;
 
 			var password = RandomPassword();
-			var result = await _userManager.CreateAsync(user, password);
+			var result = await _userService.CreateAsync(user, password);
 
 			if (result.Succeeded)
 			{

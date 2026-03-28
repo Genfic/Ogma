@@ -1,6 +1,7 @@
 @page
 @using Microsoft.AspNetCore.Antiforgery
-@model Users
+@using Routes.Areas.Admin.Pages
+@model Ogma3.Areas.Admin.Pages.Users.Index
 @inject IAntiforgery Antiforgery
 
 @{
@@ -8,6 +9,10 @@
 	ViewData["ActivePage"] = NavPages.Users;
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
+
+<nav>
+	<a for-route="@Users_Create.Get()">Create</a>
+</nav>
 
 <div
 	id="users-app"
