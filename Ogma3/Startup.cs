@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Net;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -6,6 +7,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -54,6 +56,7 @@ using Scalar.AspNetCore;
 using Sqids;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
+using IPNetwork = System.Net.IPNetwork;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace Ogma3;
@@ -306,6 +309,14 @@ public static class Startup
 			options.MaxAge = TimeSpan.FromHours(12); // TimeSpan.FromYears(1) when HTTPS config is down pat
 		});
 
+		// Forwarded headers (for Cloudflare Tunnel / reverse proxies)
+		services.Configure<ForwardedHeadersOptions>(options =>
+		{
+			options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
+			options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+			options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+		});
+
 		// Security headers
 		services.AddCustomSecurityHeaderPolicies();
 
@@ -350,8 +361,11 @@ public static class Startup
 			app.UseHsts();
 		}
 
-		// Forward the IP
+		// Forward the IP from Cloudflare
 		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
+
+		// Forward proto from trusted proxies (Cloudflare Tunnel / Docker)
+		app.UseForwardedHeaders();
 
 		// Redirects
 		app.UseHttpsRedirection();

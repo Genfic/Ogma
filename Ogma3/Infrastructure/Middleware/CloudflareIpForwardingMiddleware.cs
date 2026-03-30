@@ -26,6 +26,11 @@ public sealed partial class CloudflareIpForwardingMiddleware
 			return;
 		}
 
+		if (connectingIp.IsIPv4MappedToIPv6)
+		{
+			connectingIp = connectingIp.MapToIPv4();
+		}
+
 		var ranges = await GetCloudflareIpRangesAsync();
 
 		if (!IsCloudflareIp(connectingIp, ranges))
@@ -57,25 +62,27 @@ public sealed partial class CloudflareIpForwardingMiddleware
 
 	private async Task<CloudflareIpRanges> GetCloudflareIpRangesAsync()
 	{
-		return await cache.GetOrSetAsync(CacheKey, async ct =>
-		{
-			var client = clientFactory.CreateClient();
+		return await cache.GetOrSetAsync(CacheKey, async ct => {
+				var client = clientFactory.CreateClient();
 
-			var ipv4Text = await client.GetStringAsync("https://www.cloudflare.com/ips-v4", ct);
-			var ipv6Text = await client.GetStringAsync("https://www.cloudflare.com/ips-v6", ct);
+				var ipv4Text = await client.GetStringAsync("https://www.cloudflare.com/ips-v4", ct);
+				var ipv6Text = await client.GetStringAsync("https://www.cloudflare.com/ips-v6", ct);
 
-			var ipv4 = ParseRanges(ipv4Text);
-			var ipv6 = ParseRanges(ipv6Text);
+				var ipv4 = ParseRanges(ipv4Text);
+				var ipv6 = ParseRanges(ipv6Text);
 
-			LogFetchedCloudflareRanges(ipv4.Length, ipv6.Length);
+				LogFetchedCloudflareRanges(ipv4.Length, ipv6.Length);
 
-			return new CloudflareIpRanges
-			{
-				IPv4 = ipv4,
-				IPv6 = ipv6,
-			};
-		},
-		options => options.Duration = TimeSpan.FromDays(1));
+				return new CloudflareIpRanges
+				{
+					IPv4 = ipv4,
+					IPv6 = ipv6,
+				};
+			},
+			options => options
+				.SetDuration(TimeSpan.FromDays(1))
+				.SetFailSafe(true, TimeSpan.FromDays(1), TimeSpan.FromHours(3))
+		);
 	}
 
 	private static IpRange[] ParseRanges(string text)
@@ -84,8 +91,8 @@ public sealed partial class CloudflareIpForwardingMiddleware
 			.Select(ParseCidr)
 			.OfType<IPNetwork>()
 			.Select(ConvertCidr)
-			.OrderBy(r => r.StartHigh)
-			.ThenBy(r => r.StartLow)
+			.OrderBy(static r => r.StartHigh)
+			.ThenBy(static r => r.StartLow)
 			.ToArray();
 
 		return list;
@@ -151,11 +158,22 @@ public sealed partial class CloudflareIpForwardingMiddleware
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static void ConvertIp(IPAddress ip, out ulong high, out ulong low)
 	{
-		Span<byte> bytes = stackalloc byte[16];
-		ip.TryWriteBytes(bytes, out _);
+		if (ip.AddressFamily == AddressFamily.InterNetwork)
+		{
+			Span<byte> bytes = stackalloc byte[4];
+			ip.TryWriteBytes(bytes, out _);
 
-		high = BinaryPrimitives.ReadUInt64BigEndian(bytes[..8]);
-		low  = BinaryPrimitives.ReadUInt64BigEndian(bytes[8..]);
+			high = 0;
+			low = BinaryPrimitives.ReadUInt32BigEndian(bytes);
+		}
+		else
+		{
+			Span<byte> bytes = stackalloc byte[16];
+			ip.TryWriteBytes(bytes, out _);
+
+			high = BinaryPrimitives.ReadUInt64BigEndian(bytes[..8]);
+			low = BinaryPrimitives.ReadUInt64BigEndian(bytes[8..]);
+		}
 	}
 
 	private static IpRange ConvertCidr(IPNetwork net)
@@ -177,7 +195,7 @@ public sealed partial class CloudflareIpForwardingMiddleware
 			}
 			default:
 			{
-				var lowMask = ulong.MaxValue >> hostBits;
+				var lowMask = ulong.MaxValue >> 64 - hostBits;
 				return new(high, low & ~lowMask, high, low | lowMask);
 			}
 		}
@@ -186,8 +204,8 @@ public sealed partial class CloudflareIpForwardingMiddleware
 	[LoggerMessage(Level = LogLevel.Debug, Message = "Request not from Cloudflare IP: {RemoteIp}")]
 	private partial void LogRequestNotFromCloudflare(IPAddress? remoteIp);
 
-	[LoggerMessage(Level = LogLevel.Warning, Message = "Request from Cloudflare IP {CloudflareIp} but CF-Connecting-IP header is missing or invalid")]
-	private partial void LogMissingOrInvalidCfHeader(IPAddress? cloudflareIp);
+	[LoggerMessage(Level = LogLevel.Warning, Message = "Request from Cloudflare IP {Ip} but CF-Connecting-IP header is missing or invalid")]
+	private partial void LogMissingOrInvalidCfHeader(IPAddress? ip);
 
 	[LoggerMessage(Level = LogLevel.Information, Message = "Fetched {Ipv4Count} IPv4 and {Ipv6Count} IPv6 Cloudflare ranges")]
 	private partial void LogFetchedCloudflareRanges(int ipv4Count, int ipv6Count);
