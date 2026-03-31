@@ -1,0 +1,54 @@
+@use 'sass:color';
+@use "./mixins/generators" as a;
+
+// Variables
+$foreground: oklch(93.4% 0 89.876deg);
+$background: oklch(0% 0 0deg);
+$accent: oklch(82.4% 0.149 73.346deg);
+
+$gold: oklch(66.4% 0.138 75.089deg);
+$red: oklch(57.4% 0.223 28.103deg);
+$green: oklch(64.2% 0.219 142.495deg);
+$blue: oklch(52.8% 0.225 261.757deg);
+$yellow: oklch(86.5% 0.177 90.382deg);
+
+:root {
+	--trans: transparent;
+	--foreground: #{$foreground};
+
+	@include a.alphas('foreground', .75, .50, .25, .10);
+	@include a.blends('foreground', 'background', 75, 50, 25, 10);
+
+	--background: #{$background};
+
+	@include a.alphas('background', .75, .50, .25);
+	@include a.blends('background', 'trans', 75, 50, 25, 10);
+
+	--accent: #{$accent};
+
+	@include a.alphas('accent', .75, .50, .25, .10, .05);
+	@include a.blends('accent', 'background', 75, 50, 25, 10, 5);
+
+	--red: #{$red};
+
+	@include a.alphas('red', .75, .50, .25, .10);
+	@include a.blends('red', 'background', 100, 75, 50, 25, 10);
+
+	--green: #{$green};
+
+	@include a.alphas('green', .75, .50, .25, .10);
+	@include a.blends('green', 'background', 100, 75, 50, 25, 10);
+
+	--blue: #{$blue};
+
+	@include a.alphas('blue', .75, .50, .25, .10);
+	@include a.blends('blue', 'background', 100, 75, 50, 25, 10);
+
+	--yellow: #{$yellow};
+
+	@include a.alphas('yellow', .75, .50, .25, .10);
+	@include a.blends('yellow', 'background', 100, 75, 50, 25, 10);
+
+	--gold: #{$gold};
+	--ele-1: oklch(from #{$background} calc(l + 0.08) c h);
+}
