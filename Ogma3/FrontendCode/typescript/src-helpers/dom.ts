@@ -36,7 +36,7 @@ function $id<TElement extends HTMLElement>(id: string, noThrow?: boolean): TElem
 	return el as TElement;
 }
 
-export { $query, $queryAll, $id };
+export { $id, $query, $queryAll };
 
 /**
  * Finds the first following sibling element matching a CSS selector.

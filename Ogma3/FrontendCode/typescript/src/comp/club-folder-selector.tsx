@@ -1,4 +1,4 @@
-import { GetApiClubsUser as getUserClubs, GetApiFolders as getFolders, PostApiFoldersAddStory as addStoryToFolder } from "@g/paths-public";
+import { GetApiClubsUser as getUserClubs, GetApiFolders as getFolders, PostApiFoldersAddStory as addStoryToFolder, } from "@g/paths-public";
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
@@ -165,7 +165,12 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 				Add to folder
 			</button>
 
-			<Dialog ref={$set(dialogRef)} onClose={reset} header={selectedView().head} classes={["club-folder-selector"]}>
+			<Dialog
+				ref={$set(dialogRef)}
+				onClose={reset}
+				header={selectedView().head}
+				classes={["club-folder-selector"]}
+			>
 				<div class="content">{selectedView().view()}</div>
 			</Dialog>
 		</>
