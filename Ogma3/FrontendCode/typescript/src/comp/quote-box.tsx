@@ -1,17 +1,20 @@
 import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
-import { useLocalStorage } from "@h/localStorageHook";
 import { component } from "@h/web-components";
+import { makePersisted } from "@solid-primitives/storage";
 import type { Empty } from "@t/utils";
 import type { ComponentType } from "solid-element";
-import { createResource, Show } from "solid-js";
+import { createResource, createSignal, Show } from "solid-js";
 import { LucideClock } from "../icons/LucideClock";
 import { LucideRefreshCw } from "../icons/LucideRefreshCw";
 import css from "./quote-box.css";
 
 const QuoteBox: ComponentType<Empty> = (_) => {
 	let canFetch = $signal(true);
-	const [getQuoteFromStore, setQuoteInStore] = useLocalStorage<QuoteDto>("quote");
+	const [getQuoteFromStore, setQuoteInStore] = makePersisted(createSignal<QuoteDto | null>(null), {
+		name: "quote",
+		storage: localStorage,
+	});
 
 	const loadQuote = async () => {
 		const stored = getQuoteFromStore();

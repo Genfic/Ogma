@@ -27,7 +27,7 @@
 		"@socketsecurity/bun-security-scanner": "^1.1.2",
 		"@stylelint-types/stylelint-scss": "^7.0.0",
 		"@types/ansi-colors": "^3.2.6",
-		"@types/bun": "^1.3.11",
+		"@types/bun": "^1.3.10",
 		"@types/json5": "^2.2.0",
 		"@types/node": "^25.5.0",
 		"@typescript/native-preview": "^7.0.0-dev.20260319.1",
@@ -51,7 +51,8 @@
 		"stylelint-config-standard-scss": "^17.0.0",
 		"stylelint-define-config": "^17.2.0",
 		"utility-types": "^3.11.0",
-		"zod": "^4.3.6"
+		"zod": "^4.3.6",
+		"@types/ejs": "^3.1.5"
 	},
 	"dependencies": {
 		"@angius/tinytime": "^1.2.0",
@@ -60,7 +61,6 @@
 		"@solid-primitives/event-dispatcher": "^0.1.1",
 		"@solid-primitives/intersection-observer": "^2.2.4",
 		"@solid-primitives/storage": "^4.3.4",
-		"@types/ejs": "^3.1.5",
 		"clsx": "^2.1.1",
 		"comlink": "^4.4.2",
 		"date-fns": "^4.1.0",

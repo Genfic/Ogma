@@ -5,7 +5,7 @@ import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { compact } from "es-toolkit";
-import { createResource, For } from "solid-js";
+import { createEffect, createResource, For } from "solid-js";
 import { Portal, render } from "solid-js/web";
 import { ManageInfraction, type ManageInfractionApi } from "./components/manage-infraction-component";
 
@@ -39,7 +39,7 @@ const Users = () => {
 	let userRoles = $signal<number[]>([]);
 	const userInfractions = $memo(user?.infractions ?? []);
 
-	$effect(() => {
+	createEffect(() => {
 		userRoles = compact(
 			user?.roleNames.map((r) => roles.find((rr) => rr.Name.toLowerCase() === r.toLowerCase())?.Id) ?? [],
 		);
@@ -142,6 +142,7 @@ const Users = () => {
 										onMouseOver={showImage}
 										onMouseMove={updateImage}
 										onMouseLeave={hideImage}
+										rel="noopener"
 									>
 										{user.avatar ?? "No avatar"}
 									</a>

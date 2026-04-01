@@ -1,12 +1,12 @@
 @use 'sass:color';
-@use "./mixins/generators" as a;
+@use "../mixins/generators" as a;
 
 // Variables
-$foreground: oklch(93.4% 0 89.876deg);
-$background: oklch(0% 0 0deg);
-$accent: oklch(82.4% 0.149 73.346deg);
+$foreground: oklch(90.0% 0.025 74deg);
+$background: oklch(22.0% 0.040 55deg);
+$accent: oklch(68.0% 0.130 62deg);
 
-$gold: oklch(66.4% 0.138 75.089deg);
+$gold: oklch(64.0% 0.138 75.089deg);
 $red: oklch(57.4% 0.223 28.103deg);
 $green: oklch(64.2% 0.219 142.495deg);
 $blue: oklch(52.8% 0.225 261.757deg);
@@ -50,5 +50,5 @@ $yellow: oklch(86.5% 0.177 90.382deg);
 	@include a.blends('yellow', 'background', 100, 75, 50, 25, 10);
 
 	--gold: #{$gold};
-	--ele-1: oklch(from #{$background} calc(l + 0.08) c h);
+	--ele-1: oklch(from #{$background} calc(l * 1.2) c h);
 }

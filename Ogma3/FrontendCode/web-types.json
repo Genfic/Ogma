@@ -545,6 +545,15 @@
             "module": "./typescript\\src\\comp\\table-info.tsx",
             "symbol": "table-info"
           }
+        },
+        {
+          "name": "theme-selector",
+          "description": "Custom element <theme-selector> defined in typescript\\src\\comp\\theme-selector.tsx",
+          "attributes": [],
+          "source": {
+            "module": "./typescript\\src\\comp\\theme-selector.tsx",
+            "symbol": "theme-selector"
+          }
         }
       ]
     }

@@ -1,0 +1,68 @@
+.dropdown {
+	position: relative;
+	cursor: pointer;
+
+	&[open] summary:after {
+		transform: rotate(-180deg);
+	}
+
+	summary {
+		list-style: none;
+		display: flex;
+		align-content: center;
+		justify-content: space-between;
+		border: 1px solid var(--foreground-25);
+		padding: 0.25rem 0.5rem;
+
+		&:after {
+			display: inline-block;
+			content: "⮟";
+			transition: transform 0.2s ease-in-out;
+		}
+
+		@media prefers-reduced-motion {
+			&:after {
+				transition: none;
+			}
+		}
+	}
+
+	.options {
+		position: absolute;
+		bottom: 100%;
+		right: 0;
+		z-index: 100;
+		display: flex;
+		flex-direction: column;
+		background-color: var(--background);
+		border: 1px solid var(--foreground-25);
+		border-bottom: none;
+		padding: 0.25rem;
+		color: var(--foreground-75);
+
+		label {
+			padding: 0.25rem 0.5rem;
+			cursor: pointer;
+
+			&:focus-within {
+				outline: 2px solid var(--accent-50);
+			}
+
+			&:has(input:checked) {
+				color: var(--accent);
+			}
+
+			input {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border-width: 0;
+			}
+		}
+	}
+}

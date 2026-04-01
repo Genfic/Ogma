@@ -127,7 +127,7 @@ const compileSass = async (file: string) => {
 const compileAll = async () => {
 	const timer = new Stopwatch();
 	const logger = new Logger();
-	const files = [...new Glob(`${_base}/[!_]*.scss`).scanSync()];
+	const files = [...new Glob(`${_base}/[!_]*.scss`).scanSync(), ...new Glob(`${_base}/themes/[!_]*.scss`).scanSync()];
 
 	logger.log(ct`{green ⚙ Compiling {bold.underline ${files.length}} files}`);
 
