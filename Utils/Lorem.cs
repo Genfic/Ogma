@@ -1,10 +1,13 @@
 ﻿using System.Text;
 using JetBrains.Annotations;
+using NetEscapades.EnumGenerators;
 
 namespace Utils;
 
 public static class Lorem
 {
+	private static readonly HttpClient Client = new();
+
 	public static string Picsum(int x, int? y = null) => y is null ? $"//picsum.photos/{x}" : $"//picsum.photos/{x}/{y}";
 
 	public static async Task<string> Ipsum(int paragraphs, IpsumOptions? options)
@@ -13,29 +16,31 @@ public static class Lorem
 		sb.Append("https://loripsum.net/api/");
 		sb.Append(paragraphs);
 
-		if (options is {} o)
+		if (options is not {} o)
 		{
-			if (o.Length is not null) sb.Append($"/{o.Length}".ToLower());
-			if (o.Decorate) sb.Append("/decorate");
-			if (o.Link) sb.Append("/link");
-			if (o.Ulist) sb.Append("/ul");
-			if (o.Olist) sb.Append("/ol");
-			if (o.Dlist) sb.Append("/dl");
-			if (o.Blockquotes) sb.Append("/bq");
-			if (o.Codeblocks) sb.Append("/code");
-			if (o.Headers) sb.Append("/headers");
-			if (o.Allcaps) sb.Append("/allcaps");
-			if (o.Prude) sb.Append("/prude");
-			if (o.Plaintext) sb.Append("/plaintext");
+			return await Client.GetStringAsync(sb.ToString());
 		}
 
-		using var client = new HttpClient();
-		return await client.GetStringAsync(sb.ToString());
+		if (o.Length is {} l) sb.Append($"/{l.ToStringFast()}".ToLower());
+		if (o.Decorate) sb.Append("/decorate");
+		if (o.Link) sb.Append("/link");
+		if (o.Ulist) sb.Append("/ul");
+		if (o.Olist) sb.Append("/ol");
+		if (o.Dlist) sb.Append("/dl");
+		if (o.Blockquotes) sb.Append("/bq");
+		if (o.Codeblocks) sb.Append("/code");
+		if (o.Headers) sb.Append("/headers");
+		if (o.Allcaps) sb.Append("/allcaps");
+		if (o.Prude) sb.Append("/prude");
+		if (o.Plaintext) sb.Append("/plaintext");
+
+		return await Client.GetStringAsync(sb.ToString());
 	}
 }
 
 [UsedImplicitly]
-public readonly record struct IpsumOptions(
+public readonly record struct IpsumOptions
+(
 	IpsumLength? Length,
 	bool Decorate,
 	bool Link,
@@ -49,6 +54,7 @@ public readonly record struct IpsumOptions(
 	bool Prude,
 	bool Plaintext);
 
+[EnumExtensions]
 public enum IpsumLength
 {
 	Short,

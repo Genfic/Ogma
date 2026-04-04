@@ -32,7 +32,6 @@
 		<PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" />
 		<PackageReference Include="AWSSDK.S3" Version="4.0.20.3" />
 		<PackageReference Include="Bogus" Version="35.6.5" />
-		<PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation" Version="12.1.1" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" PrivateAssets="all" />
 		<PackageReference Include="Humanizer.Core" Version="3.0.10" PrivateAssets="all" />

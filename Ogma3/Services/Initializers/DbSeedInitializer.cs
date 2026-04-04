@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Bogus;
-using Extensions.Hosting.AsyncInitialization;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -25,29 +24,16 @@ using Utils.Extensions;
 namespace Ogma3.Services.Initializers;
 
 [UsedImplicitly]
-public sealed class DbSeedInitializer : IAsyncInitializer
+public sealed class DbSeedInitializer : IHostedLifecycleService
 {
-	private readonly ApplicationDbContext _context;
-	private readonly OgmaUserManager _userManager;
+	private readonly IServiceScopeFactory _scopeFactory;
 	private readonly ILogger<DbSeedInitializer> _logger;
-	private readonly IHttpClientFactory _clientFactory;
-	private readonly IUserService _userService;
-
 	private readonly JsonData _data;
 
-	public DbSeedInitializer(
-		ApplicationDbContext context,
-		OgmaUserManager userManager,
-		ILogger<DbSeedInitializer> logger,
-		IHttpClientFactory clientFactory,
-		IUserService userService
-	)
+	public DbSeedInitializer(IServiceScopeFactory scopeFactory, ILogger<DbSeedInitializer> logger)
 	{
-		_context = context;
-		_userManager = userManager;
+		_scopeFactory = scopeFactory;
 		_logger = logger;
-		_clientFactory = clientFactory;
-		_userService = userService;
 
 		using var sr = new StreamReader("seed.json5");
 		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
@@ -63,31 +49,45 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		}
 	}
 
-	public async Task InitializeAsync(CancellationToken ct)
+	// Runs before StartAsync of ANY hosted service — guaranteed to complete first
+	public async Task StartingAsync(CancellationToken cancellationToken)
 	{
+		await using var scope = _scopeFactory.CreateAsyncScope();
+		var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		var userManager = scope.ServiceProvider.GetRequiredService<OgmaUserManager>();
+		var clientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
+		var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+
 		_logger.LogInformation("Async initialization started.");
 
 		var timer = new Stopwatch();
 		timer.Start();
 
-		await Time(SeedRoles, nameof(SeedRoles));
-		await Time(SeedAdmin, nameof(SeedAdmin));
-		await Time(SeedUsers, nameof(SeedUsers));
-		await Time(SeedRatings, nameof(SeedRatings));
-		await Time(SeedIcons, nameof(SeedIcons));
-		await Time(SeedQuotes, nameof(SeedQuotes));
-		var tagIds = await Time(SeedTags, nameof(SeedTags));
-		var storyIds = await Time(SeedStories, nameof(SeedStories));
-		await Time(() => SeedStoryTags(storyIds, tagIds), nameof(SeedStoryTags));
-		await Time(() => SeedBlogposts(storyIds), nameof(SeedBlogposts));
+		await Time(() => SeedRoles(context), nameof(SeedRoles));
+		await Time(() => SeedAdmin(context, userManager, userService), nameof(SeedAdmin));
+		await Time(() => SeedUsers(context, userService), nameof(SeedUsers));
+		await Time(() => SeedRatings(context), nameof(SeedRatings));
+		await Time(() => SeedIcons(context), nameof(SeedIcons));
+		await Time(() => SeedQuotes(context, clientFactory), nameof(SeedQuotes));
+		var tagIds = await Time(() => SeedTags(context), nameof(SeedTags));
+		var storyIds = await Time(() => SeedStories(context), nameof(SeedStories));
+		await Time(() => SeedStoryTags(context, storyIds, tagIds), nameof(SeedStoryTags));
+		await Time(() => SeedBlogposts(context, storyIds), nameof(SeedBlogposts));
 
 		timer.Stop();
 		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);
 	}
 
-	private async Task SeedRoles()
+	// Required interface stubs — no work needed at these lifecycle points
+	public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task StartedAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task StoppingAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task StoppedAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+	private static async Task SeedRoles(ApplicationDbContext context)
 	{
-		if (await Any<OgmaRole>()) return;
+		if (await Any<OgmaRole>(context)) return;
 		var roles = new[]
 		{
 			new OgmaRole { Name = RoleNames.Admin, IsStaff = true, Color = "#ffaa00", Order = byte.MaxValue }.Normalize(),
@@ -97,27 +97,28 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			new OgmaRole { Name = RoleNames.Supporter, IsStaff = false, Color = "#ffdd11", Order = byte.MaxValue - 20 }.Normalize(),
 		};
 
-		await BulkUpsert(_context.Roles, roles, r => r.NormalizedName);
+		await BulkUpsert(context, context.Roles, roles, r => r.NormalizedName);
 	}
 
 	private const string Email = "admin@genfic.net";
-	public async Task SeedAdmin()
+
+	private async Task SeedAdmin(ApplicationDbContext context, OgmaUserManager userManager, IUserService userService)
 	{
-		var exists = await _userManager.FindByEmailAsync(Email);
+		var exists = await userManager.FindByEmailAsync(Email);
 		if (exists is not null) return;
 
 		var password = RandomPassword();
 
-		var result = await _userService.CreateAsync("Angius", Email, password, true);
+		var result = await userService.CreateAsync("Angius", Email, password, true);
 		if (result.Succeeded)
 		{
-			var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
+			var adminRole = await context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
 			if (adminRole is null) throw new NullReferenceException("Admin role does not exist, somehow");
 
 			_logger.LogCritical("Admin user created with password {Password}. Change it ASAP.", password);
 
 			result.User.Roles.Add(adminRole);
-			await _context.SaveChangesAsync();
+			await context.SaveChangesAsync();
 		}
 		else
 		{
@@ -125,36 +126,34 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		}
 	}
 
-	private async Task SeedRatings()
+	private async Task SeedRatings(ApplicationDbContext context)
 	{
-		await BulkUpsert(_context.Ratings, _data.Ratings, r => r.Name);
+		await BulkUpsert(context, context.Ratings, _data.Ratings, r => r.Name);
 	}
 
-	private async Task SeedIcons()
+	private async Task SeedIcons(ApplicationDbContext context)
 	{
 		var icons = _data.Icons.Select(s => new Icon { Name = s });
-
-		await BulkUpsert(_context.Icons, icons, i => i.Name);
+		await BulkUpsert(context, context.Icons, icons, i => i.Name);
 	}
 
-	private async Task SeedQuotes()
+	private async Task SeedQuotes(ApplicationDbContext context, IHttpClientFactory clientFactory)
 	{
-		if (await _context.Quotes.AnyAsync()) return;
+		if (await context.Quotes.AnyAsync()) return;
 
-		using var hc = _clientFactory.CreateClient();
+		using var hc = clientFactory.CreateClient();
 		var json = await hc.GetFromJsonAsync(_data.QuotesUrl, JsonQuoteContext.Default.JsonQuoteArray);
 
 		var quotes = json?.Select(q => new Quote { Body = q.Quote, Author = q.Author });
 		if (quotes is null) return;
 
-		_context.Quotes.AddRange(quotes);
-
-		await _context.SaveChangesAsync();
+		context.Quotes.AddRange(quotes);
+		await context.SaveChangesAsync();
 	}
 
-	public async Task SeedUsers()
+	private async Task SeedUsers(ApplicationDbContext context, IUserService userService)
 	{
-		if (await Any<OgmaUser>(u => u.Email != Email)) return;
+		if (await Any<OgmaUser>(context, u => u.Email != Email)) return;
 
 		var avatars = new Faker<Image>()
 			.RuleFor(i => i.Url, f => f.Internet.Avatar());
@@ -173,13 +172,13 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		{
 			var avatar = avatars.Generate();
 
-			_context.Images.Add(avatar);
-			await _context.SaveChangesAsync();
+			context.Images.Add(avatar);
+			await context.SaveChangesAsync();
 
 			user.AvatarId = avatar.Id;
 
 			var password = RandomPassword();
-			var result = await _userService.CreateAsync(user, password);
+			var result = await userService.CreateAsync(user, password);
 
 			if (result.Succeeded)
 			{
@@ -188,62 +187,63 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 		}
 	}
 
-	public async Task<(long, ETagNamespace?)[]> SeedTags()
+	private static async Task<(long, ETagNamespace?)[]> SeedTags(ApplicationDbContext context)
 	{
 		var tags = new List<Tag>
-		{
-			new() { Name = "Comedy", Namespace = ETagNamespace.Genre },
-			new() { Name = "Horror", Namespace = ETagNamespace.Genre },
-			new() { Name = "Romance", Namespace = ETagNamespace.Genre },
-			new() { Name = "Psychological", Namespace = ETagNamespace.Genre },
-			new() { Name = "Slice of Life", Namespace = ETagNamespace.Genre },
-			new() { Name = "Parody", Namespace = ETagNamespace.Genre },
-			new() { Name = "Drama", Namespace = ETagNamespace.Genre },
-			new() { Name = "Thriller", Namespace = ETagNamespace.Genre },
-			new() { Name = "Sci-Fi", Namespace = ETagNamespace.Genre },
-			new() { Name = "Fantasy", Namespace = ETagNamespace.Genre },
+			{
+				new() { Name = "Comedy", Namespace = ETagNamespace.Genre },
+				new() { Name = "Horror", Namespace = ETagNamespace.Genre },
+				new() { Name = "Romance", Namespace = ETagNamespace.Genre },
+				new() { Name = "Psychological", Namespace = ETagNamespace.Genre },
+				new() { Name = "Slice of Life", Namespace = ETagNamespace.Genre },
+				new() { Name = "Parody", Namespace = ETagNamespace.Genre },
+				new() { Name = "Drama", Namespace = ETagNamespace.Genre },
+				new() { Name = "Thriller", Namespace = ETagNamespace.Genre },
+				new() { Name = "Sci-Fi", Namespace = ETagNamespace.Genre },
+				new() { Name = "Fantasy", Namespace = ETagNamespace.Genre },
 
-			new() { Name = "Gore", Namespace = ETagNamespace.ContentWarning },
-			new() { Name = "Body Horror", Namespace = ETagNamespace.ContentWarning },
-			new() { Name = "Sex", Namespace = ETagNamespace.ContentWarning },
-			new() { Name = "Self-harm", Namespace = ETagNamespace.ContentWarning },
-			new() { Name = "Mental Illness", Namespace = ETagNamespace.ContentWarning },
+				new() { Name = "Gore", Namespace = ETagNamespace.ContentWarning },
+				new() { Name = "Body Horror", Namespace = ETagNamespace.ContentWarning },
+				new() { Name = "Sex", Namespace = ETagNamespace.ContentWarning },
+				new() { Name = "Self-harm", Namespace = ETagNamespace.ContentWarning },
+				new() { Name = "Mental Illness", Namespace = ETagNamespace.ContentWarning },
 
-			new() { Name = "My Little Pony", Namespace = ETagNamespace.Franchise },
-			new() { Name = "The Care Bears", Namespace = ETagNamespace.Franchise },
-			new() { Name = "The Smurfs", Namespace = ETagNamespace.Franchise },
-			new() { Name = "Fast and Furious", Namespace = ETagNamespace.Franchise },
+				new() { Name = "My Little Pony", Namespace = ETagNamespace.Franchise },
+				new() { Name = "The Care Bears", Namespace = ETagNamespace.Franchise },
+				new() { Name = "The Smurfs", Namespace = ETagNamespace.Franchise },
+				new() { Name = "Fast and Furious", Namespace = ETagNamespace.Franchise },
 
-			new() { Name = "Slow Burn" },
-			new() { Name = "Oneshot" },
-			new() { Name = "Aliens" },
-			new() { Name = "Elves" },
-			new() { Name = "Orks" },
-			new() { Name = "Enemies to Lovers" },
-			new() { Name = "Lovers to Enemies" },
-			new() { Name = "Space" },
-			new() { Name = "Magic" },
-			new() { Name = "RPG Mechanics" },
-			new() { Name = "Videogames" },
-		}.Select(t => new Tag
-		{
-			Name = t.Name,
-			Slug = t.Name.Friendlify().ToUpper(),
-			Namespace = t.Namespace,
-		})
-		.ToArray();
+				new() { Name = "Slow Burn" },
+				new() { Name = "Oneshot" },
+				new() { Name = "Aliens" },
+				new() { Name = "Elves" },
+				new() { Name = "Orks" },
+				new() { Name = "Enemies to Lovers" },
+				new() { Name = "Lovers to Enemies" },
+				new() { Name = "Space" },
+				new() { Name = "Magic" },
+				new() { Name = "RPG Mechanics" },
+				new() { Name = "Videogames" },
+			}
+			.Select(t => new Tag
+			{
+				Name = t.Name,
+				Slug = t.Name.Friendlify().ToUpper(),
+				Namespace = t.Namespace,
+			})
+			.ToArray();
 
-		await BulkUpsert(_context.Tags, tags, t => t.Name);
+		await BulkUpsert(context, context.Tags, tags, t => t.Name);
 
 		return tags.Select(t => (t.Id, t.Namespace)).ToArray();
 	}
 
-	public async Task<long[]> SeedStories()
+	private static async Task<long[]> SeedStories(ApplicationDbContext context)
 	{
-		if (await Any<Story>()) return [];
+		if (await Any<Story>(context)) return [];
 
-		var userIds = await _context.Users.Select(u => u.Id).ToListAsync();
-		var ratings = await _context.Ratings.Select(r => r.Id).ToListAsync();
+		var userIds = await context.Users.Select(u => u.Id).ToListAsync();
+		var ratings = await context.Ratings.Select(r => r.Id).ToListAsync();
 
 		var coverGenerator = new Faker<Image>()
 			.RuleFor(i => i.Url, f => f.Image.PicsumUrl());
@@ -254,7 +254,8 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			.RuleFor(s => s.AuthorId, f => f.PickRandom(userIds))
 			.RuleFor(s => s.Description, f => f.WaffleMarkdown(paragraphs: f.Random.Int(1, 3), includeHeading: false))
 			.RuleFor(s => s.CreationDate, f => f.Date.PastOffset().ToUniversalTime())
-			.RuleFor(s => s.PublicationDate, (f, s) => f.Date.BetweenOffset(s.CreationDate, DateTimeOffset.UtcNow).ToUniversalTime().OrNull(f, 0.2f))
+			.RuleFor(s => s.PublicationDate,
+				(f, s) => f.Date.BetweenOffset(s.CreationDate, DateTimeOffset.UtcNow).ToUniversalTime().OrNull(f, 0.2f))
 			.RuleFor(s => s.Hook, f => f.WaffleText(includeHeading: false).Trim(CTConfig.Story.MaxHookLength))
 			.RuleFor(s => s.RatingId, f => f.PickRandom(ratings))
 			.RuleFor(s => s.Status, f => f.PickRandom<EStoryStatus>())
@@ -269,30 +270,30 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 						: null)
 					.RuleFor(c => c.CommentThread, _ => new CommentThread())
 					.RuleFor(c => c.Order, () => order++)
-					.RuleFor(c => c.CreationDate, (cf, c) => cf.Date.BetweenOffset(s.CreationDate, c.PublicationDate ?? DateTimeOffset.UtcNow).ToUniversalTime())
+					.RuleFor(c => c.CreationDate,
+						(cf, c) => cf.Date.BetweenOffset(s.CreationDate, c.PublicationDate ?? DateTimeOffset.UtcNow).ToUniversalTime())
 					.RuleFor(c => c.WordCount, (_, c) => c.Body.Words())
 					.RuleFor(c => c.Slug, (_, c) => c.Title.Friendlify().ToUpper())
-					.RuleFor(c => c.StartNotes, cf => cf.WaffleMarkdown(includeHeading: false)
-						.Trim(CTConfig.Chapter.MaxNotesLength)
-						.OrNull(cf, 0.7f))
-					.RuleFor(c => c.EndNotes, cf => cf.WaffleMarkdown(includeHeading: false)
-						.Trim(CTConfig.Chapter.MaxNotesLength)
-						.OrNull(cf, 0.7f));
+					.RuleFor(c => c.StartNotes,
+						cf => cf.WaffleMarkdown(includeHeading: false).Trim(CTConfig.Chapter.MaxNotesLength).OrNull(cf, 0.7f))
+					.RuleFor(c => c.EndNotes,
+						cf => cf.WaffleMarkdown(includeHeading: false).Trim(CTConfig.Chapter.MaxNotesLength).OrNull(cf, 0.7f));
 				return chapterGenerator.Generate(f.Random.Int(1, 5));
 			})
 			.RuleFor(s => s.ChapterCount, (_, s) => s.Chapters.Count)
 			.RuleFor(s => s.WordCount, (_, s) => s.Chapters.Sum(c => c.WordCount));
+
 		var stories = storiesGenerator.Generate(50);
 
-		_context.Stories.AddRange(stories);
-		await _context.SaveChangesAsync();
+		context.Stories.AddRange(stories);
+		await context.SaveChangesAsync();
 
 		return stories.Select(s => s.Id).ToArray();
 	}
 
-	public async Task SeedStoryTags(long[] storyIds, (long, ETagNamespace?)[] tags)
+	private static async Task SeedStoryTags(ApplicationDbContext context, long[] storyIds, (long, ETagNamespace?)[] tags)
 	{
-		if (await Any<StoryTag>()) return;
+		if (await Any<StoryTag>(context)) return;
 
 		var genreTags = tags.Where(g => g.Item2 == ETagNamespace.Genre).ToArray();
 		var otherTags = tags.Where(g => g.Item2 != ETagNamespace.Genre).ToArray();
@@ -312,24 +313,25 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 			}));
 		}
 
-		_context.StoryTags.AddRange(storyTags);
-		await _context.SaveChangesAsync();
+		context.StoryTags.AddRange(storyTags);
+		await context.SaveChangesAsync();
 	}
 
-	public async Task SeedBlogposts(long[] storyIds)
+	private static async Task SeedBlogposts(ApplicationDbContext context, long[] storyIds)
 	{
-		if (await Any<Blogpost>()) return;
+		if (await Any<Blogpost>(context)) return;
 
-		var userIds = await _context.Users.Select(u => u.Id).ToListAsync();
-		var chapterIds = await _context.Chapters.Select(c => c.Id).ToListAsync();
+		var userIds = await context.Users.Select(u => u.Id).ToListAsync();
+		var chapterIds = await context.Chapters.Select(c => c.Id).ToListAsync();
 
 		var blogpostGenerator = new Faker<Blogpost>()
-			.RuleFor(s => s.Title, f => f.WaffleTitle())
-			.RuleFor(s => s.Slug, (_, s) => s.Title.Friendlify().ToUpper())
-			.RuleFor(s => s.AuthorId, f => f.PickRandom(userIds))
-			.RuleFor(s => s.Body, f => f.WaffleMarkdown(f.Random.Int(5, 30), f.Random.Bool()))
+			.RuleFor(b => b.Title, f => f.WaffleTitle())
+			.RuleFor(b => b.Slug, (_, b) => b.Title.Friendlify().ToUpper())
+			.RuleFor(b => b.AuthorId, f => f.PickRandom(userIds))
+			.RuleFor(b => b.Body, f => f.WaffleMarkdown(f.Random.Int(5, 30), f.Random.Bool()))
 			.RuleFor(b => b.CreationDate, f => f.Date.PastOffset().ToUniversalTime())
-			.RuleFor(b => b.PublicationDate, (f, b) => f.Date.BetweenOffset(b.CreationDate, DateTimeOffset.UtcNow).ToUniversalTime().OrNull(f, 0.2f))
+			.RuleFor(b => b.PublicationDate,
+				(f, b) => f.Date.BetweenOffset(b.CreationDate, DateTimeOffset.UtcNow).ToUniversalTime().OrNull(f, 0.2f))
 			.RuleFor(b => b.Hashtags, f => f.Lorem.Words())
 			.RuleFor(b => b.CommentThread, _ => new CommentThread())
 			.RuleFor(b => b.WordCount, (_, b) => b.Body.Words())
@@ -339,46 +341,40 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 				: null);
 
 		var blogposts = blogpostGenerator.Generate(60);
-		_context.Blogposts.AddRange(blogposts);
-		await _context.SaveChangesAsync();
+		context.Blogposts.AddRange(blogposts);
+		await context.SaveChangesAsync();
 	}
 
-	private async Task BulkUpsert<TEntity, TKey>(
+	private static async Task BulkUpsert<TEntity>(
+		ApplicationDbContext context,
 		DbSet<TEntity> source,
 		IEnumerable<TEntity> entries,
-		Expression<Func<TEntity, TKey>> extractor
+		Expression<Func<TEntity, object?>> extractor
 	) where TEntity : class
 	{
-		var existing = await source
-			.Select(extractor)
-			.ToListAsync();
-
+		var existing = await source.Select(extractor).ToListAsync();
 		var exceptor = extractor.Compile();
 		var toAdd = entries.ExceptBy(existing, exceptor);
 
 		source.AddRange(toAdd);
-
-		await _context.SaveChangesAsync();
+		await context.SaveChangesAsync();
 	}
 
-	private async Task<bool> Any<T>(Expression<Func<T, bool>>? predicate = null) where T : class
+	private static async Task<bool> Any<T>(
+		ApplicationDbContext context,
+		Expression<Func<T, bool>>? predicate = null
+	) where T : class
 	{
-		var any = predicate != null
-			? await _context.Set<T>().AnyAsync(predicate)
-			: await _context.Set<T>().AnyAsync();
-
-		return any;
+		return predicate != null
+			? await context.Set<T>().AnyAsync(predicate)
+			: await context.Set<T>().AnyAsync();
 	}
 
 	private async Task Time(Func<Task> func, string name)
 	{
 		_logger.LogInformation("▶️ Starting {Name}", name);
-
-		var stopwatch = new Stopwatch();
-		stopwatch.Start();
-
+		var stopwatch = Stopwatch.StartNew();
 		await func();
-
 		stopwatch.Stop();
 		_logger.LogInformation("⌚ {Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
 	}
@@ -386,15 +382,10 @@ public sealed class DbSeedInitializer : IAsyncInitializer
 	private async Task<T> Time<T>(Func<Task<T>> func, string name)
 	{
 		_logger.LogInformation("▶️ Starting {Name}", name);
-
-		var stopwatch = new Stopwatch();
-		stopwatch.Start();
-
+		var stopwatch = Stopwatch.StartNew();
 		var res = await func();
-
 		stopwatch.Stop();
 		_logger.LogInformation("⌚ {Name} executed in {Time}ms", name, stopwatch.ElapsedMilliseconds);
-
 		return res;
 	}
 

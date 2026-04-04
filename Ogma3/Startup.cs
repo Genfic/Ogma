@@ -198,7 +198,10 @@ public static class Startup
 			.Configure<TurnstileSettings>(configuration.GetSection(TurnstileSettings.Section));
 
 		// Seeding
-		services.AddAsyncInitializer<DbSeedInitializer>();
+		if (configuration.GetValue<bool>("SHOULD_SEED"))
+		{
+			services.AddHostedService<DbSeedInitializer>();
+		}
 
 		// Auth
 		services
@@ -310,8 +313,7 @@ public static class Startup
 		});
 
 		// Forwarded headers (for Cloudflare Tunnel / reverse proxies)
-		services.Configure<ForwardedHeadersOptions>(options =>
-		{
+		services.Configure<ForwardedHeadersOptions>(options => {
 			options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
 			options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
 			options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));

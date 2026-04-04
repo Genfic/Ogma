@@ -44,12 +44,11 @@ builder.Configuration
 builder.Host.UseSerilog();
 
 // builder.WebHost.UseUrls("https://+:5001");
-builder.WebHost.ConfigureKestrel(options =>
-	{
-		options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
-		options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
-		options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3; });
-	});
+builder.WebHost.ConfigureKestrel(options => {
+	options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
+	options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
+	options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3; });
+});
 
 await builder.ConfigureServices();
 
@@ -65,11 +64,6 @@ if (app.Environment.IsDevelopment())
 	using var serviceScope = app.Services.CreateScope();
 	var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 	await dbContext.Database.MigrateAsync();
-}
-
-if (builder.Configuration.GetValue<bool>("SHOULD_SEED"))
-{
-	await app.InitAsync();
 }
 
 app.Run();
