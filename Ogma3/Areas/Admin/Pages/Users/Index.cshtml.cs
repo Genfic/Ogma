@@ -14,7 +14,7 @@ public sealed class Index(ApplicationDbContext context) : PageModel
 	public required UserDetailsDto? OgmaUser { get; set; }
 	public required List<RoleDto> Roles { get; set; }
 	public string InfractionNamesJson =>
-		JsonSerializer.Serialize(InfractionType.GetNames(), InfractionNamesJsonContext.Default.StringArray);
+		JsonSerializer.Serialize(InfractionTypeExtensions.GetNames(), InfractionNamesJsonContext.Default.StringArray);
 	public string RolesJson =>
 		JsonSerializer.Serialize(Roles, RoleDtoJsonContext.Default.ListRoleDto);
 

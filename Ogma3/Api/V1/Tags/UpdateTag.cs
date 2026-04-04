@@ -46,7 +46,7 @@ public static partial class UpdateTag
 			.Where(t => t.Name == request.Name && t.Namespace == request.Namespace)
 			.AnyAsync(cancellationToken);
 
-		if (duplicateExists) return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace} namespace.");
+		if (duplicateExists) return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
 
 		var res = await context.Tags
 			.Where(t => t.Id == request.Id)

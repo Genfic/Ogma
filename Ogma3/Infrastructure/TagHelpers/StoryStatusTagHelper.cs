@@ -25,7 +25,7 @@ public sealed class StoryStatusTagHelper : TagHelper
 
 		output.AddClass("story-status", NullHtmlEncoder.Default);
 		output.AddClass("tag", NullHtmlEncoder.Default);
-		output.AddClass(Status.ToString().ToLower(), HtmlEncoder.Default);
+		output.AddClass(Status.ToStringFast().ToLower(), HtmlEncoder.Default);
 
 		output.Content.SetHtmlContent("");
 		output.Content.AppendHtml($"""

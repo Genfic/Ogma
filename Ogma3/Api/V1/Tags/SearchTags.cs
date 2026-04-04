@@ -29,6 +29,7 @@ public static partial class SearchTags
 		// We need to use `EF.Functions.Collate` because Postgres versions < 18 don't support `ILIKE` for
 		// columns with non-deterministic collations.
 		// ReSharper disable EntityFramework.ClientSideDbFunctionCall
+ #pragma warning disable NEEG004
 		Expression<Func<Tag, bool>>? search = request.SearchString.Split(':') switch
 		{
 			[{ Length: > 0 } ns, { Length: > 0 } name] => (Tag t)
@@ -47,6 +48,7 @@ public static partial class SearchTags
 
 			_ => null,
 		};
+ #pragma warning restore NEEG004
 		// ReSharper enable EntityFramework.ClientSideDbFunctionCall
 
 		if (search is null) return TypedResults.BadRequest();

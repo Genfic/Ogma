@@ -58,7 +58,10 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 			.HasDefaultValue(0);
 
 		builder
-			.OwnsMany(s => s.Credits, c => c.ToJson());
+			.ComplexCollection(
+				s => s.Credits,
+				c => c.ToJson()
+			);
 
 
 		// NAVIGATION

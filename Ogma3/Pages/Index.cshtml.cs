@@ -48,7 +48,7 @@ public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache,
 		var userId = User.GetNumericId();
 
 		return await context.Stories
-			.TagWith($"{nameof(GetTopStoryCards)} -> {count}, {sort}")
+			.TagWith($"{nameof(GetTopStoryCards)} -> {count}, {sort.ToStringFast()}")
 			.Where(b => b.PublicationDate != null)
 			.Where(b => b.ContentBlockId == null)
 			.Blacklist(context, userId)

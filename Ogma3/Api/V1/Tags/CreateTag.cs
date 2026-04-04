@@ -42,7 +42,7 @@ public static partial class CreateTag
 			.Where(t => t.Name == request.Name && t.Namespace == request.Namespace)
 			.AnyAsync(cancellationToken);
 
-		if (tagExist) return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace} namespace.");
+		if (tagExist) return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
 
 		var tag = new Tag
 		{

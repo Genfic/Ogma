@@ -45,11 +45,9 @@ public sealed class DocumentConfiguration : BaseConfiguration<Document>
 			.IsRequired();
 
 		builder
-			.OwnsMany<Document.Header>(
+			.ComplexCollection(
 				c => c.Headers,
-				d => {
-					d.ToJson();
-				}
+				d => d.ToJson()
 			);
 
 		builder
