@@ -1,8 +1,6 @@
 using System.IO.Compression;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Options;
-using Ogma3.Infrastructure.Exceptions;
-using ZstdSharp;
 
 namespace Ogma3.Infrastructure.Compression;
 
@@ -22,23 +20,20 @@ public sealed class ZstdCompressionProvider(IOptions<ZstdCompressionProvider.Opt
 	/// <inheritdoc />
 	public bool SupportsFlush => true;
 
+	/// <inheritdoc />
 	public Stream CreateStream(Stream outputStream)
 	{
-		var level = _options.CompressionLevel switch
-		{
-
-			CompressionLevel.NoCompression => 0,
-			CompressionLevel.Fastest => 1,
-			CompressionLevel.Optimal => 5,
-			CompressionLevel.SmallestSize => 19,
-			_ => throw new UnexpectedEnumValueException<CompressionLevel>(_options.CompressionLevel),
-		};
-		return new CompressionStream(outputStream, level: level, leaveOpen: true);
+		return new ZstandardStream(outputStream, _options.CompressionOptions, leaveOpen: true);
 	}
 
 	public sealed class Options : IOptions<Options>
 	{
-		public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Fastest;
+		/// <summary>
+		/// The compression options to use for the stream.
+		/// </summary>
+		public ZstandardCompressionOptions CompressionOptions { get; set; } = new();
+
+		/// <inheritdoc />
 		Options IOptions<Options>.Value => this;
 	}
 }

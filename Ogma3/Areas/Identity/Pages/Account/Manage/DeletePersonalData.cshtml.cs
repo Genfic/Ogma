@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using HashidsNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Users;
+using Sqids;
 using Index = Routes.Pages.Index;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
@@ -18,6 +18,7 @@ public sealed class DeletePersonalDataModel
 	ApplicationDbContext context)
 	: PageModel
 {
+	private readonly SqidsEncoder<long> _sqids = new();
 
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -60,10 +61,8 @@ public sealed class DeletePersonalDataModel
 			}
 		}
 
-		var hashids = new Hashids(minHashLength: 6);
-
 		// Clean basic data
-		user.UserName = $"Deleted User {hashids.EncodeLong(user.Id)}";
+		user.UserName = $"Deleted User {_sqids.Encode(user.Id)}";
 		user.NormalizedUserName = user.UserName.ToUpperInvariant().Normalize();
 		user.Email = "noreply@example.com";
 		user.NormalizedEmail = user.Email.ToUpperInvariant().Normalize();

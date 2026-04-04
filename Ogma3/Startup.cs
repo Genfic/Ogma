@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using System.Net;
 using System.Security.Claims;
 using System.Text.Json;
@@ -78,7 +77,7 @@ public static class Startup
 				options.Providers.Add<BrotliCompressionProvider>();
 				options.Providers.Add<GzipCompressionProvider>();
 			})
-			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionLevel = CompressionLevel.Optimal);
+			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionOptions.Quality = 5);
 
 		// Database
 		var conn = configuration.GetConnectionString("ogma3-db");
@@ -163,6 +162,7 @@ public static class Startup
 			.AddSingleton<ISpeedTrapService, SpeedTrapService>()
 			.AddSingleton<IFileLogService, FileLogService>()
 			.Configure<FileLogOptions>(c => {
+				c.CompressionLevel = 3;
 				c.MaxSizeInBytes = 50 * 1024 * 1024;
 				c.Directory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
 			})

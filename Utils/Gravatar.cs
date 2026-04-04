@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
-using Flurl;
 using JetBrains.Annotations;
+using NetEscapades.EnumGenerators;
 
 namespace Utils;
 
@@ -9,19 +9,36 @@ public static class Gravatar
 {
 	public static string Generate(string email, Options? options = null)
 	{
-		const string url = "https://www.gravatar.com/avatar";
-		var hash = MD5.HashData(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
-		var emailHash = string.Join("", hash.Select(x => x.ToString("x2")));
+		var normalized = email.Trim().ToLower();
 
-		var avatar = new Url(url).AppendPathSegment(emailHash);
+		Span<byte> hash = stackalloc byte[MD5.HashSizeInBytes];
+		MD5.TryHashData(Encoding.UTF8.GetBytes(normalized), hash, out _);
 
-		if (options is null) return avatar;
+		var baseUrl = $"https://www.gravatar.com/avatar/{Convert.ToHexStringLower(hash)}";
 
-		if (!string.IsNullOrEmpty(options.Default)) avatar = avatar.SetQueryParam("d", options.Default);
-		if (options.ForceDefault) avatar = avatar.SetQueryParam("f", "y");
-		if (options.Rating is { } r) avatar = avatar.SetQueryParam("r", r.ToString().ToLower());
+		if (options is null)
+		{
+			return baseUrl;
+		}
 
-		return avatar;
+		var queryParams = new List<string>();
+
+		if (!string.IsNullOrEmpty(options.Default))
+		{
+			queryParams.Add($"d={Uri.EscapeDataString(options.Default)}");
+		}
+		if (options.ForceDefault)
+		{
+			queryParams.Add("f=y");
+		}
+		if (options.Rating is { } r)
+		{
+			queryParams.Add($"r={r.ToStringFast().ToLower()}");
+		}
+
+		return queryParams.Count > 0
+			? $"{baseUrl}?{string.Join("&", queryParams)}"
+			: baseUrl;
 	}
 
 	[UsedImplicitly]
@@ -32,6 +49,7 @@ public static class Gravatar
 	);
 
 	// ReSharper disable once InconsistentNaming
+	[EnumExtensions]
 	public enum Ratings
 	{
 		G,

@@ -6,6 +6,11 @@
 		<ImplicitUsings>true</ImplicitUsings>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<Features>runtime-async=on</Features>
+		<EnablePreviewFeatures>true</EnablePreviewFeatures>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<AdditionalFiles Include="$(SolutionDir)/BannedSymbols.txt" />
 	</ItemGroup>

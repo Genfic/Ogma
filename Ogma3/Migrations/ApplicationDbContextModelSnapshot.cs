@@ -26,7 +26,7 @@ namespace Ogma3.Migrations
             modelBuilder
                 .HasAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
                 .HasAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "11.0.0-preview.2.26159.112")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_club_member_roles", new[] { "admin", "founder", "moderator", "user" });
@@ -119,6 +119,40 @@ namespace Ogma3.Migrations
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Data", "Microsoft.AspNetCore.Identity.IdentityUserPasskey<long>.Data#IdentityPasskeyData", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<byte[]>("Aaguid");
+
+                            b1.Property<byte[]>("AttestationObject")
+                                .IsRequired();
+
+                            b1.Property<byte[]>("ClientDataJson")
+                                .IsRequired();
+
+                            b1.Property<DateTimeOffset>("CreatedAt");
+
+                            b1.Property<bool>("IsBackedUp");
+
+                            b1.Property<bool>("IsBackupEligible");
+
+                            b1.Property<bool>("IsUserVerified");
+
+                            b1.Property<string>("Name");
+
+                            b1.Property<byte[]>("PublicKey")
+                                .IsRequired();
+
+                            b1.Property<long>("SignCount");
+
+                            b1.PrimitiveCollection<string>("Transports");
+
+                            b1
+                                .ToJson("Data")
+                                .HasColumnType("jsonb");
+                        });
 
                     b.HasKey("CredentialId");
 
@@ -680,6 +714,22 @@ namespace Ogma3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasDefaultValue(1L);
+
+                    b.ComplexCollection(typeof(List<Dictionary<string, object>>), "Headers", "Ogma3.Data.Documents.Document.Headers#Header", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Body")
+                                .IsRequired();
+
+                            b1.Property<byte>("Level");
+
+                            b1.Property<byte>("Occurrence");
+
+                            b1
+                                .ToJson("Headers")
+                                .HasColumnType("jsonb");
+                        });
 
                     b.HasKey("Id");
 
@@ -1294,6 +1344,23 @@ namespace Ogma3.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(0);
 
+                    b.ComplexCollection(typeof(List<Dictionary<string, object>>), "Credits", "Ogma3.Data.Stories.Story.Credits#Credit", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Link");
+
+                            b1.Property<string>("Name")
+                                .IsRequired();
+
+                            b1.Property<string>("Role")
+                                .IsRequired();
+
+                            b1
+                                .ToJson("Credits")
+                                .HasColumnType("jsonb");
+                        });
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
@@ -1650,48 +1717,6 @@ namespace Ogma3.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("Microsoft.AspNetCore.Identity.IdentityPasskeyData", "Data", b1 =>
-                        {
-                            b1.Property<byte[]>("IdentityUserPasskeyCredentialId");
-
-                            b1.Property<byte[]>("AttestationObject")
-                                .IsRequired();
-
-                            b1.Property<byte[]>("ClientDataJson")
-                                .IsRequired();
-
-                            b1.Property<DateTimeOffset>("CreatedAt");
-
-                            b1.Property<bool>("IsBackedUp");
-
-                            b1.Property<bool>("IsBackupEligible");
-
-                            b1.Property<bool>("IsUserVerified");
-
-                            b1.Property<string>("Name");
-
-                            b1.Property<byte[]>("PublicKey")
-                                .IsRequired();
-
-                            b1.Property<long>("SignCount");
-
-                            b1.PrimitiveCollection<string>("Transports");
-
-                            b1.HasKey("IdentityUserPasskeyCredentialId");
-
-                            b1.ToTable("AspNetUserPasskeys");
-
-                            b1
-                                .ToJson("Data")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("IdentityUserPasskeyCredentialId");
-                        });
-
-                    b.Navigation("Data")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
@@ -1973,37 +1998,6 @@ namespace Ogma3.Migrations
                     b.Navigation("OgmaUser");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.Documents.Document", b =>
-                {
-                    b.OwnsMany("Ogma3.Data.Documents.Document+Header", "Headers", b1 =>
-                        {
-                            b1.Property<long>("DocumentId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<string>("Body")
-                                .IsRequired();
-
-                            b1.Property<byte>("Level");
-
-                            b1.Property<byte>("Occurrence");
-
-                            b1.HasKey("DocumentId", "__synthesizedOrdinal");
-
-                            b1.ToTable("Documents");
-
-                            b1
-                                .ToJson("Headers")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DocumentId");
-                        });
-
-                    b.Navigation("Headers");
-                });
-
             modelBuilder.Entity("Ogma3.Data.Folders.Folder", b =>
                 {
                     b.HasOne("Ogma3.Data.Clubs.Club", "Club")
@@ -2227,40 +2221,11 @@ namespace Ogma3.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Ogma3.Data.Stories.Credit", "Credits", b1 =>
-                        {
-                            b1.Property<long>("StoryId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<string>("Link");
-
-                            b1.Property<string>("Name")
-                                .IsRequired();
-
-                            b1.Property<string>("Role")
-                                .IsRequired();
-
-                            b1.HasKey("StoryId", "__synthesizedOrdinal");
-
-                            b1.ToTable("Stories");
-
-                            b1
-                                .ToJson("Credits")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("StoryId");
-                        });
-
                     b.Navigation("Author");
 
                     b.Navigation("ContentBlock");
 
                     b.Navigation("Cover");
-
-                    b.Navigation("Credits");
 
                     b.Navigation("Rating");
                 });

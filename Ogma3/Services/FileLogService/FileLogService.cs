@@ -1,6 +1,6 @@
+using System.IO.Compression;
 using System.Text;
 using Microsoft.Extensions.Options;
-using ZstdSharp;
 
 namespace Ogma3.Services.FileLogService;
 
@@ -46,7 +46,13 @@ public sealed class FileLogService(IOptions<FileLogOptions> options) : IFileLogS
 
 		await using var source = File.Open(LogPath, FileMode.Open, FileAccess.ReadWrite);
 		await using var archive = File.OpenWrite(ArchivePath);
-		await using var compression = new CompressionStream(archive, options.Value.CompressionLevel);
+
+		var zstdOptions = new ZstandardCompressionOptions
+		{
+			Quality = options.Value.CompressionLevel,
+		};
+
+		await using var compression = new ZstandardStream(archive, zstdOptions);
 		await source.CopyToAsync(compression);
 		source.SetLength(0);
 		source.Close();

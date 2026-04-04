@@ -14,18 +14,22 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:Enum:e_club_member_roles", "founder,admin,moderator,user")
-                .Annotation("Npgsql:Enum:e_deleted_by", "user,staff")
-                .Annotation("Npgsql:Enum:e_notification_event", "system,watched_story_updated,watched_thread_new_comment,followed_author_new_blogpost,followed_author_new_story,comment_reply")
-                .Annotation("Npgsql:Enum:e_story_status", "in_progress,completed,on_hiatus,cancelled")
-                .Annotation("Npgsql:Enum:e_tag_namespace", "content_warning,genre,franchise")
-                .Annotation("Npgsql:Enum:infraction_type", "note,warning,mute,ban")
+                .Annotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
+                .Annotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
+                .Annotation("Npgsql:Enum:e_club_member_roles", "admin,founder,moderator,user")
+                .Annotation("Npgsql:Enum:e_deleted_by", "staff,user")
+                .Annotation("Npgsql:Enum:e_notification_event", "comment_reply,followed_author_new_blogpost,followed_author_new_story,system,watched_story_updated,watched_thread_new_comment")
+                .Annotation("Npgsql:Enum:e_story_status", "cancelled,completed,in_progress,on_hiatus,unspecified")
+                .Annotation("Npgsql:Enum:e_tag_namespace", "content_warning,franchise,genre")
+                .Annotation("Npgsql:Enum:infraction_type", "ban,mute,note,warning")
+                .Annotation("Npgsql:PostgresExtension:citext", ",,")
+                .Annotation("Npgsql:PostgresExtension:tsm_system_rows", ",,")
                 .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
 
             migrationBuilder.CreateTable(
@@ -34,11 +38,11 @@ namespace Ogma3.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     IsStaff = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    Color = table.Column<string>(type: "text", nullable: true),
-                    Order = table.Column<byte>(type: "smallint", nullable: true),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Color = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: true),
+                    Order = table.Column<byte>(type: "smallint", nullable: false, defaultValue: (byte)0),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -47,68 +51,19 @@ namespace Ogma3.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
-                    Bio = table.Column<string>(type: "character varying(10000)", maxLength: 10000, nullable: true),
-                    Links = table.Column<List<string>>(type: "text[]", maxLength: 5, nullable: false, defaultValueSql: "'{}'"),
-                    Avatar = table.Column<string>(type: "text", nullable: false),
-                    AvatarId = table.Column<string>(type: "text", nullable: true),
-                    RegistrationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    LastActive = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Clubs",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Slug = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Hook = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(25000)", maxLength: 25000, nullable: true),
-                    Icon = table.Column<string>(type: "text", nullable: true),
-                    IconId = table.Column<string>(type: "text", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clubs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Documents",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Slug = table.Column<string>(type: "text", nullable: false),
-                    RevisionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    Title = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Slug = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    RevisionDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CreationTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Version = table.Column<long>(type: "bigint", nullable: false, defaultValue: 1L),
-                    Body = table.Column<string>(type: "text", nullable: false)
+                    Body = table.Column<string>(type: "text", nullable: false),
+                    CompiledBody = table.Column<string>(type: "text", nullable: false),
+                    Headers = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,9 +76,9 @@ namespace Ogma3.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Question = table.Column<string>(type: "text", nullable: false),
-                    Answer = table.Column<string>(type: "text", nullable: false),
-                    AnswerRendered = table.Column<string>(type: "text", nullable: false)
+                    Question = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
+                    Answer = table.Column<string>(type: "character varying(10000)", maxLength: 10000, nullable: false),
+                    AnswerRendered = table.Column<string>(type: "character varying(20000)", maxLength: 20000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,14 +99,28 @@ namespace Ogma3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Url = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    ETag = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Notifications",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Body = table.Column<string>(type: "text", nullable: false),
+                    Body = table.Column<string>(type: "text", nullable: true),
                     Url = table.Column<string>(type: "text", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    DateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Event = table.Column<ENotificationEvent>(type: "e_notification_event", nullable: false)
                 },
                 constraints: table =>
@@ -182,8 +151,7 @@ namespace Ogma3.Migrations
                     Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     Order = table.Column<byte>(type: "smallint", nullable: false, defaultValue: (byte)0),
-                    Icon = table.Column<string>(type: "text", nullable: true),
-                    IconId = table.Column<string>(type: "text", nullable: true),
+                    Color = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
                     BlacklistedByDefault = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -192,14 +160,29 @@ namespace Ogma3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubscriptionTiers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    AmountCents = table.Column<int>(type: "integer", nullable: false),
+                    Entitlements = table.Column<int[]>(type: "integer[]", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionTiers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Slug = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false, collation: "nocase"),
+                    Slug = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false, collation: "nocase"),
+                    Description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
                     Namespace = table.Column<ETagNamespace>(type: "e_tag_namespace", nullable: true)
                 },
                 constraints: table =>
@@ -229,6 +212,69 @@ namespace Ogma3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    NormalizedUserName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false, collation: "nocase-noaccent"),
+                    Email = table.Column<string>(type: "character varying(254)", maxLength: 254, nullable: false),
+                    NormalizedEmail = table.Column<string>(type: "character varying(254)", maxLength: 254, nullable: false),
+                    Title = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Bio = table.Column<string>(type: "character varying(10000)", maxLength: 10000, nullable: true),
+                    Links = table.Column<List<string>>(type: "text[]", maxLength: 5, nullable: false, defaultValueSql: "'{}'"),
+                    AvatarId = table.Column<long>(type: "bigint", nullable: false),
+                    RegistrationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    LastActive = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    SubscriptionId = table.Column<long>(type: "bigint", nullable: true),
+                    TimeZone = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Images_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clubs",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Slug = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Hook = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(25000)", maxLength: 25000, nullable: false),
+                    IconId = table.Column<long>(type: "bigint", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clubs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clubs_Images_IconId",
+                        column: x => x.IconId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -253,8 +299,8 @@ namespace Ogma3.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -263,6 +309,25 @@ namespace Ogma3.Migrations
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserPasskeys",
+                columns: table => new
+                {
+                    CredentialId = table.Column<byte[]>(type: "bytea", maxLength: 1024, nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Data = table.Column<string>(type: "jsonb", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserPasskeys", x => x.CredentialId);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserPasskeys_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -298,8 +363,8 @@ namespace Ogma3.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -309,370 +374,6 @@ namespace Ogma3.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BlacklistedUsers",
-                columns: table => new
-                {
-                    BlockingUserId = table.Column<long>(type: "bigint", nullable: false),
-                    BlockedUserId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BlacklistedUsers", x => new { x.BlockingUserId, x.BlockedUserId });
-                    table.ForeignKey(
-                        name: "FK_BlacklistedUsers_AspNetUsers_BlockedUserId",
-                        column: x => x.BlockedUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BlacklistedUsers_AspNetUsers_BlockingUserId",
-                        column: x => x.BlockingUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContentBlocks",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IssuerId = table.Column<long>(type: "bigint", nullable: false),
-                    Reason = table.Column<string>(type: "text", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    Type = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContentBlocks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContentBlocks_AspNetUsers_IssuerId",
-                        column: x => x.IssuerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FollowedUsers",
-                columns: table => new
-                {
-                    FollowingUserId = table.Column<long>(type: "bigint", nullable: false),
-                    FollowedUserId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FollowedUsers", x => new { x.FollowingUserId, x.FollowedUserId });
-                    table.ForeignKey(
-                        name: "FK_FollowedUsers_AspNetUsers_FollowedUserId",
-                        column: x => x.FollowedUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FollowedUsers_AspNetUsers_FollowingUserId",
-                        column: x => x.FollowingUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Infractions",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    IssueDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    ActiveUntil = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    RemovedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Reason = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<InfractionType>(type: "infraction_type", nullable: false),
-                    IssuedById = table.Column<long>(type: "bigint", nullable: false),
-                    RemovedById = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Infractions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Infractions_AspNetUsers_IssuedById",
-                        column: x => x.IssuedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Infractions_AspNetUsers_RemovedById",
-                        column: x => x.RemovedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Infractions_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InviteCodes",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "text", nullable: false),
-                    NormalizedCode = table.Column<string>(type: "text", nullable: false),
-                    UsedById = table.Column<long>(type: "bigint", nullable: true),
-                    IssuedById = table.Column<long>(type: "bigint", nullable: false),
-                    UsedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IssueDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InviteCodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InviteCodes_AspNetUsers_IssuedById",
-                        column: x => x.IssuedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_InviteCodes_AspNetUsers_UsedById",
-                        column: x => x.UsedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ModeratorActions",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StaffMemberId = table.Column<long>(type: "bigint", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ModeratorActions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ModeratorActions_AspNetUsers_StaffMemberId",
-                        column: x => x.StaffMemberId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClubBans",
-                columns: table => new
-                {
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ClubId = table.Column<long>(type: "bigint", nullable: false),
-                    IssuerId = table.Column<long>(type: "bigint", nullable: false),
-                    BanDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    Reason = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClubBans", x => new { x.ClubId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_ClubBans_AspNetUsers_IssuerId",
-                        column: x => x.IssuerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClubBans_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClubBans_Clubs_ClubId",
-                        column: x => x.ClubId,
-                        principalTable: "Clubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClubMembers",
-                columns: table => new
-                {
-                    MemberId = table.Column<long>(type: "bigint", nullable: false),
-                    ClubId = table.Column<long>(type: "bigint", nullable: false),
-                    Role = table.Column<EClubMemberRoles>(type: "e_club_member_roles", nullable: false, defaultValue: EClubMemberRoles.User),
-                    MemberSince = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClubMembers", x => new { x.ClubId, x.MemberId });
-                    table.ForeignKey(
-                        name: "FK_ClubMembers_AspNetUsers_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClubMembers_Clubs_ClubId",
-                        column: x => x.ClubId,
-                        principalTable: "Clubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClubModeratorActions",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ModeratorId = table.Column<long>(type: "bigint", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    ClubId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClubModeratorActions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClubModeratorActions_AspNetUsers_ModeratorId",
-                        column: x => x.ModeratorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ClubModeratorActions_Clubs_ModeratorId",
-                        column: x => x.ModeratorId,
-                        principalTable: "Clubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClubThreads",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Body = table.Column<string>(type: "character varying(25000)", maxLength: 25000, nullable: false),
-                    AuthorId = table.Column<long>(type: "bigint", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    ClubId = table.Column<long>(type: "bigint", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IsPinned = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClubThreads", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClubThreads_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ClubThreads_Clubs_ClubId",
-                        column: x => x.ClubId,
-                        principalTable: "Clubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Folders",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Slug = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    ClubId = table.Column<long>(type: "bigint", nullable: false),
-                    ParentFolderId = table.Column<long>(type: "bigint", nullable: true),
-                    StoriesCount = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    AccessLevel = table.Column<EClubMemberRoles>(type: "e_club_member_roles", nullable: false, defaultValue: EClubMemberRoles.User)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Folders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Folders_Clubs_ClubId",
-                        column: x => x.ClubId,
-                        principalTable: "Clubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Folders_Folders_ParentFolderId",
-                        column: x => x.ParentFolderId,
-                        principalTable: "Folders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Shelves",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false, defaultValue: ""),
-                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDefault = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    IsPublic = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    IsQuickAdd = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    TrackUpdates = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    Color = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: true),
-                    IconId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Shelves", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Shelves_AspNetUsers_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Shelves_Icons_IconId",
-                        column: x => x.IconId,
-                        principalTable: "Icons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NotificationRecipients",
-                columns: table => new
-                {
-                    RecipientId = table.Column<long>(type: "bigint", nullable: false),
-                    NotificationId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotificationRecipients", x => new { x.NotificationId, x.RecipientId });
-                    table.ForeignKey(
-                        name: "FK_NotificationRecipients_AspNetUsers_RecipientId",
-                        column: x => x.RecipientId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NotificationRecipients_Notifications_NotificationId",
-                        column: x => x.NotificationId,
-                        principalTable: "Notifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -726,6 +427,358 @@ namespace Ogma3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlockedUsers",
+                columns: table => new
+                {
+                    BlockingUserId = table.Column<long>(type: "bigint", nullable: false),
+                    BlockedUserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlockedUsers", x => new { x.BlockingUserId, x.BlockedUserId });
+                    table.ForeignKey(
+                        name: "FK_BlockedUsers_AspNetUsers_BlockedUserId",
+                        column: x => x.BlockedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BlockedUsers_AspNetUsers_BlockingUserId",
+                        column: x => x.BlockingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContentBlocks",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IssuerId = table.Column<long>(type: "bigint", nullable: false),
+                    Reason = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
+                    DateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    Type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContentBlocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContentBlocks_AspNetUsers_IssuerId",
+                        column: x => x.IssuerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FollowedUsers",
+                columns: table => new
+                {
+                    FollowingUserId = table.Column<long>(type: "bigint", nullable: false),
+                    FollowedUserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FollowedUsers", x => new { x.FollowingUserId, x.FollowedUserId });
+                    table.ForeignKey(
+                        name: "FK_FollowedUsers_AspNetUsers_FollowedUserId",
+                        column: x => x.FollowedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FollowedUsers_AspNetUsers_FollowingUserId",
+                        column: x => x.FollowingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Infractions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    IssueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    ActiveUntil = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    RemovedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    Reason = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Type = table.Column<InfractionType>(type: "infraction_type", nullable: false),
+                    IssuedById = table.Column<long>(type: "bigint", nullable: false),
+                    RemovedById = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Infractions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Infractions_AspNetUsers_IssuedById",
+                        column: x => x.IssuedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Infractions_AspNetUsers_RemovedById",
+                        column: x => x.RemovedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Infractions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InviteCodes",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Code = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false, collation: "nocase-noaccent"),
+                    UsedById = table.Column<long>(type: "bigint", nullable: true),
+                    IssuedById = table.Column<long>(type: "bigint", nullable: false),
+                    UsedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IssueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InviteCodes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InviteCodes_AspNetUsers_IssuedById",
+                        column: x => x.IssuedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InviteCodes_AspNetUsers_UsedById",
+                        column: x => x.UsedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ModeratorActions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StaffMemberId = table.Column<long>(type: "bigint", nullable: false),
+                    Description = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
+                    DateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModeratorActions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ModeratorActions_AspNetUsers_StaffMemberId",
+                        column: x => x.StaffMemberId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotificationRecipients",
+                columns: table => new
+                {
+                    RecipientId = table.Column<long>(type: "bigint", nullable: false),
+                    NotificationId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationRecipients", x => new { x.NotificationId, x.RecipientId });
+                    table.ForeignKey(
+                        name: "FK_NotificationRecipients_AspNetUsers_RecipientId",
+                        column: x => x.RecipientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NotificationRecipients_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shelves",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false, defaultValue: ""),
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDefault = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    IsQuickAdd = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    TrackUpdates = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    Color = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: true),
+                    IconId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shelves", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Shelves_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Shelves_Icons_IconId",
+                        column: x => x.IconId,
+                        principalTable: "Icons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    TierId = table.Column<long>(type: "bigint", nullable: true),
+                    PatreonTierIds = table.Column<List<string>>(type: "text[]", nullable: false),
+                    PatreonStatus = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    PatreonUserId = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    LastChange = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_SubscriptionTiers_TierId",
+                        column: x => x.TierId,
+                        principalTable: "SubscriptionTiers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClubMembers",
+                columns: table => new
+                {
+                    MemberId = table.Column<long>(type: "bigint", nullable: false),
+                    ClubId = table.Column<long>(type: "bigint", nullable: false),
+                    Role = table.Column<EClubMemberRoles>(type: "e_club_member_roles", nullable: false, defaultValue: EClubMemberRoles.User),
+                    MemberSince = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClubMembers", x => new { x.ClubId, x.MemberId });
+                    table.ForeignKey(
+                        name: "FK_ClubMembers_AspNetUsers_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClubMembers_Clubs_ClubId",
+                        column: x => x.ClubId,
+                        principalTable: "Clubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClubModeratorActions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ModeratorId = table.Column<long>(type: "bigint", nullable: false),
+                    Description = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    ClubId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClubModeratorActions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClubModeratorActions_AspNetUsers_ModeratorId",
+                        column: x => x.ModeratorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ClubModeratorActions_Clubs_ModeratorId",
+                        column: x => x.ModeratorId,
+                        principalTable: "Clubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClubThreads",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Body = table.Column<string>(type: "character varying(25000)", maxLength: 25000, nullable: false),
+                    AuthorId = table.Column<long>(type: "bigint", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    ClubId = table.Column<long>(type: "bigint", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsPinned = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClubThreads", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClubThreads_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ClubThreads_Clubs_ClubId",
+                        column: x => x.ClubId,
+                        principalTable: "Clubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Folders",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Slug = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    ClubId = table.Column<long>(type: "bigint", nullable: false),
+                    AccessLevel = table.Column<EClubMemberRoles>(type: "e_club_member_roles", nullable: false, defaultValue: EClubMemberRoles.User)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Folders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Folders_Clubs_ClubId",
+                        column: x => x.ClubId,
+                        principalTable: "Clubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stories",
                 columns: table => new
                 {
@@ -736,15 +789,16 @@ namespace Ogma3.Migrations
                     Slug = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false),
                     Hook = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    Cover = table.Column<string>(type: "text", nullable: true),
-                    CoverId = table.Column<string>(type: "text", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    PublicationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CoverId = table.Column<long>(type: "bigint", nullable: true),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    PublicationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     RatingId = table.Column<long>(type: "bigint", nullable: false),
                     Status = table.Column<EStoryStatus>(type: "e_story_status", nullable: false, defaultValue: EStoryStatus.InProgress),
                     WordCount = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     ChapterCount = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    ContentBlockId = table.Column<long>(type: "bigint", nullable: true)
+                    IsLocked = table.Column<bool>(type: "boolean", nullable: false),
+                    ContentBlockId = table.Column<long>(type: "bigint", nullable: true),
+                    Credits = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -761,6 +815,11 @@ namespace Ogma3.Migrations
                         principalTable: "ContentBlocks",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Stories_Images_CoverId",
+                        column: x => x.CoverId,
+                        principalTable: "Images",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Stories_Ratings_RatingId",
                         column: x => x.RatingId,
                         principalTable: "Ratings",
@@ -775,8 +834,8 @@ namespace Ogma3.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Order = table.Column<long>(type: "bigint", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    PublicationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    PublicationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Slug = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Body = table.Column<string>(type: "character varying(500000)", maxLength: 500000, nullable: false),
@@ -808,7 +867,7 @@ namespace Ogma3.Migrations
                 {
                     StoryId = table.Column<long>(type: "bigint", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Chapters = table.Column<HashSet<long>>(type: "bigint[]", nullable: true)
+                    Chapters = table.Column<List<long>>(type: "bigint[]", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -833,7 +892,7 @@ namespace Ogma3.Migrations
                 {
                     FolderId = table.Column<long>(type: "bigint", nullable: false),
                     StoryId = table.Column<long>(type: "bigint", nullable: false),
-                    Added = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    Added = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     AddedById = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -941,12 +1000,13 @@ namespace Ogma3.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Slug = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    PublicationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    PublicationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     AuthorId = table.Column<long>(type: "bigint", nullable: false),
                     Body = table.Column<string>(type: "character varying(500000)", maxLength: 500000, nullable: false),
                     WordCount = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     Hashtags = table.Column<string[]>(type: "text[]", maxLength: 10, nullable: false, defaultValue: new string[0]),
+                    IsLocked = table.Column<bool>(type: "boolean", nullable: false),
                     AttachedStoryId = table.Column<long>(type: "bigint", nullable: true),
                     AttachedChapterId = table.Column<long>(type: "bigint", nullable: true),
                     ContentBlockId = table.Column<long>(type: "bigint", nullable: true)
@@ -986,7 +1046,8 @@ namespace Ogma3.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CommentsCount = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    LockDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LockDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsLocked = table.Column<bool>(type: "boolean", nullable: false, computedColumnSql: "\"LockDate\" IS NOT NULL", stored: true),
                     UserId = table.Column<long>(type: "bigint", nullable: true),
                     ChapterId = table.Column<long>(type: "bigint", nullable: true),
                     BlogpostId = table.Column<long>(type: "bigint", nullable: true),
@@ -1029,12 +1090,10 @@ namespace Ogma3.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CommentsThreadId = table.Column<long>(type: "bigint", nullable: false),
                     AuthorId = table.Column<long>(type: "bigint", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    LastEdit = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Body = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
                     DeletedBy = table.Column<EDeletedBy>(type: "e_deleted_by", nullable: true),
-                    DeletedByUserId = table.Column<long>(type: "bigint", nullable: true),
-                    EditCount = table.Column<int>(type: "integer", nullable: false, defaultValue: 0)
+                    DeletedByUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1059,7 +1118,7 @@ namespace Ogma3.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommentsThreadSubscribers",
+                name: "CommentThreadSubscribers",
                 columns: table => new
                 {
                     CommentsThreadId = table.Column<long>(type: "bigint", nullable: false),
@@ -1067,15 +1126,15 @@ namespace Ogma3.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommentsThreadSubscribers", x => new { x.CommentsThreadId, x.OgmaUserId });
+                    table.PrimaryKey("PK_CommentThreadSubscribers", x => new { x.CommentsThreadId, x.OgmaUserId });
                     table.ForeignKey(
-                        name: "FK_CommentsThreadSubscribers_AspNetUsers_OgmaUserId",
+                        name: "FK_CommentThreadSubscribers_AspNetUsers_OgmaUserId",
                         column: x => x.OgmaUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CommentsThreadSubscribers_CommentThreads_CommentsThreadId",
+                        name: "FK_CommentThreadSubscribers_CommentThreads_CommentsThreadId",
                         column: x => x.CommentsThreadId,
                         principalTable: "CommentThreads",
                         principalColumn: "Id",
@@ -1088,7 +1147,7 @@ namespace Ogma3.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    EditTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    EditTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Body = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
                     ParentId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -1110,7 +1169,7 @@ namespace Ogma3.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ReporterId = table.Column<long>(type: "bigint", nullable: false),
-                    ReportDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    ReportDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Reason = table.Column<string>(type: "text", nullable: false),
                     ContentType = table.Column<string>(type: "text", nullable: false),
                     CommentId = table.Column<long>(type: "bigint", nullable: true),
@@ -1189,6 +1248,11 @@ namespace Ogma3.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserPasskeys_UserId",
+                table: "AspNetUserPasskeys",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
@@ -1197,6 +1261,17 @@ namespace Ogma3.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_AvatarId",
+                table: "AspNetUsers",
+                column: "AvatarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_LastActive",
+                table: "AspNetUsers",
+                column: "LastActive",
+                descending: new bool[0]);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -1215,8 +1290,8 @@ namespace Ogma3.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlacklistedUsers_BlockedUserId",
-                table: "BlacklistedUsers",
+                name: "IX_BlockedUsers_BlockedUserId",
+                table: "BlockedUsers",
                 column: "BlockedUserId");
 
             migrationBuilder.CreateIndex(
@@ -1257,16 +1332,6 @@ namespace Ogma3.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClubBans_IssuerId",
-                table: "ClubBans",
-                column: "IssuerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClubBans_UserId",
-                table: "ClubBans",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ClubMembers_MemberId",
                 table: "ClubMembers",
                 column: "MemberId");
@@ -1275,6 +1340,12 @@ namespace Ogma3.Migrations
                 name: "IX_ClubModeratorActions_ModeratorId",
                 table: "ClubModeratorActions",
                 column: "ModeratorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clubs_IconId",
+                table: "Clubs",
+                column: "IconId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClubThreads_AuthorId",
@@ -1307,11 +1378,6 @@ namespace Ogma3.Migrations
                 column: "DeletedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommentsThreadSubscribers_OgmaUserId",
-                table: "CommentsThreadSubscribers",
-                column: "OgmaUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CommentThreads_BlogpostId",
                 table: "CommentThreads",
                 column: "BlogpostId",
@@ -1336,6 +1402,11 @@ namespace Ogma3.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommentThreadSubscribers_OgmaUserId",
+                table: "CommentThreadSubscribers",
+                column: "OgmaUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ContentBlocks_IssuerId",
                 table: "ContentBlocks",
                 column: "IssuerId");
@@ -1356,11 +1427,6 @@ namespace Ogma3.Migrations
                 name: "IX_Folders_ClubId",
                 table: "Folders",
                 column: "ClubId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Folders_ParentFolderId",
-                table: "Folders",
-                column: "ParentFolderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FolderStories_AddedById",
@@ -1389,9 +1455,20 @@ namespace Ogma3.Migrations
                 column: "IssuedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Infractions_RemovedAt",
+                table: "Infractions",
+                column: "RemovedAt",
+                filter: "\"RemovedAt\" IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Infractions_RemovedById",
                 table: "Infractions",
                 column: "RemovedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Infractions_Type",
+                table: "Infractions",
+                column: "Type");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Infractions_UserId",
@@ -1487,6 +1564,11 @@ namespace Ogma3.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Stories_CoverId",
+                table: "Stories",
+                column: "CoverId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stories_RatingId",
                 table: "Stories",
                 column: "RatingId");
@@ -1497,14 +1579,32 @@ namespace Ogma3.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_TierId",
+                table: "Subscriptions",
+                column: "TierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_UserId",
+                table: "Subscriptions",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tags_Name",
                 table: "Tags",
-                column: "Name");
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tags_Name_Namespace",
                 table: "Tags",
                 columns: new[] { "Name", "Namespace" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_Slug",
+                table: "Tags",
+                column: "Slug",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1532,6 +1632,9 @@ namespace Ogma3.Migrations
                 name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
+                name: "AspNetUserPasskeys");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(
@@ -1544,13 +1647,10 @@ namespace Ogma3.Migrations
                 name: "BlacklistedTags");
 
             migrationBuilder.DropTable(
-                name: "BlacklistedUsers");
+                name: "BlockedUsers");
 
             migrationBuilder.DropTable(
                 name: "ChaptersRead");
-
-            migrationBuilder.DropTable(
-                name: "ClubBans");
 
             migrationBuilder.DropTable(
                 name: "ClubMembers");
@@ -1562,7 +1662,7 @@ namespace Ogma3.Migrations
                 name: "CommentRevisions");
 
             migrationBuilder.DropTable(
-                name: "CommentsThreadSubscribers");
+                name: "CommentThreadSubscribers");
 
             migrationBuilder.DropTable(
                 name: "Documents");
@@ -1601,6 +1701,9 @@ namespace Ogma3.Migrations
                 name: "StoryTags");
 
             migrationBuilder.DropTable(
+                name: "Subscriptions");
+
+            migrationBuilder.DropTable(
                 name: "Votes");
 
             migrationBuilder.DropTable(
@@ -1620,6 +1723,9 @@ namespace Ogma3.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "SubscriptionTiers");
 
             migrationBuilder.DropTable(
                 name: "CommentThreads");
@@ -1650,6 +1756,22 @@ namespace Ogma3.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Images");
+
+            migrationBuilder.AlterDatabase()
+                .OldAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
+                .OldAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
+                .OldAnnotation("Npgsql:Enum:e_club_member_roles", "admin,founder,moderator,user")
+                .OldAnnotation("Npgsql:Enum:e_deleted_by", "staff,user")
+                .OldAnnotation("Npgsql:Enum:e_notification_event", "comment_reply,followed_author_new_blogpost,followed_author_new_story,system,watched_story_updated,watched_thread_new_comment")
+                .OldAnnotation("Npgsql:Enum:e_story_status", "cancelled,completed,in_progress,on_hiatus,unspecified")
+                .OldAnnotation("Npgsql:Enum:e_tag_namespace", "content_warning,franchise,genre")
+                .OldAnnotation("Npgsql:Enum:infraction_type", "ban,mute,note,warning")
+                .OldAnnotation("Npgsql:PostgresExtension:citext", ",,")
+                .OldAnnotation("Npgsql:PostgresExtension:tsm_system_rows", ",,")
+                .OldAnnotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
         }
     }
 }

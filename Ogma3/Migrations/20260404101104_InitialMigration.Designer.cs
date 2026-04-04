@@ -19,23 +19,26 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240928212937_FlattenedFolders")]
-    partial class FlattenedFolders
+    [Migration("20260404101104_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
+                .HasAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
+                .HasAnnotation("ProductVersion", "11.0.0-preview.2.26159.112")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_club_member_roles", new[] { "invalid", "founder", "admin", "moderator", "user" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_deleted_by", new[] { "user", "staff" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_notification_event", new[] { "system", "watched_story_updated", "watched_thread_new_comment", "followed_author_new_blogpost", "followed_author_new_story", "comment_reply" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_story_status", new[] { "unspecified", "in_progress", "completed", "on_hiatus", "cancelled" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_tag_namespace", new[] { "content_warning", "genre", "franchise" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "infraction_type", new[] { "note", "warning", "mute", "ban" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_club_member_roles", new[] { "admin", "founder", "moderator", "user" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_deleted_by", new[] { "staff", "user" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_notification_event", new[] { "comment_reply", "followed_author_new_blogpost", "followed_author_new_story", "system", "watched_story_updated", "watched_thread_new_comment" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_story_status", new[] { "cancelled", "completed", "in_progress", "on_hiatus", "unspecified" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_tag_namespace", new[] { "content_warning", "franchise", "genre" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "infraction_type", new[] { "ban", "mute", "note", "warning" });
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "tsm_system_rows");
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -91,10 +94,12 @@ namespace Ogma3.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -109,16 +114,68 @@ namespace Ogma3.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<long>", b =>
+                {
+                    b.Property<byte[]>("CredentialId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("bytea");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Data", "Microsoft.AspNetCore.Identity.IdentityUserPasskey<long>.Data#IdentityPasskeyData", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<byte[]>("Aaguid");
+
+                            b1.Property<byte[]>("AttestationObject")
+                                .IsRequired();
+
+                            b1.Property<byte[]>("ClientDataJson")
+                                .IsRequired();
+
+                            b1.Property<DateTimeOffset>("CreatedAt");
+
+                            b1.Property<bool>("IsBackedUp");
+
+                            b1.Property<bool>("IsBackupEligible");
+
+                            b1.Property<bool>("IsUserVerified");
+
+                            b1.Property<string>("Name");
+
+                            b1.Property<byte[]>("PublicKey")
+                                .IsRequired();
+
+                            b1.Property<long>("SignCount");
+
+                            b1.PrimitiveCollection<string>("Transports");
+
+                            b1
+                                .ToJson("Data")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.HasKey("CredentialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserPasskeys", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -176,11 +233,13 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -219,12 +278,15 @@ namespace Ogma3.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string[]>("Hashtags")
+                    b.PrimitiveCollection<string[]>("Hashtags")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(10)
                         .HasColumnType("text[]")
                         .HasDefaultValue(new string[0]);
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("PublicationDate")
                         .HasColumnType("timestamp with time zone");
@@ -327,8 +389,10 @@ namespace Ogma3.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<List<long>>("Chapters")
-                        .HasColumnType("bigint[]");
+                    b.PrimitiveCollection<List<long>>("_chaptersInternal")
+                        .IsRequired()
+                        .HasColumnType("bigint[]")
+                        .HasColumnName("Chapters");
 
                     b.HasKey("StoryId", "UserId");
 
@@ -355,7 +419,8 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
 
                     b.Property<long>("ModeratorId")
                         .HasColumnType("bigint");
@@ -434,12 +499,8 @@ namespace Ogma3.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Icon")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("IconId")
-                        .HasColumnType("text");
+                    b.Property<long>("IconId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -452,6 +513,9 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IconId")
+                        .IsUnique();
 
                     b.ToTable("Clubs");
                 });
@@ -550,7 +614,7 @@ namespace Ogma3.Migrations
                     b.ToTable("CommentRevisions");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentsThread", b =>
+            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThread", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -600,7 +664,7 @@ namespace Ogma3.Migrations
                     b.ToTable("CommentThreads");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentsThreadSubscriber", b =>
+            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThreadSubscriber", b =>
                 {
                     b.Property<long>("CommentsThreadId")
                         .HasColumnType("bigint");
@@ -612,7 +676,7 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("OgmaUserId");
 
-                    b.ToTable("CommentsThreadSubscribers");
+                    b.ToTable("CommentThreadSubscribers");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Documents.Document", b =>
@@ -627,6 +691,10 @@ namespace Ogma3.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("CompiledBody")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -637,16 +705,34 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<long>("Version")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasDefaultValue(1L);
+
+                    b.ComplexCollection(typeof(List<Dictionary<string, object>>), "Headers", "Ogma3.Data.Documents.Document.Headers#Header", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Body")
+                                .IsRequired();
+
+                            b1.Property<byte>("Level");
+
+                            b1.Property<byte>("Occurrence");
+
+                            b1
+                                .ToJson("Headers")
+                                .HasColumnType("jsonb");
+                        });
 
                     b.HasKey("Id");
 
@@ -717,11 +803,6 @@ namespace Ogma3.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<int>("StoriesCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClubId");
@@ -773,6 +854,28 @@ namespace Ogma3.Migrations
                         .IsUnique();
 
                     b.ToTable("Icons");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Images.Image", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ETag")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Infractions.Infraction", b =>
@@ -837,7 +940,9 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .UseCollation("nocase-noaccent");
 
                     b.Property<DateTimeOffset>("IssueDate")
                         .ValueGeneratedOnAdd()
@@ -846,10 +951,6 @@ namespace Ogma3.Migrations
 
                     b.Property<long>("IssuedById")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("NormalizedCode")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<long?>("UsedById")
                         .HasColumnType("bigint");
@@ -882,7 +983,8 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
 
                     b.Property<long>("StaffMemberId")
                         .HasColumnType("bigint");
@@ -971,16 +1073,15 @@ namespace Ogma3.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("Icon")
-                        .HasColumnType("text");
-
-                    b.Property<string>("IconId")
-                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1199,12 +1300,8 @@ namespace Ogma3.Migrations
                     b.Property<long?>("ContentBlockId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Cover")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CoverId")
-                        .HasColumnType("text");
+                    b.Property<long?>("CoverId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTimeOffset>("CreationDate")
                         .ValueGeneratedOnAdd()
@@ -1220,6 +1317,9 @@ namespace Ogma3.Migrations
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("PublicationDate")
                         .HasColumnType("timestamp with time zone");
@@ -1247,12 +1347,31 @@ namespace Ogma3.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(0);
 
+                    b.ComplexCollection(typeof(List<Dictionary<string, object>>), "Credits", "Ogma3.Data.Stories.Story.Credits#Credit", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Link");
+
+                            b1.Property<string>("Name")
+                                .IsRequired();
+
+                            b1.Property<string>("Role")
+                                .IsRequired();
+
+                            b1
+                                .ToJson("Credits")
+                                .HasColumnType("jsonb");
+                        });
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("ContentBlockId")
                         .IsUnique();
+
+                    b.HasIndex("CoverId");
 
                     b.HasIndex("RatingId");
 
@@ -1274,6 +1393,79 @@ namespace Ogma3.Migrations
                     b.ToTable("StoryTags");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Subscriptions.Subscription", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset>("LastChange")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("PatreonStatus")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.PrimitiveCollection<List<string>>("PatreonTierIds")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("PatreonUserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<long?>("TierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TierId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Subscriptions");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Subscriptions.SubscriptionTier", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AmountCents")
+                        .HasColumnType("integer");
+
+                    b.PrimitiveCollection<int[]>("Entitlements")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionTiers");
+                });
+
             modelBuilder.Entity("Ogma3.Data.Tags.Tag", b =>
                 {
                     b.Property<long>("Id")
@@ -1283,25 +1475,31 @@ namespace Ogma3.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .UseCollation("nocase");
 
                     b.Property<ETagNamespace?>("Namespace")
                         .HasColumnType("e_tag_namespace");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .UseCollation("nocase");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
 
                     b.HasIndex("Name", "Namespace")
                         .IsUnique();
@@ -1320,12 +1518,8 @@ namespace Ogma3.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("AvatarId")
-                        .HasColumnType("text");
+                    b.Property<long>("AvatarId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Bio")
                         .HasMaxLength(10000)
@@ -1351,7 +1545,7 @@ namespace Ogma3.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<List<string>>("Links")
+                    b.PrimitiveCollection<List<string>>("Links")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(5)
@@ -1372,7 +1566,8 @@ namespace Ogma3.Migrations
                     b.Property<string>("NormalizedUserName")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("character varying(20)")
+                        .UseCollation("nocase-noaccent");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
@@ -1384,6 +1579,14 @@ namespace Ogma3.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
+
+                    b.Property<long?>("SubscriptionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TimeZone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(20)
@@ -1398,6 +1601,8 @@ namespace Ogma3.Migrations
                         .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AvatarId");
 
                     b.HasIndex("LastActive")
                         .IsDescending();
@@ -1424,7 +1629,7 @@ namespace Ogma3.Migrations
 
                     b.HasIndex("BlockedUserId");
 
-                    b.ToTable("BlacklistedUsers");
+                    b.ToTable("BlockedUsers");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Users.UserFollow", b =>
@@ -1500,6 +1705,15 @@ namespace Ogma3.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
+                {
+                    b.HasOne("Ogma3.Data.Users.OgmaUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<long>", b =>
                 {
                     b.HasOne("Ogma3.Data.Users.OgmaUser", null)
                         .WithMany()
@@ -1671,6 +1885,17 @@ namespace Ogma3.Migrations
                     b.Navigation("Club");
                 });
 
+            modelBuilder.Entity("Ogma3.Data.Clubs.Club", b =>
+                {
+                    b.HasOne("Ogma3.Data.Images.Image", "Icon")
+                        .WithOne()
+                        .HasForeignKey("Ogma3.Data.Clubs.Club", "IconId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Icon");
+                });
+
             modelBuilder.Entity("Ogma3.Data.Clubs.ClubMember", b =>
                 {
                     b.HasOne("Ogma3.Data.Clubs.Club", "Club")
@@ -1698,7 +1923,7 @@ namespace Ogma3.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ogma3.Data.CommentsThreads.CommentsThread", "CommentsThread")
+                    b.HasOne("Ogma3.Data.CommentsThreads.CommentThread", "CommentThread")
                         .WithMany("Comments")
                         .HasForeignKey("CommentsThreadId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1710,7 +1935,7 @@ namespace Ogma3.Migrations
 
                     b.Navigation("Author");
 
-                    b.Navigation("CommentsThread");
+                    b.Navigation("CommentThread");
 
                     b.Navigation("DeletedByUser");
                 });
@@ -1726,26 +1951,26 @@ namespace Ogma3.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentsThread", b =>
+            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThread", b =>
                 {
                     b.HasOne("Ogma3.Data.Blogposts.Blogpost", "Blogpost")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentsThread", "BlogpostId")
+                        .WithOne("CommentThread")
+                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "BlogpostId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Ogma3.Data.Chapters.Chapter", "Chapter")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentsThread", "ChapterId")
+                        .WithOne("CommentThread")
+                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "ChapterId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Ogma3.Data.ClubThreads.ClubThread", "ClubThread")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentsThread", "ClubThreadId")
+                        .WithOne("CommentThread")
+                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "ClubThreadId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Ogma3.Data.Users.OgmaUser", "User")
-                        .WithOne("CommentsThread")
-                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentsThread", "UserId")
+                        .WithOne("CommentThread")
+                        .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Blogpost");
@@ -1757,9 +1982,9 @@ namespace Ogma3.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentsThreadSubscriber", b =>
+            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThreadSubscriber", b =>
                 {
-                    b.HasOne("Ogma3.Data.CommentsThreads.CommentsThread", "CommentsThread")
+                    b.HasOne("Ogma3.Data.CommentsThreads.CommentThread", "CommentThread")
                         .WithMany()
                         .HasForeignKey("CommentsThreadId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1771,7 +1996,7 @@ namespace Ogma3.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CommentsThread");
+                    b.Navigation("CommentThread");
 
                     b.Navigation("OgmaUser");
                 });
@@ -1989,47 +2214,21 @@ namespace Ogma3.Migrations
                         .WithOne()
                         .HasForeignKey("Ogma3.Data.Stories.Story", "ContentBlockId");
 
+                    b.HasOne("Ogma3.Data.Images.Image", "Cover")
+                        .WithMany()
+                        .HasForeignKey("CoverId");
+
                     b.HasOne("Ogma3.Data.Ratings.Rating", "Rating")
                         .WithMany()
                         .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Ogma3.Data.Stories.Credit", "Credits", b1 =>
-                        {
-                            b1.Property<long>("StoryId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Link")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Role")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("StoryId", "Id");
-
-                            b1.ToTable("Stories");
-
-                            b1.ToJson("Credits");
-
-                            b1.WithOwner()
-                                .HasForeignKey("StoryId");
-                        });
-
                     b.Navigation("Author");
 
                     b.Navigation("ContentBlock");
 
-                    b.Navigation("Credits");
+                    b.Navigation("Cover");
 
                     b.Navigation("Rating");
                 });
@@ -2051,6 +2250,34 @@ namespace Ogma3.Migrations
                     b.Navigation("Story");
 
                     b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Subscriptions.Subscription", b =>
+                {
+                    b.HasOne("Ogma3.Data.Subscriptions.SubscriptionTier", "Tier")
+                        .WithMany()
+                        .HasForeignKey("TierId");
+
+                    b.HasOne("Ogma3.Data.Users.OgmaUser", "User")
+                        .WithOne("Subscription")
+                        .HasForeignKey("Ogma3.Data.Subscriptions.Subscription", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tier");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ogma3.Data.Users.OgmaUser", b =>
+                {
+                    b.HasOne("Ogma3.Data.Images.Image", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("Ogma3.Data.Users.UserBlock", b =>
@@ -2129,7 +2356,7 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Blogposts.Blogpost", b =>
                 {
-                    b.Navigation("CommentsThread")
+                    b.Navigation("CommentThread")
                         .IsRequired();
 
                     b.Navigation("Reports");
@@ -2137,7 +2364,7 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.Chapters.Chapter", b =>
                 {
-                    b.Navigation("CommentsThread")
+                    b.Navigation("CommentThread")
                         .IsRequired();
 
                     b.Navigation("Reports");
@@ -2145,7 +2372,8 @@ namespace Ogma3.Migrations
 
             modelBuilder.Entity("Ogma3.Data.ClubThreads.ClubThread", b =>
                 {
-                    b.Navigation("CommentsThread");
+                    b.Navigation("CommentThread")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ogma3.Data.Clubs.Club", b =>
@@ -2166,7 +2394,7 @@ namespace Ogma3.Migrations
                     b.Navigation("Revisions");
                 });
 
-            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentsThread", b =>
+            modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThread", b =>
                 {
                     b.Navigation("Comments");
                 });
@@ -2188,7 +2416,7 @@ namespace Ogma3.Migrations
 
                     b.Navigation("Blogposts");
 
-                    b.Navigation("CommentsThread")
+                    b.Navigation("CommentThread")
                         .IsRequired();
 
                     b.Navigation("Infractions");
@@ -2196,6 +2424,8 @@ namespace Ogma3.Migrations
                     b.Navigation("Reports");
 
                     b.Navigation("Stories");
+
+                    b.Navigation("Subscription");
 
                     b.Navigation("UserRoles");
                 });
