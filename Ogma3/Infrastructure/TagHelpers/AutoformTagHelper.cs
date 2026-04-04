@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Reflection;
 using Humanizer;
@@ -22,6 +23,9 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 	public string Action { get; set; } = "";
 
 	private static readonly ConcurrentDictionary<Type, Dictionary<string, List<PropertyInfo>>> GroupedPropertiesCache = new();
+
+	[HtmlAttributeName(DictionaryAttributePrefix = "datalist-for-")]
+	public IDictionary<string, object?> Datalists { get; set; } = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
 
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
@@ -69,10 +73,24 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 				var label = prop.Name;
 				var value = prop.GetValue(obj);
 
+				var hasDatalist = Datalists.TryGetValue(prop.Name, out var datalist);
+				var datalistAttr = hasDatalist ? $"""
+				                                  list="datalist-{prop.Name.ToLowerInvariant()}"
+				                                  """ : "";
+
 				output.Content.AppendHtml("""<div class="o-form-group">""");
 				output.Content.AppendHtml($"""<label for="{objName}_{label}">{label.Humanize()}</label>""");
 				output.Content.AppendHtml(
-					$"""<input type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
+					$"""<input {datalistAttr} type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
+				if (hasDatalist && datalist is IEnumerable items)
+				{
+					output.Content.AppendHtml($"""<datalist id="datalist-{prop.Name.ToLowerInvariant()}">""");
+					foreach (var item in items)
+					{
+						output.Content.AppendHtml($"""<option value="{item}"></option>""");
+					}
+					output.Content.AppendHtml("</datalist>");
+				}
 				output.Content.AppendHtml("</div>");
 			}
 

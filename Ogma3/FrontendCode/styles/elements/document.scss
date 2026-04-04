@@ -27,10 +27,11 @@
 		grid-column: 2;
 		align-self: start;
 		position: sticky;
-		top: calc(var(--nav-height) + (var(--nav-v-pad) * 2) * 1.1);
+		top: calc(var(--dynamic-nav-height) + 1rem);
 		display: flex;
 		flex-direction: column;
 		padding: .5rem;
+		transition: top .2s ease-in-out;
 		@include ab.active-border;
 
 		.toc-h {

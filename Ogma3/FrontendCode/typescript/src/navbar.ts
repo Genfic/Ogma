@@ -15,6 +15,7 @@ window.addEventListener("scroll", () => {
 			const delta = currentScrollY - lastScrollY;
 			if (Math.abs(delta) > scrollThreshold) {
 				nav.classList.toggle("compact", delta > 0);
+				document.body.setAttribute("data-scroll-direction", delta > 0 ? "down" : "up");
 				lastScrollY = currentScrollY;
 			}
 			ticking = false;

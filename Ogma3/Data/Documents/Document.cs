@@ -15,5 +15,5 @@ public sealed class Document : BaseModel
 	public string CompiledBody { get; init; } = "";
 	public List<Header> Headers { get; init; } = [];
 
-	public sealed record Header(byte Level, byte Occurrence, string Body);
+	public sealed record Header(byte Level, string Id, string Body);
 }

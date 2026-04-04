@@ -21,6 +21,8 @@ html {
 }
 
 body {
+	--dynamic-nav-height: calc(var(--nav-height) + var(--nav-v-pad) * 2);
+
 	font-family: 'Inter Variable', Inter, Arial, sans-serif;
 	font-weight: 350;
 	font-feature-settings: 'dlig' 1, 'ss01' 1, 'ss03' 1, 'cv05' 1;
@@ -32,6 +34,10 @@ body {
 	background-color: var(--background);
 	color: var(--foreground);
 	overflow-x: hidden;
+
+	&[data-scroll-direction="down"] {
+		--dynamic-nav-height: var(--nav-height);
+	}
 
 	> header {
 		width: 100%;

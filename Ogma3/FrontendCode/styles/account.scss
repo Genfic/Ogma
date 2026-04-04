@@ -21,6 +21,10 @@
 		&__nav {
 			grid-row: 2;
 			grid-column: 1;
+			position: sticky;
+			top: calc(var(--dynamic-nav-height) + 1rem);
+			align-self: start;
+			transition: top .2s ease-in-out;
 		}
 
 		&__body {

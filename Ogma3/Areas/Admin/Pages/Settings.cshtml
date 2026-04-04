@@ -6,7 +6,13 @@
 	ViewData["ActivePage"] = NavPages.Settings;
 }
 
-<autoform for="@Model.Config"></autoform>
+<autoform
+	for="@Model.Config"
+	datalist-for-PrivacyPolicyDoc="@Model.DocNames"
+	datalist-for-AboutDoc="@Model.DocNames"
+	datalist-for-TosDoc="@Model.DocNames"
+	datalist-for-SearchHelpDoc="@Model.DocNames"
+></autoform>
 
 @section Scripts
 {

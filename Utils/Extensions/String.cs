@@ -121,43 +121,6 @@ public static partial class String
 		{
 			return [..HashtagRegex.Matches(input).Select(m => m.Groups["tag"].Value)];
 		}
-
-		public List<Header> GetMarkdownHeaders()
-		{
-			var headers = new List<Header>();
-
-			var lines = input.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-			foreach (var line in lines)
-			{
-				if (!line.StartsWith('#')) continue;
-
-				byte level = 0;
-				foreach (var c in line)
-				{
-					if (c == '#')
-					{
-						level++;
-					}
-					else
-					{
-						break;
-					}
-				}
-
-				var body = line.TrimStart('#').Trim();
-
-				var latest = headers.Count(h => h.Body == body);
-
-				var occurrence = latest > 0
-					? (byte)(latest + 1)
-					: (byte)0;
-
-				var header = new Header(level, occurrence, body);
-				headers.Add(header);
-			}
-
-			return headers;
-		}
 	}
 
 

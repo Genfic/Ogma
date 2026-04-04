@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Markdig;
+using Markdig.Renderers.Html;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Documents;
 using Ogma3.Infrastructure.Constants;
-using Utils.Extensions;
+using Routes.Areas.Admin.Pages;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
@@ -56,25 +59,31 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 		var now = DateTimeOffset.UtcNow;
 
-		var html = Markdown.ToHtml(Input.Body, MarkdownPipelines.All);
+		var document = Markdown.Parse(Input.Body, MarkdownPipelines.All);
+
+		var toc = document
+			.Descendants<HeadingBlock>()
+			.Select(h => new Document.Header((byte)h.Level, h.GetAttributes().Id ?? "", h.Inline?
+				.Descendants<LiteralInline>()
+				.Aggregate("", (acc, l) => acc + l.Content) ?? "")
+			)
+			.ToList();
 
 		context.Documents.Add(new Document
 		{
 			Title = oldVersion.Title,
 			Slug = oldVersion.Slug,
 			Body = Input.Body,
-			CompiledBody = html,
+			CompiledBody = document.ToHtml(),
 			Version = oldVersion.Version + 1,
 			CreationTime = now,
 			RevisionDate = null,
-			Headers = Input.Body.GetMarkdownHeaders()
-				.Select(h => new Document.Header(h.Level, h.Occurrence, h.Body))
-				.ToList(),
+			Headers = toc,
 		});
 
 		oldVersion.RevisionDate = now;
 
 		await context.SaveChangesAsync();
-		return Routes.Pages.Index.Get().Redirect(this);
+		return Documents_Index.Get().Redirect(this);
 	}
 }

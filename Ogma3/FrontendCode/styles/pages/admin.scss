@@ -10,6 +10,10 @@ main#app {
 
 	.side-nav {
 		grid-area: nav;
+		position: sticky;
+		top: calc(var(--dynamic-nav-height) + 1rem);
+		align-self: start;
+		transition: top .2s ease-in-out;
 	}
 
 	.admin-body {

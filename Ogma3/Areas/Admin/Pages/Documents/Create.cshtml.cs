@@ -1,10 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using Markdig;
+using Markdig.Renderers.Html;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Documents;
 using Ogma3.Infrastructure.Constants;
+using Routes.Areas.Admin.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
@@ -29,23 +33,29 @@ public sealed class CreateModel(ApplicationDbContext context) : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var html = Markdown.ToHtml(Input.Body, MarkdownPipelines.All);
+		var document = Markdown.Parse(Input.Body, MarkdownPipelines.All);
+
+		var toc = document
+			.Descendants<HeadingBlock>()
+			.Select(h => new Document.Header((byte)h.Level, h.GetAttributes().Id ?? "", h.Inline?
+				.Descendants<LiteralInline>()
+				.Aggregate("", (acc, l) => acc + l.Content) ?? "")
+			)
+			.ToList();
 
 		context.Documents.Add(new Document
 		{
 			Title = Input.Title,
 			Slug = Input.Title.Friendlify(),
 			Body = Input.Body,
-			CompiledBody = html,
+			CompiledBody = document.ToHtml(),
 			Version = 1,
 			CreationTime = DateTimeOffset.UtcNow,
 			RevisionDate = null,
-			Headers = Input.Body.GetMarkdownHeaders()
-				.Select(h => new Document.Header(h.Level, h.Occurrence, h.Body))
-				.ToList(),
+			Headers = toc,
 		});
 
 		await context.SaveChangesAsync();
-		return Routes.Pages.Index.Get().Redirect(this);
+		return Documents_Index.Get().Redirect(this);
 	}
 }

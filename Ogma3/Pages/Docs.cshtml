@@ -1,5 +1,4 @@
 @page "{slug}"
-@using Utils.Extensions
 @model Docs
 
 @{
@@ -9,15 +8,14 @@
 }
 
 <article class="document">
-	<h1 class="header">@Model.Document.Title</h1>
+	<h1 class="header olde">@Model.Document.Title</h1>
 
 	@if (Model.Document.Headers.Any())
 	{
 		<div class="toc">
 			@foreach (var h in Model.Document.Headers)
 			{
-				<a href="#@h.Body.Friendlify()@(h.Occurrence > 0 ? $"-{h.Occurrence}" : "")"
-				   class="toc-h @("h" + h.Level)">
+				<a href="#@h.Id" class="toc-h @("h" + h.Level)">
 					@h.Body
 				</a>
 			}
