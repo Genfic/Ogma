@@ -1,6 +1,7 @@
+import { $query } from "@h/dom";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
-import { createEffect, For, type JSX, onCleanup, onMount } from "solid-js";
+import { createEffect, For, onCleanup, onMount } from "solid-js";
 import { createHistory } from "solid-signals";
 import { LucideBold } from "../icons/LucideBold";
 import { LucideEyeClosed } from "../icons/LucideEyeClosed";
@@ -8,31 +9,21 @@ import { LucideItalic } from "../icons/LucideItalic";
 import { LucideLink } from "../icons/LucideLink";
 import { LucideStrikethrough } from "../icons/LucideStrikethrough";
 import { Comment } from "./common/_comment";
+import type { ExtraButtonContext } from "./extra-buttons/extra-button-types";
 import css from "./markdown-editor.css";
 import sharedCss from "./shared.css";
 
-type Action = {
-	name: string;
-	icon: () => JSX.Element;
-	prefix: string;
-	suffix: string;
-};
-
-const actions: Action[] = [
+const actions = [
 	{ name: "bold", icon: () => <LucideBold />, prefix: "**", suffix: "**" },
 	{ name: "italic", icon: () => <LucideItalic />, prefix: "*", suffix: "*" },
 	{ name: "strikethrough", icon: () => <LucideStrikethrough />, prefix: "~~", suffix: "~~" },
 	{ name: "link", icon: () => <LucideLink />, prefix: "[", suffix: "](url)" },
 	{ name: "spoiler", icon: () => <LucideEyeClosed />, prefix: "||", suffix: "||" },
-] as const;
+];
+
+type Action = (typeof actions)[number];
 
 const name = "markdown-editor" as const;
-
-const isTextAreaOrInput = (node: JSX.Element): node is HTMLTextAreaElement | HTMLInputElement =>
-	typeof node === "object" &&
-	node !== null &&
-	"nodeName" in node &&
-	(node.nodeName === "TEXTAREA" || node.nodeName === "INPUT");
 
 type Props = {
 	selector: `textarea${string | ""}` | `input${string | ""}`;
@@ -41,15 +32,32 @@ type Props = {
 
 export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelector }) => {
 	const selectorActual = overrideSelector ? selector : `${name} + ${selector}`;
-	const area = document.querySelector(selectorActual);
+	const area = $query<HTMLTextAreaElement | HTMLInputElement>(selectorActual);
 
 	if (!area) {
 		throw Error(`Element "${selector}" not found`);
 	}
 
-	if (!isTextAreaOrInput(area)) {
+	if (!["TEXTAREA", "INPUT"].includes(area.nodeName)) {
 		throw Error(`Element "${selector}" is not a textarea or input`);
 	}
+
+	const slot = $signal<HTMLSlotElement>();
+
+	const onReslotted = async () => {
+		for (const el of slot?.assignedElements() ?? []) {
+			await customElements.whenDefined(el.localName);
+
+			if (!("context" in el)) {
+				console.info("MarkdownEditor: Found element without context attribute", el);
+				continue;
+			}
+
+			el.context = {
+				input: area,
+			} satisfies ExtraButtonContext;
+		}
+	};
 
 	const [cursorPosition, setCursorPosition] = createHistory(0);
 	const [content, setContent] = createHistory(area.value);
@@ -82,11 +90,24 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 		const start = area.selectionStart ?? 0;
 		const end = area.selectionEnd ?? 0;
 		const text = area.value.substring(start, end);
-		const newText = `${prefix}${text}${suffix}`;
 
-		area.setRangeText(newText, start, end, "preserve");
-		area.selectionStart = start + prefix.length;
-		area.selectionEnd = end + prefix.length;
+		if (text.substring(0, prefix.length) === prefix && text.substring(text.length - suffix.length) === suffix) {
+			const inner = text.substring(prefix.length, text.length - suffix.length);
+			area.setRangeText(inner, start, end, "preserve");
+			area.selectionStart = start;
+			area.selectionEnd = start + inner.length;
+		} else if (
+			area.value.substring(start - prefix.length, start) === prefix &&
+			area.value.substring(end, end + suffix.length) === suffix
+		) {
+			area.setRangeText(text, start - prefix.length, end + suffix.length, "preserve");
+			area.selectionStart = start - prefix.length;
+			area.selectionEnd = end - prefix.length;
+		} else {
+			area.setRangeText(`${prefix}${text}${suffix}`, start, end, "preserve");
+			area.selectionStart = start + prefix.length;
+			area.selectionEnd = end + prefix.length;
+		}
 
 		setContent(area.value);
 		setCursorPosition(end);
@@ -105,6 +126,7 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 					</button>
 				)}
 			</For>
+			<slot ref={$set(slot)} onslotchange={onReslotted} />
 		</nav>
 	);
 };

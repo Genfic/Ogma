@@ -1,6 +1,7 @@
-.toolbar {
+:host {
 	display: flex;
-	gap: 1px;
+	align-items: center;
+	margin-left: 0.5rem;
 }
 
 .btn {

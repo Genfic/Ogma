@@ -22,10 +22,13 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 	const [theme, setTheme] = makePersisted(createSignal<string>("system"), {
 		storage: cookieStorage,
 		name: "theme",
+		serialize: (t) => t,
+		deserialize: (t) => t,
 		storageOptions: {
 			sameSite: "Strict",
 			expires: addToDate(new Date(), { years: 1 }),
 			httpOnly: false,
+			path: "/",
 		} satisfies CookieOptions,
 	});
 

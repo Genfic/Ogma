@@ -10,7 +10,7 @@
 	var returnTo = from.Count > 0 ? from[0] : User_Index.Get(User.GetUsername() ?? "").Url(Url);
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="olde">@ViewData["Title"]</h1>
 
 <div class="button-group">
 	<a title="Cancel" class="action-btn large" href="@returnTo">
@@ -33,7 +33,9 @@
 
 	<div class="o-form-group">
 		<label asp-for="Input.Body"></label>
-		<markdown-editor></markdown-editor>
+		<markdown-editor>
+			<autosave-btn uid="@Model.User.GetUsername()" key="new-blogpost"></autosave-btn>
+		</markdown-editor>
 		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
 		<span asp-validation-for="Input.Body"></span>
 	</div>
@@ -81,4 +83,5 @@
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/extra-buttons/autosave-button.js" asp-append-version="true"></script>
 }

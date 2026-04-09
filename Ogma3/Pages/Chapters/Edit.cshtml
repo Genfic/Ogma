@@ -6,7 +6,7 @@
 	ViewData["Title"] = "Edit Chapter";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="olde">@ViewData["Title"]</h1>
 
 <div class="button-group">
 	<a title="Cancel" class="action-btn large" asp-page="../Chapter" asp-route-sid="@Model.Input.StoryId" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Title.Friendlify()">
@@ -19,7 +19,7 @@
 	</a>
 </div>
 
-<form class="form" id="chapter" method="post" v-on:submit="onSubmit">
+<form class="form" id="chapter" method="post">
 
 	<div asp-validation-summary="All">
 		<span>Please correct the following errors</span>
@@ -33,7 +33,9 @@
 
 	<div class="o-form-group">
 		<label asp-for="Input.Body"></label>
-		<markdown-editor></markdown-editor>
+		<markdown-editor>
+			<autosave-btn uid="@Model.Input.Id" key="chapter"></autosave-btn>
+			</markdown-editor>
 		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
 		<span asp-validation-for="Input.Body"></span>
 	</div>
@@ -80,4 +82,5 @@
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/extra-buttons/autosave-button.js" asp-append-version="true"></script>
 }
