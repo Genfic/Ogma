@@ -1,10 +1,10 @@
+import LucideDownload from "icon:lucide:download";
+import LucideSave from "icon:lucide:save";
+import LucideSaveOff from "icon:lucide:save-off";
 import { component } from "@h/web-components";
 import { debounce } from "es-toolkit";
 import type { ComponentType } from "solid-element";
 import { createEffect, onCleanup, Show } from "solid-js";
-import { LucideDownload } from "../../icons/LucideDownload";
-import { LucideSave } from "../../icons/LucideSave";
-import { LucideSaveOff } from "../../icons/LucideSaveOff";
 import shared from "../shared.css";
 import css from "./autosave-button.css";
 import type { ExtraButtonContext } from "./extra-button-types";

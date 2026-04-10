@@ -13,6 +13,7 @@ import { hasExtension } from "./helpers/path";
 import { SizeHistory } from "./helpers/size-history";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
+import { iconPlugin } from "./plugins/icon-plugin";
 import { manifestPlugin } from "./plugins/manifest-plugin";
 import { cssMinifyPlugin } from "./plugins/minified-css-loader";
 
@@ -55,6 +56,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 		sourcemap: "linked",
 		splitting: true,
 		plugins: [
+			iconPlugin({ cacheDir: join(_source, "generated", "icons") }),
 			SolidPlugin({
 				babelOptions: {
 					plugins: [[solidLabels, { dev: false }]],
