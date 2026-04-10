@@ -15,7 +15,7 @@ for (const input of inputs) {
 
 	let type: InputType;
 	if (input.dataset.maxCount || input.dataset.valLengthMax || input.dataset.valMaxlengthMax) {
-		// One of the validation parameters is set so it's a validated input
+		// One of the validation parameters is set, so it's a validated input
 		type = "validated";
 	} else if (input.dataset.valFilesizeMax && input.type === "file") {
 		// File size validation parameter is set and the input type is file, so it's a file
@@ -32,14 +32,14 @@ for (const input of inputs) {
 		regular: input.maxLength ?? 0,
 	}[type];
 
-	// Sometimes we have the minimum value as well, if not let's just ensure it's not 0 or less
+	// Sometimes we have the minimum value as well, if not, let's just ensure it's not 0 or less
 	const min: number = Number(input.dataset.valLengthMin) ?? 0;
 
 	// Function to get the current size
 	const currentSize: () => number = (): number => {
 		if (input.dataset.maxCount) {
 			// `data-max-count` is set, so we're counting comma-separated values
-			return input.value.split(",").length;
+			return properSplit(input.value, ",").length;
 		}
 		if (input.dataset.valFilesizeMax && input instanceof HTMLInputElement && input.type === "file") {
 			// It's a file input with maximum file size defined, so we get the file size
@@ -76,6 +76,11 @@ for (const input of inputs) {
 
 	//
 	const updateMetrics = () => {
+		// fix up extra commas
+		if (input.dataset.maxCount) {
+			input.value = input.value.replaceAll(/,+/g, ",");
+		}
+
 		const length = currentSize();
 		const suffix = type === "file" ? " bytes" : "";
 		// Update character counter
@@ -96,6 +101,6 @@ for (const input of inputs) {
 
 	// Listen to input
 	console.log(`Listening to ${input.type}`);
-	input.addEventListener("input", updateMetrics);
+	input.addEventListener("input", () => requestAnimationFrame(updateMetrics));
 	updateMetrics();
 }

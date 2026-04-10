@@ -2,7 +2,7 @@ import LucideDownload from "icon:lucide:download";
 import LucideSave from "icon:lucide:save";
 import LucideSaveOff from "icon:lucide:save-off";
 import { component } from "@h/web-components";
-import { debounce } from "es-toolkit";
+import { debounce } from "@solid-primitives/scheduled";
 import type { ComponentType } from "solid-element";
 import { createEffect, onCleanup, Show } from "solid-js";
 import shared from "../shared.css";
@@ -21,32 +21,26 @@ const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; 
 
 		saveExists = (localStorage.getItem(key)?.length ?? -1) > 0;
 
-		input.addEventListener("keydown", onKeyDown);
+		input.addEventListener("input", save);
 		onCleanup(() => {
-			input.removeEventListener("keydown", onKeyDown);
+			input.removeEventListener("input", save);
 		});
 	});
 
-	const onKeyDown = (e: KeyboardEvent) => {
+	const save = debounce(() => {
 		if (!enabled) return;
-		if (![" ", "backspace", "enter"].includes(e.key.toLowerCase())) return;
 
-		debounce(() => {
-			const input = props.context.input;
+		const input = props.context.input;
 
-			if (input.value.length > 0) {
-				localStorage.setItem(key, input.value);
-			} else {
-				localStorage.removeItem(key);
-			}
-		}, 200)();
-	};
+		if (input.value.length > 0) {
+			console.log("Autosave");
+			localStorage.setItem(key, input.value);
+		} else {
+			localStorage.removeItem(key);
+		}
+	}, 1000);
 
 	let enabled = $signal(true);
-
-	const toggle = () => {
-		enabled = !enabled;
-	};
 
 	const load = () => {
 		props.context.input.value = localStorage.getItem(key) ?? "";
@@ -54,19 +48,19 @@ const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; 
 
 	return (
 		<>
-			<button
-				type="button"
-				class="btn action-btn"
-				title={`Autosave is ${enabled ? "enabled" : "disabled"}`}
-				onClick={toggle}
-			>
-				{enabled ? <LucideSave /> : <LucideSaveOff />}
-			</button>
 			<Show when={saveExists}>
 				<button type="button" class="btn action-btn" title="Load existing autosave" onClick={load}>
 					<LucideDownload />
 				</button>
 			</Show>
+			<button
+				type="button"
+				class="btn action-btn"
+				title={`Autosave is ${enabled ? "enabled" : "disabled"}`}
+				onClick={() => (enabled = !enabled)}
+			>
+				{enabled ? <LucideSave /> : <LucideSaveOff />}
+			</button>
 		</>
 	);
 };

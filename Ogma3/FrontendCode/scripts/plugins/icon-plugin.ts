@@ -18,8 +18,9 @@ const BASE_CONTENT = dedent(`
 			return (
 				<svg
 					viewBox={viewBox}
-					width="1em"
-					height="1em"
+					width="1.5em"
+					height="1.5em"
+					part="icon"
 					{...props}
 					innerHTML={innerHTML}
 				/>

@@ -1,4 +1,3 @@
-import { writeFile } from "node:fs/promises";
 import { relative } from "node:path";
 import type { BunPlugin } from "bun";
 import { Parallel } from "../helpers/promises";
@@ -33,7 +32,7 @@ export function manifestPlugin(options?: ManifestOptions): BunPlugin {
 
 				const manifest = `${new Date().toISOString()}\n${lines.join("\n")}`;
 
-				await writeFile(`${outdir}/${filename}`, manifest);
+				await Bun.write(`${outdir}/${filename}`, manifest);
 			});
 		},
 	};

@@ -10,6 +10,7 @@
         "@solid-primitives/destructure": "^0.2.3",
         "@solid-primitives/event-dispatcher": "^0.1.1",
         "@solid-primitives/intersection-observer": "^2.2.4",
+        "@solid-primitives/scheduled": "^1.5.3",
         "@solid-primitives/storage": "^4.3.4",
         "clsx": "^2.1.1",
         "comlink": "^4.4.2",
@@ -419,6 +420,8 @@
     "@solid-primitives/event-dispatcher": ["@solid-primitives/event-dispatcher@0.1.1", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-Lo3OGmGuzCZGxMUDue0fBbbeFGdKWMGnWYk87il4FgSAosVxWbNCI9egxYwwEjdxf2bcgiFJhZfC03cmNc0OAw=="],
 
     "@solid-primitives/intersection-observer": ["@solid-primitives/intersection-observer@2.2.4", "", { "dependencies": { "@solid-primitives/utils": "^6.4.0" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-3+QaAT/TUdEaeKkqiTf+sk8g1/vE+QM9PucG2/JI8hLI8ALpBYBnlhtvcwIdpjaKMSpPN/1L4hneLvwqnx4YRA=="],
+
+    "@solid-primitives/scheduled": ["@solid-primitives/scheduled@1.5.3", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-oNwLE6E6lxJAWrc8QXuwM0k2oU1BnANnkChwMw82aK1j3+mWGJkG1IFe5gCwbV+afYmjI76t9JJV3md/8tLw+g=="],
 
     "@solid-primitives/storage": ["@solid-primitives/storage@4.3.4", "", { "dependencies": { "@solid-primitives/utils": "^6.4.0" }, "peerDependencies": { "@tauri-apps/plugin-store": "*", "solid-js": "^1.6.12" }, "optionalPeers": ["@tauri-apps/plugin-store"] }, "sha512-GSxPAIuyxhJWOcv7n10iv3aid5oHN3KUgyA9IV0GYWlPpgyGs43aS9E85b0VXDLoH+D4ThNK8+2WEJ8B/S6Ccg=="],
 

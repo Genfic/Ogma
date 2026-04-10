@@ -30,10 +30,13 @@ const values = program
 const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript");
 const _dest = join(_root, "..", "..", "wwwroot", "js");
+const _iconCache = join(_source, "generated", "icons");
 
 const clean = async () => {
 	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_dest}}`);
 	await rm(_dest, { recursive: true, force: true });
+	console.log(ct`{bold.red 🗑️{dim Cleaning} ${_iconCache}}`);
+	await rm(_iconCache, { recursive: true, force: true });
 };
 
 if (values.clean) {
@@ -56,7 +59,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 		sourcemap: "linked",
 		splitting: true,
 		plugins: [
-			iconPlugin({ cacheDir: join(_source, "generated", "icons") }),
+			iconPlugin({ cacheDir: _iconCache }),
 			SolidPlugin({
 				babelOptions: {
 					plugins: [[solidLabels, { dev: false }]],

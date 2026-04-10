@@ -1,8 +1,8 @@
-import LucideBold from "icon:lucide:bold";
-import LucideEyeClosed from "icon:lucide:eye-closed";
-import LucideItalic from "icon:lucide:italic";
-import LucideLink from "icon:lucide:link";
-import LucideStrikethrough from "icon:lucide:strikethrough";
+import RemixBold from "icon:ri:bold";
+import RemixEyeClosed from "icon:ri:eye-close-line";
+import RemixItalic from "icon:ri:italic";
+import RemixLink from "icon:ri:link-m";
+import RemixStrikethrough from "icon:ri:strikethrough";
 import { $query } from "@h/dom";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
@@ -14,11 +14,11 @@ import css from "./markdown-editor.css";
 import sharedCss from "./shared.css";
 
 const actions = [
-	{ name: "bold", icon: () => <LucideBold />, prefix: "**", suffix: "**" },
-	{ name: "italic", icon: () => <LucideItalic />, prefix: "*", suffix: "*" },
-	{ name: "strikethrough", icon: () => <LucideStrikethrough />, prefix: "~~", suffix: "~~" },
-	{ name: "link", icon: () => <LucideLink />, prefix: "[", suffix: "](url)" },
-	{ name: "spoiler", icon: () => <LucideEyeClosed />, prefix: "||", suffix: "||" },
+	{ name: "Bold", icon: () => <RemixBold />, prefix: "**", suffix: "**" },
+	{ name: "Italic", icon: () => <RemixItalic />, prefix: "*", suffix: "*" },
+	{ name: "Strikethrough", icon: () => <RemixStrikethrough />, prefix: "~~", suffix: "~~" },
+	{ name: "Link", icon: () => <RemixLink />, prefix: "[", suffix: "](url)" },
+	{ name: "Spoiler", icon: () => <RemixEyeClosed />, prefix: "||", suffix: "||" },
 ];
 
 type Action = (typeof actions)[number];
@@ -75,6 +75,7 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 			const cursor = cursorPosition.history().at(-1) ?? 0;
 			area.setSelectionRange(cursor, cursor);
 			setCursorPosition.history.back();
+			area.dispatchEvent(new Event("input", { bubbles: true }));
 			return;
 		}
 	};
@@ -113,7 +114,7 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 		setCursorPosition(end);
 
 		area.focus();
-		area.dispatchEvent(new Event("input"));
+		area.dispatchEvent(new Event("input", { bubbles: true }));
 	};
 
 	return (

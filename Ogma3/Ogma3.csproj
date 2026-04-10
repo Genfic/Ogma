@@ -23,6 +23,15 @@
 		<EnumGenerator_EnableUsageAnalyzers>true</EnumGenerator_EnableUsageAnalyzers>
 	</PropertyGroup>
 
+	<Target Name="ExportCTConfig" BeforeTargets="Build">
+		<PropertyGroup>
+			<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
+		</PropertyGroup>
+		<Exec
+			Command="dotnet run &quot;$(ToolsDir)\GenerateCTConfig.cs&quot; -- &quot;$(MSBuildProjectDirectory)\Data\CTConfig.cs&quot; &quot;$(MSBuildProjectDirectory)\FrontendCode\typescript\generated&quot;"
+			WorkingDirectory="$(ToolsDir)" />
+	</Target>
+
 	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis" Version="13.2.1" />
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.2.1" />
