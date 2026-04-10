@@ -1,3 +1,5 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
@@ -6,8 +8,6 @@ import { createResource, For, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
-import { LucidePencil } from "../icons/LucidePencil";
-import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const FaqSchema = v.object({
 	question: v.string(),

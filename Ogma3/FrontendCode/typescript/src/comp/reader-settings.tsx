@@ -1,3 +1,4 @@
+import LucideSettings from "icon:lucide:settings";
 import { CSS } from "@h/css-helpers";
 import { $query } from "@h/dom";
 import { component } from "@h/web-components";
@@ -5,7 +6,6 @@ import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { type ComponentType, noShadowDOM } from "solid-element";
 import { createEffect, createUniqueId } from "solid-js";
 import { createStore } from "solid-js/store";
-import { LucideSettings } from "../icons/LucideSettings";
 import { Dialog, type DialogApi } from "./common/_dialog";
 import { InputToggle } from "./common/_input-toggle";
 import css from "./reader-settings.css";

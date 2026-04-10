@@ -1,10 +1,10 @@
+import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "@g/paths-public";
 import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
 import { createResource, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
-import { LucideTrash2 } from "./icons/LucideTrash2";
 
 const parent = $id("notifications");
 

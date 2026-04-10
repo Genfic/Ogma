@@ -1,3 +1,4 @@
+import LucideEllipsisVertical from "icon:lucide:ellipsis-vertical";
 import {
 	DeleteApiShelfStories as removeFromShelf,
 	GetApiShelfStories as getShelves,
@@ -10,7 +11,6 @@ import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
 import { createResource, For, type Setter, Show } from "solid-js";
-import { LucideEllipsisVertical } from "../icons/LucideEllipsisVertical";
 import sharedCss from "./shared.css";
 import css from "./shelves-button.css";
 

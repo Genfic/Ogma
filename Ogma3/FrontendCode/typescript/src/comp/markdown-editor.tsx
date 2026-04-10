@@ -1,13 +1,13 @@
+import LucideBold from "icon:lucide:bold";
+import LucideEyeClosed from "icon:lucide:eye-closed";
+import LucideItalic from "icon:lucide:italic";
+import LucideLink from "icon:lucide:link";
+import LucideStrikethrough from "icon:lucide:strikethrough";
 import { $query } from "@h/dom";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
 import { createEffect, For, onCleanup, onMount } from "solid-js";
 import { createHistory } from "solid-signals";
-import { LucideBold } from "../icons/LucideBold";
-import { LucideEyeClosed } from "../icons/LucideEyeClosed";
-import { LucideItalic } from "../icons/LucideItalic";
-import { LucideLink } from "../icons/LucideLink";
-import { LucideStrikethrough } from "../icons/LucideStrikethrough";
 import { Comment } from "./common/_comment";
 import type { ExtraButtonContext } from "./extra-buttons/extra-button-types";
 import css from "./markdown-editor.css";

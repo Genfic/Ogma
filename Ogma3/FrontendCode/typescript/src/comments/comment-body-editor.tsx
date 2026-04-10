@@ -1,7 +1,7 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucideX from "icon:lucide:x";
 import { PatchApiComments } from "@g/paths-public";
 import { createSignal } from "solid-js";
-import { LucidePencil } from "../icons/LucidePencil";
-import { LucideX } from "../icons/LucideX";
 
 type Props = {
 	id: string;

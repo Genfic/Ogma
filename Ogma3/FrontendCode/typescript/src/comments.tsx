@@ -1,3 +1,7 @@
+import LucideCircleHelp from "icon:lucide:circle-help";
+import LucideMessageSquarePlus from "icon:lucide:message-square-plus";
+import MdiLockOpenVariantOutline from "icon:mdi:lock-open-variant-outline";
+import MdiLockOutline from "icon:mdi:lock-outline";
 import { GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
 import { pow } from "@h/pow";
@@ -7,10 +11,6 @@ import { noShadowDOM } from "solid-element";
 import { createEffect, createResource, Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";
 import css from "./comments.css";
-import { LucideCircleHelp } from "./icons/LucideCircleHelp";
-import { LucideMessageSquarePlus } from "./icons/LucideMessageSquarePlus";
-import { MdiLockOpenVariantOutline } from "./icons/MdiLockOpenVariantOutline";
-import { MdiLockOutline } from "./icons/MdiLockOutline";
 
 interface Props {
 	csrf: string;

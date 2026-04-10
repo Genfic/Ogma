@@ -1,3 +1,6 @@
+import LucideEyeOff from "icon:lucide:eye-off";
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiRatings, GetApiRatings, PostApiRatings, PutApiRatings } from "@g/paths-public";
 import { $id } from "@h/dom";
 import { expose } from "@h/expose";
@@ -7,9 +10,6 @@ import { createResource, For, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
-import { LucideEyeOff } from "../icons/LucideEyeOff";
-import { LucidePencil } from "../icons/LucidePencil";
-import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("ratings-app");
 

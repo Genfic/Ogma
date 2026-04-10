@@ -1,8 +1,8 @@
+import LucideEye from "icon:lucide:eye";
+import LucideEyeClosed from "icon:lucide:eye-closed";
 import { DeleteApiChaptersread, PostApiChaptersread } from "@g/paths-public";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
-import { LucideEye } from "../icons/LucideEye";
-import { LucideEyeClosed } from "../icons/LucideEyeClosed";
 import css from "./chapter-read.css";
 import { useChaptersRead } from "./common/_chaptersReadData";
 

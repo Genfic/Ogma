@@ -1,3 +1,6 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucideShieldHalf from "icon:lucide:shield-half";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "@g/paths-public";
 import type { RoleDto } from "@g/types-public";
 import { $id } from "@h/dom";
@@ -7,9 +10,6 @@ import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
-import { LucidePencil } from "../icons/LucidePencil";
-import { LucideShieldHalf } from "../icons/LucideShieldHalf";
-import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };

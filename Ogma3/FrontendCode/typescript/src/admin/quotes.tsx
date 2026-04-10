@@ -1,3 +1,6 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucidePlus from "icon:lucide:plus";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiQuotes, GetAllQuotes, PostApiQuotes, PostApiQuotesJson, PutApiQuotes } from "@g/paths-public";
 import type { FullQuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
@@ -8,9 +11,6 @@ import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
 import { Dialog, type DialogApi } from "../comp/common/_dialog";
-import { LucidePencil } from "../icons/LucidePencil";
-import { LucidePlus } from "../icons/LucidePlus";
-import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("quotes-app");
 

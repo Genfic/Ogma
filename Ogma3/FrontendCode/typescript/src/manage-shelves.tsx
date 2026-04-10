@@ -1,3 +1,5 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { Shelf } from "@g/ctconfig";
 import { DeleteApiShelves, GetApiShelves, PostApiShelves, PutApiShelves } from "@g/paths-public";
 import { component } from "@h/web-components";
@@ -7,8 +9,6 @@ import { noShadowDOM } from "solid-element";
 import { createResource, For } from "solid-js";
 import { InputCounter } from "./comp/common/_input-counter";
 import { InputToggle } from "./comp/common/_input-toggle";
-import { LucidePencil } from "./icons/LucidePencil";
-import { LucideTrash2 } from "./icons/LucideTrash2";
 
 interface Props {
 	icons: string;

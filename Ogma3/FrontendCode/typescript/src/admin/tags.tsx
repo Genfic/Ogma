@@ -1,3 +1,5 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { Tag as TagConfig } from "@g/ctconfig";
 import { DeleteApiTags, GetApiTagsAll, GetTagNamespaces, PostApiTags, PutApiTags } from "@g/paths-public";
 import type { TagDto } from "@g/types-public";
@@ -8,8 +10,6 @@ import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
-import { LucidePencil } from "../icons/LucidePencil";
-import { LucideTrash2 } from "../icons/LucideTrash2";
 
 const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };

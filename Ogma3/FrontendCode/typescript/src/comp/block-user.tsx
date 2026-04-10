@@ -1,8 +1,8 @@
+import IcRoundBlock from "icon:ic:round-block";
 import { DeleteApiUsersBlock as unblockUser, PostApiUsersBlock as blockUser } from "@g/paths-public";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import type { Component } from "solid-js";
-import { IcRoundBlock } from "../icons/IcRoundBlock";
 import css from "./block-user.css";
 
 const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean }> = (props) => {

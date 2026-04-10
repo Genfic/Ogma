@@ -73,3 +73,28 @@ for file in files:
 	print('Nullability disabled')
 
 ```
+
+## Replace direct icon imports with `icon:` on-demand imports
+
+```ts
+// ./Ogma3/Ogma3/FrontendCode/fix.ts
+
+import { Glob } from "bun";
+import { kebabCase } from "es-toolkit";
+
+for await (const x of new Glob("./typescript/src/**/*.tsx").scan()) {
+	console.log(x);
+
+	const file = Bun.file(x);
+	const content = await file.text();
+
+	const fixed = content.replaceAll(/^import \{(.+)} from "((\.+)\/)+icons\/(.+)";/gm, (_, p1, _p2, _p3, p4) => {
+		const [coll, ...ico] = kebabCase(p4).split("-");
+		const f = `icon:${coll}:${ico.join("-")}`;
+		return `import ${p1} from "${f}";`.replaceAll(/ +/g, " ");
+	});
+
+	await file.write(fixed);
+}
+
+```

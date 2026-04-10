@@ -1,6 +1,6 @@
+import LucideTrash2 from "icon:lucide:trash-2";
 import { $query } from "@h/dom";
 import { render } from "solid-js/web";
-import { LucideTrash2 } from "./icons/LucideTrash2";
 
 const table = $query("table.credits-table > tbody");
 const addBtn = $query<HTMLButtonElement>("button.add-row");
