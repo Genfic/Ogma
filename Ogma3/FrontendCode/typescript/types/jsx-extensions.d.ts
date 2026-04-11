@@ -17,5 +17,9 @@ declare module "solid-js" {
 			[key: `class:${string}`]: boolean;
 			[key: `style:${string}`]: string;
 		}
+
+		interface SVGAttributes<T> {
+			part?: string;
+		}
 	}
 }
