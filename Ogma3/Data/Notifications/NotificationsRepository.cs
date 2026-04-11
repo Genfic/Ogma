@@ -3,6 +3,7 @@ using Ogma3.Services;
 
 namespace Ogma3.Data.Notifications;
 
+[RegisterScoped]
 public sealed class NotificationsRepository
 (
 	ApplicationDbContext context,

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 
 namespace Ogma3.Services.SpeedTrapService;
 
+[RegisterSingleton<ISpeedTrapService>]
 public sealed class SpeedTrapService(IDataProtectionProvider dataProtection) : ISpeedTrapService
 {
 	private readonly IDataProtector _protector = dataProtection.CreateProtector("Register.SpeedTrap.v1");

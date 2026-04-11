@@ -1,5 +1,6 @@
 namespace Ogma3.Infrastructure.Middleware.RequestTimingMiddleware;
 
+[RegisterTransient]
 public sealed class RequestTimingMiddleware : IMiddleware
 {
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)

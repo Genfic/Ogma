@@ -8,6 +8,7 @@ using StackExchange.Redis;
 
 namespace Ogma3.Services.PowService;
 
+[RegisterTransient]
 public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config)
 {
 	public async Task<PowChallenge> IssueChallenge()

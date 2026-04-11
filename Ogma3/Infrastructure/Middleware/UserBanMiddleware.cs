@@ -8,6 +8,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
+[RegisterTransient]
 public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
 	public static string CacheKey(long id) => $"user-ban:{id}";

@@ -8,6 +8,7 @@ using Utils;
 
 namespace Ogma3.Services.UserService;
 
+[RegisterScoped<IUserService>]
 public sealed class UserService(IHttpContextAccessor? accessor, OgmaUserManager userManager, ApplicationDbContext context) : IUserService
 {
 	public ClaimsPrincipal? User => accessor?.HttpContext?.User;

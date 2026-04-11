@@ -3,6 +3,7 @@ using StackExchange.Redis;
 
 namespace Ogma3.Services.ETagService;
 
+[RegisterScoped]
 public sealed class ETagService(IConnectionMultiplexer garnet)
 {
 	private IDatabase Db => garnet.GetDatabase(GarnetDatabase.ETag);

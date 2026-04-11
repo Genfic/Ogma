@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -17,8 +16,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using NpgSqlGenerators;
 using Ogma3.Data;
-using Ogma3.Data.Clubs;
-using Ogma3.Data.Notifications;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Attributes;
@@ -35,22 +32,13 @@ using Ogma3.Infrastructure.OpenApi;
 using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.ServiceDefaults;
-using Ogma3.Services;
-using Ogma3.Services.CodeGenerator;
-using Ogma3.Services.EmailBlocklistProvider;
-using Ogma3.Services.ETagService;
-using Ogma3.Services.FileLogService;
-using Ogma3.Services.FileUploader;
 using Ogma3.Services.Initializers;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
-using Ogma3.Services.PowService;
 using Ogma3.Services.S3Storage;
-using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
-using Ogma3.Services.UserService;
 using Scalar.AspNetCore;
 using Sqids;
 using ZiggyCreatures.Caching.Fusion;
@@ -93,24 +81,10 @@ public static class Startup
 			services.AddDatabaseDeveloperPageExceptionFilter();
 		}
 
-		// Repositories
-		services
-			.AddScoped<UserRepository>()
-			.AddScoped<ClubRepository>()
-			.AddScoped<NotificationsRepository>();
-
-		// Middleware
-		services
-			.AddTransient<RequestTimingMiddleware>()
-			.AddTransient<UserBanMiddleware>()
-			.AddTransient<CloudflareIpForwardingMiddleware>();
 		builder.UseAddHeaders();
 
 		// Custom persistent config
 		await services.AddOgmaConfigAsync("config.json5");
-
-		// Comment redirector
-		services.AddScoped<CommentRedirector>();
 
 		// Routing
 		services.AddRouting(options => {
@@ -154,22 +128,9 @@ public static class Startup
 
 		// Add services
 		services
-			.AddScoped<IUserService, UserService>()
-			.AddSingleton<ICodeGenerator, CodeGenerator>()
-			.AddScoped<UserActivityService>()
-			.AddScoped<ETagService>()
-			.AddSingleton<IEmailBlocklistProvider>(await EmailBlocklistProvider.CreateAsync())
-			.AddSingleton<ISpeedTrapService, SpeedTrapService>()
-			.AddSingleton<IFileLogService, FileLogService>()
-			.Configure<FileLogOptions>(c => {
-				c.CompressionLevel = 3;
-				c.MaxSizeInBytes = 50 * 1024 * 1024;
-				c.Directory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
-			})
-			.AddTransient<PowService>();
-
-		// Claims
-		services.AddScoped<IUserClaimsPrincipalFactory<OgmaUser>, OgmaClaimsPrincipalFactory>();
+			.AddOgma3()
+			.Configure<TurnstileSettings>(configuration.GetSection(TurnstileSettings.Section))
+			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"));
 
 		// Argon2 hasher
 		services
@@ -181,21 +142,8 @@ public static class Startup
 		// HttpClient factory
 		services.AddHttpClient();
 
-		// Email
-		services
-			.AddTransient<IEmailSender, PostmarkMailer>()
-			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"));
-
 		// Backblaze
 		services.AddS3Storage(configuration);
-
-		// File uploader
-		services.AddSingleton<ImageUploader>();
-
-		// Turnstile
-		services
-			.AddTransient<ITurnstileService, TurnstileService>()
-			.Configure<TurnstileSettings>(configuration.GetSection(TurnstileSettings.Section));
 
 		// Seeding
 		if (configuration.GetValue<bool>("SHOULD_SEED"))

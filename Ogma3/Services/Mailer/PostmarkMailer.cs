@@ -4,6 +4,7 @@ using PostmarkDotNet;
 
 namespace Ogma3.Services.Mailer;
 
+[RegisterTransient<IEmailSender>]
 public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<PostmarkMailer> logger ) : IEmailSender
 {
 	private readonly PostmarkOptions _options = options.Value;

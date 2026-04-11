@@ -3,6 +3,7 @@ using SimpleBase;
 
 namespace Ogma3.Services.CodeGenerator;
 
+[RegisterSingleton<ICodeGenerator>]
 public sealed class CodeGenerator : ICodeGenerator
 {
 	public string GetInviteCode()

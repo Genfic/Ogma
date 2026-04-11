@@ -9,6 +9,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
 
+[RegisterSingleton]
 public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options, ILogger<ImageUploader> logger) : IFileUploader
 {
 	/// <inheritdoc cref="IFileUploader"/>

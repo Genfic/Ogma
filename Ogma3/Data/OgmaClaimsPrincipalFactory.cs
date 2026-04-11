@@ -8,6 +8,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Data;
 
+[RegisterScoped<IUserClaimsPrincipalFactory<OgmaUser>>(Duplicate = DuplicateStrategy.Replace)]
 public sealed class OgmaClaimsPrincipalFactory
 (
 	UserManager<OgmaUser> userManager,

@@ -7,6 +7,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
+[RegisterTransient]
 public sealed partial class CloudflareIpForwardingMiddleware
 (
 	IFusionCache cache,

@@ -47,6 +47,7 @@
 		<PackageReference Include="Immediate.Apis" Version="4.2.0" PrivateAssets="all" />
 		<PackageReference Include="Immediate.Handlers" Version="3.4.0" PrivateAssets="all" />
 		<PackageReference Include="Immediate.Validations" Version="3.3.0" />
+		<PackageReference Include="Injectio" Version="5.1.0" />
 		<PackageReference Include="JetBrains.Annotations" Version="2025.2.4" PrivateAssets="all" />
 		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.2.0" PrivateAssets="all">
 			<PrivateAssets>all</PrivateAssets>

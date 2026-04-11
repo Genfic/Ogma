@@ -4,6 +4,7 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Data.Clubs;
 
+[RegisterScoped]
 public sealed class ClubRepository(ApplicationDbContext context, IUserService userService)
 {
 	public async Task<ClubBar?> GetClubBar(long clubId)

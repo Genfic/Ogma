@@ -5,6 +5,7 @@ using StackExchange.Redis;
 
 namespace Ogma3.Services;
 
+[RegisterScoped]
 public sealed class UserActivityService(IConnectionMultiplexer garnet, IUserService userService)
 {
 	private const string Prefix = "lastActive:";

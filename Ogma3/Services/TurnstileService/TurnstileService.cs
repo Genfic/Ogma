@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace Ogma3.Services.TurnstileService;
 
+[RegisterTransient<ITurnstileService>]
 public sealed class TurnstileService(
 	IHttpClientFactory clientFactory,
 	IOptions<TurnstileSettings> options,
