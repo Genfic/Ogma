@@ -99,6 +99,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="ZString" Version="2.6.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />
@@ -130,5 +131,11 @@
 		<None Update="disposable_email_blocklist.txt">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg" />
+	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.br" />
+	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.gz" />
+	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.zst" />
 	</ItemGroup>
 </Project>

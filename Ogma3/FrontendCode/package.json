@@ -13,7 +13,6 @@
 		"js": "bun ./scripts/build-js.ts",
 		"js:watch": "bun ./scripts/build-js.ts -- --watch",
 		"js:typecheck": "tsc --project ./typescript --noEmit",
-		"icons": "bun ./scripts/build-icons.ts",
 		"lh": "bunx unlighthouse",
 		"build": "bun run css && bun run js && bun run webtypes && bun run icons"
 	},
