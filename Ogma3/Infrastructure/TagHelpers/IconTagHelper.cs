@@ -6,7 +6,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 
 public sealed class IconTagHelper : TagHelper
 {
-	public string Icon { get; set; } = "bug_report";
+	public string Name { get; set; } = "bug_report";
 	public bool FromSpritesheet { get; set; } = false;
 	public int Size { get; set; } = 24;
 
@@ -22,11 +22,11 @@ public sealed class IconTagHelper : TagHelper
 
 		if (FromSpritesheet)
 		{
-			output.Content.SetHtmlContent($"""<use href="/svg/spritesheet.svg#{Icon}"></use>""");
+			output.Content.SetHtmlContent($"""<use href="/svg/spritesheet.svg#{Name}"></use>""");
 		}
 		else
 		{
-			output.Content.SetHtmlContent(Icons.GetSvg(Icon));
+			output.Content.SetHtmlContent(Icons.GetSvg(Name));
 		}
 	}
 }

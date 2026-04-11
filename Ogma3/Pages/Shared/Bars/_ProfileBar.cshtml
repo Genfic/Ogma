@@ -64,7 +64,7 @@
 			<div class="o-dropdown left" o-dropdown>
 
 				<button class="action-btn max" o-dd-btn>
-					<icon icon="lucide:ellipsis-vertical"></icon>
+					<icon name="lucide:ellipsis-vertical"></icon>
 				</button>
 
 				<nav class="menu" o-dd-body>
@@ -78,7 +78,7 @@
 					@if (User.Identity?.IsAuthenticated ?? false)
 					{
 						<button title="Report" class="item active red" id="open-modal-button-profilebar">
-							<icon icon="lucide:flag"></icon>
+							<icon name="lucide:flag"></icon>
 							Report
 						</button>
 					}
@@ -89,7 +89,7 @@
 						   asp-page="/Users"
 						   asp-route-name="@Model.UserName"
 						   class="item active">
-							<icon icon="ic:outline-admin-panel-settings"></icon>
+							<icon name="ic:outline-admin-panel-settings"></icon>
 							Manage
 						</a>
 					}
