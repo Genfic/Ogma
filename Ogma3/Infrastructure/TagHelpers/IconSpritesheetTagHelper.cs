@@ -34,7 +34,7 @@ public sealed class IconSpritesheetTagHelper(IconCache cache, IconCollector coll
 			}
 			else
 			{
-				sb.AppendFormat("""<symbol id="icon:{0}" viewBox="0 0 {1} {2}" width="{1}px" height="{2}px">{3}</symbol>{4}""",
+				sb.AppendFormat("""<symbol id="icon:{0}" viewBox="0 0 {1} {2}">{3}</symbol>{4}""",
 					name,
 					icon.Width,
 					icon.Height,
@@ -49,6 +49,7 @@ public sealed class IconSpritesheetTagHelper(IconCache cache, IconCollector coll
 		output.TagName = "svg";
 		output.Attributes.Add("xmlns", "http://www.w3.org/2000/svg");
 		output.Attributes.Add("style", "display: none;");
+		output.Attributes.Add("id", "icon-spritesheet");
 		output.Content.SetHtmlContent(sb.ToString());
 		output.Attributes.Add("data-gen-time", $"{start.ElapsedMilliseconds}ms");
 	}

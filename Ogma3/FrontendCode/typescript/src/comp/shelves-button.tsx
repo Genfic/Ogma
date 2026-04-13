@@ -11,6 +11,7 @@ import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
 import { createResource, For, type Setter, Show } from "solid-js";
+import { Icon } from "./common/Icon";
 import sharedCss from "./shared.css";
 import css from "./shelves-button.css";
 
@@ -104,7 +105,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 						style={style(shelf)}
 					>
 						{shelf.iconName ? (
-							<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
+							<Icon style={iconStyle(shelf)} name={shelf.iconName} />
 						) : (
 							<span style={iconStyle(shelf)}>B</span>
 						)}
@@ -128,7 +129,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 								style={style(shelf)}
 							>
 								{shelf.iconName ? (
-									<o-icon style={iconStyle(shelf)} icon={shelf.iconName} />
+									<Icon style={iconStyle(shelf)} name={shelf.iconName} />
 								) : (
 									<span style={iconStyle(shelf)}>B</span>
 								)}

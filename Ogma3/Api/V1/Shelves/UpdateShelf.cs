@@ -33,7 +33,7 @@ public static partial class UpdateShelf
 		bool TrackUpdates,
 		[property: System.ComponentModel.DataAnnotations.MaxLength(7)]
 		string Color,
-		long IconId
+		long? IconId
 	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(

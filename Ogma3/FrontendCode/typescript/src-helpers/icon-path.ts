@@ -1,1 +1,1 @@
-export const ico = (name: string) => `/svg/spritesheet.svg#${name}`;
+export const ico = (name: string) => `/spritesheet.svg#${name}`;

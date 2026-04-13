@@ -9,6 +9,7 @@ import { noShadowDOM } from "solid-element";
 import { createResource, For } from "solid-js";
 import { InputCounter } from "./comp/common/_input-counter";
 import { InputToggle } from "./comp/common/_input-toggle";
+import { Icon } from "./comp/common/Icon";
 
 interface Props {
 	icons: string;
@@ -24,7 +25,7 @@ type ShelfModel = {
 	isQuickAdd: boolean;
 	trackUpdates: boolean;
 	color: string;
-	iconId: number;
+	iconId: number | null;
 };
 const EmptyShelf = {
 	name: "",
@@ -33,7 +34,7 @@ const EmptyShelf = {
 	isQuickAdd: false,
 	trackUpdates: false,
 	color: "",
-	iconId: 0,
+	iconId: null,
 } satisfies ShelfModel;
 
 const ManageShelves = (props: Props) => {
@@ -55,7 +56,7 @@ const ManageShelves = (props: Props) => {
 		const el = event.target as HTMLInputElement;
 		formData = {
 			...formData,
-			[prop]: custom ?? (el.type === "checkbox" ? el.checked : el.value),
+			[prop]: custom === undefined ? (el.type === "checkbox" ? el.checked : el.value) : custom,
 		};
 	};
 
@@ -163,6 +164,8 @@ const ManageShelves = (props: Props) => {
 						<legend>Icon</legend>
 
 						<div class="select-group">
+							<input type="radio" name="iconId" id={"icon-none"} onchange={handleInput("iconId", null)} />
+							<label for={"icon-none"}>None</label>
 							<For each={icons()}>
 								{(i) => (
 									<>
@@ -175,7 +178,10 @@ const ManageShelves = (props: Props) => {
 											onchange={handleInput("iconId", i.Id)}
 										/>
 										<label for={`icon-${i.Id}`}>
-											<o-icon icon={i.Name} />
+											<span style={{ display: "block", width: 0, height: 0, overflow: "hidden" }}>
+												{i.Name.split(":").at(-1)?.split("-")?.join(" ")} icon
+											</span>
+											<Icon name={i.Name} />
 										</label>
 									</>
 								)}
@@ -191,8 +197,8 @@ const ManageShelves = (props: Props) => {
 					return null;
 				})()}
 
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary">
+				<div class="form-row">
+					<button type="submit" class="btn btn-primary wide">
 						{formData.id ? "Update" : "Create"}
 					</button>
 					<button type="reset" class="btn" onclick={clear}>
@@ -207,7 +213,9 @@ const ManageShelves = (props: Props) => {
 				<For each={shelves()}>
 					{(s) => (
 						<li class="bookshelf-card calm" style={{ "--shelf-color": s.color ?? undefined }}>
-							<o-icon class="ico" icon={s.iconName ?? ""} />
+							<div class="ico">
+								<Icon class="icon" name={s.iconName ?? ""} />
+							</div>
 							<span class="name">{s.name}</span>
 							<span class="desc">{s.description} &nbsp;</span>
 							<div class="count">{s.storiesCount}</div>

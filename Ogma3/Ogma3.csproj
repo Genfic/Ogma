@@ -18,7 +18,7 @@
 		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
 		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsNamespaces>
 	</PropertyGroup>
-	
+
 	<PropertyGroup>
 		<EnumGenerator_EnableUsageAnalyzers>true</EnumGenerator_EnableUsageAnalyzers>
 	</PropertyGroup>
@@ -28,6 +28,13 @@
 			<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
 		</PropertyGroup>
 		<Exec Command="dotnet run &quot;$(ToolsDir)\GenerateCTConfig.cs&quot; -- &quot;$(MSBuildProjectDirectory)\Data\CTConfig.cs&quot; &quot;$(MSBuildProjectDirectory)\FrontendCode\typescript\generated&quot;" WorkingDirectory="$(ToolsDir)" />
+	</Target>
+
+	<Target Name="CreateIconSpritesheet" BeforeTargets="Build">
+		<PropertyGroup>
+			<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
+		</PropertyGroup>
+		<Exec Command="dotnet run &quot;$(ToolsDir)\GenerateSpritesheet.cs&quot; -- &quot;$(MSBuildProjectDirectory)\seed.json5&quot; &quot;$(MSBuildProjectDirectory)\wwwroot\spritesheet.svg&quot;" WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
 	<ItemGroup>

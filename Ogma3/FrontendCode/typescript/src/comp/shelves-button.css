@@ -17,6 +17,8 @@
 		padding: 0.5rem;
 		justify-content: start;
 		margin: 0;
+		display: flex;
+		gap: 0.5rem;
 	}
 
 	.icon {

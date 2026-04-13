@@ -1,10 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Icons;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Bars;
@@ -12,7 +12,12 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Pages.User.Library;
 
-public sealed class ManageModel(UserRepository userRepo, ApplicationDbContext context, IFusionCache cache) : PageModel
+public sealed class ManageModel
+(
+	UserRepository userRepo,
+	ApplicationDbContext context,
+	IFusionCache cache
+) : PageModel
 {
 	public required ProfileBar ProfileBar { get; set; }
 	public required string IconsJson { get; set; }
@@ -28,9 +33,9 @@ public sealed class ManageModel(UserRepository userRepo, ApplicationDbContext co
 
 		IconsJson = await cache.GetOrSetAsync("IconsList", async ct => {
 				var icons = await context.Icons
-					.AsNoTracking()
+					.Select(i => new IconDto(i.Id, i.Name))
 					.ToListAsync(ct);
-				return JsonSerializer.Serialize(icons, IconsJsonContext.Default.ListIcon);
+				return JsonSerializer.Serialize(icons, IconsJsonContext.Default.ListIconDto);
 			},
 			options => options.Duration = TimeSpan.FromDays(1));
 
@@ -38,5 +43,8 @@ public sealed class ManageModel(UserRepository userRepo, ApplicationDbContext co
 	}
 }
 
-[JsonSerializable(typeof(List<Icon>))]
+public sealed record IconDto(long Id, string Name);
+
+[UsedImplicitly]
+[JsonSerializable(typeof(List<IconDto>))]
 public sealed partial class IconsJsonContext : JsonSerializerContext;

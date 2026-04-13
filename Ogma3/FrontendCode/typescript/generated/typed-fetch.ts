@@ -90,8 +90,10 @@ export async function typedFetch<TResponses extends Record<number, unknown>, TBo
             data = DateSafeJsonParse(text);
         } else if (/^(application|image|audio|video)\//.test(contentType)) {
             data = await res.blob();
-        } else {
+        } else if (contentType) {
             data = await res.text();
+        } else {
+            data = null;
         }
 
         return {

@@ -81,7 +81,7 @@ export type CreateShelfCommand = {
     isPublic: boolean;
     trackUpdates: boolean;
     color: string;
-    iconId: number;
+    iconId: number | null;
 };
 
 export type CreateTagCommand = {
@@ -394,7 +394,7 @@ export type UpdateShelfCommand = {
     isPublic: boolean;
     trackUpdates: boolean;
     color: string;
-    iconId: number;
+    iconId: number | null;
 };
 
 export type UpdateTagCommand = {

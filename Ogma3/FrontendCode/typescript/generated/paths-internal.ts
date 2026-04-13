@@ -1,5 +1,5 @@
 import { DELETE, GET, POST, typedFetch } from "./typed-fetch";
-import type { CreateInfractionCommand, GetUserDataUserDetailsDto, GetUserInfractionsResult, InfractionDto } from "./types-internal";
+import type { CreateInfractionCommand, GetUserDataUserDetailsDto, GetUserInfractionsResult, InfractionDto, } from "./types-internal";
 
 const _enc = <T>(p: T): T extends string ? string : T => (typeof p === 'string' ? encodeURIComponent(p) : p) as any;
 

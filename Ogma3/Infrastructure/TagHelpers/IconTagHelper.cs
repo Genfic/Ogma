@@ -22,6 +22,8 @@ public sealed class IconTagHelper(IconCollector collector) : TagHelper
 
 		output.Content.SetHtmlContent($"""<use href="#icon:{Name}"></use>""");
 
+		output.Attributes.Add("aria-hidden", "true");
+		output.Attributes.Add("role", "image");
 		output.Attributes.Add("part", "icon");
 		output.Attributes.Add("width", Size);
 		output.Attributes.Add("height", Size);

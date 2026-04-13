@@ -55,7 +55,7 @@ const newRow = (idx: number, role = "", name = "", link = "") => {
 
 let index = 0;
 
-for (const row of [...table.querySelectorAll("tr")]) {
+for (const row of table.querySelectorAll("tr")) {
 	const entries = new Map(
 		(["role", "name", "link"] as const).map((prop) => [
 			prop,

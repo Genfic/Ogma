@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Exceptions;
+using Ogma3.Services.IconService;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class StoryStatusTagHelper : TagHelper
+public sealed class StoryStatusTagHelper(IconCollector collector) : TagHelper
 {
 	public EStoryStatus Status { get; set; }
 
@@ -21,6 +22,8 @@ public sealed class StoryStatusTagHelper : TagHelper
 			_ => throw new UnexpectedEnumValueException<EStoryStatus>(Status, nameof(Status)),
 		};
 
+		collector.RegisterIcon(icon);
+
 		output.TagName = "div";
 
 		output.AddClass("story-status", NullHtmlEncoder.Default);
@@ -29,8 +32,8 @@ public sealed class StoryStatusTagHelper : TagHelper
 
 		output.Content.SetHtmlContent("");
 		output.Content.AppendHtml($"""
-           <svg class="icon" height="24" width="24" part="icon">
-               <use href="/svg/spritesheet.svg#{icon}"></use>
+           <svg class="icon" viewBox="0 0 16 16" height="16px" width="16px" part="icon">
+               <use href="#icon:{icon}"></use>
            </svg>
            """);
 		output.Content.AppendHtml($"""<span class="name">{name}</span>""");

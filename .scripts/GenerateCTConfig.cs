@@ -1,6 +1,8 @@
 #!/usr/bin/dotnet run
 #:package Microsoft.CodeAnalysis.CSharp@5.*
 #:property PublishAot = false
+#:property LangVersion = preview
+#:property TargetFramework = net11.0
 
 using System.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp;

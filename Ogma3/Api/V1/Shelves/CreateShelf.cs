@@ -32,7 +32,7 @@ public static partial class CreateShelf
 		bool TrackUpdates,
 		[property: MaxLength(7)]
 		string Color,
-		long IconId
+		long? IconId
 	) : IValidationTarget<Command>;
 
 	private static async ValueTask<ReturnType> HandleAsync(

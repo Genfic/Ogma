@@ -3,11 +3,11 @@ import { $queryAll } from "@h/dom";
 const tabViews = $queryAll("[tab-view]");
 
 for (const tabView of tabViews) {
-	const tabs = [...tabView.querySelectorAll('[role="tab"]')];
-	const tabPanels = [...tabView.querySelectorAll('[role="tabpanel"]')];
+	const tabs = tabView.querySelectorAll('[role="tab"]');
+	const tabPanels = tabView.querySelectorAll('[role="tabpanel"]');
 
 	for (const tab of tabs) {
-		const panel = tabPanels.find((p) => p.getAttribute("aria-labelledby") === tab.id);
+		const panel = tabPanels.values().find((p) => p.getAttribute("aria-labelledby") === tab.id);
 		if (panel) {
 			tab.addEventListener("click", () => {
 				for (const t of tabs) {
