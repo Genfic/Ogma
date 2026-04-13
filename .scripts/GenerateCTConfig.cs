@@ -1,14 +1,12 @@
 #!/usr/bin/dotnet run
 #:package Microsoft.CodeAnalysis.CSharp@5.*
 #:property PublishAot = false
-#:property LangVersion = preview
-#:property TargetFramework = net11.0
 
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Text;
 using System.Text.Json;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 var start = Stopwatch.StartNew();
 

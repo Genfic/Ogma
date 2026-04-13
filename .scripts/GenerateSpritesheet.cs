@@ -1,7 +1,5 @@
 #! usr/bin/env dotnet
 #:package JetBrains.Annotations@2025.2.4
-#:property LangVersion = preview
-#:property TargetFramework = net11.0
 
 using System.Collections.Immutable;
 using System.Diagnostics;
