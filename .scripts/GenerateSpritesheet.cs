@@ -43,20 +43,21 @@ var sprites = (await Task.WhenAll(grouped.Select(async group => {
 			: null;
 	})))
 	.SelectMany(x => x ?? [])
+	.OrderBy(s => s.Name)
 	.ToImmutableArray();
 
 var sheet = /*lang=svg*/
 	$"""
-	 <svg xmlns="http://www.w3.org/2000/svg">
-	 	<defs>
-	 {string.Join("\n", sprites.Select(s => /*lang=svg*/
-	$"""
+	<svg xmlns="http://www.w3.org/2000/svg">
+		<defs>
+			{string.Join("\n\t\t", sprites.Select(s => /*lang=svg*/
+			$"""
 			<symbol id="{s.Name}" viewBox="0 0 {s.Width} {s.Height}">{s.Body}</symbol>
-	"""
-	 ))}
-	 	</defs>
-	 </svg>
-	 """;
+			"""
+			))}
+		</defs>
+	</svg>
+	""";
 
 await File.WriteAllTextAsync(target, sheet);
 

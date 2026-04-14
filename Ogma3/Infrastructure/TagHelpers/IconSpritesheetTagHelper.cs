@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Text.Json;
-using Cysharp.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Ogma3.Services.IconService;
 
@@ -14,43 +12,35 @@ public sealed class IconSpritesheetTagHelper(IconCache cache, IconCollector coll
 
 		if (collector.RequestedIcons.Count <= 0)
 		{
+			output.SuppressOutput();
 			return;
 		}
 
-		var symbols = await Task.WhenAll(collector.RequestedIcons.Select(async i => new
-		{
-			Name = i,
-			Icon = await cache.GetIcon(i),
-		}));
-
-		using var sb = ZString.CreateStringBuilder(true);
-
-		sb.AppendLine("<defs>");
-		foreach (var symbol in symbols)
-		{
-			if (symbol is not { Icon: {} icon, Name: var name })
-			{
-				sb.AppendLine($"<!-- missing icon: {JsonSerializer.Serialize(symbol)} -->");
-			}
-			else
-			{
-				sb.AppendFormat("""<symbol id="icon:{0}" viewBox="0 0 {1} {2}">{3}</symbol>{4}""",
-					name,
-					icon.Width,
-					icon.Height,
-					icon.Body,
-					'\n'
-				);
-			}
-
-		}
-		sb.Append("</defs>");
+		var symbols = await cache.GetIcons(collector.RequestedIcons);
 
 		output.TagName = "svg";
 		output.Attributes.Add("xmlns", "http://www.w3.org/2000/svg");
 		output.Attributes.Add("style", "display: none;");
 		output.Attributes.Add("id", "icon-spritesheet");
-		output.Content.SetHtmlContent(sb.ToString());
-		output.Attributes.Add("data-gen-time", $"{start.ElapsedMilliseconds}ms");
+
+		output.Content.AppendHtml("<defs>");
+		foreach (var symbol in symbols)
+		{
+			output.Content.AppendFormat("""<symbol id="icon:{0}" viewBox="0 0 {1} {2}">""",
+				symbol.Name,
+				symbol.Width,
+				symbol.Height
+			);
+			output.Content.AppendHtml(symbol.Body);
+			output.Content.AppendHtml("</symbol>");
+
+		}
+		output.Content.AppendHtml("</defs>");
+
+		output.Content.AppendFormat("<!-- generated {0} of {1} sprites in {2} ms -->",
+			symbols.Count,
+			collector.RequestedIcons.Count,
+			start.ElapsedMilliseconds
+		);
 	}
 }

@@ -104,7 +104,6 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="ZString" Version="2.6.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />

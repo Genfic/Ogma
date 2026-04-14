@@ -88,25 +88,18 @@ return;
 static object? ParseValue(ExpressionSyntax? expr, Dictionary<string, object> scope)
 	=> expr switch
 	{
-		LiteralExpressionSyntax lit
-			=> lit.Token.Value!,
+		LiteralExpressionSyntax lit => lit.Token.Value!,
 
-		BinaryExpressionSyntax bin
-			=> EvalBinary(bin, scope),
+		BinaryExpressionSyntax bin => EvalBinary(bin, scope),
 
-		ImplicitArrayCreationExpressionSyntax arr
-			=> arr.Initializer.Expressions.Select(e => ParseValue(e, scope)).ToArray(),
+		ImplicitArrayCreationExpressionSyntax arr => arr.Initializer.Expressions.Select(e => ParseValue(e, scope)).ToArray(),
 
-		CollectionExpressionSyntax col
-			=> col.Elements.SelectMany(e => e switch
-			{
-				ExpressionElementSyntax exprEl
-					=> [ParseValue(exprEl.Expression, scope)],
-				SpreadElementSyntax spread
-					=> ResolveSpread(spread, scope),
-				_
-					=> Array.Empty<object?>(),
-			}).ToArray(),
+		CollectionExpressionSyntax col => col.Elements.SelectMany(e => e switch
+		{
+			ExpressionElementSyntax exprEl => [ParseValue(exprEl.Expression, scope)],
+			SpreadElementSyntax spread => ResolveSpread(spread, scope),
+			_ => [],
+		}).ToArray(),
 
 		not null => expr.ToString(),
 		_ => null,

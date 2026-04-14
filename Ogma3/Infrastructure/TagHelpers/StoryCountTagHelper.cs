@@ -16,18 +16,12 @@ public sealed class StoryCountTagHelper(ApplicationDbContext dbContext, IMemoryC
 	{
 		const string name = nameof(StoryCountTagHelper) + "_cache";
 
-		int count;
-		if (cache.TryGetValue(name, out int c))
-		{
-			count = c;
-		}
-		else
-		{
-			count = await dbContext.Stories
+		var count = await cache.GetOrCreateAsync(name, async entry => {
+			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
+			return await dbContext.Stories
 				.Where(s => s.PublicationDate != null)
 				.CountAsync();
-			cache.Set(name, count, TimeSpan.FromMinutes(CacheTime));
-		}
+		});
 
 		output.TagName = "span";
 		output.Content.SetContent(count.ToString());

@@ -10,38 +10,72 @@ public sealed class IconCache(IHttpClientFactory clientFactory, ILogger<IconCach
 	private readonly ConcurrentDictionary<string, Icon> _cache = new(StringComparer.OrdinalIgnoreCase);
 	private readonly HttpClient _client = clientFactory.CreateClient();
 
-	public async Task<Icon?> GetIcon(string name)
+	public async ValueTask<IReadOnlyList<Icon>> GetIcons(HashSet<string> names)
 	{
-		if (_cache.TryGetValue(name, out var icon))
+		var found = new List<Icon>(names.Count);
+
+		var groups = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+
+		var missing = 0;
+		foreach (var name in names)
 		{
-			return icon;
+			if (_cache.TryGetValue(name, out var icon))
+			{
+				found.Add(icon);
+				continue;
+			}
+
+			var span = name.AsSpan();
+			var colon = span.IndexOf(':');
+			if (colon < 0)
+			{
+				continue;
+			}
+
+			var collection = span[..colon].ToString();
+			var iconName = span[(colon + 1)..].ToString();
+
+			if (!groups.TryGetValue(collection, out var set))
+			{
+				groups[collection] = set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+			}
+
+			missing++;
+			set.Add(iconName);
 		}
 
-		logger.LogInformation("Icon cache miss. Fetching icon {IconName}", name);
-
-		if (name.Split(':') is not [var collection, var iconName])
+		if (groups.Count <= 0)
 		{
-			return null;
+			return found;
 		}
 
-		var response = await _client.GetFromJsonAsync(
-			$"https://api.iconify.design/{collection}.json?icons={iconName}",
-			IconifyJsonContext.Default.IconifyResponse
-		);
+		logger.LogInformation("Icon cache miss. Fetching {Count}/{Total} icons.", missing, names.Count);
 
-		logger.LogInformation("Fetched iconify response: {@Response}", response);
+		var newIcons = new ConcurrentBag<Icon>();
 
-		if (response is not { Width: var width, Height: var height, Icons: {} icons } || !icons.TryGetValue(iconName, out var value))
-		{
-			return null;
-		}
+		await Task.WhenAll(groups.Select(async g => {
+			var res = await _client.GetFromJsonAsync(
+				$"https://api.iconify.design/{g.Key}.json?icons={string.Join(',', g.Value)}",
+				IconifyJsonContext.Default.IconifyResponse
+			);
 
-		var newIcon = new Icon(width, height, value.Body);
+			if (res is { Icons: var i, Height: var h, Width: var w })
+			{
+				foreach (var ico in i)
+				{
+					var key = string.Concat(g.Key, ':', ico.Key);
+					var icon = new Icon(key, w, h, ico.Value.Body);
 
-		return _cache.TryAdd(name, newIcon)
-			? newIcon
-			: null;
+					_cache.TryAdd(key, icon);
+					newIcons.Add(icon);
+				}
+			}
+		}));
+
+		found.AddRange(newIcons);
+		return found.AsReadOnly();
 	}
 
-	public sealed record Icon(int Width, int Height, string Body);
+
+	public record struct Icon(string Name, int Width, int Height, string Body);
 }
