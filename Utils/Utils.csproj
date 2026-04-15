@@ -1,12 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-		<PackageReference Update="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.0.0-1.25277.114">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21" />
+		<PackageReference Include="JetBrains.Annotations" />
+		<PackageReference Include="NetEscapades.EnumGenerators" PrivateAssets="all" />
 	</ItemGroup>
 
 </Project>

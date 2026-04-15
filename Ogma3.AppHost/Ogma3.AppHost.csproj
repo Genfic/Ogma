@@ -12,13 +12,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.Docker" Version="13.2.2" />
-        <PackageReference Include="Aspire.Hosting.Garnet" Version="13.2.2" />
-        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.2.2" />
-        <PackageReference Update="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.0.0-1.25277.114">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+        <PackageReference Include="Aspire.Hosting.Docker" />
+        <PackageReference Include="Aspire.Hosting.Garnet" />
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" />
     </ItemGroup>
 
     <ItemGroup>

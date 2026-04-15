@@ -38,71 +38,67 @@
 	</Target>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.StackExchange.Redis" Version="13.2.2" />
-		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.2.2" />
-		<PackageReference Include="Atulin.AutoDbSet" Version="1.1.3" PrivateAssets="all" />
-		<PackageReference Include="Atulin.MarkdigExtensions" Version="1.2.0" PrivateAssets="all" />
-		<PackageReference Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" PrivateAssets="all" />
-		<PackageReference Include="Atulin.SealAnalyzer" Version="1.0.0" />
-		<PackageReference Include="AWSSDK.S3" Version="4.0.21.1" />
-		<PackageReference Include="Bogus" Version="35.6.5" />
-		<PackageReference Include="FluentValidation" Version="12.1.1" PrivateAssets="all" />
-		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" PrivateAssets="all" />
-		<PackageReference Include="Humanizer.Core" Version="3.0.10" PrivateAssets="all" />
-		<PackageReference Include="Immediate.Apis" Version="4.2.0" PrivateAssets="all" />
-		<PackageReference Include="Immediate.Handlers" Version="3.4.0" PrivateAssets="all" />
-		<PackageReference Include="Immediate.Validations" Version="3.3.0" />
-		<PackageReference Include="Injectio" Version="5.1.0" />
-		<PackageReference Include="JetBrains.Annotations" Version="2025.2.4" PrivateAssets="all" />
-		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.2.0" PrivateAssets="all">
+		<PackageReference Include="Aspire.StackExchange.Redis" />
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
+		<PackageReference Include="Atulin.AutoDbSet" PrivateAssets="all" />
+		<PackageReference Include="Atulin.MarkdigExtensions" PrivateAssets="all" />
+		<PackageReference Include="Atulin.NpgsqlSourceGenerator" PrivateAssets="all" />
+		<PackageReference Include="Atulin.SealAnalyzer" />
+		<PackageReference Include="AWSSDK.S3" />
+		<PackageReference Include="Bogus" />
+		<PackageReference Include="FluentValidation" PrivateAssets="all" />
+		<PackageReference Include="FluentValidation.AspNetCore" PrivateAssets="all" />
+		<PackageReference Include="Humanizer.Core" PrivateAssets="all" />
+		<PackageReference Include="Immediate.Apis" PrivateAssets="all" />
+		<PackageReference Include="Immediate.Handlers" PrivateAssets="all" />
+		<PackageReference Include="Immediate.Validations" />
+		<PackageReference Include="Injectio" />
+		<PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
+		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Markdig" Version="1.1.2" PrivateAssets="all" />
-		<PackageReference Include="MemoryPack" Version="1.21.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0-preview.3.26207.106" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0-preview.3.26207.106">
+		<PackageReference Include="Markdig" PrivateAssets="all" />
+		<PackageReference Include="MemoryPack" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="11.0.0-preview.3.26207.106" />
-		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" PrivateAssets="all" />
-		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.5.4" PrivateAssets="all" />
-		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.5.4" PrivateAssets="all" />
-		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" Version="7.1.2" PrivateAssets="all" />
-		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.3.1" />
-		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" Version="1.3.1" />
-		<PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21" PrivateAssets="all" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-preview.2" PrivateAssets="all" />
-		<PackageReference Include="Postmark" Version="5.3.0" PrivateAssets="all" />
-		<PackageReference Include="Riok.Mapperly" Version="4.3.1" />
-		<PackageReference Include="SafeRouting" Version="1.5.0" PrivateAssets="all" />
-		<PackageReference Include="Scalar.AspNetCore" Version="2.13.22" PrivateAssets="all" />
-		<PackageReference Include="Serilog" Version="4.3.1" />
-		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" PrivateAssets="all" />
-		<PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
-		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" PrivateAssets="all" />
-		<PackageReference Include="SimpleBase" Version="5.6.0" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" PrivateAssets="all" />
-		<PackageReference Include="Sqids" Version="3.2.1" PrivateAssets="all" />
-		<PackageReference Include="stbychkov.AutoLoggerMessage" Version="1.0.15" />
-		<PackageReference Include="System.ServiceModel.Syndication" Version="11.0.0-preview.3.26207.106" PrivateAssets="all" />
-		<PackageReference Include="WaffleGenerator.Bogus" Version="4.2.2" />
-		<PackageReference Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
-		<PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.6.0" />
-		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.6.0" />
-		<PackageReference Update="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.0.0-1.25277.114">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" PrivateAssets="all" />
+		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" PrivateAssets="all" />
+		<PackageReference Include="MiniProfiler.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" PrivateAssets="all" />
+		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
+		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
+		<PackageReference Include="NetEscapades.EnumGenerators" PrivateAssets="all" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" PrivateAssets="all" />
+		<PackageReference Include="Postmark" PrivateAssets="all" />
+		<PackageReference Include="Riok.Mapperly" />
+		<PackageReference Include="SafeRouting" PrivateAssets="all" />
+		<PackageReference Include="Scalar.AspNetCore" PrivateAssets="all" />
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Serilog.AspNetCore" PrivateAssets="all" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
+		<PackageReference Include="Serilog.Sinks.Seq" PrivateAssets="all" />
+		<PackageReference Include="SimpleBase" />
+		<PackageReference Include="SixLabors.ImageSharp" PrivateAssets="all" />
+		<PackageReference Include="Sqids" PrivateAssets="all" />
+		<PackageReference Include="stbychkov.AutoLoggerMessage" />
+		<PackageReference Include="System.ServiceModel.Syndication" PrivateAssets="all" />
+		<PackageReference Include="WaffleGenerator.Bogus" />
+		<PackageReference Include="ZiggyCreatures.FusionCache" />
+		<PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" />
+		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />
