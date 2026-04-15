@@ -1,6 +1,7 @@
 <Project Sdk="Aspire.AppHost.Sdk/13.2.2">
 
     <PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework> <!--	Explicit, since Aspire Dashboard is broken in 11-preview3 -->
         <OutputType>Exe</OutputType>
         <IsAspireHost>true</IsAspireHost>
         <UserSecretsId>1f7fa604-b7af-418a-97ae-e1aaea83b0af</UserSecretsId>
