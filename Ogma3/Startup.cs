@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using MinHash;
 using NpgSqlGenerators;
 using Ogma3.Data;
 using Ogma3.Data.Roles;
@@ -25,6 +26,7 @@ using Ogma3.Infrastructure.Constraints;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.Filters;
+using Ogma3.Infrastructure.Jobs;
 using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware;
 using Ogma3.Infrastructure.OgmaConfig;
@@ -130,7 +132,8 @@ public static class Startup
 		services
 			.AddOgma3()
 			.Configure<TurnstileSettings>(configuration.GetSection(TurnstileSettings.Section))
-			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"));
+			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"))
+			.AddSingleton(new MinHasher(shingleSize: 5, shingleMode: ShingleMode.Words));
 
 		// Argon2 hasher
 		services
@@ -199,6 +202,9 @@ public static class Startup
 
 		// Json options
 		services.ConfigureHttpJsonOptions(options => ConfigJson(options.SerializerOptions));
+
+		// Jobs
+		services.RegisterJobs();
 
 		// MVC
 		services

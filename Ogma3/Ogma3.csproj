@@ -42,6 +42,7 @@
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
 		<PackageReference Include="Atulin.AutoDbSet" PrivateAssets="all" />
 		<PackageReference Include="Atulin.MarkdigExtensions" PrivateAssets="all" />
+		<PackageReference Include="Atulin.MinHash" />
 		<PackageReference Include="Atulin.NpgsqlSourceGenerator" PrivateAssets="all" />
 		<PackageReference Include="Atulin.SealAnalyzer" />
 		<PackageReference Include="AWSSDK.S3" />

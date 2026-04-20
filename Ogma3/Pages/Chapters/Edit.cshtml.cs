@@ -4,14 +4,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using MinHash;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Routes.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context) : PageModel
+public sealed class EditModel(ApplicationDbContext context, MinHasher hasher) : PageModel
 {
 	[BindProperty]
 	public required PostData Input { get; set; }
@@ -87,10 +89,11 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(c => c.Title, Input.Title.Trim())
 				.SetProperty(c => c.Slug, Input.Title.Trim().Friendlify())
 				.SetProperty(c => c.Body, Input.Body.Trim())
-				.SetProperty(c => c.StartNotes, Input.StartNotes == null ? null : Input.StartNotes.Trim())
-				.SetProperty(c => c.EndNotes, Input.EndNotes == null ? null : Input.EndNotes.Trim())
+				.SetProperty(c => c.StartNotes, Input.StartNotes?.Trim())
+				.SetProperty(c => c.EndNotes, Input.EndNotes?.Trim())
 				.SetProperty(c => c.WordCount, Input.Body.Words())
 				.SetProperty(c => c.PublicationDate, Input.IsPublished ? DateTimeOffset.UtcNow : null)
+				.SetProperty(c => c.Signature, hasher.ComputeSignature(Input.Body.Trim()))
 			);
 
 		if (chapterEditRows <= 0) return NotFound("Chapter not found");
@@ -100,7 +103,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 			.Where(s => s.Chapters.Any(c => c.Id == id))
 			.Select(s => new
 			{
-				Story = s, 
+				Story = s,
 				ChapterCount = s.Chapters.Count(c => c.PublicationDate != null),
 				WordCount = s.Chapters.Where(c => c.PublicationDate != null).Sum(c => c.WordCount),
 			})
@@ -123,6 +126,6 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 		if (data is null) return NotFound();
 
-		return Routes.Pages.Chapter.Get(data.StoryId, data.Id, data.Slug).Redirect(this);
+		return Chapter.Get(data.StoryId, data.Id, data.Slug).Redirect(this);
 	}
 }

@@ -53,7 +53,8 @@ public sealed partial class ApplicationDbContext
 		builder
 			.HasPostgresExtension("uuid-ossp")
 			.HasPostgresExtension("tsm_system_rows")
-			.HasPostgresExtension("citext");
+			.HasPostgresExtension("citext")
+			.HasPostgresExtension("intarray");
 
 		// Load model configurations
 		builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using MinHash;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
@@ -14,7 +15,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
+public sealed class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo, MinHasher hasher)
 	: PageModel
 {
 	[BindProperty]
@@ -80,24 +81,27 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
-		// Get the story to insert a chapter into. Include user in the search to check ownership.
-		var story = await context.Stories
-			.Where(s => s.Id == id)
-			.Where(s => s.AuthorId == uid)
-			.Include(s => s.Chapters)
-			.Include(s => s.Shelves.Where(x => x.TrackUpdates))
+		var storyDto = await context.Stories
+			.Where(s => s.Id == id && s.AuthorId == uid)
+			.Select(s => new
+			{
+				s.Id,
+				s.Title,
+				LatestChapterOrder = s.Chapters
+					.OrderByDescending(c => c.Order)
+					.Select(c => c.Order)
+					.FirstOrDefault(),
+				ChapterCount = s.Chapters.Count(),
+				CurrentWordCount = s.Chapters.Sum(c => c.WordCount),
+				ShelfOwnerIds = s.Shelves
+					.Where(x => x.TrackUpdates)
+					.Select(x => x.OwnerId)
+					.ToList(),
+			})
 			.FirstOrDefaultAsync();
 
-		// Back to index if the story is null or author isn't the logged in user
-		if (story is null) return Page();
+		if (storyDto is null) return Page();
 
-		// Get the order number of the latest chapter
-		var latestChapter = story.Chapters
-			.OrderByDescending(c => c.Order)
-			.Select(c => c.Order)
-			.FirstOrDefault();
-
-		// Construct new chapter
 		var chapter = new Chapter
 		{
 			Title = Input.Title.Trim(),
@@ -105,19 +109,18 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			Body = Input.Body.Trim(),
 			StartNotes = Input.StartNotes?.Trim(),
 			EndNotes = Input.EndNotes?.Trim(),
-			Order = latestChapter + 1,
+			Order = storyDto.LatestChapterOrder + 1,
+			StoryId = storyDto.Id,
 			CommentThread = new CommentThread(),
 			WordCount = Input.Body.Words(),
+			Signature = hasher.ComputeSignature(Input.Body.Trim()),
 		};
 
-		// Recalculate words and chapters in the story
-		story.WordCount = story.Chapters.Sum(c => c.WordCount) + chapter.WordCount;
-		story.ChapterCount = story.Chapters.Count + 1;
+		var newWordCount = storyDto.CurrentWordCount + chapter.WordCount;
+		var newChapterCount = storyDto.ChapterCount + 1;
 
-		// Create the chapter and add it to the story
-		story.Chapters.Add(chapter);
+		context.Chapters.Add(chapter);
 
-		// Subscribe author to the comment thread
 		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
 		{
 			CommentThread = chapter.CommentThread,
@@ -126,12 +129,18 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 
 		await context.SaveChangesAsync();
 
-		// Notify
-		await notificationsRepo.Create(ENotificationEvent.WatchedStoryUpdated,
-			story.Shelves.Select(s => s.OwnerId),
-			Routes.Pages.Chapter.Get(story.Id, chapter.Id, chapter.Slug).Url(Url) ?? "",
-			$"A new chapter was added to {story.Title}");
+		await context.Stories
+			.Where(s => s.Id == storyDto.Id)
+			.ExecuteUpdateAsync(s => s
+				.SetProperty(x => x.WordCount, newWordCount)
+				.SetProperty(x => x.ChapterCount, newChapterCount));
 
-		return Routes.Pages.Chapter.Get(story.Id, chapter.Id, chapter.Slug).Redirect(this);
+		await notificationsRepo.Create(
+			ENotificationEvent.WatchedStoryUpdated,
+			storyDto.ShelfOwnerIds,
+			Routes.Pages.Chapter.Get(storyDto.Id, chapter.Id, chapter.Slug).Url(Url) ?? "",
+			$"A new chapter was added to {storyDto.Title}");
+
+		return Routes.Pages.Chapter.Get(storyDto.Id, chapter.Id, chapter.Slug).Redirect(this);
 	}
 }

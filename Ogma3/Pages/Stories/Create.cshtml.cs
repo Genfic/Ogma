@@ -19,7 +19,8 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public sealed class CreateModel(
+public sealed class CreateModel
+(
 	ApplicationDbContext context,
 	ImageUploader uploader,
 	OgmaConfig ogmaConfig)
@@ -104,7 +105,12 @@ public sealed class CreateModel(
 		var credits = Input.Credits
 			.Where(c => c.Role is not null)
 			.Where(c => c.Name is not null)
-			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
+			.Select(c => new Credit
+			{
+				Role = c.Role!,
+				Name = c.Name!,
+				Link = c.Link,
+			})
 			.Take(25)
 			.ToList();
 

@@ -12,6 +12,10 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 	{
 		base.Configure(builder);
 
+		builder
+			.HasIndex(c => c.Signature)
+			.HasMethod(PgConstants.IndexTypes.Gin);
+
 		// CONSTRAINTS
 		builder
 			.Property(c => c.PublicationDate)
@@ -47,6 +51,14 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 			.IsRequired(false)
 			.HasMaxLength(CTConfig.Chapter.MaxNotesLength);
 
+		builder
+			.Property(c => c.Signature)
+			.HasColumnType(PgConstants.Types.IntArray)
+			.HasConversion(
+				v => Array.ConvertAll(v, i => (int)i),
+				v => Array.ConvertAll(v, i => (uint)i)
+			);
+
 		// NAVIGATION
 		builder
 			.HasOne(c => c.CommentThread)
@@ -65,5 +77,6 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 			.WithOne(r => r.Chapter)
 			.HasForeignKey(r => r.ChapterId)
 			.OnDelete(DeleteBehavior.Cascade);
+
 	}
 }

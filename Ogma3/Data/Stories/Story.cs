@@ -29,9 +29,9 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 
 	public List<Credit> Credits { get; set; } = [];
 
-	public List<Chapter> Chapters { get; set; } = null!;
-	public List<Tag> Tags { get; set; } = null!;
-	public List<Vote> Votes { get; set; } = null!;
+	public List<Chapter> Chapters { get; set; } = [];
+	public List<Tag> Tags { get; set; } = [];
+	public List<Vote> Votes { get; set; } = [];
 
 	// Rating
 	public Rating Rating { get; set; } = null!;
@@ -51,8 +51,13 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public ContentBlock? ContentBlock { get; set; }
 	public long? ContentBlockId { get; set; }
 
-	public List<Report> Reports { get; set; } = null!;
-	public List<Shelf> Shelves { get; set; } = null!;
+	public List<Report> Reports { get; set; } = [];
+	public List<Shelf> Shelves { get; set; } = [];
 }
 
-public sealed record Credit(string Role, string Name, string? Link);
+public sealed class Credit
+{
+	public required string Role { get; init; }
+	public required string Name { get; init; }
+	public required string? Link { get; init; }
+}

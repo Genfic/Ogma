@@ -63,7 +63,6 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 				c => c.ToJson()
 			);
 
-
 		// NAVIGATION
 		builder
 			.HasOne(s => s.Rating)

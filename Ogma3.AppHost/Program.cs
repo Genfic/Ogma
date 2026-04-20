@@ -18,6 +18,12 @@ var database = builder
 	.WithImageTag("18")
 	.WithDataVolume()
 	.WithLifetime(ContainerLifetime.Persistent)
+	.WithEndpoint("tcp", e =>
+	{
+		e.Port = 5433;
+		e.TargetPort = 5432;
+		e.IsProxied = false;
+	})
 	.WithPgWeb()
 	.AddDatabase("ogma3-db");
 

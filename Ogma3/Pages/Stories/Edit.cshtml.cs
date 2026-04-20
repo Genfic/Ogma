@@ -149,7 +149,12 @@ public sealed class EditModel(
 		var credits = Input.Credits
 			.Where(c => c.Role is not null)
 			.Where(c => c.Name is not null)
-			.Select(c => new Credit(c.Role!, c.Name!, c.Link))
+			.Select(c => new Credit
+			{
+				Role = c.Role!,
+				Name = c.Name!,
+				Link = c.Link,
+			})
 			.Take(25)
 			.ToList();
 

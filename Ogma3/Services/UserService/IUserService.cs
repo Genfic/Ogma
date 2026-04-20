@@ -5,8 +5,8 @@ namespace Ogma3.Services.UserService;
 
 public interface IUserService
 {
-	public ClaimsPrincipal? User { get; }
-	public long? UserId { get; }
-	public Task<UserCreationResult> CreateAsync(string username, string email, string password, bool activated = false);
-	public Task<UserCreationResult> CreateAsync(OgmaUser user, string password);
+	ClaimsPrincipal? User { get; }
+	long? UserId { get; }
+	Task<UserCreationResult> CreateAsync(string username, string email, string password, bool activated = false);
+	Task<UserCreationResult> CreateAsync(OgmaUser user, string password);
 }
