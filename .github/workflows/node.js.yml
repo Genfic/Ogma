@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: read
+
 defaults:
   run:
     working-directory: ./Ogma3/FrontendCode
