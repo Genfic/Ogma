@@ -35,7 +35,7 @@ public sealed class ImageTagHelper(
 		var h = CfHeight ?? Height;
 		var w = CfWidth ?? Width;
 
-		var src = Src[..2] switch
+		var src = Src.AsSpan()[..2] switch
 		{
 			['/', '/'] => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/https:{Src}",
 			['/', _] => Src,

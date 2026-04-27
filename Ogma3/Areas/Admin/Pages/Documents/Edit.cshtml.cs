@@ -10,11 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Documents;
 using Ogma3.Infrastructure.Constants;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Routes.Areas.Admin.Pages;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
-[Authorize(Roles = RoleNames.Admin)]
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed class EditModel(ApplicationDbContext context) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }

@@ -1,14 +1,17 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
+using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Areas.Admin.Pages.Users;
 
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed class Index(ApplicationDbContext context) : PageModel
 {
 	public required UserDetailsDto? OgmaUser { get; set; }
@@ -20,7 +23,7 @@ public sealed class Index(ApplicationDbContext context) : PageModel
 
 	public string? Name { get; set;  }
 
-	public async Task<ActionResult> OnGet([FromQuery] string? name)
+	public async Task<ActionResult> OnGet([FromQuery] string? name = null)
 	{
 		Name = name;
 

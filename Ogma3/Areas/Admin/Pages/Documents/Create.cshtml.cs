@@ -3,16 +3,19 @@ using Markdig;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
 using Ogma3.Data.Documents;
 using Ogma3.Infrastructure.Constants;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Routes.Areas.Admin.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed class CreateModel(ApplicationDbContext context) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }

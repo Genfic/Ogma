@@ -1,46 +1,41 @@
-@using Ogma3.Areas.Admin.Pages.Shared
-@using Ogma3.Infrastructure.Constants
+@using Microsoft.Extensions.Caching.Memory
+@using Ogma3.Infrastructure.Extensions
+@using Ogma3.Services.SidebarNavService
+@inject AdminSidebarNavService SidebarNavService
+@inject IMemoryCache Cache
+
+@{
+	var navItems = await Cache.GetOrCreateAsync(
+		$"admin-nav-item-permissions:{User.GetUsername()}",
+		async e => {
+			e.SlidingExpiration = TimeSpan.FromMinutes(10);
+			return await SidebarNavService.GetAccessibleItems(User);
+		}
+	);
+}
+
 <ul class="nav nav-pills flex-column">
 
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Index, "Dashboard"))"/>
-
-	@if (User.Identity is {IsAuthenticated: true } && User.IsInRole(RoleNames.Admin))
+	@foreach (var (category, items) in navItems ?? new Dictionary<string, List<NavbarItem>>())
 	{
-		<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Settings))"/>
-		<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Email, "Mailer"))"/>
+		if (!string.IsNullOrWhiteSpace(category))
+		{
+			<li class="nav-item">
+				@category
+			</li>
+		}
+
+		foreach (var item in items)
+		{
+			<li class="nav-item">
+				<a class="nav-link @NavPages.PageNavClass(ViewContext, item.Name ?? "")"
+				   id="@item.Name?.ToLower()"
+				   for-route="@item.Path">
+					@item.Name
+				</a>
+			</li>
+		}
 	}
-
-	<li class="nav-item">
-		Categorization
-	</li>
-
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Tags))"/>
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Ratings))"/>
-
-	<li class="nav-item">
-		Content
-	</li>
-
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Quotes))"/>
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial("Documents/Index", "Documents"))"/>
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.ContentBlock))"/>
-
-	<li class="nav-item">
-		Users
-	</li>
-
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.InviteCodes))"/>
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Roles, "User roles"))"/>
-    <partial name="Shared/_NavItemPartial" model="@(new NavItemPartial("Users/Index", "User management"))" />
-    <partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Infractions, "Infractions"))" />
-
-	<li class="nav-item">
-		Other
-	</li>
-
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.ModLog))"/>
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Reports))"/>
-	<partial name="Shared/_NavItemPartial" model="@(new NavItemPartial(NavPages.Faq))"/>
 
 	<li class="nav-item">
 		OpenAPI
@@ -48,12 +43,14 @@
 
 	@* ReSharper disable once Html.PathError *@
 	<a class="nav-link" href="/scalar/public" target="_blank">
-		Scalar public <icon class="icon" name="lucide:external-link"></icon>
+		Scalar public
+		<icon class="icon" name="lucide:external-link"></icon>
 	</a>
 
 	@* ReSharper disable once Html.PathError *@
 	<a class="nav-link" href="/scalar/internal" target="_blank">
-		Scalar internal <icon class="icon" name="lucide:external-link"></icon>
+		Scalar internal
+		<icon class="icon" name="lucide:external-link"></icon>
 	</a>
 
 </ul>

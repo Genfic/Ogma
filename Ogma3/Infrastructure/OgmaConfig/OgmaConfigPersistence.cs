@@ -14,7 +14,7 @@ public sealed class OgmaConfigPersistence
 	}
 
 	/// <summary>
-	/// Asynchronously initializes an instance of <see cref="OgmaConfigPersistence"/> by loading
+	/// Asynchronously initialises an instance of <see cref="OgmaConfigPersistence"/> by loading
 	/// configuration data from a specified file location. If the specified file does not exist,
 	/// a new default configuration instance will be used.
 	/// </summary>
@@ -37,7 +37,7 @@ public sealed class OgmaConfigPersistence
 
 	/// <summary>
 	/// Asynchronously persists the current instance of <see cref="OgmaConfig"/> to the specified file path.
-	/// A temporary file is used to ensure atomicity of the save operation, minimizing the risk of data corruption
+	/// A temporary file is used to ensure atomicity of the save operation, minimising the risk of data corruption
 	/// in case of an interruption during the writing process.
 	/// </summary>
 	/// <returns>A task that represents the asynchronous operation.</returns>

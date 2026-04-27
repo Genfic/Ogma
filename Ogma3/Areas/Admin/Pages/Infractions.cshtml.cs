@@ -1,12 +1,15 @@
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
+using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Areas.Admin.Pages;
 
+[Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed class InfractionsModel(ApplicationDbContext context) : PageModel
 {
 	public required List<InfractionDto> Infractions { get; set; }

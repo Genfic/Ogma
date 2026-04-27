@@ -5,9 +5,10 @@ using PostmarkDotNet;
 namespace Ogma3.Services.Mailer;
 
 [RegisterTransient<IEmailSender>]
-public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<PostmarkMailer> logger ) : IEmailSender
+public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<PostmarkMailer> logger) : IEmailSender
 {
 	private readonly PostmarkOptions _options = options.Value;
+	private readonly PostmarkClient _client = new(options.Value.Key);
 
 	public async Task SendEmailAsync(string email, string subject, string htmlMessage)
 	{
@@ -21,9 +22,7 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 			HtmlBody = htmlMessage,
 			MessageStream = "outbound",
 		};
-
-		var client = new PostmarkClient(_options.Key);
-		var result = await client.SendMessageAsync(message);
+		var result = await _client.SendMessageAsync(message);
 
 		if (result.Status == PostmarkStatus.Success)
 		{

@@ -1,17 +1,21 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Areas.Admin.Pages.Users;
 
+[Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed class Create(IUserService userService) : PageModel
 {
 	public sealed record InputModel
 	(
 		string Username,
 		[property: DataType(DataType.EmailAddress)] string Email,
-		[property: DataType(DataType.Password)] string Password);
+		[property: DataType(DataType.Password)] string Password
+	);
 
 	[BindProperty]
 	public required InputModel Input { get; set; }

@@ -17,13 +17,13 @@ namespace Ogma3.Areas.Admin.Pages;
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed class ContentBlock(ApplicationDbContext context) : PageModel
 {
-	[BindProperty] public ItemType Type { get; set; }
+	[BindProperty] public ItemType? Type { get; set; }
 
-	[BindProperty] public long Id { get; set; }
+	[BindProperty] public long? Id { get; set; }
 
 	public ItemData? Item { get; private set; }
 
-	public async Task<ActionResult> OnGet(ItemType type, long id)
+	public async Task<ActionResult> OnGet(ItemType? type = null, long? id = null)
 	{
 		Type = type;
 		Id = id;
@@ -72,22 +72,29 @@ public sealed class ContentBlock(ApplicationDbContext context) : PageModel
 			return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
 		}
 
-		if (User.GetNumericId() is not { } staffId) return Unauthorized();
+		if (Id is not {} id)
+		{
+			ModelState.AddModelError(string.Empty, "Invalid item id");
+			return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
+		}
+
+		if (User.GetNumericId() is not {} staffId) return Unauthorized();
 		_ = Type switch
 		{
-			ItemType.Story => await TryBlockContent<Story>(Id, data.Reason, staffId),
-			ItemType.Chapter => await TryBlockContent<Chapter>(Id, data.Reason, staffId),
-			ItemType.Blogpost => await TryBlockContent<Blogpost>(Id, data.Reason, staffId),
+			ItemType.Story => await TryBlockContent<Story>(id, data.Reason, staffId),
+			ItemType.Chapter => await TryBlockContent<Chapter>(id, data.Reason, staffId),
+			ItemType.Blogpost => await TryBlockContent<Blogpost>(id, data.Reason, staffId),
 			_ => false,
 		};
 
-		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
+		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, id).Redirect(this);
 	}
 
 	private async Task<bool> TryBlockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
 	{
-		if (User.GetNumericId() is not { } staffId) return false;
-		if (User.GetUsername() is not { } uname) return false;
+		if (User.GetNumericId() is not {} staffId) return false;
+		if (User.GetUsername() is not {} uname) return false;
+		if (Type is not {} type) return false;
 
 		var item = await context.Set<T>()
 			.Where(i => i.Id == itemId)
@@ -116,7 +123,7 @@ public sealed class ContentBlock(ApplicationDbContext context) : PageModel
 		context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentBlocked(Type.ToString(), title, itemId, uname),
+			Description = ModeratorActionTemplates.ContentBlocked(type.ToString(), title, itemId, uname),
 		});
 
 		await context.SaveChangesAsync();
@@ -125,21 +132,27 @@ public sealed class ContentBlock(ApplicationDbContext context) : PageModel
 
 	public async Task<ActionResult> OnPostUnblock()
 	{
+		if (Id is not {} id)
+		{
+			ModelState.AddModelError(string.Empty, "Invalid item id");
+			return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
+		}
 		_ = Type switch
 		{
-			ItemType.Story => await TryUnblockContent<Story>(Id),
-			ItemType.Chapter => await TryUnblockContent<Chapter>(Id),
-			ItemType.Blogpost => await TryUnblockContent<Blogpost>(Id),
+			ItemType.Story => await TryUnblockContent<Story>(id),
+			ItemType.Chapter => await TryUnblockContent<Chapter>(id),
+			ItemType.Blogpost => await TryUnblockContent<Blogpost>(id),
 			_ => false,
 		};
 
-		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
+		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, id).Redirect(this);
 	}
 
 	private async Task<bool> TryUnblockContent<T>(long itemId) where T : BaseModel, IBlockableContent
 	{
-		if (User.GetNumericId() is not { } staffId) return false;
-		if (User.GetUsername() is not { } uname) return false;
+		if (User.GetNumericId() is not {} staffId) return false;
+		if (User.GetUsername() is not {} uname) return false;
+		if (Type is not {} type) return false;
 
 		var item = await context.Set<T>()
 			.Where(i => i.Id == itemId)
@@ -163,7 +176,7 @@ public sealed class ContentBlock(ApplicationDbContext context) : PageModel
 		context.ModeratorActions.Add(new ModeratorAction
 		{
 			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentUnblocked(Type.ToString(), title, itemId, uname),
+			Description = ModeratorActionTemplates.ContentUnblocked(type.ToString(), title, itemId, uname),
 		});
 
 		await context.SaveChangesAsync();
