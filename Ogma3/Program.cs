@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Ogma3;
 using Ogma3.Data;
+using Ogma3.Infrastructure.Config.RemoteSecrets;
 using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
@@ -40,6 +41,8 @@ builder.Configuration
 	.AddEnvironmentVariables()
 	// WARN: It probably should not be used in prod, switch to DI instead
 	.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
+
+builder.AddInfisical();
 
 builder.Host.UseSerilog();
 
