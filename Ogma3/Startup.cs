@@ -134,9 +134,19 @@ public static class Startup
 		// Add services
 		services
 			.AddOgma3()
-			.Configure<TurnstileSettings>(configuration.GetSection(TurnstileSettings.Section))
-			.Configure<PostmarkOptions>(configuration.GetSection("Postmark"))
 			.AddSingleton(new MinHasher(shingleSize: 5, shingleMode: ShingleMode.Words));
+
+		services
+			.AddOptions<TurnstileSettings>()
+			.Bind(configuration.GetSection(TurnstileSettings.Section))
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
+		services
+			.AddOptions<PostmarkOptions>()
+			.Bind(configuration.GetSection(PostmarkOptions.Section))
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
 
 		// Argon2 hasher
 		services

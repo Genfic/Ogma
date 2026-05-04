@@ -1,5 +1,6 @@
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Extensions.Options;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Logging.OperationTiming;
 using Ogma3.Services.S3Storage;
@@ -10,8 +11,10 @@ using SixLabors.ImageSharp.Processing;
 namespace Ogma3.Services.FileUploader;
 
 [RegisterSingleton]
-public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options, ILogger<ImageUploader> logger) : IFileUploader
+public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions> options, ILogger<ImageUploader> logger) : IFileUploader
 {
+	private readonly S3StorageOptions _s3Options = options.Value;
+
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
 	/// <exception cref="Exception">Thrown when after `tries` number of tries, the file could not be uploaded</exception>
@@ -63,7 +66,7 @@ public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options
 
 				var request = new PutObjectRequest
 				{
-					BucketName = s3Options.BucketName,
+					BucketName = _s3Options.BucketName,
 					Key = key,
 					InputStream = uploadStream,
 					ContentType = "image/webp",
@@ -74,7 +77,7 @@ public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options
 			}
 			catch (AmazonS3Exception e)
 			{
-				logger.LogError("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, --counter);
+				logger.LogError("⚠ Backblaze Error: {Message}\n\tTries left: {Count}", e.Message, counter--);
 			}
 		}
 
@@ -86,7 +89,7 @@ public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options
 	{
 		var request = new DeleteObjectRequest
 		{
-			BucketName = s3Options.BucketName,
+			BucketName = _s3Options.BucketName,
 			Key = key,
 		};
 		await s3Client.DeleteObjectAsync(request, cancellationToken);

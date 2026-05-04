@@ -1,5 +1,6 @@
 using Amazon.Runtime;
 using Amazon.S3;
+using Microsoft.Extensions.Options;
 
 namespace Ogma3.Services.S3Storage;
 
@@ -7,11 +8,15 @@ public static class S3Storage
 {
 	public static IServiceCollection AddS3Storage(this IServiceCollection services, IConfiguration config)
 	{
-		var options = config.GetSection("B2").Get<S3StorageOptions>() ?? throw new InvalidOperationException("S3 storage options not found");
+		services
+			.AddOptions<S3StorageOptions>()
+			.Bind(config.GetSection("B2"))
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
 
-		services.AddSingleton(options);
+		services.AddSingleton<IAmazonS3>(s => {
+			var options = s.GetRequiredService<IOptions<S3StorageOptions>>().Value;
 
-		services.AddSingleton<IAmazonS3>(_ => {
 			var s3Config = new AmazonS3Config
 			{
 				ServiceURL = options.ServiceUrl,
