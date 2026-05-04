@@ -1,14 +1,13 @@
 using System.Collections.Frozen;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Routes.Areas.Admin.Pages;
 using Index = Routes.Areas.Admin.Pages.Index;
 
 namespace Ogma3.Services.SidebarNavService;
 
 [RegisterScoped]
-public sealed class AdminSidebarNavService(EndpointDataSource endpointData, IAuthorizationService authorizationService)
+public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthorizationService authorizationService)
 {
 	private static readonly FrozenDictionary<string, NavbarItem[]> AllNavbarItems = new Dictionary<string, NavbarItem[]>
 	{
@@ -44,21 +43,8 @@ public sealed class AdminSidebarNavService(EndpointDataSource endpointData, IAut
 		],
 	}.ToFrozenDictionary();
 
-	private static FrozenDictionary<string, IReadOnlyList<IAuthorizeData>>? _policyMap;
-
 	public async Task<IReadOnlyDictionary<string, List<NavbarItem>>> GetAccessibleItems(ClaimsPrincipal user)
 	{
-		_policyMap ??= endpointData.Endpoints
-			.OfType<RouteEndpoint>()
-			.Select(ep => new
-			{
-				PageName = ep.Metadata.GetMetadata<PageActionDescriptor>()?.ViewEnginePath,
-				AuthData = ep.Metadata.GetOrderedMetadata<IAuthorizeData>(),
-			})
-			.Where(x => x.PageName is not null)
-			.DistinctBy(x => x.PageName)
-			.ToFrozenDictionary(x => x.PageName!, x => x.AuthData, StringComparer.OrdinalIgnoreCase);
-
 		var accessible = new Dictionary<string, List<NavbarItem>>();
 
 		foreach (var (category, items) in AllNavbarItems)
@@ -67,7 +53,7 @@ public sealed class AdminSidebarNavService(EndpointDataSource endpointData, IAut
 
 			foreach (var item in items)
 			{
-				if (!_policyMap.TryGetValue(item.Path.PageName, out var authData) || authData.Count <= 0)
+				if (!navData.PolicyMap.TryGetValue(item.Path.PageName, out var authData) || authData.Count <= 0)
 				{
 					accessible[category].Add(item);
 					continue;
@@ -85,15 +71,20 @@ public sealed class AdminSidebarNavService(EndpointDataSource endpointData, IAut
 						}
 					}
 
-					if (attr.Roles is { Length: > 0 })
+					if (attr.Roles is not { Length: > 0 })
 					{
-						var roles = attr.Roles.Split(',', StringSplitOptions.TrimEntries);
-						if (roles.Any(user.IsInRole))
-						{
-							accessible[category].Add(item);
-							break;
-						}
+						continue;
 					}
+
+					var roles = attr.Roles.Split(',', StringSplitOptions.TrimEntries);
+
+					if (!roles.Any(user.IsInRole))
+					{
+						continue;
+					}
+
+					accessible[category].Add(item);
+					break;
 				}
 			}
 

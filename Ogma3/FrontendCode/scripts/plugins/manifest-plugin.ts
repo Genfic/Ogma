@@ -28,7 +28,7 @@ export function manifestPlugin(options?: ManifestOptions): BunPlugin {
 					},
 				);
 
-				lines.sort();
+				lines.sort((a, b) => a.localeCompare(b));
 
 				const manifest = `${new Date().toISOString()}\n${lines.join("\n")}`;
 

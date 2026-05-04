@@ -43,7 +43,7 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public int WordCount { get; set; }
 	public int ChapterCount { get; set; }
 
-	public bool IsLocked { get; set; } = false;
+	public bool IsLocked { get; set; }
 
 	// Just for relationship purposes
 	public List<Folder> Folders { get; set; } = [];

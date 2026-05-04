@@ -8,7 +8,7 @@ namespace Ogma3.Infrastructure.TagHelpers;
 /// <summary>
 /// Get the cached amount of users online
 /// </summary>
-public sealed class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCache cache) : TagHelper
+public sealed class UsersOnlineTagHelper(ApplicationDbContext ctx, IMemoryCache cache) : TagHelper
 {
 	/// <summary>
 	/// Tolerance in minutes
@@ -20,7 +20,7 @@ public sealed class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCa
 	/// </summary>
 	public int CacheTime { get; set; } = 60;
 
-	public override async Task ProcessAsync(TagHelperContext context1, TagHelperOutput output)
+	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 	{
 		const string name = nameof(UsersOnlineTagHelper) + "_cache";
 
@@ -29,7 +29,7 @@ public sealed class UsersOnlineTagHelper(ApplicationDbContext context, IMemoryCa
 			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
 
 			var minutesAgo = DateTimeOffset.UtcNow.AddMinutes(-Tolerance);
-			return await context.Users
+			return await ctx.Users
 				.TagWith("Getting currently active users")
 				.Where(u => u.LastActive >= minutesAgo)
 				.CountAsync();

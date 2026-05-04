@@ -5,21 +5,21 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class UserCountTagHelper(ApplicationDbContext dbContext, IMemoryCache cache) : TagHelper
+public sealed class UserCountTagHelper(ApplicationDbContext ctx, IMemoryCache cache) : TagHelper
 {
 	/// <summary>
 	/// How often should the cache refresh in minutes
 	/// </summary>
 	public int CacheTime { get; set; } = 60;
 
-	public override async Task ProcessAsync(TagHelperContext httpContext, TagHelperOutput output)
+	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 	{
 		const string name = nameof(UserCountTagHelper) + "_cache";
 
 		var count = await cache.GetOrCreateAsync(name, async entry =>
 		{
 			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
-			return await dbContext.Users.TagWith("Getting current user count").CountAsync();
+			return await ctx.Users.TagWith("Getting current user count").CountAsync();
 		});
 
 		output.TagName = "span";

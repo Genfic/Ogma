@@ -11,7 +11,7 @@ public static class EndpointExtensions
 		string description
 	)
 	{
-		return builder.AddOpenApiOperationTransformer((operation, ctx, ct) => {
+		return builder.AddOpenApiOperationTransformer((operation, _, _) => {
 			var response = operation.Responses?[responseCode];
 
 			response?.Headers?.Add(name, new OpenApiHeader

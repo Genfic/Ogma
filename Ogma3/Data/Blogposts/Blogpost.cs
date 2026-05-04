@@ -22,7 +22,7 @@ public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent,
 	public CommentThread CommentThread { get; set; } = null!;
 	public int WordCount { get; set; }
 	public string[] Hashtags { get; set; } = [];
-	public bool IsLocked { get; set; } = false;
+	public bool IsLocked { get; set; }
 
 	// Attachments
 	public Story? AttachedStory { get; set; }

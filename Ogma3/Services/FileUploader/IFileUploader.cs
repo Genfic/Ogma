@@ -3,7 +3,7 @@ namespace Ogma3.Services.FileUploader;
 public interface IFileUploader
 {
 	/// <inheritdoc cref="Upload(IFormFile, string, int?, int?, int)"/>
-	Task<FileUploadResult> Upload(IFormFile file, string folder, int? width = null, int? height = null, int tries = 10);
+	Task<FileUploadResult> Upload(IFormFile file, string folder, int? width = null, int? height = null, int tries = 5);
 
 	/// <summary>
 	/// Uploads a given file to some persistent storage
@@ -16,7 +16,7 @@ public interface IFileUploader
 	/// <param name="height">Desired height of the uploaded image</param>
 	/// <param name="tries">The number of times the upload should be attempted</param>
 	/// <returns>`FileUploaderResult` object</returns>
-	Task<FileUploadResult> Upload(IFormFile file, string folder, string name, int? width = null, int? height = null, int tries = 10);
+	Task<FileUploadResult> Upload(IFormFile file, string folder, string name, int? width = null, int? height = null, int tries = 5);
 
 	/// <summary>
 	/// Delete the file from the blob storage

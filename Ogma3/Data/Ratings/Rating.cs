@@ -8,7 +8,7 @@ public sealed class Rating : BaseModel
 {
 	public required string Name { get; init; }
 	public required string Description { get; init; }
-	public byte Order { get; init; } = 0;
+	public byte Order { get; init; }
 	public required string Color { get; init; }
-	public bool BlacklistedByDefault { get; init; } = false;
+	public bool BlacklistedByDefault { get; init; }
 }

@@ -8,7 +8,7 @@ let tzCache: string | null = null;
  */
 export const toCurrentTimezone = (date: Date) => {
 	if (!tzCache) {
-		tzCache = document.documentElement.getAttribute("data-timezone") ?? "UTC";
+		tzCache = document.documentElement.dataset.timezone ?? "UTC";
 	}
 	return toZonedTime(date, tzCache);
 };

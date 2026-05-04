@@ -51,9 +51,9 @@ public static class StoryMapper
 		CommentsCount = s.Chapters.Sum(c => c.CommentThread.CommentsCount),
 		VotesCount = s.Votes.Count,
 		ContentBlock = s.ContentBlock != null ? new ContentBlockCard(
-			s.ContentBlock.Reason ?? "",
+			s.ContentBlock.Reason,
 			s.ContentBlock.DateTime,
-			s.ContentBlock.Issuer != null ? s.ContentBlock.Issuer.UserName : ""
+			s.ContentBlock.Issuer.UserName
 		) : null,
 		Credits = s.Credits.Select(c => new CreditDto(c.Role, c.Name, c.Link)).ToList(),
 	};

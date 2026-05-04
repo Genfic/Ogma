@@ -32,17 +32,17 @@ public static partial class SearchTags
  #pragma warning disable NEEG004
 		Expression<Func<Tag, bool>>? search = request.SearchString.Split(':') switch
 		{
-			[{ Length: > 0 } ns, { Length: > 0 } name] => (Tag t)
+			[{ Length: > 0 } ns, { Length: > 0 } name] => t
 				=> EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{name}%")
 				   && EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{ns}%"),
 
 			[{ Length: > 0 } ns, _]
-				=> (Tag t) => EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{ns}%"),
+				=> t => EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{ns}%"),
 
 			[_, { Length: > 0 } name]
-				=> (Tag t) => EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{name}%"),
+				=> t => EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{name}%"),
 
-			[{ Length: > 0 } q] => (Tag t)
+			[{ Length: > 0 } q] => t
 				=> EF.Functions.ILike(EF.Functions.Collate(t.Name, "C"), $"%{q}%")
 				   || EF.Functions.ILike(EF.Functions.Collate(t.Namespace.ToString() ?? string.Empty, "C"), $"%{q}%"),
 

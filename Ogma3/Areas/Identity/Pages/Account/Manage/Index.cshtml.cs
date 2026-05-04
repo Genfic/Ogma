@@ -31,8 +31,7 @@ public sealed partial class IndexModel
 	[TempData] public string StatusMessage { get; set; } = "";
 	[BindProperty] public required InputModel Input { get; set; }
 
-	private List<TimezoneEntry> _availableTimezones = [];
-	public List<SelectListItem> AvailableTimezones => _availableTimezones.Select(tz => new SelectListItem(tz.Text, tz.Value)).ToList();
+	public List<SelectListItem> AvailableTimezones { get; private set; } = [];
 
 	public sealed class InputModel
 	{
@@ -41,7 +40,7 @@ public sealed partial class IndexModel
 		public string? Title { get; init; }
 		public string? Bio { get; init; }
 		public string? Links { get; init; }
-		public string? Timezone { get; set; }
+		public string? Timezone { get; init; }
 	}
 
 	public sealed class InputModelValidation : AbstractValidator<InputModel>
@@ -83,7 +82,7 @@ public sealed partial class IndexModel
 		if (model is null) return NotFound();
 		Input = model;
 
-		_availableTimezones = cache.GetOrSet(
+		AvailableTimezones = cache.GetOrSet(
 			"AvailableTimezones",
 			TimeZoneInfo.GetSystemTimeZones()
 				.Select(tzi => {
@@ -98,6 +97,7 @@ public sealed partial class IndexModel
 				})
 				.OfType<TimezoneEntry>()
 				.OrderBy(i => i.Text)
+				.Select(tz => new SelectListItem(tz.Text, tz.Value))
 				.ToList(),
 			opt => opt.Duration = TimeSpan.FromHours(1)
 		);

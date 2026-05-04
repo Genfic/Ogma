@@ -19,7 +19,7 @@ public static partial class ListPasskeys
 		Query _,
 		OgmaUserManager userManager,
 		IHttpContextAccessor contextAccessor,
-		CancellationToken ct
+		CancellationToken __
 	)
 	{
 		if (contextAccessor.HttpContext is not { } httpContext)

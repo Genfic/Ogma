@@ -16,7 +16,7 @@ public static partial class TestTwo
 {
 	public sealed record Query(string Name);
 
-	private static async ValueTask<ReturnType> Handle(Query q, IOptions<Workers> cfg, CancellationToken cancellationToken)
+	private static async ValueTask<ReturnType> Handle(Query q, IOptions<Workers> cfg, CancellationToken _)
 	{
 		var keyBytes = Encoding.UTF8.GetBytes(cfg.Value.AvatarServiceSignatureKey);
 		var nameBytes = Encoding.UTF8.GetBytes(q.Name);

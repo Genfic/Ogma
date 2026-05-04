@@ -112,7 +112,7 @@ public sealed class ImageUploader(IAmazonS3 s3Client, S3StorageOptions s3Options
 			}
 		}
 
-		if ((width ?? height) is {} w && (height ?? width) is {} h && (img.Width > w || img.Height > h))
+		if ((width ?? height) is { } w && (height ?? width) is { } h && (img.Width > w || img.Height > h))
 		{
 			using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 

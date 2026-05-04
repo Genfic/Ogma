@@ -31,7 +31,7 @@ public static partial class GetPasskeyCreationOptions
 		IHttpContextAccessor contextAccessor,
 		SignInManager<OgmaUser> signInManager,
 		OgmaUserManager userManager,
-		CancellationToken ct
+		CancellationToken __
 	)
 	{
 		if (contextAccessor.HttpContext is not { } httpContext)

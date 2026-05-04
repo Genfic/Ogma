@@ -13,25 +13,25 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 {
 	public static string CacheKey(long id) => $"user-ban:{id}";
 
-	public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
-		if (httpContext.User.GetNumericId() is not {} uid)
+		if (context.User.GetNumericId() is not {} uid)
 		{
-			await next(httpContext);
+			await next(context);
 			return;
 		}
 
-		var allowBanned = httpContext.GetEndpoint()?.Metadata.GetMetadata<AllowBannedUsersAttribute>();
+		var allowBanned = context.GetEndpoint()?.Metadata.GetMetadata<AllowBannedUsersAttribute>();
 		if (allowBanned is not null)
 		{
-			await next(httpContext);
+			await next(context);
 			return;
 		}
 
 		var isBanned = await cache.GetOrSetAsync(
 			CacheKey(uid),
 			async _ => {
-				var dbContext = httpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
+				var dbContext = context.RequestServices.GetRequiredService<ApplicationDbContext>();
 				return await CompiledQuery(dbContext, uid);
 			},
 			o => o.Duration = TimeSpan.FromMinutes(30)
@@ -41,19 +41,19 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 		{
 			LogAccessAttempt(logger, uid);
 
-			if (httpContext.IsApiEndpoint())
+			if (context.IsApiEndpoint())
 			{
-				httpContext.Response.Clear();
-				httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				await httpContext.Response.WriteAsync("Account banned.");
+				context.Response.Clear();
+				context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				await context.Response.WriteAsync("Account banned.");
 				return;
 			}
 
-			httpContext.Response.Redirect("/Ban");
+			context.Response.Redirect("/Ban");
 			return;
 		}
 
-		await next(httpContext);
+		await next(context);
 	}
 
 	private static readonly Func<ApplicationDbContext, long, Task<bool>> CompiledQuery =

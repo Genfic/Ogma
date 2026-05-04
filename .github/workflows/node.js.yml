@@ -26,5 +26,5 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - run: bun i
+      - run: bun i —ignore-scripts
       - run: bun run build
