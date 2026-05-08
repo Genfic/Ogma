@@ -38,9 +38,12 @@ builder.Configuration
 	.AddEnvironmentVariables("ogma_")
 	.AddJsonFile("appsettings.json5")
 	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true)
-	.AddEnvironmentVariables()
-	// WARN: It probably should not be used in prod, switch to DI instead
-	.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
+	// .AddEnvironmentVariables()
+	;
+if (builder.Environment.IsDevelopment())
+{
+	builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
+}
 
 builder.AddInfisical();
 

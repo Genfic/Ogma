@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Bogus;
@@ -115,7 +116,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 			var adminRole = await context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
 			if (adminRole is null) throw new NullReferenceException("Admin role does not exist, somehow");
 
-			_logger.LogCritical("Admin user created with password {Password}. Change it ASAP.", password);
+			Console.WriteLine($"👨‍💼Admin user created with password {password}. Change it ASAP.");
 
 			result.User.Roles.Add(adminRole);
 			await context.SaveChangesAsync();
@@ -182,7 +183,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 
 			if (result.Succeeded)
 			{
-				_logger.LogInformation("User {UserName} created with password {Password}.", user.UserName, password);
+				Console.WriteLine($"🙋 User {user.UserName} created with password {password}.");
 			}
 		}
 	}
@@ -391,8 +392,16 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 
 	private static string RandomPassword()
 	{
-		var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()".AsSpan();
-		return new string(Random.Shared.GetItems(alpha, 20));
+		var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()"u8;
+		Span<byte> indices = stackalloc byte[20];
+		Span<char> chars = stackalloc char[20];
+		RandomNumberGenerator.Fill(indices);
+
+		foreach (var i in indices)
+		{
+			chars[i] = (char)alpha[i % alpha.Length];
+		}
+		return new string(chars);
 	}
 }
 

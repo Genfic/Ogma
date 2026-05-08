@@ -168,6 +168,10 @@ public static partial class HandlePatreonWebhook
 		return TypedResults.Ok();
 	}
 
+	/// <summary>
+	/// Validate the HMAC-MD5 signature of the webhook payload.
+	/// See <see href="https://docs.patreon.com/#webhooks">the docs</see> for more info.
+	/// </summary>
 	private static bool ValidateSignature(string signature, string key, ReadOnlySpan<byte> body)
 	{
 		// MD5 produces 16 bytes, so 32 hex chars

@@ -4,7 +4,6 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Utils;
 
 namespace Ogma3.Api.V1.SignIn;
 
@@ -29,9 +28,7 @@ public static partial class GetSignInData
 			.Select(u => new Result(u.Avatar.Url, u.Title))
 			.FirstOrDefaultAsync(cancellationToken);
 
-		var data = user ?? new Result(Lorem.Picsum(200), string.Empty);
-
-		return TypedResults.Ok(data);
+		return TypedResults.Ok(user);
 	}
 
 	public sealed record Result(string Avatar, string? Title);

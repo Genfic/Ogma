@@ -276,7 +276,10 @@ public static class Startup
 		services.AddHsts(options => {
 			options.Preload = true;
 			options.IncludeSubDomains = true;
-			options.MaxAge = TimeSpan.FromHours(12); // TimeSpan.FromYears(1) when HTTPS config is down pat
+			options.MaxAge = builder.Environment.IsDevelopment()
+				? TimeSpan.FromHours(12)
+				: TimeSpan.FromDays(365);
+
 		});
 
 		// Forwarded headers (for Cloudflare Tunnel / reverse proxies)

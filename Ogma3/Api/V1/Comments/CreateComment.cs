@@ -103,6 +103,8 @@ public static partial class CreateComment
 		return await context.Infractions
 			.Where(i => i.UserId == currentUserId)
 			.Where(i => i.Type == InfractionType.Mute)
+			.Where(i => i.RemovedAt == null)
+			.Where(i => i.ActiveUntil > DateTimeOffset.UtcNow)
 			.AnyAsync(ct);
 	}
 

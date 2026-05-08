@@ -96,11 +96,11 @@ public sealed partial class IndexModel
 						: null;
 				})
 				.OfType<TimezoneEntry>()
-				.OrderBy(i => i.Text)
-				.Select(tz => new SelectListItem(tz.Text, tz.Value))
-				.ToList(),
+				.OrderBy(i => i.Text),
 			opt => opt.Duration = TimeSpan.FromHours(1)
-		);
+		)
+		.Select(tz => new SelectListItem(tz.Text, tz.Value))
+		.ToList();
 
 		return Page();
 	}
