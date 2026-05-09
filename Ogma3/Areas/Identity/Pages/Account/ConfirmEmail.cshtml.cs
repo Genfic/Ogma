@@ -8,12 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.Images;
 using Ogma3.Data.Shelves;
+using Ogma3.Services.GeneratedImagesService;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public sealed class ConfirmEmailModel(OgmaUserManager userManager, ApplicationDbContext context) : PageModel
+public sealed class ConfirmEmailModel
+	(OgmaUserManager userManager, ApplicationDbContext context, GeneratedImagesService imagesService) : PageModel
 {
 
 	// ReSharper disable once MemberCanBePrivate.Global
@@ -44,6 +47,15 @@ public sealed class ConfirmEmailModel(OgmaUserManager userManager, ApplicationDb
 		StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
 
 		if (!result.Succeeded) return Page();
+
+		// Setup default avatar
+		var avatar = new Image
+		{
+			Url = imagesService.GenerateAvatarUrl(user.UserName),
+		};
+		context.Images.Add(avatar);
+		user.Avatar = avatar;
+
 
 		// Setup default blacklists
 		var defaultBlockedRatings = await context.Ratings

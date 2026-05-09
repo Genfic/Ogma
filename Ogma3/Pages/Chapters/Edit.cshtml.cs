@@ -7,13 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using MinHash;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.ChapterService;
 using Routes.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context, MinHasher hasher) : PageModel
+public sealed class EditModel(
+	ApplicationDbContext context,
+	MinHasher hasher,
+	ChapterService chapterService,
+	ILogger<EditModel> logger) : PageModel
 {
 	[BindProperty]
 	public required PostData Input { get; set; }
@@ -79,6 +84,15 @@ public sealed class EditModel(ApplicationDbContext context, MinHasher hasher) : 
 	{
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
+
+		var signature = hasher.ComputeSignature(Input.Body.Trim());
+		var copies = await chapterService.IsPlagiarized(signature);
+
+		if (copies.Count > 0)
+		{
+			logger.LogWarning("User {UserId} tried to create a chapter on story {StoryId} that was similar to {@Copies}", uid, id, copies);
+			ModelState.AddModelError("Body", "This chapter seems plagiarized.");
+		}
 
 		if (!ModelState.IsValid) return Page();
 

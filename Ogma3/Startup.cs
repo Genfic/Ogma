@@ -21,6 +21,7 @@ using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Compression;
+using Ogma3.Infrastructure.Config;
 using Ogma3.Infrastructure.Config.RemoteSecrets;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Constraints;
@@ -145,6 +146,12 @@ public static class Startup
 		services
 			.AddOptions<PostmarkOptions>()
 			.Bind(configuration.GetSection(PostmarkOptions.Section))
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
+		services
+			.AddOptions<TimeOptions>()
+			.Bind(configuration.GetSection(TimeOptions.Section))
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 

@@ -13,8 +13,8 @@ using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.GeneratedImagesService;
 using Routes.Areas.Identity.Pages;
-using Utils;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -25,7 +25,8 @@ public sealed class ExternalLoginModel
 	UserManager<OgmaUser> userManager,
 	ApplicationDbContext context,
 	ILogger<ExternalLoginModel> logger,
-	IEmailSender emailSender)
+	IEmailSender emailSender,
+	GeneratedImagesService imagesService)
 	: PageModel
 {
 
@@ -152,7 +153,7 @@ public sealed class ExternalLoginModel
 				Email = email ?? Input.Email ?? "",
 				Avatar = new Image
 				{
-					Url = avatar ?? Gravatar.Generate(email ?? Input.Email ?? ""),
+					Url = avatar ?? imagesService.GenerateAvatarUrl(Input.UserName),
 				},
 			};
 			var result = await userManager.CreateAsync(user);

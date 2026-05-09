@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using FluentValidation;
-using MemoryPack;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,8 +14,8 @@ using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services.FileUploader;
-using Utils;
-using ZiggyCreatures.Caching.Fusion;
+using Ogma3.Services.GeneratedImagesService;
+using Ogma3.Services.TimeService;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -26,7 +25,8 @@ public sealed partial class IndexModel
 	SignInManager<OgmaUser> signInManager,
 	ImageUploader uploader,
 	OgmaConfig config,
-	IFusionCache cache) : PageModel
+	GeneratedImagesService imagesService,
+	ITimeService timeService) : PageModel
 {
 	[TempData] public string StatusMessage { get; set; } = "";
 	[BindProperty] public required InputModel Input { get; set; }
@@ -82,25 +82,9 @@ public sealed partial class IndexModel
 		if (model is null) return NotFound();
 		Input = model;
 
-		AvailableTimezones = cache.GetOrSet(
-			"AvailableTimezones",
-			TimeZoneInfo.GetSystemTimeZones()
-				.Select(tzi => {
-					if (tzi.HasIanaId)
-					{
-						return new TimezoneEntry(tzi.Id, tzi.DisplayName);
-					}
-
-					return TimeZoneInfo.TryConvertWindowsIdToIanaId(tzi.Id, out var ianaId)
-						? new TimezoneEntry(ianaId, tzi.DisplayName)
-						: null;
-				})
-				.OfType<TimezoneEntry>()
-				.OrderBy(i => i.Text),
-			opt => opt.Duration = TimeSpan.FromHours(1)
-		)
-		.Select(tz => new SelectListItem(tz.Text, tz.Value))
-		.ToList();
+		AvailableTimezones = timeService.AvailableTimezones
+			.Select(tz => new SelectListItem(tz.Text, tz.Value))
+			.ToList();
 
 		return Page();
 	}
@@ -155,7 +139,7 @@ public sealed partial class IndexModel
 
 			user.Avatar = new Image
 			{
-				Url = Gravatar.Generate(user.Email),
+				Url = imagesService.GenerateAvatarUrl(user.UserName),
 			};
 		}
 
@@ -196,9 +180,6 @@ public sealed partial class IndexModel
 		StatusMessage = "Your profile has been updated";
 		return RedirectToPage();
 	}
-
-	[MemoryPackable]
-	private sealed partial record TimezoneEntry(string Value, string Text);
 
 	[GeneratedRegex("(?:https|http)?(?:://)?(?:w{3}\\.)?(.+)")]
 	private partial Regex UrlRegex { get; }

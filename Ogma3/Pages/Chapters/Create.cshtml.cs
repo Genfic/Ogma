@@ -10,12 +10,18 @@ using Ogma3.Data.Chapters;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.ChapterService;
 using Utils.Extensions;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo, MinHasher hasher)
+public sealed class CreateModel(
+	ApplicationDbContext context,
+	NotificationsRepository notificationsRepo,
+	MinHasher hasher,
+	ChapterService chapterService,
+	ILogger<CreateModel> logger)
 	: PageModel
 {
 	[BindProperty]
@@ -81,6 +87,18 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
+		var signature = hasher.ComputeSignature(Input.Body.Trim());
+		var copies = await chapterService.IsPlagiarized(signature);
+
+		if (copies.Count > 0)
+		{
+			logger.LogWarning("User {UserId} tried to create a chapter on story {StoryId} that was similar to {@Copies}", uid, id, copies);
+			ModelState.AddModelError("Body", "This chapter seems plagiarized.");
+			return Page();
+		}
+
+		if (!ModelState.IsValid) return Page();
+
 		var storyDto = await context.Stories
 			.Where(s => s.Id == id && s.AuthorId == uid)
 			.Select(s => new
@@ -113,7 +131,7 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 			StoryId = storyDto.Id,
 			CommentThread = new CommentThread(),
 			WordCount = Input.Body.Words(),
-			Signature = hasher.ComputeSignature(Input.Body.Trim()),
+			Signature = signature,
 		};
 
 		var newWordCount = storyDto.CurrentWordCount + chapter.WordCount;

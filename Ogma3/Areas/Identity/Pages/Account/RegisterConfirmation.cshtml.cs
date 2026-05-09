@@ -9,13 +9,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
 using Ogma3.Services.TurnstileService;
+using Routes.Areas.Identity.Pages;
+using Index = Routes.Pages.Index;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
 public sealed class RegisterConfirmationModel(
-	UserManager<OgmaUser> userManager, 
-	IEmailSender emailSender, 
+	UserManager<OgmaUser> userManager,
+	IEmailSender emailSender,
 	ITurnstileService turnstile,
 	ILogger<RegisterConfirmationModel> logger)
 	: PageModel
@@ -29,7 +31,7 @@ public sealed class RegisterConfirmationModel(
 	{
 		if (email is null)
 		{
-			return Routes.Pages.Index.Get().Redirect(this);
+			return Index.Get().Redirect(this);
 		}
 
 		var user = await userManager.FindByEmailAsync(email);
@@ -42,7 +44,7 @@ public sealed class RegisterConfirmationModel(
 
 		return Page();
 	}
-	
+
 	[Required(ErrorMessage = "Turnstile response is required")]
 	[BindProperty(Name = "cf-turnstile-response")]
 	public string TurnstileResponse { get; set; } = null!;
@@ -53,13 +55,13 @@ public sealed class RegisterConfirmationModel(
 		returnUrl ??= Url.Content("~/");
 
 		if (!ModelState.IsValid) return Page();
-		
+
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);
 		if (!turnstileResponse.Success)
 		{
 			ModelState.TryAddModelError("Turnstile", "Incorrect Turnstile response");
-			logger.LogInformation("Register confirmation attempt with Turnstile errors: {Errors}", (object)turnstileResponse.ErrorCodes);
+			logger.LogInformation("Register confirmation attempt with Turnstile errors: {@Errors}", turnstileResponse.ErrorCodes);
 			return Page();
 		}
 
@@ -86,7 +88,7 @@ public sealed class RegisterConfirmationModel(
 
 		if (userManager.Options.SignIn.RequireConfirmedAccount)
 		{
-			return Routes.Areas.Identity.Pages.Account_RegisterConfirmation.Get(Email).Redirect(this);
+			return Account_RegisterConfirmation.Get(Email).Redirect(this);
 		}
 
 		return LocalRedirect(returnUrl);

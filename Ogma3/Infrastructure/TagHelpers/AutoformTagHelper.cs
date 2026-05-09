@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Reflection;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -56,32 +57,46 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 
 			foreach (var prop in propertyInfos)
 			{
-				var type = Type.GetTypeCode(prop.PropertyType) switch
+				var (type, meta) = Type.GetTypeCode(prop.PropertyType) switch
 				{
-					TypeCode.Int16 => "number",
-					TypeCode.Int32 => "number",
-					TypeCode.Int64 => "number",
-					TypeCode.UInt16 => "number",
-					TypeCode.UInt32 => "number",
-					TypeCode.UInt64 => "number",
-					TypeCode.Double => "number",
-					TypeCode.Decimal => "number",
-					TypeCode.Boolean => "checkbox",
-					TypeCode.DateTime => "date",
-					_ => "text",
+					TypeCode.Int16 => new FieldType("number"),
+					TypeCode.Int32 => new FieldType("number"),
+					TypeCode.Int64 => new FieldType("number"),
+					TypeCode.UInt16 => new FieldType("number"),
+					TypeCode.UInt32 => new FieldType("number"),
+					TypeCode.UInt64 => new FieldType("number"),
+					TypeCode.Double => new FieldType("number", new(){["step"] = "0.01"}),
+					TypeCode.Decimal => new FieldType("number", new(){["step"] = "0.01"}),
+					TypeCode.Boolean => new FieldType("checkbox"),
+					TypeCode.DateTime => new FieldType("date"),
+					_ => new FieldType("text"),
 				};
+
 				var label = prop.Name;
-				var value = prop.GetValue(obj);
+
+				var val = prop.GetValue(obj);
+				var value = val is IFormattable f
+					? f.ToString(null, CultureInfo.InvariantCulture)
+					: val?.ToString();
 
 				var hasDatalist = Datalists.TryGetValue(prop.Name, out var datalist);
-				var datalistAttr = hasDatalist ? $"""
-				                                  list="datalist-{prop.Name.ToLowerInvariant()}"
-				                                  """ : "";
+
+				if (hasDatalist)
+				{
+					meta ??= new()
+					{
+						["list"] = $"list=\"datalist-{prop.Name.ToLowerInvariant()}\"",
+					};
+				}
+
+				var attrs = meta?
+					.Select(kvp => $"{kvp.Key}=\"{kvp.Value}\"")
+					.Aggregate((a, b) => $"{a} {b}");
 
 				output.Content.AppendHtml("""<div class="o-form-group">""");
 				output.Content.AppendHtml($"""<label for="{objName}_{label}">{label.Humanize()}</label>""");
 				output.Content.AppendHtml(
-					$"""<input {datalistAttr} type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
+					$"""<input {attrs} type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
 				if (hasDatalist && datalist is IEnumerable items)
 				{
 					output.Content.AppendHtml($"""<datalist id="datalist-{prop.Name.ToLowerInvariant()}">""");
@@ -107,4 +122,6 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 			output.PostContent.AppendHtml(xcsrf);
 		}
 	}
+
+	private sealed record FieldType(string Type, Dictionary<string, string>? Meta = null);
 }

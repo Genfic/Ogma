@@ -37,6 +37,7 @@ public sealed class OgmaConfig
 	[AutoformCategory("Moderation")] public int PowDifficulty { get; set; } = 16;
 	[AutoformCategory("Moderation")] public int PowExpirySeconds { get; set; } = 10 * 60;
 	[AutoformCategory("Moderation")] public int PowMinimumSolveTimeSeconds { get; set; } = 2;
+	[AutoformCategory("Moderation")] public double PlagiarismThreshold { get; set; } = 0.7;
 }
 
 [Mapper]

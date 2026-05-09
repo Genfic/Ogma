@@ -14,8 +14,12 @@ public static partial class TestThree
 
 	private static async ValueTask<ReturnType> Handle(Query q, IConfiguration cfg, CancellationToken _)
 	{
+		await Task.CompletedTask;
+	#if DEBUG
 		var secrets = cfg.AsEnumerable().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
 		return TypedResults.Ok(secrets);
+	#else
+		return TypedResults.NotFound();
+	#endif
 	}
 }
