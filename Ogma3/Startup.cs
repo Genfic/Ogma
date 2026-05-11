@@ -2,6 +2,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ConfigBoundNET;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -21,8 +22,6 @@ using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Compression;
-using Ogma3.Infrastructure.Config;
-using Ogma3.Infrastructure.Config.RemoteSecrets;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Constraints;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
@@ -37,12 +36,10 @@ using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.ServiceDefaults;
 using Ogma3.Services.Initializers;
-using Ogma3.Services.Mailer;
 using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.S3Storage;
-using Ogma3.Services.TurnstileService;
 using Scalar.AspNetCore;
 using Sqids;
 using ZiggyCreatures.Caching.Fusion;
@@ -58,8 +55,6 @@ public static class Startup
 	{
 		var services = builder.Services;
 		var configuration = builder.Configuration;
-
-		builder.BindRemoteConfigOptions();
 
 		// Profiler
 		services.AddMiniProfiler().AddEntityFramework();
@@ -138,22 +133,7 @@ public static class Startup
 			.AddSingleton(new MinHasher(shingleSize: 5, shingleMode: ShingleMode.Words));
 
 		services
-			.AddOptions<TurnstileSettings>()
-			.Bind(configuration.GetSection(TurnstileSettings.Section))
-			.ValidateDataAnnotations()
-			.ValidateOnStart();
-
-		services
-			.AddOptions<PostmarkOptions>()
-			.Bind(configuration.GetSection(PostmarkOptions.Section))
-			.ValidateDataAnnotations()
-			.ValidateOnStart();
-
-		services
-			.AddOptions<TimeOptions>()
-			.Bind(configuration.GetSection(TimeOptions.Section))
-			.ValidateDataAnnotations()
-			.ValidateOnStart();
+			.AddConfigBoundSections(configuration, true);
 
 		// Argon2 hasher
 		services

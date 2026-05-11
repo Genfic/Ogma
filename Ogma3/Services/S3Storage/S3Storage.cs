@@ -8,12 +8,6 @@ public static class S3Storage
 {
 	public static IServiceCollection AddS3Storage(this IServiceCollection services, IConfiguration config)
 	{
-		services
-			.AddOptions<S3StorageOptions>()
-			.Bind(config.GetSection("B2"))
-			.ValidateDataAnnotations()
-			.ValidateOnStart();
-
 		services.AddSingleton<IAmazonS3>(s => {
 			var options = s.GetRequiredService<IOptions<S3StorageOptions>>().Value;
 

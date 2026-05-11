@@ -1,13 +1,10 @@
-using System.ComponentModel.DataAnnotations;
+using ConfigBoundNET;
 
 namespace Ogma3.Services.TurnstileService;
 
-public sealed class TurnstileSettings
+[ConfigSection("Turnstile")]
+public sealed partial class TurnstileSettings
 {
-	public const string Section = "Turnstile";
-
-	[Required]
 	public required string Secret { get; init; }
-	[Required]
 	public required string SiteKey { get; init; }
 }

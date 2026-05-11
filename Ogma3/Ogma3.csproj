@@ -48,6 +48,10 @@
 		<PackageReference Include="Atulin.SealAnalyzer" />
 		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="Bogus" />
+		<PackageReference Include="ConfigBoundNET">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="FluentValidation" PrivateAssets="all" />
 		<PackageReference Include="FluentValidation.AspNetCore" PrivateAssets="all" />
 		<PackageReference Include="Humanizer.Core" PrivateAssets="all" />

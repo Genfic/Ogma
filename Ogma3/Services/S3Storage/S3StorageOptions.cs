@@ -1,6 +1,9 @@
+using ConfigBoundNET;
+
 namespace Ogma3.Services.S3Storage;
 
-public sealed class S3StorageOptions
+[ConfigSection("B2")]
+public sealed partial class S3StorageOptions
 {
 	public required string ServiceUrl { get; init; }
 	public required string KeyId { get; init; }

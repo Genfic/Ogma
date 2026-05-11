@@ -1,9 +1,10 @@
+using Immediate.Validations.Shared;
 using InfisicalConfiguration;
 using Serilog;
 
 namespace Ogma3.Infrastructure.Config.RemoteSecrets;
 
-public static class RemoteSecretsExtensions
+public static partial class RemoteSecretsExtensions
 {
 	extension(IHostApplicationBuilder builder)
 	{
@@ -15,6 +16,8 @@ public static class RemoteSecretsExtensions
 				Log.Error("Infisical configuration not found");
 				return builder.Configuration;
 			}
+
+			ValidationException.ThrowIfInvalid(opts);
 
 			var auth = new InfisicalAuthBuilder()
 				.SetUniversalAuth(opts.MachineId, opts.ClientSecret)
@@ -29,24 +32,14 @@ public static class RemoteSecretsExtensions
 
 			return builder.Configuration.AddInfisical(config);
 		}
-
-		public IHostApplicationBuilder BindRemoteConfigOptions()
-		{
-			builder.Services
-				.AddOptions<Workers>()
-				.Bind(builder.Configuration.GetSection("Workers"))
-				.ValidateDataAnnotations()
-				.ValidateOnStart();
-
-			return builder;
-		}
 	}
 
-	private sealed record InfisicalOptions
+	[Validate]
+	private sealed partial record InfisicalOptions
 	(
-		string ProjectId,
-		string MachineId,
-		string? Env,
-		string ClientSecret
-	);
+		[property: NotEmpty] string ProjectId,
+		[property: NotEmpty] string MachineId,
+		[property: NotEmpty] string ClientSecret,
+		string? Env
+	) : IValidationTarget<InfisicalOptions>;
 }

@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations;
+using ConfigBoundNET;
 
 namespace Ogma3.Infrastructure.Config;
 
-public sealed class TimeOptions
+[ConfigSection("Time")]
+public sealed partial class TimeOptions
 {
-	public const string Section = "Time";
-
-	[Required]
 	public required bool UseBuiltInTimezoneStyle { get; init; }
 }

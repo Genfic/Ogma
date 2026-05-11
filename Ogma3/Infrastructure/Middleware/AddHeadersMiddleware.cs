@@ -1,3 +1,4 @@
+using ConfigBoundNET;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
@@ -25,15 +26,13 @@ public static class AddHeadersMiddlewareExtensions
 	public static TBuilder UseAddHeaders<TBuilder>(this TBuilder builder)  where TBuilder : IHostApplicationBuilder
 	{
 		builder.Services
-			.AddSingleton<AddHeadersMiddleware>()
-			.AddOptions<AddHeadersOptions>()
-			.Bind(builder.Configuration.GetSection("AdditionalHeaders"))
-			.ValidateOnStart();
+			.AddSingleton<AddHeadersMiddleware>();
 		return builder;
 	}
 }
 
-public sealed class AddHeadersOptions
+[ConfigSection("AdditionalHeaders")]
+public sealed partial class AddHeadersOptions
 {
 	[UsedImplicitly]
 	public Dictionary<string, string> Headers { get; init; } = [];

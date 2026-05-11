@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
+using ConfigBoundNET;
 
 namespace Ogma3.Infrastructure.Config.RemoteSecrets;
 
-public sealed class Workers
+[ConfigSection("Workers")]
+public sealed partial class Workers
 {
-	[Required]
 	public required string AvatarServiceSignatureKey { get; init; }
 }

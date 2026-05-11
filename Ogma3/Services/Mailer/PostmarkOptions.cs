@@ -1,14 +1,10 @@
-using System.ComponentModel.DataAnnotations;
-using JetBrains.Annotations;
+using ConfigBoundNET;
 
 namespace Ogma3.Services.Mailer;
 
-public sealed class PostmarkOptions
+[ConfigSection("Postmark")]
+public sealed partial class PostmarkOptions
 {
-	public const string Section = "Postmark";
-
-	[Required]
-	public required string Key { get; [UsedImplicitly] init; }
-	[Required]
-	public required string Domain { get; [UsedImplicitly] init; }
+	public required string Key { get; init; }
+	public required string Domain { get; init; }
 }
