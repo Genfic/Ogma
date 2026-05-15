@@ -87,6 +87,12 @@
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
 		<PackageReference Include="NetEscapades.EnumGenerators" PrivateAssets="all" />
+		<PackageReference Include="NetVips" />
+		<PackageReference Include="NetVips.Native.linux-arm64" />
+		<PackageReference Include="NetVips.Native.linux-musl-arm64" />
+		<PackageReference Include="NetVips.Native.linux-musl-x64" />
+		<PackageReference Include="NetVips.Native.linux-x64" />
+		<PackageReference Include="NetVips.Native.win-x64" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" PrivateAssets="all" />
 		<PackageReference Include="Postmark" PrivateAssets="all" />
 		<PackageReference Include="Riok.Mapperly" />
@@ -97,7 +103,6 @@
 		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
 		<PackageReference Include="Serilog.Sinks.Seq" PrivateAssets="all" />
 		<PackageReference Include="SimpleBase" />
-		<PackageReference Include="SixLabors.ImageSharp" PrivateAssets="all" />
 		<PackageReference Include="Sqids" PrivateAssets="all" />
 		<PackageReference Include="stbychkov.AutoLoggerMessage" />
 		<PackageReference Include="System.ServiceModel.Syndication" PrivateAssets="all" />

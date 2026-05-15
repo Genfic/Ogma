@@ -1,19 +1,21 @@
 using Amazon.S3;
 using Amazon.S3.Model;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
+using NetVips;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Logging.OperationTiming;
 using Ogma3.Services.S3Storage;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Webp;
-using SixLabors.ImageSharp.Processing;
 
 namespace Ogma3.Services.FileUploader;
 
 [RegisterSingleton]
+[UsedImplicitly]
 public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions> options, ILogger<ImageUploader> logger) : IFileUploader
 {
 	private readonly S3StorageOptions _s3Options = options.Value;
+
+	private const int MaxFrames = 100;
 
 	/// <inheritdoc cref="IFileUploader"/>
 	/// <exception cref="ArgumentException">Thrown when the given file is null or empty</exception>
@@ -23,7 +25,8 @@ public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions>
 		string folder,
 		int? width = null,
 		int? height = null,
-		int tries = 5
+		int tries = 5,
+		bool allowAnimated = false
 	)
 	{
 		var name = Guid.NewGuid().ToString();
@@ -39,7 +42,8 @@ public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions>
 		string name,
 		int? width = null,
 		int? height = null,
-		int tries = 5
+		int tries = 5,
+		bool allowAnimated = false
 	)
 	{
 		if (file is not { Length: > 0 })
@@ -47,7 +51,7 @@ public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions>
 			throw new ArgumentException("File cannot be null or empty");
 		}
 
-		await using var outputMs = await ProcessImage(file, width, height);
+		await using var outputMs = await ProcessImageVips(file, width, height, allowAnimated);
 		outputMs.Position = 0;
 		var bytes = outputMs.ToArray();
 
@@ -95,46 +99,34 @@ public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions>
 		await s3Client.DeleteObjectAsync(request, cancellationToken);
 	}
 
-	private async Task<MemoryStream> ProcessImage(IFormFile file, int? width = null, int? height = null)
+	private async Task<MemoryStream> ProcessImageVips(IFormFile file, int? width, int? height, bool allowAnimated)
 	{
-		// Load the image to a memory stream
-		await using var inputMs = new MemoryStream();
-		await file.CopyToAsync(inputMs);
-		inputMs.Seek(0, SeekOrigin.Begin);
+		using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
-		using var img = await Image.LoadAsync(inputMs);
+		await using var stream = file.OpenReadStream();
+		var bytes = new byte[stream.Length];
+		await stream.ReadExactlyAsync(bytes, 0, (int)stream.Length);
 
-		// Remove all but the second frame if the image is animated
-		if (img.Frames.Count > 1)
-		{
-			img.Frames.RemoveFrame(0);
+		var w = width ?? height ?? throw new ArgumentException($"At least one of {nameof(width)} and {nameof(height)} should not be null");
+		var h = height ?? w;
 
-			while (img.Frames.Count > 1)
-			{
-				img.Frames.RemoveFrame(1);
-			}
-		}
+		return await Task.Run(() => {
+			using var processed = Image.ThumbnailBuffer(bytes,
+				width: w,
+				height: h,
+				size: Enums.Size.Down,
+				crop: Enums.Interesting.Centre,
+				optionString: allowAnimated ? $"[n={MaxFrames}]" : "[n=1]"
+			);
 
-		if ((width ?? height) is { } w && (height ?? width) is { } h && (img.Width > w || img.Height > h))
-		{
-			using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
+			var saveOptions = processed.Contains("n-pages") && (processed.Get("n-pages") as int?) is > 1
+				? ".webp[Q=82,strip=true,loop=0]"
+				: ".webp[Q=85,strip=true]";
 
-			// Load and resize the image
-			img.Mutate(i => i.Resize(new ResizeOptions
-			{
-				Size = new Size(w, h),
-				Mode = ResizeMode.Crop,
-				Position = AnchorPositionMode.Center,
-			}));
-		}
-
-		// Strip EXIF metadata
-		img.Metadata.ExifProfile = null;
-
-		// Save it as WEBP
-		var outputMs = new MemoryStream();
-		await img.SaveAsync(outputMs, new WebpEncoder());
-
-		return outputMs;
+			var outStream = new MemoryStream();
+			processed.WriteToStream(outStream, saveOptions);
+			outStream.Position = 0;
+			return outStream;
+		});
 	}
 }

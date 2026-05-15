@@ -49,7 +49,7 @@ public sealed partial class IndexModel
 		{
 			RuleFor(x => x.Avatar!)
 				.FileSmallerThan(CTConfig.Files.AvatarMaxWeight)
-				.FileHasExtension(".jpg", ".jpeg", ".png", ".webp")
+				.FileHasExtension(".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif")
 				.When(x => x.Avatar is not null);
 			RuleFor(x => x.Title)
 				.MaximumLength(CTConfig.User.MaxTitleLength);

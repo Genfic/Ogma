@@ -2,21 +2,22 @@ namespace Ogma3.Services.FileUploader;
 
 public interface IFileUploader
 {
-	/// <inheritdoc cref="Upload(IFormFile, string, int?, int?, int)"/>
-	Task<FileUploadResult> Upload(IFormFile file, string folder, int? width = null, int? height = null, int tries = 5);
+	/// <inheritdoc cref="Upload(IFormFile, string, int?, int?, int, bool)"/>
+	Task<FileUploadResult> Upload(IFormFile file, string folder, int? width = null, int? height = null, int tries = 5, bool allowAnimated = false);
 
 	/// <summary>
 	/// Uploads a given file to some persistent storage
 	/// </summary>
-	/// <inheritdoc cref="Upload(IFormFile, string, int?, int?, int)"/>
+	/// <inheritdoc cref="Upload(IFormFile, string, int?, int?, int, bool)"/>
 	/// <param name="file">File to be uploaded</param>
 	/// <param name="folder">Folder – or a whole path – to upload the file to on the storage</param>
 	/// <param name="name">Name of the file</param>
 	/// <param name="width">Desired width of the uploaded image</param>
 	/// <param name="height">Desired height of the uploaded image</param>
 	/// <param name="tries">The number of times the upload should be attempted</param>
+	/// <param name="allowAnimated">If set to false (default) removes all but the first frame from animated images and processes it as a static image</param>
 	/// <returns>`FileUploaderResult` object</returns>
-	Task<FileUploadResult> Upload(IFormFile file, string folder, string name, int? width = null, int? height = null, int tries = 5);
+	Task<FileUploadResult> Upload(IFormFile file, string folder, string name, int? width = null, int? height = null, int tries = 5, bool allowAnimated = false);
 
 	/// <summary>
 	/// Delete the file from the blob storage

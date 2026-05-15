@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Ogma3;
 using Ogma3.Data;
+using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Config.RemoteSecrets;
 using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
@@ -32,14 +33,15 @@ Log.Logger = new LoggerConfiguration()
 	.MinimumLevel.Debug()
 	.CreateLogger();
 
+NetVipsHelpers.EnsureInitialized();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
 	.AddEnvironmentVariables("ogma_")
 	.AddJsonFile("appsettings.json5")
-	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true)
-	// .AddEnvironmentVariables()
-	;
+	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true);
+
 if (builder.Environment.IsDevelopment())
 {
 	builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));

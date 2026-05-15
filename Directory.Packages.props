@@ -55,7 +55,13 @@
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.3.1" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" Version="1.3.1" />
     <PackageVersion Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-preview.3" />
+    <PackageVersion Include="NetVips" Version="3.2.0" />
+    <PackageVersion Include="NetVips.Native.linux-arm64" Version="8.18.2" />
+    <PackageVersion Include="NetVips.Native.linux-musl-arm64" Version="8.18.2" />
+    <PackageVersion Include="NetVips.Native.linux-musl-x64" Version="8.18.2" />
+    <PackageVersion Include="NetVips.Native.linux-x64" Version="8.18.2" />
+    <PackageVersion Include="NetVips.Native.win-x64" Version="8.18.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-preview.4-ci.20260428T085825" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.3" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.3" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.2" />
@@ -71,7 +77,6 @@
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageVersion Include="SimpleBase" Version="5.6.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="[3.1.12]" />
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.15" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-preview.4.26230.115" />
