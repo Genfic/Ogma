@@ -23,18 +23,24 @@
 		<EnumGenerator_EnableUsageAnalyzers>true</EnumGenerator_EnableUsageAnalyzers>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
+		<ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
+	</PropertyGroup>
+
 	<Target Name="ExportCTConfig" BeforeTargets="Build">
-		<PropertyGroup>
-			<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
-		</PropertyGroup>
-		<Exec Command="dotnet run &quot;$(ToolsDir)\GenerateCTConfig.cs&quot; -- &quot;$(MSBuildProjectDirectory)\Data\CTConfig.cs&quot; &quot;$(MSBuildProjectDirectory)\FrontendCode\typescript\generated&quot;" WorkingDirectory="$(ToolsDir)" />
+		<Exec Command='dotnet run "$(ToolsDir)\GenerateCTConfig.cs" -- "$(ProjectDir)\Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
+		      WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
 	<Target Name="CreateIconSpritesheet" BeforeTargets="Build">
-		<PropertyGroup>
-			<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
-		</PropertyGroup>
-		<Exec Command="dotnet run &quot;$(ToolsDir)\GenerateSpritesheet.cs&quot; -- &quot;$(MSBuildProjectDirectory)\seed.json5&quot; &quot;$(MSBuildProjectDirectory)\wwwroot\spritesheet.svg&quot;" WorkingDirectory="$(ToolsDir)" />
+		<Exec Command='dotnet run "$(ToolsDir)\GenerateSpritesheet.cs" -- "$(ProjectDir)\seed.json5" "$(ProjectDir)\wwwroot\spritesheet.svg"'
+		      WorkingDirectory="$(ToolsDir)" />
+	</Target>
+
+	<Target Name="CompressImages" BeforeTargets="Build">
+		<Exec Command='dotnet run "$(ToolsDir)\CompressImages.cs" -- "$(ProjectDir)\wwwroot\img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)\wwwroot\img"'
+		      WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
 	<ItemGroup>
