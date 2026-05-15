@@ -31,6 +31,8 @@ var genfic = builder
 	.AddProject<Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
 	.WithExternalHttpEndpoints()
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
+	.WithEnvironment("OTEL_DOTNET_EXPERIMENTAL_EFCORE_ENABLE_TRACE_DB_QUERY_PARAMETERS", "true")
+	.WithEnvironment("OTEL_DOTNET_AUTO_ENTITYFRAMEWORKCORE_SET_DBSTATEMENT_FOR_TEXT", "true")
 	.WithReference(database)
 	.WaitFor(database)
 	.WithReference(garnet)

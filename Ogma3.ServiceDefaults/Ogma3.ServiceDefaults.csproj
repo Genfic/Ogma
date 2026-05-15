@@ -7,13 +7,14 @@
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App"/>
 
-        <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
-        <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" />
-        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" PrivateAssets="all" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" PrivateAssets="all" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" PrivateAssets="all" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" PrivateAssets="all" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" PrivateAssets="all" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" PrivateAssets="all" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" PrivateAssets="all" />
     </ItemGroup>
 
 </Project>
