@@ -9,11 +9,11 @@
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.Docker" Version="13.3.2" />
-    <PackageVersion Include="Aspire.Hosting.Garnet" Version="13.3.2" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.3.2" />
-    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.3.2" />
-    <PackageVersion Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.3.2" />
+    <PackageVersion Include="Aspire.Hosting.Docker" Version="13.3.3" />
+    <PackageVersion Include="Aspire.Hosting.Garnet" Version="13.3.3" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.3.3" />
+    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.3.3" />
+    <PackageVersion Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.3.3" />
     <PackageVersion Include="Atulin.AutoDbSet" Version="1.1.3" />
     <PackageVersion Include="Atulin.InfisicalConfiguration" Version="0.2.1" />
     <PackageVersion Include="Atulin.MarkdigExtensions" Version="1.2.0" />
@@ -61,7 +61,7 @@
     <PackageVersion Include="NetVips.Native.linux-musl-x64" Version="8.18.2" />
     <PackageVersion Include="NetVips.Native.linux-x64" Version="8.18.2" />
     <PackageVersion Include="NetVips.Native.win-x64" Version="8.18.2" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-preview.4-ci.20260428T085825" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[11.0.0-preview.4-ci.20260428T085825]" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.3" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.3" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.2" />
