@@ -1,5 +1,6 @@
 @page
 @using Ogma3.Data.Infractions
+@using Routes.Areas.Admin.Pages
 @model InfractionsModel
 @{
     ViewData["Title"] = "Infractions";
@@ -7,26 +8,32 @@
 }
 
 <table class="o-table">
-    <tr>
-        <th>Username</th>
-        <th>Type</th>
-        <th>Reason</th>
-        <th>Until</th>
-        <th>Issuer</th>
-        <th>Lifted</th>
-        <th>Lifter</th>
-    </tr>
-    @foreach (var infraction in Model.Infractions)
-    {
-	    var remover = infraction is { RemovedAt: not null, RemovedById: null } ? "[Automatic]" : infraction.RemovedByUserName;
-        <tr>
-            <td>@infraction.UserUserName [@infraction.UserId]</td>
-            <td>@infraction.Type.ToStringFast()</td>
-            <td>@infraction.Reason</td>
-            <td>@infraction.ActiveUntil.ToString("u")</td>
-            <td>@infraction.IssuedByUserName</td>
-            <td>@infraction.RemovedAt?.ToString("u")</td>
-            <td>@remover</td>
-        </tr>
-    }
+	<tr>
+		<th>Username</th>
+		<th>Type</th>
+		<th>Reason</th>
+		<th>Until</th>
+		<th>Issuer</th>
+		<th>Lifted</th>
+		<th>Lifter</th>
+	</tr>
+	@foreach (var infraction in Model.Infractions)
+	{
+		var remover = infraction is { RemovedAt: not null, RemovedById: null } ? "[Automatic]" : infraction.RemovedByUserName;
+		<tr>
+			<td>
+				<a for-route="@Users_Index.Get(infraction.UserUserName)">
+					@infraction.UserUserName
+				</a>
+			</td>
+			<td>@infraction.Type.ToStringFast()</td>
+			<td>@infraction.Reason</td>
+			<td>@infraction.ActiveUntil.ToString("u")</td>
+			<td>@infraction.IssuedByUserName</td>
+			<td>@infraction.RemovedAt?.ToString("u")</td>
+			<td>@remover</td>
+		</tr>
+	}
 </table>
+
+<partial name="_Pagination" model="Model.Pagination"/>

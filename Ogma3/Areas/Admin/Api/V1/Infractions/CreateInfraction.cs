@@ -57,7 +57,7 @@ public static partial class CreateInfraction
 		var action = new ModeratorAction
 		{
 			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.Infractions.Create(uid, modName, infraction.Id, reason, type),
+			Description = ModeratorActionTemplates.Infractions.Create(userId, modName, infraction.Id, reason, type),
 		};
 		context.ModeratorActions.Add(action);
 

@@ -152,7 +152,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		await context.SaveChangesAsync();
 	}
 
-	private async Task SeedUsers(ApplicationDbContext context, IUserService userService)
+	private static async Task SeedUsers(ApplicationDbContext context, IUserService userService)
 	{
 		if (await Any<OgmaUser>(context, u => u.Email != Email)) return;
 

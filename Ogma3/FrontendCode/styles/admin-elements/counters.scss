@@ -1,6 +1,8 @@
 @use "../mixins/active-border" as ab;
 
 .counters {
+	--pad: 2rem;
+
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 12rem);
 	gap: 1rem;
@@ -10,11 +12,19 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 2rem;
+		padding: var(--pad);
 		@include ab.active-border;
+
+		&:hover {
+			.chart {
+				opacity: .75;
+			}
+		}
 
 		* {
 			cursor: default;
+			text-shadow: 0 0 10px black;
+			transition: opacity .2s ease-in-out;
 		}
 
 		.name {
@@ -25,9 +35,18 @@
 		}
 
 		.value {
-			font-size: 2rem;
+			font-size: 3rem;
 			line-height: 2rem;
-			font-weight: 565;
+			font-weight: 825;
+			margin-top: .5rem;
+		}
+
+		.chart {
+			width: calc(100% + var(--pad) * 2);
+			height: calc(100% + var(--pad) * 2);
+			margin: calc(-1 * var(--pad));
+			z-index: -1;
+			opacity: .5;
 		}
 	}
 }

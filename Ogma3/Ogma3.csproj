@@ -44,6 +44,10 @@
 	</Target>
 
 	<ItemGroup>
+		<EmbeddedResource Include="$(ProjectDir)\Queries\**\*.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis" />
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
 		<PackageReference Include="Atulin.InfisicalConfiguration" />
@@ -52,6 +56,10 @@
 		<PackageReference Include="Atulin.SealAnalyzer" />
 		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="Bogus" />
+		<PackageReference Include="Chorn.EmbeddedResourceAccessGenerator">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="ConfigBoundNET">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

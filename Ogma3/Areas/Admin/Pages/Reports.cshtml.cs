@@ -28,7 +28,7 @@ public sealed class Reports(ApplicationDbContext context, CommentRedirector redi
 			.ToListAsync();
 		var count = await context.Reports.CountAsync();
 
-		Pagination = new Pagination
+		Pagination = new()
 		{
 			CurrentPage = page,
 			ItemCount = count,

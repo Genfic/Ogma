@@ -5,6 +5,7 @@
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Services
+@using Routes.Areas.Admin.Pages
 @using Routes.Pages
 @model ProfileBar
 @inject IAntiforgery Antiforgery
@@ -85,9 +86,7 @@
 
 					@if (User.IsInRole(RoleNames.Admin))
 					{
-						<a asp-area="Admin"
-						   asp-page="/Users"
-						   asp-route-name="@Model.UserName"
+						<a for-route="@Users_Index.Get(Model.UserName)"
 						   class="item active">
 							<icon name="ic:outline-admin-panel-settings"></icon>
 							Manage

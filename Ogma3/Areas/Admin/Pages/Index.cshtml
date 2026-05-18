@@ -9,15 +9,56 @@
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
+<h2>At a glance</h2>
+
+<br>
+
 <div class="counters">
 	@foreach (var item in Model.Counts)
 	{
 		<div class="counter">
 			<span class="name">@item.Name</span>
 			<span class="value">@item.Count</span>
+
+			@if (Model.DailyCounts.TryGetValue(item.Name, out var data))
+			{
+				<chart
+					data="@(data.Select(i => (double)i).ToList())"
+					class="chart"
+					fill-area="true"
+					line-color="var(--accent)"
+					fill-color="var(--accent-50)"
+					padding="0"></chart>
+			}
+			else
+			{
+
+				<chart
+					data="@(Enumerable.Range(1, 15).Select(_ => (double)Random.Shared.Next(0, 100)).ToList())"
+					class="chart"
+					fill-area="true"
+					line-color="var(--accent)"
+					fill-color="var(--accent-50)"
+					padding="0"></chart>
+			}
 		</div>
 	}
 </div>
+
+<br>
+
+<h2>Latest actions</h2>
+
+<br>
+
+<ul class="actions">
+	@foreach (var item in Model.LatestActions)
+	{
+		<li>
+			<markdown preset="Basic">@item</markdown>
+		</li>
+	}
+</ul>
 
 <br>
 

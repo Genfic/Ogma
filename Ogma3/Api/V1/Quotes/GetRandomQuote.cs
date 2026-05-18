@@ -23,12 +23,7 @@ public static partial class GetRandomQuote
 
 	private static async ValueTask<ReturnType> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
 	{
-		var quote = await context.Database.SqlQueryRaw<QuoteDto>("""
-		    SELECT q."Author", q."Body"
-		    FROM "Quotes" q
-		    TABLESAMPLE SYSTEM_ROWS(1)
-		    LIMIT 1
-		    """)
+		var quote = await context.Database.SqlQueryRaw<QuoteDto>(EmbeddedResourceQueries.GetRandomQoute_sql.LoadSql())
 			.FirstOrDefaultAsync(cancellationToken);
 
 		return quote is null ? TypedResults.NotFound() : TypedResults.Ok(quote);
