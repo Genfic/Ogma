@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
+
+		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<EnumGenerator_EnableUsageAnalyzers>true</EnumGenerator_EnableUsageAnalyzers>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Atulin.AutoDbSet" PrivateAssets="all" />
+		<PackageReference Include="Atulin.NpgsqlSourceGenerator" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" PrivateAssets="all" />
+		<PackageReference Include="NetEscapades.EnumGenerators" PrivateAssets="all" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" PrivateAssets="all" />
+		<PackageReference Include="Serilog" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Utils\Utils.csproj" />
+	</ItemGroup>
+</Project>

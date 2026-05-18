@@ -14,9 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.EntityFrameworkCore;
 using MinHash;
-using NpgSqlGenerators;
 using Ogma3.Data;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
@@ -69,13 +67,7 @@ public static class Startup
 			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionOptions.Quality = 5);
 
 		// Database
-		var conn = configuration.GetConnectionString("ogma3-db");
-		services
-			.AddDbContext<ApplicationDbContext>(options => options
-				.UseNpgsql(conn, o => o
-					.MapPostgresEnums()
-					.SetPostgresVersion(18, 0))
-			);
+		services.AddDbContext<ApplicationDbContext>();
 
 		if (builder.Environment.IsDevelopment())
 		{

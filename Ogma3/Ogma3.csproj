@@ -29,7 +29,7 @@
 	</PropertyGroup>
 
 	<Target Name="ExportCTConfig" BeforeTargets="Build">
-		<Exec Command='dotnet run "$(ToolsDir)\GenerateCTConfig.cs" -- "$(ProjectDir)\Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
+		<Exec Command='dotnet run "$(ToolsDir)\GenerateCTConfig.cs" -- "$(ProjectDir)\..\Ogma3.Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
 		      WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
@@ -46,11 +46,9 @@
 	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis" />
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
-		<PackageReference Include="Atulin.AutoDbSet" PrivateAssets="all" />
 		<PackageReference Include="Atulin.InfisicalConfiguration" />
 		<PackageReference Include="Atulin.MarkdigExtensions" PrivateAssets="all" />
 		<PackageReference Include="Atulin.MinHash" />
-		<PackageReference Include="Atulin.NpgsqlSourceGenerator" PrivateAssets="all" />
 		<PackageReference Include="Atulin.SealAnalyzer" />
 		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="Bogus" />
@@ -118,6 +116,7 @@
 		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj" />
 		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\Utils\Utils.csproj" />
 	</ItemGroup>

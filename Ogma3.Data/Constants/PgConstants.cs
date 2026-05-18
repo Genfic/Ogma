@@ -1,0 +1,24 @@
+namespace Ogma3.Data.Constants;
+
+public static class PgConstants
+{
+	public const string CurrentTimestamp = "CURRENT_TIMESTAMP";
+	public const string DuplicatePrimaryKeyError = "23505";
+	public const string EmptyArray = "'{}'";
+
+	public static class Types
+	{
+		public const string IntArray = "integer[]";
+	}
+
+	public static class IndexTypes
+	{
+		public const string Gin = "gin";
+	}
+
+	public static class CollationNames
+	{
+		public const string CaseInsensitive = "nocase";
+		public const string CaseInsensitiveNoAccent = "nocase-noaccent";
+	}
+}
