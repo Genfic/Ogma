@@ -61,3 +61,20 @@ tasks:
       - task: db-migrate
       - task: db-up
       - task: db-compile
+
+
+  _build-script:
+    internal: true
+    dir: ./.scripts
+    cmd: dotnet publish "{{.ITEM}}" -o ./out
+
+  build-scripts:
+    dir: ./.scripts
+    vars:
+      SCRIPTS:
+        sh: ls *.cs
+    deps:
+      - for: { var: SCRIPTS, split: "\n" }
+        task: _build-script
+        vars:
+          ITEM: "{{.ITEM}}"

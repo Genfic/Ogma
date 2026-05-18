@@ -25,21 +25,32 @@
 
 	<PropertyGroup>
 		<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
+		<ToolsOut>$(ToolsDir)\out</ToolsOut>
 		<ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<Script Include="$(ToolsDir)\GenerateCTConfig.cs" />
+		<Script Include="$(ToolsDir)\GenerateSpritesheet.cs" />
+		<Script Include="$(ToolsDir)\CompressImages.cs" />
+	</ItemGroup>
+
+	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)\%(Filename).dll'">
+		<Exec Command='dotnet publish "%(Script.FullPath)" --output "$(ToolsOut)"' WorkingDirectory="$(ToolsDir)" />
+	</Target>
+
 	<Target Name="ExportCTConfig" BeforeTargets="Build">
-		<Exec Command='dotnet run "$(ToolsDir)\GenerateCTConfig.cs" -- "$(ProjectDir)\..\Ogma3.Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
+		<Exec Command='dotnet "$(ToolsOut)\GenerateCTConfig.dll" "$(ProjectDir)\..\Ogma3.Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
 		      WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
 	<Target Name="CreateIconSpritesheet" BeforeTargets="Build">
-		<Exec Command='dotnet run "$(ToolsDir)\GenerateSpritesheet.cs" -- "$(ProjectDir)\seed.json5" "$(ProjectDir)\wwwroot\spritesheet.svg"'
+		<Exec Command='dotnet "$(ToolsOut)\GenerateSpritesheet.dll" "$(ProjectDir)\seed.json5" "$(ProjectDir)\wwwroot\spritesheet.svg"'
 		      WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
 	<Target Name="CompressImages" BeforeTargets="Build">
-		<Exec Command='dotnet run "$(ToolsDir)\CompressImages.cs" -- "$(ProjectDir)\wwwroot\img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)\wwwroot\img"'
+		<Exec Command='dotnet "$(ToolsOut)\CompressImages.dll" "$(ProjectDir)\wwwroot\img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)\wwwroot\img"'
 		      WorkingDirectory="$(ToolsDir)" />
 	</Target>
 

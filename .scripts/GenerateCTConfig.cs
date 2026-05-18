@@ -1,6 +1,5 @@
 #!/usr/bin/dotnet run
 #:package Microsoft.CodeAnalysis.CSharp@5.*
-#:property PublishAot = false
 
 using System.Diagnostics;
 using System.Text;
