@@ -1,8 +1,8 @@
 import { exists, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { BunPlugin } from "bun";
-import dedent from "dedent";
 import { pascalCase } from "es-toolkit";
+import { dedent } from "../helpers/string-helpers";
 import baseIcon from "../templates/base-icon.tsx?raw";
 
 export interface IconOptions {
@@ -58,10 +58,10 @@ export function iconPlugin(options: IconOptions): BunPlugin {
 
 					const data: Icon = await res.json();
 
-					const tsx = dedent(`
+					const tsx = dedent`
 						import { createIcon } from "./${BASE_FILE.replace(".tsx", "")}";
 						export default createIcon(${data.width}, ${data.height}, \`${data.icons[icon]?.body}\`);
-					`);
+					`;
 
 					await file.write(tsx);
 				})();
