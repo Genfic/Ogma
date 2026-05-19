@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<PackageId>Ogma3.MigrationService</PackageId>
+		<Authors>Ogma3</Authors>
+		<Company>Ogma3</Company>
+		<Product>Ogma3.MigrationService</Product>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" PrivateAssets="all" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj" />
+		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />
+	</ItemGroup>
+</Project>
