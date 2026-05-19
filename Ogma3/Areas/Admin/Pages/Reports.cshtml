@@ -15,6 +15,7 @@
 		<th>Reporter</th>
 		<th>Date</th>
 		<th>Description</th>
+		<th>Status</th>
 	</tr>
 	@foreach (var report in Model.ReportsList)
 	{
@@ -49,6 +50,7 @@
 			<td>
 				<markdown preset="Basic">@report.Reason</markdown>
 			</td>
+			<td>@report.Status.ToStringFast()</td>
 		</tr>
 	}
 </table>

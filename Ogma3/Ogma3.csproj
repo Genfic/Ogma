@@ -92,7 +92,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" PrivateAssets="all" />

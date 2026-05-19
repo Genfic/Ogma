@@ -19,6 +19,7 @@ public sealed class Report : BaseModel
 	public long ReporterId { get; set; }
 	public DateTimeOffset ReportDate { get; set; }
 	public string Reason { get; set; } = null!;
+	public ReportStatus Status { get; set; } = ReportStatus.Open;
 
 	// Blockable content
 	public string ContentType { get; set; } = null!;
@@ -46,12 +47,21 @@ public sealed class Report : BaseModel
 		public override void Configure(EntityTypeBuilder<Report> builder)
 		{
 			base.Configure(builder);
+
 			builder
 				.Property(b => b.ReportDate)
 				.IsRequired()
 				.HasDefaultValueSql(PgConstants.CurrentTimestamp);
-			builder.Property(b => b.Reason).IsRequired();
-			builder.Property(b => b.ContentType).IsRequired();
+
+			builder
+				.Property(b => b.Reason)
+				.HasMaxLength(CTConfig.Report.MaxReasonLength)
+				.IsRequired();
+
+			builder
+				.Property(b => b.ContentType)
+				.HasMaxLength(32)
+				.IsRequired();
 		}
 	}
 }

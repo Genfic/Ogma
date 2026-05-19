@@ -27,12 +27,16 @@
 
 		foreach (var item in items)
 		{
-			<li class="nav-item">
-				<a class="nav-link @NavPages.PageNavClass(ViewContext, item.Name ?? "")"
+			<li class="nav-item @NavPages.PageNavClass(ViewContext, item.Name)">
+				<a class="nav-link"
 				   id="@item.Name?.ToLower()"
 				   for-route="@item.Path">
 					@item.Name
 				</a>
+				@if (item.Name?.Contains("Reports", StringComparison.OrdinalIgnoreCase) is true)
+				{
+					<reports-count-badge></reports-count-badge>
+				}
 			</li>
 		}
 	}
@@ -41,16 +45,20 @@
 		OpenAPI
 	</li>
 
-	@* ReSharper disable once Html.PathError *@
-	<a class="nav-link" href="/scalar/public" target="_blank">
-		Scalar public
-		<icon class="icon" name="lucide:external-link"></icon>
-	</a>
+	<li class="nav-item">
+		@* ReSharper disable once Html.PathError *@
+		<a class="nav-link" href="/scalar/public" target="_blank">
+			Scalar public
+			<icon class="icon" name="lucide:external-link"></icon>
+		</a>
+	</li>
 
-	@* ReSharper disable once Html.PathError *@
-	<a class="nav-link" href="/scalar/internal" target="_blank">
-		Scalar internal
-		<icon class="icon" name="lucide:external-link"></icon>
-	</a>
+	<li class="nav-item">
+		@* ReSharper disable once Html.PathError *@
+		<a class="nav-link" href="/scalar/internal" target="_blank">
+			Scalar internal
+			<icon class="icon" name="lucide:external-link"></icon>
+		</a>
+	</li>
 
 </ul>

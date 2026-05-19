@@ -37,8 +37,8 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 		],
 		["Other"] =
 		[
-			new(ModLog.Get()),
 			new(Reports.Get()),
+			new(ModLog.Get()),
 			new(Faq.Get()),
 		],
 	}.ToFrozenDictionary();

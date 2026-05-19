@@ -1,6 +1,10 @@
 version: "3"
 silent: true
 
+vars:
+  PROJ: ./Ogma3/Ogma3.csproj
+  DB_PROJ: ./Ogma3.Data/Ogma3.Data.csproj
+
 tasks:
   watch: dotnet watch --project ./Ogma3.AppHost/Ogma3.AppHost.csproj
 
@@ -53,9 +57,9 @@ tasks:
       - lighthouse https://localhost:5001 --view
 
   # EF helpers
-  db-migrate: dotnet ef migrations add --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
-  db-up: dotnet ef database update --project ./Ogma3/Ogma3.csproj {{.CLI_ARGS}}
-  db-compile: dotnet ef dbcontext optimize --project ./Ogma3/Ogma3.csproj --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
+  db-migrate: dotnet ef migrations add --project {{.DB_PROJ}} --startup-project {{.PROJ}} {{.CLI_ARGS}}
+  db-up: dotnet ef database update --project {{.DB_PROJ}} --startup-project {{.PROJ}} {{.CLI_ARGS}}
+  db-compile: dotnet ef dbcontext optimize --project {{.DB_PROJ}} --startup-project {{.PROJ}} --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
   db-all:
     cmds:
       - task: db-migrate

@@ -20,7 +20,7 @@ public static class NavPages
 	public static string Faq => "FAQ";
 	public static string Infractions => "Infractions";
 
-	public static string PageNavClass(ViewContext viewContext, string page)
+	public static string PageNavClass(ViewContext viewContext, string? page)
 	{
 		var activePage = viewContext.ViewData["ActivePage"] as string
 		                 ?? Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);

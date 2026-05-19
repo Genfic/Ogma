@@ -1,23 +1,47 @@
-
 .nav-pills {
-	.nav-link {
-		display: block;
-		border-radius: .25rem;
-		padding: .5rem 1rem;
+	.nav-item:has(.nav-link) {
+		display: flex;
+		flex-direction: row;
+		color: var(--accent);
 
-		.icon {
-			vertical-align: center;
-			height: 1rem;
-			width: 1rem;
+		:hover {
+			background-color: var(--accent-5);
+		}
+
+		&.active {
+			color: var(--background);
+			background-color: var(--accent-75);
+			border-color: var(--accent);
+		}
+
+		.nav-link {
+			color: inherit;
+			display: block;
+			border-radius: .25rem;
+			padding: .5rem 1rem;
+			flex: 1;
+
+			.icon {
+				vertical-align: center;
+				height: 1rem;
+				width: 1rem;
+			}
+		}
+
+		.badge {
+			display: flex;
+			background-color: var(--red-50);
+			border: 1px solid var(--red);
+			border-radius: 999px;
+			padding: .05rem .5rem;
+			font-size: .9rem;
+			font-weight: 900;
+			align-self: center;
+			margin-left: auto;
+			justify-content: center;
+			align-items: center;
+			color: var(--foreground);
+			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 		}
 	}
-
-	.nav-link.active,
-	.show > .nav-link {
-		color: var(--background) !important;
-		background-color: var(--accent-75) !important;
-		border-color: var(--accent) !important;
-
-	}
 }
-

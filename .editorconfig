@@ -75,3 +75,8 @@ generated_code = true
 
 [*.{yml,yaml}]
 indent_size = 2
+
+[*.sql]
+indent_style = tab
+indent_size = 4
+tab_width = 4

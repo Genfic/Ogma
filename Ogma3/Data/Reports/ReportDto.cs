@@ -8,8 +8,8 @@ public sealed class ReportDto
 	public string ReporterUserName { get; init; } = null!;
 	public long ReporterId { get; init; }
 	public DateTimeOffset ReportDate { get; init; }
-
 	public string Reason { get; init; } = null!;
+	public ReportStatus Status { get; init; }
 
 	// Blockable content
 	public string ContentType { get; init; } = null!;
