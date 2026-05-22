@@ -40,7 +40,7 @@ public sealed class ImageTagHelper(
 			['/', '/'] => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/https:{Src}",
 			['/', _] => Src,
 			['h', 't'] => Src,
-			_ => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/https:{Path.Join(config.Cdn, Src)}",
+			_ => $"https://genfic.net/cdn-cgi/image/h={h},w={w},format=auto,fit=cover/{Path.Join(config.Cdn, Src)}",
 		};
 
 		output.Attributes.SetAttribute("width", Width);

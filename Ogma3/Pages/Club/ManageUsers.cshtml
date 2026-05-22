@@ -28,8 +28,7 @@
 	{
 		<div class="user-card">
 
-			@* TODO: height and width *@
-			<img src="@user.Avatar" alt="@(user.Name)'s avatar" class="avatar" loading="lazy" />
+			<img src="@user.Avatar" alt="@(user.Name)'s avatar" class="avatar" width="80" height="80" cf/>
 
 			<a asp-page="/User/Index" asp-route-name="@user.Name.ToUpper()" class="name">
 				@user.Name

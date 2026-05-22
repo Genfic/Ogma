@@ -1,6 +1,6 @@
 o-comments {
 	display: block;
-	width: 70%;
+	width: min(100%, 800px);
 	margin-top: 1rem;
 }
 .comment-btn {

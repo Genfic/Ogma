@@ -9,18 +9,18 @@
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.Docker" Version="13.3.4" />
-    <PackageVersion Include="Aspire.Hosting.Garnet" Version="13.3.4" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.3.4" />
-    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.3.4" />
-    <PackageVersion Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.3.4" />
+    <PackageVersion Include="Aspire.Hosting.Docker" Version="13.3.5" />
+    <PackageVersion Include="Aspire.Hosting.Garnet" Version="13.3.5" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.3.5" />
+    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.3.5" />
+    <PackageVersion Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.3.5" />
     <PackageVersion Include="Atulin.AutoDbSet" Version="1.1.3" />
     <PackageVersion Include="Atulin.InfisicalConfiguration" Version="0.2.1" />
     <PackageVersion Include="Atulin.MarkdigExtensions" Version="1.2.0" />
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.23.3" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.23.4" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="ConfigBoundNET" Version="2.4.2" />
@@ -28,7 +28,7 @@
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.1" />
     <PackageVersion Include="Humanizer.Core" Version="3.0.10" />
     <PackageVersion Include="Immediate.Apis" Version="5.0.0" />
-    <PackageVersion Include="Immediate.Handlers" Version="3.7.1" />
+    <PackageVersion Include="Immediate.Handlers" Version="3.7.2" />
     <PackageVersion Include="Immediate.Validations" Version="3.3.0" />
     <PackageVersion Include="Injectio" Version="[5.2.2]" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
@@ -77,7 +77,7 @@
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.15" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-preview.4.26230.115" />
-    <PackageVersion Include="TUnit" Version="1.45.8" />
+    <PackageVersion Include="TUnit" Version="1.45.29" />
     <PackageVersion Include="WaffleGenerator.Bogus" Version="4.2.2" />
     <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.6.0" />

@@ -58,9 +58,16 @@ export function iconPlugin(options: IconOptions): BunPlugin {
 
 					const data: Icon = await res.json();
 
+					const icons = new Map(Object.entries(data.icons));
+					const body = icons.size > 1 ? icons.get(icon)?.body : icons.values().next().value?.body;
+
+					if (!body) {
+						console.warn(`Icon ${icon} returned no body`);
+					}
+
 					const tsx = dedent`
 						import { createIcon } from "./${BASE_FILE.replace(".tsx", "")}";
-						export default createIcon(${data.width}, ${data.height}, \`${data.icons[icon]?.body}\`);
+						export default createIcon(${data.width}, ${data.height}, \`${body}\`);
 					`;
 
 					await file.write(tsx);

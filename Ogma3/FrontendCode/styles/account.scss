@@ -25,6 +25,11 @@
 			top: calc(var(--dynamic-nav-height) + 1rem);
 			align-self: start;
 			transition: top .2s ease-in-out;
+
+			@media (width <= v.$mq-mobile) {
+				position: relative;
+				top: unset;
+			}
 		}
 
 		&__body {

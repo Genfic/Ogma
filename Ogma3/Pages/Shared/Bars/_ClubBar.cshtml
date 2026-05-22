@@ -29,7 +29,7 @@
 
 	<div class="buttons">
 
-		<o-join clubId="@Model.Id" isMember="@Model.IsMember" csrf="@csrf"></o-join>
+		<o-join club-id="@Model.Id" is-member="@Model.IsMember" csrf="@csrf"></o-join>
 
 		<div class="o-dropdown left" o-dropdown>
 
@@ -80,7 +80,7 @@
 		</a>
 	</nav>
 
-	<report-modal v-pre itemId="@Model.Id" item-type="@EReportableContentTypes.Story" csrf="@csrf"
+	<report-modal v-pre item-id="@Model.Id" item-type="@EReportableContentTypes.Story" csrf="@csrf"
 		open-selector="#open-modal-button-clubbar">
 	</report-modal>
 </div>

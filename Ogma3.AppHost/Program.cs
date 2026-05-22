@@ -1,8 +1,9 @@
+using Microsoft.Extensions.Configuration;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var emulateProd = args.Contains("--emulate-prod");
+var emulateProd = builder.Configuration.GetValue<bool>("emulate-prod");
 
 var shouldSeed = builder.AddParameter("should-seed");
 
@@ -28,8 +29,9 @@ var database = builder
 	.AddDatabase("ogma3-db");
 
 var genfic = builder
-	.AddProject<Ogma3>("ogma3", launchProfileName: emulateProd ? "Ogma3 Prod" : "Ogma3")
+	.AddProject<Ogma3>("ogma3")
 	.WithExternalHttpEndpoints()
+	.WithEnvironment("ASPNETCORE_ENVIRONMENT", emulateProd ? "Production" : "Development")
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
 	.WithEnvironment("OTEL_DOTNET_EXPERIMENTAL_EFCORE_ENABLE_TRACE_DB_QUERY_PARAMETERS", "true")
 	.WithEnvironment("OTEL_DOTNET_AUTO_ENTITYFRAMEWORKCORE_SET_DBSTATEMENT_FOR_TEXT", "true")
@@ -38,7 +40,8 @@ var genfic = builder
 	.WithReference(garnet)
 	.WaitFor(garnet);
 
-builder.AddContainer("tunnel", "cloudflare/cloudflared")
+builder
+	.AddContainer("tunnel", "cloudflare/cloudflared")
 	.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
 	.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
 	.WithArgs("tunnel", "--no-autoupdate", "run")

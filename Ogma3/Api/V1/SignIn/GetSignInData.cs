@@ -4,6 +4,8 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services.GeneratedImagesService;
 
 namespace Ogma3.Api.V1.SignIn;
 
@@ -20,16 +22,25 @@ public static partial class GetSignInData
 	private static async ValueTask<Ok<Result>> HandleAsync(
 		Query request,
 		ApplicationDbContext context,
+		OgmaConfig config,
+		GeneratedImagesService genImg,
 		CancellationToken cancellationToken
 	)
 	{
 		var user = await context.Users
 			.Where(u => u.NormalizedUserName == request.Name)
-			.Select(u => new Result(u.Avatar.Url, u.Title))
+			.Select(u => new {u.Avatar.Url, u.Title})
 			.FirstOrDefaultAsync(cancellationToken);
 
-		return TypedResults.Ok(user);
+		if (user is null)
+		{
+			return TypedResults.Ok(new Result(genImg.GenerateAvatarUrl(request.Name)));
+		}
+
+		var res = new Result(Path.Join(config.Cdn, user.Url), user.Title);
+
+		return TypedResults.Ok(res);
 	}
 
-	public sealed record Result(string Avatar, string? Title);
+	public sealed record Result(string Avatar, string? Title = null);
 }

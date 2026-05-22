@@ -10,6 +10,11 @@
 	@media (width <= v.$mq-mobile) {
 		display: flex;
 		flex-direction: column;
+
+		.toc {
+			position: unset !important;
+			width: 100%;
+		}
 	}
 
 	.header {
@@ -32,6 +37,7 @@
 		flex-direction: column;
 		padding: .5rem;
 		transition: top .2s ease-in-out;
+		background-color: var(--background);
 		@include ab.active-border;
 
 		.toc-h {

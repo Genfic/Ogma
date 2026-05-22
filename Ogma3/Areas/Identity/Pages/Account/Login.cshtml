@@ -4,7 +4,7 @@
 @{
 	ViewData["Title"] = "Log in";
 	Request.Cookies.TryGetValue("theme", out var theme);
-	theme ??= "light";
+	theme ??= "system";
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>

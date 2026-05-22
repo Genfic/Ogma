@@ -60,7 +60,7 @@
 	<div class="buttons">
 		@if (!User.IsUserSameAsLoggedIn(Model.Id) && (User.Identity?.IsAuthenticated ?? false))
 		{
-			<o-follow user-name="@Model.UserName" is-followed="@Model.IsFollowedBy"></o-follow>
+			<o-follow user-name="@Model.UserName" is-followed="@Model.IsFollowedBy" csrf="@csrf"></o-follow>
 
 			<div class="o-dropdown left" o-dropdown>
 

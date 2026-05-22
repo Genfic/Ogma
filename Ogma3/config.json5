@@ -1,11 +1,11 @@
 {
-	"Cdn": "//cdn.genfic.net/file/Genfic/",
+	"Cdn": "https://cdn.genfic.net/file/Genfic/",
 	"AvatarServiceUrl": "https://avatars.genfic.net",
 	"AdminEmail": "admin@genfic.net",
 	"MaxInvitesPerUser": 5,
 	"PrivacyPolicyDoc": "privacy-policy",
 	"AboutDoc": "about",
-	"TosDoc": null,
+	"TosDoc": "terms-of-service",
 	"SearchHelpDoc": "search-help",
 	"CommentsPerPage": 20,
 	"ClubsPerPage": 25,

@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Notifications;
 using Ogma3.Data.Users;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
+using P = Routes.Pages;
 
 namespace Ogma3.Api.V1.Users;
 
@@ -27,10 +30,13 @@ public static partial class FollowUser
 		Command request,
 		ApplicationDbContext context,
 		IUserService userService,
+		NotificationsRepository notifications,
+		LinkGenerator linkGenerator,
 		CancellationToken cancellationToken
 	)
 	{
 		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
+		if (userService.User?.GetUsername() is not {} name) return TypedResults.Unauthorized();
 
 		var targetUserId = await context.Users
 			.Where(u => u.NormalizedUserName == request.Name)
@@ -50,7 +56,11 @@ public static partial class FollowUser
 			FollowingUserId = uid,
 			FollowedUserId = targetId,
 		});
+
 		await context.SaveChangesAsync(cancellationToken);
+
+		var url = P.User_Index.Get(name).Path(linkGenerator);
+		await notifications.Create(ENotificationEvent.NewFollower, [targetId], url, $"User **{name}** just followed you!");
 
 		return TypedResults.Ok(true);
 	}

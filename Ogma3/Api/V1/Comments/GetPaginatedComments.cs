@@ -82,6 +82,19 @@ public static partial class GetPaginatedComments
 		foreach (var comment in comments)
 		{
 			comment.Id = sqids.Encode(comment.InternalId);
+
+			if (comment.Author is null)
+			{
+				continue;
+			}
+
+			var src = comment.Author.Avatar;
+			comment.Author.Avatar = src.AsSpan()[..2] switch
+			{
+				['/', _] => src,
+				['h', 't'] => $"https://genfic.net/cdn-cgi/image/h={120},w={120},format=auto,fit=cover/{src}",
+				_ => $"https://genfic.net/cdn-cgi/image/h={120},w={120},format=auto,fit=cover/{Path.Join(ogmaConfig.Cdn, src)}",
+			};
 		}
 
 		var pagination = new PaginationResult<CommentDto>

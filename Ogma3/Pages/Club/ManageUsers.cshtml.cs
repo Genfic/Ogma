@@ -10,7 +10,7 @@ namespace Ogma3.Pages.Club;
 public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 {
 	public required ClubData Club { get; set; }
-	public required IEnumerable<UserDto> Users { get; set; }
+	public required List<UserDto> Users { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
@@ -24,7 +24,7 @@ public sealed class ManageUsers(ApplicationDbContext context) : PageModel
 				c.Slug,
 				c.ClubMembers
 					.Where(cm => cm.MemberId == uid)
-					.Select(cm => cm.Role)
+					.Select(cm => (EClubMemberRoles?)cm.Role)
 					.FirstOrDefault()
 			))
 			.FirstOrDefaultAsync();

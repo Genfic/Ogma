@@ -5,7 +5,7 @@ namespace Ogma3.Data.Users;
 public sealed class UserSimpleDto
 {
 	public required string UserName { get; init; }
-	public required string Avatar { get; init; }
+	public required string Avatar { get; set; }
 	public string? Title { get; init; }
 	public IEnumerable<RoleTinyDto> Roles { get; init; } = [];
 }

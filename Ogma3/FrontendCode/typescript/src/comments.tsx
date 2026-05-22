@@ -1,4 +1,4 @@
-import LucideCircleHelp from "icon:lucide:circle-help";
+import LucideCircleHelp from "icon:lucide:circle-question-mark";
 import LucideMessageSquarePlus from "icon:lucide:message-square-plus";
 import MdiLockOpenVariantOutline from "icon:mdi:lock-open-variant-outline";
 import MdiLockOutline from "icon:mdi:lock-outline";

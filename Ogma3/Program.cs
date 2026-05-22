@@ -46,10 +46,7 @@ builder.Configuration
 	.AddJsonFile("appsettings.json5")
 	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true);
 
-if (builder.Environment.IsDevelopment())
-{
-	builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
-}
+builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
 
 builder.AddInfisical();
 
