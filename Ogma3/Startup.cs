@@ -141,7 +141,7 @@ public static class Startup
 		services.AddS3Storage(configuration);
 
 		// Seeding
-		if (configuration.GetValue<bool>("SHOULD_SEED"))
+		if (configuration.GetValue<string>("SHOULD_SEED")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false)
 		{
 			services.AddHostedService<DbSeedInitializer>();
 		}

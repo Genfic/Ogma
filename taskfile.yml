@@ -66,6 +66,15 @@ tasks:
       - task: db-up
       - task: db-compile
 
+  # Deploy
+  prep-image:
+    dir: ./Ogma3.AppHost/aspire-output
+    cmds:
+      - aspire do push
+      - docker save ogma3:latest -o ogma3.tar
+      - powershell -Command "Compress-Archive -Path 'ogma3.tar' -DestinationPath 'ogma3.tar.gz' -Force"
+
+  up-image: scp ./Ogma3.AppHost/aspire-output/ogma3.tar.gz root@[{{.CLI_ARGS}}]:/tmp/
 
   _build-script:
     internal: true

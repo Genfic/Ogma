@@ -1,3 +1,4 @@
+#! usr/bin/env dotnet
 #:package NetVips@3.2.0
 #:package NetVips.Native@8.18.2
 #:package Glob@1.1.9

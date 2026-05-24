@@ -5,11 +5,16 @@
 		<Authors>Ogma3</Authors>
 		<Company>Ogma3</Company>
 		<Product>Ogma3</Product>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
 		<NeutralLanguage>en</NeutralLanguage>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<ContainerImageName>Ogma3</ContainerImageName>
+		<ContainerImageTag>latest</ContainerImageTag>
+		<ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:11.0-preview</ContainerBaseImage>
+		<GetSharedPropsFileDirectoryForContainer>true</GetSharedPropsFileDirectoryForContainer>
 
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
@@ -35,7 +40,7 @@
 		<Script Include="$(ToolsDir)\CompressImages.cs" />
 	</ItemGroup>
 
-	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)\%(Filename).dll'">
+	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)\%(Filename).dll'" BeforeTargets="Build">
 		<Exec Command='dotnet publish "%(Script.FullPath)" --output "$(ToolsOut)"' WorkingDirectory="$(ToolsDir)" />
 	</Target>
 
@@ -118,6 +123,7 @@
 		<PackageReference Include="Scalar.AspNetCore" PrivateAssets="all" />
 		<PackageReference Include="Serilog" />
 		<PackageReference Include="Serilog.AspNetCore" PrivateAssets="all" />
+		<PackageReference Include="Serilog.Sinks.Console" />
 		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
 		<PackageReference Include="Serilog.Sinks.Seq" PrivateAssets="all" />
 		<PackageReference Include="SimpleBase" />

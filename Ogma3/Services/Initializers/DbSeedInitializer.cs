@@ -29,12 +29,14 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 {
 	private readonly IServiceScopeFactory _scopeFactory;
 	private readonly ILogger<DbSeedInitializer> _logger;
+	private readonly IConfiguration _config;
 	private readonly JsonData _data;
 
-	public DbSeedInitializer(IServiceScopeFactory scopeFactory, ILogger<DbSeedInitializer> logger)
+	public DbSeedInitializer(IServiceScopeFactory scopeFactory, ILogger<DbSeedInitializer> logger, IConfiguration config)
 	{
 		_scopeFactory = scopeFactory;
 		_logger = logger;
+		_config = config;
 
 		using var sr = new StreamReader("seed.json5");
 		var data = JsonSerializer.Deserialize(sr.ReadToEnd(), JsonDataContext.Default.JsonData);
@@ -53,6 +55,13 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 	// Runs before StartAsync of ANY hosted service — guaranteed to complete first
 	public async Task StartingAsync(CancellationToken cancellationToken)
 	{
+		var seedScope = _config.GetValue<string>("SHOULD_SEED") ?? "false";
+
+		if (seedScope.Equals("false", StringComparison.OrdinalIgnoreCase))
+		{
+			return;
+		}
+
 		await using var scope = _scopeFactory.CreateAsyncScope();
 		var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 		var userManager = scope.ServiceProvider.GetRequiredService<OgmaUserManager>();
@@ -66,14 +75,18 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 
 		await Time(() => SeedRoles(context), nameof(SeedRoles));
 		await Time(() => SeedAdmin(context, userManager, userService), nameof(SeedAdmin));
-		await Time(() => SeedUsers(context, userService), nameof(SeedUsers));
 		await Time(() => SeedRatings(context), nameof(SeedRatings));
 		await Time(() => SeedIcons(context), nameof(SeedIcons));
 		await Time(() => SeedQuotes(context, clientFactory), nameof(SeedQuotes));
-		var tagIds = await Time(() => SeedTags(context), nameof(SeedTags));
-		var storyIds = await Time(() => SeedStories(context), nameof(SeedStories));
-		await Time(() => SeedStoryTags(context, storyIds, tagIds), nameof(SeedStoryTags));
-		await Time(() => SeedBlogposts(context, storyIds), nameof(SeedBlogposts));
+
+		if (!seedScope.Equals("basic", StringComparison.OrdinalIgnoreCase))
+		{
+			var tagIds = await Time(() => SeedTags(context), nameof(SeedTags));
+			await Time(() => SeedUsers(context, userService), nameof(SeedUsers));
+			var storyIds = await Time(() => SeedStories(context), nameof(SeedStories));
+			await Time(() => SeedStoryTags(context, storyIds, tagIds), nameof(SeedStoryTags));
+			await Time(() => SeedBlogposts(context, storyIds), nameof(SeedBlogposts));
+		}
 
 		timer.Stop();
 		_logger.LogInformation("Async initialization took {Time} ms", timer.ElapsedMilliseconds);

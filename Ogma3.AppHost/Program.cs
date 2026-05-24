@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using Projects;
+using Ogma3.AppHost.Helpers;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -25,11 +25,11 @@ var database = builder
 		e.TargetPort = 5432;
 		e.IsProxied = false;
 	})
-	.WithPgWeb()
+	.If(!emulateProd, b => b.WithPgWeb())
 	.AddDatabase("ogma3-db");
 
 var genfic = builder
-	.AddProject<Ogma3>("ogma3")
+	.AddProject<Projects.Ogma3>("ogma3")
 	.WithExternalHttpEndpoints()
 	.WithEnvironment("ASPNETCORE_ENVIRONMENT", emulateProd ? "Production" : "Development")
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
@@ -45,7 +45,8 @@ builder
 	.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
 	.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
 	.WithArgs("tunnel", "--no-autoupdate", "run")
-	.WaitFor(genfic)
-	.WithExplicitStart();
+	.ExcludeFromManifest()
+	.If(!emulateProd, b => b.WithExplicitStart())
+	.WaitFor(genfic);
 
 builder.Build().Run();

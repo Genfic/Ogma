@@ -38,5 +38,4 @@ public static partial class GetReadChapters
 
 		return TypedResults.Ok(chaptersRead?.ToHashSet() ?? []);
 	}
-
 }
