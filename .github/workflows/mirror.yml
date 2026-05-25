@@ -1,5 +1,7 @@
 name: Mirror
 on: [ push ]
+permissions:
+  contents: read
 jobs:
   mirror:
     runs-on: ubuntu-latest
