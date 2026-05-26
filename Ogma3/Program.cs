@@ -48,7 +48,7 @@ builder.Configuration
 
 builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
 
-builder.AddInfisical();
+await builder.AddInfisicalAsync();
 
 builder.Host.UseSerilog();
 

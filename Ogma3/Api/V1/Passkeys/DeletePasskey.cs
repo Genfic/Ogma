@@ -16,7 +16,7 @@ using ReturnType = Results<Ok, NotFound, InternalServerError>;
 public sealed partial class DeletePasskey(
 	OgmaUserManager userManager,
 	IHttpContextAccessor contextAccessor,
-	ILogger<DeletePasskey> logger)
+	ILogger<DeletePasskey.Handler> logger)
 {
 	[UsedImplicitly]
 	public sealed record Query([FromQuery] string Id);

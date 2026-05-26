@@ -34,12 +34,21 @@ public static class Extensions
 			return builder;
 		}
 
-
 		public IResourceBuilder<T> WithEnvironmentVariables(Dictionary<string, string> variables)
 		{
 			foreach (var (key, value) in variables)
 			{
 				builder.WithEnvironment(key, value);
+			}
+			return builder;
+		}
+
+		public IResourceBuilder<T> WithEnvironmentVariables(HashSet<string> keys)
+		{
+			foreach (var key in keys)
+			{
+				var underscored = key.Replace(":", "__");
+				builder.WithEnvironment(underscored, builder.ApplicationBuilder.Configuration[key]);
 			}
 			return builder;
 		}

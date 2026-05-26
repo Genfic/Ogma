@@ -4,10 +4,30 @@ using Ogma3.AppHost.Helpers;
 var builder = DistributedApplication.CreateBuilder(args);
 
 var emulateProd = builder.Configuration.GetValue<bool>("emulate-prod");
+var isProd = emulateProd || builder.ExecutionContext.IsPublishMode;
 
-var shouldSeed = builder.AddParameter("should-seed");
+var shouldSeed = builder.AddParameter("should-seed", "basic", publishValueAsDefault: true);
 
-builder.AddDockerComposeEnvironment("ogma3-docker");
+var infisical = new Dictionary<string, IResourceBuilder<ParameterResource>>
+{
+	["Infisical__ProjectId"] = builder.AddParameter("infisical-project-id", secret: true),
+	["Infisical__ClientSecret"] = builder.AddParameter("infisical-client-secret", secret: true),
+	["Infisical__MachineId"] = builder.AddParameter("infisical-machine-id", secret: true),
+	["Infisical__Env"] = builder.AddParameter("infisical-env", isProd ? "prod" : "dev", publishValueAsDefault: true),
+};
+
+builder
+	.AddDockerComposeEnvironment("ogma3-docker")
+	.ConfigureComposeFile(file => {
+		if (!file.Networks.TryGetValue("aspire", out var network)) return;
+
+		network.DriverOpts["com.docker.network.enable_ipv6"] = "true";
+
+		network.Ipam ??= new();
+		network.Ipam.Config.Add(new() { ["subnet"] = "fd01::/80" });
+	})
+	.WithDashboard(db => db.WithHostPort(8085))
+	.WithSshDeploySupport();
 
 var garnet = builder
 	.AddGarnet("garnet", port: 6379)
@@ -30,23 +50,29 @@ var database = builder
 
 var genfic = builder
 	.AddProject<Projects.Ogma3>("ogma3")
+	.WithHttpEndpoint(port: 32773, targetPort: 8080)
 	.WithExternalHttpEndpoints()
-	.WithEnvironment("ASPNETCORE_ENVIRONMENT", emulateProd ? "Production" : "Development")
+	.WithEnvironment("ASPNETCORE_ENVIRONMENT", isProd ? "Production" : "Development")
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
 	.WithEnvironment("OTEL_DOTNET_EXPERIMENTAL_EFCORE_ENABLE_TRACE_DB_QUERY_PARAMETERS", "true")
 	.WithEnvironment("OTEL_DOTNET_AUTO_ENTITYFRAMEWORKCORE_SET_DBSTATEMENT_FOR_TEXT", "true")
+	.WithEnvironment("DOTNET_SYSTEM_NET_DISABLEIPV4", "true")
+	.WithEnvironmentVariables(infisical)
 	.WithReference(database)
 	.WaitFor(database)
 	.WithReference(garnet)
 	.WaitFor(garnet);
 
-builder
-	.AddContainer("tunnel", "cloudflare/cloudflared")
-	.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
-	.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
-	.WithArgs("tunnel", "--no-autoupdate", "run")
-	.ExcludeFromManifest()
-	.If(!emulateProd, b => b.WithExplicitStart())
-	.WaitFor(genfic);
+if (!builder.ExecutionContext.IsPublishMode)
+{
+	builder
+		.AddContainer("tunnel", "cloudflare/cloudflared")
+		.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
+		.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
+		.WithArgs("tunnel", "--no-autoupdate", "run")
+		.ExcludeFromManifest()
+		.If(!emulateProd, b => b.WithExplicitStart())
+		.WaitFor(genfic);
+}
 
 builder.Build().Run();

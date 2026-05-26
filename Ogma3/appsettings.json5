@@ -1,8 +1,4 @@
 {
-	"ConnectionStrings": {
-		"PostgresConnection": "Host=localhost;Database=Ogma3;Username=;Password=",
-		"DbConnection": "Host=localhost;Database=Ogma3;Username=;Password=",
-	},
 	"Logging": {
 		"LogLevel": {
 			"Default": "Information",
@@ -11,7 +7,7 @@
 		},
 	},
 	"AllowedHosts": "*",
-	"Domain": "genfic.net",
+	"Domain": "beta.genfic.net",
 	"AdditionalHeaders": {
 		"Headers": {
 			"X-Robots-Tag": "noai, noimageai",

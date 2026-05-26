@@ -50,8 +50,7 @@ yarn-error.log
 Ogma3/logger-tokens.txt
 
 # Env variables
-ogma.env
-postgres/postgres.env
+*.env
 
 # Reports
 *.report.html

@@ -35,142 +35,131 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Script Include="$(ToolsDir)\GenerateCTConfig.cs" />
-		<Script Include="$(ToolsDir)\GenerateSpritesheet.cs" />
-		<Script Include="$(ToolsDir)\CompressImages.cs" />
+		<Script Include="$(ToolsDir)\GenerateCTConfig.cs"/>
+		<Script Include="$(ToolsDir)\GenerateSpritesheet.cs"/>
+		<Script Include="$(ToolsDir)\CompressImages.cs"/>
 	</ItemGroup>
 
 	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)\%(Filename).dll'" BeforeTargets="Build">
-		<Exec Command='dotnet publish "%(Script.FullPath)" --output "$(ToolsOut)"' WorkingDirectory="$(ToolsDir)" />
+		<Exec Command='dotnet publish "%(Script.FullPath)" --output "$(ToolsOut)"' WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<Target Name="ExportCTConfig" BeforeTargets="Build">
 		<Exec Command='dotnet "$(ToolsOut)\GenerateCTConfig.dll" "$(ProjectDir)\..\Ogma3.Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
-		      WorkingDirectory="$(ToolsDir)" />
+		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<Target Name="CreateIconSpritesheet" BeforeTargets="Build">
 		<Exec Command='dotnet "$(ToolsOut)\GenerateSpritesheet.dll" "$(ProjectDir)\seed.json5" "$(ProjectDir)\wwwroot\spritesheet.svg"'
-		      WorkingDirectory="$(ToolsDir)" />
+		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<Target Name="CompressImages" BeforeTargets="Build">
 		<Exec Command='dotnet "$(ToolsOut)\CompressImages.dll" "$(ProjectDir)\wwwroot\img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)\wwwroot\img"'
-		      WorkingDirectory="$(ToolsDir)" />
+		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<ItemGroup>
-		<EmbeddedResource Include="$(ProjectDir)\Queries\**\*.sql" />
+		<EmbeddedResource Include="$(ProjectDir)\Queries\**\*.sql"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.StackExchange.Redis" />
-		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
-		<PackageReference Include="Atulin.InfisicalConfiguration" />
-		<PackageReference Include="Atulin.MarkdigExtensions" PrivateAssets="all" />
-		<PackageReference Include="Atulin.MinHash" />
-		<PackageReference Include="Atulin.SealAnalyzer" />
-		<PackageReference Include="AWSSDK.S3" />
-		<PackageReference Include="Bogus" />
-		<PackageReference Include="Chorn.EmbeddedResourceAccessGenerator">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="ConfigBoundNET">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="FluentValidation" PrivateAssets="all" />
-		<PackageReference Include="FluentValidation.AspNetCore" PrivateAssets="all" />
-		<PackageReference Include="Humanizer.Core" PrivateAssets="all" />
-		<PackageReference Include="Immediate.Apis" PrivateAssets="all" />
-		<PackageReference Include="Immediate.Handlers" PrivateAssets="all" />
-		<PackageReference Include="Immediate.Validations" />
-		<PackageReference Include="Injectio" />
-		<PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
-		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Markdig" PrivateAssets="all" />
-		<PackageReference Include="MemoryPack" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
-		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" PrivateAssets="all" />
-		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" PrivateAssets="all" />
-		<PackageReference Include="MiniProfiler.EntityFrameworkCore" PrivateAssets="all" />
-		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2" PrivateAssets="all" />
-		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
-		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
-		<PackageReference Include="NetEscapades.EnumGenerators" PrivateAssets="all" />
-		<PackageReference Include="NetVips" />
-		<PackageReference Include="NetVips.Native" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" PrivateAssets="all" />
-		<PackageReference Include="Postmark" PrivateAssets="all" />
-		<PackageReference Include="Riok.Mapperly" />
-		<PackageReference Include="SafeRouting" PrivateAssets="all" />
-		<PackageReference Include="Scalar.AspNetCore" PrivateAssets="all" />
-		<PackageReference Include="Serilog" />
-		<PackageReference Include="Serilog.AspNetCore" PrivateAssets="all" />
-		<PackageReference Include="Serilog.Sinks.Console" />
-		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
-		<PackageReference Include="Serilog.Sinks.Seq" PrivateAssets="all" />
-		<PackageReference Include="SimpleBase" />
-		<PackageReference Include="Sqids" PrivateAssets="all" />
-		<PackageReference Include="stbychkov.AutoLoggerMessage" />
-		<PackageReference Include="System.ServiceModel.Syndication" PrivateAssets="all" />
-		<PackageReference Include="WaffleGenerator.Bogus" />
-		<PackageReference Include="ZiggyCreatures.FusionCache" />
-		<PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" />
-		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" />
+		<PackageReference Include="Aspire.StackExchange.Redis"/>
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching"/>
+		<PackageReference Include="Atulin.InfisicalConfiguration"/>
+		<PackageReference Include="Atulin.MarkdigExtensions"/>
+		<PackageReference Include="Atulin.MinHash"/>
+		<PackageReference Include="Atulin.SealAnalyzer"/>
+		<PackageReference Include="AWSSDK.S3"/>
+		<PackageReference Include="Bogus"/>
+		<PackageReference Include="Chorn.EmbeddedResourceAccessGenerator"/>
+		<PackageReference Include="ConfigBoundNET"/>
+		<PackageReference Include="FluentValidation"/>
+		<PackageReference Include="FluentValidation.AspNetCore"/>
+		<PackageReference Include="Humanizer.Core"/>
+		<PackageReference Include="Immediate.Apis" />
+		<PackageReference Include="Immediate.Handlers" />
+		<PackageReference Include="Immediate.Validations"/>
+		<PackageReference Include="Injectio"/>
+		<PackageReference Include="JetBrains.Annotations"/>
+		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning"/>
+		<PackageReference Include="Markdig"/>
+		<PackageReference Include="MemoryPack"/>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google"/>
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"/>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI"/>
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies"/>
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream"/>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"/>
+		<PackageReference Include="MiniProfiler.AspNetCore.Mvc"/>
+		<PackageReference Include="MiniProfiler.EntityFrameworkCore"/>
+		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2"/>
+		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders"/>
+		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers"/>
+		<PackageReference Include="NetEscapades.EnumGenerators"/>
+		<PackageReference Include="NetVips"/>
+		<PackageReference Include="NetVips.Native"/>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+		<PackageReference Include="Postmark"/>
+		<PackageReference Include="Riok.Mapperly"/>
+		<PackageReference Include="SafeRouting"/>
+		<PackageReference Include="Scalar.AspNetCore"/>
+		<PackageReference Include="Serilog"/>
+		<PackageReference Include="Serilog.AspNetCore"/>
+		<PackageReference Include="Serilog.Sinks.Console"/>
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry"/>
+		<PackageReference Include="Serilog.Sinks.Seq"/>
+		<PackageReference Include="SimpleBase"/>
+		<PackageReference Include="Sqids"/>
+		<PackageReference Include="stbychkov.AutoLoggerMessage"/>
+		<PackageReference Include="System.ServiceModel.Syndication"/>
+		<PackageReference Include="WaffleGenerator.Bogus"/>
+		<PackageReference Include="ZiggyCreatures.FusionCache"/>
+		<PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis"/>
+		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack"/>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj" />
-		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />
-		<ProjectReference Include="..\Utils\Utils.csproj" />
+		<ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj"/>
+		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj"/>
+		<ProjectReference Include="..\Utils\Utils.csproj"/>
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include="seed.json5;config.json5">
+		<Content Include="seed.json5;config.json5;appsettings.json5">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Remove="FrontendCode\**\*" />
-		<None Include="FrontendCode\**\*" />
+		<Content Remove="FrontendCode\**\*"/>
+		<None Include="FrontendCode\**\*"/>
 		<Content Update="FrontendCode\svg\discord.svg">
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 		<Content Update="FrontendCode\svg\google.svg">
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 		<Content Update="FrontendCode\svg\patreon.svg">
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 		<Content Update="FrontendCode\svg\tumblr.svg">
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 		<None Update="disposable_email_blocklist.txt">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg" />
-	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.br" />
-	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.gz" />
-	  <_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.zst" />
+		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg"/>
+		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.br"/>
+		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.gz"/>
+		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.zst"/>
 	</ItemGroup>
 </Project>

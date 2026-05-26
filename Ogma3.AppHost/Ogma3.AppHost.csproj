@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <PackageReference Include="Aspire.Hosting.Docker" />
+        <PackageReference Include="Aspire.Hosting.Docker.SshDeploy" />
         <PackageReference Include="Aspire.Hosting.Garnet" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL" />
     </ItemGroup>

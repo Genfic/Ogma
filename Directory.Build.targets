@@ -1,0 +1,5 @@
+<Project>
+	<PropertyGroup Condition="'$(PublishProtocol)' == 'Container' Or '$(ContainerImageName)' != ''">
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+</Project>
