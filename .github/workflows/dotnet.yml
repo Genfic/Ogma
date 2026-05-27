@@ -20,7 +20,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10
+          global-json-file: global.json
       - name: Add gh nuget registry
         run: dotnet nuget add source --username Atulin --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/atulin/index.json"
       - name: Restore dependencies
