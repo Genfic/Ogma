@@ -1,5 +1,6 @@
 import { readdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import Bun from "bun";
 
 const root = dirname(Bun.main);
 const _base = join(root, "FrontendCode", "styles", "themes");

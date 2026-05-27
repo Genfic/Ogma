@@ -59,6 +59,11 @@
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
+	<Target Name="BuildFrontendCode" BeforeTargets="BeforePublish">
+		<Message Importance="high" Text="--- Running frontend code build ---" />
+		<Exec Command="bun run build" WorkingDirectory="$(ProjectDir)\FrontendCode"/>
+	</Target>
+
 	<ItemGroup>
 		<EmbeddedResource Include="$(ProjectDir)\Queries\**\*.sql"/>
 	</ItemGroup>

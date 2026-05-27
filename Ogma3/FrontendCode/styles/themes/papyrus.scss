@@ -51,4 +51,14 @@ $yellow: oklch(85.0% 0.180 90.382deg);
 
 	--gold: #{$gold};
 	--ele-1: oklch(from #{$background} calc(l * 0.93) c h);
+
+	// brands
+	--patreon-bg: oklch(95% 0.05 31.998deg);
+	--patreon-fg: var(--foreground);
+	--tumblr-bg: oklch(90% 0.064 252.202deg);
+	--tumblr-fg: #001935;
+	--discord-bg: #e0e3ff;
+	--discord-fg: var(--foreground);
+	--google-bg: white;
+	--google-fg: #1F1F1F;
 }

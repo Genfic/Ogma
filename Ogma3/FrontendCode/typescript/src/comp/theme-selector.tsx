@@ -69,7 +69,9 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 		window.addEventListener(
 			"pointerup",
 			() => {
-				isPointerDown = false;
+				setTimeout(() => {
+					isPointerDown = false;
+				}, 0);
 			},
 			{ once: true },
 		);

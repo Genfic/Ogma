@@ -6,7 +6,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var emulateProd = builder.Configuration.GetValue<bool>("emulate-prod");
 var isProd = emulateProd || builder.ExecutionContext.IsPublishMode;
 
-var shouldSeed = builder.AddParameter("should-seed", "basic", publishValueAsDefault: true);
+var shouldSeed = builder.AddParameter("should-seed", "false", publishValueAsDefault: true);
 
 var infisical = new Dictionary<string, IResourceBuilder<ParameterResource>>
 {

@@ -13,8 +13,9 @@
 		"js": "bun ./scripts/build-js.ts",
 		"js:watch": "bun ./scripts/build-js.ts -- --watch",
 		"js:typecheck": "tsc --project ./typescript --noEmit",
+		"fonts": "bun ./scripts/build-fonts.ts",
 		"lh": "bunx unlighthouse",
-		"build": "bun run css && bun run js && bun run webtypes && bun run icons"
+		"build": "bun run css -- -c && bun run js -- -c && bun run fonts"
 	},
 	"devDependencies": {
 		"@angius/bun-plugin-solid": "^1.4.2",

@@ -38,53 +38,32 @@ form.social-login {
 		}
 
 		&.patreon {
-			background-color: oklch(95% 0.05 31.998deg);
+			background-color: var(--patreon-bg);
 
 			.icon {
 				color: #FC674D;
 			}
-
-			&.dark {
-				background-color: oklch(10% 0.1 31.998deg);
-			}
 		}
 
 		&.discord {
-			background-color: #e0e3ff;
+			background-color: var(--discord-bg);
 
 			.icon {
 				color: #5865f2;
 			}
-
-			&.dark {
-				background-color: #000;
-			}
 		}
 
 		&.tumblr {
-			background-color: oklch(90% 0.064 252.202deg);
+			background-color: var(--tumblr-bg);
 
 			.icon {
-				color: #001935;
-			}
-
-			&.dark {
-				background-color: #001935;
-
-				.icon {
-					color: #fff;
-				}
+				color: var(--tumblr-fg);
 			}
 		}
 
 		&.google {
-			color: #1F1F1F;
-			background-color: white;
-
-			&.dark {
-				color: #E3E3E3;
-				background-color: #131314;
-			}
+			color: var(--google-fg);
+			background-color: var(--google-bg);
 		}
 	}
 }
