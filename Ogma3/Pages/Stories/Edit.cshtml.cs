@@ -14,6 +14,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 using Story = Routes.Pages.Story;
@@ -25,6 +26,7 @@ public sealed class EditModel
 (
 	ApplicationDbContext context,
 	ImageUploader uploader,
+	ImageProcessor processor,
 	OgmaConfig ogmaConfig,
 	NotificationsRepository notificationsRepo)
 	: PageModel
@@ -200,12 +202,8 @@ public sealed class EditModel
 				await uploader.Delete(storyData.CoverUrl!);
 			}
 
-			var file = await uploader.Upload(
-				Input.Cover,
-				"covers",
-				ogmaConfig.StoryCoverWidth,
-				ogmaConfig.StoryCoverHeight
-			);
+			var processed = await processor.ProcessAvatar(Input.Cover, ogmaConfig.StoryCoverWidth, ogmaConfig.StoryCoverHeight, false);
+			var file = await uploader.Upload(processed, "covers");
 
 			if (storyData.CoverId is not null)
 			{

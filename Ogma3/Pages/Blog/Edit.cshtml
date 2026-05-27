@@ -36,7 +36,7 @@
 		<markdown-editor>
 			<autosave-btn uid="@Model.Input.Id" key="chapter"></autosave-btn>
 		</markdown-editor>
-		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
+		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true" allow-paste></textarea>
 		<span asp-validation-for="Input.Body"></span>
 	</div>
 
@@ -108,4 +108,5 @@
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/extra-buttons/autosave-button.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/image-uploader.js" asp-append-version="true"></script>
 }

@@ -13,6 +13,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.GeneratedImagesService;
 using Ogma3.Services.TimeService;
@@ -24,6 +25,7 @@ public sealed partial class IndexModel
 	ApplicationDbContext context,
 	SignInManager<OgmaUser> signInManager,
 	ImageUploader uploader,
+	ImageProcessor processor,
 	OgmaConfig config,
 	GeneratedImagesService imagesService,
 	ITimeService timeService) : PageModel
@@ -118,12 +120,8 @@ public sealed partial class IndexModel
 			}
 
 			// Upload the new one
-			var file = await uploader.Upload(
-				Input.Avatar,
-				"avatars",
-				config.AvatarWidth,
-				config.AvatarHeight
-			);
+			var processed = await processor.ProcessAvatar(Input.Avatar, config.AvatarWidth, config.AvatarHeight, false);
+			var file = await uploader.Upload(processed, "avatars");
 			user.Avatar = new Image
 			{
 				Url = file.Key,

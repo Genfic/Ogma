@@ -13,6 +13,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Utils.Extensions;
 
@@ -23,6 +24,7 @@ public sealed class CreateModel
 (
 	ApplicationDbContext context,
 	ImageUploader uploader,
+	ImageProcessor processor,
 	OgmaConfig ogmaConfig)
 	: PageModel
 {
@@ -134,12 +136,8 @@ public sealed class CreateModel
 		// Upload cover
 		if (Input.Cover is { Length: > 0 })
 		{
-			var file = await uploader.Upload(
-				Input.Cover,
-				"covers",
-				ogmaConfig.StoryCoverWidth,
-				ogmaConfig.StoryCoverHeight
-			);
+			var processed = await processor.ProcessAvatar(Input.Cover, ogmaConfig.StoryCoverWidth, ogmaConfig.StoryCoverHeight, false);
+			var file = await uploader.Upload(processed, "covers");
 			story.Cover = new Image
 			{
 				Url = file.Key,

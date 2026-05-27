@@ -59,7 +59,7 @@
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
-	<Target Name="BuildFrontendCode" BeforeTargets="BeforePublish">
+	<Target Name="BuildFrontendCode" BeforeTargets="AssignTargetPaths" Condition="'$(Configuration)' == 'Release'">
 		<Message Importance="high" Text="--- Running frontend code build ---" />
 		<Exec Command="bun run build" WorkingDirectory="$(ProjectDir)\FrontendCode"/>
 	</Target>

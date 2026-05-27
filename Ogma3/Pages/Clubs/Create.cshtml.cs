@@ -10,6 +10,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Routes.Pages;
 using Utils.Extensions;
@@ -17,7 +18,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public sealed class CreateModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig) : PageModel
+public sealed class CreateModel(ApplicationDbContext context, ImageUploader uploader, ImageProcessor processor, OgmaConfig ogmaConfig) : PageModel
 {
 	public IActionResult OnGet()
 	{
@@ -62,12 +63,8 @@ public sealed class CreateModel(ApplicationDbContext context, ImageUploader uplo
 		string? iconId = null;
 		if (Input.Icon is { Length: > 0})
 		{
-			var file = await uploader.Upload(
-				Input.Icon,
-				"club-icons",
-				ogmaConfig.ClubIconWidth,
-				ogmaConfig.ClubIconHeight
-			);
+			var processed = await processor.ProcessAvatar(Input.Icon, ogmaConfig.ClubIconWidth, ogmaConfig.ClubIconHeight, false);
+			var file = await uploader.Upload(processed, "club-icons");
 			icon = file.Key;
 			iconId = file.ETag;
 		}

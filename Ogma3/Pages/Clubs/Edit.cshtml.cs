@@ -11,6 +11,7 @@ using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
+using Ogma3.Services;
 using Ogma3.Services.FileUploader;
 using Routes.Pages;
 using Utils.Extensions;
@@ -18,7 +19,13 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context, ImageUploader uploader, OgmaConfig ogmaConfig, ILogger<EditModel> logger) : PageModel
+public sealed class EditModel
+(
+	ApplicationDbContext context,
+	ImageUploader uploader,
+	ImageProcessor processor,
+	OgmaConfig ogmaConfig,
+	ILogger<EditModel> logger) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -29,7 +36,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 		public required string Slug { get; init; }
 		public required string Hook { get; init; }
 		public required string Description { get; init; }
-		[DataType(DataType.Upload)]public IFormFile? Icon { get; init; }
+		[DataType(DataType.Upload)] public IFormFile? Icon { get; init; }
 	}
 
 	public sealed class InputModelValidator : AbstractValidator<InputModel>
@@ -84,7 +91,7 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 	{
 		if (!ModelState.IsValid) return Page();
 
-		if (User.GetNumericId() is not { } uid) return Unauthorized();
+		if (User.GetNumericId() is not {} uid) return Unauthorized();
 
 		logger.LogInformation("User {UserId} attempted to edit club {ClubId}", uid, id);
 
@@ -114,12 +121,8 @@ public sealed class EditModel(ApplicationDbContext context, ImageUploader upload
 				await uploader.Delete(club.Icon.Url);
 			}
 
-			var file = await uploader.Upload(
-				Input.Icon,
-				"club-icons",
-				ogmaConfig.ClubIconWidth,
-				ogmaConfig.ClubIconHeight
-			);
+			var processed = await processor.ProcessAvatar(Input.Icon, ogmaConfig.ClubIconWidth, ogmaConfig.ClubIconHeight, false);
+			var file = await uploader.Upload(processed, "club-icons");
 			club.Icon = new Image
 			{
 				Url = file.Key,
