@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '11.0.x'
-          include-prerelease: true
+          dotnet-quality: 'preview'
           source-url: https://nuget.pkg.github.com/atulin/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
