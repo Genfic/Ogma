@@ -1,5 +1,6 @@
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ConfigBoundNET;
@@ -7,6 +8,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -117,7 +119,14 @@ public static class Startup
 		});
 
 		// Data protection
-		services.AddDataProtection();
+		var certPem = configuration.Require<string>("DataProtection:CertificatePem");
+		var keyPem = configuration.Require<string>("DataProtection:KeyPem");
+		var cert = X509Certificate2.CreateFromPem(certPem, keyPem);
+		services
+			.AddDataProtection()
+			.SetApplicationName("Ogma3")
+			.PersistKeysToFileSystem(new DirectoryInfo("/var/ogma/data-protection-keys"))
+			.ProtectKeysWithCertificate(cert);
 
 		// Add services
 		services
