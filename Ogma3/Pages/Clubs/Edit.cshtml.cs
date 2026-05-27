@@ -33,11 +33,12 @@ public sealed class EditModel
 	{
 		public required long Id { get; init; }
 		public required string Name { get; init; }
-		public required string Slug { get; init; }
 		public required string Hook { get; init; }
 		public required string Description { get; init; }
 		[DataType(DataType.Upload)] public IFormFile? Icon { get; init; }
 	}
+
+	public string? Slug { get; set; }
 
 	public sealed class InputModelValidator : AbstractValidator<InputModel>
 	{
@@ -69,27 +70,37 @@ public sealed class EditModel
 			.Where(c => c.ClubMembers
 				.Where(cm => cm.MemberId == uid)
 				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
-			.Select(c => new InputModel
+			.Select(c => new
 			{
-				Id = c.Id,
-				Name = c.Name,
-				Slug = c.Slug,
-				Hook = c.Hook,
-				Description = c.Description,
+				c.Id,
+				c.Name,
+				c.Slug,
+				c.Hook,
+				c.Description,
 			})
 			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
 		if (input is null) return NotFound();
 
-		Input = input;
+		Input = new InputModel
+		{
+			Id = input.Id,
+			Name = input.Name,
+			Hook = input.Hook,
+			Description = input.Description,
+		};
+		Slug = input.Slug;
 
 		return Page();
 	}
 
 	public async Task<IActionResult> OnPostAsync(long? id)
 	{
-		if (!ModelState.IsValid) return Page();
+		if (!ModelState.IsValid)
+		{
+			return Page();
+		}
 
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
 

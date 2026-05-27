@@ -1,5 +1,6 @@
 @page "{id}"
 @using Ogma3.Infrastructure.OgmaConfig
+@using Routes.Pages
 @model EditModel
 
 @inject OgmaConfig Config
@@ -12,7 +13,7 @@
 <br>
 
 <div class="button-group">
-	<a title="Cancel" class="action-btn large" asp-page="/Club/Index" asp-route-id="@Model.Input.Id" asp-route-slug="@Model.Input.Slug">
+	<a title="Cancel" class="action-btn large" for-route="@Club_Index.Get(Model.Input.Id, Model.Slug)">
 		<icon class="icon" name="lucide:arrow-left"></icon>
 		<span class="name">Back to club</span>
 	</a>
@@ -72,7 +73,7 @@
 
 </form>
 
-<partial name="Shared/_ValidationScriptsPartial"/>
+<partial name="Shared/_ValidationScriptsPartial" />
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
