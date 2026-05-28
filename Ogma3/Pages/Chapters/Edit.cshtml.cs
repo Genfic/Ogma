@@ -86,7 +86,7 @@ public sealed class EditModel(
 		if (uid is null) return Unauthorized();
 
 		var signature = hasher.ComputeSignature(Input.Body.Trim());
-		var copies = await chapterService.IsPlagiarized(signature);
+		var copies = await chapterService.IsPlagiarized(signature, id);
 
 		if (copies.Count > 0)
 		{
