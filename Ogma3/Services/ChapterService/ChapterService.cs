@@ -48,12 +48,11 @@ public sealed class ChapterService(ApplicationDbContext context, OgmaConfig conf
 		var chaps = await context.Chapters
 			.FromSql($"""
 			          SELECT * FROM "Chapters" c
-			          WHERE CASE
-			              WHEN c."Id" = {id} THEN FALSE
-			              WHEN NOT (c."Signature" && {sig}) THEN FALSE
-			              ELSE (icount(c."Signature" & {sig})::float / {sig.Length} >= {config.PlagiarismThreshold})
-			          END
-			          ORDER BY icount(c."Signature" & {sig}) DESC;
+			          WHERE c."Id" <> {id}
+			            AND c."Signature" && {sig}
+			            AND icount(c."Signature" & {sig})::float / {sig.Length}
+			                  >= {config.PlagiarismThreshold}
+			          ORDER BY icount(c."Signature" & {sig}) DESC
 			          """)
 			.Select(c => c.Id)
 			.ToListAsync(ct);

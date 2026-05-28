@@ -9,6 +9,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -42,6 +44,7 @@ using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.S3Storage;
 using Scalar.AspNetCore;
 using Sqids;
+using StackExchange.Redis;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
 using IPNetwork = System.Net.IPNetwork;
@@ -125,8 +128,12 @@ public static class Startup
 		services
 			.AddDataProtection()
 			.SetApplicationName("Ogma3")
-			.PersistKeysToFileSystem(new DirectoryInfo("/var/ogma/data-protection-keys"))
 			.ProtectKeysWithCertificate(cert);
+		services
+			.AddOptions<KeyManagementOptions>()
+			.Configure<IConnectionMultiplexer>((opt, mux) => {
+				opt.XmlRepository = new RedisXmlRepository(() => mux.GetDatabase(), "DataProtection:Keys");
+			});
 
 		// Add services
 		services

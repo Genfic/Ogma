@@ -38,6 +38,7 @@
     <PackageVersion Include="Markdig" Version="1.2.0" />
     <PackageVersion Include="MemoryPack" Version="1.21.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0-preview.4.26230.115" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="11.0.0-preview.4.26230.115" />
     <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="11.0.0-preview.4.26230.115" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="11.0.0-preview.4.26230.115" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="11.0.0-preview.4.26230.115" />
