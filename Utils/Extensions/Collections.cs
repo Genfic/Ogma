@@ -29,18 +29,27 @@ public static class List
 
 public static class Dictionary
 {
-	public static void AddMany<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, bool replace = true)
+	extension<TKey, TValue>(IDictionary<TKey, TValue> dict)
 	{
-		foreach (var (key, value) in other)
+		public void AddMany(IDictionary<TKey, TValue> other, bool replace = true)
 		{
-			if (replace)
+			foreach (var (key, value) in other)
 			{
-				dict[key] = value;
-			}
-			else
-			{
-				_ = dict.TryAdd(key, value);
+				if (replace)
+				{
+					dict[key] = value;
+				}
+				else
+				{
+					_ = dict.TryAdd(key, value);
+				}
 			}
 		}
+
+		public TValue GetOrDefault(TKey key, TValue defaultValue = default(TValue))
+		{
+			return dict.TryGetValue(key, out var value) ? value : defaultValue;
+		}
 	}
+
 }

@@ -182,7 +182,7 @@ public static class Startup
 			options.LoginPath = new PathString("/login");
 			options.LogoutPath = new PathString("/logout");
 			options.AccessDeniedPath = new PathString("/login");
-			options.Cookie.SameSite = SameSiteMode.Strict;
+			options.Cookie.SameSite = SameSiteMode.Lax;
 			options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 		});
 

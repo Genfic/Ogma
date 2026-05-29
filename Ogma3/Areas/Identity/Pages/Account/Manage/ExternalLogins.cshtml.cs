@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data.Users;
+using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
@@ -23,7 +24,7 @@ public sealed class ExternalLoginsModel
 		var user = await userManager.GetUserAsync(User);
 		if (user == null)
 		{
-			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			return NotFound("Unable to find the user. Refresh the page manually.");
 		}
 
 		var currentLogins = await userManager.GetLoginsAsync(user);
@@ -46,7 +47,7 @@ public sealed class ExternalLoginsModel
 		var user = await userManager.GetUserAsync(User);
 		if (user is null)
 		{
-			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			return NotFound("Unable to find user.");
 		}
 
 		var result = await userManager.RemoveLoginAsync(user, loginProvider, providerKey);
@@ -75,9 +76,21 @@ public sealed class ExternalLoginsModel
 	public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
 	{
 		var user = await userManager.GetUserAsync(User);
+
+		// Fallback, in case the browser or the user forces cookies to be `SameSite=Strict`
 		if (user is null)
 		{
-			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			var externalInfo = await signInManager.GetExternalLoginInfoAsync();
+			var xsrfUserId = externalInfo?.AuthenticationProperties?.Items.GetOrDefault("XsrfId");
+			if (xsrfUserId is not null)
+			{
+				user = await userManager.FindByIdAsync(xsrfUserId);
+			}
+		}
+
+		if (user is null)
+		{
+			return NotFound("Unable to find user.");
 		}
 
 		var info = await signInManager.GetExternalLoginInfoAsync(await userManager.GetUserIdAsync(user));
