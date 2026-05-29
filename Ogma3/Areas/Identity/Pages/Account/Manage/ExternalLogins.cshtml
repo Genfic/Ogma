@@ -3,9 +3,6 @@
 @{
 	ViewData["Title"] = "Manage your external logins";
 	ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
-	Request.Cookies.TryGetValue("theme", out var theme);
-	theme ??= "light";
-	var logoColor = theme == "light" ? "black" : "white";
 }
 
 <partial name="_StatusMessage" for="StatusMessage" />
@@ -13,7 +10,7 @@
 <div class="logins">
 	@foreach (var login in Model.AllLogins)
 	{
-		<img alt="" src="https://api.iconify.design/simple-icons:@(login.Name.ToLower()).svg?color=@logoColor" />
+		<icon name="simple-icons:@(login.Name.ToLower())" size="24" ></icon>
 
 		<div class="name">
 			@login.DisplayName

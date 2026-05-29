@@ -1,0 +1,17 @@
+@model IList<Microsoft.AspNetCore.Authentication.AuthenticationScheme>
+
+@{
+	var text = (ViewData["Title"] as string)?.Equals("register", StringComparison.OrdinalIgnoreCase) is true
+		? "Sign up"
+		: "Sign in";
+}
+
+@foreach (var provider in Model)
+{
+	<button type="submit" class="btn btn-primary @(provider.Name.ToLower())" name="provider" value="@provider.Name"
+	        title="Log in using your @provider.DisplayName account">
+		<icon name="simple-icons:@(provider.Name.ToLower())" size="48" ></icon>
+		@text with @provider.DisplayName
+	</button>
+}
+

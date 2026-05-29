@@ -79,7 +79,6 @@
 		<PackageReference Include="Bogus"/>
 		<PackageReference Include="Chorn.EmbeddedResourceAccessGenerator"/>
 		<PackageReference Include="ConfigBoundNET"/>
-		<PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" />
 		<PackageReference Include="FluentValidation"/>
 		<PackageReference Include="FluentValidation.AspNetCore"/>
 		<PackageReference Include="Humanizer.Core"/>
