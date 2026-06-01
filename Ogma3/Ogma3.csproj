@@ -60,8 +60,17 @@
 	</Target>
 
 	<Target Name="BuildFrontendCode" BeforeTargets="AssignTargetPaths" Condition="'$(Configuration)' == 'Release'">
-		<Message Importance="high" Text="--- Running frontend code build ---" />
+		<Message Importance="high" Text="--- Running frontend code build ---"/>
 		<Exec Command="bun run build" WorkingDirectory="$(ProjectDir)\FrontendCode"/>
+
+		<ItemGroup>
+			<Content Remove="$(ProjectDir)\wwwroot\{js,css}\**"/>
+			<None Remove="$(ProjectDir)\wwwroot\{js,css}\**"/>
+			
+			<Content Include="$(ProjectDir)\wwwroot\{js,css}\**">
+				<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			</Content>
+		</ItemGroup>
 	</Target>
 
 	<ItemGroup>
@@ -82,16 +91,16 @@
 		<PackageReference Include="FluentValidation"/>
 		<PackageReference Include="FluentValidation.AspNetCore"/>
 		<PackageReference Include="Humanizer.Core"/>
-		<PackageReference Include="Immediate.Apis" />
-		<PackageReference Include="Immediate.Handlers" />
-		<PackageReference Include="Immediate.Injections" />
+		<PackageReference Include="Immediate.Apis"/>
+		<PackageReference Include="Immediate.Handlers"/>
+		<PackageReference Include="Immediate.Injections"/>
 		<PackageReference Include="Immediate.Validations"/>
 		<PackageReference Include="JetBrains.Annotations"/>
 		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning"/>
 		<PackageReference Include="Markdig"/>
 		<PackageReference Include="MemoryPack"/>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google"/>
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis"/>
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"/>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI"/>
@@ -140,8 +149,6 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Remove="FrontendCode\**\*"/>
-		<None Include="FrontendCode\**\*"/>
 		<Content Update="FrontendCode\svg\discord.svg">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
