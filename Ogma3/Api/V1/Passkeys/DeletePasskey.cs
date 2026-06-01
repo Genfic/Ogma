@@ -13,25 +13,24 @@ using ReturnType = Results<Ok, NotFound, InternalServerError>;
 [Handler]
 [Authorize]
 [MapDelete("api/passkeys/delete")]
-public sealed partial class DeletePasskey(
+public sealed partial class DeletePasskey
+(
 	OgmaUserManager userManager,
 	IHttpContextAccessor contextAccessor,
 	ILogger<DeletePasskey.Handler> logger)
 {
-	[UsedImplicitly]
-	public sealed record Query([FromQuery] string Id);
 
 	private async ValueTask<ReturnType> Handle(
 		Query request,
 		CancellationToken _
 	)
 	{
-		if (contextAccessor.HttpContext is not { } httpContext)
+		if (contextAccessor.HttpContext is not {} httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
+		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
 		{
 			return TypedResults.NotFound();
 		}
@@ -48,4 +47,7 @@ public sealed partial class DeletePasskey(
 		logger.LogWarning("Could not remove passkey {PasskeyId} for user {UserId}", request.Id, user.Id);
 		return TypedResults.InternalServerError();
 	}
+
+	[UsedImplicitly]
+	public sealed record Query([FromQuery] string Id);
 }

@@ -13,12 +13,10 @@ using ReturnType = Results<Ok, UnauthorizedResult>;
 
 [Handler]
 [MapPost("api/passkeys/signin")]
-public static partial class SignInWithPasskey
+public sealed partial class SignInWithPasskey(SignInManager<OgmaUser> signInManager)
 {
-	[UsedImplicitly]
-	public sealed record Query(string Credentials);
 
-	private static async ValueTask<ReturnType> Handle(Query request, SignInManager<OgmaUser> signInManager, CancellationToken _)
+	private async ValueTask<ReturnType> Handle(Query request, CancellationToken _)
 	{
 		var res = await signInManager.PasskeySignInAsync(request.Credentials);
 
@@ -29,4 +27,7 @@ public static partial class SignInWithPasskey
 
 		return TypedResults.Ok();
 	}
+
+	[UsedImplicitly]
+	public sealed record Query(string Credentials);
 }

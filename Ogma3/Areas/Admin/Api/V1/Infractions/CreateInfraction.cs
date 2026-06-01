@@ -21,7 +21,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok>;
 [Handler]
 [MapPost("admin/api/infractions")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class CreateInfraction
+public sealed partial class CreateInfraction(ApplicationDbContext context, IUserService userService, IFusionCache cache)
 {
 	[Validate]
 	public sealed partial record Command
@@ -32,11 +32,8 @@ public static partial class CreateInfraction
 		InfractionType Type
 	) : IValidationTarget<Command>;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		IFusionCache cache,
 		CancellationToken cancellationToken
 	)
 	{

@@ -12,20 +12,19 @@ namespace Ogma3.Api.V1.Files;
 [Handler]
 [MapPost("api/files/upload")]
 [Authorize]
-public static partial class UploadFile
+public sealed partial class UploadFile(IFileUploader uploader, ImageProcessor processor, OgmaConfig config)
 {
-	public sealed record Query(IFormFile File);
 
-	private static async ValueTask<Ok<string>> Handle(
+	private async ValueTask<Ok<string>> Handle(
 		[FromForm] Query request,
-		IFileUploader uploader,
-		ImageProcessor processor,
-		OgmaConfig config,
-		CancellationToken _)
+		CancellationToken _
+	)
 	{
 		var processed = await processor.ProcessPaste(request.File);
 		var res = await uploader.Upload(processed, "paste");
 
 		return TypedResults.Ok(Path.Join(config.Cdn, res.Key));
 	}
+
+	public sealed record Query(IFormFile File);
 }

@@ -9,30 +9,27 @@ using Ogma3.Data.Users;
 
 namespace Ogma3.Api.V1.Passkeys;
 
-using ReturnType = Results<BadRequest<string>, BadRequest<IEnumerable<string>>, InternalServerError, Ok<RegisterPasskey.Response>, NotFound>;
+using ReturnType =
+	Results<BadRequest<string>, BadRequest<IEnumerable<string>>, InternalServerError, Ok<RegisterPasskey.Response>, NotFound>;
 
 [Handler]
 [Authorize]
 [MapPost("api/passkeys/register")]
-public static partial class RegisterPasskey
+public sealed partial class RegisterPasskey
+	(IHttpContextAccessor contextAccessor, SignInManager<OgmaUser> signInManager, OgmaUserManager userManager)
 {
-	[UsedImplicitly]
-	public sealed record Query(string Credentials, string? Name);
 
-	private static async ValueTask<ReturnType> Handle(
+	private async ValueTask<ReturnType> Handle(
 		Query query,
-		IHttpContextAccessor contextAccessor,
-		SignInManager<OgmaUser> signInManager,
-		OgmaUserManager userManager,
 		CancellationToken _
 	)
 	{
-		if (contextAccessor.HttpContext is not { } httpContext)
+		if (contextAccessor.HttpContext is not {} httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
+		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
 		{
 			return TypedResults.NotFound();
 		}
@@ -58,6 +55,9 @@ public static partial class RegisterPasskey
 
 		return TypedResults.Ok(response);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query(string Credentials, string? Name);
 
 	public sealed record Response(string Id, string? Name, DateTimeOffset CreationDate);
 }

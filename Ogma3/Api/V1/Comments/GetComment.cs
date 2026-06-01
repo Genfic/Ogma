@@ -13,20 +13,15 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<CommentDto>>;
 
 [Handler]
 [MapGet("api/comments/{commentId:long}")]
-public static partial class GetComment
+public sealed partial class GetComment(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) =>
-		endpoint
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
 			.WithName(nameof(GetComment))
 			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -41,4 +36,7 @@ public static partial class GetComment
 
 		return TypedResults.Ok(comment);
 	}
+
+	[Validate]
+	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
 }

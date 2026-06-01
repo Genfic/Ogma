@@ -14,18 +14,14 @@ using ReturnType = Ok<bool>;
 [Handler]
 [MapGet("/api/ClubJoin/{clubId:long}")]
 [Authorize]
-public static partial class GetClubMembershipStatus
+public sealed partial class GetClubMembershipStatus(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long ClubId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -38,4 +34,7 @@ public static partial class GetClubMembershipStatus
 
 		return TypedResults.Ok(isMember);
 	}
+
+	[Validate]
+	public sealed partial record Query(long ClubId) : IValidationTarget<Query>;
 }

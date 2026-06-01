@@ -11,23 +11,20 @@ using ReturnType = Results<Ok<List<ListPasskeys.UserPasskey>>, NotFound, Interna
 [Handler]
 [Authorize]
 [MapGet("api/passkeys/list")]
-public static partial class ListPasskeys
+public sealed partial class ListPasskeys(OgmaUserManager userManager, IHttpContextAccessor contextAccessor)
 {
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> Handle(
+	private async ValueTask<ReturnType> Handle(
 		Query _,
-		OgmaUserManager userManager,
-		IHttpContextAccessor contextAccessor,
 		CancellationToken __
 	)
 	{
-		if (contextAccessor.HttpContext is not { } httpContext)
+		if (contextAccessor.HttpContext is not {} httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
+		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
 		{
 			return TypedResults.NotFound();
 		}
@@ -41,6 +38,8 @@ public static partial class ListPasskeys
 
 		return TypedResults.Ok(mapped);
 	}
+
+	public sealed record Query;
 
 	public sealed record UserPasskey(string Id, string? Name, DateTimeOffset CreationDate);
 }

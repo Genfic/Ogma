@@ -15,15 +15,11 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto[]>>;
 [Handler]
 [MapGet("api/InviteCodes")]
 [Authorize]
-public static partial class GetIssuedInviteCodes
+public sealed partial class GetIssuedInviteCodes(ApplicationDbContext context, IUserService userService)
 {
-	[UsedImplicitly]
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -37,4 +33,7 @@ public static partial class GetIssuedInviteCodes
 
 		return TypedResults.Ok(codes);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 }

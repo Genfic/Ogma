@@ -16,16 +16,12 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, Ok<Invite
 [Handler]
 [MapPost("api/InviteCodes")]
 [Authorize]
-public static partial class IssueInviteCode
+public sealed partial class IssueInviteCode
+	(ApplicationDbContext context, OgmaConfig config, ICodeGenerator codeGenerator, IUserService userService)
 {
-	public sealed record Command;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command _,
-		ApplicationDbContext context,
-		OgmaConfig config,
-		ICodeGenerator codeGenerator,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -56,4 +52,6 @@ public static partial class IssueInviteCode
 
 		return TypedResults.Ok(newCode);
 	}
+
+	public sealed record Command;
 }

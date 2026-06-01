@@ -14,18 +14,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetCurrentUserQuickShelves
 [Handler]
 [MapGet("api/ShelfStories/{storyId:long}/quick")]
 [Authorize]
-public static partial class GetCurrentUserQuickShelves
+public sealed partial class GetCurrentUserQuickShelves(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -45,6 +41,9 @@ public static partial class GetCurrentUserQuickShelves
 
 		return TypedResults.Ok(shelves);
 	}
+
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 
 	public sealed record Result(long Id, string Name, string? Color, string? IconName, bool DoesContainBook);
 }

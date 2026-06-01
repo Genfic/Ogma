@@ -19,18 +19,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 [Handler]
 [MapPost("api/users/roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class UpdateRoles
+public sealed partial class UpdateRoles(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long UserId, List<long> Roles) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -71,4 +67,7 @@ public static partial class UpdateRoles
 
 		return TypedResults.Ok();
 	}
+
+	[Validate]
+	public sealed partial record Command(long UserId, List<long> Roles) : IValidationTarget<Command>;
 }

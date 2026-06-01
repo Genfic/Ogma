@@ -15,19 +15,15 @@ using ReturnType = Results<Ok<ShelfDto>, NotFound, UnauthorizedHttpResult>;
 [Handler]
 [MapGet("api/shelves/{shelfId:long}")]
 [Authorize]
-public static partial class GetShelf
+public sealed partial class GetShelf(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithName(nameof(GetShelf))
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.WithName(nameof(GetShelf))
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long ShelfId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -43,4 +39,7 @@ public static partial class GetShelf
 			? TypedResults.NotFound()
 			: TypedResults.Ok(shelf);
 	}
+
+	[Validate]
+	public sealed partial record Query(long ShelfId) : IValidationTarget<Query>;
 }

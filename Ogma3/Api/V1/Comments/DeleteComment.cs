@@ -17,20 +17,14 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
 [Handler]
 [MapDelete("api/comments/{commentId}")]
 [Authorize]
-public static partial class DeleteComment
+public sealed partial class DeleteComment(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Command(string CommentId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
@@ -44,10 +38,10 @@ public static partial class DeleteComment
 		var rows = await context.Comments
 			.Where(c => c.Id == id)
 			.Where(c => c.AuthorId == uid)
-			.ExecuteUpdateAsync(setters => setters
-					.SetProperty(c => c.DeletedBy, EDeletedBy.User)
-					.SetProperty(c => c.DeletedByUserId, uid)
-					.SetProperty(c => c.Body, string.Empty),
+			.ExecuteUpdateAsync(setPropertyCalls: setters => setters
+					.SetProperty(propertyExpression: c => c.DeletedBy, EDeletedBy.User)
+					.SetProperty(propertyExpression: c => c.DeletedByUserId, uid)
+					.SetProperty(propertyExpression: c => c.Body, string.Empty),
 				cancellationToken);
 
 		_ = await context.CommentRevisions
@@ -58,4 +52,8 @@ public static partial class DeleteComment
 
 		return rows > 0 ? TypedResults.Ok(request.CommentId) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Command(string CommentId) : IValidationTarget<Command>;
 }

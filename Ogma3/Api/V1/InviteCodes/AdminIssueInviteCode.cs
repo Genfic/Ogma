@@ -16,15 +16,11 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 [Handler]
 [MapPost("api/InviteCodes/no-limit")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class AdminIssueInviteCode
+public sealed partial class AdminIssueInviteCode(ApplicationDbContext context, ICodeGenerator codeGenerator, IUserService userService)
 {
-	public sealed record Command;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command _,
-		ApplicationDbContext context,
-		ICodeGenerator codeGenerator,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -46,4 +42,6 @@ public static partial class AdminIssueInviteCode
 
 		return TypedResults.Ok(newCode);
 	}
+
+	public sealed record Command;
 }

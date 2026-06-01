@@ -12,18 +12,15 @@ using ReturnType = Results<Ok<TagDto>, NotFound>;
 
 [Handler]
 [MapGet("api/tags/{tagId:long}")]
-public static partial class GetSingleTag
+public sealed partial class GetSingleTag(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithName(nameof(GetSingleTag))
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.WithName(nameof(GetSingleTag))
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long TagId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -36,4 +33,7 @@ public static partial class GetSingleTag
 			? TypedResults.NotFound()
 			: TypedResults.Ok(tag);
 	}
+
+	[Validate]
+	public sealed partial record Query(long TagId) : IValidationTarget<Query>;
 }

@@ -11,13 +11,12 @@ namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 [Handler]
 [MapGet("admin/api/infractions/user/{userId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class GetUserInfractions
+public sealed partial class GetUserInfractions(ApplicationDbContext context)
 {
 	public sealed record Query(long UserId);
 	
-	private static async ValueTask<Ok<List<Result>>> HandleAsync(
+	private async ValueTask<Ok<List<Result>>> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{

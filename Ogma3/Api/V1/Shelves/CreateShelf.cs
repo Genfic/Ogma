@@ -14,31 +14,14 @@ using ReturnType = Results<CreatedAtRoute<ShelfDto>, UnauthorizedHttpResult>;
 [Handler]
 [MapPost("api/shelves")]
 [Authorize]
-public static partial class CreateShelf
+public sealed partial class CreateShelf(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command
-	(
-		[property: MinLength(CTConfig.Shelf.MinNameLength)]
-		[property: MaxLength(CTConfig.Shelf.MaxNameLength)]
-		string Name,
-		[property: MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
-		string Description,
-		bool IsQuickAdd,
-		bool IsPublic,
-		bool TrackUpdates,
-		[property: MaxLength(7)]
-		string Color,
-		long? IconId
-	) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -75,4 +58,20 @@ public static partial class CreateShelf
 
 		return TypedResults.CreatedAtRoute(dto, nameof(GetShelf), new GetShelf.Query(shelf.Id));
 	}
+
+	[Validate]
+	public sealed partial record Command
+	(
+		[property: MinLength(CTConfig.Shelf.MinNameLength)]
+		[property: MaxLength(CTConfig.Shelf.MaxNameLength)]
+		string Name,
+		[property: MaxLength(CTConfig.Shelf.MaxDescriptionLength)]
+		string Description,
+		bool IsQuickAdd,
+		bool IsPublic,
+		bool TrackUpdates,
+		[property: MaxLength(7)]
+		string Color,
+		long? IconId
+	) : IValidationTarget<Command>;
 }

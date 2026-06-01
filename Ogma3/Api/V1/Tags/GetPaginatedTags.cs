@@ -10,17 +10,14 @@ namespace Ogma3.Api.V1.Tags;
 
 [Handler]
 [MapGet("api/tags")]
-public static partial class GetPaginatedTags
+public sealed partial class GetPaginatedTags(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
-
-	private static async ValueTask<Ok<TagDto[]>> HandleAsync(
+	private async ValueTask<Ok<TagDto[]>> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -32,4 +29,7 @@ public static partial class GetPaginatedTags
 
 		return TypedResults.Ok(tags);
 	}
+
+	[Validate]
+	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
 }

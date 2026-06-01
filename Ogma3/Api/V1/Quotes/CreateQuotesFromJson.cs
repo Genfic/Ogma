@@ -14,19 +14,15 @@ using ResponseType = Ok<int>;
 [Handler]
 [MapPost("api/quotes/json")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class CreateQuotesFromJson
+public sealed partial class CreateQuotesFromJson(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
 			.DisableAntiforgery()
 			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(QuoteDto[] Quotes) : IValidationTarget<Query>;
-
-	private static async ValueTask<ResponseType> HandleAsync(
+	private async ValueTask<ResponseType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -42,4 +38,7 @@ public static partial class CreateQuotesFromJson
 		return TypedResults.Ok(insertedRows);
 
 	}
+
+	[Validate]
+	public sealed partial record Query(QuoteDto[] Quotes) : IValidationTarget<Query>;
 }

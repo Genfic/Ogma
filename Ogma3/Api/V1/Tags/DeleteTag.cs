@@ -14,17 +14,14 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [Handler]
 [MapDelete("api/tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class DeleteTag
+public sealed partial class DeleteTag(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long TagId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -34,4 +31,7 @@ public static partial class DeleteTag
 
 		return res > 0 ? TypedResults.Ok(request.TagId) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(long TagId) : IValidationTarget<Command>;
 }

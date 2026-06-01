@@ -11,19 +11,14 @@ namespace Ogma3.Api.V1.Comments;
 
 [Handler]
 [MapGet("api/comments/{commentId}/revisions")]
-public static partial class GetRevision
+public sealed partial class GetRevision(ApplicationDbContext context, SqidsEncoder<long> sqids)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Query(string CommentId) : IValidationTarget<Query>;
-
-	private static async ValueTask<Results<Ok<Result[]>, NotFound>> HandleAsync(
+	private async ValueTask<Results<Ok<Result[]>, NotFound>> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
@@ -39,6 +34,10 @@ public static partial class GetRevision
 
 		return TypedResults.Ok(revisions);
 	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Query(string CommentId) : IValidationTarget<Query>;
 
 	public sealed record Result(DateTimeOffset EditTime, string Body);
 }

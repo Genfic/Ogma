@@ -14,17 +14,14 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [Handler]
 [MapDelete("api/roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class DeleteRole
+public sealed partial class DeleteRole(RoleManager<OgmaRole> roleManager)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long RoleId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		RoleManager<OgmaRole> roleManager,
 		CancellationToken cancellationToken
 	)
 	{
@@ -38,4 +35,7 @@ public static partial class DeleteRole
 
 		return TypedResults.Ok(role.Id);
 	}
+
+	[Validate]
+	public sealed partial record Command(long RoleId) : IValidationTarget<Command>;
 }

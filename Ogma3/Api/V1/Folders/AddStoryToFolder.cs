@@ -13,18 +13,14 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound<string>, Conflict<st
 
 [Handler]
 [MapPost("api/folders/AddStory")]
-public static partial class AddStoryToFolder
+public sealed partial class AddStoryToFolder(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long FolderId, long StoryId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -59,6 +55,9 @@ public static partial class AddStoryToFolder
 		await context.SaveChangesAsync(cancellationToken);
 		return TypedResults.Ok(new Response(fs.FolderId, fs.StoryId, fs.Added, fs.AddedById));
 	}
+
+	[Validate]
+	public sealed partial record Command(long FolderId, long StoryId) : IValidationTarget<Command>;
 
 	public sealed record Response(long FolderId, long StoryId, DateTimeOffset Added, long AddedById);
 }

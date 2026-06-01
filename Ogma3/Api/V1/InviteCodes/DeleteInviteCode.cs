@@ -14,17 +14,14 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [Handler]
 [MapDelete("api/InviteCodes/{CodeId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class DeleteInviteCode
+public sealed partial class DeleteInviteCode(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long CodeId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -34,4 +31,7 @@ public static partial class DeleteInviteCode
 
 		return res > 0 ? TypedResults.Ok(request.CodeId) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(long CodeId) : IValidationTarget<Command>;
 }

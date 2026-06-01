@@ -13,14 +13,11 @@ using ReturnType = Results<Ok<int>, NoContent>;
 [Handler]
 [MapGet("api/notifications/count")]
 [Authorize]
-public static partial class CountUserNotifications
+public sealed partial class CountUserNotifications(ApplicationDbContext context, IUserService userService)
 {
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -32,4 +29,6 @@ public static partial class CountUserNotifications
 
 		return TypedResults.Ok(count);
 	}
+
+	public sealed record Query;
 }

@@ -9,17 +9,14 @@ namespace Ogma3.Api.V1.Clubs;
 
 [Handler]
 [MapGet("api/clubs/story/{storyId:long}")]
-public static partial class GetClubsWithStory
+public sealed partial class GetClubsWithStory(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
-
-	private static async ValueTask<Ok<Result[]>> HandleAsync(
+	private async ValueTask<Ok<Result[]>> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -40,6 +37,9 @@ public static partial class GetClubsWithStory
 
 		return TypedResults.Ok(clubs);
 	}
+
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 
 	public sealed record Result(long Id, string Name, string Icon, IEnumerable<string> Folders);
 }

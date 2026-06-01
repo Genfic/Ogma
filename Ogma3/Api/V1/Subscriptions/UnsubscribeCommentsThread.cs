@@ -14,18 +14,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [Handler]
 [Authorize]
 [MapDelete("api/subscriptions/thread")]
-public static partial class UnsubscribeCommentsThread
+public sealed partial class UnsubscribeCommentsThread(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -44,4 +40,7 @@ public static partial class UnsubscribeCommentsThread
 
 		return TypedResults.Ok(false);
 	}
+
+	[Validate]
+	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 }

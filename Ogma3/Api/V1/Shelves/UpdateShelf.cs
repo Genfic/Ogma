@@ -14,10 +14,33 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 [Handler]
 [MapPut("api/shelves")]
 [Authorize]
-public static partial class UpdateShelf
+public sealed partial class UpdateShelf(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
+
+	private async ValueTask<ReturnType> HandleAsync(
+		Command request,
+		CancellationToken cancellationToken
+	)
+	{
+		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
+
+		var rows = await context.Shelves
+			.Where(s => s.Id == request.Id)
+			.Where(s => s.OwnerId == uid)
+			.ExecuteUpdateAsync(setPropertyCalls: setters => setters
+				.SetProperty(propertyExpression: s => s.Name, request.Name)
+				.SetProperty(propertyExpression: s => s.Description, request.Description)
+				.SetProperty(propertyExpression: s => s.IsQuickAdd, request.IsQuickAdd)
+				.SetProperty(propertyExpression: s => s.IsPublic, request.IsPublic)
+				.SetProperty(propertyExpression: s => s.TrackUpdates, request.TrackUpdates)
+				.SetProperty(propertyExpression: s => s.Color, request.Color)
+				.SetProperty(propertyExpression: s => s.IconId, request.IconId), cancellationToken);
+
+		return rows > 0 ? TypedResults.Ok() : TypedResults.NotFound();
+	}
 
 	[Validate]
 	public sealed partial record Command
@@ -35,28 +58,4 @@ public static partial class UpdateShelf
 		string Color,
 		long? IconId
 	) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
-		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		CancellationToken cancellationToken
-	)
-	{
-		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
-
-		var rows = await context.Shelves
-			.Where(s => s.Id == request.Id)
-			.Where(s => s.OwnerId == uid)
-			.ExecuteUpdateAsync(setters => setters
-				.SetProperty(s => s.Name, request.Name)
-				.SetProperty(s => s.Description, request.Description)
-				.SetProperty(s => s.IsQuickAdd, request.IsQuickAdd)
-				.SetProperty(s => s.IsPublic, request.IsPublic)
-				.SetProperty(s => s.TrackUpdates, request.TrackUpdates)
-				.SetProperty(s => s.Color, request.Color)
-				.SetProperty(s => s.IconId, request.IconId), cancellationToken: cancellationToken);
-
-		return rows > 0 ? TypedResults.Ok() : TypedResults.NotFound();
-	}
 }

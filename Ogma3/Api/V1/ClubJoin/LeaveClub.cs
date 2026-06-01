@@ -16,18 +16,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, BadRequest<string>>
 [Handler]
 [MapDelete("api/clubjoin")]
 [Authorize]
-public static partial class LeaveClub
+public sealed partial class LeaveClub(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		[FromBody] Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -53,4 +49,7 @@ public static partial class LeaveClub
 
 		return TypedResults.Ok(false);
 	}
+
+	[Validate]
+	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
 }

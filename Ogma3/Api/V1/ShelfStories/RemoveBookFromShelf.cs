@@ -15,18 +15,14 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<RemoveBookFromSh
 [Handler]
 [MapDelete("api/ShelfStories")]
 [Authorize]
-public static partial class RemoveBookFromShelf
+public sealed partial class RemoveBookFromShelf(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long ShelfId, long StoryId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
-		[FromBody]Command request,
-		ApplicationDbContext context,
-		IUserService userService,
+	private async ValueTask<ReturnType> HandleAsync(
+		[FromBody] Command request,
 		CancellationToken cancellationToken
 	)
 	{
@@ -45,6 +41,9 @@ public static partial class RemoveBookFromShelf
 			? TypedResults.Ok(new Result(shelfId, storyId))
 			: TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(long ShelfId, long StoryId) : IValidationTarget<Command>;
 
 	public sealed record Result(long ShelfId, long StoryId);
 }

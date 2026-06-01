@@ -15,12 +15,12 @@ using ReturnType = Results<Ok<GetUserData.UserDetailsDto>, NotFound>;
 [Handler]
 [MapGet("admin/api/users/{name}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class GetUserData
+public sealed partial class GetUserData(ApplicationDbContext context)
 {
 	[UsedImplicitly]
 	public sealed record Query(string Name);
 
-	private static async ValueTask<ReturnType> Handle(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> Handle(Query request, CancellationToken cancellationToken)
 	{
 		var query = context.Users.AsQueryable();
 

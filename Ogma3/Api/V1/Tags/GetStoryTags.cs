@@ -12,15 +12,13 @@ using ReturnType = Results<Ok<TagDto[]>, NotFound>;
 
 [Handler]
 [MapGet("api/tags/story/{storyId:long}")]
-public static partial class GetStoryTags
+public sealed partial class GetStoryTags(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> HandleAsync(Query request, CancellationToken cancellationToken)
 	{
 		var tags = await context.StoryTags
 			.Where(st => st.StoryId == request.StoryId)
@@ -32,4 +30,7 @@ public static partial class GetStoryTags
 			? TypedResults.Ok(tags)
 			: TypedResults.NotFound(); // NOTE: Maybe this should be *only* returned when story is not found?
 	}
+
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 }

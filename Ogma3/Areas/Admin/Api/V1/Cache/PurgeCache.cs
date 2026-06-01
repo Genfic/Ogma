@@ -13,12 +13,12 @@ using ReturnType = Results<Ok, InternalServerError<string>>;
 [Handler]
 [MapDelete("admin/api/cache")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class PurgeCache
+public sealed partial class PurgeCache(IMemoryCache cache, IFusionCache fusionCache, ILogger<PurgeCache.Handler> logger)
 {
 	public sealed record Query;
 
 	// ReSharper disable once UnusedParameter.Local
-	private static async ValueTask<ReturnType> HandleAsync(Query _, IMemoryCache cache, IFusionCache fusionCache, ILogger<Query> logger, CancellationToken ct)
+	private async ValueTask<ReturnType> HandleAsync(Query _, CancellationToken ct)
 	{
 		await Task.Yield();
 

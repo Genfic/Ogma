@@ -14,17 +14,14 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [Handler]
 [MapDelete("api/ratings/{ratingId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class DeleteRating
+public sealed partial class DeleteRating(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long RatingId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -32,6 +29,9 @@ public static partial class DeleteRating
 			.Where(r => r.Id == request.RatingId)
 			.ExecuteDeleteAsync(cancellationToken);
 
-		return rows > 0  ?TypedResults.Ok(request.RatingId) : TypedResults.NotFound();
+		return rows > 0 ? TypedResults.Ok(request.RatingId) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(long RatingId) : IValidationTarget<Command>;
 }

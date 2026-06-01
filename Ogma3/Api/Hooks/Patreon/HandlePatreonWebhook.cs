@@ -19,7 +19,13 @@ using ReturnType = Results<Ok, NotFound, BadRequest, InternalServerError>;
 [Handler]
 [MapPost("hooks/patreon")]
 [AllowAnonymous]
-public static partial class HandlePatreonWebhook
+public sealed partial class HandlePatreonWebhook
+(
+	IConfiguration config,
+	ApplicationDbContext context,
+	IHttpContextAccessor httpContextAccessor,
+	OgmaUserManager userManager,
+	ILogger<HandlePatreonWebhook.Handler> logger)
 {
 	private static readonly FrozenSet<string> AllowedEvents =
 	[
@@ -31,20 +37,8 @@ public static partial class HandlePatreonWebhook
 		"members:pledge:delete",
 	];
 
-	[UsedImplicitly]
-	public sealed record Query
-	(
-		[property: FromHeader(Name = "X-Patreon-Signature")] string Signature,
-		[property: FromHeader(Name = "X-Patreon-Event")] string Event
-	);
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		IConfiguration config,
-		ApplicationDbContext context,
-		IHttpContextAccessor httpContextAccessor,
-		OgmaUserManager userManager,
-		ILogger<Query> logger,
 		CancellationToken cancellationToken
 	)
 	{
@@ -121,7 +115,8 @@ public static partial class HandlePatreonWebhook
 			var rows = await context.Subscriptions
 				.Where(s => s.PatreonUserId == patreonUserId)
 				.ExecuteDeleteAsync(cancellationToken);
-			logger.LogInformation("Deleted {Rows} subscriptions tied to deleted user {UserId} (Patreon: {PatreonId}).", rows, user.Id, patreonUserId);
+			logger.LogInformation("Deleted {Rows} subscriptions tied to deleted user {UserId} (Patreon: {PatreonId}).", rows, user.Id,
+				patreonUserId);
 		}
 
 		var subscriptionExists = await context.Subscriptions
@@ -144,12 +139,12 @@ public static partial class HandlePatreonWebhook
 		{
 			await context.Subscriptions
 				.Where(s => s.UserId == user.Id)
-				.ExecuteUpdateAsync(set => set
-					.SetProperty(s => s.PatreonStatus, status)
-					.SetProperty(s => s.PatreonTierIds, tierIds)
-					.SetProperty(s => s.TierId, tierId)
-					.SetProperty(s => s.LastChange, DateTimeOffset.UtcNow),
-				cancellationToken);
+				.ExecuteUpdateAsync(setPropertyCalls: set => set
+						.SetProperty(propertyExpression: s => s.PatreonStatus, status)
+						.SetProperty(propertyExpression: s => s.PatreonTierIds, tierIds)
+						.SetProperty(propertyExpression: s => s.TierId, tierId)
+						.SetProperty(propertyExpression: s => s.LastChange, DateTimeOffset.UtcNow),
+					cancellationToken);
 		}
 		else
 		{
@@ -169,8 +164,8 @@ public static partial class HandlePatreonWebhook
 	}
 
 	/// <summary>
-	/// Validate the HMAC-MD5 signature of the webhook payload.
-	/// See <see href="https://docs.patreon.com/#webhooks">the docs</see> for more info.
+	///     Validate the HMAC-MD5 signature of the webhook payload.
+	///     See <see href="https://docs.patreon.com/#webhooks">the docs</see> for more info.
 	/// </summary>
 	private static bool ValidateSignature(string signature, string key, ReadOnlySpan<byte> body)
 	{
@@ -198,4 +193,11 @@ public static partial class HandlePatreonWebhook
 
 		return hmac.TryComputeHash(body, computedHash, out _) && CryptographicOperations.FixedTimeEquals(signatureBytes, computedHash);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query
+	(
+		[property: FromHeader(Name = "X-Patreon-Signature")] string Signature,
+		[property: FromHeader(Name = "X-Patreon-Event")] string Event
+	);
 }

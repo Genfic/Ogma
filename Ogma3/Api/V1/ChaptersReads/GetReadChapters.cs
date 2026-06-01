@@ -12,19 +12,15 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>>;
 
 [Handler]
 [MapGet("api/ChaptersRead/{id:long}")]
-public static partial class GetReadChapters
+public sealed partial class GetReadChapters(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery()
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.DisableAntiforgery()
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long Id) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -38,4 +34,7 @@ public static partial class GetReadChapters
 
 		return TypedResults.Ok(chaptersRead?.ToHashSet() ?? []);
 	}
+
+	[Validate]
+	public sealed partial record Query(long Id) : IValidationTarget<Query>;
 }

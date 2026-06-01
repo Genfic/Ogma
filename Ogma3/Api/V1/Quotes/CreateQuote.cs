@@ -14,25 +14,15 @@ using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<FullQuoteDto>>;
 [Handler]
 [MapPost("api/quotes")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class CreateQuote
+public sealed partial class CreateQuote(ApplicationDbContext context, ILogger<CreateQuote.Handler> logger)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery()
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.DisableAntiforgery()
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command : IValidationTarget<Command>
-	{
-		[NotEmpty]
-		public required string Body { get; init; }
-		[NotEmpty]
-		public required string Author { get; init; }
-	}
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		ILogger<Handler> logger,
 		CancellationToken cancellationToken
 	)
 	{
@@ -52,5 +42,14 @@ public static partial class CreateQuote
 			nameof(GetSingleQuote),
 			new { quote.Id }
 		);
+	}
+
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
+	{
+		[NotEmpty]
+		public required string Body { get; init; }
+		[NotEmpty]
+		public required string Author { get; init; }
 	}
 }

@@ -12,15 +12,11 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetJoinedClubs.Response[]>
 
 [Handler]
 [MapGet("api/clubs/user")]
-public static partial class GetJoinedClubs
+public sealed partial class GetJoinedClubs(ApplicationDbContext context, IUserService userService)
 {
-	[UsedImplicitly]
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -34,6 +30,9 @@ public static partial class GetJoinedClubs
 
 		return TypedResults.Ok(clubs);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 
 	public sealed record Response(long Id, string Name, string Icon);
 }

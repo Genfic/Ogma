@@ -14,7 +14,8 @@ using ReturnType = Results<RssResult, InternalServerError>;
 
 [Handler]
 [MapGet("rss/blogposts")]
-public static partial class GetBlogpostsRssFeed
+public sealed partial class GetBlogpostsRssFeed
+	(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
@@ -23,15 +24,8 @@ public static partial class GetBlogpostsRssFeed
 			.ExcludeFromDescription()
 			.WithName(nameof(GetBlogpostsRssFeed));
 
-	[UsedImplicitly]
-	public sealed record Query;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
-		LinkGenerator generator,
-		IHttpContextAccessor contextAccessor,
-		IConfiguration config,
 		CancellationToken cancellationToken
 	)
 	{
@@ -63,4 +57,7 @@ public static partial class GetBlogpostsRssFeed
 			$"https://{config.GetValue<string>("Domain")}"
 		);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 }

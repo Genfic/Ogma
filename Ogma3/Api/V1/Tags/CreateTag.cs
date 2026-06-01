@@ -16,25 +16,14 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 [Handler]
 [MapPost("api/tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class CreateTag
+public sealed partial class CreateTag(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command
-	(
-		[property: MinLength(CTConfig.Tag.MinNameLength)]
-		[property: MaxLength(CTConfig.Tag.MaxNameLength)]
-		string Name,
-		[property: MaxLength(CTConfig.Tag.MaxDescLength)]
-		string? Description,
-		ETagNamespace? Namespace
-	) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -42,7 +31,8 @@ public static partial class CreateTag
 			.Where(t => t.Name == request.Name && t.Namespace == request.Namespace)
 			.AnyAsync(cancellationToken);
 
-		if (tagExist) return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
+		if (tagExist)
+			return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
 
 		var tag = new Tag
 		{
@@ -56,4 +46,15 @@ public static partial class CreateTag
 
 		return TypedResults.CreatedAtRoute(tag.ToDto(), nameof(GetSingleTag), new GetSingleTag.Query(tag.Id));
 	}
+
+	[Validate]
+	public sealed partial record Command
+	(
+		[property: MinLength(CTConfig.Tag.MinNameLength)]
+		[property: MaxLength(CTConfig.Tag.MaxNameLength)]
+		string Name,
+		[property: MaxLength(CTConfig.Tag.MaxDescLength)]
+		string? Description,
+		ETagNamespace? Namespace
+	) : IValidationTarget<Command>;
 }

@@ -19,19 +19,14 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [Handler]
 [MapPost("api/CommentsThread/lock")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class LockThread
+public sealed partial class LockThread(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -71,4 +66,8 @@ public static partial class LockThread
 
 		return TypedResults.Ok(thread.LockDate is not null);
 	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Command(long ThreadId) : IValidationTarget<Command>;
 }

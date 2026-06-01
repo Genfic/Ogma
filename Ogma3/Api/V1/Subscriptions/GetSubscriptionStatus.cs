@@ -12,18 +12,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 
 [Handler]
 [MapGet("api/subscriptions/thread")]
-public static partial class GetSubscriptionStatus
+public sealed partial class GetSubscriptionStatus(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -36,4 +32,7 @@ public static partial class GetSubscriptionStatus
 
 		return TypedResults.Ok(isSubscribed);
 	}
+
+	[Validate]
+	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
 }

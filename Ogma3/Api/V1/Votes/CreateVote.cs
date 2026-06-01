@@ -15,18 +15,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 [Handler]
 [MapPost("api/votes")]
 [Authorize]
-public static partial class CreateVote
+public sealed partial class CreateVote(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long StoryId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -52,4 +48,7 @@ public static partial class CreateVote
 
 		return TypedResults.Ok(new VoteResult(true, count));
 	}
+
+	[Validate]
+	public sealed partial record Command(long StoryId) : IValidationTarget<Command>;
 }

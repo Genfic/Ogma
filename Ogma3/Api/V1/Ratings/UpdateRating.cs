@@ -14,10 +14,28 @@ using ReturnType = Results<NotFound, Ok>;
 [Handler]
 [MapPut("api/ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class UpdateRating
+public sealed partial class UpdateRating(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
+
+	private async ValueTask<ReturnType> HandleAsync(
+		Command request,
+		CancellationToken cancellationToken
+	)
+	{
+		var rows = await context.Ratings
+			.Where(r => r.Id == request.Id)
+			.ExecuteUpdateAsync(setPropertyCalls: s => s
+				.SetProperty(propertyExpression: r => r.Name, request.Name)
+				.SetProperty(propertyExpression: r => r.Description, request.Description)
+				.SetProperty(propertyExpression: r => r.BlacklistedByDefault, request.BlacklistedByDefault)
+				.SetProperty(propertyExpression: r => r.Order, request.Order)
+				.SetProperty(propertyExpression: r => r.Color, request.Color), cancellationToken);
+
+		return rows > 0 ? TypedResults.Ok() : TypedResults.NotFound();
+	}
 
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>
@@ -35,23 +53,5 @@ public static partial class UpdateRating
 		[MinLength(3)]
 		[MaxLength(6)]
 		public required string Color { get; init; }
-	}
-
-	private static async ValueTask<ReturnType> HandleAsync(
-		Command request,
-		ApplicationDbContext context,
-		CancellationToken cancellationToken
-	)
-	{
-		var rows = await context.Ratings
-			.Where(r => r.Id == request.Id)
-			.ExecuteUpdateAsync(s => s
-				.SetProperty(r => r.Name, request.Name)
-				.SetProperty(r => r.Description, request.Description)
-				.SetProperty(r => r.BlacklistedByDefault, request.BlacklistedByDefault)
-				.SetProperty(r => r.Order, request.Order)
-				.SetProperty(r => r.Color, request.Color), cancellationToken);
-
-		return rows > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}
 }

@@ -18,21 +18,15 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<GetThreadDetails
 
 [Handler]
 [MapGet("api/CommentsThread/{threadId:long}")]
-public static partial class GetThreadDetails
+public sealed partial class GetThreadDetails
+	(ApplicationDbContext context, IUserService userService, IHttpContextAccessor httpContextAccessor, OgmaConfig config)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
-		IHttpContextAccessor httpContextAccessor,
-		OgmaConfig config,
 		CancellationToken cancellationToken
 	)
 	{
@@ -72,6 +66,10 @@ public static partial class GetThreadDetails
 
 		return TypedResults.Ok(new Result(perPage, minCommentLength, maxCommentLength, source, threadData.Locked));
 	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
 
 	public sealed record Result(int PerPage, int MinCommentLength, int MaxCommentLength, CommentSource Source, bool IsLocked);
 }

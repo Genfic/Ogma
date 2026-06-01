@@ -21,26 +21,14 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, NotFound,
 [MapPost("api/comments")]
 [Authorize]
 [UsedImplicitly]
-public sealed partial class CreateComment(
+public sealed partial class CreateComment
+(
 	ApplicationDbContext context,
 	IUserService userService,
 	ETagService eTagService,
 	PowService powService,
 	SqidsEncoder<long> sqids)
 {
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Command : IValidationTarget<Command>
-	{
-		[MaxLength(CTConfig.Comment.MaxBodyLength)]
-		[MinLength(CTConfig.Comment.MinBodyLength)]
-		public required string Body { get; init; }
-		public required long Thread { get; init; }
-		public required CommentSource Source { get; init; }
-		public required string PowToken { get; init; }
-		public required int PowNonce { get; init; }
-		public required string PowHash { get; init; }
-	}
 
 	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -109,7 +97,7 @@ public sealed partial class CreateComment(
 	}
 
 	/// <summary>
-	/// Check if the comment thread is a profile thread, and if so, if the profile owner has the current user blocked
+	///     Check if the comment thread is a profile thread, and if so, if the profile owner has the current user blocked
 	/// </summary>
 	private static async ValueTask<bool> CheckIfBlocked(
 		ApplicationDbContext context,
@@ -125,5 +113,19 @@ public sealed partial class CreateComment(
 			.Where(b => b.BlockingUserId == profileOwnerId)
 			.Where(b => b.BlockedUserId == currentUserId)
 			.AnyAsync(ct);
+	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Command : IValidationTarget<Command>
+	{
+		[MaxLength(CTConfig.Comment.MaxBodyLength)]
+		[MinLength(CTConfig.Comment.MinBodyLength)]
+		public required string Body { get; init; }
+		public required long Thread { get; init; }
+		public required CommentSource Source { get; init; }
+		public required string PowToken { get; init; }
+		public required int PowNonce { get; init; }
+		public required string PowHash { get; init; }
 	}
 }

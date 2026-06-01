@@ -12,13 +12,12 @@ namespace Ogma3.Areas.Admin.Api.V1.Telemetry;
 [Handler]
 [MapGet($"admin/api/telemetry/{nameof(GetImportantItemCounts)}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class GetImportantItemCounts
+public sealed partial class GetImportantItemCounts(ApplicationDbContext context)
 {
 	public sealed record Query;
 
-	private static async ValueTask<Ok<Dictionary<string, int>>> HandleAsync(
+	private async ValueTask<Ok<Dictionary<string, int>>> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{

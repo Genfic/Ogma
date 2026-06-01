@@ -20,15 +20,12 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 [Handler]
 [MapDelete("admin/api/infractions/{infractionId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class DeactivateInfraction
+public sealed partial class DeactivateInfraction(ApplicationDbContext context, IUserService userService, IFusionCache cache)
 {
 	public sealed record Command(long InfractionId);
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		IFusionCache cache,
 		CancellationToken cancellationToken
 	)
 	{

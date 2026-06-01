@@ -11,17 +11,17 @@ namespace Ogma3.Api.V1.Tags;
 
 [Handler]
 [MapGet("api/tags/search")]
-public static partial class SearchTags
+public sealed partial class SearchTags(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
 	[Validate]
 	public sealed partial record Query(string SearchString) : IValidationTarget<Query>;
 
-	private static async ValueTask<Results<Ok<TagDto[]>, BadRequest>> HandleAsync(
+	private async ValueTask<Results<Ok<TagDto[]>, BadRequest>> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{

@@ -12,18 +12,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 
 [Handler]
 [MapGet("api/votes/{storyId:long}")]
-public static partial class GetVotes
+public sealed partial class GetVotes(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -42,4 +38,7 @@ public static partial class GetVotes
 
 		return TypedResults.Ok(new VoteResult(didUserVote, count));
 	}
+
+	[Validate]
+	public sealed partial record Query(long StoryId) : IValidationTarget<Query>;
 }

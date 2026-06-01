@@ -10,15 +10,13 @@ namespace Ogma3.Api.V1.Quotes;
 
 [Handler]
 [MapGet("api/quotes")]
-public static partial class GetAllQuotes
+public sealed partial class GetAllQuotes(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithName(nameof(GetAllQuotes));
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.WithName(nameof(GetAllQuotes));
 
-	[UsedImplicitly]
-	public sealed record Query;
-
-	private static async ValueTask<Ok<List<FullQuoteDto>>> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<Ok<List<FullQuoteDto>>> HandleAsync(Query _, CancellationToken cancellationToken)
 	{
 		var quotes = await context.Quotes
 			.OrderBy(q => q.Id)
@@ -28,4 +26,6 @@ public static partial class GetAllQuotes
 		return TypedResults.Ok(quotes);
 	}
 
+	[UsedImplicitly]
+	public sealed record Query;
 }

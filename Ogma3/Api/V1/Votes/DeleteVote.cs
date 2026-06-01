@@ -15,18 +15,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>, NotFound>;
 [Handler]
 [MapDelete("api/votes")]
 [Authorize]
-public static partial class DeleteVote
+public sealed partial class DeleteVote(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long StoryId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		[FromBody] Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -45,4 +41,7 @@ public static partial class DeleteVote
 
 		return TypedResults.Ok(new VoteResult(false, count));
 	}
+
+	[Validate]
+	public sealed partial record Command(long StoryId) : IValidationTarget<Command>;
 }

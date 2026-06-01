@@ -12,17 +12,14 @@ using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 
 [Handler]
 [MapGet("api/quotes/{id:long}")]
-public static partial class GetSingleQuote
+public sealed partial class GetSingleQuote(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
 			.WithName(nameof(GetSingleQuote))
 			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long Id) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> HandleAsync(Query request, CancellationToken cancellationToken)
 	{
 		var quote = await context.Quotes
 			.Where(q => q.Id == request.Id)
@@ -31,4 +28,7 @@ public static partial class GetSingleQuote
 
 		return quote is null ? TypedResults.NotFound() : TypedResults.Ok(quote);
 	}
+
+	[Validate]
+	public sealed partial record Query(long Id) : IValidationTarget<Query>;
 }

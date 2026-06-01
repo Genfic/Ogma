@@ -9,13 +9,11 @@ namespace Ogma3.Api.V1.Roles;
 
 [Handler]
 [MapGet("api/roles")]
-public static partial class GetAllRoles
+public sealed partial class GetAllRoles(ApplicationDbContext context)
 {
-	public sealed record Query;
 
-	private static async ValueTask<Ok<RoleDto[]>> HandleAsync(
+	private async ValueTask<Ok<RoleDto[]>> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -26,4 +24,6 @@ public static partial class GetAllRoles
 
 		return TypedResults.Ok(roles);
 	}
+
+	public sealed record Query;
 }

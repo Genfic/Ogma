@@ -12,18 +12,15 @@ using ReturnType = Results<NotFound, Ok<FaqDto>>;
 
 [Handler]
 [MapGet("api/faqs/{faqId:long}")]
-public static partial class GetSingleFaq
+public sealed partial class GetSingleFaq(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithName(nameof(GetSingleFaq))
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.WithName(nameof(GetSingleFaq))
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long FaqId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> Handle(
+	private async ValueTask<ReturnType> Handle(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -36,4 +33,7 @@ public static partial class GetSingleFaq
 			? TypedResults.NotFound()
 			: TypedResults.Ok(faq);
 	}
+
+	[Validate]
+	public sealed partial record Query(long FaqId) : IValidationTarget<Query>;
 }

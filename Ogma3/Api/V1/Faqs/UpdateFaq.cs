@@ -16,10 +16,29 @@ using ReturnType = Results<NotFound, Ok>;
 [Handler]
 [MapPut("api/faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class UpdateFaq
+public sealed partial class UpdateFaq(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
+
+	private async ValueTask<ReturnType> HandleAsync(
+		Command request,
+		CancellationToken cancellationToken
+	)
+	{
+		var rendered = Markdown.ToHtml(request.Answer, MarkdownPipelines.All);
+
+		var res = await context.Faqs
+			.Where(f => f.Id == request.Id)
+			.ExecuteUpdateAsync(setPropertyCalls: f => f
+					.SetProperty(propertyExpression: x => x.Question, request.Question)
+					.SetProperty(propertyExpression: x => x.Answer, request.Answer)
+					.SetProperty(propertyExpression: x => x.AnswerRendered, rendered),
+				cancellationToken);
+
+		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
+	}
 
 	[Validate]
 	public sealed partial record Command : IValidationTarget<Command>
@@ -29,24 +48,5 @@ public static partial class UpdateFaq
 		public required string Question { get; init; }
 		[NotEmpty]
 		public required string Answer { get; init; }
-	}
-
-	private static async ValueTask<ReturnType> HandleAsync(
-		Command request,
-		ApplicationDbContext context,
-		CancellationToken cancellationToken
-	)
-	{
-		var rendered = Markdown.ToHtml(request.Answer, MarkdownPipelines.All);
-
-		var res = await context.Faqs
-			.Where(f => f.Id == request.Id)
-			.ExecuteUpdateAsync(f => f
-					.SetProperty(x => x.Question, request.Question)
-					.SetProperty(x => x.Answer, request.Answer)
-					.SetProperty(x => x.AnswerRendered, rendered),
-				cancellationToken);
-
-		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}
 }

@@ -15,18 +15,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>>;
 [Handler]
 [MapPost("api/chaptersread")]
 [Authorize]
-public static partial class MarkChapterAsRead
+public sealed partial class MarkChapterAsRead(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long Chapter, long Story) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -59,4 +55,6 @@ public static partial class MarkChapterAsRead
 		return TypedResults.Ok(chaptersReadObj.Chapters.ToHashSet());
 	}
 
+	[Validate]
+	public sealed partial record Command(long Chapter, long Story) : IValidationTarget<Command>;
 }

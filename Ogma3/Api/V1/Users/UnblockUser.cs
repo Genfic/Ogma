@@ -15,18 +15,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [Handler]
 [MapDelete("api/users/block")]
 [Authorize]
-public static partial class UnblockUser
+public sealed partial class UnblockUser(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(string Name) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		[FromBody] Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -46,4 +42,7 @@ public static partial class UnblockUser
 
 		return affectedRows > 0 ? TypedResults.Ok(false) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(string Name) : IValidationTarget<Command>;
 }

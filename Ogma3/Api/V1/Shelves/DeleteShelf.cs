@@ -14,18 +14,14 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<long>, NotFound>;
 [Handler]
 [MapDelete("api/shelves/{shelfId:long}")]
 [Authorize]
-public static partial class DeleteShelf
+public sealed partial class DeleteShelf(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long ShelfId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -38,4 +34,7 @@ public static partial class DeleteShelf
 
 		return res > 0 ? TypedResults.Ok(request.ShelfId) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(long ShelfId) : IValidationTarget<Command>;
 }

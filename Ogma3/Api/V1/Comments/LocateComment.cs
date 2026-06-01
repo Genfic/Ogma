@@ -16,8 +16,6 @@ using ReturnType = Results<Ok<LocateComment.Response>, NotFound>;
 [UsedImplicitly]
 public sealed partial class LocateComment(ApplicationDbContext context, OgmaConfig config, SqidsEncoder<long> sqids)
 {
-	[UsedImplicitly]
-	public sealed record Query(long ThreadId, string CommentId);
 
 	private async ValueTask<ReturnType> Handle(Query request, CancellationToken cancellationToken)
 	{
@@ -41,10 +39,13 @@ public sealed partial class LocateComment(ApplicationDbContext context, OgmaConf
 			.Where(c => c.Id > id)
 			.CountAsync(cancellationToken);
 
-		var page = (newer / config.CommentsPerPage) + 1;
+		var page = newer / config.CommentsPerPage + 1;
 
 		return TypedResults.Ok(new Response(page));
 	}
+
+	[UsedImplicitly]
+	public sealed record Query(long ThreadId, string CommentId);
 
 	public sealed record Response(int Page);
 }

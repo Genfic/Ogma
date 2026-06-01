@@ -14,18 +14,14 @@ using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 [Handler]
 [MapDelete("api/notifications/{id:long}")]
 [Authorize]
-public static partial class DeleteNotification
+public sealed partial class DeleteNotification(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long Id) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -39,4 +35,6 @@ public static partial class DeleteNotification
 		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}
 
+	[Validate]
+	public sealed partial record Command(long Id) : IValidationTarget<Command>;
 }

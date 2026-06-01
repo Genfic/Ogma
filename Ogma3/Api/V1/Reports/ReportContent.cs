@@ -16,27 +16,15 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest, Ok<long>>;
 [Handler]
 [MapPost("api/reports")]
 [Authorize]
-public static partial class ReportContent
+public sealed partial class ReportContent(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.RequireRateLimiting(RateLimiting.Reports)
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.RequireRateLimiting(RateLimiting.Reports)
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command : IValidationTarget<Command>
-	{
-		public required string ItemId { get; init; }
-		[MinLength(CTConfig.Report.MinReasonLength)]
-		[MaxLength(CTConfig.Report.MaxReasonLength)]
-		public required string Reason { get; init; }
-		public required EReportableContentTypes ItemType { get; init; }
-	}
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
@@ -97,5 +85,15 @@ public static partial class ReportContent
 		await context.SaveChangesAsync(cancellationToken);
 
 		return TypedResults.Ok(report.Id);
+	}
+
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
+	{
+		public required string ItemId { get; init; }
+		[MinLength(CTConfig.Report.MinReasonLength)]
+		[MaxLength(CTConfig.Report.MaxReasonLength)]
+		public required string Reason { get; init; }
+		public required EReportableContentTypes ItemType { get; init; }
 	}
 }

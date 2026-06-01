@@ -15,17 +15,14 @@ using ReturnType = Ok<InviteCodeDto[]>;
 [Handler]
 [MapGet("api/InviteCodes/paginated")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class GetPaginatedInviteCodes
+public sealed partial class GetPaginatedInviteCodes(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -38,4 +35,7 @@ public static partial class GetPaginatedInviteCodes
 
 		return TypedResults.Ok(codes);
 	}
+
+	[Validate]
+	public sealed partial record Query(int Page, int PerPage) : IValidationTarget<Query>;
 }

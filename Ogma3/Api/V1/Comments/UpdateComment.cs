@@ -17,27 +17,14 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<UpdateComment.Re
 [Handler]
 [MapPatch("api/comments")]
 [Authorize]
-public static partial class UpdateComment
+public sealed partial class UpdateComment(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Command : IValidationTarget<Command>
-	{
-		[MaxLength(CTConfig.Comment.MaxBodyLength)]
-		[MinLength(CTConfig.Comment.MinBodyLength)]
-		public required string Body { get; init; }
-		public required string CommentId { get; init; }
-
-	}
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
@@ -66,6 +53,16 @@ public static partial class UpdateComment
 		await context.SaveChangesAsync(cancellationToken);
 
 		return TypedResults.Ok(new Response(comment.Body, DateTimeOffset.UtcNow));
+	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Command : IValidationTarget<Command>
+	{
+		[MaxLength(CTConfig.Comment.MaxBodyLength)]
+		[MinLength(CTConfig.Comment.MinBodyLength)]
+		public required string Body { get; init; }
+		public required string CommentId { get; init; }
 	}
 
 	public sealed record Response(string Body, DateTimeOffset EditTime);

@@ -14,23 +14,14 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<RoleDto>>;
 [Handler]
 [MapPost("api/roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class CreateRole
+public sealed partial class CreateRole(RoleManager<OgmaRole> roleManager)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command
-	(
-		[property: NotEmpty] string Name,
-		bool IsStaff,
-		string? Color,
-		byte Order
-	) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		RoleManager<OgmaRole> roleManager,
 		CancellationToken cancellationToken
 	)
 	{
@@ -49,4 +40,13 @@ public static partial class CreateRole
 
 		return TypedResults.CreatedAtRoute(role.ToDto(), nameof(GetRoleById), new GetRoleById.Query(role.Id));
 	}
+
+	[Validate]
+	public sealed partial record Command
+	(
+		[property: NotEmpty] string Name,
+		bool IsStaff,
+		string? Color,
+		byte Order
+	) : IValidationTarget<Command>;
 }

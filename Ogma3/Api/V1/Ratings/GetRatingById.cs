@@ -12,19 +12,15 @@ using ReturnType = Results<NotFound, Ok<RatingApiDto>>;
 
 [Handler]
 [MapGet("api/ratings/{id:long}")]
-public static partial class GetRatingById
+public sealed partial class GetRatingById(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
 			.WithName(nameof(GetRatingById))
 			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long Id) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -35,4 +31,7 @@ public static partial class GetRatingById
 
 		return ratings is null ? TypedResults.NotFound() : TypedResults.Ok(ratings);
 	}
+
+	[Validate]
+	public sealed partial record Query(long Id) : IValidationTarget<Query>;
 }

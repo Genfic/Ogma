@@ -12,13 +12,12 @@ namespace Ogma3.Areas.Admin.Api.V1.Telemetry;
 [Handler]
 [MapGet($"admin/api/telemetry/{nameof(GetTableInfo)}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class GetTableInfo
+public sealed partial class GetTableInfo(ApplicationDbContext context)
 {
 	public sealed record Query;
 
-	private static async ValueTask<Ok<Dictionary<string, ulong>>> HandleAsync(
+	private async ValueTask<Ok<Dictionary<string, ulong>>> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{

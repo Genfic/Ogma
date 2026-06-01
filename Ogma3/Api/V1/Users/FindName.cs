@@ -14,17 +14,14 @@ using ReturnType = Results<Ok<string[]>, UnprocessableEntity<string>>;
 [Handler]
 [MapGet("api/users/names")]
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
-public static partial class FindName
+public sealed partial class FindName(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(string Name) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -37,4 +34,7 @@ public static partial class FindName
 
 		return TypedResults.Ok(names);
 	}
+
+	[Validate]
+	public sealed partial record Query(string Name) : IValidationTarget<Query>;
 }

@@ -12,16 +12,14 @@ using ReturnType = Results<Ok<RoleDto>, NotFound>;
 
 [Handler]
 [MapGet("api/roles/{roleId:long}")]
-public static partial class GetRoleById
+public sealed partial class GetRoleById(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.WithName(nameof(GetRoleById))
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.WithName(nameof(GetRoleById))
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long RoleId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> HandleAsync(Query request, CancellationToken cancellationToken)
 	{
 		var role = await context.Roles
 			.Where(r => r.Id == request.RoleId)
@@ -30,4 +28,7 @@ public static partial class GetRoleById
 
 		return role is null ? TypedResults.NotFound() : TypedResults.Ok(role);
 	}
+
+	[Validate]
+	public sealed partial record Query(long RoleId) : IValidationTarget<Query>;
 }

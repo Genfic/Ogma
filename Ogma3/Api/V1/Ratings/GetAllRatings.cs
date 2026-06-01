@@ -11,13 +11,11 @@ using ReturnType = Ok<RatingApiDto[]>;
 
 [Handler]
 [MapGet("api/ratings")]
-public static partial class GetAllRatings
+public sealed partial class GetAllRatings(ApplicationDbContext context)
 {
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -28,4 +26,6 @@ public static partial class GetAllRatings
 
 		return TypedResults.Ok(ratings);
 	}
+
+	public sealed record Query;
 }

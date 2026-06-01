@@ -11,13 +11,11 @@ using ReturnType = Ok<FaqDto[]>;
 
 [Handler]
 [MapGet("api/faqs")]
-public static partial class GetAllFaqs
+public sealed partial class GetAllFaqs(ApplicationDbContext context)
 {
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -27,4 +25,6 @@ public static partial class GetAllFaqs
 
 		return TypedResults.Ok(faqs);
 	}
+
+	public sealed record Query;
 }

@@ -16,19 +16,14 @@ using ReturnType = Results<Ok<ShelfDto[]>, UnauthorizedHttpResult>;
 [Handler]
 [MapGet("api/shelves/{userName:alpha}")]
 [Authorize]
-public static partial class GetPaginatedUserShelves
+public sealed partial class GetPaginatedUserShelves(ApplicationDbContext context, IUserService userService, OgmaConfig config)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(string UserName, int Page) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
-		OgmaConfig config,
 		CancellationToken cancellationToken
 	)
 	{
@@ -43,4 +38,7 @@ public static partial class GetPaginatedUserShelves
 
 		return TypedResults.Ok(shelves);
 	}
+
+	[Validate]
+	public sealed partial record Query(string UserName, int Page) : IValidationTarget<Query>;
 }

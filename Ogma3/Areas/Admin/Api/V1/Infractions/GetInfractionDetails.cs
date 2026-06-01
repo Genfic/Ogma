@@ -15,14 +15,14 @@ using ReturnType = Results<Ok<InfractionDto>, NotFound>;
 [Handler]
 [MapGet("admin/api/infractions/{infractionId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class GetInfractionDetails
+public sealed partial class GetInfractionDetails(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetInfractionDetails));
 
 	[UsedImplicitly]
 	public sealed record Query(long InfractionId);
 
-	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> HandleAsync(Query request, CancellationToken cancellationToken)
 	{
 		var infraction = await context.Infractions
 			.Where(i => i.Id == request.InfractionId)

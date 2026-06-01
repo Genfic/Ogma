@@ -12,11 +12,10 @@ namespace Ogma3.Api.V1.Tags;
 [Handler]
 [MapGet("api/tags/all")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public static partial class GetAllTags
+public sealed partial class GetAllTags(ApplicationDbContext context)
 {
-	public sealed record Query;
 
-	private static async ValueTask<Ok<TagDto[]>> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<Ok<TagDto[]>> HandleAsync(Query _, CancellationToken cancellationToken)
 	{
 		var tags = await context.Tags
 			.OrderByDescending(t => t.Id)
@@ -25,4 +24,6 @@ public static partial class GetAllTags
 
 		return TypedResults.Ok(tags);
 	}
+
+	public sealed record Query;
 }

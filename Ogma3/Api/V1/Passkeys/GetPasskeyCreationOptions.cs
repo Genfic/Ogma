@@ -15,31 +15,27 @@ using ReturnType = Results<ContentHttpResult, InternalServerError, NotFound>;
 [Handler]
 [Authorize]
 [MapGet("api/passkeys/options")]
-public static partial class GetPasskeyCreationOptions
+public sealed partial class GetPasskeyCreationOptions
+	(IHttpContextAccessor contextAccessor, SignInManager<OgmaUser> signInManager, OgmaUserManager userManager)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.Produces<string>(contentType: "application/json", statusCode: 200)
-		.WithSummary("Returns WebAuthn creation options JSON")
-		.WithDescription("Returns PublicKeyCredentialCreationOptionsJSON as defined by the WebAuthn spec.")
-		.DisableAntiforgery();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.Produces<string>(contentType: "application/json", statusCode: 200)
+			.WithSummary("Returns WebAuthn creation options JSON")
+			.WithDescription("Returns PublicKeyCredentialCreationOptionsJSON as defined by the WebAuthn spec.")
+			.DisableAntiforgery();
 
-	[UsedImplicitly]
-	public sealed record Query;
-
-	private static async ValueTask<ReturnType> Handle(
+	private async ValueTask<ReturnType> Handle(
 		Query _,
-		IHttpContextAccessor contextAccessor,
-		SignInManager<OgmaUser> signInManager,
-		OgmaUserManager userManager,
 		CancellationToken __
 	)
 	{
-		if (contextAccessor.HttpContext is not { } httpContext)
+		if (contextAccessor.HttpContext is not {} httpContext)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (await userManager.GetUserAsync(httpContext.User) is not { } user)
+		if (await userManager.GetUserAsync(httpContext.User) is not {} user)
 		{
 			return TypedResults.NotFound();
 		}
@@ -54,7 +50,7 @@ public static partial class GetPasskeyCreationOptions
 			DisplayName = userName,
 		});
 
-		return TypedResults.Content(options, contentType: "application/json", statusCode: 200);
+		return TypedResults.Content(options, "application/json", statusCode: 200);
 	}
 
 	private static string GetRandomName()
@@ -64,4 +60,7 @@ public static partial class GetPasskeyCreationOptions
 		var encoded = Base32.Crockford.Encode(bytes);
 		return $"User_{encoded}";
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 }

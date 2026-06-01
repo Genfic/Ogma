@@ -12,20 +12,15 @@ using ReturnType = Results<Ok<int>, NoContent>;
 
 [Handler]
 [MapMethod("HEAD", "api/useractivity")]
-public static partial class UpdateLastActive
+public sealed partial class UpdateLastActive(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
 			.DisableAntiforgery()
 			.WithName(nameof(UpdateLastActive));
 
-	[UsedImplicitly]
-	public sealed record Command;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command _,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -36,10 +31,15 @@ public static partial class UpdateLastActive
 		var rows = await context.Users
 			.TagWith(nameof(UpdateLastActive))
 			.Where(u => u.Id == uid)
-			.ExecuteUpdateAsync(setters => setters.SetProperty(u => u.LastActive, DateTimeOffset.UtcNow), cancellationToken);
+			.ExecuteUpdateAsync(
+				setPropertyCalls: setters => setters.SetProperty(propertyExpression: u => u.LastActive, DateTimeOffset.UtcNow),
+				cancellationToken);
 
 		return TypedResults.Ok(rows);
 	}
+
+	[UsedImplicitly]
+	public sealed record Command;
 
 	// private static readonly Func<ApplicationDbContext, long, CancellationToken, Task<int>> CompiledQuery =
 	// 	EF.CompileAsyncQuery(static (ApplicationDbContext context, long uid, CancellationToken _)

@@ -14,17 +14,14 @@ using ReturnType = Results<NotFound, Ok<long>>;
 [Handler]
 [MapDelete("api/faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class DeleteFaq
+public sealed partial class DeleteFaq(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long Id) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -34,4 +31,7 @@ public static partial class DeleteFaq
 
 		return res > 0 ? TypedResults.Ok(request.Id) : TypedResults.NotFound();
 	}
+
+	[Validate]
+	public sealed partial record Command(long Id) : IValidationTarget<Command>;
 }

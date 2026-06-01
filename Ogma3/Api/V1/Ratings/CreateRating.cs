@@ -12,34 +12,16 @@ namespace Ogma3.Api.V1.Ratings;
 [Handler]
 [MapPost("api/ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class CreateRating
+public sealed partial class CreateRating(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
-
-	[Validate]
-	public sealed partial record Command : IValidationTarget<Command>
-	{
-		[MinLength(CTConfig.Rating.MinNameLength)]
-		[MaxLength(CTConfig.Rating.MaxNameLength)]
-		public required string Name { get; init; }
-		[MinLength(CTConfig.Rating.MinDescriptionLength)]
-		[MaxLength(CTConfig.Rating.MaxDescriptionLength)]
-		public required string Description { get; init; }
-		public required bool BlacklistedByDefault { get; init; }
-		[LessThanOrEqual(byte.MaxValue)]
-		public required byte Order { get; init; }
-
-		[MinLength(3)]
-		[MaxLength(6)]
-		public required string Color { get; init; }
-	}
 
 	private static readonly Func<Rating, RatingApiDto> Mapper = RatingMapper.ToApiDto.Compile();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	private static async ValueTask<CreatedAtRoute<RatingApiDto>> HandleAsync(
+	private async ValueTask<CreatedAtRoute<RatingApiDto>> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -57,5 +39,23 @@ public static partial class CreateRating
 		await context.SaveChangesAsync(cancellationToken);
 
 		return TypedResults.CreatedAtRoute(Mapper(rating), nameof(GetRatingById), new GetRatingById.Query(rating.Id));
+	}
+
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
+	{
+		[MinLength(CTConfig.Rating.MinNameLength)]
+		[MaxLength(CTConfig.Rating.MaxNameLength)]
+		public required string Name { get; init; }
+		[MinLength(CTConfig.Rating.MinDescriptionLength)]
+		[MaxLength(CTConfig.Rating.MaxDescriptionLength)]
+		public required string Description { get; init; }
+		public required bool BlacklistedByDefault { get; init; }
+		[LessThanOrEqual(byte.MaxValue)]
+		public required byte Order { get; init; }
+
+		[MinLength(3)]
+		[MaxLength(6)]
+		public required string Color { get; init; }
 	}
 }

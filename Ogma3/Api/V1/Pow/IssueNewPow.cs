@@ -15,9 +15,6 @@ public sealed partial class IssueNewPow(PowService powService, OgmaConfig config
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint.RequireRateLimiting(RateLimiting.PowIssue);
 
-	[UsedImplicitly]
-	public sealed record Query;
-
 	private async ValueTask<Ok<Response>> Handle(Query _, CancellationToken ct)
 	{
 		ct.ThrowIfCancellationRequested();
@@ -28,6 +25,9 @@ public sealed partial class IssueNewPow(PowService powService, OgmaConfig config
 
 		return TypedResults.Ok(res);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 
 	public sealed record Response(string Token, int Difficulty, DateTimeOffset ExpiresAt);
 }

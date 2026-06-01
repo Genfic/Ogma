@@ -16,23 +16,14 @@ using ReturnType = CreatedAtRoute<FaqDto>;
 [Handler]
 [MapPost("api/faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class CreateFaq
+public sealed partial class CreateFaq(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command : IValidationTarget<Command>
-	{
-		[NotEmpty]
-		public required string Question { get; init; }
-		[NotEmpty]
-		public required string Answer { get; init; }
-	}
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -47,5 +38,14 @@ public static partial class CreateFaq
 		await context.SaveChangesAsync(cancellationToken);
 
 		return TypedResults.CreatedAtRoute(faq.ToDto(), nameof(GetSingleFaq), new GetSingleFaq.Query(faq.Id));
+	}
+
+	[Validate]
+	public sealed partial record Command : IValidationTarget<Command>
+	{
+		[NotEmpty]
+		public required string Question { get; init; }
+		[NotEmpty]
+		public required string Answer { get; init; }
 	}
 }

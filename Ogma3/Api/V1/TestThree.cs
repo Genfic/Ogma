@@ -8,18 +8,19 @@ using ReturnType = Results<Ok<Dictionary<string, string?>>, NotFound>;
 
 [Handler]
 [MapGet("api/test-three")]
-public static partial class TestThree
+public sealed partial class TestThree(IConfiguration cfg)
 {
-	public sealed record Query();
 
-	private static async ValueTask<ReturnType> Handle(Query q, IConfiguration cfg, CancellationToken _)
+	private async ValueTask<ReturnType> Handle(Query q, CancellationToken _)
 	{
 		await Task.CompletedTask;
 	#if DEBUG
-		var secrets = cfg.AsEnumerable().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+		var secrets = cfg.AsEnumerable().ToDictionary(keySelector: kvp => kvp.Key, elementSelector: kvp => kvp.Value);
 		return TypedResults.Ok(secrets);
 	#else
 		return TypedResults.NotFound();
 	#endif
 	}
+
+	public sealed record Query;
 }

@@ -11,15 +11,13 @@ using ReturnType = Results<Ok<string>, NotFound>;
 
 [Handler]
 [MapGet("api/comments/{commentId:int}/md")]
-public static partial class GetCommentMarkdown
+public sealed partial class GetCommentMarkdown(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(Query request, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> HandleAsync(Query request, CancellationToken cancellationToken)
 	{
 		var markdown = await context.Comments
 			.Where(c => c.Id == request.CommentId)
@@ -28,4 +26,7 @@ public static partial class GetCommentMarkdown
 
 		return markdown is null ? TypedResults.NotFound() : TypedResults.Ok(markdown);
 	}
+
+	[Validate]
+	public sealed partial record Query(long CommentId) : IValidationTarget<Query>;
 }

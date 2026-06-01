@@ -12,21 +12,17 @@ using ReturnType = Results<ContentHttpResult, InternalServerError, NotFound>;
 
 [Handler]
 [MapGet("api/passkeys/request-options")]
-public static partial class GetPasskeyRequestOptions
+public sealed partial class GetPasskeyRequestOptions(SignInManager<OgmaUser> signInManager, OgmaUserManager userManager)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.Produces<string>(contentType: "application/json", statusCode: 200)
-		.WithSummary("Returns WebAuthn creation options JSON")
-		.WithDescription("Returns PublicKeyCredentialCreationOptionsJSON as defined by the WebAuthn spec.")
-		.DisableAntiforgery();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.Produces<string>(contentType: "application/json", statusCode: 200)
+			.WithSummary("Returns WebAuthn creation options JSON")
+			.WithDescription("Returns PublicKeyCredentialCreationOptionsJSON as defined by the WebAuthn spec.")
+			.DisableAntiforgery();
 
-	[UsedImplicitly]
-	public sealed record Query(string? Username);
-
-	private static async ValueTask<ReturnType> Handle(
+	private async ValueTask<ReturnType> Handle(
 		Query request,
-		SignInManager<OgmaUser> signInManager,
-		OgmaUserManager userManager,
 		CancellationToken _
 	)
 	{
@@ -34,6 +30,9 @@ public static partial class GetPasskeyRequestOptions
 
 		var options = await signInManager.MakePasskeyRequestOptionsAsync(user);
 
-		return TypedResults.Content(options, contentType: "application/json", statusCode: 200);
+		return TypedResults.Content(options, "application/json", statusCode: 200);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query(string? Username);
 }

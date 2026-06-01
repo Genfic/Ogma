@@ -16,15 +16,11 @@ using ReturnType = Results<Ok<List<GetUserNotifications.Result>>, UnauthorizedHt
 [Handler]
 [MapGet("api/notifications")]
 [Authorize]
-public static partial class GetUserNotifications
+public sealed partial class GetUserNotifications(ApplicationDbContext context, IUserService userService)
 {
-	[UsedImplicitly]
-	public sealed record Query;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -38,6 +34,9 @@ public static partial class GetUserNotifications
 
 		return TypedResults.Ok(notifications);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 
 
 	public sealed record Result(long Id, string? Body, string Url, DateTimeOffset DateTime, ENotificationEvent Event)

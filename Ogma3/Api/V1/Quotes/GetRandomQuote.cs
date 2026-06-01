@@ -13,19 +13,20 @@ using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 
 [Handler]
 [MapGet("api/quotes/random")]
-public static partial class GetRandomQuote
+public sealed partial class GetRandomQuote(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.RequireRateLimiting(RateLimiting.Quotes);
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.RequireRateLimiting(RateLimiting.Quotes);
 
-	[UsedImplicitly]
-	public sealed record Query;
-
-	private static async ValueTask<ReturnType> HandleAsync(Query _, ApplicationDbContext context, CancellationToken cancellationToken)
+	private async ValueTask<ReturnType> HandleAsync(Query _, CancellationToken cancellationToken)
 	{
 		var quote = await context.Database.SqlQueryRaw<QuoteDto>(EmbeddedResourceQueries.GetRandomQoute_sql.LoadSql())
 			.FirstOrDefaultAsync(cancellationToken);
 
 		return quote is null ? TypedResults.NotFound() : TypedResults.Ok(quote);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 }

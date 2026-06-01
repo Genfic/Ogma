@@ -20,7 +20,14 @@ using ReturnType = Results<Ok<PaginationResult<CommentDto>>, NotModifiedResult>;
 
 [Handler]
 [MapGet("api/comments")]
-public static partial class GetPaginatedComments
+public sealed partial class GetPaginatedComments
+(
+	ApplicationDbContext context,
+	IUserService userService,
+	OgmaConfig ogmaConfig,
+	IHttpContextAccessor httpContextAccessor,
+	ETagService eTagService,
+	SqidsEncoder<long> sqids)
 {
 	private const string HeaderName = "X-Username";
 
@@ -30,18 +37,8 @@ public static partial class GetPaginatedComments
 			.WithHeader("200", HeaderName, "The username of the user who is requesting the comments or null if the request is anonymous.")
 			.ProducesValidationProblem();
 
-	[Validate]
-	[UsedImplicitly]
-	public sealed partial record Query(long Thread, int? Page) : IValidationTarget<Query>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		IUserService userService,
-		OgmaConfig ogmaConfig,
-		IHttpContextAccessor httpContextAccessor,
-		ETagService eTagService,
-		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
@@ -114,4 +111,8 @@ public static partial class GetPaginatedComments
 		var p = page is not null ? page.ToString() : "n";
 		return $"{etag}-{p}";
 	}
+
+	[Validate]
+	[UsedImplicitly]
+	public sealed partial record Query(long Thread, int? Page) : IValidationTarget<Query>;
 }

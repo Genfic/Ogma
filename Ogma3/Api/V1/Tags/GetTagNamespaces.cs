@@ -12,9 +12,6 @@ public static partial class GetTagNamespaces
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetTagNamespaces));
 
-	[UsedImplicitly]
-	public sealed record Query;
-
 	private static ValueTask<Ok<NamespaceDto[]>> Handle(Query _, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
@@ -25,6 +22,9 @@ public static partial class GetTagNamespaces
 
 		return ValueTask.FromResult(TypedResults.Ok(values));
 	}
+
+	[UsedImplicitly]
+	public sealed record Query;
 
 	public sealed record NamespaceDto(int Value, string Name);
 }

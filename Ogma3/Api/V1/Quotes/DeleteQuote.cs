@@ -9,23 +9,20 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Api.V1.Quotes;
 
-using ResponseType=Results<Ok<long>, NotFound>;
+using ResponseType = Results<Ok<long>, NotFound>;
 
 [Handler]
 [MapDelete("api/quotes/{id:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class DeleteQuote
+public sealed partial class DeleteQuote(ApplicationDbContext context)
 {
-	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
-		.DisableAntiforgery()
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
+		=> endpoint
+			.DisableAntiforgery()
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long Id) : IValidationTarget<Command>;
-
-	private static async ValueTask<ResponseType> HandleAsync(
+	private async ValueTask<ResponseType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
 		CancellationToken cancellationToken
 	)
 	{
@@ -36,4 +33,6 @@ public static partial class DeleteQuote
 		return res > 0 ? TypedResults.Ok(request.Id) : TypedResults.NotFound();
 	}
 
+	[Validate]
+	public sealed partial record Command(long Id) : IValidationTarget<Command>;
 }

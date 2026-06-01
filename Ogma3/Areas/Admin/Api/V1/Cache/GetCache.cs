@@ -13,13 +13,13 @@ using ReturnType = Results<Ok<int>, InternalServerError<string>>;
 [Handler]
 [MapGet("admin/api/cache")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public static partial class GetCache
+public sealed partial class GetCache(IMemoryCache cache)
 {
 	[UsedImplicitly]
 	public sealed record Query;
 
 	// ReSharper disable once UnusedParameter.Local
-	private static async ValueTask<ReturnType> HandleAsync(Query _, IMemoryCache cache, CancellationToken __)
+	private async ValueTask<ReturnType> HandleAsync(Query _, CancellationToken __)
 	{
 		await Task.Yield();
 

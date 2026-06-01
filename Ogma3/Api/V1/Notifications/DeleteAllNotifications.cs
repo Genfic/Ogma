@@ -13,14 +13,11 @@ using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 [Handler]
 [MapDelete("api/notifications/all")]
 [Authorize]
-public static partial class DeleteAllNotifications
+public sealed partial class DeleteAllNotifications(ApplicationDbContext context, IUserService userService)
 {
-	public sealed record Command;
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command _,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -33,4 +30,5 @@ public static partial class DeleteAllNotifications
 		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}
 
+	public sealed record Command;
 }

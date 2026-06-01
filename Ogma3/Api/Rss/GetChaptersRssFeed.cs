@@ -14,7 +14,8 @@ using ReturnType = Results<RssResult, InternalServerError, NotFound>;
 
 [Handler]
 [MapGet("rss/story/{storyId:long}/chapters")]
-public static partial class GetChaptersRssFeed
+public sealed partial class GetChaptersRssFeed
+	(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
@@ -23,15 +24,8 @@ public static partial class GetChaptersRssFeed
 			.ExcludeFromDescription()
 			.WithName(nameof(GetChaptersRssFeed));
 
-	[UsedImplicitly]
-	public sealed record Query(long StoryId);
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
-		ApplicationDbContext context,
-		LinkGenerator generator,
-		IHttpContextAccessor contextAccessor,
-		IConfiguration config,
 		CancellationToken cancellationToken
 	)
 	{
@@ -71,10 +65,13 @@ public static partial class GetChaptersRssFeed
 		));
 
 		return new RssResult(
-			$"{storyResult.Title} — chapters", 
+			$"{storyResult.Title} — chapters",
 			$"All {storyResult.ChapterCount} chapters of story {storyResult.Title}",
-			items, 
+			items,
 			$"https://{config.GetValue<string>("Domain")}"
 		);
 	}
+
+	[UsedImplicitly]
+	public sealed record Query(long StoryId);
 }

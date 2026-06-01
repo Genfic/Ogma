@@ -18,20 +18,15 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [Handler]
 [MapPost("api/users/follow")]
 [Authorize]
-public static partial class FollowUser
+public sealed partial class FollowUser
+	(ApplicationDbContext context, IUserService userService, NotificationsRepository notifications, LinkGenerator linkGenerator)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(string Name) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		NotificationsRepository notifications,
-		LinkGenerator linkGenerator,
 		CancellationToken cancellationToken
 	)
 	{
@@ -64,4 +59,7 @@ public static partial class FollowUser
 
 		return TypedResults.Ok(true);
 	}
+
+	[Validate]
+	public sealed partial record Command(string Name) : IValidationTarget<Command>;
 }

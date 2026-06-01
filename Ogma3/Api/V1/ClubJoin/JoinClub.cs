@@ -15,18 +15,14 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [Handler]
 [MapPost("api/clubjoin")]
 [Authorize]
-public static partial class JoinClub
+public sealed partial class JoinClub(ApplicationDbContext context, IUserService userService)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
+	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
+		=> endpoint
+			.ProducesValidationProblem();
 
-	[Validate]
-	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
-
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
 		CancellationToken cancellationToken
 	)
 	{
@@ -51,4 +47,7 @@ public static partial class JoinClub
 
 		return TypedResults.Ok(true);
 	}
+
+	[Validate]
+	public sealed partial record Command(long ClubId) : IValidationTarget<Command>;
 }
