@@ -1,3 +1,4 @@
+using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Services;
 

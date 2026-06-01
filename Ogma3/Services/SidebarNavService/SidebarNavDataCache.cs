@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;

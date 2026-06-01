@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using Immediate.Injections.Shared;
 using MemoryPack;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.OgmaConfig;

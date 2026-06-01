@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using Immediate.Injections.Shared;
 using SimpleBase;
 
 namespace Ogma3.Services.CodeGenerator;

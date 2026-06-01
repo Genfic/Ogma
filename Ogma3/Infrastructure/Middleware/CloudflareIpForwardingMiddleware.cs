@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using Immediate.Injections.Shared;
 using MemoryPack;
 using ZiggyCreatures.Caching.Fusion;
 

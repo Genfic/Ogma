@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using Immediate.Injections.Shared;
 
 namespace Ogma3.Services.EmailBlocklistProvider;
 

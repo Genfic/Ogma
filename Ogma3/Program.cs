@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 using AutoSeal;
 using Immediate.Handlers.Shared;
+using Immediate.Injections.Shared;
 using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 [assembly: Behaviors(typeof(ValidationBehavior<,>))]
 [assembly: SealPublicClasses]
+[assembly: RegistrationDefaults(RegistrationStrategy = RegistrationStrategy.SelfAndImplementedInterfaces)]
 
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;

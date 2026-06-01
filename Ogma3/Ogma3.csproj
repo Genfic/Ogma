@@ -84,8 +84,8 @@
 		<PackageReference Include="Humanizer.Core"/>
 		<PackageReference Include="Immediate.Apis" />
 		<PackageReference Include="Immediate.Handlers" />
+		<PackageReference Include="Immediate.Injections" />
 		<PackageReference Include="Immediate.Validations"/>
-		<PackageReference Include="Injectio"/>
 		<PackageReference Include="JetBrains.Annotations"/>
 		<PackageReference Include="Lindhart.Analyser.MissingAwaitWarning"/>
 		<PackageReference Include="Markdig"/>

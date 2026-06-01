@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 
 namespace Ogma3.Services.IconService;

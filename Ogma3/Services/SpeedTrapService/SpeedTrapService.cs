@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace Ogma3.Services.SpeedTrapService;

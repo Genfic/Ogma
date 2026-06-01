@@ -22,7 +22,7 @@
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.23.4" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.23.5" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="ConfigBoundNET" Version="2.4.2" />
@@ -31,8 +31,8 @@
     <PackageVersion Include="Humanizer.Core" Version="3.0.10" />
     <PackageVersion Include="Immediate.Apis" Version="5.1.0" />
     <PackageVersion Include="Immediate.Handlers" Version="3.8.0" />
+    <PackageVersion Include="Immediate.Injections" Version="0.1.0" />
     <PackageVersion Include="Immediate.Validations" Version="3.3.0" />
-    <PackageVersion Include="Injectio" Version="[5.2.2]" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
     <PackageVersion Include="LibGit2Sharp" Version="0.31.0" />
     <PackageVersion Include="Lindhart.Analyser.MissingAwaitWarning" Version="4.0.0-beta" />
@@ -82,7 +82,7 @@
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.15" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-preview.4.26230.115" />
-    <PackageVersion Include="TUnit" Version="1.45.29" />
+    <PackageVersion Include="TUnit" Version="1.48.6" />
     <PackageVersion Include="WaffleGenerator.Bogus" Version="4.2.2" />
     <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.6.0" />

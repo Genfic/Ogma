@@ -1,3 +1,4 @@
+using Immediate.Injections.Shared;
 using Ogma3.Infrastructure.Constants;
 using StackExchange.Redis;
 

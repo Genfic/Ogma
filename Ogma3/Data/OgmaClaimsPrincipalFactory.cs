@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -8,7 +9,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Data;
 
-[RegisterScoped<IUserClaimsPrincipalFactory<OgmaUser>>(Duplicate = DuplicateStrategy.Replace)]
+[RegisterScoped<IUserClaimsPrincipalFactory<OgmaUser>>(DuplicateStrategy = DuplicateStrategy.Replace)]
 public sealed class OgmaClaimsPrincipalFactory
 (
 	UserManager<OgmaUser> userManager,

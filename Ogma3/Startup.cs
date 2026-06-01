@@ -137,7 +137,7 @@ public static class Startup
 
 		// Add services
 		services
-			.AddOgma3()
+			.AddOgma3Services()
 			.AddSingleton(new MinHasher(shingleSize: 5, shingleMode: ShingleMode.Words));
 
 		services

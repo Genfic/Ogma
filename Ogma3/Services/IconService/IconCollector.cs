@@ -1,3 +1,4 @@
+using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 
 namespace Ogma3.Services.IconService;

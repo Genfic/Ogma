@@ -1,3 +1,5 @@
+using Immediate.Injections.Shared;
+
 namespace Ogma3.Infrastructure.Middleware.RequestTimingMiddleware;
 
 [RegisterTransient]

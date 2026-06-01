@@ -1,5 +1,6 @@
 using Amazon.S3;
 using Amazon.S3.Model;
+using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Ogma3.Infrastructure.Exceptions;
@@ -8,7 +9,7 @@ using Ogma3.Services.S3Storage;
 
 namespace Ogma3.Services.FileUploader;
 
-[RegisterSingleton]
+[RegisterSingleton<IFileUploader>]
 [UsedImplicitly]
 public sealed class ImageUploader(IAmazonS3 s3Client, IOptions<S3StorageOptions> options, ILogger<ImageUploader> logger) : IFileUploader
 {

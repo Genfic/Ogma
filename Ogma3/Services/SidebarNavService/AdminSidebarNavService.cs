@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using System.Security.Claims;
+using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Routes.Areas.Admin.Pages;
 using Index = Routes.Areas.Admin.Pages.Index;

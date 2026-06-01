@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Immediate.Injections.Shared;
 using Microsoft.Extensions.Options;
 
 namespace Ogma3.Services.TurnstileService;

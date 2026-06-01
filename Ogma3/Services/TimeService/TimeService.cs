@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Ogma3.Infrastructure.Config;

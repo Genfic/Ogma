@@ -1,3 +1,4 @@
+using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using PostmarkDotNet;

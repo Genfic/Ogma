@@ -1,3 +1,4 @@
+using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using NetVips;
 using Ogma3.Infrastructure.Logging.OperationTiming;
