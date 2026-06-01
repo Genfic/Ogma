@@ -1,10 +1,14 @@
+@using Microsoft.Extensions.Options
 @using Ogma3.Api.Rss
 @using Ogma3.Data.Users
+@using Ogma3.Infrastructure.Config
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware
 @using Ogma3.Infrastructure.OgmaConfig
 @inject SignInManager<OgmaUser> SignInManager
 @inject OgmaConfig Config
+@inject IConfiguration Configuration
+@inject IOptions<GitState> GitState
 
 @{
 	var duration = Context.GetRequestDuration() ?? TimeSpan.Zero;
@@ -66,19 +70,18 @@
 		<div class="col">
 			<span class="header">Follow and support</span>
 
-			@{
-				var pages = new[]
-				{
+			@functions{
+				private static readonly (string name, string link)[] Pages = [
 					(name: "SubscribeStar", link: "https://www.subscribestar.com/genfic"),
 					(name: "Patreon", link: "https://www.patreon.com/genfic"),
 					(name: "Ko-Fi", link: "https://ko-fi.com/genfic"),
 					(name: "Discord", link: "https://discord.com/invite/BNVZmJb"),
 					(name: "Twitter", link: "https://twitter.com/GenficNet"),
 					(name: "Bluesky", link: "https://bsky.app/profile/genfic.net"),
-				};
+				];
 			}
 
-			@foreach (var (name, link) in pages)
+			@foreach (var (name, link) in Pages)
 			{
 				<a href="@link" target="_blank" rel="noopener" aria-label="@name (opens in new tab)" class="item follow @(name.ToLower())">
 					<picture src="/img/@(name.ToLower().Replace("-", "")).png"
@@ -96,6 +99,8 @@
 	</div>
 
 	<div class="bottom">
-		<span class="copy-text">&copy;2019-@DateTimeOffset.UtcNow.Year</span><a class="copy-link" asp-area="" asp-page="/Index">Genfic</a>
+		<span class="copy-text">&copy;2019-@DateTimeOffset.UtcNow.Year <a asp-area="" asp-page="/Index">Genfic</a></span>
+		<span class="build-text" aria-hidden="true">@(GitState.Value.CommitHash)@(GitState.Value.Dirty ? "-d" : "") (@GitState.Value.Branch)</span>
+		<span class="build-text" aria-hidden="true">@(Configuration["BUILD_TIME"])</span>
 	</div>
 </footer>

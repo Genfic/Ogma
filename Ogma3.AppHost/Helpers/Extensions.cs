@@ -21,6 +21,20 @@ public static class Extensions
 		{
 			return builder.If(condition(), action);
 		}
+
+		public IResourceBuilder<T> IfNot(bool condition, Func<IResourceBuilder<T>, IResourceBuilder<T>> action)
+		{
+			return builder.If(!condition, action);
+		}
+
+		public IResourceBuilder<T> IfNot(
+			Func<bool> condition,
+			Func<IResourceBuilder<T>, IResourceBuilder<T>> action
+		)
+		{
+			return builder.If(!condition(), action);
+		}
+
 	}
 
 	extension<T>(IResourceBuilder<T> builder) where T : IResourceWithEnvironment

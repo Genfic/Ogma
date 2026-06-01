@@ -102,13 +102,25 @@ footer.footer {
 
 	> .bottom {
 		display: flex;
+		flex-direction: column;
 		width: 100%;
-		place-content: center center;
+		place-items: center center;
 		padding: .5rem;
 		border-top: 1px solid var(--foreground-25);
 
+		>span {
+			display: inline-block;
+		}
+
 		> .copy-text {
 			margin-right: 1ch;
+			margin-bottom: .5rem;
+		}
+
+		> .build-text {
+			color: var(--foreground-25);
+			font-size: .8rem;
+			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 		}
 	}
 }

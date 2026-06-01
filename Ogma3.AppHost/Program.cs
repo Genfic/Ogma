@@ -4,6 +4,7 @@ using Ogma3.AppHost.Helpers;
 var builder = DistributedApplication.CreateBuilder(args);
 
 var emulateProd = builder.Configuration.GetValue<bool>("emulate-prod");
+var allowDirty = builder.Configuration.GetValue<bool>("allow-dirty");
 var isProd = emulateProd || builder.ExecutionContext.IsPublishMode;
 
 var shouldSeed = builder.AddParameter("should-seed", "false", publishValueAsDefault: true);
@@ -15,6 +16,14 @@ var infisical = new Dictionary<string, IResourceBuilder<ParameterResource>>
 	["Infisical__MachineId"] = builder.AddParameter("infisical-machine-id", secret: true),
 	["Infisical__Env"] = builder.AddParameter("infisical-env", isProd ? "prod" : "dev", publishValueAsDefault: true),
 };
+
+var git = GitHelpers.GetState();
+
+if (git.IsDirty && !allowDirty)
+{
+	Console.Error.WriteLine("Repository has uncommited changes. Aborting.");
+	Environment.Exit(1);
+}
 
 builder
 	.AddDockerComposeEnvironment("ogma3-docker")
@@ -45,7 +54,7 @@ var database = builder
 		e.TargetPort = 5432;
 		e.IsProxied = false;
 	})
-	.If(!emulateProd, b => b.WithPgWeb())
+	.IfNot(emulateProd, b => b.WithPgWeb())
 	.AddDatabase("ogma3-db");
 
 var genfic = builder
@@ -57,6 +66,10 @@ var genfic = builder
 	.WithEnvironment("OTEL_DOTNET_EXPERIMENTAL_EFCORE_ENABLE_TRACE_DB_QUERY_PARAMETERS", "true")
 	.WithEnvironment("OTEL_DOTNET_AUTO_ENTITYFRAMEWORKCORE_SET_DBSTATEMENT_FOR_TEXT", "true")
 	.WithEnvironment("DOTNET_SYSTEM_NET_DISABLEIPV4", "true")
+	.WithEnvironment("Git__CommitHash", git.Hash)
+	.WithEnvironment("Git__Branch", git.Branch)
+	.WithEnvironment("Git__Dirty", git.IsDirty.ToString())
+	.WithEnvironment("BUILD_TIME", DateTimeOffset.UtcNow.ToString("O"))
 	.WithEnvironmentVariables(infisical)
 	.WithReference(database)
 	.WaitFor(database)
@@ -71,7 +84,7 @@ if (!builder.ExecutionContext.IsPublishMode)
 		.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
 		.WithArgs("tunnel", "--no-autoupdate", "run")
 		.ExcludeFromManifest()
-		.If(!emulateProd, b => b.WithExplicitStart())
+		.IfNot(emulateProd, b => b.WithExplicitStart())
 		.WaitFor(genfic);
 }
 

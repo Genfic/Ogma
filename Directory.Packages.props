@@ -34,6 +34,7 @@
     <PackageVersion Include="Immediate.Validations" Version="3.3.0" />
     <PackageVersion Include="Injectio" Version="[5.2.2]" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
+    <PackageVersion Include="LibGit2Sharp" Version="0.31.0" />
     <PackageVersion Include="Lindhart.Analyser.MissingAwaitWarning" Version="4.0.0-beta" />
     <PackageVersion Include="Markdig" Version="1.2.0" />
     <PackageVersion Include="MemoryPack" Version="1.21.4" />
