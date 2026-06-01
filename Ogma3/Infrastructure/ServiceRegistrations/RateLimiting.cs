@@ -10,6 +10,7 @@ public static class RateLimiting
 	public const string Reports = nameof(Reports);
 	public const string Registration = nameof(Registration);
 	public const string Login = nameof(Login);
+	public const string PowIssue = nameof(PowIssue);
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
@@ -38,6 +39,11 @@ public static class RateLimiting
 					options.PermitLimit = 10;
 					options.SegmentsPerWindow = 10;
 					options.QueueLimit = 0;
+				})
+				.AddPartitionedSlidingWindowLimiter(policyName: PowIssue, options => {
+					options.Window = TimeSpan.FromMinutes(1);
+					options.PermitLimit = 5;
+					options.SegmentsPerWindow = 3;
 				});
 
 			limiterOptions.OnRejected = (context, _) => {

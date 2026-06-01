@@ -20,11 +20,14 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, NotFound,
 [Handler]
 [MapPost("api/comments")]
 [Authorize]
-public static partial class CreateComment
+[UsedImplicitly]
+public sealed partial class CreateComment(
+	ApplicationDbContext context,
+	IUserService userService,
+	ETagService eTagService,
+	PowService powService,
+	SqidsEncoder<long> sqids)
 {
-	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint) => endpoint
-		.ProducesValidationProblem();
-
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Command : IValidationTarget<Command>
@@ -34,26 +37,23 @@ public static partial class CreateComment
 		public required string Body { get; init; }
 		public required long Thread { get; init; }
 		public required CommentSource Source { get; init; }
-
-		public required PowResult Pow { get; init; }
-
+		public required string PowToken { get; init; }
+		public required int PowNonce { get; init; }
+		public required string PowHash { get; init; }
 	}
 
-	private static async ValueTask<ReturnType> HandleAsync(
+	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
-		ApplicationDbContext context,
-		IUserService userService,
-		ETagService eTagService,
-		PowService powService,
-		SqidsEncoder<long> sqids,
 		CancellationToken cancellationToken
 	)
 	{
 		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
-		if (!await powService.VerifyChallenge(request.Pow.Token, request.Pow.Nonce, request.Pow.Hash))
+		var powResult = await powService.VerifyChallenge(request.PowToken, request.PowNonce, request.PowHash);
+
+		if (powResult is not PowVerificationResult.Ok)
 		{
-			return TypedResults.BadRequest("Invalid challenge");
+			return TypedResults.BadRequest($"Invalid challenge: {powResult.ToStringFast()}");
 		}
 
 		var isMuted = await CheckIfMuted(context, uid, cancellationToken);

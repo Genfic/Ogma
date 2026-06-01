@@ -32,6 +32,7 @@ import type {
 	GetUserNotificationsResult,
 	InviteCodeDto,
 	IssueInviteCodeCommand,
+	IssueNewPowResponse,
 	JoinClubCommand,
 	LeaveClubCommand,
 	ListPasskeysUserPasskey,
@@ -338,6 +339,13 @@ export const GetApiPasskeysRequestOptions = async (username: string | null, head
     options,
 );
 
+export const GetApiPowIssue = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: IssueNewPowResponse; 429: undefined }, undefined>("/api/pow/issue",
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
 export const GetApiQuotesRandom = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: QuoteDto; 404: undefined; 429: undefined }, undefined>("/api/quotes/random",
     GET,
     undefined,
@@ -520,7 +528,7 @@ export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersIn
     options,
 );
 
-export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 400: undefined; 401: undefined; 404: undefined }, CreateCommentCommand>("/api/comments",
+export const PostApiComments = async (body: CreateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 400: string; 401: undefined; 404: undefined }, CreateCommentCommand>("/api/comments",
     POST,
     body,
     headers,

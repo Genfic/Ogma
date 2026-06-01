@@ -131,7 +131,7 @@ public sealed class RegisterModel(
 		}
 
 		// Check PoW
-		if (!await powService.VerifyChallenge(Input.PowToken, Input.PowNonce, Input.PowHash))
+		if (await powService.VerifyChallenge(Input.PowToken, Input.PowNonce, Input.PowHash) is not PowVerificationResult.Ok)
 		{
 			ModelState.AddModelError("PoW", "Incorrect PoW response");
 			logger.LogInformation("PoW verification failed during registration");

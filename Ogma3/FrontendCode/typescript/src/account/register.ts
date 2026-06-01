@@ -1,6 +1,6 @@
 import { getCookieValue } from "@h/cookies";
 import { $query, $queryAll } from "@h/dom";
-import { pow } from "@h/pow";
+import { minePow } from "@h/pow";
 
 const classname = "visible";
 const formInputs = $queryAll("input[id]");
@@ -13,7 +13,7 @@ if (!token || !diff) throw new Error("Missing pow data");
 
 let powStarted = false;
 const runPow = async () => {
-	const res = await pow(token, Number.parseInt(diff, 10));
+	const res = await minePow(token, Number.parseInt(diff, 10));
 	console.log("PoW", res);
 	for (const [k, v] of Object.entries({ ...res, token })) {
 		const el = $query<HTMLInputElement>(`[id="Input_Pow${k}" i]`);

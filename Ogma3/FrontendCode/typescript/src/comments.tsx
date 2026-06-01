@@ -2,9 +2,9 @@ import LucideCircleHelp from "icon:lucide:circle-question-mark";
 import LucideMessageSquarePlus from "icon:lucide:message-square-plus";
 import MdiLockOpenVariantOutline from "icon:mdi:lock-open-variant-outline";
 import MdiLockOutline from "icon:mdi:lock-outline";
-import { GetApiCommentsThread, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
+import { GetApiCommentsThread, GetApiPowIssue, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
-import { pow } from "@h/pow";
+import { minePow, type PowResult } from "@h/pow";
 import { component } from "@h/web-components";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { noShadowDOM } from "solid-element";
@@ -20,8 +20,6 @@ interface Props {
 	mdRefRoute: string;
 	loginRoute: string;
 	registerRoute: string;
-	powToken: string;
-	powDifficulty: number;
 }
 
 const Comments = (props: Props) => {
@@ -30,7 +28,7 @@ const Comments = (props: Props) => {
 	let listRef: CommentListFunctions | undefined;
 
 	let body = $signal("");
-	let powResult = $signal<Awaited<ReturnType<typeof pow>>>();
+	let powResult = $signal<PowResult & { expiry: Date; token: string }>();
 
 	const [threadData] = createResource(
 		async () => {
@@ -53,6 +51,14 @@ const Comments = (props: Props) => {
 		},
 	);
 
+	const getPow = async () => {
+		const res = await GetApiPowIssue();
+		if (!res.ok) {
+			throw new Error(res.data ?? res.statusText);
+		}
+		return res.data;
+	};
+
 	let isLocked = $signal(!!props.lockDate);
 
 	const maxLength = $memo(threadData().maxCommentLength);
@@ -71,9 +77,11 @@ const Comments = (props: Props) => {
 		if (powResult) {
 			return;
 		}
-		const result = await pow(props.powToken, props.powDifficulty);
-		console.log("Pow result", result);
-		powResult = result;
+		const pow = await getPow();
+		const result = await minePow(pow.token, pow.difficulty);
+
+		console.log("Pow result", pow, result);
+		powResult = { ...result, expiry: pow.expiresAt, token: pow.token };
 	};
 
 	const handleEnterKey = async (e: KeyboardEvent) => {
@@ -87,13 +95,18 @@ const Comments = (props: Props) => {
 		await send();
 	};
 
+	let mining = $signal(false);
 	const send = async () => {
 		if (body.trim().length >= maxLength) {
 			return;
 		}
 
-		if (!powResult) {
-			return;
+		if (!powResult || powResult.expiry < new Date()) {
+			console.log(`Pow ${powResult ? "expired" : "undefined"}, fetching new one`);
+			const pow = await getPow();
+			mining = true;
+			const result = await minePow(pow.token, pow.difficulty);
+			powResult = { ...result, expiry: pow.expiresAt, token: pow.token };
 		}
 
 		const res = await PostApiComments(
@@ -101,14 +114,15 @@ const Comments = (props: Props) => {
 				body: body,
 				thread: Number(props.threadId),
 				source: threadData()?.source ?? ("" as CommentSource),
-				pow: {
-					hash: powResult.hash,
-					nonce: powResult.nonce,
-					token: props.powToken,
-				},
+				powToken: powResult.token,
+				powNonce: powResult.nonce,
+				powHash: powResult.hash,
 			},
 			{ RequestVerificationToken: props.csrf },
 		);
+
+		powResult = undefined;
+		mining = false;
 
 		if (!res.ok) {
 			return;
@@ -169,7 +183,7 @@ const Comments = (props: Props) => {
 						<div class="buttons">
 							<button
 								type="submit"
-								class="comment-btn active-border"
+								classList={{ "comment-btn": true, "active-border": true, loading: mining }}
 								onClick={submit}
 								disabled={powResult === undefined}
 							>
@@ -215,8 +229,6 @@ component(
 		mdRefRoute: "",
 		loginRoute: "",
 		registerRoute: "",
-		powToken: "",
-		powDifficulty: 0,
 	},
 	Comments,
 	css,

@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
+using MemoryPack;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.OgmaConfig;
 using StackExchange.Redis;
@@ -9,7 +9,7 @@ using StackExchange.Redis;
 namespace Ogma3.Services.PowService;
 
 [RegisterTransient]
-public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config)
+public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, ILogger<PowService> logger)
 {
 	public async Task<PowChallenge> IssueChallenge()
 	{
@@ -24,34 +24,34 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config)
 
 		await redis.GetDatabase(GarnetDatabase.Misc).StringSetAsync(
 			Key(token),
-			JsonSerializer.Serialize(challenge, PowChallengeContext.Default.PowChallenge),
+			MemoryPackSerializer.Serialize(challenge),
 			TimeSpan.FromSeconds(config.PowExpirySeconds)
 		);
 
 		return challenge;
 	}
 
-	public async Task<bool> VerifyChallenge(string token, long nonce, string hash)
+	public async Task<PowVerificationResult> VerifyChallenge(string token, long nonce, string hash)
 	{
 		var db = redis.GetDatabase(GarnetDatabase.Misc);
 
-		var json = await db.StringGetDeleteAsync(Key(token)); // atomic get + delete
-		if (json.IsNull)
+		var body = await db.StringGetDeleteAsync(Key(token)); // atomic get + delete
+		if (body.IsNull)
 		{
-			return false;
+			return PowVerificationResult.NotFound;
 		}
 
-		var challenge = JsonSerializer.Deserialize(json.ToString(), PowChallengeContext.Default.PowChallenge);
-
+		var challenge = MemoryPackSerializer.Deserialize<PowChallenge>(body);
 		if (challenge is null)
 		{
-			return false;
+			logger.LogError("Failed to deserialize pow challenge");
+			return PowVerificationResult.Invalid;
 		}
 
 		var nowTs = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		if (nowTs - challenge.IssuedAt < config.PowMinimumSolveTimeSeconds)
 		{
-			return false;
+			return PowVerificationResult.TooFast;
 		}
 
 		var input = Encoding.UTF8.GetBytes($"{token}{nonce}");
@@ -59,7 +59,7 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config)
 
 		var meetsTarget = MeetsTarget(Convert.FromHexString(computed), Convert.FromHexString(challenge.Target));
 
-		return computed == hash && meetsTarget;
+		return computed == hash && meetsTarget ? PowVerificationResult.Ok : PowVerificationResult.Invalid;
 
 	}
 

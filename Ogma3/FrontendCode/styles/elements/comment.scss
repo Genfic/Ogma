@@ -3,7 +3,7 @@
 .comment {
 	contain: content;
 	display: grid;
-	grid-template-columns: 100px 1fr;
+	grid-template-columns: min(100px, 20vw) 1fr;
 	grid-template-rows: auto 1fr;
 	align-items: flex-start;
 	padding: .5rem 0;

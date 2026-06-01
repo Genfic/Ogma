@@ -42,7 +42,9 @@ export type CreateCommentCommand = {
     body: string;
     thread: number;
     source: CommentSource;
-    pow: PowResult;
+    powToken: string;
+    powNonce: number;
+    powHash: string;
 };
 
 export type CreateFaqCommand = {
@@ -209,6 +211,12 @@ export type InviteCodeDto = {
 
 export type IssueInviteCodeCommand = object;
 
+export type IssueNewPowResponse = {
+    token: string;
+    difficulty: number;
+    expiresAt: Date;
+};
+
 export type JoinClubCommand = {
     clubId: number;
 };
@@ -242,12 +250,6 @@ export type MarkChapterAsUnreadCommand = {
 };
 
 export type None = undefined;
-
-export type PowResult = {
-    token: string;
-    nonce: number;
-    hash: string;
-};
 
 export type QuoteDto = {
     body: string;

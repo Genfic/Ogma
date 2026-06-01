@@ -19,6 +19,8 @@ const checkHash = (bytes: Uint8Array, target: Uint8Array) => {
 	return true;
 };
 
+let shouldAbort = false;
+
 const api = {
 	/**
 	 * Mines a hash that matches the target criteria by iterating over nonce values and checking the hash.
@@ -28,12 +30,17 @@ const api = {
 	 * @return {Promise<{nonce: number, hash: string}>} A promise that resolves to an object containing the valid nonce and corresponding hash.
 	 */
 	async mine(data: string, target: Uint8Array) {
+		shouldAbort = false;
 		hasher ??= await createSHA256();
 
 		let nonce = 0;
 		let lastYield = performance.now();
 
 		while (true) {
+			if (shouldAbort) {
+				throw new Error("Mining aborted");
+			}
+
 			hasher.init();
 			hasher.update(`${data}${nonce}`);
 
@@ -51,6 +58,10 @@ const api = {
 			}
 		}
 	},
+
+	abort() {
+		shouldAbort = true;
+	}
 };
 
 export type PowApi = typeof api;
