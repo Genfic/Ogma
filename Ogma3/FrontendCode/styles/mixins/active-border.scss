@@ -6,7 +6,7 @@
 		border-color: var(--foreground-50);
 	}
 
-	&:focus {
+	&:focus-visible {
 		border-color: var(--accent);
 	}
 }

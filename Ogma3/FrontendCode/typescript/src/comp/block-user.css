@@ -10,6 +10,10 @@
 	cursor: pointer;
 	width: 100%;
 
+	&:focus-visible {
+		outline: 3px groove color-mix(in oklab, var(--accent), var(--background) 50%);
+	}
+
 	o-icon {
 		margin-right: 4px;
 	}

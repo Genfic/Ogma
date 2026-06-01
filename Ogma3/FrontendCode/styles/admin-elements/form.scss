@@ -68,7 +68,7 @@ form {
 		input[readonly] {
 			color: var(--foreground-75);
 
-			&:focus {
+			&:focus-visible {
 				outline: none;
 				border: 1px solid var(--foreground-25);
 			}

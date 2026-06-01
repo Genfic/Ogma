@@ -10,6 +10,10 @@
 	align-items: center;
 	color: var(--foreground-75);
 
+	&:focus-visible {
+		outline: 3px groove color-mix(in oklab, var(--accent), var(--background) 50%);
+	}
+
 	span {
 		position: absolute;
 		bottom: 0;

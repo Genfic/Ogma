@@ -12,6 +12,10 @@
 	border: none;
 	cursor: pointer;
 
+	&:focus-visible {
+		outline: 3px groove color-mix(in oklab, var(--accent), var(--background) 50%);
+	}
+
 	&.active {
 		color: var(--foreground-75);
 	}

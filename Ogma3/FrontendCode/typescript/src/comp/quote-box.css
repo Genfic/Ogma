@@ -14,7 +14,7 @@
 		--refresh-opacity: 0.5;
 	}
 
-	&:focus {
+	&:focus-visible {
 		border-color: var(--accent);
 	}
 
@@ -45,8 +45,8 @@
 			background: var(--accent-10);
 		}
 
-		&:focus {
-			outline: 0;
+		&:focus-visible {
+			outline: 3px groove color-mix(in oklab, var(--accent), var(--background) 50%);
 		}
 
 		svg {

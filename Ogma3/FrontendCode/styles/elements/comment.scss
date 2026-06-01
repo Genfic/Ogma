@@ -131,7 +131,7 @@
 				padding: .25rem;
 				border: 1px solid var(--foreground-25);
 
-				&:focus {
+				&:focus-visible {
 					box-shadow: 0 0 0 2px var(--accent-50);
 				}
 			}

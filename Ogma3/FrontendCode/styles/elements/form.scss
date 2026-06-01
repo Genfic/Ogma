@@ -177,7 +177,7 @@ form.form {
 						border-color: var(--accent);
 					}
 
-					&:focus + .radio-label {
+					&:focus-visible + .radio-label {
 						border-color: var(--accent);
 						box-shadow: 0 0 0 3px var(--accent-25);
 					}
@@ -263,7 +263,7 @@ form.form {
 				}
 			}
 
-			&:focus {
+			&:focus-visible {
 				& + label {
 					border-color: var(--accent);
 					box-shadow: 0 0 0 3px var(--accent-25);

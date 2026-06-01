@@ -15,7 +15,7 @@
 			border-bottom: none;
 			text-align: center;
 
-			&:hover, &:focus {
+			&:hover, &:focus-visible {
 				background-color: var(--accent-10);
 			}
 

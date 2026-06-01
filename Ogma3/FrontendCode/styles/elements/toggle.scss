@@ -47,7 +47,7 @@
 		opacity: 0;
 		position: absolute;
 
-		&:focus {
+		&:focus-visible {
 			& + label {
 				border-color: var(--accent);
 				box-shadow: 0 0 0 3px var(--accent-25);

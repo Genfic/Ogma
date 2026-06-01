@@ -48,7 +48,7 @@ $margin: .5rem;
 			background-color: var(--background-75);
 
 			&:hover,
-			&:focus {
+			&:focus-visible {
 				color: var(--foreground);
 				background: var(--accent-10);
 			}
