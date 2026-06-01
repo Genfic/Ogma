@@ -1,12 +1,12 @@
 @page
-@using Microsoft.AspNetCore.Antiforgery
 @inject IAntiforgery Csrf
+@using Microsoft.AspNetCore.Antiforgery
 @model Notifications
 
 @{
 	ViewData["Title"] = "Notifications";
 }
-<h1>@ViewData["Title"]</h1>
+<h1 class="header olde">@ViewData["Title"]</h1>
 
 <div id="notifications" data-csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken">
 

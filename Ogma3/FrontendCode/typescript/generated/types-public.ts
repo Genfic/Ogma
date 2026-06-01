@@ -98,7 +98,7 @@ export type DeleteVoteCommand = {
     storyId: number;
 };
 
-export type ENotificationEvent = "CommentReply" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment";
+export type ENotificationEvent = "CommentReply" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "NewFollower" | "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment";
 
 export type EReportableContentTypes = "Blogpost" | "Chapter" | "Club" | "Comment" | "Story" | "User";
 
@@ -195,6 +195,8 @@ export type HttpValidationProblemDetails = {
     instance: string | null;
     errors: object[];
 };
+
+export type IFormFile = Blob;
 
 export type InviteCodeDto = {
     id: number;
@@ -402,6 +404,10 @@ export type UpdateTagCommand = {
     name: string;
     description: string | null;
     namespace: "ContentWarning" | "Franchise" | "Genre" | null;
+};
+
+export type UploadFileQuery = {
+    file: IFormFile;
 };
 
 export type UserSimpleDto = {

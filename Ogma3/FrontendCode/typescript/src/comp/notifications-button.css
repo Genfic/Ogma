@@ -28,6 +28,9 @@
 		font-size: 0.8rem;
 		text-align: center;
 		border-radius: 9999999px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		--stroke: 3px var(--background);
 		@supports (--webkit-text-stroke: var(--stroke)) {

@@ -1,5 +1,9 @@
 import LucideTrash2 from "icon:lucide:trash-2";
-import { DeleteApiNotifications as deleteNotification, GetApiNotifications as getNotifications } from "@g/paths-public";
+import {
+	DeleteApiNotifications as deleteNotification,
+	DeleteApiNotificationsAll as deleteAllNotifications,
+	GetApiNotifications as getNotifications,
+} from "@g/paths-public";
 import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
@@ -9,7 +13,7 @@ import { render } from "solid-js/web";
 const parent = $id("notifications");
 
 const Notifications = () => {
-	const [notifications, { refetch }] = createResource(async () => {
+	const [notifications, { refetch, mutate }] = createResource(async () => {
 		const res = await getNotifications();
 		if (!res.ok) {
 			throw new Error(res.statusText);
@@ -26,6 +30,14 @@ const Notifications = () => {
 		refetch();
 	};
 
+	const deleteAll = async () => {
+		const res = await deleteAllNotifications({
+			RequestVerificationToken: csrf,
+		});
+		if (!res.ok) return;
+		mutate([]);
+	};
+
 	return (
 		<Switch>
 			<Match when={notifications.loading}>
@@ -35,6 +47,14 @@ const Notifications = () => {
 				<span class="error">{notifications.error}</span>
 			</Match>
 			<Match when={notifications()}>
+				{(notifications()?.length ?? 0) <= 0 ? (
+					<h2>You're all set! The inbox is empty.</h2>
+				) : (
+					<button type="button" class="btn btn-primary" onclick={deleteAll}>
+						<LucideTrash2 />
+						Clear all
+					</button>
+				)}
 				<For each={notifications()}>
 					{(notif) => (
 						<div class="notification active-border">
@@ -44,7 +64,7 @@ const Notifications = () => {
 							<span class="body">{notif.body}</span>
 							<span class="time">{long.render(toCurrentTimezone(new Date(notif.dateTime)))}</span>
 							<div class="actions">
-								<button type="button" onClick={[deleteNotif, notif.id]}>
+								<button type="button" class="action-btn" onClick={[deleteNotif, notif.id]}>
 									<LucideTrash2 />
 								</button>
 							</div>

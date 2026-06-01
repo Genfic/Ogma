@@ -50,6 +50,7 @@ public static partial class GetUserNotifications
 			ENotificationEvent.FollowedAuthorNewBlogpost => "The author you're following just wrote a new blogpost.",
 			ENotificationEvent.FollowedAuthorNewStory => "The author you're following just created a new story.",
 			ENotificationEvent.CommentReply => "One of your comments just got a reply.",
+			ENotificationEvent.NewFollower => "You just got a new follower!",
 			_ => throw new UnexpectedEnumValueException<ENotificationEvent>(Event),
 		};
 	}

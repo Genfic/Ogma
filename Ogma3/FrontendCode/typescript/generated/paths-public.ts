@@ -110,6 +110,13 @@ export const DeleteApiNotifications = async (id: number, headers?: HeadersInit, 
     options,
 );
 
+export const DeleteApiNotificationsAll = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined; 404: undefined }, undefined>("/api/notifications/all",
+    DELETE,
+    undefined,
+    headers,
+    options,
+);
+
 export const DeleteApiPasskeysDelete = async (id: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined; 404: undefined; 500: undefined }, undefined>(`/api/passkeys/delete?id=${_enc(id)}`,
     DELETE,
     undefined,
@@ -415,7 +422,7 @@ export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, op
     options,
 );
 
-export const GetApiTest = async (q: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined }, undefined>(`/api/test?q=${_enc(q)}`,
+export const GetApiTestThree = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 404: undefined }, undefined>("/api/test-three",
     GET,
     undefined,
     headers,
@@ -530,6 +537,13 @@ export const PostApiCommentsThreadLock = async (body: LockThreadCommand, headers
 export const PostApiFaqs = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: FaqDto; 400: undefined; 401: undefined }, CreateFaqCommand>("/api/faqs",
     POST,
     body,
+    headers,
+    options,
+);
+
+export const PostApiFilesUpload = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 401: undefined }, undefined>("/api/files/upload",
+    POST,
+    undefined,
     headers,
     options,
 );
