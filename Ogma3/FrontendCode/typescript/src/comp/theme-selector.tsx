@@ -112,16 +112,14 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 			<div id="theme-list" class="options" role="listbox" aria-label="Themes">
 				<For each={["system", ...themes]}>
 					{(t) => (
-						<label>
-							<input
-								type="radio"
-								name="theme-selector"
-								value={t}
-								checked={theme() === t}
-								onchange={[setTheme, t]}
-							/>
-							{capitalize(t)} theme
-						</label>
+						<button
+							type="button"
+							role="option"
+							classList={{ active: theme() === t }}
+							onclick={[setTheme, t]}
+						>
+							{capitalize(t)}
+						</button>
 					)}
 				</For>
 			</div>

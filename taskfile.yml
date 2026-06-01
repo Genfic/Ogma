@@ -68,3 +68,5 @@ tasks:
 
   # Deploy
   deploy: aspire deploy -e Production
+
+  ngrok: ngrok http https://localhost:5001

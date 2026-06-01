@@ -40,28 +40,32 @@
 		padding: 0.25rem;
 		color: var(--foreground-75);
 
-		label {
-			padding: 0.25rem 0.5rem;
+		button {
+			padding: 0.5rem 2rem;
+			min-height: 48px;
 			cursor: pointer;
+			background-color: transparent;
+			color: var(--foreground);
+			border: none;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			font-size: 1rem;
 
-			&:focus-within {
+			&:focus-visible {
 				outline: 2px solid var(--accent-50);
 			}
 
-			&:has(input:checked) {
-				color: var(--accent);
+			&:hover {
+				background-color: var(--foreground-10);
 			}
 
-			input {
-				position: absolute;
-				width: 1px;
-				height: 1px;
-				padding: 0;
-				margin: -1px;
-				overflow: hidden;
-				clip: rect(0, 0, 0, 0);
-				white-space: nowrap;
-				border-width: 0;
+			&:not(:last-child) {
+				border-bottom: 1px solid var(--foreground-10);
+			}
+
+			&.active {
+				color: var(--accent);
+				border-left-color: var(--accent);
 			}
 		}
 	}

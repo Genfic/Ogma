@@ -82,7 +82,7 @@ if (!builder.ExecutionContext.IsPublishMode)
 		.AddContainer("tunnel", "cloudflare/cloudflared")
 		.WithEnvironment("TUNNEL_TOKEN", builder.Configuration["CLOUDFLARE_TUNNEL_TOKEN"])
 		.WithContainerRuntimeArgs("--add-host=host.docker.internal:host-gateway")
-		.WithArgs("tunnel", "--no-autoupdate", "run")
+		.WithArgs("tunnel", "--no-autoupdate", "run", "--no-tls-verify")
 		.ExcludeFromManifest()
 		.IfNot(emulateProd, b => b.WithExplicitStart())
 		.WaitFor(genfic);
