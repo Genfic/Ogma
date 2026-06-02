@@ -66,7 +66,14 @@ tasks:
       - task: db-up
       - task: db-compile
 
+  build-frontend:
+    dir: ./Ogma3/FrontendCode
+    cmd: bun run build
+
   # Deploy
-  deploy: aspire deploy -e Production
+  deploy:
+    cmds:
+      - task: build-frontend
+      - aspire deploy -e Production
 
   ngrok: ngrok http https://localhost:5001

@@ -59,20 +59,6 @@
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
-	<Target Name="BuildFrontendCode" BeforeTargets="AssignTargetPaths" Condition="'$(Configuration)' == 'Release'">
-		<Message Importance="high" Text="--- Running frontend code build ---"/>
-		<Exec Command="bun run build" WorkingDirectory="$(ProjectDir)\FrontendCode"/>
-
-		<ItemGroup>
-			<Content Remove="$(ProjectDir)\wwwroot\{js,css}\**"/>
-			<None Remove="$(ProjectDir)\wwwroot\{js,css}\**"/>
-			
-			<Content Include="$(ProjectDir)\wwwroot\{js,css}\**">
-				<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			</Content>
-		</ItemGroup>
-	</Target>
-
 	<ItemGroup>
 		<EmbeddedResource Include="$(ProjectDir)\Queries\**\*.sql"/>
 	</ItemGroup>

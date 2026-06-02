@@ -23,7 +23,9 @@ const values = program
 	.option("-r, --release", "Build in release mode", false)
 	.option("--no-minify", "Don't minify code", true)
 	.option("-c, --clean", "Clean output directory", false)
-	.option("-C --clean-always", "Clean output directory before each compilation", false)
+	.option("-C, --clean-always", "Clean output directory before each compilation", false)
+	.option("-s, --size", "Show size history", true)
+	.option("--no-size", "Hide size history")
 	.parse(Bun.argv)
 	.opts();
 
@@ -103,16 +105,18 @@ const compileAll = async () => {
 
 	const size = await compile(new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`), join(_dest, "/"), "src");
 
-	const best = (size: number) => convert(size, "bytes").to("best").toString(3);
+	if (values.size) {
+		const best = (size: number) => convert(size, "bytes").to("best").toString(3);
 
-	logger.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
+		logger.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
 
-	const [first, prev] = await sizeHistory.sizeAt(0, -1);
-	if (prev) {
-		const text = (x: number) => (x > 0 ? c.red : c.green)((x < 0 ? "" : "+") + best(x));
-		logger.log(`Size difference: ${text(size - prev)} (total: ${text(size - first)})`);
+		const [first, prev] = await sizeHistory.sizeAt(0, -1);
+		if (prev) {
+			const text = (x: number) => (x > 0 ? c.red : c.green)((x < 0 ? "" : "+") + best(x));
+			logger.log(`Size difference: ${text(size - prev)} (total: ${text(size - first)})`);
+		}
+		await sizeHistory.push(size);
 	}
-	await sizeHistory.push(size);
 
 	await Bun.write(join(_dest, ".gitkeep"), "");
 

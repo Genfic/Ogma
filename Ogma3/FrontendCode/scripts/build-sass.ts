@@ -21,6 +21,8 @@ const values = program
 	.option("-w, --watch", "Watch mode", false)
 	.option("-c, --clean", "Clean output directory", false)
 	.option("-r, --raw", "Output raw css", false)
+	.option("-s, --size", "Show size history", true)
+	.option("--no-size", "Hide size history")
 	.parse(Bun.argv)
 	.opts();
 
@@ -145,9 +147,11 @@ const compileAll = async () => {
 
 await compileAll();
 
-const size = await dirsize(`${_dest}/**/[!_]*.css`);
-const best = (num: number) => convert(num, "bytes").to("best").toString(3);
-console.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
+if (values.size) {
+	const size = await dirsize(`${_dest}/**/[!_]*.css`);
+	const best = (num: number) => convert(num, "bytes").to("best").toString(3);
+	console.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
+}
 
 if (values.watch) {
 	await watch(_base, ["update"], {
