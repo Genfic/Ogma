@@ -18,7 +18,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public sealed class CreateModel(ApplicationDbContext context, ImageUploader uploader, ImageProcessor processor, OgmaConfig ogmaConfig) : PageModel
+public sealed class CreateModel(ApplicationDbContext context, IFileUploader uploader, ImageProcessor processor, OgmaConfig ogmaConfig) : PageModel
 {
 	public IActionResult OnGet()
 	{

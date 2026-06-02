@@ -22,7 +22,7 @@ namespace Ogma3.Pages.Clubs;
 public sealed class EditModel
 (
 	ApplicationDbContext context,
-	ImageUploader uploader,
+	IFileUploader uploader,
 	ImageProcessor processor,
 	OgmaConfig ogmaConfig,
 	ILogger<EditModel> logger) : PageModel

@@ -11,7 +11,7 @@ using Routes.Pages;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uploader) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uploader) : PageModel
 {
 	public sealed class GetData
 	{

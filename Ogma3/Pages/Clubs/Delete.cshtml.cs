@@ -11,7 +11,7 @@ using Index = Routes.Pages.Index;
 namespace Ogma3.Pages.Clubs;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context, ImageUploader uploader, ILogger<DeleteModel> logger) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uploader, ILogger<DeleteModel> logger) : PageModel
 {
 	[BindProperty] public required GetData Club { get; set; }
 

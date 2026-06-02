@@ -114,6 +114,11 @@ const Users = () => {
 
 					<a href={`/user/${user.name.toLowerCase()}`}>Visit profile</a>
 
+					<form action="" method="post">
+						<input type="hidden" name="Username" value={user.name.toLowerCase()} />
+						<button type="submit">Impersonate</button>
+					</form>
+
 					<table class="o-table">
 						<tbody>
 							<tr>

@@ -12,4 +12,11 @@
 	<div class="text">
 		@Model.Text
 	</div>
+
+	@if (!string.IsNullOrEmpty(Model.Body))
+	{
+		<hr>
+		<br>
+		<pre>@Model.Body</pre>
+	}
 </div>

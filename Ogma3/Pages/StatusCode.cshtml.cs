@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -10,8 +11,9 @@ public sealed class StatusCodeModel : PageModel
 	public required int Code { get; set; }
 	public required string Name { get; set; }
 	public required string Text { get; set; }
+	public string? Body { get; set; }
 
-	public void OnGet(int? code)
+	public async Task OnGet(int? code)
 	{
 		if (code is not null)
 		{
@@ -23,6 +25,9 @@ public sealed class StatusCodeModel : PageModel
 			Code = 0;
 			Name = "Unknown Error";
 		}
+
+		using var reader = new StreamReader(HttpContext.Request.Body);
+		Body = JsonSerializer.Serialize(await reader.ReadToEndAsync());
 
 		var statusCodeReExecuteFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
 		if (statusCodeReExecuteFeature != null)

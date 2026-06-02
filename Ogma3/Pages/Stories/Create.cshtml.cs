@@ -23,7 +23,7 @@ namespace Ogma3.Pages.Stories;
 public sealed class CreateModel
 (
 	ApplicationDbContext context,
-	ImageUploader uploader,
+	IFileUploader uploader,
 	ImageProcessor processor,
 	OgmaConfig ogmaConfig)
 	: PageModel

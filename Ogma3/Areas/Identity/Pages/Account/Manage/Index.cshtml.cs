@@ -24,7 +24,7 @@ public sealed partial class IndexModel
 (
 	ApplicationDbContext context,
 	SignInManager<OgmaUser> signInManager,
-	ImageUploader uploader,
+	IFileUploader uploader,
 	ImageProcessor processor,
 	OgmaConfig config,
 	GeneratedImagesService imagesService,

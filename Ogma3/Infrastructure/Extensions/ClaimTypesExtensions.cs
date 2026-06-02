@@ -10,5 +10,6 @@ public static class ClaimTypesExtensions
 		public static string Title => "x:Title";
 		public static string IsStaff => "x:IsStaff";
 		public static string Timezone => "x:Timezone";
+		public static string ImpersonatingUserId => "x:ImpersonatingUserId";
 	}
 }

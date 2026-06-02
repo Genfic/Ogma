@@ -25,7 +25,7 @@ namespace Ogma3.Pages.Stories;
 public sealed class EditModel
 (
 	ApplicationDbContext context,
-	ImageUploader uploader,
+	IFileUploader uploader,
 	ImageProcessor processor,
 	OgmaConfig ogmaConfig,
 	NotificationsRepository notificationsRepo)
@@ -139,7 +139,7 @@ public sealed class EditModel
 				s.ChapterCount,
 				s.CoverId,
 				CoverUrl = s.Cover != null ? s.Cover.Url : null,
-				CoverETag = s.Cover != null ? s.Cover.ETag : null
+				CoverETag = s.Cover != null ? s.Cover.ETag : null,
 			})
 			.FirstOrDefaultAsync();
 

@@ -135,6 +135,39 @@
 
 	@RenderBody()
 
+	@if (User.FindFirst(ClaimTypes.ImpersonatingUserId) is not null)
+	{
+		<style asp-add-nonce>
+			.impersonation-info {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 1000;
+				background-color: oklch(0.5 0.25 55);
+				color: white;
+				padding: .25rem .5rem;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.action-btn {
+					background-color: rgb(15 15 15);
+					color: white;
+					border-color: white;
+
+					&:hover {
+						background-color: rgb(25 25 25);
+					}
+				}
+			}
+		</style>
+
+		<div class="impersonation-info">
+			<span>⚠️ You are impersonating <strong>@(User.Identity?.Name ?? "[unknown]")</strong></span>
+			<a href="/api/users/stop-impersonation" class="action-btn">Stop impersonation</a>
+		</div>
+	}
 </div>
 
 @if (!cookieConsent)
