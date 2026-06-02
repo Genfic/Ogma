@@ -3,7 +3,7 @@ using System.Text;
 using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
-using Ogma3.Infrastructure.Config.RemoteSecrets;
+using Ogma3.Infrastructure.Config;
 using Ogma3.Infrastructure.OgmaConfig;
 
 namespace Ogma3.Services.GeneratedImagesService;

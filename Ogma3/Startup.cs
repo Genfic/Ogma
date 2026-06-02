@@ -59,9 +59,6 @@ public static class Startup
 		var services = builder.Services;
 		var configuration = builder.Configuration;
 
-		// Profiler
-		services.AddMiniProfiler().AddEntityFramework();
-
 		// Compression
 		services.AddResponseCompression(options => {
 				options.EnableForHttps = true;
@@ -279,7 +276,7 @@ public static class Startup
 
 		// Forwarded headers (for Cloudflare Tunnel / reverse proxies)
 		services.Configure<ForwardedHeadersOptions>(options => {
-			options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
+			options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor;
 			options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
 			options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
 		});
@@ -300,12 +297,6 @@ public static class Startup
 	public static void Configure(this WebApplication app)
 	{
 		var env = app.Environment;
-
-		// Profiler
-		if (env.IsDevelopment())
-		{
-			app.UseMiniProfiler();
-		}
 
 		app.MapDefaultEndpoints();
 

@@ -16,5 +16,8 @@
 	},
 	"Time": {
 		"UseBuiltInTimezoneStyle": true,
-	}
+	},
+	"Infisical": {
+		"Url": "https://eu.infisical.com",
+	},
 }

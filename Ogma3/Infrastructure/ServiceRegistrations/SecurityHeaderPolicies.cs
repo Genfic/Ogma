@@ -14,6 +14,7 @@ public static class SecurityHeaderPolicies
 				policy.AddContentTypeOptionsNoSniff();
 				policy.AddReferrerPolicyStrictOriginWhenCrossOrigin();
 				policy.AddContentSecurityPolicy(csp => {
+					csp.AddDefaultSrc().Self();
 					csp.AddObjectSrc().None();
 					csp.AddFormAction().Self();
 					csp.AddFrameAncestors().None();

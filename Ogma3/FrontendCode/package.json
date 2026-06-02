@@ -15,7 +15,7 @@
 		"js:typecheck": "tsc --project ./typescript --noEmit",
 		"fonts": "bun ./scripts/build-fonts.ts",
 		"lh": "bunx unlighthouse",
-		"build": "bun run css -- -c && bun run js -- -c && bun run fonts"
+		"build": "bun run css -- -c && bun run js -- -cr && bun run fonts"
 	},
 	"devDependencies": {
 		"@angius/bun-plugin-solid": "^1.4.2",

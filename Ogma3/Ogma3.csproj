@@ -80,7 +80,7 @@
 	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis"/>
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching"/>
-		<PackageReference Include="Atulin.InfisicalConfiguration"/>
+		<PackageReference Include="Atulin.InfisicalConfig" />
 		<PackageReference Include="Atulin.MarkdigExtensions"/>
 		<PackageReference Include="Atulin.MinHash"/>
 		<PackageReference Include="Atulin.SealAnalyzer"/>
@@ -112,8 +112,6 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream"/>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"/>
-		<PackageReference Include="MiniProfiler.AspNetCore.Mvc"/>
-		<PackageReference Include="MiniProfiler.EntityFrameworkCore"/>
 		<PackageReference Include="NetDevPack.Security.PasswordHasher.Argon2"/>
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders"/>
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers"/>

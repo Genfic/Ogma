@@ -1,6 +1,6 @@
 using ConfigBoundNET;
 
-namespace Ogma3.Infrastructure.Config.RemoteSecrets;
+namespace Ogma3.Infrastructure.Config;
 
 [ConfigSection("Workers")]
 public sealed partial class Workers
