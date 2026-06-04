@@ -67,6 +67,7 @@ public sealed partial class HandlePatreonWebhook
 		if (!ValidateSignature(request.Signature, secret, body))
 		{
 			logger.LogWarning("Invalid Patreon webhook signature: {Signature}", request.Signature);
+			await Task.Delay(Random.Shared.Next(100, 500), cancellationToken); // throw off any timing attacks even more
 			return TypedResults.BadRequest();
 		}
 

@@ -1,0 +1,25 @@
+@page
+@using Utils.Extensions
+@model Subscription
+
+@{
+	ViewData["Title"] = "Subscription";
+	ViewData["ActivePage"] = ManageNavPages.Subscription;
+}
+
+<div class="tiers">
+	@foreach (var tier in Model.Tiers)
+	{
+		<a class="tier" href="https://patreon.com@(tier.Url)" target="_blank" noopener>
+			<h2 class="name">@tier.Name</h2>
+			<h3 class="price">€@((tier.AmountCents / 100).ToString("#.##"))</h3>
+			<p class="desc">@tier.Description</p>
+			<ul class="benefits">
+				@foreach (var (key, benefit) in tier.Benefits.Keyed())
+				{
+					<li class="benefit" style="--key: @key; --items: @tier.Benefits.Count">@benefit.Name</li>
+				}
+			</ul>
+		</a>
+	}
+</div>

@@ -1,0 +1,57 @@
+@page
+@using Ogma3.Data.Subscriptions
+@model Subscriptions
+
+@{
+	ViewData["Title"] = "Subscriptions";
+	ViewData["ActivePage"] = NavPages.Subscriptions;
+}
+
+<form action="" method="post" class="form auto">
+	<label asp-for="Tier.Name"></label>
+	<input asp-for="Tier.Name" />
+
+	<label asp-for="Tier.Price"></label>
+	<input asp-for="Tier.Price">
+
+	<label asp-for="Tier.Entitlements"></label>
+	<select asp-for="Tier.Entitlements" asp-items="Html.GetEnumSelectList<Entitlement>()" multiple></select>
+
+	<button type="submit">Add</button>
+</form>
+
+<ul>
+	@foreach (var tier in Model.Tiers)
+	{
+		<li>
+			<div>@tier.Name</div>
+			<div>@tier.Price</div>
+			<ul>
+				@foreach (var e in tier.Entitlements)
+				{
+					<li>@e.ToStringFast()</li>
+				}
+			</ul>
+		</li>
+	}
+</ul>
+
+<ul>
+	@foreach (var tier in Model.Patiers)
+	{
+		<li>
+			<div>@tier.Name</div>
+			<div>@tier.AmountCents</div>
+			<div>@tier.Description</div>
+			<ul>
+				@foreach (var ben in tier.Benefits)
+				{
+					<li>
+						<div>@ben.Name</div>
+						<div>@ben.Description</div>
+					</li>
+				}
+			</ul>
+		</li>
+	}
+</ul>

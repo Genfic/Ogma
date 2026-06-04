@@ -2,6 +2,10 @@
 @using Microsoft.AspNetCore.Antiforgery
 @model Passkeys
 @inject IAntiforgery Csrf
+@{
+	ViewData["Title"] = "Passkeys";
+	ViewData["ActivePage"] = ManageNavPages.Passkeys;
+}
 
 <setup-passkey csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken"></setup-passkey>
 

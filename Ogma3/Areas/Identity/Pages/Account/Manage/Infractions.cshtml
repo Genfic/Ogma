@@ -6,8 +6,6 @@
 	ViewData["ActivePage"] = ManageNavPages.Infractions;
 }
 
-<h4>@ViewData["Title"]</h4>
-
 @if (Model.AllInfractions is { Count: <= 0 })
 {
 	<strong>You're clear! 🎉</strong>

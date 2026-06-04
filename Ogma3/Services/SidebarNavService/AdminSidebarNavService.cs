@@ -35,6 +35,7 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 			new(Roles.Get()),
 			new(Users_Index.Get(), "Users"),
 			new(Infractions.Get()),
+			new(Subscriptions.Get()),
 		],
 		["Other"] =
 		[

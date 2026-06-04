@@ -58,3 +58,53 @@
 		}
 	}
 }
+
+.tiers {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1rem;
+
+	.tier {
+		--anim-time: 1s;
+		--bg: var(--foreground-10);
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: .5rem;
+		padding: .5rem 0;
+		border: 2px solid var(--foreground-50);
+		box-shadow: 0 0 0 2px var(--background), 0 0 0 3px var(--foreground-50);
+		outline-offset: 1px;
+		font-size: 1.1rem;
+		background-color: var(--bg);
+		color: var(--foreground);
+
+		&:hover {
+			--bg: var(--accent);
+			color: var(--background);
+
+			.benefits .benefit {
+				animation: highlight calc(var(--items) * var(--anim-time)) infinite ease-in-out;
+				animation-delay: calc(var(--key) * var(--anim-time));
+			}
+		}
+	}
+}
+
+@keyframes highlight {
+	0%, 25% {
+		font-weight: 800;
+		letter-spacing: .1rem;
+	}
+
+	25.01%, 100% {
+		font-weight: 400;
+		letter-spacing: 0;
+	}
+
+	// 100% {
+	//	font-weight: 400;
+	// }
+}

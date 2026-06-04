@@ -22,6 +22,39 @@ interface Props {
 	registerRoute: string;
 }
 
+const adjectives = [
+	"insightful",
+	"thoughtful",
+	"engaging",
+	"heartfelt",
+	"inspiring",
+	"uplifting",
+	"perceptive",
+	"encouraging",
+	"warm",
+	"witty",
+	"clever",
+	"eloquent",
+	"sincere",
+	"appreciative",
+	"supportive",
+	"charming",
+	"reflective",
+	"delightful",
+	"constructive",
+	"nuanced",
+	"expressive",
+	"resonant",
+	"poetic",
+	"admiring",
+	"genuine",
+];
+
+const article = (adjective: string) => (["a", "e", "i", "o", "u"].includes(adjective[0].toLowerCase()) ? "an" : "a");
+
+const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+const pre = article(adj);
+
 const Comments = (props: Props) => {
 	noShadowDOM();
 
@@ -168,6 +201,7 @@ const Comments = (props: Props) => {
 							id="body"
 							rows="3"
 							aria-label="Comment"
+							placeholder={`Write ${pre} ${adj} comment...`}
 						/>
 
 						<div class="counter" classList={{ invalid: body.length >= maxLength }}>

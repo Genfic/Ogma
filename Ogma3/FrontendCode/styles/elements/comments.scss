@@ -31,8 +31,9 @@ $btn-height: 2.5rem;
 		> .comment-box {
 			padding: .5rem;
 			min-height: 5rem;
-			background-color: var(--background);
+			background-color: var(--foreground-10);
 			color: var(--foreground);
+			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 		}
 
 		> .counter {
@@ -42,12 +43,15 @@ $btn-height: 2.5rem;
 		> .buttons {
 			margin-top: .1rem;
 			display: flex;
+
+			> * {
+				background-color: var(--foreground-10);
+			}
 		}
 
 		& .comment-btn {
 			flex: 1;
 			height: $btn-height;
-			background-color: var(--background);
 			color: var(--foreground);
 			margin: 1px 1px 0 0;
 

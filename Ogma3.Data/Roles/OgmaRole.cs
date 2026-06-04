@@ -2,6 +2,7 @@ using AutoDbSetGenerators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Ogma3.Data.Constants;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Roles;
@@ -28,6 +29,10 @@ public sealed class OgmaRole : IdentityRole<long>
 	{
 		public void Configure(EntityTypeBuilder<OgmaRole> builder)
 		{
+			builder.Property(r => r.Name)
+				.IsRequired()
+				.HasMaxLength(256)
+				.UseCollation(PgConstants.CollationNames.CaseInsensitive);
 			builder.Property(r => r.IsStaff)
 				.IsRequired()
 				.HasDefaultValue(false);
