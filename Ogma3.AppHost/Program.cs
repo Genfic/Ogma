@@ -35,7 +35,10 @@ builder
 		network.Ipam ??= new();
 		network.Ipam.Config.Add(new() { ["subnet"] = "fd01::/80" });
 	})
-	.WithDashboard(db => db.WithHostPort(8085))
+	.WithDashboard(db => {
+		db.WithHostPort(8085);
+		db.WithEnvironment("Dashboard__Frontend__BrowserToken", Password.Generate(32, true));
+	})
 	.WithSshDeploySupport();
 
 var garnet = builder
