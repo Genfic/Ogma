@@ -5,7 +5,7 @@
 		<Authors>Ogma3</Authors>
 		<Company>Ogma3</Company>
 		<Product>Ogma3</Product>
-		<ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
+		<ApplicationIcon>wwwroot/favicon.ico</ApplicationIcon>
 		<NeutralLanguage>en</NeutralLanguage>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
@@ -29,38 +29,38 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\.scripts'))</ToolsDir>
-		<ToolsOut>$(ToolsDir)\out</ToolsOut>
+		<ToolsDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../.scripts'))</ToolsDir>
+		<ToolsOut>$(ToolsDir)/out</ToolsOut>
 		<ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Script Include="$(ToolsDir)\GenerateCTConfig.cs"/>
-		<Script Include="$(ToolsDir)\GenerateSpritesheet.cs"/>
-		<Script Include="$(ToolsDir)\CompressImages.cs"/>
+		<Script Include="$(ToolsDir)/GenerateCTConfig.cs"/>
+		<Script Include="$(ToolsDir)/GenerateSpritesheet.cs"/>
+		<Script Include="$(ToolsDir)/CompressImages.cs"/>
 	</ItemGroup>
 
-	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)\%(Filename).dll'" BeforeTargets="Build">
+	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)/%(Filename).dll'" BeforeTargets="Build">
 		<Exec Command='dotnet publish "%(Script.FullPath)" --output "$(ToolsOut)"' WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<Target Name="ExportCTConfig" BeforeTargets="Build">
-		<Exec Command='dotnet "$(ToolsOut)\GenerateCTConfig.dll" "$(ProjectDir)\..\Ogma3.Data\CTConfig.cs" "$(ProjectDir)\FrontendCode\typescript\generated"'
+		<Exec Command='dotnet "$(ToolsOut)/GenerateCTConfig.dll" "$(ProjectDir)/../Ogma3.Data/CTConfig.cs" "$(ProjectDir)/FrontendCode/typescript/generated"'
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<Target Name="CreateIconSpritesheet" BeforeTargets="Build">
-		<Exec Command='dotnet "$(ToolsOut)\GenerateSpritesheet.dll" "$(ProjectDir)\seed.json5" "$(ProjectDir)\wwwroot\spritesheet.svg"'
+		<Exec Command='dotnet "$(ToolsOut)/GenerateSpritesheet.dll" "$(ProjectDir)/seed.json5" "$(ProjectDir)/wwwroot/spritesheet.svg"'
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<Target Name="CompressImages" BeforeTargets="Build">
-		<Exec Command='dotnet "$(ToolsOut)\CompressImages.dll" "$(ProjectDir)\wwwroot\img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)\wwwroot\img"'
+		<Exec Command='dotnet "$(ToolsOut)/CompressImages.dll" "$(ProjectDir)/wwwroot/img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)/wwwroot/img"'
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
 	<ItemGroup>
-		<EmbeddedResource Include="$(ProjectDir)\Queries\**\*.sql"/>
+		<EmbeddedResource Include="$(ProjectDir)/Queries/**/*.sql"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -127,28 +127,28 @@
 		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack"/>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj"/>
-		<ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj"/>
-		<ProjectReference Include="..\Utils\Utils.csproj"/>
+		<ProjectReference Include="../Ogma3.Data/Ogma3.Data.csproj"/>
+		<ProjectReference Include="../Ogma3.ServiceDefaults/Ogma3.ServiceDefaults.csproj"/>
+		<ProjectReference Include="../Utils/Utils.csproj"/>
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="seed.json5;config.json5;appsettings.json5">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="FrontendCode\svg\discord.svg">
+		<Content Update="FrontendCode/svg/discord.svg">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="FrontendCode\svg\google.svg">
+		<Content Update="FrontendCode/svg/google.svg">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="FrontendCode\svg\patreon.svg">
+		<Content Update="FrontendCode/svg/patreon.svg">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="FrontendCode\svg\tumblr.svg">
+		<Content Update="FrontendCode/svg/tumblr.svg">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
@@ -157,9 +157,9 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg"/>
-		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.br"/>
-		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.gz"/>
-		<_ContentIncludedByDefault Remove="wwwroot\svg\spritesheet.svg.zst"/>
+		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg"/>
+		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg.br"/>
+		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg.gz"/>
+		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg.zst"/>
 	</ItemGroup>
 </Project>
