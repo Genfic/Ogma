@@ -9,6 +9,7 @@
 	<PropertyGroup>
 		<Features>runtime-async=on</Features>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
+		<CheckSdkVulnerabilities>true</CheckSdkVulnerabilities>
 	</PropertyGroup>
 
 	<ItemGroup>

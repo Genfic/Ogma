@@ -1,7 +1,10 @@
 {
-  "sdk": {
-    "version": "11.0.0",
-    "rollForward": "latestMinor",
-    "allowPrerelease": true
-  }
+	"sdk": {
+		"version": "11.0.0",
+		"rollForward": "latestMinor",
+		"allowPrerelease": true
+	},
+	"test": {
+		"runner": "Microsoft.Testing.Platform"
+	}
 }

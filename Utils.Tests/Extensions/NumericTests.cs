@@ -38,6 +38,12 @@ public sealed class NumericExtensionsTests
 		await Assert.That(25.0.Normalize(0.0, 100.0)).IsEqualTo(0.25);
 	}
 
+	[Test]
+	public async Task TestNormalize_CorrectRange_ExplicitNewRange()
+	{
+		await Assert.That(25.0.Normalize(0.0, 100.0, 10, 73)).IsEqualTo(25.75);
+	}
+
 	// Test clamp
 	[Test]
 	public async Task TestClamp_InRange()
