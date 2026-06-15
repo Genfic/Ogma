@@ -40,7 +40,8 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           files: >
-            Utils.Tests/bin/Release/net11.0/TestResults/coverage.cobertura.xml
-            Utils.Tests/bin/Release/net11.0/TestResults/Utils.Tests-windows-net11.0-report.html
             Ogma3.Tests/bin/Release/net11.0/TestResults/coverage.cobertura.xml
-            Ogma3.Tests/bin/Release/net11.0/TestResults/Ogma3.Tests-windows-net11.0-report.html
+            Ogma3.Tests/bin/Release/net11.0/TestResults/Ogma3.Tests-linux-net11.0-report.html
+            Utils.Tests/bin/Release/net11.0/TestResults/coverage.cobertura.xml
+            Utils.Tests/bin/Release/net11.0/TestResults/Utils.Tests-linux-net11.0-report.html
+
