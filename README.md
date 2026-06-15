@@ -2,7 +2,8 @@
 
 [![.NET](https://github.com/Genfic/Ogma/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Genfic/Ogma/actions/workflows/dotnet.yml)
 [![Node.js CI](https://github.com/Genfic/Ogma/actions/workflows/node.js.yml/badge.svg)](https://github.com/Genfic/Ogma/actions/workflows/node.js.yml)
-[![CodeQL](https://github.com/Genfic/Ogma/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Genfic/Ogma/actions/workflows/codeql-analysis.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Genfic/Ogma/badge.svg?branch=master)](https://coveralls.io/github/Genfic/Ogma?branch=master)
+<!--[![CodeQL](https://github.com/Genfic/Ogma/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Genfic/Ogma/actions/workflows/codeql-analysis.yml)-->
 
 Readme (and the software itself) under construction. Expect it to
 contain something when the code itself is ready for prime time.
