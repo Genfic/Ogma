@@ -77,3 +77,5 @@ tasks:
       - aspire deploy -e Production
 
   ngrok: ngrok http https://localhost:5001
+
+  aspire-update: aspire update --self --channel stable && aspire update
