@@ -18,9 +18,11 @@ To run some helper scripts contained in the [taskfile](./taskfile.yml), the comp
 
 [GPL-3](LICENSE.md) until release. Then, most probably, MIT.
 
+<!--
 ## Acknowledgements
 
 Thank you, JetBrains, for providing us with an open-source
 license for your products 💜
 
 [![JetBrains logo](Assets/jetbrains-variant-4-500px.png)](https://www.jetbrains.com/?from=Ogma)
+-->
