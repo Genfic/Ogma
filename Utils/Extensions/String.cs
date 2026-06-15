@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Utils.Extensions;
@@ -63,10 +64,20 @@ public static partial class String
 		/// <returns>String without leading whitespace</returns>
 		public string RemoveLeadingWhiteSpace()
 		{
-			var lines = input
-				.Split([Environment.NewLine], StringSplitOptions.None)
-				.Select(s => s.TrimStart(' ', '\t'));
-			return string.Join(Environment.NewLine, lines);
+			var sb = new StringBuilder();
+			var text = input.AsSpan();
+
+			foreach (var range in text.Split('\n'))
+			{
+				var line = text[range];
+				var trimmed = line.TrimStart();
+				sb.Append(trimmed);
+				sb.Append('\n');
+			}
+
+			sb.Remove(sb.Length - 1, 1);
+
+			return sb.ToString();
 		}
 
 		/// <summary>
