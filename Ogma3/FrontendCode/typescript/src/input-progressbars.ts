@@ -33,7 +33,7 @@ for (const input of inputs) {
 	}[type];
 
 	// Sometimes we have the minimum value as well, if not, let's just ensure it's not 0 or less
-	const min: number = Number(input.dataset.valLengthMin) ?? 0;
+	const min: number = Number(input.dataset.valLengthMin ?? "0");
 
 	// Function to get the current size
 	const currentSize: () => number = (): number => {

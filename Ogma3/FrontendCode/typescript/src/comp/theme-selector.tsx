@@ -115,6 +115,7 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 						<button
 							type="button"
 							role="option"
+							aria-checked={theme() === t}
 							classList={{ active: theme() === t }}
 							onclick={[setTheme, t]}
 						>

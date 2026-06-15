@@ -7,7 +7,10 @@ import css from "./password-input.css";
 import sharedCss from "./shared.css";
 
 const PasswordInput: ComponentType<Empty> = (_, { element }) => {
-	if (!(element instanceof Element)) throw Error("Not an element?");
+	if (!(element instanceof Element)) {
+		throw new Error("Not an element?");
+	}
+
 	const input = element.previousElementSibling as HTMLInputElement;
 
 	let showPassword = $signal(false);

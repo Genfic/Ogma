@@ -35,11 +35,11 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 	const area = $query<HTMLTextAreaElement | HTMLInputElement>(selectorActual);
 
 	if (!area) {
-		throw Error(`Element "${selector}" not found`);
+		throw new Error(`Element "${selector}" not found`);
 	}
 
 	if (!["TEXTAREA", "INPUT"].includes(area.nodeName)) {
-		throw Error(`Element "${selector}" is not a textarea or input`);
+		throw new Error(`Element "${selector}" is not a textarea or input`);
 	}
 
 	const slot = $signal<HTMLSlotElement>();

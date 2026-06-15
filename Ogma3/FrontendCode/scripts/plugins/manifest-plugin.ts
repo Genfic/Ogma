@@ -19,7 +19,7 @@ export function manifestPlugin(options?: ManifestOptions): BunPlugin {
 				const lines = await Parallel.forEach(
 					result.outputs.filter((o) => !!o.path && o.kind !== "sourcemap"),
 					async (output) => {
-						const relPath = relative(outdir, output.path).replace(/\\/g, "/");
+						const relPath = relative(outdir, output.path).replaceAll(/\\/g, "/");
 						const buffer = await output.arrayBuffer();
 						const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
 						const vHash = Buffer.from(hashBuffer).toString("base64url");

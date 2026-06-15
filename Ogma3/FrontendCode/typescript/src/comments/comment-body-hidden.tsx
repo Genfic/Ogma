@@ -1,7 +1,13 @@
 export const HiddenCommentBody = (props: { onToggleVisibility: () => void }) => {
+	const handleKey = (e: KeyboardEvent) => {
+		if (e.key === "Enter" || e.key === " ") {
+			props.onToggleVisibility();
+		}
+	};
+
 	return (
-		<div class="main" onclick={props.onToggleVisibility}>
+		<button type="button" class="main" onclick={props.onToggleVisibility} onKeyDown={handleKey}>
 			<div class="header">Comment hidden by user blacklist</div>
-		</div>
+		</button>
 	);
 };

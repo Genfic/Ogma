@@ -78,4 +78,4 @@ if (app.Environment.IsDevelopment())
 	await dbContext.Database.MigrateAsync();
 }
 
-app.Run();
+await app.RunAsync();

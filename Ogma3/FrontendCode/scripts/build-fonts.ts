@@ -2,7 +2,7 @@ import path, { dirname, join } from "node:path";
 import convert from "convert";
 import { createFont, type FontEditor, woff2 } from "fonteditor-core";
 
-const asciiChars = Array.from({ length: 95 }, (_, i) => String.fromCharCode(i + 32)).join("");
+const asciiChars = Array.from({ length: 95 }, (_, i) => String.fromCodePoint(i + 32)).join("");
 
 const subsets: [name: string, chars: string, scale: number][] = [
 	["IMFellEnglish-Italic.ttf", asciiChars, 1.2],
@@ -25,7 +25,10 @@ for (const [file, chars, scale] of subsets) {
 		const buffer = await Bun.file(input).arrayBuffer();
 		const ogSize = buffer.byteLength;
 
-		const unicodes = chars.split("").map((c) => c.charCodeAt(0));
+		const unicodes = chars
+			.split("")
+			.map((c) => c.codePointAt(0))
+			.filter((c) => c !== undefined);
 
 		const font = createFont(buffer, {
 			type: ext.slice(1) as FontEditor.FontType,

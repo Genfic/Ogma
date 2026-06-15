@@ -127,7 +127,7 @@ export const CommentList: Component<Props> = (props) => {
 		const hash = window.location.hash;
 		const match = hash.match(/^#comment-([a-zA-Z0-9]+)$/);
 
-		if (!match || !match[1]) return;
+		if (!match?.[1]) return;
 
 		setHighlight(match[1]);
 

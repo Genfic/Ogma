@@ -33,7 +33,7 @@ public sealed class ChartTagHelper : TagHelper
         var maxValue = Data.Max();
         var minValue = Math.Min(0, Data.Min());
         var valueRange = maxValue - minValue;
-        if (valueRange == 0)
+        if (Math.Abs(valueRange) < double.Epsilon)
         {
 	        valueRange = 1;
         }
