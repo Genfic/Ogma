@@ -356,6 +356,9 @@ public static class Startup
 			app.MapScalarApiReference().WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax);
 		}
 
+		// Antiforgery
+		app.UseAntiforgery();
+
 		// Rate limit
 		app.UseRateLimiter();
 
@@ -364,9 +367,6 @@ public static class Startup
 		app.MapGroup("/")
 			.WithMetadata(new ApiEndpointAttribute())
 			.MapOgma3Endpoints();
-
-		// Antiforgery
-		app.UseAntiforgery();
 
 		// Security headers
 		app.UseSecurityHeaders();
