@@ -61,16 +61,18 @@ public sealed class DeletePersonalDataModel
 			}
 		}
 
+		var sqid = _sqids.Encode(user.Id);
+
 		// Clean basic data
-		user.UserName = $"Deleted User {_sqids.Encode(user.Id)}";
+		user.UserName = $"Deleted User {sqid}";
 		user.NormalizedUserName = user.UserName.ToUpperInvariant().Normalize();
-		user.Email = "noreply@example.com";
+		user.Email = $"deleted-{sqid}@example.com";
 		user.NormalizedEmail = user.Email.ToUpperInvariant().Normalize();
 		user.Bio = null;
 		user.Title = null;
 		user.DeletedAt = DateTimeOffset.UtcNow;
 		user.LastActive = DateTimeOffset.UtcNow;
-		user.RegistrationDate = DateTimeOffset.UtcNow;
+		user.RegistrationDate = DateTimeOffset.UnixEpoch;
 
 		// Delete related data
 		await context.BlockedUsers.Where(ub => ub.BlockedUserId == user.Id || ub.BlockingUserId == user.Id).ExecuteDeleteAsync();

@@ -319,11 +319,11 @@ public static class Startup
 			app.UseHsts();
 		}
 
-		// Forward the IP from Cloudflare
-		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
-
 		// Forward proto from trusted proxies (Cloudflare Tunnel / Docker)
 		app.UseForwardedHeaders();
+
+		// Forward the IP from Cloudflare
+		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
 
 		// Redirects
 		app.UseHttpsRedirection();

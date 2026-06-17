@@ -60,7 +60,13 @@ public sealed partial class HandlePatreonWebhook
 
 		logger.LogInformation("Patreon webhook for {Event} received.", request.Event);
 
-		using var ms = new MemoryStream(4096); // 4096 should be enough for the webhook payload
+		if (httpContext.Request.ContentLength > int.MaxValue)
+		{
+			logger.LogWarning("Patreon webhook payload is too large.");
+			return TypedResults.BadRequest();
+		}
+
+		using var ms = new MemoryStream((int)(httpContext.Request.ContentLength ?? 4096));
 		await httpContext.Request.Body.CopyToAsync(ms, cancellationToken);
 		var body = ms.GetBuffer().AsSpan(0, (int)ms.Length);
 
@@ -118,6 +124,8 @@ public sealed partial class HandlePatreonWebhook
 				.ExecuteDeleteAsync(cancellationToken);
 			logger.LogInformation("Deleted {Rows} subscriptions tied to deleted user {UserId} (Patreon: {PatreonId}).", rows, user.Id,
 				patreonUserId);
+
+			return TypedResults.Ok();
 		}
 
 		var subscriptionExists = await context.Subscriptions
@@ -192,7 +200,9 @@ public sealed partial class HandlePatreonWebhook
 
 		Span<byte> computedHash = stackalloc byte[16];
 
-		return hmac.TryComputeHash(body, computedHash, out _) && CryptographicOperations.FixedTimeEquals(signatureBytes, computedHash);
+		return hmac.TryComputeHash(body, computedHash, out var written)
+		       && written == 16
+		       && CryptographicOperations.FixedTimeEquals(signatureBytes, computedHash);
 	}
 
 	[UsedImplicitly]
