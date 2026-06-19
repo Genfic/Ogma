@@ -60,6 +60,7 @@ Ogma3/logger-tokens.txt
 # Experimental
 Ogma3/wwwroot/lib/comments/
 Ogma3/wwwroot/lib/admin/
+justfile
 
 # Unlighthouse
 .unlighthouse

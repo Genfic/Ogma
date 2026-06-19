@@ -71,11 +71,9 @@ var app = builder.Build();
 
 app.Configure();
 
-if (app.Environment.IsDevelopment())
-{
-	using var serviceScope = app.Services.CreateScope();
-	var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-	await dbContext.Database.MigrateAsync();
-}
+// TODO: dedicated migration service pl0x
+using var serviceScope = app.Services.CreateScope();
+var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+await dbContext.Database.MigrateAsync();
 
 await app.RunAsync();

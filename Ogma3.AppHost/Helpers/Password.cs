@@ -4,7 +4,7 @@ namespace Ogma3.AppHost.Helpers;
 
 public static class Password
 {
-	private const string Alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&*()_+[]{}|;:,.<>?";
+	private const string Alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
 	public static string Generate(int length, bool log)
 	{

@@ -37,7 +37,7 @@ builder
 	})
 	.WithDashboard(db => {
 		db.WithHostPort(8085);
-		db.WithEnvironment("Dashboard__Frontend__BrowserToken", Password.Generate(32, true));
+		db.WithEnvironment("Dashboard__Frontend__BrowserToken", Password.Generate(64, true));
 	})
 	.WithSshDeploySupport();
 
