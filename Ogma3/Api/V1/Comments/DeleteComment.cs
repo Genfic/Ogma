@@ -48,6 +48,13 @@ public sealed partial class DeleteComment(ApplicationDbContext context, IUserSer
 			.Where(r => r.ParentId == id)
 			.ExecuteDeleteAsync(cancellationToken);
 
+		_ = await context.CommentThreads
+				.Where(ct => ct.Comments.Any(c => c.Id == id))
+				.ExecuteUpdateAsync(setters => setters
+					.SetProperty(ct => ct.LastChange, DateTimeOffset.UtcNow)
+					.SetProperty(ct => ct.CommentsCount, ct => ct.CommentsCount - 1),
+				cancellationToken);
+
 		await context.SaveChangesAsync(cancellationToken);
 
 		return rows > 0 ? TypedResults.Ok(request.CommentId) : TypedResults.NotFound();

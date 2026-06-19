@@ -52,6 +52,12 @@ public sealed partial class UpdateComment(ApplicationDbContext context, IUserSer
 
 		await context.SaveChangesAsync(cancellationToken);
 
+		_ = await context.CommentThreads
+			.Where(ct => ct.Id == comment.CommentsThreadId)
+			.ExecuteUpdateAsync(setters => setters
+					.SetProperty(ct => ct.LastChange, DateTimeOffset.UtcNow),
+				cancellationToken);
+
 		return TypedResults.Ok(new Response(comment.Body, DateTimeOffset.UtcNow));
 	}
 

@@ -1,7 +1,5 @@
 import { GetApiComments, GetApiCommentsLocate } from "@g/paths-public";
-import { DateSafeJsonParse } from "@g/typed-fetch";
 import type { CommentDto } from "@g/types-public";
-import { stripNullish } from "@h/csharping";
 import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount } from "solid-js";
 import { Comment } from "./comment";
 import { CommentListPagination } from "./comment-list-pagination";
@@ -15,56 +13,22 @@ interface Props {
 	ref?: (functions: CommentListFunctions) => void;
 }
 
-type SuccessDataFrom<T> = T extends Promise<infer R> ? (R extends { ok: true; data: infer D } ? D : never) : never;
-type CommentsData = SuccessDataFrom<ReturnType<typeof GetApiComments>>;
-
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
 	const [highlight, setHighlight] = createSignal("");
 	const [reload, setReload] = createSignal("");
 	const [username, setUsername] = createSignal<string | null>(null);
 	const [deleted, setDeleted] = createSignal<string[]>([]);
-	const [perPageEtags, setPerPageEtags] = createSignal<Record<number, string>>({});
 
 	const [commentsData] = createResource(
 		() => [props.id, currentPage(), reload()] as const,
 		async ([id, page]) => {
-			const headers = stripNullish(
-				perPageEtags()[page],
-				(v) => ({
-					"If-None-Match": v,
-				}),
-				undefined,
-			);
-
-			const res = await GetApiComments(id, page, headers);
+			const res = await GetApiComments(id, page);
 			if (!res.ok) {
 				throw new Error(res.data ?? res.statusText);
 			}
-
-			let data: CommentsData;
-			if (res.status === 304) {
-				console.log("Cache hit");
-				const cached = window.sessionStorage.getItem(perPageEtags()[page] ?? "");
-				if (cached) {
-					data = DateSafeJsonParse<CommentsData>(cached);
-					console.log("Loading from cache", page, data);
-				} else {
-					const newRes = await GetApiComments(id, page);
-					if (newRes.ok) {
-						data = newRes.data;
-					} else {
-						throw new Error(res.data ?? res.statusText);
-					}
-				}
-			} else {
-				setPerPageEtags((old) => ({ ...old, [page]: res.headers.get("ETag") ?? "" }));
-				data = res.data;
-				setUsername(res.headers.get("X-Username"));
-			}
-
-			window.sessionStorage.setItem(perPageEtags()[page] ?? "", JSON.stringify(data));
-			return data;
+			setUsername(res.headers.get("X-Username"));
+			return res.data;
 		},
 	);
 

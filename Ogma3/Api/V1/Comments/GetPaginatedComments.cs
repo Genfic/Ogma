@@ -1,3 +1,5 @@
+using System.IO.Hashing;
+using System.Text;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
@@ -10,13 +12,12 @@ using Ogma3.Infrastructure;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.IResults;
 using Ogma3.Infrastructure.OgmaConfig;
-using Ogma3.Services.ETagService;
 using Ogma3.Services.UserService;
 using Sqids;
 
 namespace Ogma3.Api.V1.Comments;
 
-using ReturnType = Results<Ok<PaginationResult<CommentDto>>, NotModifiedResult>;
+using ReturnType = Results<Ok<PaginationResult<CommentDto>>, NotModifiedResult, NotFound>;
 
 [Handler]
 [MapGet("api/comments")]
@@ -26,7 +27,6 @@ public sealed partial class GetPaginatedComments
 	IUserService userService,
 	OgmaConfig ogmaConfig,
 	IHttpContextAccessor httpContextAccessor,
-	ETagService eTagService,
 	SqidsEncoder<long> sqids)
 {
 	private const string HeaderName = "X-Username";
@@ -47,17 +47,25 @@ public sealed partial class GetPaginatedComments
 		var uid = userService.UserId;
 
 		var (thread, page) = request;
-		var etag = eTagService.Get(ETagFor.Comments, request.Thread, uid);
 
-		ctx.Response.Headers.CacheControl = "public, max-age=0, must-revalidate";
-		ctx.Response.Headers.ETag = etag.ToString();
+		var lastModified = await context.CommentThreads
+			.Where(ct => ct.Id == thread)
+			.Select(ct => ct.LastChange)
+			.FirstOrDefaultAsync(cancellationToken);
 
-		if (ctx.Request.Headers.IfNoneMatch is var inm)
+		if (lastModified == default)
 		{
-			if (MakeEtag(etag, page) == inm.ToString())
-			{
-				return TypedResults.NotModified();
-			}
+			return TypedResults.NotFound();
+		}
+
+		var etag = GenerateETag(thread, page ?? 1, uid, lastModified);
+
+		ctx.Response.Headers.CacheControl = "private, no-cache";
+		ctx.Response.Headers.ETag = etag;
+
+		if (etag == ctx.Request.Headers.IfNoneMatch.ToString())
+		{
+			return TypedResults.NotModified();
 		}
 
 		var total = await context.Comments
@@ -73,8 +81,6 @@ public sealed partial class GetPaginatedComments
 			.Select(CommentMappings.ToCommentDto(uid))
 			.Paginate(page ?? 1, ogmaConfig.CommentsPerPage)
 			.ToListAsync(cancellationToken);
-
-		ctx.Response.Headers.ETag = MakeEtag(etag, page);
 
 		foreach (var comment in comments)
 		{
@@ -106,10 +112,11 @@ public sealed partial class GetPaginatedComments
 		return TypedResults.Ok(pagination);
 	}
 
-	private static string MakeEtag(Guid etag, int? page)
+	private static string GenerateETag(long threadId, int page, long? userId, DateTimeOffset lastModified)
 	{
-		var p = page is not null ? page.ToString() : "n";
-		return $"{etag}-{p}";
+		var raw = $"{threadId}:{page}:{userId?.ToString() ?? "anon"}:{lastModified.Ticks}";
+		var hash = XxHash64.HashToUInt64(Encoding.UTF8.GetBytes(raw));
+		return $"\"{hash:x16}\"";
 	}
 
 	[Validate]

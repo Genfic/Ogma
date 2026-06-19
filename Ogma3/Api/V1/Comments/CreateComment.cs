@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Comments;
 using Ogma3.Data.Infractions;
-using Ogma3.Services.ETagService;
 using Ogma3.Services.PowService;
 using Ogma3.Services.UserService;
 using Sqids;
@@ -25,7 +24,6 @@ public sealed partial class CreateComment
 (
 	ApplicationDbContext context,
 	IUserService userService,
-	ETagService eTagService,
 	PowService powService,
 	SqidsEncoder<long> sqids)
 {
@@ -75,13 +73,12 @@ public sealed partial class CreateComment
 
 		context.Comments.Add(comment);
 		thread.CommentsCount++;
+		thread.LastChange = DateTimeOffset.UtcNow;
 
 		await context.SaveChangesAsync(cancellationToken);
 
 		// TODO: Make the notification shit better
 		// await notificationsRepo.NotifyUsers(thread.Id, comment.Id, comment.Body.Truncate(50), cancellationToken, [uid]);
-
-		eTagService.Create(ETagFor.Comments, request.Thread, uid);
 
 		return TypedResults.Ok(sqids.Encode(comment.Id));
 	}

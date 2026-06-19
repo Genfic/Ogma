@@ -69,7 +69,7 @@ public static class Startup
 			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionOptions.Quality = 5);
 
 		// Database
-		services.AddDbContext<ApplicationDbContext>();
+		builder.AddApplicationDbContext();
 
 		if (builder.Environment.IsDevelopment())
 		{

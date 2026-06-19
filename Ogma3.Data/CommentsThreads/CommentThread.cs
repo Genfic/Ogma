@@ -19,6 +19,8 @@ public sealed class CommentThread : BaseModel
 
 	public bool IsLocked { get; [UsedImplicitly] private set; }
 
+	public DateTimeOffset LastChange { get; set; }
+
 	public OgmaUser? User { get; set; }
 	public long? UserId { get; set; }
 

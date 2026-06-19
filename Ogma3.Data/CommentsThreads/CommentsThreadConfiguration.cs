@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
+using Ogma3.Data.Constants;
 
 namespace Ogma3.Data.CommentsThreads;
 
@@ -19,6 +20,10 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 		builder
 			.Property(ct => ct.IsLocked)
 			.HasComputedColumnSql($"\"{nameof(CommentThread.LockDate)}\" IS NOT NULL", true);
+
+		builder
+			.Property(ct => ct.LastChange)
+			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
 
 		// NAVIGATION
 		builder
