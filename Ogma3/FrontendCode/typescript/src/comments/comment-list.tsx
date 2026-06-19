@@ -16,7 +16,7 @@ interface Props {
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
 	const [highlight, setHighlight] = createSignal("");
-	const [reload, setReload] = createSignal("");
+	const [reload, setReload] = createSignal(0);
 	const [username, setUsername] = createSignal<string | null>(null);
 	const [deleted, setDeleted] = createSignal<string[]>([]);
 
@@ -110,7 +110,7 @@ export const CommentList: Component<Props> = (props) => {
 	};
 
 	const deleteComment = (id: string) => {
-		setReload(id);
+		setReload((r) => r + 1);
 		setDeleted([...deleted(), id]);
 	};
 
