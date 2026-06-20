@@ -22,7 +22,7 @@ var tasks = Glob.Files(source, glob)
 		Stopwatch? subTimer = null;
 		if (verbose)
 		{
-			subTimer =  Stopwatch.StartNew();
+			subTimer = Stopwatch.StartNew();
 			Console.WriteLine($"Processing {path}");
 		}
 

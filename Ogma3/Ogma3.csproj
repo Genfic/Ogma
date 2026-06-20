@@ -38,9 +38,10 @@
 		<Script Include="$(ToolsDir)/GenerateCTConfig.cs"/>
 		<Script Include="$(ToolsDir)/GenerateSpritesheet.cs"/>
 		<Script Include="$(ToolsDir)/CompressImages.cs"/>
+		<Script Include="$(ToolsDir)/CompressLib.cs"/>
 	</ItemGroup>
 
-	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)/%(Filename).dll'" BeforeTargets="Build">
+	<Target Name="BuildScripts" Inputs="@(Script)" Outputs="@(Script->'$(ToolsOut)/%(Filename).dll')" BeforeTargets="Build">
 		<Exec Command='dotnet publish "%(Script.FullPath)" --output "$(ToolsOut)"' WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
@@ -56,6 +57,11 @@
 
 	<Target Name="CompressImages" BeforeTargets="Build">
 		<Exec Command='dotnet "$(ToolsOut)/CompressImages.dll" "$(ProjectDir)/wwwroot/img" "**/*.{png,jpg,jpeg}" "$(ProjectDir)/wwwroot/img"'
+		      WorkingDirectory="$(ToolsDir)"/>
+	</Target>
+
+	<Target Name="CompressLib" BeforeTargets="Build">
+		<Exec Command='dotnet "$(ToolsOut)/CompressLib.dll" "$(ProjectDir)/wwwroot/lib"'
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 

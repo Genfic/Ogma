@@ -2,7 +2,8 @@ import path, { basename, dirname, join } from "node:path";
 import { Glob } from "bun";
 import ct from "chalk-template";
 import { kebabCase } from "es-toolkit";
-import ts from "typescript";
+import type { Expression } from "oxc-parser";
+import { parseSync, Visitor } from "oxc-parser";
 import pkg from "../package.json" with { type: "json" };
 import { alphaBy } from "./helpers/function-helpers";
 import type { HTMLAttribute, HTMLElement, Webtypes } from "./types/webtypes";
@@ -38,153 +39,184 @@ function getPackageInfo(): { name: string; version: string } {
 	}
 }
 
+/** Unwraps `x as Foo`, `x as const`, and `x satisfies Foo` down to the underlying expression. */
+function unwrapTypeWrapper(node: Expression): Expression {
+	if (node.type === "TSAsExpression" || node.type === "TSSatisfiesExpression") {
+		return unwrapTypeWrapper(node.expression);
+	}
+	return node;
+}
+
+/** Resolves the type of a property's value expression directly, e.g. `foo: "bar"` or `foo: String`. */
+function resolveDirectType(node: Expression): string {
+	switch (node.type) {
+		case "Literal": {
+			if (typeof node.value === "string") {
+				return "string";
+			}
+			if (typeof node.value === "number") {
+				return "number";
+			}
+			if (typeof node.value === "boolean") {
+				return "boolean";
+			}
+			return "unknown";
+		}
+		case "ArrayExpression": {
+			return "array";
+		}
+		case "ObjectExpression": {
+			return "object";
+		}
+		case "Identifier": {
+			switch (node.name) {
+				case "String":
+					return "string";
+				case "Number":
+					return "number";
+				case "Boolean":
+					return "boolean";
+				case "Array":
+					return "array";
+				case "Object":
+					return "object";
+				default:
+					return node.name.toLowerCase();
+			}
+		}
+		default: {
+			return "unknown";
+		}
+	}
+}
+
+/** Resolves the type of a shorthand property, e.g. `{ foo }`, via its top-level variable declaration. */
+function resolveShorthandType(propName: string, topLevelVars: Map<string, Expression>): string {
+	const initializer = topLevelVars.get(propName);
+	if (!initializer) {
+		return "unknown";
+	}
+
+	const node = unwrapTypeWrapper(initializer);
+
+	switch (node.type) {
+		case "Literal": {
+			if (typeof node.value === "string") {
+				return "string";
+			}
+			if (typeof node.value === "number") {
+				return "number";
+			}
+			if (typeof node.value === "boolean") {
+				return "boolean";
+			}
+			return "unknown";
+		}
+		case "ArrayExpression": {
+			return "array";
+		}
+		case "ObjectExpression": {
+			return "object";
+		}
+		default: {
+			return "unknown";
+		}
+	}
+}
+
+/** Resolves the tag name argument: either a direct string literal or an identifier pointing at one. */
+function resolveTagName(arg: Expression, topLevelVars: Map<string, Expression>, base: string): string {
+	if (arg.type === "Literal" && typeof arg.value === "string") {
+		return arg.value;
+	}
+
+	if (arg.type === "Identifier") {
+		const initializer = topLevelVars.get(arg.name);
+		const resolved = initializer ? unwrapTypeWrapper(initializer) : null;
+
+		if (resolved && resolved.type === "Literal" && typeof resolved.value === "string") {
+			return resolved.value;
+		}
+
+		console.warn(ct`{dim [${base}]} Couldn't resolve variable value for tag name: {red ${arg.name}}`);
+		return "";
+	}
+
+	console.warn(
+		ct`{dim [${base}]} Skipping component call: {red Tag name is not a string literal or resolvable variable.}`,
+	);
+	return "";
+}
+
 function extractComponentsFromFile(filePath: string, sourceCode: string): ComponentInfo[] {
 	const components: ComponentInfo[] = [];
-	const sourceFile = ts.createSourceFile(filePath, sourceCode, ts.ScriptTarget.Latest, true);
-
 	const base = basename(filePath);
 
-	function visit(node: ts.Node) {
-		if (
-			ts.isCallExpression(node) &&
-			ts.isIdentifier(node.expression) &&
-			node.expression.escapedText === "component" &&
-			node.arguments.length >= 2
-		) {
-			const tagNameArg = node.arguments[0];
-			const propsArg = node.arguments[1];
+	// Language is inferred from the .tsx extension on filePath.
+	const { program, errors } = parseSync(filePath, sourceCode, {
+		sourceType: "module",
+	});
 
-			let tagName = "";
-			if (ts.isStringLiteral(tagNameArg)) {
-				// Direct string literal
-				tagName = tagNameArg.text;
-			} else if (ts.isIdentifier(tagNameArg)) {
-				// Handle variables - try to find the variable declaration and its value
-				const varName = tagNameArg.escapedText as string;
-				let found = false;
+	for (const error of errors) {
+		console.warn(ct`{dim [${base}]} Parse error: {red ${error.message}}`);
+	}
 
-				// Look for variable declarations in the file
-				ts.forEachChild(sourceFile, (node) => {
-					if (!found && ts.isVariableStatement(node)) {
-						for (const decl of node.declarationList.declarations) {
-							if (ts.isIdentifier(decl.name) && decl.name.escapedText === varName) {
-								// Handle initializer with possible type assertion
-								let initializer = decl.initializer;
-
-								// Check if it's a type assertion like "x as const"
-								if (initializer && ts.isAsExpression(initializer)) {
-									initializer = initializer.expression;
-								}
-
-								// Extract the string value
-								if (initializer && ts.isStringLiteral(initializer)) {
-									tagName = initializer.text;
-									found = true;
-								}
-							}
-						}
-					}
-				});
-
-				if (!found) {
-					console.warn(`{dim [${base}]} Couldn't resolve variable value for tag name: {red ${varName}}`);
+	// Top-level `const`/`let` declarations, so identifiers used as tag names or shorthand
+	// prop values can be resolved back to their initializers. This mirrors the old script's
+	// ts.forEachChild(sourceFile, ...) lookup, which was also top-level only.
+	const topLevelVars = new Map<string, Expression>();
+	for (const stmt of program.body) {
+		if (stmt.type === "VariableDeclaration") {
+			for (const decl of stmt.declarations) {
+				if (decl.id.type === "Identifier" && decl.init) {
+					topLevelVars.set(decl.id.name, decl.init);
 				}
-			} else {
-				console.warn(
-					`{dim [${base}]} Skipping customElement call: {red Tag name is not a string literal or resolvable variable.}`,
-				);
+			}
+		}
+	}
+
+	const visitor = new Visitor({
+		CallExpression(node) {
+			if (node.callee.type !== "Identifier" || node.callee.name !== "component" || node.arguments.length < 2) {
 				return;
 			}
 
-			// Change to store both name and type
+			const [tagNameArg, propsArg] = node.arguments;
+
+			if (tagNameArg.type === "SpreadElement" || propsArg.type === "SpreadElement") {
+				console.warn(ct`{dim [${base}]} Skipping component call: {red Arguments cannot be spread elements.}`);
+				return;
+			}
+
+			const tagName = resolveTagName(tagNameArg, topLevelVars, base);
+			if (!tagName) {
+				return;
+			}
+
 			const attributes: Array<{ name: string; type: string }> = [];
 
-			if (ts.isObjectLiteralExpression(propsArg)) {
+			if (propsArg.type === "ObjectExpression") {
 				for (const prop of propsArg.properties) {
-					if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
-						const propName = prop.name.escapedText as string;
-						let typeName = "unknown";
+					if (
+						prop.type === "Property" &&
+						prop.kind === "init" &&
+						!prop.computed &&
+						!prop.method &&
+						prop.key.type === "Identifier"
+					) {
+						const propName = prop.key.name;
 
-						// Determine the type based on the initializer node kind
-						if (ts.isStringLiteral(prop.initializer)) {
-							typeName = "string";
-						} else if (ts.isNumericLiteral(prop.initializer)) {
-							typeName = "number";
-						} else if (
-							prop.initializer.kind === ts.SyntaxKind.TrueKeyword ||
-							prop.initializer.kind === ts.SyntaxKind.FalseKeyword
-						) {
-							typeName = "boolean";
-						} else if (ts.isArrayLiteralExpression(prop.initializer)) {
-							typeName = "array";
-						} else if (ts.isObjectLiteralExpression(prop.initializer)) {
-							typeName = "object";
-						} else if (ts.isIdentifier(prop.initializer)) {
-							// Handle references to constructors or other identifiers
-							const name = prop.initializer.escapedText as string;
-							switch (name) {
-								case "String":
-									typeName = "string";
-									break;
-								case "Number":
-									typeName = "number";
-									break;
-								case "Boolean":
-									typeName = "boolean";
-									break;
-								case "Array":
-									typeName = "array";
-									break;
-								case "Object":
-									typeName = "object";
-									break;
-								default:
-									typeName = name.toLowerCase();
-							}
+						if (prop.shorthand) {
+							// Preserves the original script's behavior of NOT kebab-casing
+							// shorthand property names (only the non-shorthand branch did) —
+							// flag if that asymmetry was unintentional.
+							attributes.push({ name: propName, type: resolveShorthandType(propName, topLevelVars) });
+						} else {
+							attributes.push({ name: kebabCase(propName), type: resolveDirectType(prop.value) });
 						}
-
-						attributes.push({ name: kebabCase(propName), type: typeName });
-					} else if (ts.isShorthandPropertyAssignment(prop)) {
-						const propName = prop.name.escapedText as string;
-						let typeName = "unknown";
-
-						// For shorthand properties, we need a different approach
-						// Try to find the variable declaration to determine its type
-						let found = false;
-						ts.forEachChild(sourceFile, (node) => {
-							if (!found && ts.isVariableStatement(node)) {
-								for (const decl of node.declarationList.declarations) {
-									if (
-										ts.isIdentifier(decl.name) &&
-										decl.name.escapedText === propName &&
-										decl.initializer
-									) {
-										found = true;
-
-										// Determine type from initializer
-										if (ts.isStringLiteral(decl.initializer)) {
-											typeName = "string";
-										} else if (ts.isNumericLiteral(decl.initializer)) {
-											typeName = "number";
-										} else if (
-											decl.initializer.kind === ts.SyntaxKind.TrueKeyword ||
-											decl.initializer.kind === ts.SyntaxKind.FalseKeyword
-										) {
-											typeName = "boolean";
-										} else if (ts.isArrayLiteralExpression(decl.initializer)) {
-											typeName = "array";
-										} else if (ts.isObjectLiteralExpression(decl.initializer)) {
-											typeName = "object";
-										}
-									}
-								}
-							}
-						});
-
-						attributes.push({ name: propName, type: typeName });
 					} else {
 						console.warn(
-							ct`{dim [${base}]} Non-standard property found in props definition for {bold <${tagName}>}: {red ${ts.SyntaxKind[prop.kind]}}`,
+							ct`{dim [${base}]} Non-standard property found in props definition for {bold <${tagName}>}: {red ${prop.type}}`,
 						);
 					}
 				}
@@ -194,28 +226,24 @@ function extractComponentsFromFile(filePath: string, sourceCode: string): Compon
 				);
 			}
 
-			if (tagName) {
-				// Format for logging
-				const attributesFormatted = attributes
-					.map((attr) => ct`{blue ${attr.name}:} {green ${attr.type}}`)
-					.join(", ");
+			const attributesFormatted = attributes
+				.map((attr) => ct`{blue ${attr.name}:} {green ${attr.type}}`)
+				.join(", ");
 
-				console.log(
-					ct`{dim [${base}]} Found component: {bold <${tagName}>} with attributes: \{ ${attributesFormatted} \}`,
-				);
+			console.log(
+				ct`{dim [${base}]} Found component: {bold <${tagName}>} with attributes: \{ ${attributesFormatted} \}`,
+			);
 
-				components.push({
-					tagName,
-					attributes, // Now this contains both name and type
-					sourceFile: path.relative(process.cwd(), filePath),
-				});
-			}
-		}
+			components.push({
+				tagName,
+				attributes,
+				sourceFile: path.relative(process.cwd(), filePath),
+			});
+		},
+	});
 
-		ts.forEachChild(node, visit);
-	}
+	visitor.visit(program);
 
-	visit(sourceFile);
 	return components;
 }
 
