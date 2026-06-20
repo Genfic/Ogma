@@ -15,7 +15,7 @@ const _dest = join(_root, "..", "..", "wwwroot", "fonts");
 
 await woff2.init();
 
-for (const [file, chars, scale] of subsets) {
+for (const [file, chars, _scale] of subsets) {
 	const { ext, name } = path.parse(file);
 
 	const input = join(_source, file);

@@ -1,9 +1,9 @@
 import LucideEllipsisVertical from "icon:lucide:ellipsis-vertical";
 import {
-	DeleteApiShelfStories as removeFromShelf,
-	GetApiShelfStories as getShelves,
-	GetApiShelfStoriesQuick as getQuickShelves,
 	PostApiShelfStories as addToShelf,
+	GetApiShelfStoriesQuick as getQuickShelves,
+	GetApiShelfStories as getShelves,
+	DeleteApiShelfStories as removeFromShelf,
 } from "@g/paths-public";
 import type { GetCurrentUserQuickShelvesResult, GetPaginatedUserShelvesResult } from "@g/types-public";
 import { useClickOutside } from "@h/click-outside";

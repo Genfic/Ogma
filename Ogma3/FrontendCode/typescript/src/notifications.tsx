@@ -1,7 +1,7 @@
 import LucideTrash2 from "icon:lucide:trash-2";
 import {
-	DeleteApiNotifications as deleteNotification,
 	DeleteApiNotificationsAll as deleteAllNotifications,
+	DeleteApiNotifications as deleteNotification,
 	GetApiNotifications as getNotifications,
 } from "@g/paths-public";
 import { toCurrentTimezone } from "@h/date-helpers";

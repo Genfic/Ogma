@@ -1,4 +1,4 @@
-import { DeleteApiClubjoin as leaveClub, PostApiClubjoin as joinClub } from "@g/paths-public";
+import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "@g/paths-public";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";

@@ -6,7 +6,7 @@ interface ImportMetaEnv {
 	 */
 	readonly DEV: boolean;
 	readonly PROD: boolean;
-	readonly [key: string]: any;
+	readonly [key: string]: unknown;
 }
 
 interface ImportMeta {

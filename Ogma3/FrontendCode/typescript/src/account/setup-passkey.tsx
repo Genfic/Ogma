@@ -1,7 +1,7 @@
 import {
 	DeleteApiPasskeysDelete as deletePasskey,
-	GetApiPasskeysList as listPasskeys,
 	GetApiPasskeysOptions as getOptions,
+	GetApiPasskeysList as listPasskeys,
 	PostApiPasskeysRegister as setPasskey,
 } from "@g/paths-public";
 import { attempt, attemptAsync } from "@h/error-helpers";
@@ -106,6 +106,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 
 		if (keyRes.status === 400) {
 			errors = keyRes.data ?? [];
+			console.error(errors);
 			return;
 		}
 

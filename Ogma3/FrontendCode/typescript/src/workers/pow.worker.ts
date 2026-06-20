@@ -61,7 +61,7 @@ const api = {
 
 	abort() {
 		shouldAbort = true;
-	}
+	},
 };
 
 export type PowApi = typeof api;

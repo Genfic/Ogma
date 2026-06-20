@@ -1,4 +1,8 @@
-import { GetApiClubsUser as getUserClubs, GetApiFolders as getFolders, PostApiFoldersAddStory as addStoryToFolder, } from "@g/paths-public";
+import {
+	PostApiFoldersAddStory as addStoryToFolder,
+	GetApiFolders as getFolders,
+	GetApiClubsUser as getUserClubs,
+} from "@g/paths-public";
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
@@ -166,7 +170,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 			</button>
 
 			<Dialog
-				ref={$set(dialogRef)}
+				ref={(e) => (dialogRef = e)}
 				onClose={reset}
 				header={selectedView().head}
 				classes={["club-folder-selector"]}

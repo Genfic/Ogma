@@ -1,4 +1,4 @@
-import { DeleteApiUsersFollow as unfollowUser, PostApiUsersFollow as followUser } from "@g/paths-public";
+import { PostApiUsersFollow as followUser, DeleteApiUsersFollow as unfollowUser } from "@g/paths-public";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";

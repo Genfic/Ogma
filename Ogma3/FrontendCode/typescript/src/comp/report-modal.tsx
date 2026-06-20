@@ -88,7 +88,7 @@ const ReportModal: ComponentType<{
 	};
 
 	return (
-		<Dialog ref={$set(dialogRef)} header={<span>Report</span>}>
+		<Dialog ref={(e) => (dialogRef = e)} header={<span>Report</span>}>
 			<form class="form" onSubmit={submit}>
 				<div class="o-form-group">
 					<label for="reason">Reason</label>

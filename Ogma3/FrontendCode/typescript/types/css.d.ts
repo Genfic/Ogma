@@ -3,6 +3,7 @@ declare module "*.module.css" {
 	export default classes;
 
 	const code: string;
+
 	export { code };
 }
 
