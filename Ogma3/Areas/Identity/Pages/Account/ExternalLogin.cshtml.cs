@@ -184,7 +184,13 @@ public sealed class ExternalLoginModel
 					await emailSender.SendEmailAsync(Input.Email!, "Confirm your email",
 						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
-					Response.Cookies.Append("Message", "Confirmation link sent. Please check your email.");
+					Response.Cookies.Append("Message", "Confirmation link sent. Please check your email.", new CookieOptions
+					{
+						Secure = true,
+						SameSite = SameSiteMode.Strict,
+						HttpOnly = true,
+						MaxAge = TimeSpan.FromSeconds(0),
+					});
 
 					return LocalRedirect(returnUrl);
 				}

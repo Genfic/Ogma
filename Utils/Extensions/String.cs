@@ -21,6 +21,7 @@ public static partial class String
 				.ToLower()
 				.Trim(separator);
 		}
+
 		/// <summary>
 		/// Because expression trees are fucking garbage piece of shit
 		/// </summary>
@@ -195,6 +196,29 @@ public static partial class String
 			});
 
 			return s;
+		}
+
+		/// <summary>
+		/// Obfuscates the input span by replacing all but the first few characters with a specified obfuscation character.
+		/// </summary>
+		/// <param name="maxVisibleChars">The maximum number of characters to remain visible at the start of the span. Defaults to 5.</param>
+		/// <param name="obfuscationChar">The character to use for obfuscating the remaining portion of the span. Defaults to '*'.</param>
+		/// <returns>A new string where all but the specified number of visible characters are replaced with the obfuscation character.</returns>
+		public string Obfuscate(int maxVisibleChars = 5, char obfuscationChar = '*')
+		{
+			var len = span.Length;
+			if (len <= maxVisibleChars)
+			{
+				maxVisibleChars = (int)Math.Floor(len / 2.0d);
+			}
+			var count = len - maxVisibleChars;
+
+			var sb = new StringBuilder(len);
+
+			sb.Append(span[..maxVisibleChars]);
+			sb.Append(obfuscationChar, count);
+
+			return sb.ToString();
 		}
 	}
 

@@ -116,6 +116,7 @@ const Users = () => {
 
 					<form action="" method="post">
 						<input type="hidden" name="Username" value={user.name.toLowerCase()} />
+						<input type="hidden" name="__RequestVerificationToken" value={csrf ?? ""} />
 						<button type="submit">Impersonate</button>
 					</form>
 

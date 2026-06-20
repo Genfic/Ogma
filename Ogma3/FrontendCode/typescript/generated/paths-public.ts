@@ -64,8 +64,7 @@ import type {
 	UpdateShelfCommand,
 	UpdateTagCommand,
 	VoteResult,
-} from "./types-public";
-
+} from './types-public';
 const _enc = <T>(p: T): T extends string ? string : T => (typeof p === 'string' ? encodeURIComponent(p) : p) as any;
 
 
@@ -76,7 +75,7 @@ export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, he
     options,
 );
 
-export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, LeaveClubCommand>("/api/clubjoin",
+export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: string; 401: undefined }, LeaveClubCommand>("/api/clubjoin",
     DELETE,
     body,
     headers,
@@ -241,7 +240,7 @@ export const GetApiComments = async (thread: number, page: number | null, header
     pages: number;
     /** The requested page */
     page: number;
-}; 304: undefined; 400: undefined }, undefined>(`/api/comments?thread=${_enc(thread)}&page=${_enc(page)}`,
+}; 304: undefined; 400: undefined; 404: undefined }, undefined>(`/api/comments?thread=${_enc(thread)}&page=${_enc(page)}`,
     GET,
     undefined,
     headers,
@@ -444,6 +443,13 @@ export const GetApiUsersNames = async (name: string, headers?: HeadersInit, opti
     options,
 );
 
+export const GetApiUsersStopImpersonation = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 400: string; 401: undefined; 404: undefined }, undefined>("/api/users/stop-impersonation",
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
 export const GetApiVotes = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: undefined }, undefined>(`/api/votes/${storyId}`,
     GET,
     undefined,
@@ -577,7 +583,7 @@ export const PostApiInviteCodesNoLimit = async (body: AdminIssueInviteCodeComman
     options,
 );
 
-export const PostApiPasskeysRegister = async (body: RegisterPasskeyQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RegisterPasskeyResponse; 400: string[]; 401: undefined; 404: undefined; 500: undefined }, RegisterPasskeyQuery>("/api/passkeys/register",
+export const PostApiPasskeysRegister = async (body: RegisterPasskeyQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RegisterPasskeyResponse; 400: string | string[]; 401: undefined; 404: undefined; 500: undefined }, RegisterPasskeyQuery>("/api/passkeys/register",
     POST,
     body,
     headers,

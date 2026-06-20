@@ -37,7 +37,7 @@ jobs:
         run: dotnet test -c Release -- --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
 
       - name: Coveralls
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b
         with:
           files: >
             Ogma3.Tests/bin/Release/net11.0/TestResults/coverage.cobertura.xml

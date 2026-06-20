@@ -26,8 +26,6 @@ public sealed partial class UpdateLastActive(ApplicationDbContext context, IUser
 	{
 		if (userService.UserId is not {} uid) return TypedResults.NoContent();
 
-		// var rows = await CompiledQuery(context, uid, cancellationToken);
-
 		var rows = await context.Users
 			.TagWith(nameof(UpdateLastActive))
 			.Where(u => u.Id == uid)
@@ -40,11 +38,4 @@ public sealed partial class UpdateLastActive(ApplicationDbContext context, IUser
 
 	[UsedImplicitly]
 	public sealed record Command;
-
-	// private static readonly Func<ApplicationDbContext, long, CancellationToken, Task<int>> CompiledQuery =
-	// 	EF.CompileAsyncQuery(static (ApplicationDbContext context, long uid, CancellationToken _)
-	// 		=> context.Users
-	// 			.TagWith(nameof(UpdateLastActive))
-	// 			.Where(u => u.Id == uid)
-	// 			.ExecuteUpdate(setters => setters.SetProperty(u => u.LastActive, DateTimeOffset.UtcNow)));
 }

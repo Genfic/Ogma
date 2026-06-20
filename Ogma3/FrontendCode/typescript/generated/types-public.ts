@@ -174,8 +174,6 @@ export type GetTagNamespacesNamespaceDto = {
 
 export type GetThreadDetailsResult = {
     perPage: number;
-    minCommentLength: number;
-    maxCommentLength: number;
     source: CommentSource;
     isLocked: boolean;
 };

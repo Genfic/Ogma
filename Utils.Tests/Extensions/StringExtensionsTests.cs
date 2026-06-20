@@ -164,6 +164,42 @@ public sealed class StringExtensionsTests
 		await Assert.That(result).IsEqualTo("");
 	}
 
+	[Test]
+	public async Task Obfuscate_Default()
+	{
+		const string input = "Hello, World!";
+		var result = input.Obfuscate();
+
+		await Assert.That(result).IsEqualTo("Hello********");
+	}
+
+	[Test]
+	public async Task Obfuscate_CustomLength()
+	{
+		const string input = "Hello, World!";
+		var result = input.Obfuscate(10);
+
+		await Assert.That(result).IsEqualTo("Hello, Wor***");
+	}
+
+	[Test]
+	public async Task Obfuscate_CustomChar()
+	{
+		const string input = "Hello, World!";
+		var result = input.Obfuscate(obfuscationChar: '-');
+
+		await Assert.That(result).IsEqualTo("Hello--------");
+	}
+
+	[Test]
+	public async Task Obfuscate_CustomLengthAndChar()
+	{
+		const string input = "Hello, World!";
+		var result = input.Obfuscate(10, '-');
+
+		await Assert.That(result).IsEqualTo("Hello, Wor---");
+	}
+
 	// Test FindHashtags
 	[Test]
 	public async Task FindHashtags_None()

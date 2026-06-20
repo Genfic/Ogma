@@ -33,8 +33,6 @@ public sealed partial class GetThreadDetails
 		var isStaff = userService.User?.HasAnyRole(RoleNames.Admin, RoleNames.Moderator) ?? false;
 
 		var perPage = config.CommentsPerPage;
-		const int minCommentLength = CTConfig.Comment.MinBodyLength;
-		const int maxCommentLength = CTConfig.Comment.MaxBodyLength;
 
 		var threadData = await context.CommentThreads
 			.Where(ct => ct.Id == request.ThreadId)
@@ -64,12 +62,12 @@ public sealed partial class GetThreadDetails
 			httpContextAccessor.HttpContext?.Response.Headers.Append("X-IsStaff", isStaff.ToString());
 		}
 
-		return TypedResults.Ok(new Result(perPage, minCommentLength, maxCommentLength, source, threadData.Locked));
+		return TypedResults.Ok(new Result(perPage, source, threadData.Locked));
 	}
 
 	[Validate]
 	[UsedImplicitly]
 	public sealed partial record Query(long ThreadId) : IValidationTarget<Query>;
 
-	public sealed record Result(int PerPage, int MinCommentLength, int MaxCommentLength, CommentSource Source, bool IsLocked);
+	public sealed record Result(int PerPage, CommentSource Source, bool IsLocked);
 }

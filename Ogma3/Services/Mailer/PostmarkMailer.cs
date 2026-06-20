@@ -2,6 +2,7 @@ using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using PostmarkDotNet;
+using Utils.Extensions;
 
 namespace Ogma3.Services.Mailer;
 
@@ -27,7 +28,7 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 
 		if (result.Status == PostmarkStatus.Success)
 		{
-			logger.LogInformation("Email {EmailId} sent to {Email} at {Time}", result.MessageID, email, result.SubmittedAt);
+			logger.LogInformation("Email {EmailId} sent to {Email} at {Time}", result.MessageID, ObfuscateEmail(email), result.SubmittedAt);
 		}
 		else
 		{
@@ -40,5 +41,13 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 				result.Status, result.Message, result.ErrorCode
 			);
 		}
+	}
+
+	private static string ObfuscateEmail(ReadOnlySpan<char> email)
+	{
+		var at = email.IndexOf('@');
+		var start = email[..at].Obfuscate();
+		var end = email[(at + 1)..];
+		return $"{start}@{end}";
 	}
 }

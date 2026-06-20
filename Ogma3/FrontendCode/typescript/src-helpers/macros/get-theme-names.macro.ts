@@ -1,9 +1,8 @@
 import { readdir } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import Bun from "bun";
 
-const root = dirname(Bun.main);
-const _base = join(root, "FrontendCode", "styles", "themes");
+const _base = join(import.meta.dir, "..", "..", "..", "styles", "themes");
 
 export const getThemes = async () => {
 	const files = await readdir(_base);

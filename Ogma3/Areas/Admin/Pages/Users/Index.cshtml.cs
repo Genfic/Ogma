@@ -18,7 +18,6 @@ using Ogma3.Services.UserService;
 namespace Ogma3.Areas.Admin.Pages.Users;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-[IgnoreAntiforgeryToken]
 public sealed class Index
 (
 	ApplicationDbContext context,

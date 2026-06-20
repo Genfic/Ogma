@@ -275,7 +275,7 @@ const packageInfo = getPackageInfo();
 
 const webTypesElements: HTMLElement[] = allComponents.map((comp) => ({
 	name: comp.tagName,
-	description: `Custom element <${comp.tagName}> defined in ${comp.sourceFile}`,
+	description: `Custom element <${comp.tagName}> defined in ${comp.sourceFile.replaceAll("\\", "/")}`,
 	attributes: comp.attributes.map(
 		(attr): HTMLAttribute => ({
 			name: attr.name,
@@ -286,7 +286,7 @@ const webTypesElements: HTMLElement[] = allComponents.map((comp) => ({
 		}),
 	),
 	source: {
-		module: `./${comp.sourceFile}`,
+		module: `./${comp.sourceFile.replaceAll("\\", "/")}`,
 		symbol: comp.tagName,
 	},
 }));
@@ -305,7 +305,7 @@ const webTypesJson: Webtypes = {
 };
 
 try {
-	await Bun.write(OUTPUT_FILE, JSON.stringify(webTypesJson, null, 2));
+	await Bun.write(OUTPUT_FILE, JSON.stringify(webTypesJson, null, "\t"));
 	console.log(`\nSuccessfully generated ${OUTPUT_FILE}`);
 } catch (error) {
 	console.error(`Error writing ${OUTPUT_FILE}:`, error);

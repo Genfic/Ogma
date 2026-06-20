@@ -2,6 +2,7 @@ import LucideCircleHelp from "icon:lucide:circle-question-mark";
 import LucideMessageSquarePlus from "icon:lucide:message-square-plus";
 import MdiLockOpenVariantOutline from "icon:mdi:lock-open-variant-outline";
 import MdiLockOutline from "icon:mdi:lock-outline";
+import { Comment } from "@g/ctconfig";
 import { GetApiCommentsThread, GetApiPowIssue, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
 import { minePow, type PowResult } from "@h/pow";
@@ -55,6 +56,9 @@ const article = (adjective: string) => (["a", "e", "i", "o", "u"].includes(adjec
 const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
 const pre = article(adj);
 
+const maxCommentLength = Comment.MaxBodyLength;
+// const minCommentLength = Comment.MinBodyLength;
+
 const Comments = (props: Props) => {
 	noShadowDOM();
 
@@ -74,8 +78,6 @@ const Comments = (props: Props) => {
 		},
 		{
 			initialValue: {
-				maxCommentLength: 0,
-				minCommentLength: 0,
 				perPage: 10,
 				isStaff: false,
 				isLocked: false,
@@ -94,7 +96,6 @@ const Comments = (props: Props) => {
 
 	let isLocked = $signal(!!props.lockDate);
 
-	const maxLength = $memo(threadData().maxCommentLength);
 	const isStaff = $memo(threadData().isStaff);
 
 	const visibilityTrigger = $signal<Element>();
@@ -130,7 +131,7 @@ const Comments = (props: Props) => {
 
 	let mining = $signal(false);
 	const send = async () => {
-		if (body.trim().length >= maxLength) {
+		if (body.trim().length >= maxCommentLength) {
 			return;
 		}
 
@@ -204,13 +205,13 @@ const Comments = (props: Props) => {
 							placeholder={`Write ${pre} ${adj} comment...`}
 						/>
 
-						<div class="counter" classList={{ invalid: body.length >= maxLength }}>
+						<div class="counter" classList={{ invalid: body.length >= maxCommentLength }}>
 							<div
 								class="o-progress-bar"
-								style={{ width: `${Math.min(100, 100 * (body.length / maxLength))}%` }}
+								style={{ width: `${Math.min(100, 100 * (body.length / maxCommentLength))}%` }}
 							/>
 							<span>
-								{body.length} / {maxLength}
+								{body.length} / {maxCommentLength}
 							</span>
 						</div>
 
