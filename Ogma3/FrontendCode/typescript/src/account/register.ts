@@ -35,7 +35,12 @@ for (const input of formInputs) {
 		}
 	});
 	input.addEventListener("focusout", () => {
-		info.classList.remove(classname);
+		setTimeout(() => {
+			if (info.contains(document.activeElement as Node)) {
+				return;
+			}
+			info.classList.remove(classname);
+		}, 50);
 	});
 }
 

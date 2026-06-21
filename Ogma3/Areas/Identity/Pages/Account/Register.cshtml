@@ -29,7 +29,9 @@
 				<label asp-for="Input.Name"></label>
 				<input asp-for="Input.Name" class="o-form-control active-border" autocomplete="username" />
 				<span asp-validation-for="Input.Name" class="text-danger"></span>
-				<aside class="info" asp-for="Input.Name">Can consist of alphanumeric characters, dashes, underscores, and spaces</aside>
+				<aside class="info" asp-for="Input.Name">
+					Can consist of alphanumeric characters, dashes, underscores, and spaces. Not your <em>real</em> name.
+				</aside>
 			</div>
 
 			<div class="o-form-group">
@@ -54,7 +56,9 @@
 						<li class="nb">one uppercase character</li>
 						<li class="nb">one special character</li>
 					</ul>
-					and must be at least @CTConfig.User.MinPassLength characters long
+					and must be at least @CTConfig.User.MinPassLength characters long.
+					<br>
+					Use a <a href="https://en.wikipedia.org/wiki/Passphrase" rel="noopener noreferrer" target="_blank">passphrase</a> for higher security.
 				</aside>
 			</div>
 

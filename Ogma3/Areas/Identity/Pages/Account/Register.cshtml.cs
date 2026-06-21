@@ -50,7 +50,9 @@ public sealed class RegisterModel(
 
 	public sealed class InputModel
 	{
+		[Display(Name = "Nickname")]
 		public string Name { get; init; } = null!;
+
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; init; } = null!;
 

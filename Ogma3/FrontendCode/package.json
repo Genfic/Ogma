@@ -45,7 +45,6 @@
 		"solid-labels": "^0.17.0",
 		"stylelint": "^17.13.0",
 		"stylelint-config-standard-scss": "^17.0.0",
-		"stylelint-define-config": "^17.11.0",
 		"typescript": "^7.0.1-rc",
 		"utility-types": "^3.11.0"
 	},

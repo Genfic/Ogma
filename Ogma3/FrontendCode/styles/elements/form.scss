@@ -200,13 +200,16 @@ form.form {
 			background-color: var(--ele-1);
 			border: 1px solid var(--foreground-25);
 			padding: .5rem;
-			pointer-events: none;
 			opacity: 0;
-			transition: opacity 200ms ease-in-out;
+			pointer-events: none;
+			visibility: hidden;
+			transition: opacity 200ms ease-in-out, visibility 200ms ease-in-out;
 			z-index: 1;
 
 			&.visible {
 				opacity: 1;
+				visibility: visible;
+				pointer-events: auto;
 			}
 
 			> * {
