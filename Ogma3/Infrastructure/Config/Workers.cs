@@ -6,4 +6,5 @@ namespace Ogma3.Infrastructure.Config;
 public sealed partial class Workers
 {
 	public required string AvatarServiceSignatureKey { get; init; }
+	public required string DiscordBotSignatureKey { get; init; }
 }

@@ -19,6 +19,10 @@ public sealed class InviteCodeConfiguration : BaseConfiguration<InviteCode>
 			.IsRequired();
 
 		builder
+			.Property(ic => ic.IssuedByType)
+			.HasMaxLength(32);
+
+		builder
 			.Property(ic => ic.UsedDate)
 			.HasDefaultValue(null);
 

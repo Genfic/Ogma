@@ -10,8 +10,9 @@ public sealed class InviteCode : BaseModel
 	public required string Code { get; set; }
 	public OgmaUser? UsedBy { get; set; }
 	public long? UsedById { get; set; }
-	public OgmaUser IssuedBy { get; set; } = null!;
-	public long IssuedById { get; set; }
+	public OgmaUser? IssuedBy { get; set; }
+	public long? IssuedById { get; set; }
+	public string? IssuedByType { get; set; }
 	public DateTimeOffset? UsedDate { get; set; }
 	public DateTimeOffset IssueDate { get; set; }
 }
