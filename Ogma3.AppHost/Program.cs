@@ -8,6 +8,8 @@ var allowDirty = builder.Configuration.GetValue<bool>("allow-dirty");
 var isProd = emulateProd || builder.ExecutionContext.IsPublishMode;
 
 var shouldSeed = builder.AddParameter("should-seed", "false", publishValueAsDefault: true);
+var postgresPassword = builder.AddParameter("postgres-password", secret: true);
+var garnetPassword = builder.AddParameter("garnet-password", secret: true);
 
 var infisical = new Dictionary<string, IResourceBuilder<ParameterResource>>
 {
@@ -42,12 +44,12 @@ builder
 	.WithSshDeploySupport();
 
 var garnet = builder
-	.AddGarnet("garnet", port: 6379)
+	.AddGarnet("garnet", port: 6379, password: garnetPassword)
 	.WithDataVolume()
 	.WithPersistence();
 
 var database = builder
-	.AddPostgres("postgres", port: 5432)
+	.AddPostgres("postgres", port: 5432, password: postgresPassword)
 	.WithImageTag("18")
 	.WithDataVolume()
 	.WithLifetime(ContainerLifetime.Persistent)
@@ -73,7 +75,7 @@ var genfic = builder
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
 	.WithEnvironment("OTEL_DOTNET_EXPERIMENTAL_EFCORE_ENABLE_TRACE_DB_QUERY_PARAMETERS", "true")
 	.WithEnvironment("OTEL_DOTNET_AUTO_ENTITYFRAMEWORKCORE_SET_DBSTATEMENT_FOR_TEXT", "true")
-	.WithEnvironment("DOTNET_SYSTEM_NET_DISABLEIPV4", "true")
+	// .WithEnvironment("DOTNET_SYSTEM_NET_DISABLEIPV4", "true")
 	.WithEnvironment("Git__CommitHash", git.Hash)
 	.WithEnvironment("Git__Branch", git.Branch)
 	.WithEnvironment("Git__Dirty", git.IsDirty.ToString())
