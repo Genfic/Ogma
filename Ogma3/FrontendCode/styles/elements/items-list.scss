@@ -17,7 +17,7 @@ ul.items-list {
 		margin: .2rem 0;
 		background-color: var(--ele-1);
 
-		&:hover {
+		&:not(.ph):hover {
 			border-color: var(--foreground);
 		}
 

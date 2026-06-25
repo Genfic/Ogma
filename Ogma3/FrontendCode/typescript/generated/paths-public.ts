@@ -289,6 +289,13 @@ export const GetApiFolders = async (clubId: number, headers?: HeadersInit, optio
     options,
 );
 
+export const GetApiGenerateInviteCode = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 429: undefined }, undefined>("/api/generate-invite-code",
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
 export const GetApiInviteCodes = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: InviteCodeDto[]; 401: undefined }, undefined>("/api/InviteCodes",
     GET,
     undefined,

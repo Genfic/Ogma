@@ -88,7 +88,8 @@ const InviteCodes = () => {
 				</h3>
 				<span class="desc">
 					<span>
-						Issued by <strong>{c.issuedByUserName}</strong> on <strong>{date(c.issueDate)}</strong>
+						Issued by <strong>{c.issuedByUserName ?? `[${c.issuedByType}]`}</strong> on{" "}
+						<strong>{date(c.issueDate)}</strong>
 					</span>
 					<br />
 					<Show when={c.usedDate}>

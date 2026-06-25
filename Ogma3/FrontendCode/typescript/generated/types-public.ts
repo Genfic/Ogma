@@ -202,9 +202,10 @@ export type InviteCodeDto = {
     id: number;
     code: string;
     usedByUserName: string | null;
-    issuedByUserName: string;
+    issuedByUserName: string | null;
     issueDate: Date;
     usedDate: Date | null;
+    issuedByType: string | null;
 };
 
 export type IssueInviteCodeCommand = object;

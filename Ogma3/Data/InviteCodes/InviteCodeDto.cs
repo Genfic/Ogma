@@ -1,15 +1,18 @@
+using JetBrains.Annotations;
 using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.InviteCodes;
 
+[UsedImplicitly]
 public sealed class InviteCodeDto
 {
 	public required long Id { get; init; }
-	public required string Code { get; init; } = null!;
+	public required string Code { get; init; }
 	public required string? UsedByUserName { get; init; }
-	public required string IssuedByUserName { get; init; } = null!;
+	public required string? IssuedByUserName { get; init; }
 	public required DateTimeOffset IssueDate { get; init; }
 	public required DateTimeOffset? UsedDate { get; init; }
+	public required string? IssuedByType { get; init; }
 }
 
 [Mapper]

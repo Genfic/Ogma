@@ -17,7 +17,6 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto[]>>;
 [Authorize]
 public sealed partial class GetIssuedInviteCodes(ApplicationDbContext context, IUserService userService)
 {
-
 	private async ValueTask<ReturnType> HandleAsync(
 		Query _,
 		CancellationToken cancellationToken

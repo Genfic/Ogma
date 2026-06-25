@@ -18,7 +18,6 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed partial class AdminIssueInviteCode(ApplicationDbContext context, ICodeGenerator codeGenerator, IUserService userService)
 {
-
 	private async ValueTask<ReturnType> HandleAsync(
 		Command _,
 		CancellationToken cancellationToken
@@ -30,6 +29,7 @@ public sealed partial class AdminIssueInviteCode(ApplicationDbContext context, I
 		{
 			Code = codeGenerator.GetInviteCode(),
 			IssuedById = uid,
+			IssuedByType = "Staff",
 		};
 		context.InviteCodes.Add(code);
 

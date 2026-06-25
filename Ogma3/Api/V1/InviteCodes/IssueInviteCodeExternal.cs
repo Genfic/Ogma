@@ -44,7 +44,7 @@ public sealed partial class IssueInviteCodeExternal
 		var code = new InviteCode
 		{
 			Code = codeGenerator.GetInviteCode(),
-			IssuedByType = "External",
+			IssuedByType = command.Issuer ?? "External",
 		};
 		context.InviteCodes.Add(code);
 
@@ -97,5 +97,8 @@ public sealed partial class IssueInviteCodeExternal
 	}
 
 	[UsedImplicitly]
-	public sealed record Command([FromHeader(Name = "X-Api-Key")] string Key);
+	public sealed record Command(
+		[FromHeader(Name = "X-Api-Key")] string Key,
+		[FromHeader(Name = "X-Issued-By")] string? Issuer
+	);
 }

@@ -350,11 +350,12 @@ public static class Startup
 		app.UseOutputCache();
 
 		// OpenAPI
-		if (app.Environment.IsDevelopment())
-		{
-			app.MapOpenApi("openapi/{documentName}.json");
-			app.MapScalarApiReference().WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax);
-		}
+
+		app.MapOpenApi("openapi/{documentName}.json")
+			.ConfigureIf(!env.IsDevelopment(), b => b.RequireAuthorization(AuthorizationPolicies.RequireAdminRole));
+		app.MapScalarApiReference()
+			.WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax)
+			.ConfigureIf(!env.IsDevelopment(), b => b.RequireAuthorization(AuthorizationPolicies.RequireAdminRole));
 
 		// Antiforgery
 		app.UseAntiforgery();

@@ -45,6 +45,33 @@ const InviteCodes = () => {
 		);
 	};
 
+	const Code = ({ code }: { code: InviteCodeDto }) => (
+		<li>
+			<div class="deco" style={{ background: code.usedByUserName ? "green" : "gray" }} />
+			<div class="main">
+				<h3 class="name">
+					<span class="monospace">{code.code}</span>
+				</h3>
+
+				<span class="desc">
+					Issued by <strong>{code.issuedByUserName ?? code.issuedByType}</strong> on{" "}
+					<strong>{date(code.issueDate)}</strong>
+				</span>
+
+				{code.usedByUserName && code.usedDate ? (
+					<span class="desc">
+						Redeemed by <strong>{code.usedByUserName}</strong> on <strong>{date(code.usedDate)}</strong>
+					</span>
+				) : null}
+			</div>
+			<div class="actions">
+				<button type="button" class="action" onClick={[copyCode, code]} disabled={!!code.usedByUserName}>
+					<LucideClipboardCopy />
+				</button>
+			</div>
+		</li>
+	);
+
 	return (
 		<>
 			<button type="button" class="btn btn-primary btn-block" onClick={createCode}>
@@ -61,34 +88,7 @@ const InviteCodes = () => {
 				</Match>
 				<Match when={codes()}>
 					<ul class="items-list">
-						<For each={codes()}>
-							{(code) => (
-								<li>
-									<div class="deco" style={{ background: code.usedByUserName ? "green" : "gray" }} />
-									<div class="main">
-										<h3 class="name">
-											<span class="monospace">{code.code}</span> : {date(code.issueDate)}
-										</h3>
-										{code.usedByUserName && code.usedDate ? (
-											<span class="desc">
-												Redeemed by <strong>{code.usedByUserName}</strong> on{" "}
-												<strong>{date(code.usedDate)}</strong>
-											</span>
-										) : null}
-									</div>
-									<div class="actions">
-										<button
-											type="button"
-											class="action"
-											onClick={[copyCode, code]}
-											disabled={!!code.usedByUserName}
-										>
-											<LucideClipboardCopy />
-										</button>
-									</div>
-								</li>
-							)}
-						</For>
+						<For each={codes()}>{(code) => <Code code={code} />}</For>
 					</ul>
 				</Match>
 			</Switch>
