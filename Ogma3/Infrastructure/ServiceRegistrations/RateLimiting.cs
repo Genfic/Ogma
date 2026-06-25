@@ -11,6 +11,7 @@ public static class RateLimiting
 	public const string Registration = nameof(Registration);
 	public const string Login = nameof(Login);
 	public const string PowIssue = nameof(PowIssue);
+	public const string IssueInviteCodeExternal = nameof(IssueInviteCodeExternal);
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
@@ -44,6 +45,10 @@ public static class RateLimiting
 					options.Window = TimeSpan.FromMinutes(1);
 					options.PermitLimit = 5;
 					options.SegmentsPerWindow = 3;
+				})
+				.AddPartitionedFixedWindowLimiter(policyName: IssueInviteCodeExternal, options => {
+					options.Window = TimeSpan.FromSeconds(10);
+					options.PermitLimit = 5;
 				});
 
 			limiterOptions.OnRejected = (context, _) => {
