@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Ogma3\Ogma3.csproj" />
+		<ProjectReference Include="..\Ogma3.Migrator\Ogma3.Migrator.csproj" />
     </ItemGroup>
 
 </Project>

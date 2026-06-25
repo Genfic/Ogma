@@ -1,7 +1,8 @@
 <Solution>
-  <Project Path="Ogma3.AppHost\Ogma3.AppHost.csproj" Type="Classic C#" />
+  <Project Path="Ogma3.AppHost\Ogma3.AppHost.csproj" Type="C#" />
   <Project Path="Ogma3.Data\Ogma3.Data.csproj" />
-  <Project Path="Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" Type="Classic C#" />
+  <Project Path="Ogma3.Migrator/Ogma3.Migrator.csproj" />
+  <Project Path="Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" Type="C#" />
   <Project Path="Ogma3.Tests\Ogma3.Tests.csproj" />
   <Project Path="Ogma3\Ogma3.csproj" />
   <Project Path="Utils.Tests\Utils.Tests.csproj" />

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +17,11 @@ public static class DbContextRegistration
 				.UseNpgsql(conn, o => o
 					.MapPostgresEnums()
 					.SetPostgresVersion(18, 0)
-				);
+				)
+				// NOTE: uh-oh stinky poo-poo
+				// But without it, for some godforsaken reason, the Migrator project wholeheartedly believes, that the
+				// model has pending changes even if creating a new migration literally generates empty Up and Down methods.
+				.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
 
 			if (builder.Environment.IsDevelopment())
 			{
