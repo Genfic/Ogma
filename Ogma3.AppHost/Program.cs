@@ -60,6 +60,11 @@ var database = builder
 	.IfNot(emulateProd, b => b.WithPgWeb())
 	.AddDatabase("ogma3-db");
 
+var migrator = builder
+	.AddProject<Projects.Ogma3_Migrator>("migrator")
+	.WithReference(database)
+	.WaitFor(database);
+
 var genfic = builder
 	.AddProject<Projects.Ogma3>("ogma3")
 	.WithHttpEndpoint(port: 32773, targetPort: 8080)
@@ -74,6 +79,7 @@ var genfic = builder
 	.WithEnvironment("Git__Dirty", git.IsDirty.ToString())
 	.WithEnvironment("BUILD_TIME", DateTimeOffset.UtcNow.ToString("O"))
 	.WithEnvironmentVariables(infisical)
+	.WaitForCompletion(migrator)
 	.WithReference(database)
 	.WaitFor(database)
 	.WithReference(garnet)

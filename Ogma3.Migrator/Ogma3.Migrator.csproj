@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-Ogma3.Migrator-78c12548-dcc6-4505-9620-9b6e58740885</UserSecretsId>
+    </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+	</ItemGroup>
+	
+    <ItemGroup>
+      <ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj" />
+      <ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />
+    </ItemGroup>
+</Project>
