@@ -16,6 +16,7 @@ public class MigrationWorker
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
+		var watch = Stopwatch.StartNew();
 		using var activity = ActivitySource.StartActivity(ActivityKind.Client);
 
 		try
@@ -37,6 +38,7 @@ public class MigrationWorker
 		finally
 		{
 			appLifetime.StopApplication();
+			logger.LogInformation("Migration took {Elapsed} ms", watch.ElapsedMilliseconds);
 		}
 	}
 }
