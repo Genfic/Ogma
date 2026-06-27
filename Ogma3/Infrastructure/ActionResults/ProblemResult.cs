@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ogma3.Infrastructure.ActionResults;
 
+// TODO: Do we even need this one?
 public sealed class ProblemResult : ObjectResult
 {
 	private const int DefaultStatusCode = StatusCodes.Status422UnprocessableEntity;

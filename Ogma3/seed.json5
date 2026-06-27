@@ -48,4 +48,37 @@
 			"BlacklistedByDefault": true,
 		},
 	],
+	"Tags": {
+		"Genre": [
+			"Comedy",
+			"Horror",
+			"Romance",
+			"Psychological",
+			"Slice of Life",
+			"Parody",
+			"Drama",
+			"Thriller",
+		],
+		"ContentWarning": [
+			"Gore",
+			"Body Horror",
+			"Sex",
+			"Self-harm",
+			"Mental Illness",
+		],
+		"Franchise": [
+			"My Little Pony",
+			"The Care Bears",
+			"The Smurfs",
+			"Fast and Furious",
+		],
+		"": [
+			"Slow Burn",
+			"Oneshot",
+			"Aliens",
+			"Elves",
+			"Orks",
+			"Enemies to Lovers"
+		]
+	}
 }

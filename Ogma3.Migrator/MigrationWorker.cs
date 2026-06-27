@@ -4,11 +4,12 @@ using Ogma3.Data;
 
 namespace Ogma3.Migrator;
 
-public class MigrationWorker(
+public class MigrationWorker
+(
 	ILogger<MigrationWorker> logger,
 	IServiceProvider services,
 	IHostApplicationLifetime appLifetime
-	) : BackgroundService
+) : BackgroundService
 {
 	public const string ActivitySourceName = nameof(MigrationWorker);
 	private static readonly ActivitySource ActivitySource = new(ActivitySourceName);

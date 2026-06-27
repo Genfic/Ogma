@@ -14,14 +14,19 @@ public sealed partial class Base64RouteConstraint : IRouteConstraint
         RouteDirection routeDirection)
     {
         if (!values.TryGetValue(routeKey, out var value) || value is not string s)
-            return false;
+        {
+	        return false;
+        }
 
         if (string.IsNullOrEmpty(s))
-            return false;
+        {
+	        return false;
+        }
 
-        // Fast structural validation (generated at compile time)
-        if (!Base64Regex().IsMatch(s))
-            return false;
+        if (!Base64Regex.IsMatch(s))
+        {
+	        return false;
+        }
 
         // Normalize URL-safe Base64 inline (minimal allocation)
         var normalized = s.Length <= 256
@@ -35,14 +40,16 @@ public sealed partial class Base64RouteConstraint : IRouteConstraint
             {
                 '-' => '+',
                 '_' => '/',
-                _ => c
+                _ => c,
             };
         }
 
         // Fix padding
         var padding = (4 - (i % 4)) % 4;
         for (var p = 0; p < padding; p++)
-            normalized[i++] = '=';
+        {
+	        normalized[i++] = '=';
+        }
 
         ReadOnlySpan<char> finalSpan = normalized[..i];
 
@@ -52,7 +59,9 @@ public sealed partial class Base64RouteConstraint : IRouteConstraint
             : new byte[finalSpan.Length];
 
         for (var j = 0; j < finalSpan.Length; j++)
-            utf8[j] = (byte)finalSpan[j];
+        {
+	        utf8[j] = (byte)finalSpan[j];
+        }
 
         var output = utf8.Length <= 256
             ? stackalloc byte[Base64.GetMaxDecodedFromUtf8Length(utf8.Length)]
@@ -63,7 +72,6 @@ public sealed partial class Base64RouteConstraint : IRouteConstraint
         return status == OperationStatus.Done;
     }
 
-    // Source-generated at compile time
     [GeneratedRegex(@"^[A-Za-z0-9\-_+/]*={0,2}$", RegexOptions.CultureInvariant)]
-    private static partial Regex Base64Regex();
+    private static partial Regex Base64Regex { get; }
 }

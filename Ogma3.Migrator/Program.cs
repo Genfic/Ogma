@@ -7,7 +7,8 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddHostedService<MigrationWorker>();
-builder.Services.AddOpenTelemetry()
+builder.Services
+	.AddOpenTelemetry()
 	.WithTracing(t => t.AddSource(MigrationWorker.ActivitySourceName));
 builder.AddApplicationDbContext();
 

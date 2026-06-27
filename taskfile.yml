@@ -58,12 +58,10 @@ tasks:
 
   # EF helpers
   db-migrate: dotnet ef migrations add --project {{.DB_PROJ}} --startup-project {{.PROJ}} {{.CLI_ARGS}}
-  db-up: dotnet ef database update --project {{.DB_PROJ}} --startup-project {{.PROJ}} {{.CLI_ARGS}}
   db-compile: dotnet ef dbcontext optimize --project {{.DB_PROJ}} --startup-project {{.PROJ}} --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
   db-all:
     cmds:
       - task: db-migrate
-      - task: db-up
       - task: db-compile
 
   build-frontend:

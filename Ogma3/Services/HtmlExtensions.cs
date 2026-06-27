@@ -27,6 +27,7 @@ public static class HtmlExtensions
 
 			return new HtmlString(string.Empty);
 		}
+
 		/// <summary>
 		/// Define a spot where resources of a given `type` should be rendered
 		/// </summary>

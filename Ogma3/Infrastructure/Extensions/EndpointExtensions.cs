@@ -27,6 +27,7 @@ public static class EndpointExtensions
 				return Task.CompletedTask;
 			});
 		}
+
 		public TBuilder ConfigureIf(bool condition, Func<TBuilder, TBuilder> config)
 			=> condition
 				? config(builder)

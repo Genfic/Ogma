@@ -75,7 +75,6 @@ var genfic = builder
 	.WithEnvironment("SHOULD_SEED", shouldSeed)
 	.WithEnvironment("OTEL_DOTNET_EXPERIMENTAL_EFCORE_ENABLE_TRACE_DB_QUERY_PARAMETERS", "true")
 	.WithEnvironment("OTEL_DOTNET_AUTO_ENTITYFRAMEWORKCORE_SET_DBSTATEMENT_FOR_TEXT", "true")
-	// .WithEnvironment("DOTNET_SYSTEM_NET_DISABLEIPV4", "true")
 	.WithEnvironment("Git__CommitHash", git.Hash)
 	.WithEnvironment("Git__Branch", git.Branch)
 	.WithEnvironment("Git__Dirty", git.IsDirty.ToString())

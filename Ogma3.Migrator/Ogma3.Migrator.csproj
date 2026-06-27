@@ -8,7 +8,7 @@
 	<ItemGroup>
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
 	</ItemGroup>
-	
+
     <ItemGroup>
       <ProjectReference Include="..\Ogma3.Data\Ogma3.Data.csproj" />
       <ProjectReference Include="..\Ogma3.ServiceDefaults\Ogma3.ServiceDefaults.csproj" />

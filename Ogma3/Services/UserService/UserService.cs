@@ -31,6 +31,7 @@ public sealed class UserService(IHttpContextAccessor? accessor, OgmaUserManager 
 
 		return await CreateAsync(user, password);
 	}
+
 	public async Task<UserCreationResult> CreateAsync(OgmaUser user, string password)
 	{
 		await using var transaction = await context.Database.BeginTransactionAsync();

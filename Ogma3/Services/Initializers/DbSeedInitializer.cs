@@ -114,16 +114,18 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		await BulkUpsert(context, context.Roles, roles, r => r.NormalizedName);
 	}
 
-	private const string Email = "admin@genfic.net";
+	private sealed record Admin(string Email, string Name);
 
 	private async Task SeedAdmin(ApplicationDbContext context, OgmaUserManager userManager, IUserService userService)
 	{
-		var exists = await userManager.FindByEmailAsync(Email);
+		var admin = _config.GetSection("Seed:Admin").Get<Admin>() ?? throw new NullReferenceException("Admin section is null");
+
+		var exists = await userManager.FindByEmailAsync(admin.Email);
 		if (exists is not null) return;
 
 		var password = RandomPassword();
 
-		var result = await userService.CreateAsync("Angius", Email, password, true);
+		var result = await userService.CreateAsync(admin.Name, admin.Email, password, true);
 		if (result.Succeeded)
 		{
 			var adminRole = await context.Roles.SingleOrDefaultAsync(r => r.Name == RoleNames.Admin);
@@ -167,7 +169,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 
 	private static async Task SeedUsers(ApplicationDbContext context, IUserService userService)
 	{
-		if (await Any<OgmaUser>(context, u => u.Email != Email)) return;
+		if (await Any<OgmaUser>(context, u => u.Roles.Any(r => r.Name != RoleNames.Admin))) return;
 
 		var avatars = new Faker<Image>()
 			.RuleFor(i => i.Url, f => f.Internet.Avatar());
@@ -201,51 +203,19 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		}
 	}
 
-	private static async Task<(long, ETagNamespace?)[]> SeedTags(ApplicationDbContext context)
+	private async Task<(long, ETagNamespace?)[]> SeedTags(ApplicationDbContext context)
 	{
-		var tags = new List<Tag>
+		var tags = new List<Tag>();
+		foreach (var kvp in _data.Tags)
+		{
+			var ns = ETagNamespaceExtensions.TryParse(kvp.Key, out var n) ? n : (ETagNamespace?)null;
+			tags.AddRange(kvp.Value.Select(s => new Tag
 			{
-				new() { Name = "Comedy", Namespace = ETagNamespace.Genre },
-				new() { Name = "Horror", Namespace = ETagNamespace.Genre },
-				new() { Name = "Romance", Namespace = ETagNamespace.Genre },
-				new() { Name = "Psychological", Namespace = ETagNamespace.Genre },
-				new() { Name = "Slice of Life", Namespace = ETagNamespace.Genre },
-				new() { Name = "Parody", Namespace = ETagNamespace.Genre },
-				new() { Name = "Drama", Namespace = ETagNamespace.Genre },
-				new() { Name = "Thriller", Namespace = ETagNamespace.Genre },
-				new() { Name = "Sci-Fi", Namespace = ETagNamespace.Genre },
-				new() { Name = "Fantasy", Namespace = ETagNamespace.Genre },
-
-				new() { Name = "Gore", Namespace = ETagNamespace.ContentWarning },
-				new() { Name = "Body Horror", Namespace = ETagNamespace.ContentWarning },
-				new() { Name = "Sex", Namespace = ETagNamespace.ContentWarning },
-				new() { Name = "Self-harm", Namespace = ETagNamespace.ContentWarning },
-				new() { Name = "Mental Illness", Namespace = ETagNamespace.ContentWarning },
-
-				new() { Name = "My Little Pony", Namespace = ETagNamespace.Franchise },
-				new() { Name = "The Care Bears", Namespace = ETagNamespace.Franchise },
-				new() { Name = "The Smurfs", Namespace = ETagNamespace.Franchise },
-				new() { Name = "Fast and Furious", Namespace = ETagNamespace.Franchise },
-
-				new() { Name = "Slow Burn" },
-				new() { Name = "Oneshot" },
-				new() { Name = "Aliens" },
-				new() { Name = "Elves" },
-				new() { Name = "Orks" },
-				new() { Name = "Enemies to Lovers" },
-				new() { Name = "Lovers to Enemies" },
-				new() { Name = "Space" },
-				new() { Name = "Magic" },
-				new() { Name = "RPG Mechanics" },
-				new() { Name = "Videogames" },
-			}
-			.Select(t => new Tag
-			{
-				Name = t.Name,
-				Slug = t.Name.Friendlify().ToUpper(),
-				Namespace = t.Namespace,
-			})
-			.ToArray();
+				Name = s,
+				Slug = s.Friendlify().ToUpper(),
+				Namespace = ns,
+			}));
+		}
 
 		await BulkUpsert(context, context.Tags, tags, t => t.Name);
 
@@ -418,7 +388,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 	}
 }
 
-public sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl);
+public sealed record JsonData(string[] Icons, Rating[] Ratings, string QuotesUrl, Dictionary<string, List<string>> Tags);
 
 [JsonSerializable(typeof(JsonData))]
 [JsonSourceGenerationOptions(AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip)]
