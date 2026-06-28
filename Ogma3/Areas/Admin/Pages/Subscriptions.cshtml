@@ -7,28 +7,26 @@
 	ViewData["ActivePage"] = NavPages.Subscriptions;
 }
 
-@if (Model.Tier is not null)
-{
-	<form action="" method="post" class="form auto">
-		<label asp-for="Tier!.Name"></label>
-		<input asp-for="Tier!.Name" />
 
-		<label asp-for="Tier!.Price"></label>
-		<input asp-for="Tier!.Price">
+<form action="" method="post" class="form auto">
+	<label asp-for="Tier.Name"></label>
+	<input asp-for="Tier!.Name" />
 
-		<label asp-for="Tier!.Entitlements"></label>
-		<select asp-for="Tier!.Entitlements" multiple>
-			@foreach (var e in EntitlementExtensions.GetValues())
-			{
-				<option value="@e">@e.ToStringFast()</option>
-			}
-		</select>
+	<label asp-for="Tier.Price"></label>
+	<input asp-for="Tier.Price">
 
-		<input type="hidden" asp-for="Tier!.Id">
+	<label asp-for="Tier.Entitlements"></label>
+	<select asp-for="Tier.Entitlements" multiple>
+		@foreach (var e in EntitlementExtensions.GetValues())
+		{
+			<option value="@e">@e.ToStringFast()</option>
+		}
+	</select>
 
-		<button type="submit">@(Model.Tier?.Id is null ? "Add" : "Save")</button>
-	</form>
-}
+	<input type="hidden" asp-for="Tier.Id">
+
+	<button type="submit">@(Model.Tier?.Id is null ? "Add" : "Save")</button>
+</form>
 
 
 <table>

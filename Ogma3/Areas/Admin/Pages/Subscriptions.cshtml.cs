@@ -44,7 +44,7 @@ public sealed class Subscriptions(ApplicationDbContext context, PatreonService p
 
 	public sealed record TierData(long? Id, string Name, decimal Price, Entitlement? Entitlements);
 
-	[BindProperty] public TierData? Tier { get; set; }
+	[BindProperty] public TierData Tier { get; set; } = null!;
 
 	public async Task<IActionResult> OnPostAsync()
 	{
@@ -58,7 +58,7 @@ public sealed class Subscriptions(ApplicationDbContext context, PatreonService p
 			});
 			await context.SaveChangesAsync();
 		}
-		else if (Tier is not null)
+		else
 		{
 			await context.SubscriptionTiers
 				.Where(s => s.Id == Tier.Id)
