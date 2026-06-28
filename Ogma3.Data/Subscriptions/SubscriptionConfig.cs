@@ -11,6 +11,9 @@ public sealed class SubscriptionConfig : BaseConfiguration<Subscription>
 	{
 		base.Configure(builder);
 
+		builder.HasIndex(s => s.UserId);
+		builder.HasIndex(s => s.TierId);
+
 		builder
 			.HasOne(s => s.User)
 			.WithOne(u => u.Subscription)

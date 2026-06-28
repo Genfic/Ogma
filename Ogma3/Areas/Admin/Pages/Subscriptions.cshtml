@@ -7,51 +7,73 @@
 	ViewData["ActivePage"] = NavPages.Subscriptions;
 }
 
-<form action="" method="post" class="form auto">
-	<label asp-for="Tier.Name"></label>
-	<input asp-for="Tier.Name" />
+@if (Model.Tier is not null)
+{
+	<form action="" method="post" class="form auto">
+		<label asp-for="Tier!.Name"></label>
+		<input asp-for="Tier!.Name" />
 
-	<label asp-for="Tier.Price"></label>
-	<input asp-for="Tier.Price">
+		<label asp-for="Tier!.Price"></label>
+		<input asp-for="Tier!.Price">
 
-	<label asp-for="Tier.Entitlements"></label>
-	<select asp-for="Tier.Entitlements" asp-items="Html.GetEnumSelectList<Entitlement>()" multiple></select>
+		<label asp-for="Tier!.Entitlements"></label>
+		<select asp-for="Tier!.Entitlements" multiple>
+			@foreach (var e in EntitlementExtensions.GetValues())
+			{
+				<option value="@e">@e.ToStringFast()</option>
+			}
+		</select>
 
-	<button type="submit">Add</button>
-</form>
+		<input type="hidden" asp-for="Tier!.Id">
 
-<ul>
-	@foreach (var tier in Model.Tiers)
-	{
-		<li>
-			<div>@tier.Name</div>
-			<div>@tier.Price</div>
+		<button type="submit">@(Model.Tier?.Id is null ? "Add" : "Save")</button>
+	</form>
+}
+
+
+<table>
+	<tr>
+		<th>Genfic</th>
+		<th>Patreon</th>
+	</tr>
+	<tr>
+		<td>
 			<ul>
-				@foreach (var e in tier.Entitlements)
-				{
-					<li>@e.ToStringFast()</li>
-				}
-			</ul>
-		</li>
-	}
-</ul>
-
-<ul>
-	@foreach (var tier in Model.Patiers)
-	{
-		<li>
-			<div>@tier.Name</div>
-			<div>@tier.AmountCents</div>
-			<div>@tier.Description</div>
-			<ul>
-				@foreach (var ben in tier.Benefits)
+				@foreach (var tier in Model.Tiers)
 				{
 					<li>
-						<div>@ben.Name</div>
-						<div>@ben.Description</div>
+						<div>@tier.Name <a href="?edit=@tier.Id">[edit]</a></div>
+						<div>@tier.Price</div>
+						<ul>
+							@foreach (var e in EntitlementExtensions.GetValues().Where(e => tier.Entitlements.HasFlagFast(e) && e != Entitlement.None))
+							{
+								<li>@e.ToStringFast()</li>
+							}
+						</ul>
 					</li>
 				}
 			</ul>
-		</li>
-	}
-</ul>
+		</td>
+		<td>
+			<ul>
+				@foreach (var tier in Model.PatreonTiers)
+				{
+					<li>
+						<div>@tier.Name</div>
+						<div>@tier.AmountCents</div>
+						<div>@tier.Description</div>
+						<ul>
+							@foreach (var ben in tier.Benefits)
+							{
+								<li>
+									<div>@ben.Name</div>
+									<div>@ben.Description</div>
+								</li>
+							}
+						</ul>
+					</li>
+				}
+			</ul>
+		</td>
+	</tr>
+</table>

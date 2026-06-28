@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Images;
+using Ogma3.Data.Subscriptions;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Services;
+using Ogma3.Services.EntitlementService;
 using Ogma3.Services.FileUploader;
 using Ogma3.Services.GeneratedImagesService;
 using Ogma3.Services.TimeService;
@@ -28,7 +30,8 @@ public sealed partial class IndexModel
 	ImageProcessor processor,
 	OgmaConfig config,
 	GeneratedImagesService imagesService,
-	ITimeService timeService) : PageModel
+	ITimeService timeService,
+	EntitlementService entitlementService) : PageModel
 {
 	[TempData] public string StatusMessage { get; set; } = "";
 	[BindProperty] public required InputModel Input { get; set; }
@@ -119,8 +122,10 @@ public sealed partial class IndexModel
 				await uploader.Delete(user.Avatar.Url.Replace(config.Cdn, ""));
 			}
 
+			var allowAnimated = await entitlementService.CheckEntitlement(user.Id, Entitlement.AnimatedAvatar);
+
 			// Upload the new one
-			var processed = await processor.ProcessAvatar(Input.Avatar, config.AvatarWidth, config.AvatarHeight, false);
+			var processed = await processor.ProcessAvatar(Input.Avatar, config.AvatarWidth, config.AvatarHeight, allowAnimated);
 			var file = await uploader.Upload(processed, "avatars");
 			user.Avatar = new Image
 			{

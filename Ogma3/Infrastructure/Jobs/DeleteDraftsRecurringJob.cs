@@ -1,22 +1,21 @@
-using Immediate.Apis.Shared;
-using Immediate.Handlers.Shared;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Subscriptions;
-using Ogma3.Infrastructure.OgmaConfig;
 
-namespace Ogma3.Api.V1;
+namespace Ogma3.Infrastructure.Jobs;
 
-using ReturnType = Results<Ok<List<string>>, NotFound>;
-
-[Handler]
-[MapGet("api/test-three")]
-public sealed partial class TestThree(IConfiguration cfg, OgmaConfig config, ApplicationDbContext ctx)
+public sealed class DeleteDraftsRecurringJob
+	(IServiceProvider serviceProvider, OgmaConfig.OgmaConfig config, ILogger<DeleteDraftsRecurringJob> logger)
+	: BaseRecurringJob(serviceProvider, logger)
 {
+	protected override TimeSpan Interval => TimeSpan.FromDays(1);
+	protected override string Name => nameof(DeleteDraftsRecurringJob);
 
-	private async ValueTask<ReturnType> Handle(Query q, CancellationToken ct)
+	protected override async Task Run(CancellationToken ct)
 	{
+		using var scope = ServiceProvider.CreateScope();
+		var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
 		var safeUsers = ctx.Subscriptions
 			.Where(s => s.Tier != null && (s.Tier.Entitlements & Entitlement.DraftsLastForever) != 0)
 			.Select(s => s.UserId);
@@ -26,24 +25,24 @@ public sealed partial class TestThree(IConfiguration cfg, OgmaConfig config, App
 			.Select(s => s.UserId);
 
 		var now = DateTimeOffset.UtcNow;
-		var chapterCount = ctx.Chapters
+		var chapterCount = await ctx.Chapters
 			.Where(c => c.PublicationDate == null)
 			.Where(c => !safeUsers.Contains(c.Story.AuthorId))
 			.Where(c => c.CreationDate < (longerUsers.Contains(c.Story.AuthorId)
 				? now.AddDays(-config.PremiumDraftRetentionDays)
 				: now.AddDays(-config.DraftRetentionDays)))
-			.ToQueryString();
+			.ExecuteDeleteAsync(ct);
 
-		var blogpostCount = ctx.Blogposts
+		logger.LogInformation("Deleted {ChapterCount} chapter drafts", chapterCount);
+
+		var blogpostCount = await ctx.Blogposts
 			.Where(b => b.PublicationDate == null)
 			.Where(b => !safeUsers.Contains(b.AuthorId))
 			.Where(b => b.CreationDate < (longerUsers.Contains(b.AuthorId)
 				? now.AddDays(-config.PremiumDraftRetentionDays)
 				: now.AddDays(-config.DraftRetentionDays)))
-			.ToQueryString();
+			.ExecuteDeleteAsync(ct);
 
-		return TypedResults.Ok(new List<string> { chapterCount, blogpostCount });
+		logger.LogInformation("Deleted {BlogpostCount} blogpost drafts", blogpostCount);
 	}
-
-	public sealed record Query;
 }

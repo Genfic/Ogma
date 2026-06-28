@@ -18,6 +18,9 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.IsRequired()
 			.HasMaxLength(CTConfig.Blogpost.MaxTitleLength);
 
+		builder.HasIndex(b => b.PublicationDate);
+		builder.HasIndex(b => b.CreationDate);
+
 		builder
 			.Property(b => b.Slug)
 			.IsRequired()

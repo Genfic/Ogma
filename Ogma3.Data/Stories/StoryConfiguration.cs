@@ -12,6 +12,8 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 		base.Configure(builder);
 
 		// CONSTRAINTS
+		builder.HasIndex(s => s.AuthorId);
+
 		builder
 			.Property(s => s.Title)
 			.IsRequired()

@@ -7,6 +7,7 @@ public static class JobsHelper
 		return services
 			.AddHostedService<UnbanRecurringJob>()
 			.AddHostedService<DeleteInactiveAccountsRecurringJob>()
+			.AddHostedService<DeleteDraftsRecurringJob>()
 			;
 	}
 }

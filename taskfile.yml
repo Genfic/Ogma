@@ -58,6 +58,7 @@ tasks:
 
   # EF helpers
   db-migrate: dotnet ef migrations add --project {{.DB_PROJ}} --startup-project {{.PROJ}} {{.CLI_ARGS}}
+  db-unmigrate: dotnet ef migrations remove --project {{.DB_PROJ}} --startup-project {{.PROJ}} {{.CLI_ARGS}}
   db-compile: dotnet ef dbcontext optimize --project {{.DB_PROJ}} --startup-project {{.PROJ}} --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
   db-all:
     cmds:

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Ogma3.Data;
 using Ogma3.Data.Subscriptions;
 
@@ -19,9 +20,10 @@ using ReturnType = Results<Ok, NotFound, BadRequest, InternalServerError>;
 [Handler]
 [MapPost("hooks/patreon")]
 [AllowAnonymous]
+[UsedImplicitly]
 public sealed partial class HandlePatreonWebhook
 (
-	IConfiguration config,
+	IOptions<Infrastructure.Config.Patreon> config,
 	ApplicationDbContext context,
 	IHttpContextAccessor httpContextAccessor,
 	OgmaUserManager userManager,
@@ -47,12 +49,6 @@ public sealed partial class HandlePatreonWebhook
 			return TypedResults.Ok();
 		}
 
-		if (config["Webhooks:Patreon:Secret"] is not {} secret)
-		{
-			logger.LogCritical("Patreon webhook secret is not set.");
-			return TypedResults.InternalServerError();
-		}
-
 		if (httpContextAccessor.HttpContext is not {} httpContext)
 		{
 			return TypedResults.InternalServerError();
@@ -70,7 +66,7 @@ public sealed partial class HandlePatreonWebhook
 		await httpContext.Request.Body.CopyToAsync(ms, cancellationToken);
 		var body = ms.GetBuffer().AsSpan(0, (int)ms.Length);
 
-		if (!ValidateSignature(request.Signature, secret, body))
+		if (!ValidateSignature(request.Signature, config.Value.WebhookSecret, body))
 		{
 			logger.LogWarning("Invalid Patreon webhook signature: {Signature}", request.Signature);
 			await Task.Delay(Random.Shared.Next(100, 500), cancellationToken); // throw off any timing attacks even more
@@ -107,11 +103,7 @@ public sealed partial class HandlePatreonWebhook
 			// just to be sure, let's delete any subscriptions that might be tied to this ID if the event is deletion
 			if (request.Event is "members:pledge:delete" or "members:delete" or "members:pledge:update" or "members:update")
 			{
-				var rows = await context.Subscriptions
-					.Where(s => s.PatreonUserId == patreonUserId)
-					.ExecuteDeleteAsync(cancellationToken);
-
-				logger.LogInformation("Deleted {Rows} subscriptions tied to deleted Patreon user {UserId}.", rows, patreonUserId);
+				await RevokeSubscription(patreonUserId, cancellationToken: cancellationToken);
 			}
 
 			return TypedResults.NotFound();
@@ -119,11 +111,7 @@ public sealed partial class HandlePatreonWebhook
 
 		if (entitledCents <= 0 || status is "former_patron")
 		{
-			var rows = await context.Subscriptions
-				.Where(s => s.PatreonUserId == patreonUserId)
-				.ExecuteDeleteAsync(cancellationToken);
-			logger.LogInformation("Deleted {Rows} subscriptions tied to deleted user {UserId} (Patreon: {PatreonId}).", rows, user.Id,
-				patreonUserId);
+			await RevokeSubscription(patreonUserId, user.Id, cancellationToken);
 
 			return TypedResults.Ok();
 		}
@@ -141,11 +129,13 @@ public sealed partial class HandlePatreonWebhook
 		if (tierId is null)
 		{
 			logger.LogWarning("No tier matched {Entitlement} cents of entitlement", entitledCents);
+			await RevokeSubscription(patreonUserId, user.Id, cancellationToken);
 			return TypedResults.Ok();
 		}
 
 		if (subscriptionExists)
 		{
+			logger.LogInformation("Updated subscription for user {UserId} (Patreon: {PatreonId}).", user.Id, patreonUserId);
 			await context.Subscriptions
 				.Where(s => s.UserId == user.Id)
 				.ExecuteUpdateAsync(setPropertyCalls: set => set
@@ -157,6 +147,7 @@ public sealed partial class HandlePatreonWebhook
 		}
 		else
 		{
+			logger.LogInformation("New subscription for user {UserId} (Patreon: {PatreonId}).", user.Id, patreonUserId);
 			var sub = new Subscription
 			{
 				PatreonStatus = status,
@@ -170,6 +161,22 @@ public sealed partial class HandlePatreonWebhook
 		}
 
 		return TypedResults.Ok();
+	}
+
+	private async Task RevokeSubscription(string patronId, long? userId = null, CancellationToken cancellationToken = default)
+	{
+		var rows = await context.Subscriptions
+			.Where(s => s.PatreonUserId == patronId)
+			.ExecuteDeleteAsync(cancellationToken);
+
+		if (userId is not null)
+		{
+			logger.LogInformation("Deleted {Rows} subscriptions tied to user {UserId} (Patreon: {PatreonId}).", rows, userId, patronId);
+		}
+		else
+		{
+			logger.LogInformation("Deleted {Rows} subscriptions tied to Patreon user {UserId}.", rows, patronId);
+		}
 	}
 
 	/// <summary>

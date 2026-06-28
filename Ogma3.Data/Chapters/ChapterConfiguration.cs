@@ -16,6 +16,9 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 			.HasIndex(c => c.Signature)
 			.HasMethod(PgConstants.IndexTypes.Gin);
 
+		builder.HasIndex(c => c.PublicationDate);
+		builder.HasIndex(c => c.CreationDate);
+
 		// CONSTRAINTS
 		builder
 			.Property(c => c.PublicationDate)
