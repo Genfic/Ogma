@@ -1,4 +1,5 @@
-using ConfigBoundNET;
+using ConfigBinder.Attributes;
+using Immediate.Validations.Shared;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
@@ -31,8 +32,9 @@ public static class AddHeadersMiddlewareExtensions
 	}
 }
 
+[Validate]
 [ConfigSection("AdditionalHeaders")]
-public sealed partial class AddHeadersOptions
+public sealed partial class AddHeadersOptions : IValidationTarget<AddHeadersOptions>
 {
 	[UsedImplicitly]
 	public Dictionary<string, string> Headers { get; init; } = [];

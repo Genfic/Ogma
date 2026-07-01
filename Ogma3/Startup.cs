@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ConfigBoundNET;
+using ConfigBinder;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -138,7 +138,7 @@ public static class Startup
 			.AddSingleton(new MinHasher(shingleSize: 5, shingleMode: ShingleMode.Words));
 
 		services
-			.AddConfigBoundSections(configuration, true);
+			.RegisterGeneratedConfigs(configuration);
 
 		// Argon2 hasher
 		services
