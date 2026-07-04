@@ -21,13 +21,13 @@ public sealed class TimeService : ITimeService
 				{
 					ianaId = tzi.Id;
 				}
-				else if (!TimeZoneInfo.TryConvertWindowsIdToIanaId(tzi.Id, out var converted))
+				else if (TimeZoneInfo.TryConvertWindowsIdToIanaId(tzi.Id, out var converted))
 				{
-					return null;
+					ianaId = converted;
 				}
 				else
 				{
-					ianaId = converted;
+					return null;
 				}
 
 				if (options.Value.UseBuiltInTimezoneStyle)

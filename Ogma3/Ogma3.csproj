@@ -72,7 +72,7 @@
 	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis"/>
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching"/>
-		<PackageReference Include="Atulin.ConfigBinder" />
+		<PackageReference Include="Atulin.ConfigBinder" PrivateAssets="all" />
 		<PackageReference Include="Atulin.InfisicalConfig" />
 		<PackageReference Include="Atulin.MarkdigExtensions"/>
 		<PackageReference Include="Atulin.MinHash"/>

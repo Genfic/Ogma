@@ -53,10 +53,9 @@ public static class Dictionary
 			}
 		}
 
-		public TValue GetOrDefault(TKey key, TValue defaultValue = default(TValue))
+		public TValue GetOrDefault(TKey key, TValue defaultValue = default!)
 		{
 			return dict.TryGetValue(key, out var value) ? value : defaultValue;
 		}
 	}
-
 }

@@ -12,9 +12,8 @@ using ReturnType = Results<Ok<List<string>>, NotFound>;
 
 [Handler]
 [MapGet("api/test-three")]
-public sealed partial class TestThree(IConfiguration cfg, OgmaConfig config, ApplicationDbContext ctx)
+public sealed partial class TestThree(OgmaConfig config, ApplicationDbContext ctx)
 {
-
 	private async ValueTask<ReturnType> Handle(Query q, CancellationToken ct)
 	{
 		var safeUsers = ctx.Subscriptions
