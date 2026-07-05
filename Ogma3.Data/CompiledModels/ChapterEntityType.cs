@@ -29,7 +29,7 @@ public partial class ChapterEntityType
             propertyCount: 13,
             navigationCount: 4,
             foreignKeyCount: 2,
-            unnamedIndexCount: 3,
+            unnamedIndexCount: 5,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -154,9 +154,15 @@ public partial class ChapterEntityType
             unique: true);
 
         var index0 = runtimeEntityType.AddIndex(
-            new[] { signature });
+            new[] { creationDate });
 
         var index1 = runtimeEntityType.AddIndex(
+            new[] { publicationDate });
+
+        var index2 = runtimeEntityType.AddIndex(
+            new[] { signature });
+
+        var index3 = runtimeEntityType.AddIndex(
             new[] { storyId });
 
         return runtimeEntityType;

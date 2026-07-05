@@ -151,7 +151,8 @@ public sealed class CreateModel(
 			.Where(s => s.Id == storyDto.Id)
 			.ExecuteUpdateAsync(s => s
 				.SetProperty(x => x.WordCount, newWordCount)
-				.SetProperty(x => x.ChapterCount, newChapterCount));
+				.SetProperty(x => x.ChapterCount, newChapterCount)
+				.SetProperty(x => x.LastUpdatedAt, DateTimeOffset.UtcNow));
 
 		await notificationsRepo.Create(
 			ENotificationEvent.WatchedStoryUpdated,

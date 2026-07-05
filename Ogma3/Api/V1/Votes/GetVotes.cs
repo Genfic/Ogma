@@ -23,9 +23,10 @@ public sealed partial class GetVotes(ApplicationDbContext context, IUserService 
 		CancellationToken cancellationToken
 	)
 	{
-		var count = await context.Votes
-			.Where(v => v.StoryId == request.StoryId)
-			.CountAsync(cancellationToken);
+		var count = await context.Stories
+			.Where(s => s.Id == request.StoryId)
+			.Select(s => s.VoteCount)
+			.FirstOrDefaultAsync(cancellationToken);
 
 		var didUserVote = userService.UserId switch
 		{

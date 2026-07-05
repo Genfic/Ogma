@@ -11,7 +11,7 @@ public static class QueryableExtensions
 	/// <param name="page">Page number</param>
 	/// <param name="perPage">Number of results per page</param>
 	/// <typeparam name="T">Type of the object</typeparam>
-	/// <exception cref="ArgumentOutOfRangeException">Throw error where either `page` or `perPage` are less than 1</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Throw an error where either `page` or `perPage` are less than 1</exception>
 	/// <returns>Desired page of the objects</returns>
 	public static IQueryable<T> Paginate<T>(this IQueryable<T> query, int page, int perPage)
 	{
@@ -25,42 +25,45 @@ public static class QueryableExtensions
 			.Take(perPage);
 	}
 
-	public static IQueryable<Story> SortByEnum(this IQueryable<Story> query, EStorySortingOptions order)
+	extension(IQueryable<Story> query)
 	{
-		return order switch
+		public IQueryable<Story> SortByEnum(EStorySortingOptions order)
 		{
-			EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
-			EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-			EStorySortingOptions.DateAscending => query.OrderBy(s => s.PublicationDate),
-			EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.PublicationDate),
-			EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
-			EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
-			EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.Votes.Count),
-			EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.Votes.Count),
-			EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.Chapters.OrderBy(c => c.PublicationDate).First().PublicationDate),
-			EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s =>
-				s.Chapters.OrderBy(c => c.PublicationDate).First().PublicationDate),
-			_ => query.OrderByDescending(s => s.CreationDate),
-		};
+			return order switch
+			{
+				EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
+				EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
+				EStorySortingOptions.DateAscending => query.Where(s => s.PublicationDate != null).OrderBy(s => s.PublicationDate),
+				EStorySortingOptions.DateDescending => query.Where(s => s.PublicationDate != null).OrderByDescending(s => s.PublicationDate),
+				EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
+				EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
+				EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.VoteCount),
+				EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.VoteCount),
+				EStorySortingOptions.UpdatedAscending => query.Where(s => s.LastUpdatedAt != null).OrderBy(s => s.LastUpdatedAt),
+				EStorySortingOptions.UpdatedDescending => query.Where(s => s.LastUpdatedAt != null).OrderByDescending(s => s.LastUpdatedAt),
+				_ => query.OrderByDescending(s => s.CreationDate),
+			};
+		}
+
+		public IQueryable<Story> Blacklist(ApplicationDbContext ctx, long? userId)
+		{
+			return userId is not null
+				? query
+					.Where(s => !ctx.BlacklistedRatings
+						.Where(br => br.UserId == userId)
+						.Any(br => br.RatingId == s.RatingId)
+					)
+					.Where(s => !ctx.BlacklistedTags
+						.Where(bt => bt.UserId == userId)
+						.Any(bt => s.Tags.Any(t => t.Id == bt.TagId))
+					)
+					.Where(s => !ctx.BlockedUsers
+						.Where(bu => bu.BlockingUserId == userId)
+						.Any(bu => bu.BlockedUserId == s.AuthorId)
+					)
+				: query
+					.Where(s => !s.Rating.BlacklistedByDefault);
+		}
 	}
 
-	public static IQueryable<Story> Blacklist(this IQueryable<Story> query, ApplicationDbContext ctx, long? userId)
-	{
-		return userId is not null
-			? query
-				.Where(s => !ctx.BlacklistedRatings
-					.Where(br => br.UserId == userId)
-					.Any(br => br.RatingId == s.RatingId)
-				)
-				.Where(s => !ctx.BlacklistedTags
-					.Where(bt => bt.UserId == userId)
-					.Any(bt => s.Tags.Any(t => t.Id == bt.TagId))
-				)
-				.Where(s => !ctx.BlockedUsers
-					.Where(bu => bu.BlockingUserId == userId)
-					.Any(bu => bu.BlockedUserId == s.AuthorId)
-				)
-			: query
-				.Where(s => !s.Rating.BlacklistedByDefault);
-	}
 }

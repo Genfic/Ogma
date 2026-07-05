@@ -220,10 +220,17 @@ public static class Startup
 			.AddJsonOptions(options => ConfigJson(options.JsonSerializerOptions));
 
 		// Razor
-		services
+		var pages = services
 			.AddRazorPages(options => {
 				options.Conventions.AuthorizeAreaFolder("Admin", "/", AuthorizationPolicies.RequireAdminRole);
 			});
+
+		if (builder.Environment.IsDevelopment())
+		{
+		#if DEBUG
+			pages.AddRazorRuntimeCompilation();
+		#endif
+		}
 
 		// X-CSRF
 		services.AddAntiforgery();

@@ -39,6 +39,10 @@ public sealed partial class DeleteVote(ApplicationDbContext context, IUserServic
 			.Where(v => v.StoryId == request.StoryId)
 			.CountAsync(cancellationToken);
 
+		await context.Stories.ExecuteUpdateAsync(setters => setters
+				.SetProperty(s => s.VoteCount, count),
+			cancellationToken);
+
 		return TypedResults.Ok(new VoteResult(false, count));
 	}
 

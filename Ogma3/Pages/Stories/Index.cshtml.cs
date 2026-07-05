@@ -67,6 +67,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 				.WhereIf(s => s.Status == Status, Status is not null)
 				.WhereIf(s => s.Author.NormalizedUserName == author, author is not null)
 				.Where(s => s.PublicationDate != null)
+				.Where(s => s.LastUpdatedAt != null)
 				.Where(s => s.ContentBlockId == null)
 				.Blacklist(context, uid);
 

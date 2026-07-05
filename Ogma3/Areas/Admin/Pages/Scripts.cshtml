@@ -1,0 +1,14 @@
+@page
+@model Ogma3.Areas.Admin.Pages.Scripts
+
+@{
+	ViewData["Title"] = "Scripts";
+}
+
+<pre>
+@(Model.Message ?? "No message")
+</pre>
+
+<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetUpdateStories()">
+	Update Stories (recalculate vote counts and last update dates)
+</a>

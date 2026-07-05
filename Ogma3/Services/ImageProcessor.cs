@@ -20,14 +20,12 @@ public sealed class ImageProcessor(ILogger<ImageProcessor> logger)
 		using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
 		await using var stream = file.OpenReadStream();
-		var bytes = new byte[stream.Length];
-		await stream.ReadExactlyAsync(bytes, 0, (int)stream.Length);
 
 		var w = width ?? height ?? throw new ArgumentException($"At least one of {nameof(width)} and {nameof(height)} should not be null");
 		var h = height ?? w;
 
 		return await Task.Run(() => {
-			using var processed = Image.ThumbnailBuffer(bytes,
+			using var processed = Image.ThumbnailStream(stream,
 				width: w,
 				height: h,
 				size: Enums.Size.Down,
@@ -54,11 +52,9 @@ public sealed class ImageProcessor(ILogger<ImageProcessor> logger)
 		using var op = logger.TimeOperation("Resizing image {Filename} that weighs {Size} bytes", file.FileName, file.Length);
 
 		await using var stream = file.OpenReadStream();
-		var bytes = new byte[stream.Length];
-		await stream.ReadExactlyAsync(bytes, 0, (int)stream.Length);
 
 		return await Task.Run(() => {
-			using var image = Image.NewFromBuffer(bytes);
+			using var image = Image.NewFromStream(stream);
 			if (image.Width > MaxWidth)
 			{
 				var scale = (double)MaxWidth / image.Width;

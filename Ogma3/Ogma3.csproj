@@ -16,12 +16,12 @@
 		<ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:11.0-preview</ContainerBaseImage>
 		<GetSharedPropsFileDirectoryForContainer>true</GetSharedPropsFileDirectoryForContainer>
 
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
-
-		<UseRazorSourceGenerator>true</UseRazorSourceGenerator>
 		<EnableEnumGeneratorInterceptor>true</EnableEnumGeneratorInterceptor>
 		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated;Microsoft.Extensions.Logging.AutoLoggerMessage</InterceptorsNamespaces>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<UseRazorSourceGenerator>true</UseRazorSourceGenerator>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -69,6 +69,9 @@
 		<EmbeddedResource Include="$(ProjectDir)/Queries/**/*.sql"/>
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Aspire.StackExchange.Redis"/>
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching"/>
@@ -139,7 +142,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="seed.json5;config.json5;appsettings.json5">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 		<Content Update="FrontendCode/svg/discord.svg">

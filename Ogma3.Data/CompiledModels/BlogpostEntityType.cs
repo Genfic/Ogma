@@ -30,7 +30,7 @@ public partial class BlogpostEntityType
             propertyCount: 13,
             navigationCount: 6,
             foreignKeyCount: 4,
-            unnamedIndexCount: 4,
+            unnamedIndexCount: 6,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -162,6 +162,12 @@ public partial class BlogpostEntityType
         var index2 = runtimeEntityType.AddIndex(
             new[] { contentBlockId },
             unique: true);
+
+        var index3 = runtimeEntityType.AddIndex(
+            new[] { creationDate });
+
+        var index4 = runtimeEntityType.AddIndex(
+            new[] { publicationDate });
 
         return runtimeEntityType;
     }

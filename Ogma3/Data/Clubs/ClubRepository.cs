@@ -1,4 +1,5 @@
 using Immediate.Injections.Shared;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Pages.Shared.Bars;
 using Ogma3.Services.UserService;
@@ -6,6 +7,7 @@ using Ogma3.Services.UserService;
 namespace Ogma3.Data.Clubs;
 
 [RegisterScoped]
+[UsedImplicitly]
 public sealed class ClubRepository(ApplicationDbContext context, IUserService userService)
 {
 	public async Task<ClubBar?> GetClubBar(long clubId)
@@ -36,13 +38,18 @@ public sealed class ClubRepository(ApplicationDbContext context, IUserService us
 
 	public async Task<bool> CheckRoles(long clubId, long? userId, params EClubMemberRoles[] roles)
 	{
-		if (userId is null) return false;
+		if (userId is null)
+		{
+			return false;
+		}
+
+		var roleList = roles.ToList();
 
 		return await context.Clubs
 			.TagWith($"{nameof(ClubRepository)} : {nameof(CheckRoles)} — {clubId}, {userId}")
 			.Where(c => c.Id == clubId)
 			.Where(c => c.ClubMembers
-				.Any(cm => cm.MemberId == userId && roles.ToList().Contains(cm.Role))
+				.Any(cm => cm.MemberId == userId && roleList.Contains(cm.Role))
 			)
 			.AnyAsync();
 	}

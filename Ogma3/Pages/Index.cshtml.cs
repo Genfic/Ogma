@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Stories;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared.Cards;
 using ZiggyCreatures.Caching.Fusion;
 
@@ -45,13 +44,11 @@ public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache,
 		CancellationToken cancellationToken = default
 	)
 	{
-		var userId = User.GetNumericId();
-
 		return await context.Stories
 			.TagWith($"{nameof(GetTopStoryCards)} -> {count}, {sort.ToStringFast()}")
 			.Where(b => b.PublicationDate != null)
 			.Where(b => b.ContentBlockId == null)
-			.Blacklist(context, userId)
+			.Where(s => s.Rating.BlacklistedByDefault == false)
 			.SortByEnum(sort)
 			.Take(count)
 			.Select(StoryMapper.MapToCard)

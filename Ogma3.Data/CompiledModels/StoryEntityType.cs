@@ -30,7 +30,7 @@ public partial class StoryEntityType
             "Ogma3.Data.Stories.Story",
             typeof(Story),
             baseEntityType,
-            propertyCount: 15,
+            propertyCount: 17,
             complexPropertyCount: 1,
             navigationCount: 7,
             skipNavigationCount: 3,
@@ -116,6 +116,16 @@ public partial class StoryEntityType
             sentinel: false);
         isLocked.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var lastUpdatedAt = runtimeEntityType.AddProperty(
+            "LastUpdatedAt",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Story).GetProperty("LastUpdatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Story).GetField("<LastUpdatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true,
+            valueGenerated: ValueGenerated.OnAdd);
+        lastUpdatedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        lastUpdatedAt.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+
         var publicationDate = runtimeEntityType.AddProperty(
             "PublicationDate",
             typeof(DateTimeOffset?),
@@ -157,6 +167,14 @@ public partial class StoryEntityType
             fieldInfo: typeof(Story).GetField("<Title>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             maxLength: 100);
         title.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var voteCount = runtimeEntityType.AddProperty(
+            "VoteCount",
+            typeof(int),
+            propertyInfo: typeof(Story).GetProperty("VoteCount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Story).GetField("<VoteCount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            sentinel: 0);
+        voteCount.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var wordCount = runtimeEntityType.AddProperty(
             "WordCount",
