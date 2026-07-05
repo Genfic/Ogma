@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.InviteCodes;
 using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
-[MapDelete("api/InviteCodes/{CodeId:long}")]
+[MapGroup<ApiGroup>]
+[MapDelete("InviteCodes/{CodeId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class DeleteInviteCode(ApplicationDbContext context)
 {

@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.ClubJoin;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, BadRequest<string>>;
 
 [Handler]
-[MapDelete("api/clubjoin")]
+[MapGroup<ApiGroup>]
+[MapDelete("clubjoin")]
 [Authorize]
 public sealed partial class LeaveClub(ApplicationDbContext context, IUserService userService)
 {

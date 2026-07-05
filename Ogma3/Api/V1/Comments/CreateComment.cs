@@ -17,7 +17,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, NotFound, Ok<string>>;
 
 [Handler]
-[MapPost("api/comments")]
+[MapGroup<ApiGroup>]
+[MapPost("comments")]
 [Authorize]
 [UsedImplicitly]
 public sealed partial class CreateComment

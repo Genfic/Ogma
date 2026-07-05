@@ -15,7 +15,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
 
 [Handler]
-[MapDelete("api/comments/{commentId}")]
+[MapGroup<ApiGroup>]
+[MapDelete("comments/{commentId}")]
 [Authorize]
 public sealed partial class DeleteComment(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {

@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Subscriptions;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 
 [Handler]
-[MapGet("api/subscriptions/thread")]
+[MapGroup<ApiGroup>]
+[MapGet("subscriptions/thread")]
 public sealed partial class GetSubscriptionStatus(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

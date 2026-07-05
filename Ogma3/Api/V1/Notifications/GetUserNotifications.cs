@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Notifications;
 using ReturnType = Results<Ok<List<GetUserNotifications.Result>>, UnauthorizedHttpResult>;
 
 [Handler]
-[MapGet("api/notifications")]
+[MapGroup<ApiGroup>]
+[MapGet("notifications")]
 [Authorize]
 public sealed partial class GetUserNotifications(ApplicationDbContext context, IUserService userService)
 {

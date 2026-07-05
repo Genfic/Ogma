@@ -17,7 +17,8 @@ namespace Ogma3.Api.V1.Users;
 using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpResult>;
 
 [Handler]
-[MapPost("api/users/roles")]
+[MapGroup<ApiGroup>]
+[MapPost("users/roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class UpdateRoles(ApplicationDbContext context, IUserService userService)
 {

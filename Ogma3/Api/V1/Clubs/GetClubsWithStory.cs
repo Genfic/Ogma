@@ -8,7 +8,8 @@ using Ogma3.Data;
 namespace Ogma3.Api.V1.Clubs;
 
 [Handler]
-[MapGet("api/clubs/story/{storyId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("clubs/story/{storyId:long}")]
 public sealed partial class GetClubsWithStory(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

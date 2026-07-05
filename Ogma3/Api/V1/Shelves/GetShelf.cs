@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.Shelves;
 using ReturnType = Results<Ok<ShelfDto>, NotFound, UnauthorizedHttpResult>;
 
 [Handler]
-[MapGet("api/shelves/{shelfId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("shelves/{shelfId:long}")]
 [Authorize]
 public sealed partial class GetShelf(ApplicationDbContext context, IUserService userService)
 {

@@ -10,7 +10,8 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Api.V1.Tags;
 
 [Handler]
-[MapGet("api/tags/search")]
+[MapGroup<ApiGroup>]
+[MapGet("tags/search")]
 public sealed partial class SearchTags(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

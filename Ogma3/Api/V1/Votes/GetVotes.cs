@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Votes;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 
 [Handler]
-[MapGet("api/votes/{storyId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("votes/{storyId:long}")]
 public sealed partial class GetVotes(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Users;
 using ReturnType = Results<Ok<string[]>, UnprocessableEntity<string>>;
 
 [Handler]
-[MapGet("api/users/names")]
+[MapGroup<ApiGroup>]
+[MapGet("users/names")]
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
 public sealed partial class FindName(ApplicationDbContext context)
 {

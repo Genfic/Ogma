@@ -10,7 +10,8 @@ using Ogma3.Services.FileUploader;
 namespace Ogma3.Api.V1.Files;
 
 [Handler]
-[MapPost("api/files/upload")]
+[MapGroup<ApiGroup>]
+[MapPost("files/upload")]
 [Authorize]
 public sealed partial class UploadFile(IFileUploader uploader, ImageProcessor processor, OgmaConfig config)
 {

@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Ratings;
 using ReturnType = Results<NotFound, Ok>;
 
 [Handler]
-[MapPut("api/ratings")]
+[MapGroup<ApiGroup>]
+[MapPut("ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class UpdateRating(ApplicationDbContext context)
 {

@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Quotes;
 using ResponseType = Results<Ok<long>, NotFound>;
 
 [Handler]
-[MapDelete("api/quotes/{id:long}")]
+[MapGroup<ApiGroup>]
+[MapDelete("quotes/{id:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class DeleteQuote(ApplicationDbContext context)
 {

@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<ContentHttpResult, InternalServerError, NotFound>;
 
 [Handler]
-[MapGet("api/passkeys/request-options")]
+[MapGroup<ApiGroup>]
+[MapGet("passkeys/request-options")]
 public sealed partial class GetPasskeyRequestOptions(SignInManager<OgmaUser> signInManager, OgmaUserManager userManager)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

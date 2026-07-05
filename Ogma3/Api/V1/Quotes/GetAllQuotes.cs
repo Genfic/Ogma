@@ -9,7 +9,8 @@ using Ogma3.Data.Quotes;
 namespace Ogma3.Api.V1.Quotes;
 
 [Handler]
-[MapGet("api/quotes")]
+[MapGroup<ApiGroup>]
+[MapGet("quotes")]
 public sealed partial class GetAllQuotes(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

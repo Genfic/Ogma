@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Tags;
 using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
-[MapDelete("api/tags")]
+[MapGroup<ApiGroup>]
+[MapDelete("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class DeleteTag(ApplicationDbContext context)
 {

@@ -18,7 +18,8 @@ namespace Ogma3.Api.Hooks.Patreon;
 using ReturnType = Results<Ok, NotFound, BadRequest, InternalServerError>;
 
 [Handler]
-[MapPost("hooks/patreon")]
+[MapGroup<HooksGroup>]
+[MapPost("patreon")]
 [AllowAnonymous]
 [UsedImplicitly]
 public sealed partial class HandlePatreonWebhook

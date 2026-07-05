@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.InviteCodes;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto[]>>;
 
 [Handler]
-[MapGet("api/InviteCodes")]
+[MapGroup<ApiGroup>]
+[MapGet("InviteCodes")]
 [Authorize]
 public sealed partial class GetIssuedInviteCodes(ApplicationDbContext context, IUserService userService)
 {

@@ -9,7 +9,8 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Api.V1.Tags;
 
 [Handler]
-[MapGet("api/tags")]
+[MapGroup<ApiGroup>]
+[MapGet("tags")]
 public sealed partial class GetPaginatedTags(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

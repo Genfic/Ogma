@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Faqs;
 using ReturnType = Results<NotFound, Ok<long>>;
 
 [Handler]
-[MapDelete("api/faqs")]
+[MapGroup<ApiGroup>]
+[MapDelete("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class DeleteFaq(ApplicationDbContext context)
 {

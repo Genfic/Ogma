@@ -10,7 +10,8 @@ using Ogma3.Services.GeneratedImagesService;
 namespace Ogma3.Api.V1.SignIn;
 
 [Handler]
-[MapGet("api/signin")]
+[MapGroup<ApiGroup>]
+[MapGet("signin")]
 public sealed partial class GetSignInData(ApplicationDbContext context, OgmaConfig config, GeneratedImagesService genImg)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

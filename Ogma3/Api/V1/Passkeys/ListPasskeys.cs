@@ -9,8 +9,9 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<Ok<List<ListPasskeys.UserPasskey>>, NotFound, InternalServerError>;
 
 [Handler]
+[MapGroup<ApiGroup>]
 [Authorize]
-[MapGet("api/passkeys/list")]
+[MapGet("passkeys/list")]
 public sealed partial class ListPasskeys(OgmaUserManager userManager, IHttpContextAccessor contextAccessor)
 {
 

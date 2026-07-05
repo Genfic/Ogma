@@ -10,7 +10,8 @@ namespace Ogma3.Api.V1.Faqs;
 using ReturnType = Ok<FaqDto[]>;
 
 [Handler]
-[MapGet("api/faqs")]
+[MapGroup<ApiGroup>]
+[MapGet("faqs")]
 public sealed partial class GetAllFaqs(ApplicationDbContext context)
 {
 

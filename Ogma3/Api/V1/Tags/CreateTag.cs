@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Tags;
 using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 
 [Handler]
-[MapPost("api/tags")]
+[MapGroup<ApiGroup>]
+[MapPost("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class CreateTag(ApplicationDbContext context)
 {

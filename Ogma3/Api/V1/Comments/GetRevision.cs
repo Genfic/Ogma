@@ -10,7 +10,8 @@ using Sqids;
 namespace Ogma3.Api.V1.Comments;
 
 [Handler]
-[MapGet("api/comments/{commentId}/revisions")]
+[MapGroup<ApiGroup>]
+[MapGet("comments/{commentId}/revisions")]
 public sealed partial class GetRevision(ApplicationDbContext context, SqidsEncoder<long> sqids)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

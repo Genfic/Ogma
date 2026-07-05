@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.ChaptersReads;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>, NoContent>;
 
 [Handler]
-[MapDelete("api/chaptersread")]
+[MapGroup<ApiGroup>]
+[MapDelete("chaptersread")]
 [Authorize]
 public sealed partial class MarkChapterAsUnread(ApplicationDbContext context, IUserService userService)
 {

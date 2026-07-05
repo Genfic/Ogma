@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<Ok, UnauthorizedResult>;
 
 [Handler]
-[MapPost("api/passkeys/signin")]
+[MapGroup<ApiGroup>]
+[MapPost("passkeys/signin")]
 public sealed partial class SignInWithPasskey(SignInManager<OgmaUser> signInManager)
 {
 

@@ -16,7 +16,8 @@ namespace Ogma3.Api.V1.Users;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 
 [Handler]
-[MapPost("api/users/follow")]
+[MapGroup<ApiGroup>]
+[MapPost("users/follow")]
 [Authorize]
 public sealed partial class FollowUser
 	(ApplicationDbContext context, IUserService userService, NotificationsRepository notifications, LinkGenerator linkGenerator)

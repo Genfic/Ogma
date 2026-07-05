@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Tags;
 using ReturnType = Results<Ok, NotFound, Conflict<string>>;
 
 [Handler]
-[MapPut("api/tags")]
+[MapGroup<ApiGroup>]
+[MapPut("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class UpdateTag(ApplicationDbContext context)
 {

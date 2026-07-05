@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Shelves;
 using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 
 [Handler]
-[MapPut("api/shelves")]
+[MapGroup<ApiGroup>]
+[MapPut("shelves")]
 [Authorize]
 public sealed partial class UpdateShelf(ApplicationDbContext context, IUserService userService)
 {

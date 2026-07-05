@@ -17,7 +17,8 @@ namespace Ogma3.Api.V1.CommentThreads;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<GetThreadDetails.Result>>;
 
 [Handler]
-[MapGet("api/CommentsThread/{threadId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("CommentsThread/{threadId:long}")]
 public sealed partial class GetThreadDetails
 	(ApplicationDbContext context, IUserService userService, IHttpContextAccessor httpContextAccessor, OgmaConfig config)
 {

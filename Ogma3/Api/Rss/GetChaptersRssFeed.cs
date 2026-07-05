@@ -13,7 +13,8 @@ namespace Ogma3.Api.Rss;
 using ReturnType = Results<RssResult, InternalServerError, NotFound>;
 
 [Handler]
-[MapGet("rss/story/{storyId:long}/chapters")]
+[MapGroup<RssGroup>]
+[MapGet("story/{storyId:long}/chapters")]
 public sealed partial class GetChaptersRssFeed
 	(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
 {

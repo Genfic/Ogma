@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Notifications;
 using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 
 [Handler]
-[MapDelete("api/notifications/all")]
+[MapGroup<ApiGroup>]
+[MapDelete("notifications/all")]
 [Authorize]
 public sealed partial class DeleteAllNotifications(ApplicationDbContext context, IUserService userService)
 {

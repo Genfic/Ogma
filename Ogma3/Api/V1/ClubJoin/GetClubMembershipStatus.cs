@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.ClubJoin;
 using ReturnType = Ok<bool>;
 
 [Handler]
-[MapGet("/api/ClubJoin/{clubId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("ClubJoin/{clubId:long}")]
 [Authorize]
 public sealed partial class GetClubMembershipStatus(ApplicationDbContext context, IUserService userService)
 {

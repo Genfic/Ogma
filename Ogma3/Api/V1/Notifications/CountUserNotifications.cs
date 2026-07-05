@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Notifications;
 using ReturnType = Results<Ok<int>, NoContent>;
 
 [Handler]
-[MapGet("api/notifications/count")]
+[MapGroup<ApiGroup>]
+[MapGet("notifications/count")]
 [Authorize]
 public sealed partial class CountUserNotifications(ApplicationDbContext context, IUserService userService)
 {

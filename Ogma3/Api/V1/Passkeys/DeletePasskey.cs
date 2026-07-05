@@ -11,8 +11,9 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<Ok, NotFound, InternalServerError>;
 
 [Handler]
+[MapGroup<ApiGroup>]
 [Authorize]
-[MapDelete("api/passkeys/delete")]
+[MapDelete("passkeys/delete")]
 public sealed partial class DeletePasskey
 (
 	OgmaUserManager userManager,

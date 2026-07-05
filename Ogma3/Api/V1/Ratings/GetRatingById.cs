@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Ratings;
 using ReturnType = Results<NotFound, Ok<RatingApiDto>>;
 
 [Handler]
-[MapGet("api/ratings/{id:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("ratings/{id:long}")]
 public sealed partial class GetRatingById(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

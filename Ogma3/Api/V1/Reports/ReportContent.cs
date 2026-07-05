@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Reports;
 using ReturnType = Results<UnauthorizedHttpResult, BadRequest, Ok<long>>;
 
 [Handler]
-[MapPost("api/reports")]
+[MapGroup<ApiGroup>]
+[MapPost("reports")]
 [Authorize]
 public sealed partial class ReportContent(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {

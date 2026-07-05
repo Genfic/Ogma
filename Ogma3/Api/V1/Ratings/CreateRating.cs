@@ -10,7 +10,8 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 namespace Ogma3.Api.V1.Ratings;
 
 [Handler]
-[MapPost("api/ratings")]
+[MapGroup<ApiGroup>]
+[MapPost("ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class CreateRating(ApplicationDbContext context)
 {

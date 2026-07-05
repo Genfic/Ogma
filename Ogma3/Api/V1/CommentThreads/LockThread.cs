@@ -17,7 +17,8 @@ namespace Ogma3.Api.V1.CommentThreads;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 
 [Handler]
-[MapPost("api/CommentsThread/lock")]
+[MapGroup<ApiGroup>]
+[MapPost("CommentsThread/lock")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed partial class LockThread(ApplicationDbContext context, IUserService userService)
 {

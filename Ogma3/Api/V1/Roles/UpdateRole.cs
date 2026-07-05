@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Roles;
 using ReturnType = Results<Ok, NotFound>;
 
 [Handler]
-[MapPut("api/roles")]
+[MapGroup<ApiGroup>]
+[MapPut("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class UpdateRole(ApplicationDbContext context)
 {

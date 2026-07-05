@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Roles;
 using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
-[MapDelete("api/roles")]
+[MapGroup<ApiGroup>]
+[MapDelete("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class DeleteRole(RoleManager<OgmaRole> roleManager)
 {

@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Folders;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound<string>, Conflict<string>, Ok<AddStoryToFolder.Response>>;
 
 [Handler]
-[MapPost("api/folders/AddStory")]
+[MapGroup<ApiGroup>]
+[MapPost("folders/AddStory")]
 public sealed partial class AddStoryToFolder(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

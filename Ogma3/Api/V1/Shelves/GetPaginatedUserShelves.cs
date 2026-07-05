@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Shelves;
 using ReturnType = Results<Ok<ShelfDto[]>, UnauthorizedHttpResult>;
 
 [Handler]
-[MapGet("api/shelves/{userName:alpha}")]
+[MapGroup<ApiGroup>]
+[MapGet("shelves/{userName:alpha}")]
 [Authorize]
 public sealed partial class GetPaginatedUserShelves(ApplicationDbContext context, IUserService userService, OgmaConfig config)
 {

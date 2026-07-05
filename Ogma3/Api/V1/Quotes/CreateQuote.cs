@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Quotes;
 using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<FullQuoteDto>>;
 
 [Handler]
-[MapPost("api/quotes")]
+[MapGroup<ApiGroup>]
+[MapPost("quotes")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class CreateQuote(ApplicationDbContext context, ILogger<CreateQuote.Handler> logger)
 {

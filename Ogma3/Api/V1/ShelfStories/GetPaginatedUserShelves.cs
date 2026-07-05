@@ -10,12 +10,13 @@ using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.ShelfStories;
 
-using ReturnType = Results<UnauthorizedHttpResult, Ok<GetPaginatedUserShelves.Result[]>>;
+using ReturnType = Results<UnauthorizedHttpResult, Ok<GetPaginatedCurrentUserShelves.Result[]>>;
 
 [Handler]
-[MapGet("api/ShelfStories/{storyId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("ShelfStories/{storyId:long}")]
 [Authorize]
-public sealed partial class GetPaginatedUserShelves(ApplicationDbContext context, IUserService userService, OgmaConfig config)
+public sealed partial class GetPaginatedCurrentUserShelves(ApplicationDbContext context, IUserService userService, OgmaConfig config)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

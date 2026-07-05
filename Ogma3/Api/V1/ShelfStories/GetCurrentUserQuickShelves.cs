@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.ShelfStories;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<GetCurrentUserQuickShelves.Result[]>>;
 
 [Handler]
-[MapGet("api/ShelfStories/{storyId:long}/quick")]
+[MapGroup<ApiGroup>]
+[MapGet("ShelfStories/{storyId:long}/quick")]
 [Authorize]
 public sealed partial class GetCurrentUserQuickShelves(ApplicationDbContext context, IUserService userService)
 {

@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Faqs;
 using ReturnType = Results<NotFound, Ok>;
 
 [Handler]
-[MapPut("api/faqs")]
+[MapGroup<ApiGroup>]
+[MapPut("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class UpdateFaq(ApplicationDbContext context)
 {

@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Roles;
 using ReturnType = Results<Ok<RoleDto>, NotFound>;
 
 [Handler]
-[MapGet("api/roles/{roleId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("roles/{roleId:long}")]
 public sealed partial class GetRoleById(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.ClubJoin;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 
 [Handler]
-[MapPost("api/clubjoin")]
+[MapGroup<ApiGroup>]
+[MapPost("clubjoin")]
 [Authorize]
 public sealed partial class JoinClub(ApplicationDbContext context, IUserService userService)
 {

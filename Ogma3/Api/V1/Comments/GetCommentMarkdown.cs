@@ -10,7 +10,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<Ok<string>, NotFound>;
 
 [Handler]
-[MapGet("api/comments/{commentId:int}/md")]
+[MapGroup<ApiGroup>]
+[MapGet("comments/{commentId:int}/md")]
 public sealed partial class GetCommentMarkdown(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.Users;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 
 [Handler]
-[MapDelete("api/users/block")]
+[MapGroup<ApiGroup>]
+[MapDelete("users/block")]
 [Authorize]
 public sealed partial class UnblockUser(ApplicationDbContext context, IUserService userService)
 {

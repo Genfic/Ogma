@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Shelves;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<long>, NotFound>;
 
 [Handler]
-[MapDelete("api/shelves/{shelfId:long}")]
+[MapGroup<ApiGroup>]
+[MapDelete("shelves/{shelfId:long}")]
 [Authorize]
 public sealed partial class DeleteShelf(ApplicationDbContext context, IUserService userService)
 {

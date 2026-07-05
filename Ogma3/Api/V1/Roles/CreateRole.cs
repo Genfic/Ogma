@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Roles;
 using ReturnType = Results<Conflict<string>, CreatedAtRoute<RoleDto>>;
 
 [Handler]
-[MapPost("api/roles")]
+[MapGroup<ApiGroup>]
+[MapPost("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class CreateRole(RoleManager<OgmaRole> roleManager)
 {

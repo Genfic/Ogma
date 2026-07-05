@@ -13,7 +13,8 @@ namespace Ogma3.Api.Rss;
 using ReturnType = Results<RssResult, InternalServerError>;
 
 [Handler]
-[MapGet("rss/blogposts")]
+[MapGroup<RssGroup>]
+[MapGet("blogposts")]
 public sealed partial class GetBlogpostsRssFeed
 	(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
 {

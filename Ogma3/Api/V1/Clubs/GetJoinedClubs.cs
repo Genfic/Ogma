@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Clubs;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<GetJoinedClubs.Response[]>>;
 
 [Handler]
-[MapGet("api/clubs/user")]
+[MapGroup<ApiGroup>]
+[MapGet("clubs/user")]
 public sealed partial class GetJoinedClubs(ApplicationDbContext context, IUserService userService)
 {
 

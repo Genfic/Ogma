@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<CommentDto>>;
 
 [Handler]
-[MapGet("api/comments/{commentId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("comments/{commentId:long}")]
 public sealed partial class GetComment(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

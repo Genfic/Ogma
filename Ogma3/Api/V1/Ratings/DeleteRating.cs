@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Ratings;
 using ReturnType = Results<Ok<long>, NotFound>;
 
 [Handler]
-[MapDelete("api/ratings/{ratingId:long}")]
+[MapGroup<ApiGroup>]
+[MapDelete("ratings/{ratingId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class DeleteRating(ApplicationDbContext context)
 {

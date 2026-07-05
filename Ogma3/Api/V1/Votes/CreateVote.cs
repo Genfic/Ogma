@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.Votes;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 
 [Handler]
-[MapPost("api/votes")]
+[MapGroup<ApiGroup>]
+[MapPost("votes")]
 [Authorize]
 public sealed partial class CreateVote(ApplicationDbContext context, IUserService userService)
 {

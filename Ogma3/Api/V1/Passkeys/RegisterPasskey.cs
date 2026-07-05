@@ -13,8 +13,9 @@ using ReturnType =
 	Results<BadRequest<string>, BadRequest<IEnumerable<string>>, InternalServerError, Ok<RegisterPasskey.Response>, NotFound>;
 
 [Handler]
+[MapGroup<ApiGroup>]
 [Authorize]
-[MapPost("api/passkeys/register")]
+[MapPost("passkeys/register")]
 public sealed partial class RegisterPasskey
 	(IHttpContextAccessor contextAccessor, SignInManager<OgmaUser> signInManager, OgmaUserManager userManager)
 {

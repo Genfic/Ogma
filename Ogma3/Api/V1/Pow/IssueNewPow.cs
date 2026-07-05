@@ -9,7 +9,8 @@ using Ogma3.Services.PowService;
 namespace Ogma3.Api.V1.Pow;
 
 [Handler]
-[MapGet("api/pow/issue")]
+[MapGroup<ApiGroup>]
+[MapGet("pow/issue")]
 [UsedImplicitly]
 public sealed partial class IssueNewPow(PowService powService, OgmaConfig config)
 {

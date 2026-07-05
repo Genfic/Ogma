@@ -10,7 +10,8 @@ namespace Ogma3.Api.V1.Ratings;
 using ReturnType = Ok<RatingApiDto[]>;
 
 [Handler]
-[MapGet("api/ratings")]
+[MapGroup<ApiGroup>]
+[MapGet("ratings")]
 public sealed partial class GetAllRatings(ApplicationDbContext context)
 {
 

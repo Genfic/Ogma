@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.InviteCodes;
 using ReturnType = Ok<InviteCodeDto[]>;
 
 [Handler]
-[MapGet("api/InviteCodes/paginated")]
+[MapGroup<ApiGroup>]
+[MapGet("InviteCodes/paginated")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed partial class GetPaginatedInviteCodes(ApplicationDbContext context)
 {

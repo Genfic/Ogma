@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.ShelfStories;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<RemoveBookFromShelf.Result>>;
 
 [Handler]
-[MapDelete("api/ShelfStories")]
+[MapGroup<ApiGroup>]
+[MapDelete("ShelfStories")]
 [Authorize]
 public sealed partial class RemoveBookFromShelf(ApplicationDbContext context, IUserService userService)
 {

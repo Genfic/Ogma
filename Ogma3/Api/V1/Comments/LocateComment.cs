@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<Ok<LocateComment.Response>, NotFound>;
 
 [Handler]
-[MapGet("api/comments/locate")]
+[MapGroup<ApiGroup>]
+[MapGet("comments/locate")]
 [UsedImplicitly]
 public sealed partial class LocateComment(ApplicationDbContext context, OgmaConfig config, SqidsEncoder<long> sqids)
 {

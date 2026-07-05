@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.Faqs;
 using ReturnType = CreatedAtRoute<FaqDto>;
 
 [Handler]
-[MapPost("api/faqs")]
+[MapGroup<ApiGroup>]
+[MapPost("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class CreateFaq(ApplicationDbContext context)
 {

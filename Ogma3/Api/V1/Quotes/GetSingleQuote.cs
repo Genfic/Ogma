@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Quotes;
 using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 
 [Handler]
-[MapGet("api/quotes/{id:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("quotes/{id:long}")]
 public sealed partial class GetSingleQuote(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

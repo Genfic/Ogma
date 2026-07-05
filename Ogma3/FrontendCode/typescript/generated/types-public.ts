@@ -149,7 +149,7 @@ export type GetJoinedClubsResponse = {
     icon: string;
 };
 
-export type GetPaginatedUserShelvesResult = {
+export type GetPaginatedCurrentUserShelvesResult = {
     id: number;
     name: string;
     color: string | null;

@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Faqs;
 using ReturnType = Results<NotFound, Ok<FaqDto>>;
 
 [Handler]
-[MapGet("api/faqs/{faqId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("faqs/{faqId:long}")]
 public sealed partial class GetSingleFaq(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

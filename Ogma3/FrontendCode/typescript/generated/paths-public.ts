@@ -24,7 +24,7 @@ import type {
 	GetCurrentUserQuickShelvesResult,
 	GetFolderResult,
 	GetJoinedClubsResponse,
-	GetPaginatedUserShelvesResult,
+	GetPaginatedCurrentUserShelvesResult,
 	GetRevisionResult,
 	GetSignInDataResult,
 	GetTagNamespacesNamespaceDto,
@@ -373,7 +373,7 @@ export const GetApiRoles = async (headers?: HeadersInit, options?: RequestInit) 
     options,
 );
 
-export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetPaginatedUserShelvesResult[]; 400: undefined; 401: undefined }, undefined>(`/api/ShelfStories/${storyId}?page=${_enc(page)}`,
+export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetPaginatedCurrentUserShelvesResult[]; 400: undefined; 401: undefined }, undefined>(`/api/ShelfStories/${storyId}?page=${_enc(page)}`,
     GET,
     undefined,
     headers,
@@ -436,7 +436,7 @@ export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, op
     options,
 );
 
-export const GetApiTestThree = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 404: undefined }, undefined>("/api/test-three",
+export const GetApiTestThree = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string[]; 404: undefined }, undefined>("/api/test-three",
     GET,
     undefined,
     headers,

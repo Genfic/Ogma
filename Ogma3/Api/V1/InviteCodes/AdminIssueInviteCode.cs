@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.InviteCodes;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 
 [Handler]
-[MapPost("api/InviteCodes/no-limit")]
+[MapGroup<ApiGroup>]
+[MapPost("InviteCodes/no-limit")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed partial class AdminIssueInviteCode(ApplicationDbContext context, ICodeGenerator codeGenerator, IUserService userService)
 {

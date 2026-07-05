@@ -8,7 +8,8 @@ using Ogma3.Data.Roles;
 namespace Ogma3.Api.V1.Roles;
 
 [Handler]
-[MapGet("api/roles")]
+[MapGroup<ApiGroup>]
+[MapGet("roles")]
 public sealed partial class GetAllRoles(ApplicationDbContext context)
 {
 

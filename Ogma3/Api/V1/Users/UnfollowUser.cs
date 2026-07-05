@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.Users;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 
 [Handler]
-[MapDelete("api/users/follow")]
+[MapGroup<ApiGroup>]
+[MapDelete("users/follow")]
 [Authorize]
 public sealed partial class UnfollowUser(ApplicationDbContext context, IUserService userService)
 {

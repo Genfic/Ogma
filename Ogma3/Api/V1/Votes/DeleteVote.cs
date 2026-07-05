@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.Votes;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>, NotFound>;
 
 [Handler]
-[MapDelete("api/votes")]
+[MapGroup<ApiGroup>]
+[MapDelete("votes")]
 [Authorize]
 public sealed partial class DeleteVote(ApplicationDbContext context, IUserService userService)
 {

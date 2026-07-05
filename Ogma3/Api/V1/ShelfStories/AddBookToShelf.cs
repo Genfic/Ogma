@@ -13,7 +13,8 @@ namespace Ogma3.Api.V1.ShelfStories;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<AddBookToShelf.Result>>;
 
 [Handler]
-[MapPost("api/ShelfStories")]
+[MapGroup<ApiGroup>]
+[MapPost("ShelfStories")]
 [Authorize]
 public sealed partial class AddBookToShelf(ApplicationDbContext context, IUserService userService)
 {

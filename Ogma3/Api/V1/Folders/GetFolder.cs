@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Folders;
 using ReturnType = Results<Ok<GetFolder.Result[]>, UnauthorizedHttpResult>;
 
 [Handler]
-[MapGet("api/folders")]
+[MapGroup<ApiGroup>]
+[MapGet("folders")]
 public sealed partial class GetFolder(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

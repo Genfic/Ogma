@@ -13,8 +13,9 @@ namespace Ogma3.Api.V1.Passkeys;
 using ReturnType = Results<ContentHttpResult, InternalServerError, NotFound>;
 
 [Handler]
+[MapGroup<ApiGroup>]
 [Authorize]
-[MapGet("api/passkeys/options")]
+[MapGet("passkeys/options")]
 public sealed partial class GetPasskeyCreationOptions
 	(IHttpContextAccessor contextAccessor, SignInManager<OgmaUser> signInManager, OgmaUserManager userManager)
 {

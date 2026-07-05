@@ -10,7 +10,8 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 namespace Ogma3.Api.V1.Tags;
 
 [Handler]
-[MapGet("api/tags/all")]
+[MapGroup<ApiGroup>]
+[MapGet("tags/all")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 public sealed partial class GetAllTags(ApplicationDbContext context)
 {

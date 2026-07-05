@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Tags;
 using ReturnType = Results<Ok<TagDto[]>, NotFound>;
 
 [Handler]
-[MapGet("api/tags/story/{storyId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("tags/story/{storyId:long}")]
 public sealed partial class GetStoryTags(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)

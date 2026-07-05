@@ -14,7 +14,8 @@ namespace Ogma3.Api.V1.InviteCodes;
 using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, Ok<InviteCodeDto>>;
 
 [Handler]
-[MapPost("api/InviteCodes")]
+[MapGroup<ApiGroup>]
+[MapPost("InviteCodes")]
 [Authorize]
 public sealed partial class IssueInviteCode
 	(ApplicationDbContext context, OgmaConfig config, ICodeGenerator codeGenerator, IUserService userService)

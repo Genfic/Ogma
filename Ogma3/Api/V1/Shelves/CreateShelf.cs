@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Shelves;
 using ReturnType = Results<CreatedAtRoute<ShelfDto>, UnauthorizedHttpResult>;
 
 [Handler]
-[MapPost("api/shelves")]
+[MapGroup<ApiGroup>]
+[MapPost("shelves")]
 [Authorize]
 public sealed partial class CreateShelf(ApplicationDbContext context, IUserService userService)
 {

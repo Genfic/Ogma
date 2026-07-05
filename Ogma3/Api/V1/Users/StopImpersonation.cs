@@ -16,7 +16,8 @@ using ReturnType = Results<RedirectHttpResult, BadRequest<string>, NotFound>;
 
 [Handler]
 [Authorize]
-[MapGet("api/users/stop-impersonation")]
+[MapGroup<ApiGroup>]
+[MapGet("users/stop-impersonation")]
 public sealed partial class StopImpersonation
 (
 	OgmaUserManager userManager,

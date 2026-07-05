@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.UserActivity;
 using ReturnType = Results<Ok<int>, NoContent>;
 
 [Handler]
-[MapMethod("HEAD", "api/useractivity")]
+[MapGroup<ApiGroup>]
+[MapMethod("HEAD", "useractivity")]
 public sealed partial class UpdateLastActive(ApplicationDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

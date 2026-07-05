@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1;
 using ReturnType = Results<Ok<List<string>>, NotFound>;
 
 [Handler]
-[MapGet("api/test-three")]
+[MapGroup<ApiGroup>]
+[MapGet("test-three")]
 public sealed partial class TestThree(OgmaConfig config, ApplicationDbContext ctx)
 {
 	private async ValueTask<ReturnType> Handle(Query q, CancellationToken ct)

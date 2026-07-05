@@ -15,7 +15,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<UpdateComment.Response>>;
 
 [Handler]
-[MapPatch("api/comments")]
+[MapGroup<ApiGroup>]
+[MapPatch("comments")]
 [Authorize]
 public sealed partial class UpdateComment(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {

@@ -7,7 +7,8 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Api.V1.Tags;
 
 [Handler]
-[MapGet("api/tags/namespaces")]
+[MapGroup<ApiGroup>]
+[MapGet("tags/namespaces")]
 public static partial class GetTagNamespaces
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetTagNamespaces));

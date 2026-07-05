@@ -20,7 +20,8 @@ namespace Ogma3.Api.V1.Comments;
 using ReturnType = Results<Ok<PaginationResult<CommentDto>>, NotModifiedResult, NotFound>;
 
 [Handler]
-[MapGet("api/comments")]
+[MapGroup<ApiGroup>]
+[MapGet("comments")]
 public sealed partial class GetPaginatedComments
 (
 	ApplicationDbContext context,

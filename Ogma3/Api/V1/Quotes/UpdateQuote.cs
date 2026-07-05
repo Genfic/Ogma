@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Quotes;
 using ReturnType = Results<Ok, NotFound>;
 
 [Handler]
-[MapPut("api/quotes")]
+[MapGroup<ApiGroup>]
+[MapPut("quotes")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class UpdateQuote(ApplicationDbContext context)
 {

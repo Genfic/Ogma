@@ -11,7 +11,8 @@ namespace Ogma3.Api.V1.Tags;
 using ReturnType = Results<Ok<TagDto>, NotFound>;
 
 [Handler]
-[MapGet("api/tags/{tagId:long}")]
+[MapGroup<ApiGroup>]
+[MapGet("tags/{tagId:long}")]
 public sealed partial class GetSingleTag(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

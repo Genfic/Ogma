@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Quotes;
 using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 
 [Handler]
-[MapGet("api/quotes/random")]
+[MapGroup<ApiGroup>]
+[MapGet("quotes/random")]
 public sealed partial class GetRandomQuote(ApplicationDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)

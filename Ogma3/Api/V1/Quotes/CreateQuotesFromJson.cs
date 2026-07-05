@@ -12,7 +12,8 @@ namespace Ogma3.Api.V1.Quotes;
 using ResponseType = Ok<int>;
 
 [Handler]
-[MapPost("api/quotes/json")]
+[MapGroup<ApiGroup>]
+[MapPost("quotes/json")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed partial class CreateQuotesFromJson(ApplicationDbContext context)
 {

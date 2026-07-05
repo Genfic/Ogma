@@ -18,7 +18,8 @@ namespace Ogma3.Api.V1.InviteCodes;
 using ReturnType = Results<UnauthorizedHttpResult, Ok<string>>;
 
 [Handler]
-[MapGet("api/generate-invite-code")]
+[MapGroup<ApiGroup>]
+[MapGet("generate-invite-code")]
 [UsedImplicitly]
 public sealed partial class IssueInviteCodeExternal
 (
