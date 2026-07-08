@@ -28,6 +28,7 @@ public static class SecurityHeaderPolicies
 						.Self()
 						.UnsafeInline();
 					csp.AddObjectSrc()
+						.Self()
 						.None();
 					csp.AddFormAction()
 						.Self();
@@ -35,7 +36,14 @@ public static class SecurityHeaderPolicies
 						.None();
 					csp.AddScriptSrc()
 						.Self()
-						.WithNonce();
+						.From("https://challenges.cloudflare.com")
+						.WithNonce()
+						.StrictDynamic();
+					csp.AddFrameSrc()
+						.From("https://challenges.cloudflare.com");
+					csp.AddConnectSrc()
+						.Self()
+						.From("https://cloudflareinsights.com");
 				});
 			});
 
