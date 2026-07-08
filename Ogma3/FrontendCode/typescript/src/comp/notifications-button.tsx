@@ -1,7 +1,7 @@
-import LucideBell from "icon:lucide:bell";
 import { GetApiNotificationsCount as countNotifications } from "@g/paths-public";
 import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
+import LucideBell from "icon:lucide:bell";
 import type { ComponentType } from "solid-element";
 import { createResource, Show } from "solid-js";
 import css from "./notifications-button.css";

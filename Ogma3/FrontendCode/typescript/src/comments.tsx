@@ -1,13 +1,13 @@
-import LucideCircleHelp from "icon:lucide:circle-question-mark";
-import LucideMessageSquarePlus from "icon:lucide:message-square-plus";
-import MdiLockOpenVariantOutline from "icon:mdi:lock-open-variant-outline";
-import MdiLockOutline from "icon:mdi:lock-outline";
 import { Comment } from "@g/ctconfig";
 import { GetApiCommentsThread, GetApiPowIssue, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
 import { minePow, type PowResult } from "@h/pow";
 import { component } from "@h/web-components";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
+import LucideCircleHelp from "icon:lucide:circle-question-mark";
+import LucideMessageSquarePlus from "icon:lucide:message-square-plus";
+import MdiLockOpenVariantOutline from "icon:mdi:lock-open-variant-outline";
+import MdiLockOutline from "icon:mdi:lock-outline";
 import { noShadowDOM } from "solid-element";
 import { createEffect, createResource, Show } from "solid-js";
 import { CommentList, type CommentListFunctions } from "./comments/comment-list";

@@ -24,7 +24,7 @@
 			position: sticky;
 			top: calc(var(--dynamic-nav-height) + 1rem);
 			align-self: start;
-			transition: top .2s ease-in-out;
+			transition: top 0.2s ease-in-out;
 
 			@media (width <= v.$mq-mobile) {
 				position: relative;
@@ -46,7 +46,7 @@
 	display: grid;
 	grid-template-columns: auto 2fr auto 1fr;
 	align-items: center;
-	gap: .25rem 1rem;
+	gap: 0.25rem 1rem;
 
 	img {
 		aspect-ratio: 1;
@@ -72,10 +72,12 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		gap: .5rem;
-		padding: .5rem 0;
+		gap: 0.5rem;
+		padding: 0.5rem 0;
 		border: 2px solid var(--foreground-50);
-		box-shadow: 0 0 0 2px var(--background), 0 0 0 3px var(--foreground-50);
+		box-shadow:
+			0 0 0 2px var(--background),
+			0 0 0 3px var(--foreground-50);
 		outline-offset: 1px;
 		font-size: 1.1rem;
 		background-color: var(--bg);
@@ -94,12 +96,14 @@
 }
 
 @keyframes highlight {
-	0%, 25% {
+	0%,
+	25% {
 		font-weight: 800;
-		letter-spacing: .1rem;
+		letter-spacing: 0.1rem;
 	}
 
-	25.01%, 100% {
+	25.01%,
+	100% {
 		font-weight: 400;
 		letter-spacing: 0;
 	}

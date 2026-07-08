@@ -1,11 +1,10 @@
-
 .folder-minimal {
 	display: flex;
 	flex-direction: row;
-	padding: .5rem;
+	padding: 0.5rem;
 
 	.icon {
-		margin-right: .5rem;
+		margin-right: 0.5rem;
 	}
 
 	.name {
@@ -27,7 +26,7 @@
 
 		strong {
 			font-size: 110%;
-			margin-right: .5ch;
+			margin-right: 0.5ch;
 		}
 	}
 }

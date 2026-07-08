@@ -4,7 +4,7 @@
 .md {
 	// Paragraphs
 	p {
-		margin-bottom: .5rem;
+		margin-bottom: 0.5rem;
 
 		&:last-child {
 			margin-bottom: 0;
@@ -30,13 +30,14 @@
 	}
 
 	mark {
-		--slant: .4em;
+		--slant: 0.4em;
 
 		position: relative;
 		background-color: var(--accent-25);
 		color: var(--foreground);
 
-		&::before, &::after {
+		&::before,
+		&::after {
 			position: absolute;
 			top: 0;
 			bottom: 0;
@@ -58,16 +59,21 @@
 	}
 
 	// Headers
-	h1, h2, h3, h4, h5, h6 {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		scroll-margin-top: calc(var(--nav-height) + (var(--nav-v-pad) * 2) * 1.5);
-		margin-bottom: .25rem;
-		margin-top: .5rem;
+		margin-bottom: 0.25rem;
+		margin-top: 0.5rem;
 	}
 
 	@for $level from 1 to 7 {
 		h#{$level} {
-			font-size: #{1 + ((6 - $level) * .2)}rem;
-			margin-top: #{((math.div((7 - $level) - 1 , 6 - 1)) * (2 - 1)) + 1}rem; // Normalize to [1rem, 2rem] range
+			font-size: #{1 + ((6 - $level) * 0.2)}rem;
+			margin-top: #{((math.div((7 - $level) - 1, 6 - 1)) * (2 - 1)) + 1}rem; // Normalize to [1rem, 2rem] range
 		}
 	}
 
@@ -83,9 +89,9 @@
 		position: relative;
 		width: max-content;
 		color: var(--foreground-75);
-		font-size: .95rem;
-		padding: .1rem .2rem;
-		border-radius: .2rem;
+		font-size: 0.95rem;
+		padding: 0.1rem 0.2rem;
+		border-radius: 0.2rem;
 		@include ab.active-border;
 
 		> code {
@@ -98,8 +104,8 @@
 	// Quote
 	blockquote {
 		font-style: italic;
-		padding-left: .5rem;
-		margin: .5rem .5rem .5rem 1ch;
+		padding-left: 0.5rem;
+		margin: 0.5rem 0.5rem 0.5rem 1ch;
 		border-left: 2px solid var(--foreground-10);
 
 		&:hover {
@@ -109,7 +115,7 @@
 
 	// Table
 	table {
-		margin: .5rem 0;
+		margin: 0.5rem 0;
 		border-collapse: collapse;
 
 		tbody {
@@ -127,12 +133,13 @@
 		}
 
 		td {
-			padding: .5rem;
+			padding: 0.5rem;
 		}
 	}
 
-	ul, ol {
-		margin: .5rem 0;
+	ul,
+	ol {
+		margin: 0.5rem 0;
 	}
 
 	a[href^="https://" i],
@@ -141,7 +148,7 @@
 			&::after {
 				content: "🡭";
 				display: inline-block;
-				font-size: .9rem;
+				font-size: 0.9rem;
 			}
 		}
 	}
@@ -152,7 +159,9 @@
 		background-color: var(--foreground-50);
 		border-bottom: 1px dotted var(--foreground);
 		cursor: help;
-		transition: color 50ms ease-in-out, background-color 50ms ease-in-out;
+		transition:
+			color 50ms ease-in-out,
+			background-color 50ms ease-in-out;
 
 		&::selection {
 			color: transparent;

@@ -5,7 +5,7 @@ export const useClickOutside = (element: ICustomElement, callback: () => void) =
 	const handleClick = (event: MouseEvent) => {
 		const root = element.renderRoot;
 		const path = event.composedPath();
-		if (root && !path.includes(root as EventTarget)) {
+		if (root && !path.includes(root)) {
 			callback();
 		}
 	};

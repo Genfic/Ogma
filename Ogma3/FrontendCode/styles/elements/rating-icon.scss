@@ -8,6 +8,7 @@
 
 	.icon {
 		height: 20px;
-		filter: drop-shadow(1px 0 0 var(--background)) drop-shadow(0 1px 0 var(--background)) drop-shadow(-1px 0 0 var(--background)) drop-shadow(0 -1px 0 var(--background));
+		filter: drop-shadow(1px 0 0 var(--background)) drop-shadow(0 1px 0 var(--background))
+			drop-shadow(-1px 0 0 var(--background)) drop-shadow(0 -1px 0 var(--background));
 	}
 }

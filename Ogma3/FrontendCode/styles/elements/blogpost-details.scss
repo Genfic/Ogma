@@ -1,5 +1,4 @@
-
-@use '../mixins/focus' as f;
+@use "../mixins/focus" as f;
 
 .blogpost-details {
 	display: flex;
@@ -10,7 +9,7 @@
 
 	> .title {
 		text-align: center;
-		margin: .5rem;
+		margin: 0.5rem;
 	}
 
 	.date {
@@ -23,7 +22,7 @@
 	}
 
 	.actions {
-		margin: .5rem 0;
+		margin: 0.5rem 0;
 		display: flex;
 		justify-content: center;
 
@@ -46,7 +45,7 @@
 		display: flex;
 
 		> .tag {
-			padding: .25rem;
+			padding: 0.25rem;
 			text-decoration: none;
 			@include f.focus;
 
@@ -56,7 +55,7 @@
 
 			> .name {
 				&::before {
-					content: '#';
+					content: "#";
 					color: var(--foreground-50);
 				}
 			}
@@ -64,8 +63,8 @@
 	}
 
 	.unavailable {
-		padding: .5rem;
-		margin: .5rem 0;
+		padding: 0.5rem;
+		margin: 0.5rem 0;
 		background-color: var(--red-10);
 	}
 }

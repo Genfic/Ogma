@@ -35,14 +35,14 @@
 		top: calc(var(--dynamic-nav-height) + 1rem);
 		display: flex;
 		flex-direction: column;
-		padding: .5rem;
-		transition: top .2s ease-in-out;
+		padding: 0.5rem;
+		transition: top 0.2s ease-in-out;
 		background-color: var(--background);
 		@include ab.active-border;
 
 		.toc-h {
 			font-size: 1rem;
-			margin: .25rem 0;
+			margin: 0.25rem 0;
 
 			&:first-child {
 				margin-top: 0;
@@ -54,7 +54,7 @@
 
 			@for $level from 1 to 6 {
 				&.h#{$level} {
-					margin-left: #{($level - 1) * .5}rem;
+					margin-left: #{($level - 1) * 0.5}rem;
 				}
 			}
 		}
@@ -80,9 +80,9 @@
 			}
 
 			span.current {
-				font-size: .7rem;
-				padding: .1rem .5rem;
-				margin-left: .5rem;
+				font-size: 0.7rem;
+				padding: 0.1rem 0.5rem;
+				margin-left: 0.5rem;
 				border-radius: 1vw;
 				text-transform: uppercase;
 				color: var(--foreground-75);

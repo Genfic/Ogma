@@ -9,7 +9,7 @@
 	left: 0;
 	right: 0;
 	background-color: var(--ele-1);
-	padding: .2rem;
+	padding: 0.2rem;
 	border-top: 1px solid var(--foreground-50);
 	text-align: center;
 	z-index: 999;
@@ -26,11 +26,11 @@
 	}
 
 	span {
-		margin: 0 .5rem;
+		margin: 0 0.5rem;
 	}
 
 	button#cookie-consent-button {
-		padding: .1rem .5rem;
+		padding: 0.1rem 0.5rem;
 		display: inline-block;
 	}
 }

@@ -1,8 +1,7 @@
-
 .minimal {
 	display: flex;
 	flex-direction: column;
-	padding: .5rem;
+	padding: 0.5rem;
 	color: var(--foreground);
 
 	&:hover {
@@ -31,9 +30,9 @@
 		align-items: center;
 
 		i.dot {
-			margin: .5rem;
-			width: .25rem;
-			height: .25rem;
+			margin: 0.5rem;
+			width: 0.25rem;
+			height: 0.25rem;
 			border-radius: 50%;
 			background-color: var(--bc, var(--foreground-75));
 		}

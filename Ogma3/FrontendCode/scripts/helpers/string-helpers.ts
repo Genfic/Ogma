@@ -37,5 +37,4 @@ export const dedent = (strings: TemplateStringsArray, ...values: unknown[]) => {
 	}
 
 	return lines.join("\n");
-}
-;
+};

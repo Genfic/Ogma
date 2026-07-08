@@ -1,11 +1,11 @@
-import LucidePencil from "icon:lucide:pencil";
-import LucideShieldHalf from "icon:lucide:shield-half";
-import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiRoles, GetApiRoles, PostApiRoles, PutApiRoles } from "@g/paths-public";
 import type { RoleDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { getFormData } from "@h/form-helpers";
 import { checkboxBool, strippedHexColor } from "@h/valibot-schemas";
+import LucidePencil from "icon:lucide:pencil";
+import LucideShieldHalf from "icon:lucide:shield-half";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";

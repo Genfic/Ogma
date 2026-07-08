@@ -1,5 +1,5 @@
-import LucideX from "icon:lucide:x";
 import { createEventDispatcher } from "@solid-primitives/event-dispatcher";
+import LucideX from "icon:lucide:x";
 import { createUniqueId, type JSX, onMount, type ParentComponent, type ParentProps, Show } from "solid-js";
 
 export type DialogApi = {

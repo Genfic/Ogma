@@ -1,5 +1,3 @@
-import LucidePencil from "icon:lucide:pencil";
-import LucideTrash2 from "icon:lucide:trash2";
 import { Tag as TagConfig } from "@g/ctconfig";
 import {
 	DeleteApiTags,
@@ -14,6 +12,8 @@ import { $id } from "@h/dom";
 import { getFormData } from "@h/form-helpers";
 import clsx from "clsx";
 import { compact, sortBy } from "es-toolkit";
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash2";
 import { createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";

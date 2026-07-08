@@ -1,6 +1,5 @@
 @use "../mixins/active-border.scss" as ab;
 
-
 .active-border {
 	@include ab.active-border;
 }
@@ -18,7 +17,7 @@
 }
 
 .box-shadow {
-	box-shadow: 0 .25rem .75rem rgb(0 0 0 / 5%);
+	box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 5%);
 }
 
 [v-cloak] {

@@ -1,14 +1,13 @@
-
 .modtools {
 	display: flex;
 	width: 100%;
-	padding: .5rem;
+	padding: 0.5rem;
 	background: repeating-linear-gradient(
-			-45deg,
-			var(--foreground-10),
-			var(--foreground-10) 15px,
-			transparent 16px,
-			transparent 30px
+		-45deg,
+		var(--foreground-10),
+		var(--foreground-10) 15px,
+		transparent 16px,
+		transparent 30px
 	);
 
 	span {

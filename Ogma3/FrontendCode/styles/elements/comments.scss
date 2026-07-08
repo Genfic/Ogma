@@ -1,4 +1,4 @@
-@use '../mixins/active-border' as ab;
+@use "../mixins/active-border" as ab;
 @use "../vars" as v;
 
 $btn-height: 2.5rem;
@@ -18,7 +18,7 @@ $btn-height: 2.5rem;
 
 	> .info {
 		@include ab.active-border;
-		margin-bottom: .5rem;
+		margin-bottom: 0.5rem;
 		padding: 1rem;
 		background-color: var(--ele-1);
 	}
@@ -29,7 +29,7 @@ $btn-height: 2.5rem;
 		margin-bottom: 1rem;
 
 		> .comment-box {
-			padding: .5rem;
+			padding: 0.5rem;
 			min-height: 5rem;
 			background-color: var(--foreground-10);
 			color: var(--foreground);
@@ -37,11 +37,11 @@ $btn-height: 2.5rem;
 		}
 
 		> .counter {
-			font-size: .8rem;
+			font-size: 0.8rem;
 		}
 
 		> .buttons {
-			margin-top: .1rem;
+			margin-top: 0.1rem;
 			display: flex;
 
 			> * {
@@ -76,7 +76,7 @@ $btn-height: 2.5rem;
 		display: flex;
 
 		> button {
-			padding: .25rem .5rem;
+			padding: 0.25rem 0.5rem;
 
 			o-icon {
 				display: flex;
@@ -91,20 +91,21 @@ $btn-height: 2.5rem;
 	}
 
 	> .comments {
-		padding-top: .5rem;
+		padding-top: 0.5rem;
 
 		.snip {
 			width: 100%;
 			display: flex;
 			flex-direction: row;
-			margin: .5rem 0;
+			margin: 0.5rem 0;
 			color: var(--foreground-50);
 
 			&:hover {
 				color: var(--foreground);
 			}
 
-			&::before, &::after {
+			&::before,
+			&::after {
 				content: "";
 				flex: 1 1;
 				border-bottom: 2px solid var(--foreground-50);
@@ -112,17 +113,17 @@ $btn-height: 2.5rem;
 			}
 
 			&::before {
-				margin-right: .5rem;
+				margin-right: 0.5rem;
 			}
 
 			&::after {
-				margin-left: .5rem;
+				margin-left: 0.5rem;
 			}
 		}
 
 		.no-comments {
 			@include ab.active-border;
-			padding: .25rem .5rem;
+			padding: 0.25rem 0.5rem;
 			width: 100%;
 			display: block;
 			text-align: center;

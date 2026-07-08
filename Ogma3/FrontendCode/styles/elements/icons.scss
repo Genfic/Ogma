@@ -1,3 +1,4 @@
-svg[part="icon"], ::part(icon) {
+svg[part="icon"],
+::part(icon) {
 	pointer-events: none;
 }

@@ -1,5 +1,5 @@
-import LucideTrash2 from "icon:lucide:trash-2";
 import { $query } from "@h/dom";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { render } from "solid-js/web";
 
 const table = $query("table.credits-table > tbody");

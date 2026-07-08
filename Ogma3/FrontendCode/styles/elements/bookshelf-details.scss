@@ -1,26 +1,26 @@
-
 #bookshelf-details {
 	.details {
 		display: grid;
-		grid: "icon name" auto
-			  "icon desc" auto
-			  / auto 1fr;
-		gap: .25rem 1rem;
+		grid:
+			"icon name" auto
+			"icon desc" auto
+			/ auto 1fr;
+		gap: 0.25rem 1rem;
 		align-items: center;
-		margin-bottom: .5rem;
-		padding-bottom: .5rem;
-		border-bottom: .5rem solid var(--shelf-color);
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 0.5rem solid var(--shelf-color);
 
 		.icon {
 			grid-area: icon;
 			color: var(--foreground);
 			border-radius: 999px;
 			background-color: var(--background);
-			border: .5rem solid var(--shelf-color);
+			border: 0.5rem solid var(--shelf-color);
 
 			svg {
 				display: block;
-				margin: .5rem;
+				margin: 0.5rem;
 				border: none;
 				height: 30px;
 				width: 30px;
@@ -29,7 +29,7 @@
 
 		.name {
 			grid-area: name;
-			padding-bottom: .5rem;
+			padding-bottom: 0.5rem;
 		}
 
 		.desc {

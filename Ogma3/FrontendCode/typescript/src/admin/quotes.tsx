@@ -1,11 +1,11 @@
-import LucidePencil from "icon:lucide:pencil";
-import LucidePlus from "icon:lucide:plus";
-import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiQuotes, GetAllQuotes, PostApiQuotes, PostApiQuotesJson, PutApiQuotes } from "@g/paths-public";
 import type { FullQuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { getFormData } from "@h/form-helpers";
 import { makeEmpty } from "@h/type-helpers";
+import LucidePencil from "icon:lucide:pencil";
+import LucidePlus from "icon:lucide:plus";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";

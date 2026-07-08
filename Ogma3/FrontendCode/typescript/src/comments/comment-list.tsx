@@ -66,7 +66,7 @@ export const CommentList: Component<Props> = (props) => {
 		const data = commentsData();
 		if (commentsData.state === "ready" && data) {
 			return data.elements.map(
-				(c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }) as CommentDto,
+				(c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }),
 			);
 		}
 		return prev ?? [];

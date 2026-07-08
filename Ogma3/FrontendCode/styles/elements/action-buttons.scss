@@ -1,12 +1,12 @@
-@use '../mixins/active-border' as ab;
+@use "../mixins/active-border" as ab;
 @use "../vars" as v;
 
 .action-btn {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0 .5rem;
-	margin-right: .1rem;
+	padding: 0 0.5rem;
+	margin-right: 0.1rem;
 	background-color: var(--background-75);
 	color: var(--foreground-75);
 
@@ -21,7 +21,7 @@
 	}
 
 	&.large {
-		padding: .5rem;
+		padding: 0.5rem;
 	}
 
 	&.red {
@@ -47,7 +47,7 @@
 
 		&-hl {
 			&:hover {
-				background-color: var(--green-50)
+				background-color: var(--green-50);
 			}
 		}
 	}
@@ -56,7 +56,7 @@
 		font-size: inherit;
 
 		& + * {
-			margin-left: .5rem;
+			margin-left: 0.5rem;
 		}
 	}
 

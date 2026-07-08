@@ -1,4 +1,3 @@
-import LucideTrash2 from "icon:lucide:trash-2";
 import {
 	DeleteApiNotificationsAll as deleteAllNotifications,
 	DeleteApiNotifications as deleteNotification,
@@ -7,6 +6,7 @@ import {
 import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { long } from "@h/tinytime-templates";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { createResource, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
 

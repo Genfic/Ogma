@@ -299,7 +299,7 @@ const webTypesJson: Webtypes = {
 	"description-markup": "markdown",
 	contributions: {
 		html: {
-			elements: webTypesElements.sort(alphaBy((e) => e.name)),
+			elements: webTypesElements.toSorted(alphaBy((e) => e.name)),
 		},
 	},
 };

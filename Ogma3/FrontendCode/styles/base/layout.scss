@@ -6,9 +6,9 @@
 
 	// Sizes
 	--nav-height: 1.5rem;
-	--nav-v-pad: .8rem;
+	--nav-v-pad: 0.8rem;
 	--body-width: min(100%, calc(1000px + 5rem));
-	--body-padding-horizontal: clamp(1px, -2.0000rem + 8.0000vw, 3rem);
+	--body-padding-horizontal: clamp(1px, -2rem + 8vw, 3rem);
 }
 
 html {
@@ -23,9 +23,13 @@ html {
 body {
 	--dynamic-nav-height: calc(var(--nav-height) + var(--nav-v-pad) * 2);
 
-	font-family: 'Inter Variable', Inter, Arial, sans-serif;
+	font-family: "Inter Variable", Inter, Arial, sans-serif;
 	font-weight: 350;
-	font-feature-settings: 'dlig' 1, 'ss01' 1, 'ss03' 1, 'cv05' 1;
+	font-feature-settings:
+		"dlig" 1,
+		"ss01" 1,
+		"ss03" 1,
+		"cv05" 1;
 
 	display: flex;
 	flex-direction: column;
@@ -78,7 +82,7 @@ body {
 .o-grid {
 	display: grid;
 	width: 100%;
-	gap: .25rem;
+	gap: 0.25rem;
 	padding: 0;
 	margin: 0;
 	@media (width <= v.$mq-mobile) {

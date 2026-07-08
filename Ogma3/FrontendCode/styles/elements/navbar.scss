@@ -5,8 +5,8 @@ $burger-size: 48px;
 
 button#burger {
 	position: fixed;
-	bottom: .5rem;
-	right: .5rem;
+	bottom: 0.5rem;
+	right: 0.5rem;
 	background-color: var(--ele-1);
 	border: 1px solid var(--foreground-10);
 	border-radius: 50%;
@@ -39,19 +39,21 @@ nav#top-nav {
 	background-color: var(--ele-1);
 	border-bottom: 1px solid var(--foreground-50);
 
-	transition: padding-top .2s ease-in-out, padding-bottom .2s ease-in-out;
+	transition:
+		padding-top 0.2s ease-in-out,
+		padding-bottom 0.2s ease-in-out;
 
 	@media (width <= v.$mq-mobile) {
 		bottom: 0;
 		top: unset;
-		padding: .4rem 1rem;
+		padding: 0.4rem 1rem;
 		box-shadow: var(--shadow);
 		border-bottom: none;
 		border-top: 1px solid var(--foreground-50);
 	}
 	@media (width <= v.$mq-mobile-sm) {
 		flex-direction: column;
-		padding: .2rem .5rem;
+		padding: 0.2rem 0.5rem;
 		height: auto;
 		margin-bottom: -120%;
 		transition: margin-bottom 100ms ease-in-out;
@@ -66,23 +68,23 @@ nav#top-nav {
 	}
 
 	&.compact {
-		--pad: .1rem;
+		--pad: 0.1rem;
 		--font: 1.3rem;
 
 		@media (prefers-reduced-motion) {
 			height: var(--nav-height);
 		}
 		@media (width <= v.$mq-mobile) {
-			padding: .4rem 1rem;
+			padding: 0.4rem 1rem;
 		}
 		@media (width <= v.$mq-mobile-sm) {
-			padding: .2rem .5rem;
+			padding: 0.2rem 0.5rem;
 		}
 	}
 
 	.brand {
 		color: var(--foreground);
-		padding: 0 .5rem;
+		padding: 0 0.5rem;
 
 		margin-top: calc(-1 * var(--pad));
 		margin-bottom: calc(-1 * var(--pad));
@@ -92,12 +94,12 @@ nav#top-nav {
 		font-size: var(--font, 2rem);
 
 		display: flex;
-		gap: .5rex;
+		gap: 0.5rex;
 
 		align-items: center;
 		@include f.focus;
 
-		transition: all .2s ease-in-out;
+		transition: all 0.2s ease-in-out;
 
 		&:hover {
 			color: var(--foreground);
@@ -115,7 +117,7 @@ nav#top-nav {
 		flex-direction: row;
 
 		@media (width <= v.$mq-mobile-sm) {
-			padding: .2rem .5rem;
+			padding: 0.2rem 0.5rem;
 			flex-direction: column;
 
 			&.left {
@@ -166,7 +168,7 @@ nav#top-nav {
 				font-weight: 600;
 				background-color: var(--accent-25);
 				border: 1px solid var(--accent-50);
-				border-radius: .25rem;
+				border-radius: 0.25rem;
 
 				&:hover {
 					background-color: var(--accent-50);
@@ -176,7 +178,7 @@ nav#top-nav {
 
 			.nav-link {
 				position: relative;
-				padding: 0 .5rem;
+				padding: 0 0.5rem;
 				height: 100%;
 
 				display: flex;
@@ -197,7 +199,7 @@ nav#top-nav {
 				&.user {
 					> .name {
 						color: var(--foreground-75);
-						padding-left: .5ch;
+						padding-left: 0.5ch;
 					}
 				}
 
@@ -211,14 +213,14 @@ nav#top-nav {
 					color: var(--background);
 
 					font-weight: bold;
-					font-size: .8rem;
+					font-size: 0.8rem;
 
 					text-align: center;
 					line-height: 1;
 					height: 1rem;
 					min-width: 1rem;
 					border: 1px solid var(--background);
-					border-radius: .5rem;
+					border-radius: 0.5rem;
 				}
 			}
 		}

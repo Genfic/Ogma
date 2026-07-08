@@ -1,4 +1,3 @@
-import LucideEllipsisVertical from "icon:lucide:ellipsis-vertical";
 import {
 	PostApiShelfStories as addToShelf,
 	GetApiShelfStoriesQuick as getQuickShelves,
@@ -9,6 +8,7 @@ import type { GetCurrentUserQuickShelvesResult, GetPaginatedUserShelvesResult } 
 import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
+import LucideEllipsisVertical from "icon:lucide:ellipsis-vertical";
 import type { ComponentType } from "solid-element";
 import { createResource, For, type Setter, Show } from "solid-js";
 import { Icon } from "./common/Icon";

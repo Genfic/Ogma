@@ -9,7 +9,7 @@ export class Stopwatch {
 
 	lap(precision: number): { time: string; unit: string };
 	lap(): number;
-	lap(precision?: number | undefined): number | { time: string; unit: string } {
+	lap(precision?: number  ): number | { time: string; unit: string } {
 		const current = Bun.nanoseconds();
 		const time = current - this.start;
 		this.start = current;

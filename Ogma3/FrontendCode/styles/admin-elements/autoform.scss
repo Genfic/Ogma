@@ -3,7 +3,7 @@
 .autoform {
 	details {
 		margin-top: 1rem;
-		padding: .5rem;
+		padding: 0.5rem;
 		background-color: var(--foreground-10);
 		@include ab.active-border;
 
@@ -14,9 +14,8 @@
 
 		&[open] {
 			summary {
-				padding-bottom: .5rem;
+				padding-bottom: 0.5rem;
 			}
 		}
 	}
-
 }

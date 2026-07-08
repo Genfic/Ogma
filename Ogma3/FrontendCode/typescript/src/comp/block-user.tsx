@@ -1,7 +1,7 @@
-import IcRoundBlock from "icon:ic:round-block";
 import { PostApiUsersBlock as blockUser, DeleteApiUsersBlock as unblockUser } from "@g/paths-public";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
+import IcRoundBlock from "icon:ic:round-block";
 import type { Component } from "solid-js";
 import css from "./block-user.css";
 

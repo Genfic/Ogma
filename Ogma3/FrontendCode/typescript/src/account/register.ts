@@ -36,7 +36,7 @@ for (const input of formInputs) {
 	});
 	input.addEventListener("focusout", () => {
 		setTimeout(() => {
-			if (info.contains(document.activeElement as Node)) {
+			if (info.contains(document.activeElement)) {
 				return;
 			}
 			info.classList.remove(classname);

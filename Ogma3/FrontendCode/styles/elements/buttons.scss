@@ -8,7 +8,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: .5rem;
+	padding: 0.5rem;
 
 	@include ab.active-border;
 	@include f.focus;
@@ -62,10 +62,13 @@
 	}
 
 	@keyframes shimmer {
-		from { background-position: -800px 0; }
-		to { background-position: 800px 0; }
+		from {
+			background-position: -800px 0;
+		}
+		to {
+			background-position: 800px 0;
+		}
 	}
-
 }
 
 .btn-primary {
@@ -77,7 +80,7 @@
 		margin-top: -40px;
 		min-height: 40px;
 		background-color: color-mix(in oklab, var(--accent), var(--background) 25%);
-		outline: .25rem solid var(--background);
+		outline: 0.25rem solid var(--background);
 
 		&:not([disabled]):hover {
 			background-color: color-mix(in oklab, var(--accent), var(--background) 75%);

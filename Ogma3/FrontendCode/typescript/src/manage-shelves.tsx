@@ -1,10 +1,10 @@
-import LucidePencil from "icon:lucide:pencil";
-import LucideTrash2 from "icon:lucide:trash-2";
 import { Shelf } from "@g/ctconfig";
 import { DeleteApiShelves, GetApiShelves, PostApiShelves, PutApiShelves } from "@g/paths-public";
 import { component } from "@h/web-components";
 import type { ProblemDetails } from "@t/utils";
 import { omit } from "es-toolkit";
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { noShadowDOM } from "solid-element";
 import { createResource, For } from "solid-js";
 import { InputCounter } from "./comp/common/_input-counter";
@@ -75,14 +75,14 @@ const ManageShelves = (props: Props) => {
 			if (res.ok) {
 				refetch();
 			} else if (res.status === 400) {
-				errors = Object.values((res as unknown as ProblemDetails).errors).flat() as string[];
+				errors = Object.values((res as unknown as ProblemDetails).errors).flat();
 			}
 		} else {
 			const res = await PostApiShelves(omit(data, ["id"]), headers);
 			if (res.ok) {
 				refetch();
 			} else if (res.status === 400) {
-				errors = Object.values((res as unknown as ProblemDetails).errors).flat() as string[];
+				errors = Object.values((res as unknown as ProblemDetails).errors).flat();
 			}
 		}
 		clear();

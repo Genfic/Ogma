@@ -1,7 +1,4 @@
-preload = [
-	'./scripts/plugins/raw-plugin.ts',
-	'./scripts/plugins/minified-css-loader.ts',
-]
+preload = ['./scripts/plugins/raw-plugin.ts', './scripts/plugins/minified-css-loader.ts']
 
 [test]
 preload = ['./typescript/tests/_happy-dom.ts']

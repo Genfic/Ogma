@@ -12,14 +12,14 @@ table.o-table {
 
 		td {
 			border: 1px solid var(--foreground-25);
-			padding: .5rem;
+			padding: 0.5rem;
 
 			.flex {
 				display: flex;
 
 				time {
 					flex: 1;
-					padding-right: .5rem;
+					padding-right: 0.5rem;
 				}
 			}
 		}

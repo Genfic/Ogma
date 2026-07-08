@@ -13,7 +13,7 @@ footer.footer {
 		flex-flow: row wrap;
 		justify-content: center;
 		width: var(--body-width);
-		padding: .5rem var(--body-padding-horizontal);
+		padding: 0.5rem var(--body-padding-horizontal);
 
 		@media (width <= v.$mq-mobile) {
 			flex-direction: column;
@@ -23,7 +23,7 @@ footer.footer {
 			display: flex;
 			flex-direction: column;
 			flex: 1;
-			padding: 0 .5rem;
+			padding: 0 0.5rem;
 			border-right: 1px solid var(--foreground-25);
 			@media (width <= v.$mq-mobile) {
 				border-right: none;
@@ -37,14 +37,14 @@ footer.footer {
 			> .header {
 				white-space: nowrap;
 				font-weight: 500;
-				padding: 0 .25rem;
+				padding: 0 0.25rem;
 				border-bottom: 1px solid var(--foreground-25);
 			}
 
 			> .item {
 				width: 100%;
 				white-space: nowrap;
-				padding: .25rem;
+				padding: 0.25rem;
 				color: var(--foreground-75);
 
 				.icon {
@@ -66,7 +66,7 @@ footer.footer {
 					}
 
 					.icon {
-						height: .9rem;
+						height: 0.9rem;
 						color: var(--foreground-50);
 					}
 				}
@@ -105,21 +105,21 @@ footer.footer {
 		flex-direction: column;
 		width: 100%;
 		place-items: center center;
-		padding: .5rem;
+		padding: 0.5rem;
 		border-top: 1px solid var(--foreground-25);
 
-		>span {
+		> span {
 			display: inline-block;
 		}
 
 		> .copy-text {
 			margin-right: 1ch;
-			margin-bottom: .5rem;
+			margin-bottom: 0.5rem;
 		}
 
 		> .build-text {
 			color: var(--foreground-25);
-			font-size: .8rem;
+			font-size: 0.8rem;
 			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
 		}
 	}

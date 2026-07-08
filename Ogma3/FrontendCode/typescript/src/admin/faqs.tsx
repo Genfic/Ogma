@@ -1,9 +1,9 @@
-import LucidePencil from "icon:lucide:pencil";
-import LucideTrash2 from "icon:lucide:trash-2";
 import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { getFormData } from "@h/form-helpers";
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash-2";
 import { createResource, For, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";

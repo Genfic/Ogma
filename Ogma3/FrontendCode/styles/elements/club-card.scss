@@ -8,7 +8,7 @@ $title-height: 2rem;
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	grid-auto-columns: 10rem 1fr;
-	grid-column-gap: .25rem;
+	grid-column-gap: 0.25rem;
 	margin: 0;
 	background-color: var(--ele-1);
 	@include ab.active-border;
@@ -75,12 +75,12 @@ $title-height: 2rem;
 		border-top: 1px solid var(--bc, var(--foreground-25));
 
 		> * {
-			padding: 0 .25rem;
+			padding: 0 0.25rem;
 			color: var(--foreground-75);
 			cursor: default;
 
 			&:hover {
-				color: var(--foreground)
+				color: var(--foreground);
 			}
 		}
 	}

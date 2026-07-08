@@ -6,22 +6,24 @@
 	width: 100%;
 
 	display: grid;
-	grid: " img  title " auto
-		  " img  hook "  1fr
-		  " img  tags "  auto
-		  " info info "  auto / 10rem 1fr auto;
-	gap: .5rem;
+	grid:
+		" img  title " auto
+		" img  hook " 1fr
+		" img  tags " auto
+		" info info " auto / 10rem 1fr auto;
+	gap: 0.5rem;
 
-	margin: .75rem 0 0;
-	padding: .5rem .5rem 0;
+	margin: 0.75rem 0 0;
+	padding: 0.5rem 0.5rem 0;
 	background-color: var(--ele-1);
 	@include ab.active-border;
 
 	@media (width <= v.$mq-mobile) {
-		grid: " title  title " auto
-			  " img    hook  " 1fr
-			  " tags   tags  " auto
-			  " info   info  " auto / 6rem 1fr;
+		grid:
+			" title  title " auto
+			" img    hook  " 1fr
+			" tags   tags  " auto
+			" info   info  " auto / 6rem 1fr;
 	}
 
 	&:first-of-type {
@@ -41,13 +43,13 @@
 
 	.info {
 		grid-area: info;
-		padding: .25rem;
+		padding: 0.25rem;
 		display: flex;
 		flex-wrap: wrap;
 		border-top: 1px solid var(--bc, var(--foreground-25));
 
 		> * {
-			padding: 0 .25rem;
+			padding: 0 0.25rem;
 			color: var(--foreground-75);
 			cursor: default;
 
@@ -88,7 +90,7 @@
 		h3 {
 			display: inline;
 			white-space: nowrap;
-			padding: 0 .25rem;
+			padding: 0 0.25rem;
 
 			> a {
 				color: var(--foreground);

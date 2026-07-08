@@ -1,9 +1,8 @@
 .generic-list {
 	display: flex;
 	flex-direction: column;
-	gap: .5rem;
+	gap: 0.5rem;
 }
-
 
 ul.items-list {
 	min-width: 100%;
@@ -14,7 +13,7 @@ ul.items-list {
 		display: flex;
 		min-width: 100%;
 		border: 1px solid var(--foreground-25);
-		margin: .2rem 0;
+		margin: 0.2rem 0;
 		background-color: var(--ele-1);
 
 		&:not(.ph):hover {
@@ -44,7 +43,7 @@ ul.items-list {
 		}
 
 		.main {
-			margin: .5rem;
+			margin: 0.5rem;
 			display: flex;
 			flex-direction: column;
 			flex: 1;
@@ -66,19 +65,24 @@ ul.items-list {
 		.deco {
 			height: auto;
 			min-width: 5px;
-			margin-right: .5rem;
+			margin-right: 0.5rem;
 			display: flex;
 			align-items: center;
 
 			> * {
-				margin: 0 .4rem;
+				margin: 0 0.4rem;
 				min-width: 3ch;
 				font-weight: bold;
 				color: var(--background);
-				text-shadow: 1px 1px 0 var(--foreground-75), -1px 1px 0 var(--foreground-75), 1px -1px 0 var(--foreground-75), -1px -1px 0 var(--foreground-75);
+				text-shadow:
+					1px 1px 0 var(--foreground-75),
+					-1px 1px 0 var(--foreground-75),
+					1px -1px 0 var(--foreground-75),
+					-1px -1px 0 var(--foreground-75);
 			}
 
-			> i, o-icon {
+			> i,
+			o-icon {
 				min-width: unset;
 			}
 		}
@@ -88,7 +92,7 @@ ul.items-list {
 			text-decoration: none;
 			text-overflow: ellipsis;
 			display: inline-flex;
-			gap: .5em;
+			gap: 0.5em;
 
 			> .icon {
 				color: var(--foreground-50);
@@ -109,12 +113,12 @@ ul.items-list {
 		.actions {
 			display: flex;
 			align-self: baseline;
-			padding: .25rem;
-			gap: .25rem;
+			padding: 0.25rem;
+			gap: 0.25rem;
 
 			> .action {
 				display: flex;
-				padding: .5rem;
+				padding: 0.5rem;
 				border: 1px solid var(--foreground-25);
 				color: var(--foreground-50);
 				background-color: transparent;
@@ -133,7 +137,7 @@ ul.items-list {
 
 		.ph {
 			place-self: center center;
-			margin: .5rem auto;
+			margin: 0.5rem auto;
 		}
 	}
 }

@@ -3,13 +3,13 @@ form.social-login {
 
 	display: flex;
 	flex-direction: column;
-	gap: .25rem;
+	gap: 0.25rem;
 
 	.btn {
 		display: flex;
 		align-items: center;
 		justify-content: start;
-		gap: max(.25rem, calc(var(--icon-size) / 2));
+		gap: max(0.25rem, calc(var(--icon-size) / 2));
 		min-width: 20ch;
 		min-height: 48px;
 		color: var(--foreground);
@@ -18,7 +18,7 @@ form.social-login {
 		.icon {
 			height: var(--icon-size);
 			aspect-ratio: 1/1;
-			transition: height .1s ease-in-out;
+			transition: height 0.1s ease-in-out;
 		}
 
 		&:hover {
@@ -41,7 +41,7 @@ form.social-login {
 			background-color: var(--patreon-bg);
 
 			.icon {
-				color: #FC674D;
+				color: #fc674d;
 			}
 		}
 

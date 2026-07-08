@@ -1,13 +1,13 @@
+import { component } from "@h/web-components";
+import { debounce } from "@solid-primitives/scheduled";
 import LucideDownload from "icon:lucide:download";
 import LucideSave from "icon:lucide:save";
 import LucideSaveOff from "icon:lucide:save-off";
-import { component } from "@h/web-components";
-import { debounce } from "@solid-primitives/scheduled";
 import type { ComponentType } from "solid-element";
 import { createEffect, onCleanup, Show } from "solid-js";
+import type { ExtraButtonContext } from "./extra-button-types";
 import shared from "../shared.css";
 import css from "./autosave-button.css";
-import type { ExtraButtonContext } from "./extra-button-types";
 
 const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; uid: number }> = (props) => {
 	const key = `autosave:${props.key}:${props.uid}`;

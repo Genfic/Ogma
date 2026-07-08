@@ -1,10 +1,10 @@
+import { $query } from "@h/dom";
+import { component } from "@h/web-components";
 import RemixBold from "icon:ri:bold";
 import RemixEyeClosed from "icon:ri:eye-close-line";
 import RemixItalic from "icon:ri:italic";
 import RemixLink from "icon:ri:link-m";
 import RemixStrikethrough from "icon:ri:strikethrough";
-import { $query } from "@h/dom";
-import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
 import { createEffect, For, onCleanup, onMount } from "solid-js";
 import { createHistory } from "solid-signals";

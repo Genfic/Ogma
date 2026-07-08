@@ -1,10 +1,10 @@
-import LucideEye from "icon:lucide:eye";
-import LucideEyeClosed from "icon:lucide:eye-closed";
 import { DeleteApiChaptersread, PostApiChaptersread } from "@g/paths-public";
 import { component } from "@h/web-components";
+import LucideEye from "icon:lucide:eye";
+import LucideEyeClosed from "icon:lucide:eye-closed";
 import type { ComponentType } from "solid-element";
-import css from "./chapter-read.css";
 import { useChaptersRead } from "./common/_chaptersReadData";
+import css from "./chapter-read.css";
 
 const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (props) => {
 	const [getChaptersRead, { mutate }] = useChaptersRead(props.storyId);

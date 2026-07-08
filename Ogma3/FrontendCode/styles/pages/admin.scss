@@ -1,7 +1,8 @@
 main#app {
 	display: grid;
-	grid: "head head" auto
-        "nav body" 1fr / auto 1fr;
+	grid:
+		"head head" auto
+		"nav body" 1fr / auto 1fr;
 	gap: 1rem 2rem;
 
 	.head {
@@ -13,7 +14,7 @@ main#app {
 		position: sticky;
 		top: calc(var(--dynamic-nav-height) + 1rem);
 		align-self: start;
-		transition: top .2s ease-in-out;
+		transition: top 0.2s ease-in-out;
 	}
 
 	.admin-body {

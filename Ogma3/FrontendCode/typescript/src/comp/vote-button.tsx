@@ -1,8 +1,8 @@
-import IcRoundStar from "icon:ic:round-star";
-import IcRoundStarBorder from "icon:ic:round-star-border";
 import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as postVote } from "@g/paths-public";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
+import IcRoundStar from "icon:ic:round-star";
+import IcRoundStarBorder from "icon:ic:round-star-border";
 import type { ComponentType } from "solid-element";
 import { createResource } from "solid-js";
 import sharedCss from "./shared.css";

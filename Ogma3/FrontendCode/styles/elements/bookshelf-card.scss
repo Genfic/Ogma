@@ -6,10 +6,11 @@
 	--count-offset: 1rem;
 
 	display: grid;
-	grid: "icon name count buttons" auto
-		  "icon description count buttons" auto
-		  / auto 1fr auto auto;
-	gap: .25rem 1rem;
+	grid:
+		"icon name count buttons" auto
+		"icon description count buttons" auto
+		/ auto 1fr auto auto;
+	gap: 0.25rem 1rem;
 	color: var(--foreground);
 
 	.ico {
@@ -21,9 +22,10 @@
 		height: 100%;
 		padding: 0 1rem;
 
-		.icon, &::part(icon) {
+		.icon,
+		&::part(icon) {
 			background-color: var(--background);
-			outline: .5rem solid var(--background);
+			outline: 0.5rem solid var(--background);
 			outline-offset: -1px;
 			border-radius: 999px;
 		}
@@ -33,12 +35,12 @@
 		grid-area: name;
 		font-weight: bold;
 		font-size: 1.1rem;
-		padding-top: .25rem;
+		padding-top: 0.25rem;
 	}
 
 	.desc {
 		grid-area: description;
-		padding-bottom: .25rem;
+		padding-bottom: 0.25rem;
 	}
 
 	.count {
@@ -48,7 +50,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding-right: .5rem;
+		padding-right: 0.5rem;
 	}
 
 	.buttons {

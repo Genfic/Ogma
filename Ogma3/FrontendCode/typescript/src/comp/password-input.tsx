@@ -1,7 +1,7 @@
-import LucideEye from "icon:lucide:eye";
-import LucideEyeClosed from "icon:lucide:eye-closed";
 import { component } from "@h/web-components";
 import type { Empty } from "@t/utils";
+import LucideEye from "icon:lucide:eye";
+import LucideEyeClosed from "icon:lucide:eye-closed";
 import type { ComponentType } from "solid-element";
 import css from "./password-input.css";
 import sharedCss from "./shared.css";
