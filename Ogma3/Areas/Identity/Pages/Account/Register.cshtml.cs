@@ -64,7 +64,7 @@ public sealed class RegisterModel(
 		public string ConfirmPassword { get; init; } = null!;
 
 		[Display(Name = "Invite code")]
-		public string? InviteCode { get; init; }
+		public string? InviteCode { get; set; }
 
 		public string? Occupation { get; init; }
 
@@ -103,24 +103,25 @@ public sealed class RegisterModel(
 		}
 	}
 
-	private async Task Hydrate(string? returnUrl = null)
+	private async Task Hydrate(string? returnUrl = null, string? inviteCode = null)
 	{
 		ReturnUrl = returnUrl;
 		Input.SubmissionToken = speedTrap.GenerateToken();
+		Input.InviteCode = inviteCode;
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 		PowChallenge = await powService.IssueChallenge();
 	}
 
-	public async Task OnGetAsync(string? returnUrl = null)
+	public async Task OnGetAsync(string? returnUrl = null, string? inviteCode = null)
 	{
-		await Hydrate(returnUrl);
+		await Hydrate(returnUrl, inviteCode);
 	}
 
 	[EnableRateLimiting(policyName: RateLimiting.Registration)]
-	public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
+	public async Task<IActionResult> OnPostAsync(string? returnUrl = null, string? inviteCode = null)
 	{
 		returnUrl ??= Url.Content("~/");
-		await Hydrate(returnUrl);
+		await Hydrate(returnUrl, inviteCode);
 
 		if (!ModelState.IsValid) return Page();
 
@@ -150,17 +151,17 @@ public sealed class RegisterModel(
 		}
 
 		// Check if invite code is correct
-		var inviteCode = await context.InviteCodes
+		var invite = await context.InviteCodes
 			.Where(ic => Input.InviteCode != null && ic.Code == Input.InviteCode)
 			.FirstOrDefaultAsync();
 
-		if (inviteCode is null)
+		if (invite is null)
 		{
 			ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
 			return Page();
 		}
 
-		if (inviteCode.UsedDate is not null)
+		if (invite.UsedDate is not null)
 		{
 			ModelState.TryAddModelError("InviteCode", "This invite code has been used");
 			return Page();
@@ -175,8 +176,8 @@ public sealed class RegisterModel(
 			logger.LogInformation("User {Name} created an account!", Input.Name);
 
 			// Modify invite code
-			inviteCode.UsedById = result.User.Id;
-			inviteCode.UsedDate = DateTimeOffset.UtcNow;
+			invite.UsedById = result.User.Id;
+			invite.UsedDate = DateTimeOffset.UtcNow;
 			await context.SaveChangesAsync();
 
 			// Send confirmation code
