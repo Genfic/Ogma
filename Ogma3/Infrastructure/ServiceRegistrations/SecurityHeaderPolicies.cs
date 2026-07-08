@@ -37,13 +37,15 @@ public static class SecurityHeaderPolicies
 					csp.AddScriptSrc()
 						.Self()
 						.From("https://challenges.cloudflare.com")
-						.WithNonce()
-						.StrictDynamic();
+						.From("https://*.challenges.cloudflare.com")
+						.WithNonce();
 					csp.AddFrameSrc()
-						.From("https://challenges.cloudflare.com");
+						.From("https://challenges.cloudflare.com")
+						.From("https://*.challenges.cloudflare.com");
 					csp.AddConnectSrc()
 						.Self()
-						.From("https://cloudflareinsights.com");
+						.From("https://cloudflareinsights.com")
+						.From("https://*.cloudflareinsights.com");
 				});
 			});
 
