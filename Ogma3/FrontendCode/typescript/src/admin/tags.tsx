@@ -1,6 +1,6 @@
+import LucidePencil from "icon:lucide:pencil";
+import LucideTrash2 from "icon:lucide:trash2";
 import { Tag as TagConfig } from "@g/ctconfig";
-import LucidePencil from "@g/icons/LucidePencil";
-import LucideTrash2 from "@g/icons/LucideTrash2";
 import {
 	DeleteApiTags,
 	GetApiTagsAll,

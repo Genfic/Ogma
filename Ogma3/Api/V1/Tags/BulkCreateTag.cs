@@ -35,10 +35,6 @@ public sealed partial class BulkCreateTag(ApplicationDbContext context, ILogger<
 			return TypedResults.BadRequest("Incorrect file format.");
 		}
 
-		var existing = await context.Tags
-			.Select(t => t.Slug)
-			.ToListAsync(cancellationToken);
-
 		var tags = data
 			.Select(kvp => kvp.Value
 				.Select(v => new Tag
@@ -49,18 +45,31 @@ public sealed partial class BulkCreateTag(ApplicationDbContext context, ILogger<
 				}))
 			.SelectMany(x => x)
 			.DistinctBy(t => t.Slug)
-			.ExceptBy(
-				existing,
-				t => t.Slug
-			)
+			.DistinctBy(t => t.Name)
+			.DistinctBy(t => (t.Name, t.Namespace))
 			.ToList();
 
-		logger.LogInformation("Bulk-inserted {Tags} new tags.", tags.Count);
+		var names = new List<string>();
+		var slugs = new List<string>();
+		var namespaces = new List<ETagNamespace?>();
+		foreach (var tag in tags)
+		{
+			names.Add(tag.Name);
+			slugs.Add(tag.Slug);
+			namespaces.Add(tag.Namespace);
+		}
 
-		context.Tags.AddRange(tags);
-		await context.SaveChangesAsync(cancellationToken);
+		var inserted = await context.Database.ExecuteSqlAsync(// lang=sql
+			$"""
+			INSERT INTO "Tags" ("Name", "Slug", "Namespace")
+			SELECT * FROM UNNEST({names}, {slugs}, {namespaces}::"e_tag_namespace"[])
+			ON CONFLICT DO NOTHING;
+			""",
+			cancellationToken);
 
-		return TypedResults.Ok($"Created {tags.Count} of {data.Sum(p => p.Value.Count)} tags");
+		logger.LogInformation("Bulk inserted {Inserted} tags", inserted);
+
+		return TypedResults.Ok($"Created {inserted} of {data.Sum(p => p.Value.Count)} tags");
 	}
 
 	[UsedImplicitly]

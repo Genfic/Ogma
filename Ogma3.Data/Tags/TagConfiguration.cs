@@ -14,7 +14,8 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 		// CONSTRAINTS
 		builder
 			.HasIndex(t => new { t.Name, t.Namespace })
-			.IsUnique();
+			.IsUnique()
+			.AreNullsDistinct(false);
 
 		builder
 			.HasIndex(t => t.Name)
