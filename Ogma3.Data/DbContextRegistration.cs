@@ -12,8 +12,25 @@ public static class DbContextRegistration
 {
 	public static IHostApplicationBuilder AddApplicationDbContext(this IHostApplicationBuilder builder)
 	{
+		var dev = builder.Environment.IsDevelopment();
+
 		builder.Services.AddDbContextPool<ApplicationDbContext>(options => {
 			var conn = builder.Configuration.GetConnectionString("ogma3-db");
+
+			if (conn is null)
+			{
+				throw new InvalidOperationException("Connection string 'ogma3-db' is not defined.");
+			}
+
+			if (dev)
+			{
+				if (conn.Trim() is not [.., ';'])
+				{
+					conn += ';';
+				}
+				conn += "Include Error Detail=True;";
+			}
+
 			options
 				.UseNpgsql(conn, o => o
 					.MapPostgresEnums()

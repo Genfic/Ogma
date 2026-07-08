@@ -1,6 +1,6 @@
 import type { ComponentOptions, FunctionComponent } from "component-register";
 import type { ComponentType } from "solid-element";
-import { onMount } from "solid-js";
+import { type JSX, onMount } from "solid-js";
 
 type SolidElementInstance = Element & { renderRoot?: Node | null };
 
@@ -34,4 +34,18 @@ export const Styled = <TProps extends object>(
 
 		return component(props, options);
 	};
+};
+
+export const StyledElement = <TProps extends object>(
+	Component: (props: TProps) => JSX.Element,
+	css: string | string[],
+) => {
+	const styles = Array.isArray(css) ? css.join("\n") : css;
+
+	return (props: TProps) => (
+		<>
+			<style>{styles}</style>
+			<Component {...props} />
+		</>
+	);
 };

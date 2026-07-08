@@ -1,15 +1,25 @@
-import LucidePencil from "icon:lucide:pencil";
-import LucideTrash2 from "icon:lucide:trash-2";
 import { Tag as TagConfig } from "@g/ctconfig";
-import { DeleteApiTags, GetApiTagsAll, GetTagNamespaces, PostApiTags, PutApiTags } from "@g/paths-public";
+import LucidePencil from "@g/icons/LucidePencil";
+import LucideTrash2 from "@g/icons/LucideTrash2";
+import {
+	DeleteApiTags,
+	GetApiTagsAll,
+	GetTagNamespaces,
+	PostApiTags,
+	PostApiTagsBulk,
+	PutApiTags,
+} from "@g/paths-public";
 import type { TagDto } from "@g/types-public";
 import { $id } from "@h/dom";
 import { getFormData } from "@h/form-helpers";
-import { makeEmpty } from "@h/type-helpers";
-import { createResource, For, Match, Show, Switch } from "solid-js";
+import clsx from "clsx";
+import { compact, sortBy } from "es-toolkit";
+import { createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
+import { StyledElement } from "../comp/common/_styled";
+import styles from "./tags.css";
 
 const parent = $id("roles-app");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
@@ -41,16 +51,21 @@ const Tags = () => {
 		if (!res.ok) {
 			throw new Error(res.data ?? res.statusText);
 		}
-		return res.data;
+		return sortBy(res.data, ["namespace", "name"]);
 	});
 
 	const [form, setForm] = createStore<FormTag>(EmptyTag);
+	const [bulk, setBulk] = createSignal(false);
+	let jsonBulk = $signal("");
+	const [errors, setErrors] = createSignal<string[]>([]);
+	const [filter, setFilter] = createSignal<string | null>(null);
 
 	const deleteTag = async (t: TagDto) => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiTags(t.id, headers);
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				setErrors((e) => [...e, res.data ?? res.statusText]);
+				return;
 			}
 			await refetch();
 		}
@@ -58,11 +73,12 @@ const Tags = () => {
 
 	const editTag = (t: TagDto) => {
 		const ns = namespaces()?.find((n) => n.name === t.namespace)?.value;
+		window.scrollTo({ top: 0, behavior: "smooth" });
 		setForm({ ...t, namespace: ns });
 	};
 
 	const cancelEdit = () => {
-		setForm(makeEmpty);
+		setForm({ name: "", namespace: null, description: null, id: undefined });
 	};
 
 	const createTag = async (e: SubmitEvent) => {
@@ -71,7 +87,7 @@ const Tags = () => {
 		const [error, f] = getFormData(e, FormTagSchema);
 
 		if (error) {
-			console.error(error);
+			setErrors((e) => [...e, error.message]);
 			return;
 		}
 
@@ -83,69 +99,132 @@ const Tags = () => {
 			description: description ?? null,
 		};
 
-		if (id) {
-			const res = await PutApiTags({ id, ...data }, headers);
-			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
-			}
-			await refetch();
-			cancelEdit();
-		} else {
-			const res = await PostApiTags(data, headers);
-			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
-			}
-			await refetch();
+		const res = id ? await PutApiTags({ id, ...data }, headers) : await PostApiTags(data, headers);
+
+		if (!res.ok) {
+			setErrors((e) => [...e, res.data ?? res.statusText]);
+			return;
 		}
+
+		await refetch();
+		cancelEdit();
+	};
+
+	const createBulkTag = async (e: SubmitEvent) => {
+		e.preventDefault();
+
+		const data = JSON.parse(jsonBulk) as Record<string, string[]>;
+
+		const nsNames = new Set(["", ...(namespaces()?.map((n) => n.name.toLowerCase()) ?? [])]);
+		const dataNamespaces = new Set(Object.keys(data).map((n) => n.toLowerCase()));
+
+		const difference = dataNamespaces.difference(nsNames);
+		if (difference.size > 0) {
+			setErrors((e) => [...e, `Unknown namespace(s): ${[...difference].join(", ")}.`]);
+			return;
+		}
+
+		const res = await PostApiTagsBulk({ json: jsonBulk }, headers);
+		if (!res.ok) {
+			setErrors((e) => [...e, res.data ?? res.statusText]);
+			return;
+		}
+
+		await refetch();
+		(e.currentTarget as HTMLTextAreaElement).value = "";
+	};
+
+	const changeFilter = (ns: string) => {
+		if (filter() === ns) {
+			setFilter(null);
+		} else {
+			setFilter(ns);
+		}
+	};
+
+	const filtered = () =>
+		tags()?.filter((t) => {
+			const f = filter();
+			if (f == null) return true;
+			if (f === "None") return t.namespace == null;
+			return t.namespace === f;
+		}) ?? [];
+
+	const active = (ns: string | null) => {
+		const f = filter();
+
+		return f ? f === ns : false;
 	};
 
 	return (
 		<>
-			<form id="tag" class="auto" method="post" onsubmit={createTag}>
-				<label for="tag-name">Name</label>
-				<input
-					id="tag-name"
-					type="text"
-					class="o-form-control"
-					name="name"
-					prop:value={form.name}
-					minlength={TagConfig.MinNameLength}
-					maxlength={TagConfig.MaxNameLength}
-				/>
+			<Show when={compact(errors()).length > 0}>
+				<ul class="errors">
+					{compact(errors()).map((e) => (
+						<li>{e}</li>
+					))}
+				</ul>
+			</Show>
+			<Show when={!bulk()}>
+				<form id="tag" class="auto" method="post" onsubmit={createTag}>
+					<label for="tag-name">Name</label>
+					<input
+						id="tag-name"
+						type="text"
+						class="o-form-control"
+						name="name"
+						prop:value={form.name}
+						minlength={TagConfig.MinNameLength}
+						maxlength={TagConfig.MaxNameLength}
+					/>
 
-				<label for="tag-desc">Description</label>
-				<input
-					id="tag-desc"
-					type="text"
-					class="o-form-control"
-					name="description"
-					prop:value={form.description}
-					maxlength={TagConfig.MaxDescLength}
-				/>
+					<label for="tag-desc">Description</label>
+					<input
+						id="tag-desc"
+						type="text"
+						class="o-form-control"
+						name="description"
+						prop:value={form.description}
+						maxlength={TagConfig.MaxDescLength}
+					/>
 
-				<label for="tag-namespace">Namespace</label>
-				<select id="tag-namespace" class="o-form-control" name="namespace" prop:value={form.namespace}>
-					<option value="" selected>
-						None
-					</option>
-					<For each={namespaces()}>{({ value, name }) => <option value={value}>{name}</option>}</For>
-				</select>
+					<label for="tag-namespace">Namespace</label>
+					<select id="tag-namespace" class="o-form-control" name="namespace" prop:value={form.namespace}>
+						<option value="" selected>
+							None
+						</option>
+						<For each={namespaces()}>{({ value, name }) => <option value={value}>{name}</option>}</For>
+					</select>
 
-				<Show when={form.id}>
-					<input type="hidden" name="id" value={form.id} />
-				</Show>
-
-				<div class="form-row">
-					<button type="submit" class="btn btn-primary">
-						{form.id ? "Edit" : "Add"}
-					</button>
 					<Show when={form.id}>
-						<button type="reset" class="btn btn-secondary" onclick={cancelEdit}>
-							Cancel
-						</button>
+						<input type="hidden" name="id" value={form.id} />
 					</Show>
-				</div>
-			</form>
+
+					<div class="form-row">
+						<button type="submit" class="btn btn-primary">
+							{form.id ? "Edit" : "Add"}
+						</button>
+						<Show when={form.id}>
+							<button type="reset" class="btn btn-secondary" onclick={cancelEdit}>
+								Cancel
+							</button>
+						</Show>
+					</div>
+				</form>
+			</Show>
+			<Show when={bulk()}>
+				<form id="tag-bulk" class="auto" method="post" onSubmit={createBulkTag}>
+					<label for="tag-desc">Description</label>
+					<textarea onChange={(e) => (jsonBulk = e.currentTarget.value)} rows={10} />
+					<button type="submit" class="btn btn-primary">
+						Submit
+					</button>
+				</form>
+			</Show>
+
+			<button type="button" class="btn toggle-bulk" onClick={() => setBulk((b) => !b)}>
+				Toggle bulk editor
+			</button>
 
 			<Switch>
 				<Match when={namespaces.loading}>
@@ -155,8 +234,19 @@ const Tags = () => {
 					</button>
 				</Match>
 				<Match when={tags}>
+					<div class="tabs">
+						{["None", ...(namespaces()?.map((n) => n.name) ?? [])]?.map((n) => (
+							<button
+								type="button"
+								class={clsx("tab", active(n) && "active")}
+								onClick={[changeFilter, n]}
+							>
+								{n}
+							</button>
+						))}
+					</div>
 					<ul class="items-list">
-						<For each={tags()}>
+						<For each={filtered()}>
 							{(t) => (
 								<li>
 									<div
@@ -187,4 +277,5 @@ const Tags = () => {
 	);
 };
 
-render(() => <Tags />, parent);
+const S = StyledElement(Tags, styles);
+render(() => <S />, parent);

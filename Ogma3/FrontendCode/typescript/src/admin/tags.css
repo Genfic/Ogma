@@ -1,0 +1,38 @@
+ul.errors {
+	background-color: var(--red-10);
+	color: var(--red);
+	border: 1px solid var(--red-50);
+	padding: 0.5rem 1rem;
+}
+
+button.toggle-bulk {
+	padding: 0;
+	border: none;
+	font-size: 0.8rem;
+}
+
+.tabs {
+	display: flex;
+	flex-direction: row;
+	border-bottom: 1px solid var(--foreground);
+	margin-top: 1rem;
+	.tab {
+		border: 1px solid var(--foreground-25);
+		border-bottom: none;
+		background-color: var(--foreground-10);
+		padding: 0.5rem 1rem;
+
+		&.active {
+			border-color: var(--foreground);
+			color: var(--accent);
+		}
+	}
+}
+
+ul.items-list {
+	margin-top: 0;
+
+	li:first-child {
+		margin-top: 0;
+	}
+}

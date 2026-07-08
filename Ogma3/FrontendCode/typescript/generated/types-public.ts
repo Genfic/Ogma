@@ -26,6 +26,10 @@ export type BlockUserCommand = {
     name: string;
 };
 
+export type BulkCreateTagCommand = {
+    json: string;
+};
+
 export type CommentDto = {
     id: string;
     author: UserSimpleDto | null;

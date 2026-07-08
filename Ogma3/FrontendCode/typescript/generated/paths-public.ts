@@ -6,6 +6,7 @@ import type {
 	AddStoryToFolderResponse,
 	AdminIssueInviteCodeCommand,
 	BlockUserCommand,
+	BulkCreateTagCommand,
 	CommentDto,
 	CreateCommentCommand,
 	CreateFaqCommand,
@@ -661,6 +662,13 @@ export const PostApiSubscriptionsThread = async (body: SubscribeCommentsThreadCo
 );
 
 export const PostApiTags = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagDto; 400: undefined; 401: undefined; 409: string }, CreateTagCommand>("/api/tags",
+    POST,
+    body,
+    headers,
+    options,
+);
+
+export const PostApiTagsBulk = async (body: BulkCreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 400: string; 401: undefined }, BulkCreateTagCommand>("/api/tags/bulk",
     POST,
     body,
     headers,
