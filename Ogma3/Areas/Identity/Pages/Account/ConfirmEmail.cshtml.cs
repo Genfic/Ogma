@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,38 +14,40 @@ using Ogma3.Services.GeneratedImagesService;
 namespace Ogma3.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
-public sealed class ConfirmEmailModel
-	(OgmaUserManager userManager, ApplicationDbContext context, GeneratedImagesService imagesService) : PageModel
+public sealed class ConfirmEmailModel(
+	OgmaUserManager userManager,
+	ApplicationDbContext context,
+	GeneratedImagesService imagesService,
+	ILogger<ConfirmEmailModel> logger
+) : PageModel
 {
-
-	// ReSharper disable once MemberCanBePrivate.Global
 	[TempData] public required string StatusMessage { get; set; }
 
-	[BindProperty] [Required] public required string UserName { get; set; }
-
-	[BindProperty] [Required] public required string Code { get; set; }
-
-	public IActionResult OnGet(string userName, string code)
+	public async Task<IActionResult> OnGetAsync(string? userName = null, string? code = null)
 	{
-		UserName = userName;
-		Code = code;
+		if (userName is null || code is null)
+		{
+			StatusMessage = "Error: Invalid confirmation link.";
+			return Page();
+		}
 
-		return Page();
-	}
+		var user = await userManager.FindByNameAsync(userName);
+		if (user is null)
+		{
+			logger.LogWarning("Attempt to confirm email for nonexistent user '{UserName}'.", userName);
+			StatusMessage = "Error: Invalid confirmation link.";
+			return Page();
+		}
 
-	public async Task<IActionResult> OnPostAsync()
-	{
-		if (!ModelState.IsValid) return Page();
-
-		var user = await userManager.FindByNameAsync(UserName);
-		if (user is null) return NotFound($"Unable to load user with name '{UserName}'.");
-
-		var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
-		var result = await userManager.ConfirmEmailAsync(user, code);
+		var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+		var result = await userManager.ConfirmEmailAsync(user, decodedCode);
 
 		StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
 
-		if (!result.Succeeded) return Page();
+		if (!result.Succeeded)
+		{
+			return Page();
+		}
 
 		// Setup default avatar
 		var avatar = new Image
@@ -112,6 +113,8 @@ public sealed class ConfirmEmailModel
 
 		await context.SaveChangesAsync();
 
-		return Page();
+		StatusMessage = "Thank you for confirming your email.";
+
+		return Routes.Areas.Identity.Pages.Account_Login.Get().Redirect(this);
 	}
 }

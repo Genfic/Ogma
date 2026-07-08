@@ -3,11 +3,11 @@ using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
+using Ogma3.Services.Mailer;
 using Ogma3.Services.TurnstileService;
 using Routes.Areas.Identity.Pages;
 using Index = Routes.Pages.Index;
@@ -17,7 +17,7 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public sealed class RegisterConfirmationModel(
 	UserManager<OgmaUser> userManager,
-	IEmailSender emailSender,
+	IMailer emailSender,
 	ITurnstileService turnstile,
 	ILogger<RegisterConfirmationModel> logger)
 	: PageModel
@@ -83,9 +83,12 @@ public sealed class RegisterConfirmationModel(
 			new { area = "Identity", userName = user.UserName, code },
 			Request.Scheme);
 
-		await emailSender.SendEmailAsync(Email, "Confirm your email",
-			$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl ?? "")}'>clicking here</a>.\n\nAlternatively, go to <pre>/confirm-email</pre> and enter the code <pre>{code}</pre>.");
-
+		await emailSender.SendEmailTemplateAsync(Email, "confirm-email", new()
+		{
+			["name"] = user.UserName,
+			["link"] = callbackUrl ?? "",
+			["product_name"] = "Genfic",
+		});
 		if (userManager.Options.SignIn.RequireConfirmedAccount)
 		{
 			return Account_RegisterConfirmation.Get(Email).Redirect(this);

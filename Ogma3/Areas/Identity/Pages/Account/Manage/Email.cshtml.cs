@@ -2,15 +2,15 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
+using Ogma3.Services.Mailer;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class EmailModel(UserManager<OgmaUser> userManager, IEmailSender emailSender) : PageModel
+public sealed class EmailModel(UserManager<OgmaUser> userManager, IMailer emailSender) : PageModel
 {
 	public required string Username { get; set; }
 

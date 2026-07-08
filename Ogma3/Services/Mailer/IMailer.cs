@@ -4,5 +4,5 @@ namespace Ogma3.Services.Mailer;
 
 public interface IMailer : IEmailSender
 {
-	Task SendEmailWithAttachmentsAsync(string email, string subject, string htmlMessage);
+	Task SendEmailTemplateAsync(string email, string templateName, Dictionary<string, string> model);
 }

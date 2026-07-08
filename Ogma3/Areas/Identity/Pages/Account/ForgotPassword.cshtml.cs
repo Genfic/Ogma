@@ -3,11 +3,11 @@ using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
+using Ogma3.Services.Mailer;
 using Ogma3.Services.TurnstileService;
 using Routes.Areas.Identity.Pages;
 
@@ -16,7 +16,7 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public sealed class ForgotPasswordModel(
 	UserManager<OgmaUser> userManager,
-	IEmailSender emailSender,
+	IMailer emailSender,
 	ITurnstileService turnstile,
 	ILogger<ForgotPasswordModel> logger) : PageModel
 {

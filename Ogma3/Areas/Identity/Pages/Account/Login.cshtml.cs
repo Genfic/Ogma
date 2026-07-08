@@ -20,7 +20,7 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 
 	public required string ReturnUrl { get; set; }
 
-	[TempData] public required string ErrorMessage { get; set; }
+	[TempData] public required string StatusMessage { get; set; }
 
 	public sealed class InputModel
 	{
@@ -37,9 +37,9 @@ public sealed class LoginModel(SignInManager<OgmaUser> signInManager, ILogger<Lo
 
 	public async Task OnGetAsync(string? returnUrl = null)
 	{
-		if (!string.IsNullOrEmpty(ErrorMessage))
+		if (!string.IsNullOrEmpty(StatusMessage) && StatusMessage.StartsWith("Error", StringComparison.OrdinalIgnoreCase))
 		{
-			ModelState.AddModelError(string.Empty, ErrorMessage);
+			ModelState.AddModelError(string.Empty, StatusMessage);
 		}
 
 		returnUrl ??= Url.Content("~/");

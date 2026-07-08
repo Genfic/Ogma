@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Text.Encodings.Web;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.RateLimiting;
@@ -16,6 +14,7 @@ using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.EmailBlocklistProvider;
+using Ogma3.Services.Mailer;
 using Ogma3.Services.PowService;
 using Ogma3.Services.SpeedTrapService;
 using Ogma3.Services.TurnstileService;
@@ -28,7 +27,7 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 public sealed class RegisterModel(
 	UserManager<OgmaUser> userManager,
 	SignInManager<OgmaUser> signInManager,
-	IEmailSender emailSender,
+	IMailer emailSender,
 	ITurnstileService turnstile,
 	PowService powService,
 	ISpeedTrapService speedTrap,
@@ -190,8 +189,12 @@ public sealed class RegisterModel(
 				new { area = "Identity", userName = result.User.UserName, code },
 				Request.Scheme);
 
-			await emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-				$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl ?? "")}'>clicking here</a>.\n\nAlternatively, go to <pre>/confirm-email</pre> and enter the code <pre>{code}</pre>.");
+			await emailSender.SendEmailTemplateAsync(Input.Email, "confirm-email", new()
+			{
+				["name"] = result.User.UserName,
+				["link"] = callbackUrl ?? "",
+				["product_name"] = "Genfic",
+			});
 
 			if (userManager.Options.SignIn.RequireConfirmedAccount)
 			{

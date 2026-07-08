@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using Markdig;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.Mailer;
 using Serilog;
 
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class Email(IEmailSender emailSender) : PageModel
+public sealed class Email(IMailer emailSender) : PageModel
 {
 	public sealed class EmailModel
 	{
