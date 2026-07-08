@@ -107,7 +107,7 @@ public sealed class RegisterModel(
 	{
 		ReturnUrl = returnUrl;
 		Input.SubmissionToken = speedTrap.GenerateToken();
-		Input.InviteCode = inviteCode;
+		Input.InviteCode ??= inviteCode;
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 		PowChallenge = await powService.IssueChallenge();
 	}
