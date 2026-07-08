@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Oxlint Report</title>
+    <style>
+		:root {
+			--bg: #0f1117;
+			--panel: #171a23;
+			--border: #262b38;
+			--text: #e4e6eb;
+			--muted: #8a8f9c;
+			--error: #f47174;
+			--warning: #f5c453;
+            --info: #2ae3db;
+			--accent: #6ea8fe;
+			--code-bg: #0b0d12;
+			--highlight: rgba(244, 113, 116, 0.25);
+		}
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			line-height: 1.5;
+		}
+		header {
+			padding: 2rem 2.5rem 1.5rem;
+			border-bottom: 1px solid var(--border);
+		}
+		header h1 {
+			margin: 0 0 0.5rem;
+			font-size: 1.6rem;
+			font-weight: 700;
+		}
+		.summary {
+			display: flex;
+			gap: 1.5rem;
+			flex-wrap: wrap;
+			margin-top: 1rem;
+		}
+		.stat {
+			background: var(--panel);
+			border: 1px solid var(--border);
+			border-radius: 10px;
+			padding: 0.75rem 1.25rem;
+			min-width: 120px;
+		}
+		.stat .value {
+			font-size: 1.5rem;
+			font-weight: 700;
+		}
+		.stat .label {
+			font-size: 0.78rem;
+			color: var(--muted);
+			text-transform: uppercase;
+			letter-spacing: 0.03em;
+		}
+		.stat.errors .value { color: var(--error); }
+		.stat.warnings .value { color: var(--warning); }
+        .stat.info .value { color: var(--info); }
+
+		main { padding: 1.5rem 2.5rem 3rem; max-width: 1100px; margin: 0 auto; }
+
+		.empty-state {
+			text-align: center;
+			color: var(--muted);
+			padding: 4rem 0;
+			font-size: 1.1rem;
+		}
+
+		.diagnostic {
+			background: var(--panel);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			margin-bottom: 1.25rem;
+			overflow: hidden;
+		}
+		.diagnostic-header {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			gap: 1rem;
+			padding: 1rem 1.25rem;
+			border-bottom: 1px solid var(--border);
+		}
+		.severity-badge {
+			display: inline-block;
+			font-size: 0.7rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			padding: 0.2rem 0.55rem;
+			border-radius: 6px;
+			margin-right: 0.6rem;
+			vertical-align: middle;
+		}
+		.severity-badge.error { background: rgba(244,113,116,0.15); color: var(--error); }
+		.severity-badge.warning { background: rgba(245,196,83,0.15); color: var(--warning); }
+
+		.message { font-weight: 600; font-size: 1rem; }
+		.rule-code {
+			font-family: "SF Mono", Consolas, monospace;
+			font-size: 0.8rem;
+			color: var(--accent);
+			text-decoration: none;
+		}
+		.rule-code:hover { text-decoration: underline; }
+
+		.file-location {
+			font-family: "SF Mono", Consolas, monospace;
+			font-size: 0.8rem;
+			color: var(--muted);
+			white-space: nowrap;
+			margin-top: 0.35rem;
+		}
+
+		.code-block {
+			background: var(--code-bg);
+			overflow-x: auto;
+			font-family: "SF Mono", Consolas, "Courier New", monospace;
+			font-size: 0.85rem;
+		}
+		.code-line {
+			display: flex;
+		}
+		.code-line.target { background: rgba(244,113,116,0.08); }
+		.line-number {
+			width: 3.5rem;
+			flex-shrink: 0;
+			text-align: right;
+			padding: 0.15rem 0.75rem;
+			color: var(--muted);
+			user-select: none;
+			border-right: 1px solid var(--border);
+		}
+		.line-content {
+			padding: 0.15rem 1rem;
+			white-space: pre;
+			flex: 1;
+		}
+		.hl {
+			background: var(--highlight);
+			border-radius: 3px;
+			outline: 1px solid var(--error);
+		}
+
+		.help-box {
+			padding: 0.85rem 1.25rem;
+			font-size: 0.85rem;
+			color: var(--muted);
+			border-top: 1px solid var(--border);
+		}
+		.help-box strong { color: var(--text); }
+		.missing-file {
+			padding: 1rem 1.25rem;
+			color: var(--muted);
+			font-style: italic;
+			font-size: 0.85rem;
+		}
+    </style>
+</head>
+<body>
+<header>
+    <h1>🦀 Oxlint Report</h1>
+    <div class="summary">
+        <div class="stat errors">
+            <div class="value"><%= summary.errors %></div>
+            <div class="label">Errors</div>
+        </div>
+        <div class="stat warnings">
+            <div class="value"><%= summary.warnings %></div>
+            <div class="label">Warnings</div>
+        </div>
+        <div class="stat info">
+            <div class="value"><%= summary.info %></div>
+            <div class="label">Informations</div>
+        </div>
+        <div class="stat">
+            <div class="value"><%= summary.filesLinted %></div>
+            <div class="label">Files linted</div>
+        </div>
+        <div class="stat">
+            <div class="value"><%= summary.rulesRun %></div>
+            <div class="label">Rules run</div>
+        </div>
+        <div class="stat">
+            <div class="value"><%= summary.durationMs %>ms</div>
+            <div class="label">Duration</div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <% if (diagnostics.length === 0) { %>
+        <div class="empty-state">✅ No issues found. Clean run!</div>
+    <% } else { %>
+        <% diagnostics.forEach(function(d) { %>
+            <div class="diagnostic">
+                <div class="diagnostic-header">
+                    <div>
+                        <div class="message">
+                            <span class="severity-badge <%= d.severity %>"><%= d.severity %></span>
+                            <%= d.message %>
+                        </div>
+                        <div class="file-location"><%= d.lineInfo %></div>
+                    </div>
+                    <a class="rule-code" href="<%= d.url %>" target="_blank" rel="noopener">
+                        <%= d.code %>
+                    </a>
+                </div>
+
+                <% if (d.snippet.missing) { %>
+                    <div class="missing-file">Source file not found — cannot render snippet for <%= d.filename %></div>
+                <% } else { %>
+                    <div class="code-block">
+                        <% d.snippet.lines.forEach(function(line) { %>
+                            <div class="code-line <%= line.isTarget ? 'target' : '' %>">
+                                <div class="line-number"><%= line.number %></div>
+                                <div class="line-content"><%- line.before %><% if (line.isTarget) { %><span class="hl"><%- line.highlighted %></span><%- line.after %><% } %></div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } %>
+
+                <% if (d.help) { %>
+                    <div class="help-box"><strong>💡 Help:</strong> <%= d.help %></div>
+                <% } %>
+            </div>
+        <% }); %>
+    <% } %>
+</main>
+</body>
+</html>
