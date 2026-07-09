@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using Immediate.Injections.Shared;
+using JetBrains.Annotations;
 using MemoryPack;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.OgmaConfig;
@@ -10,6 +11,7 @@ using StackExchange.Redis;
 namespace Ogma3.Services.PowService;
 
 [RegisterTransient]
+[UsedImplicitly]
 public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, ILogger<PowService> logger)
 {
 	public async Task<PowChallenge> IssueChallenge()
@@ -64,11 +66,22 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 
 	}
 
+	private sealed record TargetCache(int Difficulty, string Target);
+	private static TargetCache _challengeCache = new(0, "");
 	private static string ComputeTarget(int difficulty)
 	{
-		var max = BigInteger.Pow(2, 256) - 1;
-		var target = max >> difficulty;
-		return target.ToString("x").PadLeft(64, '0');
+		var cache = Volatile.Read(ref _challengeCache);
+		if (difficulty == cache.Difficulty)
+		{
+			return cache.Target;
+		}
+
+		var max = (BigInteger.One << 256) - 1;
+		var target = (max >> difficulty).ToString("x").PadLeft(64, '0');
+
+		Interlocked.Exchange(ref _challengeCache, new(difficulty, target));
+
+		return target;
 	}
 
 	private static bool MeetsTarget(byte[] hash, byte[] target)

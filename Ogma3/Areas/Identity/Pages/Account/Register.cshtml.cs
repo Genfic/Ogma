@@ -132,14 +132,6 @@ public sealed class RegisterModel(
 			return Page();
 		}
 
-		// Check PoW
-		if (await powService.VerifyChallenge(Input.PowToken, Input.PowNonce, Input.PowHash) is not PowVerificationResult.Ok)
-		{
-			ModelState.AddModelError("PoW", "Incorrect PoW response");
-			logger.LogInformation("PoW verification failed during registration");
-			return Page();
-		}
-
 		// Check Turnstile
 		var turnstileResponse = await turnstile.Verify(TurnstileResponse, Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty);
 		if (!turnstileResponse.Success)
@@ -163,6 +155,15 @@ public sealed class RegisterModel(
 		if (invite.UsedDate is not null)
 		{
 			ModelState.TryAddModelError("InviteCode", "This invite code has been used");
+			return Page();
+		}
+
+		// Check PoW
+		var powResponse = await powService.VerifyChallenge(Input.PowToken, Input.PowNonce, Input.PowHash);
+		if (powResponse is not PowVerificationResult.Ok)
+		{
+			ModelState.AddModelError("PoW", "Incorrect PoW response");
+			logger.LogInformation("PoW verification for {User} failed during registration: {Result}", Input.Name, powResponse.ToStringFast());
 			return Page();
 		}
 

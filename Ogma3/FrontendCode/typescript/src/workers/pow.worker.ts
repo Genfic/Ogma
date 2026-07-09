@@ -29,7 +29,7 @@ const api = {
 	 * @param {Uint8Array} target The target threshold used to validate the generated hash.
 	 * @return {Promise<{nonce: number, hash: string}>} A promise that resolves to an object containing the valid nonce and corresponding hash.
 	 */
-	async mine(data: string, target: Uint8Array) {
+	async mine(data: string, target: Uint8Array): Promise<{ nonce: number; hash: string }> {
 		shouldAbort = false;
 		hasher ??= await createSHA256();
 

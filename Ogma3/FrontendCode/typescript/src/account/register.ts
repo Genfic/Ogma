@@ -1,5 +1,5 @@
 import { getCookieValue } from "@h/cookies";
-import { $query, $queryAll } from "@h/dom";
+import { $id, $query, $queryAll } from "@h/dom";
 import { minePow } from "@h/pow";
 
 const classname = "visible";
@@ -22,6 +22,11 @@ const runPow = async () => {
 
 	$query<HTMLButtonElement>('button[type="submit"]').disabled = false;
 };
+
+// Prevent accidental double submits
+$id<HTMLFormElement>('register-form').addEventListener("submit", () => {
+	$query<HTMLButtonElement>('button[type="submit"]').disabled = true;
+})
 
 for (const input of formInputs) {
 	const info = $query(`[data-for="${input.id}"]`, true);
