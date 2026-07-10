@@ -10,24 +10,43 @@ export namespace CSS {
 			.map(([key, value]) => `${key}:${encodeURIComponent(value)}`)
 			.join(";");
 
-	export const deserialize = <TKey extends string>(str: string) =>
-		Object.fromEntries(
-			(str ?? "")
-				.split(";")
-				.filter(Boolean)
-				.map((pair) => {
-					const [key, ...value] = pair.split(":");
+	const isValidVar = <TKey extends string>(key: string, validVars: readonly TKey[]): key is TKey =>
+		(validVars as readonly string[]).includes(key);
 
-					const raw = value.join(":").trim();
+	export const deserialize = <TKey extends string>(
+		str: string,
+		allowedVars: readonly TKey[],
+	): Partial<Record<TKey, string>> => {
+		return str
+			.split(";")
+			.filter(Boolean)
+			.reduce<Partial<Record<TKey, string>>>((acc, pair) => {
+				const [key, ...value] = pair.split(":");
 
-					const decoded = attemptOr(() => decodeURIComponent(raw), raw);
-					return [key.trim(), decoded];
-				}),
-		) as Record<TKey, string>;
+				const raw = value.join(":").trim();
 
-	export const toHex = (color: string) => {
+				const decoded = attemptOr(() => decodeURIComponent(raw), raw);
+
+				const k = key.trim();
+				if (isValidVar(k, allowedVars)) {
+					acc[k] = decoded;
+				}
+
+				return acc;
+			}, {});
+	};
+
+	export const deserializer =
+		<TKey extends string>(validVars: readonly TKey[]) =>
+		(str: string) =>
+			deserialize(str, validVars);
+
+	export const toHex = (color: string | undefined) => {
 		if (!ctx) {
 			return color;
+		}
+		if (!color) {
+			return undefined;
 		}
 		ctx.fillStyle = color;
 		return ctx?.fillStyle;

@@ -1,4 +1,4 @@
-import { $queryAll } from "@h/dom";
+import { $queryAll, $target } from "@h/dom";
 import { ico } from "@h/icon-path" with { type: "macro" };
 
 const passwordInputs = $queryAll<HTMLInputElement>("input[type=password]");
@@ -9,7 +9,7 @@ for (const pi of passwordInputs) {
 	buttons?.querySelector(".show-password")?.addEventListener("click", (e: Event) => {
 		e.preventDefault();
 
-		const icon = (e.currentTarget as HTMLElement)?.querySelector("use");
+		const icon = $target(e, true)?.querySelector("use");
 		if (!icon) return;
 
 		if (pi.type === "password") {

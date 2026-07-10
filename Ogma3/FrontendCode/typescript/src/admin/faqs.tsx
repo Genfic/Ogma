@@ -34,7 +34,7 @@ const FAQ = () => {
 	const deleteFaq = async (id: number) => {
 		const res = await DeleteApiFaqs(id, headers);
 		if (res.ok) {
-			refetch();
+			await refetch();
 		} else {
 			throw new Error(res.data ?? res.statusText);
 		}
@@ -53,14 +53,14 @@ const FAQ = () => {
 		if (data.id) {
 			const res = await PutApiFaqs({ ...data, id: data.id }, headers);
 			if (res.ok) {
-				refetch();
+				await refetch();
 			} else {
 				throw new Error(res.data ?? res.statusText);
 			}
 		} else {
 			const res = await PostApiFaqs(data, headers);
 			if (res.ok) {
-				refetch();
+				await refetch();
 			} else {
 				throw new Error(res.data ?? res.statusText);
 			}

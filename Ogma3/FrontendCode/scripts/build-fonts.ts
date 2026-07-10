@@ -15,6 +15,37 @@ const _dest = join(_root, "..", "..", "wwwroot", "fonts");
 
 await woff2.init();
 
+const supportedFont = (value: string): value is FontEditor.FontType => {
+	switch (value) {
+		case "ttf":
+		case "otf":
+		case "eot":
+		case "woff":
+		case "woff2":
+		case "svg":
+			return true;
+		default:
+			return false;
+	}
+};
+
+const writeBinary = (
+	font: FontEditor.Font,
+	type: FontEditor.FontType,
+	options: Omit<FontEditor.FontWriteOptions, "type">,
+): ArrayBuffer | Buffer => {
+	const out = font.write({ ...options, type });
+	if (typeof out === "string") {
+		throw new TypeError(`Unexpected string output for ${type}`);
+	}
+	return out;
+};
+
+const best = (bytes: number) => {
+	const { quantity, unit } = convert(bytes, "bytes").to("best");
+	return `${quantity.toFixed(3)} ${unit}`;
+};
+
 for (const [file, chars, _scale] of subsets) {
 	const { ext, name } = path.parse(file);
 
@@ -30,8 +61,15 @@ for (const [file, chars, _scale] of subsets) {
 			.map((c) => c.codePointAt(0))
 			.filter((c) => c !== undefined);
 
+		const type = ext.slice(1);
+
+		if (!supportedFont(type)) {
+			console.error(`Unsupported font type: ${type}`);
+			continue;
+		}
+
 		const font = createFont(buffer, {
-			type: ext.slice(1) as FontEditor.FontType,
+			type,
 			subset: unicodes,
 			hinting: true,
 			kerning: true,
@@ -41,19 +79,14 @@ for (const [file, chars, _scale] of subsets) {
 		// obj.head.unitsPerE = Math.round(obj.head.unitsPerEm / scale);
 		// font.set(obj);
 
-		const woff2buffer = Buffer.from(font.write({ type: "woff2", hinting: true }) as ArrayBuffer);
-		const woffbuffer = Buffer.from(font.write({ type: "woff", hinting: true }) as ArrayBuffer);
+		const woff2buffer = writeBinary(font,"woff2",{ hinting: true });
+		const woffbuffer =  writeBinary(font,"woff", {hinting: true });
 
 		await Bun.write(`${output}.woff2`, woff2buffer);
 		await Bun.write(`${output}.woff`, woffbuffer);
 
-		const c = (bytes: number) => {
-			const { quantity, unit } = convert(bytes, "bytes").to("best");
-			return `${quantity.toFixed(3)} ${unit}`;
-		};
-
 		console.log(
-			`${file} (${c(ogSize)}) -> woff (${c(woffbuffer.byteLength)}) & woff2 (${c(woff2buffer.byteLength)})`,
+			`${file} (${best(ogSize)}) -> woff (${best(woffbuffer.byteLength)}) & woff2 (${best(woff2buffer.byteLength)})`,
 		);
 	} catch (e) {
 		console.error(`Error processing ${file}:`, e);

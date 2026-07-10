@@ -90,7 +90,7 @@ const Quotes = () => {
 			if (!res.ok) {
 				throw new Error(res.data ?? res.statusText);
 			}
-			mutate((old) => old?.map((v) => (v.id === id ? { id, author, body } : v)));
+			mutate((old) => old?.map((qd) => (qd.id === id ? { id, author, body } : qd)));
 		} else {
 			const res = await PostApiQuotes(data, headers);
 			if (!res.ok) {

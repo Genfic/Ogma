@@ -26,7 +26,7 @@ type Action = (typeof actions)[number];
 const name = "markdown-editor" as const;
 
 type Props = {
-	selector: `textarea${string | ""}` | `input${string | ""}`;
+	selector: `textarea${string}` | `input${string}`;
 	overrideSelector?: boolean;
 };
 

@@ -51,7 +51,7 @@ const Ratings = () => {
 	const deleteRating = async (id: number) => {
 		const res = await DeleteApiRatings(id, headers);
 		if (res.ok) {
-			refetch();
+			await refetch();
 		} else {
 			throw new Error(res.data ?? res.statusText);
 		}
@@ -69,14 +69,14 @@ const Ratings = () => {
 		if (data.id) {
 			const res = await PutApiRatings({ ...data, id: data.id }, headers);
 			if (res.ok) {
-				refetch();
+				await refetch();
 			} else {
 				throw new Error(res.data ?? res.statusText);
 			}
 		} else {
 			const res = await PostApiRatings(data, headers);
 			if (res.ok) {
-				refetch();
+				await refetch();
 			} else {
 				throw new Error(res.data ?? res.statusText);
 			}

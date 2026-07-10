@@ -1,25 +1,29 @@
 const parser = new DOMParser();
 
 export const parseDom = (html: string): HTMLElement => {
-	return parser.parseFromString(html, "text/html").body.firstElementChild as HTMLElement;
+	const child = parser.parseFromString(html, "text/html").body.firstElementChild;
+	if (child instanceof HTMLElement) {
+		return child;
+	}
+	throw new Error("Invalid HTML");
 };
 
 function $query<TElement extends HTMLElement>(selector: string): TElement;
 function $query<TElement extends HTMLElement>(selector: string, noThrow: false): TElement;
 function $query<TElement extends HTMLElement>(selector: string, noThrow: true): TElement | null;
 function $query<TElement extends HTMLElement>(selector: string, noThrow?: boolean): TElement | null {
-	const el = document.querySelector(selector);
+	const el = document.querySelector<TElement>(selector);
 	if (noThrow) {
-		return el as TElement | null;
+		return el;
 	}
 	if (!el) {
 		throw new Error(`Element not found: ${selector}`);
 	}
-	return el as TElement;
+	return el;
 }
 
 function $queryAll<TElement extends HTMLElement>(selector: string): TElement[] {
-	return [...document.querySelectorAll(selector)] as TElement[];
+	return [...document.querySelectorAll<TElement>(selector)] as TElement[];
 }
 
 function $id<TElement extends HTMLElement>(id: string): TElement;
@@ -27,16 +31,32 @@ function $id<TElement extends HTMLElement>(id: string, noThrow: false): TElement
 function $id<TElement extends HTMLElement>(id: string, noThrow: true): TElement | null;
 function $id<TElement extends HTMLElement>(id: string, noThrow?: boolean): TElement | null {
 	const el = document.getElementById(id);
+
 	if (noThrow) {
-		return el as TElement | null;
+		return el as unknown as TElement | null;
 	}
 	if (!el) {
 		throw new Error(`Element not found: ${id}`);
 	}
-	return el as TElement;
+	return el as unknown as TElement;
 }
 
-export { $id, $query, $queryAll };
+function $target<TElement extends HTMLElement>(event: Event): TElement;
+function $target<TElement extends HTMLElement>(event: Event, noThrow: false): TElement;
+function $target<TElement extends HTMLElement>(event: Event, noThrow: true): TElement | null;
+function $target<TElement extends HTMLElement>(event: Event, noThrow?: boolean): TElement | null {
+	const t = event.target as HTMLElement;
+
+	if (noThrow) {
+		return t as unknown as TElement | null;
+	}
+	if (!t) {
+		throw new Error();
+	}
+	return t as unknown as TElement;
+}
+
+export { $id, $query, $queryAll, $target };
 
 /**
  * Finds the first following sibling element matching a CSS selector.

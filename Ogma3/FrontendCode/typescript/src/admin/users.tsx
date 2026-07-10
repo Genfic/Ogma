@@ -1,20 +1,25 @@
 import { DeleteAdminApiInfractions, GetAdminApiUsers } from "@g/paths-internal";
 import { PostApiUsersRoles } from "@g/paths-public";
-import type { InfractionType } from "@g/types-internal";
 import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { compact } from "es-toolkit";
 import { createEffect, createResource, For } from "solid-js";
 import { Portal, render } from "solid-js/web";
+import * as v from "valibot";
 import { ManageInfraction, type ManageInfractionApi } from "./components/manage-infraction-component";
+
+const infractionsSchema = v.array(
+	v.union([v.literal("Ban"), v.literal("Mute"), v.literal("Note"), v.literal("Warning")]),
+);
+const rolesSchema = v.array(v.object({ Id: v.number(), Name: v.string() }));
 
 const parent = $id("users-app");
 const csrf = parent.dataset.csrf;
 const headers = { RequestVerificationToken: csrf ?? "" };
-const infractions = JSON.parse(parent.dataset.infractions ?? "[]") as InfractionType[];
-const roles = JSON.parse(parent.dataset.roles ?? "[]") as { Id: number; Name: string }[];
-const name = parent.dataset.name as string | null;
+const infractions = v.parse(infractionsSchema, JSON.parse(parent.dataset.infractions ?? "[]"));
+const roles = v.parse(rolesSchema, JSON.parse(parent.dataset.roles ?? "[]"));
+const name = parent.dataset.name ?? null;
 
 const date = (dt: Date) => iso8601.render(dt);
 const dateEu = (dt: Date) => EU.render(toCurrentTimezone(dt));
@@ -83,7 +88,7 @@ const Users = () => {
 			throw new Error(res.data ?? res.statusText);
 		}
 
-		refetch();
+		await refetch();
 	};
 
 	const addInfraction = () => {

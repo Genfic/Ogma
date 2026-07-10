@@ -4,7 +4,7 @@ import {
 	GetApiShelfStories as getShelves,
 	DeleteApiShelfStories as removeFromShelf,
 } from "@g/paths-public";
-import type { GetCurrentUserQuickShelvesResult, GetPaginatedUserShelvesResult } from "@g/types-public";
+import type { GetCurrentUserQuickShelvesResult, GetPaginatedCurrentUserShelvesResult } from "@g/types-public";
 import { useClickOutside } from "@h/click-outside";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
@@ -15,7 +15,7 @@ import { Icon } from "./common/Icon";
 import sharedCss from "./shared.css";
 import css from "./shelves-button.css";
 
-type Shelf = GetPaginatedUserShelvesResult & GetCurrentUserQuickShelvesResult;
+type Shelf = GetPaginatedCurrentUserShelvesResult & GetCurrentUserQuickShelvesResult;
 
 const updateShelfData = (
 	currentShelves: Shelf[],

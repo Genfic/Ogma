@@ -5,6 +5,10 @@ import { orderBy } from "es-toolkit";
 import { type Component, createResource, For } from "solid-js";
 import css from "./table-info.css";
 
+const formatBytes = (bytes: number, decimals = 2) => {
+	return convert(bytes, "bytes").to("best").toString(decimals);
+};
+
 const TableInfo: Component = () => {
 	let sortBy = $signal<"size" | "name">("size");
 	let sortOrder = $signal<"asc" | "desc">("desc");
@@ -32,10 +36,6 @@ const TableInfo: Component = () => {
 		sortBy = by;
 		sortOrder = sortOrder === "desc" ? "asc" : "desc";
 		setTableInfo((prev) => orderBy(prev, [by], [sortOrder]));
-	};
-
-	const formatBytes = (bytes: number, decimals = 2) => {
-		return convert(bytes, "bytes").to("best").toString(decimals);
 	};
 
 	return (

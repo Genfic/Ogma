@@ -5,14 +5,14 @@ const MANIFEST_URL = "/js/manifest.txt";
 export type ConsoleMethods = keyof Pick<typeof console, "error" | "warn" | "info" | "log">;
 export type Message = { type: "log"; from: "cache-worker"; level: ConsoleMethods; msg: string; args: unknown[] };
 
-const log = (level: ConsoleMethods, msg: string, ...args: unknown[]) => {
+const log = async (level: ConsoleMethods, msg: string, ...args: unknown[]) => {
 	console[level](msg, ...args);
 
-	self.clients.matchAll().then((clients) => {
-		for (const client of clients) {
-			client.postMessage({ type: "log", from: "cache-worker", level, msg, args } satisfies Message);
-		}
-	});
+	const clients = await self.clients.matchAll();
+
+	for (const client of clients) {
+		client.postMessage({ type: "log", from: "cache-worker", level, msg, args } satisfies Message);
+	}
 };
 
 const loadManifest = async () => {
@@ -41,17 +41,17 @@ const precache = async () => {
 			try {
 				const res = await fetch(url, { cache: "reload" });
 				if (!res.ok) {
-					log("warn", "Failed to fetch for precache:", url);
+					await log("warn", "Failed to fetch for precache:", url);
 				}
 
 				await cache.put(url, res);
 			} catch (err) {
-				log("error", "Error precaching", url, err);
+				await log("error", "Error precaching", url, err);
 			}
 		}),
 	);
 
-	log("info", `Precached ${files.length} assets into cache ${stamp}`);
+	await log("info", `Precached ${files.length} assets into cache ${stamp}`);
 };
 
 const clearOldCaches = async () => {
@@ -62,7 +62,7 @@ const clearOldCaches = async () => {
 
 	await self.clients.claim();
 
-	log("info", "Cleared old caches. Active cache:", stamp);
+	await log("info", "Cleared old caches. Active cache:", stamp);
 };
 
 self.addEventListener("install", (e) => {

@@ -27,6 +27,7 @@ export const createInlineFormatExtension = (name: string, char: string, htmlTag:
 					tokens: this.lexer.inlineTokens(match[1]),
 				};
 			}
+			return undefined;
 		},
 		renderer(this: Renderer, token: { type: string; raw: string; tokens: Token[] }) {
 			const classAttr = className ? ` class="${className}"` : "";

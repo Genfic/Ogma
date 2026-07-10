@@ -19,6 +19,7 @@ export const createMentionExtension = (char: string, urlTemplate: string, classN
 					value: match[1],
 				};
 			}
+			return undefined;
 		},
 		renderer(token: { type: string; raw: string; value: string }) {
 			const href = urlTemplate.replace("{}", token.value);

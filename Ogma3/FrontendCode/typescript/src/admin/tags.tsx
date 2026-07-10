@@ -8,7 +8,7 @@ import {
 	PutApiTags,
 } from "@g/paths-public";
 import type { TagDto } from "@g/types-public";
-import { $id } from "@h/dom";
+import { $id, $target } from "@h/dom";
 import { getFormData } from "@h/form-helpers";
 import clsx from "clsx";
 import { compact, sortBy } from "es-toolkit";
@@ -32,6 +32,8 @@ const FormTagSchema = v.object({
 });
 
 type FormTag = v.InferOutput<typeof FormTagSchema>;
+
+const bulkSchema = v.record(v.string(), v.array(v.string()));
 
 const EmptyTag = {
 	id: undefined,
@@ -81,10 +83,10 @@ const Tags = () => {
 		setForm({ name: "", namespace: null, description: null, id: undefined });
 	};
 
-	const createTag = async (e: SubmitEvent) => {
-		e.preventDefault();
+	const createTag = async (ev: SubmitEvent) => {
+		ev.preventDefault();
 
-		const [error, f] = getFormData(e, FormTagSchema);
+		const [error, f] = getFormData(ev, FormTagSchema);
 
 		if (error) {
 			setErrors((e) => [...e, error.message]);
@@ -110,10 +112,14 @@ const Tags = () => {
 		cancelEdit();
 	};
 
-	const createBulkTag = async (e: SubmitEvent) => {
-		e.preventDefault();
+	const createBulkTag = async (ev: SubmitEvent) => {
+		ev.preventDefault();
 
-		const data = JSON.parse(jsonBulk) as Record<string, string[]>;
+		const { success, issues, output: data } = v.safeParse(bulkSchema, JSON.parse(jsonBulk));
+		if (!success) {
+			setErrors((e) => [...e, ...issues.map((i) => i.message)]);
+			return;
+		}
 
 		const nsNames = new Set(["", ...(namespaces()?.map((n) => n.name.toLowerCase()) ?? [])]);
 		const dataNamespaces = new Set(Object.keys(data).map((n) => n.toLowerCase()));
@@ -131,7 +137,7 @@ const Tags = () => {
 		}
 
 		await refetch();
-		(e.currentTarget as HTMLTextAreaElement).value = "";
+		$target<HTMLTextAreaElement>(ev).value = "";
 	};
 
 	const changeFilter = (ns: string) => {
@@ -251,7 +257,7 @@ const Tags = () => {
 								<li>
 									<div
 										class="deco"
-										style={{ "background-color": t.namespaceColor as string | undefined }}
+										style={{ "background-color": t.namespaceColor ?? undefined }}
 									/>
 									<div class="main">
 										<h3 class="name" title={t.slug}>

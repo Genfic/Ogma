@@ -1,4 +1,4 @@
-import { $queryAll } from "@h/dom";
+import { $queryAll, $target } from "@h/dom";
 
 const inputs = $queryAll<HTMLInputElement>("input.o-form-control");
 
@@ -8,7 +8,7 @@ for (const i of inputs) {
 	initValues.set(i.name, i.value);
 
 	i.addEventListener("input", (e: Event) => {
-		const element = e.target as HTMLInputElement;
+		const element = $target<HTMLInputElement>(e);
 
 		if (element.value !== initValues.get(element.name)) {
 			element.classList.add("changed");

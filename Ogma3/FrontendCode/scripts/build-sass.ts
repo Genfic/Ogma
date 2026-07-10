@@ -6,8 +6,8 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import { attempt, attemptAsync } from "es-toolkit";
-import { transform } from "lightningcss";
-import { initAsyncCompiler } from "sass-embedded";
+import { transform, TransformResult } from "lightningcss";
+import { CompileResult, initAsyncCompiler } from "sass-embedded";
 import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
 import { Logger } from "./helpers/logger";
@@ -64,7 +64,7 @@ const compileSass = async (file: string) => {
 	const size = Bun.file(file).size;
 	logger.verbose(`File size: ${size} bytes`);
 
-	const [compileError, compileResult] = await attemptAsync(async () => {
+	const [compileError, compileResult] = await attemptAsync<CompileResult, Error>(async () => {
 		return await compiler.compileAsync(file, {
 			sourceMap: true,
 			sourceMapIncludeSources: true,
@@ -87,7 +87,7 @@ const compileSass = async (file: string) => {
 
 	const outFile = `${filename}.css`;
 
-	const [error, result] = attempt(() =>
+	const [error, result] = attempt<TransformResult, Error>(() =>
 		transform({
 			projectRoot: projectRoot,
 			code: encoder.encode(css),
@@ -149,8 +149,8 @@ await compileAll();
 
 if (values.size) {
 	const size = await dirsize(`${_dest}/**/[!_]*.css`);
-	const best = (num: number) => convert(num, "bytes").to("best").toString(3);
-	console.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
+	const best = convert(size, "bytes").to("best").toString(3);
+	console.log(ct`{green Total size: {bold.underline ${best}}}`);
 }
 
 if (values.watch) {

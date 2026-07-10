@@ -7,7 +7,6 @@ import c from "chalk";
 import ct from "chalk-template";
 import convert from "convert";
 import solidLabels from "solid-labels/babel";
-import { log } from "../typescript/src-helpers/logger";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
 import { SizeHistory } from "./helpers/size-history";
@@ -70,7 +69,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 			cssMinifyPlugin(),
 			manifestPlugin(),
 		],
-		drop: values.release ? ["console", ...Object.keys(log).map((k) => `log.${k}`)] : undefined,
+		drop: values.release ? ["console", ...Object.keys(console).map((k) => `log.${k}`)] : undefined,
 		define: {
 			"import.meta.env.DEV": values.release ? "false" : "true",
 		},
@@ -91,10 +90,13 @@ const compile = async (from: Glob, to: string, root: string) => {
 		}
 	}
 
-	return outputs.filter((c) => c.kind !== "sourcemap").reduce((a, b) => a + b.size, 0);
+	return outputs.filter((ba) => ba.kind !== "sourcemap").reduce((a, b) => a + b.size, 0);
 };
 
 const sizeHistory = new SizeHistory("JS");
+
+const best = (size: number) => convert(size, "bytes").to("best").toString(3);
+
 const compileAll = async () => {
 	const timer = new Stopwatch();
 	const logger = new Logger();
@@ -106,7 +108,6 @@ const compileAll = async () => {
 	const size = await compile(new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`), join(_dest, "/"), "src");
 
 	if (values.size) {
-		const best = (size: number) => convert(size, "bytes").to("best").toString(3);
 
 		logger.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
 

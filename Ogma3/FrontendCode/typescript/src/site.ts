@@ -17,12 +17,13 @@ const registerServiceWorkers = async () => {
 					console.info(`Service worker ${name} active`);
 				}
 			} catch (error) {
-				console.error(`Registration of ${name} failed with ${error}`);
+				const e = error instanceof Error ? error.message : String(error);
+				console.error(`Registration of ${name} failed with ${e}`);
 			}
 
-			navigator.serviceWorker.addEventListener("message", (e) => {
+			navigator.serviceWorker.addEventListener("message", (e: MessageEvent<Message>) => {
 				if ("type" in e.data && e.data.type === "log") {
-					const { level, from, msg, args } = e.data as Message;
+					const { level, from, msg, args } = e.data;
 					console[level](`%c[${from} says]`, "color: #999", msg, ...args);
 				}
 			});

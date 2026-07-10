@@ -59,7 +59,7 @@ for (const row of table.querySelectorAll("tr")) {
 	const entries = new Map(
 		(["role", "name", "link"] as const).map((prop) => [
 			prop,
-			(row.querySelector(`input[name$=".${prop}" i]`) as HTMLInputElement).value,
+			row.querySelector<HTMLInputElement>(`input[name$=".${prop}" i]`)?.value,
 		]),
 	);
 	table.appendChild(newRow(index++, entries.get("role"), entries.get("name"), entries.get("link")));

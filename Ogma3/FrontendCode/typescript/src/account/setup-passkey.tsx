@@ -56,26 +56,26 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 			throw new Error(res.data ?? res.statusText);
 		}
 
-		const optionsResult = attempt(() =>
+		const optionsResult = attempt<PublicKeyCredentialCreationOptions, Error>(() =>
 			PublicKeyCredential.parseCreationOptionsFromJSON(
 				res.data as unknown as PublicKeyCredentialCreationOptionsJSON,
 			),
 		);
 
 		if (!optionsResult.success) {
-			log.warn(`Failed to parse options: ${optionsResult.error}`);
+			log.warn(`Failed to parse options: ${optionsResult.error.message}`);
 			loading = false;
 			return;
 		}
 
 		const options = optionsResult.value;
 
-		const credentialsResult = await attemptAsync(async () => {
+		const credentialsResult = await attemptAsync<PublicKeyCredential, Error>(async () => {
 			return (await navigator.credentials.create({ publicKey: options })) as PublicKeyCredential;
 		});
 
 		if (!credentialsResult.success) {
-			log.warn(`Failed to create credentials: ${credentialsResult.error}`);
+			log.warn(`Failed to create credentials: ${credentialsResult.error.message}`);
 			loading = false;
 			return;
 		}
@@ -105,7 +105,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 		);
 
 		if (keyRes.status === 400) {
-			errors = keyRes.data ?? [];
+			errors = Array.isArray(keyRes.data) ? keyRes.data : [keyRes.data];
 			console.error(errors);
 			return;
 		}

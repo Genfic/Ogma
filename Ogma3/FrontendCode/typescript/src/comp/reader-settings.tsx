@@ -26,7 +26,7 @@ const defaults = Object.freeze(
 			acc[curr] = getComputedStyle(articleBody).getPropertyValue(curr);
 			return acc;
 		},
-		{} as Record<CSSVar, string>,
+		{} as Partial<Record<CSSVar, string>>,
 	),
 );
 
@@ -49,7 +49,7 @@ const ReaderSettings: ComponentType<never> = () => {
 			sameSite: "strict",
 		},
 		serialize: CSS.serialize,
-		deserialize: CSS.deserialize<CSSVar>,
+		deserialize: CSS.deserializer(cssVars),
 	});
 
 	createEffect(() => {
@@ -60,10 +60,10 @@ const ReaderSettings: ComponentType<never> = () => {
 
 	const setVar = (name: (typeof cssVars)[number]) => {
 		return (e: Event) => {
-			if (!e.target) {
+			if (!(e.target instanceof HTMLInputElement)) {
 				return;
 			}
-			setStore(name, (e.target as HTMLInputElement).value);
+			setStore(name, e.target.value);
 		};
 	};
 

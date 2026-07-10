@@ -22,6 +22,14 @@ export default defineConfig({
 		"unicorn/no-document-cookie": "off", // Let's wait until at least 95% support: https://caniuse.com/cookie-store-api
 		"no-cond-assign": "off",
 	},
+	settings: {
+		"jsx-a11y": {
+			attributes: {
+				for: ["for"],
+				class: ["class"],
+			},
+		},
+	},
 	options: {
 		typeAware: true,
 	},

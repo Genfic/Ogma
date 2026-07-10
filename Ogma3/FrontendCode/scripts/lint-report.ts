@@ -96,7 +96,8 @@ const server = Bun.serve({
 			const html = await ejs.renderFile(tplPath, vm, { async: true });
 			return new Response(html, { headers: { "Content-Type": "text/html" } });
 		} catch (err) {
-			return new Response(`Internal Server Error: ${(err as Error).message}`, { status: 500 });
+			const e = Error.isError(err) ? err.message : typeof err === "string" ? err : "Unknown error";
+			return new Response(`Internal Server Error: ${e}`, { status: 500 });
 		}
 	},
 });
@@ -118,7 +119,7 @@ interface Label {
 interface Diagnostic {
 	message: string;
 	code: string;
-	severity: "error" | "warning" | string;
+	severity: "error" | "warning" | (string & { __: never });
 	causes: string[];
 	url: string;
 	help: string;

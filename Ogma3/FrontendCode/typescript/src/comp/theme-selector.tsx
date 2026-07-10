@@ -1,6 +1,6 @@
 import { addToDate } from "@angius/tinytime/addtoDate";
 import { useClickOutside } from "@h/click-outside";
-import { $query } from "@h/dom";
+import { $query, $target } from "@h/dom";
 import { getThemes } from "@h/macros/get-theme-names.macro" with { type: "macro" };
 import { component } from "@h/web-components";
 import { type CookieOptions, cookieStorage, makePersisted } from "@solid-primitives/storage";
@@ -46,11 +46,11 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 	let stylesLoaded = $signal(false);
 	const onToggle = (e: ToggleEvent) => {
 		if (e.newState === "open" && !stylesLoaded) {
-			for (const theme of themes) {
+			for (const th of themes) {
 				const preloader = document.createElement("link");
 				preloader.rel = "preload";
 				preloader.as = "style";
-				preloader.href = `/css/${theme}.css?v=${themeMap[theme]}`;
+				preloader.href = `/css/${th}.css?v=${themeMap[th]}`;
 				document.head.appendChild(preloader);
 			}
 			stylesLoaded = true;
@@ -58,8 +58,10 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 		if (e.newState === "closed") {
 			return;
 		}
-		const focusTarget = details?.querySelector("input:checked") || details?.querySelector("input");
-		(focusTarget as HTMLElement)?.focus();
+		const focusTarget =
+			details?.querySelector<HTMLInputElement>("input:checked") ||
+			details?.querySelector<HTMLInputElement>("input");
+		focusTarget?.focus();
 	};
 
 	let isPointerDown = $signal(false);
@@ -82,7 +84,7 @@ const ThemeSelector: ComponentType<null> = (_props, { element }) => {
 			return;
 		}
 
-		const current = e.currentTarget as HTMLElement;
+		const current = $target(e);
 
 		if (e.relatedTarget && current.contains(e.relatedTarget as HTMLElement)) {
 			return;

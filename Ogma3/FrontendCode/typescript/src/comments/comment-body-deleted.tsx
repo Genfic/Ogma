@@ -1,9 +1,9 @@
 import { toCurrentTimezone } from "@h/date-helpers";
 import { long } from "@h/tinytime-templates";
 
-export const DeletedCommentBody = (props: { creationDate: Date; deletedBy: string | null }) => {
-	const date = (dt: Date) => long.render(toCurrentTimezone(dt));
+const date = (dt: Date) => long.render(toCurrentTimezone(dt));
 
+export const DeletedCommentBody = (props: { creationDate: Date; deletedBy: string | null }) => {
 	return (
 		<div class="main">
 			<div class="header">

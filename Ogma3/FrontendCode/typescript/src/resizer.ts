@@ -1,4 +1,4 @@
-import { $queryAll } from "@h/dom";
+import { $queryAll, $target } from "@h/dom";
 import { modifyImage } from "@h/image-helper";
 
 const element = $queryAll("[data-resize]");
@@ -8,7 +8,7 @@ for (const el of element) {
 	}
 
 	const form = el.closest("form");
-	const submitBtn = form?.querySelector("button[type=submit]") as HTMLButtonElement | null;
+	const submitBtn = form?.querySelector<HTMLButtonElement>("button[type=submit]");
 
 	if (!form || !submitBtn) {
 		continue;
@@ -29,7 +29,7 @@ for (const el of element) {
 	el.addEventListener("change", async (e) => {
 		submitBtn.disabled = true;
 
-		const files = (e.target as HTMLInputElement).files;
+		const files = $target<HTMLInputElement>(e).files;
 		if (!files || files.length === 0) {
 			submitBtn.disabled = false;
 			return;

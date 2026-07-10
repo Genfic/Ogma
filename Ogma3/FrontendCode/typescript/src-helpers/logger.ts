@@ -3,26 +3,26 @@
  * @param {any} obj Variable to check
  * @returns {boolean} True if the variable is an object, false if it's a primitive
  */
-function _isObject(obj: unknown): boolean {
+function isObject(obj: unknown): boolean {
 	return obj === Object(obj);
 }
 
 /**
  * Creates a deep copy of the object through parsing and serializing JSON
  */
-function _deepCopy(o: object): object {
+function deepCopy(o: object): object {
 	return JSON.parse(JSON.stringify({ ...o, __isCopied__: true }));
 }
 
-const _getMessage = (o: unknown) => (import.meta.env.DEV ? (_isObject(o) ? _deepCopy(o as object) : o) : o);
+const getMessage = (o: unknown) => (import.meta.env.DEV ? (isObject(o) && o instanceof Object ? deepCopy(o) : o) : o);
 
 /**
  * Logger object to create a better logging experience
  */
 export const log = {
-	log: (o: unknown) => console.log(_getMessage(o)),
-	info: (o: unknown) => console.info(_getMessage(o)),
-	warn: (o: unknown) => console.warn(_getMessage(o)),
-	error: (o: unknown) => console.error(_getMessage(o)),
-	debug: (o: unknown) => console.debug(_getMessage(o)),
+	log: (o: unknown) => console.log(getMessage(o)),
+	info: (o: unknown) => console.info(getMessage(o)),
+	warn: (o: unknown) => console.warn(getMessage(o)),
+	error: (o: unknown) => console.error(getMessage(o)),
+	debug: (o: unknown) => console.debug(getMessage(o)),
 };

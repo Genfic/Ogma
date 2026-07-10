@@ -3,7 +3,6 @@ import { join } from "node:path";
 import type { BunPlugin } from "bun";
 import { pascalCase } from "es-toolkit";
 import { dedent } from "../helpers/string-helpers";
-import baseIcon from "../templates/base-icon.tsx?raw";
 
 export interface IconOptions {
 	cacheDir: string;
@@ -17,8 +16,6 @@ interface Icon {
 	icons: Record<string, { body: string }>;
 }
 
-const BASE_FILE = "icon-base.tsx";
-
 export function iconPlugin(options: IconOptions): BunPlugin {
 	return {
 		name: "icon-plugin",
@@ -28,11 +25,6 @@ export function iconPlugin(options: IconOptions): BunPlugin {
 
 			if (!(await exists(cacheDir))) {
 				await mkdir(cacheDir);
-			}
-
-			const basePath = join(cacheDir, BASE_FILE);
-			if (!(await Bun.file(basePath).exists())) {
-				await Bun.write(basePath, baseIcon);
 			}
 
 			build.onResolve({ filter: /^icon:/ }, async (args) => {
@@ -66,9 +58,9 @@ export function iconPlugin(options: IconOptions): BunPlugin {
 					}
 
 					const tsx = dedent`
-						import { createIcon } from "./${BASE_FILE.replace(".tsx", "")}";
+						import { createIcon } from "@h/create-icon";
 						export default createIcon(${data.width}, ${data.height}, \`${body}\`);
-					`;
+					`.trim();
 
 					await file.write(tsx);
 				})();

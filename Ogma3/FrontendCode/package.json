@@ -7,6 +7,7 @@
 		"webtypes": "bun ./scripts/webtypes.ts",
 		"lint": "bunx oxlint .",
 		"lint:fix": "bunx oxlint . --fix",
+		"lint:report": "bun run ./scripts/lint-report.ts",
 		"format": "bunx oxfmt .",
 		"format:fix": "bunx oxfmt . --fix",
 		"css": "bun ./scripts/build-sass.ts",

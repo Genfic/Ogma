@@ -12,7 +12,7 @@ type NoHTMLAttributeKeys<T> = {
 export const component = <T extends NoHTMLAttributeKeys<T>>(
 	name: `${string}-${string}`,
 	defaultProps: T,
-	component: FunctionComponent<T>,
+	child: FunctionComponent<T>,
 	styles?: string[] | string,
 	optionalProps?: (keyof T)[],
 ) => {
@@ -39,7 +39,7 @@ export const component = <T extends NoHTMLAttributeKeys<T>>(
 			}
 
 			const missing: string[] = [];
-			for (const key of Object.keys(defaultProps) as (keyof T)[]) {
+			for (const key in defaultProps) {
 				if (optionalProps?.includes(key)) continue;
 
 				const value = props[key];
@@ -48,7 +48,7 @@ export const component = <T extends NoHTMLAttributeKeys<T>>(
 					(Array.isArray(value) && (value as undefined[]).length === 0) ||
 					(typeof value === "number" && Number.isNaN(value))
 				) {
-					missing.push(String(key));
+					missing.push(key);
 				}
 			}
 			if (missing.length > 0) {
@@ -58,10 +58,10 @@ export const component = <T extends NoHTMLAttributeKeys<T>>(
 				setTimeout(() => (el.style.outline = ""), 3000);
 			}
 
-			return component(props, options);
+			return child(props, options);
 		};
 	} else {
-		validated = component;
+		validated = child;
 	}
 
 	const comp = styles && styles.length > 0 ? Styled(validated, styles) : validated;

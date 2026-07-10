@@ -1,10 +1,11 @@
+import { $query, $queryAll } from "@h/dom";
 import { trim } from "@h/string-helpers";
 
-const areas = document.querySelectorAll("textarea[allow-paste]");
-const csrf = (document.querySelector("input[name=__RequestVerificationToken]") as HTMLInputElement).value;
+const areas = $queryAll<HTMLTextAreaElement>("textarea[allow-paste]");
+const csrf = $query<HTMLInputElement>("input[name=__RequestVerificationToken]").value;
 
 for (const area of areas) {
-	watchForPaste(area as HTMLTextAreaElement);
+	watchForPaste(area);
 }
 
 function watchForPaste(area: HTMLTextAreaElement) {

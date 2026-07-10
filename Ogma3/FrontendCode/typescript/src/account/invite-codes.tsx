@@ -13,6 +13,43 @@ const date = (dt: string | Date) => long.render(toCurrentTimezone(new Date(dt)))
 const csrf = parent.dataset.csrf ?? "";
 const max = Number.parseInt(parent.dataset.max ?? "0", 10);
 
+const copyCode = ({ code }: InviteCodeDto) => {
+	navigator.clipboard.writeText(code).then(
+		() => alert("Copied"),
+		(e) => {
+			alert("Could not copy");
+			console.error(e);
+		},
+	);
+};
+
+const Code = ({ code }: { code: InviteCodeDto }) => (
+	<li>
+		<div class="deco" style={{ background: code.usedByUserName ? "green" : "gray" }} />
+		<div class="main">
+			<h3 class="name">
+				<span class="monospace">{code.code}</span>
+			</h3>
+
+			<span class="desc">
+					Issued by <strong>{code.issuedByUserName ?? code.issuedByType}</strong> on{" "}
+				<strong>{date(code.issueDate)}</strong>
+				</span>
+
+			{code.usedByUserName && code.usedDate ? (
+				<span class="desc">
+						Redeemed by <strong>{code.usedByUserName}</strong> on <strong>{date(code.usedDate)}</strong>
+					</span>
+			) : null}
+		</div>
+		<div class="actions">
+			<button type="button" class="action" onClick={[copyCode, code]} disabled={!!code.usedByUserName}>
+				<LucideClipboardCopy />
+			</button>
+		</div>
+	</li>
+);
+
 const InviteCodes = () => {
 	const [codes, { mutate }] = createResource<InviteCodeDto[]>(
 		async () => {
@@ -34,43 +71,6 @@ const InviteCodes = () => {
 			console.error(res.data ?? res.statusText);
 		}
 	};
-
-	const copyCode = ({ code }: InviteCodeDto) => {
-		navigator.clipboard.writeText(code).then(
-			() => alert("Copied"),
-			(e) => {
-				alert("Could not copy");
-				console.error(e);
-			},
-		);
-	};
-
-	const Code = ({ code }: { code: InviteCodeDto }) => (
-		<li>
-			<div class="deco" style={{ background: code.usedByUserName ? "green" : "gray" }} />
-			<div class="main">
-				<h3 class="name">
-					<span class="monospace">{code.code}</span>
-				</h3>
-
-				<span class="desc">
-					Issued by <strong>{code.issuedByUserName ?? code.issuedByType}</strong> on{" "}
-					<strong>{date(code.issueDate)}</strong>
-				</span>
-
-				{code.usedByUserName && code.usedDate ? (
-					<span class="desc">
-						Redeemed by <strong>{code.usedByUserName}</strong> on <strong>{date(code.usedDate)}</strong>
-					</span>
-				) : null}
-			</div>
-			<div class="actions">
-				<button type="button" class="action" onClick={[copyCode, code]} disabled={!!code.usedByUserName}>
-					<LucideClipboardCopy />
-				</button>
-			</div>
-		</li>
-	);
 
 	return (
 		<>

@@ -59,6 +59,14 @@ const pre = article(adj);
 const maxCommentLength = Comment.MaxBodyLength;
 // const minCommentLength = Comment.MinBodyLength;
 
+const getPow = async () => {
+	const res = await GetApiPowIssue();
+	if (!res.ok) {
+		throw new Error(res.data ?? res.statusText);
+	}
+	return res.data;
+};
+
 const Comments = (props: Props) => {
 	noShadowDOM();
 
@@ -81,18 +89,10 @@ const Comments = (props: Props) => {
 				perPage: 10,
 				isStaff: false,
 				isLocked: false,
-				source: "" as CommentSource,
+				source: "" as unknown as CommentSource,
 			},
 		},
 	);
-
-	const getPow = async () => {
-		const res = await GetApiPowIssue();
-		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
-		}
-		return res.data;
-	};
 
 	let isLocked = $signal(!!props.lockDate);
 
@@ -146,8 +146,8 @@ const Comments = (props: Props) => {
 		const res = await PostApiComments(
 			{
 				body: body,
-				thread: Number(props.threadId),
-				source: threadData()?.source ?? ("" as CommentSource),
+				thread: props.threadId,
+				source: threadData().source,
 				powToken: powResult.token,
 				powNonce: powResult.nonce,
 				powHash: powResult.hash,
@@ -173,8 +173,10 @@ const Comments = (props: Props) => {
 		const res = await PostApiCommentsThreadLock({ threadId: props.threadId });
 		if (!res.ok) {
 			console.error(res.data ?? res.statusText);
+			return false;
 		}
 		isLocked = res.ok && res.data;
+		return isLocked;
 	};
 
 	return (
