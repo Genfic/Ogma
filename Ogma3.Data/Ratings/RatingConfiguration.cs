@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
+using Ogma3.Data.Constants;
 
 namespace Ogma3.Data.Ratings;
 
@@ -18,6 +19,7 @@ public sealed class RatingConfiguration : BaseConfiguration<Rating>
 		builder
 			.Property(r => r.Name)
 			.IsRequired()
+			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent)
 			.HasMaxLength(CTConfig.Rating.MaxNameLength);
 
 		builder

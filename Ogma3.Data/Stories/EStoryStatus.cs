@@ -9,9 +9,11 @@ namespace Ogma3.Data.Stories;
 public enum EStoryStatus
 {
 	Unspecified = 0,
-	[Description("In Progress")] InProgress = 1,
+	[Description("In Progress")]
+	InProgress = 1,
 	Completed = 2,
-	[Description("On Hiatus")] OnHiatus = 3,
+	[Description("On Hiatus")]
+	OnHiatus = 3,
 	Cancelled = 4,
 }
 

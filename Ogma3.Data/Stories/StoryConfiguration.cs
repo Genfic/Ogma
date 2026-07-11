@@ -17,6 +17,7 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 		builder
 			.Property(s => s.Title)
 			.IsRequired()
+			.UseCollation(PgConstants.CollationNames.CaseInsensitive)
 			.HasMaxLength(CTConfig.Story.MaxTitleLength);
 
 		builder

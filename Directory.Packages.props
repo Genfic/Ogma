@@ -24,7 +24,7 @@
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.100.2" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.100.3" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
@@ -32,7 +32,7 @@
     <PackageVersion Include="Humanizer.Core" Version="3.0.10" />
     <PackageVersion Include="Immediate.Apis" Version="6.0.0" />
     <PackageVersion Include="Immediate.Handlers" Version="3.10.0" />
-    <PackageVersion Include="Immediate.Injections" Version="0.4.0" />
+    <PackageVersion Include="Immediate.Injections" Version="0.5.0" />
     <PackageVersion Include="Immediate.Validations" Version="3.4.0" />
     <PackageVersion Include="JetBrains.Annotations" Version="2026.2.0" />
     <PackageVersion Include="LibGit2Sharp" Version="0.31.0" />
@@ -68,12 +68,12 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.15.1-beta.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.16.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.16.0" />
     <PackageVersion Include="Postmark" Version="5.4.1" />
     <PackageVersion Include="Riok.Mapperly" Version="4.3.1" />
     <PackageVersion Include="SafeRouting" Version="1.5.0" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.10" />
-    <PackageVersion Include="Serilog" Version="4.3.1" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.11" />
+    <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
