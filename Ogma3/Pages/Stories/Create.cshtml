@@ -139,6 +139,24 @@
 	</div>
 
 	<div class="o-form-group">
+		<label>Other</label>
+		<span class="desc">Other tags that could be useful</span>
+
+		<div class="tags">
+			@foreach (var f in Model.OtherTags)
+			{
+				<div class="story-tag active-border">
+					<input type="checkbox"
+					       id="other_@f.Name"
+					       name="Input.Tags[]"
+					       value="@f.Id">
+					<label style="--col: var(--foreground)" for="other_@f.Name">@f.Name</label>
+				</div>
+			}
+		</div>
+	</div>
+
+	<div class="o-form-group">
 		<label>Credits</label>
 		<table class="credits-table">
 			<thead>

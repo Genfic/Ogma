@@ -35,6 +35,7 @@ public sealed class EditModel
 	public required List<TagDto> Genres { get; set; }
 	public required List<TagDto> ContentWarnings { get; set; }
 	public required List<TagDto> Franchises { get; set; }
+	public required List<TagDto> OtherTags { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
@@ -265,5 +266,6 @@ public sealed class EditModel
 		Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();
 		ContentWarnings = tags.Where(t => t.Namespace == ETagNamespace.ContentWarning).ToList();
 		Franchises = tags.Where(t => t.Namespace == ETagNamespace.Franchise).ToList();
+		OtherTags = tags.Where(t => t.Namespace is null).ToList();
 	}
 }
