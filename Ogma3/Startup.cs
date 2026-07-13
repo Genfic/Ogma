@@ -196,7 +196,13 @@ public static class Startup
 		});
 		services.AddFusionCache()
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())
-			.WithRegisteredDistributedCache();
+			.WithRegisteredDistributedCache()
+			.WithDefaultEntryOptions(o => {
+				o.ReThrowSerializationExceptions = false;
+			})
+			.WithOptions(o => {
+				o.SerializationErrorsLogLevel = LogLevel.Warning;
+			});
 
 		static void ConfigJson(JsonSerializerOptions options)
 		{
