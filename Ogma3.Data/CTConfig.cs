@@ -77,6 +77,9 @@ public static class CTConfig
 
 		public const int MinTagCount = 3;
 
+		public const int MaxExtraTagsCount = 50;
+		public const int MaxExtraTagLength = 30;
+
 		public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
 		public const string ValidateFileWeight = "The {0} must be less than {1} bytes";
 		public const string ValidateTagCount = "You must select {0} tags or more";

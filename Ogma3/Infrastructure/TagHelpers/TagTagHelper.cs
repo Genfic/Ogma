@@ -12,11 +12,9 @@ public sealed class TagTagHelper(LinkGenerator generator) : TagHelper
 	{
 		var href = Routes.Pages.Tag.Get(Tag.Id, Tag.Slug).Path(generator);
 
-		var color = Tag.NamespaceColor?.Trim('#') ?? "transparent";
-
 		output.TagName = "a";
 		output.AddClass("tag", NullHtmlEncoder.Default);
-		output.Attributes.Add("style", $"--tag-bg: #{color}");
+		output.Attributes.Add("style", $"--tag-bg: {Tag.NamespaceColor}");
 
 		output.Attributes.Add("href", href);
 

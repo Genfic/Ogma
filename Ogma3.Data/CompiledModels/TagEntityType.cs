@@ -8,6 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Tags;
+using Ogma3.Data.Users;
 
 #pragma warning disable 219, 612, 618
 #nullable disable
@@ -23,9 +24,11 @@ public partial class TagEntityType
             "Ogma3.Data.Tags.Tag",
             typeof(Tag),
             baseEntityType,
-            propertyCount: 5,
+            propertyCount: 7,
+            navigationCount: 1,
             skipNavigationCount: 1,
-            unnamedIndexCount: 3,
+            foreignKeyCount: 1,
+            unnamedIndexCount: 4,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -37,6 +40,24 @@ public partial class TagEntityType
             afterSaveBehavior: PropertySaveBehavior.Throw,
             sentinel: 0L);
         id.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+        var createdAt = runtimeEntityType.AddProperty(
+            "CreatedAt",
+            typeof(DateTimeOffset),
+            propertyInfo: typeof(Tag).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Tag).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        createdAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        createdAt.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+
+        var createdById = runtimeEntityType.AddProperty(
+            "CreatedById",
+            typeof(long?),
+            propertyInfo: typeof(Tag).GetProperty("CreatedById", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Tag).GetField("<CreatedById>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        createdById.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var description = runtimeEntityType.AddProperty(
             "Description",
@@ -76,18 +97,37 @@ public partial class TagEntityType
         runtimeEntityType.SetPrimaryKey(key);
 
         var index = runtimeEntityType.AddIndex(
+            new[] { createdById });
+
+        var index0 = runtimeEntityType.AddIndex(
             new[] { name },
             unique: true);
 
-        var index0 = runtimeEntityType.AddIndex(
+        var index1 = runtimeEntityType.AddIndex(
             new[] { slug },
             unique: true);
 
-        var index1 = runtimeEntityType.AddIndex(
+        var index2 = runtimeEntityType.AddIndex(
             new[] { name, @namespace },
             unique: true);
 
         return runtimeEntityType;
+    }
+
+    public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+    {
+        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("CreatedById") },
+            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+            principalEntityType);
+
+        var createdBy = declaringEntityType.AddNavigation("CreatedBy",
+            runtimeForeignKey,
+            onDependent: true,
+            typeof(OgmaUser),
+            propertyInfo: typeof(Tag).GetProperty("CreatedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Tag).GetField("<CreatedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        return runtimeForeignKey;
     }
 
     public static RuntimeSkipNavigation CreateSkipNavigation1(RuntimeEntityType declaringEntityType, RuntimeEntityType targetEntityType, RuntimeEntityType joinEntityType)

@@ -47,5 +47,10 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 			.Property(t => t.Namespace)
 			.IsRequired(false)
 			.HasDefaultValue(null);
+
+		builder
+			.Property(t => t.CreatedAt)
+			.IsRequired()
+			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
 	}
 }

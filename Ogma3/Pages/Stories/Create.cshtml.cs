@@ -66,6 +66,8 @@ public sealed class CreateModel
 		[DataType(DataType.Upload)] public IFormFile? Cover { get; init; }
 		public long Rating { get; init; } = -1;
 		public List<long> Tags { get; init; } = [];
+		[Display(Name = "Extra tags")]
+		public string ExtraTags { get; init; } = "";
 		public List<NullableCredit> Credits { get; init; } = [];
 	}
 
@@ -93,6 +95,9 @@ public sealed class CreateModel
 			RuleFor(i => i.Rating).NotEmpty();
 			RuleFor(i => i.Tags).NotEmpty();
 			RuleFor(i => i.Credits).Must(p => p.Count <= 10);
+			RuleFor(i => i.ExtraTags)
+				.HashtagsFewerThan(CTConfig.Story.MaxExtraTagsCount)
+				.HashtagsShorterThan(CTConfig.Story.MaxExtraTagLength);
 		}
 	}
 
@@ -118,6 +123,14 @@ public sealed class CreateModel
 			.Take(25)
 			.ToList();
 
+		// Split extra tags
+		var extraTags = Input.ExtraTags
+			.Split(',')
+			.Select(t => t.Trim())
+			.Where(t => t.Length > 0)
+			.Take(CTConfig.Story.MaxExtraTagsCount)
+			.ToList();
+
 		// Add a story
 		var story = new Story
 		{
@@ -128,6 +141,7 @@ public sealed class CreateModel
 			Hook = Input.Hook,
 			RatingId = Input.Rating,
 			Tags = tags,
+			ExtraTags = extraTags,
 			Cover = new Image
 			{
 				Url = "/img/placeholders/ph-250.png",

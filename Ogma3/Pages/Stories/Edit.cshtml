@@ -223,13 +223,20 @@
 	</div>
 
 	<div class="o-form-group">
+		<label asp-for="Input.ExtraTags"></label>
+		<p class="desc">Any other tags you want to use, separated with commas</p>
+		<input asp-for="Input.ExtraTags" data-max-count="@CTConfig.Story.MaxExtraTagsCount" class="o-form-control active-border">
+		<span asp-validation-for="Input.ExtraTags"></span>
+	</div>
+
+	<div class="o-form-group">
 		<label>Credits</label>
 		<table class="credits-table">
 			<thead>
 			<tr>
-				<th>Role</th>
-				<th>Name</th>
-				<th>Link (optional)</th>
+				<th id="credits-role-col">Role</th>
+				<th id="credits-name-col">Name</th>
+				<th id="credits-link-col">Link (optional)</th>
 				<th></th>
 			</tr>
 			</thead>

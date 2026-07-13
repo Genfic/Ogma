@@ -30,7 +30,7 @@ public partial class StoryEntityType
             "Ogma3.Data.Stories.Story",
             typeof(Story),
             baseEntityType,
-            propertyCount: 17,
+            propertyCount: 18,
             complexPropertyCount: 1,
             navigationCount: 7,
             skipNavigationCount: 3,
@@ -99,6 +99,16 @@ public partial class StoryEntityType
             fieldInfo: typeof(Story).GetField("<Description>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             maxLength: 3000);
         description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var extraTags = runtimeEntityType.AddProperty(
+            "ExtraTags",
+            typeof(List<string>),
+            propertyInfo: typeof(Story).GetProperty("ExtraTags", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Story).GetField("<ExtraTags>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd);
+        var extraTagsElementType = extraTags.SetElementType(typeof(string));
+        extraTags.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        extraTags.AddAnnotation("Relational:DefaultValueSql", "'{}'");
 
         var hook = runtimeEntityType.AddProperty(
             "Hook",

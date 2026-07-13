@@ -26,13 +26,29 @@ const newRow = (idx: number, role = "", name = "", link = "") => {
 		() => (
 			<>
 				<td>
-					<input list="credit-roles" type="text" name={`Input.Credits[${idx}].Role`} value={role} />
+					<input
+						list="credit-roles"
+						aria-labelledby="credits-role-col"
+						type="text"
+						name={`Input.Credits[${idx}].Role`}
+						value={role}
+					/>
 				</td>
 				<td>
-					<input type="text" name={`Input.Credits[${idx}].Name`} value={name} />
+					<input
+						type="text"
+						aria-labelledby="credits-name-col"
+						name={`Input.Credits[${idx}].Name`}
+						value={name}
+					/>
 				</td>
 				<td>
-					<input type="text" name={`Input.Credits[${idx}].Link`} value={link} />
+					<input
+						type="text"
+						aria-labelledby="credits-link-col"
+						name={`Input.Credits[${idx}].Link`}
+						value={link}
+					/>
 				</td>
 				<td>
 					<button

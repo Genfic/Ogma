@@ -1,4 +1,5 @@
 using MemoryPack;
+using Ogma3.Infrastructure.Extensions;
 using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Tags;
@@ -13,10 +14,8 @@ public sealed partial class TagDto
 	public ETagNamespace? Namespace { get; init; }
 
 	[MapperIgnore]
-	public string? NamespaceColor => Namespace is null ? null : Namespace.GetColor();
-
-	[MapperIgnore]
-	public uint? NamespaceId => (uint?)Namespace;
+	[MemoryPackIgnore]
+	public string NamespaceColor => Namespace.GetColor();
 }
 
 [Mapper]

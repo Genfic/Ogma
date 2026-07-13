@@ -39,7 +39,6 @@ public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext c
 				.Where(s => s.PublicationDate != null)
 				.Where(s => s.ContentBlockId == null)
 				.Blacklist(context, uid);
-
 		}
 
 		// Resolve query

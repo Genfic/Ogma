@@ -34,6 +34,7 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public List<Chapter> Chapters { get; set; } = [];
 	public List<Tag> Tags { get; set; } = [];
 	public List<Vote> Votes { get; set; } = [];
+	public List<string> ExtraTags { get; set; } = [];
 
 	// Rating
 	public Rating Rating { get; set; } = null!;

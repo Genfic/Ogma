@@ -25,6 +25,7 @@ public static class StoryMapper
 		Status = s.Status,
 		WordCount = s.WordCount,
 		ChapterCount = s.ChapterCount,
+		ExtraTags = s.ExtraTags,
 	};
 
 	public static readonly Expression<Func<Story, StoryDetails>> MapToDetails = s => new StoryDetails
@@ -56,5 +57,6 @@ public static class StoryMapper
 			s.ContentBlock.Issuer.UserName
 		) : null,
 		Credits = s.Credits.Select(c => new CreditDto(c.Role, c.Name, c.Link)).ToList(),
+		ExtraTags = s.ExtraTags,
 	};
 }

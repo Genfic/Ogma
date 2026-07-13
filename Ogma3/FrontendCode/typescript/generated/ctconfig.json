@@ -57,6 +57,8 @@
 		"MaxHookLength": 250,
 		"CoverMaxWeight": 2097152,
 		"MinTagCount": 3,
+		"MaxExtraTagsCount": 50,
+		"MaxExtraTagLength": 30,
 		"ValidateLengthMsg": "The {0} must be at least {2} and at most {1} characters long.",
 		"ValidateFileWeight": "The {0} must be less than {1} bytes",
 		"ValidateTagCount": "You must select {0} tags or more"

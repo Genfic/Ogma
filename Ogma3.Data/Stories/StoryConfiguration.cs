@@ -70,6 +70,10 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 				c => c.ToJson()
 			);
 
+		builder
+			.PrimitiveCollection(s => s.ExtraTags)
+			.HasDefaultValueSql(PgConstants.EmptyArray);
+
 		// NAVIGATION
 		builder
 			.HasOne(s => s.Rating)

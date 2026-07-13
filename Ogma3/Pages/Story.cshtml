@@ -120,6 +120,10 @@
 			{
 				<tag tag="@t"></tag>
 			}
+			@foreach (var et in Model.Story.ExtraTags)
+		    {
+				<span class="extra tag">@et</span>
+		    }
 		</div>
 
 		<div class="main">

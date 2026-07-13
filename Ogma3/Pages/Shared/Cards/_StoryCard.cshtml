@@ -36,6 +36,10 @@
 		{
 			<tag tag="t"></tag>
 		}
+		@foreach (var et in Model.ExtraTags)
+		{
+			<span class="extra tag">@et</span>
+		}
 	</div>
 
 	<div class="info">

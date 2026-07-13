@@ -43,7 +43,7 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Tags"></label>
 		<p class="desc">Comma-separated tags</p>
-		<input asp-for="Input.Tags" data-max-count="10" class="o-form-control active-border">
+		<input asp-for="Input.Tags" data-max-count="@CTConfig.Blogpost.MaxTagsAmount" class="o-form-control active-border">
 		<span asp-validation-for="Input.Tags"></span>
 	</div>
 

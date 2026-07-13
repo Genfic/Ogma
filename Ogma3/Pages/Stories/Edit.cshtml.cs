@@ -53,6 +53,7 @@ public sealed class EditModel
 				Hook = story.Hook,
 				Rating = story.Rating.Id,
 				Tags = story.Tags.Select(st => st.Id).ToList(),
+				ExtraTags = string.Join(", ", story.ExtraTags),
 				Status = story.Status,
 				Published = story.PublicationDate != null,
 				IsLocked = story.IsLocked,
@@ -80,6 +81,8 @@ public sealed class EditModel
 		public required long Rating { get; init; }
 		public required EStoryStatus Status { get; init; }
 		public required List<long> Tags { get; init; }
+		[Display(Name = "Extra tags")]
+		public required string ExtraTags { get; init; }
 		public required bool Published { get; init; }
 		public required bool IsLocked { get; init; }
 		public List<NullableCredit> Credits { get; init; } = [];
@@ -106,6 +109,9 @@ public sealed class EditModel
 				.FileHasExtension(".jpg", ".jpeg", ".png");
 			RuleFor(i => i.Rating).NotEmpty();
 			RuleFor(i => i.Tags).NotEmpty();
+			RuleFor(i => i.ExtraTags)
+				.HashtagsFewerThan(CTConfig.Story.MaxExtraTagsCount)
+				.HashtagsShorterThan(CTConfig.Story.MaxExtraTagLength);
 		}
 	}
 
@@ -167,6 +173,13 @@ public sealed class EditModel
 		var newSlug = Input.Title.Friendlify();
 		var publishDate = storyData.PublicationDate ?? (Input.Published ? DateTimeOffset.UtcNow : null);
 
+		var extraTags = Input.ExtraTags
+			.Split(',')
+			.Select(t => t.Trim())
+			.Where(t => t.Length > 0)
+			.Take(CTConfig.Story.MaxExtraTagsCount)
+			.ToList();
+
 		await context.Stories
 			.Where(s => s.Id == id && s.AuthorId == uid)
 			.ExecuteUpdateAsync(setters => setters
@@ -179,6 +192,7 @@ public sealed class EditModel
 				.SetProperty(s => s.IsLocked, Input.IsLocked)
 				.SetProperty(s => s.PublicationDate, publishDate)
 				.SetProperty(s => s.Credits, credits)
+				.SetProperty(s => s.ExtraTags, extraTags)
 			);
 
 		var existingTags = context.StoryTags

@@ -12,7 +12,7 @@ namespace CompiledModels;
 public partial class ApplicationDbContextModel
 {
     private ApplicationDbContextModel()
-        : base(skipDetectChanges: false, modelId: new Guid("8cecca80-490e-4f01-962f-e9bd40883a92"), entityTypeCount: 46)
+        : base(skipDetectChanges: false, modelId: new Guid("2aa3b99f-de7a-4d3c-bc10-0a2fad428307"), entityTypeCount: 46)
     {
     }
 
@@ -131,6 +131,7 @@ public partial class ApplicationDbContextModel
         StoryTagEntityType.CreateForeignKey2(storyTag, tag);
         SubscriptionEntityType.CreateForeignKey1(subscription, subscriptionTier);
         SubscriptionEntityType.CreateForeignKey2(subscription, ogmaUser);
+        TagEntityType.CreateForeignKey1(tag, ogmaUser);
         OgmaUserEntityType.CreateForeignKey1(ogmaUser, image);
         UserBlockEntityType.CreateForeignKey1(userBlock, ogmaUser);
         UserBlockEntityType.CreateForeignKey2(userBlock, ogmaUser);

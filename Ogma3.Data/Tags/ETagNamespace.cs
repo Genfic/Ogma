@@ -17,14 +17,3 @@ public enum ETagNamespace
 	[EnumMember(Value = "f")]
 	Franchise = 3,
 }
-
-public static partial class ETagNamespaceExtensions
-{
-	public static string GetColor(this ETagNamespace? ns) => ns switch
-	{
-		ETagNamespace.ContentWarning => "#d91919",
-		ETagNamespace.Genre => "#8c37f4",
-		ETagNamespace.Franchise => "#18f900",
-		_ => "transparent",
-	};
-}

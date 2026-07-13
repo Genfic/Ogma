@@ -5,6 +5,8 @@
 }
 
 .tag {
+	--pad: 4px;
+
 	display: flex;
 	place-items: center;
 
@@ -13,10 +15,10 @@
 
 	border: 1px solid var(--foreground-75);
 	color: var(--foreground);
-	background-color: oklch(from var(--tag-bg, transparent) l c h / 50%);
+	background-color: oklch(from var(--tag-bg, transparent) l c h / calc(alpha / 2));
 
 	width: max-content;
-	padding: 4px;
+	padding: var(--pad);
 	margin: 0;
 	cursor: pointer;
 
@@ -56,6 +58,14 @@
 	&:hover {
 		opacity: 0.9;
 		color: var(--foreground);
+	}
+
+	&.extra {
+		line-height: 0.9;
+		font-size: 0.9rem;
+		padding: calc(var(--pad) + 0.1rem) calc(var(--pad) + 0.2rem);
+		text-transform: capitalize;
+		cursor: default;
 	}
 
 	> .name {

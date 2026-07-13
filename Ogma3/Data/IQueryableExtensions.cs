@@ -33,14 +33,14 @@ public static class QueryableExtensions
 			{
 				EStorySortingOptions.TitleAscending => query.OrderBy(s => s.Title),
 				EStorySortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
-				EStorySortingOptions.DateAscending => query.Where(s => s.PublicationDate != null).OrderBy(s => s.PublicationDate),
-				EStorySortingOptions.DateDescending => query.Where(s => s.PublicationDate != null).OrderByDescending(s => s.PublicationDate),
+				EStorySortingOptions.DateAscending => query.OrderBy(s => s.PublicationDate),
+				EStorySortingOptions.DateDescending => query.OrderByDescending(s => s.PublicationDate),
 				EStorySortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
 				EStorySortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
 				EStorySortingOptions.ScoreAscending => query.OrderBy(s => s.VoteCount),
 				EStorySortingOptions.ScoreDescending => query.OrderByDescending(s => s.VoteCount),
-				EStorySortingOptions.UpdatedAscending => query.Where(s => s.LastUpdatedAt != null).OrderBy(s => s.LastUpdatedAt),
-				EStorySortingOptions.UpdatedDescending => query.Where(s => s.LastUpdatedAt != null).OrderByDescending(s => s.LastUpdatedAt),
+				EStorySortingOptions.UpdatedAscending => query.OrderBy(s => s.LastUpdatedAt),
+				EStorySortingOptions.UpdatedDescending => query.OrderByDescending(s => s.LastUpdatedAt),
 				_ => query.OrderByDescending(s => s.CreationDate),
 			};
 		}
