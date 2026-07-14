@@ -64,7 +64,11 @@
 			<span class="published">
 				<icon name="lucide:calendar-days"></icon>
 				published
-				<time-display utc-date="date" formatter="d => d.FormatDateWithRomanMonth()"></time-display>
+				<time-display
+					title="Publication date"
+					utc-date="date"
+					formatter="d => d.FormatDateWithRomanMonth()">
+				</time-display>
 			</span>
 		}
 		else

@@ -26,11 +26,11 @@
 	<meta property="og:image" content="https:@Model.Story.Cover">
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
 @if (Model.Story.ContentBlock is not null)
 {
-	<partial name="Shared/_ContentBlockCard" model="Model.Story.ContentBlock"/>
+	<partial name="Shared/_ContentBlockCard" model="Model.Story.ContentBlock" />
 	<br>
 }
 
@@ -105,7 +105,9 @@
 
 		<div class="titlebar">
 			<span style="display:none" itemprop="contentRating">@Model.Story.Rating</span>
-			<h1 class="title" itemprop="name"><partial name="_RatingIcon" model="Model.Story.Rating"/> @Model.Story.Title</h1>
+			<h1 class="title" itemprop="name">
+				<partial name="_RatingIcon" model="Model.Story.Rating" /> @Model.Story.Title
+			</h1>
 		</div>
 
 		<div class="tags" itemprop="keywords">
@@ -121,9 +123,9 @@
 				<tag tag="@t"></tag>
 			}
 			@foreach (var et in Model.Story.ExtraTags)
-		    {
+			{
 				<span class="extra tag">@et</span>
-		    }
+			}
 		</div>
 
 		<div class="main">
@@ -133,7 +135,7 @@
 			     class="cover"
 			     height="160" width="160"
 			     eager="true"
-			     itemprop="thumbnailUrl" cf/>
+			     itemprop="thumbnailUrl" cf />
 
 			<div class="description" itemprop="abstract">
 				<markdown preset="Basic">@Model.Story.Description</markdown>
@@ -145,31 +147,31 @@
 
 	@if (Model.Story.Credits is { Count: > 0 })
 	{
-	<details class="credits">
-		<summary>Credits</summary>
-		<table>
-			<tr>
-				<th>Role</th>
-				<th>Name</th>
-			</tr>
-			@foreach (var credit in Model.Story.Credits)
-			{
-			<tr>
-				<td>@credit.Role</td>
-				<td>
-					@if (credit.Link is not null)
-					{
-					<a href="@credit.Link" target="_blank" noopener noreferrer>@credit.Name</a>
-					}
-					else
-					{
-					@credit.Name
-					}
-				</td>
-			</tr>
-			}
-		</table>
-	</details>
+		<details class="credits">
+			<summary>Credits</summary>
+			<table>
+				<tr>
+					<th>Role</th>
+					<th>Name</th>
+				</tr>
+				@foreach (var credit in Model.Story.Credits)
+				{
+					<tr>
+						<td>@credit.Role</td>
+						<td>
+							@if (credit.Link is not null)
+							{
+								<a href="@credit.Link" target="_blank" noopener noreferrer>@credit.Name</a>
+							}
+							else
+							{
+								@credit.Name
+							}
+						</td>
+					</tr>
+				}
+			</table>
+		</details>
 	}
 
 	@if (Model.Chapters.Length > 0)
@@ -178,16 +180,30 @@
 	}
 
 	<div class="info">
-		<span class="word-count">@Model.Story.WordCount.ToString("N0") words</span>
-		<span class="chapter-count">@Model.Story.ChaptersCount chapters</span>
-		<span class="comment-count">@Model.Story.CommentsCount comments</span>
+		<span class="word-count">
+			<icon name="lucide:pencil"></icon>
+			@Model.Story.WordCount.ToString("N0") words
+		</span>
 
-		<time-display
-			class="release-date"
-			title="Publication date"
-			utc-date="Model.Story.ReleaseDate"
-			formatter="@(d => d.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture))">
-		</time-display>
+		<span class="chapter-count">
+			<icon name="lucide:file-text"></icon>
+			@Model.Story.ChaptersCount @(Model.Story.ChaptersCount == 1 ? "chapter" : "chapters")
+		</span>
+
+		<span class="comment-count">
+			<icon name="lucide:message-square"></icon>
+			@Model.Story.CommentsCount @(Model.Story.CommentsCount == 1 ? "comment" : "comments")
+		</span>
+
+		<span class="release-date">
+			<icon name="lucide:calendar-days"></icon>
+			published
+			<time-display
+				title="Publication date"
+				utc-date="Model.Story.ReleaseDate"
+				formatter="@(d => d.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture))">
+			</time-display>
+		</span>
 
 		<div class="spacer"></div>
 
@@ -259,7 +275,10 @@
 	</report-modal>
 
 	<div class="backdrop">
-		<img src="@(Model.Story.Cover ?? "/img/placeholders/ph-250.png")" alt="@Model.Story.Title backdrop image" height="1000" width="1920" cf-height="100" cf-width="100" cf />
+		<img src="@(Model.Story.Cover ?? "/img/placeholders/ph-250.png")"
+		     alt="@Model.Story.Title backdrop image"
+		     height="1000" width="1920"
+		     cf-height="100" cf-width="100" cf />
 	</div>
 </div>
 
