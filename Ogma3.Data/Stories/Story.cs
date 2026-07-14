@@ -25,9 +25,10 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public Image? Cover { get; set; }
 	public long? CoverId { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
-	public DateTimeOffset? PublicationDate { get; set; }
+	public DateTimeOffset? PublicationDate { get; set => field ??= value; } // immutable once set
 	public DateTimeOffset? LastUpdatedAt { get; set; }
-	public int VoteCount { get; set; } = 0;
+	public bool IsVisible { get; set; }
+	public int VoteCount { get; set; }
 
 	public List<Credit> Credits { get; set; } = [];
 

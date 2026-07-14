@@ -16,6 +16,7 @@ public static class StoryMapper
 		Hook = s.Hook,
 		Cover = s.Cover == null ? null : s.Cover.Url,
 		PublicationDate = s.PublicationDate,
+		IsVisible = s.IsVisible,
 		Tags = s.Tags.OrderBy(t => t.Namespace).ThenBy(t => t.Name).Select(t => t.ToDto()),
 		Rating = new RatingIcon
 		{
@@ -38,7 +39,7 @@ public static class StoryMapper
 		Hook = s.Hook,
 		Cover = s.Cover == null ? null : s.Cover.Url,
 		ReleaseDate = s.PublicationDate ?? s.CreationDate,
-		IsPublished = s.PublicationDate != null,
+		IsPublished = s.IsVisible,
 		Tags = s.Tags.OrderBy(t => t.Namespace).ThenBy(t => t.Name).Select(t => t.ToDto()),
 		Rating = new RatingIcon
 		{

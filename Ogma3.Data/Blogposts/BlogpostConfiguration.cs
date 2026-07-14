@@ -36,6 +36,10 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.HasDefaultValue(null);
 
 		builder
+			.Property(b => b.IsVisible)
+			.HasDefaultValue(false);
+
+		builder
 			.Property(b => b.Body)
 			.IsRequired()
 			.HasMaxLength(CTConfig.Blogpost.MaxBodyLength);

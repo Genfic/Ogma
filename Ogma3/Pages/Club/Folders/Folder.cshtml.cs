@@ -59,7 +59,7 @@ public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config,
 		Stories = await context.FolderStories
 			.Where(s => s.FolderId == id)
 			.Select(s => s.Story)
-			.Where(s => s.PublicationDate != null)
+			.Where(s => s.IsVisible)
 			.Where(s => s.ContentBlockId == null)
 			.Blacklist(context, uid)
 			.OrderByDescending(s => s.PublicationDate)

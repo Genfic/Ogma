@@ -34,7 +34,7 @@ public sealed partial class GetStoriesRssFeed
 
 		var stories = await context.Stories
 			.Where(s => !s.Rating.BlacklistedByDefault)
-			.Where(s => s.PublicationDate != null)
+			.Where(s => s.IsVisible)
 			.Take(50)
 			.Select(s => new
 			{

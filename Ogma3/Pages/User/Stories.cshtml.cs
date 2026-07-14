@@ -36,7 +36,7 @@ public sealed class StoriesModel(UserRepository userRepo, ApplicationDbContext c
 		{
 			// If the profile page doesn't belong to the current user, apply additional filters
 			query = query
-				.Where(s => s.PublicationDate != null)
+				.Where(s => s.IsVisible)
 				.Where(s => s.ContentBlockId == null)
 				.Blacklist(context, uid);
 		}

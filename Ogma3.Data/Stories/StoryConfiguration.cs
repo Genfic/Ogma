@@ -45,6 +45,10 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 			.HasDefaultValue(null);
 
 		builder
+			.Property(s => s.IsVisible)
+			.HasDefaultValue(false);
+
+		builder
 			.Property(s => s.LastUpdatedAt)
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
 

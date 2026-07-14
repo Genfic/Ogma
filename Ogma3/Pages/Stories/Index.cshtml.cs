@@ -63,7 +63,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 		storiesQuery = storiesQuery
 			.WhereIf(s => s.RatingId == Rating, Rating != null)
 			.WhereIf(s => s.Status == Status, Status != null)
-			.Where(s => s.PublicationDate != null)
+			.Where(s => s.IsVisible)
 			.Where(s => s.LastUpdatedAt != null)
 			.Where(s => s.ContentBlockId == null)
 			.Blacklist(context, uid);

@@ -19,7 +19,7 @@ public sealed class StoryCountTagHelper(ApplicationDbContext ctx, IMemoryCache c
 		var count = await cache.GetOrCreateAsync(name, async entry => {
 			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheTime);
 			return await ctx.Stories
-				.Where(s => s.PublicationDate != null)
+				.Where(s => s.IsVisible)
 				.CountAsync();
 		});
 

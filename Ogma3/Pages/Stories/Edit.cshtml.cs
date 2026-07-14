@@ -191,6 +191,7 @@ public sealed class EditModel
 				.SetProperty(s => s.Status, Input.Status)
 				.SetProperty(s => s.IsLocked, Input.IsLocked)
 				.SetProperty(s => s.PublicationDate, publishDate)
+				.SetProperty(s => s.IsVisible, Input.Published)
 				.SetProperty(s => s.Credits, credits)
 				.SetProperty(s => s.ExtraTags, extraTags)
 			);

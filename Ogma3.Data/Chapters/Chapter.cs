@@ -12,7 +12,8 @@ public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, 
 {
 	public uint Order { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
-	public DateTimeOffset? PublicationDate { get; set; }
+	public DateTimeOffset? PublicationDate { get; set => field ??= value; } // immutable once set
+	public bool IsVisible { get; set; }
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;
 	public string Body { get; set; } = null!;

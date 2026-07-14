@@ -19,11 +19,16 @@ public sealed class Scripts(ApplicationDbContext ctx) : PageModel
 
 	public async Task<IActionResult> OnGetUpdateStories()
 	{
-		var rows = await ctx.Stories.ExecuteUpdateAsync(setters => setters
-			.SetProperty(s => s.VoteCount, s => s.Votes.Count)
-			.SetProperty(s => s.LastUpdatedAt, s => s.Chapters.OrderByDescending(c => c.PublicationDate).First().PublicationDate));
+		var sc = await ctx.Stories.ExecuteUpdateAsync(setters => setters
+			.SetProperty(s => s.IsVisible, s => s.PublicationDate != null));
 
-		Message = $"{rows} stories updated";
+		var bc = await ctx.Blogposts.ExecuteUpdateAsync(setters => setters
+			.SetProperty(s => s.IsVisible, s => s.PublicationDate != null));
+
+		var cc = await ctx.Chapters.ExecuteUpdateAsync(setters => setters
+			.SetProperty(s => s.IsVisible, s => s.PublicationDate != null));
+
+		Message = $"{sc} stories updated, {bc} blogposts updated, {cc} chapters updated";
 
 		return Page();
 	}

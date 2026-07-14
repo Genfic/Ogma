@@ -14,6 +14,7 @@ public sealed partial class StoryCard
 	public required string Hook { get; init; }
 	public required string? Cover { get; init; }
 	public required DateTimeOffset? PublicationDate { get; init; }
+	public required bool IsVisible { get; init; }
 	public required IEnumerable<TagDto> Tags { get; init; }
 	public required RatingIcon Rating { get; init; }
 	public required EStoryStatus Status { get; init; }

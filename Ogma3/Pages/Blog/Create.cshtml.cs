@@ -29,7 +29,7 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		{
 			Input.StoryMinimal = await context.Stories
 				.Where(s => s.Id == story)
-				.Where(s => s.PublicationDate != null)
+				.Where(s => s.IsVisible)
 				.Where(b => b.ContentBlockId == null)
 				.ProjectToMinimal()
 				.FirstOrDefaultAsync();

@@ -30,7 +30,7 @@ public partial class StoryEntityType
             "Ogma3.Data.Stories.Story",
             typeof(Story),
             baseEntityType,
-            propertyCount: 18,
+            propertyCount: 19,
             complexPropertyCount: 1,
             navigationCount: 7,
             skipNavigationCount: 3,
@@ -125,6 +125,16 @@ public partial class StoryEntityType
             fieldInfo: typeof(Story).GetField("<IsLocked>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             sentinel: false);
         isLocked.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var isVisible = runtimeEntityType.AddProperty(
+            "IsVisible",
+            typeof(bool),
+            propertyInfo: typeof(Story).GetProperty("IsVisible", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Story).GetField("<IsVisible>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: false);
+        isVisible.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        isVisible.AddAnnotation("Relational:DefaultValue", false);
 
         var lastUpdatedAt = runtimeEntityType.AddProperty(
             "LastUpdatedAt",

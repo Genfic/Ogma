@@ -26,7 +26,7 @@ public partial class ChapterEntityType
             "Ogma3.Data.Chapters.Chapter",
             typeof(Chapter),
             baseEntityType,
-            propertyCount: 13,
+            propertyCount: 14,
             navigationCount: 4,
             foreignKeyCount: 2,
             unnamedIndexCount: 5,
@@ -76,6 +76,16 @@ public partial class ChapterEntityType
             nullable: true,
             maxLength: 500);
         endNotes.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var isVisible = runtimeEntityType.AddProperty(
+            "IsVisible",
+            typeof(bool),
+            propertyInfo: typeof(Chapter).GetProperty("IsVisible", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Chapter).GetField("<IsVisible>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: false);
+        isVisible.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        isVisible.AddAnnotation("Relational:DefaultValue", false);
 
         var order = runtimeEntityType.AddProperty(
             "Order",

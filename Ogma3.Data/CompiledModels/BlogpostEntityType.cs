@@ -27,7 +27,7 @@ public partial class BlogpostEntityType
             "Ogma3.Data.Blogposts.Blogpost",
             typeof(Blogpost),
             baseEntityType,
-            propertyCount: 13,
+            propertyCount: 14,
             navigationCount: 6,
             foreignKeyCount: 4,
             unnamedIndexCount: 6,
@@ -111,6 +111,16 @@ public partial class BlogpostEntityType
             fieldInfo: typeof(Blogpost).GetField("<IsLocked>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             sentinel: false);
         isLocked.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var isVisible = runtimeEntityType.AddProperty(
+            "IsVisible",
+            typeof(bool),
+            propertyInfo: typeof(Blogpost).GetProperty("IsVisible", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Blogpost).GetField("<IsVisible>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: false);
+        isVisible.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        isVisible.AddAnnotation("Relational:DefaultValue", false);
 
         var publicationDate = runtimeEntityType.AddProperty(
             "PublicationDate",

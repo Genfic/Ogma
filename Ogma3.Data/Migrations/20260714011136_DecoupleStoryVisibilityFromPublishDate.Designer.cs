@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -19,14 +20,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
-partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+[Migration("20260714011136_DecoupleStoryVisibilityFromPublishDate")]
+partial class _20260714011136_DecoupleStoryVisibilityFromPublishDate
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260714012859_DecoupleChapterAndBlogpostVisibilityFromPublishDate";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -293,11 +291,6 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 b.Property<bool>("IsLocked")
                     .HasColumnType("boolean");
 
-                b.Property<bool>("IsVisible")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("boolean")
-                    .HasDefaultValue(false);
-
                 b.Property<DateTimeOffset?>("PublicationDate")
                     .HasColumnType("timestamp with time zone");
 
@@ -358,11 +351,6 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 b.Property<string>("EndNotes")
                     .HasMaxLength(500)
                     .HasColumnType("character varying(500)");
-
-                b.Property<bool>("IsVisible")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("boolean")
-                    .HasDefaultValue(false);
 
                 b.Property<long>("Order")
                     .HasColumnType("bigint");

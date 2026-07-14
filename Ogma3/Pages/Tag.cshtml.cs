@@ -33,7 +33,7 @@ public sealed class TagModel(ApplicationDbContext context) : PageModel
 		Tag = tag;
 
 		var query = context.Stories
-			.Where(s => s.PublicationDate != null)
+			.Where(s => s.IsVisible)
 			.Where(s => s.ContentBlockId == null)
 			.Where(s => s.Tags.Any(st => st.Id == id))
 			.Blacklist(context, uid);

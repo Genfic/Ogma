@@ -23,7 +23,7 @@ public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext con
 		var story = await context.Stories
 			.TagWith($"Fetching story {id} — {slug}")
 			.Where(s => s.Id == id)
-			.Where(s => s.PublicationDate != null || s.AuthorId == uid)
+			.Where(s => s.IsVisible || s.AuthorId == uid)
 			.Where(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff())
 			.AsSplitQuery()
 			.Select(StoryMapper.MapToDetails)

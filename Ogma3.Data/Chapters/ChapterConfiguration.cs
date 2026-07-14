@@ -25,6 +25,10 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 			.HasDefaultValue(null);
 
 		builder
+			.Property(c => c.IsVisible)
+			.HasDefaultValue(false);
+
+		builder
 			.Property(p => p.CreationDate)
 			.IsRequired()
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
