@@ -53,7 +53,7 @@
 		        name="Status"
 		        id="status">
 			<option value="">---</option>
-			@foreach (var s in EStoryStatusExtensions.GetValues().Where(v => v != EStoryStatus.Unspecified))
+			@foreach (var s in EStoryStatusExtensions.GetValues().Where(v => v > 0))
 			{
 				<option selected="@(Model.Status == s)" value="@s">@s.GetEmoji() @s.ToStringFast()</option>
 			}

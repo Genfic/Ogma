@@ -38,7 +38,6 @@ public sealed class InfractionConfig : BaseConfiguration<Infraction>
 
 		builder
 			.Property(i => i.Type)
-			// TODO: (dotnet/efcore/#35142) .HasSentinel((InfractionType)MinusOne())
 			.IsRequired();
 
 		// Navigation

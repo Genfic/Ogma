@@ -8,7 +8,9 @@ namespace Ogma3.Data.Stories;
 [EnumExtensions]
 public enum EStoryStatus
 {
+	[Obsolete("This value is not used anymore.")]
 	Unspecified = 0,
+
 	[Description("In Progress")]
 	InProgress = 1,
 	Completed = 2,

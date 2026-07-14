@@ -12,8 +12,8 @@ public sealed class ClubMemberConfiguration : IEntityTypeConfiguration<ClubMembe
 		builder
 			.Property(cm => cm.Role)
 			.IsRequired()
-			.HasDefaultValue(EClubMemberRoles.User);
-			// TODO: (dotnet/efcore/#35142) .HasSentinel((EClubMemberRoles)MinusOne());
+			.HasDefaultValue(EClubMemberRoles.User)
+			.HasSentinel((EClubMemberRoles)(-1));
 
 		builder
 			.Property(cm => cm.MemberSince)

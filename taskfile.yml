@@ -6,14 +6,14 @@ vars:
   DB_PROJ: ./Ogma3.Data/Ogma3.Data.csproj
 
 tasks:
-  watch: dotnet watch --project ./Ogma3.AppHost/Ogma3.AppHost.csproj
+  watch: dotnet watch --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --allow-dirty=true
 
   watch-dbg:
     env:
       Microsoft_CodeAnalysis_EditAndContinue_LogDir: '{{.TASKFILE_DIR | toSlash}}/.logs/{{now | date "2006-01-02_15-04-05"}}'
     cmds:
       - echo "Logging to $Microsoft_CodeAnalysis_EditAndContinue_LogDir"
-      - dotnet watch --verbose --project ./Ogma3.AppHost/Ogma3.AppHost.csproj
+      - dotnet watch --verbose --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --allow-dirty=true
 
   run-prod: dotnet run -c release --project ./Ogma3.AppHost/Ogma3.AppHost.csproj -- --emulate-prod
 
