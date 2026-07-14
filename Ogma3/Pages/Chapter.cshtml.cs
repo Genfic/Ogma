@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -34,7 +34,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 
 		var chapter = await context.Chapters
 			.Where(c => c.Id == id)
-			.Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
+			.Where(c => c.IsVisible || c.Story.AuthorId == uid)
 			.Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid || User.IsStaff())
 			.ProjectToDetails()
 			.FirstOrDefaultAsync();
@@ -51,7 +51,7 @@ public sealed class ChapterModel(ApplicationDbContext context) : PageModel
 
 		var chapterQuery = context.Chapters
 			.Where(c => c.StoryId == Chapter.StoryId)
-			.Where(c => c.PublicationDate != null)
+			.Where(c => c.IsVisible)
 			.Where(c => c.ContentBlockId == null);
 
 		Previous = await chapterQuery

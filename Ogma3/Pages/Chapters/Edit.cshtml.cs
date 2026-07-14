@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +36,7 @@ public sealed class EditModel(
 				Body = c.Body,
 				StartNotes = c.StartNotes,
 				EndNotes = c.EndNotes,
-				IsPublished = c.PublicationDate != null,
+				IsPublished = c.IsVisible,
 				StoryId = c.StoryId,
 			})
 			.FirstOrDefaultAsync();
@@ -106,7 +106,8 @@ public sealed class EditModel(
 				.SetProperty(c => c.StartNotes, Input.StartNotes?.Trim())
 				.SetProperty(c => c.EndNotes, Input.EndNotes?.Trim())
 				.SetProperty(c => c.WordCount, Input.Body.Words())
-				.SetProperty(c => c.PublicationDate, Input.IsPublished ? DateTimeOffset.UtcNow : null)
+				.SetProperty(c => c.PublicationDate, c => c.PublicationDate ?? (Input.IsPublished ? DateTimeOffset.UtcNow : null))
+				.SetProperty(c => c.IsVisible, Input.IsPublished)
 				.SetProperty(c => c.Signature, hasher.ComputeSignature(Input.Body.Trim()))
 			);
 
@@ -118,8 +119,8 @@ public sealed class EditModel(
 			.Select(s => new
 			{
 				Story = s,
-				ChapterCount = s.Chapters.Count(c => c.PublicationDate != null),
-				WordCount = s.Chapters.Where(c => c.PublicationDate != null).Sum(c => c.WordCount),
+				ChapterCount = s.Chapters.Count(c => c.IsVisible),
+				WordCount = s.Chapters.Where(c => c.IsVisible).Sum(c => c.WordCount),
 			})
 			.ExecuteUpdateAsync(spc => spc
 				.SetProperty(s => s.Story.WordCount, s => s.WordCount)

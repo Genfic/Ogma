@@ -20,9 +20,9 @@
 
 			<a for-route="storyRoute">@Model.Title</a>
 		</h3>
-
-		<a class="author" for-route="authorRoute">By&nbsp;@Model.AuthorUserName</a>
 	</div>
+
+	<a class="author" for-route="authorRoute">By @Model.AuthorUserName</a>
 
 	<div class="hook">
 		<markdown preset="Basic">
@@ -44,15 +44,27 @@
 
 	<div class="info">
 
-		<span class="word-count">@Model.WordCount.ToString("N0") words</span>
+		<span class="score">
+			<icon name="lucide:star"></icon>
+			@Model.Score @(Model.Score == 1 ? "star" : "stars")
+		</span>
 
-		<span class="chapter-count">@Model.ChapterCount @(Model.ChapterCount == 1 ? "chapter" : "chapters")</span>
+		<span class="word-count">
+			<icon name="lucide:pencil"></icon>
+			@Model.WordCount.ToString("N0") words
+		</span>
 
-		@if (Model.PublicationDate is {} date)
+		<span class="chapter-count">
+			<icon name="lucide:file-text"></icon>
+			@Model.ChapterCount @(Model.ChapterCount == 1 ? "chapter" : "chapters")
+		</span>
+
+		@if (Model is { PublicationDate: {} date, IsVisible: true })
 		{
-			<span>
+			<span class="published">
+				<icon name="lucide:calendar-days"></icon>
 				published
-				<time-display utc-date="date" formatter="d => d.FormatDateWithDaySuffix()"></time-display>
+				<time-display utc-date="date" formatter="d => d.FormatDateWithRomanMonth()"></time-display>
 			</span>
 		}
 		else

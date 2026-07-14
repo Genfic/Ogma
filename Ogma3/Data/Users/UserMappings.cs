@@ -18,7 +18,7 @@ public static class UserMappings
 			LastActive = u.LastActive,
 			RegistrationDate = u.RegistrationDate,
 			FollowersCount = u.Followers.Count,
-			BlogpostsCount = u.Blogposts.Count(b => b.PublicationDate != null),
+			BlogpostsCount = u.Blogposts.Count(b => b.IsVisible),
 			StoriesCount = u.Stories.Count(s => s.IsVisible),
 			IsBlockedBy = u.Blockers.Any(bu => bu.Id == uid),
 			IsFollowedBy = u.Followers.Any(fu => fu.Id == uid),

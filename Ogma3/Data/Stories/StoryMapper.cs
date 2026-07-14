@@ -26,6 +26,7 @@ public static class StoryMapper
 		Status = s.Status,
 		WordCount = s.WordCount,
 		ChapterCount = s.ChapterCount,
+		Score = s.VoteCount,
 		ExtraTags = s.ExtraTags,
 	};
 

@@ -40,7 +40,7 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		{
 			Input.ChapterMinimal = await context.Chapters
 				.Where(c => c.Id == chapter)
-				.Where(c => c.PublicationDate != null)
+				.Where(c => c.IsVisible)
 				.Where(b => b.ContentBlockId == null)
 				.ProjectToMinimal()
 				.FirstOrDefaultAsync();

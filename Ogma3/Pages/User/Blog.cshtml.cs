@@ -35,7 +35,7 @@ public sealed class BlogModel(UserRepository userRepo, ApplicationDbContext cont
 		{
 			// If the profile page doesn't belong to the current user, apply additional filters
 			query = query
-				.Where(b => b.PublicationDate != null)
+				.Where(b => b.IsVisible)
 				.Where(b => b.ContentBlockId == null);
 		}
 

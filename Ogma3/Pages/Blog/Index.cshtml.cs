@@ -22,7 +22,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 		SortBy = sort;
 
 		var query = context.Blogposts
-			.Where(b => b.PublicationDate != null)
+			.Where(b => b.IsVisible)
 			.Where(b => b.ContentBlockId == null);
 
 		if (User.Identity?.IsAuthenticated is not true)

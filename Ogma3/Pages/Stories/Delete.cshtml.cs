@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +47,7 @@ public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uplo
 				ReleaseDate = s.PublicationDate,
 				CreationDate = s.CreationDate,
 				Hook = s.Hook,
-				IsPublished = s.PublicationDate != null,
+				IsPublished = s.IsVisible,
 				Status = s.Status,
 				VotesCount = s.Votes.Count,
 				ChaptersCount = s.Chapters.Count,

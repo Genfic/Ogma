@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +55,7 @@ public sealed class EditModel
 				Tags = story.Tags.Select(st => st.Id).ToList(),
 				ExtraTags = string.Join(", ", story.ExtraTags),
 				Status = story.Status,
-				Published = story.PublicationDate != null,
+				Published = story.IsVisible,
 				IsLocked = story.IsLocked,
 				Credits = story.Credits.Select(c => new NullableCredit(c.Role, c.Name, c.Link)).ToList(),
 			})

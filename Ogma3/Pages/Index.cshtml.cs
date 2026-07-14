@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Stories;
@@ -46,7 +46,7 @@ public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache,
 	{
 		return await context.Stories
 			.TagWith($"{nameof(GetTopStoryCards)} -> {count}, {sort.ToStringFast()}")
-			.Where(b => b.PublicationDate != null)
+			.Where(b => b.IsVisible)
 			.Where(b => b.ContentBlockId == null)
 			.Where(s => s.Rating.BlacklistedByDefault == false)
 			.SortByEnum(sort)

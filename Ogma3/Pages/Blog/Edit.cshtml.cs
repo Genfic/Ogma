@@ -34,8 +34,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				Title = b.Title,
 				Body = b.Body,
 				Tags = string.Join(", ", b.Hashtags),
-				Published = b.PublicationDate != null,
-				PublicationDate = b.PublicationDate,
+				Published = b.IsVisible,
 				IsLocked = b.IsLocked,
 				AttachedChapter = b.AttachedChapter == null ? null : new ChapterMinimal
 				{
@@ -43,6 +42,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 					Title = b.AttachedChapter.Title,
 					Slug = b.AttachedChapter.Slug,
 					PublicationDate = b.AttachedChapter.PublicationDate,
+					IsVisible = b.AttachedChapter.IsVisible,
 					StoryId = b.AttachedChapter.StoryId,
 					StoryTitle = b.AttachedChapter.Story.Title,
 					StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName,
@@ -53,6 +53,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 					Title = b.AttachedStory.Title,
 					Slug = b.AttachedStory.Slug,
 					PublicationDate = b.AttachedStory.PublicationDate,
+					IsVisible = b.AttachedStory.IsVisible,
 					AuthorUserName = b.AttachedStory.Author.UserName,
 				},
 			})
@@ -62,7 +63,6 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		if (input is null) return NotFound();
 
 		Input = input;
-		Input.Published = Input.PublicationDate is not null;
 
 		return Page();
 	}
@@ -77,7 +77,6 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		public required StoryMinimal? AttachedStory { get; init; }
 		public required bool Published { get; set; }
 		public required bool IsLocked { get; set; }
-		public required DateTimeOffset? PublicationDate { get; init; }
 	}
 
 	public sealed class PostDataValidation : AbstractValidator<PostData>
@@ -114,7 +113,8 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(p => p.Body, Input.Body.Trim())
 				.SetProperty(p => p.WordCount, Input.Body.Words())
 				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags().ToArray())
-				.SetProperty(b => b.PublicationDate, Input.Published ? DateTimeOffset.UtcNow : null)
+				.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? (Input.Published ? DateTimeOffset.UtcNow : null))
+				.SetProperty(b => b.IsVisible, Input.Published)
 				.SetProperty(b => b.IsLocked, Input.IsLocked)
 			);
 

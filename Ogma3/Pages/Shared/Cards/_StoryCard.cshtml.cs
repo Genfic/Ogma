@@ -20,5 +20,6 @@ public sealed partial class StoryCard
 	public required EStoryStatus Status { get; init; }
 	public required int WordCount { get; init; }
 	public required int ChapterCount { get; init; }
+	public required int Score { get; init; }
 	public required List<string> ExtraTags { get; init; }
 }

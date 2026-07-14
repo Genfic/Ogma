@@ -2,28 +2,32 @@
 @use "../vars" as v;
 
 .story-card {
+	--gap: 0.5rem;
+
 	contain: content;
 	width: 100%;
 
 	display: grid;
 	grid:
-		" img  title " auto
-		" img  hook " 1fr
-		" img  tags " auto
-		" info info " auto / 10rem 1fr auto;
-	gap: 0.5rem;
+		" img  title  " auto
+		" img  author " auto
+		" img  hook   " 1fr
+		" img  tags   " auto
+		" info info   " auto / 10rem 1fr auto;
+	gap: var(--gap);
 
 	margin: 0.75rem 0 0;
-	padding: 0.5rem 0.5rem 0;
+	padding: 0;
 	background-color: var(--ele-1);
 	@include ab.active-border;
 
 	@media (width <= v.$mq-mobile) {
 		grid:
-			" title  title " auto
-			" img    hook  " 1fr
-			" tags   tags  " auto
-			" info   info  " auto / 6rem 1fr;
+			" title  title  " auto
+			" img    author " auto
+			" img    hook   " 1fr
+			" img    tags   " auto
+			" info   info   " auto / 6rem 1fr;
 	}
 
 	&:first-of-type {
@@ -35,15 +39,17 @@
 	}
 
 	> .image {
-		object-fit: contain;
+		object-fit: cover;
+		aspect-ratio: 1 / sqrt(2);
 		grid-area: img;
 		align-self: baseline;
 		height: auto;
+		margin-bottom: calc(var(--gap) * -1);
 	}
 
-	.info {
+	> .info {
 		grid-area: info;
-		padding: 0.25rem;
+		padding: 0.3rem;
 		display: flex;
 		flex-wrap: wrap;
 		border-top: 1px solid var(--bc, var(--foreground-25));
@@ -58,12 +64,18 @@
 			}
 		}
 
-		> a {
-			cursor: pointer;
+		> span {
+			display: inline-flex;
+			gap: 0.15rem;
+			align-items: center;
+
+			> .icon {
+				height: 1rem;
+			}
 		}
 
-		.icon {
-			font-size: 1rem;
+		> a {
+			cursor: pointer;
 		}
 
 		.not-published {
@@ -87,10 +99,11 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 
+		padding-top: 0.5rem;
+
 		h3 {
 			display: inline;
 			white-space: nowrap;
-			padding: 0 0.25rem;
 
 			> a {
 				color: var(--foreground);
@@ -105,25 +118,26 @@
 				}
 			}
 		}
+	}
 
-		> .author {
-			color: var(--foreground-75);
-			font-size: 90%;
+	> .author {
+		grid-area: author;
+		color: var(--foreground-75);
+		margin-top: calc(var(--gap) * -1);
+		margin-bottom: calc(var(--gap) * -1);
 
-			&:hover {
-				color: var(--foreground);
-			}
+		&:hover {
+			color: var(--foreground);
+			text-decoration: underline;
 		}
 	}
 
-	.hook {
+	> .hook {
 		grid-area: hook;
-		margin: 2px 4px;
-		flex: 1;
 		overflow-x: hidden;
 	}
 
-	.tags {
+	> .tags {
 		grid-area: tags;
 		display: flex;
 		flex-flow: row wrap;

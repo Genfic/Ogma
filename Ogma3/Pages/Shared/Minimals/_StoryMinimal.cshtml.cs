@@ -10,6 +10,7 @@ public sealed class StoryMinimal
 	public required string AuthorUserName { get; init; }
 	public required string Slug { get; init; }
 	public required DateTimeOffset? PublicationDate { get; init; }
+	public required bool IsVisible { get; init; }
 }
 
 [Mapper]

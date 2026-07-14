@@ -34,7 +34,7 @@ public sealed partial class GetChaptersRssFeed
 
 		var storyResult = await context.Stories
 			.Where(s => !s.Rating.BlacklistedByDefault)
-			.Where(s => s.PublicationDate != null)
+			.Where(s => s.IsVisible)
 			.Where(s => s.Id == request.StoryId)
 			.Select(s => new
 			{
@@ -42,7 +42,7 @@ public sealed partial class GetChaptersRssFeed
 				s.Title,
 				s.ChapterCount,
 				Chapters = s.Chapters
-					.Where(c => c.PublicationDate != null)
+					.Where(c => c.IsVisible)
 					.OrderBy(c => c.PublicationDate)
 					.Select(c => new
 					{

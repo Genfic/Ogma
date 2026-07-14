@@ -27,7 +27,7 @@ public sealed class Bookshelf(ApplicationDbContext context) : PageModel
 				s.Color,
 				s.Icon == null ? null : s.Icon.Name,
 				s.Stories.AsQueryable()
-					.Where(st => st.PublicationDate != null)
+					.Where(st => st.IsVisible)
 					.Select(StoryMapper.MapToCard)
 					.ToList()
 				))

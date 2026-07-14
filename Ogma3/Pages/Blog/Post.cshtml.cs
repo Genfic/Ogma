@@ -41,7 +41,7 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 		var blogpost = await context.Blogposts
 			.TagWith($"Get blogpost -> {id}")
 			.Where(b => b.Id == id)
-			.Where(b => b.PublicationDate != null || b.AuthorId == uid)
+			.Where(b => b.IsVisible || b.AuthorId == uid)
 			.Where(b => b.ContentBlockId == null || b.AuthorId == uid || User.IsStaff())
 			.WhereIf(b => b.IsLocked == false, uid is null)
 			.Select(MapDetails)
@@ -51,11 +51,11 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 
 		Blogpost = blogpost;
 
-		if (Blogpost.AttachedChapter is not null && Blogpost.AttachedChapter.PublicationDate is null)
+		if (Blogpost.AttachedChapter is not null && !Blogpost.AttachedChapter.IsVisible)
 		{
 			IsUnavailable = true;
 		}
-		else if (Blogpost.AttachedStory is not null && Blogpost.AttachedStory.PublicationDate is null)
+		else if (Blogpost.AttachedStory is not null && !Blogpost.AttachedStory.IsVisible)
 		{
 			IsUnavailable = true;
 		}
@@ -95,6 +95,7 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 				Title = b.AttachedChapter.Title,
 				Slug = b.AttachedChapter.Slug,
 				PublicationDate = b.AttachedChapter.PublicationDate,
+				IsVisible = b.AttachedChapter.IsVisible,
 				StoryTitle = b.AttachedChapter.Story.Title,
 				StoryId = b.AttachedChapter.StoryId,
 				StoryAuthorUserName = b.AttachedChapter.Story.Author.UserName,
@@ -107,6 +108,7 @@ public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext c
 				Title = b.AttachedStory.Title,
 				Slug = b.AttachedStory.Slug,
 				PublicationDate = b.AttachedStory.PublicationDate,
+				IsVisible = b.AttachedStory.IsVisible,
 				AuthorUserName = b.AttachedStory.Author.UserName,
 			},
 	};

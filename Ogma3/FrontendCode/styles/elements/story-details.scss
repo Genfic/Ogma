@@ -24,8 +24,6 @@ $title-height: 2rem;
 			h1.title {
 				font-size: $title-height;
 				line-height: $title-height * 1.5;
-				overflow-wrap: break-word;
-				word-break: break-all;
 
 				--stroke: 3px var(--background-50);
 				-webkit-text-stroke: var(--stroke);
@@ -47,8 +45,9 @@ $title-height: 2rem;
 				float: left;
 				margin-right: 10px;
 				margin-bottom: 10px;
-				width: 10rem;
-				object-fit: contain;
+				height: auto;
+				object-fit: cover;
+				aspect-ratio: 1 / sqrt(2);
 				border: 1px solid var(--foreground-25);
 			}
 

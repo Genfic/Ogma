@@ -12,6 +12,7 @@ public sealed class ChapterMinimal
 	public required string Title { get; init; }
 	public required string Slug { get; init; }
 	public required DateTimeOffset? PublicationDate { get; init; }
+	public required bool IsVisible { get; init; }
 }
 
 [Mapper]

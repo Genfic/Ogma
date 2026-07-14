@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -40,7 +40,7 @@ public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext con
 		Chapters = await context.Chapters
 			.TagWith($"Fetching chapters for story {id} — {slug}")
 			.Where(c => c.StoryId == id)
-			.Where(c => c.PublicationDate != null || c.Story.AuthorId == uid)
+			.Where(c => c.IsVisible || c.Story.AuthorId == uid)
 			.Where(c => c.ContentBlockId == null || c.Story.AuthorId == uid)
 			.OrderBy(c => c.Order)
 			.ProjectToBasic()
