@@ -16,10 +16,17 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 		builder
 			.Property(b => b.Title)
 			.IsRequired()
+			.UseCollation(PgConstants.CollationNames.CaseInsensitive)
 			.HasMaxLength(CTConfig.Blogpost.MaxTitleLength);
 
+		builder.HasIndex(b => b.Title);
 		builder.HasIndex(b => b.PublicationDate);
-		builder.HasIndex(b => b.CreationDate);
+
+		builder
+			.HasIndex(b => b.Hashtags)
+			.HasMethod(PgConstants.IndexTypes.Gin)
+			.HasFilter("\"IsVisible\"")
+			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent);
 
 		builder
 			.Property(b => b.Slug)

@@ -48,7 +48,7 @@ public partial class FolderEntityType
             propertyInfo: typeof(Folder).GetProperty("AccessLevel", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(Folder).GetField("<AccessLevel>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             valueGenerated: ValueGenerated.OnAdd,
-            sentinel: (EClubMemberRoles)0);
+            sentinel: (EClubMemberRoles)(-1));
         accessLevel.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         accessLevel.AddAnnotation("Relational:DefaultValue", EClubMemberRoles.User);
 

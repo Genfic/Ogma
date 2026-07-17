@@ -30,7 +30,7 @@ public partial class BlogpostEntityType
             propertyCount: 14,
             navigationCount: 6,
             foreignKeyCount: 4,
-            unnamedIndexCount: 6,
+            unnamedIndexCount: 7,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -174,10 +174,15 @@ public partial class BlogpostEntityType
             unique: true);
 
         var index3 = runtimeEntityType.AddIndex(
-            new[] { creationDate });
+            new[] { hashtags });
+        index3.AddAnnotation("Relational:Collation", new[] { "nocase-noaccent" });
+        index3.AddAnnotation("Relational:Filter", "\"IsVisible\"");
 
         var index4 = runtimeEntityType.AddIndex(
             new[] { publicationDate });
+
+        var index5 = runtimeEntityType.AddIndex(
+            new[] { title });
 
         return runtimeEntityType;
     }

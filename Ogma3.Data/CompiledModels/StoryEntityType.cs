@@ -176,7 +176,7 @@ public partial class StoryEntityType
             propertyInfo: typeof(Story).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(Story).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             valueGenerated: ValueGenerated.OnAdd,
-            sentinel: EStoryStatus.Unspecified);
+            sentinel: (EStoryStatus)(-1));
         status.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         status.AddAnnotation("Relational:DefaultValue", EStoryStatus.InProgress);
 

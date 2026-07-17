@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.CommentsThreads;
@@ -8,6 +9,11 @@ namespace Ogma3.Data.Chapters;
 
 public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 {
+	private readonly ValueComparer<uint[]> _uintArrayComparer = new(
+		(a, b) => (a == null && b == null) || (a != null && b != null && Enumerable.SequenceEqual(a, b)),
+		a => a.Aggregate(0, (i, v) => HashCode.Combine(i, v.GetHashCode()))
+	);
+
 	public override void Configure(EntityTypeBuilder<Chapter> builder)
 	{
 		base.Configure(builder);
@@ -63,7 +69,8 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 			.HasColumnType(PgConstants.Types.IntArray)
 			.HasConversion(
 				v => Array.ConvertAll(v, i => (int)i),
-				v => Array.ConvertAll(v, i => (uint)i)
+				v => Array.ConvertAll(v, i => (uint)i),
+				_uintArrayComparer
 			);
 
 		// NAVIGATION

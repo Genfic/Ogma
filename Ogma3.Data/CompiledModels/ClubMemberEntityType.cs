@@ -63,7 +63,7 @@ public partial class ClubMemberEntityType
             propertyInfo: typeof(ClubMember).GetProperty("Role", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(ClubMember).GetField("<Role>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             valueGenerated: ValueGenerated.OnAdd,
-            sentinel: (EClubMemberRoles)0);
+            sentinel: (EClubMemberRoles)(-1));
         role.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         role.AddAnnotation("Relational:DefaultValue", EClubMemberRoles.User);
 
