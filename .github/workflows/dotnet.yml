@@ -1,3 +1,16 @@
+name: .NET
+
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
