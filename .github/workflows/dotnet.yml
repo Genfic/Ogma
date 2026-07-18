@@ -1,15 +1,3 @@
-name: .NET
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-permissions:
-  contents: read
-  packages: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,29 +22,9 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: |
-          # Use coverlet.msbuild to produce cobertura files under each test project's TestResults directory
-          dotnet test -c Release --no-build \
-            /p:CollectCoverage=true \
-            /p:CoverletOutput=TestResults/coverage.cobertura.xml \
-            /p:CoverletOutputFormat=cobertura
-
-      - name: Show coverage files (debug)
-        run: |
-          echo "Coverage files found:"
-          find . -type f -name "coverage.cobertura.xml" -print || true
-          find . -type f -name "*-linux-net11.0-report.html" -print || true
-          echo "Ogma3.Tests output tree:"
-          ls -R Ogma3.Tests/bin/Release || true
-          echo "Utils.Tests output tree:"
-          ls -R Utils.Tests/bin/Release || true
+        run: dotnet test -c Release -- --coverage --coverage-output-format cobertura
 
       - name: Coveralls
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b
         with:
-          # Use globs so the uploader finds coverage files regardless of exact paths
-          files: |
-            **/TestResults/coverage.cobertura.xml
-            **/*-linux-net11.0-report.html
-          # Be tolerant in CI if no coverage files are present (optional)
-          fail-on-error: false
+          format: cobertura

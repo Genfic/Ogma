@@ -10,6 +10,7 @@
 		<Features>runtime-async=on</Features>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<CheckSdkVulnerabilities>true</CheckSdkVulnerabilities>
+		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 	</PropertyGroup>
 
 	<ItemGroup>
