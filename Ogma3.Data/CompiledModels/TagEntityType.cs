@@ -24,11 +24,11 @@ public partial class TagEntityType
             "Ogma3.Data.Tags.Tag",
             typeof(Tag),
             baseEntityType,
-            propertyCount: 7,
+            propertyCount: 8,
             navigationCount: 1,
             skipNavigationCount: 1,
             foreignKeyCount: 1,
-            unnamedIndexCount: 4,
+            unnamedIndexCount: 5,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -68,6 +68,14 @@ public partial class TagEntityType
             maxLength: 250);
         description.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var lastChange = runtimeEntityType.AddProperty(
+            "LastChange",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Tag).GetProperty("LastChange", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Tag).GetField("<LastChange>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        lastChange.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
         var name = runtimeEntityType.AddProperty(
             "Name",
             typeof(string),
@@ -100,14 +108,17 @@ public partial class TagEntityType
             new[] { createdById });
 
         var index0 = runtimeEntityType.AddIndex(
-            new[] { name },
-            unique: true);
+            new[] { lastChange });
+        index0.AddAnnotation("Relational:Filter", "\"LastChange\" IS NOT NULL");
 
         var index1 = runtimeEntityType.AddIndex(
+            new[] { name });
+
+        var index2 = runtimeEntityType.AddIndex(
             new[] { slug },
             unique: true);
 
-        var index2 = runtimeEntityType.AddIndex(
+        var index3 = runtimeEntityType.AddIndex(
             new[] { name, @namespace },
             unique: true);
 

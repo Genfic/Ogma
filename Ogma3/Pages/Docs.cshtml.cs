@@ -26,6 +26,8 @@ public sealed class Docs(ApplicationDbContext context) : PageModel
 				Title = d.Title,
 				Slug = d.Slug,
 				CompiledBody = d.CompiledBody,
+				CustomCss = d.CustomCss,
+				CustomJs = d.CustomJs,
 				Version = d.Version,
 				Headers = d.Headers,
 			})
@@ -55,6 +57,8 @@ public sealed class Docs(ApplicationDbContext context) : PageModel
 		public required string Slug { get; init; }
 		public required uint Version { get; init; }
 		public required string CompiledBody { get; init; }
+		public required string? CustomCss { get; init; }
+		public required string? CustomJs { get; init; }
 		public required List<Document.Header> Headers { get; init; }
 	}
 

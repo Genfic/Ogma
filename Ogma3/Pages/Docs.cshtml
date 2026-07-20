@@ -22,9 +22,23 @@
 		</div>
 	}
 
+	@if (Model.Document.CustomCss is {} css)
+	{
+		<style asp-add-nonce="true">
+			@Html.Raw(css)
+		</style>
+	}
+
 	<div class="md">
 		@Html.Raw(Model.Document.CompiledBody)
 	</div>
+
+	@if (Model.Document.CustomJs is {} js)
+	{
+		<script asp-add-nonce="true">
+			@Html.Raw(js)
+		</script>
+	}
 
 	<details class="details">
 		<summary>Version history</summary>

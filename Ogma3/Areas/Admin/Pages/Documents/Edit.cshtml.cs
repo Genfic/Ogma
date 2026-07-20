@@ -25,6 +25,8 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		[Required] public required string Slug { get; set; }
 		[Required] public required string Title { get; set; }
 		[Required] public required string Body { get; set; }
+		public string? CustomCss { get; set; }
+		public string? CustomJs { get; set; }
 		public uint Version { get; set; }
 	}
 
@@ -39,6 +41,8 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				Title = d.Title,
 				Body = d.Body,
 				Version = d.Version,
+				CustomCss = d.CustomCss,
+				CustomJs = d.CustomJs,
 			})
 			.FirstOrDefaultAsync();
 
@@ -60,7 +64,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 
 		var now = DateTimeOffset.UtcNow;
 
-		var document = Markdown.Parse(Input.Body, MarkdownPipelines.All);
+		var document = Markdown.Parse(Input.Body, MarkdownPipelines.AllWithHtml);
 
 		var toc = document
 			.Descendants<HeadingBlock>()
@@ -70,12 +74,16 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 			)
 			.ToList();
 
+		var admin = User.IsInRole(RoleNames.Admin);
+
 		context.Documents.Add(new Document
 		{
 			Title = oldVersion.Title,
 			Slug = oldVersion.Slug,
 			Body = Input.Body,
 			CompiledBody = document.ToHtml(),
+			CustomCss = Input.CustomCss,
+			CustomJs = admin ? Input.CustomJs : null,
 			Version = oldVersion.Version + 1,
 			CreationTime = now,
 			RevisionDate = null,

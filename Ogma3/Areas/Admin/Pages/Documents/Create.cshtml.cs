@@ -23,10 +23,10 @@ public sealed class CreateModel(ApplicationDbContext context) : PageModel
 	public sealed class InputModel
 	{
 		public required long Id { get; set; }
-
 		[Required] public required string Title { get; set; }
-
 		[Required] public required string Body { get; set; }
+		public string? CustomCss { get; set; }
+		public string? CustomJs { get; set; }
 	}
 
 	public IActionResult OnGet()
@@ -36,7 +36,7 @@ public sealed class CreateModel(ApplicationDbContext context) : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var document = Markdown.Parse(Input.Body, MarkdownPipelines.All);
+		var document = Markdown.Parse(Input.Body, MarkdownPipelines.AllWithHtml);
 
 		var toc = document
 			.Descendants<HeadingBlock>()
@@ -46,12 +46,16 @@ public sealed class CreateModel(ApplicationDbContext context) : PageModel
 			)
 			.ToList();
 
+		var admin = User.IsInRole(RoleNames.Admin);
+
 		context.Documents.Add(new Document
 		{
 			Title = Input.Title,
 			Slug = Input.Title.Friendlify(),
 			Body = Input.Body,
 			CompiledBody = document.ToHtml(),
+			CustomCss = Input.CustomCss,
+			CustomJs = admin ? Input.CustomJs : null,
 			Version = 1,
 			CreationTime = DateTimeOffset.UtcNow,
 			RevisionDate = null,

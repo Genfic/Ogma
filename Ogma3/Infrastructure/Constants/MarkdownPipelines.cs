@@ -1,6 +1,8 @@
 using Markdig;
+using MarkdigExtensions.Center;
 using MarkdigExtensions.Hashtags;
 using MarkdigExtensions.Mentions;
+using MarkdigExtensions.PollEmbed;
 using MarkdigExtensions.Spoiler;
 
 namespace Ogma3.Infrastructure.Constants;
@@ -16,6 +18,7 @@ public static class MarkdownPipelines
 		.UseAutoIdentifiers()
 		.UseEmphasisExtras()
 		.UseSpoilers()
+		.UseCenter()
 		.Build();
 
 	public static MarkdownPipeline Comment { get; } = new MarkdownPipelineBuilder()
@@ -35,6 +38,19 @@ public static class MarkdownPipelines
 		.UseAdvancedExtensions()
 		.UseAutoIdentifiers()
 		.UseSpoilers()
+		.UseCenter()
+		.UsePollEmbeds()
+		.Build();
+
+	public static MarkdownPipeline AllWithHtml { get; } = new MarkdownPipelineBuilder()
+		.UsePipeTables()
+		.UseEmphasisExtras()
+		.UseMentions(MentionOptions)
+		.UseAdvancedExtensions()
+		.UseAutoIdentifiers()
+		.UseSpoilers()
+		.UseCenter()
+		.UsePollEmbeds()
 		.Build();
 
 	public static MarkdownPipeline Blogpost { get; } = new MarkdownPipelineBuilder()
@@ -45,5 +61,7 @@ public static class MarkdownPipelines
 		.UseHashtags(HashtagOptions)
 		.UseAutoIdentifiers()
 		.UseSpoilers()
+		.UseCenter()
+		.UsePollEmbeds()
 		.Build();
 }

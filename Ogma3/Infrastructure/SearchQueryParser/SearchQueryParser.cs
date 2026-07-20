@@ -65,7 +65,7 @@ public static class SearchQueryParser
 
 		var colon = segment.IndexOf(':');
 
-		    // "some title"
+		// "some title"
 		if (segment is ['"', .. var title, '"'])
 		{
 			return new TitleToken(title.Trim().ToString());

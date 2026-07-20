@@ -18,12 +18,15 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 			.AreNullsDistinct(false);
 
 		builder
-			.HasIndex(t => t.Name)
-			.IsUnique();
+			.HasIndex(t => t.Name);
 
 		builder
 			.HasIndex(t => t.Slug)
 			.IsUnique();
+
+		builder
+			.HasIndex(t => t.LastChange)
+			.HasFilter($"\"{nameof(Tag.LastChange)}\" IS NOT NULL");
 
 		builder
 			.Property(t => t.Name)

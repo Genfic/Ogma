@@ -15,6 +15,7 @@ public sealed class Tag : BaseModel
 	public List<Story> Stories { get; init; } = null!;
 
 	public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+	public DateTimeOffset? LastChange { get; set; }
 	public OgmaUser? CreatedBy { get; set; }
 	public long? CreatedById { get; set; }
 }

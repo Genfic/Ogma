@@ -23,7 +23,6 @@ public sealed partial class UpdateTag(ApplicationDbContext context)
 		=> endpoint
 			.ProducesValidationProblem();
 
-
 	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
 		CancellationToken cancellationToken
@@ -36,15 +35,18 @@ public sealed partial class UpdateTag(ApplicationDbContext context)
 			.AnyAsync(cancellationToken);
 
 		if (duplicateExists)
+		{
 			return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
+		}
 
 		var res = await context.Tags
 			.Where(t => t.Id == request.Id)
-			.ExecuteUpdateAsync(setPropertyCalls: tag => tag
-					.SetProperty(propertyExpression: t => t.Name, request.Name)
-					.SetProperty(propertyExpression: t => t.Slug, request.Name.Friendlify('_'))
-					.SetProperty(propertyExpression: t => t.Description, request.Description)
-					.SetProperty(propertyExpression: t => t.Namespace, request.Namespace),
+			.ExecuteUpdateAsync(tag => tag
+					.SetProperty(t => t.Name, request.Name)
+					.SetProperty(t => t.Slug, request.Name.Friendlify('_'))
+					.SetProperty(t => t.Description, request.Description)
+					.SetProperty(t => t.Namespace, request.Namespace)
+					.SetProperty(t => t.LastChange, DateTimeOffset.UtcNow),
 				cancellationToken);
 
 		await context.SaveChangesAsync(cancellationToken);

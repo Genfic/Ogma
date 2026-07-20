@@ -25,7 +25,7 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 		builder
 			.HasIndex(b => b.Hashtags)
 			.HasMethod(PgConstants.IndexTypes.Gin)
-			.HasFilter("\"IsVisible\"")
+			.HasFilter($"\"{nameof(Blogpost.IsVisible)}\"")
 			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent);
 
 		builder

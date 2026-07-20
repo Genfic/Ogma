@@ -22,7 +22,7 @@ public partial class DocumentEntityType
             "Ogma3.Data.Documents.Document",
             typeof(Document),
             baseEntityType,
-            propertyCount: 8,
+            propertyCount: 10,
             complexPropertyCount: 1,
             unnamedIndexCount: 2,
             keyCount: 1);
@@ -60,6 +60,22 @@ public partial class DocumentEntityType
             sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
         creationTime.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         creationTime.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+
+        var customCss = runtimeEntityType.AddProperty(
+            "CustomCss",
+            typeof(string),
+            propertyInfo: typeof(Document).GetProperty("CustomCss", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Document).GetField("<CustomCss>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        customCss.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var customJs = runtimeEntityType.AddProperty(
+            "CustomJs",
+            typeof(string),
+            propertyInfo: typeof(Document).GetProperty("CustomJs", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Document).GetField("<CustomJs>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        customJs.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var revisionDate = runtimeEntityType.AddProperty(
             "RevisionDate",

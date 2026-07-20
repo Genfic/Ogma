@@ -1,4 +1,5 @@
 @page
+@using Ogma3.Infrastructure.Constants
 @model Ogma3.Areas.Admin.Pages.Documents.CreateModel
 
 @{
@@ -15,11 +16,34 @@
 
 	<div class="o-form-group">
 		<label asp-for="@Model.Input.Body"></label>
-		<textarea asp-for="@Model.Input.Body" 
-            cols="30" rows="10" 
-            class="o-form-control active-border">
+		<textarea asp-for="@Model.Input.Body"
+		          cols="30" rows="10"
+		          class="o-form-control active-border">
         </textarea>
 	</div>
+
+	<details>
+		<summary>Advanced</summary>
+
+		<div class="o-form-group">
+			<label asp-for="@Model.Input.CustomCss"></label>
+			<textarea asp-for="@Model.Input.CustomCss"
+			          cols="30" rows="10"
+			          class="o-form-control active-border">
+			</textarea>
+		</div>
+
+		@if (User.IsInRole(RoleNames.Admin))
+		{
+			<div class="o-form-group">
+				<label asp-for="@Model.Input.CustomJs"></label>
+				<textarea asp-for="@Model.Input.CustomJs"
+			          cols="30" rows="10"
+			          class="o-form-control active-border">
+				</textarea>
+			</div>
+		}
+	</details>
 
 	<input asp-for="@Model.Input.Id" type="hidden">
 
