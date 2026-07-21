@@ -1,15 +1,15 @@
 using Immediate.Injections.Shared;
-using Ogma3.Infrastructure.Constants;
 using StackExchange.Redis;
+using StackExchange.Redis.KeyspaceIsolation;
 
 namespace Ogma3.Services.ETagService;
 
 [RegisterScoped]
 public sealed class ETagService(IConnectionMultiplexer garnet)
 {
-	private IDatabase Db => garnet.GetDatabase(GarnetDatabase.ETag);
+	private IDatabase Db => garnet.GetDatabase().WithKeyPrefix("etags:");
 	private static string GetKey<T>(ETagFor etagFor, T id, long? userId = null)
-		=> $"etag_{etagFor.ToStringFast()}:{id}" + (userId.HasValue ? $":{userId}" : "");
+		=> $"{etagFor.ToStringFast()}:{id}" + (userId.HasValue ? $":{userId}" : "");
 
 	public void Create<T>(ETagFor etagFor, T id, long? userId)
 	{

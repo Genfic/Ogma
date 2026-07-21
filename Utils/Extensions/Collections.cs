@@ -57,5 +57,16 @@ public static class Dictionary
 		{
 			return dict.TryGetValue(key, out var value) ? value : defaultValue;
 		}
+
+		public void AddOrUpdate(TKey key, Func<TValue> valueFactory, Action<TValue> update)
+		{
+			if (!dict.TryGetValue(key, out var val))
+			{
+				val = valueFactory();
+				dict.Add(key, val);
+			}
+
+			update(val);
+		}
 	}
 }

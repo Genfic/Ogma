@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.TagCache;
 
 namespace Ogma3.Api.V1.Tags;
 
@@ -15,7 +16,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteTag(ApplicationDbContext context)
+public sealed partial class DeleteTag(ApplicationDbContext context, TagCache cache)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -26,11 +27,28 @@ public sealed partial class DeleteTag(ApplicationDbContext context)
 		CancellationToken cancellationToken
 	)
 	{
+		var tag = await context.Tags
+			.Where(t => t.Id == request.TagId)
+			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace))
+			.FirstOrDefaultAsync(cancellationToken);
+
+		if (tag is null)
+		{
+			return TypedResults.NotFound();
+		}
+
 		var res = await context.Tags
 			.Where(t => t.Id == request.TagId)
 			.ExecuteDeleteAsync(cancellationToken);
 
-		return res > 0 ? TypedResults.Ok(request.TagId) : TypedResults.NotFound();
+		if (res <= 0)
+		{
+			return TypedResults.NotFound();
+		}
+
+		await cache.DeleteAsync(tag);
+		return TypedResults.Ok(request.TagId);
+
 	}
 
 	[Validate]

@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.TagCache;
 
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class Scripts(ApplicationDbContext ctx) : PageModel
+public sealed class Scripts(ApplicationDbContext ctx, TagCache tagCache) : PageModel
 {
 	public void OnGet()
 	{
@@ -16,6 +17,19 @@ public sealed class Scripts(ApplicationDbContext ctx) : PageModel
 	}
 
 	public string? Message { get; set; }
+
+	public async Task<IActionResult> OnGetReloadTagCache()
+	{
+		var tags = await ctx.Tags
+			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace))
+			.ToListAsync();
+
+		var entries = await tagCache.AddManyAsync(tags);
+
+		Message = $"Fetched {tags.Count} tags and created {entries} cache entries.";
+
+		return Page();
+	}
 
 	public async Task<IActionResult> OnGetUpdateStories()
 	{

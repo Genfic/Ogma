@@ -4,7 +4,6 @@ using System.Text;
 using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using MemoryPack;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.OgmaConfig;
 using StackExchange.Redis;
 
@@ -25,7 +24,7 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 			IssuedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
 		};
 
-		await redis.GetDatabase(GarnetDatabase.Misc).StringSetAsync(
+		await redis.GetDatabase().StringSetAsync(
 			Key(token),
 			MemoryPackSerializer.Serialize(challenge),
 			TimeSpan.FromSeconds(config.PowExpirySeconds)
@@ -36,7 +35,7 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 
 	public async Task<PowVerificationResult> VerifyChallenge(string token, long nonce, string hash)
 	{
-		var db = redis.GetDatabase(GarnetDatabase.Misc);
+		var db = redis.GetDatabase();
 
 		var body = await db.StringGetDeleteAsync(Key(token)); // atomic get + delete
 		if (body.IsNull)

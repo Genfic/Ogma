@@ -189,10 +189,6 @@ public static class Startup
 		builder.AddRedisDistributedCache(connectionName: "garnet");
 		services.AddStackExchangeRedisCache(o => {
 			o.Configuration = configuration.GetConnectionString("garnet") ?? "localhost";
-			o.ConfigurationOptions = new()
-			{
-				DefaultDatabase = GarnetDatabase.Cache,
-			};
 		});
 		services.AddFusionCache()
 			.WithSerializer(new FusionCacheCysharpMemoryPackSerializer())

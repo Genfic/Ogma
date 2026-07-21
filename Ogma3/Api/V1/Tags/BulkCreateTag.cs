@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.TagCache;
 using Utils.Extensions;
 
 namespace Ogma3.Api.V1.Tags;
@@ -21,7 +22,7 @@ using ReturnType = Results<BadRequest<string>, Ok<string>>;
 [MapPost("tags/bulk")]
 [UsedImplicitly]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class BulkCreateTag(ApplicationDbContext context, ILogger<BulkCreateTag.Handler> logger)
+public sealed partial class BulkCreateTag(ApplicationDbContext context, TagCache cache, ILogger<BulkCreateTag.Handler> logger)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -66,6 +67,8 @@ public sealed partial class BulkCreateTag(ApplicationDbContext context, ILogger<
 			ON CONFLICT DO NOTHING;
 			""",
 			cancellationToken);
+
+		await cache.AddManyAsync(tags.Select(t => new TagEntry(t.Id, t.Name, t.Namespace)));
 
 		logger.LogInformation("Bulk inserted {Inserted} tags", inserted);
 

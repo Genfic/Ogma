@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.TagCache;
 using Utils.Extensions;
 
 namespace Ogma3.Api.V1.Tags;
@@ -17,7 +18,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateTag(ApplicationDbContext context)
+public sealed partial class CreateTag(ApplicationDbContext context, TagCache cache)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -44,6 +45,8 @@ public sealed partial class CreateTag(ApplicationDbContext context)
 		};
 		context.Tags.Add(tag);
 		await context.SaveChangesAsync(cancellationToken);
+
+		await cache.AddAsync(new(tag.Id, tag.Name, tag.Namespace));
 
 		return TypedResults.CreatedAtRoute(tag.ToDto(), nameof(GetSingleTag), new GetSingleTag.Query(tag.Id));
 	}

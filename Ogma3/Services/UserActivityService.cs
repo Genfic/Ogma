@@ -1,19 +1,17 @@
 using Immediate.Injections.Shared;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.UserService;
 using StackExchange.Redis;
+using StackExchange.Redis.KeyspaceIsolation;
 
 namespace Ogma3.Services;
 
 [RegisterScoped]
 public sealed class UserActivityService(IConnectionMultiplexer garnet, IUserService userService)
 {
-	private const string Prefix = "lastActive:";
-
 	private string? UserName => userService.User?.GetUsername();
 
-	private IDatabase Db => garnet.GetDatabase(GarnetDatabase.UserActivity);
+	private IDatabase Db => garnet.GetDatabase().WithKeyPrefix("activity:");
 
 	public async Task SetLastActiveAsync()
 	{
@@ -21,7 +19,7 @@ public sealed class UserActivityService(IConnectionMultiplexer garnet, IUserServ
 		{
 			return;
 		}
-		await Db.StringSetAsync($"{Prefix}{UserName}", DateTimeOffset.UtcNow.ToString());
+		await Db.StringSetAsync(UserName, DateTimeOffset.UtcNow.ToString());
 	}
 
 	public async Task<DateTimeOffset?> GetLastActiveAsync()
@@ -30,7 +28,7 @@ public sealed class UserActivityService(IConnectionMultiplexer garnet, IUserServ
 		{
 			return null;
 		}
-		var value = await Db.StringGetAsync($"{Prefix}{UserName}");
+		var value = await Db.StringGetAsync(UserName);
 
 		return DateTimeOffset.TryParse(value, out var result) ? result : null;
 	}

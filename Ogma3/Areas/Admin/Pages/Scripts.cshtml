@@ -9,6 +9,43 @@
 @(Model.Message ?? "No message")
 </pre>
 
-<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetUpdateStories()">
-	Update Stories (set `IsVisible` based on publish date nullability)
-</a>
+<ul class="scripts">
+
+	<li>
+		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetUpdateStories()">
+			Update Stories (set `IsVisible` based on publish date nullability)
+		</a>
+	</li>
+
+	<li>
+		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetReloadTagCache()">
+			Reload tag cache based on tags in the database
+		</a>
+	</li>
+
+</ul>
+
+<style asp-add-nonce="true">
+	.scripts {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: .25rem;
+
+		a {
+			text-decoration: none;
+			display: flex;
+			padding: .5rem 1rem;
+			background-color: var(--accent-5);
+			border: 1px solid var(--accent-75);
+			color: var(--foreground);
+			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+
+			&:hover {
+				background-color: var(--accent-10);
+				border-color: var(--accent);
+			}
+		}
+	}
+</style>
