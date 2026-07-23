@@ -1,0 +1,25 @@
+@using Utils.Extensions
+@model NewsCard
+
+<div class="blogpost-card">
+	<a class="title" asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+		<h3>@Model.Title</h3>
+	</a>
+
+	<markdown class="excerpt">
+		@Model.Excerpt
+	</markdown>
+
+	<div class="info">
+
+		@if (Model.PublicationDate is {} date)
+		{
+			<span class="release-date">
+				published
+				<time-display utc-date="@date" formatter="d => d.FormatDateWithDaySuffix()"></time-display>
+			</span>
+		}
+
+		<span class="author">by <strong>@Model.AuthorUserName</strong></span>
+	</div>
+</div>

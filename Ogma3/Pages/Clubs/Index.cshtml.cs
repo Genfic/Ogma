@@ -19,11 +19,11 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 	public async Task OnGetAsync(
 		[FromQuery] int page = 1,
 		[FromQuery] string? q = null,
-		[FromQuery] EClubSortingOptions sort = EClubSortingOptions.CreationDateDescending
+		[FromQuery] EClubSortingOptions? sort = null
 	)
 	{
 		Query = q;
-		SortBy = sort;
+		SortBy = sort ?? EClubSortingOptions.CreationDateDescending;
 
 		var query = context.Clubs.AsQueryable();
 
@@ -32,7 +32,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 			query = query.Where(c => EF.Functions.Like(c.Name.ToUpper(), $"%{q.Trim().ToUpper()}%"));
 		}
 
-		Clubs = await (sort switch
+		Clubs = await (SortBy switch
 			{
 				EClubSortingOptions.NameAscending => query.OrderBy(c => c.Name),
 				EClubSortingOptions.NameDescending => query.OrderByDescending(c => c.Name),

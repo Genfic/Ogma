@@ -220,6 +220,20 @@ public static partial class String
 
 			return sb.ToString();
 		}
+
+		public ReadOnlySpan<char> ReadUntil(ReadOnlySpan<char> stopChars, StringComparison comparisonType = StringComparison.CurrentCulture)
+		{
+			if (span.Length == 0)
+			{
+				return ReadOnlySpan<char>.Empty;
+			}
+
+			var index = span.IndexOf(stopChars, comparisonType);
+
+			return index >= 0
+				? span[..index]
+				: span;
+		}
 	}
 
 

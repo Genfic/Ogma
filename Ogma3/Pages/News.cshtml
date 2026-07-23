@@ -1,0 +1,25 @@
+@page
+@model Ogma3.Pages.NewsModel
+
+@{
+	ViewData["Title"] = "Site News";
+}
+
+<h1 class="olde">Site News</h1>
+
+<div>
+	@if (Model.NewsCards is { Count: <= 0 })
+	{
+		<h1>No news found</h1>
+	}
+	else
+	{
+		{
+			foreach (var news in Model.NewsCards)
+			{
+				<partial name="Shared/Cards/_NewsCard" model="news"/>
+			}
+			<partial name="_Pagination" model="Model.Pagination"/>
+		}
+	}
+</div>

@@ -12,14 +12,14 @@ namespace Ogma3.Pages.Blog;
 public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	public required IList<BlogpostCard> Posts { get; set; }
-	public required string SearchBy { get; set; }
+	public string? SearchBy { get; set; }
 	public required EBlogpostSortingOptions SortBy { get; set; }
 	public required Pagination Pagination { get; set; }
 
-	public async Task<ActionResult> OnGetAsync([FromQuery] string q, [FromQuery] EBlogpostSortingOptions sort, [FromQuery] int page = 1)
+	public async Task<ActionResult> OnGetAsync([FromQuery] string? q = null, [FromQuery] EBlogpostSortingOptions? sort = null, [FromQuery] int page = 1)
 	{
 		SearchBy = q;
-		SortBy = sort;
+		SortBy = sort ?? EBlogpostSortingOptions.DateDescending;
 
 		var query = context.Blogposts
 			.Where(b => b.IsVisible)

@@ -20,13 +20,13 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 	public required Pagination? Pagination { get; set; }
 
 	[FromQuery]
-	public string? Query { get; set; } = null;
+	public string? Query { get; set; }
 	[FromQuery]
-	public long? Rating { get; set; } = null;
+	public long? Rating { get; set; }
 	[FromQuery]
-	public EStorySortingOptions Sort { get; set; } = EStorySortingOptions.DateDescending;
+	public EStorySortingOptions? Sort { get; set; }
 	[FromQuery]
-	public EStoryStatus? Status { get; set; } = null;
+	public EStoryStatus? Status { get; set; }
 
 	public async Task OnGetAsync([FromQuery] int? page)
 	{
@@ -73,7 +73,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 			var s = await storiesQuery
 				.TagWith("Searching for stories")
 				.AsSplitQuery()
-				.SortByEnum(Sort)
+				.SortByEnum(Sort ?? EStorySortingOptions.DateDescending)
 				.Paginate(page ?? 1, config.StoriesPerPage)
 				.Select(StoryMapper.MapToCard)
 				.ToListAsync(ct);

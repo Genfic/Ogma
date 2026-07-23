@@ -1,4 +1,4 @@
-<a class="brand" asp-area="" asp-page="/Index">
+<a class="brand" for-route="@Routes.Pages.Index.Get()">
 	Genfic
 	<version color="#ff5400" text="β"></version>
 </a>
@@ -6,20 +6,26 @@
 <ul class="navbar-nav left">
 
 	<li class="nav-item">
-		<a class="nav-link" asp-area="" asp-page="/Stories/Index">
+		<a class="nav-link" for-route="@Routes.Pages.Stories_Index.Get(null, null, null, null, null)">
 			<span class="name">Stories</span>
 		</a>
 	</li>
 
 	<li class="nav-item">
-		<a class="nav-link" asp-area="" asp-page="/Blog/Index">
+		<a class="nav-link" for-route="@Routes.Pages.Blog_Index.Get()">
 			<span class="name">Blogs</span>
 		</a>
 	</li>
 
 	<li class="nav-item">
-		<a class="nav-link" asp-area="" asp-page="/Clubs/Index">
+		<a class="nav-link" for-route="@Routes.Pages.Clubs_Index.Get()">
 			<span class="name">Clubs</span>
+		</a>
+	</li>
+
+	<li class="nav-item">
+		<a class="nav-link" for-route="@Routes.Pages.News.Get()">
+			<span class="name">News</span>
 		</a>
 	</li>
 
