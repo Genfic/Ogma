@@ -21,6 +21,10 @@
 		<icon class="icon" name="lucide:trash-2"></icon>
 		<span class="name">Delete</span>
 	</a>
+	<a title="Delete" class="action-btn large red" asp-page="./Orphan" asp-route-id="@Model.Input.Id">
+		<icon class="icon" name="lucide:ghost"></icon>
+		<span class="name">Orphan</span>
+	</a>
 </div>
 
 <form class="form" id="story" method="post" enctype="multipart/form-data">

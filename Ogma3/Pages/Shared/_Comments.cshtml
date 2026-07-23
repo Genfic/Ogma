@@ -13,7 +13,7 @@
 <o-comments csrf="@csrf"
             thread-id="@Model.Id"
             is-logged-in="@(User.Identity is { IsAuthenticated: true })"
-            lock-date="@(Model.LockDate == default(DateTimeOffset) ? null : Model.LockDate)"
+            is-locked="@(Model.LockDate is not null)"
             md-ref-route="@Markdown.Get().Path(LinkGenerator)"
             login-route="@Account_Login.Get().Path(LinkGenerator)"
             register-route="@Account_Register.Get().Path(LinkGenerator)"

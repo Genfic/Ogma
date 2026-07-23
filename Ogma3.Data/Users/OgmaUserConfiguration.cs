@@ -64,7 +64,8 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 		builder
 			.Property(u => u.TimeZone)
 			.HasMaxLength(50)
-			.IsRequired();
+			.IsRequired()
+			.HasDefaultValue("UTC");
 
 		builder
 			.Ignore(u => u.PhoneNumber)
@@ -119,6 +120,29 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.HasMany(u => u.Reports)
 			.WithOne(r => r.User)
 			.HasForeignKey(r => r.UserId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetNull);
+
+		// Seeding system users
+		builder.HasData(
+			new()
+			{
+				Id = SystemUserConstants.Deleted.Id,
+				UserName = SystemUserConstants.Deleted.Name,
+				NormalizedUserName = SystemUserConstants.Deleted.NormalizedName,
+				AvatarId = SystemUserConstants.Deleted.Id,
+				CommentThread = null!,
+				Email = "",
+				NormalizedEmail = "",
+			}, new()
+			{
+				Id = SystemUserConstants.Anonymous.Id,
+				UserName = SystemUserConstants.Anonymous.Name,
+				NormalizedUserName = SystemUserConstants.Anonymous.NormalizedName,
+				AvatarId = SystemUserConstants.Anonymous.Id,
+				CommentThread = null!,
+				Email = "",
+				NormalizedEmail = "",
+			}
+		);
 	}
 }

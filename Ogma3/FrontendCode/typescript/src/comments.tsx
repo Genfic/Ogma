@@ -17,7 +17,7 @@ interface Props {
 	csrf: string;
 	threadId: number;
 	isLoggedIn: boolean;
-	lockDate?: Date;
+	isLocked: boolean;
 	mdRefRoute: string;
 	loginRoute: string;
 	registerRoute: string;
@@ -94,7 +94,7 @@ const Comments = (props: Props) => {
 		},
 	);
 
-	let isLocked = $signal(!!props.lockDate);
+	let isLocked = $signal(props.isLocked);
 
 	const isStaff = $memo(threadData().isStaff);
 
@@ -262,12 +262,11 @@ component(
 		csrf: "",
 		threadId: 0,
 		isLoggedIn: false,
-		lockDate: undefined,
+		isLocked: false,
 		mdRefRoute: "",
 		loginRoute: "",
 		registerRoute: "",
 	},
 	Comments,
 	css,
-	["lockDate"],
 );

@@ -194,8 +194,10 @@ public partial class OgmaUserEntityType
             typeof(string),
             propertyInfo: typeof(OgmaUser).GetProperty("TimeZone", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(OgmaUser).GetField("<TimeZone>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
             maxLength: 50);
         timeZone.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        timeZone.AddAnnotation("Relational:DefaultValue", "UTC");
 
         var title = runtimeEntityType.AddProperty(
             "Title",

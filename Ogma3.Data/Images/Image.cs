@@ -1,6 +1,7 @@
 using AutoDbSetGenerators;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
+using Ogma3.Data.Constants;
 
 namespace Ogma3.Data.Images;
 
@@ -23,5 +24,19 @@ public sealed class ImageConfiguration : BaseConfiguration<Image>
 		builder
 			.Property(i => i.ETag)
 			.HasMaxLength(255);
+
+		// Seed avatars for system users
+		builder.HasData(
+			new()
+			{
+				Id = SystemUserConstants.Deleted.Id,
+				Url = SystemUserConstants.Deleted.Avatar,
+			},
+			new()
+			{
+				Id = SystemUserConstants.Anonymous.Id,
+				Url = SystemUserConstants.Anonymous.Avatar,
+			}
+		);
 	}
 }

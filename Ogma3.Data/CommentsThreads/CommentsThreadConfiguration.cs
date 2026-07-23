@@ -45,5 +45,21 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 					.WithMany()
 					.HasForeignKey(c => c.CommentsThreadId)
 			);
+
+		// Seed comments for system users
+		builder.HasData(
+			new()
+			{
+				Id = SystemUserConstants.Deleted.Id,
+				UserId = SystemUserConstants.Deleted.Id,
+				LockDate = DateTimeOffset.MinValue,
+			},
+			new()
+			{
+				Id = SystemUserConstants.Anonymous.Id,
+				UserId = SystemUserConstants.Anonymous.Id,
+				LockDate = DateTimeOffset.MinValue,
+			}
+		);
 	}
 }

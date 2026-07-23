@@ -1,0 +1,73 @@
+﻿@page
+@model OrphanModel
+
+@{
+	ViewData["Title"] = "Orphan";
+}
+
+<h2>@Model.Story.Title</h2>
+
+<div>
+	<h3>Are you sure you want to orphan this story?</h3>
+	<hr/>
+	<dl class="rows">
+		<dt>
+    		Created on:
+    	</dt>
+    	<dd>
+    		@Model.Story.CreationDate
+    	</dd>
+		<dt>
+			Published on:
+		</dt>
+		<dd>
+			@Model.Story.ReleaseDate
+		</dd>
+		<dt>
+			Hook:
+		</dt>
+		<dd>
+			<markdown>
+				@Model.Story.Hook
+			</markdown>
+		</dd>
+		<dt>
+			Published status:
+		</dt>
+		<dd>
+			@(Model.Story.IsPublished ? "Published" : "Not published")
+		</dd>
+		<dt>
+			Progress:
+		</dt>
+		<dd>
+			<story-status status="@Model.Story.Status"></story-status>
+		</dd>
+		<dt>
+			Score:
+		</dt>
+		<dd>
+			@Model.Story.VotesCount
+		</dd>
+		<dt>
+			Chapters:
+		</dt>
+		<dd>
+			@Model.Story.ChaptersCount
+		</dd>
+		<dt>
+			Comments:
+		</dt>
+		<dd>
+			@Model.Story.CommentsCount
+		</dd>
+	</dl>
+
+	<form method="post">
+		<input type="hidden" asp-for="Story.Id"/>
+		<div class="button-group">
+			<input type="submit" value="Orphan Story" class="btn red"/>
+			<a asp-page="../Story" class="btn" asp-route-id="@Model.Story.Id" asp-route-slug="@Model.Story.Slug">Cancel</a>
+		</div>
+	</form>
+</div>
