@@ -1,8 +1,10 @@
 using System.Collections.Frozen;
+using Utils.Extensions;
 
 namespace Ogma3.Infrastructure.SearchQueryParser;
 
 using LookupDict = FrozenDictionary<string, Func<string, bool, SearchToken>>;
+using SubstitutionDict = FrozenDictionary<string, string>;
 
 public static class SearchQueryParser
 {
@@ -16,6 +18,16 @@ public static class SearchQueryParser
 
 	private static readonly LookupDict.AlternateLookup<ReadOnlySpan<char>> FieldLookup =
 		FieldParsers.GetAlternateLookup<ReadOnlySpan<char>>();
+
+	private static readonly SubstitutionDict NamespaceSubs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+	{
+		["cw"] = "contentwarning",
+		["g"] = "genre",
+		["f"] = "franchise",
+	}.ToFrozenDictionary();
+
+	private static readonly SubstitutionDict.AlternateLookup<ReadOnlySpan<char>> SubstitutionLookup =
+		NamespaceSubs.GetAlternateLookup<ReadOnlySpan<char>>();
 
 	public static IReadOnlyList<SearchToken> Parse(ReadOnlySpan<char> query)
 	{
@@ -87,6 +99,20 @@ public static class SearchQueryParser
 		}
 
 		// plain tag with namespace
-		return new TagToken(segment[..colon].Trim().ToString(), segment[(colon+1)..].Trim().ToString(), negated);
+		var trimmed = segment[..colon].Trim();
+
+		// fast path: no spaces to remove, skip the stackalloc copy entirely
+		if (trimmed.IndexOf(' ') < 0)
+		{
+			var subbed = SubstitutionLookup.TryGetValue(trimmed, out var sub) ? sub : trimmed;
+			return new TagToken(subbed.ToString(), segment[(colon + 1)..].Trim().ToString(), negated);
+		}
+
+		// slow path: contains spaces, perform the stackalloc strip
+		Span<char> buffer = stackalloc char[trimmed.Length];
+		var ns = trimmed.RemoveChar(' ', buffer);
+
+		var subbedClean = SubstitutionLookup.TryGetValue(ns, out var subClean) ? subClean : ns;
+		return new TagToken(subbedClean.ToString(), segment[(colon + 1)..].Trim().ToString(), negated);
 	}
 }

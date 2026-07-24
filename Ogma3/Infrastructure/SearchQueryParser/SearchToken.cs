@@ -1,5 +1,4 @@
 using Ogma3.Data.Stories;
-using Ogma3.Data.Tags;
 
 namespace Ogma3.Infrastructure.SearchQueryParser;
 
@@ -9,8 +8,9 @@ public sealed record TitleToken(string Value): SearchToken;
 
 public sealed record TagToken(string? Namespace, string Value, bool Negated = false) : SearchToken
 {
-	public ETagNamespace? Ns =>
-		ETagNamespaceExtensions.TryParse(Namespace, out var val, true, true) ? val : null;
+	public string FullName => Namespace is null
+		? Value
+		: $"{Namespace}:{Value}".ToLowerInvariant();
 }
 
 public sealed record AuthorToken(string Value, bool Negated = false): SearchToken;

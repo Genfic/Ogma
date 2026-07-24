@@ -15,7 +15,6 @@ namespace Ogma3.Api.V1.Files;
 [Authorize]
 public sealed partial class UploadFile(IFileUploader uploader, ImageProcessor processor, OgmaConfig config)
 {
-
 	private async ValueTask<Ok<string>> Handle(
 		[FromForm] Query request,
 		CancellationToken _

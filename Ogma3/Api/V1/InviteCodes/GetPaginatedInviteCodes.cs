@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 
 namespace Ogma3.Api.V1.InviteCodes;

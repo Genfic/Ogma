@@ -6,7 +6,7 @@ namespace Ogma3.Data.Stories;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 [EnumExtensions]
-public enum EStorySortingOptions
+public enum StorySort
 {
 	[Display(Name = "Title ↑")] TitleAscending,
 	[Display(Name = "Title ↓")] TitleDescending,

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -22,34 +23,34 @@ public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache,
 		// Try getting recent stories from the cache
 		RecentStories = await cache.GetOrSetAsync("IndexRecent", async ct => {
 			logger.LogInformation("{Stories} cache miss!", nameof(RecentStories));
-			return await GetTopStoryCards(10, cancellationToken: ct);
+			return await GetTopStoryCards(10, static s => s.PublicationDate, ct);
 		}, options => options.Duration = shortExpiry);
 
 		// Try getting top stories from the cache
 		TopStories = await cache.GetOrSetAsync("IndexTop", async ct => {
 			logger.LogInformation("{Stories} cache miss!", nameof(TopStories));
-			return await GetTopStoryCards(10, EStorySortingOptions.ScoreDescending, ct);
+			return await GetTopStoryCards(10, static s => s.VoteCount, ct);
 		}, options => options.Duration = longExpiry);
 
 		// Try getting recently updated stories from the cache
 		LastUpdatedStories = await cache.GetOrSetAsync("IndexUpdated", async ct => {
 			logger.LogInformation("{Stories} cache miss!", nameof(LastUpdatedStories));
-			return await GetTopStoryCards(10, EStorySortingOptions.UpdatedDescending, ct);
+			return await GetTopStoryCards(10, static s => s.LastUpdatedAt, ct);
 		}, options => options.Duration = shortExpiry);
 	}
 
-	private async Task<List<StoryCard>> GetTopStoryCards(
+	private async Task<List<StoryCard>> GetTopStoryCards<TProp>(
 		int count,
-		EStorySortingOptions sort = EStorySortingOptions.DateDescending,
+		Expression<Func<Story, TProp>> sort,
 		CancellationToken cancellationToken = default
 	)
 	{
 		return await context.Stories
-			.TagWith($"{nameof(GetTopStoryCards)} -> {count}, {sort.ToStringFast()}")
+			.TagWith($"{nameof(GetTopStoryCards)} -> {count}")
 			.Where(b => b.IsVisible)
 			.Where(b => b.ContentBlockId == null)
 			.Where(s => s.Rating.BlacklistedByDefault == false)
-			.SortByEnum(sort)
+			.OrderByDescending(sort)
 			.Take(count)
 			.Select(StoryMapper.MapToCard)
 			.ToListAsync(cancellationToken);

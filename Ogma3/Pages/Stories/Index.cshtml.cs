@@ -4,16 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
+using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.SearchQueryParser;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
+using Ogma3.Services.TagCache;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Pages.Stories;
 
-public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, IFusionCache cache) : PageModel
+public sealed class IndexModel(
+	ApplicationDbContext context,
+	OgmaConfig config,
+	TagCache tagCache,
+	IFusionCache cache) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<StoryCard> Stories { get; set; }
@@ -24,7 +30,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 	[FromQuery]
 	public long? Rating { get; set; }
 	[FromQuery]
-	public EStorySortingOptions? Sort { get; set; }
+	public StorySort? Sort { get; set; }
 	[FromQuery]
 	public EStoryStatus? Status { get; set; }
 
@@ -39,28 +45,46 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 			.AsQueryable();
 
 		var tokens = SearchQueryParser.Parse(Query);
-		storiesQuery = tokens.Aggregate(storiesQuery, (current, token) => token switch
+
+		var includedTags = new HashSet<string>();
+		var excludedTags = new HashSet<string>();
+		foreach (var token in tokens)
 		{
-			TitleToken t => current.Where(s => s.Title.Contains(t.Value)),
-			AuthorToken t => t.Negated
-				? current.Where(s => !s.Author.NormalizedUserName.Contains(t.Value))
-				: current.Where(s => s.Author.NormalizedUserName.Contains(t.Value)),
-			RatingToken t => t.Negated
-				? current.Where(s => s.Rating.Name != t.Value)
-				: current.Where(s => s.Rating.Name == t.Value),
-			StatusToken t => t.Negated
-				? current.Where(s => s.Status != t.Status)
-				: current.Where(s => s.Status == t.Status),
-			TagToken { Negated: false } t => t.Ns is null
-				? current.Where(s => s.Tags.Any(st => st.Name == t.Value))
-				: current.Where(s => s.Tags.Any(st => st.Name == t.Value && st.Namespace == t.Ns)),
-			TagToken { Negated: true } t => t.Ns is null
-				? current.Where(s => s.Tags.All(st => st.Name != t.Value))
-				: current.Where(s => !s.Tags.Any(st => st.Name == t.Value && st.Namespace == t.Ns)),
-			_ => current,
-		});
+			switch (token)
+			{
+				case TitleToken t:
+					storiesQuery = storiesQuery.Where(s => s.Title.Contains(t.Value));
+					break;
+				case AuthorToken t:
+					storiesQuery = t.Negated
+						? storiesQuery.Where(s => !s.Author.NormalizedUserName.Contains(t.Value))
+						: storiesQuery.Where(s => s.Author.NormalizedUserName.Contains(t.Value));
+					break;
+				case RatingToken t:
+					storiesQuery = t.Negated
+						? storiesQuery.Where(s => s.Rating.Name != t.Value)
+						: storiesQuery.Where(s => s.Rating.Name == t.Value);
+					break;
+				case StatusToken t:
+					storiesQuery = t.Negated
+						? storiesQuery.Where(s => s.Status != t.Status)
+						: storiesQuery.Where(s => s.Status == t.Status);
+					break;
+				case TagToken { Negated: false } t:
+					includedTags.Add(t.FullName);
+					break;
+				case TagToken { Negated: true } t:
+					excludedTags.Add(t.FullName);
+					break;
+			}
+		}
+
+		var includedTagIds = await tagCache.GetTagIds([..includedTags]);
+		var excludedTagIds = await tagCache.GetTagIds([..excludedTags]);
 
 		storiesQuery = storiesQuery
+			.WhereIf(s =>  includedTagIds.All(i => s.Tags.Any(t => t.Id == i)), includedTagIds.Length > 0)
+			.WhereIf(s => !s.Tags.Any(t =>  excludedTagIds.AsEnumerable().Contains(t.Id)), excludedTagIds.Length > 0)
 			.WhereIf(s => s.RatingId == Rating, Rating != null)
 			.WhereIf(s => s.Status == Status, Status != null)
 			.Where(s => s.IsVisible)
@@ -70,10 +94,10 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 
 		var key = Query + ":" + string.Join(':', [Rating, (long?)Status, (long?)Sort, page, uid]);
 		var (stories, count) = await cache.GetOrSetAsync<(List<StoryCard> s, int c)>(key, async ct => {
-			var s = await storiesQuery
+
+			var s = await SortStories(storiesQuery, Sort ?? StorySort.DateDescending)
 				.TagWith("Searching for stories")
 				.AsSplitQuery()
-				.SortByEnum(Sort ?? EStorySortingOptions.DateDescending)
 				.Paginate(page ?? 1, config.StoriesPerPage)
 				.Select(StoryMapper.MapToCard)
 				.ToListAsync(ct);
@@ -93,4 +117,20 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config, 
 			CurrentPage = page ?? 1,
 		};
 	}
+
+	private static IQueryable<Story> SortStories(IQueryable<Story> query, StorySort sortBy)
+		=> sortBy switch
+		{
+			StorySort.TitleAscending => query.OrderBy(s => s.Title),
+			StorySort.TitleDescending => query.OrderByDescending(s => s.Title),
+			StorySort.DateAscending => query.OrderBy(s => s.PublicationDate),
+			StorySort.DateDescending => query.OrderByDescending(s => s.PublicationDate),
+			StorySort.WordsAscending => query.OrderBy(s => s.WordCount),
+			StorySort.WordsDescending => query.OrderByDescending(s => s.WordCount),
+			StorySort.ScoreAscending => query.OrderBy(s => s.VoteCount),
+			StorySort.ScoreDescending => query.OrderByDescending(s => s.VoteCount),
+			StorySort.UpdatedAscending => query.OrderBy(s => s.LastUpdatedAt),
+			StorySort.UpdatedDescending => query.OrderByDescending(s => s.LastUpdatedAt),
+			_ => throw new UnexpectedEnumValueException<StorySort>(sortBy),
+		};
 }

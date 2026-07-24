@@ -234,6 +234,28 @@ public static partial class String
 				? span[..index]
 				: span;
 		}
+
+		public ReadOnlySpan<char> RemoveChar(char needle, Span<char> buffer)
+		{
+			var written = 0;
+			while (true)
+			{
+				var idx = span.IndexOf(needle);
+				if (idx < 0)
+				{
+					span.CopyTo(buffer[written..]);
+					written += span.Length;
+					break;
+				}
+
+				span[..idx].CopyTo(buffer[written..]);
+				written += idx;
+
+				span = span[(idx + 1)..];
+			}
+
+			return buffer[..written];
+		}
 	}
 
 
