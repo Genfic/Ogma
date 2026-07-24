@@ -112,6 +112,8 @@ public static class CTConfig
 		public const int MaxTagsAmount = 10;
 		public const int MaxTagLength = 20;
 		public const string ValidateTagsCountMsg = "The {0} can have a maximum of {1} tags.";
+
+		public const string CutoffMarker = "<!-- read more -->";
 	}
 
 	public static class Club

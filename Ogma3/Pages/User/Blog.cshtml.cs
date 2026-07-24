@@ -43,8 +43,17 @@ public sealed class BlogModel(UserRepository userRepo, ApplicationDbContext cont
 		Posts = await query
 			.OrderByDescending(b => b.CreationDate)
 			.Paginate(page, PerPage)
-			.ProjectToCard()
-			.AsNoTracking()
+			.Select(b => new BlogpostCard
+			{
+				Id = b.Id,
+				Title = b.Title,
+				Slug = b.Slug,
+				Body = b.Body.Substring(0, b.ExcerptCutoff),
+				WordCount = b.WordCount,
+				PublicationDate = b.PublicationDate,
+				AuthorUserName = b.Author.UserName,
+				Hashtags = b.Hashtags,
+			})
 			.ToListAsync();
 
 		// Prepare pagination

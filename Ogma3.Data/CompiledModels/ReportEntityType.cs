@@ -306,7 +306,7 @@ public partial class ReportEntityType
         var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId") },
             principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
             principalEntityType,
-            deleteBehavior: DeleteBehavior.Cascade);
+            deleteBehavior: DeleteBehavior.SetNull);
 
         var user = declaringEntityType.AddNavigation("User",
             runtimeForeignKey,

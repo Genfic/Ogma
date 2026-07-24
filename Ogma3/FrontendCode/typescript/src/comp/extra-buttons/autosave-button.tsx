@@ -7,15 +7,15 @@ import type { ComponentType } from "solid-element";
 import { createEffect, onCleanup, Show } from "solid-js";
 import type { ExtraButtonContext } from "./extra-button-types";
 import shared from "../shared.css";
-import css from "./autosave-button.css";
+import css from "./extra-button.css";
 
-const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; uid: number }> = (props) => {
+const AutosaveButton: ComponentType<{ context?: ExtraButtonContext; key: string; uid: number }> = (props) => {
 	const key = `autosave:${props.key}:${props.uid}`;
 
 	let saveExists = $signal(false);
 
 	createEffect(() => {
-		const input = props.context.input;
+		const input = props.context?.input;
 
 		if (!(input instanceof EventTarget)) return;
 
@@ -30,7 +30,8 @@ const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; 
 	const save = debounce(() => {
 		if (!enabled) return;
 
-		const input = props.context.input;
+		const input = props.context?.input;
+		if (!input) return;
 
 		if (input.value.length > 0) {
 			console.log("Autosave");
@@ -43,7 +44,9 @@ const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; 
 	let enabled = $signal(true);
 
 	const load = () => {
-		props.context.input.value = localStorage.getItem(key) ?? "";
+		const input = props.context?.input;
+		if (!input) return;
+		input.value = localStorage.getItem(key) ?? "";
 	};
 
 	return (
@@ -65,10 +68,4 @@ const AutosaveButton: ComponentType<{ context: ExtraButtonContext; key: string; 
 	);
 };
 
-component(
-	"autosave-btn",
-	{ context: { input: {} as HTMLInputElement }, key: "", uid: -1 },
-	AutosaveButton,
-	[shared, css],
-	["context"],
-);
+component("autosave-btn", { context: undefined, key: "", uid: -1 }, AutosaveButton, [shared, css], ["context"]);

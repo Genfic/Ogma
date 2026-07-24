@@ -34,6 +34,11 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.HasMaxLength(CTConfig.Blogpost.MaxTitleLength);
 
 		builder
+			.Property(b => b.ExcerptCutoff)
+			.IsRequired()
+			.HasDefaultValue(200);
+
+		builder
 			.Property(b => b.CreationDate)
 			.IsRequired()
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);

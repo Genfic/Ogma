@@ -76,6 +76,7 @@ export const Blogpost = {
 	MaxTagsAmount: 10,
 	MaxTagLength: 20,
 	ValidateTagsCountMsg: "The {0} can have a maximum of {1} tags.",
+	CutoffMarker: "<!-- read more -->",
 } as const;
 
 export const Club = {

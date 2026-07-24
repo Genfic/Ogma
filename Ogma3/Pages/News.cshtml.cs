@@ -23,7 +23,16 @@ public sealed class NewsModel(ApplicationDbContext context) : PageModel
 
 		NewsCards = await query
 			.Paginate(page, PerPage)
-			.ProjectToNewsCard()
+			.Select(b => new NewsCard
+			{
+				Id = b.Id,
+				Title = b.Title,
+				Slug = b.Slug,
+				PublicationDate = b.PublicationDate,
+				AuthorUserName = b.Author.UserName,
+				AuthorAvatarUrl = b.Author.Avatar.Url,
+				Body = b.Body.Substring(0, b.ExcerptCutoff),
+			})
 			.ToListAsync();
 
 		Pagination = new()

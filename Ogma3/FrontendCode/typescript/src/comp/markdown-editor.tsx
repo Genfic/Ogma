@@ -55,6 +55,12 @@ export const MarkdownEditor: ComponentType<Props> = ({ selector, overrideSelecto
 
 			el.context = {
 				input: area,
+				finishEdit: (newEnd: number, newStart?: number) => {
+					setCursorPosition(newEnd);
+					area.setSelectionRange(newStart ?? newEnd, newEnd);
+					setContent(area.value);
+					area.focus();
+				},
 			} satisfies ExtraButtonContext;
 		}
 	};

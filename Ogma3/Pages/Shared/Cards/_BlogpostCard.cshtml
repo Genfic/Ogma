@@ -7,15 +7,7 @@
 	</a>
 
 	<markdown class="excerpt">
-		@{
-			var exc = Model.Body.Split('\n')[0];
-			var words = exc.Split(' ');
-		}
-		@(
-		words.Length > 80
-			? words.Take(80).ToArray().JoinToString(' ') + "..."
-			: exc
-		)
+		@Model.Body
 	</markdown>
 
 	@if (Model.Hashtags is [_, ..])

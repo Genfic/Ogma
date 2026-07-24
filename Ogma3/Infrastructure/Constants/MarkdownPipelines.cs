@@ -1,6 +1,7 @@
 using Markdig;
 using MarkdigExtensions.Center;
 using MarkdigExtensions.Hashtags;
+using MarkdigExtensions.HtmlComments;
 using MarkdigExtensions.Mentions;
 using MarkdigExtensions.PollEmbed;
 using MarkdigExtensions.Spoiler;
@@ -12,55 +13,50 @@ public static class MarkdownPipelines
 	private static MentionOptions MentionOptions { get; } = new("/user/", "_blank");
 	private static HashtagOptions HashtagOptions { get; } = new("/blog?q=", "_blank");
 
-	public static MarkdownPipeline Basic { get; } = new MarkdownPipelineBuilder()
+	private static readonly MarkdownPipelineBuilder Base = new MarkdownPipelineBuilder()
+		.UseHtmlComments()
+		.UseEmphasisExtras()
+		.UseSpoilers();
+
+	public static MarkdownPipeline Basic { get; } = Base
 		.DisableHtml()
 		.DisableHeadings()
 		.UseAutoIdentifiers()
-		.UseEmphasisExtras()
-		.UseSpoilers()
 		.UseCenter()
 		.Build();
 
-	public static MarkdownPipeline Comment { get; } = new MarkdownPipelineBuilder()
+	public static MarkdownPipeline Comment { get; } = Base
 		.DisableHtml()
 		.DisableHeadings()
 		.UseMentions(MentionOptions)
 		.UseAutoLinks()
-		.UseEmphasisExtras()
-		.UseSpoilers()
 		.Build();
 
-	public static MarkdownPipeline All { get; } = new MarkdownPipelineBuilder()
+	public static MarkdownPipeline All { get; } = Base
 		.DisableHtml()
 		.UsePipeTables()
-		.UseEmphasisExtras()
 		.UseMentions(MentionOptions)
 		.UseAdvancedExtensions()
 		.UseAutoIdentifiers()
-		.UseSpoilers()
 		.UseCenter()
 		.UsePollEmbeds()
 		.Build();
 
-	public static MarkdownPipeline AllWithHtml { get; } = new MarkdownPipelineBuilder()
+	public static MarkdownPipeline AllWithHtml { get; } = Base
 		.UsePipeTables()
-		.UseEmphasisExtras()
 		.UseMentions(MentionOptions)
 		.UseAdvancedExtensions()
 		.UseAutoIdentifiers()
-		.UseSpoilers()
 		.UseCenter()
 		.UsePollEmbeds()
 		.Build();
 
-	public static MarkdownPipeline Blogpost { get; } = new MarkdownPipelineBuilder()
+	public static MarkdownPipeline Blogpost { get; } = Base
 		.DisableHtml()
 		.UseAdvancedExtensions()
-		.UseEmphasisExtras()
 		.UseMentions(MentionOptions)
 		.UseHashtags(HashtagOptions)
 		.UseAutoIdentifiers()
-		.UseSpoilers()
 		.UseCenter()
 		.UsePollEmbeds()
 		.Build();

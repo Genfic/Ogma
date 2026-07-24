@@ -34,6 +34,7 @@
 	<div class="o-form-group">
 		<label asp-for="Input.Body"></label>
 		<markdown-editor>
+			<read-more-btn></read-more-btn>
 			<autosave-btn uid="@Model.User.GetUsername()" key="new-blogpost"></autosave-btn>
 		</markdown-editor>
 		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true" allow-paste></textarea>
@@ -84,5 +85,6 @@
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/extra-buttons/autosave-button.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/extra-buttons/read-more-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/image-uploader.js" asp-append-version="true"></script>
 }

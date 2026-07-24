@@ -27,7 +27,7 @@ public partial class BlogpostEntityType
             "Ogma3.Data.Blogposts.Blogpost",
             typeof(Blogpost),
             baseEntityType,
-            propertyCount: 14,
+            propertyCount: 15,
             navigationCount: 6,
             foreignKeyCount: 4,
             unnamedIndexCount: 7,
@@ -92,6 +92,16 @@ public partial class BlogpostEntityType
             sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
         creationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         creationDate.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+
+        var excerptCutoff = runtimeEntityType.AddProperty(
+            "ExcerptCutoff",
+            typeof(int),
+            propertyInfo: typeof(Blogpost).GetProperty("ExcerptCutoff", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Blogpost).GetField("<ExcerptCutoff>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: 0);
+        excerptCutoff.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        excerptCutoff.AddAnnotation("Relational:DefaultValue", 200);
 
         var hashtags = runtimeEntityType.AddProperty(
             "Hashtags",

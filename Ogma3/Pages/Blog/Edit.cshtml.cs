@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Pages.Shared.Minimals;
 using Routes.Pages;
 using Utils.Extensions;
@@ -13,7 +14,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context) : PageModel
+public sealed class EditModel(ApplicationDbContext context, OgmaConfig config) : PageModel
 {
 	[BindProperty]
 	public required PostData Input { get; set; }
@@ -104,6 +105,19 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 		var uid = User.GetNumericId();
 		if (uid is null) return Unauthorized();
 
+		// Get cutoff point
+		var body = Input.Body.AsSpan().Trim();
+		var cutoff = body.IndexOf(CTConfig.Blogpost.CutoffMarker, StringComparison.OrdinalIgnoreCase);
+
+		if (cutoff <= 0)
+		{
+			cutoff = body.IndexOfBefore(' ', config.BlogpostExcerptDefaultCutoff);
+		}
+		else if (!User.IsStaff())
+		{
+			cutoff = Math.Min(body.IndexOfBefore(' ', config.BlogpostExcerptDefaultCutoff * 2), cutoff);
+		}
+
 		var rows = await context.Blogposts
 			.Where(b => b.Id == id)
 			.Where(b => b.AuthorId == uid)
@@ -111,6 +125,7 @@ public sealed class EditModel(ApplicationDbContext context) : PageModel
 				.SetProperty(p => p.Title, Input.Title.Trim())
 				.SetProperty(p => p.Slug, Input.Title.Trim().Friendlify())
 				.SetProperty(p => p.Body, Input.Body.Trim())
+				.SetProperty(p => p.ExcerptCutoff, cutoff > 0 ? cutoff : config.BlogpostExcerptDefaultCutoff)
 				.SetProperty(p => p.WordCount, Input.Body.Words())
 				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags().ToArray())
 				.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? (Input.Published ? DateTimeOffset.UtcNow : null))

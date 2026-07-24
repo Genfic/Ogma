@@ -84,7 +84,7 @@ public sealed class IndexModel(ApplicationDbContext context, OgmaConfig config) 
 				Id = b.Id,
 				Title = b.Title,
 				Slug = b.Slug,
-				Body = b.Body,
+				Body = b.Body.Substring(0, b.ExcerptCutoff),
 				WordCount = b.WordCount,
 				PublicationDate = b.PublicationDate,
 				AuthorUserName = b.Author.UserName,

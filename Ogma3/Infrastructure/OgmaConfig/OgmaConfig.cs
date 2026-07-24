@@ -16,6 +16,9 @@ public sealed class OgmaConfig
 	[AutoformCategory("Docs")] public string TosDoc { get; set; } = "";
 	[AutoformCategory("Docs")] public string SearchHelpDoc { get; set; } = "";
 
+	// Content
+	[AutoformCategory("Content")] public int BlogpostExcerptDefaultCutoff { get; set; } = 500;
+
 	// Pagination settings
 	[AutoformCategory("Pagination")] public int CommentsPerPage { get; set; } = 25;
 	[AutoformCategory("Pagination")] public int ClubsPerPage { get; set; } = 25;

@@ -80,7 +80,8 @@
 		"ValidateLengthMsg": "The {0} must be at least {2} and at most {1} characters long.",
 		"MaxTagsAmount": 10,
 		"MaxTagLength": 20,
-		"ValidateTagsCountMsg": "The {0} can have a maximum of {1} tags."
+		"ValidateTagsCountMsg": "The {0} can have a maximum of {1} tags.",
+		"CutoffMarker": "\u003C!-- read more --\u003E"
 	},
 	"Club": {
 		"MinNameLength": 3,

@@ -27,7 +27,7 @@ public partial class OgmaUserEntityType
             "Ogma3.Data.Users.OgmaUser",
             typeof(OgmaUser),
             baseEntityType,
-            propertyCount: 22,
+            propertyCount: 23,
             navigationCount: 10,
             skipNavigationCount: 7,
             foreignKeyCount: 1,
@@ -172,6 +172,14 @@ public partial class OgmaUserEntityType
             sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
         registrationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         registrationDate.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+
+        var safetyPinHash = runtimeEntityType.AddProperty(
+            "SafetyPinHash",
+            typeof(string),
+            propertyInfo: typeof(OgmaUser).GetProperty("SafetyPinHash", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<SafetyPinHash>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        safetyPinHash.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var securityStamp = runtimeEntityType.AddProperty(
             "SecurityStamp",

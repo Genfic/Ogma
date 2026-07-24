@@ -9,6 +9,7 @@ using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Notifications;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Pages.Shared.Minimals;
 using Routes.Pages;
 using Utils.Extensions;
@@ -16,8 +17,10 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public sealed class CreateModel(ApplicationDbContext context, NotificationsRepository notificationsRepo)
-	: PageModel
+public sealed class CreateModel(
+	ApplicationDbContext context,
+	NotificationsRepository notificationsRepo,
+	OgmaConfig config) : PageModel
 {
 	[BindProperty] public required PostData Input { get; set; }
 
@@ -93,12 +96,26 @@ public sealed class CreateModel(ApplicationDbContext context, NotificationsRepos
 		// Return if not logged in
 		if (uid is null || uname is null) return Unauthorized();
 
+		// Get cutoff point
+		var body = Input.Body.AsSpan().Trim();
+		var cutoff = body.IndexOf(CTConfig.Blogpost.CutoffMarker, StringComparison.OrdinalIgnoreCase);
+
+		if (cutoff <= 0)
+		{
+			cutoff = body.IndexOfBefore(' ', config.BlogpostExcerptDefaultCutoff);
+		}
+		else if (!User.IsStaff())
+		{
+			cutoff = Math.Min(body.IndexOfBefore(' ', config.BlogpostExcerptDefaultCutoff * 2), cutoff);
+		}
+
 		// Create blogpost
 		var post = new Blogpost
 		{
 			Title = Input.Title.Trim(),
 			Slug = Input.Title.Trim().Friendlify(),
-			Body = Input.Body.Trim(),
+			ExcerptCutoff = cutoff > 0 ? cutoff : config.BlogpostExcerptDefaultCutoff,
+			Body = body.ToString(),
 			AuthorId = (long)uid,
 			WordCount = Input.Body.Words(),
 			Hashtags = Input.Tags.ParseHashtags().ToArray(),

@@ -49,6 +49,8 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	[PersonalData] public DateTimeOffset LastActive { get; set; }
 
+	public string? SafetyPinHash { get; set; }
+
 	public DateTimeOffset? DeletedAt { get; set; }
 
 	public CommentThread CommentThread { get; set; } = new();

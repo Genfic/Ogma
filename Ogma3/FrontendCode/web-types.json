@@ -177,10 +177,10 @@
 							}
 						},
 						{
-							"name": "lock-date",
+							"name": "is-locked",
 							"value": {
 								"kind": "expression",
-								"type": "undefined"
+								"type": "boolean"
 							}
 						},
 						{
@@ -471,6 +471,23 @@
 					"source": {
 						"module": "./typescript/src/comp/quote-box.tsx",
 						"symbol": "quote-box"
+					}
+				},
+				{
+					"name": "read-more-btn",
+					"description": "Custom element <read-more-btn> defined in typescript/src/comp/extra-buttons/read-more-button.tsx",
+					"attributes": [
+						{
+							"name": "context",
+							"value": {
+								"kind": "expression",
+								"type": "undefined"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript/src/comp/extra-buttons/read-more-button.tsx",
+						"symbol": "read-more-btn"
 					}
 				},
 				{
