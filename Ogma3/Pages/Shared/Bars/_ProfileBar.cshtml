@@ -110,6 +110,9 @@
 		<a class="nav-item @(tab == "Library" ? "active" : null)" for-route="@User_Library_Index.Get(Model.UserName)">
 			Library
 		</a>
+		<a class="nav-item @(tab == "follows" ? "active" : null)" for-route="@User_Follows.Get(Model.UserName)">
+			Follows
+		</a>
 	</nav>
 
 	<report-modal item-id="@Model.Id"

@@ -30,7 +30,6 @@ public sealed class Follows(UserRepository userRepo, ApplicationDbContext contex
 			.Select(u => u.FollowingUser)
 			.Paginate(page, PerPage)
 			.Select(UserMappings.ToUserCard)
-			.AsNoTracking()
 			.ToListAsync();
 
 		var count = await context.Users

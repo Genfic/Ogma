@@ -8,15 +8,19 @@
 
 <partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
 
-<h1>Users followed by @Model.ProfileBar.UserName</h1>
 
-<hr>
+@if (Model.Users.Count <= 0)
+{
+	<h1>@Model.ProfileBar.UserName doesn't follow anyone</h1>
+}
+else
+{
+	<div class="two-columns o-grid">
+		@foreach (var u in Model.Users)
+		{
+			<partial name="Shared/Cards/_UserCard" model="u"/>
+		}
 
-<div class="two-columns o-grid">
-	@foreach (var u in Model.Users)
-	{
-		<partial name="Shared/Cards/_UserCard" model="u"/>
-	}
-
-	<partial name="_Pagination" model="Model.Pagination"/>
-</div>
+		<partial name="_Pagination" model="Model.Pagination"/>
+	</div>
+}
