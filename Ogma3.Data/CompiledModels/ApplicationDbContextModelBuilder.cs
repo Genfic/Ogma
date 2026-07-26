@@ -12,7 +12,7 @@ namespace CompiledModels;
 public partial class ApplicationDbContextModel
 {
     private ApplicationDbContextModel()
-        : base(skipDetectChanges: false, modelId: new Guid("e67f184a-7b05-4787-8db1-201d7ae14af5"), entityTypeCount: 46)
+        : base(skipDetectChanges: false, modelId: new Guid("71593750-4ae7-43db-885f-16d12f567a19"), entityTypeCount: 47)
     {
     }
 
@@ -41,6 +41,7 @@ public partial class ApplicationDbContextModel
         var faq = FaqEntityType.Create(this);
         var folder = FolderEntityType.Create(this);
         var folderStory = FolderStoryEntityType.Create(this);
+        var globalNotification = GlobalNotificationEntityType.Create(this);
         var icon = IconEntityType.Create(this);
         var image = ImageEntityType.Create(this);
         var infraction = InfractionEntityType.Create(this);
@@ -104,6 +105,7 @@ public partial class ApplicationDbContextModel
         FolderStoryEntityType.CreateForeignKey1(folderStory, ogmaUser);
         FolderStoryEntityType.CreateForeignKey2(folderStory, folder);
         FolderStoryEntityType.CreateForeignKey3(folderStory, story);
+        GlobalNotificationEntityType.CreateForeignKey1(globalNotification, ogmaUser);
         InfractionEntityType.CreateForeignKey1(infraction, ogmaUser);
         InfractionEntityType.CreateForeignKey2(infraction, ogmaUser);
         InfractionEntityType.CreateForeignKey3(infraction, ogmaUser);
@@ -182,6 +184,7 @@ public partial class ApplicationDbContextModel
         FaqEntityType.CreateAnnotations(faq);
         FolderEntityType.CreateAnnotations(folder);
         FolderStoryEntityType.CreateAnnotations(folderStory);
+        GlobalNotificationEntityType.CreateAnnotations(globalNotification);
         IconEntityType.CreateAnnotations(icon);
         ImageEntityType.CreateAnnotations(image);
         InfractionEntityType.CreateAnnotations(infraction);

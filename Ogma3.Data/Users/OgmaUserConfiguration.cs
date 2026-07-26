@@ -133,6 +133,9 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 				CommentThread = null!,
 				Email = "",
 				NormalizedEmail = "",
+				ConcurrencyStamp = "00000000-0000-0000-0000-000000000001",
+				SecurityStamp = "00000000-0000-0000-0000-000000000001",
+				Links = [],
 			}, new()
 			{
 				Id = SystemUserConstants.Anonymous.Id,
@@ -142,6 +145,9 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 				CommentThread = null!,
 				Email = "",
 				NormalizedEmail = "",
+				ConcurrencyStamp = "00000000-0000-0000-0000-000000000002",
+				SecurityStamp = "00000000-0000-0000-0000-000000000002",
+				Links = [],
 			}
 		);
 	}

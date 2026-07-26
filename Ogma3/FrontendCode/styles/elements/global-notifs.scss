@@ -1,0 +1,21 @@
+.global-notifications {
+	--neg: calc((100vw - var(--body-width)) / 2);
+
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+
+	margin-top: -0.3rem !important;
+	margin-left: calc(-1 * (var(--body-padding-horizontal) - 3px)) !important;
+	margin-right: calc(-1 * (var(--body-padding-horizontal) - 3px)) !important;
+
+	li {
+		border: 3px solid var(--color);
+		background-color: color-mix(in oklch, var(--color) 25%, var(--background));
+		padding: 0.5rem 1rem;
+		font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+		font-weight: 600;
+		letter-spacing: 0.075rem;
+		font-size: 110%;
+	}
+}

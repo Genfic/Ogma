@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -19,14 +20,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
-partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+[Migration("20260726040642_GlobalNotificationSystem")]
+partial class _20260726040642_GlobalNotificationSystem
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260726041344_BetterUserSeeding";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -918,9 +916,6 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
                 NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
-                b.Property<DateTimeOffset?>("ArchivedAt")
-                    .HasColumnType("timestamp with time zone");
-
                 b.Property<string>("Color")
                     .HasMaxLength(8)
                     .HasColumnType("character varying(8)");
@@ -933,13 +928,10 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 b.Property<long>("CreatedById")
                     .HasColumnType("bigint");
 
-                b.Property<DateTimeOffset?>("ExpiresAt")
-                    .HasColumnType("timestamp with time zone");
-
                 b.Property<string>("Message")
                     .IsRequired()
-                    .HasMaxLength(512)
-                    .HasColumnType("character varying(512)");
+                    .HasMaxLength(-1)
+                    .HasColumnType("text");
 
                 b.HasKey("Id");
 
@@ -1799,7 +1791,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         Id = -1L,
                         AccessFailedCount = 0,
                         AvatarId = -1L,
-                        ConcurrencyStamp = "00000000-0000-0000-0000-000000000001",
+                        ConcurrencyStamp = "3007e8a5-7b43-480b-b131-0abf2ee980d3",
                         Email = "",
                         EmailConfirmed = false,
                         LastActive = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -1808,7 +1800,6 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         NormalizedEmail = "",
                         NormalizedUserName = "DELETED USER",
                         RegistrationDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        SecurityStamp = "00000000-0000-0000-0000-000000000001",
                         TimeZone = "UTC",
                         TwoFactorEnabled = false,
                         UserName = "Deleted User"
@@ -1818,7 +1809,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         Id = -2L,
                         AccessFailedCount = 0,
                         AvatarId = -2L,
-                        ConcurrencyStamp = "00000000-0000-0000-0000-000000000002",
+                        ConcurrencyStamp = "29006130-47f7-4df3-a0b5-0d160cc6b63d",
                         Email = "",
                         EmailConfirmed = false,
                         LastActive = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -1827,7 +1818,6 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         NormalizedEmail = "",
                         NormalizedUserName = "ANONYMOUS USER",
                         RegistrationDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        SecurityStamp = "00000000-0000-0000-0000-000000000002",
                         TimeZone = "UTC",
                         TwoFactorEnabled = false,
                         UserName = "Anonymous User"

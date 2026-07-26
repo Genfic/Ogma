@@ -1,0 +1,41 @@
+@page
+@model Ogma3.Areas.Admin.Pages.NotificationsModel
+
+@{
+	ViewData["Title"] = "Notifications";
+	ViewData["ActivePage"] = NavPages.Notifications;
+}
+
+<form action="" method="post" class="form auto">
+	<label asp-for="Message"></label>
+	<input asp-for="Message" />
+
+	<label asp-for="Color"></label>
+	<input asp-for="Color" type="color">
+
+	<input type="hidden" asp-for="Id">
+
+	<button type="submit">@(Model.Id is null ? "Add" : "Save")</button>
+</form>
+
+<ul>
+	@foreach (var n in Model.Notifications)
+	{
+		<li style="border: 1px solid @($"#{n.Color}")">
+			@if (n.ArchivedAt is null)
+			{
+				<span>@n.Message</span>
+			}
+			else
+			{
+				@* ReSharper disable once Html.Obsolete *@
+				<strike>
+					@n.Message (@n.ArchivedAt.Value.ToString())
+				@* ReSharper disable once Html.Obsolete *@
+				</strike>
+			}
+			<a href="?id=@n.Id">Edit</a>
+			<a href="?handler=archive&id=@n.Id">Archive</a>
+		</li>
+	}
+</ul>

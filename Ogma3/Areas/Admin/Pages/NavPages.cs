@@ -20,6 +20,7 @@ public static class NavPages
 	public static string Faq => "FAQ";
 	public static string Infractions => "Infractions";
 	public static string Subscriptions => "Subscriptions";
+	public static string Notifications => "Notifications";
 
 	public static string PageNavClass(ViewContext viewContext, string? page)
 	{
