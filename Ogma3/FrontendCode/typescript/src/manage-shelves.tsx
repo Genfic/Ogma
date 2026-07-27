@@ -71,16 +71,16 @@ const ManageShelves = (props: Props) => {
 		data.color = data.color.startsWith("#") ? data.color : `#${data.color}`;
 
 		if (data.id) {
-			const res = await PutApiShelves(data as Required<ShelfModel>, headers);
+			const res = await PutApiShelves({ ...data, id: data.id }, headers);
 			if (res.ok) {
-				refetch();
+				await refetch();
 			} else if (res.status === 400) {
 				errors = Object.values((res as unknown as ProblemDetails).errors).flat();
 			}
 		} else {
 			const res = await PostApiShelves(omit(data, ["id"]), headers);
 			if (res.ok) {
-				refetch();
+				await refetch();
 			} else if (res.status === 400) {
 				errors = Object.values((res as unknown as ProblemDetails).errors).flat();
 			}

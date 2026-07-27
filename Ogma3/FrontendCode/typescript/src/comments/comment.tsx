@@ -51,9 +51,9 @@ export const Comment = (props: Props) => {
 		setEditing(true);
 	};
 
-	const updated = (body: string) => {
+	const updated = (text: string) => {
 		setEditing(false);
-		setBody(body);
+		setBody(text);
 	};
 
 	const history = async () => {

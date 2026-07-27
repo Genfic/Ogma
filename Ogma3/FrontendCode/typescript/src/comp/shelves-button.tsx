@@ -35,6 +35,14 @@ const updateShelfData = (
 	setShelvesFunc(newShelves);
 };
 
+const iconStyle = (shelf: Shelf) => ({
+	color: shelf.color ?? undefined,
+});
+
+const style = (shelf: Shelf) => ({
+	"--s-col": shelf.doesContainBook ? (shelf.color ?? undefined) : undefined,
+});
+
 const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, { element }) => {
 	let more = $signal(false);
 	const page = $signal(1);
@@ -42,7 +50,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 	const [quickShelves, { mutate: mutateQuick }] = createResource(
 		async () => {
 			const res = await getQuickShelves(props.storyId);
-			return res.ok ? (res.data as Shelf[]) : [];
+			return res.ok ? res.data : [];
 		},
 		{ initialValue: [] },
 	);
@@ -51,7 +59,7 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 		async (trigger) => {
 			if (trigger) {
 				const res = await getShelves(props.storyId, page);
-				return res.ok ? (res.data as Shelf[]) : [];
+				return res.ok ? res.data : [];
 			}
 			return [];
 		},
@@ -84,14 +92,6 @@ const ShelvesButton: ComponentType<{ storyId: number; csrf: string }> = (props, 
 			log.error(res.statusText);
 		}
 	};
-
-	const iconStyle = (shelf: Shelf) => ({
-		color: shelf.color ?? undefined,
-	});
-
-	const style = (shelf: Shelf) => ({
-		"--s-col": shelf.doesContainBook ? (shelf.color ?? undefined) : undefined,
-	});
 
 	return () => (
 		<>

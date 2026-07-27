@@ -114,3 +114,7 @@ export const Report = {
 	MaxReasonLength: 500,
 } as const;
 
+export const Cookies = {
+	DismissedNotifications: "dismissed-notifications",
+} as const;
+

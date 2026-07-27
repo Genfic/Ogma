@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-base-to-string
 export const dedent = (strings: TemplateStringsArray, ...values: unknown[]) => {
 	const lines = strings.reduce((acc, str, idx) => acc + str + (values[idx] ?? ""), "").split("\n");
 

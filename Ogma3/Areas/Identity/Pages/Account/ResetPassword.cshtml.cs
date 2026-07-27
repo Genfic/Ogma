@@ -25,17 +25,17 @@ public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurns
 	{
 		[Required,
 		 EmailAddress]
-			public string Email { get; set; } = "";
+		public string Email { get; set; } = "";
 
 		[Required,
 		 StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6),
 		 DataType(DataType.Password)]
-			public string Password { get; set; } = "";
+		public string Password { get; set; } = "";
 
 		[DataType(DataType.Password),
 		 Display(Name = "Confirm password"),
 		 Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-			public string ConfirmPassword { get; set; } = "";
+		public string ConfirmPassword { get; set; } = "";
 
 		public string Code { get; set; } = "";
 	}
@@ -67,7 +67,7 @@ public sealed class ResetPasswordModel(UserManager<OgmaUser> userManager, ITurns
 		if (!turnstileResponse.Success)
 		{
 			ModelState.TryAddModelError("Turnstile", "Incorrect Turnstile response");
-			logger.LogInformation("Password reset attempt with Turnstile errors: {Errors}", (object)turnstileResponse.ErrorCodes);
+			logger.LogInformation("Password reset attempt with Turnstile errors: {@Errors}", turnstileResponse.ErrorCodes);
 			return Page();
 		}
 

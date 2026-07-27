@@ -1,3 +1,4 @@
+// oxlint-disable import/no-unassigned-import
 import "solid-js";
 import "solid-labels";
 

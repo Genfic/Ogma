@@ -27,7 +27,7 @@ const Notifications = () => {
 			RequestVerificationToken: csrf,
 		});
 		if (!res.ok) return;
-		refetch();
+		await refetch();
 	};
 
 	const deleteAll = async () => {

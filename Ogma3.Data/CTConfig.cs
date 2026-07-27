@@ -162,4 +162,9 @@ public static class CTConfig
 		public const int MinReasonLength = 30;
 		public const int MaxReasonLength = 500;
 	}
+
+	public static class Cookies
+	{
+		public const string DismissedNotifications = "dismissed-notifications";
+	}
 }

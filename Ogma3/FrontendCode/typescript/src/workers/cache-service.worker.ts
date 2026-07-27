@@ -1,3 +1,4 @@
+// oxlint-disable unicorn/require-post-message-target-origin
 declare let self: ServiceWorkerGlobalScope;
 
 const MANIFEST_URL = "/js/manifest.txt";

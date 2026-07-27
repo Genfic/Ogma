@@ -112,5 +112,8 @@
 	"Report": {
 		"MinReasonLength": 30,
 		"MaxReasonLength": 500
+	},
+	"Cookies": {
+		"DismissedNotifications": "dismissed-notifications"
 	}
 }
