@@ -15,7 +15,7 @@
 							"name": "context",
 							"value": {
 								"kind": "expression",
-								"type": "object"
+								"type": "undefined"
 							}
 						},
 						{

@@ -1,11 +1,13 @@
 @using System.Globalization
 @using System.Security.Claims
 @using Ogma3.Api.V1.UserActivity
+@using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Extensions
 @using Ogma3.Infrastructure.OgmaConfig
 @using Ogma3.Services
 @inject IWebHostEnvironment Env
 @inject OgmaConfig Config
+@inject SignInManager<OgmaUser> SignInManager
 
 @{
 	Context.Request.Cookies.TryGetValue("theme", out var theme);
@@ -124,7 +126,10 @@
 
 <div class="container" id="site-content">
 
-	<global-notifications></global-notifications>
+	@if (!SignInManager.IsSignedIn(User))
+	{
+		<global-notifications></global-notifications>
+	}
 
 	<partial name="_StatusMessage" for="@message"/>
 
