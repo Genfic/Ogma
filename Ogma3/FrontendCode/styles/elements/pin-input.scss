@@ -1,0 +1,21 @@
+.pin-input {
+	.boxes {
+		display: flex;
+		gap: 0.25rem;
+		padding: 0.25rem;
+
+		.pin-box {
+			width: 3rem;
+			aspect-ratio: 1;
+			font-size: 2rem;
+			text-align: center;
+			background-color: var(--foreground-10);
+			line-height: 3rem;
+			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+
+			&.masked {
+				color: var(--foreground-75);
+			}
+		}
+	}
+}

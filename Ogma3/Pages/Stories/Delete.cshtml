@@ -64,6 +64,11 @@
 	</dl>
 
 	<form method="post">
+		@if (Model.HasPin)
+		{
+			<pin-input asp-for="Pin"></pin-input>
+		}
+
 		<input type="hidden" asp-for="Story.Id"/>
 		<div class="button-group">
 			<input type="submit" value="Delete" class="btn red"/>

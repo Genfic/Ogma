@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.SafetyPinService;
 
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, SafetyPinService pinService) : PageModel
 {
 	[BindProperty]
 	public required GetData Blogpost { get; set; }
@@ -23,12 +24,22 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 		public required int CommentsCount { get; init; }
 	}
 
+	public required bool HasPin { get; set; }
+
+	[BindProperty]
+	public required string? Pin { get; set; }
+
 	public async Task<IActionResult> OnGetAsync(int? id)
 	{
 		if (id is null) return NotFound();
 
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
+
+		HasPin = await pinService.HasPin(uid);
+
 		var blogpost = await context.Blogposts
 			.Where(m => m.Id == id)
+			.Where(m => m.AuthorId == uid)
 			.Select(b => new GetData
 			{
 				Id = b.Id,
@@ -41,10 +52,9 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 			.FirstOrDefaultAsync();
 
 		if (blogpost is null) return NotFound();
-		if (blogpost.AuthorId != User.GetNumericId()) return Unauthorized();
 
 		Blogpost = blogpost;
-		
+
 		return Page();
 	}
 
@@ -55,10 +65,20 @@ public sealed class DeleteModel(ApplicationDbContext context) : PageModel
 		// Get logged-in user
 		var uname = User.GetUsername();
 		if (uname is null) return Unauthorized();
+		if (User.GetNumericId() is not { } uid) return Unauthorized();
+
+		HasPin = await pinService.HasPin(uid);
+
+		var check = Pin is not null && await pinService.VerifyPin(uid, Pin);
+		if (!check)
+		{
+			ModelState.AddModelError("Pin", "Incorrect PIN");
+			return Page();
+		}
 
 		var rows = await context.Blogposts
 			.Where(b => b.Id == id)
-			.Where(b => b.AuthorId == User.GetNumericId())
+			.Where(b => b.AuthorId == uid)
 			.ExecuteDeleteAsync();
 
 		if (rows <= 0) return NotFound();

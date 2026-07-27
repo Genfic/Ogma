@@ -1,0 +1,36 @@
+@page
+@model Ogma3.Areas.Identity.Pages.Account.Manage.SafetyPinModel
+
+@{
+	ViewData["Title"] = "Safety PIN";
+	ViewData["ActivePage"] = ManageNavPages.SafetyPin;
+}
+
+@if (Model.Success)
+{
+	<span>Success!</span>
+}
+
+@if (Model.HasPin)
+{
+	<form method="post" class="form">
+		<div asp-validation-summary="All" class="text-danger"></div>
+
+		<pin-input asp-for="FormData.Pin"></pin-input>
+		<pin-input asp-for="FormData.RepeatPin"></pin-input>
+		<pin-input asp-for="FormData.CurrentPin"></pin-input>
+
+		<button type="submit" class="btn btn-primary">Update PIN</button>
+	</form>
+}
+else
+{
+	<form method="post" class="form">
+		<div asp-validation-summary="All" class="text-danger"></div>
+
+		<pin-input asp-for="FormData.Pin"></pin-input>
+		<pin-input asp-for="FormData.RepeatPin"></pin-input>
+
+		<button type="submit" class="btn btn-primary">Create PIN</button>
+	</form>
+}

@@ -46,5 +46,4 @@ public static class HtmlExtensions
 			return new HtmlString(string.Empty);
 		}
 	}
-
 }

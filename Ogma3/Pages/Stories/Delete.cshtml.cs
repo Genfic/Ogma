@@ -6,12 +6,14 @@ using Ogma3.Data;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.FileUploader;
+using Ogma3.Services.SafetyPinService;
 using Routes.Pages;
+using Sodium;
 
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uploader) : PageModel
+public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uploader, SafetyPinService pinService) : PageModel
 {
 	public sealed class GetData
 	{
@@ -30,10 +32,17 @@ public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uplo
 
 	[BindProperty] public required GetData Story { get; set; }
 
+	public required bool HasPin { get; set; }
+
+	[BindProperty]
+	public required string? Pin { get; set; }
+
 	public async Task<IActionResult> OnGetAsync(int? id)
 	{
 		if (id is null) return NotFound();
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
+
+		HasPin = await pinService.HasPin(uid);
 
 		// Get the story and make sure the logged-in user matches author
 		var story = await context.Stories
@@ -67,6 +76,15 @@ public sealed class DeleteModel(ApplicationDbContext context, IFileUploader uplo
 		if (id is null) return NotFound();
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
 		if (User.GetUsername() is not {} uname) return Unauthorized();
+
+		HasPin = await pinService.HasPin(uid);
+
+		var check = Pin is not null && await pinService.VerifyPin(uid, Pin);
+		if (!check)
+		{
+			ModelState.AddModelError("Pin", "Incorrect PIN");
+			return Page();
+		}
 
 		// Get the story and make sure the logged-in user matches author
 		var story = await context.Stories

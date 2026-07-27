@@ -43,6 +43,10 @@
 		<a class="nav-link" id="passkeys" asp-page="./Passkeys">Passkeys</a>
 	</li>
 
+	<li class="nav-item @ManageNavPages.SafetyPinNavClass(ViewContext)">
+		<a class="nav-link" id="safety-pin" asp-page="./SafetyPin">Safety PIN</a>
+	</li>
+
 	<li class="nav-item @ManageNavPages.PersonalDataNavClass(ViewContext)">
 		<a class="nav-link" id="personal-data" asp-page="./PersonalData">Personal data</a>
 	</li>

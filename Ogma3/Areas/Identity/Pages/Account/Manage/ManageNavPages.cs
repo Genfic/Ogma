@@ -15,6 +15,7 @@ public static class ManageNavPages
 	public static string Blacklists => "Blacklists";
 	public static string Infractions => "Infractions";
 	public static string Subscription => "Subscription";
+	public static string SafetyPin => "SafetyPin";
 
 	public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 	public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
@@ -27,6 +28,7 @@ public static class ManageNavPages
 	public static string BlacklistsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Blacklists);
 	public static string InfractionsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Infractions);
 	public static string SubscriptionNavClass(ViewContext viewContext) => PageNavClass(viewContext, Subscription);
+	public static string SafetyPinNavClass(ViewContext viewContext) => PageNavClass(viewContext, SafetyPin);
 
 	private static string PageNavClass(ViewContext viewContext, string page)
 	{
