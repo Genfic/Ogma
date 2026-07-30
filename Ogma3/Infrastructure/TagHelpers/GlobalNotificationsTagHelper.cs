@@ -30,28 +30,47 @@ public sealed class GlobalNotificationsTagHelper(ApplicationDbContext ctx, IFusi
 			return;
 		}
 
-		var cookie = ViewContext.HttpContext.Request.Cookies[CTConfig.Cookies.DismissedNotifications];
-
-		var dismissed = cookie?.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries) ?? [];
+		var dismissed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+		if (ViewContext.HttpContext.Request.Cookies.TryGetValue(CTConfig.Cookies.DismissedNotifications, out var cookie))
+		{
+			var span = cookie.AsSpan();
+			foreach (var r in span.Split(','))
+			{
+				var id = span[r].Trim();
+				if (!id.IsEmpty)
+				{
+					dismissed.Add(id.ToString());
+				}
+			}
+		}
 
 		var sb = new StringBuilder();
 		foreach (var notif in notifs)
 		{
-			var id = sqids.Encode(notif.Id);
-
-			if (dismissed.Contains(id))
+			if (notif.Sqid is null || notif.Sqid is {} sq && dismissed.Contains(sq))
 			{
 				continue;
 			}
 
-			sb.Append($"""<li global-notif-id="{id}" style="--color: #{notif.Color}">""");
-			sb.Append(notif.Message);
-			sb.AppendLine("""<button class="close">&#10006;</button></li>""");
+			var item = /*lang=html*/
+				$"""
+				 <li global-notif-id={notif.Sqid} style="--color: #{notif.Color}">
+				 	{notif.Message}
+				 	<button class="close">&#10006;</button>
+				 </li>
+				 """;
+			sb.Append(item);
+		}
+
+		if (sb.Length <= 0)
+		{
+			output.SuppressOutput();
+			return;
 		}
 
 		output.TagName = "ul";
 		output.AddClass("global-notifications", HtmlEncoder.Default);
-		output.Content.SetHtmlContent(sb.ToString().Trim());
+		output.Content.SetHtmlContent(sb.ToString());
 	}
 
 	private async Task<IReadOnlyList<NotifDto>> GetData(CancellationToken ct)
@@ -65,6 +84,7 @@ public sealed class GlobalNotificationsTagHelper(ApplicationDbContext ctx, IFusi
 		foreach (var notif in notifs)
 		{
 			notif.Message = Markdown.ToHtml(notif.Message, MarkdownPipelines.Basic);
+			notif.Sqid = sqids.Encode(notif.Id);
 		}
 
 		return notifs;
@@ -75,6 +95,7 @@ public sealed class GlobalNotificationsTagHelper(ApplicationDbContext ctx, IFusi
 public sealed partial class NotifDto(long id, string message, string? color)
 {
 	public long Id { get; } = id;
+	public string? Sqid { get; set; }
 	public string Message { get; set; } = message;
 	public string? Color { get; } = color;
 }

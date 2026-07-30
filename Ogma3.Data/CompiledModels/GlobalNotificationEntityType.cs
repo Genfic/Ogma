@@ -123,7 +123,7 @@ public partial class GlobalNotificationEntityType
         runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
         runtimeEntityType.AddAnnotation("Relational:Schema", null);
         runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-        runtimeEntityType.AddAnnotation("Relational:TableName", "GlobalNotification");
+        runtimeEntityType.AddAnnotation("Relational:TableName", "GlobalNotifications");
         runtimeEntityType.AddAnnotation("Relational:ViewName", null);
         runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
 

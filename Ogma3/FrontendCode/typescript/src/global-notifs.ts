@@ -19,12 +19,17 @@ for (const notif of notifs) {
 		const cookie = await cookieStore.get(COOKIE_NAME);
 		console.log("cookie:", cookie);
 
-		const dismissed = cookie?.value?.split(",") ?? [];
-		dismissed.push(id);
+		const dismissed = new Set(cookie?.value?.split(","));
+		dismissed.add(id);
 
 		console.log(dismissed);
 
-		await cookieStore.set(COOKIE_NAME, dismissed.join(","));
+		await cookieStore.set({
+			name: COOKIE_NAME,
+			value: [...dismissed].join(","),
+			sameSite: "lax",
+			expires: 60 * 60 * 60 * 24 * 100,
+		});
 		notif.remove();
 	});
 }

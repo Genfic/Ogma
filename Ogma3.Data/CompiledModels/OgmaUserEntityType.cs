@@ -27,7 +27,7 @@ public partial class OgmaUserEntityType
             "Ogma3.Data.Users.OgmaUser",
             typeof(OgmaUser),
             baseEntityType,
-            propertyCount: 23,
+            propertyCount: 26,
             navigationCount: 10,
             skipNavigationCount: 7,
             foreignKeyCount: 1,
@@ -178,8 +178,34 @@ public partial class OgmaUserEntityType
             typeof(string),
             propertyInfo: typeof(OgmaUser).GetProperty("SafetyPinHash", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(OgmaUser).GetField("<SafetyPinHash>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            nullable: true);
+            nullable: true,
+            maxLength: 512);
         safetyPinHash.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var safetyPinLockedOutUntil = runtimeEntityType.AddProperty(
+            "SafetyPinLockedOutUntil",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(OgmaUser).GetProperty("SafetyPinLockedOutUntil", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<SafetyPinLockedOutUntil>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        safetyPinLockedOutUntil.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var safetyPinResetTokenExpiry = runtimeEntityType.AddProperty(
+            "SafetyPinResetTokenExpiry",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(OgmaUser).GetProperty("SafetyPinResetTokenExpiry", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<SafetyPinResetTokenExpiry>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        safetyPinResetTokenExpiry.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var safetyPinResetTokenHash = runtimeEntityType.AddProperty(
+            "SafetyPinResetTokenHash",
+            typeof(string),
+            propertyInfo: typeof(OgmaUser).GetProperty("SafetyPinResetTokenHash", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<SafetyPinResetTokenHash>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true,
+            maxLength: 512);
+        safetyPinResetTokenHash.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var securityStamp = runtimeEntityType.AddProperty(
             "SecurityStamp",

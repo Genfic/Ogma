@@ -28,6 +28,14 @@ public static class ClaimsPrincipalEx
 		}
 
 		/// <summary>
+		/// Get the current user's email
+		/// </summary>
+		/// <returns>The email, or `null` if the user is not logged in</returns>
+		public string? GetEmail()
+			=> principal.FindFirstValue(ClaimTypes.Email);
+
+
+		/// <summary>
 		/// Get the current user's username
 		/// </summary>
 		/// <returns>The username of the currently logged-in user or `null` if the user isn't logged in</returns>

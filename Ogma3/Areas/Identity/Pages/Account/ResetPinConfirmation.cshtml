@@ -1,0 +1,18 @@
+@page
+@model ResetPinConfirmationModel
+@{
+	ViewData["Title"] = "Reset PIN confirmation";
+}
+
+<h1 class="olde">@ViewData["Title"]</h1>
+
+<h2>Your PIN has been reset.</h2>
+
+<p>
+	You can create a new PIN by <a for-route="Routes.Areas.Identity.Pages.Account_Manage_SafetyPin.Get()">clicking here</a>.
+</p>
+
+<p>
+	For safety reasons, you will not be able to delete your content for the next 24 hours. Consider unpublishing it instead in the interim.
+</p>
+

@@ -49,8 +49,6 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	[PersonalData] public DateTimeOffset LastActive { get; set; }
 
-	public string? SafetyPinHash { get; set; }
-
 	public DateTimeOffset? DeletedAt { get; set; }
 
 	public CommentThread CommentThread { get; set; } = new();
@@ -85,4 +83,10 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 	public long? SubscriptionId { get; set; }
 
 	public string TimeZone { get; set; } = "UTC";
+
+
+	public string? SafetyPinHash { get; set; }
+	public string? SafetyPinResetTokenHash { get; set; }
+	public DateTimeOffset? SafetyPinResetTokenExpiry { get; set; }
+	public DateTimeOffset? SafetyPinLockedOutUntil { get; set; }
 }

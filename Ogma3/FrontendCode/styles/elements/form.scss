@@ -14,6 +14,20 @@ form.form {
 	display: flex;
 	flex-direction: column;
 
+	&-link {
+		input[type="submit"] {
+			display: inline;
+			background-color: transparent;
+			border: none;
+			color: var(--accent);
+			text-decoration: underline;
+
+			&:hover {
+				color: var(--accent-75);
+			}
+		}
+	}
+
 	.form-row {
 		display: flex;
 		flex-direction: row;

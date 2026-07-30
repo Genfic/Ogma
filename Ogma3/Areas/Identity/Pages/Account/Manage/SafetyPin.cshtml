@@ -1,4 +1,5 @@
 @page
+@using Humanizer
 @model Ogma3.Areas.Identity.Pages.Account.Manage.SafetyPinModel
 
 @{
@@ -8,7 +9,14 @@
 
 @if (Model.Success)
 {
-	<span>Success!</span>
+	<span class="alert success">Success!</span>
+}
+
+@if (Model.TimeSinceLockout is {} lockout)
+{
+	<span class="alert warning">
+		Your safety PIN has been recently changed. Remaining lockout: <strong class="monospace">@lockout.Humanize(2)</strong>.
+	</span>
 }
 
 @if (Model.HasPin)
@@ -22,6 +30,8 @@
 
 		<button type="submit" class="btn btn-primary">Update PIN</button>
 	</form>
+
+	<a for-route="Routes.Areas.Identity.Pages.Account_ResetPin.Get()">Reset PIN?</a>
 }
 else
 {

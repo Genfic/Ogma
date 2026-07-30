@@ -24,7 +24,7 @@
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.101.4" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.101.5" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
@@ -82,7 +82,7 @@
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.17" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-preview.6.26359.118" />
-    <PackageVersion Include="TUnit" Version="1.61.38" />
+    <PackageVersion Include="TUnit" Version="1.62.0" />
     <PackageVersion Include="WaffleGenerator.Bogus" Version="4.2.2" />
     <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.6.0" />

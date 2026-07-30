@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.SafetyPinService;
 
@@ -69,11 +70,28 @@ public sealed class DeleteModel(ApplicationDbContext context, SafetyPinService p
 
 		HasPin = await pinService.HasPin(uid);
 
-		var check = Pin is not null && await pinService.VerifyPin(uid, Pin);
-		if (!check)
+		if (HasPin)
 		{
-			ModelState.AddModelError("Pin", "Incorrect PIN");
-			return Page();
+			if (Pin is not {} pin)
+			{
+				ModelState.AddModelError("Pin", "Pin required");
+				return Page();
+			}
+
+			var res = await pinService.VerifyPin(uid, pin);
+			if (res != PinVerificationResult.Valid)
+			{
+				var msg = res switch
+				{
+					PinVerificationResult.Invalid => "Incorrect PIN",
+					PinVerificationResult.LockedOut => "PIN recently changed, lockout",
+					PinVerificationResult.NoPin => "No PIN set",
+					PinVerificationResult.NotFound => "User not found",
+					_ => throw new UnexpectedEnumValueException<PinVerificationResult>(res),
+				};
+				ModelState.AddModelError("Pin", msg);
+				return Page();
+			}
 		}
 
 		var rows = await context.Blogposts

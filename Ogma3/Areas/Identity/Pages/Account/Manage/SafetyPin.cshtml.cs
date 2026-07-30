@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.Mailer;
 using Sodium;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class SafetyPinModel(ApplicationDbContext context, ILogger<SafetyPinModel> logger) : PageModel
+public sealed class SafetyPinModel(ApplicationDbContext context, IMailer mailer, ILogger<SafetyPinModel> logger) : PageModel
 {
 	[BindProperty]
 	public required Data FormData { get; set; }
 
 	public required bool HasPin { get; set; }
-
+	public TimeSpan? TimeSinceLockout { get; set; }
 	public required bool Success { get; set; }
 
 	public async Task<IActionResult> OnGet()
@@ -24,10 +25,22 @@ public sealed class SafetyPinModel(ApplicationDbContext context, ILogger<SafetyP
 			return Page();
 		}
 
-		HasPin = await context.Users
+		var data = await context.Users
 			.Where(u => u.Id == uid)
-			.Select(u => u.SafetyPinHash != null)
+			.Select(u => new
+			{
+				HasPin = u.SafetyPinHash != null,
+				Lockout = u.SafetyPinLockedOutUntil,
+			})
 			.FirstOrDefaultAsync();
+
+		if (data is null)
+		{
+			return NotFound();
+		}
+
+		HasPin = data.HasPin;
+		TimeSinceLockout = data.Lockout is null ? null : data.Lockout - DateTimeOffset.UtcNow;
 
 		return Page();
 	}

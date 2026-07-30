@@ -14,17 +14,36 @@ public sealed class SafetyPinService(ApplicationDbContext ctx)
 	{
 		return await ctx.Users
 			.Where(u => u.Id == uid)
-			.Select(u => u.SafetyPinHash != null)
+			.Select(u => u.SafetyPinHash != null || u.SafetyPinLockedOutUntil > DateTimeOffset.UtcNow)
 			.FirstOrDefaultAsync();
 	}
 
-	public async Task<bool> VerifyPin(long uid, string pin)
+	public async Task<PinVerificationResult> VerifyPin(long uid, string pin)
 	{
-		var hash = await ctx.Users
+		var data = await ctx.Users
 			.Where(u => u.Id == uid)
-			.Select(u => u.SafetyPinHash)
+			.Select(u => new PinData(u.SafetyPinHash, u.SafetyPinLockedOutUntil))
 			.FirstOrDefaultAsync();
 
-		return hash is not null && PasswordHash.ArgonHashStringVerify(hash, pin);
+		if (data is null)
+		{
+			return PinVerificationResult.NotFound;
+		}
+
+		if (data.Expiry > DateTimeOffset.UtcNow)
+		{
+			return PinVerificationResult.LockedOut;
+		}
+
+		if (data.Hash is null)
+		{
+			return PinVerificationResult.NoPin;
+		}
+
+		return PasswordHash.ArgonHashStringVerify(data.Hash, pin)
+			? PinVerificationResult.Valid
+			: PinVerificationResult.Invalid;
 	}
+
+	private sealed record PinData(string? Hash, DateTimeOffset? Expiry);
 }

@@ -36,6 +36,13 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.HasMaxLength(CTConfig.MaxEmailAddressLength);
 
 		builder
+			.Property(u => u.SafetyPinHash)
+			.HasMaxLength(512);
+		builder
+			.Property(u => u.SafetyPinResetTokenHash)
+			.HasMaxLength(512);
+
+		builder
 			.Property(u => u.Title)
 			.HasMaxLength(CTConfig.User.MaxTitleLength);
 
