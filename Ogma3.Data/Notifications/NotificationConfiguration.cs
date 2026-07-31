@@ -28,10 +28,12 @@ public sealed class NotificationConfiguration : BaseConfiguration<Notification>
 			.UsingEntity<NotificationRecipients>(
 				ent => ent.HasOne(nr => nr.Recipient)
 					.WithMany()
-					.HasForeignKey(nr => nr.RecipientId),
+					.HasForeignKey(nr => nr.RecipientId)
+					.OnDelete(DeleteBehavior.Cascade),
 				ent => ent.HasOne(nr => nr.Notification)
 					.WithMany()
 					.HasForeignKey(nr => nr.NotificationId)
+					.OnDelete(DeleteBehavior.Cascade)
 			);
 	}
 }

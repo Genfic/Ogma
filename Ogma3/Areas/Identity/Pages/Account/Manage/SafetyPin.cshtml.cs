@@ -9,7 +9,7 @@ using Sodium;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class SafetyPinModel(ApplicationDbContext context, IMailer mailer, ILogger<SafetyPinModel> logger) : PageModel
+public sealed class SafetyPinModel(ApplicationDbContext context) : PageModel
 {
 	[BindProperty]
 	public required Data FormData { get; set; }
