@@ -7,7 +7,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
-public sealed class ResetPinConfirmationModel(ApplicationDbContext context) : PageModel
+public sealed class ResetPinConfirmationModel(AppDbContext context) : PageModel
 {
 	public async Task<IActionResult> OnGetAsync([FromQuery] string code)
 	{

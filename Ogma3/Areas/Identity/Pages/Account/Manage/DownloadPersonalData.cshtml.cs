@@ -11,7 +11,7 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public sealed class DownloadPersonalDataModel(
-	ApplicationDbContext context,
+	AppDbContext context,
 	ILogger<DownloadPersonalDataModel> logger)
 	: PageModel
 {

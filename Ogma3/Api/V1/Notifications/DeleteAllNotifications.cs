@@ -14,7 +14,7 @@ using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 [MapGroup<ApiGroup>]
 [MapDelete("notifications/all")]
 [Authorize]
-public sealed partial class DeleteAllNotifications(ApplicationDbContext context, IUserService userService)
+public sealed partial class DeleteAllNotifications(AppDbContext context, IUserService userService)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

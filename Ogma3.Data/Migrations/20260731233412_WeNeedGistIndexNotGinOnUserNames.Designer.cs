@@ -19,7 +19,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Data.Migrations;
 
-[DbContext(typeof(ApplicationDbContext))]
+[DbContext(typeof(AppDbContext))]
 [Migration("20260731233412_WeNeedGistIndexNotGinOnUserNames")]
 partial class _20260731233412_WeNeedGistIndexNotGinOnUserNames
 {

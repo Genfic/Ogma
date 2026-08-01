@@ -18,7 +18,7 @@ using ReturnType = Results<Ok, NotFound, Conflict<string>>;
 [MapGroup<ApiGroup>]
 [MapPut("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateTag(ApplicationDbContext context, TagCache cache)
+public sealed partial class UpdateTag(AppDbContext context, TagCache cache)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

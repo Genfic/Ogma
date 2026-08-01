@@ -18,7 +18,7 @@ using ReturnType = Results<Ok<ShelfDto[]>, UnauthorizedHttpResult>;
 [MapGroup<ApiGroup>]
 [MapGet("shelves/{userName:alpha}")]
 [Authorize]
-public sealed partial class GetPaginatedUserShelves(ApplicationDbContext context, IUserService userService, OgmaConfig config)
+public sealed partial class GetPaginatedUserShelves(AppDbContext context, IUserService userService, OgmaConfig config)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

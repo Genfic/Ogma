@@ -15,7 +15,7 @@ namespace Ogma3.Pages.Chapters;
 
 [Authorize]
 public sealed class EditModel(
-	ApplicationDbContext context,
+	AppDbContext context,
 	MinHasher hasher,
 	ChapterService chapterService,
 	ILogger<EditModel> logger) : PageModel

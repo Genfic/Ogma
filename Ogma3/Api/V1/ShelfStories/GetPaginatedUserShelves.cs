@@ -17,7 +17,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetPaginatedCurrentUserShe
 [MapGroup<ApiGroup>]
 [MapGet("ShelfStories/{storyId:long}")]
 [Authorize]
-public sealed partial class GetPaginatedCurrentUserShelves(ApplicationDbContext context, IUserService userService, OgmaConfig config)
+public sealed partial class GetPaginatedCurrentUserShelves(AppDbContext context, IUserService userService, OgmaConfig config)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

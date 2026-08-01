@@ -12,7 +12,7 @@ public sealed class DeleteInactiveAccountsRecurringJob(IServiceProvider serviceP
 	protected override async Task Run(CancellationToken ct)
 	{
 		using var scope = ServiceProvider.CreateScope();
-		var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
 		var cutoff = DateTimeOffset.UtcNow - TimeSpan.FromDays(30);
 

@@ -21,7 +21,7 @@ namespace Ogma3.Pages.Clubs;
 [Authorize]
 public sealed class EditModel
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	IFileUploader uploader,
 	ImageProcessor processor,
 	OgmaConfig ogmaConfig,

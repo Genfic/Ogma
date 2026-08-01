@@ -12,7 +12,7 @@ namespace Ogma3.Areas.Admin.Api.V1.Telemetry;
 [Handler]
 [MapGet($"admin/api/telemetry/{nameof(GetImportantItemCounts)}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class GetImportantItemCounts(ApplicationDbContext context)
+public sealed partial class GetImportantItemCounts(AppDbContext context)
 {
 	public sealed record Query;
 

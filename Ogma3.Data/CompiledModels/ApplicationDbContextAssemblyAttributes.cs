@@ -6,4 +6,4 @@ using Ogma3.Data;
 #pragma warning disable 219, 612, 618
 #nullable disable
 
-[assembly: DbContextModel(typeof(ApplicationDbContext), typeof(ApplicationDbContextModel), ProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL")]
+[assembly: DbContextModel(typeof(AppDbContext), typeof(ApplicationDbContextModel), ProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL")]

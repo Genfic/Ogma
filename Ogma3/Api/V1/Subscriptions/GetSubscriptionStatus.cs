@@ -13,7 +13,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("subscriptions/thread")]
-public sealed partial class GetSubscriptionStatus(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetSubscriptionStatus(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

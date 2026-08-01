@@ -12,7 +12,7 @@ using ReturnType = Ok<RatingApiDto[]>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("ratings")]
-public sealed partial class GetAllRatings(ApplicationDbContext context)
+public sealed partial class GetAllRatings(AppDbContext context)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

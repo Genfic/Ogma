@@ -31,7 +31,7 @@ public sealed class RegisterModel(
 	ITurnstileService turnstile,
 	PowService powService,
 	ISpeedTrapService speedTrap,
-	ApplicationDbContext context,
+	AppDbContext context,
 	IUserService userService,
 	ILogger<RegisterModel> logger) : PageModel
 {

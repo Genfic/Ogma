@@ -15,7 +15,7 @@ using ReturnType = Ok<bool>;
 [MapGroup<ApiGroup>]
 [MapGet("ClubJoin/{clubId:long}")]
 [Authorize]
-public sealed partial class GetClubMembershipStatus(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetClubMembershipStatus(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

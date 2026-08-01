@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 [MapGroup<ApiGroup>]
 [MapPost("votes")]
 [Authorize]
-public sealed partial class CreateVote(ApplicationDbContext context, IUserService userService)
+public sealed partial class CreateVote(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

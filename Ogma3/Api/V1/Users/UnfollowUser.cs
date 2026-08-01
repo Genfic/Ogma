@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("users/follow")]
 [Authorize]
-public sealed partial class UnfollowUser(ApplicationDbContext context, IUserService userService)
+public sealed partial class UnfollowUser(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

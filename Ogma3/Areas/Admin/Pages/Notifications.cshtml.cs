@@ -9,7 +9,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public sealed class NotificationsModel(ApplicationDbContext context, IFusionCache cache) : PageModel
+public sealed class NotificationsModel(AppDbContext context, IFusionCache cache) : PageModel
 {
 	public required List<NotificationDto> Notifications { get; set; }
 

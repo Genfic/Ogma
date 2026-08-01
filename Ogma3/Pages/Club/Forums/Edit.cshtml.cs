@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context) : PageModel
+public sealed class EditModel(AppDbContext context) : PageModel
 {
 	public async Task<IActionResult> OnGetAsync(long id)
 	{

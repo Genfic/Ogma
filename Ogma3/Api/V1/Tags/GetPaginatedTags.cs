@@ -12,7 +12,7 @@ namespace Ogma3.Api.V1.Tags;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("tags")]
-public sealed partial class GetPaginatedTags(ApplicationDbContext context)
+public sealed partial class GetPaginatedTags(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

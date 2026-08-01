@@ -8,7 +8,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class ReportsCountBadgeTagHelper(ApplicationDbContext ctx) : TagHelper
+public sealed class ReportsCountBadgeTagHelper(AppDbContext ctx) : TagHelper
 {
 	[ViewContext]
 	[HtmlAttributeNotBound]

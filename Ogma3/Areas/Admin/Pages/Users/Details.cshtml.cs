@@ -12,7 +12,7 @@ using Ogma3.Infrastructure.Extensions;
 namespace Ogma3.Areas.Admin.Pages.Users;
 
 public sealed class DetailsModel(
-	ApplicationDbContext context,
+	AppDbContext context,
 	OgmaUserManager userManager,
 	SignInManager<OgmaUser> signInManager,
 	ILogger<DetailsModel> logger) : PageModel

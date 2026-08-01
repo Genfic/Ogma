@@ -17,7 +17,7 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest, Ok<long>>;
 [MapGroup<ApiGroup>]
 [MapPost("reports")]
 [Authorize]
-public sealed partial class ReportContent(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
+public sealed partial class ReportContent(AppDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

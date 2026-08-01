@@ -6,7 +6,7 @@ using Ogma3.Data.Documents;
 
 namespace Ogma3.Pages;
 
-public sealed class Docs(ApplicationDbContext context) : PageModel
+public sealed class Docs(AppDbContext context) : PageModel
 {
 	public required DocumentDto Document { get;  set; }
 	public required List<DocumentVersionDto> Versions { get; set; }

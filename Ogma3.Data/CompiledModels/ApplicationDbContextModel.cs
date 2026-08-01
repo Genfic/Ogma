@@ -8,7 +8,7 @@ using Ogma3.Data;
 
 namespace CompiledModels;
 
-[DbContext(typeof(ApplicationDbContext))]
+[DbContext(typeof(AppDbContext))]
 public partial class ApplicationDbContextModel : RuntimeModel
 {
     private static readonly bool _useOldBehavior31751 =

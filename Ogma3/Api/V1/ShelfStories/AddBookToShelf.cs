@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<AddBookToShelf.R
 [MapGroup<ApiGroup>]
 [MapPost("ShelfStories")]
 [Authorize]
-public sealed partial class AddBookToShelf(ApplicationDbContext context, IUserService userService)
+public sealed partial class AddBookToShelf(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

@@ -20,7 +20,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [MapPost("users/follow")]
 [Authorize]
 public sealed partial class FollowUser
-	(ApplicationDbContext context, IUserService userService, NotificationsRepository notifications, LinkGenerator linkGenerator)
+	(AppDbContext context, IUserService userService, NotificationsRepository notifications, LinkGenerator linkGenerator)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

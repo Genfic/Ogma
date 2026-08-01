@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("users/block")]
 [Authorize]
-public sealed partial class UnblockUser(ApplicationDbContext context, IUserService userService)
+public sealed partial class UnblockUser(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

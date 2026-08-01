@@ -8,7 +8,7 @@ namespace Ogma3.Data.Clubs;
 
 [RegisterScoped]
 [UsedImplicitly]
-public sealed class ClubRepository(ApplicationDbContext context, IUserService userService)
+public sealed class ClubRepository(AppDbContext context, IUserService userService)
 {
 	public async Task<ClubBar?> GetClubBar(long clubId)
 	{

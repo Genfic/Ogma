@@ -10,7 +10,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club;
 
-public sealed class Members(ClubRepository clubRepo, ApplicationDbContext context) : PageModel
+public sealed class Members(ClubRepository clubRepo, AppDbContext context) : PageModel
 {
 	public required ClubBar ClubBar { get;  set; }
 	public required List<UserCard> ClubMembers { get; set; }

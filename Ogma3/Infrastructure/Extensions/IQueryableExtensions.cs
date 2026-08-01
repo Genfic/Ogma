@@ -47,7 +47,7 @@ public static class QueryableExtensions
 
 	extension(IQueryable<Story> query)
 	{
-		public IQueryable<Story> Blacklist(ApplicationDbContext ctx, long? userId)
+		public IQueryable<Story> Blacklist(AppDbContext ctx, long? userId)
 		{
 			return userId is not null
 				? query

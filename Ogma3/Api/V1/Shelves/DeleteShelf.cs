@@ -15,7 +15,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("shelves/{shelfId:long}")]
 [Authorize]
-public sealed partial class DeleteShelf(ApplicationDbContext context, IUserService userService)
+public sealed partial class DeleteShelf(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

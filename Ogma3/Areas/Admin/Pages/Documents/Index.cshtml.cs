@@ -9,7 +9,7 @@ using Riok.Mapperly.Abstractions;
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
-public sealed class IndexModel(ApplicationDbContext context) : PageModel
+public sealed class IndexModel(AppDbContext context) : PageModel
 {
 	public required List<DocumentDto> Docs { get; set; }
 

@@ -12,7 +12,7 @@ using ReturnType = Ok<FaqDto[]>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("faqs")]
-public sealed partial class GetAllFaqs(ApplicationDbContext context)
+public sealed partial class GetAllFaqs(AppDbContext context)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

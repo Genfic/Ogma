@@ -10,7 +10,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public sealed class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class CreateModel(AppDbContext context, ClubRepository clubRepo) : PageModel
 {
 	public required long ClubId { get; set; }
 	public required string Slug { get; set; }

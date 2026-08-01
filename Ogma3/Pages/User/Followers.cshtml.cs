@@ -10,7 +10,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User;
 
-public sealed class Followers(UserRepository userRepo, ApplicationDbContext context)
+public sealed class Followers(UserRepository userRepo, AppDbContext context)
 	: PageModel
 {
 	private const int PerPage = 25;

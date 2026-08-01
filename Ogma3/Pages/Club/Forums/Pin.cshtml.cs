@@ -10,7 +10,7 @@ using Routes.Pages;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public sealed class Pin(ApplicationDbContext context) : PageModel
+public sealed class Pin(AppDbContext context) : PageModel
 {
 	public required GetData Data { get; set; }
 

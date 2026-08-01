@@ -9,7 +9,7 @@ using Ogma3.Services.Mailer;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
-public sealed class ResetPinModel(ApplicationDbContext context, IMailer mailer, ILogger<ResetPinModel> logger) : PageModel
+public sealed class ResetPinModel(AppDbContext context, IMailer mailer, ILogger<ResetPinModel> logger) : PageModel
 {
 	public bool Success { get; set; }
 

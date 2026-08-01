@@ -14,7 +14,7 @@ using ReturnType = Results<Ok<int>, NoContent>;
 [MapGroup<ApiGroup>]
 [MapGet("notifications/count")]
 [Authorize]
-public sealed partial class CountUserNotifications(ApplicationDbContext context, IUserService userService)
+public sealed partial class CountUserNotifications(AppDbContext context, IUserService userService)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

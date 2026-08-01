@@ -17,7 +17,7 @@ using ReturnType = Results<NotFound, Ok>;
 [MapGroup<ApiGroup>]
 [MapPut("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateFaq(ApplicationDbContext context)
+public sealed partial class UpdateFaq(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

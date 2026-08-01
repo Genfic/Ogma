@@ -23,7 +23,7 @@ public sealed class ExternalLoginModel
 (
 	SignInManager<OgmaUser> signInManager,
 	UserManager<OgmaUser> userManager,
-	ApplicationDbContext context,
+	AppDbContext context,
 	ILogger<ExternalLoginModel> logger,
 	IMailer emailSender,
 	GeneratedImagesService imagesService)

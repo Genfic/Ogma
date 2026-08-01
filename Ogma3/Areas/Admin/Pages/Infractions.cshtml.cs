@@ -12,7 +12,7 @@ using Ogma3.Pages.Shared;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class InfractionsModel(ApplicationDbContext context) : PageModel
+public sealed class InfractionsModel(AppDbContext context) : PageModel
 {
 	private const int PerPage = 50;
 

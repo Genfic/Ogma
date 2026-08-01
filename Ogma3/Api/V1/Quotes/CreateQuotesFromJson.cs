@@ -15,7 +15,7 @@ using ResponseType = Ok<int>;
 [MapGroup<ApiGroup>]
 [MapPost("quotes/json")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateQuotesFromJson(ApplicationDbContext context)
+public sealed partial class CreateQuotesFromJson(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

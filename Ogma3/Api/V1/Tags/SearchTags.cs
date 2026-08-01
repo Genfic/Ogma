@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Tags;
 [MapGroup<ApiGroup>]
 [MapGet("tags/search")]
 [UsedImplicitly]
-public sealed partial class SearchTags(ApplicationDbContext context)
+public sealed partial class SearchTags(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

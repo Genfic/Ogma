@@ -17,7 +17,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>, BadRequest<string>>
 [MapGroup<ApiGroup>]
 [MapDelete("clubjoin")]
 [Authorize]
-public sealed partial class LeaveClub(ApplicationDbContext context, IUserService userService)
+public sealed partial class LeaveClub(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

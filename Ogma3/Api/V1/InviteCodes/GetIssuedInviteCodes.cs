@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto[]>>;
 [MapGroup<ApiGroup>]
 [MapGet("InviteCodes")]
 [Authorize]
-public sealed partial class GetIssuedInviteCodes(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetIssuedInviteCodes(AppDbContext context, IUserService userService)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Query _,

@@ -23,7 +23,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<string>>;
 [UsedImplicitly]
 public sealed partial class IssueInviteCodeExternal
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	ICodeGenerator codeGenerator,
 	IOptions<Workers> options)
 {

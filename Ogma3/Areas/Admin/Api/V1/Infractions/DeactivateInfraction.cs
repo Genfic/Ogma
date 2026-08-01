@@ -20,7 +20,7 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 [Handler]
 [MapDelete("admin/api/infractions/{infractionId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class DeactivateInfraction(ApplicationDbContext context, IUserService userService, IFusionCache cache)
+public sealed partial class DeactivateInfraction(AppDbContext context, IUserService userService, IFusionCache cache)
 {
 	public sealed record Command(long InfractionId);
 

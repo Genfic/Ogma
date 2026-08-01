@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
-public sealed class Index(ApplicationDbContext context) : PageModel
+public sealed class Index(AppDbContext context) : PageModel
 {
 	public required List<CountItem> Counts { get; set; }
 

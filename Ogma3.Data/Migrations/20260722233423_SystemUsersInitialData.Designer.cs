@@ -19,7 +19,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Data.Migrations;
 
-[DbContext(typeof(ApplicationDbContext))]
+[DbContext(typeof(AppDbContext))]
 [Migration("20260722233423_SystemUsersInitialData")]
 partial class _20260722233423_SystemUsersInitialData
 {

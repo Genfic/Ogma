@@ -18,7 +18,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateTag(ApplicationDbContext context, TagCache cache)
+public sealed partial class CreateTag(AppDbContext context, TagCache cache)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

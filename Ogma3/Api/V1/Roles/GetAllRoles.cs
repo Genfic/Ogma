@@ -10,7 +10,7 @@ namespace Ogma3.Api.V1.Roles;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("roles")]
-public sealed partial class GetAllRoles(ApplicationDbContext context)
+public sealed partial class GetAllRoles(AppDbContext context)
 {
 
 	private async ValueTask<Ok<RoleDto[]>> HandleAsync(

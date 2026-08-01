@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("votes")]
 [Authorize]
-public sealed partial class DeleteVote(ApplicationDbContext context, IUserService userService)
+public sealed partial class DeleteVote(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

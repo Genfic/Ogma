@@ -23,7 +23,7 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, NotFound,
 [UsedImplicitly]
 public sealed partial class CreateComment
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	IUserService userService,
 	PowService powService,
 	SqidsEncoder<long> sqids)
@@ -84,7 +84,7 @@ public sealed partial class CreateComment
 		return TypedResults.Ok(sqids.Encode(comment.Id));
 	}
 
-	private static async ValueTask<bool> CheckIfMuted(ApplicationDbContext context, long currentUserId, CancellationToken ct)
+	private static async ValueTask<bool> CheckIfMuted(AppDbContext context, long currentUserId, CancellationToken ct)
 	{
 		return await context.Infractions
 			.Where(i => i.UserId == currentUserId)
@@ -98,7 +98,7 @@ public sealed partial class CreateComment
 	///     Check if the comment thread is a profile thread, and if so, if the profile owner has the current user blocked
 	/// </summary>
 	private static async ValueTask<bool> CheckIfBlocked(
-		ApplicationDbContext context,
+		AppDbContext context,
 		long? profileOwnerId,
 		long currentUserId,
 		CommentSource source,

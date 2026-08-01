@@ -16,7 +16,7 @@ using ReturnType = Results<RssResult, InternalServerError, NotFound>;
 [MapGroup<RssGroup>]
 [MapGet("story/{storyId:long}/chapters")]
 public sealed partial class GetChaptersRssFeed
-	(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
+	(AppDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

@@ -12,7 +12,7 @@ using Ogma3.Services;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class Reports(ApplicationDbContext context, CommentRedirector redirector)
+public sealed class Reports(AppDbContext context, CommentRedirector redirector)
 	: PageModel
 {
 	private const int PerPage = 50;

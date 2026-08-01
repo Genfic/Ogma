@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Tags;
 [MapGroup<ApiGroup>]
 [MapGet("tags/all")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class GetAllTags(ApplicationDbContext context)
+public sealed partial class GetAllTags(AppDbContext context)
 {
 
 	private async ValueTask<Ok<TagDto[]>> HandleAsync(Query _, CancellationToken cancellationToken)

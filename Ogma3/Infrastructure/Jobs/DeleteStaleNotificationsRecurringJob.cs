@@ -11,7 +11,7 @@ public sealed class DeleteStaleNotificationsRecurringJob(IServiceProvider servic
 	protected override async Task Run(CancellationToken ct)
 	{
 		using var scope = ServiceProvider.CreateScope();
-		var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
 		var staleRows = await ctx.Notifications
 			.Where(n => n.DateTime < DateTimeOffset.UtcNow.AddMonths(-2))

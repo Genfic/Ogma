@@ -8,7 +8,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Pages;
 
-public sealed class IndexModel(ApplicationDbContext context, IFusionCache cache, ILogger<IndexModel> logger)
+public sealed class IndexModel(AppDbContext context, IFusionCache cache, ILogger<IndexModel> logger)
 	: PageModel
 {
 	public required List<StoryCard> RecentStories { get; set; }

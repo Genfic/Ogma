@@ -15,7 +15,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<bool>>;
 [Authorize]
 [MapGroup<ApiGroup>]
 [MapDelete("subscriptions/thread")]
-public sealed partial class UnsubscribeCommentsThread(ApplicationDbContext context, IUserService userService)
+public sealed partial class UnsubscribeCommentsThread(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

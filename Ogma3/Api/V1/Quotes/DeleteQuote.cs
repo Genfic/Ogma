@@ -15,7 +15,7 @@ using ResponseType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("quotes/{id:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteQuote(ApplicationDbContext context)
+public sealed partial class DeleteQuote(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

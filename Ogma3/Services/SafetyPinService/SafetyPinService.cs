@@ -8,7 +8,7 @@ namespace Ogma3.Services.SafetyPinService;
 
 [RegisterScoped]
 [UsedImplicitly]
-public sealed class SafetyPinService(ApplicationDbContext ctx)
+public sealed class SafetyPinService(AppDbContext ctx)
 {
 	public async Task<bool> HasPin(long uid)
 	{

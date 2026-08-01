@@ -16,7 +16,7 @@ using Utils.Extensions;
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class CreateModel(ApplicationDbContext context) : PageModel
+public sealed class CreateModel(AppDbContext context) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 

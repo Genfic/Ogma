@@ -18,7 +18,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<string>>;
 [MapGroup<ApiGroup>]
 [MapDelete("comments/{commentId}")]
 [Authorize]
-public sealed partial class DeleteComment(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
+public sealed partial class DeleteComment(AppDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

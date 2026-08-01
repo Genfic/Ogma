@@ -10,7 +10,7 @@ using Ogma3.Services.SafetyPinService;
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context, SafetyPinService pinService) : PageModel
+public sealed class DeleteModel(AppDbContext context, SafetyPinService pinService) : PageModel
 {
 	[BindProperty]
 	public required GetData Chapter { get; set; }

@@ -18,7 +18,7 @@ using ReturnType = Results<UnauthorizedHttpResult, BadRequest<string>, Ok<Invite
 [MapPost("InviteCodes")]
 [Authorize]
 public sealed partial class IssueInviteCode
-	(ApplicationDbContext context, OgmaConfig config, ICodeGenerator codeGenerator, IUserService userService)
+	(AppDbContext context, OgmaConfig config, ICodeGenerator codeGenerator, IUserService userService)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

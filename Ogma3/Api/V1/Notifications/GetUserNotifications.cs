@@ -17,7 +17,7 @@ using ReturnType = Results<Ok<List<GetUserNotifications.Result>>, UnauthorizedHt
 [MapGroup<ApiGroup>]
 [MapGet("notifications")]
 [Authorize]
-public sealed partial class GetUserNotifications(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetUserNotifications(AppDbContext context, IUserService userService)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

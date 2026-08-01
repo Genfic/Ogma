@@ -12,7 +12,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public sealed class FolderModel(ApplicationDbContext context, OgmaConfig config, ClubRepository clubRepo) : PageModel
+public sealed class FolderModel(AppDbContext context, OgmaConfig config, ClubRepository clubRepo) : PageModel
 {
 	public sealed class FolderDetails
 	{

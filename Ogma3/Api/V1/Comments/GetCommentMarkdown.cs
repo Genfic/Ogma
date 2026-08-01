@@ -12,7 +12,7 @@ using ReturnType = Results<Ok<string>, NotFound>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("comments/{commentId:int}/md")]
-public sealed partial class GetCommentMarkdown(ApplicationDbContext context)
+public sealed partial class GetCommentMarkdown(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

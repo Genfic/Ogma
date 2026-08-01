@@ -24,7 +24,7 @@ namespace Ogma3.Pages.Stories;
 [Authorize]
 public sealed class EditModel
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	IFileUploader uploader,
 	ImageProcessor processor,
 	OgmaConfig ogmaConfig,

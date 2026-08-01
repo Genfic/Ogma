@@ -11,7 +11,7 @@ namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 [Handler]
 [MapGet("admin/api/infractions/user/{userId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class GetUserInfractions(ApplicationDbContext context)
+public sealed partial class GetUserInfractions(AppDbContext context)
 {
 	public sealed record Query(long UserId);
 	

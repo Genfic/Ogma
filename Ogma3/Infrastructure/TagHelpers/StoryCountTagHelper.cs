@@ -5,7 +5,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class StoryCountTagHelper(ApplicationDbContext ctx, IMemoryCache cache) : TagHelper
+public sealed class StoryCountTagHelper(AppDbContext ctx, IMemoryCache cache) : TagHelper
 {
 	/// <summary>
 	/// How often should the cache refresh in minutes

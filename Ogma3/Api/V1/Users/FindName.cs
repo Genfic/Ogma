@@ -15,7 +15,7 @@ using ReturnType = Results<Ok<string[]>, UnprocessableEntity<string>>;
 [MapGroup<ApiGroup>]
 [MapGet("users/names")]
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
-public sealed partial class FindName(ApplicationDbContext context)
+public sealed partial class FindName(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

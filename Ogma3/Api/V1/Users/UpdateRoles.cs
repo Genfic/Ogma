@@ -20,7 +20,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 [MapGroup<ApiGroup>]
 [MapPost("users/roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateRoles(ApplicationDbContext context, IUserService userService)
+public sealed partial class UpdateRoles(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

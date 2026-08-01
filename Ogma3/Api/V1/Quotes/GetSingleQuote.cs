@@ -13,7 +13,7 @@ using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("quotes/{id:long}")]
-public sealed partial class GetSingleQuote(ApplicationDbContext context)
+public sealed partial class GetSingleQuote(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

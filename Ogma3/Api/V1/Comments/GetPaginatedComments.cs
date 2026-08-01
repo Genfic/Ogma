@@ -24,7 +24,7 @@ using ReturnType = Results<Ok<PaginationResult<CommentDto>>, NotModifiedResult, 
 [MapGet("comments")]
 public sealed partial class GetPaginatedComments
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	IUserService userService,
 	OgmaConfig ogmaConfig,
 	IHttpContextAccessor httpContextAccessor,

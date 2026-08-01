@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public sealed class DeleteModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class DeleteModel(AppDbContext context, ClubRepository clubRepo) : PageModel
 {
 	[BindProperty] public required DeleteViewModel Folder { get; set; }
 

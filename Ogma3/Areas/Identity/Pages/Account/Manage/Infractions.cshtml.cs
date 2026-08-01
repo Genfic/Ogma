@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class Infractions(ApplicationDbContext context) : PageModel
+public sealed class Infractions(AppDbContext context) : PageModel
 {
 	public required List<InfractionDto> AllInfractions { get; set; }
 

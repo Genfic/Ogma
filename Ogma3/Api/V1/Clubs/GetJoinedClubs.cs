@@ -13,7 +13,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetJoinedClubs.Response[]>
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("clubs/user")]
-public sealed partial class GetJoinedClubs(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetJoinedClubs(AppDbContext context, IUserService userService)
 {
 
 	private async ValueTask<ReturnType> HandleAsync(

@@ -11,7 +11,7 @@ using Chapter = Ogma3.Data.Chapters.Chapter;
 
 namespace Ogma3.Pages;
 
-public sealed class ChapterModel(ApplicationDbContext context) : PageModel
+public sealed class ChapterModel(AppDbContext context) : PageModel
 {
 	public required ChapterDetails Chapter { get; set; }
 	public required ChapterMicroDto? Previous { get; set; }

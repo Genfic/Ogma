@@ -16,7 +16,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteTag(ApplicationDbContext context, TagCache cache)
+public sealed partial class DeleteTag(AppDbContext context, TagCache cache)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

@@ -13,7 +13,7 @@ using Ogma3.Pages.Shared.Minimals;
 
 namespace Ogma3.Pages.Blog;
 
-public sealed class DetailsModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
+public sealed class DetailsModel(UserRepository userRepo, AppDbContext context) : PageModel
 {
 	public required Details Blogpost { get; set; }
 	public required ProfileBar ProfileBar { get; set; }

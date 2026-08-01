@@ -18,7 +18,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<UpdateComment.Re
 [MapGroup<ApiGroup>]
 [MapPatch("comments")]
 [Authorize]
-public sealed partial class UpdateComment(ApplicationDbContext context, IUserService userService, SqidsEncoder<long> sqids)
+public sealed partial class UpdateComment(AppDbContext context, IUserService userService, SqidsEncoder<long> sqids)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

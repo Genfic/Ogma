@@ -17,7 +17,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("InviteCodes/no-limit")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class AdminIssueInviteCode(ApplicationDbContext context, ICodeGenerator codeGenerator, IUserService userService)
+public sealed partial class AdminIssueInviteCode(AppDbContext context, ICodeGenerator codeGenerator, IUserService userService)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Command _,

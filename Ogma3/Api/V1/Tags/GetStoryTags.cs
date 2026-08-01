@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<TagDto[]>, NotFound>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("tags/story/{storyId:long}")]
-public sealed partial class GetStoryTags(ApplicationDbContext context)
+public sealed partial class GetStoryTags(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

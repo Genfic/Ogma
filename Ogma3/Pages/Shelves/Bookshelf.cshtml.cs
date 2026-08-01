@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Shelves;
 
-public sealed class Bookshelf(ApplicationDbContext context) : PageModel
+public sealed class Bookshelf(AppDbContext context) : PageModel
 {
 	public BookshelfDetails Shelf { get; private set; } = null!;
 

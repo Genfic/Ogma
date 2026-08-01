@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class Settings(OgmaConfig config, OgmaConfigPersistence persistence, ApplicationDbContext context) : PageModel
+public sealed class Settings(OgmaConfig config, OgmaConfigPersistence persistence, AppDbContext context) : PageModel
 {
 	[BindProperty] public required OgmaConfig Config { get; set; }
 	public required List<string> DocNames { get; set; } = [];

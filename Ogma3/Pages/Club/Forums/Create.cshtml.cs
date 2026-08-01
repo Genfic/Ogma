@@ -9,7 +9,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public sealed class CreateModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class CreateModel(AppDbContext context, ClubRepository clubRepo) : PageModel
 {
 	[BindProperty] public required PostModel ClubThread { get; set; }
 

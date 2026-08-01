@@ -14,7 +14,7 @@ public sealed class DeleteDraftsRecurringJob
 	protected override async Task Run(CancellationToken ct)
 	{
 		using var scope = ServiceProvider.CreateScope();
-		var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
 		var safeUsers = ctx.Subscriptions
 			.Where(s => s.Tier != null && (s.Tier.Entitlements & Entitlement.DraftsLastForever) != 0)

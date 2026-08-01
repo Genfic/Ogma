@@ -7,7 +7,7 @@ namespace Ogma3.Data.Notifications;
 [RegisterScoped]
 public sealed class NotificationsRepository
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	CommentRedirector redirector
 )
 {

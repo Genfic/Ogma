@@ -4,7 +4,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Pages.Chapters;
 
-public sealed class Locked(ApplicationDbContext context) : PageModel
+public sealed class Locked(AppDbContext context) : PageModel
 {
 	public required long StoryId { get; set; }
 	public required long ChapterId { get; set; }

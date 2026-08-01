@@ -15,7 +15,7 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class ContentBlock(ApplicationDbContext context) : PageModel
+public sealed class ContentBlock(AppDbContext context) : PageModel
 {
 	[BindProperty] public ItemType? Type { get; set; }
 

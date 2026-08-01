@@ -16,7 +16,7 @@ using ReturnType = Results<Ok<ShelfDto>, NotFound, UnauthorizedHttpResult>;
 [MapGroup<ApiGroup>]
 [MapGet("shelves/{shelfId:long}")]
 [Authorize]
-public sealed partial class GetShelf(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetShelf(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

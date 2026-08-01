@@ -24,7 +24,7 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public sealed partial class IndexModel
 (
-	ApplicationDbContext context,
+	AppDbContext context,
 	SignInManager<OgmaUser> signInManager,
 	IFileUploader uploader,
 	ImageProcessor processor,

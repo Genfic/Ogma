@@ -7,7 +7,7 @@ namespace Ogma3.Services;
 
 // TODO: might not be needed anymore, since comments are now referenced by their sqid
 [RegisterScoped]
-public sealed class CommentRedirector(ApplicationDbContext context, LinkGenerator linkGenerator)
+public sealed class CommentRedirector(AppDbContext context, LinkGenerator linkGenerator)
 {
 	public async Task<string?> RedirectToComment(long commentId)
 	{

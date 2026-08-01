@@ -11,7 +11,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club.Forums;
 
-public sealed class IndexModel(ApplicationDbContext context, ClubRepository clubRepo, OgmaConfig config)
+public sealed class IndexModel(AppDbContext context, ClubRepository clubRepo, OgmaConfig config)
 	: PageModel
 {
 	public required ClubBar ClubBar { get; set; }

@@ -8,7 +8,7 @@ namespace Ogma3.Services.ChapterService;
 
 [RegisterScoped]
 [UsedImplicitly]
-public sealed class ChapterService(ApplicationDbContext context, OgmaConfig config)
+public sealed class ChapterService(AppDbContext context, OgmaConfig config)
 {
 	public async Task<IReadOnlyList<long>> IsPlagiarized(long id, CancellationToken ct = default)
 	{

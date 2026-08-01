@@ -16,7 +16,7 @@ using Routes.Areas.Admin.Pages;
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class EditModel(ApplicationDbContext context) : PageModel
+public sealed class EditModel(AppDbContext context) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 

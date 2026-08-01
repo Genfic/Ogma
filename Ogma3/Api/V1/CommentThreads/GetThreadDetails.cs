@@ -20,7 +20,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<GetThreadDetails
 [MapGroup<ApiGroup>]
 [MapGet("CommentsThread/{threadId:long}")]
 public sealed partial class GetThreadDetails
-	(ApplicationDbContext context, IUserService userService, IHttpContextAccessor httpContextAccessor, OgmaConfig config)
+	(AppDbContext context, IUserService userService, IHttpContextAccessor httpContextAccessor, OgmaConfig config)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

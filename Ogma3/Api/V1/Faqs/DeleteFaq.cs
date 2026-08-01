@@ -15,7 +15,7 @@ using ReturnType = Results<NotFound, Ok<long>>;
 [MapGroup<ApiGroup>]
 [MapDelete("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteFaq(ApplicationDbContext context)
+public sealed partial class DeleteFaq(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

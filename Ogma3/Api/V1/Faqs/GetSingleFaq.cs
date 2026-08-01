@@ -13,7 +13,7 @@ using ReturnType = Results<NotFound, Ok<FaqDto>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("faqs/{faqId:long}")]
-public sealed partial class GetSingleFaq(ApplicationDbContext context)
+public sealed partial class GetSingleFaq(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

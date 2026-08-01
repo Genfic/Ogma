@@ -14,7 +14,7 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public sealed class EditModel(ApplicationDbContext context, OgmaConfig config) : PageModel
+public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageModel
 {
 	[BindProperty]
 	public required PostData Input { get; set; }

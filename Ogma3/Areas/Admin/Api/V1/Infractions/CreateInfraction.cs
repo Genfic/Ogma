@@ -21,7 +21,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok>;
 [Handler]
 [MapPost("admin/api/infractions")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class CreateInfraction(ApplicationDbContext context, IUserService userService, IFusionCache cache)
+public sealed partial class CreateInfraction(AppDbContext context, IUserService userService, IFusionCache cache)
 {
 	[Validate]
 	public sealed partial record Command

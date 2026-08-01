@@ -15,7 +15,7 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
 [MapGroup<ApiGroup>]
 [MapPut("shelves")]
 [Authorize]
-public sealed partial class UpdateShelf(ApplicationDbContext context, IUserService userService)
+public sealed partial class UpdateShelf(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

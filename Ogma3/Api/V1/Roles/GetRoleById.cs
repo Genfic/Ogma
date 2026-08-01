@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<RoleDto>, NotFound>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("roles/{roleId:long}")]
-public sealed partial class GetRoleById(ApplicationDbContext context)
+public sealed partial class GetRoleById(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

@@ -14,7 +14,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-public sealed class GlobalNotificationsTagHelper(ApplicationDbContext ctx, IFusionCache cache, SqidsEncoder<long> sqids) : TagHelper
+public sealed class GlobalNotificationsTagHelper(AppDbContext ctx, IFusionCache cache, SqidsEncoder<long> sqids) : TagHelper
 {
 	[ViewContext]
 	[HtmlAttributeNotBound]

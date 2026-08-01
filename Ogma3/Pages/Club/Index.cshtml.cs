@@ -10,10 +10,10 @@ namespace Ogma3.Pages.Club;
 
 public sealed class IndexModel : PageModel
 {
-	private readonly ApplicationDbContext _context;
+	private readonly AppDbContext _context;
 	private readonly ClubRepository _clubRepo;
 
-	public IndexModel(ApplicationDbContext context, ClubRepository clubRepo)
+	public IndexModel(AppDbContext context, ClubRepository clubRepo)
 	{
 		_context = context;
 		_clubRepo = clubRepo;

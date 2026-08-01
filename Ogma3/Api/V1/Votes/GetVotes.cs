@@ -13,7 +13,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<VoteResult>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("votes/{storyId:long}")]
-public sealed partial class GetVotes(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetVotes(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

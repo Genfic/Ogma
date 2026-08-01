@@ -11,7 +11,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class Blacklists(ApplicationDbContext context) : PageModel
+public sealed class Blacklists(AppDbContext context) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
 	public required List<UserCard> BlockedUsers { get; set; }

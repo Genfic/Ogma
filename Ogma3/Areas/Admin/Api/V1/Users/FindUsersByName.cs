@@ -14,7 +14,7 @@ namespace Ogma3.Areas.Admin.Api.V1.Users;
 [MapGet("admin/api/users/search/{name}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
 [UsedImplicitly]
-public sealed partial class FindUsersByName(ApplicationDbContext context, ILookupNormalizer normalizer)
+public sealed partial class FindUsersByName(AppDbContext context, ILookupNormalizer normalizer)
 {
 	[UsedImplicitly]
 	public sealed record Query(string Name);

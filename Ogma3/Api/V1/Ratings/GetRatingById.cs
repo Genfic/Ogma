@@ -13,7 +13,7 @@ using ReturnType = Results<NotFound, Ok<RatingApiDto>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("ratings/{id:long}")]
-public sealed partial class GetRatingById(ApplicationDbContext context)
+public sealed partial class GetRatingById(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

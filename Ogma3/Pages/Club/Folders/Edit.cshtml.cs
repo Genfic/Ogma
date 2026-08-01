@@ -9,7 +9,7 @@ using Utils.Extensions;
 
 namespace Ogma3.Pages.Club.Folders;
 
-public sealed class EditModel(ApplicationDbContext context, ClubRepository clubRepo) : PageModel
+public sealed class EditModel(AppDbContext context, ClubRepository clubRepo) : PageModel
 {
 	public required string Slug { get; set; }
 

@@ -9,7 +9,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.User.Library;
 
-public sealed class LibraryModel(ApplicationDbContext context, UserRepository userRepo) : PageModel
+public sealed class LibraryModel(AppDbContext context, UserRepository userRepo) : PageModel
 {
 	public required bool IsCurrentUser { get; set; }
 	public required ProfileBar ProfileBar { get; set; }

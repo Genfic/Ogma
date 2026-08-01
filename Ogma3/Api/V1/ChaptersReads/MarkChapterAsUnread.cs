@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>, NoContent>
 [MapGroup<ApiGroup>]
 [MapDelete("chaptersread")]
 [Authorize]
-public sealed partial class MarkChapterAsUnread(ApplicationDbContext context, IUserService userService)
+public sealed partial class MarkChapterAsUnread(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

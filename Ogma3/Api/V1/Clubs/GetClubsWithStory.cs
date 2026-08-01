@@ -10,7 +10,7 @@ namespace Ogma3.Api.V1.Clubs;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("clubs/story/{storyId:long}")]
-public sealed partial class GetClubsWithStory(ApplicationDbContext context)
+public sealed partial class GetClubsWithStory(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

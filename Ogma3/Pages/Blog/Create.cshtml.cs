@@ -18,7 +18,7 @@ namespace Ogma3.Pages.Blog;
 
 [Authorize]
 public sealed class CreateModel(
-	ApplicationDbContext context,
+	AppDbContext context,
 	NotificationsRepository notificationsRepo,
 	OgmaConfig config) : PageModel
 {

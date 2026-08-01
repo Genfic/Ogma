@@ -11,7 +11,7 @@ using Ogma3.Pages.Shared;
 namespace Ogma3.Areas.Admin.Pages.Users;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class Index (ApplicationDbContext context) : PageModel
+public sealed class Index (AppDbContext context) : PageModel
 {
 	private const int PerPage = 50;
 

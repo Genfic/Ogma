@@ -15,7 +15,7 @@ using ReturnType = Results<NotFound, Ok>;
 [MapGroup<ApiGroup>]
 [MapPut("ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateRating(ApplicationDbContext context)
+public sealed partial class UpdateRating(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

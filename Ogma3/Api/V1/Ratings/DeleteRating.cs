@@ -15,7 +15,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("ratings/{ratingId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteRating(ApplicationDbContext context)
+public sealed partial class DeleteRating(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

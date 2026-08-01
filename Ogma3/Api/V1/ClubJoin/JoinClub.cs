@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [MapGroup<ApiGroup>]
 [MapPost("clubjoin")]
 [Authorize]
-public sealed partial class JoinClub(ApplicationDbContext context, IUserService userService)
+public sealed partial class JoinClub(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

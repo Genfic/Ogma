@@ -20,7 +20,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [MapGroup<ApiGroup>]
 [MapPost("CommentsThread/lock")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class LockThread(ApplicationDbContext context, IUserService userService)
+public sealed partial class LockThread(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

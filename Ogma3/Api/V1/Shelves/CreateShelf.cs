@@ -15,7 +15,7 @@ using ReturnType = Results<CreatedAtRoute<ShelfDto>, UnauthorizedHttpResult>;
 [MapGroup<ApiGroup>]
 [MapPost("shelves")]
 [Authorize]
-public sealed partial class CreateShelf(ApplicationDbContext context, IUserService userService)
+public sealed partial class CreateShelf(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

@@ -9,7 +9,7 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages.User;
 
-public sealed class IndexModel(ApplicationDbContext context, UserRepository userRepo)
+public sealed class IndexModel(AppDbContext context, UserRepository userRepo)
 	: PageModel
 {
 	public required ProfileBar ProfileBar { get; set; }

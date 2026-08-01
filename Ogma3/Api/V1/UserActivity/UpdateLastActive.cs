@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<int>, NoContent>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapMethod("HEAD", "useractivity")]
-public sealed partial class UpdateLastActive(ApplicationDbContext context, IUserService userService)
+public sealed partial class UpdateLastActive(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

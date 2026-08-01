@@ -16,7 +16,7 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public sealed class ConfirmEmailModel(
 	OgmaUserManager userManager,
-	ApplicationDbContext context,
+	AppDbContext context,
 	GeneratedImagesService imagesService,
 	ILogger<ConfirmEmailModel> logger
 ) : PageModel

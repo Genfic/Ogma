@@ -17,7 +17,7 @@ using ReturnType = Ok<InviteCodeDto[]>;
 [MapGroup<ApiGroup>]
 [MapGet("InviteCodes/paginated")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class GetPaginatedInviteCodes(ApplicationDbContext context)
+public sealed partial class GetPaginatedInviteCodes(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

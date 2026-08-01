@@ -15,7 +15,7 @@ namespace Ogma3.Pages.User.Library;
 public sealed class ManageModel
 (
 	UserRepository userRepo,
-	ApplicationDbContext context,
+	AppDbContext context,
 	IFusionCache cache
 ) : PageModel
 {

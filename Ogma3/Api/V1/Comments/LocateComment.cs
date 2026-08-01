@@ -15,7 +15,7 @@ using ReturnType = Results<Ok<LocateComment.Response>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapGet("comments/locate")]
 [UsedImplicitly]
-public sealed partial class LocateComment(ApplicationDbContext context, OgmaConfig config, SqidsEncoder<long> sqids)
+public sealed partial class LocateComment(AppDbContext context, OgmaConfig config, SqidsEncoder<long> sqids)
 {
 
 	private async ValueTask<ReturnType> Handle(Query request, CancellationToken cancellationToken)

@@ -63,7 +63,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		}
 
 		await using var scope = _scopeFactory.CreateAsyncScope();
-		var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 		var userManager = scope.ServiceProvider.GetRequiredService<OgmaUserManager>();
 		var clientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
 		var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
@@ -99,7 +99,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 	public Task StoppedAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-	private static async Task SeedRoles(ApplicationDbContext context)
+	private static async Task SeedRoles(AppDbContext context)
 	{
 		if (await Any<OgmaRole>(context)) return;
 		var roles = new[]
@@ -116,7 +116,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 
 	private sealed record Admin(string Email, string Name);
 
-	private async Task SeedAdmin(ApplicationDbContext context, OgmaUserManager userManager, IUserService userService)
+	private async Task SeedAdmin(AppDbContext context, OgmaUserManager userManager, IUserService userService)
 	{
 		var admin = _config.GetSection("Seed:Admin").Get<Admin>() ?? throw new NullReferenceException("Admin section is null");
 
@@ -142,18 +142,18 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		}
 	}
 
-	private async Task SeedRatings(ApplicationDbContext context)
+	private async Task SeedRatings(AppDbContext context)
 	{
 		await BulkUpsert(context, context.Ratings, _data.Ratings, r => r.Name);
 	}
 
-	private async Task SeedIcons(ApplicationDbContext context)
+	private async Task SeedIcons(AppDbContext context)
 	{
 		var icons = _data.Icons.Select(s => new Icon { Name = s });
 		await BulkUpsert(context, context.Icons, icons, i => i.Name);
 	}
 
-	private async Task SeedQuotes(ApplicationDbContext context, IHttpClientFactory clientFactory)
+	private async Task SeedQuotes(AppDbContext context, IHttpClientFactory clientFactory)
 	{
 		if (await context.Quotes.AnyAsync()) return;
 
@@ -167,7 +167,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		await context.SaveChangesAsync();
 	}
 
-	private static async Task SeedUsers(ApplicationDbContext context, IUserService userService)
+	private static async Task SeedUsers(AppDbContext context, IUserService userService)
 	{
 		if (await Any<OgmaUser>(context, u => u.Roles.Any(r => r.Name != RoleNames.Admin))) return;
 
@@ -203,7 +203,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		}
 	}
 
-	private async Task<(long, ETagNamespace?)[]> SeedTags(ApplicationDbContext context)
+	private async Task<(long, ETagNamespace?)[]> SeedTags(AppDbContext context)
 	{
 		var tags = new List<Tag>();
 		foreach (var kvp in _data.Tags)
@@ -222,7 +222,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		return tags.Select(t => (t.Id, t.Namespace)).ToArray();
 	}
 
-	private static async Task<long[]> SeedStories(ApplicationDbContext context)
+	private static async Task<long[]> SeedStories(AppDbContext context)
 	{
 		if (await Any<Story>(context)) return [];
 
@@ -275,7 +275,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		return stories.Select(s => s.Id).ToArray();
 	}
 
-	private static async Task SeedStoryTags(ApplicationDbContext context, long[] storyIds, (long, ETagNamespace?)[] tags)
+	private static async Task SeedStoryTags(AppDbContext context, long[] storyIds, (long, ETagNamespace?)[] tags)
 	{
 		if (await Any<StoryTag>(context)) return;
 
@@ -301,7 +301,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		await context.SaveChangesAsync();
 	}
 
-	private static async Task SeedBlogposts(ApplicationDbContext context, long[] storyIds)
+	private static async Task SeedBlogposts(AppDbContext context, long[] storyIds)
 	{
 		if (await Any<Blogpost>(context)) return;
 
@@ -330,7 +330,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 	}
 
 	private static async Task BulkUpsert<TEntity>(
-		ApplicationDbContext context,
+		AppDbContext context,
 		DbSet<TEntity> source,
 		IEnumerable<TEntity> entries,
 		Expression<Func<TEntity, object?>> extractor
@@ -345,7 +345,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 	}
 
 	private static async Task<bool> Any<T>(
-		ApplicationDbContext context,
+		AppDbContext context,
 		Expression<Func<T, bool>>? predicate = null
 	) where T : class
 	{

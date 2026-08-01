@@ -14,7 +14,7 @@ using ReturnType = Results<NotFound, Ok<QuoteDto>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("quotes/random")]
-public sealed partial class GetRandomQuote(ApplicationDbContext context)
+public sealed partial class GetRandomQuote(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

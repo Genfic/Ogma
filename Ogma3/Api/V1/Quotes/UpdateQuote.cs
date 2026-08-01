@@ -15,7 +15,7 @@ using ReturnType = Results<Ok, NotFound>;
 [MapGroup<ApiGroup>]
 [MapPut("quotes")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateQuote(ApplicationDbContext context)
+public sealed partial class UpdateQuote(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

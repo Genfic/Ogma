@@ -17,7 +17,7 @@ namespace Ogma3.Pages.Chapters;
 
 [Authorize]
 public sealed class CreateModel(
-	ApplicationDbContext context,
+	AppDbContext context,
 	NotificationsRepository notificationsRepo,
 	MinHasher hasher,
 	ChapterService chapterService,

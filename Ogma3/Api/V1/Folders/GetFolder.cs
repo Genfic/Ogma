@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<GetFolder.Result[]>, UnauthorizedHttpResult>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("folders")]
-public sealed partial class GetFolder(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetFolder(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

@@ -10,7 +10,7 @@ using Index = Routes.Pages.Index;
 namespace Ogma3.Pages;
 
 [AllowBannedUsers]
-public sealed class Ban(ApplicationDbContext context) : PageModel
+public sealed class Ban(AppDbContext context) : PageModel
 {
 	public DateTimeOffset BannedUntil { get; private set; }
 	public List<InfractionDto> Infractions { get; private set; } = [];

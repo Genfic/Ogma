@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<TagDto>, NotFound>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("tags/{tagId:long}")]
-public sealed partial class GetSingleTag(ApplicationDbContext context)
+public sealed partial class GetSingleTag(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

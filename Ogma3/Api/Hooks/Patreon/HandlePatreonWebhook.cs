@@ -25,7 +25,7 @@ using ReturnType = Results<Ok, NotFound, BadRequest, InternalServerError>;
 public sealed partial class HandlePatreonWebhook
 (
 	IOptions<Infrastructure.Config.Patreon> config,
-	ApplicationDbContext context,
+	AppDbContext context,
 	IHttpContextAccessor httpContextAccessor,
 	OgmaUserManager userManager,
 	ILogger<HandlePatreonWebhook.Handler> logger)

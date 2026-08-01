@@ -100,20 +100,20 @@ public static class Startup
 				config.User.RequireUniqueEmail = true;
 				config.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
 			})
-			.AddEntityFrameworkStores<ApplicationDbContext>()
+			.AddEntityFrameworkStores<AppDbContext>()
 			.AddUserManager<OgmaUserManager>()
 			.AddDefaultTokenProviders()
 			.AddUserStore<UserStore<
 				OgmaUser,
 				OgmaRole,
-				ApplicationDbContext,
+				AppDbContext,
 				long,
 				IdentityUserClaim<long>,
 				UserRole,
 				IdentityUserLogin<long>,
 				IdentityUserToken<long>,
 				IdentityRoleClaim<long>>>()
-			.AddRoleStore<RoleStore<OgmaRole, ApplicationDbContext, long, UserRole, IdentityRoleClaim<long>>>();
+			.AddRoleStore<RoleStore<OgmaRole, AppDbContext, long, UserRole, IdentityRoleClaim<long>>>();
 		services.Configure<IdentityPasskeyOptions>(options => {
 			options.ServerDomain = "genfic.net";
 		});

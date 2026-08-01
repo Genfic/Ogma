@@ -17,7 +17,7 @@ using ReturnType = CreatedAtRoute<FaqDto>;
 [MapGroup<ApiGroup>]
 [MapPost("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateFaq(ApplicationDbContext context)
+public sealed partial class CreateFaq(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

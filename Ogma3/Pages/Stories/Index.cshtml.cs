@@ -16,7 +16,7 @@ using ZiggyCreatures.Caching.Fusion;
 namespace Ogma3.Pages.Stories;
 
 public sealed class IndexModel(
-	ApplicationDbContext context,
+	AppDbContext context,
 	OgmaConfig config,
 	TagCache tagCache,
 	IFusionCache cache) : PageModel

@@ -16,7 +16,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<RemoveBookFromSh
 [MapGroup<ApiGroup>]
 [MapDelete("ShelfStories")]
 [Authorize]
-public sealed partial class RemoveBookFromShelf(ApplicationDbContext context, IUserService userService)
+public sealed partial class RemoveBookFromShelf(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

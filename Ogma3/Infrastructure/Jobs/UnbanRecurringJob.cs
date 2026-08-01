@@ -13,7 +13,7 @@ public sealed class UnbanRecurringJob(IServiceProvider serviceProvider, ILogger<
 	protected override async Task Run(CancellationToken ct)
 	{
 		using var scope = ServiceProvider.CreateScope();
-		var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
 		var count = await ctx.Infractions
 			.Where(i => i.Type == InfractionType.Ban)

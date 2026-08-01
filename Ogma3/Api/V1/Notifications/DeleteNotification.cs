@@ -15,7 +15,7 @@ using ReturnType = Results<Ok, NotFound, UnauthorizedHttpResult>;
 [MapGroup<ApiGroup>]
 [MapDelete("notifications/{id:long}")]
 [Authorize]
-public sealed partial class DeleteNotification(ApplicationDbContext context, IUserService userService)
+public sealed partial class DeleteNotification(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

@@ -6,7 +6,7 @@ using Ogma3.Services.UserService;
 namespace Ogma3.Data.Users;
 
 [RegisterScoped]
-public sealed class UserRepository(ApplicationDbContext context, IUserService userService)
+public sealed class UserRepository(AppDbContext context, IUserService userService)
 {
 	private readonly long? _uid = userService.UserId;
 

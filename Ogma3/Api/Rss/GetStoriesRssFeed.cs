@@ -16,7 +16,7 @@ using ReturnType = Results<RssResult, InternalServerError>;
 [MapGroup<RssGroup>]
 [MapGet("stories")]
 public sealed partial class GetStoriesRssFeed
-	(ApplicationDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
+	(AppDbContext context, LinkGenerator generator, IHttpContextAccessor contextAccessor, IConfiguration config)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

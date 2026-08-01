@@ -13,7 +13,7 @@ namespace Ogma3.Api.V1.Ratings;
 [MapGroup<ApiGroup>]
 [MapPost("ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateRating(ApplicationDbContext context)
+public sealed partial class CreateRating(AppDbContext context)
 {
 
 	private static readonly Func<Rating, RatingApiDto> Mapper = RatingMapper.ToApiDto.Compile();

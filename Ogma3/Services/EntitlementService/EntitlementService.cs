@@ -10,7 +10,7 @@ namespace Ogma3.Services.EntitlementService;
 [RegisterScoped]
 [UsedImplicitly]
 public sealed class EntitlementService(
-	ApplicationDbContext context,
+	AppDbContext context,
 	IFusionCache cache
 )
 {

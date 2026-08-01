@@ -12,7 +12,7 @@ namespace Ogma3.Api.V1.Comments;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("comments/{commentId}/revisions")]
-public sealed partial class GetRevision(ApplicationDbContext context, SqidsEncoder<long> sqids)
+public sealed partial class GetRevision(AppDbContext context, SqidsEncoder<long> sqids)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

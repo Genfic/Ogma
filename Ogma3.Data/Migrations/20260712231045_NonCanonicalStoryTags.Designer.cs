@@ -19,7 +19,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Data.Migrations;
 
-[DbContext(typeof(ApplicationDbContext))]
+[DbContext(typeof(AppDbContext))]
 [Migration("20260712231045_NonCanonicalStoryTags")]
 partial class _20260712231045_NonCanonicalStoryTags
 {

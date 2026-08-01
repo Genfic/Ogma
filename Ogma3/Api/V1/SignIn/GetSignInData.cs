@@ -12,7 +12,7 @@ namespace Ogma3.Api.V1.SignIn;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("signin")]
-public sealed partial class GetSignInData(ApplicationDbContext context, OgmaConfig config, GeneratedImagesService genImg)
+public sealed partial class GetSignInData(AppDbContext context, OgmaConfig config, GeneratedImagesService genImg)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

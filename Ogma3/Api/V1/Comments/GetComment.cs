@@ -14,7 +14,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<CommentDto>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("comments/{commentId:long}")]
-public sealed partial class GetComment(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetComment(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

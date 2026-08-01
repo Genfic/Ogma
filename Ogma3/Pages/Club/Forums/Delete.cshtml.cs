@@ -12,7 +12,7 @@ using Routes.Pages;
 namespace Ogma3.Pages.Club.Forums;
 
 [Authorize]
-public sealed class DeleteModel(ApplicationDbContext context) : PageModel
+public sealed class DeleteModel(AppDbContext context) : PageModel
 {
 	[BindProperty] public required GetData ClubThread { get; set; }
 

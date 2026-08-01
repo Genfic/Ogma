@@ -14,7 +14,7 @@ public sealed class OgmaClaimsPrincipalFactory
 (
 	UserManager<OgmaUser> userManager,
 	RoleManager<OgmaRole> roleManager,
-	ApplicationDbContext context,
+	AppDbContext context,
 	IOptions<IdentityOptions> options)
 	: UserClaimsPrincipalFactory<OgmaUser, OgmaRole>(userManager, roleManager, options)
 {

@@ -19,7 +19,7 @@ using Ogma3.Data.Tags;
 
 namespace Ogma3.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20260522212310_FollowNotifications")]
     partial class _20260522212310_FollowNotifications
     {

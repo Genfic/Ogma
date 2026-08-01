@@ -15,7 +15,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<GetCurrentUserQuickShelves
 [MapGroup<ApiGroup>]
 [MapGet("ShelfStories/{storyId:long}/quick")]
 [Authorize]
-public sealed partial class GetCurrentUserQuickShelves(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetCurrentUserQuickShelves(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

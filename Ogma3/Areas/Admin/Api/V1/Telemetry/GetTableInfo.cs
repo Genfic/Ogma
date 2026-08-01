@@ -12,7 +12,7 @@ namespace Ogma3.Areas.Admin.Api.V1.Telemetry;
 [Handler]
 [MapGet($"admin/api/telemetry/{nameof(GetTableInfo)}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class GetTableInfo(ApplicationDbContext context)
+public sealed partial class GetTableInfo(AppDbContext context)
 {
 	public sealed record Query;
 

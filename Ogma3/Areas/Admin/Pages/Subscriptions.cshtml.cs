@@ -7,7 +7,7 @@ using Ogma3.Services.PatreonService;
 
 namespace Ogma3.Areas.Admin.Pages;
 
-public sealed class Subscriptions(ApplicationDbContext context, PatreonService patreonService) : PageModel
+public sealed class Subscriptions(AppDbContext context, PatreonService patreonService) : PageModel
 {
 	public required List<TierDto> Tiers { get; set; }
 	public required IReadOnlyList<PatreonTier> PatreonTiers { get; set; }

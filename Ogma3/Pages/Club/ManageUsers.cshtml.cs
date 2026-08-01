@@ -7,7 +7,7 @@ using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Pages.Club;
 
-public sealed class ManageUsers(ApplicationDbContext context) : PageModel
+public sealed class ManageUsers(AppDbContext context) : PageModel
 {
 	public required ClubData Club { get; set; }
 	public required List<UserDto> Users { get; set; }

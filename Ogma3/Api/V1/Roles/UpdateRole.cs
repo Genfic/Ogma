@@ -15,7 +15,7 @@ using ReturnType = Results<Ok, NotFound>;
 [MapGroup<ApiGroup>]
 [MapPut("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateRole(ApplicationDbContext context)
+public sealed partial class UpdateRole(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

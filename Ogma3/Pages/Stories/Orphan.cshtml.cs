@@ -12,7 +12,7 @@ using Routes.Pages;
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public sealed class OrphanModel(ApplicationDbContext context) : PageModel
+public sealed class OrphanModel(AppDbContext context) : PageModel
 {
 	public sealed class GetData
 	{

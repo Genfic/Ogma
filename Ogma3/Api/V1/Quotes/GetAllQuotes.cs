@@ -11,7 +11,7 @@ namespace Ogma3.Api.V1.Quotes;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("quotes")]
-public sealed partial class GetAllQuotes(ApplicationDbContext context)
+public sealed partial class GetAllQuotes(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

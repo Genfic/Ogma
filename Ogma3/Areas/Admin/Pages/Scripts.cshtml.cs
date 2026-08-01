@@ -10,7 +10,7 @@ using Ogma3.Services.TagCache;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class Scripts(ApplicationDbContext ctx, TagCache tagCache, OgmaConfig config) : PageModel
+public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig config) : PageModel
 {
 	public void OnGet()
 	{

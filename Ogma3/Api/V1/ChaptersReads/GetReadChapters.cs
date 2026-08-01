@@ -13,7 +13,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<HashSet<long>>>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("ChaptersRead/{id:long}")]
-public sealed partial class GetReadChapters(ApplicationDbContext context, IUserService userService)
+public sealed partial class GetReadChapters(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

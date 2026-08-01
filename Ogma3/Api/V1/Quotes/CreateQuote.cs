@@ -15,7 +15,7 @@ using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<FullQuoteDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("quotes")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateQuote(ApplicationDbContext context, ILogger<CreateQuote.Handler> logger)
+public sealed partial class CreateQuote(AppDbContext context, ILogger<CreateQuote.Handler> logger)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint

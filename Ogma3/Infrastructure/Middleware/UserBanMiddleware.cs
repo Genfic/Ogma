@@ -32,7 +32,7 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 		var isBanned = await cache.GetOrSetAsync(
 			CacheKey(uid),
 			async _ => {
-				var dbContext = context.RequestServices.GetRequiredService<ApplicationDbContext>();
+				var dbContext = context.RequestServices.GetRequiredService<AppDbContext>();
 				return await CompiledQuery(dbContext, uid);
 			},
 			o => o.Duration = TimeSpan.FromMinutes(30)
@@ -57,8 +57,8 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 		await next(context);
 	}
 
-	private static readonly Func<ApplicationDbContext, long, Task<bool>> CompiledQuery =
-		EF.CompileAsyncQuery(static (ApplicationDbContext dbContext, long uid) => dbContext.Infractions
+	private static readonly Func<AppDbContext, long, Task<bool>> CompiledQuery =
+		EF.CompileAsyncQuery(static (AppDbContext dbContext, long uid) => dbContext.Infractions
 			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
 			.Where(i => i.UserId == uid)
 			.Where(i => i.Type == InfractionType.Ban)

@@ -15,7 +15,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("InviteCodes/{CodeId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteInviteCode(ApplicationDbContext context)
+public sealed partial class DeleteInviteCode(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

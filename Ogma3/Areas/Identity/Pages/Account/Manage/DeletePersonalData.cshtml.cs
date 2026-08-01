@@ -15,7 +15,7 @@ public sealed class DeletePersonalDataModel
 	UserManager<OgmaUser> userManager,
 	SignInManager<OgmaUser> signInManager,
 	ILogger<DeletePersonalDataModel> logger,
-	ApplicationDbContext context)
+	AppDbContext context)
 	: PageModel
 {
 	private readonly SqidsEncoder<long> _sqids = new();

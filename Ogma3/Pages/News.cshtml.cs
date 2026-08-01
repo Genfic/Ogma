@@ -8,7 +8,7 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages;
 
-public sealed class NewsModel(ApplicationDbContext context) : PageModel
+public sealed class NewsModel(AppDbContext context) : PageModel
 {
 	private const int PerPage = 20;
 

@@ -14,7 +14,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound<string>, Conflict<st
 [Handler]
 [MapGroup<ApiGroup>]
 [MapPost("folders/AddStory")]
-public sealed partial class AddStoryToFolder(ApplicationDbContext context, IUserService userService)
+public sealed partial class AddStoryToFolder(AppDbContext context, IUserService userService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

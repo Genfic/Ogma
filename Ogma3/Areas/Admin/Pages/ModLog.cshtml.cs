@@ -11,7 +11,7 @@ using Ogma3.Pages.Shared;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireStaffRole)]
-public sealed class ModLog(ApplicationDbContext context) : PageModel
+public sealed class ModLog(AppDbContext context) : PageModel
 {
 	private const int PerPage = 50;
 

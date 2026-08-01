@@ -9,7 +9,7 @@ using Ogma3.Data.Users;
 namespace Ogma3.Data;
 
 [AutoDbContext]
-public sealed partial class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext
+public sealed partial class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext
 <
 	OgmaUser,
 	OgmaRole,
@@ -51,6 +51,6 @@ public sealed partial class ApplicationDbContext(DbContextOptions<ApplicationDbC
 			.HasPostgresExtension("fuzzystrmatch");
 
 		// Load model configurations
-		builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+		builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 	}
 }

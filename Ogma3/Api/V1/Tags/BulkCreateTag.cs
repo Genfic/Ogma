@@ -22,7 +22,7 @@ using ReturnType = Results<BadRequest<string>, Ok<string>>;
 [MapPost("tags/bulk")]
 [UsedImplicitly]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class BulkCreateTag(ApplicationDbContext context, TagCache cache, ILogger<BulkCreateTag.Handler> logger)
+public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, ILogger<BulkCreateTag.Handler> logger)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Command request,

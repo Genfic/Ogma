@@ -13,7 +13,7 @@ using ReturnType = Results<Ok<List<string>>, NotFound>;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("test-three")]
-public sealed partial class TestThree(OgmaConfig config, ApplicationDbContext ctx)
+public sealed partial class TestThree(OgmaConfig config, AppDbContext ctx)
 {
 	private async ValueTask<ReturnType> Handle(Query q, CancellationToken ct)
 	{

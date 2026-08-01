@@ -10,7 +10,7 @@ using Ogma3.Pages.Shared.Bars;
 
 namespace Ogma3.Pages;
 
-public sealed class StoryModel(UserRepository userRepo, ApplicationDbContext context) : PageModel
+public sealed class StoryModel(UserRepository userRepo, AppDbContext context) : PageModel
 {
 	public required StoryDetails Story { get; set; }
 	public required ChapterBasic[] Chapters { get; set; }
