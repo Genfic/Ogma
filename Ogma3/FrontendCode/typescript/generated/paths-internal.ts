@@ -1,7 +1,8 @@
 import { DELETE, GET, HEAD, PATCH, POST, PUT, typedFetch } from "./typed-fetch";
 import type {
 	CreateInfractionCommand,
-	GetUserDataUserDetailsDto,
+	FindUsersByNameUserSearchResult,
+	GetUserInfractionsInfractionDetails,
 	GetUserInfractionsResult,
 	InfractionDto,
 } from './types-internal';
@@ -50,7 +51,14 @@ export const GetAdminApiTelemetryGetTableInfo = async (headers?: HeadersInit, op
     options,
 );
 
-export const GetAdminApiUsers = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetUserDataUserDetailsDto; 401: undefined; 404: undefined }, undefined>(`/admin/api/users/${name}`,
+export const GetAdminApiUserInfractions = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetUserInfractionsInfractionDetails; 401: undefined; 404: undefined }, undefined>(`/admin/api/user/infractions/${id}`,
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
+export const GetAdminApiUsersSearch = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: FindUsersByNameUserSearchResult[]; 401: undefined }, undefined>(`/admin/api/users/search/${name}`,
     GET,
     undefined,
     headers,

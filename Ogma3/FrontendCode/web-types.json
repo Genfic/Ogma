@@ -56,6 +56,30 @@
 					}
 				},
 				{
+					"name": "manage-infractions",
+					"description": "Custom element <manage-infractions> defined in typescript/src/admin/manage-infractions.tsx",
+					"attributes": [
+						{
+							"name": "user-id",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "csrf",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript/src/admin/manage-infractions.tsx",
+						"symbol": "manage-infractions"
+					}
+				},
+				{
 					"name": "markdown-editor",
 					"description": "Custom element <markdown-editor> defined in typescript/src/comp/markdown-editor.tsx",
 					"attributes": [

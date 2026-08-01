@@ -3,7 +3,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Infrastructure.Jobs;
 
-public sealed class DeleteStaleNotificationsRecurringJob(IServiceProvider serviceProvider, ILogger logger)
+public sealed class DeleteStaleNotificationsRecurringJob(IServiceProvider serviceProvider, ILogger<DeleteStaleNotificationsRecurringJob> logger)
 	: BaseRecurringJob(serviceProvider, logger)
 {
 	protected override TimeSpan Interval => TimeSpan.FromDays(1);

@@ -1,0 +1,124 @@
+@page
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery Csrf
+@model Ogma3.Areas.Admin.Pages.Users.DetailsModel
+
+@{
+	ViewData["Title"] = $"User {Model.Details?.Name ?? "Not Found"}";
+	ViewData["ActivePage"] = NavPages.Users;
+}
+
+<h3>User Info</h3>
+
+@if (Model.Details is not null)
+{
+	var user = Model.Details;
+
+	<a for-route="@Routes.Pages.User_Index.Get(user.Name)">Visit profile</a>
+
+	<hr>
+
+	<form method="post" asp-page-handler="Impersonate">
+		<input type="hidden" name="username" value="@user.Name" />
+		<button type="submit" class="btn btn-primary">Impersonate</button>
+	</form>
+
+	<br>
+
+	<table class="o-table">
+		<tbody>
+		<tr>
+			<td>Id</td>
+			<td id="id">@user.Id</td>
+		</tr>
+		<tr>
+			<td>Name</td>
+			<td>@user.Name</td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td>@user.Email</td>
+		</tr>
+		<tr>
+			<td>Title</td>
+			<td>@user.Title</td>
+		</tr>
+		<tr>
+			<td>Avatar</td>
+			<td>
+				<a href="@user.Avatar">@user.Avatar</a>
+				<img src="@user.Avatar" alt="@user.Name's avatar" height="120" width="120" cf />
+			</td>
+		</tr>
+		<tr>
+			<td class="nb">Registration date</td>
+			<td>@user.RegistrationDate.ToString("dd.MM.yyyy HH:mm")</td>
+		</tr>
+		<tr>
+			<td class="nb">Last active</td>
+			<td>@user.LastActive.ToString("dd.MM.yyyy HH:mm")</td>
+		</tr>
+		<tr>
+			<td class="nb">Stories count</td>
+			<td>@user.StoriesCount</td>
+		</tr>
+		<tr>
+			<td class="nb">Blogposts count</td>
+			<td>@user.BlogpostsCount</td>
+		</tr>
+		<tr>
+			<td>Roles</td>
+			<td>
+				<form method="post">
+					<div asp-validation-summary="All"></div>
+
+                    @{
+                        var roles = Model.Roles.Select(r => r.Name);
+                    }
+
+					<div class="select-group">
+						@foreach (var role in Model.Roles)
+						{
+                            var check = user.RoleNames.Contains(role.Name, StringComparer.OrdinalIgnoreCase);
+
+							<input
+								id="role-@role.Name"
+								type="checkbox"
+								name="@nameof(Model.GivenRoles)"
+								value="@role.Id"
+								checked="@check"/>
+							<label for="role-@role.Name">@role.Name</label>
+						}
+					</div>
+
+					<input type="hidden" name="UserId" value="@user.Id">
+
+					<button type="submit" class="btn btn-primary">
+						Save
+					</button>
+				</form>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+
+	<br>
+
+	<h3>Infractions</h3>
+
+	<manage-infractions
+		user-id="@user.Id"
+		csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken">
+	</manage-infractions>
+}
+else
+{
+	<span class="alert warning">
+		User not found
+	</span>
+}
+
+@section Scripts
+{
+	<script type="module" src="~/js/admin/manage-infractions.js" asp-append-version="true"></script>
+}

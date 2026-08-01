@@ -338,7 +338,6 @@ export type TagDto = {
     description: string | null;
     namespace: "ContentWarning" | "Franchise" | "Genre" | null;
     namespaceColor: string | null;
-    namespaceId: number | null;
 };
 
 export type UnblockUserCommand = {

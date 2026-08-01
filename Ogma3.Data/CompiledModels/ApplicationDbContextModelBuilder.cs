@@ -12,7 +12,7 @@ namespace CompiledModels;
 public partial class ApplicationDbContextModel
 {
     private ApplicationDbContextModel()
-        : base(skipDetectChanges: false, modelId: new Guid("9739a9d7-b3e3-4cd3-9dcf-d186de72ab78"), entityTypeCount: 47)
+        : base(skipDetectChanges: false, modelId: new Guid("6c10dced-ebd8-4199-b35a-672476fd5ff9"), entityTypeCount: 47)
     {
     }
 

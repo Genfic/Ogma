@@ -5,7 +5,19 @@ export type CreateInfractionCommand = {
     type: InfractionType;
 };
 
-export type GetUserDataInfractionDto = {
+export type FindUsersByNameUserSearchResult = {
+    id: number;
+    name: string;
+    distance: number;
+};
+
+export type GetUserInfractionsInfractionDetails = {
+    userId: number;
+    infractions: GetUserInfractionsInfractionDto[];
+    infractionTypes: InfractionType[];
+};
+
+export type GetUserInfractionsInfractionDto = {
     id: number;
     issueDate: Date;
     activeUntil: Date;
@@ -13,20 +25,6 @@ export type GetUserDataInfractionDto = {
     reason: string;
     type: InfractionType;
     removedBy: string | null;
-};
-
-export type GetUserDataUserDetailsDto = {
-    id: number;
-    name: string;
-    email: string;
-    title: string | null;
-    avatar: string | null;
-    registrationDate: Date;
-    lastActive: Date;
-    storiesCount: number;
-    blogpostsCount: number;
-    roleNames: string[];
-    infractions: GetUserDataInfractionDto[];
 };
 
 export type GetUserInfractionsResult = {

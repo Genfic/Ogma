@@ -45,7 +45,10 @@ public sealed partial class ApplicationDbContext(DbContextOptions<ApplicationDbC
 			.HasPostgresExtension("uuid-ossp")
 			.HasPostgresExtension("tsm_system_rows")
 			.HasPostgresExtension("citext")
-			.HasPostgresExtension("intarray");
+			.HasPostgresExtension("unaccent")
+			.HasPostgresExtension("intarray")
+			.HasPostgresExtension("pg_trgm")
+			.HasPostgresExtension("fuzzystrmatch");
 
 		// Load model configurations
 		builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);

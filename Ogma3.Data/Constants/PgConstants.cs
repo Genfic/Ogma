@@ -14,6 +14,13 @@ public static class PgConstants
 	public static class IndexTypes
 	{
 		public const string Gin = "gin";
+		public const string Gist = "gist";
+	}
+
+	public static class IndexOperators
+	{
+		public const string GinTrigram = "gin_trgm_ops";
+		public const string GistTrigram = "gist_trgm_ops";
 	}
 
 	public static class CollationNames

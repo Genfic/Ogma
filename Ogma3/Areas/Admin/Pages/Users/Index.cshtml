@@ -1,27 +1,49 @@
 @page
-@using Microsoft.AspNetCore.Antiforgery
 @using Routes.Areas.Admin.Pages
 @model Ogma3.Areas.Admin.Pages.Users.Index
-@inject IAntiforgery Antiforgery
 
 @{
 	ViewData["Title"] = "Users";
 	ViewData["ActivePage"] = NavPages.Users;
-	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
-<nav>
-	<a for-route="@Users_Create.Get()">Create</a>
-</nav>
+	<a for-route="@Users_Create.Get()" class="btn btn-primary">Create</a>
 
-<div
-	id="users-app"
-	data-csrf="@csrf"
-	data-infractions="@Model.InfractionNamesJson"
-	data-roles="@Model.RolesJson"
-	data-name="@Model.Name"
-></div>
 
+<table class="o-table wide">
+	<thead>
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Joined</th>
+		<th title="stories">S</th>
+		<th title="chapters">C</th>
+		<th title="blogposts">B</th>
+		<th>Active</th>
+		<th>Actions</th>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach (var u in Model.Users)
+	{
+		<tr>
+			<td class="right">@u.Id</td>
+			<td>@u.Name</td>
+			<td>@u.Joined.ToString("yyy-MM-dd HH:mm")</td>
+			<td class="right">@u.Stories</td>
+			<td class="right">@u.Chapters</td>
+			<td class="right">@u.Blogposts</td>
+			<td>@u.Active</td>
+			<td>
+				<a for-route="@Users_Details.Get(u.Name)">Details</a>
+				<a for-route="@Routes.Pages.User_Index.Get(u.Name)">Profile</a>
+			</td>
+		</tr>
+	}
+	</tbody>
+</table>
+
+<partial name="_Pagination" model="@Model.Pagination"/>
 
 @section Scripts {
 	<script type="module" src="~/js/admin/users.js" asp-append-version="true"></script>

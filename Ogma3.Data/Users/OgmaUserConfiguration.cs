@@ -17,6 +17,12 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.HasIndex(u => u.NormalizedUserName)
 			.IsUnique();
 
+		builder
+			.HasIndex(u => u.NormalizedUserName, "IX_AspNetUsers_NormalizedUserName_Trgm")
+			.HasMethod(PgConstants.IndexTypes.Gist)
+			.HasOperators(PgConstants.IndexOperators.GistTrigram)
+			.IsUnique(false);
+
 		// CONSTRAINTS
 		builder
 			.Property(u => u.UserName)
@@ -131,30 +137,38 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 
 		// Seeding system users
 		builder.HasData(
-			new()
+			new
 			{
 				Id = SystemUserConstants.Deleted.Id,
 				UserName = SystemUserConstants.Deleted.Name,
 				NormalizedUserName = SystemUserConstants.Deleted.NormalizedName,
 				AvatarId = SystemUserConstants.Deleted.Id,
-				CommentThread = null!,
 				Email = "",
 				NormalizedEmail = "",
 				ConcurrencyStamp = "00000000-0000-0000-0000-000000000001",
 				SecurityStamp = "00000000-0000-0000-0000-000000000001",
-				Links = [],
-			}, new()
+
+				EmailConfirmed = false,
+				PhoneNumberConfirmed = false,
+				TwoFactorEnabled = false,
+				LockoutEnabled = false,
+				AccessFailedCount = 0,
+			},
+			new
 			{
 				Id = SystemUserConstants.Anonymous.Id,
 				UserName = SystemUserConstants.Anonymous.Name,
 				NormalizedUserName = SystemUserConstants.Anonymous.NormalizedName,
 				AvatarId = SystemUserConstants.Anonymous.Id,
-				CommentThread = null!,
 				Email = "",
 				NormalizedEmail = "",
 				ConcurrencyStamp = "00000000-0000-0000-0000-000000000002",
 				SecurityStamp = "00000000-0000-0000-0000-000000000002",
-				Links = [],
+				EmailConfirmed = false,
+				PhoneNumberConfirmed = false,
+				TwoFactorEnabled = false,
+				LockoutEnabled = false,
+				AccessFailedCount = 0,
 			}
 		);
 	}

@@ -51,12 +51,14 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 		const rect = dialogRef.getBoundingClientRect();
 		const minX = rect.left + dialogRef.clientLeft;
 		const minY = rect.top + dialogRef.clientTop;
-		if (
+
+		const isInBounds =
 			e.clientX < minX ||
 			e.clientX >= minX + dialogRef.clientWidth ||
 			e.clientY < minY ||
-			e.clientY >= minY + dialogRef.clientHeight
-		) {
+			e.clientY >= minY + dialogRef.clientHeight;
+
+		if (e.target === dialogRef && isInBounds) {
 			close();
 		}
 	};
@@ -64,7 +66,6 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 	return (
 		<dialog
 			id={id}
-			closedby="any"
 			ref={(e) => (maybeDialogRef = e)}
 			class={["my-dialog", ...(props.classes ?? [])].join(" ")}
 			onmousedown={backdropClose}

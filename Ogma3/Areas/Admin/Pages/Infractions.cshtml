@@ -22,7 +22,7 @@
 		var remover = infraction is { RemovedAt: not null, RemovedById: null } ? "[Automatic]" : infraction.RemovedByUserName;
 		<tr>
 			<td>
-				<a for-route="@Users_Index.Get(infraction.UserUserName)">
+				<a for-route="@Users_Details.Get(infraction.UserUserName)">
 					@infraction.UserUserName
 				</a>
 			</td>

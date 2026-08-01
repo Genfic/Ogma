@@ -32,6 +32,7 @@ public partial class OgmaUserEntityType
             skipNavigationCount: 7,
             foreignKeyCount: 1,
             unnamedIndexCount: 4,
+            namedIndexCount: 1,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -276,6 +277,10 @@ public partial class OgmaUserEntityType
             new[] { normalizedUserName },
             unique: true);
         index2.AddAnnotation("Relational:Name", "UserNameIndex");
+
+        var iX_AspNetUsers_NormalizedUserName_Trgm = runtimeEntityType.AddIndex(
+            new[] { normalizedUserName },
+            name: "IX_AspNetUsers_NormalizedUserName_Trgm");
 
         return runtimeEntityType;
     }

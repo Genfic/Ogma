@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -19,14 +20,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
-partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+[Migration("20260731220218_ProperNotificationOnDeleteSetup")]
+partial class _20260731220218_ProperNotificationOnDeleteSetup
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260731233412_WeNeedGistIndexNotGinOnUserNames";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -43,11 +41,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "infraction_type", new[] { "ban", "mute", "note", "warning" });
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_status", new[] { "in_review", "open", "rejected", "resolved" });
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
-        NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "fuzzystrmatch");
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "intarray");
-        NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "pg_trgm");
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "tsm_system_rows");
-        NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "unaccent");
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
         NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
@@ -1804,11 +1799,6 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("NormalizedUserName")
                     .IsUnique()
                     .HasDatabaseName("UserNameIndex");
-
-                var index = b.HasIndex(new[] { "NormalizedUserName" }, "IX_AspNetUsers_NormalizedUserName_Trgm");
-
-                NpgsqlIndexBuilderExtensions.HasMethod(index, "gist");
-                NpgsqlIndexBuilderExtensions.HasOperators(index, new[] { "gist_trgm_ops" });
 
                 b.ToTable("AspNetUsers");
 

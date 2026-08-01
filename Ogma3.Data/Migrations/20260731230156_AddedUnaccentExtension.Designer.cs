@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -19,14 +20,11 @@ using Ogma3.Data.Tags;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
-partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+[Migration("20260731230156_AddedUnaccentExtension")]
+partial class _20260731230156_AddedUnaccentExtension
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260731233412_WeNeedGistIndexNotGinOnUserNames";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -1807,8 +1805,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
                 var index = b.HasIndex(new[] { "NormalizedUserName" }, "IX_AspNetUsers_NormalizedUserName_Trgm");
 
-                NpgsqlIndexBuilderExtensions.HasMethod(index, "gist");
-                NpgsqlIndexBuilderExtensions.HasOperators(index, new[] { "gist_trgm_ops" });
+                NpgsqlIndexBuilderExtensions.HasMethod(index, "gin");
+                NpgsqlIndexBuilderExtensions.HasOperators(index, new[] { "gin_trgm_ops" });
 
                 b.ToTable("AspNetUsers");
 
