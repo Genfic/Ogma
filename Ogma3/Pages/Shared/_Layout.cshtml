@@ -96,6 +96,7 @@
 	<script type="module" src="~/js/comp/notifications-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/alerts.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/theme-selector.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/global-notifs.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", false)
 	@Html.RenderResources()
@@ -194,9 +195,6 @@
 		fetch('@Url.RouteUrl(nameof(UpdateLastActive))', { method: "HEAD" });
 	})();
 </script>
-
-<script type="module" src="~/js/global-notifs.js"></script>
-
 
 @if (Env.IsDevelopment())
 {
