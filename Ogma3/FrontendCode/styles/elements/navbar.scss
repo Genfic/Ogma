@@ -86,8 +86,7 @@ nav#top-nav {
 		color: var(--foreground);
 		padding: 0 0.5rem;
 
-		margin-top: calc(-1 * var(--pad));
-		margin-bottom: calc(-1 * var(--pad));
+		margin-block: calc(-1 * var(--pad));
 		margin-right: 1rem;
 
 		font-family: IMFellEnglish, serif;
