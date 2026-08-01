@@ -28,7 +28,7 @@ for (const notif of notifs) {
 			name: COOKIE_NAME,
 			value: [...dismissed].join(","),
 			sameSite: "lax",
-			expires: Date.now() + 60 * 60 * 60 * 24 * 100,
+			expires: Date.now() + 60 * 60 * 60 * 24 * 365 * 10,
 			path: "/",
 		});
 		notif.remove();
