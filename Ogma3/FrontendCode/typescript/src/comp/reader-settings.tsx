@@ -10,7 +10,15 @@ import { Dialog, type DialogApi } from "./common/_dialog";
 import { InputToggle } from "./common/_input-toggle";
 import css from "./reader-settings.css";
 
-const cssVars = ["--align", "--para-spacing", "--line-height", "--font-size", "--bg-color", "--fg-color"] as const;
+const cssVars = [
+	"--align",
+	"--para-spacing",
+	"--para-indent",
+	"--line-height",
+	"--font-size",
+	"--bg-color",
+	"--fg-color",
+] as const;
 type CSSVar = (typeof cssVars)[number];
 
 const articleBody = $query("article.chapter-details div.body[itemprop='text']");
@@ -86,6 +94,7 @@ const ReaderSettings: ComponentType<never> = () => {
 					value={getStore["--align"] === "justify"}
 					onToggle={(b) => setStore("--align", b ? "justify" : "left")}
 				/>
+
 				<label for={$id("spacing")}>Paragraph spacing: {getStore["--para-spacing"]}</label>
 				<input
 					id={$id("spacing")}
@@ -96,6 +105,18 @@ const ReaderSettings: ComponentType<never> = () => {
 					value={getStore["--para-spacing"]}
 					oninput={setVar("--para-spacing")}
 				/>
+
+				<label for={$id("indent")}>Paragraph indentation: {getStore["--para-indent"]}</label>
+				<input
+					id={$id("indent")}
+					type="range"
+					min="0"
+					max="3"
+					step="0.05"
+					value={getStore["--para-indent"]}
+					oninput={setVar("--para-indent")}
+				/>
+
 				<label for={$id("line-height")}>Line height: {getStore["--line-height"]}</label>
 				<input
 					id={$id("line-height")}
@@ -106,6 +127,7 @@ const ReaderSettings: ComponentType<never> = () => {
 					value={getStore["--line-height"]}
 					oninput={setVar("--line-height")}
 				/>
+
 				<label for={$id("font-size")}>Font size: {getStore["--font-size"]}</label>
 				<input
 					id={$id("font-size")}
@@ -116,6 +138,7 @@ const ReaderSettings: ComponentType<never> = () => {
 					value={getStore["--font-size"]}
 					oninput={setVar("--font-size")}
 				/>
+
 				<label for={$id("bg-color")}>Background color</label>
 				<input
 					id={$id("bg-color")}
@@ -123,6 +146,7 @@ const ReaderSettings: ComponentType<never> = () => {
 					value={CSS.toHex(getStore["--bg-color"])}
 					oninput={setVar("--bg-color")}
 				/>
+
 				<label for={$id("fg-color")}>Text color</label>
 				<input
 					id={$id("fg-color")}

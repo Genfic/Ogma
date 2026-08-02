@@ -138,6 +138,7 @@ $notes-padding-y: 0.25rem;
 
 		> .body {
 			--para-spacing: 0.5;
+			--para-indent: 0;
 			--line-height: 1.75;
 			--align: left;
 			--font-size: 1;
@@ -150,6 +151,10 @@ $notes-padding-y: 0.25rem;
 			background-color: var(--bg-color);
 			box-shadow: 0 0 0.5rem 1rem var(--bg-color);
 			color: var(--fg-color);
+
+			p {
+				text-indent: calc(var(--para-indent) * 1rem);
+			}
 
 			> * {
 				margin-bottom: calc(var(--para-spacing) * 1rem);
