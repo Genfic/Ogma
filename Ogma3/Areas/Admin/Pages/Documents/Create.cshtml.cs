@@ -22,9 +22,12 @@ public sealed class CreateModel(AppDbContext context) : PageModel
 
 	public sealed class InputModel
 	{
-		public required long Id { get; set; }
-		[Required] public required string Title { get; set; }
-		[Required] public required string Body { get; set; }
+		[Required]
+		[MinLength(1)]
+		public required string Title { get; set; }
+		[Required]
+		[MinLength(100)]
+		public required string Body { get; set; }
 		public string? CustomCss { get; set; }
 		public string? CustomJs { get; set; }
 	}
@@ -36,6 +39,11 @@ public sealed class CreateModel(AppDbContext context) : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
+		if (!ModelState.IsValid)
+		{
+			return Page();
+		}
+
 		var document = Markdown.Parse(Input.Body, MarkdownPipelines.AllWithHtml);
 
 		var toc = document

@@ -1,0 +1,26 @@
+.reader {
+	--para-spacing: 0.5;
+	--para-indent: 0;
+	--line-height: 1.75;
+	--align: left;
+	--font-size: 1;
+	--letter-spacing: 0;
+	--bg-color: transparent;
+	--fg-color: var(--foreground);
+
+	text-align: var(--align);
+	line-height: var(--line-height);
+	font-size: calc(var(--font-size) * 1rem);
+	letter-spacing: calc(var(--letter-spacing) * 1rem);
+	background-color: var(--bg-color);
+	box-shadow: 0 0 0.5rem 1rem var(--bg-color);
+	color: var(--fg-color);
+
+	p {
+		text-indent: calc(var(--para-indent) * 1rem);
+	}
+
+	> * {
+		margin-bottom: calc(var(--para-spacing) * 1rem);
+	}
+}

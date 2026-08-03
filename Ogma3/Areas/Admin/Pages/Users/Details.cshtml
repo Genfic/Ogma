@@ -37,11 +37,40 @@
 		</tr>
 		<tr>
 			<td>Email</td>
-			<td>@user.Email</td>
+			<td>
+				@{
+					var at = user.Email.IndexOf('@');
+					var name = user.Email[..at];
+					var domain = user.Email[at..];
+				}
+				<span class="monospace">
+					<span class="redacted">@name</span><span>@domain</span>
+				</span>
+			</td>
 		</tr>
 		<tr>
 			<td>Title</td>
 			<td>@user.Title</td>
+		</tr>
+		<tr>
+			<td>Invited by</td>
+			<td>
+				@if (user.Invite is not {} invite)
+				{
+					<span>Nobody</span>
+				}
+				else
+				{
+					if(invite.Name is not null)
+					{
+						<a for-route="@Routes.Pages.User_Index.Get(invite.Name)">@invite.Name</a>
+					}
+					if (invite.Type is not null)
+					{
+						<span>(@invite.Type)</span>
+					}
+				}
+			</td>
 		</tr>
 		<tr>
 			<td>Avatar</td>
@@ -71,10 +100,6 @@
 			<td>
 				<form method="post">
 					<div asp-validation-summary="All"></div>
-
-                    @{
-                        var roles = Model.Roles.Select(r => r.Name);
-                    }
 
 					<div class="select-group">
 						@foreach (var role in Model.Roles)

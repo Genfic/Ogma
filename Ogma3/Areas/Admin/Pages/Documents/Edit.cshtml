@@ -11,6 +11,8 @@
 
 <form method="post" id="editor" class="form">
 
+	<div asp-validation-summary="All"></div>
+
 	<div class="o-form-group">
 		<label asp-for="@Model.Input.Body"></label>
 		<textarea asp-for="@Model.Input.Body"

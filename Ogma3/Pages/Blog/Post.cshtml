@@ -16,6 +16,8 @@
 	ViewData["Tab"] = "Blog";
 
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+
+	var readerSettings = Request.Cookies.TryGetValue("reader-settings", out var settings) ? settings : null;
 }
 
 @section OgMeta {
@@ -25,7 +27,7 @@
 	<meta property="og:image" content="http:@Model.ProfileBar.Avatar">
 }
 
-<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar"/>
+<partial name="Shared/Bars/_ProfileBar" model="Model.ProfileBar" />
 
 <article id="blogpost-app" class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
 	<h1 class="title" itemprop="name">@Model.Blogpost.Title</h1>
@@ -68,11 +70,13 @@
 				<icon class="icon" name="lucide:flag"></icon>
 			</button>
 		}
+
+		<reader-settings></reader-settings>
 	</div>
 
 	@if (Model.Blogpost.ContentBlock is not null)
 	{
-		<partial name="Shared/_ContentBlockCard" model="Model.Blogpost.ContentBlock"/>
+		<partial name="Shared/_ContentBlockCard" model="Model.Blogpost.ContentBlock" />
 	}
 
 	@if (Model.IsUnavailable)
@@ -87,16 +91,16 @@
 		if (Model.Blogpost.AttachedStory is not null)
 		{
 			<strong>Attached story</strong>
-			<partial name="Shared/Minimals/_StoryMinimal" model="@Model.Blogpost.AttachedStory"/>
+			<partial name="Shared/Minimals/_StoryMinimal" model="@Model.Blogpost.AttachedStory" />
 		}
 		if (Model.Blogpost.AttachedChapter is not null)
 		{
 			<strong>Attached chapter</strong>
-			<partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Blogpost.AttachedChapter"/>
+			<partial name="Shared/Minimals/_ChapterMinimal" model="@Model.Blogpost.AttachedChapter" />
 		}
 	}
 
-	<markdown class="body" preset="Blogpost" itemprop="articleBody">
+	<markdown class="body reader" preset="Blogpost" itemprop="articleBody" style="@readerSettings">
 		@Model.Blogpost.Body
 	</markdown>
 
@@ -119,4 +123,9 @@
 	</report-modal>
 </article>
 
-<partial name="_Comments" model="@Model.Blogpost.CommentsThread"/>
+<partial name="_Comments" model="@Model.Blogpost.CommentsThread" />
+
+@section Scripts
+{
+	<script type="module" src="~/js/comp/reader-settings.js" asp-append-version="true"></script>
+}

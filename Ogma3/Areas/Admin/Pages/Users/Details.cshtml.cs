@@ -54,6 +54,10 @@ public sealed class DetailsModel(
 				LastActive = u.LastActive,
 				StoriesCount = u.Stories.Count,
 				BlogpostsCount = u.Blogposts.Count,
+				Invite = context.InviteCodes
+					.Where(i => i.UsedById == u.Id)
+					.Select(i => new InviteDto(i.IssuedBy == null ? null : i.IssuedBy.UserName, i.IssuedByType))
+					.FirstOrDefault(),
 			})
 			.FirstOrDefaultAsync();
 
@@ -182,7 +186,10 @@ public sealed class DetailsModel(
 		public required int StoriesCount { get; init; }
 		public required int BlogpostsCount { get; init; }
 		public required IEnumerable<string> RoleNames { get; init; }
+		public required InviteDto? Invite { get; init; }
 	}
+
+	public sealed record InviteDto(string? Name, string? Type);
 
 	public sealed record RoleDto(long Id, string Name);
 }

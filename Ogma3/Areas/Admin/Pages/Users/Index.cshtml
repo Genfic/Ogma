@@ -7,8 +7,24 @@
 	ViewData["ActivePage"] = NavPages.Users;
 }
 
-	<a for-route="@Users_Create.Get()" class="btn btn-primary">Create</a>
+<a for-route="@Users_Create.Get()" class="btn btn-primary">Create</a>
 
+<form class="search form" method="GET" for-route="@Users_Details.Get(null)">
+	<div class="form-row">
+		<div class="o-form-group">
+			<label for="username">Search</label>
+			<input class="active-border"
+			       id="username"
+			       list="autocomplete"
+			       name="name"
+			       autocomplete="off"
+			       type="search">
+			<datalist id="autocomplete"></datalist>
+		</div>
+
+		<input class="btn btn-primary w-3" type="submit" value="Go">
+	</div>
+</form>
 
 <table class="o-table wide">
 	<thead>
@@ -46,5 +62,5 @@
 <partial name="_Pagination" model="@Model.Pagination"/>
 
 @section Scripts {
-	<script type="module" src="~/js/admin/users.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/admin/user-search.js" asp-append-version="true"></script>
 }

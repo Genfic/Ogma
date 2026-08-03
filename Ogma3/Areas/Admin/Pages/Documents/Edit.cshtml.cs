@@ -22,9 +22,12 @@ public sealed class EditModel(AppDbContext context) : PageModel
 
 	public sealed class InputModel
 	{
-		[Required] public required string Slug { get; set; }
-		[Required] public required string Title { get; set; }
-		[Required] public required string Body { get; set; }
+		[Required]
+		public required string Slug { get; set; }
+		public required string? Title { get; set; }
+		[Required]
+		[MinLength(100)]
+		public required string Body { get; set; }
 		public string? CustomCss { get; set; }
 		public string? CustomJs { get; set; }
 		public uint Version { get; set; }
@@ -55,6 +58,11 @@ public sealed class EditModel(AppDbContext context) : PageModel
 
 	public async Task<IActionResult> OnPostAsync()
 	{
+		if (!ModelState.IsValid)
+		{
+			return Page();
+		}
+
 		var oldVersion = await context.Documents
 			.Where(d => d.RevisionDate == null)
 			.Where(d => d.Slug == Input.Slug)

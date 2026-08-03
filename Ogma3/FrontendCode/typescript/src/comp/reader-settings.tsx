@@ -18,10 +18,11 @@ const cssVars = [
 	"--font-size",
 	"--bg-color",
 	"--fg-color",
+	"--letter-spacing",
 ] as const;
 type CSSVar = (typeof cssVars)[number];
 
-const articleBody = $query("article.chapter-details div.body[itemprop='text']");
+const articleBody = $query(".reader");
 
 // We have to remove the contents rendered from the server so that the computed style
 // actually uses the defaults from the stylesheet instead of the customized ones.
@@ -137,6 +138,17 @@ const ReaderSettings: ComponentType<never> = () => {
 					step="0.05"
 					value={getStore["--font-size"]}
 					oninput={setVar("--font-size")}
+				/>
+
+				<label for={$id("letter-spacing")}>Letter spacing: {getStore["--letter-spacing"]}</label>
+				<input
+					id={$id("letter-spacing")}
+					type="range"
+					min="-0.15"
+					max="1"
+					step="0.005"
+					value={getStore["--letter-spacing"]}
+					oninput={setVar("--letter-spacing")}
 				/>
 
 				<label for={$id("bg-color")}>Background color</label>
