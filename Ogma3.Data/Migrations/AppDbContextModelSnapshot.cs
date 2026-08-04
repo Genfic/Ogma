@@ -24,7 +24,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260731233412_WeNeedGistIndexNotGinOnUserNames";
+    public override string LastMigrationId => "20260804045102_CoolNewPartialIndexes";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -701,16 +701,20 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.HasKey("Id");
 
                 b.HasIndex("BlogpostId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"BlogpostId\" IS NOT NULL");
 
                 b.HasIndex("ChapterId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"ChapterId\" IS NOT NULL");
 
                 b.HasIndex("ClubThreadId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"ClubThreadId\" IS NOT NULL");
 
                 b.HasIndex("UserId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"UserId\" IS NOT NULL");
 
                 b.ToTable("CommentThreads");
 

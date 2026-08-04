@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.Tags;
 
@@ -24,9 +25,7 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 			.HasIndex(t => t.Slug)
 			.IsUnique();
 
-		builder
-			.HasIndex(t => t.LastChange)
-			.HasFilter($"\"{nameof(Tag.LastChange)}\" IS NOT NULL");
+		builder.HasPartialIndex(t => t.LastChange);
 
 		builder
 			.Property(t => t.Name)

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.CommentsThreads;
 
@@ -24,6 +25,11 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 		builder
 			.Property(ct => ct.LastChange)
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
+
+		builder.HasPartialIndex(ct => ct.UserId);
+		builder.HasPartialIndex(ct => ct.ChapterId);
+		builder.HasPartialIndex(ct => ct.BlogpostId);
+		builder.HasPartialIndex(ct => ct.ClubThreadId);
 
 		// NAVIGATION
 		builder

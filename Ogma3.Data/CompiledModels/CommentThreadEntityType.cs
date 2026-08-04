@@ -124,18 +124,22 @@ public partial class CommentThreadEntityType
         var index = runtimeEntityType.AddIndex(
             new[] { blogpostId },
             unique: true);
+        index.AddAnnotation("Relational:Filter", "\"BlogpostId\" IS NOT NULL");
 
         var index0 = runtimeEntityType.AddIndex(
             new[] { chapterId },
             unique: true);
+        index0.AddAnnotation("Relational:Filter", "\"ChapterId\" IS NOT NULL");
 
         var index1 = runtimeEntityType.AddIndex(
             new[] { clubThreadId },
             unique: true);
+        index1.AddAnnotation("Relational:Filter", "\"ClubThreadId\" IS NOT NULL");
 
         var index2 = runtimeEntityType.AddIndex(
             new[] { userId },
             unique: true);
+        index2.AddAnnotation("Relational:Filter", "\"UserId\" IS NOT NULL");
 
         return runtimeEntityType;
     }

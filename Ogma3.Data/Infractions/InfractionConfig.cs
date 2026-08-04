@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.Infractions;
 
@@ -13,9 +14,7 @@ public sealed class InfractionConfig : BaseConfiguration<Infraction>
 
 		builder.HasIndex(i => i.UserId);
 		builder.HasIndex(i => i.Type);
-		builder
-			.HasIndex(i => i.RemovedAt)
-			.HasFilter($"\"{nameof(Infraction.RemovedAt)}\" IS NOT NULL");
+		builder.HasPartialIndex(i => i.RemovedAt);
 
 		// Constraints
 		builder

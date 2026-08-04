@@ -1,5 +1,5 @@
 {
 	"project": "Ogma3.Data",
 	"startupProject": "Ogma3",
-	"context": "ApplicationDbContext"
+	"context": "AppDbContext"
 }
