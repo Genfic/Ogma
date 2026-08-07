@@ -29,9 +29,7 @@ public sealed class ClubRepository(AppDbContext context, IUserService userServic
 				ClubMembersCount = c.ClubMembers.Count,
 				StoriesCount = c.Folders.Sum(f => f.Stories.Count),
 				FounderId = c.ClubMembers.First(cm => cm.Role == EClubMemberRoles.Founder).MemberId,
-				Role = c.ClubMembers.Any(cm => cm.MemberId == uid)
-					? c.ClubMembers.First(cm => cm.MemberId == uid).Role
-					: null,
+				Role = c.ClubMembers.First(cm => cm.MemberId == uid).Role,
 			})
 			.FirstOrDefaultAsync();
 	}

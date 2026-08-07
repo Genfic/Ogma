@@ -8,27 +8,18 @@ using Ogma3.Pages.Shared.Cards;
 
 namespace Ogma3.Pages.Club;
 
-public sealed class IndexModel : PageModel
+public sealed class IndexModel(AppDbContext context, ClubRepository clubRepo) : PageModel
 {
-	private readonly AppDbContext _context;
-	private readonly ClubRepository _clubRepo;
-
-	public IndexModel(AppDbContext context, ClubRepository clubRepo)
-	{
-		_context = context;
-		_clubRepo = clubRepo;
-	}
-
 	public ClubBar ClubBar { get; private set; } = null!;
 	public IList<ThreadCard> ThreadCards { get; private set; } = null!;
 
 	public async Task<IActionResult> OnGetAsync(long id, string? slug)
 	{
-		var cb = await _clubRepo.GetClubBar(id);
+		var cb = await clubRepo.GetClubBar(id);
 		if (cb is null) return NotFound();
 		ClubBar = cb;
 
-		ThreadCards = await _context.ClubThreads
+		ThreadCards = await context.ClubThreads
 			.Where(ct => ct.ClubId == id)
 			.Where(ct => ct.DeletedAt == null)
 			.OrderByDescending(ct => ct.CreationDate)
