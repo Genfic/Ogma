@@ -51,6 +51,7 @@ public sealed class Blacklists(AppDbContext context) : PageModel
 			.Where(u => u.Id == uid)
 			.Include(u => u.BlacklistedRatings)
 			.Include(u => u.BlacklistedTags)
+			.AsSplitQuery()
 			.FirstOrDefaultAsync();
 		if (user is null) return Unauthorized();
 
@@ -72,7 +73,7 @@ public sealed class Blacklists(AppDbContext context) : PageModel
 		// And tags
 		var blacklistedTags = BlacklistedTags?.Split(' ') ?? [];
 		var tagsToBlacklist = await context.Tags
-			.Where(t => blacklistedTags.Contains(t.Name.ToLower()))
+			.Where(t => blacklistedTags.AsEnumerable().Contains(t.Name.ToLower()))
 			.Select(t => t.Id)
 			.ToListAsync();
 		// And add them to the blacklist

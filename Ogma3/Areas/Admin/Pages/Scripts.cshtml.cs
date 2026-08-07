@@ -12,12 +12,10 @@ namespace Ogma3.Areas.Admin.Pages;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig config) : PageModel
 {
-	public void OnGet()
-	{
-
-	}
 
 	public string? Message { get; set; }
+	// Handler needed for SafeRouting generator to work
+	public IActionResult OnGet() => Page();
 
 	public async Task<IActionResult> OnGetRecalculateBlogpostCutoff()
 	{
@@ -40,7 +38,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 
 				rows += await ctx.Blogposts
 					.Where(b => b.Id == post.Id)
-					.ExecuteUpdateAsync(s => s.SetProperty(b => b.ExcerptCutoff, cutoff));
+					.ExecuteUpdateAsync(s => s.SetProperty(propertyExpression: b => b.ExcerptCutoff, cutoff));
 			}
 			await transaction.CommitAsync();
 

@@ -11,6 +11,9 @@ public sealed class Ratings : PageModel
 	[BindProperty]
 	public required InputModel Input { get; init; }
 
+	// Handler needed for SafeRouting generator to work
+	public IActionResult OnGet() => Page();
+
 	public sealed class InputModel
 	{
 		public required string Name { get; init; }
@@ -18,9 +21,5 @@ public sealed class Ratings : PageModel
 		public required byte Order { get; init; }
 		public required IFormFile Icon { get; init; }
 		public required bool BlacklistedByDefault { get; init; }
-	}
-
-	public void OnGet()
-	{
 	}
 }

@@ -12,7 +12,15 @@ namespace Ogma3.Infrastructure.Middleware;
 [RegisterTransient]
 public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
-	public static string CacheKey(long id) => $"user-ban:{id}";
+
+	private static readonly Func<AppDbContext, long, CancellationToken, Task<bool>> CompiledQuery =
+		EF.CompileAsyncQuery(static (AppDbContext dbContext, long uid, CancellationToken ct) => dbContext.Infractions
+			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
+			.Where(i => i.UserId == uid)
+			.Where(i => i.Type == InfractionType.Ban)
+			.Where(i => i.RemovedAt == null)
+			.Any(i => i.ActiveUntil > DateTimeOffset.UtcNow)
+		);
 
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
@@ -33,9 +41,10 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 			CacheKey(uid),
 			async _ => {
 				var dbContext = context.RequestServices.GetRequiredService<AppDbContext>();
-				return await CompiledQuery(dbContext, uid);
+				return await CompiledQuery(dbContext, uid, context.RequestAborted);
 			},
-			o => o.Duration = TimeSpan.FromMinutes(30)
+			o => o.Duration = TimeSpan.FromMinutes(30),
+			context.RequestAborted
 		);
 
 		if (isBanned)
@@ -46,7 +55,7 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 			{
 				context.Response.Clear();
 				context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				await context.Response.WriteAsync("Account banned.");
+				await context.Response.WriteAsync("Account banned.", context.RequestAborted);
 				return;
 			}
 
@@ -56,15 +65,7 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 
 		await next(context);
 	}
-
-	private static readonly Func<AppDbContext, long, Task<bool>> CompiledQuery =
-		EF.CompileAsyncQuery(static (AppDbContext dbContext, long uid) => dbContext.Infractions
-			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
-			.Where(i => i.UserId == uid)
-			.Where(i => i.Type == InfractionType.Ban)
-			.Where(i => i.RemovedAt == null)
-			.Any(i => i.ActiveUntil > DateTimeOffset.UtcNow)
-		);
+	public static string CacheKey(long id) => $"user-ban:{id}";
 
 	[LoggerMessage(0, LogLevel.Information, "Banned user {UserId} tried accessing the site")]
 	public static partial void LogAccessAttempt(ILogger<UserBanMiddleware> logger, long userId);

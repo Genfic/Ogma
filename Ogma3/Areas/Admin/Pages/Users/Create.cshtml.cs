@@ -10,18 +10,12 @@ namespace Ogma3.Areas.Admin.Pages.Users;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed class Create(IUserService userService) : PageModel
 {
-	public sealed record InputModel
-	(
-		string Username,
-		[property: DataType(DataType.EmailAddress)] string Email,
-		[property: DataType(DataType.Password)] string Password
-	);
 
 	[BindProperty]
 	public required InputModel Input { get; set; }
 
-	public void OnGet()
-	{}
+	// Handler needed for SafeRouting generator to work
+	public IActionResult OnGet() => Page();
 
 	public async Task<IActionResult> OnPost()
 	{
@@ -39,4 +33,11 @@ public sealed class Create(IUserService userService) : PageModel
 
 		return Page();
 	}
+
+	public sealed record InputModel
+	(
+		string Username,
+		[property: DataType(DataType.EmailAddress)] string Email,
+		[property: DataType(DataType.Password)] string Password
+	);
 }

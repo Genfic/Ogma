@@ -13,21 +13,12 @@ namespace Ogma3.Areas.Admin.Pages;
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
 public sealed class Email(IMailer emailSender) : PageModel
 {
-	public sealed class EmailModel
-	{
-		[EmailAddress]
-		public required string To { get; init; }
-		public required string Subject { get; init; }
-		public required string Body { get; init; }
-		public bool Markdown { get; init; }
-	}
 
 	[BindProperty]
 	public required EmailModel Mail { get; init; }
 
-	public void OnGet()
-	{
-	}
+	// Handler needed for SafeRouting generator to work
+	public IActionResult OnGet() => Page();
 
 	public async Task OnPostAsync()
 	{
@@ -38,5 +29,14 @@ public sealed class Email(IMailer emailSender) : PageModel
 		Log.Information("✉ Sending email to {Recipient}", Mail.To);
 
 		await emailSender.SendEmailAsync(Mail.To, Mail.Subject, body);
+	}
+
+	public sealed class EmailModel
+	{
+		[EmailAddress]
+		public required string To { get; init; }
+		public required string Subject { get; init; }
+		public required string Body { get; init; }
+		public bool Markdown { get; init; }
 	}
 }

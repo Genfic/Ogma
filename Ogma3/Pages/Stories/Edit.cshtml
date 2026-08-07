@@ -250,13 +250,13 @@
 			{
 				<tr>
 					<td>
-						<input list="credit-roles" asp-for="Input.Credits[i].Role">
+						<input list="credit-roles" aria-labelledby="credits-role-col" asp-for="Input.Credits[i].Role">
 					</td>
 					<td>
-						<input asp-for="Input.Credits[i].Name">
+						<input aria-labelledby="credits-name-col" asp-for="Input.Credits[i].Name">
 					</td>
 					<td>
-						<input asp-for="Input.Credits[i].Link">
+						<input aria-labelledby="credits-link-col" asp-for="Input.Credits[i].Link">
 					</td>
 				</tr>
 			}

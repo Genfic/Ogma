@@ -2,7 +2,6 @@ using System.Collections.Frozen;
 using System.Security.Claims;
 using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.Authorization;
-using Ogma3.Data.GlobalNotifications;
 using Routes.Areas.Admin.Pages;
 using Index = Routes.Areas.Admin.Pages.Index;
 
@@ -18,7 +17,7 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 			new(Index.Get(), "Dashboard"),
 			new(Settings.Get()),
 			new(Email.Get(), "Mailer"),
-			new(Notifications.Get(), "Notifications")
+			new(Notifications.Get(), "Notifications"),
 		],
 		["Categorization"] =
 		[
@@ -67,7 +66,7 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 				{
 					if (attr.Policy is { Length: > 0 })
 					{
-						var result = await authorizationService.AuthorizeAsync(user, resource: null, policyName: attr.Policy);
+						var result = await authorizationService.AuthorizeAsync(user, null, attr.Policy);
 						if (result.Succeeded)
 						{
 							accessible[category].Add(item);

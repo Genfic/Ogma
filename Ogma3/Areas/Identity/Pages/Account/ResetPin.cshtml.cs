@@ -12,13 +12,13 @@ namespace Ogma3.Areas.Identity.Pages.Account;
 public sealed class ResetPinModel(AppDbContext context, IMailer mailer, ILogger<ResetPinModel> logger) : PageModel
 {
 	public bool Success { get; set; }
+	// Handler needed for SafeRouting generator to work
 
-	public void OnGet()
-	{}
+	public IActionResult OnGet() => Page();
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		if (User.GetNumericId() is not {} uid || User.GetEmail() is not { } email || User.GetUsername() is not {} name)
+		if (User.GetNumericId() is not {} uid || User.GetEmail() is not {} email || User.GetUsername() is not {} name)
 		{
 			return Page();
 		}

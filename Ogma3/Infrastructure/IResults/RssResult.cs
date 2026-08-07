@@ -42,6 +42,6 @@ public sealed class RssResult(string title, string description, IEnumerable<Synd
 		httpContext.Response.ContentType = "application/rss+xml";
 
 		stream.Position = 0;
-		await stream.CopyToAsync(httpContext.Response.Body);
+		await stream.CopyToAsync(httpContext.Response.Body, httpContext.RequestAborted);
 	}
 }
