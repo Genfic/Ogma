@@ -17,9 +17,7 @@ public sealed class GeneratedImagesService(IOptionsSnapshot<Workers> options, Og
 		var keyBytes = Encoding.UTF8.GetBytes(options.Value.AvatarServiceSignatureKey);
 		var nameBytes = Encoding.UTF8.GetBytes(username);
 
-		using var hmac = new HMACSHA256(keyBytes);
-
-		var hashBytes = hmac.ComputeHash(nameBytes);
+		var hashBytes = HMACSHA256.HashData(keyBytes, nameBytes);
 
 		var sig = Convert.ToHexString(hashBytes).ToLower();
 		return $"{config.AvatarServiceUrl}?name={username}&sig={sig}";

@@ -48,7 +48,8 @@ public sealed partial class DiscordAuthenticationHandler
             throw new HttpRequestException("An error occurred while retrieving the user profile.");
         }
 
-        using var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync(Context.RequestAborted));
+        await using var stream = await response.Content.ReadAsStreamAsync(Context.RequestAborted);
+        using var payload = await JsonDocument.ParseAsync(stream);
 
         var principal = new ClaimsPrincipal(identity);
         var context = new OAuthCreatingTicketContext(principal, properties, Context, Scheme, Options, Backchannel, tokens, payload.RootElement);

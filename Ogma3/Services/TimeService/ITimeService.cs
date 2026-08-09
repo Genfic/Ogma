@@ -4,5 +4,5 @@ namespace Ogma3.Services.TimeService;
 
 public interface ITimeService
 {
-	ImmutableSortedSet<TimezoneEntry> AvailableTimezones { get; }
+	ImmutableArray<TimezoneEntry> AvailableTimezones { get; }
 }

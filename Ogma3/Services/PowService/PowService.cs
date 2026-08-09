@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using MemoryPack;
 using Ogma3.Infrastructure.OgmaConfig;
 using StackExchange.Redis;
+using StackExchange.Redis.KeyspaceIsolation;
 
 namespace Ogma3.Services.PowService;
 
@@ -13,6 +14,8 @@ namespace Ogma3.Services.PowService;
 [UsedImplicitly]
 public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, ILogger<PowService> logger)
 {
+	private readonly IDatabase _redis = redis.GetDatabase().WithKeyPrefix("pow:challenge:");
+
 	public async Task<PowChallenge> IssueChallenge()
 	{
 		var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
@@ -24,8 +27,8 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 			IssuedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
 		};
 
-		await redis.GetDatabase().StringSetAsync(
-			Key(token),
+		await _redis.StringSetAsync(
+			token,
 			MemoryPackSerializer.Serialize(challenge),
 			TimeSpan.FromSeconds(config.PowExpirySeconds)
 		);
@@ -35,9 +38,7 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 
 	public async Task<PowVerificationResult> VerifyChallenge(string token, long nonce, string hash)
 	{
-		var db = redis.GetDatabase();
-
-		var body = await db.StringGetDeleteAsync(Key(token)); // atomic get + delete
+		var body = await _redis.StringGetDeleteAsync(token); // atomic get + delete
 		if (body.IsNull)
 		{
 			return PowVerificationResult.NotFound;
@@ -104,6 +105,4 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 
 		return true;
 	}
-
-	private static string Key(string token) => $"pow:challenge:{token}";
 }

@@ -26,8 +26,7 @@ public static class AddHeadersMiddlewareExtensions
 
 	public static TBuilder UseAddHeaders<TBuilder>(this TBuilder builder)  where TBuilder : IHostApplicationBuilder
 	{
-		builder.Services
-			.AddSingleton<AddHeadersMiddleware>();
+		builder.Services.AddSingleton<AddHeadersMiddleware>();
 		return builder;
 	}
 }

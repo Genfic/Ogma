@@ -9,7 +9,6 @@ namespace Ogma3.Services.IconService;
 public sealed class IconCache(IHttpClientFactory clientFactory, ILogger<IconCache> logger)
 {
 	private readonly ConcurrentDictionary<string, Icon> _cache = new(StringComparer.OrdinalIgnoreCase);
-	private readonly HttpClient _client = clientFactory.CreateClient();
 
 	public async ValueTask<IReadOnlyList<Icon>> GetIcons(HashSet<string> names)
 	{
@@ -53,9 +52,10 @@ public sealed class IconCache(IHttpClientFactory clientFactory, ILogger<IconCach
 		logger.LogInformation("Icon cache miss. Fetching {Count}/{Total} icons.", missing, names.Count);
 
 		var newIcons = new ConcurrentBag<Icon>();
+		var client = clientFactory.CreateClient();
 
 		await Task.WhenAll(groups.Select(async g => {
-			var res = await _client.GetFromJsonAsync(
+			var res = await client.GetFromJsonAsync(
 				$"https://api.iconify.design/{g.Key}.json?icons={string.Join(',', g.Value)}",
 				IconifyJsonContext.Default.IconifyResponse
 			);

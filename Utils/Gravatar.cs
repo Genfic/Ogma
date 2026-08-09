@@ -12,7 +12,7 @@ public static class Gravatar
 		var normalized = email.Trim().ToLower();
 
 		Span<byte> hash = stackalloc byte[MD5.HashSizeInBytes];
-		MD5.TryHashData(Encoding.UTF8.GetBytes(normalized), hash, out _);
+		SHA256.TryHashData(Encoding.UTF8.GetBytes(normalized), hash, out _);
 
 		var baseUrl = $"https://www.gravatar.com/avatar/{Convert.ToHexStringLower(hash)}";
 
@@ -35,6 +35,10 @@ public static class Gravatar
 		{
 			queryParams.Add($"r={r.ToStringFast().ToLower()}");
 		}
+		if (options.Size is {} s)
+		{
+			queryParams.Add($"s={s}");
+		}
 
 		return queryParams.Count > 0
 			? $"{baseUrl}?{string.Join("&", queryParams)}"
@@ -44,6 +48,7 @@ public static class Gravatar
 	[UsedImplicitly]
 	public sealed record Options(
 		string? Default = null,
+		int? Size = null,
 		bool ForceDefault = false,
 		Ratings? Rating = null
 	);

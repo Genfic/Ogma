@@ -10,7 +10,7 @@ namespace Ogma3.Services.TimeService;
 [UsedImplicitly]
 public sealed class TimeService : ITimeService
 {
-	public ImmutableSortedSet<TimezoneEntry> AvailableTimezones { get; }
+	public ImmutableArray<TimezoneEntry> AvailableTimezones { get; }
 
 	public TimeService(IOptions<TimeOptions> options)
 	{
@@ -45,6 +45,7 @@ public sealed class TimeService : ITimeService
 			.OfType<TimezoneEntry>()
 			.OrderBy(i => i.Offset)
 			.ThenBy(i => i.Text)
-			.ToImmutableSortedSet();
+			.Distinct()
+			.ToImmutableArray();
 	}
 }
