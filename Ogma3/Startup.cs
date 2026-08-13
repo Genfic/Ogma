@@ -249,7 +249,6 @@ public static class Startup
 
 		// Immediate
 		services.AddOgma3Handlers();
-		services.AddOgma3Behaviors();
 
 		// Problem details
 		services.AddProblemDetails(ProblemDetailsMiddleware.ConfigureProblemDetails);
