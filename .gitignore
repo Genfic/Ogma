@@ -69,3 +69,5 @@ Ogma3/wwwroot/lib/admin/
 
 # Logs
 .logs/
+
+.backups/
