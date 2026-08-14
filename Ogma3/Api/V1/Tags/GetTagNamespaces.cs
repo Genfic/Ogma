@@ -2,30 +2,31 @@ using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Ogma3.Data.Tags;
+using Microsoft.EntityFrameworkCore;
+using Ogma3.Data;
 
 namespace Ogma3.Api.V1.Tags;
 
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("tags/namespaces")]
-public static partial class GetTagNamespaces
+public sealed partial class GetTagNamespaces(AppDbContext context)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint.WithName(nameof(GetTagNamespaces));
 
-	private static ValueTask<Ok<NamespaceDto[]>> Handle(Query _, CancellationToken cancellationToken)
+	private async ValueTask<Ok<NamespaceDto[]>> Handle(Query _, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var values = ETagNamespaceExtensions.GetValues()
-			.Select(v => new NamespaceDto((int)v, v.ToStringFast()))
-			.ToArray();
+		var values = await context.TagNamespaces
+			.Select(v => new NamespaceDto(v.Id, v.Name))
+			.ToArrayAsync(cancellationToken);
 
-		return ValueTask.FromResult(TypedResults.Ok(values));
+		return TypedResults.Ok(values);
 	}
 
 	[UsedImplicitly]
 	public sealed record Query;
 
-	public sealed record NamespaceDto(int Value, string Name);
+	public sealed record NamespaceDto(long Value, string Name);
 }

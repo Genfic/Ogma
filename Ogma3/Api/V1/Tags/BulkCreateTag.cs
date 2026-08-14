@@ -38,11 +38,11 @@ public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, 
 
 		var tags = data
 			.Select(kvp => kvp.Value
-				.Select(v => new Tag
+				.Select(v => new
 				{
 					Name = v.Transform(To.TitleCase),
 					Slug = v.Normalize().Friendlify().ToUpperInvariant(),
-					Namespace = string.IsNullOrWhiteSpace(kvp.Key) ? null : ETagNamespaceExtensions.Parse(kvp.Key, true),
+					Namespace = kvp.Key.Friendlify().ToLower(),
 				}))
 			.SelectMany(x => x)
 			.DistinctBy(t => t.Slug)
@@ -52,7 +52,7 @@ public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, 
 
 		var names = new List<string>();
 		var slugs = new List<string>();
-		var namespaces = new List<ETagNamespace?>();
+		var namespaces = new List<string?>();
 		foreach (var tag in tags)
 		{
 			names.Add(tag.Name);
@@ -60,15 +60,18 @@ public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, 
 			namespaces.Add(tag.Namespace);
 		}
 
-		var inserted = await context.Database.ExecuteSqlAsync(// lang=sql
+		var inserted = await context.Database.SqlQuery<TagEntry>(// lang=sql
 			$"""
-			INSERT INTO "Tags" ("Name", "Slug", "Namespace")
-			SELECT * FROM UNNEST({names}, {slugs}, {namespaces}::"e_tag_namespace"[])
-			ON CONFLICT DO NOTHING;
-			""",
-			cancellationToken);
+			INSERT INTO "Tags" ("Name", "Slug", "NamespaceId")
+			SELECT u.name, u.slug, n."Id"
+			FROM UNNEST({names}, {slugs}, {namespaces}) AS u(name, slug, ns_slug)
+			JOIN "TagNamespace" n ON n."Slug" = u.ns_slug
+			ON CONFLICT DO NOTHING
+			RETURNING "Id", "Slug", n."Name";
+			""")
+			.ToListAsync(cancellationToken);
 
-		await cache.AddManyAsync(tags.Select(t => new TagEntry(t.Id, t.Name, t.Namespace)));
+		await cache.AddManyAsync(inserted);
 
 		logger.LogInformation("Bulk inserted {Inserted} tags", inserted);
 

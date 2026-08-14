@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
+using Ogma3.Services;
+using Utils.Extensions;
 
 namespace Ogma3.Api.V1.Tags;
 
@@ -13,7 +15,7 @@ namespace Ogma3.Api.V1.Tags;
 [MapGroup<ApiGroup>]
 [MapGet("tags/search")]
 [UsedImplicitly]
-public sealed partial class SearchTags(AppDbContext context)
+public sealed partial class SearchTags(AppDbContext context, TagNamespaceAliasService aliasService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -30,20 +32,24 @@ public sealed partial class SearchTags(AppDbContext context)
 	{
 		var query = context.Tags.AsQueryable();
 
-		var searchSpan = request.SearchString
-			.Replace("cw:", "ContentWarning:", StringComparison.OrdinalIgnoreCase)
+		var aliases = await aliasService.GetPrefixes(cancellationToken);
+
+		var lookup = aliases.GetAlternateLookup<ReadOnlySpan<char>>();
+
+		ReadOnlySpan<char> searchSpan = request.SearchString
+			.ReplaceWithPattern(aliases)
 			.AsSpan()
 			.Trim();
 		var colon = searchSpan.IndexOf(':');
 
 		switch (colon)
 		{
-			case > 0 when ETagNamespaceExtensions.TryParse(searchSpan[..colon].Trim(), out var ns, true, true):
+			case > 0 when lookup.TryGetValue(searchSpan[..colon].Trim(), out var ns):
 			{
 				var name = searchSpan[(colon + 1)..].Trim().ToString();
 
 				query = query
-					.Where(t => t.Namespace == ns);
+					.Where(t => t.Namespace!.Name == ns);
 
 				if (!string.IsNullOrWhiteSpace(name))
 				{
@@ -57,7 +63,7 @@ public sealed partial class SearchTags(AppDbContext context)
 			{
 				var name = searchSpan[1..].Trim().ToString();
 				query = query
-					.Where(t => t.Namespace == null)
+					.Where(t => t.NamespaceId == null)
 					.Where(t => t.Name.StartsWith(name));
 				break;
 			}

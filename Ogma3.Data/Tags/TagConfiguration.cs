@@ -14,7 +14,7 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 
 		// CONSTRAINTS
 		builder
-			.HasIndex(t => new { t.Name, t.Namespace })
+			.HasIndex(t => new { t.Name, t.NamespaceId })
 			.IsUnique()
 			.AreNullsDistinct(false);
 
@@ -46,13 +46,14 @@ public sealed class TagConfiguration : BaseConfiguration<Tag>
 			.HasDefaultValue(null);
 
 		builder
-			.Property(t => t.Namespace)
-			.IsRequired(false)
-			.HasDefaultValue(null);
-
-		builder
 			.Property(t => t.CreatedAt)
 			.IsRequired()
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
+
+		builder
+			.HasOne(t => t.Namespace)
+			.WithMany(n => n.Tags)
+			.HasForeignKey(t => t.NamespaceId)
+			.OnDelete(DeleteBehavior.SetNull);
 	}
 }

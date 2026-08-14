@@ -30,23 +30,30 @@ public sealed partial class CreateTag(AppDbContext context, TagCache cache)
 	)
 	{
 		var tagExist = await context.Tags
-			.Where(t => t.Name == request.Name && t.Namespace == request.Namespace)
+			.Where(t => t.Name == request.Name && t.NamespaceId == request.NamespaceId)
 			.AnyAsync(cancellationToken);
 
 		if (tagExist)
-			return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
+		{
+			return TypedResults.Conflict($"Tag {request.Name} already exists in namespace ID={request.NamespaceId}");
+		}
 
 		var tag = new Tag
 		{
 			Name = request.Name,
 			Slug = request.Name.Friendlify('_'),
 			Description = request.Description,
-			Namespace = request.Namespace,
+			NamespaceId = request.NamespaceId,
 		};
 		context.Tags.Add(tag);
 		await context.SaveChangesAsync(cancellationToken);
 
-		await cache.AddAsync(new(tag.Id, tag.Name, tag.Namespace));
+		var nsName = await context.TagNamespaces
+			.Where(n => n.Id == tag.NamespaceId)
+			.Select(n => n.Name)
+			.FirstOrDefaultAsync(cancellationToken);
+
+		await cache.AddAsync(new(tag.Id, tag.Slug, nsName));
 
 		return TypedResults.CreatedAtRoute(tag.ToDto(), nameof(GetSingleTag), new GetSingleTag.Query(tag.Id));
 	}
@@ -59,6 +66,6 @@ public sealed partial class CreateTag(AppDbContext context, TagCache cache)
 		string Name,
 		[property: MaxLength(CTConfig.Tag.MaxDescLength)]
 		string? Description,
-		ETagNamespace? Namespace
+		long? NamespaceId
 	) : IValidationTarget<Command>;
 }

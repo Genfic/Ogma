@@ -1,12 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using NetEscapades.EnumGenerators;
-using NpgSqlGenerators;
 
 namespace Ogma3.Data.Tags;
 
-[PostgresEnum]
-[EnumExtensions]
+[Obsolete(error: false, message: "This enum is obsolete and will be removed in the future.")]
 public enum ETagNamespace
 {
 	[Display(Name = "Content Warning")]

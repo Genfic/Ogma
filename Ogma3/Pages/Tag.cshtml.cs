@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Stories;
-using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
@@ -14,7 +13,7 @@ public sealed class TagModel(AppDbContext context) : PageModel
 {
 	private const int PerPage = 25;
 
-	public sealed record TagInfo(string Name, ETagNamespace? Namespace);
+	public sealed record TagInfo(string Name, string? Namespace, string? Color);
 
 	public TagInfo Tag { get; private set; } = null!;
 	public IList<StoryCard> Stories { get; private set; } = null!;
@@ -26,7 +25,7 @@ public sealed class TagModel(AppDbContext context) : PageModel
 
 		var tag = await context.Tags
 			.Where(t => t.Id == id)
-			.Select(t => new TagInfo(t.Name, t.Namespace))
+			.Select(t => new TagInfo(t.Name, t.Namespace!.Name, t.Namespace!.Color))
 			.FirstOrDefaultAsync();
 
 		if (tag is null) return NotFound();

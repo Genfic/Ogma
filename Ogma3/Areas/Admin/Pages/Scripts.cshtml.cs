@@ -55,7 +55,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 	public async Task<IActionResult> OnGetReloadTagCache()
 	{
 		var tags = await ctx.Tags
-			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace))
+			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace!.Slug))
 			.ToListAsync();
 
 		var entries = await tagCache.AddManyAsync(tags);

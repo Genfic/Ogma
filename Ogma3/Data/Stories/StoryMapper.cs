@@ -17,7 +17,15 @@ public static class StoryMapper
 		Cover = s.Cover == null ? null : s.Cover.Url,
 		PublicationDate = s.PublicationDate,
 		IsVisible = s.IsVisible,
-		Tags = s.Tags.OrderBy(t => t.Namespace).ThenBy(t => t.Name).Select(t => t.ToDto()),
+		Tags = s.Tags.OrderBy(t => t.NamespaceId).ThenBy(t => t.Name).Select(t => new TagDto
+		{
+			Id = t.Id,
+			Name = t.Name,
+			Slug = t.Slug,
+			Description = t.Description,
+			NamespaceName = t.Namespace == null ? null : t.Namespace.Name,
+			NamespaceColor = t.Namespace == null ? null : t.Namespace.Color,
+		}),
 		Rating = new RatingIcon
 		{
 			Name = s.Rating.Name,
@@ -41,7 +49,15 @@ public static class StoryMapper
 		Cover = s.Cover == null ? null : s.Cover.Url,
 		ReleaseDate = s.PublicationDate ?? s.CreationDate,
 		IsPublished = s.IsVisible,
-		Tags = s.Tags.OrderBy(t => t.Namespace).ThenBy(t => t.Name).Select(t => t.ToDto()),
+		Tags = s.Tags.OrderBy(t => t.NamespaceId).ThenBy(t => t.Name).Select(t => new TagDto
+		{
+			Id = t.Id,
+			Name = t.Name,
+			Slug = t.Slug,
+			Description = t.Description,
+			NamespaceName = t.Namespace == null ? null : t.Namespace.Name,
+			NamespaceColor = t.Namespace == null ? null : t.Namespace.Color,
+		}),
 		Rating = new RatingIcon
 		{
 			Name = s.Rating.Name,

@@ -109,10 +109,10 @@ public sealed class TagCache(IConnectionMultiplexer redis)
 
 	private static IEnumerable<RedisKey> GetKeys(TagEntry tag)
 	{
-		var name = tag.Name.ToLowerInvariant();
+		var name = tag.TagName.ToLowerInvariant();
 		yield return name;
 
-		if (tag.Namespace is {} ns)
+		if (tag.NamespaceSlug is {} ns)
 		{
 			yield return $"{ns.ToLowerInvariant()}:{name}";
 		}
@@ -120,8 +120,4 @@ public sealed class TagCache(IConnectionMultiplexer redis)
 
 }
 
-public sealed record TagEntry(long Id, string Name, string? Namespace)
-{
-	public TagEntry(long id, string name, ETagNamespace? ns) : this(id, name, ns?.ToStringFast())
-	{}
-}
+public sealed record TagEntry(long Id, string TagName, string? NamespaceSlug);

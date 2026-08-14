@@ -93,7 +93,7 @@ export type CreateShelfCommand = {
 export type CreateTagCommand = {
     name: string;
     description: string | null;
-    namespace: "ContentWarning" | "Franchise" | "Genre" | null;
+    namespaceId: number | null;
 };
 
 export type CreateVoteCommand = {
@@ -336,7 +336,7 @@ export type TagDto = {
     name: string;
     slug: string;
     description: string | null;
-    namespace: "ContentWarning" | "Franchise" | "Genre" | null;
+    namespaceName: string | null;
     namespaceColor: string | null;
 };
 
@@ -407,7 +407,7 @@ export type UpdateTagCommand = {
     id: number;
     name: string;
     description: string | null;
-    namespace: "ContentWarning" | "Franchise" | "Genre" | null;
+    namespaceId: number | null;
 };
 
 export type UploadFileQuery = {

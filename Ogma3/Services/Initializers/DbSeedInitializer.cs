@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
@@ -16,6 +17,7 @@ using Ogma3.Data.Quotes;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Stories;
+using Ogma3.Data.TagNamespaces;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
@@ -203,23 +205,38 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		}
 	}
 
-	private async Task<(long, ETagNamespace?)[]> SeedTags(AppDbContext context)
+	private async Task<(long, long?)[]> SeedTags(AppDbContext context)
 	{
+		var namespaces = _data.Tags.Keys
+			.Select(k => new TagNamespace
+			{
+				Name = k,
+				Slug = k.Friendlify().ToLower(),
+			})
+			.ToList();
+
+		await BulkUpsert(context, context.TagNamespaces, namespaces, n => n.Name);
+
+		var namespaceDict = namespaces.ToFrozenDictionary(
+			n => n.Name,
+			n => n.Id
+		);
+
 		var tags = new List<Tag>();
 		foreach (var kvp in _data.Tags)
 		{
-			var ns = ETagNamespaceExtensions.TryParse(kvp.Key, out var n) ? n : (ETagNamespace?)null;
+			var ns = namespaceDict.TryGetValue(kvp.Key, out var nsId) ? (long?)nsId : null;
 			tags.AddRange(kvp.Value.Select(s => new Tag
 			{
 				Name = s,
 				Slug = s.Friendlify().ToUpper(),
-				Namespace = ns,
+				NamespaceId = ns,
 			}));
 		}
 
 		await BulkUpsert(context, context.Tags, tags, t => t.Name);
 
-		return tags.Select(t => (t.Id, t.Namespace)).ToArray();
+		return tags.Select(t => (t.Id, Namespace: t.NamespaceId)).ToArray();
 	}
 
 	private static async Task<long[]> SeedStories(AppDbContext context)
@@ -275,12 +292,17 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 		return stories.Select(s => s.Id).ToArray();
 	}
 
-	private static async Task SeedStoryTags(AppDbContext context, long[] storyIds, (long, ETagNamespace?)[] tags)
+	private static async Task SeedStoryTags(AppDbContext context, long[] storyIds, (long, long?)[] tags)
 	{
 		if (await Any<StoryTag>(context)) return;
 
-		var genreTags = tags.Where(g => g.Item2 == ETagNamespace.Genre).ToArray();
-		var otherTags = tags.Where(g => g.Item2 != ETagNamespace.Genre).ToArray();
+		var genreNamespaceId = await context.TagNamespaces
+			.Where(n => n.Name == "Genre")
+			.Select(n => n.Id)
+			.SingleOrDefaultAsync();
+
+		var genreTags = tags.Where(g => g.Item2 == genreNamespaceId).ToArray();
+		var otherTags = tags.Where(g => g.Item2 != genreNamespaceId).ToArray();
 
 		var storyTags = new List<StoryTag>();
 		foreach (var storyId in storyIds)
@@ -288,7 +310,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 			var randomGenres = Random.Shared.GetItems(genreTags, Random.Shared.Next(1, 5));
 			var randomOther = Random.Shared.GetItems(otherTags, Random.Shared.Next(5, 10));
 
-			HashSet<long> tagIds = [..randomGenres.Select(t => t.Item1), ..randomOther.Select(t => t.Item1)];
+			HashSet<long> tagIds = [.. randomGenres.Select(t => t.Item1), .. randomOther.Select(t => t.Item1)];
 
 			storyTags.AddRange(tagIds.Select(tagId => new StoryTag
 			{

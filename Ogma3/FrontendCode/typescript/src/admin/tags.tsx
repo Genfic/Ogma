@@ -26,7 +26,11 @@ const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 
 const FormTagSchema = v.object({
 	name: v.string(),
-	namespace: v.nullable(v.pipe(v.string(), v.transform(Number), v.integer())),
+	namespace: v.pipe(
+		v.string(),
+		v.transform((val) => (val === "" ? null : Number(val))),
+		v.check((val) => val === null || Number.isInteger(val), "Invalid namespace ID"),
+	),
 	description: v.nullable(v.string()),
 	id: v.optional(v.pipe(v.string(), v.transform(Number), v.integer())),
 });
@@ -53,7 +57,7 @@ const Tags = () => {
 		if (!res.ok) {
 			throw new Error(res.data ?? res.statusText);
 		}
-		return sortBy(res.data, ["namespace", "name"]);
+		return sortBy(res.data, ["namespaceName", "name"]);
 	});
 
 	const [form, setForm] = createStore<FormTag>(EmptyTag);
@@ -74,7 +78,7 @@ const Tags = () => {
 	};
 
 	const editTag = (t: TagDto) => {
-		const ns = namespaces()?.find((n) => n.name === t.namespace)?.value;
+		const ns = namespaces()?.find((n) => n.name === t.namespaceName)?.value;
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setForm({ ...t, namespace: ns });
 	};
@@ -90,6 +94,7 @@ const Tags = () => {
 
 		if (error) {
 			setErrors((e) => [...e, error.message]);
+			console.error(error);
 			return;
 		}
 
@@ -97,7 +102,7 @@ const Tags = () => {
 
 		const data = {
 			name,
-			namespace: (namespaces()?.find((n) => n.value === namespace)?.name ?? null) as TagDto["namespace"],
+			namespaceId: namespace,
 			description: description ?? null,
 		};
 
@@ -152,8 +157,8 @@ const Tags = () => {
 		tags()?.filter((t) => {
 			const f = filter();
 			if (f == null) return true;
-			if (f === "None") return t.namespace == null;
-			return t.namespace === f;
+			if (f === "None") return t.namespaceName == null;
+			return t.namespaceName === f;
 		}) ?? [];
 
 	const active = (ns: string | null) => {
@@ -257,7 +262,10 @@ const Tags = () => {
 								<li>
 									<div
 										class="deco"
-										style={{ "background-color": t.namespaceColor ?? undefined }}
+										style={{
+											"background-color":
+												(t.namespaceColor && `#${t.namespaceColor}`) ?? undefined,
+										}}
 									/>
 									<div class="main">
 										<h3 class="name" title={t.slug}>

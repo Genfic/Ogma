@@ -1,6 +1,7 @@
 using AutoDbSetGenerators;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Stories;
+using Ogma3.Data.TagNamespaces;
 using Ogma3.Data.Users;
 
 namespace Ogma3.Data.Tags;
@@ -11,7 +12,8 @@ public sealed class Tag : BaseModel
 	public string Name { get; init; } = null!;
 	public string Slug { get; init; } = null!;
 	public string? Description { get; init; }
-	public ETagNamespace? Namespace { get; init; }
+	public TagNamespace? Namespace { get; init; }
+	public long? NamespaceId { get; init; }
 	public List<Story> Stories { get; init; } = null!;
 
 	public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;

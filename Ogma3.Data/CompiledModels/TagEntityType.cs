@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Stories;
+using Ogma3.Data.TagNamespaces;
 using Ogma3.Data.Tags;
 using Ogma3.Data.Users;
 
@@ -25,10 +27,10 @@ public partial class TagEntityType
             typeof(Tag),
             baseEntityType,
             propertyCount: 8,
-            navigationCount: 1,
+            navigationCount: 2,
             skipNavigationCount: 1,
-            foreignKeyCount: 1,
-            unnamedIndexCount: 5,
+            foreignKeyCount: 2,
+            unnamedIndexCount: 6,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -84,13 +86,13 @@ public partial class TagEntityType
             maxLength: 25);
         name.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
-        var @namespace = runtimeEntityType.AddProperty(
-            "Namespace",
-            typeof(ETagNamespace?),
-            propertyInfo: typeof(Tag).GetProperty("Namespace", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            fieldInfo: typeof(Tag).GetField("<Namespace>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+        var namespaceId = runtimeEntityType.AddProperty(
+            "NamespaceId",
+            typeof(long?),
+            propertyInfo: typeof(Tag).GetProperty("NamespaceId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Tag).GetField("<NamespaceId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             nullable: true);
-        @namespace.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        namespaceId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var slug = runtimeEntityType.AddProperty(
             "Slug",
@@ -115,11 +117,14 @@ public partial class TagEntityType
             new[] { name });
 
         var index2 = runtimeEntityType.AddIndex(
+            new[] { namespaceId });
+
+        var index3 = runtimeEntityType.AddIndex(
             new[] { slug },
             unique: true);
 
-        var index3 = runtimeEntityType.AddIndex(
-            new[] { name, @namespace },
+        var index4 = runtimeEntityType.AddIndex(
+            new[] { name, namespaceId },
             unique: true);
 
         return runtimeEntityType;
@@ -137,6 +142,30 @@ public partial class TagEntityType
             typeof(OgmaUser),
             propertyInfo: typeof(Tag).GetProperty("CreatedBy", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(Tag).GetField("<CreatedBy>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        return runtimeForeignKey;
+    }
+
+    public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+    {
+        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("NamespaceId") },
+            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+            principalEntityType,
+            deleteBehavior: DeleteBehavior.SetNull);
+
+        var @namespace = declaringEntityType.AddNavigation("Namespace",
+            runtimeForeignKey,
+            onDependent: true,
+            typeof(TagNamespace),
+            propertyInfo: typeof(Tag).GetProperty("Namespace", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Tag).GetField("<Namespace>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        var tags = principalEntityType.AddNavigation("Tags",
+            runtimeForeignKey,
+            onDependent: false,
+            typeof(List<Tag>),
+            propertyInfo: typeof(TagNamespace).GetProperty("Tags", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(TagNamespace).GetField("<Tags>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
         return runtimeForeignKey;
     }

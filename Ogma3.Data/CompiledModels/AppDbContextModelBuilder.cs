@@ -12,7 +12,7 @@ namespace CompiledModels;
 public partial class AppDbContextModel
 {
     private AppDbContextModel()
-        : base(skipDetectChanges: false, modelId: new Guid("407cb25e-2de8-4087-9e44-49a68ebf159f"), entityTypeCount: 47)
+        : base(skipDetectChanges: false, modelId: new Guid("b9f9bfea-3b22-4909-a1dc-e2bad99a33c6"), entityTypeCount: 48)
     {
     }
 
@@ -59,6 +59,7 @@ public partial class AppDbContextModel
         var storyTag = StoryTagEntityType.Create(this);
         var subscription = SubscriptionEntityType.Create(this);
         var subscriptionTier = SubscriptionTierEntityType.Create(this);
+        var tagNamespace = TagNamespaceEntityType.Create(this);
         var tag = TagEntityType.Create(this);
         var ogmaUser = OgmaUserEntityType.Create(this);
         var userBlock = UserBlockEntityType.Create(this);
@@ -134,6 +135,7 @@ public partial class AppDbContextModel
         SubscriptionEntityType.CreateForeignKey1(subscription, subscriptionTier);
         SubscriptionEntityType.CreateForeignKey2(subscription, ogmaUser);
         TagEntityType.CreateForeignKey1(tag, ogmaUser);
+        TagEntityType.CreateForeignKey2(tag, tagNamespace);
         OgmaUserEntityType.CreateForeignKey1(ogmaUser, image);
         UserBlockEntityType.CreateForeignKey1(userBlock, ogmaUser);
         UserBlockEntityType.CreateForeignKey2(userBlock, ogmaUser);
@@ -202,6 +204,7 @@ public partial class AppDbContextModel
         StoryTagEntityType.CreateAnnotations(storyTag);
         SubscriptionEntityType.CreateAnnotations(subscription);
         SubscriptionTierEntityType.CreateAnnotations(subscriptionTier);
+        TagNamespaceEntityType.CreateAnnotations(tagNamespace);
         TagEntityType.CreateAnnotations(tag);
         OgmaUserEntityType.CreateAnnotations(ogmaUser);
         UserBlockEntityType.CreateAnnotations(userBlock);
@@ -212,7 +215,7 @@ public partial class AppDbContextModel
         AddAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False");
         AddAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False");
         AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-        AddAnnotation("ProductVersion", "11.0.0-preview.6.26359.118");
+        AddAnnotation("ProductVersion", "11.0.0-preview.7.26381.103");
         AddAnnotation("Relational:MaxIdentifierLength", 63);
     }
 }

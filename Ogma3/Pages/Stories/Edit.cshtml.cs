@@ -32,10 +32,7 @@ public sealed class EditModel
 	: PageModel
 {
 	public required List<RatingDto> Ratings { get; set; }
-	public required List<TagDto> Genres { get; set; }
-	public required List<TagDto> ContentWarnings { get; set; }
-	public required List<TagDto> Franchises { get; set; }
-	public required List<TagDto> OtherTags { get; set; }
+	public required List<TagGroup> Tags { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
@@ -273,14 +270,28 @@ public sealed class EditModel
 			.Select(RatingMapper.ToDto)
 			.ToListAsync();
 
-		var tags = await context.Tags
-			.OrderBy(t => t.Name)
-			.ProjectToDto()
+		var tagList = await context.Tags
+			.Select(t => new { t.Id, t.Name, t.Slug, t.NamespaceId })
 			.ToListAsync();
 
-		Genres = tags.Where(t => t.Namespace == ETagNamespace.Genre).ToList();
-		ContentWarnings = tags.Where(t => t.Namespace == ETagNamespace.ContentWarning).ToList();
-		Franchises = tags.Where(t => t.Namespace == ETagNamespace.Franchise).ToList();
-		OtherTags = tags.Where(t => t.Namespace is null).ToList();
+		var namespaces = await context.TagNamespaces
+			.AsNoTracking()
+			.ToDictionaryAsync(ns => ns.Id, ns => new { ns.Name, ns.Color, ns.Description });
+
+		Tags = tagList
+			.GroupBy(t => t.NamespaceId ?? long.MaxValue)
+			.OrderBy(g => g.Key)
+			.Select(g => {
+				var ns = g.Key != 0 && namespaces.TryGetValue(g.Key, out var found) ? found : null;
+				var tags = g.Select(t => new MicroTag(t.Id, t.Name, t.Slug))
+					.OrderBy(t => t.Name)
+					.ToList();
+				return new TagGroup(ns?.Name, ns?.Color, ns?.Description, tags);
+			})
+			.ToList();
 	}
+
+	public sealed record TagGroup(string? Namespace, string? Color, string? Description, List<MicroTag> Tags);
+
+	public sealed record MicroTag(long Id, string Name, string Slug);
 }

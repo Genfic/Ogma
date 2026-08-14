@@ -1,48 +1,34 @@
+using System.Text.Json;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Subscriptions;
 using Ogma3.Infrastructure.OgmaConfig;
 
 namespace Ogma3.Api.V1;
-
-using ReturnType = Results<Ok<List<string>>, NotFound>;
 
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("test-three")]
 public sealed partial class TestThree(OgmaConfig config, AppDbContext ctx)
 {
-	private async ValueTask<ReturnType> Handle(Query q, CancellationToken ct)
+	JsonSerializerOptions opt = new() { WriteIndented = true };
+
+	private async ValueTask<Ok<string>> Handle(Query q, CancellationToken ct)
 	{
-		var safeUsers = ctx.Subscriptions
-			.Where(s => s.Tier != null && (s.Tier.Entitlements & Entitlement.DraftsLastForever) != 0)
-			.Select(s => s.UserId);
+		var ns = await ctx.TagNamespaces.ToListAsync(ct);
+		var t = await ctx.Tags.Select(t => new
+			{
+				t.Name,
+				t.NamespaceId,
+				NsName = t.Namespace == null ? null : t.Namespace.Name,
+				NsCol = t.Namespace == null ? null : t.Namespace.Color,
+			})
+			.ToListAsync(ct);
 
-		var longerUsers = ctx.Subscriptions
-			.Where(s => s.Tier != null && (s.Tier.Entitlements & Entitlement.DraftsLastLonger) != 0)
-			.Select(s => s.UserId);
-
-		var now = DateTimeOffset.UtcNow;
-		var chapterCount = ctx.Chapters
-			.Where(c => c.PublicationDate == null)
-			.Where(c => !safeUsers.Contains(c.Story.AuthorId))
-			.Where(c => c.CreationDate < (longerUsers.Contains(c.Story.AuthorId)
-				? now.AddDays(-config.PremiumDraftRetentionDays)
-				: now.AddDays(-config.DraftRetentionDays)))
-			.ToQueryString();
-
-		var blogpostCount = ctx.Blogposts
-			.Where(b => b.PublicationDate == null)
-			.Where(b => !safeUsers.Contains(b.AuthorId))
-			.Where(b => b.CreationDate < (longerUsers.Contains(b.AuthorId)
-				? now.AddDays(-config.PremiumDraftRetentionDays)
-				: now.AddDays(-config.DraftRetentionDays)))
-			.ToQueryString();
-
-		return TypedResults.Ok(new List<string> { chapterCount, blogpostCount });
+		var json =  JsonSerializer.Serialize(new { ns, t }, opt);
+		return TypedResults.Ok(json);
 	}
 
 	public sealed record Query;

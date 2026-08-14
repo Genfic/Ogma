@@ -19,5 +19,7 @@ export const getFormData = <TSchema extends BaseSchema<unknown, unknown, BaseIss
 		return [null, output];
 	}
 
+	console.error("Form schema error:", issues);
+
 	return [new Error(issues?.map((i) => i.message).join(", ")), null];
 };

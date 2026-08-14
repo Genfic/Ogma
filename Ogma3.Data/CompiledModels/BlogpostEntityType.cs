@@ -110,7 +110,6 @@ public partial class BlogpostEntityType
             fieldInfo: typeof(Blogpost).GetField("<Hashtags>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             valueGenerated: ValueGenerated.OnAdd,
             maxLength: 10);
-        var hashtagsElementType = hashtags.SetElementType(typeof(string));
         hashtags.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         hashtags.AddAnnotation("Relational:DefaultValue", new string[0]);
 

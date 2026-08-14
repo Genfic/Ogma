@@ -1,5 +1,4 @@
 ﻿@page "{id}/{slug?}"
-@using Ogma3.Data.Tags
 @model TagModel
 @{
 	if (Model.Tag.Namespace is null)
@@ -8,7 +7,7 @@
 	}
 	else
 	{
-		var nsn = Model.Tag.Namespace?.ToStringFast();
+		var nsn = Model.Tag.Namespace;
 		ViewData["Title"] = nsn is null ? Model.Tag.Name : $"{nsn}: {Model.Tag.Name}";
 	}
 }

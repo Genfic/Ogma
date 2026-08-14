@@ -11,11 +11,8 @@ public sealed partial class TagDto
 	public required string Name { get; init; }
 	public required string Slug { get; init; }
 	public required string? Description { get; init; }
-	public ETagNamespace? Namespace { get; init; }
-
-	[MapperIgnore]
-	[MemoryPackIgnore]
-	public string NamespaceColor => Namespace.GetColor();
+	public string? NamespaceName { get; init; }
+	public string? NamespaceColor { get; init; }
 }
 
 [Mapper]

@@ -32,17 +32,17 @@ public sealed partial class UpdateTag(AppDbContext context, TagCache cache)
 		// Different ID but the same (name, namespace) tuple means update would make the tag a duplicate
 		var duplicateExists = await context.Tags
 			.Where(t => t.Id != request.Id)
-			.Where(t => t.Name == request.Name && t.Namespace == request.Namespace)
+			.Where(t => t.Name == request.Name && t.NamespaceId == request.NamespaceId)
 			.AnyAsync(cancellationToken);
 
 		if (duplicateExists)
 		{
-			return TypedResults.Conflict($"Tag {request.Name} already exists in the {request.Namespace?.ToStringFast()} namespace.");
+			return TypedResults.Conflict($"Tag {request.Name} already exists in namespace with ID={request.NamespaceId}");
 		}
 
 		var tag = await context.Tags
 			.Where(t => t.Id == request.Id)
-			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace))
+			.Select(t => new TagEntry(t.Id, t.Slug, t.Namespace!.Name))
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (tag is null)
@@ -56,11 +56,21 @@ public sealed partial class UpdateTag(AppDbContext context, TagCache cache)
 					.SetProperty(t => t.Name, request.Name)
 					.SetProperty(t => t.Slug, request.Name.Friendlify('_'))
 					.SetProperty(t => t.Description, request.Description)
-					.SetProperty(t => t.Namespace, request.Namespace)
+					.SetProperty(t => t.NamespaceId, request.NamespaceId)
 					.SetProperty(t => t.LastChange, DateTimeOffset.UtcNow),
 				cancellationToken);
 
-		await cache.UpdateAsync(tag, new(request.Id, request.Name, request.Namespace));
+		var names = await context.Tags
+			.Where(t => t.Id == request.Id)
+			.Select(t => new { Ns = t.Namespace!.Name, Slug = t.Slug })
+			.FirstOrDefaultAsync(cancellationToken);
+
+		if (names is null)
+		{
+			return TypedResults.NotFound();
+		}
+
+		await cache.UpdateAsync(tag, new(request.Id, names.Slug, names.Ns));
 
 		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}
@@ -74,6 +84,6 @@ public sealed partial class UpdateTag(AppDbContext context, TagCache cache)
 		string Name,
 		[property: MaxLength(CTConfig.Tag.MaxDescLength)]
 		string? Description,
-		ETagNamespace? Namespace
+		long? NamespaceId
 	) : IValidationTarget<Command>;
 }

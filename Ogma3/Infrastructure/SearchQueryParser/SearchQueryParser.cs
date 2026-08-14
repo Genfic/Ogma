@@ -4,7 +4,7 @@ using Utils.Extensions;
 namespace Ogma3.Infrastructure.SearchQueryParser;
 
 using LookupDict = FrozenDictionary<string, Func<string, bool, SearchToken>>;
-using SubstitutionDict = FrozenDictionary<string, string>;
+using AliasLookup = Dictionary<string,string>.AlternateLookup<ReadOnlySpan<char>>;
 
 public static class SearchQueryParser
 {
@@ -19,19 +19,11 @@ public static class SearchQueryParser
 	private static readonly LookupDict.AlternateLookup<ReadOnlySpan<char>> FieldLookup =
 		FieldParsers.GetAlternateLookup<ReadOnlySpan<char>>();
 
-	private static readonly SubstitutionDict NamespaceSubs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-	{
-		["cw"] = "contentwarning",
-		["g"] = "genre",
-		["f"] = "franchise",
-	}.ToFrozenDictionary();
-
-	private static readonly SubstitutionDict.AlternateLookup<ReadOnlySpan<char>> SubstitutionLookup =
-		NamespaceSubs.GetAlternateLookup<ReadOnlySpan<char>>();
-
-	public static IReadOnlyList<SearchToken> Parse(ReadOnlySpan<char> query)
+	public static IReadOnlyList<SearchToken> Parse(ReadOnlySpan<char> query, Dictionary<string, string> namespaceAliases)
 	{
 		var tokens = new List<SearchToken>();
+
+		var aliasLookup = namespaceAliases.GetAlternateLookup<ReadOnlySpan<char>>();
 
 		var start = 0;
 		var quoted = false;
@@ -45,7 +37,7 @@ public static class SearchQueryParser
 					quoted = !quoted;
 					continue;
 				case ',' when !quoted:
-					TryAddToken(tokens, query[start..i]);
+					TryAddToken(tokens, query[start..i], aliasLookup);
 					start = i + 1;
 					break;
 			}
@@ -53,12 +45,12 @@ public static class SearchQueryParser
 		}
 
 		// trailing
-		TryAddToken(tokens, query[start..]);
+		TryAddToken(tokens, query[start..], aliasLookup);
 
 		return tokens.AsReadOnly();
 	}
 
-	private static void TryAddToken(List<SearchToken> tokens, ReadOnlySpan<char> rawSegment)
+	private static void TryAddToken(List<SearchToken> tokens, ReadOnlySpan<char> rawSegment, AliasLookup aliasLookup)
 	{
 		var segment = rawSegment.Trim();
 		if (segment.IsEmpty)
@@ -66,11 +58,11 @@ public static class SearchQueryParser
 			return;
 		}
 
-		tokens.Add(ParseSegment(segment));
+		tokens.Add(ParseSegment(segment, aliasLookup));
 	}
 
 
-	private static SearchToken ParseSegment(ReadOnlySpan<char> segment)
+	private static SearchToken ParseSegment(ReadOnlySpan<char> segment, AliasLookup aliasLookup)
 	{
 		var negated = segment.StartsWith('-');
 		segment = negated ? segment[1..] : segment;
@@ -104,7 +96,7 @@ public static class SearchQueryParser
 		// fast path: no spaces to remove, skip the stackalloc copy entirely
 		if (trimmed.IndexOf(' ') < 0)
 		{
-			var subbed = SubstitutionLookup.TryGetValue(trimmed, out var sub) ? sub : trimmed;
+			var subbed = aliasLookup.TryGetValue(trimmed, out var sub) ? sub : trimmed;
 			return new TagToken(subbed.ToString(), segment[(colon + 1)..].Trim().ToString(), negated);
 		}
 
@@ -112,7 +104,7 @@ public static class SearchQueryParser
 		Span<char> buffer = stackalloc char[trimmed.Length];
 		var ns = trimmed.RemoveChar(' ', buffer);
 
-		var subbedClean = SubstitutionLookup.TryGetValue(ns, out var subClean) ? subClean : ns;
+		var subbedClean = aliasLookup.TryGetValue(ns, out var subClean) ? subClean : ns;
 		return new TagToken(subbedClean.ToString(), segment[(colon + 1)..].Trim().ToString(), negated);
 	}
 }

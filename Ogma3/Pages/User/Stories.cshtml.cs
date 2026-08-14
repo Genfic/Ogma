@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
@@ -30,6 +31,7 @@ public sealed class StoriesModel(UserRepository userRepo, AppDbContext context)
 
 		// Start building the query
 		var query = context.Stories
+			.TagWith($"Fetching stories for user {name} page {page}")
 			.Where(b => b.AuthorId == ProfileBar.Id);
 
 		if (User.GetUsername()?.Equals(name, StringComparison.InvariantCultureIgnoreCase) is not true)

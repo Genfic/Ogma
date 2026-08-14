@@ -10,6 +10,7 @@ using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.SearchQueryParser;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
+using Ogma3.Services;
 using Ogma3.Services.TagCache;
 using ZiggyCreatures.Caching.Fusion;
 
@@ -19,6 +20,8 @@ public sealed class IndexModel(
 	AppDbContext context,
 	OgmaConfig config,
 	TagCache tagCache,
+	TagNamespaceAliasService aliasService,
+	ILogger<IndexModel> logger,
 	IFusionCache cache) : PageModel
 {
 	public required List<Rating> Ratings { get; set; }
@@ -44,7 +47,10 @@ public sealed class IndexModel(
 		var storiesQuery = context.Stories
 			.AsQueryable();
 
-		var tokens = SearchQueryParser.Parse(Query);
+		var aliases = await aliasService.GetAliases(HttpContext.RequestAborted);
+		var tokens = SearchQueryParser.Parse(Query, aliases);
+
+		logger.LogInformation("Aliases {@Aliases} resulted in tokens {@Tokens}", aliases, tokens);
 
 		var includedTags = new HashSet<string>();
 		var excludedTags = new HashSet<string>();

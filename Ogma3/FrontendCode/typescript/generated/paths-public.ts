@@ -202,7 +202,7 @@ export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit)
     options,
 );
 
-export const GetApiChaptersRead = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 400: undefined }, undefined>(`/api/ChaptersRead/${id}`,
+export const GetApiChaptersRead = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 400: undefined; 401: undefined }, undefined>(`/api/ChaptersRead/${id}`,
     GET,
     undefined,
     headers,
@@ -223,7 +223,7 @@ export const GetApiClubsStory = async (storyId: number, headers?: HeadersInit, o
     options,
 );
 
-export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetJoinedClubsResponse[] }, undefined>("/api/clubs/user",
+export const GetApiClubsUser = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetJoinedClubsResponse[]; 401: undefined }, undefined>("/api/clubs/user",
     GET,
     undefined,
     headers,
@@ -269,7 +269,7 @@ export const GetApiCommentsRevisions = async (commentId: string, headers?: Heade
     options,
 );
 
-export const GetApiCommentsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetThreadDetailsResult; 400: undefined; 404: undefined }, undefined>(`/api/CommentsThread/${threadId}`,
+export const GetApiCommentsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetThreadDetailsResult; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/CommentsThread/${threadId}`,
     GET,
     undefined,
     headers,
@@ -283,14 +283,14 @@ export const GetApiFaqs = async (headers?: HeadersInit, options?: RequestInit) =
     options,
 );
 
-export const GetApiFolders = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetFolderResult[]; 400: undefined }, undefined>(`/api/folders?clubId=${_enc(clubId)}`,
+export const GetApiFolders = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetFolderResult[]; 400: undefined; 401: undefined }, undefined>(`/api/folders?clubId=${_enc(clubId)}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiGenerateInviteCode = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 429: undefined }, undefined>("/api/generate-invite-code",
+export const GetApiGenerateInviteCode = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 401: undefined; 429: undefined }, undefined>("/api/generate-invite-code",
     GET,
     undefined,
     headers,
@@ -402,7 +402,7 @@ export const GetApiSignin = async (name: string, headers?: HeadersInit, options?
     options,
 );
 
-export const GetApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
+export const GetApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
     GET,
     undefined,
     headers,
@@ -437,7 +437,7 @@ export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, op
     options,
 );
 
-export const GetApiTestThree = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string[]; 404: undefined }, undefined>("/api/test-three",
+export const GetApiTestThree = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string }, undefined>("/api/test-three",
     GET,
     undefined,
     headers,
@@ -458,14 +458,14 @@ export const GetApiUsersStopImpersonation = async (headers?: HeadersInit, option
     options,
 );
 
-export const GetApiVotes = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: undefined }, undefined>(`/api/votes/${storyId}`,
+export const GetApiVotes = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: undefined; 401: undefined }, undefined>(`/api/votes/${storyId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetComment = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: CommentDto; 400: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}`,
+export const GetComment = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: CommentDto; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}`,
     GET,
     undefined,
     headers,
@@ -570,7 +570,7 @@ export const PostApiFilesUpload = async (headers?: HeadersInit, options?: Reques
     options,
 );
 
-export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: AddStoryToFolderResponse; 400: undefined; 404: string; 409: string }, AddStoryToFolderCommand>("/api/folders/AddStory",
+export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: AddStoryToFolderResponse; 400: undefined; 401: undefined; 404: string; 409: string }, AddStoryToFolderCommand>("/api/folders/AddStory",
     POST,
     body,
     headers,
