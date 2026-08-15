@@ -13,6 +13,7 @@ using Ogma3.ServiceDefaults;
 using Riok.Mapperly.Abstractions;
 using Serilog;
 using Serilog.Events;
+using Serilog.Settings.Configuration;
 using Serilog.Sinks.SystemConsole.Themes;
 
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -28,15 +29,6 @@ Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 Console.OutputEncoding = Encoding.Unicode;
 
-var seqUrl = Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341";
-Log.Logger = new LoggerConfiguration()
-	.Enrich.FromLogContext()
-	.WriteTo.Seq(seqUrl, LogEventLevel.Debug)
-	.WriteTo.Console(LogEventLevel.Information, theme: ConsoleTheme.None)
-	.WriteTo.OpenTelemetry()
-	.MinimumLevel.Debug()
-	.CreateLogger();
-
 NetVipsHelpers.EnsureInitialized();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +38,18 @@ builder.Configuration
 	.AddJsonFile("appsettings.json5")
 	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true);
 
-builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program)) ?? throw new NullReferenceException("The assembly was, somehow, null"));
+builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program))
+                                     ?? throw new NullReferenceException("The assembly was, somehow, null"));
+
+Log.Logger = new LoggerConfiguration()
+	.Enrich.FromLogContext()
+	.MinimumLevel.Debug()
+	.ReadFrom.Configuration(builder.Configuration)
+	.WriteTo.Logger(lc => lc
+		.ReadFrom.Configuration(builder.Configuration, new ConfigurationReaderOptions { SectionName = "ConsoleLogger" })
+		.WriteTo.Console(LogEventLevel.Information, theme: ConsoleTheme.None))
+	.WriteTo.OpenTelemetry()
+	.CreateLogger();
 
 await builder.AddInfisicalAsync();
 

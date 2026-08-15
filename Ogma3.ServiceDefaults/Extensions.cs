@@ -50,12 +50,20 @@ public static class Extensions
 
 			builder.Services.AddOpenTelemetry()
 				.WithMetrics(metrics => {
-					metrics.AddAspNetCoreInstrumentation()
+					metrics
+						.AddAspNetCoreInstrumentation()
 						.AddHttpClientInstrumentation()
-						.AddRuntimeInstrumentation();
+						.AddRuntimeInstrumentation()
+						.AddMeter(
+							"Npgsql",
+							"Microsoft.EntityFrameworkCore",
+							"ZiggyCreatures.Caching.Fusion.Distributed",
+							"ZiggyCreatures.Caching.Fusion.Backplane"
+						);
 				})
 				.WithTracing(tracing => {
-					tracing.AddSource(builder.Environment.ApplicationName)
+					tracing
+						.AddSource(builder.Environment.ApplicationName)
 						.AddAspNetCoreInstrumentation()
 						.AddHttpClientInstrumentation()
 						.AddEntityFrameworkCoreInstrumentation();
@@ -110,7 +118,7 @@ public static class Extensions
 		// Only health checks tagged with the "live" tag must pass for app to be considered alive
 		app.MapHealthChecks("/alive", new HealthCheckOptions
 		{
-			Predicate = r => r.Tags.Contains("live")
+			Predicate = r => r.Tags.Contains("live"),
 		});
 
 		return app;

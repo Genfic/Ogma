@@ -1,0 +1,11 @@
+{
+	"ConsoleLogger": {
+		"MinimumLevel": {
+			"Override": {
+				"Microsoft.AspNetCore": "Warning",
+				"Microsoft.EntityFrameworkCore.Database.Command": "Warning",
+				"ZiggyCreatures.Caching.Fusion": "Warning",
+			}
+		},
+	},
+}

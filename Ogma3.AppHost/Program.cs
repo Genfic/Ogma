@@ -36,6 +36,13 @@ builder
 
 		network.Ipam ??= new();
 		network.Ipam.Config.Add(new() { ["subnet"] = "fd01::/80" });
+
+		foreach (var service in file.Services)
+		{
+			service.Value.Logging ??= new();
+			service.Value.Logging.Options["max-size"] = "10m";
+			service.Value.Logging.Options["max-file"] = "3";
+		}
 	})
 	.WithDashboard(db => {
 		db.WithHostPort(8085);
