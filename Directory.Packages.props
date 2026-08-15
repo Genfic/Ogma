@@ -72,7 +72,7 @@
     <PackageVersion Include="Postmark" Version="5.4.1" />
     <PackageVersion Include="Riok.Mapperly" Version="4.3.1" />
     <PackageVersion Include="SafeRouting" Version="1.5.0" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.19" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.20" />
     <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
