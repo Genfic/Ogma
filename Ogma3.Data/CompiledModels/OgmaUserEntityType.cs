@@ -27,7 +27,7 @@ public partial class OgmaUserEntityType
             "Ogma3.Data.Users.OgmaUser",
             typeof(OgmaUser),
             baseEntityType,
-            propertyCount: 26,
+            propertyCount: 28,
             navigationCount: 10,
             skipNavigationCount: 7,
             foreignKeyCount: 1,
@@ -163,6 +163,16 @@ public partial class OgmaUserEntityType
             nullable: true);
         passwordHash.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var privacyPolicyAcceptedAt = runtimeEntityType.AddProperty(
+            "PrivacyPolicyAcceptedAt",
+            typeof(DateTimeOffset),
+            propertyInfo: typeof(OgmaUser).GetProperty("PrivacyPolicyAcceptedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<PrivacyPolicyAcceptedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        privacyPolicyAcceptedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        privacyPolicyAcceptedAt.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
+
         var registrationDate = runtimeEntityType.AddProperty(
             "RegistrationDate",
             typeof(DateTimeOffset),
@@ -241,6 +251,16 @@ public partial class OgmaUserEntityType
             nullable: true,
             maxLength: 20);
         title.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var tosAcceptedAt = runtimeEntityType.AddProperty(
+            "TosAcceptedAt",
+            typeof(DateTimeOffset),
+            propertyInfo: typeof(OgmaUser).GetProperty("TosAcceptedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(OgmaUser).GetField("<TosAcceptedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
+            sentinel: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        tosAcceptedAt.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        tosAcceptedAt.AddAnnotation("Relational:DefaultValueSql", "CURRENT_TIMESTAMP");
 
         var twoFactorEnabled = runtimeEntityType.AddProperty(
             "TwoFactorEnabled",

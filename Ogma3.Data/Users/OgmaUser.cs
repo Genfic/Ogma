@@ -84,6 +84,8 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 
 	public string TimeZone { get; set; } = "UTC";
 
+	public DateTimeOffset PrivacyPolicyAcceptedAt { get; set; }
+	public DateTimeOffset TosAcceptedAt { get; set; }
 
 	public string? SafetyPinHash { get; set; }
 	public string? SafetyPinResetTokenHash { get; set; }

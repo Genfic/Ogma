@@ -85,6 +85,12 @@ public static class SearchQueryParser
 		var key = segment[..colon].Trim();
 		var val = segment[(colon + 1)..].Trim();
 
+		// my:<something>
+		if (key is "my" && MyContentTypeExtensions.TryParse(val, out var myType, true))
+		{
+			return new MyContentToken(myType);
+		}
+
 		if (FieldLookup.TryGetValue(key, out var fac))
 		{
 			return fac(val.ToString(), negated);

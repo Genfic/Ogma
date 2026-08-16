@@ -1,184 +1,186 @@
 @use "../mixins/active-border" as ab;
 @use "sass:math";
 
-@layer md {
-	.md {
-		// Paragraphs
-		p {
-			margin-bottom: 0.5rem;
+.md {
+	// Paragraphs
+	p {
+		margin-bottom: 0.5rem;
 
-			&:last-child {
-				margin-bottom: 0;
-			}
+		&:last-child {
+			margin-bottom: 0;
 		}
+	}
 
-		// Emphasis
-		strong {
-			font-weight: 750;
-		}
+	// Emphasis
+	strong {
+		font-weight: 750;
+	}
 
-		em {
-			font-style: italic;
-		}
+	em {
+		font-style: italic;
+	}
 
-		strike {
-			text-decoration: line-through;
-		}
+	strike {
+		text-decoration: line-through;
+	}
 
-		ins {
-			text-decoration: underline;
-			text-decoration-style: dotted;
-		}
+	ins {
+		text-decoration: underline;
+		text-decoration-style: dotted;
+	}
 
-		mark {
-			--slant: 0.4em;
+	mark {
+		--slant: 0.4em;
 
-			position: relative;
+		position: relative;
+		background-color: var(--accent-25);
+		color: var(--foreground);
+
+		&::before,
+		&::after {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: var(--slant);
+			content: "";
 			background-color: var(--accent-25);
-			color: var(--foreground);
-
-			&::before,
-			&::after {
-				position: absolute;
-				top: 0;
-				bottom: 0;
-				width: var(--slant);
-				content: "";
-				background-color: var(--accent-25);
-				pointer-events: none;
-			}
-
-			&::before {
-				left: calc(-1 * var(--slant));
-				clip-path: polygon(100% 0, 0 100%, 100% 100%);
-			}
-
-			&::after {
-				right: calc(-1 * var(--slant));
-				clip-path: polygon(0 0, 0 100%, 100% 0);
-			}
+			pointer-events: none;
 		}
 
-		// Headers
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		h6 {
-			scroll-margin-top: calc(var(--nav-height) + (var(--nav-v-pad) * 2) * 1.5);
-			margin-bottom: 0.25rem;
-			margin-top: 0.5rem;
+		&::before {
+			left: calc(-1 * var(--slant));
+			clip-path: polygon(100% 0, 0 100%, 100% 100%);
 		}
 
-		@for $level from 1 to 7 {
-			h#{$level} {
-				font-size: #{1 + ((6 - $level) * 0.2)}rem;
-				margin-top: #{((math.div((7 - $level) - 1, 6 - 1)) * (2 - 1)) + 1}rem; // Normalize to [1rem, 2rem] range
-			}
+		&::after {
+			right: calc(-1 * var(--slant));
+			clip-path: polygon(0 0, 0 100%, 100% 0);
 		}
+	}
 
-		// Code
-		code {
-			font-size: 87.5%;
-			color: #e83e8c;
-			overflow-wrap: break-word;
+	// Headers
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		scroll-margin-top: calc(var(--nav-height) + (var(--nav-v-pad) * 2) * 1.5);
+		margin-bottom: 0.25rem;
+		margin-top: 0.5rem;
+	}
+
+	@for $level from 1 to 7 {
+		h#{$level} {
+			font-size: #{1 + ((6 - $level) * 0.2)}rem;
+			margin-top: #{((math.div((7 - $level) - 1, 6 - 1)) * (2 - 1)) + 1}rem; // Normalize to [1rem, 2rem] range
+		}
+	}
+
+	// Code
+	code {
+		font-size: 87.5%;
+		color: #e83e8c;
+		overflow-wrap: break-word;
+		word-break: normal;
+	}
+
+	pre {
+		position: relative;
+		width: max-content;
+		color: var(--foreground-75);
+		font-size: 0.95rem;
+		padding: 0.1rem 0.2rem;
+		border-radius: 0.2rem;
+		@include ab.active-border;
+
+		> code {
+			font-size: inherit;
+			color: inherit;
 			word-break: normal;
 		}
+	}
 
-		pre {
-			position: relative;
-			width: max-content;
-			color: var(--foreground-75);
-			font-size: 0.95rem;
-			padding: 0.1rem 0.2rem;
-			border-radius: 0.2rem;
-			@include ab.active-border;
+	// Quote
+	blockquote {
+		font-style: italic;
+		padding-left: 0.5rem;
+		margin: 0.5rem 0.5rem 0.5rem 1ch;
+		border-left: 2px solid var(--foreground-10);
 
-			> code {
-				font-size: inherit;
-				color: inherit;
-				word-break: normal;
-			}
+		&:hover {
+			border-left-color: var(--foreground-25);
 		}
+	}
 
-		// Quote
-		blockquote {
-			font-style: italic;
-			padding-left: 0.5rem;
-			margin: 0.5rem 0.5rem 0.5rem 1ch;
-			border-left: 2px solid var(--foreground-10);
+	// Table
+	table {
+		margin: 0.5rem 0;
+		border-collapse: collapse;
 
-			&:hover {
-				border-left-color: var(--foreground-25);
-			}
-		}
+		tbody {
+			tr {
+				border-bottom: 1px solid var(--foreground-25);
 
-		// Table
-		table {
-			margin: 0.5rem 0;
-			border-collapse: collapse;
-
-			tbody {
-				tr {
-					border-bottom: 1px solid var(--foreground-25);
-
-					&:first-child {
-						border-top: 1px solid var(--foreground-25);
-					}
-
-					&:hover {
-						background-color: var(--foreground-10);
-					}
+				&:first-child {
+					border-top: 1px solid var(--foreground-25);
 				}
-			}
 
-			td {
-				padding: 0.5rem;
-			}
-		}
-
-		ul,
-		ol {
-			margin: 0.5rem 0;
-		}
-
-		a[href^="https://" i],
-		a[href^="http://" i] {
-			&:not([href*="genfic.net" i], [href*="localhost" i]) {
-				&::after {
-					content: "🡭";
-					display: inline-block;
-					font-size: 0.9rem;
+				&:hover {
+					background-color: var(--foreground-10);
 				}
 			}
 		}
 
-		// Spoilers
-		.spoiler {
+		td {
+			padding: 0.5rem;
+		}
+	}
+
+	ul,
+	ol {
+		margin: 0.5rem 0;
+	}
+
+	a[href^="https://" i],
+	a[href^="http://" i] {
+		&:not([href*="genfic.net" i], [href*="localhost" i]) {
+			&::after {
+				content: "🡭";
+				display: inline-block;
+				font-size: 0.9rem;
+			}
+		}
+	}
+
+	// Spoilers
+	.spoiler {
+		color: transparent;
+		background-color: var(--foreground-50);
+		border-bottom: 1px dotted var(--foreground);
+		cursor: help;
+		transition:
+			color 100ms ease-in-out,
+			background-color 100ms ease-in-out;
+		transition-delay: 0s;
+
+		&::selection {
 			color: transparent;
 			background-color: var(--foreground-50);
-			border-bottom: 1px dotted var(--foreground);
-			cursor: help;
-			transition:
-				color 100ms ease-in-out,
-				background-color 100ms ease-in-out;
-			transition-delay: 0s;
+		}
+
+		&:hover {
+			color: var(--foreground);
+			background-color: transparent;
+			transition-delay: 0.5s;
 
 			&::selection {
-				color: transparent;
-				background-color: var(--foreground-50);
-			}
-
-			&:hover {
-				color: var(--foreground);
-				background-color: transparent;
-				transition-delay: 0.5s;
-
-				&::selection {
-					color: var(--background);
-				}
+				color: var(--background);
 			}
 		}
+	}
+
+	:first-child {
+		margin-top: 0;
 	}
 }

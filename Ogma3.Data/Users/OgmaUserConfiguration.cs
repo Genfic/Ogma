@@ -81,6 +81,14 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.HasDefaultValue("UTC");
 
 		builder
+			.Property(u => u.TosAcceptedAt)
+			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
+
+		builder
+			.Property(u => u.PrivacyPolicyAcceptedAt)
+			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
+
+		builder
 			.Ignore(u => u.PhoneNumber)
 			.Ignore(u => u.PhoneNumberConfirmed);
 

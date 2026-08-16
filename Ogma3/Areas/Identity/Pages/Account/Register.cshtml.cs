@@ -65,6 +65,9 @@ public sealed class RegisterModel(
 		[Display(Name = "Invite code")]
 		public string? InviteCode { get; set; }
 
+		public bool TosAccepted { get; init; }
+		public bool PrivacyPolicyAccepted { get; init; }
+
 		public string? Occupation { get; init; }
 
 		public string SubmissionToken { get; set; } = "";
@@ -99,6 +102,12 @@ public sealed class RegisterModel(
 				.NotEmpty()
 				.Must(token => speedTrap.IsHumanSpeed(token, 5))
 				.WithMessage("Submission too fast. Slow down and try again.");
+			RuleFor(im => im.TosAccepted)
+				.Equal(true)
+				.WithMessage("You must accept the Terms of Service");
+			RuleFor(im => im.PrivacyPolicyAccepted)
+				.Equal(true)
+				.WithMessage("You must accept the Privacy Policy");
 		}
 	}
 

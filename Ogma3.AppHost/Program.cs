@@ -52,6 +52,7 @@ builder
 
 var garnet = builder
 	.AddGarnet("garnet", port: 6379, password: garnetPassword)
+	.WithImageTag("2")
 	.WithDataVolume()
 	.WithPersistence();
 

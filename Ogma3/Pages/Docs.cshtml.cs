@@ -11,7 +11,7 @@ public sealed class Docs(AppDbContext context) : PageModel
 	public required DocumentDto Document { get;  set; }
 	public required List<DocumentVersionDto> Versions { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(string slug, [FromQuery] uint? v)
+	public async Task<IActionResult> OnGetAsync(string slug, [FromQuery] uint? v = null)
 	{
 		var query = context.Documents
 			.Where(d => d.Slug == slug);

@@ -82,6 +82,18 @@ public sealed class IndexModel(
 				case TagToken { Negated: true } t:
 					excludedTags.Add(t.FullName);
 					break;
+				case MyContentToken t:
+					storiesQuery = t.Type switch
+					{
+						MyContentType.Starred => storiesQuery
+							.Where(s => s.Votes.Any(v => v.UserId == uid)),
+						MyContentType.Shelved => storiesQuery
+							.Where(s => s.Shelves.Any(sh => sh.OwnerId == uid)),
+						MyContentType.Started => storiesQuery
+							.Where(s => context.ChaptersRead.Any(cr => cr.StoryId == s.Id && cr.UserId == uid)),
+						_ => storiesQuery,
+					};
+					break;
 			}
 		}
 

@@ -1,7 +1,9 @@
 ﻿@page "/register"
 @inject IOptions<TurnstileSettings> TurnstileSettings
+@inject OgmaConfig Config
 @using Microsoft.Extensions.Options
 @using Ogma3.Data
+@using Ogma3.Infrastructure.OgmaConfig
 @using Ogma3.Services.TurnstileService
 @model RegisterModel
 @{
@@ -79,6 +81,22 @@
 				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our
 					Discord!
 				</aside>
+			</div>
+
+			<div class="o-form-group">
+				<label asp-for="Input.TosAccepted">
+					I accept the <a for-route="@Routes.Pages.Docs.Get(Config.TosDoc)" target="_blank">Terms of Service</a>
+				</label>
+				<span asp-validation-for="Input.TosAccepted" class="text-danger"></span>
+				<input asp-for="Input.TosAccepted" type="checkbox" required>
+			</div>
+
+			<div class="o-form-group">
+				<label asp-for="Input.PrivacyPolicyAccepted">
+					I accept the <a for-route="@Routes.Pages.Docs.Get(Config.PrivacyPolicyDoc)" target="_blank">Privacy Policy</a>
+				</label>
+				<span asp-validation-for="Input.PrivacyPolicyAccepted" class="text-danger"></span>
+				<input asp-for="Input.PrivacyPolicyAccepted" type="checkbox" required>
 			</div>
 
 			<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register" data-theme="@theme"></div>

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Routes.Areas.Admin.Pages;
+using Utils.Extensions;
 using Index = Routes.Areas.Admin.Pages.Index;
 
 namespace Ogma3.Services.SidebarNavService;
@@ -81,7 +82,7 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 
 					var roles = attr.Roles.Split(',', StringSplitOptions.TrimEntries);
 
-					if (!roles.Any(user.IsInRole))
+					if (roles.None(user.IsInRole))
 					{
 						continue;
 					}

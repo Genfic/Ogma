@@ -1,3 +1,4 @@
+using NetEscapades.EnumGenerators;
 using Ogma3.Data.Stories;
 
 namespace Ogma3.Infrastructure.SearchQueryParser;
@@ -22,3 +23,13 @@ public sealed record StatusToken(string Value, bool Negated = false) : SearchTok
 }
 
 public sealed record RatingToken(string Value, bool Negated = false) : SearchToken;
+
+public sealed record MyContentToken(MyContentType Type) : SearchToken;
+
+[EnumExtensions]
+public enum MyContentType
+{
+	Starred,
+	Shelved,
+	Started,
+}

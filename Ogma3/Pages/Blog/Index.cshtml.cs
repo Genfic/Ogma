@@ -65,7 +65,7 @@ public sealed class IndexModel(AppDbContext context, OgmaConfig config) : PageMo
 		var postsCount = await query.CountAsync();
 
 		// Sort
-		query = sort switch
+		query = SortBy switch
 		{
 			EBlogpostSortingOptions.TitleAscending => query.OrderBy(s => s.Title),
 			EBlogpostSortingOptions.TitleDescending => query.OrderByDescending(s => s.Title),
@@ -73,7 +73,7 @@ public sealed class IndexModel(AppDbContext context, OgmaConfig config) : PageMo
 			EBlogpostSortingOptions.DateDescending => query.OrderByDescending(s => s.PublicationDate),
 			EBlogpostSortingOptions.WordsAscending => query.OrderBy(s => s.WordCount),
 			EBlogpostSortingOptions.WordsDescending => query.OrderByDescending(s => s.WordCount),
-			_ => query.OrderByDescending(s => s.WordCount),
+			_ => query.OrderByDescending(s => s.PublicationDate),
 		};
 
 		// Finalize query
