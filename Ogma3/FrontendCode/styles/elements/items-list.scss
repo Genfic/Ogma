@@ -118,7 +118,7 @@ ul.items-list {
 
 			> .action {
 				display: flex;
-				padding: 0.5rem;
+				padding: 0.25rem;
 				border: 1px solid var(--foreground-25);
 				color: var(--foreground-50);
 				background-color: transparent;
@@ -129,8 +129,9 @@ ul.items-list {
 					border-color: var(--foreground);
 				}
 
-				> i.material-icons-outlined {
-					font-size: 1.2rem;
+				svg {
+					height: 1.2rem;
+					width: 1.2rem;
 				}
 			}
 		}

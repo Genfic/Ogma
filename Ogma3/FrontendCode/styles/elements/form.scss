@@ -94,7 +94,7 @@ form.form {
 		margin-top: 1rem;
 		gap: 0.25rem;
 
-		&:has(input[type="checkbox"]) {
+		&.inline:has(input[type="checkbox"]) {
 			flex-direction: row-reverse;
 			align-items: center;
 			justify-content: flex-end;
@@ -120,6 +120,14 @@ form.form {
 
 			&[disabled] {
 				color: var(--foreground-50);
+				cursor: default;
+				opacity: 0.75;
+			}
+
+			&[readonly] {
+				color: var(--foreground-75);
+				cursor: text;
+				opacity: 0.75;
 			}
 		}
 

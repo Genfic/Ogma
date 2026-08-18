@@ -8,6 +8,14 @@ export const parseDom = (html: string): HTMLElement => {
 	throw new Error("Invalid HTML");
 };
 
+export const parseSVG = (html: string): SVGElement => {
+	const child = parser.parseFromString(html, "image/svg+xml").firstElementChild;
+	if (child instanceof SVGElement) {
+		return child;
+	}
+	throw new Error("Invalid SVG");
+};
+
 function $query<TElement extends HTMLElement>(selector: string): TElement;
 function $query<TElement extends HTMLElement>(selector: string, noThrow: false): TElement;
 function $query<TElement extends HTMLElement>(selector: string, noThrow: true): TElement | null;

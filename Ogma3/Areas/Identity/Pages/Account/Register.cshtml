@@ -76,14 +76,17 @@
 
 			<div class="o-form-group">
 				<label asp-for="Input.InviteCode"></label>
-				<input asp-for="Input.InviteCode" class="o-form-control active-border" autocomplete="one-time-code">
+				<input asp-for="Input.InviteCode"
+				       class="o-form-control active-border"
+				       autocomplete="one-time-code"
+				       readonly="@(Model.Input.InviteCode is not null)">
 				<span asp-validation-for="Input.InviteCode" class="text-danger"></span>
-				<aside class="info" asp-for="Input.InviteCode">Access will be public soon, but in the meantime you can ask for one on our
-					Discord!
+				<aside class="info" asp-for="Input.InviteCode">
+					Access will be public soon, but in the meantime you can ask for one on our Discord!
 				</aside>
 			</div>
 
-			<div class="o-form-group">
+			<div class="o-form-group inline">
 				<label asp-for="Input.TosAccepted">
 					I accept the <a for-route="@Routes.Pages.Docs.Get(Config.TosDoc)" target="_blank">Terms of Service</a>
 				</label>
@@ -91,7 +94,7 @@
 				<input asp-for="Input.TosAccepted" type="checkbox" required>
 			</div>
 
-			<div class="o-form-group">
+			<div class="o-form-group inline">
 				<label asp-for="Input.PrivacyPolicyAccepted">
 					I accept the <a for-route="@Routes.Pages.Docs.Get(Config.PrivacyPolicyDoc)" target="_blank">Privacy Policy</a>
 				</label>

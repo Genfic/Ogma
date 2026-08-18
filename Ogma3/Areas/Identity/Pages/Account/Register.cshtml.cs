@@ -111,25 +111,25 @@ public sealed class RegisterModel(
 		}
 	}
 
-	private async Task Hydrate(string? returnUrl = null, string? inviteCode = null)
+	private async Task Hydrate(string? returnUrl = null, string? invite = null)
 	{
 		ReturnUrl = returnUrl;
 		Input.SubmissionToken = speedTrap.GenerateToken();
-		Input.InviteCode ??= inviteCode;
+		Input.InviteCode ??= invite;
 		ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 		PowChallenge = await powService.IssueChallenge();
 	}
 
-	public async Task OnGetAsync(string? returnUrl = null, string? inviteCode = null)
+	public async Task OnGetAsync(string? returnUrl = null, string? invite = null)
 	{
-		await Hydrate(returnUrl, inviteCode);
+		await Hydrate(returnUrl, invite);
 	}
 
 	[EnableRateLimiting(policyName: RateLimiting.Registration)]
-	public async Task<IActionResult> OnPostAsync(string? returnUrl = null, string? inviteCode = null)
+	public async Task<IActionResult> OnPostAsync(string? returnUrl = null, string? invite = null)
 	{
 		returnUrl ??= Url.Content("~/");
-		await Hydrate(returnUrl, inviteCode);
+		await Hydrate(returnUrl, invite);
 
 		if (!ModelState.IsValid) return Page();
 
@@ -151,17 +151,17 @@ public sealed class RegisterModel(
 		}
 
 		// Check if invite code is correct
-		var invite = await context.InviteCodes
+		var inviteCode = await context.InviteCodes
 			.Where(ic => Input.InviteCode != null && ic.Code == Input.InviteCode)
 			.FirstOrDefaultAsync();
 
-		if (invite is null)
+		if (inviteCode is null)
 		{
 			ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
 			return Page();
 		}
 
-		if (invite.UsedDate is not null)
+		if (inviteCode.UsedDate is not null)
 		{
 			ModelState.TryAddModelError("InviteCode", "This invite code has been used");
 			return Page();
@@ -185,8 +185,8 @@ public sealed class RegisterModel(
 			logger.LogInformation("User {Name} created an account!", Input.Name);
 
 			// Modify invite code
-			invite.UsedById = result.User.Id;
-			invite.UsedDate = DateTimeOffset.UtcNow;
+			inviteCode.UsedById = result.User.Id;
+			inviteCode.UsedDate = DateTimeOffset.UtcNow;
 			await context.SaveChangesAsync();
 
 			// Send confirmation code

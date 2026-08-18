@@ -1,13 +1,10 @@
 import { DeleteApiInviteCodes, GetApiInviteCodesPaginated, PostApiInviteCodesNoLimit } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
-import { toCurrentTimezone } from "@h/date-helpers";
 import { $id } from "@h/dom";
-import { log } from "@h/logger";
-import { long } from "@h/tinytime-templates";
-import LucideClipboardCopy from "icon:lucide:clipboard-copy";
 import LucideTrash2 from "icon:lucide:trash-2";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { render } from "solid-js/web";
+import { InviteCode } from "../comp/common/_invite-code";
 
 const parent = $id("invite-codes-app");
 
@@ -15,69 +12,19 @@ const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 
 const perPage = 50;
 
-const copyCode = (t: InviteCodeDto) => {
-	navigator.clipboard.writeText(t.code).then(
-		() => alert("Copied"),
-		(e) => {
-			alert("Could not copy");
-			log.error(e);
-		},
-	);
-};
-
-const date = (dt: Date) => long.render(toCurrentTimezone(new Date(dt)));
-
-const Code = ({
-	c,
-	newCode,
-	onDelete,
-}: {
-	c: InviteCodeDto;
-	newCode: number | null;
-	onDelete: (id: number) => void;
-}) => {
+const DeleteButton = ({ code, onDelete }: { code: InviteCodeDto; onDelete: (id: number) => void }) => {
 	const deleteCode = async (t: InviteCodeDto) => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiInviteCodes(t.id, headers);
-
 			if (!res.ok) return;
-
 			onDelete(t.id);
 		}
 	};
 
 	return (
-		<li classList={{ hl: c.id === newCode }}>
-			<div class="deco" style={{ background: c.usedDate ? "green" : "gray" }} />
-
-			<div class="main">
-				<h3 class="name">
-					<span class="monospace">{c.code}</span>
-				</h3>
-				<span class="desc">
-					<span>
-						Issued by <strong>{c.issuedByUserName ?? `[${c.issuedByType}]`}</strong> on{" "}
-						<strong>{date(c.issueDate)}</strong>
-					</span>
-					<br />
-					<Show when={c.usedDate}>
-						<span>
-							Redeemed by <strong>{c.usedByUserName}</strong> on{" "}
-							<strong>{c.usedDate && date(c.usedDate)}</strong>
-						</span>
-					</Show>
-				</span>
-			</div>
-
-			<div class="actions">
-				<button type="button" class="action" onClick={[deleteCode, c]}>
-					<LucideTrash2 />
-				</button>
-				<button type="button" class="action" onClick={[copyCode, c]}>
-					<LucideClipboardCopy />
-				</button>
-			</div>
-		</li>
+		<button type="button" class="action" onClick={[deleteCode, code]}>
+			<LucideTrash2 />
+		</button>
 	);
 };
 
@@ -140,7 +87,13 @@ const InviteCodes = () => {
 				<Match when={codes}>
 					<ul class="items-list">
 						<For each={codes()}>
-							{(code) => <Code c={code} newCode={newCode} onDelete={deleteHandler} />}
+							{(code) => (
+								<InviteCode
+									code={code}
+									class={code.id === newCode && "hl"}
+									actions={<DeleteButton code={code} onDelete={deleteHandler} />}
+								/>
+							)}
 						</For>
 
 						<Show when={!isAnyMore}>

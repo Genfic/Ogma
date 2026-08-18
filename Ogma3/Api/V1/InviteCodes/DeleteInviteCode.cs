@@ -28,6 +28,7 @@ public sealed partial class DeleteInviteCode(AppDbContext context)
 	{
 		var res = await context.InviteCodes
 			.Where(ic => ic.Id == request.CodeId)
+			.Where(ic => ic.UsedBy == null)
 			.ExecuteDeleteAsync(cancellationToken);
 
 		return res > 0 ? TypedResults.Ok(request.CodeId) : TypedResults.NotFound();
