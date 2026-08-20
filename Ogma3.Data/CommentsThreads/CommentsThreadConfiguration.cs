@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
+using Ogma3.Data.Comments;
 using Ogma3.Data.Constants;
 using Ogma3.Data.Helpers;
 
@@ -30,6 +31,19 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 		builder.HasPartialIndex(ct => ct.ChapterId);
 		builder.HasPartialIndex(ct => ct.BlogpostId);
 		builder.HasPartialIndex(ct => ct.ClubThreadId);
+		builder.HasPartialIndex(ct => ct.NewsId);
+
+		builder.Property(ct => ct.Source)
+			.HasComputedColumnSql(
+				$"""
+				CASE
+					WHEN "{nameof(CommentThread.ChapterId)}" IS NOT NULL THEN {(short)CommentSource.Chapter}
+					WHEN "{nameof(CommentThread.BlogpostId)}" IS NOT NULL THEN {(short)CommentSource.Blogpost}
+					WHEN "{nameof(CommentThread.UserId)}" IS NOT NULL THEN {(short)CommentSource.Profile}
+					WHEN "{nameof(CommentThread.ClubThreadId)}" IS NOT NULL THEN {(short)CommentSource.ForumPost}
+					WHEN "{nameof(CommentThread.NewsId)}" IS NOT NULL THEN {(short)CommentSource.NewsPost}
+				END
+				""", stored: true);
 
 		// NAVIGATION
 		builder
@@ -54,13 +68,13 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 
 		// Seed comments for system users
 		builder.HasData(
-			new()
+			new
 			{
 				Id = SystemUserConstants.Deleted.Id,
 				UserId = SystemUserConstants.Deleted.Id,
 				LockDate = DateTimeOffset.MinValue,
 			},
-			new()
+			new
 			{
 				Id = SystemUserConstants.Anonymous.Id,
 				UserId = SystemUserConstants.Anonymous.Id,

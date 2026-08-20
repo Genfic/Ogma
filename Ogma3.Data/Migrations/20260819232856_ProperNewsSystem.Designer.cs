@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -18,14 +19,11 @@ using Ogma3.Data.Stories;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-partial class AppDbContextModelSnapshot : ModelSnapshot
+[Migration("20260819232856_ProperNewsSystem")]
+partial class _20260819232856_ProperNewsSystem
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260820010802_BetterWayOfGettingCommentThreadSource";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -696,11 +694,6 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<long?>("NewsId")
                     .HasColumnType("bigint");
 
-                b.Property<short>("Source")
-                    .ValueGeneratedOnAddOrUpdate()
-                    .HasColumnType("smallint")
-                    .HasComputedColumnSql("CASE\r\n	WHEN \"ChapterId\" IS NOT NULL THEN 0\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN 1\r\n	WHEN \"UserId\" IS NOT NULL THEN 2\r\n	WHEN \"ClubThreadId\" IS NOT NULL THEN 3\r\n	WHEN \"NewsId\" IS NOT NULL THEN 4\r\nEND", true);
-
                 b.Property<long?>("UserId")
                     .HasColumnType("bigint");
 
@@ -732,12 +725,18 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     new
                     {
                         Id = -1L,
+                        CommentsCount = 0,
+                        IsLocked = false,
+                        LastChange = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         LockDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         UserId = -1L
                     },
                     new
                     {
                         Id = -2L,
+                        CommentsCount = 0,
+                        IsLocked = false,
+                        LastChange = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         LockDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         UserId = -2L
                     });

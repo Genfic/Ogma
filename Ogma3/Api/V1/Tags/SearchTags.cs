@@ -32,24 +32,32 @@ public sealed partial class SearchTags(AppDbContext context, TagNamespaceAliasSe
 	{
 		var query = context.Tags.AsQueryable();
 
-		var aliases = await aliasService.GetPrefixes(cancellationToken);
-
+		var aliases = await aliasService.GetAliases(cancellationToken);
 		var lookup = aliases.GetAlternateLookup<ReadOnlySpan<char>>();
 
-		ReadOnlySpan<char> searchSpan = request.SearchString
-			.ReplaceWithPattern(aliases)
+		var searchSpan = request.SearchString
 			.AsSpan()
 			.Trim();
 		var colon = searchSpan.IndexOf(':');
 
 		switch (colon)
 		{
-			case > 0 when lookup.TryGetValue(searchSpan[..colon].Trim(), out var ns):
+			case > 0:
 			{
 				var name = searchSpan[(colon + 1)..].Trim().ToString();
+				var nspace = searchSpan[..colon].Trim();
 
-				query = query
-					.Where(t => t.Namespace!.Name == ns);
+				if (lookup.TryGetValue(nspace, out var ns))
+				{
+					query = query
+						.Where(t => t.Namespace!.Name == ns);
+				}
+				else
+				{
+					var n = nspace.ToString();
+					query = query
+						.Where(t => t.Namespace!.Name == n);
+				}
 
 				if (!string.IsNullOrWhiteSpace(name))
 				{
@@ -73,10 +81,6 @@ public sealed partial class SearchTags(AppDbContext context, TagNamespaceAliasSe
 				query = query
 					.Where(t => t.Name.StartsWith(name));
 				break;
-			}
-			default:
-			{
-				return TypedResults.BadRequest();
 			}
 		}
 

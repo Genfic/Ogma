@@ -11,6 +11,7 @@ public static class NavPages
 	public static string Quotes => "Quotes";
 	public static string InviteCodes => "InviteCodes";
 	public static string Documents => "Documents";
+	public static string News => "News";
 	public static string Roles => "Roles";
 	public static string Users => "Users";
 	public static string ContentBlock => "ContentBlock";

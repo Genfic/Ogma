@@ -6,9 +6,9 @@ using Ogma3.Infrastructure.Extensions;
 using Ogma3.Pages.Shared;
 using Ogma3.Pages.Shared.Cards;
 
-namespace Ogma3.Pages;
+namespace Ogma3.Pages.News;
 
-public sealed class NewsModel(AppDbContext context) : PageModel
+public sealed class IndexModel(AppDbContext context) : PageModel
 {
 	private const int PerPage = 20;
 
@@ -17,9 +17,9 @@ public sealed class NewsModel(AppDbContext context) : PageModel
 
 	public async Task<IActionResult> OnGetAsync([FromQuery]int page = 1)
 	{
-		var query = context.Blogposts
-			.Where(p => p.Hashtags.AsQueryable().Contains("site-news"))
-			.Where(p => p.Author.Roles.Any(r => r.IsStaff));
+		var query = context.News
+			.Where(b => b.IsVisible)
+			.Where(b => b.PublicationDate != null);
 
 		NewsCards = await query
 			.Paginate(page, PerPage)

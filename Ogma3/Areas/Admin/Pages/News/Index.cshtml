@@ -1,0 +1,48 @@
+@page
+@model Ogma3.Areas.Admin.Pages.News.IndexModel
+
+@{
+	ViewData["Title"] = "News";
+	ViewData["ActivePage"] = NavPages.News;
+}
+
+<a class="btn btn-block btn-outline-primary" asp-page="./Create">
+	<icon name="lucide:plus"></icon>
+	Create New
+</a>
+
+@if (Model.News.Count > 0)
+{
+	<ul class="items-list">
+		@foreach (var news in Model.News)
+		{
+			<li>
+				<div class="main">
+					<a for-route="@Routes.Pages.News_Post.Get(news.Id, news.Slug)" target="_blank">
+						<h3 class="name">
+							@news.Title
+						</h3>
+					</a>
+
+					<div class="desc">
+						Published @news.PublicationDate?.ToString("yyyy-MM-dd HH:mm") by @news.AuthorUserName
+					</div>
+
+				</div>
+
+				<div class="actions">
+					<div class="icon">
+						<icon name="lucide:@(news.IsVisible ? "eye" : "eye-off")"></icon>
+					</div>
+					<a asp-page="./Edit" asp-route-id="@news.Id" class="action" title="Edit">
+						<icon name="lucide:pencil"></icon>
+					</a>
+				</div>
+			</li>
+		}
+	</ul>
+}
+else
+{
+	<h1>No news found</h1>
+}

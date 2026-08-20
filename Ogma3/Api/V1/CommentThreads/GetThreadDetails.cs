@@ -39,31 +39,22 @@ public sealed partial class GetThreadDetails
 			.Where(ct => ct.Id == request.ThreadId)
 			.Select(ct => new
 			{
-				Blogpost = ct.BlogpostId != null,
-				Profile = ct.UserId != null,
-				Chapter = ct.ChapterId != null,
-				Thread = ct.ClubThreadId != null,
+				Source = ct.Source,
 				Locked = ct.IsLocked,
 			})
 			.FirstOrDefaultAsync(cancellationToken);
 
-		if (threadData is null) return TypedResults.NotFound();
-
-		var source = threadData switch
+		if (threadData is null)
 		{
-			{ Blogpost: true } => CommentSource.Blogpost,
-			{ Profile: true } => CommentSource.Profile,
-			{ Chapter: true } => CommentSource.Chapter,
-			{ Thread: true } => CommentSource.ForumPost,
-			_ => throw new SwitchExpressionException(),
-		};
+			return TypedResults.NotFound();
+		}
 
 		if (isStaff)
 		{
 			httpContextAccessor.HttpContext?.Response.Headers.Append("X-IsStaff", isStaff.ToString());
 		}
 
-		return TypedResults.Ok(new Result(perPage, source, threadData.Locked));
+		return TypedResults.Ok(new Result(perPage, threadData.Source, threadData.Locked));
 	}
 
 	[Validate]

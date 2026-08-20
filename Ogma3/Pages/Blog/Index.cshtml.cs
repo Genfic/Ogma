@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Blogposts;
+using Ogma3.Infrastructure.BlogpostSearchQueryParser;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Pages.Shared;
@@ -33,15 +34,15 @@ public sealed class IndexModel(AppDbContext context, OgmaConfig config) : PageMo
 
 		if (!string.IsNullOrEmpty(q))
 		{
+			var tokens = BlogpostSearchQueryParser.Parse(q);
+
 			// Search by tags
-			var splitQuery = q.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+			var tags = tokens
+				.OfType<BlogpostTagToken>()
+				.Select(t => t.Value)
+				.ToArray();
 
-			var tags = splitQuery
-				.Where(x => x.StartsWith('#'))
-				.Select(x => x.ToLower().Trim('#'))
-				.ToList();
-
-			if (tags.Count > 0)
+			if (tags.Length > 0)
 			{
 				query = query
 					.TagWith("Searching for blogposts with tags")
@@ -49,15 +50,30 @@ public sealed class IndexModel(AppDbContext context, OgmaConfig config) : PageMo
 			}
 
 			// Search in title
-			var search = splitQuery
-				.Where(x => !x.StartsWith('#') && !string.IsNullOrEmpty(x))
-				.ToArray();
-			if (search.Length > 0)
+			var title = tokens
+				.OfType<BlogpostTitleToken>()
+				.Select(t => t.Value)
+				.FirstOrDefault();
+
+			if (title is not null)
 			{
 				query = query
 					.TagWith("Searching for blogposts with title")
 					// ReSharper disable once EntityFramework.ClientSideDbFunctionCall
-					.Where(b => EF.Functions.ILike(b.Title, $"%{string.Join(' ', search)}%"));
+					.Where(b => EF.Functions.ILike(b.Title, $"%{title}%"));
+			}
+
+			// Search by author
+			var author = tokens
+				.OfType<BlogpostAuthorToken>()
+				.Select(t => t.Value)
+				.FirstOrDefault();
+
+			if (author is not null)
+			{
+				query = query
+					.TagWith("Searching for blogposts by author")
+					.Where(b => b.Author.NormalizedUserName.Contains(author));
 			}
 		}
 

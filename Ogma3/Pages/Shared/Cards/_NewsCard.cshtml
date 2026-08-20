@@ -2,7 +2,7 @@
 @model NewsCard
 
 <div class="blogpost-card">
-	<a class="title" asp-page="/Blog/Post" asp-area="" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+	<a class="title" for-route="@Routes.Pages.News_Post.Get(Model.Id, Model.Slug)">
 		<h3>@Model.Title</h3>
 	</a>
 

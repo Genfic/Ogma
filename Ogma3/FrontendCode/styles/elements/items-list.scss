@@ -117,17 +117,20 @@ ul.items-list {
 			gap: 0.25rem;
 
 			> .action {
-				display: flex;
-				padding: 0.25rem;
-				border: 1px solid var(--foreground-25);
-				color: var(--foreground-50);
-				background-color: transparent;
-
 				&:hover {
 					background-color: var(--accent-10);
 					color: var(--foreground-75);
 					border-color: var(--foreground);
 				}
+			}
+
+			> .icon,
+			.action {
+				display: flex;
+				padding: 0.25rem;
+				color: var(--foreground-50);
+				background-color: transparent;
+				border: 1px solid var(--foreground-25);
 
 				svg {
 					height: 1.2rem;

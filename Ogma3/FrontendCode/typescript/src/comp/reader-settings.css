@@ -1,6 +1,12 @@
 reader-settings {
-	position: absolute;
-	inset: 0 0 0 auto;
+	&:only-child {
+		margin-left: auto;
+	}
+
+	&:not(:only-child) {
+		position: absolute;
+		inset: 0 0 0 auto;
+	}
 
 	.settings-button {
 		background: transparent;

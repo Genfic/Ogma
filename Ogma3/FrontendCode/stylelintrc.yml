@@ -4,3 +4,7 @@ rules:
     scss/dollar-variable-empty-line-before: null
     at-rule-empty-line-before: null
     declaration-empty-line-before: null
+    selector-type-no-unknown:
+        - true
+        - ignoreTypes:
+              - "o-icon"

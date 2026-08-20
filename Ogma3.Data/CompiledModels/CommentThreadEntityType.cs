@@ -10,7 +10,9 @@ using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.ClubThreads;
+using Ogma3.Data.Comments;
 using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.NewsPosts;
 using Ogma3.Data.Users;
 
 #pragma warning disable 219, 612, 618
@@ -27,11 +29,11 @@ public partial class CommentThreadEntityType
             "Ogma3.Data.CommentsThreads.CommentThread",
             typeof(CommentThread),
             baseEntityType,
-            propertyCount: 9,
-            navigationCount: 5,
+            propertyCount: 11,
+            navigationCount: 6,
             skipNavigationCount: 1,
-            foreignKeyCount: 4,
-            unnamedIndexCount: 4,
+            foreignKeyCount: 5,
+            unnamedIndexCount: 5,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -109,6 +111,27 @@ public partial class CommentThreadEntityType
             nullable: true);
         lockDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var newsId = runtimeEntityType.AddProperty(
+            "NewsId",
+            typeof(long?),
+            propertyInfo: typeof(CommentThread).GetProperty("NewsId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(CommentThread).GetField("<NewsId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        newsId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var source = runtimeEntityType.AddProperty(
+            "Source",
+            typeof(CommentSource),
+            propertyInfo: typeof(CommentThread).GetProperty("Source", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(CommentThread).GetField("<Source>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAddOrUpdate,
+            beforeSaveBehavior: PropertySaveBehavior.Ignore,
+            afterSaveBehavior: PropertySaveBehavior.Ignore);
+        source.SetSentinelFromProviderValue((short)0);
+        source.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        source.AddAnnotation("Relational:ComputedColumnSql", "CASE\r\n	WHEN \"ChapterId\" IS NOT NULL THEN 0\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN 1\r\n	WHEN \"UserId\" IS NOT NULL THEN 2\r\n	WHEN \"ClubThreadId\" IS NOT NULL THEN 3\r\n	WHEN \"NewsId\" IS NOT NULL THEN 4\r\nEND");
+        source.AddAnnotation("Relational:IsStored", true);
+
         var userId = runtimeEntityType.AddProperty(
             "UserId",
             typeof(long?),
@@ -137,9 +160,14 @@ public partial class CommentThreadEntityType
         index1.AddAnnotation("Relational:Filter", "\"ClubThreadId\" IS NOT NULL");
 
         var index2 = runtimeEntityType.AddIndex(
+            new[] { newsId },
+            unique: true);
+        index2.AddAnnotation("Relational:Filter", "\"NewsId\" IS NOT NULL");
+
+        var index3 = runtimeEntityType.AddIndex(
             new[] { userId },
             unique: true);
-        index2.AddAnnotation("Relational:Filter", "\"UserId\" IS NOT NULL");
+        index3.AddAnnotation("Relational:Filter", "\"UserId\" IS NOT NULL");
 
         return runtimeEntityType;
     }
@@ -223,6 +251,32 @@ public partial class CommentThreadEntityType
     }
 
     public static RuntimeForeignKey CreateForeignKey4(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+    {
+        var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("NewsId") },
+            principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+            principalEntityType,
+            deleteBehavior: DeleteBehavior.Cascade,
+            unique: true,
+            requiredDependent: true);
+
+        var news = declaringEntityType.AddNavigation("News",
+            runtimeForeignKey,
+            onDependent: true,
+            typeof(News),
+            propertyInfo: typeof(CommentThread).GetProperty("News", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(CommentThread).GetField("<News>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        var commentThread = principalEntityType.AddNavigation("CommentThread",
+            runtimeForeignKey,
+            onDependent: false,
+            typeof(CommentThread),
+            propertyInfo: typeof(News).GetProperty("CommentThread", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(News).GetField("<CommentThread>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+        return runtimeForeignKey;
+    }
+
+    public static RuntimeForeignKey CreateForeignKey5(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
     {
         var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId") },
             principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),

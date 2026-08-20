@@ -21,6 +21,8 @@ public sealed class CommentThread : BaseModel
 
 	public DateTimeOffset LastChange { get; set; }
 
+	public CommentSource Source { get; private set; }
+
 	public OgmaUser? User { get; set; }
 	public long? UserId { get; set; }
 
@@ -32,6 +34,9 @@ public sealed class CommentThread : BaseModel
 
 	public ClubThread? ClubThread { get; set; }
 	public long? ClubThreadId { get; set; }
+
+	public NewsPosts.News? News { get; set; }
+	public long? NewsId { get; set; }
 
 	public List<OgmaUser> Subscribers { get; set; } = [];
 }

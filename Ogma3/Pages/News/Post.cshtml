@@ -1,0 +1,48 @@
+@page "{id:long}/{slug?}"
+@using Utils.Extensions
+@model DetailsModel
+@{
+
+	ViewData["Title"] = Model.NewsPost.Title;
+	ViewData["Tab"] = "News";
+
+	var readerSettings = Request.Cookies.TryGetValue("reader-settings", out var settings) ? settings : null;
+}
+
+@section OgMeta {
+	<meta property="og:type" content="article">
+	<meta property="og:url" content="@Url.PageLink("/News/Post", values: new { Model.NewsPost.Id, Model.NewsPost.Slug })">
+	<meta property="og:description" content="@Model.NewsPost.Body[..200]">
+}
+<article class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
+	<h1 class="title" itemprop="name">@Model.NewsPost.Title</h1>
+
+	<time-display
+		class="date"
+		itemprop="datePublished"
+		utc-date="Model.NewsPost.PublicationDate"
+		formatter="dt => dt.FormatDateWithDaySuffix()">
+	</time-display>
+
+	<div class="actions">
+		<reader-settings></reader-settings>
+	</div>
+
+	<markdown class="body reader" preset="Blogpost" itemprop="articleBody" style="@readerSettings">
+		@Model.NewsPost.Body
+	</markdown>
+
+	<o-read-progress></o-read-progress>
+
+</article>
+
+@if (Model.CommentsThread is {} ct)
+{
+	<partial name="_Comments" model="@ct" />
+}
+
+@section Scripts
+{
+	<script type="module" src="~/js/comp/reader-settings.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/read-progress.js" asp-append-version="true"></script>
+}

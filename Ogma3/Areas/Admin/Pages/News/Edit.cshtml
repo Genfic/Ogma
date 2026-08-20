@@ -1,0 +1,56 @@
+@page "{id:long}"
+@model Ogma3.Areas.Admin.Pages.News.EditModel
+
+@{
+	ViewData["Title"] = "Edit News Post";
+	ViewData["ActivePage"] = NavPages.News;
+}
+
+<form method="post" id="editor" class="form">
+
+	<div asp-validation-summary="All"></div>
+
+	<div class="o-form-group">
+		<label asp-for="@Model.Input.Title"></label>
+		<input asp-for="@Model.Input.Title" type="text" class="o-form-control active-border">
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="@Model.Input.Body"></label>
+		<markdown-editor>
+			<read-more-btn></read-more-btn>
+		</markdown-editor>
+		<textarea asp-for="@Model.Input.Body"
+		          cols="30" rows="10"
+		          class="o-form-control active-border"
+		          allow-paste>
+        </textarea>
+	</div>
+
+	<div class="o-form-group keep-size">
+		<label asp-for="Input.Published"></label>
+		<p class="desc">Control whether the post is published or not</p>
+
+		<div class="toggle-input">
+			<input asp-for="Input.Published">
+
+			<label asp-for="Input.Published">
+				<span class="toggle"></span>
+				<span class="label-on">On</span>
+				<span class="label-off">Off</span>
+			</label>
+		</div>
+	</div>
+
+	<input asp-for="@Model.Input.Id" type="hidden">
+
+	<div class="o-form-group">
+		<button type="submit" class="btn btn-primary">Save changes</button>
+	</div>
+</form>
+
+@section Scripts {
+	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/extra-buttons/read-more-button.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/image-uploader.js" asp-append-version="true"></script>
+}

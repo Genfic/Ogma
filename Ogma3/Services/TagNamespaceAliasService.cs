@@ -17,23 +17,12 @@ public sealed class TagNamespaceAliasService(AppDbContext ctx, IFusionCache cach
 
 	public void InvalidateCache()
 	{
-		cache.Remove(Key(nameof(GetPrefixes)));
 		cache.Remove(Key(nameof(GetAliases)));
-	}
-
-	public async Task<Dictionary<string, string>> GetPrefixes(CancellationToken cancellationToken = default)
-	{
-		var aliases = await cache.GetOrSetAsync(Key(nameof(GetPrefixes)), async ct => {
-			var dict = await InnerGetPairs(ct);
-			return dict.ToDictionary(k => $"{k}:", v => $"{v}:", StringComparer.InvariantCultureIgnoreCase);
-		}, _options, cancellationToken);
-
-		return aliases;
 	}
 
 	public async Task<Dictionary<string, string>> GetAliases(CancellationToken cancellationToken = default)
 	{
-		var aliases = await cache.GetOrSetAsync(Key(nameof(GetPrefixes)),
+		var aliases = await cache.GetOrSetAsync(Key(nameof(GetAliases)),
 			async ct => await InnerGetPairs(ct),
 			_options,
 			token: cancellationToken

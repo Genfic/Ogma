@@ -82,10 +82,10 @@
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.17" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-preview.7.26381.103" />
-    <PackageVersion Include="TUnit" Version="1.65.31" />
+    <PackageVersion Include="TUnit" Version="1.65.38" />
     <PackageVersion Include="WaffleGenerator.Bogus" Version="4.2.2" />
-    <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
-    <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.6.0" />
-    <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.6.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.7.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.7.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.7.0" />
   </ItemGroup>
 </Project>

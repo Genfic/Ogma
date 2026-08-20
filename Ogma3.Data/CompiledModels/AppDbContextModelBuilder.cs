@@ -12,7 +12,7 @@ namespace CompiledModels;
 public partial class AppDbContextModel
 {
     private AppDbContextModel()
-        : base(skipDetectChanges: false, modelId: new Guid("02f5d6aa-0093-4473-b73b-c2c12894b816"), entityTypeCount: 48)
+        : base(skipDetectChanges: false, modelId: new Guid("24d6dd79-0e83-46d5-b4c3-949ce93562d9"), entityTypeCount: 49)
     {
     }
 
@@ -47,6 +47,7 @@ public partial class AppDbContextModel
         var infraction = InfractionEntityType.Create(this);
         var inviteCode = InviteCodeEntityType.Create(this);
         var moderatorAction = ModeratorActionEntityType.Create(this);
+        var news = NewsEntityType.Create(this);
         var notification = NotificationEntityType.Create(this);
         var notificationRecipients = NotificationRecipientsEntityType.Create(this);
         var quote = QuoteEntityType.Create(this);
@@ -99,7 +100,8 @@ public partial class AppDbContextModel
         CommentThreadEntityType.CreateForeignKey1(commentThread, blogpost);
         CommentThreadEntityType.CreateForeignKey2(commentThread, chapter);
         CommentThreadEntityType.CreateForeignKey3(commentThread, clubThread);
-        CommentThreadEntityType.CreateForeignKey4(commentThread, ogmaUser);
+        CommentThreadEntityType.CreateForeignKey4(commentThread, news);
+        CommentThreadEntityType.CreateForeignKey5(commentThread, ogmaUser);
         CommentThreadSubscriberEntityType.CreateForeignKey1(commentThreadSubscriber, commentThread);
         CommentThreadSubscriberEntityType.CreateForeignKey2(commentThreadSubscriber, ogmaUser);
         FolderEntityType.CreateForeignKey1(folder, club);
@@ -113,6 +115,7 @@ public partial class AppDbContextModel
         InviteCodeEntityType.CreateForeignKey1(inviteCode, ogmaUser);
         InviteCodeEntityType.CreateForeignKey2(inviteCode, ogmaUser);
         ModeratorActionEntityType.CreateForeignKey1(moderatorAction, ogmaUser);
+        NewsEntityType.CreateForeignKey1(news, ogmaUser);
         NotificationRecipientsEntityType.CreateForeignKey1(notificationRecipients, notification);
         NotificationRecipientsEntityType.CreateForeignKey2(notificationRecipients, ogmaUser);
         ReportEntityType.CreateForeignKey1(report, blogpost);
@@ -192,6 +195,7 @@ public partial class AppDbContextModel
         InfractionEntityType.CreateAnnotations(infraction);
         InviteCodeEntityType.CreateAnnotations(inviteCode);
         ModeratorActionEntityType.CreateAnnotations(moderatorAction);
+        NewsEntityType.CreateAnnotations(news);
         NotificationEntityType.CreateAnnotations(notification);
         NotificationRecipientsEntityType.CreateAnnotations(notificationRecipients);
         QuoteEntityType.CreateAnnotations(quote);
