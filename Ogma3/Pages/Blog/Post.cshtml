@@ -100,8 +100,12 @@
 		}
 	}
 
-	<markdown class="body reader" preset="Blogpost" itemprop="articleBody" style="@readerSettings">
-		@Model.Blogpost.Body
+	<markdown class="body reader"
+	          preset="Blogpost"
+	          itemprop="articleBody"
+	          style="@readerSettings"
+	          markdown="Blogpost.Body"
+	          lower-headings="@true">
 	</markdown>
 
 	<div class="tags" itemprop="keywords">

@@ -28,8 +28,12 @@
 		<reader-settings></reader-settings>
 	</div>
 
-	<markdown class="body reader" preset="Blogpost" itemprop="articleBody" style="@readerSettings">
-		@Model.NewsPost.Body
+	<markdown class="body reader"
+	          preset="AllWithHtml"
+	          itemprop="articleBody"
+	          style="@readerSettings"
+	          markdown="NewsPost.Body"
+	          lower-headings="@true">
 	</markdown>
 
 	<o-read-progress></o-read-progress>

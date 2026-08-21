@@ -13,51 +13,69 @@ public static class MarkdownPipelines
 	private static MentionOptions MentionOptions { get; } = new("/user/", "_blank");
 	private static HashtagOptions HashtagOptions { get; } = new("/blog?q=", "_blank");
 
-	private static readonly MarkdownPipelineBuilder Base = new MarkdownPipelineBuilder()
-		.UseHtmlComments()
-		.UseEmphasisExtras()
-		.UseSpoilers();
-
-	public static MarkdownPipeline Basic { get; } = Base
+	public static MarkdownPipeline Basic { get; } = GetBase()
 		.DisableHtml()
 		.DisableHeadings()
 		.UseAutoIdentifiers()
 		.UseCenter()
 		.Build();
 
-	public static MarkdownPipeline Comment { get; } = Base
+	public static MarkdownPipeline Comment { get; } = GetBase()
 		.DisableHtml()
 		.DisableHeadings()
 		.UseMentions(MentionOptions)
 		.UseAutoLinks()
 		.Build();
 
-	public static MarkdownPipeline All { get; } = Base
+	public static MarkdownPipeline All { get; } = GetBase()
 		.DisableHtml()
-		.UsePipeTables()
 		.UseMentions(MentionOptions)
-		.UseAdvancedExtensions()
+		.UseCustomAdvancedExtensions()
 		.UseAutoIdentifiers()
 		.UseCenter()
 		.UsePollEmbeds()
 		.Build();
 
-	public static MarkdownPipeline AllWithHtml { get; } = Base
-		.UsePipeTables()
+	public static MarkdownPipeline AllWithHtml { get; } = GetBase()
 		.UseMentions(MentionOptions)
-		.UseAdvancedExtensions()
+		.UseCustomAdvancedExtensions()
 		.UseAutoIdentifiers()
 		.UseCenter()
 		.UsePollEmbeds()
 		.Build();
 
-	public static MarkdownPipeline Blogpost { get; } = Base
+	public static MarkdownPipeline Blogpost { get; } = GetBase()
 		.DisableHtml()
-		.UseAdvancedExtensions()
+		.UseCustomAdvancedExtensions()
 		.UseMentions(MentionOptions)
 		.UseHashtags(HashtagOptions)
 		.UseAutoIdentifiers()
 		.UseCenter()
 		.UsePollEmbeds()
 		.Build();
+
+	private static MarkdownPipelineBuilder GetBase() => new MarkdownPipelineBuilder()
+		.UseHtmlComments()
+		.UseEmphasisExtras()
+		.UseSpoilers();
+
+	private static MarkdownPipelineBuilder UseCustomAdvancedExtensions(this MarkdownPipelineBuilder builder)
+		=> builder
+			.UseAlertBlocks()
+			.UseAbbreviations()
+			.UseAutoIdentifiers()
+			.UseCitations()
+			.UseCustomContainers()
+			.UseDefinitionLists()
+			.UseFigures()
+			.UseFooters()
+			.UseFootnotes()
+			.UseGridTables()
+			.UseMathematics()
+			.UseMediaLinks()
+			.UseListExtras()
+			.UseTaskLists()
+			.UseDiagrams()
+			.UseAutoLinks()
+			.UseGenericAttributes();
 }
