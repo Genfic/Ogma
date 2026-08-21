@@ -27,4 +27,5 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --frozen-lockfile --ignore-scripts
-      - run: bun run build
+      - run: bun run css
+      - run: bun run js
