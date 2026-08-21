@@ -67,7 +67,11 @@ tasks:
 
   build-frontend:
     dir: ./Ogma3/FrontendCode
-    cmd: bun run build
+    cmd: bun run --parallel "*:prod" fonts
+
+  watch-frontend:
+    dir: ./Ogma3/FrontendCode
+    cmd: bun run --parallel "*:watch"
 
   # Deploy
   deploy:

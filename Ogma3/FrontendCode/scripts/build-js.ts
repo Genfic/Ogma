@@ -108,7 +108,6 @@ const compileAll = async () => {
 	const size = await compile(new Glob(`${_source}/src/**/[^_]*.{ts,js,tsx}`), join(_dest, "/"), "src");
 
 	if (values.size) {
-
 		logger.log(ct`{green Total size: {bold.underline ${best(size)}}}`);
 
 		const [first, prev] = await sizeHistory.sizeAt(0, -1);

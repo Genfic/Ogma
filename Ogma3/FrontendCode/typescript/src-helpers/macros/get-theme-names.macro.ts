@@ -3,6 +3,7 @@ import { join } from "node:path";
 import Bun from "bun";
 
 const baseDir = join(import.meta.dir, "..", "..", "..", "styles", "themes");
+const hasher = new Bun.CryptoHasher("sha256");
 
 export const getThemes = async () => {
 	const files = await readdir(baseDir);
@@ -11,9 +12,9 @@ export const getThemes = async () => {
 		const path = join(baseDir, filename);
 		const file = Bun.file(path);
 		const buffer = await file.arrayBuffer();
-		const hashBuffer = crypto.subtle.digest("SHA-256", buffer);
+		hasher.update(buffer);
 
-		out[filename.replace(".scss", "")] = Buffer.from(await hashBuffer).toString("base64url");
+		out[filename.replace(".scss", "")] = hasher.digest("base64url");
 	}
 	return out;
 };
