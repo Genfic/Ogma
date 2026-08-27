@@ -1,10 +1,11 @@
 using LibGit2Sharp;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ogma3.AppHost.Helpers;
 
 public static class GitHelpers
 {
-	public static State GetState()
+	public static GitState RegisterAndGetGitState(this IDistributedApplicationBuilder builder)
 	{
 		using var repo = new Repository(Repository.Discover(AppContext.BaseDirectory));
 
@@ -12,8 +13,14 @@ public static class GitHelpers
 		var hash = repo.Head.Tip.Sha;
 		var branch = repo.Head.FriendlyName;
 
-		return new State(hash, dirty, branch);
+		var state = new GitState(hash, dirty, branch);
+
+		builder.Services.AddSingleton(state);
+
+		return state;
 	}
 
-	public sealed record State(string Hash, bool IsDirty, string Branch);
+	public static GitState GetGitState(this IServiceProvider services) => services.GetRequiredService<GitState>();
+
+	public sealed record GitState(string Hash, bool IsDirty, string Branch);
 }

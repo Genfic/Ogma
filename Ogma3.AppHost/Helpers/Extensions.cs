@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Ogma3.AppHost.Helpers;
 
 public static class Extensions
@@ -68,4 +71,11 @@ public static class Extensions
 		}
 	}
 
+	extension(IServiceProvider services)
+	{
+		public T RequireConfigSection<T>(string name) => services
+			.GetRequiredService<IConfiguration>()
+			.GetSection(name)
+			.Get<T>() ?? throw new InvalidOperationException($"Missing configuration section {name}");
+	}
 }

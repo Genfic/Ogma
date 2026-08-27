@@ -1,8 +1,9 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.5.2">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <IsAspireHost>true</IsAspireHost>
+		<AspireUseCliBundle>true</AspireUseCliBundle>
         <UserSecretsId>1f7fa604-b7af-418a-97ae-e1aaea83b0af</UserSecretsId>
         <AssemblyName>Ogma3.AppHost</AssemblyName>
         <RootNamespace>Ogma3.AppHost</RootNamespace>

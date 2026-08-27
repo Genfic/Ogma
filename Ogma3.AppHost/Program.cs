@@ -1,4 +1,3 @@
-using Aspire.Hosting.Docker;
 using Microsoft.Extensions.Configuration;
 using Ogma3.AppHost.Helpers;
 
@@ -20,7 +19,7 @@ var infisical = new Dictionary<string, IResourceBuilder<ParameterResource>>
 	["Infisical__Env"] = builder.AddParameter("infisical-env", isProd ? "prod" : "dev", publishValueAsDefault: true),
 };
 
-var git = GitHelpers.GetState();
+var git = builder.RegisterAndGetGitState();
 
 if (git.IsDirty && !allowDirty)
 {
@@ -51,6 +50,8 @@ builder
 		db.WithEnvironment("Dashboard__Frontend__BrowserToken", Password.Generate(64, true));
 	})
 	.WithSshDeploySupport();
+
+builder.AddDiscordWebhookNotify();
 
 var garnet = builder
 	.AddGarnet("garnet", port: 6379, password: garnetPassword)
