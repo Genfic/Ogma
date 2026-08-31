@@ -15,6 +15,8 @@
 
 <h2>@ViewData["Title"]</h2>
 
+<markdown markdown="@Model.Tag.Description"></markdown>
+
 @if (Model.Stories.Count <= 0)
 {
 	<h1>No stories found</h1>

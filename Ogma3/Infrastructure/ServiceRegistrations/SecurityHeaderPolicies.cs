@@ -18,12 +18,7 @@ public static class SecurityHeaderPolicies
 						.Self()
 						.WithNonce();
 					csp.AddImgSrc()
-						.Self()
-						.From("https://ipfs.io") // NOTE: testing only
-						.From("https://picsum.photos") // NOTE: testing only
-						.From("https://*.picsum.photos") // NOTE: testing only
-						.From("https://genfic.net")
-						.From("https://*.genfic.net");
+						.OverHttps();
 					csp.AddStyleSrc()
 						.Self()
 						.UnsafeInline();

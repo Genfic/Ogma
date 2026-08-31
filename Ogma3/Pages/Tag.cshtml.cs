@@ -13,7 +13,7 @@ public sealed class TagModel(AppDbContext context) : PageModel
 {
 	private const int PerPage = 25;
 
-	public sealed record TagInfo(string Name, string? Namespace, string? Color);
+	public sealed record TagInfo(string Name, string? Description, string? Namespace, string? Color);
 
 	public TagInfo Tag { get; private set; } = null!;
 	public IList<StoryCard> Stories { get; private set; } = null!;
@@ -25,7 +25,7 @@ public sealed class TagModel(AppDbContext context) : PageModel
 
 		var tag = await context.Tags
 			.Where(t => t.Id == id)
-			.Select(t => new TagInfo(t.Name, t.Namespace!.Name, t.Namespace!.Color))
+			.Select(t => new TagInfo(t.Name, t.Description, t.Namespace!.Name, t.Namespace!.Color))
 			.FirstOrDefaultAsync();
 
 		if (tag is null) return NotFound();

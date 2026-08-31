@@ -79,7 +79,7 @@ public sealed class EditModel
 		public required EStoryStatus Status { get; init; }
 		public required List<long> Tags { get; init; }
 		[Display(Name = "Extra tags")]
-		public required string ExtraTags { get; init; }
+		public string? ExtraTags { get; init; }
 		public required bool Published { get; init; }
 		public required bool IsLocked { get; init; }
 		public List<NullableCredit> Credits { get; init; } = [];
@@ -170,7 +170,7 @@ public sealed class EditModel
 		var newSlug = Input.Title.Friendlify();
 		var publishDate = storyData.PublicationDate ?? (Input.Published ? DateTimeOffset.UtcNow : null);
 
-		var extraTags = Input.ExtraTags
+		var extraTags = Input.ExtraTags?
 			.Split(',')
 			.Select(t => t.Trim())
 			.Where(t => t.Length > 0)
@@ -190,7 +190,7 @@ public sealed class EditModel
 				.SetProperty(s => s.PublicationDate, publishDate)
 				.SetProperty(s => s.IsVisible, Input.Published)
 				.SetProperty(s => s.Credits, credits)
-				.SetProperty(s => s.ExtraTags, extraTags)
+				.SetProperty(s => s.ExtraTags, extraTags ?? [])
 			);
 
 		var existingTags = context.StoryTags
