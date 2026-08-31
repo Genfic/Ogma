@@ -86,23 +86,14 @@ public sealed class PowService(IConnectionMultiplexer redis, OgmaConfig config, 
 
 	private static bool MeetsTarget(byte[] hash, byte[] target)
 	{
-		if (hash.Length != target.Length)
+		var h = hash.AsSpan();
+		var t = target.AsSpan();
+
+		if (h.Length != t.Length)
 		{
 			return false;
 		}
 
-		for (var i = 0; i < hash.Length; i++)
-		{
-			if (hash[i] < target[i])
-			{
-				return true;
-			}
-			if (hash[i] > target[i])
-			{
-				return false;
-			}
-		}
-
-		return true;
+		return h.SequenceCompareTo(t) <= 0;
 	}
 }

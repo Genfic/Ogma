@@ -8,7 +8,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-[RegisterTransient]
+[RegisterSingleton]
 public sealed partial class CloudflareIpForwardingMiddleware
 (
 	IFusionCache cache,
@@ -28,10 +28,6 @@ public sealed partial class CloudflareIpForwardingMiddleware
 			return;
 		}
 
-		if (connectingIp.IsIPv4MappedToIPv6)
-		{
-			connectingIp = connectingIp.MapToIPv4();
-		}
 
 		var ranges = await GetCloudflareIpRangesAsync();
 
@@ -42,7 +38,7 @@ public sealed partial class CloudflareIpForwardingMiddleware
 			return;
 		}
 
-		var cfConnectingIp = context.Request.Headers["Cf-Connecting-Ip"].FirstOrDefault();
+		string? cfConnectingIp = context.Request.Headers["Cf-Connecting-Ip"];
 
 		if (string.IsNullOrEmpty(cfConnectingIp) || !IPAddress.TryParse(cfConnectingIp, out var realIp))
 		{
@@ -167,6 +163,14 @@ public sealed partial class CloudflareIpForwardingMiddleware
 
 			high = 0;
 			low = BinaryPrimitives.ReadUInt32BigEndian(bytes);
+		}
+		else if (ip.IsIPv4MappedToIPv6)
+		{
+			Span<byte> bytes = stackalloc byte[16];
+			ip.TryWriteBytes(bytes, out _);
+			
+			high = 0;
+			low = BinaryPrimitives.ReadUInt32BigEndian(bytes[12..]);
 		}
 		else
 		{

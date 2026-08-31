@@ -9,7 +9,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Infrastructure.Middleware;
 
-[RegisterTransient]
+[RegisterSingleton]
 public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
 

@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
@@ -5,11 +6,11 @@ namespace Ogma3.Infrastructure.Middleware;
 
 public sealed partial class RedirectMiddleware(RequestDelegate next, IOptions<RedirectMiddlewareOptions> options, ILogger<RedirectMiddleware> logger)
 {
-	private readonly RedirectMiddlewareOptions _options = options.Value;
+	private readonly FrozenDictionary<string, string> _redirects = options.Value.Redirects.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
 	public async Task InvokeAsync(HttpContext context)
 	{
-		if (_options.Redirects.TryGetValue(context.Request.Path, out var redirect))
+		if (_redirects.TryGetValue(context.Request.Path, out var redirect))
 		{
 			LogRedirect(logger, context.Request.Path, redirect);
 			context.Response.Redirect(redirect);

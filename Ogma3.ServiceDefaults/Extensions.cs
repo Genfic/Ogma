@@ -56,9 +56,7 @@ public static class Extensions
 						.AddRuntimeInstrumentation()
 						.AddMeter(
 							"Npgsql",
-							"Microsoft.EntityFrameworkCore",
-							"ZiggyCreatures.Caching.Fusion.Distributed",
-							"ZiggyCreatures.Caching.Fusion.Backplane"
+							"Microsoft.EntityFrameworkCore"
 						);
 				})
 				.WithTracing(tracing => {

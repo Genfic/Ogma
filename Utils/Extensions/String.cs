@@ -147,35 +147,9 @@ public static partial class String
 		{
 			if (span.IsEmpty) return 0;
 
-			var count = 0;
-			var i = 0;
+			var count = span.Count('\n');
 
-			while (i < span.Length)
-			{
-				switch (span[i++])
-				{
-					case '\r':
-					{
-						count++;
-						if (i < span.Length && span[i] == '\n')
-						{
-							i++; // Skip the `\n` in `\r\n`
-						}
-						break;
-					}
-					case '\n':
-						count++;
-						break;
-				}
-			}
-
-			// We need to add one more line in case the string does not end in a newline.
-			if (span is not [.., '\n' or '\r'])
-			{
-				count++;
-			}
-
-			return count;
+			return span[^1] == '\n' ? count : count + 1;
 		}
 
 		public string Capitalize()

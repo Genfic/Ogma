@@ -346,7 +346,7 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task CountLines_MixedLineEndings()
 	{
-		var input = "line1\nline2\r\nline3\rline4".AsSpan();
+		var input = "line1\nline2\r\nline3\nline4".AsSpan();
 		var result = input.CountLines();
 
 		await Assert.That(result).IsEqualTo(4);

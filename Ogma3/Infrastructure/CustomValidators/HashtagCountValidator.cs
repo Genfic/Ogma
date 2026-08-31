@@ -17,30 +17,32 @@ public sealed class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, s
 
 	private bool Validate(string? value)
 	{
-		if (value is null) return true;
-		
-		var span = value.Trim(',').AsSpan();
-
-		if (span.Length == 0) return true;
-		
-		var count = 0;
-		var wasComma = true;
-		foreach (var ch in span)
+		if (value is null)
 		{
-			if (ch == ',')
+			return true;
+		}
+
+		var span = value.Trim(',').AsSpan();
+		if (span.IsEmpty)
+		{
+			return true;
+		}
+
+		var count = 0;
+		foreach (var segment in span.Split(','))
+		{
+			var tag = span[segment].Trim();
+			if (tag.IsEmpty)
 			{
-				wasComma = true;
 				continue;
 			}
 
-			if (wasComma && !char.IsWhiteSpace(ch))
-			{
-				count++;
-				wasComma = false;
-			}
-			
+			count++;
 
-			if (count > max) return false;
+			if (count > max)
+			{
+				return false;
+			}
 		}
 
 		return true;

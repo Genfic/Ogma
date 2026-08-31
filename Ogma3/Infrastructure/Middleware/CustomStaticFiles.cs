@@ -35,7 +35,7 @@ public static class CustomStaticFiles
 			MaxAge = TimeSpan.FromDays(365),
 		};
 
-		if (context.File.Name.Contains("worker"))
+		if (context.File.Name.Contains("worker", StringComparison.OrdinalIgnoreCase))
 		{
 			Log.Information("Serving a service worker");
 			context.Context.Response.Headers.Append("Service-Worker-Allowed", "/");
