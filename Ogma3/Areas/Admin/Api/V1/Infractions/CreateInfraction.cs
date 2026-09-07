@@ -9,19 +9,18 @@ using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services;
 using Ogma3.Services.UserService;
-using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 
-using ReturnType = Results<UnauthorizedHttpResult, Ok>;
+using ReturnType = Results<UnauthorizedHttpResult, Ok, InternalServerError<string>>;
 
 [Handler]
 [MapPost("admin/api/infractions")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class CreateInfraction(AppDbContext context, IUserService userService, IFusionCache cache)
+public sealed partial class CreateInfraction(AppDbContext context, IUserService userService, BanCache cache)
 {
 	[Validate]
 	public sealed partial record Command
@@ -60,22 +59,13 @@ public sealed partial class CreateInfraction(AppDbContext context, IUserService 
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		if (infraction.Type == InfractionType.Ban)
+		if (infraction.Type != InfractionType.Ban)
 		{
-			await cache.SetAsync(
-				UserBanMiddleware.CacheKey(infraction.UserId),
-				true,
-				o => o.Duration = TimeSpan.FromMinutes(30),
-				cancellationToken
-			);
+			return TypedResults.Ok();
 		}
 
-		return TypedResults.Ok();
+		var res = await cache.Ban(uid, dateTime);
 
-		// return TypedResults.CreatedAtRoute(
-		// 	infraction.MapToResult(),
-		// 	nameof(GetInfractionDetails),
-		// 	new GetInfractionDetails.Query(infraction.Id)
-		// );
+		return res ? TypedResults.Ok() : TypedResults.InternalServerError("Could not ban user!");
 	}
 }

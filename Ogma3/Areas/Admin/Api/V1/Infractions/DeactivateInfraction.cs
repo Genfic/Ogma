@@ -8,19 +8,18 @@ using Ogma3.Data.Infractions;
 using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services;
 using Ogma3.Services.UserService;
-using ZiggyCreatures.Caching.Fusion;
 
 namespace Ogma3.Areas.Admin.Api.V1.Infractions;
 
-using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound>;
+using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound, InternalServerError<string>>;
 
 [Handler]
 [MapDelete("admin/api/infractions/{infractionId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class DeactivateInfraction(AppDbContext context, IUserService userService, IFusionCache cache)
+public sealed partial class DeactivateInfraction(AppDbContext context, IUserService userService, BanCache cache)
 {
 	public sealed record Command(long InfractionId);
 
@@ -50,11 +49,14 @@ public sealed partial class DeactivateInfraction(AppDbContext context, IUserServ
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		if (infraction.Type == InfractionType.Ban)
+		if (infraction.Type != InfractionType.Ban)
 		{
-			await cache.ExpireAsync(UserBanMiddleware.CacheKey(infraction.UserId), token: cancellationToken);
+			return TypedResults.Ok();
 		}
 
-		return TypedResults.Ok();
+		var res = await cache.Unban(infraction.UserId);
+		return res
+			? TypedResults.Ok()
+			: TypedResults.InternalServerError("Cound not unban user!");
 	}
 }

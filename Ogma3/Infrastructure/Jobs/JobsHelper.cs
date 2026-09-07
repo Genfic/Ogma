@@ -9,6 +9,7 @@ public static class JobsHelper
 			.AddHostedService<DeleteInactiveAccountsRecurringJob>()
 			.AddHostedService<DeleteDraftsRecurringJob>()
 			.AddHostedService<DeleteStaleNotificationsRecurringJob>()
+			.AddHostedService<ReconcileBanCacheRecurringJob>()
 			;
 	}
 }

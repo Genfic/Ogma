@@ -10,6 +10,12 @@ public sealed partial class RedirectMiddleware(RequestDelegate next, IOptions<Re
 
 	public async Task InvokeAsync(HttpContext context)
 	{
+		if (_redirects.Count == 0)
+		{
+			await next(context);
+			return;
+		}
+
 		if (_redirects.TryGetValue(context.Request.Path, out var redirect))
 		{
 			LogRedirect(logger, context.Request.Path, redirect);
@@ -19,7 +25,7 @@ public sealed partial class RedirectMiddleware(RequestDelegate next, IOptions<Re
 
 		await next(context);
 	}
-	
+
 	[LoggerMessage(0, LogLevel.Information, "Redirecting from {Source} to {Target}")]
 	public static partial void LogRedirect(ILogger<RedirectMiddleware> logger, PathString source, string target);
 }

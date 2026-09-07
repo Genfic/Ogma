@@ -1,27 +1,14 @@
 using System.Net;
 using Immediate.Injections.Shared;
-using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
-using Ogma3.Data.Infractions;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Extensions;
-using ZiggyCreatures.Caching.Fusion;
+using Ogma3.Services;
 
 namespace Ogma3.Infrastructure.Middleware;
 
 [RegisterSingleton]
-public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBanMiddleware> logger) : IMiddleware
+public sealed partial class UserBanMiddleware(BanCache cache, ILogger<UserBanMiddleware> logger) : IMiddleware
 {
-
-	private static readonly Func<AppDbContext, long, CancellationToken, Task<bool>> CompiledQuery =
-		EF.CompileAsyncQuery(static (AppDbContext dbContext, long uid, CancellationToken ct) => dbContext.Infractions
-			.TagWith($"{nameof(UserBanMiddleware)} querying for ban status of user")
-			.Where(i => i.UserId == uid)
-			.Where(i => i.Type == InfractionType.Ban)
-			.Where(i => i.RemovedAt == null)
-			.Any(i => i.ActiveUntil > DateTimeOffset.UtcNow)
-		);
-
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
 		if (context.User.GetNumericId() is not {} uid)
@@ -37,15 +24,7 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 			return;
 		}
 
-		var isBanned = await cache.GetOrSetAsync(
-			CacheKey(uid),
-			async _ => {
-				var dbContext = context.RequestServices.GetRequiredService<AppDbContext>();
-				return await CompiledQuery(dbContext, uid, context.RequestAborted);
-			},
-			o => o.Duration = TimeSpan.FromMinutes(30),
-			context.RequestAborted
-		);
+		var isBanned = await cache.Check(uid);
 
 		if (isBanned)
 		{
@@ -65,7 +44,6 @@ public sealed partial class UserBanMiddleware(IFusionCache cache, ILogger<UserBa
 
 		await next(context);
 	}
-	public static string CacheKey(long id) => $"user-ban:{id}";
 
 	[LoggerMessage(0, LogLevel.Information, "Banned user {UserId} tried accessing the site")]
 	public static partial void LogAccessAttempt(ILogger<UserBanMiddleware> logger, long userId);
