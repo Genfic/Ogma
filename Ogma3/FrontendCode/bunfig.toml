@@ -19,3 +19,6 @@ provider = "@socketsecurity/bun-security-scanner"
 
 [install.scopes]
 "@jsr" = "https://npm.jsr.io"
+
+[install.cache]
+disable = true
