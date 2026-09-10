@@ -308,12 +308,27 @@ public static class Startup
 
 		app.MapDefaultEndpoints();
 
-		// Middleware
+		// Diagnostic — must be first to time the full pipeline
 		app.UseRequestTiming();
-		app.UseAddHeaders();
 
-		// Compression
-		app.UseResponseCompression();
+		// Forward proto/IP from trusted proxies (Cloudflare Tunnel / Docker) — must be before
+		// HSTS and HttpsRedirection so Request.Scheme is correct when those run
+		app.UseForwardedHeaders();
+
+		// Forward the real client IP from Cloudflare — after UseForwardedHeaders so X-Forwarded-*
+		// headers are already normalised before the CF-Connecting-IP rewrite
+		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
+
+		// HSTS — has the correct scheme from the proxy-header middlewares above
+		if (!env.IsDevelopment())
+		{
+			// NOTE: The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+			app.UseHsts();
+		}
+
+		// Security headers — placed before the exception handler so that error responses
+		// (e.g. the /Error page rendered by UseExceptionHandler) also receive CSP/nonce headers
+		app.UseSecurityHeaders();
 
 		if (env.IsDevelopment())
 		{
@@ -323,23 +338,21 @@ public static class Startup
 		else
 		{
 			app.UseExceptionHandler("/Error");
-			// NOTE: The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-			app.UseHsts();
 		}
 
-		// Forward proto from trusted proxies (Cloudflare Tunnel / Docker)
-		app.UseForwardedHeaders();
-
-		// Forward the IP from Cloudflare
-		app.UseMiddleware<CloudflareIpForwardingMiddleware>();
-
-		// Redirects
+		// Redirects — short-circuit cheap requests before any heavier middleware runs
 		app.UseHttpsRedirection();
-		app.UseRewriter(new RewriteOptions()
+		app.UseRewriter(static o => o
 			.AddRedirect(@"^\.well-known/change-password$", "identity/account/manage/changepassword")
 		);
 
-		// Serve static files
+		// Compression — wraps everything below so all content-producing responses are compressed
+		app.UseResponseCompression();
+
+		// Custom response headers — inside compression so they are emitted on compressed responses
+		app.UseAddHeaders();
+
+		// Serve static files — short-circuits early for assets; no auth needed
 		app.UseCustomStaticFiles();
 		app.UseRouting();
 
@@ -355,29 +368,28 @@ public static class Startup
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.UseBanMiddleware();
+
+		// Antiforgery before rate limiter and output cache so CSRF tokens are always validated
+		// regardless of whether the response will be served from cache or rejected by the limiter
+		app.UseAntiforgery();
+
+		// Rate limiter before output cache so abusive requests are rejected without paying
+		// the cost of a cache lookup or downstream pipeline execution
+		app.UseRateLimiter();
+
 		app.UseOutputCache();
 
 		// OpenAPI
-
 		app.MapOpenApi("openapi/{documentName}.json")
 			.ConfigureIf(!env.IsDevelopment(), b => b.RequireAuthorization(AuthorizationPolicies.RequireAdminRole));
 		app.MapScalarApiReference()
 			.WithSecurityHeadersPolicy(SecurityHeaderPolicies.Lax)
 			.ConfigureIf(!env.IsDevelopment(), b => b.RequireAuthorization(AuthorizationPolicies.RequireAdminRole));
 
-		// Antiforgery
-		app.UseAntiforgery();
-
-		// Rate limit
-		app.UseRateLimiter();
-
 		app.MapRazorPages();
 		app.MapControllers();
 		app.MapGroup("/")
 			.WithMetadata(new ApiEndpointAttribute())
 			.MapOgma3Endpoints();
-
-		// Security headers
-		app.UseSecurityHeaders();
 	}
 }
